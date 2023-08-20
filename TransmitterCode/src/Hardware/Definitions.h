@@ -18,7 +18,7 @@
 
 #define TXVERSION_MAJOR   2
 #define TXVERSION_MINOR   2
-#define TXVERSION_MINIMUS 4  //   August 2023
+#define TXVERSION_MINIMUS 5  //   August 2023
 
 // **************************************************************************
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
@@ -690,7 +690,8 @@ bool            ValueSent            = false;
 uint8_t         SwitchEditNumber     = 0; // number of switch being edited
 uint32_t        ShowServoTimer       = 0;
 bool            LastFourOnly         = false;
-uint8_t         InPutStick[17]       = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}; //
+uint8_t         InPutStick[17]       = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}; // User defined stick inputs
+uint8_t         ChannelOutPut[17]    = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}; // User defined channel outputs
 uint8_t         InputTrim[4]         = {0, 1, 2, 3};                                           // User defined trim inputs
 uint8_t         ExportedFileCounter  = 0;
 char            TheFilesList[100][14];

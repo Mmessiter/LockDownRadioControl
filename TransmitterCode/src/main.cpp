@@ -31,6 +31,7 @@
  * - Four User definable three position switches
  * - Channels 5,6,7 & 8 can be switches or knobs.
  * - Input sources definable - any stick, switch or knob can be mapped to any function.
+ * - Output channels definable - any channel can be mapped to any output channels
  * - Model memories export and import to backup files on SD card
  * - Model memory files alphabetically sorted
  * - Timer goes on and off with motor to keep track of motor use.
@@ -669,7 +670,7 @@ FASTRUN void ShowComms()
         }
         snprintf(Vbuf, 7, "%d", GPSSatellites);
         SendText(Sat, Vbuf);
-        snprintf(Vbuf, 10, "%f",  GPSLongitude);
+        snprintf(Vbuf, 10, "%f", GPSLongitude);
         SendText(Lon, Vbuf);
         snprintf(Vbuf, 10, "%f", GPSLatitude);
         SendText(Lat, Vbuf);
@@ -868,13 +869,13 @@ uint16_t ExponentialInterpolation(uint16_t InputValue, uint16_t InputChannel, ui
     if (InputValue >= ChannelCentre[InputChannel]) {
         k = MapWithExponential(InputValue - ChannelCentre[InputChannel], 0, ChannelMax[InputChannel] - ChannelCentre[InputChannel], 0, IntoHigherRes(CurveDots[4]) - //
                                    IntoHigherRes(CurveDots[2]),
-                               Exponential[Bank][OutputChannel])                                                                                                     //
-            + IntoHigherRes(CurveDots[2]);                                                                                                                           //
+                               Exponential[Bank][OutputChannel]) //
+            + IntoHigherRes(CurveDots[2]);                       //
     }
     else {
         k = MapWithExponential(ChannelCentre[InputChannel] - InputValue, 0, ChannelCentre[InputChannel] - ChannelMin[InputChannel], IntoHigherRes(CurveDots[2]) - //
                                    IntoHigherRes(CurveDots[0]),
-                               0, Exponential[Bank][OutputChannel])                                                                                               //
+                               0, Exponential[Bank][OutputChannel]) //
             + IntoHigherRes(CurveDots[0]);
     }
     return k;
@@ -968,38 +969,53 @@ void DoSlowServos()
                 if (!distance) SSize = 0;                                        // Already arrived?
                 CurrentPosition[i] += SSize;                                     // Move Current Position a little bit towards goal
             }
-            SendBuffer[i]   = CurrentPosition[i];                                // Modify next servo position
-            PreMixBuffer[i] = SendBuffer[i];                                     // mix the slowed version
+            SendBuffer[i]   = CurrentPosition[i]; // Modify next servo position
+            PreMixBuffer[i] = SendBuffer[i];      // mix the slowed version
         }
+    }
+}
+/*********************************************************************************************************************************/
+void DoRouteOutputs()
+{ // This function re-routes outputs to the defined channels
+
+    uint16_t temp[CHANNELSUSED];
+    for (int i = 0; i < CHANNELSUSED; ++i) {
+        temp[i] = PreMixBuffer[i];
+    }
+    for (int i = 0; i < CHANNELSUSED; ++i) {
+        PreMixBuffer[i] = temp[ChannelOutPut[i]];
+        SendBuffer[i]   = PreMixBuffer[i];
     }
 }
 
 /*********************************************************************************************************************************/
 
 /** @brief GET NEW SERVO POSITIONS */
-FASTRUN void GetNewChannelValues()
+FASTRUN void
+GetNewChannelValues()
 {
-    if (NewCompressNeeded) return;                                                                                       // Have we compressed the last one yet?
-    NewCompressNeeded = true;                                                                                            // Yes indeed. It's therefore time for new data.
+    if (NewCompressNeeded) return; // Have we compressed the last one yet?
+    NewCompressNeeded = true;      // Yes indeed. It's therefore time for new data.
     uint16_t OutputValue, InputChannel, InputValue, OutputChannel;
-    for (OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {                                             // Do every channel
-        InputChannel = InPutStick[OutputChannel];                                                                        // Input sticks knobs & switches are mapped by user
-        GetCurveDots(OutputChannel, DualRateValue);                                                                      // This for the Dual Rates function
-        if (InputChannel > 7) {                                                                                          // Must be a switch if over 7
-            OutputValue = GetStickInput(InputChannel);                                                                   // Four 3 postion switches
+    for (OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) { // Do every channel
+        InputChannel = InPutStick[OutputChannel];                            // Input sticks knobs & switches are mapped by user
+        GetCurveDots(OutputChannel, DualRateValue);                          // This for the Dual Rates function
+        if (InputChannel > 7) {                                              // Must be a switch if over 7
+            OutputValue = GetStickInput(InputChannel);                       // Four 3 postion switches
         }
         else {                                                                                                           // i.e. l <= 7 so it's a Stick/knob/switch
             InputValue  = AnalogueReed(InputChannel);                                                                    // Get values from sticks' pots then ADD TRIM then interpolate them.
             OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputValue, InputChannel, OutputChannel); // Use function pointer array to invoke selected interpolation.
         }
-        OutputValue += GetTrimAmount(InputChannel);                                                                      // Add trim AFTER doing rates
-        OutputValue += (SubTrims[OutputChannel] - 127) * (TrimMultiplier);                                               // ADD SUBTRIM to output channel, not mapped input channel (Range 0 - 127 - 254)
+        OutputValue += GetTrimAmount(InputChannel);                        // Add trim AFTER doing rates
+        OutputValue += (SubTrims[OutputChannel] - 127) * (TrimMultiplier); // ADD SUBTRIM to output channel, not mapped input channel (Range 0 - 127 - 254)
         PreMixBuffer[OutputChannel] = constrain(OutputValue, MINMICROS, MAXMICROS);
-        SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel];
+        SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel]; // reroute to defined output channel
     }
     if (CurrentMode == NORMAL) {
         DoReverseSense();
         DoSlowServos();
+        DoRouteOutputs();
         DoMixes(); // Mixes the OUTPUT :-)
     }
 }
@@ -1055,7 +1071,7 @@ void ChannelCentres()
     }
     NewCompressNeeded = false; // fake it as we are not sending data
     GetNewChannelValues();
-    CalibrateEdgeSwitches();   // These are now calibrated too in case some are reversed.
+    CalibrateEdgeSwitches(); // These are now calibrated too in case some are reversed.
 }
 
 /*********************************************************************************************************************************/
@@ -1299,9 +1315,9 @@ FLASHMEM void InitCentreDegrees()
         for (int i = 0; i < CHANNELSUSED; ++i) {
             MaxDegrees[j][i]    = 180; //  180 degrees
             MidHiDegrees[j][i]  = 135;
-            CentreDegrees[j][i] = 90;  //  90 degrees
+            CentreDegrees[j][i] = 90; //  90 degrees
             MidLowDegrees[j][i] = 45;
-            MinDegrees[j][i]    = 0;   //  0 degrees
+            MinDegrees[j][i]    = 0; //  0 degrees
         }
     }
 }
@@ -1310,14 +1326,15 @@ FLASHMEM void InitCentreDegrees()
 
 void UpdateButtonLabels()
 {
-    char InputStick_Labels[16][4] = {"c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10", "c11", "c12", "c13", "c14", "c15", "c16"};
-    char fsch_labels[16][5]       = {"ch1", "ch2", "ch3", "ch4", "ch5", "ch6", "ch7", "ch8", "ch9", "ch10", "ch11", "ch12", "ch13", "ch14", "ch15", "ch16"};
-    char fs[16][5]                = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
-    char ChannelLabels[16][6]     = {"Sch1", "Sch2", "Sch3", "Sch4", "Sch5", "Sch6", "Sch7", "Sch8", "Sch9", "Sch10", "Sch11", "Sch12", "Sch13", "Sch14", "Sch15", "Sch16"};
-    char ChannelNumber[16][6]     = {" (1)", "(2) ", " (3)", "(4) ", " (5)", "(6) ", " (7)", "(8) ", " (9)", "(10) ", " (11)", "(12) ", " (13)", "(14) ", " (15)", "(16) "};
-    char ArrowRh[]                = " >";
-    char ArrowLh[]                = "< ";
-    char TrimLabels[4][4]         = {"n0", "n1", "n2", "n3"};
+    char InputStick_Labels[16][4]  = {"c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10", "c11", "c12", "c13", "c14", "c15", "c16"};
+    char OutputStick_Labels[16][4] = {"n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11", "n12", "n13", "n14", "n15", "n16", "n17", "n18", "n19"};
+    char fsch_labels[16][5]        = {"ch1", "ch2", "ch3", "ch4", "ch5", "ch6", "ch7", "ch8", "ch9", "ch10", "ch11", "ch12", "ch13", "ch14", "ch15", "ch16"};
+    char fs[16][5]                 = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
+    char ChannelLabels[16][6]      = {"Sch1", "Sch2", "Sch3", "Sch4", "Sch5", "Sch6", "Sch7", "Sch8", "Sch9", "Sch10", "Sch11", "Sch12", "Sch13", "Sch14", "Sch15", "Sch16"};
+    char ChannelNumber[16][6]      = {" (1)", "(2) ", " (3)", "(4) ", " (5)", "(6) ", " (7)", "(8) ", " (9)", "(10) ", " (11)", "(12) ", " (13)", "(14) ", " (15)", "(16) "};
+    char ArrowRh[]                 = " >";
+    char ArrowLh[]                 = "< ";
+    char TrimLabels[4][4]          = {"n0", "n1", "n2", "n3"};
     char LabelText[20];
 
     if (CurrentView == STICKSVIEW) {
@@ -1344,7 +1361,9 @@ void UpdateButtonLabels()
         for (int i = 0; i < 16; ++i) {
             SendText(fsch_labels[i], ChannelNames[i]);
             SendValue(InputStick_Labels[i], InPutStick[i] + 1);
-            if (CurrentView != SLOWSERVOVIEW) {
+            SendValue(OutputStick_Labels[i], ChannelOutPut[i] + 1);
+            if (CurrentView != SLOWSERVOVIEW)
+            {
                 if (i < 4) SendValue(TrimLabels[i], InputTrim[i] + 1); //
             }
         }
@@ -1365,6 +1384,37 @@ void CheckStepSizes()
 { // for slow servos
     for (int i = 0; i < 16; ++i)
         if (StepSize[i] > 100) StepSize[i] = 100;
+}
+
+/*********************************************************************************************************************************/
+
+bool CheckDuplicate(uint8_t ch, int8_t j)
+{
+    for (int i = 0; i < j; ++i) {
+        if (ch == ChannelOutPut[i]) {
+            return false;
+        }
+    }
+    return true;
+}
+
+/*********************************************************************************************************************************/
+
+void CheckOutPutChannels() // This function checks for bad or duplicate output channels and resets them if found
+{
+    bool resetit = false;
+    for (int i = 0; i < 16; ++i) {
+        if (ChannelOutPut[i] > 15) ChannelOutPut[i] = i;
+        if (!CheckDuplicate(ChannelOutPut[i], i)) {
+            resetit = true;
+            break;
+        }
+    }
+    if (resetit) {
+        for (int i = 0; i < 16; ++i) {
+            ChannelOutPut[i] = i;
+        }
+    }
 }
 /*********************************************************************************************************************************/
 
@@ -1594,6 +1644,12 @@ bool ReadOneModel(uint32_t Mnum)
     }
     ++SDCardAddress;
     ++SDCardAddress;
+
+    for (i = 0; i < 16; ++i) {
+        ChannelOutPut[i] = SDRead8BITS(SDCardAddress);
+        ++SDCardAddress;
+    }
+    CheckOutPutChannels();
 
     // **************************************
 
@@ -2053,8 +2109,8 @@ uint32_t GetOverallSuccessRate()
 // ************************************************************************
 FASTRUN void LogDisConnection()
 {
-    char buf[40]    = " ";
-    char TheText[]  = "Disconnected from ";
+    char buf[40]   = " ";
+    char TheText[] = "Disconnected from ";
 
     strcpy(buf, TheText);
     strcat(buf, ModelName);
@@ -2064,7 +2120,6 @@ FASTRUN void LogDisConnection()
     LogTotalLostPackets();
     LogTotalGoodPackets();
     LogOverallSuccessRate();
-   
 }
 // ************************************************************************
 FASTRUN void LogNewBank()
@@ -2135,11 +2190,10 @@ FASTRUN void LogThisGap()
 }
 // ************************************************************************
 
-
 FASTRUN void LogLongestGap()
 {
     char thetext[50];
-    snprintf(thetext,45, "Longest gap: %d", (short int) GapLongest);
+    snprintf(thetext, 45, "Longest gap: %d", (short int)GapLongest);
     LogText(thetext, strlen(thetext));
 }
 
@@ -2148,16 +2202,16 @@ FASTRUN void LogLongestGap()
 void LogTotalLostPackets()
 {
     char thetext[50];
-    snprintf(thetext,45,"Total lost packets: %d", (short int)TotalLostPackets);
+    snprintf(thetext, 45, "Total lost packets: %d", (short int)TotalLostPackets);
     LogText(thetext, strlen(thetext));
 }
 
 // ************************************************************************
 
-    void LogTotalGoodPackets()
+void LogTotalGoodPackets()
 {
     char thetext[50];
-    snprintf(thetext,45, "Total good packets: %d", (uint16_t) TotalGoodPackets);
+    snprintf(thetext, 45, "Total good packets: %d", (uint16_t)TotalGoodPackets);
     LogText(thetext, strlen(thetext));
 }
 
@@ -2165,10 +2219,10 @@ void LogTotalLostPackets()
 
 void LogOverallSuccessRate()
 {
-    char thetext[50];
+    char     thetext[50];
     uint32_t OverallSuccessRate = 0;
-    OverallSuccessRate = GetOverallSuccessRate();
-    snprintf(thetext,45, "Overall success rate: %d%%", (uint8_t)OverallSuccessRate);
+    OverallSuccessRate          = GetOverallSuccessRate();
+    snprintf(thetext, 45, "Overall success rate: %d%%", (uint8_t)OverallSuccessRate);
     LogText(thetext, strlen(thetext));
 }
 // ************************************************************************
@@ -2280,11 +2334,11 @@ FLASHMEM void setup()
     WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
-    delay(300);                      // <<********************* MUST ALLOW DOG TO INITIALISE
+    delay(300); // <<********************* MUST ALLOW DOG TO INITIALISE
     DelayWithDog(WARMUPDELAY);
     if (!SD.begin(BUILTIN_SDCARD)) { // MUST return true or all is lost!
         DelayWithDog(WARMUPDELAY);
-        SD.begin(BUILTIN_SDCARD);    // a second attempt for iffy sd cards ?!
+        SD.begin(BUILTIN_SDCARD); // a second attempt for iffy sd cards ?!
     }
     ErrorState = NOERROR;
     if (CheckFileExists(ModelsFile)) {
@@ -2408,7 +2462,7 @@ int InStrng(char* text1, char* text2)
         }
         if (!flag) return j + 1; // Found match
     }
-    return 0;                    // Found no match
+    return 0; // Found no match
 }
 
 /*********************************************************************************************************************************/
@@ -2475,15 +2529,15 @@ void SaveTransmitterParameters()
 
     SDCardAddress += 2;
     for (i = 0; i < CHANNELSUSED; ++i) {
-        SDUpdate16BITS(SDCardAddress, ChannelMin[i]);    // Stick min output of pot
+        SDUpdate16BITS(SDCardAddress, ChannelMin[i]); // Stick min output of pot
         SDCardAddress += 2;
         SDUpdate16BITS(SDCardAddress, ChannelMidLow[i]); //
         SDCardAddress += 2;
         SDUpdate16BITS(SDCardAddress, ChannelCentre[i]); // Stick Centre output of pot
         SDCardAddress += 2;
-        SDUpdate16BITS(SDCardAddress, ChannelMidHi[i]);  //
+        SDUpdate16BITS(SDCardAddress, ChannelMidHi[i]); //
         SDCardAddress += 2;
-        SDUpdate16BITS(SDCardAddress, ChannelMax[i]);    // Stick max output of pot
+        SDUpdate16BITS(SDCardAddress, ChannelMax[i]); // Stick max output of pot
         SDCardAddress += 2;
     }
     SDUpdate8BITS(SDCardAddress, BuddyPupilOnPPM);
@@ -2596,8 +2650,8 @@ void SaveOneModel(uint32_t mnum)
     FileCheckSum       = 0;
     if ((mnum < 1) || (mnum > MAXMODELNUMBER)) return; // There is no model zero!
     if (!ModelsFileOpen) OpenModelsFile();
-    SDCardAddress = TXSIZE;                            //  spare bytes for TX stuff
-    SDCardAddress += (mnum - 1) * MODELSIZE;           //  spare bytes for Model params
+    SDCardAddress = TXSIZE;                  //  spare bytes for TX stuff
+    SDCardAddress += (mnum - 1) * MODELSIZE; //  spare bytes for Model params
     if (SingleModelFlag) SDCardAddress = 0;
     StartLocation = SDCardAddress;
     ModelDefined  = 42;
@@ -2611,15 +2665,15 @@ void SaveOneModel(uint32_t mnum)
     }
     for (i = 0; i < CHANNELSUSED; ++i) {
         for (j = 1; j <= 4; ++j) {
-            SDUpdate8BITS(SDCardAddress, MaxDegrees[j][i]);    // Max requested in degrees (180)
+            SDUpdate8BITS(SDCardAddress, MaxDegrees[j][i]); // Max requested in degrees (180)
             ++SDCardAddress;
-            SDUpdate8BITS(SDCardAddress, MidHiDegrees[j][i]);  // MidHi requested in degrees (135)
+            SDUpdate8BITS(SDCardAddress, MidHiDegrees[j][i]); // MidHi requested in degrees (135)
             ++SDCardAddress;
             SDUpdate8BITS(SDCardAddress, CentreDegrees[j][i]); // Centre requested in degrees (90)
             ++SDCardAddress;
             SDUpdate8BITS(SDCardAddress, MidLowDegrees[j][i]); // MidLo requested in degrees (45)
             ++SDCardAddress;
-            SDUpdate8BITS(SDCardAddress, MinDegrees[j][i]);    // Min requested in degrees (0)
+            SDUpdate8BITS(SDCardAddress, MinDegrees[j][i]); // Min requested in degrees (0)
             ++SDCardAddress;
         }
     }
@@ -2671,7 +2725,7 @@ void SaveOneModel(uint32_t mnum)
 
     SDUpdate8BITS(SDCardAddress, SticksMode); // save sticks mode in case of rf transfer
 
-    SDCardAddress += 1;                       // *********************** 0 spare here remaining  **********************
+    SDCardAddress += 1; // *********************** 0 spare here remaining  **********************
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdate8BITS(SDCardAddress, InPutStick[i]);
@@ -2783,9 +2837,14 @@ void SaveOneModel(uint32_t mnum)
     ++SDCardAddress;
     ++SDCardAddress;
 
+    for (i = 0; i < 16; ++i) {
+        SDUpdate8BITS(SDCardAddress, ChannelOutPut[i]);
+        ++SDCardAddress;
+    }
+
     SaveCheckSum32(); // Save the Model parametres checksm
 
-                      // ********************** Add more
+    // ********************** Add more
 
     OneModelMemory = SDCardAddress - StartLocation;
 #ifdef DB_SD
@@ -2875,7 +2934,7 @@ uint16_t WordWrap(char* htext)
     for (i = strlen(htext) - 1; i > 1; --i) {
         if ((htext[i] == ' ') || (htext[i] == '-')) break; // 'i' now has last space pointer
     }
-    for (j = 0; j < i; ++j) {                              // get text to i ...
+    for (j = 0; j < i; ++j) { // get text to i ...
         a[0] = htext[j];
         strcat(temp1, a);
     }
@@ -2970,8 +3029,8 @@ void ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t Max
 
 /*********************************************************************************************************************************/
 void ScrollHelpFile()
-{                                                                      // redisplays help file to scroll it ... maybe from top of file
-    char HelpText[MAXFILELEN + 10];                                    // MAX = 3K or so
+{                                   // redisplays help file to scroll it ... maybe from top of file
+    char HelpText[MAXFILELEN + 10]; // MAX = 3K or so
     char HelpView[] = "HelpText";
     ReadTextFile(RecentTextFile, HelpText, RecentStartLine, MAXLINES); // Then load help text
     SendText1(HelpView, HelpText);                                     // Then send it
@@ -3197,7 +3256,7 @@ void SetDefaultValues()
 
     for (j = 0; j < BANKSUSED + 1; ++j) { // must have fudged this somewhere.... 5?!
         for (i = 0; i < CHANNELSUSED; ++i) {
-            Trims[j][i] = 80;             // MIDPOINT is 80 !
+            Trims[j][i] = 80; // MIDPOINT is 80 !
         }
     }
     RXCellCount = 3;
@@ -3727,7 +3786,7 @@ void MovePoint()
     if (YtouchPlace < BoxTop) return;              // out of range
     if (YtouchPlace > BoxBottom - BOXLEFT) return; // out of range
 
-    if (XtouchPlace < BOXLEFT + xPoints[0]) {      // do leftmost point  ?
+    if (XtouchPlace < BOXLEFT + xPoints[0]) { // do leftmost point  ?
         CurrentPoint = 1;
 
         rjump = GetDifference(YtouchPlace, yPoints[0]);
@@ -4096,7 +4155,7 @@ void SendModelFile()
             Fbuffer[BUFFERSIZE + 3] = Fsize >> 24; // SEND FILE SIZE (four bytes)
         }
         else {
-            ModelsFileNumber.seek(Fposition);           // Move filepointer
+            ModelsFileNumber.seek(Fposition); // Move filepointer
             ShortDelay();
             ModelsFileNumber.read(Fbuffer, BUFFERSIZE); // Read part of file
             Fposition += BUFFERSIZE;
@@ -4376,7 +4435,7 @@ void ReadNewSwitchFunction()
     SaveOneModel(ModelNumber);
     SendCommand(PageSwitchView); // change to all switches screen
     CurrentView = SWITCHES_VIEW;
-    UpdateSwitchesView();        // update its info
+    UpdateSwitchesView(); // update its info
     ClearText();
     SendCommand(ProgressEnd);
     return;
@@ -4522,7 +4581,7 @@ void EndBuddyView()
     char prompt[] = "Power off transmitter?";
     char GoBack[] = "page BuddyView";
 
-    OldPupil        = BuddyPupilOnPPM;  // save old version to detect a change
+    OldPupil        = BuddyPupilOnPPM; // save old version to detect a change
     OldMaster       = BuddyMaster;
     BuddyPupilOnPPM = GetValue(BuddyP); // Pupil
     BuddyMaster     = GetValue(BuddyM); // Master
@@ -4659,7 +4718,7 @@ void GotoMacrosView()
     PreviousMacroNumber = 200; // i.e. no usable number
     SendCommand(pMacrosView);  // Display MacroView
     CurrentView = MACROS_VIEW;
-    DelayWithDog(200);         // allow enough time for screen to display
+    DelayWithDog(200); // allow enough time for screen to display
     UpdateModelsNameEveryWhere();
     PopulateMacrosView();
 }
@@ -5529,7 +5588,7 @@ bool GetBackupFilename(char* goback, char* tt1, char* MMname, char* heading, cha
 // goback is the command needed to return to calling page
 
 bool GetConfirmation(char* goback, char* Prompt)
-{ 
+{
 
     char GoPopupView[] = "page PopupView";
     char Dialog[]      = "Dialog";
@@ -5903,7 +5962,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     StartPong,                // 69
     StoreModelID              // 70
 
-};                            // list will become longer ...
+}; // list will become longer ...
 
 /*********************************************************************************************************************************
  *                          BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)                                            *
@@ -5957,159 +6016,160 @@ FASTRUN void ButtonWasPressed()
                 return;
             }
         }
-        int  i                        = 0;
-        int  j                        = 0;
-        int  p                        = 0;
-        char lpm[]                    = "c0"; // Auto model selection
-        char Setup[]                  = "Setup";
-        char ClickX[]                 = "ClickX";
-        char ClickY[]                 = "ClickY";
-        char Reset[]                  = "Reset";
-        char Front_View[]             = "FrontView";
-        char Sticks_View[]            = "SticksView";
-        char Graph_View[]             = "GraphView";
-        char SetupView[]              = "MainSetup";
-        char Scan_End[]               = "ScanEnd";
-        char DataEnd[]                = "DataEnd";
-        char Data_View[]              = "DataView";
-        char CalibrateView[]          = "CalibrateView";
-        char TrimView[]               = "TrimView";
-        char TRIMS50[]                = "TRIMS50";
-        char MIXES_VIEW[]             = "MIXESVIEW"; // first call
-        char Mixes_View[]             = "MixesView";
-        char Fhss_View[]              = "FhssView";
-        char FM1[]                    = "FM 1";
-        char FM2[]                    = "FM 2";
-        char FM3[]                    = "FM 3";
-        char FM4[]                    = "FM 4";
-        char ReScan[]                 = "ReScan";
-        char Delete[]                 = "Delete";
-        char MixesView_MixNumber[]    = "MixNumber";
-        char ModelsView_ModelNumber[] = "ModelNumber";
-        char page_SticksView[]        = "page SticksView";
-        char page_GraphView[]         = "page GraphView";
-        char page_SetupView[]         = "page TXSetupView";
-        char page_AudioView[]         = "page AudioView";
-        char page_ColoursView[]       = "page ColoursView";
-        char GoSetupView[]            = "GoSetupView";
-        char ColoursView[]            = "ColoursView";
-        char SvT11[]                  = "t11";
-        char CMsg1[]                  = "Move all controls to their full\r\nextent several times,\r\nthen press Next.";
-        char SvB0[]                   = "b0";
-        char CMsg2[]                  = "Next ...";
-        char Cmsg3[]                  = "Centre all channels.\r\nPut edge switches fully back,\r\nor fully forward, then press Finish.";
-        char Cmsg4[]                  = "Finish";
-        char Cmsg5[]                  = "Repeat?";
-        char Cmsg6[]                  = "Calbrate again?";
-        char TypeView[]               = "TypeView";
-        char CopyToAllBanks[]         = "callfm";
-        char RXBAT[]                  = "RXBAT";
-        char r2s[]                    = "r2s";
-        char r3s[]                    = "r3s";
-        char r4s[]                    = "r4s";
-        char r5s[]                    = "r5s";
-        char r6s[]                    = "r6s";
-        char r12s[]                   = "r12s";
-        char r0[]                     = "r0";
-        char r1[]                     = "r1";
-        char SwitchesView[]           = "SwitchesView";
-        char SwitchesView1[]          = "SwitchesView1";
-        char OneSwitchView[]          = "OneSwitchView";
-        char PageOneSwitchView[]      = "page OneSwitchView";
-        char InputsView[]             = "InputsView";
-        char InputsDone[]             = "InputsDone";
-        char InputStick_Labels[16][4] = {"c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10", "c11", "c12", "c13", "c14", "c15", "c16"};
-        char InputTrim_labels[4][4]   = {"n0", "n1", "n2", "n3"};
-        char Export[]                 = "Export";
-        char Import[]                 = "Import";
-        char DelFile[]                = "DelFile";
-        char ModExt[]                 = ".MOD";
-        char FailSAVE[]               = "FailSAVE";
-        char FailSafe[]               = "FailSafe";
-        char fs[16][5]                = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
-        char CH1NAME[]                = "CH1NAME=";
-        char CH2NAME[]                = "CH2NAME=";
-        char b17[]                    = "b17";
-        char CH3NAME[]                = "CH3NAME=";
-        char CH4NAME[]                = "CH4NAME=";
-        char CH5NAME[]                = "CH5NAME=";
-        char CH6NAME[]                = "CH6NAME=";
-        char CH7NAME[]                = "CH7NAME=";
-        char CH8NAME[]                = "CH8NAME=";
-        char CH9NAME[]                = "CH9NAME=";
-        char CH10NAME[]               = "CH10NAME=";
-        char CH11NAME[]               = "CH11NAME=";
-        char CH12NAME[]               = "CH12NAME=";
-        char CH13NAME[]               = "CH13NAME=";
-        char CH14NAME[]               = "CH14NAME=";
-        char CH15NAME[]               = "CH15NAME=";
-        char CH16NAME[]               = "CH16NAME=";
-        char HelpView[]               = "HelpView";
-        char SendModel[]              = "SendModel";
-        char OptionsViewS[]           = "OptionsViewS";
-        char Pto[]                    = "Pto";
-        char Tx_Name[]                = "TxName";
-        char Exrite[]                 = "Exrite";
-        char ExpR[]                   = "Exp";
-        char Smooth[]                 = "Smooth";
-        char Lines[]                  = "Lines";
-        char GOTO[]                   = "GOTO:";
-        char WhichPage[]              = "page                                 "; // excessive spaces for page name
-        char AddMinute[]              = "IncMinute";
-        char Dec_Minute[]             = "DecMinute";
-        char Dec_Hour[]               = "DecHour";
-        char Inc_Hour[]               = "IncHour";
-        char Inc_Year[]               = "IncYear";
-        char Dec_Year[]               = "DecYear";
-        char Inc_Date[]               = "IncDate";
-        char Dec_Date[]               = "DecDate";
-        char Inc_Month[]              = "IncMonth";
-        char Dec_Month[]              = "DecMonth";
-        char pDataView[]              = "page DataView";
-        char pSwitchesView[]          = "page SwitchesView";
-        char pInputsView[]            = "page InputsView";
-        char pOptionsViewS[]          = "page OptionsView"; // TX options view
-        char pMixesView[]             = "page MixesView";
-        char pTypeView[]              = "page TypeView";
-        char pFailSafe[]              = "page FailSafeView";
-        char DataView_Clear[]         = "Clear";
-        char DataView_AltZero[]       = "AltZero";
-        char OptionsEnd[]             = "OptionsEnd";
-        char Mark[]                   = "Mark";
-        char UKRULES[]                = "UKRULES";
-        char Htext0[]                 = "HELP";
-        char Htext1[]                 = "Help";
-        char Bwn[]                    = "Bwn";
-        char SetupCol[]               = "SetupCol";
-        char b0_bco[]                 = "b0.bco";
-        char b0_pco[]                 = "b0.pco";
-        char High_pco[]               = "High.pco";
-        char Fm_pco[]                 = "Fm.pco";
-        char FrontView_BackGround[]   = "FrontView.BackGround";
-        char FrontView_ForeGround[]   = "FrontView.ForeGround";
-        char FrontView_Special[]      = "FrontView.Special";
-        char FrontView_Highlight[]    = "FrontView.Highlight";
-        char SetupAud[]               = "SetupAud";
-        char n0[]                     = "n0";
-        char Ex1[]                    = "Ex1";
-        char Expo[]                   = "Expo";
-        char AudioView[]              = "AudioView";
-        char n1[]                     = "n1";
-        char h0[]                     = "h0";
-        char c0[]                     = "c0";
-        char c1[]                     = "c1";
-        char c2[]                     = "c2";
-        char c3[]                     = "c3";
-        char c4[]                     = "c4";
-        char c5[]                     = "c5";
-        char StCH[]                   = "StCH";
-        char s0[]                     = "s0";
-        char t2[]                     = "t2";
-        char StEDIT[]                 = "StEDIT";
-        char pLogView[]               = "page LogView";
-        char dGMT[]                   = "dGMT";
-        char TxNme[]                  = "TxName";
-        char MMems[]                  = "MMems";
+        int  i                         = 0;
+        int  j                         = 0;
+        int  p                         = 0;
+        char lpm[]                     = "c0"; // Auto model selection
+        char Setup[]                   = "Setup";
+        char ClickX[]                  = "ClickX";
+        char ClickY[]                  = "ClickY";
+        char Reset[]                   = "Reset";
+        char Front_View[]              = "FrontView";
+        char Sticks_View[]             = "SticksView";
+        char Graph_View[]              = "GraphView";
+        char SetupView[]               = "MainSetup";
+        char Scan_End[]                = "ScanEnd";
+        char DataEnd[]                 = "DataEnd";
+        char Data_View[]               = "DataView";
+        char CalibrateView[]           = "CalibrateView";
+        char TrimView[]                = "TrimView";
+        char TRIMS50[]                 = "TRIMS50";
+        char MIXES_VIEW[]              = "MIXESVIEW"; // first call
+        char Mixes_View[]              = "MixesView";
+        char Fhss_View[]               = "FhssView";
+        char FM1[]                     = "FM 1";
+        char FM2[]                     = "FM 2";
+        char FM3[]                     = "FM 3";
+        char FM4[]                     = "FM 4";
+        char ReScan[]                  = "ReScan";
+        char Delete[]                  = "Delete";
+        char MixesView_MixNumber[]     = "MixNumber";
+        char ModelsView_ModelNumber[]  = "ModelNumber";
+        char page_SticksView[]         = "page SticksView";
+        char page_GraphView[]          = "page GraphView";
+        char page_SetupView[]          = "page TXSetupView";
+        char page_AudioView[]          = "page AudioView";
+        char page_ColoursView[]        = "page ColoursView";
+        char GoSetupView[]             = "GoSetupView";
+        char ColoursView[]             = "ColoursView";
+        char SvT11[]                   = "t11";
+        char CMsg1[]                   = "Move all controls to their full\r\nextent several times,\r\nthen press Next.";
+        char SvB0[]                    = "b0";
+        char CMsg2[]                   = "Next ...";
+        char Cmsg3[]                   = "Centre all channels.\r\nPut edge switches fully back,\r\nor fully forward, then press Finish.";
+        char Cmsg4[]                   = "Finish";
+        char Cmsg5[]                   = "Repeat?";
+        char Cmsg6[]                   = "Calbrate again?";
+        char TypeView[]                = "TypeView";
+        char CopyToAllBanks[]          = "callfm";
+        char RXBAT[]                   = "RXBAT";
+        char r2s[]                     = "r2s";
+        char r3s[]                     = "r3s";
+        char r4s[]                     = "r4s";
+        char r5s[]                     = "r5s";
+        char r6s[]                     = "r6s";
+        char r12s[]                    = "r12s";
+        char r0[]                      = "r0";
+        char r1[]                      = "r1";
+        char SwitchesView[]            = "SwitchesView";
+        char SwitchesView1[]           = "SwitchesView1";
+        char OneSwitchView[]           = "OneSwitchView";
+        char PageOneSwitchView[]       = "page OneSwitchView";
+        char InputsView[]              = "InputsView";
+        char InputsDone[]              = "InputsDone";
+        char InputStick_Labels[16][4]  = {"c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10", "c11", "c12", "c13", "c14", "c15", "c16"};
+        char OutputStick_Labels[16][4] = {"n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11", "n12", "n13", "n14", "n15", "n16", "n17", "n18", "n19"};
+        char InputTrim_labels[4][4]    = {"n0", "n1", "n2", "n3"};
+        char Export[]                  = "Export";
+        char Import[]                  = "Import";
+        char DelFile[]                 = "DelFile";
+        char ModExt[]                  = ".MOD";
+        char FailSAVE[]                = "FailSAVE";
+        char FailSafe[]                = "FailSafe";
+        char fs[16][5]                 = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
+        char CH1NAME[]                 = "CH1NAME=";
+        char CH2NAME[]                 = "CH2NAME=";
+        char b17[]                     = "b17";
+        char CH3NAME[]                 = "CH3NAME=";
+        char CH4NAME[]                 = "CH4NAME=";
+        char CH5NAME[]                 = "CH5NAME=";
+        char CH6NAME[]                 = "CH6NAME=";
+        char CH7NAME[]                 = "CH7NAME=";
+        char CH8NAME[]                 = "CH8NAME=";
+        char CH9NAME[]                 = "CH9NAME=";
+        char CH10NAME[]                = "CH10NAME=";
+        char CH11NAME[]                = "CH11NAME=";
+        char CH12NAME[]                = "CH12NAME=";
+        char CH13NAME[]                = "CH13NAME=";
+        char CH14NAME[]                = "CH14NAME=";
+        char CH15NAME[]                = "CH15NAME=";
+        char CH16NAME[]                = "CH16NAME=";
+        char HelpView[]                = "HelpView";
+        char SendModel[]               = "SendModel";
+        char OptionsViewS[]            = "OptionsViewS";
+        char Pto[]                     = "Pto";
+        char Tx_Name[]                 = "TxName";
+        char Exrite[]                  = "Exrite";
+        char ExpR[]                    = "Exp";
+        char Smooth[]                  = "Smooth";
+        char Lines[]                   = "Lines";
+        char GOTO[]                    = "GOTO:";
+        char WhichPage[]               = "page                                 "; // excessive spaces for page name
+        char AddMinute[]               = "IncMinute";
+        char Dec_Minute[]              = "DecMinute";
+        char Dec_Hour[]                = "DecHour";
+        char Inc_Hour[]                = "IncHour";
+        char Inc_Year[]                = "IncYear";
+        char Dec_Year[]                = "DecYear";
+        char Inc_Date[]                = "IncDate";
+        char Dec_Date[]                = "DecDate";
+        char Inc_Month[]               = "IncMonth";
+        char Dec_Month[]               = "DecMonth";
+        char pDataView[]               = "page DataView";
+        char pSwitchesView[]           = "page SwitchesView";
+        char pInputsView[]             = "page InputsView";
+        char pOptionsViewS[]           = "page OptionsView"; // TX options view
+        char pMixesView[]              = "page MixesView";
+        char pTypeView[]               = "page TypeView";
+        char pFailSafe[]               = "page FailSafeView";
+        char DataView_Clear[]          = "Clear";
+        char DataView_AltZero[]        = "AltZero";
+        char OptionsEnd[]              = "OptionsEnd";
+        char Mark[]                    = "Mark";
+        char UKRULES[]                 = "UKRULES";
+        char Htext0[]                  = "HELP";
+        char Htext1[]                  = "Help";
+        char Bwn[]                     = "Bwn";
+        char SetupCol[]                = "SetupCol";
+        char b0_bco[]                  = "b0.bco";
+        char b0_pco[]                  = "b0.pco";
+        char High_pco[]                = "High.pco";
+        char Fm_pco[]                  = "Fm.pco";
+        char FrontView_BackGround[]    = "FrontView.BackGround";
+        char FrontView_ForeGround[]    = "FrontView.ForeGround";
+        char FrontView_Special[]       = "FrontView.Special";
+        char FrontView_Highlight[]     = "FrontView.Highlight";
+        char SetupAud[]                = "SetupAud";
+        char n0[]                      = "n0";
+        char Ex1[]                     = "Ex1";
+        char Expo[]                    = "Expo";
+        char AudioView[]               = "AudioView";
+        char n1[]                      = "n1";
+        char h0[]                      = "h0";
+        char c0[]                      = "c0";
+        char c1[]                      = "c1";
+        char c2[]                      = "c2";
+        char c3[]                      = "c3";
+        char c4[]                      = "c4";
+        char c5[]                      = "c5";
+        char StCH[]                    = "StCH";
+        char s0[]                      = "s0";
+        char t2[]                      = "t2";
+        char StEDIT[]                  = "StEDIT";
+        char pLogView[]                = "page LogView";
+        char dGMT[]                    = "dGMT";
+        char TxNme[]                   = "TxName";
+        char MMems[]                   = "MMems";
         char Prompt[60];
         char del[]               = "Delete ";
         char overwr[]            = "Overwrite ";
@@ -6418,7 +6478,7 @@ FASTRUN void ButtonWasPressed()
                 WhichPage[i] = 0;
             }                       // Get page name to which to return
             SendCommand(WhichPage); // this sends nextion back to last screen
-           // Look(WhichPage); // heer ********************************
+                                    // Look(WhichPage); // heer ********************************
             CurrentView = SavedCurrentView;
 
             if (CurrentView == PONGVIEW) StartPong();
@@ -6532,7 +6592,7 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(OneSwitchView, TextIn) > 0) {
             SwitchEditNumber = GetChannel(); // which switch?
             CurrentView      = ONE_SWITCH_VIEW;
-            SendCommand(PageOneSwitchView);  // edit one switch - could be 1-4 // heer
+            SendCommand(PageOneSwitchView); // edit one switch - could be 1-4 // heer
             UpdateOneSwitchView();
             UpdateModelsNameEveryWhere();
             ClearText();
@@ -6555,7 +6615,8 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(InputsDone, TextIn) > 0) {
             SendCommand(ProgressStart);
             for (int i = 0; i < 16; ++i) {
-                InPutStick[i] = CheckRange((GetValue(InputStick_Labels[i]) - 1), 0, 15);
+                InPutStick[i]    = CheckRange((GetValue(InputStick_Labels[i]) - 1), 0, 15);
+                ChannelOutPut[i] = CheckRange((GetValue(OutputStick_Labels[i]) - 1), 0, 15);
                 if (i < 4) InputTrim[i] = CheckRange((GetValue(InputTrim_labels[i]) - 1), 0, 15);
                 SendValue(Progress, (((i + 1) * 100) / 16) - 1);
             }
@@ -6926,7 +6987,7 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(Fhss_View, TextIn)) {
 
-            if ((!b5isGrey))                                     // no scan while connected!!!
+            if ((!b5isGrey)) // no scan while connected!!!
             {
                 if (PPMdata.UseTXModule) InitRadio(DefaultPipe); // because scan fails if radio isn't initialised
                 SendCommand(page_FhssView);
@@ -6964,7 +7025,7 @@ FASTRUN void ButtonWasPressed()
             UpdateModelsNameEveryWhere();
             uint8_t ThisMixNumber = MixNumber; // save it
             MixNumber             = GetValue(MixesView_MixNumber);
-            if (LastMixNumber != MixNumber)    // Did number change?
+            if (LastMixNumber != MixNumber) // Did number change?
             {
                 LastMixNumber = MixNumber;     // save new mix number
                 MixNumber     = ThisMixNumber; // force back to old number to grab last lot before doing new one
@@ -7380,7 +7441,7 @@ void GetBank()
             ShowMotor(1);
             if (AnnounceBanks) PlaySound(MOTORON); // Tell the pilot motor is on!
             if (UseLog) LogMotor(1);
-            TimerMillis = millis();                // Motor ON timerpause off
+            TimerMillis = millis(); // Motor ON timerpause off
         }
         else {
             if (AnnounceBanks) PlaySound(MOTOROFF);
@@ -7389,7 +7450,7 @@ void GetBank()
             ShowMotor(0); // Tell the pilot motor is off
             if (SendNoData) {
                 SendCommand(WarnOff);
-                SendNoData = false;      // user turned off motor
+                SendNoData = false; // user turned off motor
             }
             PausedSecs = ElapsedSeconds; //    Motor OFF timerpause started
         }
@@ -7678,14 +7739,14 @@ void GotoFrontView()
 /************************************************************************************************************/
 FASTRUN void ParseAckPayload()
 {
-    if (BuddyPupilOnPPM) return;                                                  // buddy pupil need none of this
+    if (BuddyPupilOnPPM) return; // buddy pupil need none of this
 
-    FHSS_data::NextChannelNumber = AckPayload.Byte5;                              // every packet tells of next hop destination
+    FHSS_data::NextChannelNumber = AckPayload.Byte5; // every packet tells of next hop destination
 
     if (AckPayload.Purpose & 0x80) {                                              // Hi bit is now the **HOP NOW!!** flag
         NextChannel = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber); // The actual channel number pointed to.
         HopToNextChannel();
-        AckPayload.Purpose &= 0x7f;                                               // Clear the high BIT, use the remainder ...
+        AckPayload.Purpose &= 0x7f; // Clear the high BIT, use the remainder ...
     }
 
     if (!ModelMatched && !LedWasGreen) {
@@ -7776,7 +7837,7 @@ FASTRUN void ParseAckPayload()
 /************************************************************************************************************/
 FASTRUN void CheckGapsLength()
 {
-    if (GapStart > 0) {                  // when reconnected, how long was connection lost?
+    if (GapStart > 0) { // when reconnected, how long was connection lost?
         ++GapCount;
         ThisGap = (millis() - GapStart); // AND in fact RX sends no data for 20 ms after reconnection
         if (ThisGap >= MinimumGap && UseLog) LogThisGap();
@@ -7918,11 +7979,11 @@ void FASTRUN ManageTransmitter()
     uint32_t RightNow        = millis();
     uint32_t TXPacketElapsed = RightNow - LastPacketSentTime;
 
-    KickTheDog();                                 // Watchdog ... ALWAYS!
-    CheckPowerOffButton();                        // Pretty obvious really ...
-    CheckForNextionButtonPress();                 // Pretty obvious really ...
+    KickTheDog();                 // Watchdog ... ALWAYS!
+    CheckPowerOffButton();        // Pretty obvious really ...
+    CheckForNextionButtonPress(); // Pretty obvious really ...
     if ((PACEMAKER - TXPacketElapsed <= TIMEFORTXMANAGMENT) && ModelMatched) {
-        return;                                   // If it's almost time to send data, then do not start some other task which might easily take longer.
+        return; // If it's almost time to send data, then do not start some other task which might easily take longer.
     }
     if (RightNow - TransmitterLastManaged > 50) { // 20 times a second is plenty
         if (RightNow - LastTimeRead >= 1000) {    // once a second for these...
@@ -7930,7 +7991,7 @@ void FASTRUN ManageTransmitter()
             GetStatistics();                      // Do stats
             LastTimeRead = millis();
             CheckForNextionButtonPress();
-            ShowComms();                                    // Screen Telemetry Data
+            ShowComms(); // Screen Telemetry Data
             if (CurrentView == MODELSVIEW) CheckModelName();
             if (CurrentView == FRONTVIEW) ShowMotorTimer(); // Screen Timer
             return;                                         // That's enough housekeeping this time around
@@ -7977,8 +8038,8 @@ void GetBuddyData()
 
 FASTRUN void loop()
 {
-    ManageTransmitter();               // Do the needed chores ... (if there's time)
-    GetNewChannelValues();             // Load SendBuffer with new servo positions very frequently
+    ManageTransmitter();   // Do the needed chores ... (if there's time)
+    GetNewChannelValues(); // Load SendBuffer with new servo positions very frequently
     if (CurrentMode < 3) {
         if (UseMacros) ExecuteMacro(); // Modify it if macro is running
         if (BuddyPupilOnPPM) {
@@ -8018,7 +8079,7 @@ FASTRUN void loop()
             break;
         case SENDNOTHING: // 4
             break;
-        case PONGMODE:    // 5
+        case PONGMODE: // 5
             PlayPong();
             break;
         default:
