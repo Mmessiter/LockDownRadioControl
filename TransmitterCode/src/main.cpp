@@ -3265,6 +3265,7 @@ void SetDefaultValues()
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = i;
+        ChannelOutPut[i] = i;
     }
     FMSwitch        = 4;
     Autoswitch      = 1;
@@ -3325,6 +3326,7 @@ void SetDefaultValues()
     DualRateChannels[5]       = 0;
     DualRateChannels[6]       = 0;
     DualRateChannels[7]       = 0;
+
     for (int i = 0; i < 4; ++i) {
         BanksInUse[i] = i + 4;
     }
@@ -5138,9 +5140,7 @@ void ResetTransmitterSettings()
     TimerDownwards          = false;
     PPMdata.UseTXModule     = false;
     char ProgressEnd[]      = "vis Progress,0";
-    for (int i = 0; i < 16; ++i) {
-        ChannelOutPut[i] = i;
-    }
+    
     SetDS1307ToCompilerTime();
     for (int k = 1; k < 5; ++k) { // writes default four times!
         for (ModelNumber = 1; ModelNumber <= MAXMODELNUMBER; ++ModelNumber) {
@@ -6218,7 +6218,6 @@ FASTRUN void ButtonWasPressed()
                 ModelNumber = GetValue(MMems) + 1;
                 SetDefaultValues();
                 LoadModelSelector();
-                Look(422);
             }
             ClearText();
             return;
