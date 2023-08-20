@@ -413,6 +413,7 @@ var Definitions_8h =
     [ "ChannelMidLow", "Definitions_8h.html#a6b76981ac753d96fc77b5ab7f9c0765a", null ],
     [ "ChannelMin", "Definitions_8h.html#acc312445fe26b5cac85fab093aab1c2f", null ],
     [ "ChannelNames", "Definitions_8h.html#a0c9a9276cbc69bce973fabbed4a9686b", null ],
+    [ "ChannelOutPut", "Definitions_8h.html#a542d24ef5ac1e6672793052d53182fe9", null ],
     [ "ChanneltoSet", "Definitions_8h.html#afe31e2cddc17dd03549ad02cc613f743", null ],
     [ "ClickX", "Definitions_8h.html#a5977abea05dff7ba2cdb9dd379595f76", null ],
     [ "ClickY", "Definitions_8h.html#a85578a4e235e2836fdbbfa037bcb5805", null ],
