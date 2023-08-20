@@ -1013,10 +1013,10 @@ GetNewChannelValues()
         SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel]; // reroute to defined output channel
     }
     if (CurrentMode == NORMAL) {
-        DoReverseSense();
-        DoSlowServos();
-        DoRouteOutputs();
-        DoMixes(); // Mixes the OUTPUT :-)
+        DoSlowServos();                 // Some servos need to be slowed down
+        DoRouteOutputs();               // This function re-routes outputs to the defined channels (Before reversing)
+        DoReverseSense();               // This function reverses servos if needed (After routing)
+        DoMixes();                      // Mixes the OUTPUT :-)
     }
 }
 /*********************************************************************************************************************************/
@@ -1390,10 +1390,12 @@ void CheckStepSizes()
 
 bool CheckDuplicate(uint8_t ch, int8_t j)
 {
+    uint8_t count = 0;
     for (int i = 0; i < j; ++i) {
         if (ch == ChannelOutPut[i]) {
-            return false;
+            ++count;
         }
+        if (count > 4) return false; // not allowed more than 4 of the same channel
     }
     return true;
 }
@@ -1404,7 +1406,7 @@ void CheckOutPutChannels() // This function checks for bad or duplicate output c
 {
     bool resetit = false;
     for (int i = 0; i < 16; ++i) {
-        if (ChannelOutPut[i] > 15) ChannelOutPut[i] = i;
+        if (ChannelOutPut[i] > 15) resetit = true;
         if (!CheckDuplicate(ChannelOutPut[i], i)) {
             resetit = true;
             break;
