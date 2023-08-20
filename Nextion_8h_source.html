@@ -285,7 +285,7 @@ $(document).ready(function(){initNavTree('Nextion_8h_source.html',''); initResiz
 <div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>    uint32_t ValueIn = <a class="code hl_function" href="Nextion_8h.html#aff6fa8906188d3249b01bf59de47df2f">getvalue</a>(nbox);</div>
 <div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span> </div>
 <div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>    <span class="keywordflow">while</span> (ValueIn == 65535 &amp;&amp; i &lt; 25) { <span class="comment">// if error read again!</span></div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>        <a class="code hl_function" href="Definitions_8h.html#a3b1d8aa403e2724e55c71da3d9d13e7e">DelayWithDog</a>(50);</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>        <a class="code hl_function" href="Definitions_8h.html#a3b1d8aa403e2724e55c71da3d9d13e7e">DelayWithDog</a>(10);</div>
 <div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>        ValueIn = <a class="code hl_function" href="Nextion_8h.html#aff6fa8906188d3249b01bf59de47df2f">getvalue</a>(nbox);</div>
 <div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>        ++i;</div>
 <div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>    }</div>
