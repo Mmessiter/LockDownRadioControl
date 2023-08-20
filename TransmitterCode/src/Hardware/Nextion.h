@@ -183,7 +183,7 @@ uint32_t GetValue(char* nbox)
     uint32_t ValueIn = getvalue(nbox);
 
     while (ValueIn == 65535 && i < 25) { // if error read again!
-        DelayWithDog(50);
+        DelayWithDog(10);
         ValueIn = getvalue(nbox);
         ++i;
     }
