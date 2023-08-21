@@ -1013,10 +1013,10 @@ GetNewChannelValues()
         SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel]; // reroute to defined output channel
     }
     if (CurrentMode == NORMAL) {
-        DoSlowServos();                 // Some servos need to be slowed down
-        DoRouteOutputs();               // This function re-routes outputs to the defined channels (Before reversing)
-        DoReverseSense();               // This function reverses servos if needed (After routing)
-        DoMixes();                      // Mixes the OUTPUT :-)
+        DoSlowServos();         // Some servos may need to be slowed down
+        DoRouteOutputs();       // This function re-routes outputs to the defined channels (Before reversing)
+        DoReverseSense();       // This function reverses servos if needed (After routing)
+        DoMixes();              // Mixes the OUTPUT :-)
     }
 }
 /*********************************************************************************************************************************/
@@ -3264,7 +3264,7 @@ void SetDefaultValues()
     RXCellCount = 3;
 
     for (i = 0; i < CHANNELSUSED; ++i) {
-        InPutStick[i] = i;
+        InPutStick[i]    = i;
         ChannelOutPut[i] = i;
     }
     FMSwitch        = 4;
@@ -5140,7 +5140,7 @@ void ResetTransmitterSettings()
     TimerDownwards          = false;
     PPMdata.UseTXModule     = false;
     char ProgressEnd[]      = "vis Progress,0";
-    
+
     SetDS1307ToCompilerTime();
     for (int k = 1; k < 5; ++k) { // writes default four times!
         for (ModelNumber = 1; ModelNumber <= MAXMODELNUMBER; ++ModelNumber) {
@@ -6624,6 +6624,7 @@ FASTRUN void ButtonWasPressed()
                 if (i < 4) InputTrim[i] = CheckRange((GetValue(InputTrim_labels[i]) - 1), 0, 15);
                 SendValue(Progress, (((i + 1) * 100) / 16) - 1);
             }
+            CheckOutPutChannels();
             SendValue(Progress, 95);
             SaveOneModel(ModelNumber);
             SendValue(Progress, 100);
