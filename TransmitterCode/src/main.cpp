@@ -1014,7 +1014,7 @@ GetNewChannelValues()
     }
     if (CurrentMode == NORMAL) {
         DoSlowServos();         // Some servos may need to be slowed down
-        DoRouteOutputs();       // This function re-routes outputs to the defined channels (Before reversing)
+        DoRouteOutputs();       // This function might re-route outputs to user-defined channels (Before reversing)
         DoReverseSense();       // This function reverses servos if needed (After routing)
         DoMixes();              // Mixes the OUTPUT :-)
     }
