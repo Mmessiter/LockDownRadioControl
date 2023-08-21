@@ -1,8 +1,11 @@
-This screen has two main functions:||
+This screen has three main functions:||
 
-(1) An output channel can be mapped from any input device.|
-(2) The name of each output channel can be edited.||
+(1) A channel can be routed from any input device.|
+(2) The name of each output channel can be edited.|
+(3) A channel can be routed to any output channel.||
 
+All channels by default are routed from the input of the same number (in yellow) to the output of the same number (in red).|
+And these can all be edited. Just press a yellow or red number to bring up its edit window.||
 
 One input device can have multiple outputs. Traditional helicopters use input 3 ('Throttle') for both throttle and collective pitch. Although these share an input stick, each still uses its own independent output curves. ||
 
@@ -14,8 +17,9 @@ One input can be mapped to multiple output channels. ||
 
 But to change a single output from multiple inputs, use 'Mixes'.||
 
-Even the trims may be redefined here. || 
+The trims' output channel may be redefined here. But trims' inputs cannot be changed because there are only the four hardware trims. || 
 
-The trims inputs default to 1,2,3,4 and I suggest you don't change these unless you know what you're doing. It's possible to have a trim affect a different channel (up to 8) but this is rarely needed.
+The trims outputs default to 1,2,3,4 and I suggest you don't change these unless you know what you're doing. |
+It's possible to have a trim affect any channel but this is rarely needed.
 
 After making changes, Be SURE TO TEST on the ground before flying.||
