@@ -1010,7 +1010,7 @@ GetNewChannelValues()
         OutputValue += GetTrimAmount(InputChannel);                        // Add trim AFTER doing rates
         OutputValue += (SubTrims[OutputChannel] - 127) * (TrimMultiplier); // ADD SUBTRIM to output channel, not mapped input channel (Range 0 - 127 - 254)
         PreMixBuffer[OutputChannel] = constrain(OutputValue, MINMICROS, MAXMICROS);
-        SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel]; // reroute to defined output channel
+        SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel]; 
     }
     if (CurrentMode == NORMAL) {
         DoSlowServos();         // Some servos may need to be slowed down
