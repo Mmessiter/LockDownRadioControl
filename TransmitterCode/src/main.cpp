@@ -1010,13 +1010,13 @@ GetNewChannelValues()
         OutputValue += GetTrimAmount(InputChannel);                        // Add trim AFTER doing rates
         OutputValue += (SubTrims[OutputChannel] - 127) * (TrimMultiplier); // ADD SUBTRIM to output channel, not mapped input channel (Range 0 - 127 - 254)
         PreMixBuffer[OutputChannel] = constrain(OutputValue, MINMICROS, MAXMICROS);
-        SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel]; 
+        SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel];
     }
     if (CurrentMode == NORMAL) {
-        DoSlowServos();         // Some servos may need to be slowed down
-        DoRouteOutputs();       // This function might re-route outputs to user-defined channels (Before reversing)
-        DoReverseSense();       // This function reverses servos if needed (After routing)
-        DoMixes();              // Mixes the OUTPUT :-)
+        DoSlowServos();   // Some servos may need to be slowed down
+        DoRouteOutputs(); // This function might re-route outputs to user-defined channels (Before reversing)
+        DoReverseSense(); // This function reverses servos if needed (After routing)
+        DoMixes();        // Mixes the OUTPUT :-)
     }
 }
 /*********************************************************************************************************************************/
@@ -1387,30 +1387,24 @@ void CheckStepSizes()
 }
 
 /*********************************************************************************************************************************/
-
 bool CheckDuplicate(uint8_t ch, int8_t j)
 {
-    uint8_t count = 0;
     for (int i = 0; i < j; ++i) {
-        if (ch == ChannelOutPut[i]) {
-            ++count;
-        }
-        if (count > 4) return false; // not allowed more than 4 of the same channel
+        if (ch == ChannelOutPut[i]) return false; // no duplicates allowed
     }
     return true;
 }
-
 /*********************************************************************************************************************************/
 
 void CheckOutPutChannels() // This function checks for bad or duplicate output channels and resets them if found
 {
     bool resetit = false;
     for (int i = 0; i < 16; ++i) {
-        if (ChannelOutPut[i] > 15) resetit = true;
-        if (!CheckDuplicate(ChannelOutPut[i], i)) {
-            resetit = true;
-            break;
-        }
+        if ((ChannelOutPut[i] > 15) || (!CheckDuplicate(ChannelOutPut[i], i)))
+            {
+                resetit = true;
+                break;
+            }
     }
     if (resetit) {
         for (int i = 0; i < 16; ++i) {
