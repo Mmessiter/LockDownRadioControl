@@ -980,12 +980,12 @@ void CheckScanButton() // Scan button AND models button
                 b5isGrey = true;
             }
         }
-        if (CurrentView == RXSETUPVIEW) {
-            if (!b12isGrey) {
-                SendCommand(b12Greyed);
-                b12isGrey = true;
-            }
-        }
+       if (CurrentView == RXSETUPVIEW) {
+           if (!b12isGrey) {
+               SendCommand(b12Greyed);
+               b12isGrey = true;
+           }
+       }
     }
 }
 /************************************************************************************************************/
