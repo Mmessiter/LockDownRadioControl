@@ -485,7 +485,7 @@ FASTRUN bool CheckRXVolts()
 
             if (VoltsPerCell < StopFlyingVoltsPerCell && GreenPercentBar > 0) {
                 if (!LowVoltstimer) LowVoltstimer = millis();      // Start a timer if not running already
-                if (millis() - LowVoltstimer > LOW_VOLTAGE_TIME) { // Is RX Lipo down to storage volts for over 3 seconds?
+                if (millis() - LowVoltstimer > LOW_VOLTAGE_TIME) { // Is RX Lipo down to storage volts for over 5 seconds?
                     RXWarningFlag = true;
                     WarningSound  = STORAGECHARGE;
                 }
