@@ -331,7 +331,8 @@ FASTRUN void ShowMotorTimer()
 
 FASTRUN void ShowServoPos()
 {
-    uint32_t Hertz = 25;                       // Fast
+    uint8_t  MinimumDistance = 10;             // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
+    uint32_t Hertz           = 25;             // Fast
     if (CurrentView == GRAPHVIEW) Hertz = 200; // Slower!
     if (millis() - ShowServoTimer < Hertz) return;
     ShowServoTimer = millis();
@@ -346,17 +347,21 @@ FASTRUN void ShowServoPos()
     // The first 8 channels are displayed on all three of these screens
     if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW) || (CurrentView == CALIBRATEVIEW)) {
         for (int i = 0; i < 8; ++i) {
-            if (abs(SendBuffer[i] - ShownBuffer[i]) > 10) { //  no need to show tiny movements
+            if (ChannelOutPut[i] > 3)
+                MinimumDistance = 40;                                    // coarse for pots & switches...
+            else
+                MinimumDistance = 10;                                    // ...finer for sticks
+            if (abs(SendBuffer[i] - ShownBuffer[i]) > MinimumDistance) { // no need to show tiny movements
                 SendValue(Ch_Lables[i], IntoLowerRes(SendBuffer[i]));
                 ShownBuffer[i] = SendBuffer[i];
             }
         }
     }
-
+    MinimumDistance = 10;
     // The second 8 channels are displayed on only two screens
     if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW)) {
         for (int i = 8; i < 16; ++i) {
-            if (abs(SendBuffer[i] - ShownBuffer[i]) > 10) {
+            if (abs(SendBuffer[i] - ShownBuffer[i]) > MinimumDistance) {
                 SendValue(Ch_Lables[i], IntoLowerRes(SendBuffer[i]));
                 ShownBuffer[i] = SendBuffer[i];
             }
@@ -365,7 +370,7 @@ FASTRUN void ShowServoPos()
     if ((CurrentView == GRAPHVIEW)) {
 #define fixitx 35
 
-        uint16_t LeastDistance = 3; // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
+        MinimumDistance = 3; // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
 
         l = (InPutStick[ChanneltoSet - 1]);
         if (ChanneltoSet <= 8)
@@ -390,7 +395,7 @@ FASTRUN void ShowServoPos()
             StickPosition = map(l1, ChannelCentre[l], ChannelMax[l], BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2), BoxRight - fixitx);
         }
 
-        if ((abs(StickPosition - SavedLineX) > LeastDistance)) {
+        if ((abs(StickPosition - SavedLineX) > MinimumDistance)) {
             DisplayCurve();                                                                                        // needed to clear last line
             DrawLine(StickPosition - 1, BoxTop + 3, StickPosition - 1, (BoxBottom - 3) - BoxTop, HighlightColour); // draws line for stick position
             SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet - 1], MINMICROS, MAXMICROS, -100, 100));
@@ -1401,10 +1406,10 @@ void CheckOutPutChannels() // This function checks for bad or duplicate output c
     bool resetit = false;
     for (int i = 0; i < 16; ++i) {
         if ((ChannelOutPut[i] > 15) || (!CheckDuplicate(ChannelOutPut[i], i)))
-            {
-                resetit = true;
-                break;
-            }
+        {
+            resetit = true;
+            break;
+        }
     }
     if (resetit) {
         for (int i = 0; i < 16; ++i) {
