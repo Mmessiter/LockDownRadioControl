@@ -6620,7 +6620,7 @@ FASTRUN void ButtonWasPressed()
             for (int i = 0; i < 16; ++i) {
                 if (ModelMatched) {
                     NewCompressNeeded = false;
-                    SendData(); // To prevent failsafe, keep sending data
+                    SendData(); // To prevent failsafe, keep sending data as this takes a while
                 }
                 InPutStick[i]    = CheckRange((GetValue(InputStick_Labels[i]) - 1), 0, 15);
                 ChannelOutPut[i] = CheckRange((GetValue(OutputStick_Labels[i]) - 1), 0, 15);
