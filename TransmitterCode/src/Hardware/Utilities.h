@@ -883,7 +883,7 @@ void ShowConnectionQuality()
 
     if (PPMdata.UseTXModule) SendText(FrontView_Connected, TXModuleMSG);
     if (!LedWasGreen) return;
-    SendValue(Quality, ConnectionQuality);                              // show quality of connection in progress bar
+    SendValue(Quality, ConnectionQuality); // show quality of connection in progress bar
     strcpy(Msgbuf, Msg_Connected);
     if (ConnectionQuality >= 100) strcat(Msgbuf, Msg_ConnectedPerfect); // show quality as a comment
     if ((ConnectionQuality >= 95) && (ConnectionQuality < 100)) strcat(Msgbuf, Msg_ConnectedExcellent);
@@ -956,10 +956,12 @@ void DelayWithDog(uint32_t HowLong)
     uint32_t ThisMoment = millis();
     while ((millis() - ThisMoment) < HowLong) {
         KickTheDog();
+      //  if (BoundFlag && Connected && ModelMatched && CurrentView != FRONTVIEW) SendData();
     }
 }
 /************************************************************************************************************/
-template<typename any> void Look(const any& value) // this is a template function that can print anything but cannot be used to change anything
+template<typename any>
+void Look(const any& value) // this is a template function that can print anything but cannot be used to change anything
 {
     Serial.println(value);
 }

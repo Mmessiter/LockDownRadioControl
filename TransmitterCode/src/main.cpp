@@ -6618,6 +6618,10 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(InputsDone, TextIn) > 0) {
             SendCommand(ProgressStart);
             for (int i = 0; i < 16; ++i) {
+                if (ModelMatched) {
+                    NewCompressNeeded = false;
+                    SendData(); // To prevent failsafe, keep sending data
+                }
                 InPutStick[i]    = CheckRange((GetValue(InputStick_Labels[i]) - 1), 0, 15);
                 ChannelOutPut[i] = CheckRange((GetValue(OutputStick_Labels[i]) - 1), 0, 15);
                 if (i < 4) InputTrim[i] = CheckRange((GetValue(InputTrim_labels[i]) - 1), 0, 15);
