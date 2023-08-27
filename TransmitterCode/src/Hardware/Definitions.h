@@ -76,7 +76,7 @@
 #define MAXMODELNUMBER          91
 #define PERFECTPACKETSPERSECOND 150  // Flat out perfect packets per second
 #define RED_LED_ON_TIME         3500 // How many ms of no connection before RED led comes on
-#define LOW_VOLTAGE_TIME        10000 // How many ms to endure low voltage before announcing it. (5 seconds)
+#define LOW_VOLTAGE_TIME        10000 // How many ms to endure low voltage before announcing it. (10 seconds)
 #define MAXSHOWCOMMSSESCONDS    6    // Assess average connection quality over most recent 6 seconds continously
 #define SHOWCOMMSDELAY          1000 // ms pauses between updated info on NEXTION
 #define WARMUPDELAY             300  // fails at 200 so must be >200 ...
