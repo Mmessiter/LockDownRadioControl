@@ -378,14 +378,6 @@ FASTRUN void ShowServoPos()
         else
             l1 = GetStickInputInputOnly(l);
 
-        if (ReversedChannelBITS & 1 << (ChanneltoSet - 1)) { // reversed?
-            if (l1 <= ChannelCentre[l]) {
-                l1 = map(l1, ChannelMin[l], ChannelCentre[l], ChannelMax[l], ChannelCentre[l]);
-            }
-            else {
-                l1 = map(l1, ChannelCentre[l], ChannelMax[l], ChannelCentre[l], ChannelMin[l]);
-            }
-        }
         if (l1 <= ChannelCentre[l]) {
             SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMin[l], 0, -100));
             StickPosition = map(l1, ChannelMin[l], ChannelCentre[l], BoxLeft - 0, BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2));
@@ -394,7 +386,7 @@ FASTRUN void ShowServoPos()
             SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMax[l], 0, 100));
             StickPosition = map(l1, ChannelCentre[l], ChannelMax[l], BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2), BoxRight - fixitx);
         }
-
+       
         if ((abs(StickPosition - SavedLineX) > MinimumDistance)) {
             DisplayCurve();                                                                                        // needed to clear last line
             DrawLine(StickPosition - 1, BoxTop + 3, StickPosition - 1, (BoxBottom - 3) - BoxTop, HighlightColour); // draws line for stick position
