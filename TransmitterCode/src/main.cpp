@@ -3064,8 +3064,8 @@ void DoOneSwitch(char* Sw, uint8_t n)
 {
 
     char NotUsed[]          = "Not used";
-    char Banks123[]         = "Banks 1-2-3";
-    char Auto[]             = "Bank 4 (etc)";
+    char Banks123[]         = "Banks 1 2 3";
+    char Auto[]             = "Bank 4 & Motor";
     char Safety_Switch[]    = "Safety    ";
     char Buddy_Switch[]     = "Buddy     ";
     char DualRates_Switch[] = "Rates     ";
