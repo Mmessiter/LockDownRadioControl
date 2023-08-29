@@ -2416,6 +2416,7 @@ FLASHMEM void setup()
         SendNoData = true;
     }
     if (!UseMotorKill) ShowMotor(1);
+    if (SafetyON)  ShowSafetyIsOn();
 
     if (ErrorState) {
         SendCommand(WarnNow);
