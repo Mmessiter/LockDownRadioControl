@@ -4195,10 +4195,10 @@ void SendModelFile()
 
 void SoundBank()
 {
-    Look1("TIME: ");
-    Look(millis());
+    // Look1("TIME: ");
+    // Look(millis());
 
-    if (millis() < 2000) return;                    // don't announce bank if just booted
+    if (millis() < 1700) return;                    // don't announce bank if just booted
     PlaySound(BankSounds[BanksInUse[Bank - 1]]);
     ScreenTimeTimer = millis();                     // reset screen counter
     if (ScreenIsOff) {
