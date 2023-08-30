@@ -4195,6 +4195,7 @@ void SendModelFile()
 
 void SoundBank()
 {
+    if (!MotorWasEnabled) return;
     PlaySound(BankSounds[BanksInUse[Bank - 1]]);
     ScreenTimeTimer = millis(); // reset screen counter
     if (ScreenIsOff) {
