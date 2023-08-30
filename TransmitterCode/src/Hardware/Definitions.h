@@ -18,7 +18,7 @@
 
 #define TXVERSION_MAJOR   2
 #define TXVERSION_MINOR   2
-#define TXVERSION_MINIMUS 5  //   August 2023
+#define TXVERSION_MINIMUS 5 //   August 2023
 
 // **************************************************************************
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
@@ -49,15 +49,15 @@
     #define BUDDYPPMPORT 6  // Buddybox PPM pin
 #endif
 
-#define DEFAULTPIPEADDRESS      0xB7BE3E9423LL            // Pipe address for startup - any value but MUST match RX
-#define CHANNELSUSED            16                        // 16 Channels
-#define MAXMIXES                32                        // 32 mixes
-#define TICKSPERMINUTE          60000                     // millis() = 60000 per minute
-#define PROPOCHANNELS           8                         // Only 4 have knobs / 2 sticks (= 4 hall sensors)
-#define BANKSWITCH              4                         // Default MODE switch
-#define AUTOSWITCH              1                         // Default AUTO switch
-#define BANKSUSED               4                         // Flight modes (AKA Banks)
-#define LOWBATTERY              42                        // Default percent for warning (User definable)
+#define DEFAULTPIPEADDRESS      0xB7BE3E9423LL // Pipe address for startup - any value but MUST match RX
+#define CHANNELSUSED            16             // 16 Channels
+#define MAXMIXES                32             // 32 mixes
+#define TICKSPERMINUTE          60000          // millis() = 60000 per minute
+#define PROPOCHANNELS           8              // Only 4 have knobs / 2 sticks (= 4 hall sensors)
+#define BANKSWITCH              4              // Default MODE switch
+#define AUTOSWITCH              1              // Default AUTO switch
+#define BANKSUSED               4              // Flight modes (AKA Banks)
+#define LOWBATTERY              42             // Default percent for warning (User definable)
 #define DEFAULTTRIMREPEATSPEED  600
 #define INACTIVITYTIMEOUT       10 * TICKSPERMINUTE       // Default time after which to switch off
 #define INACTIVITYMINIMUM       05 * TICKSPERMINUTE       // Inactivity timeout minimum is 5 minutes
@@ -74,13 +74,13 @@
 #define MAXDUALRATE             200
 #define MAXBUFFERSIZE           1024 * 6
 #define MAXMODELNUMBER          91
-#define PERFECTPACKETSPERSECOND 150  // Flat out perfect packets per second
-#define RED_LED_ON_TIME         3500 // How many ms of no connection before RED led comes on
+#define PERFECTPACKETSPERSECOND 150   // Flat out perfect packets per second
+#define RED_LED_ON_TIME         3500  // How many ms of no connection before RED led comes on
 #define LOW_VOLTAGE_TIME        10000 // How many ms to endure low voltage before announcing it. (10 seconds)
-#define MAXSHOWCOMMSSESCONDS    6    // Assess average connection quality over most recent 6 seconds continously
-#define SHOWCOMMSDELAY          1000 // ms pauses between updated info on NEXTION
-#define WARMUPDELAY             300  // fails at 200 so must be >200 ...
-#define SCREENCHANGEWAIT        100  // allow time for screen to appear
+#define MAXSHOWCOMMSSESCONDS    6     // Assess average connection quality over most recent 6 seconds continously
+#define SHOWCOMMSDELAY          1000  // ms pauses between updated info on NEXTION
+#define WARMUPDELAY             300   // fails at 200 so must be >200 ...
+#define SCREENCHANGEWAIT        100   // allow time for screen to appear
 
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
@@ -477,7 +477,11 @@ FASTRUN void  Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uin
 FASTRUN void  BufferTeensyMACAddPipe();
 void          ExecuteMacro();
 template<typename any>
-void             Look(const any& value);
+void Look(const any& value);
+
+template<typename any>
+void Look1(const any& value);
+
 void             ShowBank();
 void             UpdateModelsNameEveryWhere();
 void             DefineTrimsStart();
@@ -535,34 +539,34 @@ uint8_t       LastMixNumber    = 1;
 uint8_t       MixNumber        = 0;
 uint8_t       CurrentView      = FRONTVIEW;
 uint8_t       SavedCurrentView = FRONTVIEW;
-uint64_t      DefaultPipe      = DEFAULTPIPEADDRESS;                                //          Default Radio pipe address
-uint64_t      TeensyMACAddPipe = DEFAULTPIPEADDRESS;                                //          New Radio pipe address for binding will come from MAC address
-char          TextIn[CHARSMAX + 2];                                                 //          Spare space
+uint64_t      DefaultPipe      = DEFAULTPIPEADDRESS; //          Default Radio pipe address
+uint64_t      TeensyMACAddPipe = DEFAULTPIPEADDRESS; //          New Radio pipe address for binding will come from MAC address
+char          TextIn[CHARSMAX + 2];                  //          Spare space
 uint16_t      PacketsPerSecond = 0;
 uint8_t       PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS]; // Here we record some history
-uint32_t      TotalLostPackets   = 0;
-uint32_t      TotalGoodPackets   = 0;
+uint32_t      TotalLostPackets = 0;
+uint32_t      TotalGoodPackets = 0;
 
-uint8_t       PacketNumber       = 0;
-uint8_t       GPSMarkHere        = 0;
-uint16_t      TrimRepeatSpeed    = 600;
-char          na[]               = "";
-uint8_t       StepSize[16]       = {0, 0, 0, 0, 0, 0, 0, 0, 5, 25, 5, 25, 5, 25, 5, 25}; //    How far to move each time on slow servos
-uint16_t      CurrentPosition[UNCOMPRESSEDWORDS];                                        //    Position from which a slow servo started (0 = not started yet)
-uint16_t      SendBuffer[UNCOMPRESSEDWORDS];                                             //    Data to send to rx (16 words)
-uint16_t      PPMBuffer[UNCOMPRESSEDWORDS];                                              //
-uint16_t      ShownBuffer[UNCOMPRESSEDWORDS];                                            //    Data shown before
-uint16_t      LastBuffer[CHANNELSUSED + 1];                                              //    Used to spot any change
-uint16_t      PreMixBuffer[CHANNELSUSED + 1];                                            //    Data collected from sticks
-uint8_t       MaxDegrees[5][CHANNELSUSED + 1];                                           //    Max degrees (180)
-uint8_t       MidHiDegrees[5][CHANNELSUSED + 1];                                         //    MidHi degrees (135)
-uint8_t       CentreDegrees[5][CHANNELSUSED + 1];                                        //    Middle degrees (90)
-uint8_t       MidLowDegrees[5][CHANNELSUSED + 1];                                        //    MidLow Degrees (45)
-uint8_t       MinDegrees[5][CHANNELSUSED + 1];                                           //    Min Degrees (0)
-uint8_t       SubTrims[CHANNELSUSED + 1];                                                //    Subtrims
-uint8_t       SubTrimToEdit      = 0;
-uint32_t      LastPacketSentTime = 0;
-uint8_t       Bank               = 1;
+uint8_t  PacketNumber    = 0;
+uint8_t  GPSMarkHere     = 0;
+uint16_t TrimRepeatSpeed = 600;
+char     na[]            = "";
+uint8_t  StepSize[16]    = {0, 0, 0, 0, 0, 0, 0, 0, 5, 25, 5, 25, 5, 25, 5, 25}; //    How far to move each time on slow servos
+uint16_t CurrentPosition[UNCOMPRESSEDWORDS];                                     //    Position from which a slow servo started (0 = not started yet)
+uint16_t SendBuffer[UNCOMPRESSEDWORDS];                                          //    Data to send to rx (16 words)
+uint16_t PPMBuffer[UNCOMPRESSEDWORDS];                                           //
+uint16_t ShownBuffer[UNCOMPRESSEDWORDS];                                         //    Data shown before
+uint16_t LastBuffer[CHANNELSUSED + 1];                                           //    Used to spot any change
+uint16_t PreMixBuffer[CHANNELSUSED + 1];                                         //    Data collected from sticks
+uint8_t  MaxDegrees[5][CHANNELSUSED + 1];                                        //    Max degrees (180)
+uint8_t  MidHiDegrees[5][CHANNELSUSED + 1];                                      //    MidHi degrees (135)
+uint8_t  CentreDegrees[5][CHANNELSUSED + 1];                                     //    Middle degrees (90)
+uint8_t  MidLowDegrees[5][CHANNELSUSED + 1];                                     //    MidLow Degrees (45)
+uint8_t  MinDegrees[5][CHANNELSUSED + 1];                                        //    Min Degrees (0)
+uint8_t  SubTrims[CHANNELSUSED + 1];                                             //    Subtrims
+uint8_t  SubTrimToEdit      = 0;
+uint32_t LastPacketSentTime = 0;
+uint8_t  Bank               = 1;
 // User defined bank names zone
 // ************************************** 0                  1                 2                  3                4          5           6           7          8                9        10          11       12        13             14            15          16          17      18        19           20         21     22           23         24         25          26           27        ***
 char    BankTexts[28][14] = {{"Flight mode 1"}, {"Flight mode 2"}, {"Flight mode 3"}, {"Flight mode 4"}, {"Bank 1"}, {"Bank 2"}, {"Bank 3"}, {"Bank 4"}, {"Aerobatics"}, {"Auto"}, {"Cruise"}, {"Flaps"}, {"Hover"}, {"Idle up 1"}, {"Idle up 2"}, {"Landing"}, {"Launch"}, {"Normal"}, {"Speed"}, {"Takeoff"}, {"Thermal"}, {"Hold"}, {"3D"}, {"Brakes"}, {"Stunt 1"}, {"Stunt 2"}, {"Gear up"}, {"Gear down"}};

@@ -967,6 +967,13 @@ void Look(const any& value) // this is a template function that can print anythi
 }
 
 /************************************************************************************************************/
+template<typename any>
+void Look1(const any& value) // this is a template function that can print anything but cannot be used to change anything
+{
+    Serial.print(value);
+}
+
+/************************************************************************************************************/
 
 void CheckScanButton() // Scan button AND models button
 {
