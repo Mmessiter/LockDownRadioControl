@@ -4198,7 +4198,7 @@ void SoundBank()
     // Look1("TIME: ");
     // Look(millis());
 
-    if (millis() < 1700) return;                    // don't announce bank if just booted
+    if (millis() < 2500) return;                    // don't announce bank if just booted
     PlaySound(BankSounds[BanksInUse[Bank - 1]]);
     ScreenTimeTimer = millis();                     // reset screen counter
     if (ScreenIsOff) {
