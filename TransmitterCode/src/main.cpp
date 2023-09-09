@@ -348,7 +348,7 @@ FASTRUN void ShowServoPos()
     if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW) || (CurrentView == CALIBRATEVIEW)) {
         for (int i = 0; i < 8; ++i) {
             if (ChannelOutPut[i] > 3)
-                MinimumDistance = 40;                                    // coarse for pots & switches...
+                MinimumDistance = 40; // coarse for pots & switches...
             else
                 MinimumDistance = 10;                                    // ...finer for sticks
             if (abs(SendBuffer[i] - ShownBuffer[i]) > MinimumDistance) { // no need to show tiny movements
@@ -368,17 +368,19 @@ FASTRUN void ShowServoPos()
         }
     }
     if ((CurrentView == GRAPHVIEW)) {
+
 #define fixitx 35
 
         MinimumDistance = 3; // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
 
         l = (InPutStick[ChanneltoSet - 1]);
-        if (ChanneltoSet <= 8)
+        if (l <= 8)
             l1 = AnalogueReed(l);
         else
             l1 = GetStickInputInputOnly(l);
-
-        if (l1 <= ChannelCentre[l]) {
+// todo:  use map() here with SendBuffer[ChanneltoSet - 1] as the input
+        if (l1 <= ChannelCentre[l])
+        {
             SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMin[l], 0, -100));
             StickPosition = map(l1, ChannelMin[l], ChannelCentre[l], BoxLeft - 0, BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2));
         }
@@ -386,7 +388,7 @@ FASTRUN void ShowServoPos()
             SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMax[l], 0, 100));
             StickPosition = map(l1, ChannelCentre[l], ChannelMax[l], BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2), BoxRight - fixitx);
         }
-       
+
         if ((abs(StickPosition - SavedLineX) > MinimumDistance)) {
             DisplayCurve();                                                                                        // needed to clear last line
             DrawLine(StickPosition - 1, BoxTop + 3, StickPosition - 1, (BoxBottom - 3) - BoxTop, HighlightColour); // draws line for stick position
@@ -2416,7 +2418,7 @@ FLASHMEM void setup()
         SendNoData = true;
     }
     if (!UseMotorKill) ShowMotor(1);
-    if (SafetyON)  ShowSafetyIsOn();
+    if (SafetyON) ShowSafetyIsOn();
 
     if (ErrorState) {
         SendCommand(WarnNow);
@@ -4198,9 +4200,9 @@ void SoundBank()
     // Look1("TIME: ");
     // Look(millis());
 
-    if (millis() < 2500) return;                    // don't announce bank if just booted
+    if (millis() < 2500) return; // don't announce bank if just booted
     PlaySound(BankSounds[BanksInUse[Bank - 1]]);
-    ScreenTimeTimer = millis();                     // reset screen counter
+    ScreenTimeTimer = millis(); // reset screen counter
     if (ScreenIsOff) {
         RestoreBrightness();
         ScreenIsOff = false;
