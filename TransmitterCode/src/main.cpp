@@ -369,7 +369,7 @@ FASTRUN void ShowServoPos()
         }
     }
     if ((CurrentView == GRAPHVIEW)) {
-        MinimumDistance = 3; // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
+        MinimumDistance = 3; // if the change is very small, don't re-display anything - to reduce flashing
         InputDevice     = (InPutStick[ChanneltoSet - 1]);
         if (InputDevice <= 8)
             InputAmount = AnalogueReed(InputDevice);
