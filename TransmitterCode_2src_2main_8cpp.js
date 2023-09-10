@@ -10,7 +10,6 @@ var TransmitterCode_2src_2main_8cpp =
     [ "FILEPALEVEL", "TransmitterCode_2src_2main_8cpp.html#af4896f4ff6b440a66c915e3f891c71d2", null ],
     [ "FILEPIPEADDRESS", "TransmitterCode_2src_2main_8cpp.html#aec45a9afab4b013142d7ff497e5b4f0c", null ],
     [ "FILETIMEOUT", "TransmitterCode_2src_2main_8cpp.html#ac23f3d9653dfa68ab2f39567096545e6", null ],
-    [ "fixitx", "TransmitterCode_2src_2main_8cpp.html#ad40f5a53042299d0a733f7238b5df3a2", null ],
     [ "LASTFUNCTION", "TransmitterCode_2src_2main_8cpp.html#a7b562fa140e3020f492686ce35e4ac52", null ],
     [ "MAXWIDTH", "TransmitterCode_2src_2main_8cpp.html#ac101c663138f79260b6d5ea00140fa22", null ],
     [ "AileronLeftTrim", "TransmitterCode_2src_2main_8cpp.html#a71f72bed656884a7e88b70f73f8d81a4", null ],

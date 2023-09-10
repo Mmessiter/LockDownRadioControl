@@ -13,12 +13,11 @@ var searchData=
   ['filetimeout_10',['FILETIMEOUT',['../TransmitterCode_2src_2main_8cpp.html#ac23f3d9653dfa68ab2f39567096545e6',1,'main.cpp']]],
   ['five_11',['FIVE',['../Definitions_8h.html#a18ced145d1fdc806b5006bd4c2857026',1,'Definitions.h']]],
   ['fiveminutes_12',['FIVEMINUTES',['../Definitions_8h.html#a84242d01b905e842a18fb3019e839ada',1,'Definitions.h']]],
-  ['fixitx_13',['fixitx',['../TransmitterCode_2src_2main_8cpp.html#ad40f5a53042299d0a733f7238b5df3a2',1,'main.cpp']]],
-  ['flaps_14',['FLAPS',['../Definitions_8h.html#a757da19391eb1525d44bc78f83ea5d40',1,'Definitions.h']]],
-  ['four_15',['FOUR',['../Definitions_8h.html#a64a9b58c6a5bcd3724f3b56ad6d006a7',1,'Definitions.h']]],
-  ['fourminutes_16',['FOURMINUTES',['../Definitions_8h.html#aad932f138e888f84b6cd1c268fdabb84',1,'Definitions.h']]],
-  ['frequencyscount_17',['FREQUENCYSCOUNT',['../common_8h.html#afe5bce36baf737bd284d43cd0e805fdb',1,'common.h']]],
-  ['frequencyscount1_18',['FREQUENCYSCOUNT1',['../common_8h.html#a71a3cc3c3b499cb9329172835e5a1df8',1,'common.h']]],
-  ['frontview_19',['FRONTVIEW',['../Definitions_8h.html#a8204cbed1c612a522a43c80f071eee2a',1,'Definitions.h']]],
-  ['fs_5feeprom_5foffset_20',['FS_EEPROM_OFFSET',['../common_8h.html#ad529f0c2447693d8418608e122012388',1,'common.h']]]
+  ['flaps_13',['FLAPS',['../Definitions_8h.html#a757da19391eb1525d44bc78f83ea5d40',1,'Definitions.h']]],
+  ['four_14',['FOUR',['../Definitions_8h.html#a64a9b58c6a5bcd3724f3b56ad6d006a7',1,'Definitions.h']]],
+  ['fourminutes_15',['FOURMINUTES',['../Definitions_8h.html#aad932f138e888f84b6cd1c268fdabb84',1,'Definitions.h']]],
+  ['frequencyscount_16',['FREQUENCYSCOUNT',['../common_8h.html#afe5bce36baf737bd284d43cd0e805fdb',1,'common.h']]],
+  ['frequencyscount1_17',['FREQUENCYSCOUNT1',['../common_8h.html#a71a3cc3c3b499cb9329172835e5a1df8',1,'common.h']]],
+  ['frontview_18',['FRONTVIEW',['../Definitions_8h.html#a8204cbed1c612a522a43c80f071eee2a',1,'Definitions.h']]],
+  ['fs_5feeprom_5foffset_19',['FS_EEPROM_OFFSET',['../common_8h.html#ad529f0c2447693d8418608e122012388',1,'common.h']]]
 ];
