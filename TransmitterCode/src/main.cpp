@@ -375,22 +375,13 @@ FASTRUN void ShowServoPos()
             l1 = AnalogueReed(l);
         else
             l1 = GetStickInputInputOnly(l);
-        l1 = map(l1, ChannelCentre[l], ChannelMax[l], 0, 100);    // input stick position
-        l2 = map(SendBuffer[l], MINMICROS, MAXMICROS, -100, 100); // output servo position
-        SendValue(ChannelInput, l1);                              // input stick position
-        SendValue(ChannelOutput, l2);                             // output servo position
-        l1 += 100;
-        l1 /= 2;
-        l1 = constrain(l1, 0, 100);
-
-        // Look1("Boxleft = ");
-        // Look(BoxLeft);
-        // Look1("Boxright = ");
-        // Look(BoxRight);
-
-        StickPosition = map(l1, 0, 100, BoxLeft + 1, BoxRight - BoxLeft) - 1;  // map to box size
-        StickPosition = constrain(StickPosition, BoxLeft, BoxRight - BoxLeft); // not outside box!
-        if ((abs(StickPosition - SavedLineX) > MinimumDistance))          // no need to show tiny movements
+        l1 = map(l1, ChannelCentre[l], ChannelMax[l], 0, 100);                                           // input stick position
+        l2 = map(SendBuffer[l], MINMICROS, MAXMICROS, -100, 100);                                        // output servo position
+        SendValue(ChannelInput, l1);                                                                     // input stick position
+        SendValue(ChannelOutput, l2);                                                                    // output servo position
+        StickPosition = map(constrain((l1 + 100) / 2, 0, 100), 0, 100, BoxLeft + 2, BoxRight - BoxLeft); // map to box size
+        StickPosition = constrain(StickPosition, BoxLeft + 2, (BoxRight - BoxLeft) - 1);                 // not outside box!
+        if ((abs(StickPosition - SavedLineX) > MinimumDistance))                                         // no need to show tiny movements
         {
             DisplayCurve();                                                                                // needed to clear last line
             DrawLine(StickPosition, BoxTop + 3, StickPosition, (BoxBottom - 3) - BoxTop, HighlightColour); // draws line for stick position
