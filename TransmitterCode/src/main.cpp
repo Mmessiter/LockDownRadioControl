@@ -343,6 +343,7 @@ FASTRUN void ShowServoPos()
     uint16_t StickPosition    = 54321;
     int      l                = 0;
     int      l1               = 0;
+    int      l2               = 0;
 
     // The first 8 channels are displayed on all three of these screens
     if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW) || (CurrentView == CALIBRATEVIEW)) {
@@ -368,36 +369,35 @@ FASTRUN void ShowServoPos()
         }
     }
     if ((CurrentView == GRAPHVIEW)) {
-
-#define fixitx 35
-
         MinimumDistance = 3; // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
-
-        l = (InPutStick[ChanneltoSet - 1]);
+        l               = (InPutStick[ChanneltoSet - 1]);
         if (l <= 8)
             l1 = AnalogueReed(l);
         else
             l1 = GetStickInputInputOnly(l);
-// todo:  use map() here with SendBuffer[ChanneltoSet - 1] as the input
-        if (l1 <= ChannelCentre[l])
-        {
-            SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMin[l], 0, -100));
-            StickPosition = map(l1, ChannelMin[l], ChannelCentre[l], BoxLeft - 0, BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2));
-        }
-        else {
-            SendValue(ChannelInput, map(l1, ChannelCentre[l], ChannelMax[l], 0, 100));
-            StickPosition = map(l1, ChannelCentre[l], ChannelMax[l], BoxLeft + (((BoxRight - fixitx) - BoxLeft) / 2), BoxRight - fixitx);
-        }
+        l1 = map(l1, ChannelCentre[l], ChannelMax[l], 0, 100);    // input stick position
+        l2 = map(SendBuffer[l], MINMICROS, MAXMICROS, -100, 100); // output servo position
+        SendValue(ChannelInput, l1);                              // input stick position
+        SendValue(ChannelOutput, l2);                             // output servo position
+        l1 += 100;
+        l1 /= 2;
+        l1 = constrain(l1, 0, 100);
 
-        if ((abs(StickPosition - SavedLineX) > MinimumDistance)) {
-            DisplayCurve();                                                                                        // needed to clear last line
-            DrawLine(StickPosition - 1, BoxTop + 3, StickPosition - 1, (BoxBottom - 3) - BoxTop, HighlightColour); // draws line for stick position
-            SendValue(ChannelOutput, map(SendBuffer[ChanneltoSet - 1], MINMICROS, MAXMICROS, -100, 100));
+        // Look1("Boxleft = ");
+        // Look(BoxLeft);
+        // Look1("Boxright = ");
+        // Look(BoxRight);
+
+        StickPosition = map(l1, 0, 100, BoxLeft + 1, BoxRight - BoxLeft) - 1;  // map to box size
+        StickPosition = constrain(StickPosition, BoxLeft, BoxRight - BoxLeft); // not outside box!
+        if ((abs(StickPosition - SavedLineX) > MinimumDistance))          // no need to show tiny movements
+        {
+            DisplayCurve();                                                                                // needed to clear last line
+            DrawLine(StickPosition, BoxTop + 3, StickPosition, (BoxBottom - 3) - BoxTop, HighlightColour); // draws line for stick position
             SavedLineX = StickPosition;
         }
     }
 }
-
 /*********************************************************************************************************************************/
 FASTRUN bool CheckTXVolts()
 {
