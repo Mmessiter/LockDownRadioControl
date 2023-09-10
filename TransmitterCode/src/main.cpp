@@ -374,18 +374,17 @@ FASTRUN void ShowServoPos()
         if (InputDevice <= 8)
             InputAmount = AnalogueReed(InputDevice);
         else
-            InputAmount = GetStickInputInputOnly(InputDevice);
+            InputAmount = GetStickInputInputOnly(InputDevice);                                                    // not analogue
         InputAmount  = map(InputAmount, ChannelCentre[InputDevice], ChannelMax[InputDevice], 0, 100);             // input stick position
         OutputAmount = map(SendBuffer[InputDevice], MINMICROS, MAXMICROS, -100, 100);                             // output servo position
         SendValue(ChannelInput, InputAmount);                                                                     // input stick position
         SendValue(ChannelOutput, OutputAmount);                                                                   // output servo position
         StickPosition = map(constrain((InputAmount + 100) / 2, 0, 100), 0, 100, BoxLeft + 2, BoxRight - BoxLeft); // map to box size
         StickPosition = constrain(StickPosition, BoxLeft + 2, (BoxRight - BoxLeft) - 1);                          // not outside box!
-        if ((abs(StickPosition - SavedLineX) > MinimumDistance))                                                  // no need to show tiny movements
-        {
-            DisplayCurve();                                                                                // needed to clear last line
-            DrawLine(StickPosition, BoxTop + 3, StickPosition, (BoxBottom - 3) - BoxTop, HighlightColour); // draws line for stick position
-            SavedLineX = StickPosition;
+        if ((abs(StickPosition - SavedLineX) > MinimumDistance)) {                                                // no need to show tiny movements
+            DisplayCurve();                                                                                       // needed to clear last line
+            DrawLine(StickPosition, BoxTop + 3, StickPosition, (BoxBottom - 3) - BoxTop, HighlightColour);        // draws line for stick position
+            SavedLineX = StickPosition;                                                                           // Save for next time
         }
     }
 }
