@@ -341,9 +341,9 @@ FASTRUN void ShowServoPos()
     char     ChannelInput[]   = "Input";
     char     ChannelOutput[]  = "Output";
     uint16_t StickPosition    = 54321;
-    int      l                = 0;
-    int      l1               = 0;
-    int      l2               = 0;
+    int      InputDevice      = 0;
+    int      InputAmount      = 0;
+    int      OutputAmount     = 0;
 
     // The first 8 channels are displayed on all three of these screens
     if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW) || (CurrentView == CALIBRATEVIEW)) {
@@ -370,18 +370,18 @@ FASTRUN void ShowServoPos()
     }
     if ((CurrentView == GRAPHVIEW)) {
         MinimumDistance = 3; // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
-        l               = (InPutStick[ChanneltoSet - 1]);
-        if (l <= 8)
-            l1 = AnalogueReed(l);
+        InputDevice     = (InPutStick[ChanneltoSet - 1]);
+        if (InputDevice <= 8)
+            InputAmount = AnalogueReed(InputDevice);
         else
-            l1 = GetStickInputInputOnly(l);
-        l1 = map(l1, ChannelCentre[l], ChannelMax[l], 0, 100);                                           // input stick position
-        l2 = map(SendBuffer[l], MINMICROS, MAXMICROS, -100, 100);                                        // output servo position
-        SendValue(ChannelInput, l1);                                                                     // input stick position
-        SendValue(ChannelOutput, l2);                                                                    // output servo position
-        StickPosition = map(constrain((l1 + 100) / 2, 0, 100), 0, 100, BoxLeft + 2, BoxRight - BoxLeft); // map to box size
-        StickPosition = constrain(StickPosition, BoxLeft + 2, (BoxRight - BoxLeft) - 1);                 // not outside box!
-        if ((abs(StickPosition - SavedLineX) > MinimumDistance))                                         // no need to show tiny movements
+            InputAmount = GetStickInputInputOnly(InputDevice);
+        InputAmount  = map(InputAmount, ChannelCentre[InputDevice], ChannelMax[InputDevice], 0, 100);             // input stick position
+        OutputAmount = map(SendBuffer[InputDevice], MINMICROS, MAXMICROS, -100, 100);                             // output servo position
+        SendValue(ChannelInput, InputAmount);                                                                     // input stick position
+        SendValue(ChannelOutput, OutputAmount);                                                                   // output servo position
+        StickPosition = map(constrain((InputAmount + 100) / 2, 0, 100), 0, 100, BoxLeft + 2, BoxRight - BoxLeft); // map to box size
+        StickPosition = constrain(StickPosition, BoxLeft + 2, (BoxRight - BoxLeft) - 1);                          // not outside box!
+        if ((abs(StickPosition - SavedLineX) > MinimumDistance))                                                  // no need to show tiny movements
         {
             DisplayCurve();                                                                                // needed to clear last line
             DrawLine(StickPosition, BoxTop + 3, StickPosition, (BoxBottom - 3) - BoxTop, HighlightColour); // draws line for stick position
