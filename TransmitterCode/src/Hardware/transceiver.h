@@ -1,6 +1,7 @@
 // ********************** Transceiver.h ***********************************************
 
 #include <Arduino.h>
+#include "Hardware/Definitions.h" 
 /*********************************************************************************************************************************/
 
 /************************************************************************************************************/
@@ -303,11 +304,12 @@ void ScanAllChannels(bool cls)
 float PStartTime = 0;
 float PEndTime   = 0;
 float Pduration  = 0;
+float HopsPerSec = 0;
 #endif
 
 /************************************************************************************************************/
 
-// This function hops to the next channel in the FFHS array (about 16 times a second)
+// This function hops to the next channel in the FFHS array 
 
 FASTRUN void HopToNextChannel()
 {
@@ -322,16 +324,19 @@ FASTRUN void HopToNextChannel()
         float Freq = 2.4;
         PEndTime   = millis();
         Pduration  = (PEndTime - PStartTime) / 1000;
-        Serial.print("Hop duration: ");
-        Serial.print(Pduration);
-        Serial.print(" seconds. Good packets per hop: ");
-        Serial.print(PacketNumber);
-        Serial.print(" Next frequency: ");
+        HopsPerSec = 1 / Pduration;
+        Look1("  Hops per second: ");
+        Serial.print(HopsPerSec, 1);
+        Look1("  Hop duration: ");
+        Look1(Pduration);
+        Look1(" seconds  Good packets per hop: ");
+        Look1(PacketNumber);
+        Look1("  Next frequency: ");
         Freq += ch / 1000;
         Serial.print(Freq, 3);
-        Serial.print(" Ghz.");
-        Serial.print(" RX transceiver number: ");
-        Serial.println(ThisRadio);
+        Look1(" Ghz");
+        Look1("  RX transceiver number: ");
+        Look(ThisRadio);
         PStartTime = millis();
     }
 #endif
