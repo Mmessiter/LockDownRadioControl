@@ -2,6 +2,8 @@
 
 #include <Arduino.h>
 
+#include "Hardware/Definitions.h"
+
 uint32_t TrimTimer = 0;
 
 // **********************************************************************************************************************************
@@ -146,12 +148,12 @@ void SetATrimDefinition(int i)
                 TrimDefined[1] = true;
             }
             if (i == 5) {
-                TrimNumber[4] = TRIM2A; // throttle trim calibration was reversed!
-                TrimNumber[5] = TRIM2B;
-            }
-            if (i == 4) {
                 TrimNumber[5] = TRIM2A;
                 TrimNumber[4] = TRIM2B;
+            }
+            if (i == 4) {
+                TrimNumber[4] = TRIM2A;
+                TrimNumber[5] = TRIM2B;
             }
         }
 
@@ -221,8 +223,13 @@ int GetTrimAmount(uint8_t InputChannel)
         if (InputChannel == 2) tt = 1;
     }
     int TrimAmount = (Trims[Bank][tt] - 80) * TrimMultiplier; // TRIMS on lower four input channels (80 is mid point !! (range 40 - 80 - 120))
+   
+    if ((tt == 1) && (SticksMode == 2)) {
+        TrimAmount = 80 - TrimAmount;
+    }
     return TrimAmount;
 }
+
 /*********************************************************************************************************************************/
 void UpdateTrimView()
 {
