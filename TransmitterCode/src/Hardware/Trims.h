@@ -146,12 +146,12 @@ void SetATrimDefinition(int i)
                 TrimDefined[1] = true;
             }
             if (i == 5) {
-                TrimNumber[5] = TRIM2A;
-                TrimNumber[4] = TRIM2B;
+                TrimNumber[4] = TRIM2A; // throttle trim calibration was reversed!
+                TrimNumber[5] = TRIM2B;
             }
             if (i == 4) {
-                TrimNumber[4] = TRIM2A;
-                TrimNumber[5] = TRIM2B;
+                TrimNumber[5] = TRIM2A;
+                TrimNumber[4] = TRIM2B;
             }
         }
 
