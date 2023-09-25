@@ -277,6 +277,7 @@ var Definitions_8h =
     [ "CheckTimer", "Definitions_8h.html#addfc131a271de92cb52d869fde35729e", null ],
     [ "CheckTrimValues", "Definitions_8h.html#a1930cb00e0e68d2c871cec56cc458064", null ],
     [ "ClearSuccessRate", "Definitions_8h.html#a82b1900a80d1622896601c57d6edaeda", null ],
+    [ "ClearText", "Definitions_8h.html#af0852678d8e89501acee8951f09d3b43", null ],
     [ "CloseLogFile", "Definitions_8h.html#abc72fe68abd024cb263115e0afd3160a", null ],
     [ "Compress", "Definitions_8h.html#a1ddd5e8d5bd649dd98ce3710fbff651b", null ],
     [ "DefineTrimsStart", "Definitions_8h.html#aa36a3594acf30c4314af50c16b9f3c58", null ],
