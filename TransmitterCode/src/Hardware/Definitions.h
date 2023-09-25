@@ -523,7 +523,7 @@ void             SendValue(char* nbox, int value);
 void             LogTotalLostPackets();
 void             LogTotalGoodPackets();
 void             LogOverallSuccessRate();
-
+void             ClearText();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************
