@@ -803,6 +803,7 @@ uint32_t  PreviousPowerOffTimer   = 0;
 bool      ModelIdentified         = false;
 bool      ModelMatched            = false;
 bool      AutoModelSelect         = true;
+uint32_t  TrimTimer               = 0;
 
 union uMacReceived
 {
