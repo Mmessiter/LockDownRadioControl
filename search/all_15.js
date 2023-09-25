@@ -55,7 +55,7 @@ var searchData=
   ['trims_52',['Trims',['../Definitions_8h.html#aa091f2d8f47174c6960fd69335a4e5fa',1,'Definitions.h']]],
   ['trims_2eh_53',['Trims.h',['../Trims_8h.html',1,'']]],
   ['trimswitch_54',['TrimSwitch',['../Definitions_8h.html#ad5adb31bc39b92d27e6ca35ef4dafefe',1,'Definitions.h']]],
-  ['trimtimer_55',['TrimTimer',['../Trims_8h.html#a48589088880569c1ae40f8c226cc52be',1,'Trims.h']]],
+  ['trimtimer_55',['TrimTimer',['../Definitions_8h.html#a48589088880569c1ae40f8c226cc52be',1,'Definitions.h']]],
   ['tryotherpipe_56',['TryOtherPipe',['../transceiver_8h.html#ad0e30213b21808d00110752679788a8c',1,'transceiver.h']]],
   ['trytheothertransceiver_57',['TryTheOtherTransceiver',['../radio_8h.html#adfacfc7d075937cec51b7bcd08d323ca',1,'radio.h']]],
   ['trytoconnectnow_58',['TryToConnectNow',['../radio_8h.html#a1208ef26dd460e6f5f56582f4fbfcf94',1,'radio.h']]],

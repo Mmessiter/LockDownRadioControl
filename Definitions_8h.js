@@ -668,6 +668,7 @@ var Definitions_8h =
     [ "TrimRepeatSpeed", "Definitions_8h.html#a321797809a871259bfbb5986b5972d6e", null ],
     [ "Trims", "Definitions_8h.html#aa091f2d8f47174c6960fd69335a4e5fa", null ],
     [ "TrimSwitch", "Definitions_8h.html#ad5adb31bc39b92d27e6ca35ef4dafefe", null ],
+    [ "TrimTimer", "Definitions_8h.html#a48589088880569c1ae40f8c226cc52be", null ],
     [ "TXLiPo", "Definitions_8h.html#ae15fd0f1128566cd1120f3dd2e287dc1", null ],
     [ "TxName", "Definitions_8h.html#a2706b92e2f31363ec86e745e2014afef", null ],
     [ "TxVoltageCorrection", "Definitions_8h.html#a985d38323fbadec8df22d3e17ca18eb2", null ],

@@ -27,7 +27,7 @@ var searchData=
   ['trimrepeatspeed_24',['TrimRepeatSpeed',['../Definitions_8h.html#a321797809a871259bfbb5986b5972d6e',1,'Definitions.h']]],
   ['trims_25',['Trims',['../Definitions_8h.html#aa091f2d8f47174c6960fd69335a4e5fa',1,'Definitions.h']]],
   ['trimswitch_26',['TrimSwitch',['../Definitions_8h.html#ad5adb31bc39b92d27e6ca35ef4dafefe',1,'Definitions.h']]],
-  ['trimtimer_27',['TrimTimer',['../Trims_8h.html#a48589088880569c1ae40f8c226cc52be',1,'Trims.h']]],
+  ['trimtimer_27',['TrimTimer',['../Definitions_8h.html#a48589088880569c1ae40f8c226cc52be',1,'Definitions.h']]],
   ['tx_28',['tX',['../classMPU9250.html#af7d992743ffa2e15d5674b45a100791e',1,'MPU9250']]],
   ['txlipo_29',['TXLiPo',['../Definitions_8h.html#ae15fd0f1128566cd1120f3dd2e287dc1',1,'Definitions.h']]],
   ['txname_30',['TxName',['../Definitions_8h.html#a2706b92e2f31363ec86e745e2014afef',1,'Definitions.h']]],
