@@ -224,9 +224,13 @@ int GetTrimAmount(uint8_t InputChannel)
     }
     int TrimAmount = (Trims[Bank][tt] - 80) * TrimMultiplier; // TRIMS on lower four input channels (80 is mid point !! (range 40 - 80 - 120))
    
-    if ((tt == 1) && (SticksMode == 2)) {  // bug fix for mode 2 throttle trim - it was reversed
+    if ((tt == 1) && (SticksMode == 2)) {   // bug fix for mode 2 throttle trim - it was reversed
         TrimAmount = 80 - TrimAmount;
     }
+    if ((tt == 2) && (SticksMode == 1)) {   // bug fix for mode 1 throttle trim - it was reversed
+        TrimAmount = 80 - TrimAmount;
+    }
+
     return TrimAmount;
 }
 
