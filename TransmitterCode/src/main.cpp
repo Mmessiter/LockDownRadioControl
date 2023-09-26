@@ -4094,6 +4094,7 @@ void SendModelFile()
     char          ProgressEnd[]         = "vis Progress,0";
     char          GoModelsView[]        = "page ModelsView";
     char          Progress[]            = "Progress";
+    bool          ReceiverConnected     = true;
 
     BlueLedOn();
     CloseModelsFile();
@@ -4125,7 +4126,7 @@ void SendModelFile()
     Radio1.stopListening();
     DelayWithDog(4);
 
-    while (Fposition < Fsize) {
+    while ((Fposition < Fsize) && (ReceiverConnected)) {
         KickTheDog(); // Watchdog
         p = ((float)Fposition / (float)Fsize) * 100;
         strcpy(msg, Sent);
@@ -4155,9 +4156,11 @@ void SendModelFile()
             Radio1.flush_rx();
         }
         SentMoment = millis();
-
         if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {
             Radio1.read(&Fack, sizeof(Fack)); // ignore the ACK
+        }
+        else {
+            ReceiverConnected = false;
         }
 
 #ifdef DB_MODEL_EXCHANGE
@@ -4173,9 +4176,14 @@ void SendModelFile()
     NormaliseTheRadio();
     SendCommand(ProgressEnd);
     RedLedOn();
-    strcpy(msg, Sent);
-    strcat(msg, Str(nb1, Fsize, 0));
-    strcat(msg, bytes);
+    if (ReceiverConnected) {
+        strcpy(msg, Sent);
+        strcat(msg, Str(nb1, Fsize, 0));
+        strcat(msg, bytes);
+    }
+    else {
+        strcpy(msg, "Receiver wasn't ready!");
+    }
     ShowFileProgress(msg);
     PlaySound(BEEPCOMPLETE);
     DelayWithDog(2000);
