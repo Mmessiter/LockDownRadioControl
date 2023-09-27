@@ -10,7 +10,7 @@ void ModelNotFound(uint8_t SavedModelNumber)
     char GoModelsView[] = "page ModelsView";
     char GoFrontView[]  = "page FrontView";
     char buf[]          = "ID not found! Select model?";
-    char buf1[]         = "OK! Connecting to ";
+    char buf1[]         = "Connecting to ";
     char buf2[70];
     
     GetConfirmation(GoFrontView, buf);
