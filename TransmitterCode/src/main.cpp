@@ -4172,7 +4172,7 @@ void SendModelFile()
     Serial.println("ALL SENT.");
 #endif
     SendValue(Progress, 100);
-    DelayWithDog(750);
+    if (ReceiverConnected) DelayWithDog(750);
     NormaliseTheRadio();
     SendCommand(ProgressEnd);
     RedLedOn();
@@ -4181,13 +4181,18 @@ void SendModelFile()
         strcat(msg, Str(nb1, Fsize, 0));
         strcat(msg, bytes);
         PlaySound(BEEPCOMPLETE);
+        ShowFileProgress(msg);
+        DelayWithDog(2000);
     }
     else {
-        strcpy(msg, "Receiving TX not found.");
-        PlaySound(BEEPMIDDLE);
+        strcpy(msg, "Receiving TX not ready!");
+        ShowFileProgress(msg);
+        for (int i = 0; i < 3; ++i) {
+            PlaySound(BEEPMIDDLE);
+            DelayWithDog(130);
+        }
+        DelayWithDog(610);
     }
-    ShowFileProgress(msg);
-    DelayWithDog(2000);
     SendCommand(GoModelsView);
     CurrentView = MODELSVIEW;
     CloseModelsFile();
@@ -4196,9 +4201,6 @@ void SendModelFile()
 
 void SoundBank()
 {
-    // Look1("TIME: ");
-    // Look(millis());
-
     if (millis() < 2500) return; // don't announce bank if just booted
     PlaySound(BankSounds[BanksInUse[Bank - 1]]);
     ScreenTimeTimer = millis(); // reset screen counter
@@ -4225,8 +4227,7 @@ void ShowMotor(int on)
 /*********************************************************************************************************************************/
 
 void DoOneSwitchView(uint8_t n)
-{ // re-write one day ... This works, but not very elagantly.
-
+{ 
     char t3[]   = "t3";
     char t4[]   = "t4";
     char t5[]   = "t5";
@@ -4276,7 +4277,7 @@ void UpdateOneSwitchView()
 {
     char SwNum[] = "Sw";
     SendValue(SwNum, SwitchEditNumber); // show switch number
-    DoOneSwitchView(SwitchEditNumber);  // heer
+    DoOneSwitchView(SwitchEditNumber);  
 }
 /*********************************************************************************************************************************/
 void RestoreBrightness()
