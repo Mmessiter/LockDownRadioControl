@@ -4180,12 +4180,13 @@ void SendModelFile()
         strcpy(msg, Sent);
         strcat(msg, Str(nb1, Fsize, 0));
         strcat(msg, bytes);
+        PlaySound(BEEPCOMPLETE);
     }
     else {
-        strcpy(msg, "Receiver wasn't ready!");
+        strcpy(msg, "Receiving TX not found.");
+        PlaySound(BEEPMIDDLE);
     }
     ShowFileProgress(msg);
-    PlaySound(BEEPCOMPLETE);
     DelayWithDog(2000);
     SendCommand(GoModelsView);
     CurrentView = MODELSVIEW;
