@@ -76,11 +76,7 @@ void CompareModelsIDs()
                     GotoFrontView();
                 }
                 else {
-                   ModelNotFound(SavedModelNumber);
-
-                  //  ModelNumber = SavedModelNumber; //  Not found, so bind to the restored selected one
-                  //  ReadOneModel(ModelNumber);
-                  //  BindNow(); // heer we go again
+                    ModelNotFound(SavedModelNumber); //  Not found, so ask user to select one
                 }
             }
             if (!AutoModelSelect) BindNow();
