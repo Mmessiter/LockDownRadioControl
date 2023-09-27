@@ -4227,7 +4227,7 @@ void ShowMotor(int on)
 /*********************************************************************************************************************************/
 
 void DoOneSwitchView(uint8_t n)
-{ 
+{
     char t3[]   = "t3";
     char t4[]   = "t4";
     char t5[]   = "t5";
@@ -4277,7 +4277,7 @@ void UpdateOneSwitchView()
 {
     char SwNum[] = "Sw";
     SendValue(SwNum, SwitchEditNumber); // show switch number
-    DoOneSwitchView(SwitchEditNumber);  
+    DoOneSwitchView(SwitchEditNumber);
 }
 /*********************************************************************************************************************************/
 void RestoreBrightness()
@@ -4631,7 +4631,6 @@ void DoLastTimeRead()
 /******************************************************************************************************************************/
 void LoadModelSelector()
 {
-
     char MMemsp[] = "MMems.path=\"";
     char MMems[]  = "MMems";
     char crlf[]   = {13, 10, 0};
@@ -5685,7 +5684,6 @@ void RenameFile()
 
 void ModelViewEnd()
 {
-
     char pr[] = "Select ";
     char buf[60];
     char q[]            = "?";
@@ -5702,6 +5700,10 @@ void ModelViewEnd()
     }
     SaveAllParameters();
     BoundFlag = false;
+    if (AMSnotfound) {
+        BindNow();
+        AMSnotfound = false;
+    }
     GotoFrontView();
 }
 

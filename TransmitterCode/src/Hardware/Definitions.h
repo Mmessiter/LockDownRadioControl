@@ -524,6 +524,8 @@ void             LogTotalLostPackets();
 void             LogTotalGoodPackets();
 void             LogOverallSuccessRate();
 void             ClearText();
+void             BuildDirectory();
+void             ShowFileNumber();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************
@@ -858,6 +860,7 @@ uint32_t MacroStopTime[MAXMACROS];
 uint8_t  PreviousMacroNumber = 1;
 bool     UseMacros           = false;
 bool     CurrentPipe         = 0;
+bool     AMSnotfound         = false;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

@@ -1,5 +1,42 @@
 #include <Arduino.h>
 #include "Hardware/Definitions.h"
+
+/************************************************************************************************************/
+// If AMS (Auto Model Select) fails to find a match for the model ID, here it (optionally) asks the user to
+// select a model from the list and then bind to it.
+//
+void ModelNotFound(uint8_t SavedModelNumber)
+{
+    char GoModelsView[] = "page ModelsView";
+    char GoFrontView[]  = "page FrontView";
+    char buf[]          = "ID not found! Select model?";
+    char buf1[]         = "OK! Connecting to ";
+    char buf2[70];
+    
+    GetConfirmation(GoFrontView, buf);
+    if (Confirmed[0] != 'Y') {
+        ModelNumber = PreviousModelNumber;
+        ReadOneModel(ModelNumber);
+        strcpy(buf2, buf1);
+        strcat(buf2, ModelName);
+        GetConfirmation(GoFrontView, buf2);
+        BindNow();
+        UpdateModelsNameEveryWhere(); 
+        AMSnotfound = false;
+        return;
+    }
+    SendCommand(GoModelsView);
+    CurrentView = MODELSVIEW;
+    CurrentMode = SENDNOTHING;
+    BlueLedOn();
+    UpdateModelsNameEveryWhere();
+    BuildDirectory();
+    LoadFileSelector();
+    ModelNumber = SavedModelNumber;
+    ShowFileNumber();
+    AMSnotfound=true;
+    LoadModelSelector();
+}
 /************************************************************************************************************/
 
 void CompareModelsIDs()
@@ -39,9 +76,11 @@ void CompareModelsIDs()
                     GotoFrontView();
                 }
                 else {
-                    ModelNumber = SavedModelNumber; //  Not found, so bind to the restored selected one
-                    ReadOneModel(ModelNumber);
-                    BindNow();
+                   ModelNotFound(SavedModelNumber);
+
+                  //  ModelNumber = SavedModelNumber; //  Not found, so bind to the restored selected one
+                  //  ReadOneModel(ModelNumber);
+                  //  BindNow(); // heer we go again
                 }
             }
             if (!AutoModelSelect) BindNow();
