@@ -5,7 +5,7 @@
 // If AMS (Auto Model Select) fails to find a match for the model ID, here it (optionally) asks the user to
 // select a model from the list and then bind to it.
 //
-void ModelNotFound(uint8_t SavedModelNumber)
+void IDNotFound(uint8_t SavedModelNumber)
 {
     char GoModelsView[] = "page ModelsView";
     char GoFrontView[]  = "page FrontView";
@@ -19,7 +19,7 @@ void ModelNotFound(uint8_t SavedModelNumber)
         ReadOneModel(ModelNumber);
         strcpy(buf2, buf1);
         strcat(buf2, ModelName);
-        GetConfirmation(GoFrontView, buf2);
+        MsgBox(GoFrontView, buf2);
         BindNow();
         UpdateModelsNameEveryWhere(); 
         AMSnotfound = false;
@@ -46,7 +46,7 @@ void CompareModelsIDs()
     GotoFrontView();
     RestoreBrightness();
     if (ModelIdentified) { //  We have both bits of Model ID?
-        if ((ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64)) {
+        if ((ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64)) { //  Is it a match for current model?
             if (AnnounceConnected) {
                 if (AutoModelSelect) {
                     PlaySound(MMMATCHED);
@@ -63,10 +63,10 @@ void CompareModelsIDs()
                 while ((ModelMatched == false) && (ModelNumber < MAXMODELNUMBER - 1)) { //  Try to match the ID with a saved one
                     ++ModelNumber;
                     ReadOneModel(ModelNumber);
-                    if ((ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64)) ModelMatched = true;
+                    if ((ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64)) ModelMatched = true; //  Found it!
                 }
                 if (ModelMatched) {               //  Found it!
-                    UpdateModelsNameEveryWhere(); //  Use it.
+                    UpdateModelsNameEveryWhere(); //  Use it everywhere.
                     if (AnnounceConnected)
                     {
                         PlaySound(MMFOUND);
@@ -76,7 +76,7 @@ void CompareModelsIDs()
                     GotoFrontView();
                 }
                 else {
-                    ModelNotFound(SavedModelNumber); //  Not found, so ask user to select one
+                    IDNotFound(SavedModelNumber); //  Not found, so ask user to select one
                 }
             }
             if (!AutoModelSelect) BindNow();

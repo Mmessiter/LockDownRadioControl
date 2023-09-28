@@ -526,6 +526,7 @@ void             LogOverallSuccessRate();
 void             ClearText();
 void             BuildDirectory();
 void             ShowFileNumber();
+void             MsgBox(char* goback, char* Prompt);
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************

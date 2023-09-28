@@ -3651,16 +3651,16 @@ void DeleteModelID()
     strcat(prompt, p1);
 
     if (!ModelsMacUnionSaved.Val64) {
-        GetConfirmation(page_RXSetupView, DoneAlready);
+        MsgBox(page_RXSetupView, DoneAlready);
         return;
     }
     if (GetConfirmation(page_RXSetupView, prompt)) {
         ModelsMacUnionSaved.Val64 = 0;
         SaveOneModel(ModelNumber);
-        GetConfirmation(page_RXSetupView, Done);
+        MsgBox(page_RXSetupView, Done);
     }
     else {
-        GetConfirmation(page_RXSetupView, NotDone);
+        MsgBox(page_RXSetupView, NotDone);
     }
 }
 
@@ -3682,7 +3682,7 @@ void StoreModelID()
     strcat(prompt, p1);
 
     if (!ModelsMacUnion.Val64) {
-        GetConfirmation(page_RXSetupView, DoneAlready);
+        MsgBox(page_RXSetupView, DoneAlready);
         return;
     }
 
@@ -3690,10 +3690,10 @@ void StoreModelID()
         PlaySound(MMSAVED);
         ModelsMacUnionSaved.Val64 = ModelsMacUnion.Val64;
         SaveOneModel(ModelNumber);
-        GetConfirmation(page_RXSetupView, Done);
+        MsgBox(page_RXSetupView, Done);
     }
     else {
-        GetConfirmation(page_RXSetupView, NotDone);
+        MsgBox(page_RXSetupView, NotDone);
     }
 }
 /*********************************************************************************************************************************/
@@ -5591,10 +5591,8 @@ bool GetBackupFilename(char* goback, char* tt1, char* MMname, char* heading, cha
 
 bool GetConfirmation(char* goback, char* Prompt)
 {
-
     char GoPopupView[] = "page PopupView";
     char Dialog[]      = "Dialog";
-
     SendCommand(GoPopupView);
     SendText(Dialog, Prompt);
     Confirmed[0] = '?';
@@ -5607,6 +5605,31 @@ bool GetConfirmation(char* goback, char* Prompt)
     if (Confirmed[0] == 'Y') return true; // tell caller OK to continue
     return false;                         // tell caller STOP!
 }
+
+/******************************************************************************************************************************/
+// Windows style MSGBOX
+// params:
+// Prompt is the prompt
+// goback is the command needed to return to calling page
+
+void MsgBox(char* goback, char* Prompt)
+{
+    char GoPopupView[] = "page PopupView";
+    char Dialog[]      = "Dialog";
+    char NoCancel[]    = "vis b1,0"; // hide cancel button
+    SendCommand(GoPopupView);
+    SendCommand(NoCancel);
+    SendText(Dialog, Prompt);
+    Confirmed[0] = '?';
+    while (Confirmed[0] == '?') { // await user response
+        CheckForNextionButtonPress();
+        KickTheDog();
+    }
+    SendCommand(goback);
+    LastFileInView = 120;
+    return;
+}
+
 /******************************************************************************************************************************/
 void YesPressed() { Confirmed[0] = 'Y'; }
 /******************************************************************************************************************************/
