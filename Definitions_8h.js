@@ -328,6 +328,7 @@ var Definitions_8h =
     [ "Look", "Definitions_8h.html#a6d87eba17154f7f4f2f3802ef8ee261f", null ],
     [ "Look1", "Definitions_8h.html#aea423a497d09a142f394356bc8438c41", null ],
     [ "MoveaTrim", "Definitions_8h.html#a17123a117a96a9416dec48d9345f8a5b", null ],
+    [ "MsgBox", "Definitions_8h.html#a6f5b0f1e4ca75768c16c4dd93f92a8de", null ],
     [ "ParseAckPayload", "Definitions_8h.html#a230e862a4da0f66746b6b3afba6bd77a", null ],
     [ "PlayPong", "Definitions_8h.html#a66133191d50f6b4d010d56e6b53a853b", null ],
     [ "PlaySound", "Definitions_8h.html#aa490b4664b0a4498d53b30b82287d5df", null ],

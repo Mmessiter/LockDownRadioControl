@@ -150,6 +150,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "MoveCurrentPointDown", "TransmitterCode_2src_2main_8cpp.html#ac7a913ec35d5e97835e753fd1ee77dd7", null ],
     [ "MoveCurrentPointUp", "TransmitterCode_2src_2main_8cpp.html#adff425c4aac140ddca211d4ef4d98a7e", null ],
     [ "MovePoint", "TransmitterCode_2src_2main_8cpp.html#aad727ec0b0f9f34487a535eaa4a83172", null ],
+    [ "MsgBox", "TransmitterCode_2src_2main_8cpp.html#a6f5b0f1e4ca75768c16c4dd93f92a8de", null ],
     [ "NoPressed", "TransmitterCode_2src_2main_8cpp.html#a3e94c54a32cece9adbfc29791658d04e", null ],
     [ "OpenLogFileR", "TransmitterCode_2src_2main_8cpp.html#a74a992633b38147ad59f2fc9540294e4", null ],
     [ "OpenLogFileW", "TransmitterCode_2src_2main_8cpp.html#ad2d22d4683c318454ab9a1dd15e1f647", null ],

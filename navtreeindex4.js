@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"MPU6050_8h.html#ad13b067b38b832477c0139266a863204":[5,0,0,0,0,0,4,320],
 "MPU6050_8h.html#ad2dcc7285e3d49d0491344256f10037e":[5,0,0,0,0,0,4,302],
 "MPU6050_8h.html#ad2ea53ab83e95289ef6d78cccb73b307":[5,0,0,0,0,0,4,233],
 "MPU6050_8h.html#ad650b411bef17f370e08c7219bfc7764":[5,0,0,0,0,0,4,34],
@@ -172,9 +173,9 @@ var NAVTREEINDEX4 =
 "MPU9250_8h.html":[5,0,0,0,0,1,1],
 "MPU9250_8h_source.html":[5,0,0,0,0,1,1],
 "ModelMatch_8h.html":[5,0,3,0,0,2],
-"ModelMatch_8h.html#a299450b38ee67b7181809914167aff89":[5,0,3,0,0,2,2],
 "ModelMatch_8h.html#a494cb4acb30856d1f53f08df1b80c41b":[5,0,3,0,0,2,1],
 "ModelMatch_8h.html#af8fe429ceb65bf9d257a2a0f1c63eccb":[5,0,3,0,0,2,0],
+"ModelMatch_8h.html#afdd42b1130d38073be1c2025af855879":[5,0,3,0,0,2,2],
 "ModelMatch_8h_source.html":[5,0,3,0,0,2],
 "Nextion_8h.html":[5,0,3,0,0,3],
 "Nextion_8h.html#a1e20efc1e419b252b50d36f9924503fc":[5,0,3,0,0,3,13],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "Quadcopter_2src_2main_8cpp.html#a396d345435b59fcbef77ad2e626e03cb":[5,0,0,0,1,165],
 "Quadcopter_2src_2main_8cpp.html#a3b309466c71a16820f1d84a81b8cfb93":[5,0,0,0,1,37],
 "Quadcopter_2src_2main_8cpp.html#a3be02ea38098132450acb2f9209b458e":[5,0,0,0,1,176],
-"Quadcopter_2src_2main_8cpp.html#a3cf6efe16cdfd5ec1457e5f204c19c17":[5,0,0,0,1,206],
-"Quadcopter_2src_2main_8cpp.html#a3d068abc0fbee68badd00010995a71a6":[5,0,0,0,1,53]
+"Quadcopter_2src_2main_8cpp.html#a3cf6efe16cdfd5ec1457e5f204c19c17":[5,0,0,0,1,206]
 };
