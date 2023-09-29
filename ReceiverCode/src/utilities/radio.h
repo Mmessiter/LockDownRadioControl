@@ -117,12 +117,12 @@ void CopyCurrentPipe(uint8_t * p, uint8_t pn){
 }
 /************************************************************************************************************/
 
-void HopNowAnyway(){ 
-        ++NextChannelNumber;                                            // Move up the channels' array
-        if (NextChannelNumber >= FrequencyCount) NextChannelNumber = 1; // If needed, wrap the channels' array pointer
-        NextChannel           = *(FHSSChPointer + NextChannelNumber);
-        HopToNextChannel();
-}
+// void HopNowAnyway(){ 
+//         ++NextChannelNumber;                                            // Move up the channels' array
+//         if (NextChannelNumber >= FrequencyCount) NextChannelNumber = 1; // If needed, wrap the channels' array pointer
+//         NextChannel           = *(FHSSChPointer + NextChannelNumber);
+//         HopToNextChannel();
+// }
 /************************************************************************************************************/
 
 void SetNewPipe()
