@@ -11,7 +11,6 @@ var radio_8h =
     [ "FailSafe", "radio_8h.html#a42318598726782ebb2e1857f167c8cda", null ],
     [ "GetNewPipe", "radio_8h.html#ad8b2470258da4e397b34d67ffce9ebaf", null ],
     [ "GetOldPipe", "radio_8h.html#a198affe6f9f64da7272c5fcfe16c1621", null ],
-    [ "HopNowAnyway", "radio_8h.html#aada9f9df7e85b8c033d0cc1f75544f99", null ],
     [ "HopToNextChannel", "radio_8h.html#a62ec0168b1eea5f5c14f663d9217574d", null ],
     [ "IncChannelNumber", "radio_8h.html#ae913e02ff1fdfed85e4248ec648c1c6e", null ],
     [ "InitCurrentRadio", "radio_8h.html#ab652df130d9feb78c0accd5beedf7d80", null ],
