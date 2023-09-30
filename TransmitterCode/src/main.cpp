@@ -1763,7 +1763,8 @@ bool LoadAllParameters()
         }
         ++SDCardAddress;
     }
-    //  spare
+    ScanSensitivity = SDRead8BITS(SDCardAddress);
+    ScanSensitivity = CheckRange(ScanSensitivity, 1, 255);
     ++SDCardAddress;
     MinimumGap = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
@@ -2581,7 +2582,7 @@ void SaveTransmitterParameters()
         SDUpdate8BITS(SDCardAddress, SwitchNumber[i]);
         ++SDCardAddress;
     }
-    // spare
+    SDUpdate8BITS(SDCardAddress, ScanSensitivity);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, MinimumGap);
     ++SDCardAddress;
@@ -4860,13 +4861,14 @@ void OptionView2Start()
 
 /******************************************************************************************************************************/
 
-void OptionView3Start() /// NOT CALLED
+void OptionView3Start()
 {
     char TxVCorrextion[] = "t2";
     char n1[]            = "n1";
     char n2[]            = "n2";
-    char t10[]           = "t10";
     char n3[]            = "n3";
+    char n4[]            = "n4";
+    char t10[]           = "t10";
     char lpm[]           = "c0"; // Low power mode
     char Vbuf[10];
     char OptionV3Start[] = "page OptionView3";
@@ -4880,6 +4882,7 @@ void OptionView3Start() /// NOT CALLED
     SendValue(TxVCorrextion, TxVoltageCorrection);
     SendValue(n2, PowerOffWarningSeconds);
     SendValue(n3, ConnectionAssessSeconds);
+    SendValue(n4, ScanSensitivity);
     SendValue(lpm, AutoModelSelect);
     if (LEDBrightness < 15) LEDBrightness = DEFAULTLEDBRIGHTNESS;
     SendValue(n1, LEDBrightness);
@@ -4990,9 +4993,10 @@ void UpdateLED()
 void OptionView3End() //
 {
     char TxVCorrextion[]  = "t2";
+    char n1[]             = "n1";
     char n2[]             = "n2";
     char n3[]             = "n3";
-    char n1[]             = "n1";
+    char n4[]             = "n4";
     char page_SetupView[] = "page TXSetupView";
     char QNH[]            = "Qnh";
 
@@ -5003,6 +5007,8 @@ void OptionView3End() //
     if (LEDBrightness != GetValue(n1)) UpdateLED();
     ConnectionAssessSeconds = GetValue(n3);
     ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
+    ScanSensitivity         = GetValue(n4);
+    ScanSensitivity         = CheckRange(ScanSensitivity, 1, 255);
     SaveTransmitterParameters();
     CloseModelsFile();
     CurrentView = TXSETUPVIEW;

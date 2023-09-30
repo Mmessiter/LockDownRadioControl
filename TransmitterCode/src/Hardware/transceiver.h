@@ -289,7 +289,7 @@ void ScanAllChannels(bool cls)
         }
         else {
             ++NoCarrier[Sc];
-            if (NoCarrier[Sc] > 15) { // must see no carrier >15 times before reducing the trace
+            if (NoCarrier[Sc] > ScanSensitivity) { // must see no carrier >ScanSensitivity times before reducing the trace
                 if (AllChannels[Sc] >= (BlobHeight)) {
                     SendCharArray(CB, fyll, Str(NB, x2, 1), Str(NB1, (y2 + BlobHeight), 1), Str(NB2, 5, 1), Str(NB3, BlobHeight, 1), Str(NB4, BackGroundColour, 0), NA, NA, NA, NA, NA, NA);
                     AllChannels[Sc] -= (BlobHeight);

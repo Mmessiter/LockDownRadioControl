@@ -862,6 +862,7 @@ uint8_t  PreviousMacroNumber = 1;
 bool     UseMacros           = false;
 bool     CurrentPipe         = 0;
 bool     AMSnotfound         = false;
+uint8_t  ScanSensitivity     = 42;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

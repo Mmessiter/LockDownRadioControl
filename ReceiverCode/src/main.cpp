@@ -44,15 +44,15 @@
 #include "utilities/radio.h"
 
 Adafruit_INA219     ina219;
-bool                SensorHubConnected = false;                        //  GPS (Adafruit Ultimate GPS) ?
+bool                SensorHubConnected = false; //  GPS (Adafruit Ultimate GPS) ?
 Servo               MCMServo[SERVOSUSED];
 uint8_t             PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 9 PWMs, remaining 7 via sbus
 SBUS                MySbus(SBUSPORT);                                  // SBUS
 PulsePositionOutput PPMOutput;                                         // PPM
 float               PacketStartTime;
-bool                BoundFlag      = false;                            /** indicates if receiver paired with transmitter */
+bool                BoundFlag      = false; /** indicates if receiver paired with transmitter */
 bool                ServosAttached = false;
-uint16_t            SbusChannels[CHANNELSUSED + 1];                    // Just one spare
+uint16_t            SbusChannels[CHANNELSUSED + 1]; // Just one spare
 uint32_t            SBUSTimer = 0;
 bool                FailSafeChannel[17];
 bool                FailSafeDataLoaded = false;
@@ -226,7 +226,7 @@ void ShowHopDurationEtc()
 {
 
     int t = HOPTIME;
-                                      //
+    //
     float   freq          = 2.4 + (float)NextChannel / 1000;
     uint8_t OnePacketTime = (millis() - PacketStartTime); //  / PacketNumber;
     Serial.print("Hop duration: ");
@@ -261,22 +261,46 @@ void UseReceivedData()
         HopStart = millis();                                     // ... and start the timer.
     }
 }
+
+/************************************************************************************************************/
+bool ReceiveBuddyData()
+{
+    delay(5); // This is the place where we 'get pretend buddy data' (in under 5 ms) if we have time.
+    return true;
+}
+
 /************************************************************************************************************/
 bool ReadData()
 {
-    Connected = false;
-    while (CurrentRadio->available(&Pipnum)) {                         // Get all, but use only the latest
+    static uint32_t blankcalls = 0;
+    Connected                  = false;
+    if (CurrentRadio->available(&Pipnum))
+    { // This is the only call that actually reads the radio
         LoadAckPayload();
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
         delayMicroseconds(1500);                                       // N.B. SOME DUFF NRF24L01 TRANSCEIVERS NEED THIS PAUSE. But not all.
-        CurrentRadio->read(&CompressedData, sizeof(CompressedData));   // Get Data
+        CurrentRadio->read(&CompressedData, sizeof(CompressedData));   //  ** >> Read new data from master << **
         Connected = true;
         NewData   = true;
     }
-    if (Connected) UseReceivedData();
+    if (Connected) { // Only 1 'connected' call in about 460! So ...
+        UseReceivedData();
+        //  Serial.print("Blank calls: ");
+        //  Serial.println(blankcalls);
+        blankcalls = 0;
+    }
+    else {
+        ++blankcalls;                               //  here we can get Buddy data ...
+        if (millis() - LastPacketArrivalTime < 1) { //  ... if we have loads of time....
+            if (BoundFlag && ModelMatched) {
+                //      ReceiveBuddyData();               // later ....
+            }
+        }
+    }
     return Connected;
 }
+
 /************************************************************************************************************/
 void AttachServos()
 {
@@ -378,7 +402,7 @@ void MarkHere()
 }
 /************************************************************************************************************/
 void RebuildFlags(bool* f, uint16_t tb)
-{                                          // Pass arraypointer and the two bytes to be decoded
+{ // Pass arraypointer and the two bytes to be decoded
     for (uint8_t i = 0; i < 16; ++i) {
         f[15 - i] = false;                 // false is default
         if (tb & 1 << i) f[15 - i] = true; // sets true if bit was on
@@ -457,7 +481,7 @@ void ReadExtraParameters()
         case 3:
             if ((ReceivedData[CHANNELSUSED + 2]) == 255) { // Mark this location
                 MarkHere();
-                ReceivedData[CHANNELSUSED + 2] = 0;        // ... Once only
+                ReceivedData[CHANNELSUSED + 2] = 0; // ... Once only
             }
             break;
         case 4:
@@ -488,7 +512,7 @@ FASTRUN void ReadTheSensorHub()
 {
 
 #define IDLEN       3
-#define GPSI2CBYTES IDLEN + 4     // = 7 (only floats now)
+#define GPSI2CBYTES IDLEN + 4 // = 7 (only floats now)
 
     char  FIX[IDLEN + 1] = "FIX"; // GPS Fix
     char  SAT[IDLEN + 1] = "SAT"; // How many satellites
@@ -514,13 +538,13 @@ FASTRUN void ReadTheSensorHub()
     {
         float   Val32;
         uint8_t Val8[4];
-    } Rdata;                                               // 'union' allows access to every byte
+    } Rdata; // 'union' allows access to every byte
 
     Wire.requestFrom(SENSOR_HUB_I2C_ADDRESS, GPSI2CBYTES); // Ask hub for data
     for (int j = 0; j < GPSI2CBYTES; ++j) {
-        if (Wire.available()) {                            // Listen to HUB
+        if (Wire.available()) { // Listen to HUB
             if (j < IDLEN) {
-                RdataID[j] = Wire.read();                  // This gets the three-char data id (eg LAT)
+                RdataID[j] = Wire.read(); // This gets the three-char data id (eg LAT)
             }
             else {
                 Rdata.Val8[j - IDLEN] = Wire.read(); // This gets the 64 bit value for that data ID
@@ -644,7 +668,7 @@ FASTRUN void ReceiveData()
                     if (SensorHubConnected) ReadTheSensorHub();                  //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
                     if (INA219Connected) INA219Volts = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected separately (as will be needed on 'planes with no GPS fitted.)
                     if ((millis() - NewConnectionMoment) > 5000) {
-                        if ((millis() - TimeTest) > 6) SensorHubHasFailed();     //  If sensor hub and/or INA219 fails, don't bother calling either again (It normally returns within 2 ms.
+                        if ((millis() - TimeTest) > 6) SensorHubHasFailed(); //  If sensor hub and/or INA219 fails, don't bother calling either again (It normally returns within 2 ms.
                     }
                 }
             }
