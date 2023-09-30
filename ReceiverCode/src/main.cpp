@@ -106,9 +106,12 @@ WDT_timings_t       WatchDogConfig;
 uint32_t            LastDogKick = 0;
 bool                LedIsOn     = false;
 uint8_t*            PipePointer;
-uint8_t             Pipnum         = PIPENUMBER;
+uint8_t             Pipnum         =  PIPENUMBER;
 uint8_t             DefaultPipe[6] = {0x23, 0x94, 0x3e, 0xbe, 0xb7, 0x00};
 uint8_t             CurrentPipe[6];
+uint8_t             BuddyPipe[6]     = {0x55, 0x55, 0x55, 0x55, 0x55, 0x55};
+uint8_t*            BuddyPipePointer = BuddyPipe;
+uint8_t             BuddyPipenumber   = BUDDYPIPENUMBER;
 
 /************************************************************************************************************/
 
@@ -265,6 +268,12 @@ void UseReceivedData()
 /************************************************************************************************************/
 bool ReceiveBuddyData()
 {
+
+    if (CurrentRadio->available(&BuddyPipenumber)){
+       //  Serial.println("Buddy data available");
+    } else {
+       //  Serial.println("No buddy data available");
+    }
     delay(5); // This is the place where we 'get pretend buddy data' (in under 5 ms) if we have time.
     return true;
 }
@@ -276,6 +285,7 @@ bool ReadData()
     Connected                  = false;
     if (CurrentRadio->available(&Pipnum))
     { // This is the only call that actually reads the radio
+     //  Serial.println(Pipnum);
         LoadAckPayload();
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
@@ -294,7 +304,7 @@ bool ReadData()
         ++blankcalls;                               //  here we can get Buddy data ...
         if (millis() - LastPacketArrivalTime < 1) { //  ... if we have loads of time....
             if (BoundFlag && ModelMatched) {
-                //      ReceiveBuddyData();               // later ....
+             // ReceiveBuddyData();               // later ....
             }
         }
     }
