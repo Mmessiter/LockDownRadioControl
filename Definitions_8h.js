@@ -618,6 +618,7 @@ var Definitions_8h =
     [ "SavedSticksMode", "Definitions_8h.html#a832fd68074b211decbc4bd82bc264ae6", null ],
     [ "SaveFailSafeNow", "Definitions_8h.html#acd6754de95b605bb65a52a86e96121f7", null ],
     [ "SbusRepeats", "Definitions_8h.html#a62cc4d43d463897ef0d417150d6e7f3f", null ],
+    [ "ScanSensitivity", "Definitions_8h.html#aeeea59b14879c44a6809a64ac3c31187", null ],
     [ "ScreenIsOff", "Definitions_8h.html#aff4581f5a99a6d8eb37ef22e94d858d3", null ],
     [ "ScreenTimeout", "Definitions_8h.html#a3c8096a17fd0f8dbb05f47be54fd7637", null ],
     [ "ScreenTimeTimer", "Definitions_8h.html#a83b0bce3874e15bbce39bac61907b689", null ],
