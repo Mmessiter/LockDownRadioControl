@@ -2,7 +2,8 @@
 
 #include <Arduino.h>
 #include "Hardware/Definitions.h"
-
+#ifndef UTILITIES_H
+    #define UTILITIES_H
 // *****************************************************************************************************
 
 void CheckForNextionButtonPress()
@@ -999,3 +1000,4 @@ void CheckScanButton() // Scan button AND models button
     }
 }
 /************************************************************************************************************/
+#endif 

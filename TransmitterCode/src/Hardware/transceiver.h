@@ -2,6 +2,9 @@
 
 #include <Arduino.h>
 #include "Hardware/Definitions.h"
+
+#ifndef TRANSCEIVER_H
+    #define TRANSCEIVER_H
 /*********************************************************************************************************************************/
 
 /************************************************************************************************************/
@@ -408,3 +411,4 @@ void NormaliseTheRadio()
     Radio1.setCRCLength(RF24_CRC_16);
     Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
 }
+#endif

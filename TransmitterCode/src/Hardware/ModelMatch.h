@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "Hardware/Definitions.h"
-
+#ifndef MODEL_MATCH_H
+    #define MODEL_MATCH_H
 /************************************************************************************************************/
 // If AMS (Auto Model Select) fails to find a match for the model ID, here it (optionally) asks the user to
 // select a model from the list and then bind to it.
@@ -107,3 +108,4 @@ void GetModelsMacAddress()
 }
 
 /************************************************************************************************************/
+#endif

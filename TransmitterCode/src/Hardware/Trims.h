@@ -2,7 +2,8 @@
 
 #include <Arduino.h>
 #include "Hardware/Definitions.h"
-
+#ifndef TRIMS_H
+    #define TRIMS_H
 
 // **********************************************************************************************************************************
 void StartTrimView()
@@ -316,3 +317,4 @@ void EndSubTrimView()
     LastTimeRead = 0;
     UpdateModelsNameEveryWhere();
 }
+#endif
