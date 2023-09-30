@@ -1,7 +1,7 @@
 // ********************** Transceiver.h ***********************************************
 
 #include <Arduino.h>
-#include "Hardware/Definitions.h" 
+#include "Hardware/Definitions.h"
 /*********************************************************************************************************************************/
 
 /************************************************************************************************************/
@@ -289,7 +289,7 @@ void ScanAllChannels(bool cls)
         }
         else {
             ++NoCarrier[Sc];
-            if (NoCarrier[Sc] > ScanSensitivity) { // must see no carrier >ScanSensitivity times before reducing the trace
+            if (NoCarrier[Sc] >= ScanSensitivity) { // must see no carrier >= ScanSensitivity times before reducing the trace
                 if (AllChannels[Sc] >= (BlobHeight)) {
                     SendCharArray(CB, fyll, Str(NB, x2, 1), Str(NB1, (y2 + BlobHeight), 1), Str(NB2, 5, 1), Str(NB3, BlobHeight, 1), Str(NB4, BackGroundColour, 0), NA, NA, NA, NA, NA, NA);
                     AllChannels[Sc] -= (BlobHeight);
@@ -309,13 +309,13 @@ float HopsPerSec = 0;
 
 /************************************************************************************************************/
 
-// This function hops to the next channel in the FFHS array 
+// This function hops to the next channel in the FFHS array
 
 FASTRUN void HopToNextChannel()
 {
     Radio1.setChannel(NextChannel); // Hop !
     delayMicroseconds(500);
-    Radio1.stopListening();         // Transmit only
+    Radio1.stopListening(); // Transmit only
     delayMicroseconds(500);
 
 #ifdef DB_FHSS
@@ -364,7 +364,7 @@ uint8_t CheckPipeNibbles(uint8_t b)
     uint8_t BetterLowerNibble[BADNIBBLECOUNT]  = {0x03, 0x04, 0x06, 0x07, 0x08, 0x09};
     uint8_t BetterHigherNibble[BADNIBBLECOUNT] = {0x30, 0x40, 0x60, 0x70, 0x80, 0x90};
 
-    if (!b) return 0x36;                       // return an acceptable byte for a zero
+    if (!b) return 0x36; // return an acceptable byte for a zero
 
     for (int i = 0; i < BADNIBBLECOUNT; ++i) { // ********** check LOWER nibble **********
         if ((b & 0x0f) == BadLowerNibble[i])
