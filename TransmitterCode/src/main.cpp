@@ -1465,7 +1465,9 @@ bool ReadOneModel(uint32_t Mnum)
     }
     for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            // These are now disabled and this space is spare
+
+            // Nothing read!  - This space is spare for future use (5 * 17)
+            
             ++SDCardAddress;
         }
     }
@@ -1503,7 +1505,7 @@ bool ReadOneModel(uint32_t Mnum)
     ++SDCardAddress;
     ++SDCardAddress;
     SavedSticksMode = SDRead8BITS(SDCardAddress); // save sticks mode in case of rf transfer
-    ++SDCardAddress;                              // 0 Spare Bytes here  *****************************
+    ++SDCardAddress;                            
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDRead8BITS(SDCardAddress);
@@ -1788,8 +1790,9 @@ bool LoadAllParameters()
     LEDBrightness = SDRead8BITS(SDCardAddress);
     LEDBrightness = CheckRange(LEDBrightness, 1, 254);
     ++SDCardAddress;
-    // one spare tx byte here!
-    //
+
+    // one spare TXREAD byte here!
+
     ++SDCardAddress;
     ConnectionAssessSeconds = SDRead8BITS(SDCardAddress);
     ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
@@ -1805,7 +1808,7 @@ bool LoadAllParameters()
     if ((PPMdata.PPMChannelsNumber > 16) || (PPMdata.PPMChannelsNumber < 1)) PPMdata.PPMChannelsNumber = 6;
     ++SDCardAddress;
 
-    // Not used!!! (yet)  1 tx spare
+    //  1  TXREAD byte spare
 
     ++SDCardAddress;
     PPMdata.UseTXModule = SDRead8BITS(SDCardAddress);
@@ -2603,8 +2606,9 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate16BITS(SDCardAddress, LEDBrightness);
     ++SDCardAddress;
-    // one spare byte here!
-    //
+
+    // one spare TXWRITE byte here!
+   
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, ConnectionAssessSeconds);
     ++SDCardAddress;
@@ -2617,7 +2621,9 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, PPMdata.PPMChannelsNumber);
     ++SDCardAddress;
-    // Not used!!! (yet) // 1 spare
+
+    //  1 spare TXWRITE byte here!
+
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, PPMdata.UseTXModule);
     ++SDCardAddress;
@@ -2678,7 +2684,7 @@ void SaveOneModel(uint32_t mnum)
     }
     for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            // SPARE!!!
+            //  Nothing written!  - This space is spare for future use (5 * 17)
             ++SDCardAddress;
         }
     }
@@ -2712,7 +2718,7 @@ void SaveOneModel(uint32_t mnum)
 
     SDUpdate8BITS(SDCardAddress, SticksMode); // save sticks mode in case of rf transfer
 
-    SDCardAddress += 1; // *********************** 0 spare here remaining  **********************
+    SDCardAddress += 1; 
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdate8BITS(SDCardAddress, InPutStick[i]);
