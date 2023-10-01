@@ -527,6 +527,7 @@ void             ClearText();
 void             BuildDirectory();
 void             ShowFileNumber();
 void             MsgBox(char* goback, char* Prompt);
+void             ShowRemoteID();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************

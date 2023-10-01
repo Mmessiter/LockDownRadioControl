@@ -1814,11 +1814,17 @@ bool LoadAllParameters()
     ++SDCardAddress;
     PPMdata.UseTXModule = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
+// heer
+    for (int q = 0; q < 5; ++q) {
+        BuddyMacAddress[q] = SDRead8BITS(SDCardAddress);
+        ++SDCardAddress;
+    }
     ReadCheckSum32();
     CheckTrimValues();
     MemoryForTransmtter = SDCardAddress;
     if ((ModelNumber < 1) || (ModelNumber > 99)) ModelNumber = 1;
     ReadOneModel(ModelNumber);
+   // ShowRemoteID(); // just for testing
     return true;
 }
 
@@ -2628,7 +2634,11 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, PPMdata.UseTXModule);
     ++SDCardAddress;
-
+    for (i = 0; i < 5; ++i)
+    {
+        SDUpdate8BITS(SDCardAddress, BuddyMacAddress[i]);
+        ++SDCardAddress;
+    }
     SaveCheckSum32(); // Save the Transmitter parametres checksm
     CloseModelsFile();
 }
@@ -3895,6 +3905,22 @@ void WriteEntireBuffer()
         ShortishDelay();
     }
 }
+
+/*********************************************************************************************************************************/
+
+void ShowRemoteID()
+{ // Show remote ID
+    char nb2[5];
+    char msg[50];
+    char GoModelsView[] = "page ModelsView";
+    strcpy(msg, "Remote ID = ");
+    for (int i = 0; i < 5; ++i) {
+        snprintf(nb2, 4, "%X", BuddyMacAddress[i]);
+        strcat(msg, nb2);
+        strcat(msg, " ");
+    }
+    MsgBox(GoModelsView, msg);
+}
 /*********************************************************************************************************************************/
 
 /** @brief RECEIVE A MODEL FILE */
@@ -3918,19 +3944,19 @@ void ReceiveModelFile()
     float         SecondsElapsed = 0;
     uint8_t       p              = 5;
     char          nb1[20];
-    char          nb2[5];
-    char          Received[] = "Received ";
-    char          of[]       = " of ";
-    char          msg[50];
-    char          bytes[]         = " bytes.";
-    char          t0[]            = "t0";
-    char          RXheader[]      = "File receive";
-    char          ovwr[]          = "Overwrite ";
-    char          ques[]          = "?";
-    char          ProgressStart[] = "vis Progress,1";
-    char          ProgressEnd[]   = "vis Progress,0";
-    char          GoModelsView[]  = "page ModelsView";
-    char          Progress[]      = "Progress";
+
+    char Received[] = "Received ";
+    char of[]       = " of ";
+    char msg[50];
+    char bytes[]         = " bytes.";
+    char t0[]            = "t0";
+    char RXheader[]      = "File receive";
+    char ovwr[]          = "Overwrite ";
+    char ques[]          = "?";
+    char ProgressStart[] = "vis Progress,1";
+    char ProgressEnd[]   = "vis Progress,0";
+    char GoModelsView[]  = "page ModelsView";
+    char Progress[]      = "Progress";
 
     strcpy(msg, ovwr);
     strcat(msg, ModelName);
@@ -4077,13 +4103,10 @@ void ReceiveModelFile()
     PlaySound(BEEPCOMPLETE);
     CloseModelsFile();
     DelayWithDog(2000);
-    strcpy(msg, "Remote ID = ");
-    for (int i = 0; i < 5; ++i) {
-        snprintf(nb2, 4, "%X", BuddyMacAddress[i]);
-        strcat (msg, nb2);
-        strcat (msg, " ");
-    }
-    MsgBox(GoModelsView, msg);
+   
+   // ShowRemoteID(); // Show remote ID for tests
+
+    SaveTransmitterParameters();
     GotoModelsView();
     ClearText();
     RedLedOn();
@@ -4167,7 +4190,7 @@ void SendModelFile()
             Fbuffer[BUFFERSIZE + 2] = Fsize >> 16;
             Fbuffer[BUFFERSIZE + 3] = Fsize >> 24; // SEND FILE SIZE (four bytes)
             for (int q = 0; q < 5; ++q) {
-                Fbuffer[q + 16] = MacAddress[q+1]; // Add only 5 bytes of the macaddress to buffer at offset 16 and sent it too! heer
+                Fbuffer[q + 16] = MacAddress[q + 1]; // Add only 5 bytes of the macaddress to buffer at offset 16 and sent it too! heer
             }
         }
         else {
