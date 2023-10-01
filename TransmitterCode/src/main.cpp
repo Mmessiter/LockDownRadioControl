@@ -1468,7 +1468,7 @@ bool ReadOneModel(uint32_t Mnum)
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
 
             // Nothing read!  - This space is spare for future use (5 * 17)
-            
+
             ++SDCardAddress;
         }
     }
@@ -1506,7 +1506,7 @@ bool ReadOneModel(uint32_t Mnum)
     ++SDCardAddress;
     ++SDCardAddress;
     SavedSticksMode = SDRead8BITS(SDCardAddress); // save sticks mode in case of rf transfer
-    ++SDCardAddress;                            
+    ++SDCardAddress;
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         InPutStick[i] = SDRead8BITS(SDCardAddress);
@@ -2269,7 +2269,7 @@ void GetTeensyMacAddress()
     for (int i = 1; i < 6; ++i) {
         MacAddress[i] = CheckPipeNibbles(MacAddress[i]); // Fix PIPE if needed !
     }
-    //  for (int i = 1; i < 6; ++i) MacAddress[i] = 0x42; // TEST! (... Force new ID for tests)
+    MacAddress[1] = 0x42; // for buddy box ...
 
 #ifdef DB_BIND
     Serial.println("");
@@ -2609,7 +2609,7 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
 
     // one spare TXWRITE byte here!
-   
+
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, ConnectionAssessSeconds);
     ++SDCardAddress;
@@ -2719,7 +2719,7 @@ void SaveOneModel(uint32_t mnum)
 
     SDUpdate8BITS(SDCardAddress, SticksMode); // save sticks mode in case of rf transfer
 
-    SDCardAddress += 1; 
+    SDCardAddress += 1;
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         SDUpdate8BITS(SDCardAddress, InPutStick[i]);
@@ -3675,7 +3675,7 @@ void DeleteModelID()
 /*********************************************************************************************************************************/
 
 void StoreModelID()
-{ // This stores current model ID    // heer
+{ // This stores current model ID
 
     char prompt[60];
     char p[]                = "Store ID for ";
@@ -3918,6 +3918,7 @@ void ReceiveModelFile()
     float         SecondsElapsed = 0;
     uint8_t       p              = 5;
     char          nb1[20];
+    char          nb2[5];
     char          Received[] = "Received ";
     char          of[]       = " of ";
     char          msg[50];
@@ -4001,6 +4002,11 @@ void ReceiveModelFile()
     Fsize += Fbuffer[BUFFERSIZE + 1] << 8;
     Fsize += Fbuffer[BUFFERSIZE + 2] << 16;
     Fsize += Fbuffer[BUFFERSIZE + 3] << 24; //  Get file size
+
+    for (int q = 0; q < 5; ++q) {
+        BuddyMacAddress[q] = Fbuffer[q + 16]; // sender's macaddress is in buffer at offset 16 - get it heer!
+    }
+
 #ifdef DB_MODEL_EXCHANGE
     Serial.println("CONNECTED!");
     Serial.print("FileName=");
@@ -4071,6 +4077,13 @@ void ReceiveModelFile()
     PlaySound(BEEPCOMPLETE);
     CloseModelsFile();
     DelayWithDog(2000);
+    strcpy(msg, "Remote ID = ");
+    for (int i = 0; i < 5; ++i) {
+        snprintf(nb2, 4, "%X", BuddyMacAddress[i]);
+        strcat (msg, nb2);
+        strcat (msg, " ");
+    }
+    MsgBox(GoModelsView, msg);
     GotoModelsView();
     ClearText();
     RedLedOn();
@@ -4144,12 +4157,18 @@ void SendModelFile()
         ShowFileProgress(msg);
         SendValue(Progress, p);
         ++PacketNumber;
+        for (int q = 0; q < 36; ++q) { // clear buffer
+            Fbuffer[q] = 0;
+        }
         if (PacketNumber == 1) {
-            strcpy(Fbuffer, SingleModelFile); // Filename in first packet
+            strcpy(Fbuffer, SingleModelFile); // Filename in first packet (add in the mac address  as there is space!)
             Fbuffer[BUFFERSIZE]     = Fsize;
             Fbuffer[BUFFERSIZE + 1] = Fsize >> 8;
             Fbuffer[BUFFERSIZE + 2] = Fsize >> 16;
             Fbuffer[BUFFERSIZE + 3] = Fsize >> 24; // SEND FILE SIZE (four bytes)
+            for (int q = 0; q < 5; ++q) {
+                Fbuffer[q + 16] = MacAddress[q+1]; // Add only 5 bytes of the macaddress to buffer at offset 16 and sent it too! heer
+            }
         }
         else {
             ModelsFileNumber.seek(Fposition); // Move filepointer
@@ -6518,7 +6537,7 @@ FASTRUN void ButtonWasPressed()
                 WhichPage[i] = 0;
             }                       // Get page name to which to return
             SendCommand(WhichPage); // this sends nextion back to last screen
-                                    // Look(WhichPage); // heer ********************************
+
             CurrentView = SavedCurrentView;
 
             if (CurrentView == PONGVIEW) StartPong();
@@ -6632,7 +6651,7 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(OneSwitchView, TextIn) > 0) {
             SwitchEditNumber = GetChannel(); // which switch?
             CurrentView      = ONE_SWITCH_VIEW;
-            SendCommand(PageOneSwitchView); // edit one switch - could be 1-4 // heer
+            SendCommand(PageOneSwitchView);
             UpdateOneSwitchView();
             UpdateModelsNameEveryWhere();
             ClearText();
@@ -7154,7 +7173,7 @@ FASTRUN void ButtonWasPressed()
             XtouchPlace = GetNextNumber(p + 7, TextIn);
             // This drops through to get Y as well before moving the point
         }
-        p = (InStrng(ClickY, TextIn)); // Clicked to move point?  // heer
+        p = (InStrng(ClickY, TextIn)); // Clicked to move point?
         if (p > 0) {
             YtouchPlace = GetNextNumber(p + 7, TextIn);
             MovePoint();
