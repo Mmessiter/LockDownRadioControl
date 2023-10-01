@@ -68,6 +68,6 @@ var searchData=
   ['audiovolume_65',['AudioVolume',['../Definitions_8h.html#adddcbca54e7b49592c3f6c360bf04494',1,'Definitions.h']]],
   ['auto_66',['AUTO',['../Definitions_8h.html#a0cc6f7717df9fbdc0f33efb88720a639',1,'Definitions.h']]],
   ['automodelselect_67',['AutoModelSelect',['../Definitions_8h.html#a77387f8b9f18e9b75448e01d821ae17e',1,'Definitions.h']]],
-  ['autoswitch_68',['Autoswitch',['../Definitions_8h.html#a5b8bae72a42da5c8a19ad3b4c1692538',1,'Definitions.h']]],
-  ['autoswitch_69',['AUTOSWITCH',['../Definitions_8h.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'Definitions.h']]]
+  ['autoswitch_68',['AUTOSWITCH',['../Definitions_8h.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'Definitions.h']]],
+  ['autoswitch_69',['Autoswitch',['../Definitions_8h.html#a5b8bae72a42da5c8a19ad3b4c1692538',1,'Definitions.h']]]
 ];
