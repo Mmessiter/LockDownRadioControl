@@ -365,6 +365,7 @@ var Definitions_8h =
     [ "ShowFileNumber", "Definitions_8h.html#aa337d6e5cf496fbca7cdc61818f8239a", null ],
     [ "ShowLogFile", "Definitions_8h.html#af5df157d4ece6b40a9ce7a60faeca569", null ],
     [ "ShowMotor", "Definitions_8h.html#a6b3c522a9d43d58a184d9866ca9d21f3", null ],
+    [ "ShowRemoteID", "Definitions_8h.html#ac36bdea2efcd030a336293af16f5dc09", null ],
     [ "ShowServoPos", "Definitions_8h.html#ad959eec03b0151ade81dc088593d816c", null ],
     [ "StartInactvityTimeout", "Definitions_8h.html#a793b7bcd77531c95fe72ed4356d421c8", null ],
     [ "StartLogFile", "Definitions_8h.html#a514afc8dd077db77334696ca719a99b7", null ],
