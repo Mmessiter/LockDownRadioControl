@@ -4086,7 +4086,6 @@ void ReceiveModelFile()
             Radio1.writeAckPayload(1, &Fack, sizeof(Fack));
             Radio1.read(&Fbuffer, BUFFERSIZE + 4);
             StoreBuffer(Fbuffer, BUFFERSIZE); // Store it in ram for now rather than disk it
-            //Radio1.flush_rx();
             Fposition += BUFFERSIZE;
             if (Fposition > Fsize) Fposition = Fsize;
             p = ((float)Fposition / (float)Fsize) * 100;
@@ -4130,9 +4129,6 @@ void ReceiveModelFile()
     PlaySound(BEEPCOMPLETE);
     CloseModelsFile();
     DelayWithDog(2000);
-
-    // ShowRemoteID(); // Show remote ID for tests
-
     SaveTransmitterParameters();
     GotoModelsView();
     ClearText();
@@ -4157,7 +4153,6 @@ void SendModelFile()
     char          of[]   = " of ";
     char          msg[50];
     char          bytes[]               = " bytes.";
-   // uint32_t      SentMoment            = 0;
     char          ModelsView_filename[] = "filename";
     char          t0[]                  = "t0";
     char          Fsend[]               = "Sending file";
@@ -4228,17 +4223,9 @@ void SendModelFile()
             if (Fposition > Fsize) Fposition = Fsize;
         }
 
-        // Radio1.flush_tx();
-        // Radio1.flush_rx();
         DelayWithDog(50);
-
         Radio1.write(&Fbuffer, BUFFERSIZE + 4);
         Radio1.read(&Fack, sizeof(Fack)); // ignore the ACK
-
-        // else {
-        //   //  ReceiverConnected = false;
-          
-        // }
 
 #ifdef DB_MODEL_EXCHANGE
         Serial.println(PacketNumber);
