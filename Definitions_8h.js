@@ -692,6 +692,7 @@ var Definitions_8h =
     [ "WarningSound", "Definitions_8h.html#a31b92b91cb0e2c3cb18a38c4f9095616", null ],
     [ "WarningTimer", "Definitions_8h.html#a762d0bd8b884aee82ec41f594c470b87", null ],
     [ "WatchDogConfig", "Definitions_8h.html#abf278d2a0f4b093a96fd83a6f635d8c8", null ],
+    [ "WirelessBuddy", "Definitions_8h.html#aedb5a522377c840c0e0cecc87bb77565", null ],
     [ "xPoint", "Definitions_8h.html#a36b7f1f7174274a965e69e8853a3c90c", null ],
     [ "xPoints", "Definitions_8h.html#aa5b385037c6719d392b15313f432b472", null ],
     [ "XtouchPlace", "Definitions_8h.html#a265a814b38964ab65a1eb65730f4e707", null ],
