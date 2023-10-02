@@ -4628,13 +4628,13 @@ void EndBuddyView()
     bool Master          = false;
     char BuddyWireless[] = "wireless";
     char pRXSetupView[]  = "page RXSetupView";
-    bool OldPupil;
-    bool OldMaster;
+    bool OldPupilOnPPM;
+    bool OldMasterOnPPM;
     char prompt[] = "Power off transmitter?";
     char GoBack[] = "page BuddyView";
 
-    OldPupil      = BuddyPupilOnPPM; // save old version to detect a change
-    OldMaster     = BuddyMasterOnPPM;
+    OldPupilOnPPM      = BuddyPupilOnPPM; // save old version to detect a change
+    OldMasterOnPPM     = BuddyMasterOnPPM;
     Pupil         = GetValue(BuddyP);        // Pupil
     Master        = GetValue(BuddyM);        // Master
     WirelessBuddy = GetValue(BuddyWireless); // wireless?
@@ -4671,12 +4671,12 @@ void EndBuddyView()
         BuddyMasterOnPPM      = false;
     }
 
-    if (((OldPupil != BuddyPupilOnPPM) || (OldMaster != BuddyMasterOnPPM)) && (!WirelessBuddy)) {
+    if (((OldPupilOnPPM != BuddyPupilOnPPM) || (OldMasterOnPPM != BuddyMasterOnPPM)) && (!WirelessBuddy)) {
         if (!GetConfirmation(GoBack, prompt)) {
-            SendValue(BuddyM, OldMaster);
-            SendValue(BuddyP, OldPupil);
-            BuddyPupilOnPPM  = OldPupil;
-            BuddyMasterOnPPM = OldMaster;
+            SendValue(BuddyM, OldMasterOnPPM);
+            SendValue(BuddyP, OldPupilOnPPM);
+            BuddyPupilOnPPM  = OldPupilOnPPM;
+            BuddyMasterOnPPM = OldMasterOnPPM;
         }
     }
     SaveAllParameters();
@@ -4685,7 +4685,7 @@ void EndBuddyView()
     SendCommand(pRXSetupView);
     CurrentView = RXSETUPVIEW;
     UpdateModelsNameEveryWhere();
-    if ((OldPupil != BuddyPupilOnPPM) || (OldMaster != BuddyMasterOnPPM)) {
+    if ((OldPupilOnPPM != BuddyPupilOnPPM) || (OldMasterOnPPM != BuddyMasterOnPPM)) {
         digitalWrite(POWER_OFF_PIN, HIGH);
     }
 }
