@@ -8019,7 +8019,7 @@ void SimulateCloseDown()
     analogWrite(REDLED, 0);
     SendCommand(ScreenOff);
     SaveAllParameters();
-    DelayWithDog(2500);
+    DelayWithDog(500);
     digitalWrite(POWER_OFF_PIN, HIGH);
 }
 
