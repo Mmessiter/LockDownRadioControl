@@ -8013,15 +8013,16 @@ bool CheckModelName()
 void SimulateCloseDown()
 { // Because real closedown occurs only after button is released
 
-    char ScreenOff[] = "dim=0";
+    char ScreenOff[]     = "dim=0";
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, 0);
     SendCommand(ScreenOff);
-    SaveOneModel(ModelNumber); // in case any trim change etc wasn't saved
+    SaveAllParameters();
     DelayWithDog(2500);
     digitalWrite(POWER_OFF_PIN, HIGH);
 }
+
 /************************************************************************************************************/
 void CheckPowerOffButton()
 {
@@ -8039,8 +8040,6 @@ void CheckPowerOffButton()
         GotoFrontView();
         if (!LedWasGreen && !PPMdata.UseTXModule)
         {
-            SaveAllParameters();
-            DelayWithDog(750);   // wait a mo for user to see 0 and log to write to file
             SimulateCloseDown(); // if not connected power off immediately
         }
         else
@@ -8085,8 +8084,6 @@ void CheckPowerOffButton()
                     PlaySound(WHAHWHAHMSG);
                     DelayWithDog(2300);
                 }
-                SaveAllParameters();
-                DelayWithDog(750); // wait a mo for user to see 0 and log to write to file
                 SimulateCloseDown();
             }
             --TurnOffSecondToGo;
