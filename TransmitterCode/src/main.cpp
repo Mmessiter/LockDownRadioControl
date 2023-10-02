@@ -3983,7 +3983,6 @@ void ReceiveModelFile()
     strcat(msg, ModelName);
     strcat(msg, ques);
     if (!GetConfirmation(GoModelsView, msg)) return; // Get confirmation or quit
-
     BlueLedOn();
     ShowFileTransferWindow();
     SendText(ModelsView_filename, Waiting);
@@ -3995,14 +3994,18 @@ void ReceiveModelFile()
     Radio1.setRetries(15, 15);
     Radio1.setChannel(FILECHANNEL);
     Radio1.flush_tx();
+    Radio1.flush_rx();
     Radio1.openReadingPipe(1, RXPipe);
     Radio1.startListening();
     NewFileBufferPointer = 0;
     RXTimer              = millis(); // Start timer
     ClearText();
     CloseModelsFile();
+    for (int q = 0; q < 36; ++q) { // clear buffer
+        Fbuffer[q] = 0;
+    }
     while (!Radio1.available()) { // Await the sender....
-        delay(1);
+        delayMicroseconds(250);
         if (GetButtonPress()) {
             GotoModelsView();
             ClearText();
@@ -4038,14 +4041,14 @@ void ReceiveModelFile()
             }
         }
     } // *First* packet must have arrived!
-    for (int q = 0; q < 36; ++q) { // clear buffer
-        Fbuffer[q] = 0;
-    }
+    
+    Radio1.writeAckPayload(1, &Fack, sizeof(Fack)); //  Ack first packet
+    Radio1.read(&Fbuffer, BUFFERSIZE + 4);          //  Read it 
+
     SendCommand(ProgressStart);
     SendValue(Progress, p);
     SendText(ModelsView_filename, Receiving);
-    Radio1.writeAckPayload(1, &Fack, sizeof(Fack)); //  Ack first packet
-    Radio1.read(&Fbuffer, BUFFERSIZE + 4);          //  Read it was 12
+
     strcpy(SingleModelFile, Fbuffer);               //  Get filename
     Fsize = Fbuffer[BUFFERSIZE];
     Fsize += Fbuffer[BUFFERSIZE + 1] << 8;
@@ -4054,7 +4057,7 @@ void ReceiveModelFile()
 
     for (int q = 0; q < 5; ++q) {
         BuddyMacAddress[q] = Fbuffer[q + 16]; // sender's macaddress is in buffer at offset 16 - get it heer!
-        if (q == 0) ++BuddyMacAddress[q];
+        if (q == 0) ++BuddyMacAddress[q]; // add one to lowest byte to make it unique
     }
 
 #ifdef DB_MODEL_EXCHANGE
@@ -4083,7 +4086,7 @@ void ReceiveModelFile()
             Radio1.writeAckPayload(1, &Fack, sizeof(Fack));
             Radio1.read(&Fbuffer, BUFFERSIZE + 4);
             StoreBuffer(Fbuffer, BUFFERSIZE); // Store it in ram for now rather than disk it
-            Radio1.flush_rx();
+            //Radio1.flush_rx();
             Fposition += BUFFERSIZE;
             if (Fposition > Fsize) Fposition = Fsize;
             p = ((float)Fposition / (float)Fsize) * 100;
