@@ -654,27 +654,28 @@ FASTRUN void ShowComms()
         snprintf(Vbuf, 9, "%X", TempModelId);
         if (TempModelId) SendText(IdReceived1, Vbuf);
     }
-    if (CurrentView == DATAVIEW) { // even if not connected
-        for (int i = 0; i < 5; ++i) {
-            Vbuf[i] = 0;
-        }
-        for (int i = 0; i < 5; ++i) {
-            snprintf(nb2, 4, "%X", BuddyMacAddress[i]);
-            strcat(Vbuf, nb2);
-            strcat(Vbuf, " ");
-        }
-        SendText(MasterID, Vbuf);
+        if (CurrentView == DATAVIEW) { // even if not connected
+            for (int i = 0; i < 5; ++i) {
+                Vbuf[i] = 0;
+            }
+            for (int i = 4; i >=0; --i) {//**
+                snprintf(nb2, 4, "%X", BuddyMacAddress[i]);
+                strcat(Vbuf, nb2);
+                strcat(Vbuf, " ");
+            }
+            SendText(MasterID, Vbuf);
 
-        for (int i = 0; i < 5; ++i) {
-            Vbuf[i] = 0;
+            for (int i = 0; i < 5; ++i) {
+                Vbuf[i] = 0;
+            }
+            for (int i = 5; i > 0; --i) {//**
+                snprintf(nb2, 4, "%X", MacAddress[i]); // heer
+                strcat(Vbuf, nb2);
+                strcat(Vbuf, " ");
+            }
+            SendText(LocalMacID, Vbuf);
         }
-        for (int i = 1; i < 6; ++i) {
-            snprintf(nb2, 4, "%X", MacAddress[i]); // heer
-            strcat(Vbuf, nb2);
-            strcat(Vbuf, " ");
-        }
-        SendText(LocalMacID, Vbuf);
-    }
+    
 
     if (CurrentView == GPSVIEW) {
         if (GpsFix) { // if no fix, then leave display as before
@@ -4037,7 +4038,9 @@ void ReceiveModelFile()
             }
         }
     } // *First* packet must have arrived!
-
+    for (int q = 0; q < 36; ++q) { // clear buffer
+        Fbuffer[q] = 0;
+    }
     SendCommand(ProgressStart);
     SendValue(Progress, p);
     SendText(ModelsView_filename, Receiving);
@@ -4051,6 +4054,7 @@ void ReceiveModelFile()
 
     for (int q = 0; q < 5; ++q) {
         BuddyMacAddress[q] = Fbuffer[q + 16]; // sender's macaddress is in buffer at offset 16 - get it heer!
+        if (q == 0) ++BuddyMacAddress[q];
     }
 
 #ifdef DB_MODEL_EXCHANGE
@@ -4150,7 +4154,7 @@ void SendModelFile()
     char          of[]   = " of ";
     char          msg[50];
     char          bytes[]               = " bytes.";
-    uint32_t      SentMoment            = 0;
+   // uint32_t      SentMoment            = 0;
     char          ModelsView_filename[] = "filename";
     char          t0[]                  = "t0";
     char          Fsend[]               = "Sending file";
@@ -4190,7 +4194,7 @@ void SendModelFile()
     Radio1.stopListening();
     DelayWithDog(4);
 
-    while ((Fposition < Fsize) && (ReceiverConnected)) {
+    while ((Fposition < Fsize)) {
         KickTheDog(); // Watchdog
         p = ((float)Fposition / (float)Fsize) * 100;
         strcpy(msg, Sent);
@@ -4221,17 +4225,17 @@ void SendModelFile()
             if (Fposition > Fsize) Fposition = Fsize;
         }
 
-        while (millis() - SentMoment < 25) {
-            Radio1.flush_tx();
-            Radio1.flush_rx();
-        }
-        SentMoment = millis();
-        if (Radio1.write(&Fbuffer, BUFFERSIZE + 4)) {
-            Radio1.read(&Fack, sizeof(Fack)); // ignore the ACK
-        }
-        else {
-            ReceiverConnected = false;
-        }
+        // Radio1.flush_tx();
+        // Radio1.flush_rx();
+        DelayWithDog(50);
+
+        Radio1.write(&Fbuffer, BUFFERSIZE + 4);
+        Radio1.read(&Fack, sizeof(Fack)); // ignore the ACK
+
+        // else {
+        //   //  ReceiverConnected = false;
+          
+        // }
 
 #ifdef DB_MODEL_EXCHANGE
         Serial.println(PacketNumber);
