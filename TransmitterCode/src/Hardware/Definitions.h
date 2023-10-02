@@ -730,17 +730,23 @@ uint16_t        YtouchPlace            = 0; // Clicked Y
 
 // changing these four valiables controls LED blink and speed
 
-bool      LedIsBlinking   = false;
-float     BlinkHertz      = 2;
-uint32_t  BlinkTimer      = 0;
-bool      LedWasGreen     = true;
-bool      LedWasRed       = false;
-char      ThisRadio[6]    = "0 ";
-uint8_t   LastRadio       = 0;
-uint8_t   NextChannel     = 0;
-bool      WirelessBuddy   = false; // use RF for buddy?!?!
-bool      BuddyPupilOnPPM = false;
-bool      BuddyMaster     = false;
+bool     LedIsBlinking = false;
+float    BlinkHertz    = 2;
+uint32_t BlinkTimer    = 0;
+bool     LedWasGreen   = true;
+bool     LedWasRed     = false;
+char     ThisRadio[6]  = "0 ";
+uint8_t  LastRadio     = 0;
+uint8_t  NextChannel   = 0;
+
+bool     WirelessBuddy = false; // use RF for buddy?!?!
+
+bool BuddyPupilOnWireless = false;
+bool BuddyPupilOnPPM      = false;
+
+bool BuddyMasterOnWireless = false;
+bool BuddyMasterOnPPM      = false;
+
 bool      SlaveHasControl = false;
 uint16_t  Qnh             = 1009; // pressure at sea level here
 uint16_t  LastModelLoaded = 0;

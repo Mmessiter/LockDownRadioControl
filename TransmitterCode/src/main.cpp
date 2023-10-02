@@ -597,7 +597,7 @@ FASTRUN void ShowComms()
         if (BuddyPupilOnPPM) SendText(FrontView_Connected, MsgBuddying);
         if (LedWasGreen) {
             if (BoundFlag) {
-                if (!BuddyMaster) {
+                if (!BuddyMasterOnPPM) {
                     if (!Reconnected) {
                         ShowConnectionQuality();
                         Reconnected = true;
@@ -1705,7 +1705,7 @@ bool LoadAllParameters()
     }
     BuddyPupilOnPPM = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    BuddyMaster = SDRead8BITS(SDCardAddress);
+    BuddyMasterOnPPM = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     ModelNumber = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
@@ -1806,17 +1806,16 @@ bool LoadAllParameters()
     PPMdata.PPMChannelsNumber = SDRead8BITS(SDCardAddress);
     if ((PPMdata.PPMChannelsNumber > 16) || (PPMdata.PPMChannelsNumber < 1)) PPMdata.PPMChannelsNumber = 6;
     ++SDCardAddress;
-
-    //  1  TXREAD byte spare
-
+    BuddyPupilOnWireless = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     PPMdata.UseTXModule = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    // heer
     for (int q = 0; q < 5; ++q) {
         BuddyMacAddress[q] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
+    BuddyMasterOnWireless = SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
     ReadCheckSum32();
     CheckTrimValues();
     MemoryForTransmtter = SDCardAddress;
@@ -2366,7 +2365,7 @@ FLASHMEM void setup()
     InitRadio(DefaultPipe);
 #endif
 
-    if (BuddyMaster) {
+    if (BuddyMasterOnPPM) {
         PPMdata.PPMInputBuddy.begin(BUDDYPPMPORT);
     }
     else {
@@ -2537,7 +2536,7 @@ void SaveTransmitterParameters()
     }
     SDUpdate8BITS(SDCardAddress, BuddyPupilOnPPM);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, BuddyMaster);
+    SDUpdate8BITS(SDCardAddress, BuddyMasterOnPPM);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, ModelNumber);
     ++SDCardAddress;
@@ -2623,9 +2622,7 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, PPMdata.PPMChannelsNumber);
     ++SDCardAddress;
-
-    //  1 spare TXWRITE byte here!
-
+    SDUpdate8BITS(SDCardAddress, BuddyPupilOnWireless);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, PPMdata.UseTXModule);
     ++SDCardAddress;
@@ -2634,6 +2631,9 @@ void SaveTransmitterParameters()
         SDUpdate8BITS(SDCardAddress, BuddyMacAddress[i]);
         ++SDCardAddress;
     }
+    SDUpdate8BITS(SDCardAddress, BuddyMasterOnWireless);
+    ++SDCardAddress;
+
     SaveCheckSum32(); // Save the Transmitter parametres checksm
     CloseModelsFile();
 }
@@ -4613,8 +4613,8 @@ void StartBuddyView()
     char pBuddyView[]    = "page BuddyView";
     SendCommand(pBuddyView);
     CurrentView = BUDDYVIEW;
-    SendValue(BuddyM, BuddyMaster);
-    SendValue(BuddyP, BuddyPupilOnPPM);
+    SendValue(BuddyM, BuddyMasterOnPPM || BuddyMasterOnWireless);
+    SendValue(BuddyP, BuddyPupilOnPPM || BuddyPupilOnWireless);
     SendValue(BuddyWireless, WirelessBuddy);
 }
 
@@ -4624,6 +4624,8 @@ void EndBuddyView()
 {
     char BuddyM[]        = "BuddyM";
     char BuddyP[]        = "BuddyP";
+    bool Pupil           = false;
+    bool Master          = false;
     char BuddyWireless[] = "wireless";
     char pRXSetupView[]  = "page RXSetupView";
     bool OldPupil;
@@ -4631,18 +4633,50 @@ void EndBuddyView()
     char prompt[] = "Power off transmitter?";
     char GoBack[] = "page BuddyView";
 
-    OldPupil        = BuddyPupilOnPPM; // save old version to detect a change
-    OldMaster       = BuddyMaster;
-    BuddyPupilOnPPM = GetValue(BuddyP);        // Pupil
-    BuddyMaster     = GetValue(BuddyM);        // Master
-    WirelessBuddy   = GetValue(BuddyWireless); // wireless?
+    OldPupil      = BuddyPupilOnPPM; // save old version to detect a change
+    OldMaster     = BuddyMasterOnPPM;
+    Pupil         = GetValue(BuddyP);        // Pupil
+    Master        = GetValue(BuddyM);        // Master
+    WirelessBuddy = GetValue(BuddyWireless); // wireless?
 
-    if (((OldPupil != BuddyPupilOnPPM) || (OldMaster != BuddyMaster)) && (!WirelessBuddy)){
+    if (Pupil) {
+        if (WirelessBuddy) // wireless switch on?
+        {
+            BuddyPupilOnWireless = true;
+            BuddyPupilOnPPM      = false;
+        }
+        if (!WirelessBuddy) {
+            BuddyPupilOnWireless = false;
+            BuddyPupilOnPPM      = true;
+        }
+    }
+    if (!Pupil)
+    {
+        BuddyPupilOnWireless = false;
+        BuddyPupilOnPPM      = false;
+    }
+
+    if (Master) {
+        if (WirelessBuddy) { // wireless switch on?
+            BuddyMasterOnWireless = true;
+            BuddyMasterOnPPM      = false;
+        }
+        if (!WirelessBuddy) { // wireless switch off?
+            BuddyMasterOnWireless = false;
+            BuddyMasterOnPPM      = true;
+        }
+    }
+    if (!Master) {
+        BuddyMasterOnWireless = false;
+        BuddyMasterOnPPM      = false;
+    }
+
+    if (((OldPupil != BuddyPupilOnPPM) || (OldMaster != BuddyMasterOnPPM)) && (!WirelessBuddy)) {
         if (!GetConfirmation(GoBack, prompt)) {
             SendValue(BuddyM, OldMaster);
             SendValue(BuddyP, OldPupil);
-            BuddyPupilOnPPM = OldPupil;
-            BuddyMaster     = OldMaster;
+            BuddyPupilOnPPM  = OldPupil;
+            BuddyMasterOnPPM = OldMaster;
         }
     }
     SaveAllParameters();
@@ -4651,7 +4685,7 @@ void EndBuddyView()
     SendCommand(pRXSetupView);
     CurrentView = RXSETUPVIEW;
     UpdateModelsNameEveryWhere();
-    if (((OldPupil != BuddyPupilOnPPM) || (OldMaster != BuddyMaster)) && (!WirelessBuddy)) {
+    if ((OldPupil != BuddyPupilOnPPM) || (OldMaster != BuddyMasterOnPPM)) {
         digitalWrite(POWER_OFF_PIN, HIGH);
     }
 }
@@ -5157,7 +5191,7 @@ void ResetTransmitterSettings()
     SendValue(Progress, 2);
 
     BuddyPupilOnPPM    = false;
-    BuddyMaster        = false;
+    BuddyMasterOnPPM   = false;
     ModelNumber        = 1;
     ScreenTimeout      = 120;
     Inactivity_Timeout = INACTIVITYTIMEOUT;
@@ -8117,7 +8151,7 @@ void FixMotorChannel()
 /************************************************************************************************************/
 void GetBuddyData()
 {
-    if (BuddyMaster) GetSlaveChannelValuesPPM(); // Get buddy data and maybe use it.
+    if (BuddyMasterOnPPM) GetSlaveChannelValuesPPM(); // Get buddy data and maybe use it.
 }
 /************************************************************************************************************/
 // LOOP
