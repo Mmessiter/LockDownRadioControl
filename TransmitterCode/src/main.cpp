@@ -4637,7 +4637,7 @@ void EndBuddyView()
     BuddyMaster     = GetValue(BuddyM);        // Master
     WirelessBuddy   = GetValue(BuddyWireless); // wireless?
 
-    if ((OldPupil != BuddyPupilOnPPM) || (OldMaster != BuddyMaster)) {
+    if (((OldPupil != BuddyPupilOnPPM) || (OldMaster != BuddyMaster)) && (!WirelessBuddy)){
         if (!GetConfirmation(GoBack, prompt)) {
             SendValue(BuddyM, OldMaster);
             SendValue(BuddyP, OldPupil);
@@ -4651,7 +4651,7 @@ void EndBuddyView()
     SendCommand(pRXSetupView);
     CurrentView = RXSETUPVIEW;
     UpdateModelsNameEveryWhere();
-    if ((OldPupil != BuddyPupilOnPPM) || (OldMaster != BuddyMaster)) {
+    if (((OldPupil != BuddyPupilOnPPM) || (OldMaster != BuddyMaster)) && (!WirelessBuddy)) {
         digitalWrite(POWER_OFF_PIN, HIGH);
     }
 }
