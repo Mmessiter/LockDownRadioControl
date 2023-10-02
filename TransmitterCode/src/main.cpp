@@ -555,13 +555,16 @@ FASTRUN void ShowComms()
     char         IdStored[]            = "t19";
     char         IdReceived1[]         = "t23";
     char         IdStored1[]           = "t24";
+    char         LocalMacID[]          = "t26";
+    char         MasterID[]            = "t28";
     char         ams[]                 = "ams";
     char         trall[]               = "trall";
     char         AmsOnMsg[]            = "AMS";
     char         AmsOffMsg[]           = "   ";
     char         CopyTrimsToAllMSG[]   = "TrimAll";
     char         CopyTrimsToNoneMSG[]  = "       ";
-    unsigned int TempModelId           = 0;
+    char         nb2[5];
+    unsigned int TempModelId = 0;
 
     if (CurrentView == FRONTVIEW) {
         ShowConnectionQuality();
@@ -651,6 +654,28 @@ FASTRUN void ShowComms()
         snprintf(Vbuf, 9, "%X", TempModelId);
         if (TempModelId) SendText(IdReceived1, Vbuf);
     }
+    if (CurrentView == DATAVIEW) { // even if not connected
+        for (int i = 0; i < 5; ++i) {
+            Vbuf[i] = 0;
+        }
+        for (int i = 0; i < 5; ++i) {
+            snprintf(nb2, 4, "%X", BuddyMacAddress[i]);
+            strcat(Vbuf, nb2);
+            strcat(Vbuf, " ");
+        }
+        SendText(MasterID, Vbuf);
+
+        for (int i = 0; i < 5; ++i) {
+            Vbuf[i] = 0;
+        }
+        for (int i = 1; i < 6; ++i) {
+            snprintf(nb2, 4, "%X", MacAddress[i]); // heer
+            strcat(Vbuf, nb2);
+            strcat(Vbuf, " ");
+        }
+        SendText(LocalMacID, Vbuf);
+    }
+
     if (CurrentView == GPSVIEW) {
         if (GpsFix) { // if no fix, then leave display as before
             SendText(Fix, yes);
@@ -8011,9 +8036,8 @@ bool CheckModelName()
 
 /************************************************************************************************************/
 void SimulateCloseDown()
-{ // Because real closedown occurs only after button is released
-
-    char ScreenOff[]     = "dim=0";
+{ // Because real closedown occurs only after button is released, this function simulates it.
+    char ScreenOff[] = "dim=0";
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, 0);
