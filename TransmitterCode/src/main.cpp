@@ -1791,9 +1791,7 @@ bool LoadAllParameters()
     LEDBrightness = SDRead8BITS(SDCardAddress);
     LEDBrightness = CheckRange(LEDBrightness, 1, 254);
     ++SDCardAddress;
-
-    // one spare TXREAD byte here!
-
+    WirelessBuddy = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     ConnectionAssessSeconds = SDRead8BITS(SDCardAddress);
     ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
@@ -1814,7 +1812,7 @@ bool LoadAllParameters()
     ++SDCardAddress;
     PPMdata.UseTXModule = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-// heer
+    // heer
     for (int q = 0; q < 5; ++q) {
         BuddyMacAddress[q] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
@@ -1824,7 +1822,7 @@ bool LoadAllParameters()
     MemoryForTransmtter = SDCardAddress;
     if ((ModelNumber < 1) || (ModelNumber > 99)) ModelNumber = 1;
     ReadOneModel(ModelNumber);
-   // ShowRemoteID(); // just for testing
+    // ShowRemoteID(); // just for testing
     return true;
 }
 
@@ -2613,9 +2611,7 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate16BITS(SDCardAddress, LEDBrightness);
     ++SDCardAddress;
-
-    // one spare TXWRITE byte here!
-
+    SDUpdate8BITS(SDCardAddress, WirelessBuddy);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, ConnectionAssessSeconds);
     ++SDCardAddress;
@@ -2623,7 +2619,6 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, TXLiPo);
     ++SDCardAddress;
-
     SDUpdate8BITS(SDCardAddress, PPMdata.PPMOrderSelection);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, PPMdata.PPMChannelsNumber);
@@ -4103,8 +4098,8 @@ void ReceiveModelFile()
     PlaySound(BEEPCOMPLETE);
     CloseModelsFile();
     DelayWithDog(2000);
-   
-   // ShowRemoteID(); // Show remote ID for tests
+
+    // ShowRemoteID(); // Show remote ID for tests
 
     SaveTransmitterParameters();
     GotoModelsView();
@@ -4612,22 +4607,25 @@ void StartReverseView()
 
 void StartBuddyView()
 {
-    char BuddyM[]     = "BuddyM";
-    char BuddyP[]     = "BuddyP";
-    char pBuddyView[] = "page BuddyView";
+    char BuddyM[]        = "BuddyM";
+    char BuddyP[]        = "BuddyP";
+    char BuddyWireless[] = "wireless";
+    char pBuddyView[]    = "page BuddyView";
     SendCommand(pBuddyView);
     CurrentView = BUDDYVIEW;
     SendValue(BuddyM, BuddyMaster);
     SendValue(BuddyP, BuddyPupilOnPPM);
+    SendValue(BuddyWireless, WirelessBuddy);
 }
 
 /*********************************************************************************************************************************/
 
 void EndBuddyView()
 {
-    char BuddyM[]       = "BuddyM";
-    char BuddyP[]       = "BuddyP";
-    char pRXSetupView[] = "page RXSetupView";
+    char BuddyM[]        = "BuddyM";
+    char BuddyP[]        = "BuddyP";
+    char BuddyWireless[] = "wireless";
+    char pRXSetupView[]  = "page RXSetupView";
     bool OldPupil;
     bool OldMaster;
     char prompt[] = "Power off transmitter?";
@@ -4635,8 +4633,10 @@ void EndBuddyView()
 
     OldPupil        = BuddyPupilOnPPM; // save old version to detect a change
     OldMaster       = BuddyMaster;
-    BuddyPupilOnPPM = GetValue(BuddyP); // Pupil
-    BuddyMaster     = GetValue(BuddyM); // Master
+    BuddyPupilOnPPM = GetValue(BuddyP);        // Pupil
+    BuddyMaster     = GetValue(BuddyM);        // Master
+    WirelessBuddy   = GetValue(BuddyWireless); // wireless?
+
     if ((OldPupil != BuddyPupilOnPPM) || (OldMaster != BuddyMaster)) {
         if (!GetConfirmation(GoBack, prompt)) {
             SendValue(BuddyM, OldMaster);

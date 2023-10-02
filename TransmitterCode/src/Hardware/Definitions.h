@@ -738,6 +738,7 @@ bool      LedWasRed       = false;
 char      ThisRadio[6]    = "0 ";
 uint8_t   LastRadio       = 0;
 uint8_t   NextChannel     = 0;
+bool      WirelessBuddy   = false; // use RF for buddy?!?!
 bool      BuddyPupilOnPPM = false;
 bool      BuddyMaster     = false;
 bool      SlaveHasControl = false;
