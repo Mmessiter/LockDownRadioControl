@@ -4633,11 +4633,11 @@ void EndBuddyView()
     char prompt[] = "Power off transmitter?";
     char GoBack[] = "page BuddyView";
 
-    OldPupilOnPPM      = BuddyPupilOnPPM; // save old version to detect a change
-    OldMasterOnPPM     = BuddyMasterOnPPM;
-    Pupil         = GetValue(BuddyP);        // Pupil
-    Master        = GetValue(BuddyM);        // Master
-    WirelessBuddy = GetValue(BuddyWireless); // wireless?
+    OldPupilOnPPM  = BuddyPupilOnPPM; // save old version to detect a change
+    OldMasterOnPPM = BuddyMasterOnPPM;
+    Pupil          = GetValue(BuddyP);        // Pupil ?
+    Master         = GetValue(BuddyM);        // Master ?
+    WirelessBuddy  = GetValue(BuddyWireless); // wireless ?
 
     if (Pupil) {
         if (WirelessBuddy) // wireless switch on?
@@ -4685,7 +4685,8 @@ void EndBuddyView()
     SendCommand(pRXSetupView);
     CurrentView = RXSETUPVIEW;
     UpdateModelsNameEveryWhere();
-    if ((OldPupilOnPPM != BuddyPupilOnPPM) || (OldMasterOnPPM != BuddyMasterOnPPM)) {
+    if (((OldPupilOnPPM != BuddyPupilOnPPM) || (OldMasterOnPPM != BuddyMasterOnPPM)) && (!WirelessBuddy))
+    {
         digitalWrite(POWER_OFF_PIN, HIGH);
     }
 }
@@ -8038,6 +8039,8 @@ void CheckPowerOffButton()
         GotoFrontView();
         if (!LedWasGreen && !PPMdata.UseTXModule)
         {
+            SaveAllParameters();
+            DelayWithDog(750);   // wait a mo for user to see 0 and log to write to file
             SimulateCloseDown(); // if not connected power off immediately
         }
         else
@@ -8083,7 +8086,7 @@ void CheckPowerOffButton()
                     DelayWithDog(2300);
                 }
                 SaveAllParameters();
-                DelayWithDog(250); // wait a mo for user to see 0 and log to write to file
+                DelayWithDog(750); // wait a mo for user to see 0 and log to write to file
                 SimulateCloseDown();
             }
             --TurnOffSecondToGo;
