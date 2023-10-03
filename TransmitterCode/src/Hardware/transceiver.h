@@ -84,7 +84,11 @@ FASTRUN void TryOtherPipe()
     else
     {
         BoundFlag = true;             //  ... but not modelmatched yet
-        SetThePipe(TeensyMACAddPipe); //
+        if (!BuddyPupilOnWireless){
+            SetThePipe(TeensyMACAddPipe); 
+        }else{
+            SetThePipe(BuddyMACAddPipe); 
+        }
         CurrentPipe = 1;              // 1 = bound pipe
     }
 }
@@ -348,15 +352,44 @@ FASTRUN void HopToNextChannel()
 
 /*********************************************************************************************************************************/
 
+void DisplayPipe(uint64_t WhichPipe) // for debugging
+{
+union {
+    uint64_t i;
+    uint8_t  b[8];
+} Pipeu;
+
+    Pipeu.i = WhichPipe;
+    Look1("Pipe: ");
+    Serial.print(Pipeu.b[0],HEX);
+    Serial.print(" ");
+    Serial.print(Pipeu.b[1],HEX);
+    Serial.print(" ");
+    Serial.print(Pipeu.b[2],HEX);
+    Serial.print(" ");
+    Serial.print(Pipeu.b[3],HEX);
+    Serial.print(" ");
+    Serial.print(Pipeu.b[4],HEX);
+    // Serial.print(" ");
+    // Serial.print(Pipeu.b[5],HEX);
+    // Serial.print(" ");
+    // Serial.print(Pipeu.b[6],HEX);
+    // Serial.print(" ");
+    // Serial.print(Pipeu.b[7],HEX);
+    Look("");
+}
+/*********************************************************************************************************************************/
+
 void SetThePipe(uint64_t WhichPipe)
 {
     Radio1.openWritingPipe(WhichPipe);
     delayMicroseconds(500);
     Radio1.stopListening();
     delayMicroseconds(500); // allow things to happen
+   // DisplayPipe(WhichPipe);
 }
-/************************************************************************************************************/
-#define BADNIBBLECOUNT 6
+    /************************************************************************************************************/
+    #define BADNIBBLECOUNT 6
 
 uint8_t CheckPipeNibbles(uint8_t b)
 {

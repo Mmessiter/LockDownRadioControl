@@ -550,6 +550,7 @@ uint8_t       CurrentView      = FRONTVIEW;
 uint8_t       SavedCurrentView = FRONTVIEW;
 uint64_t      DefaultPipe      = DEFAULTPIPEADDRESS; //          Default Radio pipe address
 uint64_t      TeensyMACAddPipe = DEFAULTPIPEADDRESS; //          New Radio pipe address for binding will come from MAC address
+uint64_t      BuddyMACAddPipe  = DEFAULTPIPEADDRESS; //          Buddy pipe address
 char          TextIn[CHARSMAX + 2];                  //          Spare space
 uint16_t      PacketsPerSecond = 0;
 uint8_t       PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS]; // Here we record some history

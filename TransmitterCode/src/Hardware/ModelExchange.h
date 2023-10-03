@@ -309,9 +309,9 @@ void ReceiveModelFile()
     Fsize += Fbuffer[BUFFERSIZE + 2] << 16;
     Fsize += Fbuffer[BUFFERSIZE + 3] << 24; //  Get file size
 
-    for (int q = 0; q < 5; ++q) {
+    for (int q = 0; q < 5; ++q) { 
         BuddyMacAddress[q] = Fbuffer[q + 16]; // sender's macaddress is in buffer at offset 16 - get it heer!
-        if (q == 0) ++BuddyMacAddress[q];     // add one to lowest byte to make it unique
+      //  if (q == 0) ++BuddyMacAddress[q];     // add one to lowest byte to make it unique // heer!!
     }
 
     #ifdef DB_MODEL_EXCHANGE

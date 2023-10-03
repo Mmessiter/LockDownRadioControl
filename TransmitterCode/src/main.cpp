@@ -607,28 +607,27 @@ FASTRUN void ShowComms()
         snprintf(Vbuf, 9, "%X", TempModelId);
         if (TempModelId) SendText(IdReceived1, Vbuf);
     }
-        if (CurrentView == DATAVIEW) { // even if not connected
-            for (int i = 0; i < 5; ++i) {
-                Vbuf[i] = 0;
-            }
-            for (int i = 4; i >=0; --i) {//**
-                snprintf(nb2, 4, "%X", BuddyMacAddress[i]);
-                strcat(Vbuf, nb2);
-                strcat(Vbuf, " ");
-            }
-            SendText(MasterID, Vbuf);
-
-            for (int i = 0; i < 5; ++i) {
-                Vbuf[i] = 0;
-            }
-            for (int i = 5; i > 0; --i) {//**
-                snprintf(nb2, 4, "%X", MacAddress[i]); // heer
-                strcat(Vbuf, nb2);
-                strcat(Vbuf, " ");
-            }
-            SendText(LocalMacID, Vbuf);
+    if (CurrentView == DATAVIEW) { // even if not connected
+        for (int i = 0; i < 5; ++i) {
+            Vbuf[i] = 0;
         }
-    
+        for (int i = 4; i >= 0; --i) { //**
+            snprintf(nb2, 4, "%X", BuddyMacAddress[i]);
+            strcat(Vbuf, nb2);
+            strcat(Vbuf, " ");
+        }
+        SendText(MasterID, Vbuf);
+
+        for (int i = 0; i < 5; ++i) {
+            Vbuf[i] = 0;
+        }
+        for (int i = 5; i > 0; --i) {              //**
+            snprintf(nb2, 4, "%X", MacAddress[i]); // heer
+            strcat(Vbuf, nb2);
+            strcat(Vbuf, " ");
+        }
+        SendText(LocalMacID, Vbuf);
+    }
 
     if (CurrentView == GPSVIEW) {
         if (GpsFix) { // if no fix, then leave display as before
@@ -2269,7 +2268,23 @@ void GetTeensyMacAddress()
     TeensyMACAddPipe += (uint64_t)MacAddress[3] << 16;
     TeensyMACAddPipe += (uint64_t)MacAddress[4] << 8;
     TeensyMACAddPipe += (uint64_t)MacAddress[5];
-    TeensyMACAddPipe &= 0xffffffffff;
+    // TeensyMACAddPipe &= 0xffffffffff;
+}
+
+/*********************************************************************************************************************************/
+
+void ConvertBuddyPipeTo64BITS()
+{
+    BuddyMACAddPipe = (uint64_t)BuddyMacAddress[0] << 40;
+    BuddyMACAddPipe += (uint64_t)BuddyMacAddress[1] << 32;
+    BuddyMACAddPipe += (uint64_t)BuddyMacAddress[2] << 24;
+    BuddyMACAddPipe += (uint64_t)BuddyMacAddress[3] << 16;
+    BuddyMACAddPipe += (uint64_t)BuddyMacAddress[4] << 8;
+    BuddyMACAddPipe += (uint64_t)BuddyMacAddress[5];
+    BuddyMACAddPipe >>= 8; // Correction needed :-) !
+
+
+    // TeensyMACAddPipe &= 0xffffffffff;
 }
 
 /*********************************************************************************************************************************/
@@ -2323,7 +2338,7 @@ FLASHMEM void setup()
     }
 
     GetTeensyMacAddress();
-
+    ConvertBuddyPipeTo64BITS();
     Wire.begin();
     ScanI2c();
     if (USE_INA219) ina219.begin();
