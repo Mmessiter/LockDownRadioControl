@@ -244,13 +244,13 @@ void ConfigureRadio()
 {
     CurrentRadio->setPALevel(RF24_PA_MAX);
     CurrentRadio->setDataRate(RF24_250KBPS);
-    CurrentRadio->enableAckPayload();      // needed
-    CurrentRadio->setRetries(2, 2);        // automatic retries // was 2,0
-    CurrentRadio->enableDynamicPayloads(); // needed
-    CurrentRadio->setAddressWidth(5);
+    CurrentRadio->enableAckPayload();        // needed
+    CurrentRadio->setRetries(2, 2);          // automatic retries // was 2,0
+    CurrentRadio->enableDynamicPayloads();   // needed
+    CurrentRadio->setAddressWidth(5);        // use 5 bytes for addresses
     CurrentRadio->setCRCLength(RF24_CRC_16); // could be 8 or disabled
-    CurrentRadio->setAutoAck(true);
-    CurrentRadio->maskIRQ(1, 1, 1); // no interrupts - seems NEEDED at the moment
+    CurrentRadio->setAutoAck(true);          // we want acks
+    CurrentRadio->maskIRQ(1, 1, 1);          // no interrupts - seems NEEDED at the moment
     CurrentRadio->openReadingPipe(PIPENUMBER, PipePointer);
     CurrentRadio->openReadingPipe(BUDDYPIPENUMBER, BuddyPipePointer); // for wireless buddy box << *******
     CurrentRadio->startListening();
