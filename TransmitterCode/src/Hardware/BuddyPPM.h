@@ -3,7 +3,7 @@
 #include "Hardware/Definitions.h"
 #include "Hardware/StructsEtc.h"
 #ifndef BUDDYPPM_H
-    #define MACBUDDYPPM_HOS_H
+    #define BUDDYPPM_H
 
 //*************************************************************************************************************************
 
