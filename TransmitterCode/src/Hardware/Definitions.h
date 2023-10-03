@@ -528,6 +528,11 @@ void             BuildDirectory();
 void             ShowFileNumber();
 void             MsgBox(char* goback, char* Prompt);
 void             ShowRemoteID();
+void             CloseModelsFile();
+void             ShortishDelay();
+void             ShortDelay();
+void             BlueLedOn();
+void             NormaliseTheRadio();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************

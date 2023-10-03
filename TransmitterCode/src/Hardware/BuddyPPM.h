@@ -1,0 +1,59 @@
+// *************************************** BuddyPPM.h  *****************************************
+#include <Arduino.h>
+#include "Hardware/Definitions.h"
+#include "Hardware/StructsEtc.h"
+#ifndef BUDDYPPM_H
+    #define MACBUDDYPPM_HOS_H
+
+//*************************************************************************************************************************
+
+// This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE buddy switch is on
+
+void GetSlaveChannelValuesPPM() // MASTER code
+{
+    if (BuddyON) {
+
+        if (PPMdata.PPMInputBuddy.available() == CHANNELSUSED) {
+            for (int j = 0; j < CHANNELSUSED; ++j) {                // While slave has control, his stick data replaces all ours
+                uint16_t PpmIn = PPMdata.PPMInputBuddy.read(j + 1); // read EVERY channel
+                if (BuddyControlled & 1 << (j)) {                   // Test if this channel is buddy controlled. If not leave it unchanged
+                    SendBuffer[j] = PpmIn;
+                    PPMBuffer[j]  = PpmIn;
+                }
+            }
+            if (!SlaveHasControl) { // Buddy is now On
+                PlaySound(BUDDYMSG);
+                LastShowTime    = 0;
+                SlaveHasControl = true;
+            }
+        }
+        else {
+            for (int j = 0; j < CHANNELSUSED; ++j) { // reuse old data if no new is available.
+                if (BuddyControlled & 1 << (j)) SendBuffer[j] = PPMBuffer[j];
+            }
+        }
+    }
+    else { // Buddy is now Off
+        if (SlaveHasControl) {
+            PlaySound(MASTERMSG);
+            LastShowTime    = 0;
+            SlaveHasControl = false;
+        }
+    }
+}
+
+/************************************************************************************************************/
+//  Send via PPM for Buddy box pupil
+
+FASTRUN void SendViaPPM()
+{
+    static uint32_t PPMTimer = 0;
+
+    if (millis() - PPMTimer >= PPMBUDDYFRAMERATE) {
+        PPMTimer = millis();
+        for (int j = 0; j < CHANNELSUSED; ++j) PPMdata.PPMOutputBuddy.write(j + 1, SendBuffer[j]);
+    }
+}
+
+//***********************************************************************************************************
+#endif
