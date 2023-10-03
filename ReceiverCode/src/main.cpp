@@ -227,9 +227,6 @@ void FailSafe()
  */
 void ShowHopDurationEtc()
 {
-
-    int t = HOPTIME;
-    //
     float   freq          = 2.4 + (float)NextChannel / 1000;
     uint8_t OnePacketTime = (millis() - PacketStartTime); //  / PacketNumber;
     Serial.print("Hop duration: ");
@@ -432,28 +429,7 @@ void SendQnhToSensorHub()
     QNH[5]     = Uqnh.Val8[1];
     SendToSensorHub(QNH);
 }
-/************************************************************************************************************/
 
-// This allows a new array of pseudo-random channel numbers to be used.
-// "FHSSChPointer" and "FrequencyCount" simply need to be set appropriately.
-
-void SetTestFrequencies()
-{
-    FHSSRecoveryPointer = FHSS_Channels1;
-    FHSSChPointer       = FHSS_Channels1;
-    FrequencyCount      = FREQUENCYSCOUNT1;
-}
-/************************************************************************************************************/
-
-// This allows a new array of pseudo-random channel numbers to be used.
-// "FHSSChPointer" and "FrequencyCount" simply need to be set appropriately.
-
-void SetUKFrequencies()
-{
-    FHSSRecoveryPointer = FHSS_Channels;
-    FHSSChPointer       = FHSS_Channels;
-    FrequencyCount      = FREQUENCYSCOUNT;
-}
 /************************************************************************************************************/
 /**
  * extra parameters can be sent using the last four bytes in every data packet.

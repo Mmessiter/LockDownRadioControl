@@ -5,10 +5,9 @@
 
 #ifndef TRANSCEIVER_H
     #define TRANSCEIVER_H
-/*********************************************************************************************************************************/
 
 /************************************************************************************************************/
-//                                 Most Radio Functions
+//                                       Most Radio Functions
 /************************************************************************************************************/
 
 // This functions performs lossless compression on the data sent to receiver, to keep it below 32 bytes
@@ -313,9 +312,7 @@ float PEndTime   = 0;
 float Pduration  = 0;
 float HopsPerSec = 0;
 #endif
-
 /************************************************************************************************************/
-
 // This function hops to the next channel in the FFHS array
 
 FASTRUN void HopToNextChannel()
@@ -349,7 +346,6 @@ FASTRUN void HopToNextChannel()
 #endif
     PacketNumber = 0;
 }
-
 /*********************************************************************************************************************************/
 
 void DisplayPipe(uint64_t WhichPipe) // for debugging
@@ -358,7 +354,6 @@ union {
     uint64_t i;
     uint8_t  b[8];
 } Pipeu;
-
     Pipeu.i = WhichPipe;
     Look1("Pipe: ");
     Serial.print(Pipeu.b[0],HEX);
@@ -379,7 +374,6 @@ union {
     Look("");
 }
 /*********************************************************************************************************************************/
-
 void SetThePipe(uint64_t WhichPipe)
 {
     Radio1.openWritingPipe(WhichPipe);
@@ -393,13 +387,11 @@ void SetThePipe(uint64_t WhichPipe)
 
 uint8_t CheckPipeNibbles(uint8_t b)
 {
-
     uint8_t temp;
     uint8_t BadLowerNibble[BADNIBBLECOUNT]     = {0x05, 0x0a, 0x02, 0x01, 0x00, 0x0f};
     uint8_t BadHigherNibble[BADNIBBLECOUNT]    = {0x50, 0xa0, 0x20, 0x10, 0x00, 0xf0};
     uint8_t BetterLowerNibble[BADNIBBLECOUNT]  = {0x03, 0x04, 0x06, 0x07, 0x08, 0x09};
     uint8_t BetterHigherNibble[BADNIBBLECOUNT] = {0x30, 0x40, 0x60, 0x70, 0x80, 0x90};
-
     if (!b) return 0x36; // return an acceptable byte for a zero
 
     for (int i = 0; i < BADNIBBLECOUNT; ++i) { // ********** check LOWER nibble **********
@@ -418,9 +410,7 @@ uint8_t CheckPipeNibbles(uint8_t b)
     }
     return b;
 }
-
 /************************************************************************************************************/
-
 FASTRUN void BufferTeensyMACAddPipe() // heeer
 {
     for (int q = 1; q < 6; ++q) {
@@ -435,9 +425,7 @@ void SendBindingPipe()
     if (!BoundFlag || !ModelMatched) BindingTimer = millis();
     if ((millis() - BindingTimer) < 1200) BufferTeensyMACAddPipe();
 }
-
 /*********************************************************************************************************************************/
-
 void NormaliseTheRadio()
 {
     SetThePipe(DefaultPipe);

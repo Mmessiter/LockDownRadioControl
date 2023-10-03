@@ -110,6 +110,31 @@ Payload AckPayload;
 uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed etc. (=6)
 
 /************************************************************************************************************/
+
+// This allows a new array of pseudo-random channel numbers to be used.
+// "FHSSChPointer" and "FrequencyCount" simply need to be set appropriately.
+
+void SetTestFrequencies()
+{
+    FHSSRecoveryPointer = FHSS_Channels1;
+    FHSSChPointer       = FHSS_Channels1;
+    FrequencyCount      = FREQUENCYSCOUNT1;
+    // FrequencyCount      = 5;
+}
+/************************************************************************************************************/
+
+// This allows a new array of pseudo-random channel numbers to be used.
+// "FHSSChPointer" and "FrequencyCount" simply need to be set appropriately.
+
+void SetUKFrequencies()
+{
+    FHSSRecoveryPointer = FHSS_Channels;
+    FHSSChPointer       = FHSS_Channels;
+    FrequencyCount      = FREQUENCYSCOUNT;
+    // FrequencyCount      = 5;
+}
+
+/************************************************************************************************************/
 void CopyCurrentPipe(uint8_t* p, uint8_t pn)
 {
 

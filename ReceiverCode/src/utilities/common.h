@@ -45,8 +45,8 @@
 
 #define LISTEN_PERIOD            14  //  14 (How many ms to listen for TX in Reconnect())
 #define RECEIVE_TIMEOUT          14  //  14  (<=9 fails, >=11 OK)
-#define RECONNECT_CHANNELS_COUNT 3   // How many channels to try when reconnecting
-#define RECONNECT_CHANNELS_START 12  // Offset in the array to begin getting reconnect channels
+#define RECONNECT_CHANNELS_COUNT 3   // was 3 How many channels to try when reconnecting
+#define RECONNECT_CHANNELS_START 12  // was 12 Offset in the array to begin getting reconnect channels
 
 // *****************************************************************************************
 #define PIPENUMBER       1
