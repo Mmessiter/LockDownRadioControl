@@ -55,7 +55,7 @@ var searchData=
   ['receivedata_52',['ReceiveData',['../radio_8h.html#a06807a4f185694d37f774702ba74db0a',1,'ReceiveData():&#160;main.cpp'],['../ReceiverCode_2src_2main_8cpp.html#a06807a4f185694d37f774702ba74db0a',1,'ReceiveData():&#160;main.cpp']]],
   ['receiveddata_53',['ReceivedData',['../radio_8h.html#ae5bff5a2375f932e5653e5d3659330d3',1,'radio.h']]],
   ['receiveeventinterrupt_54',['ReceiveEventInterrupt',['../SensorHubT32_2src_2main_8cpp.html#a2be9d0838709dc3a88a9a54108bd2b4a',1,'main.cpp']]],
-  ['receivemodelfile_55',['ReceiveModelFile',['../TransmitterCode_2src_2main_8cpp.html#ab7c9edf843c732d7fe296564f39bc0dc',1,'main.cpp']]],
+  ['receivemodelfile_55',['ReceiveModelFile',['../ModelExchange_8h.html#ab7c9edf843c732d7fe296564f39bc0dc',1,'ModelExchange.h']]],
   ['receiverequestflag_56',['ReceiveRequestFlag',['../SensorHubT32_2src_2main_8cpp.html#a5ac604cfd226554c62738bdbabf09f5f',1,'main.cpp']]],
   ['receiverversionnumber_57',['ReceiverVersionNumber',['../Definitions_8h.html#a0606336234719f5039122563372820ac',1,'Definitions.h']]],
   ['recentpacketslost_58',['RecentPacketsLost',['../Definitions_8h.html#a75bea305c82af413e997a07f6554ff93',1,'Definitions.h']]],

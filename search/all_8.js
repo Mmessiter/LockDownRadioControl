@@ -181,7 +181,7 @@ var searchData=
   ['getslave4writemode_178',['getSlave4WriteMode',['../classMPU6050.html#a8d5a5e73907c78960154b92656127372',1,'MPU6050']]],
   ['getslaveaddress_179',['getSlaveAddress',['../classMPU6050.html#af75b9f7ccac48515c7544238db0e6863',1,'MPU6050']]],
   ['getslavechannelvalues_180',['GetSlaveChannelValues',['../Definitions_8h.html#a4635a8fc77c9f57fca53a5206cd5e571',1,'Definitions.h']]],
-  ['getslavechannelvaluesppm_181',['GetSlaveChannelValuesPPM',['../TransmitterCode_2src_2main_8cpp.html#a9c9e7f489bda19dbb591d5cdac3fa45b',1,'main.cpp']]],
+  ['getslavechannelvaluesppm_181',['GetSlaveChannelValuesPPM',['../BuddyPPM_8h.html#a9c9e7f489bda19dbb591d5cdac3fa45b',1,'BuddyPPM.h']]],
   ['getslavedatalength_182',['getSlaveDataLength',['../classMPU6050.html#a54c2a48b3cb79106bcaf75accf6cd311',1,'MPU6050']]],
   ['getslavedelayenabled_183',['getSlaveDelayEnabled',['../classMPU6050.html#ae84fd795630f9ab5e8d6b19a616a11ce',1,'MPU6050']]],
   ['getslaveenabled_184',['getSlaveEnabled',['../classMPU6050.html#a5f14bde83fe00b27dec6776fc44e89c2',1,'MPU6050']]],

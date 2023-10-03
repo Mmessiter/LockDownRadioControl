@@ -33,7 +33,7 @@ var searchData=
   ['buddyppmport_30',['BUDDYPPMPORT',['../Definitions_8h.html#a7693b6311a14f65e0b9e2f3d202229b9',1,'Definitions.h']]],
   ['buddyview_31',['BUDDYVIEW',['../Definitions_8h.html#a38c9376ad661411cad3019d4a43ac493',1,'Definitions.h']]],
   ['buffer_5flength_32',['BUFFER_LENGTH',['../I2Cdev_8cpp.html#af7b7dc9a200cb1404c280bd500fd1551',1,'I2Cdev.cpp']]],
-  ['buffersize_33',['BUFFERSIZE',['../TransmitterCode_2src_2main_8cpp.html#ac3146f1e9227301bb4aa518f4d336cee',1,'main.cpp']]],
+  ['buffersize_33',['BUFFERSIZE',['../ModelExchange_8h.html#ac3146f1e9227301bb4aa518f4d336cee',1,'ModelExchange.h']]],
   ['button_5fsense_5fpin_34',['BUTTON_SENSE_PIN',['../Definitions_8h.html#a6ee4615320320baaf7e0d8e87642141e',1,'Definitions.h']]],
   ['bytespermacro_35',['BYTESPERMACRO',['../Definitions_8h.html#acb6ba8383362a5f2efee8416bc4300c9',1,'Definitions.h']]]
 ];

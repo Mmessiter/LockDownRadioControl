@@ -47,7 +47,7 @@ var searchData=
   ['clearsuccessrate_44',['ClearSuccessRate',['../Definitions_8h.html#a82b1900a80d1622896601c57d6edaeda',1,'ClearSuccessRate():&#160;Utilities.h'],['../Utilities_8h.html#a82b1900a80d1622896601c57d6edaeda',1,'ClearSuccessRate():&#160;Utilities.h']]],
   ['cleartext_45',['ClearText',['../Definitions_8h.html#af0852678d8e89501acee8951f09d3b43',1,'ClearText():&#160;Utilities.h'],['../Utilities_8h.html#af0852678d8e89501acee8951f09d3b43',1,'ClearText():&#160;Utilities.h']]],
   ['closelogfile_46',['CloseLogFile',['../Definitions_8h.html#abc72fe68abd024cb263115e0afd3160a',1,'CloseLogFile():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a6f003363493fc53b69f9efc1f447a6a1',1,'CloseLogFile():&#160;main.cpp']]],
-  ['closemodelsfile_47',['CloseModelsFile',['../TransmitterCode_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c',1,'main.cpp']]],
+  ['closemodelsfile_47',['CloseModelsFile',['../Definitions_8h.html#a6922974b734cfe3a511e074a2d6ac33c',1,'CloseModelsFile():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c',1,'CloseModelsFile():&#160;main.cpp']]],
   ['commandmotors_48',['commandMotors',['../Quadcopter_2src_2main_8cpp.html#a9acf6c6b8012c342b50fc7b0656ccc31',1,'main.cpp']]],
   ['comparemodelsids_49',['CompareModelsIDs',['../ModelMatch_8h.html#af8fe429ceb65bf9d257a2a0f1c63eccb',1,'ModelMatch.h']]],
   ['compress_50',['Compress',['../Definitions_8h.html#a1ddd5e8d5bd649dd98ce3710fbff651b',1,'Compress(uint16_t *compressed_buf, uint16_t *uncompressed_buf, uint8_t uncompressed_size):&#160;transceiver.h'],['../transceiver_8h.html#a1ddd5e8d5bd649dd98ce3710fbff651b',1,'Compress(uint16_t *compressed_buf, uint16_t *uncompressed_buf, uint8_t uncompressed_size):&#160;transceiver.h']]],

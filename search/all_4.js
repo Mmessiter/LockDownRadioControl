@@ -102,7 +102,7 @@ var searchData=
   ['clockspoken_99',['ClockSpoken',['../Definitions_8h.html#a235116408ba9ac496c2a243a340888e5',1,'Definitions.h']]],
   ['clockspoken1_100',['ClockSpoken1',['../Definitions_8h.html#af6cab75e259de8cad651fc31410602ea',1,'Definitions.h']]],
   ['closelogfile_101',['CloseLogFile',['../Definitions_8h.html#abc72fe68abd024cb263115e0afd3160a',1,'CloseLogFile():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a6f003363493fc53b69f9efc1f447a6a1',1,'CloseLogFile():&#160;main.cpp']]],
-  ['closemodelsfile_102',['CloseModelsFile',['../TransmitterCode_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c',1,'main.cpp']]],
+  ['closemodelsfile_102',['CloseModelsFile',['../TransmitterCode_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c',1,'CloseModelsFile():&#160;main.cpp'],['../Definitions_8h.html#a6922974b734cfe3a511e074a2d6ac33c',1,'CloseModelsFile():&#160;main.cpp']]],
   ['colours_5fview_103',['COLOURS_VIEW',['../Definitions_8h.html#a8bafc146db9adcaf79abde00aaffb6bc',1,'Definitions.h']]],
   ['commandmotors_104',['commandMotors',['../Quadcopter_2src_2main_8cpp.html#a9acf6c6b8012c342b50fc7b0656ccc31',1,'main.cpp']]],
   ['common_2eh_105',['common.h',['../common_8h.html',1,'']]],
