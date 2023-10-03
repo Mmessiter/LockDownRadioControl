@@ -30,7 +30,7 @@ var searchData=
   ['checkmotoroff_27',['CheckMotorOff',['../Definitions_8h.html#a2f7d73b3096c884b2ace4b3399268325',1,'CheckMotorOff():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a2f7d73b3096c884b2ace4b3399268325',1,'CheckMotorOff():&#160;main.cpp']]],
   ['checkoutputchannels_28',['CheckOutPutChannels',['../TransmitterCode_2src_2main_8cpp.html#a81f424711e329d4db746d65d6cbc7b1f',1,'main.cpp']]],
   ['checkpipenibbles_29',['CheckPipeNibbles',['../Definitions_8h.html#acd761b7a3274515f60af86504f70fcd6',1,'CheckPipeNibbles(uint8_t b):&#160;transceiver.h'],['../transceiver_8h.html#acd761b7a3274515f60af86504f70fcd6',1,'CheckPipeNibbles(uint8_t b):&#160;transceiver.h']]],
-  ['checkpoweroffbutton_30',['CheckPowerOffButton',['../Definitions_8h.html#a6ae37c6938b8c10b83d1bc74e8643bd9',1,'CheckPowerOffButton():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a6ae37c6938b8c10b83d1bc74e8643bd9',1,'CheckPowerOffButton():&#160;main.cpp']]],
+  ['checkpoweroffbutton_30',['CheckPowerOffButton',['../TransmitterCode_2src_2main_8cpp.html#a6ae37c6938b8c10b83d1bc74e8643bd9',1,'CheckPowerOffButton():&#160;main.cpp'],['../Definitions_8h.html#a6ae37c6938b8c10b83d1bc74e8643bd9',1,'CheckPowerOffButton():&#160;main.cpp']]],
   ['checkrange_31',['CheckRange',['../Definitions_8h.html#a01c7a0b0de94ec72fe070ea9f90dc2ec',1,'CheckRange(int v, int min, int max):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a01c7a0b0de94ec72fe070ea9f90dc2ec',1,'CheckRange(int v, int min, int max):&#160;main.cpp']]],
   ['checkrxvolts_32',['CheckRXVolts',['../TransmitterCode_2src_2main_8cpp.html#a3014b0aec0f1343c2fd7b480bd5e0425',1,'main.cpp']]],
   ['checksavedtrimvalues_33',['CheckSavedTrimValues',['../Trims_8h.html#a688c8f45b7061a1574dcb7eb28eec56b',1,'Trims.h']]],
@@ -45,7 +45,7 @@ var searchData=
   ['clearackpayload_42',['ClearAckPayload',['../radio_8h.html#a5a26715a721e1073d6ae00498282c056',1,'radio.h']]],
   ['clearbox_43',['ClearBox',['../Utilities_8h.html#a5aeea47b9d855ae9911bae1115d02de7',1,'Utilities.h']]],
   ['clearsuccessrate_44',['ClearSuccessRate',['../Definitions_8h.html#a82b1900a80d1622896601c57d6edaeda',1,'ClearSuccessRate():&#160;Utilities.h'],['../Utilities_8h.html#a82b1900a80d1622896601c57d6edaeda',1,'ClearSuccessRate():&#160;Utilities.h']]],
-  ['cleartext_45',['ClearText',['../Definitions_8h.html#af0852678d8e89501acee8951f09d3b43',1,'ClearText():&#160;Utilities.h'],['../Utilities_8h.html#af0852678d8e89501acee8951f09d3b43',1,'ClearText():&#160;Utilities.h']]],
+  ['cleartext_45',['ClearText',['../Utilities_8h.html#af0852678d8e89501acee8951f09d3b43',1,'ClearText():&#160;Utilities.h'],['../Definitions_8h.html#af0852678d8e89501acee8951f09d3b43',1,'ClearText():&#160;Utilities.h']]],
   ['closelogfile_46',['CloseLogFile',['../Definitions_8h.html#abc72fe68abd024cb263115e0afd3160a',1,'CloseLogFile():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a6f003363493fc53b69f9efc1f447a6a1',1,'CloseLogFile():&#160;main.cpp']]],
   ['closemodelsfile_47',['CloseModelsFile',['../Definitions_8h.html#a6922974b734cfe3a511e074a2d6ac33c',1,'CloseModelsFile():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c',1,'CloseModelsFile():&#160;main.cpp']]],
   ['commandmotors_48',['commandMotors',['../Quadcopter_2src_2main_8cpp.html#a9acf6c6b8012c342b50fc7b0656ccc31',1,'main.cpp']]],
@@ -57,7 +57,8 @@ var searchData=
   ['controlangle2_54',['controlANGLE2',['../Quadcopter_2src_2main_8cpp.html#a147b4c89c72c6397859b3cbe18cc47cd',1,'main.cpp']]],
   ['controlmixer_55',['controlMixer',['../Quadcopter_2src_2main_8cpp.html#a95a8288a82a1168b82213a00cf085a0f',1,'main.cpp']]],
   ['controlrate_56',['controlRATE',['../Quadcopter_2src_2main_8cpp.html#ae7f9ccabb7ac4a5c80d7189d9ba54e13',1,'main.cpp']]],
-  ['copycurrentpipe_57',['CopyCurrentPipe',['../radio_8h.html#aa55e98a44b0bcb87b4e318381fece092',1,'radio.h']]],
-  ['createtimedatestamp_58',['CreateTimeDateStamp',['../TransmitterCode_2src_2main_8cpp.html#a1a0a5d73007aba01755e5274d12e6e9b',1,'main.cpp']]],
-  ['createtimestamp_59',['CreateTimeStamp',['../TransmitterCode_2src_2main_8cpp.html#a5d42b1fba153cc76dc96778cfb6f1a40',1,'main.cpp']]]
+  ['convertbuddypipeto64bits_57',['ConvertBuddyPipeTo64BITS',['../TransmitterCode_2src_2main_8cpp.html#a9938fb6967cdd208ca6d6e54531a5610',1,'main.cpp']]],
+  ['copycurrentpipe_58',['CopyCurrentPipe',['../radio_8h.html#aa55e98a44b0bcb87b4e318381fece092',1,'radio.h']]],
+  ['createtimedatestamp_59',['CreateTimeDateStamp',['../TransmitterCode_2src_2main_8cpp.html#a1a0a5d73007aba01755e5274d12e6e9b',1,'main.cpp']]],
+  ['createtimestamp_60',['CreateTimeStamp',['../TransmitterCode_2src_2main_8cpp.html#a5d42b1fba153cc76dc96778cfb6f1a40',1,'main.cpp']]]
 ];

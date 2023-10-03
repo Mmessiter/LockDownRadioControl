@@ -40,6 +40,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "CheckTXVolts", "TransmitterCode_2src_2main_8cpp.html#a28ff2460f96b023cdb62a5c2b8f593f5", null ],
     [ "CloseLogFile", "TransmitterCode_2src_2main_8cpp.html#a6f003363493fc53b69f9efc1f447a6a1", null ],
     [ "CloseModelsFile", "TransmitterCode_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c", null ],
+    [ "ConvertBuddyPipeTo64BITS", "TransmitterCode_2src_2main_8cpp.html#a9938fb6967cdd208ca6d6e54531a5610", null ],
     [ "CreateTimeDateStamp", "TransmitterCode_2src_2main_8cpp.html#a1a0a5d73007aba01755e5274d12e6e9b", null ],
     [ "CreateTimeStamp", "TransmitterCode_2src_2main_8cpp.html#a5d42b1fba153cc76dc96778cfb6f1a40", null ],
     [ "DecTrim", "TransmitterCode_2src_2main_8cpp.html#ae4be4bb0e33569d140264079d28227fd", null ],

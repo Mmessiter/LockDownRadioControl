@@ -405,6 +405,7 @@ var Definitions_8h =
     [ "BoxTop", "Definitions_8h.html#a14af89f3ce30e043d543d77e144a843b", null ],
     [ "Brightness", "Definitions_8h.html#adb3b4a5ffa0c290576c837177b5385a0", null ],
     [ "BuddyControlled", "Definitions_8h.html#a5c21772263bd77182ecf11e45dc773a5", null ],
+    [ "BuddyMACAddPipe", "Definitions_8h.html#ab95a8f00424b1d01a20ab9636b333225", null ],
     [ "BuddyMacAddress", "Definitions_8h.html#a5c82e425a6456b68b1237fd44b03c86c", null ],
     [ "BuddyMasterOnPPM", "Definitions_8h.html#a15c1772f7ca4eae477fdc6a5a1546156", null ],
     [ "BuddyMasterOnWireless", "Definitions_8h.html#a8aa88cb7271908e9389dd63fc08e965a", null ],
