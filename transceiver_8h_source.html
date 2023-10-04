@@ -167,7 +167,7 @@ $(document).ready(function(){initNavTree('transceiver_8h_source.html',''); initR
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>            }</div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        }</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>        <a class="code hl_function" href="transceiver_8h.html#ad0236abcfc887ad708d9504c4ab2a7c3">TryToReconnect</a>();</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        <a class="code hl_variable" href="Definitions_8h.html#a273b3bba431004a227ac5fad026b3e1e">LastPacketSentTime</a> = 0;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>     <span class="comment">//   LastPacketSentTime = 0; // heer!</span></div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    }</div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <span class="keywordtype">int</span> SecondsRemaining = (<a class="code hl_variable" href="Definitions_8h.html#ae99f193f5a3e06508bbe4b32ee91a963">Inactivity_Timeout</a> / 1000) - (millis() - <a class="code hl_variable" href="Definitions_8h.html#a42f848041eda5cd5b98d334ab44a15a1">Inactivity_Start</a>) / 1000;</div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="keywordflow">if</span> (SecondsRemaining &lt;= 0) digitalWrite(<a class="code hl_define" href="Definitions_8h.html#aac8f9c268e406507be95a1255281323c">POWER_OFF_PIN</a>, HIGH); <span class="comment">// INACTIVITY POWER OFF HERE!!</span></div>
