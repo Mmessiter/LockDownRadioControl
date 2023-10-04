@@ -7,10 +7,10 @@ var searchData=
   ['accel_5ffs_5fsel_5f8_4',['ACCEL_FS_SEL_8',['../Quadcopter_2src_2main_8cpp.html#aa7b57640b885a39544f71e77e1ff0169',1,'main.cpp']]],
   ['accel_5fscale_5',['ACCEL_SCALE',['../Quadcopter_2src_2main_8cpp.html#a5dcd67c887f0009e1ec2675a7ebe8b73',1,'main.cpp']]],
   ['accel_5fscale_5ffactor_6',['ACCEL_SCALE_FACTOR',['../Quadcopter_2src_2main_8cpp.html#a585dc9036243cba230705899afcf4348',1,'main.cpp']]],
-  ['aerobatics_7',['AEROBATICS',['../Definitions_8h.html#a7df635dd9a2363e735cdd7d66ecd2c41',1,'Definitions.h']]],
-  ['airbrakes_8',['AIRBRAKES',['../Definitions_8h.html#a4988fcf9943b9ee7ff0e02d8bd3e4f7f',1,'Definitions.h']]],
+  ['aerobatics_7',['AEROBATICS',['../1Definitions_8h.html#a7df635dd9a2363e735cdd7d66ecd2c41',1,'1Definitions.h']]],
+  ['airbrakes_8',['AIRBRAKES',['../1Definitions_8h.html#a4988fcf9943b9ee7ff0e02d8bd3e4f7f',1,'1Definitions.h']]],
   ['approximation_9',['APPROXIMATION',['../TransmitterCode_2src_2main_8cpp.html#aee8c3c363eab49d6a90d3f74587694d5',1,'main.cpp']]],
-  ['audioview_10',['AUDIOVIEW',['../Definitions_8h.html#a445cfbf06ed74188fcf3965b4cab9533',1,'Definitions.h']]],
-  ['auto_11',['AUTO',['../Definitions_8h.html#a0cc6f7717df9fbdc0f33efb88720a639',1,'Definitions.h']]],
-  ['autoswitch_12',['AUTOSWITCH',['../Definitions_8h.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'Definitions.h']]]
+  ['audioview_10',['AUDIOVIEW',['../1Definitions_8h.html#a445cfbf06ed74188fcf3965b4cab9533',1,'1Definitions.h']]],
+  ['auto_11',['AUTO',['../1Definitions_8h.html#a0cc6f7717df9fbdc0f33efb88720a639',1,'1Definitions.h']]],
+  ['autoswitch_12',['AUTOSWITCH',['../1Definitions_8h.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'1Definitions.h']]]
 ];
