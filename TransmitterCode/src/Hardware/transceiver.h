@@ -50,7 +50,7 @@ FASTRUN void FailedPacket()
     RecordsPacketSuccess(0); // Record a failure
     ++RecentPacketsLost;     // this is to keep track of events when receiver is off
     if (!LostContactFlag) {
-        if (RecentPacketsLost >= LostContactCutOff) {
+        if (RecentPacketsLost >= FHSS_data::LostContactCutOff) {
             LostContactFlag = true;
             Reconnected     = false;
             GapStart        = millis(); // To keep track of this gap's length
@@ -65,7 +65,7 @@ FASTRUN void FailedPacket()
             }
         }
         TryToReconnect();
-     //   LastPacketSentTime = 0; // heer!
+        //   LastPacketSentTime = 0; // heer!
     }
     int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF HERE!!
@@ -82,13 +82,14 @@ FASTRUN void TryOtherPipe()
     }
     else
     {
-        BoundFlag = true;             //  ... but not modelmatched yet
-        if (!BuddyPupilOnWireless){
-            SetThePipe(TeensyMACAddPipe); 
-        }else{
-            SetThePipe(BuddyMACAddPipe); 
+        BoundFlag = true; //  ... but not modelmatched yet
+        if (!BuddyPupilOnWireless) {
+            SetThePipe(TeensyMACAddPipe);
         }
-        CurrentPipe = 1;              // 1 = bound pipe
+        else {
+            SetThePipe(BuddyMACAddPipe);
+        }
+        CurrentPipe = 1; // 1 = bound pipe
     }
 }
 /************************************************************************************************************/
@@ -100,8 +101,8 @@ void TryToReconnect()
         TryOtherPipe(); // BUT NOT while connected to model!
     }
     ++ReconnectionIndex;
-    if (ReconnectionIndex >= ReconnectChannelsCount) ReconnectionIndex = 0;
-    NextChannel = *(FHSS_data::FHSSRecoveryPointer + RECONNECT_CHANNELS_START + ReconnectionIndex); //  reconnect channel (selected from three)
+    if (ReconnectionIndex >= FHSS_data::ReconnectChannelsCount) ReconnectionIndex = 0;
+    NextChannel = *(FHSS_data::FHSSRecoveryPointer + FHSS_data::ReconnectChannelsStart + ReconnectionIndex); //  reconnect channel (selected from three)
     HopToNextChannel();
 }
 
@@ -143,7 +144,7 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();
     Radio1.openWritingPipe(Pipe);             // Current Pipe address used for Binding
-    Radio1.setRetries(RetryCount, RetryWait); // automatic retries and pauses
+    Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait); // automatic retries and pauses
     Radio1.stopListening();
     delayMicroseconds(500);
     Radio1.enableDynamicPayloads();
@@ -159,7 +160,7 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 FASTRUN void SendData()
 {
     if (SendNoData) return;
-    if ((millis() - LastPacketSentTime) >= PaceMaker) { // LastPacketSentTime is set to zero when a packet failed to send
+    if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { // LastPacketSentTime is set to zero when a packet failed to send
         LastPacketSentTime = millis();
         if (BuddyPupilOnPPM) {
             SendViaPPM();
@@ -197,11 +198,11 @@ void DoScanInit()
     ScanAllChannels(true);
 }
 
-/************************************************************************************************************/
-// This function draws or re-draws and clears the box that display wave band scanning information
-#define xx1      90 // Needed below... Edit xx1,yy1 to move box ....
-#define yy1      70 // Needed below... Edit xx1,yy1 to move box ....
-#define YY1EXTRA 15
+    /************************************************************************************************************/
+    // This function draws or re-draws and clears the box that display wave band scanning information
+    #define xx1      90 // Needed below... Edit xx1,yy1 to move box ....
+    #define yy1      70 // Needed below... Edit xx1,yy1 to move box ....
+    #define YY1EXTRA 15
 
 void DrawFhssBox()
 {
@@ -306,12 +307,12 @@ void ScanAllChannels(bool cls)
     }
 }
 
-#ifdef DB_FHSS
+    #ifdef DB_FHSS
 float PStartTime = 0;
 float PEndTime   = 0;
 float Pduration  = 0;
 float HopsPerSec = 0;
-#endif
+    #endif
 /************************************************************************************************************/
 // This function hops to the next channel in the FFHS array
 
@@ -322,7 +323,7 @@ FASTRUN void HopToNextChannel()
     Radio1.stopListening(); // Transmit only
     delayMicroseconds(500);
 
-#ifdef DB_FHSS
+    #ifdef DB_FHSS
     if (BoundFlag && Connected && ModelMatched) {
         float ch   = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber);
         float Freq = 2.4;
@@ -343,28 +344,29 @@ FASTRUN void HopToNextChannel()
         Look(ThisRadio);
         PStartTime = millis();
     }
-#endif
+    #endif
     PacketNumber = 0;
 }
 /*********************************************************************************************************************************/
 
 void DisplayPipe(uint64_t WhichPipe) // for debugging
 {
-union {
-    uint64_t i;
-    uint8_t  b[8];
-} Pipeu;
+    union
+    {
+        uint64_t i;
+        uint8_t  b[8];
+    } Pipeu;
     Pipeu.i = WhichPipe;
     Look1("Pipe: ");
-    Serial.print(Pipeu.b[0],HEX);
+    Serial.print(Pipeu.b[0], HEX);
     Serial.print(" ");
-    Serial.print(Pipeu.b[1],HEX);
+    Serial.print(Pipeu.b[1], HEX);
     Serial.print(" ");
-    Serial.print(Pipeu.b[2],HEX);
+    Serial.print(Pipeu.b[2], HEX);
     Serial.print(" ");
-    Serial.print(Pipeu.b[3],HEX);
+    Serial.print(Pipeu.b[3], HEX);
     Serial.print(" ");
-    Serial.print(Pipeu.b[4],HEX);
+    Serial.print(Pipeu.b[4], HEX);
     // Serial.print(" ");
     // Serial.print(Pipeu.b[5],HEX);
     // Serial.print(" ");
@@ -380,7 +382,7 @@ void SetThePipe(uint64_t WhichPipe)
     delayMicroseconds(500);
     Radio1.stopListening();
     delayMicroseconds(500); // allow things to happen
-   // DisplayPipe(WhichPipe);
+                            // DisplayPipe(WhichPipe);
 }
     /************************************************************************************************************/
     #define BADNIBBLECOUNT 6
@@ -430,6 +432,6 @@ void NormaliseTheRadio()
 {
     SetThePipe(DefaultPipe);
     Radio1.setCRCLength(RF24_CRC_16);
-    Radio1.setRetries(RetryCount, RetryWait);
+    Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait);
 }
 #endif

@@ -912,13 +912,6 @@ bool     CurrentPipe         = 0;
 bool     AMSnotfound         = false;
 uint8_t  ScanSensitivity     = 42;
 
-uint8_t PaceMaker              = PACEMAKER;                // now variables are used
-uint8_t RetryCount             = RETRYCOUNT;               // now variables are used
-uint8_t RetryWait              = RETRYWAIT;                // now variables are used
-uint8_t LostContactCutOff      = LOSTCONTACTCUTOFF;        // now variables are used
-uint8_t ReconnectChannelsCount = RECONNECT_CHANNELS_COUNT; // now variables are used
-uint8_t ReconnectChannelsStart = RECONNECT_CHANNELS_COUNT; // now variables are used
-
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
 // **********************************************************************************************************************************
@@ -939,6 +932,13 @@ bool     UkRules           = true;
 uint8_t* FHSSRecoveryPointer;
 uint8_t* FHSSChPointer; // pointer for channels array (three only used for Recovery)
 uint8_t  NextChannelNumber = 0;
+uint8_t PaceMaker              = PACEMAKER;                // now variables are used
+uint8_t RetryCount             = RETRYCOUNT;               // now variables are used
+uint8_t RetryWait              = RETRYWAIT;                // now variables are used
+uint8_t LostContactCutOff      = LOSTCONTACTCUTOFF;        // now variables are used
+uint8_t ReconnectChannelsCount = RECONNECT_CHANNELS_COUNT; // now variables are used
+uint8_t ReconnectChannelsStart = RECONNECT_CHANNELS_START; // now variables are used
+
 } // namespace FHSS_data
 
 // *********************************************** END OF GLOBAL DATA ***************************************************************
