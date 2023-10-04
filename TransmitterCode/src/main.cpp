@@ -3887,7 +3887,7 @@ void DoOneSwitchView(uint8_t n) // n is 1-4  = number for switch to edit
     if (Channel9Switch == n) SendValue(Rlabels[3], 1);
     if (Channel10Switch == n) SendValue(Rlabels[4], 1);
     if (Channel11Switch == n) SendValue(Rlabels[5], 1);
-    if (Channel12Switch == n) SendValue(Rlabels[5], 1);
+    if (Channel12Switch == n) SendValue(Rlabels[6], 1);
     if (SafetySwitch == n) SendValue(Rlabels[7], 1);
     if (DualRatesSwitch == n) SendValue(Rlabels[8], 1);
     if (BuddySwitch == n) SendValue(Rlabels[9], 1);
