@@ -131,7 +131,7 @@
 #include <DS1307RTC.h>
 #include <InterpolationLib.h>
 
-#include "Hardware/Definitions.h" // must be here! (not higher or lower);
+#include "Hardware/1Definitions.h" // must be here! (not higher or lower);
 
 #include "Hardware/StructsEtc.h"
 #include "Hardware/Utilities.h"
@@ -143,6 +143,7 @@
 #include "Hardware/Nextion.h"
 #include "Hardware/ModelExchange.h"
 #include "Hardware/BuddyPPM.h"
+#include "Hardware/BuddyWireless.h"
 
 /*********************************************************************************************************************************/
 
