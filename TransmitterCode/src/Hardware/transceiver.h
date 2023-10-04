@@ -50,7 +50,7 @@ FASTRUN void FailedPacket()
     RecordsPacketSuccess(0); // Record a failure
     ++RecentPacketsLost;     // this is to keep track of events when receiver is off
     if (!LostContactFlag) {
-        if (RecentPacketsLost >= LOSTCONTACTCUTOFF) {
+        if (RecentPacketsLost >= LostContactCutOff) {
             LostContactFlag = true;
             Reconnected     = false;
             GapStart        = millis(); // To keep track of this gap's length
@@ -100,7 +100,7 @@ void TryToReconnect()
         TryOtherPipe(); // BUT NOT while connected to model!
     }
     ++ReconnectionIndex;
-    if (ReconnectionIndex >= RECONNECT_CHANNELS_COUNT) ReconnectionIndex = 0;
+    if (ReconnectionIndex >= ReconnectChannelsCount) ReconnectionIndex = 0;
     NextChannel = *(FHSS_data::FHSSRecoveryPointer + RECONNECT_CHANNELS_START + ReconnectionIndex); //  reconnect channel (selected from three)
     HopToNextChannel();
 }
