@@ -137,19 +137,28 @@ void SuccessfulPacket()
 
 /************************************************************************************************************/
 
-FLASHMEM void InitRadio(uint64_t Pipe)
+FLASHMEM void ReConfigureRadio()
+{
+  //  Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait); // automatic retries and pauses
+}
+
+/************************************************************************************************************/
+
+FLASHMEM void
+InitRadio(uint64_t Pipe)
 {
     Radio1.begin();
     Radio1.setPALevel(RF24_PA_MAX, true);
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();
-    Radio1.openWritingPipe(Pipe);             // Current Pipe address used for Binding
-    Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait); // automatic retries and pauses
+    Radio1.openWritingPipe(Pipe);                                   // Current Pipe address used for Binding 
+   // Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait); // automatic retries and pauses
     Radio1.stopListening();
     delayMicroseconds(500);
     Radio1.enableDynamicPayloads();
     Radio1.setAddressWidth(5);
     Radio1.setCRCLength(RF24_CRC_16); // could be (RF24_CRC_8);
+    ReConfigureRadio();
     GapSum = 0;
 }
 
@@ -367,12 +376,6 @@ void DisplayPipe(uint64_t WhichPipe) // for debugging
     Serial.print(Pipeu.b[3], HEX);
     Serial.print(" ");
     Serial.print(Pipeu.b[4], HEX);
-    // Serial.print(" ");
-    // Serial.print(Pipeu.b[5],HEX);
-    // Serial.print(" ");
-    // Serial.print(Pipeu.b[6],HEX);
-    // Serial.print(" ");
-    // Serial.print(Pipeu.b[7],HEX);
     Look("");
 }
 /*********************************************************************************************************************************/
