@@ -65,7 +65,7 @@ FASTRUN void FailedPacket()
             }
         }
         TryToReconnect();
-        LastPacketSentTime = 0;
+     //   LastPacketSentTime = 0; // heer!
     }
     int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF HERE!!
