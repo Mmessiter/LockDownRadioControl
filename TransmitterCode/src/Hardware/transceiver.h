@@ -143,7 +143,7 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();
     Radio1.openWritingPipe(Pipe);             // Current Pipe address used for Binding
-    Radio1.setRetries(RETRYCOUNT, RETRYWAIT); // automatic retries and pauses
+    Radio1.setRetries(RetryCount, RetryWait); // automatic retries and pauses
     Radio1.stopListening();
     delayMicroseconds(500);
     Radio1.enableDynamicPayloads();
@@ -159,7 +159,7 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 FASTRUN void SendData()
 {
     if (SendNoData) return;
-    if ((millis() - LastPacketSentTime) >= PACEMAKER) { // LastPacketSentTime is set to zero when a packet failed to send
+    if ((millis() - LastPacketSentTime) >= PaceMaker) { // LastPacketSentTime is set to zero when a packet failed to send
         LastPacketSentTime = millis();
         if (BuddyPupilOnPPM) {
             SendViaPPM();
@@ -430,6 +430,6 @@ void NormaliseTheRadio()
 {
     SetThePipe(DefaultPipe);
     Radio1.setCRCLength(RF24_CRC_16);
-    Radio1.setRetries(RETRYCOUNT, RETRYWAIT);
+    Radio1.setRetries(RetryCount, RetryWait);
 }
 #endif
