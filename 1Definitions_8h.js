@@ -355,6 +355,7 @@ var 1Definitions_8h =
     [ "ReadSwitches", "1Definitions_8h.html#ab0af36f3442ad4f2d0b716c14c7d6085", null ],
     [ "ReadTextFile", "1Definitions_8h.html#abd6446fb403bd9b07d150a5e4fdd86e1", null ],
     [ "ReadTheRTC", "1Definitions_8h.html#a7a48851f0d38e4a0dd727a30d9515cf1", null ],
+    [ "ReConfigureRadio", "1Definitions_8h.html#aea942887485efaccee744ca999e04d8f", null ],
     [ "RedLedOn", "1Definitions_8h.html#a7d34cec6e8edc20c8b50424e15dcc7c7", null ],
     [ "ReEnableScanButton", "1Definitions_8h.html#a0a3d89dfcfab70c6cbc50401fff1afeb", null ],
     [ "ResetAllTrims", "1Definitions_8h.html#a883e18dbafdf41d3451879db47ab113f", null ],

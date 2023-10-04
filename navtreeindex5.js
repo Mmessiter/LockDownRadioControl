@@ -1,5 +1,6 @@
 var NAVTREEINDEX5 =
 {
+"Nextion_8h.html#aff6fa8906188d3249b01bf59de47df2f":[5,0,3,0,0,6,6],
 "Nextion_8h_source.html":[5,0,3,0,0,6],
 "Pong_8h.html":[5,0,3,0,0,7],
 "Pong_8h.html#a01ddd63e9f328dd117ee13b789852868":[5,0,3,0,0,7,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX5 =
 "Quadcopter_2src_2main_8cpp_source.html":[5,0,0,0,1],
 "RXCODE.html":[1],
 "RXCODE.html#rx":[1,0],
-"RXCODE.html#rxpinout":[1,1],
-"ReceiverCode_2src_2main_8cpp.html":[5,0,1,0,1]
+"RXCODE.html#rxpinout":[1,1]
 };
