@@ -2283,7 +2283,6 @@ void ConvertBuddyPipeTo64BITS()
     BuddyMACAddPipe += (uint64_t)BuddyMacAddress[5];
     BuddyMACAddPipe >>= 8; // Correction needed :-) !
 
-
     // TeensyMACAddPipe &= 0xffffffffff;
 }
 
@@ -3871,67 +3870,50 @@ void ShowMotor(int on)
 }
 /*********************************************************************************************************************************/
 
-void DoOneSwitchView(uint8_t n)
+void DoOneSwitchView(uint8_t n) // n is 1-4  = number for switch to edit
 {
-    char t3[]   = "t3";
-    char t4[]   = "t4";
-    char t5[]   = "t5";
-    char t6[]   = "t6";
-    char ch9[]  = "Channel 9";
-    char ch10[] = "Channel 10";
-    char ch11[] = "Channel 11";
-    char ch12[] = "Channel 12";
-
-    char OneSwitchView_r0[]    = "r0";     // Not used
-    char OneSwitchView_r1[]    = "r1";     // Flight modes
-    char OneSwitchView_r2[]    = "r2";     // Auto
-    char OneSwitchView_r3[]    = "r3";     // Ch9
-    char OneSwitchView_r4[]    = "r4";     // Ch10
-    char OneSwitchView_r5[]    = "r5";     // Ch11
-    char OneSwitchView_r6[]    = "r6";     // Ch12
-    char OneSwitchView_r7[]    = "r7";     // Safety
-    char OneSwitchView_r8[]    = "r8";     // Dual Rates
-    char OneSwitchView_r9[]    = "r9";     // Buddy
+    char chLabels[4][3]        = {"t3", "t4", "t5", "t6"};
+    char chValues[4][11]       = {"Channel 9", "Channel 10", "Channel 11", "Channel 12"};
+    char Rlabels[10][3]        = {"r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9"};
     char OneSwitchViewc_revd[] = "c_revd"; // Reversed
-    ValueSent                  = false;    // If no setting, = Not Used
 
-    if (FMSwitch == n) SendValue(OneSwitchView_r1, 1);
-    if (Autoswitch == n) SendValue(OneSwitchView_r2, 1);
-    if (Channel9Switch == n) SendValue(OneSwitchView_r3, 1);
-    if (Channel10Switch == n) SendValue(OneSwitchView_r4, 1);
-    if (Channel11Switch == n) SendValue(OneSwitchView_r5, 1);
-    if (Channel12Switch == n) SendValue(OneSwitchView_r6, 1);
-    if (SafetySwitch == n) SendValue(OneSwitchView_r7, 1);
-    if (DualRatesSwitch == n) SendValue(OneSwitchView_r8, 1);
-    if (BuddySwitch == n) SendValue(OneSwitchView_r9, 1);
+    for (int i = 0; i < 10; ++i) {
+        SendValue(Rlabels[i], 0); // clear all
+    }
+    ValueSent = false; // If no setting, = Not Used
 
-    if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
+    if (FMSwitch == n) SendValue(Rlabels[1], 1);
+    if (Autoswitch == n) SendValue(Rlabels[2], 1);
+    if (Channel9Switch == n) SendValue(Rlabels[3], 1);
+    if (Channel10Switch == n) SendValue(Rlabels[4], 1);
+    if (Channel11Switch == n) SendValue(Rlabels[5], 1);
+    if (Channel12Switch == n) SendValue(Rlabels[5], 1);
+    if (SafetySwitch == n) SendValue(Rlabels[7], 1);
+    if (DualRatesSwitch == n) SendValue(Rlabels[8], 1);
+    if (BuddySwitch == n) SendValue(Rlabels[9], 1);
 
-    SendValue(OneSwitchViewc_revd, 0); // BUG FIX!!!
+    if (!ValueSent) SendValue(Rlabels[0], 1); // nothing yet, so 'not used' is select
+    SendValue(OneSwitchViewc_revd, 0);
+   
     switch (n) {
         case 1:
-            if (SWITCH1Reversed) SendValue(OneSwitchViewc_revd, 1); 
+            if (SWITCH1Reversed) SendValue(OneSwitchViewc_revd, 1);
             break;
         case 2:
-            if (SWITCH2Reversed) SendValue(OneSwitchViewc_revd, 1); 
+            if (SWITCH2Reversed) SendValue(OneSwitchViewc_revd, 1);
             break;
         case 3:
-            if (SWITCH3Reversed) SendValue(OneSwitchViewc_revd, 1); 
+            if (SWITCH3Reversed) SendValue(OneSwitchViewc_revd, 1);
             break;
         case 4:
-            if (SWITCH4Reversed) SendValue(OneSwitchViewc_revd, 1); 
+            if (SWITCH4Reversed) SendValue(OneSwitchViewc_revd, 1);
             break;
-     }
-     
-    SendText(t3, ch9);
-    SendText(t4, ch10);
-    SendText(t5, ch11);
-    SendText(t6, ch12);
+    }
 
-    if (strlen(ChannelNames[8]) >= 2) SendText(t3, ChannelNames[8]);   // Show EDITED channel names if they exist
-    if (strlen(ChannelNames[9]) >= 2) SendText(t4, ChannelNames[9]);   // Show EDITED channel names if they exist
-    if (strlen(ChannelNames[10]) >= 2) SendText(t5, ChannelNames[10]); // Show EDITED channel names if they exist
-    if (strlen(ChannelNames[11]) >= 2) SendText(t6, ChannelNames[11]); // Show EDITED channel names if they exist
+    for (int i = 0; i < 4; ++i) {
+        SendText(chLabels[i], chValues[i]);
+        if (strlen(ChannelNames[i + 8]) >= 2) SendText(chLabels[i], ChannelNames[i + 8]); // Show EDITED channel names if they exist
+    }
 }
 /*********************************************************************************************************************************/
 void UpdateOneSwitchView()
