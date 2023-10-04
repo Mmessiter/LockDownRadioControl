@@ -3880,7 +3880,7 @@ void DoOneSwitchView(uint8_t n) // n is 1-4  = number for switch to edit
     for (int i = 0; i < 10; ++i) {
         SendValue(Rlabels[i], 0); // clear all
     }
-    ValueSent = false; // If no setting, = Not Used
+    ValueSent = false; // If no setting, = 'Not Used'
 
     if (FMSwitch == n) SendValue(Rlabels[1], 1);
     if (Autoswitch == n) SendValue(Rlabels[2], 1);
@@ -3892,9 +3892,10 @@ void DoOneSwitchView(uint8_t n) // n is 1-4  = number for switch to edit
     if (DualRatesSwitch == n) SendValue(Rlabels[8], 1);
     if (BuddySwitch == n) SendValue(Rlabels[9], 1);
 
-    if (!ValueSent) SendValue(Rlabels[0], 1); // nothing yet, so 'not used' is select
+    if (!ValueSent) SendValue(Rlabels[0], 1); // nothing yet, so 'not used' is selected
+    
     SendValue(OneSwitchViewc_revd, 0);
-   
+
     switch (n) {
         case 1:
             if (SWITCH1Reversed) SendValue(OneSwitchViewc_revd, 1);
