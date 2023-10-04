@@ -16,6 +16,7 @@ var transceiver_8h =
     [ "HopToNextChannel", "transceiver_8h.html#a52aa3e80bccf5e75346c93fdae63122d", null ],
     [ "InitRadio", "transceiver_8h.html#a799f38bc33abdb30eec1d7db3cf27d58", null ],
     [ "NormaliseTheRadio", "transceiver_8h.html#a0708fa5166a126be25283b6cfaff6227", null ],
+    [ "ReConfigureRadio", "transceiver_8h.html#aadd75fbf568ff28991fa7b3529da7027", null ],
     [ "RecordsPacketSuccess", "transceiver_8h.html#afc091b5942e21a03f6dc8635d5e519ba", null ],
     [ "ScanAllChannels", "transceiver_8h.html#ae17dae8deffe2e33044f61fd3a8ebca2", null ],
     [ "SendBindingPipe", "transceiver_8h.html#ae5df0d6d4352a4039d996e773e8fc6bf", null ],
