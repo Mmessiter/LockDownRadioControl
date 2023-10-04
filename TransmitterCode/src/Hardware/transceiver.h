@@ -139,7 +139,7 @@ void SuccessfulPacket()
 
 FLASHMEM void ReConfigureRadio()
 {
-  //  Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait); // automatic retries and pauses
+   Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait); // automatic retries and pauses
 }
 
 /************************************************************************************************************/

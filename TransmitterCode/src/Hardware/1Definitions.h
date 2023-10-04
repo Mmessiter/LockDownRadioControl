@@ -1,5 +1,5 @@
-// ******************** 1Definitions.h ***************************************
-//     This header file has many prototypes, definitions                     *
+// ******************** 1Definitions.h  (+1 to put at top of list!) ************
+//     This header file has many prototypes, definitions                      *
 // ****************************************************************************
 #include <Arduino.h>
 #include <Watchdog_t4.h>
@@ -564,6 +564,7 @@ void             NormaliseTheRadio();
 void             Setup_Solo();
 void             Setup_Master();
 void             Setup_Pupil();
+void             ReConfigureRadio();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
@@ -931,13 +932,13 @@ uint8_t  UkRulesCounter    = 0;
 bool     UkRules           = true;
 uint8_t* FHSSRecoveryPointer;
 uint8_t* FHSSChPointer; // pointer for channels array (three only used for Recovery)
-uint8_t  NextChannelNumber = 0;
-uint8_t PaceMaker              = PACEMAKER;                // now variables are used
-uint8_t RetryCount             = RETRYCOUNT;               // now variables are used
-uint8_t RetryWait              = RETRYWAIT;                // now variables are used
-uint8_t LostContactCutOff      = LOSTCONTACTCUTOFF;        // now variables are used
-uint8_t ReconnectChannelsCount = RECONNECT_CHANNELS_COUNT; // now variables are used
-uint8_t ReconnectChannelsStart = RECONNECT_CHANNELS_START; // now variables are used
+uint8_t  NextChannelNumber      = 0;
+uint8_t  PaceMaker              = PACEMAKER;                // now variables are used
+uint8_t  RetryCount             = RETRYCOUNT;               // now variables are used
+uint8_t  RetryWait              = RETRYWAIT;                // now variables are used
+uint8_t  LostContactCutOff      = LOSTCONTACTCUTOFF;        // now variables are used
+uint8_t  ReconnectChannelsCount = RECONNECT_CHANNELS_COUNT; // now variables are used
+uint8_t  ReconnectChannelsStart = RECONNECT_CHANNELS_START; // now variables are used
 
 } // namespace FHSS_data
 
