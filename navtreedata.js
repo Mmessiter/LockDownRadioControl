@@ -76,8 +76,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "1Definitions_8h.html",
-"1Definitions_8h.html#a5e3e764f8311564f5e20c3a838b25c07",
-"1Definitions_8h.html#aad932f138e888f84b6cd1c268fdabb84",
+"1Definitions_8h.html#a5d4f7906962f2c612f1eeabd809f2f52",
+"1Definitions_8h.html#aad45cb80b969ee0f10952b145e4c15a5",
 "MPU6050_8cpp.html",
 "MPU6050_8h.html#aaf242278f1dd87556bdeeab589b01fd7",
 "Nextion_8h_source.html",
@@ -87,7 +87,7 @@ var NAVTREEINDEX =
 "classMPU6050.html#aed33db318a770d0020eb8b84058650f3",
 "classMPU9250.html#ad9b6213723700af8daba00f31840fe16",
 "functions_w.html",
-"structPPMArea.html#a8703cec9bbbbf962f8f068696a11e0b2"
+"structPPMArea.html#a52e475cf8a0672360f670b56a26c387f"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

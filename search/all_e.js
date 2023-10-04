@@ -69,7 +69,7 @@ var searchData=
   ['loopblink_66',['loopBlink',['../Quadcopter_2src_2main_8cpp.html#a9826c5f7dba6f1d578d9a90d06d4a373',1,'main.cpp']]],
   ['looprate_67',['loopRate',['../Quadcopter_2src_2main_8cpp.html#a368045f053bb43109cbd14504673bff6',1,'main.cpp']]],
   ['looptimer_68',['LoopTimer',['../SensorHubT32_2src_2main_8cpp.html#a46536419f1b2ee88934f4f812fd6140c',1,'main.cpp']]],
-  ['lostcontactcutoff_69',['LostContactCutOff',['../1Definitions_8h.html#ac7a07634aa04e5f942925c2c55265ae5',1,'1Definitions.h']]],
+  ['lostcontactcutoff_69',['LostContactCutOff',['../namespaceFHSS__data.html#a83f27298de46f99f51c0bc4d140f028a',1,'FHSS_data']]],
   ['lostcontactcutoff_70',['LOSTCONTACTCUTOFF',['../1Definitions_8h.html#ac5b4f54697bc5a8d58ef0c92c094c6b6',1,'1Definitions.h']]],
   ['lostcontactcutoff_5fmaster_71',['LOSTCONTACTCUTOFF_MASTER',['../1Definitions_8h.html#ad075d3993e10f0db28af3f62baf4e343',1,'1Definitions.h']]],
   ['lostcontactcutoff_5fpupil_72',['LOSTCONTACTCUTOFF_PUPIL',['../1Definitions_8h.html#acca12c48a9d3d380b9f86dfd8013c60e',1,'1Definitions.h']]],
