@@ -3892,30 +3892,30 @@ void DoOneSwitchView(uint8_t n) // n is 1-4  = number for switch to edit
     if (DualRatesSwitch == n) SendValue(Rlabels[8], 1);
     if (BuddySwitch == n) SendValue(Rlabels[9], 1);
 
-    if (!ValueSent) SendValue(Rlabels[0], 1); // nothing yet, so 'not used' is selected
-    
-    SendValue(OneSwitchViewc_revd, 0);
+            if (!ValueSent) SendValue(Rlabels[0], 1); // nothing yet, so 'not used' is selected
 
-    switch (n) {
-        case 1:
-            if (SWITCH1Reversed) SendValue(OneSwitchViewc_revd, 1);
-            break;
-        case 2:
-            if (SWITCH2Reversed) SendValue(OneSwitchViewc_revd, 1);
-            break;
-        case 3:
-            if (SWITCH3Reversed) SendValue(OneSwitchViewc_revd, 1);
-            break;
-        case 4:
-            if (SWITCH4Reversed) SendValue(OneSwitchViewc_revd, 1);
-            break;
-    }
+            SendValue(OneSwitchViewc_revd, 0);
 
-    for (int i = 0; i < 4; ++i) {
-        SendText(chLabels[i], chValues[i]);
-        if (strlen(ChannelNames[i + 8]) >= 2) SendText(chLabels[i], ChannelNames[i + 8]); // Show EDITED channel names if they exist
+            switch (n) {
+                case 1:
+                    if (SWITCH1Reversed) SendValue(OneSwitchViewc_revd, 1);
+                    break;
+                case 2:
+                    if (SWITCH2Reversed) SendValue(OneSwitchViewc_revd, 1);
+                    break;
+                case 3:
+                    if (SWITCH3Reversed) SendValue(OneSwitchViewc_revd, 1);
+                    break;
+                case 4:
+                    if (SWITCH4Reversed) SendValue(OneSwitchViewc_revd, 1);
+                    break;
+            }
+
+            for (int i = 0; i < 4; ++i) { // show channel names
+                SendText(chLabels[i], chValues[i]);
+                if (strlen(ChannelNames[i + 8]) >= 2) SendText(chLabels[i], ChannelNames[i + 8]); // Show EDITED channel names if they exist
+            }
     }
-}
 /*********************************************************************************************************************************/
 void UpdateOneSwitchView()
 {
