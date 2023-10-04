@@ -3906,7 +3906,23 @@ void DoOneSwitchView(uint8_t n)
     if (BuddySwitch == n) SendValue(OneSwitchView_r9, 1);
 
     if (!ValueSent) SendValue(OneSwitchView_r0, 1); // nothing yet, so not used
-    if (SWITCH1Reversed) SendValue(OneSwitchViewc_revd, 1);
+
+    SendValue(OneSwitchViewc_revd, 0); // BUG FIX!!!
+    switch (n) {
+        case 1:
+            if (SWITCH1Reversed) SendValue(OneSwitchViewc_revd, 1); 
+            break;
+        case 2:
+            if (SWITCH2Reversed) SendValue(OneSwitchViewc_revd, 1); 
+            break;
+        case 3:
+            if (SWITCH3Reversed) SendValue(OneSwitchViewc_revd, 1); 
+            break;
+        case 4:
+            if (SWITCH4Reversed) SendValue(OneSwitchViewc_revd, 1); 
+            break;
+     }
+     
     SendText(t3, ch9);
     SendText(t4, ch10);
     SendText(t5, ch11);
