@@ -55,6 +55,7 @@ var radio_8h =
     [ "CourseToGPS", "radio_8h.html#a1a4e211f9858a5d6d61d11e5679a71f3", null ],
     [ "CurrentPipe", "radio_8h.html#a8accdcf1df9fea74266e2f169346cc81", null ],
     [ "CurrentRadio", "radio_8h.html#a7bca81159d93f215060f40f45f19b0de", null ],
+    [ "DataToBeUsed", "radio_8h.html#ac993335a673fe8a958e9d44ff961feff", null ],
     [ "DayGPS", "radio_8h.html#a4c722ec4fa2ff675bd4a2d511e80cd6e", null ],
     [ "DefaultPipe", "radio_8h.html#ac17bcdae8bda705ade2cf0935e12853d", null ],
     [ "DistanceGPS", "radio_8h.html#a6f76c248ca5e727e482873f5328587e1", null ],

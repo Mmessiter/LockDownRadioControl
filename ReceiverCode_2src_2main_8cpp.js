@@ -7,6 +7,7 @@ var ReceiverCode_2src_2main_8cpp =
     [ "BindModel", "ReceiverCode_2src_2main_8cpp.html#aa0c6905579a33aef28d737d43676cbbd", null ],
     [ "BlinkLed", "ReceiverCode_2src_2main_8cpp.html#aa477cf7453bb57dab00e7b654f62cb13", null ],
     [ "CheckCrazyValues", "ReceiverCode_2src_2main_8cpp.html#ae5188cdc179ab32d9a36de911e3a2d45", null ],
+    [ "CopyDataToBeUsed", "ReceiverCode_2src_2main_8cpp.html#a8081d48adef22adce1d0dd4b5d910ef6", null ],
     [ "FailSafe", "ReceiverCode_2src_2main_8cpp.html#a42318598726782ebb2e1857f167c8cda", null ],
     [ "KickTheDog", "ReceiverCode_2src_2main_8cpp.html#ada95a00a341e4a80176eda743a94ab2e", null ],
     [ "LoadFailSafeData", "ReceiverCode_2src_2main_8cpp.html#a7b232e8049c83655363495df07fc96d9", null ],

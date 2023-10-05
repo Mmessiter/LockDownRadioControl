@@ -59,6 +59,7 @@ var searchData=
   ['controlrate_56',['controlRATE',['../Quadcopter_2src_2main_8cpp.html#ae7f9ccabb7ac4a5c80d7189d9ba54e13',1,'main.cpp']]],
   ['convertbuddypipeto64bits_57',['ConvertBuddyPipeTo64BITS',['../TransmitterCode_2src_2main_8cpp.html#a9938fb6967cdd208ca6d6e54531a5610',1,'main.cpp']]],
   ['copycurrentpipe_58',['CopyCurrentPipe',['../radio_8h.html#aa55e98a44b0bcb87b4e318381fece092',1,'radio.h']]],
-  ['createtimedatestamp_59',['CreateTimeDateStamp',['../TransmitterCode_2src_2main_8cpp.html#a1a0a5d73007aba01755e5274d12e6e9b',1,'main.cpp']]],
-  ['createtimestamp_60',['CreateTimeStamp',['../TransmitterCode_2src_2main_8cpp.html#a5d42b1fba153cc76dc96778cfb6f1a40',1,'main.cpp']]]
+  ['copydatatobeused_59',['CopyDataToBeUsed',['../ReceiverCode_2src_2main_8cpp.html#a8081d48adef22adce1d0dd4b5d910ef6',1,'main.cpp']]],
+  ['createtimedatestamp_60',['CreateTimeDateStamp',['../TransmitterCode_2src_2main_8cpp.html#a1a0a5d73007aba01755e5274d12e6e9b',1,'main.cpp']]],
+  ['createtimestamp_61',['CreateTimeStamp',['../TransmitterCode_2src_2main_8cpp.html#a5d42b1fba153cc76dc96778cfb6f1a40',1,'main.cpp']]]
 ];

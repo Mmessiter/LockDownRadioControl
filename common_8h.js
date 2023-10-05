@@ -46,6 +46,7 @@ var common_8h =
     [ "WATCHDOGMAXRATE", "common_8h.html#af3358f12fbced88c655895c7e56f1ca6", null ],
     [ "WATCHDOGTIMEOUT", "common_8h.html#a263fd3c52a680256641d33815e7ef6a4", null ],
     [ "HopToNextChannel", "common_8h.html#a62ec0168b1eea5f5c14f663d9217574d", null ],
+    [ "ReadExtraParameters", "common_8h.html#a6c490ef42e364f8bb1430c436e86c9c0", null ],
     [ "FailSafeSave", "common_8h.html#a332eaa61dd85cd649cf62de2345e246e", null ],
     [ "FHSS_Channels", "common_8h.html#ad8056611eb984e8cacf9f0e526815a99", null ],
     [ "FHSS_Channels1", "common_8h.html#aeea38114c49f6b6dbe375b7a64acdccb", null ],
