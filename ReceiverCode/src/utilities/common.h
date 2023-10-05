@@ -19,7 +19,7 @@
 #define RXVERSION_MINOR   2
 #define RXVERSION_MINIMUS 6 // September 2023
 
-  //  #define DB_FHSS
+ //  #define DB_FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE

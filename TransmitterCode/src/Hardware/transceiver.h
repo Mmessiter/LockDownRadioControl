@@ -128,7 +128,6 @@ FASTRUN void FailedPacket()
             }
         }
         TryToReconnect();
-        //   LastPacketSentTime = 0; // heer!
     }
     int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF HERE!!
@@ -226,6 +225,16 @@ InitRadio(uint64_t Pipe)
 }
 
 /************************************************************************************************************/
+void ListenToHMV() // Shup command detected? // heer
+
+{
+    // Radio1.setChannel(CurrentChannel); // Hop !
+    // delayMicroseconds(250);
+    // Radio1.stopListening(); // Transmit only
+    // delayMicroseconds(250);
+}
+
+/************************************************************************************************************/
 //****************** Function to send data to receiver ***************************************
 /************************************************************************************************************/
 
@@ -249,6 +258,11 @@ FASTRUN void SendData()
         else
         {
             FailedPacket();
+        }
+    }
+    else {
+        if (((millis() - LastPacketSentTime)) > 6) { // if there is time, listen for SHUTUP command from master heer
+            ListenToHMV();
         }
     }
 }
@@ -391,9 +405,10 @@ float HopsPerSec = 0;
 FASTRUN void HopToNextChannel()
 {
     Radio1.setChannel(NextChannel); // Hop !
-    delayMicroseconds(500);
+    CurrentChannel = NextChannel;   // save it for later
+    delayMicroseconds(250);
     Radio1.stopListening(); // Transmit only
-    delayMicroseconds(500);
+    delayMicroseconds(250);
 
     #ifdef DB_FHSS
     if (BoundFlag && Connected && ModelMatched) {
