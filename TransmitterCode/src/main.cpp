@@ -2250,7 +2250,7 @@ void GetTeensyMacAddress()
     for (int i = 1; i < 6; ++i) {
         MacAddress[i] = CheckPipeNibbles(MacAddress[i]); // Fix PIPE if needed !
     }
-    MacAddress[1] = 0x42; // for buddy box ...
+ //   MacAddress[1] = 0x42; // for buddy box ... heer
 
 #ifdef DB_BIND
     Serial.println("");
