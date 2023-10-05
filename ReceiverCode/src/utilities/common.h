@@ -19,7 +19,7 @@
 #define RXVERSION_MINOR   2
 #define RXVERSION_MINIMUS 6 // September 2023
 
-// #define DB_FHSS
+    #define DB_FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE
@@ -39,21 +39,27 @@
 //**************************************************************************************************************************
 
 #define SENSOR_HUB_I2C_ADDRESS 8
-#define HOPTIME                80 // ms between channel changes
 
 // ********************* >>> Reconnect params <<< ***************************************
 
 #define LISTEN_PERIOD            14  //  14 (How many ms to listen for TX in Reconnect())
 #define RECEIVE_TIMEOUT          14  //  14  (<=9 fails, >=11 OK)
-#define RECONNECT_CHANNELS_COUNT 3   // was 3 How many channels to try when reconnecting
-#define RECONNECT_CHANNELS_START 12  // was 12 Offset in the array to begin getting reconnect channels
+
+
+// ********************* >>> FHSS params <<< *******************************************
+
+#define HOPTIME                   80 // was 80 ms between channel changes
+#define RECONNECT_CHANNELS_COUNT  3  // was 3 How many channels to try when reconnecting
+#define RECONNECT_CHANNELS_OFFSET 12 // was 12 Offset in the array to begin getting reconnect channels
 
 // *****************************************************************************************
 #define PIPENUMBER       1
 #define BOUNDPIPENUMBER  1
 #define BUDDYPIPENUMBER  2
+
 #define FREQUENCYSCOUNT  82      // uses 82 different channels
 #define FREQUENCYSCOUNT1 41      // uses 41 different test channels
+
 #define CHANNELSUSED     16      //
 #define SERVOSUSED       9       // But all 16 are available via SBUS
 #define SBUSRATE         10      // SBUS frame every 10 milliseconds
@@ -92,6 +98,7 @@ uint8_t* FHSSChPointer;                 // Pointer for FHSS channels' array
 uint8_t* FHSSRecoveryPointer;           // Pointer for FHSS channels' array for recovery
 
 uint8_t FrequencyCount    = FREQUENCYSCOUNT;
+
 uint8_t FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 16, 72, // These are good for UK
                              35, 57, 45, 29, 75, 3, 41, 62, 11, 9, 77, 37, 8, 31, 36, 18, 17, 50, 78, 73, 30, 79, 6, 23, 40,
                              54, 12, 80, 53, 22, 1, 74, 39, 58, 63, 70, 52, 42, 25, 43, 26, 14, 38, 48, 68, 33, 27, 60, 44, 46,

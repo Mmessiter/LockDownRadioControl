@@ -49,7 +49,7 @@ Servo               MCMServo[SERVOSUSED];
 uint8_t             PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 9 PWMs, remaining 7 via sbus
 SBUS                MySbus(SBUSPORT);                                  // SBUS
 PulsePositionOutput PPMOutput;                                         // PPM
-float               PacketStartTime;
+
 bool                BoundFlag      = false; /** indicates if receiver paired with transmitter */
 bool                ServosAttached = false;
 uint16_t            SbusChannels[CHANNELSUSED + 1]; // Just one spare
@@ -219,35 +219,6 @@ void FailSafe()
     MacAddressSentCounter = 0;
     // Serial.println("Failsafe!");
 }
-
-#ifdef DB_FHSS
-/************************************************************************************************************/
-/*
- * Print out some FHSS information about the channel hopping implementation
- */
-void ShowHopDurationEtc()
-{
-    float   freq          = 2.4 + (float)NextChannel / 1000;
-    uint8_t OnePacketTime = (millis() - PacketStartTime); //  / PacketNumber;
-    Serial.print("Hop duration: ");
-    Serial.print(int(millis() - PacketStartTime));
-    Serial.print("ms.  Packets per hop: ");
-    Serial.print(PacketNumber);
-    Serial.print("  Average Time per packet: ");
-    Serial.print(OnePacketTime);
-    Serial.print("ms.  Next frequency: ");
-    Serial.print(freq, 3);
-    Serial.print(BoundFlag ? " Bound!" : " NOT Bound");
-    Serial.print("  Radio: ");
-    Serial.print(ThisRadio);
-    uint8_t HopsPerSecond = 1000 / OnePacketTime;
-
-    Serial.print("  Hops per second: ");
-    Serial.print(HopsPerSecond);
-    Serial.println("");
-    PacketStartTime = millis();
-}
-#endif
 
 /************************************************************************************************************/
 void UseReceivedData()

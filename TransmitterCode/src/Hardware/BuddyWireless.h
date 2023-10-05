@@ -13,6 +13,7 @@ void Setup_Solo()
     FHSS_data::LostContactCutOff      = LOSTCONTACTCUTOFF;
     FHSS_data::ReconnectChannelsCount = RECONNECT_CHANNELS_COUNT;
     FHSS_data::ReconnectChannelsStart = RECONNECT_CHANNELS_START;
+    ReConfigureRadio();
 }
 //*************************************************************************************************************************
 void Setup_Master()
@@ -23,6 +24,7 @@ void Setup_Master()
     FHSS_data::LostContactCutOff      = LOSTCONTACTCUTOFF_MASTER;
     FHSS_data::ReconnectChannelsCount = RECONNECT_CHANNELS_COUNT_MASTER;
     FHSS_data::ReconnectChannelsStart = RECONNECT_CHANNELS_START_MASTER;
+    ReConfigureRadio();
 }
 //*************************************************************************************************************************
 void Setup_Pupil()
@@ -33,6 +35,7 @@ void Setup_Pupil()
     FHSS_data::LostContactCutOff      = LOSTCONTACTCUTOFF_PUPIL;
     FHSS_data::ReconnectChannelsCount = RECONNECT_CHANNELS_COUNT_PUPIL;
     FHSS_data::ReconnectChannelsStart = RECONNECT_CHANNELS_START_PUPIL;
+    ReConfigureRadio();
 }
 
 //*************************************************************************************************************************

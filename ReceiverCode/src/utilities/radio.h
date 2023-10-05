@@ -14,7 +14,7 @@ uint8_t  ThisRadio    = 1;
 uint8_t  SavedPipeAddress[8];
 uint8_t  NextChannelNumber = 0;
 uint8_t  NextChannel;
-uint8_t  ReconnectIndex = RECONNECT_CHANNELS_START;
+uint8_t  ReconnectIndex = RECONNECT_CHANNELS_OFFSET;
 uint8_t  PacketNumber;
 uint16_t ReceivedData[UNCOMPRESSEDWORDS]; //  20 x 16 BIT words
 uint16_t PreviousData[UNCOMPRESSEDWORDS]; /** Previously received data (used for servos. Hence not sent if unchanged) */
@@ -57,7 +57,7 @@ extern uint32_t     NewConnectionMoment;
 extern void         BindModel();
 extern void         FailSafe(); // defined in main.cpp
 extern void         ClearAckPayload();
-extern void         ShowHopDurationEtc();
+//extern void         ShowHopDurationEtc();
 extern void         ReadSensorHub();
 extern void         SetUKFrequencies();
 extern void         MoveServos();
@@ -249,6 +249,38 @@ FLASHMEM void GetOldPipe()
 #endif
 }
 
+#ifdef DB_FHSS
+ float PacketStartTime = 0;
+/************************************************************************************************************/
+/*
+ * Print out some FHSS information about the channel hopping implementation
+ */
+void ShowHopDurationEtc()
+{
+   
+    float freq = 2.4 + (float)NextChannel / 1000;
+    uint8_t OnePacketTime = (millis() - PacketStartTime); //  / PacketNumber;
+  
+    Serial.print("Hop duration: ");
+    Serial.print(int(millis() - PacketStartTime));
+    Serial.print("ms.  Packets per hop: ");
+    Serial.print(PacketNumber);
+    Serial.print("  Average Time per packet: ");
+    Serial.print(OnePacketTime);
+    Serial.print("ms.  Next frequency: ");
+    Serial.print(freq, 3);
+    Serial.print(BoundFlag ? " Bound!" : " NOT Bound");
+    Serial.print("  Radio: ");
+    Serial.print(ThisRadio);
+    uint8_t HopsPerSecond = 1000 / OnePacketTime;
+
+    Serial.print("  Hops per second: ");
+    Serial.print(HopsPerSecond);
+    Serial.println("");
+  
+}
+#endif
+
 /************************************************************************************************************/
 
 void HopToNextChannel()
@@ -260,6 +292,7 @@ void HopToNextChannel()
     CurrentRadio->startListening();
 #ifdef DB_FHSS
     ShowHopDurationEtc();
+    PacketStartTime = millis();
 #endif
 }
 
@@ -394,7 +427,7 @@ FASTRUN void Reconnect()
         delay(3);                                                   // NEEDED!
         ReconnectChannel = *(FHSSRecoveryPointer + ReconnectIndex); // Get a reconnect channel
         ++ReconnectIndex;
-        if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_START) ReconnectIndex = RECONNECT_CHANNELS_START;
+        if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_OFFSET) ReconnectIndex = RECONNECT_CHANNELS_OFFSET;
         CurrentRadio->setChannel(ReconnectChannel);
         delayMicroseconds(300);
         ++Attempts;
@@ -467,11 +500,11 @@ void IncChannelNumber()
 void CheckWhetherItsTimeToHop()
 {
     AckPayload.Purpose &= 0x7f;             // Clear the HOP flag
-    if ((millis() - HopStart) >= HOPTIME) { // Time to hop??
+   if ((millis() - HopStart) >= HOPTIME) { // Time to hop??
         AckPayload.Purpose |= 0x80;         // Yes. So set the HOP flag leaving lower 7 bits unchanged
         IncChannelNumber();
         HopNow = true; // Set local flag and hop when ready BUT NOT BEFORE.
-    }
+  }
 }
 /************************************************************************************************************/
 void SendToAckPayload(float U)

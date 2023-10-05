@@ -97,7 +97,7 @@
     //                            FHSS PARAMETERS                               *
     //***************************************************************************
 
-    // solo mode
+    // No buddy mode or PPM buddy mode
     #define PACEMAKER                7  // 7 MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
     #define RETRYCOUNT               3  // was 2  // auto retries inside nRF24L01. MAX is 15. Fails below 2.
     #define RETRYWAIT                1  // was 1 (= 250us = Wait between retries (RetryWait+1 * 250us))
@@ -105,7 +105,7 @@
     #define RECONNECT_CHANNELS_COUNT 3  // was 3  // How many channels to try when reconnecting
     #define RECONNECT_CHANNELS_START 12 // was 12 // Offset into channels' array
 
-    // buddy MASTER mode
+    // wireless buddy MASTER mode
     #define PACEMAKER_MASTER                6
     #define RETRYCOUNT_MASTER               4
     #define RETRYWAIT_MASTER                1
@@ -113,7 +113,7 @@
     #define RECONNECT_CHANNELS_COUNT_MASTER 0 // How many channels to try when reconnecting
     #define RECONNECT_CHANNELS_START_MASTER 0 // Offset into channels' array
 
-    // buddy PUPIL mode
+    // wireless buddy PUPIL mode
     #define PACEMAKER_PUPIL                8
     #define RETRYCOUNT_PUPIL               4
     #define RETRYWAIT_PUPIL                5
