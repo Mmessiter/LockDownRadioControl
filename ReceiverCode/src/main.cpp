@@ -403,7 +403,7 @@ void SendQnhToSensorHub()
 
 /************************************************************************************************************/
 /** Read extra parameters from the transmitter.
- * extra parameters can be sent using the last few words bytes in every data packet.
+ * extra parameters are sent using the last few words bytes in every data packet.
  * the parameter sent is defined by the packet number & the packet number defined the transmitter.
  */
 void ReadExtraParameters()
