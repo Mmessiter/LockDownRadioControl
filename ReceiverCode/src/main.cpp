@@ -126,7 +126,7 @@ void LoadFailSafeData()
     FS_Offset += CHANNELSUSED;
     for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
         if (EEPROM.read(i + FS_Offset)) {
-            ReceivedData[i] = s[i];
+            DataToBeUsed[i] = s[i];
         }
     }
     FailSafeDataLoaded = true;
@@ -137,12 +137,12 @@ void LoadFailSafeData()
 
 /************************************************************************************************************/
 
-/** Map servo channels' data from ReceivedData buffer into SbusChannels buffer */
+/** Map servo channels' data from DataToBeUsed buffer into SbusChannels buffer */
 void MapToSBUS()
 {
     if (Connected) {
         for (int j = 0; j < CHANNELSUSED; ++j) {
-            SbusChannels[j] = static_cast<uint16_t>(map(ReceivedData[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX));
+            SbusChannels[j] = static_cast<uint16_t>(map(DataToBeUsed[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX));
         }
     }
 }
@@ -163,7 +163,7 @@ bool CheckCrazyValues()
 { // might come when binding
 
     for (int i = 0; i < 15; ++i) {
-        if ((ReceivedData[i] < MINMICROS) || (ReceivedData[i] > MAXMICROS)) return false;
+        if ((DataToBeUsed[i] < MINMICROS) || (DataToBeUsed[i] > MAXMICROS)) return false;
     }
     return true;
 }
@@ -187,13 +187,13 @@ void MoveServos()
     else
     { // not SBUS = PPM
         for (int j = 0; j < PPMChannelCount; ++j) {
-            PPMOutput.write(PPMChannelOrder[j], map(ReceivedData[j], MINMICROS, MAXMICROS, 1000, 2000));
+            PPMOutput.write(PPMChannelOrder[j], map(DataToBeUsed[j], MINMICROS, MAXMICROS, 1000, 2000));
         }
     }
     for (int j = 0; j < SERVOSUSED; ++j) {
-        if (PreviousData[j] != ReceivedData[j]) { // if same as last time, don't send again.
-            MCMServo[j].writeMicroseconds(ReceivedData[j]);
-            PreviousData[j] = ReceivedData[j];
+        if (PreviousData[j] != DataToBeUsed[j]) { // if same as last time, don't send again.
+            MCMServo[j].writeMicroseconds(DataToBeUsed[j]);
+            PreviousData[j] = DataToBeUsed[j];
         }
     }
 }
@@ -221,9 +221,20 @@ void FailSafe()
 }
 
 /************************************************************************************************************/
+void CopyDataToBeUsed()
+{
+    for (int i = 0; i < CHANNELSUSED; ++i) {
+        DataToBeUsed[i] = ReceivedData[i];
+    }
+}
+/************************************************************************************************************/
 void UseReceivedData()
 {
     Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS); // Decompress only the most recent data
+    ReadExtraParameters();                                       // Look at parameters sent with packet
+  
+    CopyDataToBeUsed();
+  
     MapToSBUS();                                                 // Get SBUS data ready
     LastPacketArrivalTime = millis();                            // Note the arrival time
     if (HopNow) {                                                // This flag gets set in LoadAckPayload();
@@ -632,10 +643,7 @@ FASTRUN void ReceiveData()
         Reconnect(); // Try to reconnect.
     }
 
-    if (ReadData()) {
-        ReadExtraParameters(); // Check the extra parameters
-    }
-    else {
+    if (!ReadData()) { 
         if (millis() - SBUSTimer >= SBUSRATE) { // No new packet yet - but maybe it's time to dispatch the last?
             if (BoundFlag && (millis() > 10000)) {
                 if (Connected) {
@@ -677,7 +685,7 @@ void SaveFailSafeData()
     // FailSafe data occupies EEPROM from offset FS_EEPROM_OFFSET
     uint8_t FS_Offset = FS_EEPROM_OFFSET;
     for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
-        EEPROM.update(i + FS_Offset, (map(ReceivedData[i], MINMICROS, MAXMICROS, 0, 180))); // save servo positions lower res: 8 bits
+        EEPROM.update(i + FS_Offset, (map(DataToBeUsed[i], MINMICROS, MAXMICROS, 0, 180))); // save servo positions lower res: 8 bits
         delay(1);
     }
     FS_Offset += CHANNELSUSED;

@@ -91,8 +91,9 @@
 uint32_t LastPacketArrivalTime = 0;
 bool     FailSafeSave          = false;
 bool     INA219Connected       = false; //  Volts from INA219 ?
+void     ReadExtraParameters();
 
-uint8_t* FHSSChPointer;                 // Pointer for FHSS channels' array
+uint8_t* FHSSChPointer; // Pointer for FHSS channels' array
 
 uint8_t* FHSSRecoveryPointer;           // Pointer for FHSS channels' array for recovery
 
