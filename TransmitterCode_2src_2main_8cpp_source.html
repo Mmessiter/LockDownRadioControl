@@ -2230,7 +2230,7 @@ $(document).ready(function(){initNavTree('TransmitterCode_2src_2main_8cpp_source
 <div class="line"><a id="l02250" name="l02250"></a><span class="lineno"> 2250</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 1; i &lt; 6; ++i) {</div>
 <div class="line"><a id="l02251" name="l02251"></a><span class="lineno"> 2251</span>        <a class="code hl_variable" href="ReceiverCode_2src_2main_8cpp.html#aa3c6638e494bc201c243565c9e955e70">MacAddress</a>[i] = <a class="code hl_function" href="1Definitions_8h.html#acd761b7a3274515f60af86504f70fcd6">CheckPipeNibbles</a>(<a class="code hl_variable" href="ReceiverCode_2src_2main_8cpp.html#aa3c6638e494bc201c243565c9e955e70">MacAddress</a>[i]); <span class="comment">// Fix PIPE if needed !</span></div>
 <div class="line"><a id="l02252" name="l02252"></a><span class="lineno"> 2252</span>    }</div>
-<div class="line"><a id="l02253" name="l02253"></a><span class="lineno"> 2253</span>    <a class="code hl_variable" href="ReceiverCode_2src_2main_8cpp.html#aa3c6638e494bc201c243565c9e955e70">MacAddress</a>[1] = 0x42; <span class="comment">// for buddy box ...</span></div>
+<div class="line"><a id="l02253" name="l02253"></a><span class="lineno"> 2253</span> <span class="comment">//   MacAddress[1] = 0x42; // for buddy box ... heer</span></div>
 <div class="line"><a id="l02254" name="l02254"></a><span class="lineno"> 2254</span> </div>
 <div class="line"><a id="l02255" name="l02255"></a><span class="lineno"> 2255</span><span class="preprocessor">#ifdef DB_BIND</span></div>
 <div class="line"><a id="l02256" name="l02256"></a><span class="lineno"> 2256</span>    Serial.println(<span class="stringliteral">&quot;&quot;</span>);</div>
