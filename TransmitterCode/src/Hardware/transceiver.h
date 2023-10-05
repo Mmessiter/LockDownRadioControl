@@ -202,7 +202,7 @@ void SuccessfulPacket()
 
 FLASHMEM void ReConfigureRadio()
 {
-   Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait); // automatic retries and pauses
+    Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait); // automatic retries and pauses
 }
 
 /************************************************************************************************************/
@@ -214,8 +214,8 @@ InitRadio(uint64_t Pipe)
     Radio1.setPALevel(RF24_PA_MAX, true);
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();
-    Radio1.openWritingPipe(Pipe);                                   // Current Pipe address used for Binding 
-   // Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait); // automatic retries and pauses
+    Radio1.openWritingPipe(Pipe); // Current Pipe address used for Binding
+                                  // Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait); // automatic retries and pauses
     Radio1.stopListening();
     delayMicroseconds(500);
     Radio1.enableDynamicPayloads();
@@ -397,17 +397,19 @@ FASTRUN void HopToNextChannel()
 
     #ifdef DB_FHSS
     if (BoundFlag && Connected && ModelMatched) {
-        float ch   = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber);
-        float Freq = 2.4;
-        PEndTime   = millis();
-        Pduration  = (PEndTime - PStartTime) / 1000;
-        HopsPerSec = 1 / Pduration;
+        float           ch         = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber);
+        float           Freq       = 2.4;
+        static uint16_t hopcount   = 0;
+        static uint32_t hoptime    = 0;
+        static uint16_t HopsPerSec = 0;
         Look1("  Hops per second: ");
-        Serial.print(HopsPerSec, 1);
-        Look1("  Hop duration: ");
-        Look1(Pduration);
-        Look1(" seconds.  Current packet number: ");
-        Look1(PacketNumber);
+        Serial.print(HopsPerSec);
+        ++hopcount;
+        if ((millis() - hoptime) >= 1000) {
+            hoptime    = millis();
+            HopsPerSec = hopcount;
+            hopcount   = 0;
+        }
         Look1("  Next frequency: ");
         Freq += ch / 1000;
         Serial.print(Freq, 3);
