@@ -114,7 +114,6 @@ var TransmitterCode_2src_2main_8cpp =
     [ "LoadFileSelector", "TransmitterCode_2src_2main_8cpp.html#a824f2e559561add2deadb0d3033c8510", null ],
     [ "LoadModelForRenaming", "TransmitterCode_2src_2main_8cpp.html#a3707639fbc6c8c053b888cd618869146", null ],
     [ "LoadModelSelector", "TransmitterCode_2src_2main_8cpp.html#a6684199e9da3ca0bdb0e01260eec7e30", null ],
-    [ "LoadPacketData", "TransmitterCode_2src_2main_8cpp.html#ac4ffb9b555ce8d38f615610dc89b5499", null ],
     [ "LogConnection", "TransmitterCode_2src_2main_8cpp.html#aaa3e86084c43b049d52d7d62c58a00b9", null ],
     [ "LogDisConnection", "TransmitterCode_2src_2main_8cpp.html#a2d5ec5fd5ed62d5b7b071fabe2225405", null ],
     [ "LogEND", "TransmitterCode_2src_2main_8cpp.html#acb3300c8b0e64f0fb381f7b96158dfc1", null ],
