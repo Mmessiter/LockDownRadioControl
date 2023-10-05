@@ -402,12 +402,9 @@ void SendQnhToSensorHub()
 }
 
 /************************************************************************************************************/
-/**
- * extra parameters can be sent using the last four bytes in every data packet.
- * the parameter sent is defined by the packet number ... which goes only up to about 5
- *
- * Note: If extra parameters are needed, the "HOPTIME" duration can be increased.
- * It's 97ms right now, which gives about 11 packets per hops.
+/** Read extra parameters from the transmitter.
+ * extra parameters can be sent using the last few words bytes in every data packet.
+ * the parameter sent is defined by the packet number & the packet number defined the transmitter.
  */
 void ReadExtraParameters()
 {
@@ -417,7 +414,7 @@ void ReadExtraParameters()
 
     switch (PacketNumber) {
         case 0:
-            //  bn = ReceivedData[CHANNELSUSED + 2];
+            //  bn = ReceivedData[CHANNELSUSED + 2]; // not used yet
 
             FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
             if (FailSafeSave) {

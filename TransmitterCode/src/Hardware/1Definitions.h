@@ -38,13 +38,13 @@
 // #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
-// #define DB_FHSS           // Debug real time FHSS data
-// #define DB_SENSORS        // Debug Sensors
-// #define DB_BIND           // Debug Binding
-// #define DB_SWITCHES       // Debug Switches
-// #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
-// #define DB_GAPS           // Debug Connection Gap assessment
-// #define DB_IDS            // Debug Model IDs (Hitting the 'BACK' button on models' screen will Serial.print these to the terminal)
+    #define DB_FHSS // Debug real time FHSS data
+                    // #define DB_SENSORS        // Debug Sensors
+                    // #define DB_BIND           // Debug Binding
+                    // #define DB_SWITCHES       // Debug Switches
+                    // #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
+                    // #define DB_GAPS           // Debug Connection Gap assessment
+                    // #define DB_IDS            // Debug Model IDs (Hitting the 'BACK' button on models' screen will Serial.print these to the terminal)
 
 // **************************************************************************
 //                               General                                    *
@@ -60,52 +60,53 @@
         #define BUDDYPPMPORT 6  // Buddybox PPM pin
     #endif
 
-    #define DEFAULTPIPEADDRESS      0xB7BE3E9423LL // Pipe address for startup - any value but MUST match RX
-    #define CHANNELSUSED            16             // 16 Channels
-    #define MAXMIXES                32             // 32 mixes
-    #define TICKSPERMINUTE          60000          // millis() = 60000 per minute
-    #define PROPOCHANNELS           8              // Only 4 have knobs / 2 sticks (= 4 hall sensors)
-    #define BANKSWITCH              4              // Default MODE switch
-    #define AUTOSWITCH              1              // Default AUTO switch
-    #define BANKSUSED               4              // Flight modes (AKA Banks)
-    #define LOWBATTERY              42             // Default percent for warning (User definable)
-    #define DEFAULTTRIMREPEATSPEED  600
-    #define INACTIVITYTIMEOUT       10 * TICKSPERMINUTE       // Default time after which to switch off
-    #define INACTIVITYMINIMUM       05 * TICKSPERMINUTE       // Inactivity timeout minimum is 5 minutes
-    #define INACTIVITYMAXIMUM       30 * TICKSPERMINUTE       // Inactivity timeout maximum is 30 minutes
-    #define DS1307_ADDRESS          0x68                      // I2C address for RTC
-    #define MAXLINES                30                        // text to load at once for log and help screens
-    #define DEFAULT_EXPO            50                        // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
-    #define CHARSMAX                120                       // Max length for char arrays
-    #define UNCOMPRESSEDWORDS       20                        // DATA TO SEND = 40  bytes
-    #define COMPRESSEDWORDS         UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
-    #define TIMEFORTXMANAGMENT      3                         // How many ms must remain spare between data packets before daring to undertake more trivial tasks
-    #define DEFAULTLEDBRIGHTNESS    20                        // LED brightness
-    #define DEFAULTPOWEROFFWARNING  3                         // Default time to warn before cutting power
-    #define MAXDUALRATE             200
-    #define MAXBUFFERSIZE           1024 * 6
-    #define MAXMODELNUMBER          91
-    #define PERFECTPACKETSPERSECOND 150   // Flat out perfect packets per second
-    #define RED_LED_ON_TIME         3500  // How many ms of no connection before RED led comes on
-    #define LOW_VOLTAGE_TIME        10000 // How many ms to endure low voltage before announcing it. (10 seconds)
-    #define MAXSHOWCOMMSSESCONDS    6     // Assess average connection quality over most recent 6 seconds continously
-    #define SHOWCOMMSDELAY          1000  // ms pauses between updated info on NEXTION
-    #define WARMUPDELAY             300   // fails at 200 so must be >200 ...
-    #define SCREENCHANGEWAIT        100   // allow time for screen to appear
+    #define DEFAULTPIPEADDRESS     0xB7BE3E9423LL // Pipe address for startup - any value but MUST match RX
+    #define CHANNELSUSED           16             // 16 Channels
+    #define MAXMIXES               32             // 32 mixes
+    #define TICKSPERMINUTE         60000          // millis() = 60000 per minute
+    #define PROPOCHANNELS          8              // Only 4 have knobs / 2 sticks (= 4 hall sensors)
+    #define BANKSWITCH             4              // Default MODE switch
+    #define AUTOSWITCH             1              // Default AUTO switch
+    #define BANKSUSED              4              // Flight modes (AKA Banks)
+    #define LOWBATTERY             42             // Default percent for warning (User definable)
+    #define DEFAULTTRIMREPEATSPEED 600
+    #define INACTIVITYTIMEOUT      10 * TICKSPERMINUTE       // Default time after which to switch off
+    #define INACTIVITYMINIMUM      05 * TICKSPERMINUTE       // Inactivity timeout minimum is 5 minutes
+    #define INACTIVITYMAXIMUM      30 * TICKSPERMINUTE       // Inactivity timeout maximum is 30 minutes
+    #define DS1307_ADDRESS         0x68                      // I2C address for RTC
+    #define MAXLINES               30                        // text to load at once for log and help screens
+    #define DEFAULT_EXPO           50                        // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
+    #define CHARSMAX               120                       // Max length for char arrays
+    #define UNCOMPRESSEDWORDS      20                        // DATA TO SEND = 40  bytes
+    #define COMPRESSEDWORDS        UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
+    #define TIMEFORTXMANAGMENT     3                         // How many ms must remain spare between data packets before daring to undertake more trivial tasks
+    #define DEFAULTLEDBRIGHTNESS   20                        // LED brightness
+    #define DEFAULTPOWEROFFWARNING 3                         // Default time to warn before cutting power
+    #define MAXDUALRATE            200
+    #define MAXBUFFERSIZE          1024 * 6
+    #define MAXMODELNUMBER         91
+    #define RED_LED_ON_TIME        3500  // How many ms of no connection before RED led comes on
+    #define LOW_VOLTAGE_TIME       10000 // How many ms to endure low voltage before announcing it. (10 seconds)
+    #define MAXSHOWCOMMSSESCONDS   6     // Assess average connection quality over most recent 6 seconds continously
+    #define SHOWCOMMSDELAY         1000  // ms pauses between updated info on NEXTION
+    #define WARMUPDELAY            300   // fails at 200 so must be >200 ...
+    #define SCREENCHANGEWAIT       100   // allow time for screen to appear
+    #define PACKETNUMBERMAX        10
+// **************************************************************************
+//                            FHSS PARAMETERS                               *
+//***************************************************************************
 
-    // **************************************************************************
-    //                            FHSS PARAMETERS                               *
-    //***************************************************************************
-
-    // No buddy mode or PPM buddy mode
-    #define PACEMAKER                7  // 7 MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-    #define RETRYCOUNT               3  // was 2  // auto retries inside nRF24L01. MAX is 15. Fails below 2.
-    #define RETRYWAIT                1  // was 1 (= 250us = Wait between retries (RetryWait+1 * 250us))
-    #define LOSTCONTACTCUTOFF        2  // How many packets to 'lose' before reconnect triggers
-    #define RECONNECT_CHANNELS_COUNT 3  // was 3  // How many channels to try when reconnecting
-    #define RECONNECT_CHANNELS_START 12 // was 12 // Offset into channels' array
+// No buddy mode or PPM buddy mode
+    #define PERFECTPACKETSPERSECOND  100 // Flat out perfect packets per second
+    #define PACEMAKER                10  // was 7. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+    #define RETRYCOUNT               3   // was 2. Auto retries inside nRF24L01. MAX is 15. Fails below 2.
+    #define RETRYWAIT                1   // was 1. 250us = Wait between retries (RetryWait+1 * 250us))
+    #define LOSTCONTACTCUTOFF        2   // How many packets to 'lose' before reconnect triggers
+    #define RECONNECT_CHANNELS_COUNT 3   // was 3  // How many channels to try when reconnecting
+    #define RECONNECT_CHANNELS_START 12  // was 12 // Offset into channels' array
 
     // wireless buddy MASTER mode
+    #define PERFECTPACKETSPERSECOND_MASTER  100 // Flat out perfect packets per second
     #define PACEMAKER_MASTER                6
     #define RETRYCOUNT_MASTER               4
     #define RETRYWAIT_MASTER                1
@@ -114,6 +115,7 @@
     #define RECONNECT_CHANNELS_START_MASTER 0 // Offset into channels' array
 
     // wireless buddy PUPIL mode
+    #define PERFECTPACKETSPERSECOND_PUPIL  100 // Flat out perfect packets per second
     #define PACEMAKER_PUPIL                8
     #define RETRYCOUNT_PUPIL               4
     #define RETRYWAIT_PUPIL                5
@@ -565,7 +567,9 @@ void             Setup_Solo();
 void             Setup_Master();
 void             Setup_Pupil();
 void             ReConfigureRadio();
-
+void             SetTestFrequencies();
+void             SetUKFrequencies();
+uint16_t         MakeTwobytes(bool* f);
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************
@@ -589,27 +593,26 @@ uint16_t      PacketsPerSecond = 0;
 uint8_t       PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS]; // Here we record some history
 uint32_t      TotalLostPackets = 0;
 uint32_t      TotalGoodPackets = 0;
-
-uint8_t  PacketNumber    = 0;
-uint8_t  GPSMarkHere     = 0;
-uint16_t TrimRepeatSpeed = 600;
-char     na[]            = "";
-uint8_t  StepSize[16]    = {0, 0, 0, 0, 0, 0, 0, 0, 5, 25, 5, 25, 5, 25, 5, 25}; //    How far to move each time on slow servos
-uint16_t CurrentPosition[UNCOMPRESSEDWORDS];                                     //    Position from which a slow servo started (0 = not started yet)
-uint16_t SendBuffer[UNCOMPRESSEDWORDS];                                          //    Data to send to rx (16 words)
-uint16_t PPMBuffer[UNCOMPRESSEDWORDS];                                           //
-uint16_t ShownBuffer[UNCOMPRESSEDWORDS];                                         //    Data shown before
-uint16_t LastBuffer[CHANNELSUSED + 1];                                           //    Used to spot any change
-uint16_t PreMixBuffer[CHANNELSUSED + 1];                                         //    Data collected from sticks
-uint8_t  MaxDegrees[5][CHANNELSUSED + 1];                                        //    Max degrees (180)
-uint8_t  MidHiDegrees[5][CHANNELSUSED + 1];                                      //    MidHi degrees (135)
-uint8_t  CentreDegrees[5][CHANNELSUSED + 1];                                     //    Middle degrees (90)
-uint8_t  MidLowDegrees[5][CHANNELSUSED + 1];                                     //    MidLow Degrees (45)
-uint8_t  MinDegrees[5][CHANNELSUSED + 1];                                        //    Min Degrees (0)
-uint8_t  SubTrims[CHANNELSUSED + 1];                                             //    Subtrims
-uint8_t  SubTrimToEdit      = 0;
-uint32_t LastPacketSentTime = 0;
-uint8_t  Bank               = 1;
+uint8_t       PacketNumber     = 0;
+uint8_t       GPSMarkHere      = 0;
+uint16_t      TrimRepeatSpeed  = 600;
+char          na[]             = "";
+uint8_t       StepSize[16]     = {0, 0, 0, 0, 0, 0, 0, 0, 5, 25, 5, 25, 5, 25, 5, 25}; //    How far to move each time on slow servos
+uint16_t      CurrentPosition[UNCOMPRESSEDWORDS];                                      //    Position from which a slow servo started (0 = not started yet)
+uint16_t      SendBuffer[UNCOMPRESSEDWORDS];                                           //    Data to send to rx (16 words)
+uint16_t      PPMBuffer[UNCOMPRESSEDWORDS];                                            //
+uint16_t      ShownBuffer[UNCOMPRESSEDWORDS];                                          //    Data shown before
+uint16_t      LastBuffer[CHANNELSUSED + 1];                                            //    Used to spot any change
+uint16_t      PreMixBuffer[CHANNELSUSED + 1];                                          //    Data collected from sticks
+uint8_t       MaxDegrees[5][CHANNELSUSED + 1];                                         //    Max degrees (180)
+uint8_t       MidHiDegrees[5][CHANNELSUSED + 1];                                       //    MidHi degrees (135)
+uint8_t       CentreDegrees[5][CHANNELSUSED + 1];                                      //    Middle degrees (90)
+uint8_t       MidLowDegrees[5][CHANNELSUSED + 1];                                      //    MidLow Degrees (45)
+uint8_t       MinDegrees[5][CHANNELSUSED + 1];                                         //    Min Degrees (0)
+uint8_t       SubTrims[CHANNELSUSED + 1];                                              //    Subtrims
+uint8_t       SubTrimToEdit      = 0;
+uint32_t      LastPacketSentTime = 0;
+uint8_t       Bank               = 1;
 // User defined bank names zone
 // ************************************** 0                  1                 2                  3                4          5           6           7          8                9        10          11       12        13             14            15          16          17      18        19           20         21     22           23         24         25          26           27        ***
 char    BankTexts[28][14] = {{"Flight mode 1"}, {"Flight mode 2"}, {"Flight mode 3"}, {"Flight mode 4"}, {"Bank 1"}, {"Bank 2"}, {"Bank 3"}, {"Bank 4"}, {"Aerobatics"}, {"Auto"}, {"Cruise"}, {"Flaps"}, {"Hover"}, {"Idle up 1"}, {"Idle up 2"}, {"Landing"}, {"Launch"}, {"Normal"}, {"Speed"}, {"Takeoff"}, {"Thermal"}, {"Hold"}, {"3D"}, {"Brakes"}, {"Stunt 1"}, {"Stunt 2"}, {"Gear up"}, {"Gear down"}};

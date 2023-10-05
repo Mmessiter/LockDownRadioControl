@@ -36,6 +36,69 @@ FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint
 }
 
 /************************************************************************************************************/
+
+// 20 x 16bit words are sent compressed to only 15 (30 bytes)
+// 4 16 bit words are vacant for other stuff (8 bytes)
+// Extra data can be send using the last 10 bytes of each data packet.
+// These are defined by the packet number.
+
+void LoadPacketData()
+{
+    uint16_t Twobytes = 0;
+    uint8_t  FS_Byte1;
+    uint8_t  FS_Byte2;
+    char     ProgressEnd[]       = "vis Progress,0";
+    SendBuffer[CHANNELSUSED]     = PacketNumber;
+    Twobytes                     = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
+    FS_Byte1                     = uint8_t(Twobytes >> 8);        // sent as two bytes
+    FS_Byte2                     = uint8_t(Twobytes & 0x00FF);
+    SendBuffer[CHANNELSUSED + 1] = 0;
+    SendBuffer[CHANNELSUSED + 2] = 0;
+    // Look (PacketNumber);
+    switch (PacketNumber) {
+        case 0:
+
+            //  SendBuffer[CHANNELSUSED + 2] = NOTUSEDYET;
+
+            if (((millis() - FailSafeTimer) > 1500) && SaveFailSafeNow) {
+                SendBuffer[CHANNELSUSED + 1] = SaveFailSafeNow; // FailSafeSaveMoment
+                SaveFailSafeNow              = false;           // once should do it.
+                SendCommand(ProgressEnd);
+            }
+            break;
+        case 1:
+            SendBuffer[CHANNELSUSED + 1] = FS_Byte2; // these are failsafe flags
+            SendBuffer[CHANNELSUSED + 2] = FS_Byte1; // these are failsafe flags
+            break;
+        case 2:
+            SendBuffer[CHANNELSUSED + 1] = Qnh >> 8;     // (HiByte)   Qnh is current atmospheric pressure at sea level here (an aviation term)
+            SendBuffer[CHANNELSUSED + 2] = Qnh & 0x00ff; // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
+            break;
+        case 3:
+            if (GPSMarkHere) {
+                SendBuffer[CHANNELSUSED + 1] = 0;
+                SendBuffer[CHANNELSUSED + 2] = GPSMarkHere;
+                GPSMarkHere                  = 0;
+            }
+            break;
+        case 4:
+            SendBuffer[CHANNELSUSED + 1] = ModelMatched; // let receiver know whether correct model is loaded.
+            SendBuffer[CHANNELSUSED + 2] = SwapWaveBand;
+            if (SwapWaveBand == 2) SetTestFrequencies();
+            if (SwapWaveBand == 1) SetUKFrequencies();
+            SwapWaveBand = 0;
+            break;
+
+        case 5:
+            SendBuffer[CHANNELSUSED + 1] = PPMdata.UseSBUSFromRX;   // 1 - 0
+            SendBuffer[CHANNELSUSED + 2] = PPMdata.PPMChannelCount; //
+            break;
+
+        default: break;
+    }
+}
+
+/************************************************************************************************************/
 void RecordsPacketSuccess(uint8_t s)
 { // or failure according to s
     static uint16_t PacketsHistoryIndex       = 0;
@@ -343,7 +406,7 @@ FASTRUN void HopToNextChannel()
         Serial.print(HopsPerSec, 1);
         Look1("  Hop duration: ");
         Look1(Pduration);
-        Look1(" seconds  Good packets per hop: ");
+        Look1(" seconds.  Current packet number: ");
         Look1(PacketNumber);
         Look1("  Next frequency: ");
         Freq += ch / 1000;
@@ -354,7 +417,7 @@ FASTRUN void HopToNextChannel()
         PStartTime = millis();
     }
     #endif
-    PacketNumber = 0;
+    if (PacketNumber > PACKETNUMBERMAX) PacketNumber = 0; // reset packet number if it gets too big
 }
 /*********************************************************************************************************************************/
 

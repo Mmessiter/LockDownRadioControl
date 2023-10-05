@@ -19,7 +19,7 @@
 #define RXVERSION_MINOR   2
 #define RXVERSION_MINIMUS 6 // September 2023
 
-    #define DB_FHSS
+  //  #define DB_FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE
@@ -45,10 +45,9 @@
 #define LISTEN_PERIOD            14  //  14 (How many ms to listen for TX in Reconnect())
 #define RECEIVE_TIMEOUT          14  //  14  (<=9 fails, >=11 OK)
 
-
 // ********************* >>> FHSS params <<< *******************************************
 
-#define HOPTIME                   80 // was 80 ms between channel changes
+#define HOPTIME                   0 // was 80 ms between channel changes
 #define RECONNECT_CHANNELS_COUNT  3  // was 3 How many channels to try when reconnecting
 #define RECONNECT_CHANNELS_OFFSET 12 // was 12 Offset in the array to begin getting reconnect channels
 

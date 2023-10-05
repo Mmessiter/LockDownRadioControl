@@ -29,35 +29,35 @@ uint32_t RX1TotalTime          = 0;
 uint32_t RX2TotalTime          = 0;
 uint32_t RadioSwaps            = 0;
 
-extern bool         BoundFlag;
-extern bool         GpsFix;
-extern bool         SensorHubConnected;
-extern uint8_t      HoursGPS;
-extern uint8_t      MinsGPS;
-extern uint8_t      SecsGPS;
-extern uint8_t      YearGPS;
-extern uint8_t      MonthGPS;
-extern uint8_t      DayGPS;
-extern uint8_t      SatellitesGPS;
-extern uint16_t     BaroAltitude;
-extern uint32_t     ReconnectedMoment;
-extern uint32_t     SBUSTimer;
-extern float        INA219Volts;
-extern float        BaroTemperature;
-extern float        LatitudeGPS;
-extern float        LongitudeGPS;
-extern float        SpeedGPS;
-extern float        AngleGPS;
-extern float        AltitudeGPS;
-extern float        DistanceGPS;
-extern float        CourseToGPS;
-extern uint8_t      MacAddress[9];
-extern uint8_t      TheReceivedPipe[6];
-extern uint32_t     NewConnectionMoment;
-extern void         BindModel();
-extern void         FailSafe(); // defined in main.cpp
-extern void         ClearAckPayload();
-//extern void         ShowHopDurationEtc();
+extern bool     BoundFlag;
+extern bool     GpsFix;
+extern bool     SensorHubConnected;
+extern uint8_t  HoursGPS;
+extern uint8_t  MinsGPS;
+extern uint8_t  SecsGPS;
+extern uint8_t  YearGPS;
+extern uint8_t  MonthGPS;
+extern uint8_t  DayGPS;
+extern uint8_t  SatellitesGPS;
+extern uint16_t BaroAltitude;
+extern uint32_t ReconnectedMoment;
+extern uint32_t SBUSTimer;
+extern float    INA219Volts;
+extern float    BaroTemperature;
+extern float    LatitudeGPS;
+extern float    LongitudeGPS;
+extern float    SpeedGPS;
+extern float    AngleGPS;
+extern float    AltitudeGPS;
+extern float    DistanceGPS;
+extern float    CourseToGPS;
+extern uint8_t  MacAddress[9];
+extern uint8_t  TheReceivedPipe[6];
+extern uint32_t NewConnectionMoment;
+extern void     BindModel();
+extern void     FailSafe(); // defined in main.cpp
+extern void     ClearAckPayload();
+// extern void         ShowHopDurationEtc();
 extern void         ReadSensorHub();
 extern void         SetUKFrequencies();
 extern void         MoveServos();
@@ -119,7 +119,6 @@ void SetTestFrequencies()
     FHSSRecoveryPointer = FHSS_Channels1;
     FHSSChPointer       = FHSS_Channels1;
     FrequencyCount      = FREQUENCYSCOUNT1;
-    // FrequencyCount      = 5;
 }
 /************************************************************************************************************/
 
@@ -131,7 +130,6 @@ void SetUKFrequencies()
     FHSSRecoveryPointer = FHSS_Channels;
     FHSSChPointer       = FHSS_Channels;
     FrequencyCount      = FREQUENCYSCOUNT;
-    // FrequencyCount      = 5;
 }
 
 /************************************************************************************************************/
@@ -250,20 +248,20 @@ FLASHMEM void GetOldPipe()
 }
 
 #ifdef DB_FHSS
- float PacketStartTime = 0;
+float PacketStartTime = 0;
 /************************************************************************************************************/
 /*
  * Print out some FHSS information about the channel hopping implementation
  */
 void ShowHopDurationEtc()
 {
-   
-    float freq = 2.4 + (float)NextChannel / 1000;
-    uint8_t OnePacketTime = (millis() - PacketStartTime); //  / PacketNumber;
-  
+
+    float   freq          = 2.4 + (float)NextChannel / 1000;
+    uint8_t OnePacketTime = (millis() - PacketStartTime);
+
     Serial.print("Hop duration: ");
     Serial.print(int(millis() - PacketStartTime));
-    Serial.print("ms.  Packets per hop: ");
+    Serial.print("ms.  Current packet number: ");
     Serial.print(PacketNumber);
     Serial.print("  Average Time per packet: ");
     Serial.print(OnePacketTime);
@@ -277,7 +275,6 @@ void ShowHopDurationEtc()
     Serial.print("  Hops per second: ");
     Serial.print(HopsPerSecond);
     Serial.println("");
-  
 }
 #endif
 
@@ -484,10 +481,12 @@ FASTRUN void Reconnect()
 
 void IncChannelNumber()
 {
-    ++NextChannelNumber;                                            // Move up the channels' array
-    if (NextChannelNumber >= FrequencyCount) NextChannelNumber = 1; // If needed, wrap the channels' array pointer
-    AckPayload.Byte5 = NextChannelNumber;                           // Tell the transmitter which element of the array to use next.
-    NextChannel      = *(FHSSChPointer + NextChannelNumber);        // Get the actual channel number from the array.
+    ++NextChannelNumber; // Move up the channels' array
+    if (NextChannelNumber >= FrequencyCount) {
+        NextChannelNumber = 0;
+    }                                                        // If needed, wrap the channels' array pointer
+    AckPayload.Byte5 = NextChannelNumber;                    // Tell the transmitter which element of the array to use next.
+    NextChannel      = *(FHSSChPointer + NextChannelNumber); // Get the actual channel number from the array.
 }
 
 /************************************************************************************************************/
@@ -500,11 +499,11 @@ void IncChannelNumber()
 void CheckWhetherItsTimeToHop()
 {
     AckPayload.Purpose &= 0x7f;             // Clear the HOP flag
-   if ((millis() - HopStart) >= HOPTIME) { // Time to hop??
+    if ((millis() - HopStart) >= HOPTIME) { // Time to hop??
         AckPayload.Purpose |= 0x80;         // Yes. So set the HOP flag leaving lower 7 bits unchanged
         IncChannelNumber();
         HopNow = true; // Set local flag and hop when ready BUT NOT BEFORE.
-  }
+    }
 }
 /************************************************************************************************************/
 void SendToAckPayload(float U)
