@@ -9,8 +9,6 @@ var searchData=
   ['listen_5fperiod_6',['LISTEN_PERIOD',['../common_8h.html#a66ccb27c237c105f63ffa01c67d6eed9',1,'common.h']]],
   ['logview_7',['LOGVIEW',['../1Definitions_8h.html#ab5b352492259f7b453a051455d5dca50',1,'1Definitions.h']]],
   ['lostcontactcutoff_8',['LOSTCONTACTCUTOFF',['../1Definitions_8h.html#ac5b4f54697bc5a8d58ef0c92c094c6b6',1,'1Definitions.h']]],
-  ['lostcontactcutoff_5fmaster_9',['LOSTCONTACTCUTOFF_MASTER',['../1Definitions_8h.html#ad075d3993e10f0db28af3f62baf4e343',1,'1Definitions.h']]],
-  ['lostcontactcutoff_5fpupil_10',['LOSTCONTACTCUTOFF_PUPIL',['../1Definitions_8h.html#acca12c48a9d3d380b9f86dfd8013c60e',1,'1Definitions.h']]],
-  ['low_5fvoltage_5ftime_11',['LOW_VOLTAGE_TIME',['../1Definitions_8h.html#a26bf5116f8cb804123206e63f1432746',1,'1Definitions.h']]],
-  ['lowbattery_12',['LOWBATTERY',['../1Definitions_8h.html#adca16f7a43b448d4584dcb62897068a5',1,'1Definitions.h']]]
+  ['low_5fvoltage_5ftime_9',['LOW_VOLTAGE_TIME',['../1Definitions_8h.html#a26bf5116f8cb804123206e63f1432746',1,'1Definitions.h']]],
+  ['lowbattery_10',['LOWBATTERY',['../1Definitions_8h.html#adca16f7a43b448d4584dcb62897068a5',1,'1Definitions.h']]]
 ];

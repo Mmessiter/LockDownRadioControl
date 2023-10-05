@@ -2,7 +2,7 @@ var dir_cf2617b2f451d485c6872b95fd1adbbe =
 [
     [ "1Definitions.h", "1Definitions_8h.html", "1Definitions_8h" ],
     [ "BuddyPPM.h", "BuddyPPM_8h.html", "BuddyPPM_8h" ],
-    [ "BuddyWireless.h", "BuddyWireless_8h.html", "BuddyWireless_8h" ],
+    [ "BuddyWireless.h", "BuddyWireless_8h.html", null ],
     [ "macros.h", "macros_8h.html", "macros_8h" ],
     [ "ModelExchange.h", "ModelExchange_8h.html", "ModelExchange_8h" ],
     [ "ModelMatch.h", "ModelMatch_8h.html", "ModelMatch_8h" ],

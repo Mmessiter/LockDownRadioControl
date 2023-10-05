@@ -15,6 +15,7 @@ var transceiver_8h =
     [ "FlushFifos", "transceiver_8h.html#a07c27b4e208198453c70876517926052", null ],
     [ "HopToNextChannel", "transceiver_8h.html#a52aa3e80bccf5e75346c93fdae63122d", null ],
     [ "InitRadio", "transceiver_8h.html#a799f38bc33abdb30eec1d7db3cf27d58", null ],
+    [ "ListenToHMV", "transceiver_8h.html#a2747a332e283ef6f5d1f7aa4c2b086ab", null ],
     [ "LoadPacketData", "transceiver_8h.html#ac4ffb9b555ce8d38f615610dc89b5499", null ],
     [ "NormaliseTheRadio", "transceiver_8h.html#a0708fa5166a126be25283b6cfaff6227", null ],
     [ "ReConfigureRadio", "transceiver_8h.html#aadd75fbf568ff28991fa7b3529da7027", null ],

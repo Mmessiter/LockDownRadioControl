@@ -53,11 +53,12 @@ var searchData=
   ['countdownindex_50',['CountDownIndex',['../1Definitions_8h.html#adfcd3241fc01c3231bd87d8711016b15',1,'1Definitions.h']]],
   ['coursetogps_51',['CourseToGPS',['../ReceiverCode_2src_2main_8cpp.html#a1a4e211f9858a5d6d61d11e5679a71f3',1,'CourseToGPS():&#160;main.cpp'],['../radio_8h.html#a1a4e211f9858a5d6d61d11e5679a71f3',1,'CourseToGPS():&#160;main.cpp']]],
   ['current_5ftime_52',['current_time',['../Quadcopter_2src_2main_8cpp.html#a42cc85bc12e25d1c6206a5044d8174e4',1,'main.cpp']]],
-  ['currentmode_53',['CurrentMode',['../1Definitions_8h.html#aacabee92eb3ddd2e3cf31695c00a912e',1,'1Definitions.h']]],
-  ['currentpipe_54',['CurrentPipe',['../ReceiverCode_2src_2main_8cpp.html#a8accdcf1df9fea74266e2f169346cc81',1,'CurrentPipe():&#160;main.cpp'],['../radio_8h.html#a8accdcf1df9fea74266e2f169346cc81',1,'CurrentPipe():&#160;main.cpp'],['../1Definitions_8h.html#ad822a6e47865e57ae25f51c6c0eea7de',1,'CurrentPipe():&#160;1Definitions.h']]],
-  ['currentpoint_55',['CurrentPoint',['../1Definitions_8h.html#af10ffe07503b33fd55065fd9021e17e7',1,'1Definitions.h']]],
-  ['currentposition_56',['CurrentPosition',['../1Definitions_8h.html#ade76e94669870d42879b18f17505f967',1,'1Definitions.h']]],
-  ['currentradio_57',['CurrentRadio',['../radio_8h.html#a7bca81159d93f215060f40f45f19b0de',1,'radio.h']]],
-  ['currentview_58',['CurrentView',['../1Definitions_8h.html#a2c76c41cd62573eb7227882fc9b9e557',1,'1Definitions.h']]],
-  ['curvedots_59',['CurveDots',['../1Definitions_8h.html#a434509284a88e9637c9b9847efe0b0e0',1,'1Definitions.h']]]
+  ['currentchannel_53',['CurrentChannel',['../1Definitions_8h.html#aeb0e129885651a4398539e6a4f6545c4',1,'1Definitions.h']]],
+  ['currentmode_54',['CurrentMode',['../1Definitions_8h.html#aacabee92eb3ddd2e3cf31695c00a912e',1,'1Definitions.h']]],
+  ['currentpipe_55',['CurrentPipe',['../ReceiverCode_2src_2main_8cpp.html#a8accdcf1df9fea74266e2f169346cc81',1,'CurrentPipe():&#160;main.cpp'],['../radio_8h.html#a8accdcf1df9fea74266e2f169346cc81',1,'CurrentPipe():&#160;main.cpp'],['../1Definitions_8h.html#ad822a6e47865e57ae25f51c6c0eea7de',1,'CurrentPipe():&#160;1Definitions.h']]],
+  ['currentpoint_56',['CurrentPoint',['../1Definitions_8h.html#af10ffe07503b33fd55065fd9021e17e7',1,'1Definitions.h']]],
+  ['currentposition_57',['CurrentPosition',['../1Definitions_8h.html#ade76e94669870d42879b18f17505f967',1,'1Definitions.h']]],
+  ['currentradio_58',['CurrentRadio',['../radio_8h.html#a7bca81159d93f215060f40f45f19b0de',1,'radio.h']]],
+  ['currentview_59',['CurrentView',['../1Definitions_8h.html#a2c76c41cd62573eb7227882fc9b9e557',1,'1Definitions.h']]],
+  ['curvedots_60',['CurveDots',['../1Definitions_8h.html#a434509284a88e9637c9b9847efe0b0e0',1,'1Definitions.h']]]
 ];

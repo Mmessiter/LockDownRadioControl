@@ -73,7 +73,7 @@ var searchData=
   ['checkinvisiblepoint_70',['CheckInvisiblePoint',['../1Definitions_8h.html#a1870ad872e2424cbf8222747d3a43617',1,'CheckInvisiblePoint():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a1870ad872e2424cbf8222747d3a43617',1,'CheckInvisiblePoint():&#160;main.cpp']]],
   ['checklogfileisopen_71',['CheckLogFileIsOpen',['../TransmitterCode_2src_2main_8cpp.html#ac45f2f949ccfa372a8cbab3ef0b8caa8',1,'main.cpp']]],
   ['checkmacrosbuffer_72',['CheckMacrosBuffer',['../Utilities_8h.html#a6bb930920ba3a8d45a737dde782ef65c',1,'Utilities.h']]],
-  ['checkmodelname_73',['CheckModelName',['../1Definitions_8h.html#a5c0f1fd26cdd6ecde365f521060158ba',1,'CheckModelName():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a5c0f1fd26cdd6ecde365f521060158ba',1,'CheckModelName():&#160;main.cpp']]],
+  ['checkmodelname_73',['CheckModelName',['../TransmitterCode_2src_2main_8cpp.html#a5c0f1fd26cdd6ecde365f521060158ba',1,'CheckModelName():&#160;main.cpp'],['../1Definitions_8h.html#a5c0f1fd26cdd6ecde365f521060158ba',1,'CheckModelName():&#160;main.cpp']]],
   ['checkmotoroff_74',['CheckMotorOff',['../1Definitions_8h.html#a2f7d73b3096c884b2ace4b3399268325',1,'CheckMotorOff():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a2f7d73b3096c884b2ace4b3399268325',1,'CheckMotorOff():&#160;main.cpp']]],
   ['checkoutputchannels_75',['CheckOutPutChannels',['../TransmitterCode_2src_2main_8cpp.html#a81f424711e329d4db746d65d6cbc7b1f',1,'main.cpp']]],
   ['checkpipenibbles_76',['CheckPipeNibbles',['../1Definitions_8h.html#acd761b7a3274515f60af86504f70fcd6',1,'CheckPipeNibbles(uint8_t b):&#160;transceiver.h'],['../transceiver_8h.html#acd761b7a3274515f60af86504f70fcd6',1,'CheckPipeNibbles(uint8_t b):&#160;transceiver.h']]],
@@ -134,11 +134,12 @@ var searchData=
   ['csn_5fon_131',['CSN_ON',['../common_8h.html#ab22ef6e01ad09b637ca55f3fcd3cae94',1,'CSN_ON():&#160;common.h'],['../1Definitions_8h.html#ab22ef6e01ad09b637ca55f3fcd3cae94',1,'CSN_ON():&#160;1Definitions.h']]],
   ['csn_5fpin_132',['CSN_PIN',['../1Definitions_8h.html#a6c4d73944fe1bd2ff7ceee867c315ac1',1,'1Definitions.h']]],
   ['current_5ftime_133',['current_time',['../Quadcopter_2src_2main_8cpp.html#a42cc85bc12e25d1c6206a5044d8174e4',1,'main.cpp']]],
-  ['currentmode_134',['CurrentMode',['../1Definitions_8h.html#aacabee92eb3ddd2e3cf31695c00a912e',1,'1Definitions.h']]],
-  ['currentpipe_135',['CurrentPipe',['../ReceiverCode_2src_2main_8cpp.html#a8accdcf1df9fea74266e2f169346cc81',1,'CurrentPipe():&#160;main.cpp'],['../radio_8h.html#a8accdcf1df9fea74266e2f169346cc81',1,'CurrentPipe():&#160;main.cpp'],['../1Definitions_8h.html#ad822a6e47865e57ae25f51c6c0eea7de',1,'CurrentPipe():&#160;1Definitions.h']]],
-  ['currentpoint_136',['CurrentPoint',['../1Definitions_8h.html#af10ffe07503b33fd55065fd9021e17e7',1,'1Definitions.h']]],
-  ['currentposition_137',['CurrentPosition',['../1Definitions_8h.html#ade76e94669870d42879b18f17505f967',1,'1Definitions.h']]],
-  ['currentradio_138',['CurrentRadio',['../radio_8h.html#a7bca81159d93f215060f40f45f19b0de',1,'radio.h']]],
-  ['currentview_139',['CurrentView',['../1Definitions_8h.html#a2c76c41cd62573eb7227882fc9b9e557',1,'1Definitions.h']]],
-  ['curvedots_140',['CurveDots',['../1Definitions_8h.html#a434509284a88e9637c9b9847efe0b0e0',1,'1Definitions.h']]]
+  ['currentchannel_134',['CurrentChannel',['../1Definitions_8h.html#aeb0e129885651a4398539e6a4f6545c4',1,'1Definitions.h']]],
+  ['currentmode_135',['CurrentMode',['../1Definitions_8h.html#aacabee92eb3ddd2e3cf31695c00a912e',1,'1Definitions.h']]],
+  ['currentpipe_136',['CurrentPipe',['../ReceiverCode_2src_2main_8cpp.html#a8accdcf1df9fea74266e2f169346cc81',1,'CurrentPipe():&#160;main.cpp'],['../radio_8h.html#a8accdcf1df9fea74266e2f169346cc81',1,'CurrentPipe():&#160;main.cpp'],['../1Definitions_8h.html#ad822a6e47865e57ae25f51c6c0eea7de',1,'CurrentPipe():&#160;1Definitions.h']]],
+  ['currentpoint_137',['CurrentPoint',['../1Definitions_8h.html#af10ffe07503b33fd55065fd9021e17e7',1,'1Definitions.h']]],
+  ['currentposition_138',['CurrentPosition',['../1Definitions_8h.html#ade76e94669870d42879b18f17505f967',1,'1Definitions.h']]],
+  ['currentradio_139',['CurrentRadio',['../radio_8h.html#a7bca81159d93f215060f40f45f19b0de',1,'radio.h']]],
+  ['currentview_140',['CurrentView',['../1Definitions_8h.html#a2c76c41cd62573eb7227882fc9b9e557',1,'1Definitions.h']]],
+  ['curvedots_141',['CurveDots',['../1Definitions_8h.html#a434509284a88e9637c9b9847efe0b0e0',1,'1Definitions.h']]]
 ];
