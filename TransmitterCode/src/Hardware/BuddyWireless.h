@@ -75,7 +75,7 @@ void GetSpecialPacket(bool IamMaster)
 
     if (Radio1.available()) {
 
-        Radio1.writeAckPayload(1, &Ack, sizeof Ack); // Send telemetry
+        Radio1.writeAckPayload(1, &Ack, sizeof Ack); // Acknowledge the packet
         Radio1.read(&DataPacket, sizeof(DataPacket));
         if (DataPacket[0] == DataPacket1[0]) {
             Look("Got S from Master");
