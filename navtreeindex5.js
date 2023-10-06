@@ -1,5 +1,10 @@
 var NAVTREEINDEX5 =
 {
+"Nextion_8h.html#aff6fa8906188d3249b01bf59de47df2f":[5,0,3,0,0,6,6],
+"Nextion_8h_source.html":[5,0,3,0,0,6],
+"Pong_8h.html":[5,0,3,0,0,7],
+"Pong_8h.html#a01ddd63e9f328dd117ee13b789852868":[5,0,3,0,0,7,3],
+"Pong_8h.html#a66133191d50f6b4d010d56e6b53a853b":[5,0,3,0,0,7,2],
 "Pong_8h.html#abead2677dc553c693bcf9bf0c54c0c81":[5,0,3,0,0,7,0],
 "Pong_8h.html#ae1838e25c06509f78c0de9f0e556d428":[5,0,3,0,0,7,1],
 "Pong_8h_source.html":[5,0,3,0,0,7],
@@ -244,10 +249,5 @@ var NAVTREEINDEX5 =
 "Quadcopter_2src_2main_8cpp_source.html":[5,0,0,0,1],
 "RXCODE.html":[1],
 "RXCODE.html#rx":[1,0],
-"RXCODE.html#rxpinout":[1,1],
-"ReceiverCode_2src_2main_8cpp.html":[5,0,1,0,1],
-"ReceiverCode_2src_2main_8cpp.html#a036e89e7dd45664d2a0b28230afcd0ac":[5,0,1,0,1,98],
-"ReceiverCode_2src_2main_8cpp.html#a06122bf4eee8af08c02c45022253a4f4":[5,0,1,0,1,29],
-"ReceiverCode_2src_2main_8cpp.html#a06807a4f185694d37f774702ba74db0a":[5,0,1,0,1,22],
-"ReceiverCode_2src_2main_8cpp.html#a07ca94db0e305e9c01ec51e417576308":[5,0,1,0,1,16]
+"RXCODE.html#rxpinout":[1,1]
 };
