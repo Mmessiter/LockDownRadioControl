@@ -443,9 +443,9 @@ void DisplayPipe(uint64_t WhichPipe) // for debugging
 void SetThePipe(uint64_t WhichPipe)
 {
     Radio1.openWritingPipe(WhichPipe);
-    delayMicroseconds(500);
+    delayMicroseconds(200);
     Radio1.stopListening();
-    delayMicroseconds(500); // allow things to happen
+    delayMicroseconds(200); // allow things to happen
                             // DisplayPipe(WhichPipe);
 }
     /************************************************************************************************************/

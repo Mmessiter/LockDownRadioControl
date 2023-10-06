@@ -308,7 +308,7 @@ void ConfigureRadio()
     CurrentRadio->setAutoAck(true);          // we want acks
     CurrentRadio->maskIRQ(1, 1, 1);          // no interrupts - seems NEEDED at the moment
     CurrentRadio->openReadingPipe(PIPENUMBER, PipePointer);
-    CurrentRadio->openReadingPipe(BUDDYPIPENUMBER, BuddyPipePointer); // for wireless buddy box << *******
+   // CurrentRadio->openReadingPipe(BUDDYPIPENUMBER, BuddyPipePointer); // for wireless buddy box << *******
     CurrentRadio->startListening();
 }
 

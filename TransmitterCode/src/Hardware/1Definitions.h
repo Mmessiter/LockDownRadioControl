@@ -117,6 +117,7 @@
     #define SCANWAVEBAND    3 // Scan waveband (SEND NO DATA)
     #define SENDNOTHING     4 // Transmission off (SEND NO DATA)
     #define PONGMODE        5 // Play Pong (SEND NO DATA)
+    #define LISTENMODE      6 // Listen only - for wireless buddy boxing (SEND NO DATA)
 
 // **************************************************************************
 //                               Colours                                    *
@@ -556,6 +557,8 @@ void             SetUKFrequencies();
 uint16_t         MakeTwobytes(bool* f);
 void             SendSpecialPacket(bool IamMaster);
 void             GetSpecialPacket(bool IamMaster);
+void             StartBuddyListen();
+void             StopBuddyListen();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************

@@ -2426,6 +2426,10 @@ FLASHMEM void setup()
             PlaySound(PLSTURNOFF);
         }
     }
+
+    if (BuddyPupilOnWireless)  {
+        StartBuddyListen();
+    }
 }
 /*********************************************************************************************************************************/
 
@@ -7739,8 +7743,11 @@ FASTRUN void loop()
         case PONGMODE: // 5
             PlayPong();
             break;
+        case LISTENMODE: // 6  ... listen only ... for buddying
+            GetSpecialPacket(BuddyMasterOnWireless);
+            break;
         default:
-            break; // CurrentMode >= 4 for no action at all.
+            break; 
     }
 } // end loop()
 
