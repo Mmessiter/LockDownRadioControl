@@ -172,9 +172,9 @@ void TryToReconnect()
 void FlushFifos()
 {
     Radio1.flush_tx(); // This avoids a lockup that happens when the FIFO gets full.
-    delayMicroseconds(250);
+    delayMicroseconds(150);
     Radio1.flush_rx();
-    delayMicroseconds(250);
+    delayMicroseconds(150);
 }
 
 /************************************************************************************************************/
@@ -196,42 +196,22 @@ void SuccessfulPacket()
     StartInactvityTimeout();
     LostContactFlag = false;
 }
-
 /************************************************************************************************************/
 
-FLASHMEM void ReConfigureRadio()
-{
-    Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait); // automatic retries and pauses
-}
-
-/************************************************************************************************************/
-
-FLASHMEM void
-InitRadio(uint64_t Pipe)
+FLASHMEM void InitRadio(uint64_t Pipe)
 {
     Radio1.begin();
     Radio1.setPALevel(RF24_PA_MAX, true);
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();
-    Radio1.openWritingPipe(Pipe); // Current Pipe address used for Binding
-                                  // Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait); // automatic retries and pauses
+    Radio1.openWritingPipe(Pipe); 
+    Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait); 
     Radio1.stopListening();
     delayMicroseconds(500);
     Radio1.enableDynamicPayloads();
     Radio1.setAddressWidth(5);
-    Radio1.setCRCLength(RF24_CRC_16); // could be (RF24_CRC_8);
-    ReConfigureRadio();
+    Radio1.setCRCLength(RF24_CRC_16); 
     GapSum = 0;
-}
-
-/************************************************************************************************************/
-void ListenToHMV() // Shup command detected? // heer
-
-{
-    // Radio1.setChannel(CurrentChannel); // Hop !
-    // delayMicroseconds(250);
-    // Radio1.stopListening(); // Transmit only
-    // delayMicroseconds(250);
 }
 
 /************************************************************************************************************/
@@ -261,8 +241,9 @@ FASTRUN void SendData()
         }
     }
     else {
-        if (((millis() - LastPacketSentTime)) > 6) { // if there is time, listen for SHUTUP command from master heer
-            ListenToHMV();
+        if (((millis() - LastPacketSentTime)) > 6) {            // if there is time, communicate with other buddy tx
+            if (BuddyPupilOnWireless && SlaveHasControl) SendSpecialPacket(0);
+            if (BuddyMasterOnWireless && !SlaveHasControl) SendSpecialPacket(1);
         }
     }
 }
@@ -406,9 +387,9 @@ FASTRUN void HopToNextChannel()
 {
     Radio1.setChannel(NextChannel); // Hop !
     CurrentChannel = NextChannel;   // save it for later
-    delayMicroseconds(250);
+    delayMicroseconds(150);
     Radio1.stopListening(); // Transmit only
-    delayMicroseconds(250);
+    delayMicroseconds(150);
 
     #ifdef DB_FHSS
     if (BoundFlag && Connected && ModelMatched) {
