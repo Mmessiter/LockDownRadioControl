@@ -242,7 +242,6 @@ FASTRUN void SendData()
         }
     }
     else {
-
         if (((millis() - LastPacketSentTime)) > 6) { // if there is time, communicate with other buddy tx
             {
                 if ((millis() - InterBuddyTimer) >= 250) { // 4 times a second

@@ -45,9 +45,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
 
 void StartBuddyListen()
 {
-
     uint64_t pip = TeensyMACAddPipe;
-
     if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
     delayMicroseconds(50);
@@ -71,23 +69,40 @@ void GetSpecialPacket(bool IamMaster)
     uint8_t DataPacket[2]        = " ";
     uint8_t Master_in_Control[2] = "S"; // = Shut Up, send nothing
     uint8_t Pupil_in_Control[2]  = "O"; // = OK to send data
-    uint8_t Ack[]                = "A"; // simple ack
+    uint8_t Ack[]                = "0"; // simple ack
+
+    if (!IamMaster) Ack[0] = 'A';
+
+    if (IamMaster) {
+        if (BuddyON) {
+            Ack[0] = 'O';// ok to send - you're in charge
+        }
+        else
+        {
+            Ack[0] = 'S'; // shut up as buddy is not on
+        }
+    }
 
     if (Radio1.available()) {
+
         Radio1.writeAckPayload(1, &Ack, sizeof Ack); // Acknowledge the packet
         Radio1.read(&DataPacket, sizeof(DataPacket));
-        if (DataPacket[0] == Master_in_Control[0]) {
-            Look("Got S from Master");
-            BuddyON = false;
+
+        if (!IamMaster) { // pupil here
+            if (DataPacket[0] == Master_in_Control[0]) {
+                Look("Got S from Master");
+                BuddyON = false;
+            }
+            else if (DataPacket[0] == Pupil_in_Control[0]) {
+                Look("Got O from Master");
+                BuddyON = true;
+            }
         }
-        else if (DataPacket[0] == Pupil_in_Control[0]) {
-            Look("Got O from Master");
-            BuddyON = true;
+        else { // master here
         }
+
         FlushFifos();
     }
-   
-
 }
 
 //*************************************************************************************************************************
