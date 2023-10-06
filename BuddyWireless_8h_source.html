@@ -109,8 +109,8 @@ $(document).ready(function(){initNavTree('BuddyWireless_8h_source.html',''); ini
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno"><a class="line" href="1Definitions_8h.html#acaaa9b3fb98db4a2c2bec422c5178f1c">    8</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="BuddyWireless_8h.html#acaaa9b3fb98db4a2c2bec422c5178f1c">SendSpecialPacket</a>(<span class="keywordtype">bool</span> IamMaster) <span class="comment">// here the sender sends to other tx</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span>{</div>
-<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>    uint8_t DataPacket1[] = <span class="stringliteral">&quot;S&quot;</span>; <span class="comment">// = Shut Up, send nothing</span></div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>    uint8_t DataPacket2[] = <span class="stringliteral">&quot;O&quot;</span>; <span class="comment">// = OK to send data</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span>    uint8_t Master_in_Control[] = <span class="stringliteral">&quot;S&quot;</span>; <span class="comment">// = Shut Up, send nothing</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span>    uint8_t Pupil_in_Control[] = <span class="stringliteral">&quot;O&quot;</span>; <span class="comment">// = OK to send data</span></div>
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    <a class="code hl_function" href="radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a">Radio1</a>.setChannel(<a class="code hl_define" href="1Definitions_8h.html#ad880cebd97490afa89660ab3c0298fed">SPECIAL_PACKET_CHANNEL</a>);</div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>    delayMicroseconds(50);</div>
@@ -119,7 +119,7 @@ $(document).ready(function(){initNavTree('BuddyWireless_8h_source.html',''); ini
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span> </div>
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    <span class="keywordflow">if</span> (IamMaster &amp;&amp; !<a class="code hl_variable" href="1Definitions_8h.html#a2134130b3bde6e04237bca0aab2c22ef">BuddyON</a>)</div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    {</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        <span class="keywordflow">if</span> (<a class="code hl_function" href="radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a">Radio1</a>.write(&amp;DataPacket1, <span class="keyword">sizeof</span>(DataPacket1))) {</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>        <span class="keywordflow">if</span> (<a class="code hl_function" href="radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a">Radio1</a>.write(&amp;Master_in_Control, <span class="keyword">sizeof</span>(Master_in_Control))) {</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>            <a class="code hl_function" href="1Definitions_8h.html#a6d87eba17154f7f4f2f3802ef8ee261f">Look</a>(<span class="stringliteral">&quot;Sent S to Buddy&quot;</span>);</div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        }</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>        <span class="keywordflow">else</span> {</div>
@@ -129,7 +129,7 @@ $(document).ready(function(){initNavTree('BuddyWireless_8h_source.html',''); ini
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="keywordflow">if</span> (IamMaster &amp;&amp; <a class="code hl_variable" href="1Definitions_8h.html#a2134130b3bde6e04237bca0aab2c22ef">BuddyON</a>)</div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    {</div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        <span class="keywordflow">if</span> (<a class="code hl_function" href="radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a">Radio1</a>.write(&amp;DataPacket2, <span class="keyword">sizeof</span>(DataPacket2))) {</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        <span class="keywordflow">if</span> (<a class="code hl_function" href="radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a">Radio1</a>.write(&amp;Pupil_in_Control, <span class="keyword">sizeof</span>(Pupil_in_Control))) {</div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>            <a class="code hl_function" href="1Definitions_8h.html#a6d87eba17154f7f4f2f3802ef8ee261f">Look</a>(<span class="stringliteral">&quot;Sent O to Buddy&quot;</span>);</div>
 <div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        }</div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        <span class="keywordflow">else</span> {</div>
@@ -171,19 +171,19 @@ $(document).ready(function(){initNavTree('BuddyWireless_8h_source.html',''); ini
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>{</div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    uint8_t DataPacket[2]  = <span class="stringliteral">&quot; &quot;</span>;</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    uint8_t DataPacket1[2] = <span class="stringliteral">&quot;S&quot;</span>; <span class="comment">// = Shut Up, send nothing</span></div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    uint8_t DataPacket2[2] = <span class="stringliteral">&quot;O&quot;</span>; <span class="comment">// = OK to send data</span></div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    uint8_t Master_in_Control[2] = <span class="stringliteral">&quot;S&quot;</span>; <span class="comment">// = Shut Up, send nothing</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    uint8_t Pupil_in_Control[2] = <span class="stringliteral">&quot;O&quot;</span>; <span class="comment">// = OK to send data</span></div>
 <div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    uint8_t Ack[]          = <span class="stringliteral">&quot;A&quot;</span>; <span class="comment">// simple ack</span></div>
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a">Radio1</a>.available()) {</div>
 <div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>        <a class="code hl_function" href="radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a">Radio1</a>.writeAckPayload(1, &amp;Ack, <span class="keyword">sizeof</span> Ack); <span class="comment">// Acknowledge the packet</span></div>
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        <a class="code hl_function" href="radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a">Radio1</a>.read(&amp;DataPacket, <span class="keyword">sizeof</span>(DataPacket));</div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        <span class="keywordflow">if</span> (DataPacket[0] == DataPacket1[0]) {</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        <span class="keywordflow">if</span> (DataPacket[0] == Master_in_Control[0]) {</div>
 <div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>            <a class="code hl_function" href="1Definitions_8h.html#a6d87eba17154f7f4f2f3802ef8ee261f">Look</a>(<span class="stringliteral">&quot;Got S from Master&quot;</span>);</div>
 <div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>            <a class="code hl_variable" href="1Definitions_8h.html#a2134130b3bde6e04237bca0aab2c22ef">BuddyON</a> = <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        }</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (DataPacket[0] == DataPacket2[0]) {</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (DataPacket[0] == Pupil_in_Control[0]) {</div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>            <a class="code hl_function" href="1Definitions_8h.html#a6d87eba17154f7f4f2f3802ef8ee261f">Look</a>(<span class="stringliteral">&quot;Got O from Master&quot;</span>);</div>
 <div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>            <a class="code hl_variable" href="1Definitions_8h.html#a2134130b3bde6e04237bca0aab2c22ef">BuddyON</a> = <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        }</div>
