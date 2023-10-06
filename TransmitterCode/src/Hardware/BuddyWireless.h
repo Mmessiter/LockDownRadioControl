@@ -7,8 +7,8 @@
 
 void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
 {
-    uint8_t DataPacket1[] = "SH"; // = Shut Up, send nothing
-    uint8_t DataPacket2[] = "OK"; // = OK to send data
+    uint8_t DataPacket1[] = "S"; // = Shut Up, send nothing
+    uint8_t DataPacket2[] = "O"; // = OK to send data
 
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
     delayMicroseconds(50);
@@ -18,20 +18,20 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
     if (IamMaster && !BuddyON)
     {
         if (Radio1.write(&DataPacket1, sizeof(DataPacket1))) {
-            Look("Sent SH to Buddy");
+            Look("Sent S to Buddy");
         }
         else {
-            Look("Failed to send SH to Buddy");
+            Look("Failed to send S to Buddy");
         }
     }
 
     if (IamMaster && BuddyON)
     {
         if (Radio1.write(&DataPacket2, sizeof(DataPacket2))) {
-            Look("Sent OK to Buddy");
+            Look("Sent O to Buddy");
         }
         else {
-            Look("Failed to send OK to Buddy");
+            Look("Failed to send O to Buddy");
         }
     }
 
@@ -68,28 +68,27 @@ void StopBuddyListen()
 void GetSpecialPacket(bool IamMaster)
 {
 
-    uint8_t DataPacket[2];
-    uint8_t DataPacket1[] = "SH"; // = Shut Up, send nothing
-    uint8_t DataPacket2[] = "OK"; // = OK to send data
+    uint8_t DataPacket[2]  = " ";
+    uint8_t DataPacket1[2] = "S"; // = Shut Up, send nothing
+    uint8_t DataPacket2[2] = "O"; // = OK to send data
+    uint8_t Ack[]          = "A"; // simple ack
 
     if (Radio1.available()) {
 
-        Radio1.writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
+        Radio1.writeAckPayload(1, &Ack, sizeof Ack); // Send telemetry
         Radio1.read(&DataPacket, sizeof(DataPacket));
-        if (DataPacket[0] == DataPacket1[0] && DataPacket[1] == DataPacket1[1]) {
-            Look("Got SH from Master");
+        if (DataPacket[0] == DataPacket1[0]) {
+            Look("Got S from Master");
             BuddyON = false;
         }
-        else if (DataPacket[0] == DataPacket2[0] && DataPacket[1] == DataPacket2[1]) {
-            Look("Got OK from Master");
+        else if (DataPacket[0] == DataPacket2[0]) {
+            Look("Got O from Master");
             BuddyON = true;
         }
         else {
             Look("Got unknown from Master");
         }
     }
-
-
 }
 
 //*************************************************************************************************************************
