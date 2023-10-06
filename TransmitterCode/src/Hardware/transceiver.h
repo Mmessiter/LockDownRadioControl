@@ -204,13 +204,13 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     Radio1.setPALevel(RF24_PA_MAX, true);
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();
-    Radio1.openWritingPipe(Pipe); 
-    Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait); 
+    Radio1.openWritingPipe(Pipe);
+    Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait);
     Radio1.stopListening();
     delayMicroseconds(500);
     Radio1.enableDynamicPayloads();
     Radio1.setAddressWidth(5);
-    Radio1.setCRCLength(RF24_CRC_16); 
+    Radio1.setCRCLength(RF24_CRC_16);
     GapSum = 0;
 }
 
@@ -220,6 +220,7 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 
 FASTRUN void SendData()
 {
+    static uint32_t InterBuddyTimer = 0;
     if (SendNoData) return;
     if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { // LastPacketSentTime is set to zero when a packet failed to send
         LastPacketSentTime = millis();
@@ -241,13 +242,18 @@ FASTRUN void SendData()
         }
     }
     else {
-        if (((millis() - LastPacketSentTime)) > 6) {            // if there is time, communicate with other buddy tx
-            if (BuddyPupilOnWireless && SlaveHasControl) SendSpecialPacket(0);
-            if (BuddyMasterOnWireless && !SlaveHasControl) SendSpecialPacket(1);
+
+        if (((millis() - LastPacketSentTime)) > 6) { // if there is time, communicate with other buddy tx
+            {
+                if ((millis() - InterBuddyTimer) >= 250) { // 4 times a second
+                    InterBuddyTimer = millis();
+                    if (BuddyPupilOnWireless && SlaveHasControl) SendSpecialPacket(0);
+                    if (BuddyMasterOnWireless && !SlaveHasControl) SendSpecialPacket(1);
+                }
+            }
         }
     }
 }
-
 /***********************************************************************************************************/
 void DoScanEnd()
 {

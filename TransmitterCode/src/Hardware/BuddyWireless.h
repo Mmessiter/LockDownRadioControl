@@ -7,8 +7,8 @@
 
 void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
 {
-    uint8_t Master_in_Control[] = "S"; // = Shut Up, send nothing
-    uint8_t Pupil_in_Control[] = "O"; // = OK to send data
+    uint8_t Master_in_Control[2] = "S"; // = Shut Up, send nothing
+    uint8_t Pupil_in_Control[2]  = "O"; // = OK to send data
 
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
     delayMicroseconds(50);
@@ -68,13 +68,12 @@ void StopBuddyListen()
 void GetSpecialPacket(bool IamMaster)
 {
 
-    uint8_t DataPacket[2]  = " ";
+    uint8_t DataPacket[2]        = " ";
     uint8_t Master_in_Control[2] = "S"; // = Shut Up, send nothing
-    uint8_t Pupil_in_Control[2] = "O"; // = OK to send data
-    uint8_t Ack[]          = "A"; // simple ack
+    uint8_t Pupil_in_Control[2]  = "O"; // = OK to send data
+    uint8_t Ack[]                = "A"; // simple ack
 
     if (Radio1.available()) {
-
         Radio1.writeAckPayload(1, &Ack, sizeof Ack); // Acknowledge the packet
         Radio1.read(&DataPacket, sizeof(DataPacket));
         if (DataPacket[0] == Master_in_Control[0]) {
@@ -85,10 +84,10 @@ void GetSpecialPacket(bool IamMaster)
             Look("Got O from Master");
             BuddyON = true;
         }
-        else {
-            Look("Got unknown from Master");
-        }
+        FlushFifos();
     }
+   
+
 }
 
 //*************************************************************************************************************************
