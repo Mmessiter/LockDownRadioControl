@@ -5,7 +5,7 @@
     #define BUDDYWIRELESS_H
     #define SPECIAL_PACKET_COUNT   2   // How many special packets to send
     #define SPECIAL_PACKET_CHANNEL 124 // Which channel for the special packets
-    #define SHORT_DELAY            250
+    #define SHORT_DELAY            150
 
 //*************************************************************************************************************************
 
@@ -21,7 +21,7 @@ void GetPupilAck()
         FailureCounter = 0;
         ++SuccessCounter;
     }
-    else {
+    else { // bad ack
         ++FailureCounter;
         SuccessCounter = 0;
     }
