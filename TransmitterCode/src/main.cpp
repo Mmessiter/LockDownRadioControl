@@ -7641,11 +7641,15 @@ void FASTRUN ManageTransmitter()
     uint32_t TXPacketElapsed = RightNow - LastPacketSentTime;
 
     KickTheDog();                 // Watchdog ... ALWAYS!
-    CheckPowerOffButton();        // Pretty obvious really ...
-    CheckForNextionButtonPress(); // Pretty obvious really ...
+
     if ((PACEMAKER - TXPacketElapsed <= TIMEFORTXMANAGMENT) && ModelMatched) {
         return; // If it's almost time to send data, then do not start some other task which might easily take longer.
     }
+
+    CheckPowerOffButton();        // Pretty obvious really ...
+    CheckForNextionButtonPress(); // Pretty obvious really ...
+    
+
     if (RightNow - TransmitterLastManaged > 50) { // 20 times a second is plenty
         if (RightNow - LastTimeRead >= 1000) {    // once a second for these...
             ReadTime();                           // Do the clock
@@ -7708,7 +7712,7 @@ FASTRUN void loop()
             ShowServoPos();
         }
         else {                 // Skip these next lines when buddying as a slave
-            GetBuddyData();    // Only if master
+            GetBuddyData();    // Only if master 
             FixMotorChannel(); // Maybe force it low BEFORE Binding data is added
             ShowServoPos();    // Show servo positions to user
             SendBindingPipe(); // Only if not bound yet - overwrite low throttle setting

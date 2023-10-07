@@ -244,10 +244,10 @@ FASTRUN void SendData()
     else {
         if (((millis() - LastPacketSentTime)) > 6) { // if there is time, communicate with other buddy tx
             {
-                if ((millis() - InterBuddyTimer) >= 250) { // 4 times a second
-                    InterBuddyTimer = millis();
+                if ((millis() - InterBuddyTimer) >= 250) {      // ? times a second
                     if (BuddyPupilOnWireless && SlaveHasControl) SendSpecialPacket(0);
-                    if (BuddyMasterOnWireless && !SlaveHasControl) SendSpecialPacket(1);
+                    if (ModelMatched && BoundFlag && BuddyMasterOnWireless && !SlaveHasControl) SendSpecialPacket(1);
+                    InterBuddyTimer = millis();
                 }
             }
         }

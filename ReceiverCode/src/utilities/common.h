@@ -54,7 +54,7 @@
 // *****************************************************************************************
 #define PIPENUMBER       1
 #define BOUNDPIPENUMBER  1
-#define BUDDYPIPENUMBER  2
+
 
 #define FREQUENCYSCOUNT  82      // uses 82 different channels
 #define FREQUENCYSCOUNT1 41      // uses 41 different test channels

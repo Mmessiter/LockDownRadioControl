@@ -3,22 +3,60 @@
 #include "Hardware/1Definitions.h"
 #ifndef BUDDYWIRELESS_H
     #define BUDDYWIRELESS_H
+    #define SPECIAL_PACKET_COUNT   2   // How many special packets to send
+    #define SPECIAL_PACKET_CHANNEL 124 // Which channel for the special packets
+    #define SHORT_DELAY            250
+
+//*************************************************************************************************************************
+
+void GetPupilAck()
+{
+    static uint8_t FailureCounter = 0;
+    static uint8_t SuccessCounter = 0;
+    uint8_t        AckSpecial[2]; // simple ack
+
+    Radio1.read(&AckSpecial, 2);
+    if (AckSpecial[0] == 'P') // ='P' pupil's only possible ack
+    {
+        FailureCounter = 0;
+        ++SuccessCounter;
+    }
+    else {
+        ++FailureCounter;
+        SuccessCounter = 0;
+    }
+    FlushFifos();
+    if (FailureCounter > SPECIAL_PACKET_COUNT) {
+        Look1(millis());
+        Look(" Pupil is sending wierd acknowledgements");
+        FailureCounter = 0;
+        Look(AckSpecial[0]);
+    }
+    if (SuccessCounter == SPECIAL_PACKET_COUNT) {
+        Look1(millis());
+        Look("  Pupil is alive and well");
+        FailureCounter = 0;
+        SuccessCounter = 0;
+    }
+}
 //*************************************************************************************************************************
 
 void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
 {
-    uint8_t Master_in_Control[2] = "S"; // = Shut Up, send nothing
-    uint8_t Pupil_in_Control[2]  = "O"; // = OK to send data
+    uint8_t        Master_in_Control[2] = "S"; // = Shut Up, send nothing
+    uint8_t        Pupil_in_Control[2]  = "O"; // = OK to send data
+   // static uint8_t FailureCounter       = 0;
 
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
-    delayMicroseconds(50);
+    delayMicroseconds(SHORT_DELAY);
     Radio1.stopListening();
-    delayMicroseconds(50);
+    delayMicroseconds(SHORT_DELAY);
 
     if (IamMaster && !BuddyON)
     {
         if (Radio1.write(&Master_in_Control, sizeof(Master_in_Control))) {
-            Look("Sent S to Buddy");
+            GetPupilAck();
+            FailureCounter = 0;
         }
         else {
             Look("Failed to send S to Buddy");
@@ -28,7 +66,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
     if (IamMaster && BuddyON)
     {
         if (Radio1.write(&Pupil_in_Control, sizeof(Pupil_in_Control))) {
-            Look("Sent O to Buddy");
+            GetPupilAck();
         }
         else {
             Look("Failed to send O to Buddy");
@@ -36,9 +74,9 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
     }
 
     Radio1.setChannel(CurrentChannel); // restore the proper frequency
-    delayMicroseconds(50);
+    delayMicroseconds(SHORT_DELAY);
     Radio1.stopListening();
-    delayMicroseconds(50);
+    delayMicroseconds(SHORT_DELAY);
 }
 
 //*************************************************************************************************************************
@@ -47,17 +85,27 @@ void StartBuddyListen()
 {
     uint64_t pip = TeensyMACAddPipe;
     if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;
-    Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
-    delayMicroseconds(50);
+
+    Radio1.setPALevel(RF24_PA_MAX);
+    Radio1.setDataRate(RF24_250KBPS);
+    Radio1.enableAckPayload();                // needed
+    Radio1.setRetries(RETRYWAIT, RETRYCOUNT); // automatic retries
+    Radio1.enableDynamicPayloads();           // needed
+    Radio1.setAddressWidth(5);                // use 5 bytes for addresses
+    Radio1.setCRCLength(RF24_CRC_16);         // could be 8 or disabled
+    Radio1.setAutoAck(true);                  // we want acks
+    Radio1.maskIRQ(1, 1, 1);                  // no interrupts - seems NEEDED at the moment
     Radio1.openReadingPipe(1, pip);
+    Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
+    delayMicroseconds(SHORT_DELAY);
     Radio1.startListening();
-    delayMicroseconds(50);
     CurrentMode = LISTENMODE;
 }
 //*************************************************************************************************************************
 void StopBuddyListen()
 {
     Radio1.stopListening();
+    delayMicroseconds(SHORT_DELAY);
     CurrentMode = NORMAL;
 }
 
@@ -65,17 +113,14 @@ void StopBuddyListen()
 
 void GetSpecialPacket(bool IamMaster)
 {
-
     uint8_t DataPacket[2]        = " ";
     uint8_t Master_in_Control[2] = "S"; // = Shut Up, send nothing
     uint8_t Pupil_in_Control[2]  = "O"; // = OK to send data
-    uint8_t Ack[]                = "0"; // simple ack
-
-    if (!IamMaster) Ack[0] = 'A';
+    uint8_t Ack[]                = "P"; // Pupil ack
 
     if (IamMaster) {
         if (BuddyON) {
-            Ack[0] = 'O';// ok to send - you're in charge
+            Ack[0] = 'O'; // ok to send - you're in charge
         }
         else
         {
@@ -84,8 +129,9 @@ void GetSpecialPacket(bool IamMaster)
     }
 
     if (Radio1.available()) {
-
-        Radio1.writeAckPayload(1, &Ack, sizeof Ack); // Acknowledge the packet
+        delayMicroseconds(SHORT_DELAY);
+        Radio1.writeAckPayload(1, &Ack, 2); // Acknowledge the packet
+        delayMicroseconds(SHORT_DELAY);
         Radio1.read(&DataPacket, sizeof(DataPacket));
 
         if (!IamMaster) { // pupil here

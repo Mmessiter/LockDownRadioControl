@@ -109,9 +109,7 @@ uint8_t*            PipePointer;
 uint8_t             Pipnum         =  PIPENUMBER;
 uint8_t             DefaultPipe[6] = {0x23, 0x94, 0x3e, 0xbe, 0xb7, 0x00};
 uint8_t             CurrentPipe[6];
-uint8_t             BuddyPipe[6]     = {0x55, 0x55, 0x55, 0x55, 0x55, 0x55};
-uint8_t*            BuddyPipePointer = BuddyPipe;
-uint8_t             BuddyPipenumber   = BUDDYPIPENUMBER;
+
 
 /************************************************************************************************************/
 
@@ -126,7 +124,7 @@ void LoadFailSafeData()
     FS_Offset += CHANNELSUSED;
     for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
         if (EEPROM.read(i + FS_Offset)) {
-            DataToBeUsed[i] = s[i];
+            ReceivedData[i] = s[i];
         }
     }
     FailSafeDataLoaded = true;
@@ -137,12 +135,12 @@ void LoadFailSafeData()
 
 /************************************************************************************************************/
 
-/** Map servo channels' data from DataToBeUsed buffer into SbusChannels buffer */
+/** Map servo channels' data from ReceivedData buffer into SbusChannels buffer */
 void MapToSBUS()
 {
     if (Connected) {
         for (int j = 0; j < CHANNELSUSED; ++j) {
-            SbusChannels[j] = static_cast<uint16_t>(map(DataToBeUsed[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX));
+            SbusChannels[j] = static_cast<uint16_t>(map(ReceivedData[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX));
         }
     }
 }
@@ -163,7 +161,7 @@ bool CheckCrazyValues()
 { // might come when binding
 
     for (int i = 0; i < 15; ++i) {
-        if ((DataToBeUsed[i] < MINMICROS) || (DataToBeUsed[i] > MAXMICROS)) return false;
+        if ((ReceivedData[i] < MINMICROS) || (ReceivedData[i] > MAXMICROS)) return false;
     }
     return true;
 }
@@ -187,13 +185,13 @@ void MoveServos()
     else
     { // not SBUS = PPM
         for (int j = 0; j < PPMChannelCount; ++j) {
-            PPMOutput.write(PPMChannelOrder[j], map(DataToBeUsed[j], MINMICROS, MAXMICROS, 1000, 2000));
+            PPMOutput.write(PPMChannelOrder[j], map(ReceivedData[j], MINMICROS, MAXMICROS, 1000, 2000));
         }
     }
     for (int j = 0; j < SERVOSUSED; ++j) {
-        if (PreviousData[j] != DataToBeUsed[j]) { // if same as last time, don't send again.
-            MCMServo[j].writeMicroseconds(DataToBeUsed[j]);
-            PreviousData[j] = DataToBeUsed[j];
+        if (PreviousData[j] != ReceivedData[j]) { // if same as last time, don't send again.
+            MCMServo[j].writeMicroseconds(ReceivedData[j]);
+            PreviousData[j] = ReceivedData[j];
         }
     }
 }
@@ -219,22 +217,11 @@ void FailSafe()
     MacAddressSentCounter = 0;
     // Serial.println("Failsafe!");
 }
-
-/************************************************************************************************************/
-void CopyDataToBeUsed()
-{
-    for (int i = 0; i < CHANNELSUSED; ++i) {
-        DataToBeUsed[i] = ReceivedData[i];
-    }
-}
 /************************************************************************************************************/
 void UseReceivedData()
 {
     Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS); // Decompress only the most recent data
     ReadExtraParameters();                                       // Look at parameters sent with packet
-  
-    CopyDataToBeUsed();
-  
     MapToSBUS();                                                 // Get SBUS data ready
     LastPacketArrivalTime = millis();                            // Note the arrival time
     if (HopNow) {                                                // This flag gets set in LoadAckPayload();
@@ -245,22 +232,8 @@ void UseReceivedData()
 }
 
 /************************************************************************************************************/
-bool ReceiveBuddyData()
-{
-
-    if (CurrentRadio->available(&BuddyPipenumber)){
-       //  Serial.println("Buddy data available");
-    } else {
-       //  Serial.println("No buddy data available");
-    }
-    delay(5); // This is the place where we 'get pretend buddy data' (in under 5 ms) if we have time.
-    return true;
-}
-
-/************************************************************************************************************/
 bool ReadData()
 {
-    static uint32_t blankcalls = 0;
     Connected                  = false;
     if (CurrentRadio->available(&Pipnum))
     { // This is the only call that actually reads the radio
@@ -275,17 +248,6 @@ bool ReadData()
     }
     if (Connected) { // Only 1 'connected' call in about 460! So ...
         UseReceivedData();
-        //  Serial.print("Blank calls: ");
-        //  Serial.println(blankcalls);
-        blankcalls = 0;
-    }
-    else {
-        ++blankcalls;                               //  here we can get Buddy data ...
-        if (millis() - LastPacketArrivalTime < 1) { //  ... if we have loads of time....
-            if (BoundFlag && ModelMatched) {
-             // ReceiveBuddyData();               // later ....
-            }
-        }
     }
     return Connected;
 }
@@ -685,7 +647,7 @@ void SaveFailSafeData()
     // FailSafe data occupies EEPROM from offset FS_EEPROM_OFFSET
     uint8_t FS_Offset = FS_EEPROM_OFFSET;
     for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
-        EEPROM.update(i + FS_Offset, (map(DataToBeUsed[i], MINMICROS, MAXMICROS, 0, 180))); // save servo positions lower res: 8 bits
+        EEPROM.update(i + FS_Offset, (map(ReceivedData[i], MINMICROS, MAXMICROS, 0, 180))); // save servo positions lower res: 8 bits
         delay(1);
     }
     FS_Offset += CHANNELSUSED;

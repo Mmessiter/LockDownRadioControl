@@ -17,7 +17,6 @@ uint8_t  NextChannel;
 uint8_t  ReconnectIndex = RECONNECT_CHANNELS_OFFSET;
 uint8_t  PacketNumber;
 uint16_t ReceivedData[UNCOMPRESSEDWORDS]; //  20 x 16 BIT words
-uint16_t DataToBeUsed[UNCOMPRESSEDWORDS]; //  20 x 16 BIT words
 uint16_t PreviousData[UNCOMPRESSEDWORDS]; /** Previously received data (used for servos. Hence not sent if unchanged) */
 uint16_t Interations = 0;
 uint32_t HopStart;
@@ -79,9 +78,6 @@ extern uint8_t*     PipePointer;
 extern uint8_t      CurrentPipe[6];
 extern uint8_t      Pipnum;
 
-extern uint8_t  BuddyPipe[6];
-extern uint8_t* BuddyPipePointer;
-extern uint8_t  BuddyPipnum;
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -196,12 +192,12 @@ void GetNewPipe() // from TX
     if (!NewData) return;
     NewData = false;
     if (PipeSeen) return;
-    NewPipeMaybe = (uint64_t)DataToBeUsed[0] << 40;
-    NewPipeMaybe += (uint64_t)DataToBeUsed[1] << 32;
-    NewPipeMaybe += (uint64_t)DataToBeUsed[2] << 24;
-    NewPipeMaybe += (uint64_t)DataToBeUsed[3] << 16;
-    NewPipeMaybe += (uint64_t)DataToBeUsed[4] << 8;
-    NewPipeMaybe += (uint64_t)DataToBeUsed[5];
+    NewPipeMaybe = (uint64_t)ReceivedData[0] << 40;
+    NewPipeMaybe += (uint64_t)ReceivedData[1] << 32;
+    NewPipeMaybe += (uint64_t)ReceivedData[2] << 24;
+    NewPipeMaybe += (uint64_t)ReceivedData[3] << 16;
+    NewPipeMaybe += (uint64_t)ReceivedData[4] << 8;
+    NewPipeMaybe += (uint64_t)ReceivedData[5];
 
     if (ValidateNewPipe()) // was this pipe corrupted?
     {
@@ -209,9 +205,9 @@ void GetNewPipe() // from TX
         Serial.println("Received TX ID!");
 #endif
         for (int i = 0; i < 5; ++i) {                            // heeer
-            TheReceivedPipe[4 - i] = DataToBeUsed[i + 1] & 0xff; // reversed byte array for our use
+            TheReceivedPipe[4 - i] = ReceivedData[i + 1] & 0xff; // reversed byte array for our use
 #ifdef DB_BIND
-            Serial.print((uint8_t)DataToBeUsed[i + 1], HEX);
+            Serial.print((uint8_t)ReceivedData[i + 1], HEX);
             Serial.print(" ");
 #endif
         }
@@ -308,7 +304,6 @@ void ConfigureRadio()
     CurrentRadio->setAutoAck(true);          // we want acks
     CurrentRadio->maskIRQ(1, 1, 1);          // no interrupts - seems NEEDED at the moment
     CurrentRadio->openReadingPipe(PIPENUMBER, PipePointer);
-   // CurrentRadio->openReadingPipe(BUDDYPIPENUMBER, BuddyPipePointer); // for wireless buddy box << *******
     CurrentRadio->startListening();
 }
 
