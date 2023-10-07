@@ -56,7 +56,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
     {
         if (Radio1.write(&Master_in_Control, sizeof(Master_in_Control))) {
             GetPupilAck();
-            FailureCounter = 0;
+          //  FailureCounter = 0;
         }
         else {
             Look("Failed to send S to Buddy");
