@@ -220,7 +220,7 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 
 FASTRUN void SendData()
 {
-    static uint32_t InterBuddyTimer = 0;
+
     if (SendNoData) return;
     if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { // LastPacketSentTime is set to zero when a packet failed to send
         LastPacketSentTime = millis();
@@ -242,15 +242,7 @@ FASTRUN void SendData()
         }
     }
     else {
-        if (((millis() - LastPacketSentTime)) > 6) { // if there is time, communicate with other buddy tx
-            {
-                if ((millis() - InterBuddyTimer) >= 250) {      // ? times a second
-                    if (BuddyPupilOnWireless && SlaveHasControl) SendSpecialPacket(0);
-                    if (ModelMatched && BoundFlag && BuddyMasterOnWireless && !SlaveHasControl) SendSpecialPacket(1);
-                    InterBuddyTimer = millis();
-                }
-            }
-        }
+        DoWirelessBuddy(); // use free time to deal with wireless buddy
     }
 }
 /***********************************************************************************************************/

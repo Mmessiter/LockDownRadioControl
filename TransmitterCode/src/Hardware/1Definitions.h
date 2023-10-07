@@ -558,6 +558,7 @@ void             SendSpecialPacket(bool IamMaster);
 void             GetSpecialPacket(bool IamMaster);
 void             StartBuddyListen();
 void             StopBuddyListen();
+void             DoWirelessBuddy();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************
