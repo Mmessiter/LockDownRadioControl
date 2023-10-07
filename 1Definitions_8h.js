@@ -205,8 +205,6 @@ var 1Definitions_8h =
     [ "SkyBlue", "1Definitions_8h.html#a8a431faef1cf5f8d166b51cd97ee08bf", null ],
     [ "SLOWSERVOVIEW", "1Definitions_8h.html#abf4356adfbfbf7bfb86bc7c86b1fbeec", null ],
     [ "SMOOTHEDCURVES", "1Definitions_8h.html#a4bb4c483e9d754ae63391df1d8341deb", null ],
-    [ "SPECIAL_PACKET_CHANNEL", "1Definitions_8h.html#ad880cebd97490afa89660ab3c0298fed", null ],
-    [ "SPECIAL_PACKET_COUNT", "1Definitions_8h.html#a0751c3dd6d545cca50f193648846276f", null ],
     [ "SPEED", "1Definitions_8h.html#aac3553b3932cbfeeac4526ce7ca0336b", null ],
     [ "STARTX", "1Definitions_8h.html#a6ffc62811b3e92f8acbedcec612c8030", null ],
     [ "STARTY", "1Definitions_8h.html#afa7f69258876ee4ca4c4f9ee3cafffd4", null ],

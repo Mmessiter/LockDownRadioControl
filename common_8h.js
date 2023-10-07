@@ -3,7 +3,6 @@ var common_8h =
     [ "BIND_EEPROM_OFFSET", "common_8h.html#a9711a7159ecb22d58fd6331700663ee7", null ],
     [ "BINDPLUG_PIN", "common_8h.html#a9986f66313bda8d791f5f4ec246d5709", null ],
     [ "BOUNDPIPENUMBER", "common_8h.html#a5f3f2939c5f5efcee13dc77b62dbaeb4", null ],
-    [ "BUDDYPIPENUMBER", "common_8h.html#a5af92e497a50cb8fbb30a392eeb034bf", null ],
     [ "CE_OFF", "common_8h.html#a45f36ff4dbd4f62c8d80b9cd22a05e75", null ],
     [ "CE_ON", "common_8h.html#af59ccf587172ff1ab593f7a51276a720", null ],
     [ "CHANNELSUSED", "common_8h.html#ad143c01c2b36424b292b568f48cbe014", null ],
