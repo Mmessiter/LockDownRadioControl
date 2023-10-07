@@ -1,5 +1,7 @@
 var NAVTREEINDEX5 =
 {
+"Nextion_8h.html#acd96c3022716bba17005df2e6b3d0ed6":[5,0,3,0,0,6,1],
+"Nextion_8h.html#ad7b8aa834c87265667a5687b1787a1cc":[5,0,3,0,0,6,0],
 "Nextion_8h.html#aecac2f0c289f02ef3c92b85be82eacac":[5,0,3,0,0,6,8],
 "Nextion_8h.html#afe513398f72d5e48f691830a1ef6eb42":[5,0,3,0,0,6,11],
 "Nextion_8h.html#aff6fa8906188d3249b01bf59de47df2f":[5,0,3,0,0,6,6],
@@ -247,7 +249,5 @@ var NAVTREEINDEX5 =
 "Quadcopter_2src_2main_8cpp.html#afddca3451c589f7b5928b6dccf8c88ba":[5,0,0,0,1,191],
 "Quadcopter_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f":[5,0,0,0,1,45],
 "Quadcopter_2src_2main_8cpp.html#afee8e6c2ad598adb1b7b09afe94eeafb":[5,0,0,0,1,223],
-"Quadcopter_2src_2main_8cpp.html#affb42fce9d818f13658479d3f18f05b9":[5,0,0,0,1,87],
-"Quadcopter_2src_2main_8cpp_source.html":[5,0,0,0,1],
-"RXCODE.html":[1]
+"Quadcopter_2src_2main_8cpp.html#affb42fce9d818f13658479d3f18f05b9":[5,0,0,0,1,87]
 };

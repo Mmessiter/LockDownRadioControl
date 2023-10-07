@@ -290,6 +290,7 @@ var 1Definitions_8h =
     [ "DisplayCurve", "1Definitions_8h.html#af941d3a33327b2cee79e058ba9cd65f6", null ],
     [ "DoScanEnd", "1Definitions_8h.html#a31fb6a46af68482e107cddee58dfb677", null ],
     [ "DoScanInit", "1Definitions_8h.html#a77c4a4ffa609df08830ccece07bf283b", null ],
+    [ "DoWirelessBuddy", "1Definitions_8h.html#a7d9257c21af6e77d71dba241aa349692", null ],
     [ "DrawBox", "1Definitions_8h.html#a705c97485d6142131c03577ec14134e7", null ],
     [ "DrawFhssBox", "1Definitions_8h.html#a6bdc6419b47dda71d0d2c8faf652adc2", null ],
     [ "DrawLine", "1Definitions_8h.html#acbef1d41e1bd646b60a6e8afd9c66880", null ],

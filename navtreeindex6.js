@@ -1,5 +1,7 @@
 var NAVTREEINDEX6 =
 {
+"Quadcopter_2src_2main_8cpp_source.html":[5,0,0,0,1],
+"RXCODE.html":[1],
 "RXCODE.html#rx":[1,0],
 "RXCODE.html#rxpinout":[1,1],
 "ReceiverCode_2src_2main_8cpp.html":[5,0,1,0,1],
@@ -247,7 +249,5 @@ var NAVTREEINDEX6 =
 "TransmitterCode_2src_2main_8cpp.html#a58fe79634784085398cb1f382f6bf57d":[5,0,3,0,1,156],
 "TransmitterCode_2src_2main_8cpp.html#a5aa4888b924a4f1d95e9cedc3004f2b6":[5,0,3,0,1,136],
 "TransmitterCode_2src_2main_8cpp.html#a5c0f1fd26cdd6ecde365f521060158ba":[5,0,3,0,1,29],
-"TransmitterCode_2src_2main_8cpp.html#a5c7f22bae35d5d6df9d54fe79dbb8401":[5,0,3,0,1,171],
-"TransmitterCode_2src_2main_8cpp.html#a5d3a46c21927cf7a3031a1e68e0b7b48":[5,0,3,0,1,205],
-"TransmitterCode_2src_2main_8cpp.html#a5d42b1fba153cc76dc96778cfb6f1a40":[5,0,3,0,1,42]
+"TransmitterCode_2src_2main_8cpp.html#a5c7f22bae35d5d6df9d54fe79dbb8401":[5,0,3,0,1,171]
 };
