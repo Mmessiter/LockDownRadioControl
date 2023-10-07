@@ -107,7 +107,7 @@ $(document).ready(function(){initNavTree('BuddyWireless_8h_source.html',''); ini
 <div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">    #define BUDDYWIRELESS_H</span></div>
 <div class="line"><a id="l00006" name="l00006"></a><span class="lineno"><a class="line" href="BuddyWireless_8h.html#a0751c3dd6d545cca50f193648846276f">    6</a></span><span class="preprocessor">    #define SPECIAL_PACKET_COUNT   2   </span><span class="comment">// How many special packets to send</span></div>
 <div class="line"><a id="l00007" name="l00007"></a><span class="lineno"><a class="line" href="BuddyWireless_8h.html#ad880cebd97490afa89660ab3c0298fed">    7</a></span><span class="preprocessor">    #define SPECIAL_PACKET_CHANNEL 124 </span><span class="comment">// Which channel for the special packets</span></div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno"><a class="line" href="BuddyWireless_8h.html#ac4eb562b9427778a7da4e852e6c02d41">    8</a></span><span class="preprocessor">    #define SHORT_DELAY            250</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno"><a class="line" href="BuddyWireless_8h.html#ac4eb562b9427778a7da4e852e6c02d41">    8</a></span><span class="preprocessor">    #define SHORT_DELAY            150</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span> </div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="comment">//*************************************************************************************************************************</span></div>
 <div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span> </div>
@@ -123,7 +123,7 @@ $(document).ready(function(){initNavTree('BuddyWireless_8h_source.html',''); ini
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>        FailureCounter = 0;</div>
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>        ++SuccessCounter;</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    }</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    <span class="keywordflow">else</span> { <span class="comment">// bad ack</span></div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>        ++FailureCounter;</div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        SuccessCounter = 0;</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    }</div>
@@ -158,7 +158,7 @@ $(document).ready(function(){initNavTree('BuddyWireless_8h_source.html',''); ini
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    {</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        <span class="keywordflow">if</span> (<a class="code hl_function" href="radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a">Radio1</a>.write(&amp;Master_in_Control, <span class="keyword">sizeof</span>(Master_in_Control))) {</div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>            <a class="code hl_function" href="BuddyWireless_8h.html#af59c2527be7a67d6b09dd467f3123d55">GetPupilAck</a>();</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>            FailureCounter = 0;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>          <span class="comment">//  FailureCounter = 0;</span></div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        }</div>
 <div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        <span class="keywordflow">else</span> {</div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>            <a class="code hl_function" href="1Definitions_8h.html#a6d87eba17154f7f4f2f3802ef8ee261f">Look</a>(<span class="stringliteral">&quot;Failed to send S to Buddy&quot;</span>);</div>
