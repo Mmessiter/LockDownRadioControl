@@ -43,9 +43,9 @@ void GetPupilAck()
 
 void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
 {
-    uint8_t        Master_in_Control[2] = "S"; // = Shut Up, send nothing
-    uint8_t        Pupil_in_Control[2]  = "O"; // = OK to send data
-   // static uint8_t FailureCounter       = 0;
+    uint8_t Master_in_Control[2] = "S"; // = Shut Up, send nothing
+    uint8_t Pupil_in_Control[2]  = "O"; // = OK to send data
+                                        // static uint8_t FailureCounter       = 0;
 
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
     delayMicroseconds(SHORT_DELAY);
@@ -56,7 +56,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
     {
         if (Radio1.write(&Master_in_Control, sizeof(Master_in_Control))) {
             GetPupilAck();
-          //  FailureCounter = 0;
+            //  FailureCounter = 0;
         }
         else {
             Look("Failed to send S to Buddy");
@@ -118,7 +118,7 @@ void GetSpecialPacket(bool IamMaster)
     uint8_t Pupil_in_Control[2]  = "O"; // = OK to send data
     uint8_t Ack[]                = "P"; // Pupil ack
 
-    if (IamMaster) {
+    if (IamMaster) { // if I am not master, I am pupil and Ack is already set to 'P'
         if (BuddyON) {
             Ack[0] = 'O'; // ok to send - you're in charge
         }
@@ -146,16 +146,15 @@ void GetSpecialPacket(bool IamMaster)
         }
         else { // master here
         }
-
         FlushFifos();
     }
 }
 
 //*************************************************************************************************************************
 
-void DoWirelessBuddy(){
+void DoWirelessBuddy()
+{
     static uint32_t InterBuddyTimer = 0;
-
     if (((millis() - LastPacketSentTime)) > 6) { // if there is time, communicate with other buddy tx
         {
             if ((millis() - InterBuddyTimer) >= 250) { // ? times a second
