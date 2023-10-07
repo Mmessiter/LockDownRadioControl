@@ -84,7 +84,8 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
 void StartBuddyListen()
 {
     uint64_t pip = TeensyMACAddPipe;
-    if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;
+     if (BuddyPupilOnWireless) pip = BuddyMACAddPipe ;
+    //if (BuddyPupilOnWireless) pip = BuddyMACAddPipe ^ 0xFFFFFFFFFFLL;
 
     Radio1.setPALevel(RF24_PA_MAX);
     Radio1.setDataRate(RF24_250KBPS);
@@ -157,7 +158,7 @@ void DoWirelessBuddy()
     static uint32_t InterBuddyTimer = 0;
     if (((millis() - LastPacketSentTime)) > 6) { // if there is time, communicate with other buddy tx
         {
-            if ((millis() - InterBuddyTimer) >= 250) { // ? times a second
+            if ((millis() - InterBuddyTimer) >= 250) { // 4 times a second
                 if (BuddyPupilOnWireless && SlaveHasControl) SendSpecialPacket(0);
                 if (ModelMatched && BoundFlag && BuddyMasterOnWireless && !SlaveHasControl) SendSpecialPacket(1);
                 InterBuddyTimer = millis();
