@@ -14,24 +14,24 @@ bool GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
 {
     static bool    Master_is_Alive = false;
     static uint8_t ErrorCounter    = 0;
-    uint8_t        AckSpecial[2]   = " "; // simple ack
-    uint8_t        OK[2]           = "O";
-    uint8_t        Ssh[2]          = "S";
+    
+    char           AckSpecial[2]   = " "; // simple ack
     bool           GoodAck         = false;
 
     Radio1.read(&AckSpecial, 2);
-    Look1(" Pupil saw -> ");
-    Look(AckSpecial[0]);
 
-    if (AckSpecial[0] == OK[0]) { // OK to continue sending. no action needed
+    if (AckSpecial[0] =='O') { // OK to continue sending. no action needed
         GoodAck         = true;
         Master_is_Alive = true;
+        Look("STILL IN CONTROL");
     }
-
-    if (AckSpecial[0] == Ssh[0]) { // PUPIL -> LISTEN  HEER <<<<<< *******
+    
+    if (AckSpecial[0] == 'S') { // PUPIL -> LISTEN  HEER <<<<<< *******
         GoodAck         = true;
         Master_is_Alive = true;
+        Look("PASSING BACK CONTROL");
         StartBuddyListen(); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        FlushFifos();
         return Master_is_Alive;
     }
 
@@ -126,7 +126,6 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
                 if (GetPupilAck()) {
                     Look("Got Pupil O Ack - GIVING CONTROL TO PUPIL");
                     StartBuddyListen(); // MASTER -> LISTEN  HEER <<<<<< *******
-
                     return;
                 }
             }
