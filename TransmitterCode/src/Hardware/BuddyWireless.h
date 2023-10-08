@@ -103,7 +103,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
     delayMicroseconds(SHORT_DELAY);
 
     if (IamMaster) {
-        if (!BuddyON) // MASTER stays IN CONTROL
+        if (!BuddyON) // MASTER stays IN CONTROL OR RETAKES CONTROL!!! <--- todo
         {
             if (Radio1.write(&Master_in_Control, sizeof(Master_in_Control))) {
                 if (!GetPupilAck()) {
