@@ -959,7 +959,8 @@ void DelayWithDog(uint32_t HowLong)
     uint32_t ThisMoment = millis();
     while ((millis() - ThisMoment) < HowLong) {
         KickTheDog();
-      //  if (BoundFlag && Connected && ModelMatched && CurrentView != FRONTVIEW) SendData();
+    
+        //  if (BoundFlag && Connected && ModelMatched && CurrentView != FRONTVIEW) SendData();
     }
 }
 /************************************************************************************************************/

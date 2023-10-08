@@ -5272,6 +5272,7 @@ bool GetBackupFilename(char* goback, char* tt1, char* MMname, char* heading, cha
     Confirmed[0] = '?';
     while (Confirmed[0] == '?') { // await user response
         CheckForNextionButtonPress();
+        CheckPowerOffButton();
         KickTheDog();
     }
     GetText(t1, SingleModelFile);
@@ -5294,6 +5295,7 @@ bool GetConfirmation(char* goback, char* Prompt)
     Confirmed[0] = '?';
     while (Confirmed[0] == '?') { // await user response
         CheckForNextionButtonPress();
+        CheckPowerOffButton();
         KickTheDog();
     }
     SendCommand(goback);
