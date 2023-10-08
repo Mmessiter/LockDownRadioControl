@@ -84,8 +84,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
 void StartBuddyListen()
 {
     uint64_t pip = TeensyMACAddPipe;
-     if (BuddyPupilOnWireless) pip = BuddyMACAddPipe ;
-    //if (BuddyPupilOnWireless) pip = BuddyMACAddPipe ^ 0xFFFFFFFFFFLL;
+    if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;
 
     Radio1.setPALevel(RF24_PA_MAX);
     Radio1.setDataRate(RF24_250KBPS);
@@ -117,8 +116,9 @@ void GetSpecialPacket(bool IamMaster)
     uint8_t DataPacket[2]        = " ";
     uint8_t Master_in_Control[2] = "S"; // = Shut Up, send nothing
     uint8_t Pupil_in_Control[2]  = "O"; // = OK to send data
-    uint8_t Ack[]                = "P"; // Pupil ack
+    uint8_t Ack[2];
 
+    Ack[0] = 'P';    // ='P' pupil's only possible ack
     if (IamMaster) { // if I am not master, I am pupil and Ack is already set to 'P'
         if (BuddyON) {
             Ack[0] = 'O'; // ok to send - you're in charge
@@ -147,6 +147,7 @@ void GetSpecialPacket(bool IamMaster)
         }
         else { // master here
         }
+        DelayWithDog(3); // give time to deliver the ack!!!
         FlushFifos();
     }
 }
