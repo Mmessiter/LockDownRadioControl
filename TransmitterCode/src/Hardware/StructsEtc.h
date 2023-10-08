@@ -4,6 +4,7 @@
 #ifndef STRUCTSETC_H
     #define STRUCTSETC_H
 
+
 /* ************************************* AckPayload structure ******************************************************
 
  * This first byte "Purpose" defines what all the other bytes mean, AND ...

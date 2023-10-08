@@ -3,7 +3,7 @@
 #include <Arduino.h>
 #include "Hardware/1Definitions.h"
 #ifndef TRIMS_H
-    #define TRIMS_H
+     #define TRIMS_H
 
 // **********************************************************************************************************************************
 void StartTrimView()

@@ -5,6 +5,7 @@
 #ifndef BUDDYPPM_H
     #define BUDDYPPM_H
 
+
 //*************************************************************************************************************************
 
 // This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE buddy switch is on

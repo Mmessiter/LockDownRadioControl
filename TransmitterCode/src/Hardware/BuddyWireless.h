@@ -7,6 +7,7 @@
     #define SPECIAL_PACKET_CHANNEL 124 // Which channel for the special packets
     #define SHORT_DELAY            150
 
+
 //*************************************************************************************************************************
 
 bool GetMasterAck(){ // Pupil gets Ack from master while in control 

@@ -4,6 +4,7 @@
 #include "Hardware/StructsEtc.h"
 #ifndef MACROS_H
     #define MACROS_H
+    
 //***********************************************************************************************************
 
 void StartMacro(uint8_t m)

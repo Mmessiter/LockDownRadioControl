@@ -302,7 +302,6 @@ void ReceiveModelFile()
     SendCommand(ProgressStart);
     SendValue(Progress, p);
     SendText(ModelsView_filename, Receiving);
-
     strcpy(SingleModelFile, Fbuffer); //  Get filename
     Fsize = Fbuffer[BUFFERSIZE];
     Fsize += Fbuffer[BUFFERSIZE + 1] << 8;
