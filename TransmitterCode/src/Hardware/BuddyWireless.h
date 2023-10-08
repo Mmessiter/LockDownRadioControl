@@ -3,17 +3,32 @@
 #include "Hardware/1Definitions.h"
 #ifndef BUDDYWIRELESS_H
     #define BUDDYWIRELESS_H
-    #define SPECIAL_PACKET_COUNT   2   // How many special packets to send
+    #define SPECIAL_PACKET_COUNT   3   // How many special packets to send
     #define SPECIAL_PACKET_CHANNEL 124 // Which channel for the special packets
     #define SHORT_DELAY            150
 
 //*************************************************************************************************************************
 
-void GetPupilAck()
+bool GetMasterAck(){ // Pupil gets Ack from master while in control 
+    static bool Master_is_Alive = false;
+
+
+
+
+
+
+    return Master_is_Alive;   
+}
+
+//*************************************************************************************************************************
+
+bool GetPupilAck() // Master gets Ack from pupil while in control
 {
     static uint8_t FailureCounter = 0;
     static uint8_t SuccessCounter = 0;
-    uint8_t        AckSpecial[2]; // simple ack
+    static bool    Pupil_is_Alive = false;
+
+    uint8_t AckSpecial[2]; // simple ack
 
     Radio1.read(&AckSpecial, 2);
     if (AckSpecial[0] == 'P') // ='P' pupil's only possible ack
@@ -29,15 +44,18 @@ void GetPupilAck()
     if (FailureCounter > SPECIAL_PACKET_COUNT) {
         Look1(millis());
         Look(" Pupil is sending wierd acknowledgements");
+        Pupil_is_Alive = false;
         FailureCounter = 0;
         Look(AckSpecial[0]);
     }
     if (SuccessCounter == SPECIAL_PACKET_COUNT) {
         Look1(millis());
         Look("  Pupil is alive and well");
+        Pupil_is_Alive = true;
         FailureCounter = 0;
         SuccessCounter = 0;
     }
+    return Pupil_is_Alive;
 }
 //*************************************************************************************************************************
 
@@ -45,31 +63,47 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
 {
     uint8_t Master_in_Control[2] = "S"; // = Shut Up, send nothing
     uint8_t Pupil_in_Control[2]  = "O"; // = OK to send data
-                                        // static uint8_t FailureCounter       = 0;
+    uint8_t Pupil_is_Alive[]     = "P";
 
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
     delayMicroseconds(SHORT_DELAY);
     Radio1.stopListening();
     delayMicroseconds(SHORT_DELAY);
 
-    if (IamMaster && !BuddyON)
-    {
-        if (Radio1.write(&Master_in_Control, sizeof(Master_in_Control))) {
-            GetPupilAck();
-            //  FailureCounter = 0;
+    if (IamMaster) {
+        if (!BuddyON) // MASTER IN CONTROL
+        {
+            if (Radio1.write(&Master_in_Control, sizeof(Master_in_Control))) {
+                if (!GetPupilAck()) {
+                    Look("Failed to get Pupil S Ack");
+                }
+            }
+            else {
+                Look("Failed even to send an S to Buddy");
+            }
         }
-        else {
-            Look("Failed to send S to Buddy");
+        if (BuddyON) // PUPIL IN CONTROL - TAKE OVER NOW ******************************************************
+        {
+            if (Radio1.write(&Pupil_in_Control, sizeof(Pupil_in_Control))) {
+                if (!GetPupilAck()) {
+                    Look("Failed to get Pupil O Ack");
+                }
+            }
+            else {
+                Look("Failed even to send O to Buddy");
+            }
         }
     }
 
-    if (IamMaster && BuddyON)
-    {
-        if (Radio1.write(&Pupil_in_Control, sizeof(Pupil_in_Control))) {
-            GetPupilAck();
+    if (!IamMaster) { // pupil area when in control **************************************************************
+
+        if (Radio1.write(&Pupil_is_Alive, sizeof(Pupil_is_Alive))) {
+            if (!GetMasterAck()) {
+                Look("Failed to get Master P Ack");
+            }
         }
         else {
-            Look("Failed to send O to Buddy");
+            Look("Failed even to send an P to Master");
         }
     }
 
@@ -84,9 +118,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
 void StartBuddyListen()
 {
     uint64_t pip = TeensyMACAddPipe;
-     if (BuddyPupilOnWireless) pip = BuddyMACAddPipe ;
-    //if (BuddyPupilOnWireless) pip = BuddyMACAddPipe ^ 0xFFFFFFFFFFLL;
-
+    if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;
     Radio1.setPALevel(RF24_PA_MAX);
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();                // needed
@@ -112,7 +144,7 @@ void StopBuddyListen()
 
 //*************************************************************************************************************************
 
-void GetSpecialPacket(bool IamMaster)
+void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
 {
     uint8_t DataPacket[2]        = " ";
     uint8_t Master_in_Control[2] = "S"; // = Shut Up, send nothing
@@ -128,7 +160,6 @@ void GetSpecialPacket(bool IamMaster)
             Ack[0] = 'S'; // shut up as buddy is not on
         }
     }
-
     if (Radio1.available()) {
         delayMicroseconds(SHORT_DELAY);
         Radio1.writeAckPayload(1, &Ack, 2); // Acknowledge the packet
@@ -145,8 +176,16 @@ void GetSpecialPacket(bool IamMaster)
                 BuddyON = true;
             }
         }
-        else { // master here
+        if (IamMaster) { // master here
+            if (DataPacket[0] == Ack[0]) {
+                Look("Phew ... Got a P from a happy Pupil");
+            }
+            else {
+                Look1("Got rubbish from unhappy Pupil: ");
+                Look(DataPacket[0]);
+            }
         }
+        DelayWithDog(3);
         FlushFifos();
     }
 }
