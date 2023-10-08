@@ -1,5 +1,6 @@
 var NAVTREEINDEX11 =
 {
+"functions_w.html":[4,3,0,19],
 "functions_x.html":[4,3,0,20],
 "functions_y.html":[4,3,0,21],
 "functions_z.html":[4,3,0,22],
@@ -248,6 +249,5 @@ var NAVTREEINDEX11 =
 "structPPMArea.html#a52e475cf8a0672360f670b56a26c387f":[4,0,5,6],
 "structPPMArea.html#a6ac130b16519ab38c553c4fb657ab4ea":[4,0,5,8],
 "structPPMArea.html#a6f623131e7bf583da7799c58fe3d9c08":[4,0,5,12],
-"structPPMArea.html#a748d93840ef117d5c5cd62dc915f0891":[4,0,5,11],
-"structPPMArea.html#a75e7d9eae4a3ab6b0d06bbe28b5582f4":[4,0,5,0]
+"structPPMArea.html#a748d93840ef117d5c5cd62dc915f0891":[4,0,5,11]
 };
