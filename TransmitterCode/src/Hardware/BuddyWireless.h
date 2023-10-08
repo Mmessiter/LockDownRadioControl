@@ -172,6 +172,7 @@ void StartBuddyListen()
     Radio1.startListening();
     CurrentMode = LISTENMODE;
     BlueLedOn();
+    delay(5);
 }
 //*************************************************************************************************************************
 void StopBuddyListen()
@@ -187,7 +188,6 @@ void StopBuddyListen()
     Radio1.setAutoAck(true);          // we want acks
     Radio1.maskIRQ(1, 1, 1);          // no interrupts - seems NEEDED at the moment
     Radio1.openWritingPipe(pip);
-    Radio1.setChannel(80);
     Radio1.stopListening();
     delayMicroseconds(SHORT_DELAY);
     ModelMatched = true;
@@ -195,6 +195,7 @@ void StopBuddyListen()
     Connected    = true;
     GreenLedOn();
     CurrentMode = NORMAL;
+    delay(5);
 }
 
 //*************************************************************************************************************************
@@ -225,7 +226,7 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
             if (DataPacket[0] == Pupil_in_Control[0]) {
                 Look("Got O from Master");
                 StopBuddyListen(); // PUPIL -> CONTROL  HEER <<<<<< *******
-                Look("control? ...");
+                Look("Control now ? ...");
             }
         }
         if (IamMaster) { // master here
