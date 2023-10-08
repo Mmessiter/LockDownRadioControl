@@ -44,6 +44,7 @@ void IDNotFound(uint8_t SavedModelNumber)
 void CompareModelsIDs()
 {                             // The saved MacAddress is compared with the one just received from the model ... etc ...
     uint8_t SavedModelNumber = ModelNumber;
+    if (BuddyPupilOnWireless) return; //  Don't do this if we are a pupil
     if (ModelMatched) return; // must not change when model connected
     GotoFrontView();
     RestoreBrightness();
@@ -89,6 +90,7 @@ void CompareModelsIDs()
 void GetModelsMacAddress()
 { // Gets a 64 bit value in two hunks of 32 bits
 
+    if (BuddyPupilOnWireless) return; //  Don't do this if we are a pupil
     switch (AckPayload.Purpose)
     {
         case 0:

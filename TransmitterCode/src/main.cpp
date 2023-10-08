@@ -2428,8 +2428,9 @@ FLASHMEM void setup()
             PlaySound(PLSTURNOFF);
         }
     }
-
-    if (BuddyPupilOnWireless)  {
+    //StopBuddyListen();
+    if (BuddyPupilOnWireless)
+    {
         StartBuddyListen();
     }
 }
