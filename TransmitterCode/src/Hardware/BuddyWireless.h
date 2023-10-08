@@ -5,7 +5,8 @@
     #define BUDDYWIRELESS_H
     #define SPECIAL_PACKET_COUNT   3   // How many special packets to send
     #define SPECIAL_PACKET_CHANNEL 124 // Which channel for the special packets
-    #define SHORT_DELAY            150
+    #define INTERBUDDYRATE         200 // 5 times a second (Fails below 200)
+    #define SHORT_DELAY            200
 
 
 //*************************************************************************************************************************
@@ -80,7 +81,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
                 }
             }
             else {
-                Look("Failed even to send an S to Buddy");
+                Look("Pupil is not responding to S");
             }
         }
         if (BuddyON) // PUPIL IN CONTROL - TAKE OVER NOW ******************************************************
@@ -198,7 +199,7 @@ void DoWirelessBuddy()
     static uint32_t InterBuddyTimer = 0;
     if (((millis() - LastPacketSentTime)) > 6) { // if there is time, communicate with other buddy tx
         {
-            if ((millis() - InterBuddyTimer) >= 250) { // 4 times a second
+            if ((millis() - InterBuddyTimer) >= INTERBUDDYRATE) { 
                 if (BuddyPupilOnWireless && SlaveHasControl) SendSpecialPacket(0);
                 if (ModelMatched && BoundFlag && BuddyMasterOnWireless && !SlaveHasControl) SendSpecialPacket(1);
                 InterBuddyTimer = millis();
