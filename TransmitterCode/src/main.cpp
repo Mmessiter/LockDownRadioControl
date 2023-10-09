@@ -5709,6 +5709,8 @@ FASTRUN void ButtonWasPressed()
     if (strlen(TextIn) > 0) {
         StartInactvityTimeout();
 
+        if (CurrentMode == LISTENMODE) return; // ignore all button presses if in listen mode
+
         ScreenTimeTimer = millis(); // reset screen timeout counter
         if (ScreenIsOff) {
             RestoreBrightness();
