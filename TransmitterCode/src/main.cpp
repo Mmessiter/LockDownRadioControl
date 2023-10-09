@@ -7005,7 +7005,11 @@ void CheckMotorOff()
 
 void GetBank()
 { //  and  motor switch and safety switch ETC ...
-
+ 
+    // static uint32_t LastBankRead = 0;
+    // if (millis() - LastBankRead < 200) return;
+    // LastBankRead = millis();
+    
     char FrontView_Hours[] = "Hours";
     char FrontView_Mins[]  = "Mins";
     char FrontView_Secs[]  = "Secs";

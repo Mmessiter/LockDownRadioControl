@@ -25,7 +25,6 @@ bool GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
     if (AckSpecial[0] == 'S') { // PUPIL -> LISTEN HEER <<<<<< *******
         Master_is_Alive = true;
         ErrorCounter    = 0;
-       // Look("Master is telling us to shut up");
         PlaySound(MASTERMSG);
         StartBuddyListen(); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         DelayWithDog(50);
@@ -34,11 +33,8 @@ bool GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
     }
 
     if (ErrorCounter > SPECIAL_PACKET_COUNT) {
-        Look1(millis());
-        Look(" Master is sending wierd acknowledgements");
         Master_is_Alive = false;
         ErrorCounter    = 0;
-        Look(AckSpecial[0]);
     }
     FlushFifos();
     return Master_is_Alive;
@@ -66,15 +62,12 @@ bool GetPupilAck() // Master gets Ack from pupil while MASTER in control
     }
     FlushFifos();
     if (FailureCounter > SPECIAL_PACKET_COUNT) {
-        Look1(millis());
-        Look(" Pupil is sending wierd acknowledgements");
+        //  Look1(millis());
+        //  Look(" Pupil is sending wierd acknowledgements");
         Pupil_is_Alive = false;
-        FailureCounter = 0;
-        Look(AckSpecial[0]);
+        //  Look(AckSpecial[0]);
     }
     if (SuccessCounter == SPECIAL_PACKET_COUNT) {
-        //  Look1(millis());
-        // Look("  Pupil is alive and well");
         Pupil_is_Alive = true;
         FailureCounter = 0;
         SuccessCounter = 0;
@@ -99,10 +92,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
         {
             delayMicroseconds(SHORT_DELAY);
             if (Radio1.write(&Master_in_Control, sizeof(Master_in_Control))) {
-                if (!GetPupilAck()) Look("Failed to get Pupil S Ack");
-            }
-            else {
-                Look("Pupil is not responding to S");
+                GetPupilAck(); // get ack from pupil - it's handled there
             }
         }
         if (BuddyON) //  PUPIL goes into CONTROL
@@ -110,35 +100,24 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
             if (Radio1.write(&Pupil_in_Control, sizeof(Pupil_in_Control))) { // SEND O to Pupil
 
                 if (GetPupilAck()) {
-                    Look("Got Pupil O Ack - GIVING CONTROL TO PUPIL");
                     StartBuddyListen(); // MASTER -> LISTEN  HEER <<<<<< *******
                     PlaySound(BUDDYMSG);
                     DelayWithDog(50);
                     LastPassivePacketTime = millis();
                     return;
                 }
-                if (!GetPupilAck()) {
-                    Look("Failed to get Pupil O Ack"); // heer
-                }
-            }
-            else {
-                Look("Pupil is not responding to O");
+                GetPupilAck();
             }
         }
     }
 
-    if (!IamMaster) { // pupil area when in control *************************************************************
+    if (!IamMaster) {                                                // pupil area when in control *************************************************************
         if (Radio1.write(&Pupil_is_Alive, sizeof(Pupil_is_Alive))) { // send P to master
             delayMicroseconds(SHORT_DELAY);
-            if (GetMasterAck()) {
-                //   Look("Master saw our P");
-            }
-            if (!GetMasterAck()) {
-                Look("Failed to get Master properly to Acknowledge our P");
-            }
+            GetMasterAck();
         }
         else {                                         // failed to send P to master while pupil in control
-            Look("Failed even to send a P to Master"); // HEER is a copout
+          //  Look("Failed even to send a P to Master"); //  copout
             StartBuddyListen();                        // <<<<<<<<<<<<<<<<<<< PUPIL -> LISTEN HEER <<<<<< *******
             PlaySound(MASTERMSG);
             DelayWithDog(50);
@@ -170,13 +149,13 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
             if (BuddyON)
             {
                 Ack[0] = 'O'; // ok to continue sending - you're in charge
-                              //  Look("Sending ACK O to Pupil");
+
                 TakeControlBackNow = false;
             }
             if (!BuddyON)
             {
                 Ack[0] = 'S'; // shut up now as buddy is now off.... *********
-                              //  Look("Sending ACK S to Pupil");
+
                 TakeControlBackNow = true;
             }
         }
@@ -187,10 +166,9 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
 
         if (!IamMaster) { // pupil here
             if (DataPacket[0] == Master_in_Control[0]) {
-                // Look("Got S from Master so will shut up");
             }
             if (DataPacket[0] == Pupil_in_Control[0]) {
-                //  Look("Got O from Master");
+
                 StopBuddyListen(); // PUPIL -> CONTROL  HEER <<<<<< *******
                 DelayWithDog(50);
                 return;
@@ -201,7 +179,7 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
         if (TakeControlBackNow) {
             DelayWithDog(10);
             StopBuddyListen(); // MASTER RECLAIMS CONTROL  HEER <<<<<< *******
-            Look("Master is taking control back");
+           // Look("Master is taking control back");
         }
         LastPassivePacketTime = millis();
     }
@@ -209,7 +187,7 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
         if (IamMaster) {
             if (millis() - LastPassivePacketTime > INTERBUDDYRATE + 50) {
                 StopBuddyListen(); // MASTER RECLAIMS CONTROL  HEER <<<<<< *******
-                Look("Pupil's dead!!");
+              //  Look("Pupil's dead!!");
             }
         }
     }
