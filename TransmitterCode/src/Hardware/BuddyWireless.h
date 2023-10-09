@@ -14,7 +14,7 @@ bool GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
 {
     static bool    Master_is_Alive = false;
     static uint8_t ErrorCounter    = 0;
-    char AckSpecial[2] = " "; // simple ack
+    char           AckSpecial[2]   = " "; // simple ack
 
     Radio1.read(&AckSpecial, 2);
 
@@ -27,6 +27,7 @@ bool GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
         Master_is_Alive = true;
         ErrorCounter    = 0;
         Look("Master is telling us to shut up");
+        PlaySound(MASTERMSG);
         StartBuddyListen(); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         DelayWithDog(50);
         FlushFifos();
@@ -73,8 +74,8 @@ bool GetPupilAck() // Master gets Ack from pupil while MASTER in control
         Look(AckSpecial[0]);
     }
     if (SuccessCounter == SPECIAL_PACKET_COUNT) {
-        Look1(millis());
-        Look("  Pupil is alive and well");
+      //  Look1(millis());
+       // Look("  Pupil is alive and well");
         Pupil_is_Alive = true;
         FailureCounter = 0;
         SuccessCounter = 0;
@@ -114,6 +115,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
                 if (GetPupilAck()) {
                     Look("Got Pupil O Ack - GIVING CONTROL TO PUPIL");
                     StartBuddyListen(); // MASTER -> LISTEN  HEER <<<<<< *******
+                    PlaySound(BUDDYMSG);
                     DelayWithDog(50);
                     return;
                 }
@@ -127,7 +129,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
     if (!IamMaster) {                                                // pupil area when in control **************************************************************
         if (Radio1.write(&Pupil_is_Alive, sizeof(Pupil_is_Alive))) { // send P to master
             if (GetMasterAck()) {
-             //   Look("Master saw our P");
+                //   Look("Master saw our P");
             }
             if (!GetMasterAck()) {
                 Look("Failed to get Master properly to Acknowledge our P");
@@ -205,18 +207,21 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
     char Master_in_Control[2] = "S"; // = Shut Up, send nothing
     char Pupil_in_Control[2]  = "O"; // = OK to send data
     char Ack[2]               = "P"; // Pupil ack
+    bool TakeControlBackNow   = false;
 
     if (Radio1.available()) {
         if (IamMaster) { // master here
             if (BuddyON)
             {
                 Ack[0] = 'O'; // ok to continue sending - you're in charge
-                Look("Sending ACK O to Pupil");
+              //  Look("Sending ACK O to Pupil");
+                TakeControlBackNow = false;
             }
             if (!BuddyON)
             {
                 Ack[0] = 'S'; // shut up now as buddy is now off.... *********
-                Look("Sending ACK S to Pupil");
+              //  Look("Sending ACK S to Pupil");
+                TakeControlBackNow = true;
             }
         }
         delayMicroseconds(SHORT_DELAY);
@@ -226,7 +231,7 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
 
         if (!IamMaster) { // pupil here
             if (DataPacket[0] == Master_in_Control[0]) {
-                 // Look("Got S from Master so will shut up");
+                // Look("Got S from Master so will shut up");
             }
             if (DataPacket[0] == Pupil_in_Control[0]) {
                 //  Look("Got O from Master");
@@ -236,20 +241,20 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
             }
         }
 
-        if (IamMaster) { // master here
-            if (DataPacket[0] == 'P') {
-                //  Look1(millis());
-                //  Look(" Pupil is alive");
-            }
-            if (!BuddyON)
-            {
-                DelayWithDog(50);
-                StopBuddyListen(); // MASTER RECLAIMS CONTROL  HEER <<<<<< *******
-               // DelayWithDog(50);
-            }
-        }
-        DelayWithDog(5);
+        // if (IamMaster) { // master here
+        //     if (DataPacket[0] == 'P') {
+        //           Look1(millis());
+        //           Look(" Pupil is alive");
+        //     }
+        // }
+
+        DelayWithDog(10);
         FlushFifos();
+        if (TakeControlBackNow) {
+            DelayWithDog(10);
+            StopBuddyListen(); // MASTER RECLAIMS CONTROL  HEER <<<<<< *******
+            Look("Master is taking control back");
+        }
     }
 }
 //*************************************************************************************************************************
