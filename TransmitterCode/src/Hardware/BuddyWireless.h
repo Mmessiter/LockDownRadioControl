@@ -14,33 +14,22 @@ bool GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
 {
     static bool    Master_is_Alive = false;
     static uint8_t ErrorCounter    = 0;
-
     char AckSpecial[2] = " "; // simple ack
-    bool GoodAck       = false;
 
     Radio1.read(&AckSpecial, 2);
 
     if (AckSpecial[0] == 'O') { // OK to continue sending. no action needed
-        GoodAck         = true;
         Master_is_Alive = true;
-        Look1(millis());
-        Look(" STILL IN CONTROL");
+        ErrorCounter    = 0;
     }
 
     if (AckSpecial[0] == 'S') { // PUPIL -> LISTEN HEER <<<<<< *******
-        GoodAck         = true;
         Master_is_Alive = true;
-        Look1(millis());
-        Look(" PASSING BACK CONTROL");
+        ErrorCounter    = 0;
         StartBuddyListen(); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         DelayWithDog(50);
         FlushFifos();
         return Master_is_Alive;
-    }
-
-    if (!GoodAck) ++ErrorCounter;
-    if (Master_is_Alive) {
-        ErrorCounter = 0;
     }
 
     if (ErrorCounter > SPECIAL_PACKET_COUNT) {
@@ -143,10 +132,9 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
                 Look("Failed to get Master properly to Acknowledge our P");
             }
         }
-        else {
+        else {                                         // failed to send P to master while pupil in control
             Look("Failed even to send a P to Master"); // HEER
-
-            StartBuddyListen(); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            StartBuddyListen();                        // <<<<<<<<<<<<<<<<<<< PUPIL -> LISTEN HEER <<<<<< *******
             DelayWithDog(50);
             FlushFifos();
         }
@@ -234,19 +222,18 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
         Radio1.writeAckPayload(1, &Ack, 2); // Acknowledge the packet
         delayMicroseconds(SHORT_DELAY);
         Radio1.read(&DataPacket, sizeof(DataPacket));
-       
+
         if (!IamMaster) { // pupil here
             if (DataPacket[0] == Master_in_Control[0]) {
-                Look("Got S from Master"); // STAY QUIET
+
             }
             if (DataPacket[0] == Pupil_in_Control[0]) {
-                Look("Got O from Master");
+                //  Look("Got O from Master");
                 StopBuddyListen(); // PUPIL -> CONTROL  HEER <<<<<< *******
                 DelayWithDog(50);
                 return;
             }
         }
-
 
         if (IamMaster) { // master here
             if (DataPacket[0] == 'P') {
@@ -255,13 +242,12 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
             }
             if (!BuddyON)
             {
-                DelayWithDog(3); 
-                StopBuddyListen(); // MASTER -> CONTROL  HEER <<<<<< *******
                 DelayWithDog(50);
+                StopBuddyListen(); // MASTER RECLAIMS CONTROL  HEER <<<<<< *******
+               // DelayWithDog(50);
             }
-            
         }
-        DelayWithDog(3); 
+        DelayWithDog(5);
         FlushFifos();
     }
 }
