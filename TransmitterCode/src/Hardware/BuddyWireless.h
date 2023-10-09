@@ -65,7 +65,6 @@ bool GetPupilAck() // Master gets Ack from pupil while MASTER in control
     }
     if (SuccessCounter == SPECIAL_PACKET_COUNT) {
         Pupil_is_Alive = true;
-        FailureCounter = 0;
     }
     return Pupil_is_Alive;
 }
