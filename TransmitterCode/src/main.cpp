@@ -7000,7 +7000,8 @@ void GetBank()
     char FrontView_Secs[]  = "Secs";
     char WarnOff[]         = "vis Warning,0";
 
-    if (CurrentMode != NORMAL) return; // not needed if calibrating
+    if ((CurrentMode != NORMAL) && (CurrentMode != LISTENMODE)) return; // not needed if calibrating
+   
     SafetyON = false;
     BuddyON  = false;
 
