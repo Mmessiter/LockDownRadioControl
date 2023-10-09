@@ -27,12 +27,13 @@ bool GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
         Look(" STILL IN CONTROL");
     }
 
-    if (AckSpecial[0] == 'S') { // PUPIL -> LISTEN  HEER <<<<<< *******
+    if (AckSpecial[0] == 'S') { // PUPIL -> LISTEN HEER <<<<<< *******
         GoodAck         = true;
         Master_is_Alive = true;
         Look1(millis());
         Look(" PASSING BACK CONTROL");
         StartBuddyListen(); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        DelayWithDog(50);
         FlushFifos();
         return Master_is_Alive;
     }
@@ -123,6 +124,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
                 if (GetPupilAck()) {
                     Look("Got Pupil O Ack - GIVING CONTROL TO PUPIL");
                     StartBuddyListen(); // MASTER -> LISTEN  HEER <<<<<< *******
+                    DelayWithDog(50);
                     return;
                 }
             }
@@ -142,7 +144,11 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
             }
         }
         else {
-            Look("Failed even to send a P to Master");
+            Look("Failed even to send a P to Master"); // HEER
+
+            StartBuddyListen(); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            DelayWithDog(50);
+            FlushFifos();
         }
 
         if (CurrentMode == LISTENMODE) return; // control might have ceased
@@ -236,6 +242,7 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
             if (DataPacket[0] == Pupil_in_Control[0]) {
                 Look("Got O from Master");
                 StopBuddyListen(); // PUPIL -> CONTROL  HEER <<<<<< *******
+                DelayWithDog(50);
                 return;
             }
         }
@@ -250,6 +257,7 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
             {
                 DelayWithDog(3); 
                 StopBuddyListen(); // MASTER -> CONTROL  HEER <<<<<< *******
+                DelayWithDog(50);
             }
             
         }

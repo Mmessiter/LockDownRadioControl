@@ -207,6 +207,17 @@ void GreenLedOn()
                 BoundFlag    = true;
                 DelayWithDog(750);
             }
+            if (AnnounceConnected && BuddyPupilOnWireless) {
+                PlaySound(BUDDYMSG);
+                ModelMatched = true;
+                BoundFlag    = true;
+                
+            }
+            if (AnnounceConnected && BuddyMasterOnWireless) {
+                PlaySound(MASTERMSG);
+                ModelMatched = true;
+                BoundFlag    = true;
+            }
         }
         if (UseLog) {
             LogConnection();
