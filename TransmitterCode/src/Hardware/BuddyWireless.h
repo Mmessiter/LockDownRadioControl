@@ -7,7 +7,7 @@
     #define SPECIAL_PACKET_CHANNEL 125 // Which channel for the special packets
     #define INTERBUDDYRATE         200 // 5 times a second (Fails below 200)
     #define SHORT_DELAY            200 // ... microseconds
-uint32_t LastPassivePacketTime = 0;
+
 //*************************************************************************************************************************
 
 bool GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
@@ -96,7 +96,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
     delayMicroseconds(SHORT_DELAY);
 
     if (IamMaster) {
-        if (!BuddyON) 
+        if (!BuddyON)
         {
             delayMicroseconds(SHORT_DELAY);
             if (Radio1.write(&Master_in_Control, sizeof(Master_in_Control))) {
@@ -206,10 +206,12 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
         LastPassivePacketTime = millis();
     }
     else { // no packet arrived
-        if (millis() - LastPassivePacketTime > INTERBUDDYRATE+100) {
-            Look("No packet arrived for ...");
-            StopBuddyListen(); // MASTER RECLAIMS CONTROL  HEER <<<<<< *******
-            Look("Master is taking control back - Pupils dead");
+        if (IamMaster) {
+            if (millis() - LastPassivePacketTime > INTERBUDDYRATE + 100) {
+                Look("No packet arrived for ...");
+                StopBuddyListen(); // MASTER RECLAIMS CONTROL  HEER <<<<<< *******
+                Look("Master is taking control back - Pupils dead");
+            }
         }
     }
 }
