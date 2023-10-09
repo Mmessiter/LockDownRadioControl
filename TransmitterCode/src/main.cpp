@@ -1,8 +1,8 @@
 /** @file TransmitterCode/src/main.cpp
  * // Malcolm Messiter 2020 - 2023
  *
- * 
- * 
+ *
+ *
  * @page TransmitterCode...
  * @section LockDown Radio Control Features list, so far:
  * - Uses Teensy 4.1 MCU (at 600 Mhz) with nRF24L01+ transceiver
@@ -2252,7 +2252,7 @@ void GetTeensyMacAddress()
     for (int i = 1; i < 6; ++i) {
         MacAddress[i] = CheckPipeNibbles(MacAddress[i]); // Fix PIPE if needed !
     }
- //   MacAddress[1] = 0x42; // for buddy box ... heer
+    //   MacAddress[1] = 0x42; // for buddy box ... heer
 
 #ifdef DB_BIND
     Serial.println("");
@@ -2428,7 +2428,7 @@ FLASHMEM void setup()
             PlaySound(PLSTURNOFF);
         }
     }
-    //StopBuddyListen();
+    // StopBuddyListen();
     if (BuddyPupilOnWireless)
     {
         StartBuddyListen();
@@ -3899,30 +3899,30 @@ void DoOneSwitchView(uint8_t n) // n is 1-4  = number for switch to edit
     if (DualRatesSwitch == n) SendValue(Rlabels[8], 1);
     if (BuddySwitch == n) SendValue(Rlabels[9], 1);
 
-            if (!ValueSent) SendValue(Rlabels[0], 1); // nothing yet, so 'not used' is selected
+    if (!ValueSent) SendValue(Rlabels[0], 1); // nothing yet, so 'not used' is selected
 
-            SendValue(OneSwitchViewc_revd, 0);
+    SendValue(OneSwitchViewc_revd, 0);
 
-            switch (n) {
-                case 1:
-                    if (SWITCH1Reversed) SendValue(OneSwitchViewc_revd, 1);
-                    break;
-                case 2:
-                    if (SWITCH2Reversed) SendValue(OneSwitchViewc_revd, 1);
-                    break;
-                case 3:
-                    if (SWITCH3Reversed) SendValue(OneSwitchViewc_revd, 1);
-                    break;
-                case 4:
-                    if (SWITCH4Reversed) SendValue(OneSwitchViewc_revd, 1);
-                    break;
-            }
-
-            for (int i = 0; i < 4; ++i) { // show channel names
-                SendText(chLabels[i], chValues[i]);
-                if (strlen(ChannelNames[i + 8]) >= 2) SendText(chLabels[i], ChannelNames[i + 8]); // Show EDITED channel names if they exist
-            }
+    switch (n) {
+        case 1:
+            if (SWITCH1Reversed) SendValue(OneSwitchViewc_revd, 1);
+            break;
+        case 2:
+            if (SWITCH2Reversed) SendValue(OneSwitchViewc_revd, 1);
+            break;
+        case 3:
+            if (SWITCH3Reversed) SendValue(OneSwitchViewc_revd, 1);
+            break;
+        case 4:
+            if (SWITCH4Reversed) SendValue(OneSwitchViewc_revd, 1);
+            break;
     }
+
+    for (int i = 0; i < 4; ++i) { // show channel names
+        SendText(chLabels[i], chValues[i]);
+        if (strlen(ChannelNames[i + 8]) >= 2) SendText(chLabels[i], ChannelNames[i + 8]); // Show EDITED channel names if they exist
+    }
+}
 /*********************************************************************************************************************************/
 void UpdateOneSwitchView()
 {
@@ -7645,7 +7645,7 @@ void FASTRUN ManageTransmitter()
     uint32_t RightNow        = millis();
     uint32_t TXPacketElapsed = RightNow - LastPacketSentTime;
 
-    KickTheDog();                 // Watchdog ... ALWAYS!
+    KickTheDog(); // Watchdog ... ALWAYS!
 
     if ((PACEMAKER - TXPacketElapsed <= TIMEFORTXMANAGMENT) && ModelMatched) {
         return; // If it's almost time to send data, then do not start some other task which might easily take longer.
@@ -7653,7 +7653,6 @@ void FASTRUN ManageTransmitter()
 
     CheckPowerOffButton();        // Pretty obvious really ...
     CheckForNextionButtonPress(); // Pretty obvious really ...
-    
 
     if (RightNow - TransmitterLastManaged > 50) { // 20 times a second is plenty
         if (RightNow - LastTimeRead >= 1000) {    // once a second for these...
@@ -7717,7 +7716,7 @@ FASTRUN void loop()
             ShowServoPos();
         }
         else {                 // Skip these next lines when buddying as a slave
-            GetBuddyData();    // Only if master 
+            GetBuddyData();    // Only if master
             FixMotorChannel(); // Maybe force it low BEFORE Binding data is added
             ShowServoPos();    // Show servo positions to user
             SendBindingPipe(); // Only if not bound yet - overwrite low throttle setting
@@ -7756,7 +7755,7 @@ FASTRUN void loop()
             GetSpecialPacket(BuddyMasterOnWireless);
             break;
         default:
-            break; 
+            break;
     }
 } // end loop()
 

@@ -178,7 +178,6 @@ void StartBuddyListen()
     CurrentMode  = LISTENMODE;
     FlushFifos();
     BlueLedOn();
-    // DelayWithDog(500);
 }
 //*************************************************************************************************************************
 void StopBuddyListen()
@@ -216,12 +215,12 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
         if (BuddyON)
         {
             Ack[0] = 'O'; // ok to continue sending - you're in charge
-                          // Look("Sending ACK O from Master");
+            Look("Sending ACK O from Pupil");
         }
         if (!BuddyON)
         {
             Ack[0] = 'S'; // shut up now as buddy is now off.... *********
-            Look("Sending ACK S from Master");
+            Look("Sending ACK S from Pupil");
         }
     }
     if (Radio1.available()) {
@@ -241,32 +240,34 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
             }
         }
         if (IamMaster) { // master here
-            Look1("Got Something from Pupil: ");
-                Look(DataPacket[0]);    
-            // }
-            // else {
-            //     Look1("Got rubbish from unhappy Pupil: ");
-            //     Look(DataPacket[0]);
-            // }
+
+            if (DataPacket[0] == 'P') {
+                Look1(millis());
+                Look(" Pupil is alive");
+            }
+            if (BuddyON)
+                Look("Buddy is ON");
+            else
+                Look("Buddy is OFF");
             // if (!BuddyON){
             //     StopBuddyListen(); // MASTER -> CONTROL  HEER <<<<<< *******
             // }
         }
-        DelayWithDog(3); // Allow time for ack to be sent
+        DelayWithDog(3);
         FlushFifos();
     }
 }
 
 //*************************************************************************************************************************
 
-void DoWirelessBuddy()
+void DoWirelessBuddy() // only called in when not in LISTENMODE
 {
     static uint32_t InterBuddyTimer = 0;
     if (((millis() - LastPacketSentTime)) > 6) { // if there is time, communicate with other buddy tx
         {
             if ((millis() - InterBuddyTimer) >= INTERBUDDYRATE) {
                 if (BuddyPupilOnWireless) SendSpecialPacket(0);
-                if (ModelMatched && BoundFlag && BuddyMasterOnWireless && !SlaveHasControl) SendSpecialPacket(1);
+                if (BuddyMasterOnWireless) SendSpecialPacket(1);
                 InterBuddyTimer = millis();
             }
         }
