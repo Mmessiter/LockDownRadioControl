@@ -1,5 +1,6 @@
 var NAVTREEINDEX8 =
 {
+"Utilities_8h.html#afb7c85cac4aa89fd998ed81c330374d2":[5,0,3,0,0,11,4],
 "Utilities_8h_source.html":[5,0,3,0,0,11],
 "annotated.html":[4,0],
 "classI2Cdev.html":[4,0,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX8 =
 "classMPU6050.html#ae54dc358da048e61a1ac68012300fdaa":[4,0,1,223],
 "classMPU6050.html#ae7e9ead9645bcef326eb579c6ab5d5ff":[4,0,1,111],
 "classMPU6050.html#ae84fd795630f9ab5e8d6b19a616a11ce":[4,0,1,108],
-"classMPU6050.html#ae9882b425cbdced4de325b608d896e10":[4,0,1,103],
-"classMPU6050.html#aea90c3e6a6666f070f7833a913cfa821":[4,0,1,177]
+"classMPU6050.html#ae9882b425cbdced4de325b608d896e10":[4,0,1,103]
 };

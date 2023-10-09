@@ -540,6 +540,7 @@ var 1Definitions_8h =
     [ "LastMixNumber", "1Definitions_8h.html#a4e93c6d21a52ae42832359ee0e4c8b2d", null ],
     [ "LastModelLoaded", "1Definitions_8h.html#a23f3d76e747ca641d7cb1549fb775e40", null ],
     [ "LastPacketSentTime", "1Definitions_8h.html#a273b3bba431004a227ac5fad026b3e1e", null ],
+    [ "LastPassivePacketTime", "1Definitions_8h.html#a53ebae516a1c5f2146a4c082d5508fc4", null ],
     [ "LastRadio", "1Definitions_8h.html#a72790e4cca2413ccec56e2bbeeb0cf4a", null ],
     [ "LastScanButtonCheck", "1Definitions_8h.html#a72c5ccd104215418611a4e833f11765b", null ],
     [ "LastSeconds", "1Definitions_8h.html#a461bdfbe0df771f541b8872ac04bb717", null ],
