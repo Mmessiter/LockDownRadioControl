@@ -5,7 +5,7 @@
     #define BUDDYWIRELESS_H
     #define SPECIAL_PACKET_COUNT   3   // How many special packets to send
     #define SPECIAL_PACKET_CHANNEL 125 // Which channel for the special packets
-    #define INTERBUDDYRATE         200 // 5 times a second (Fails below 200)
+    #define INTERBUDDYRATE         205 // 5 times a second (Fails below 200)
     #define SHORT_DELAY            200 // ... microseconds
 
 //*************************************************************************************************************************
