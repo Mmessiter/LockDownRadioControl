@@ -5726,8 +5726,8 @@ FASTRUN void ButtonWasPressed()
         } NextionCommand;
         NextionCommand.First4Bytes[0] = TextIn[0];
         NextionCommand.First4Bytes[1] = TextIn[1];
-        NextionCommand.First4Bytes[2] = 0; //   TextIn[2];
-        NextionCommand.First4Bytes[3] = 0; //   TextIn[3];
+        NextionCommand.First4Bytes[2] = 0; 
+        NextionCommand.First4Bytes[3] = 0; 
         uint32_t NumberedCommand      = NextionCommand.FirstDWord - 128;
 
 #ifdef DB_NEXTION
