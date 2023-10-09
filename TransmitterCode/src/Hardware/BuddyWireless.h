@@ -108,9 +108,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
         if (BuddyON) //  PUPIL goes into CONTROL
         {
             if (Radio1.write(&Pupil_in_Control, sizeof(Pupil_in_Control))) { // SEND O to Pupil
-                if (!GetPupilAck()) {
-                    Look("Failed to get Pupil O Ack");
-                }
+
                 if (GetPupilAck()) {
                     Look("Got Pupil O Ack - GIVING CONTROL TO PUPIL");
                     StartBuddyListen(); // MASTER -> LISTEN  HEER <<<<<< *******
@@ -119,6 +117,9 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
                     LastPassivePacketTime = millis();
                     return;
                 }
+                if (!GetPupilAck()) {
+                    Look("Failed to get Pupil O Ack"); // heer
+                }
             }
             else {
                 Look("Pupil is not responding to O");
@@ -126,7 +127,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
         }
     }
 
-    if (!IamMaster) { // HHEEEERR pupil area when in control *************************************************************
+    if (!IamMaster) { // pupil area when in control *************************************************************
         if (Radio1.write(&Pupil_is_Alive, sizeof(Pupil_is_Alive))) { // send P to master
             delayMicroseconds(SHORT_DELAY);
             if (GetMasterAck()) {
