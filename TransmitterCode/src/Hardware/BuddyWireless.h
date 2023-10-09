@@ -26,6 +26,7 @@ bool GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
     if (AckSpecial[0] == 'S') { // PUPIL -> LISTEN HEER <<<<<< *******
         Master_is_Alive = true;
         ErrorCounter    = 0;
+        Look("Master is telling us to shut up");
         StartBuddyListen(); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         DelayWithDog(50);
         FlushFifos();
@@ -126,14 +127,14 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
     if (!IamMaster) {                                                // pupil area when in control **************************************************************
         if (Radio1.write(&Pupil_is_Alive, sizeof(Pupil_is_Alive))) { // send P to master
             if (GetMasterAck()) {
-                Look("Master saw our P");
+             //   Look("Master saw our P");
             }
             if (!GetMasterAck()) {
                 Look("Failed to get Master properly to Acknowledge our P");
             }
         }
         else {                                         // failed to send P to master while pupil in control
-            Look("Failed even to send a P to Master"); // HEER
+            Look("Failed even to send a P to Master"); // HEER is a copout
             StartBuddyListen();                        // <<<<<<<<<<<<<<<<<<< PUPIL -> LISTEN HEER <<<<<< *******
             DelayWithDog(50);
             FlushFifos();
@@ -225,7 +226,7 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
 
         if (!IamMaster) { // pupil here
             if (DataPacket[0] == Master_in_Control[0]) {
-
+                 // Look("Got S from Master so will shut up");
             }
             if (DataPacket[0] == Pupil_in_Control[0]) {
                 //  Look("Got O from Master");
