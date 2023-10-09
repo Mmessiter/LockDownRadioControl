@@ -26,12 +26,11 @@ bool GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
         Master_is_Alive = true;
         ErrorCounter    = 0;
         PlaySound(MASTERMSG);
-        StartBuddyListen(); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+        StartBuddyListen(); 
         DelayWithDog(10);
         FlushFifos();
         return Master_is_Alive;
     }
-
     if (ErrorCounter > SPECIAL_PACKET_COUNT) {
         Master_is_Alive = false;
         ErrorCounter    = 0;
@@ -47,7 +46,6 @@ bool GetPupilAck() // Master gets Ack from pupil while MASTER in control
     static uint8_t FailureCounter = 0;
     static uint8_t SuccessCounter = 0;
     static bool    Pupil_is_Alive = false;
-
     uint8_t AckSpecial[2]; // simple ack
 
     Radio1.read(&AckSpecial, 2);
@@ -120,10 +118,8 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
             DelayWithDog(10);
             FlushFifos();
         }
-
         if (CurrentMode == LISTENMODE) return; // control might have ceased
     }
-
     Radio1.setChannel(CurrentChannel); // restore the proper frequency
     delayMicroseconds(SHORT_DELAY);
     Radio1.stopListening();
@@ -141,18 +137,15 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
     bool TakeControlBackNow   = false;
 
     if (Radio1.available()) {
-
         if (IamMaster) { // master here
             if (BuddyON)
             {
                 Ack[0] = 'O'; // ok to continue sending - you're in charge
-
                 TakeControlBackNow = false;
             }
             if (!BuddyON)
             {
                 Ack[0] = 'S'; // shut up now as buddy is now off.... *********
-
                 TakeControlBackNow = true;
             }
         }
@@ -160,7 +153,6 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
         Radio1.writeAckPayload(1, &Ack, 2); // Acknowledge the packet
         delayMicroseconds(SHORT_DELAY);
         Radio1.read(&DataPacket, sizeof(DataPacket));
-
         if (!IamMaster) { // pupil here
             if (DataPacket[0] == Master_in_Control[0]) {
             }
@@ -206,16 +198,12 @@ void DoWirelessBuddy() // only called in when not in LISTENMODE
 }
 
 //*************************************************************************************************************************
-//*************************************************************************************************************************
 void StopBuddyListen()
 {
     uint64_t pip = TeensyMACAddPipe;
     if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;
     Radio1.setPALevel(RF24_PA_MAX);
     Radio1.setDataRate(RF24_250KBPS);
-
-    // Radio1.setRetries(15,15);
-
     Radio1.enableAckPayload();
     Radio1.enableDynamicPayloads();   // needed
     Radio1.setAddressWidth(5);        // use 5 bytes for addresses
@@ -231,7 +219,6 @@ void StopBuddyListen()
     GreenLedOn();
     CurrentMode = NORMAL;
 }
-
 //*************************************************************************************************************************
 
 void StartBuddyListen()
@@ -240,9 +227,6 @@ void StartBuddyListen()
     if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;
     Radio1.setPALevel(RF24_PA_MAX);
     Radio1.setDataRate(RF24_250KBPS);
-
-    // Radio1.setRetries(15,15);
-
     Radio1.enableAckPayload();        // needed
     Radio1.enableDynamicPayloads();   // needed
     Radio1.setAddressWidth(5);        // use 5 bytes for addresses
@@ -260,5 +244,4 @@ void StartBuddyListen()
     FlushFifos();
     BlueLedOn();
 }
-
 #endif
