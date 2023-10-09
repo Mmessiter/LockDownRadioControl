@@ -27,7 +27,7 @@ bool GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
         ErrorCounter    = 0;
         PlaySound(MASTERMSG);
         StartBuddyListen(); 
-        DelayWithDog(10);
+        DelayWithDog(5);
         FlushFifos();
         return Master_is_Alive;
     }
@@ -99,7 +99,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
                 if (GetPupilAck()) {
                     StartBuddyListen(); // MASTER -> LISTEN  HEER <<<<<< *******
                     PlaySound(BUDDYMSG);
-                    DelayWithDog(10);
+                    DelayWithDog(5);
                     LastPassivePacketTime = millis();
                     return;
                 }
@@ -115,7 +115,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
                                 //  Look("Failed even to send a P to Master"); //  copout
             StartBuddyListen(); // <<<<<<<<<<<<<<<<<<< PUPIL -> LISTEN HEER <<<<<< *******
             PlaySound(MASTERMSG);
-            DelayWithDog(10);
+            DelayWithDog(5);
             FlushFifos();
         }
         if (CurrentMode == LISTENMODE) return; // control might have ceased
@@ -157,16 +157,15 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
             if (DataPacket[0] == Master_in_Control[0]) {
             }
             if (DataPacket[0] == Pupil_in_Control[0]) {
-
                 StopBuddyListen(); // PUPIL -> CONTROL  HEER <<<<<< *******
-                DelayWithDog(10);
+                DelayWithDog(5);
                 return;
             }
         }
-        DelayWithDog(10);
+        DelayWithDog(5);
         FlushFifos();
         if (TakeControlBackNow) {
-            DelayWithDog(10);
+            DelayWithDog(5);
             StopBuddyListen(); // MASTER RECLAIMS CONTROL  HEER <<<<<< *******
                                // Look("Master is taking control back");
         }
