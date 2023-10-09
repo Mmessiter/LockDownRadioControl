@@ -98,7 +98,6 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
         if (BuddyON) //  PUPIL goes into CONTROL
         {
             if (Radio1.write(&Pupil_in_Control, sizeof(Pupil_in_Control))) { // SEND O to Pupil
-
                 if (GetPupilAck()) {
                     StartBuddyListen(); // MASTER -> LISTEN  HEER <<<<<< *******
                     PlaySound(BUDDYMSG);
@@ -106,19 +105,17 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
                     LastPassivePacketTime = millis();
                     return;
                 }
-                GetPupilAck();
             }
         }
     }
-
     if (!IamMaster) {                                                // pupil area when in control *************************************************************
         if (Radio1.write(&Pupil_is_Alive, sizeof(Pupil_is_Alive))) { // send P to master
             delayMicroseconds(SHORT_DELAY);
             GetMasterAck();
         }
-        else {                                         // failed to send P to master while pupil in control
-          //  Look("Failed even to send a P to Master"); //  copout
-            StartBuddyListen();                        // <<<<<<<<<<<<<<<<<<< PUPIL -> LISTEN HEER <<<<<< *******
+        else {                  // failed to send P to master while pupil in control
+                                //  Look("Failed even to send a P to Master"); //  copout
+            StartBuddyListen(); // <<<<<<<<<<<<<<<<<<< PUPIL -> LISTEN HEER <<<<<< *******
             PlaySound(MASTERMSG);
             DelayWithDog(10);
             FlushFifos();
@@ -179,7 +176,7 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
         if (TakeControlBackNow) {
             DelayWithDog(10);
             StopBuddyListen(); // MASTER RECLAIMS CONTROL  HEER <<<<<< *******
-           // Look("Master is taking control back");
+                               // Look("Master is taking control back");
         }
         LastPassivePacketTime = millis();
     }
@@ -187,7 +184,7 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
         if (IamMaster) {
             if (millis() - LastPassivePacketTime > INTERBUDDYRATE + 50) {
                 StopBuddyListen(); // MASTER RECLAIMS CONTROL  HEER <<<<<< *******
-              //  Look("Pupil's dead!!");
+                                   //  Look("Pupil's dead!!");
             }
         }
     }
