@@ -1,6 +1,7 @@
 var BuddyWireless_8h =
 [
     [ "INTERBUDDYRATE", "BuddyWireless_8h.html#a1240c6070d0173cca5d14458a2a71847", null ],
+    [ "LONGER_DELAY", "BuddyWireless_8h.html#ae7ccabc87d888235fa119a3f20d29d15", null ],
     [ "SHORT_DELAY", "BuddyWireless_8h.html#ac4eb562b9427778a7da4e852e6c02d41", null ],
     [ "SPECIAL_PACKET_CHANNEL", "BuddyWireless_8h.html#ad880cebd97490afa89660ab3c0298fed", null ],
     [ "SPECIAL_PACKET_COUNT", "BuddyWireless_8h.html#a0751c3dd6d545cca50f193648846276f", null ],
