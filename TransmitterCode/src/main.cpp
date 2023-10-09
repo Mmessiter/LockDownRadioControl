@@ -5709,7 +5709,7 @@ FASTRUN void ButtonWasPressed()
     if (strlen(TextIn) > 0) {
         StartInactvityTimeout();
 
-        if ((CurrentMode == LISTENMODE) && (BuddyMasterOnWireless)) return; // ignore all button presses if in listen mode
+        if ((CurrentMode == LISTENMODE) && (BuddyMasterOnWireless)) return; // ignore all button presses if Master in listen mode
 
         ScreenTimeTimer = millis(); // reset screen timeout counter
         if (ScreenIsOff) {
