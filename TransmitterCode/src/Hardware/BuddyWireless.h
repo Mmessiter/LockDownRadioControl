@@ -17,7 +17,6 @@ bool GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
     char           AckSpecial[2]   = " "; // simple ack
 
     Radio1.read(&AckSpecial, 2);
-
     if (AckSpecial[0] == 'O') { // OK to continue sending. no action needed
         Master_is_Alive = true;
         ErrorCounter    = 0;
@@ -126,7 +125,8 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
         }
     }
 
-    if (!IamMaster) {                                                // pupil area when in control **************************************************************
+    if (!IamMaster) {                                                // HHEEEERR pupil area when in control **************************************************************
+        delay(10);
         if (Radio1.write(&Pupil_is_Alive, sizeof(Pupil_is_Alive))) { // send P to master
             if (GetMasterAck()) {
                 //   Look("Master saw our P");
@@ -149,54 +149,6 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
     delayMicroseconds(SHORT_DELAY);
     Radio1.stopListening();
     delayMicroseconds(SHORT_DELAY);
-}
-
-//*************************************************************************************************************************
-
-void StartBuddyListen()
-{
-    uint64_t pip = TeensyMACAddPipe;
-    if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;
-    Radio1.setPALevel(RF24_PA_MAX);
-    Radio1.setDataRate(RF24_250KBPS);
-    Radio1.enableAckPayload();        // needed
-    Radio1.enableDynamicPayloads();   // needed
-    Radio1.setAddressWidth(5);        // use 5 bytes for addresses
-    Radio1.setCRCLength(RF24_CRC_16); // could be 8 or disabled
-    Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
-    Radio1.setAutoAck(true); // we want acks
-    Radio1.maskIRQ(1, 1, 1); // no interrupts - seems NEEDED at the moment
-    Radio1.openReadingPipe(1, pip);
-    delayMicroseconds(SHORT_DELAY);
-    Radio1.startListening();
-    ModelMatched = false;
-    BoundFlag    = false;
-    Connected    = false;
-    CurrentMode  = LISTENMODE;
-    FlushFifos();
-    BlueLedOn();
-}
-//*************************************************************************************************************************
-void StopBuddyListen()
-{
-    uint64_t pip = TeensyMACAddPipe;
-    if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;
-    Radio1.setPALevel(RF24_PA_MAX);
-    Radio1.setDataRate(RF24_250KBPS);
-    Radio1.enableAckPayload();
-    Radio1.enableDynamicPayloads();   // needed
-    Radio1.setAddressWidth(5);        // use 5 bytes for addresses
-    Radio1.setCRCLength(RF24_CRC_16); // could be 8 or disabled
-    Radio1.setAutoAck(true);          // we want acks
-    Radio1.maskIRQ(1, 1, 1);          // no interrupts - seems NEEDED at the moment
-    Radio1.openWritingPipe(pip);
-    Radio1.stopListening();
-    delayMicroseconds(SHORT_DELAY);
-    ModelMatched = true;
-    BoundFlag    = true;
-    Connected    = true;
-    GreenLedOn();
-    CurrentMode = NORMAL;
 }
 
 //*************************************************************************************************************************
@@ -274,5 +226,61 @@ void DoWirelessBuddy() // only called in when not in LISTENMODE
 }
 
 //*************************************************************************************************************************
+//*************************************************************************************************************************
+void StopBuddyListen()
+{
+    uint64_t pip = TeensyMACAddPipe;
+    if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;
+    Radio1.setPALevel(RF24_PA_MAX);
+    Radio1.setDataRate(RF24_250KBPS);
+ 
+   
+   // Radio1.setRetries(15,15);
+
+    Radio1.enableAckPayload();
+    Radio1.enableDynamicPayloads();   // needed
+    Radio1.setAddressWidth(5);        // use 5 bytes for addresses
+    Radio1.setCRCLength(RF24_CRC_16); // could be 8 or disabled
+    Radio1.setAutoAck(true);          // we want acks
+    Radio1.maskIRQ(1, 1, 1);          // no interrupts - seems NEEDED at the moment
+    Radio1.openWritingPipe(pip);
+    Radio1.stopListening();
+    delayMicroseconds(SHORT_DELAY);
+    ModelMatched = true;
+    BoundFlag    = true;
+    Connected    = true;
+    GreenLedOn();
+    CurrentMode = NORMAL;
+}
+
+//*************************************************************************************************************************
+
+void StartBuddyListen()
+{
+    uint64_t pip = TeensyMACAddPipe;
+    if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;
+    Radio1.setPALevel(RF24_PA_MAX);
+    Radio1.setDataRate(RF24_250KBPS);
+
+    
+   // Radio1.setRetries(15,15);
+
+    Radio1.enableAckPayload();        // needed
+    Radio1.enableDynamicPayloads();   // needed
+    Radio1.setAddressWidth(5);        // use 5 bytes for addresses
+    Radio1.setCRCLength(RF24_CRC_16); // could be 8 or disabled
+    Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
+    Radio1.setAutoAck(true); // we want acks
+    Radio1.maskIRQ(1, 1, 1); // no interrupts - seems NEEDED at the moment
+    Radio1.openReadingPipe(1, pip);
+    delayMicroseconds(SHORT_DELAY);
+    Radio1.startListening();
+    ModelMatched = false;
+    BoundFlag    = false;
+    Connected    = false;
+    CurrentMode  = LISTENMODE;
+    FlushFifos();
+    BlueLedOn();
+}
 
 #endif
