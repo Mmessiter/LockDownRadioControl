@@ -98,6 +98,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
     if (IamMaster) {
         if (!BuddyON) // MASTER stays IN CONTROL OR RETAKES CONTROL!!! <--- todo
         {
+            delayMicroseconds(SHORT_DELAY);
             if (Radio1.write(&Master_in_Control, sizeof(Master_in_Control))) {
                 if (!GetPupilAck()) Look("Failed to get Pupil S Ack");
             }
@@ -138,6 +139,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
         else {                                         // failed to send P to master while pupil in control
             Look("Failed even to send a P to Master"); // HEER is a copout
             StartBuddyListen();                        // <<<<<<<<<<<<<<<<<<< PUPIL -> LISTEN HEER <<<<<< *******
+            PlaySound(BEEPMIDDLE);
             DelayWithDog(50);
             FlushFifos();
         }
