@@ -212,7 +212,6 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
     char Ack[2]               = "P"; // Pupil ack
 
     if (Radio1.available()) {
-
         if (IamMaster) { // master here
             if (BuddyON)
             {
@@ -225,12 +224,11 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
                 Look("Sending ACK S to Pupil");
             }
         }
-
-  
         delayMicroseconds(SHORT_DELAY);
         Radio1.writeAckPayload(1, &Ack, 2); // Acknowledge the packet
         delayMicroseconds(SHORT_DELAY);
         Radio1.read(&DataPacket, sizeof(DataPacket));
+       
         if (!IamMaster) { // pupil here
             if (DataPacket[0] == Master_in_Control[0]) {
                 Look("Got S from Master"); // STAY QUIET
@@ -245,8 +243,8 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
 
         if (IamMaster) { // master here
             if (DataPacket[0] == 'P') {
-                // Look1(millis());
-                // Look(" Pupil is alive");
+                //  Look1(millis());
+                //  Look(" Pupil is alive");
             }
             if (!BuddyON)
             {
