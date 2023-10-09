@@ -25,7 +25,7 @@ bool GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
     if (AckSpecial[0] == 'S') { // PUPIL -> LISTEN HEER <<<<<< *******
         Master_is_Alive = true;
         ErrorCounter    = 0;
-        Look("Master is telling us to shut up");
+       // Look("Master is telling us to shut up");
         PlaySound(MASTERMSG);
         StartBuddyListen(); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
         DelayWithDog(50);
@@ -88,7 +88,6 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
     uint8_t Master_in_Control[2] = "S"; // = Shut Up, send nothing
     uint8_t Pupil_in_Control[2]  = "O"; // = OK to send data
     uint8_t Pupil_is_Alive[2]    = "P";
-
     FlushFifos();
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
     delayMicroseconds(SHORT_DELAY);
@@ -127,9 +126,9 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
         }
     }
 
-    if (!IamMaster) { // HHEEEERR pupil area when in control **************************************************************
-        delay(10);
+    if (!IamMaster) { // HHEEEERR pupil area when in control *************************************************************
         if (Radio1.write(&Pupil_is_Alive, sizeof(Pupil_is_Alive))) { // send P to master
+            delayMicroseconds(SHORT_DELAY);
             if (GetMasterAck()) {
                 //   Look("Master saw our P");
             }
@@ -140,7 +139,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
         else {                                         // failed to send P to master while pupil in control
             Look("Failed even to send a P to Master"); // HEER is a copout
             StartBuddyListen();                        // <<<<<<<<<<<<<<<<<<< PUPIL -> LISTEN HEER <<<<<< *******
-            PlaySound(BEEPMIDDLE);
+            PlaySound(MASTERMSG);
             DelayWithDog(50);
             FlushFifos();
         }
@@ -207,10 +206,9 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
     }
     else { // no packet arrived
         if (IamMaster) {
-            if (millis() - LastPassivePacketTime > INTERBUDDYRATE + 100) {
-                Look("No packet arrived for ...");
+            if (millis() - LastPassivePacketTime > INTERBUDDYRATE + 50) {
                 StopBuddyListen(); // MASTER RECLAIMS CONTROL  HEER <<<<<< *******
-                Look("Master is taking control back - Pupils dead");
+                Look("Pupil's dead!!");
             }
         }
     }
