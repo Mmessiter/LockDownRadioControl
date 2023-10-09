@@ -210,26 +210,26 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
     char Master_in_Control[2] = "S"; // = Shut Up, send nothing
     char Pupil_in_Control[2]  = "O"; // = OK to send data
     char Ack[2]               = "P"; // Pupil ack
+    // Look1(millis());
+    // Look("  GetSpecialPacket");
+    if (IamMaster) { // master here
+        if (BuddyON)
+        {
+            Ack[0] = 'O'; // ok to continue sending - you're in charge
+            Look("Sending ACK O to Pupil");
+        }
+        if (!BuddyON)
+        {
+            Ack[0] = 'S'; // shut up now as buddy is now off.... *********
+            Look("Sending ACK S to Pupil");
+        }
+    }
 
-    
     if (Radio1.available()) {
         delayMicroseconds(SHORT_DELAY);
         Radio1.writeAckPayload(1, &Ack, 2); // Acknowledge the packet
         delayMicroseconds(SHORT_DELAY);
         Radio1.read(&DataPacket, sizeof(DataPacket));
-
-        if (IamMaster) { // master here
-            if (BuddyON)
-            {
-                Ack[0] = 'O'; // ok to continue sending - you're in charge
-                Look("Sending ACK O to Pupil");
-            }
-            if (!BuddyON)
-            {
-                Ack[0] = 'S'; // shut up now as buddy is now off.... *********
-                Look("Sending ACK S to Pupil");
-            }
-        }
 
         if (!IamMaster) { // pupil here
             if (DataPacket[0] == Master_in_Control[0]) {
@@ -241,25 +241,23 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
                 return;
             }
         }
-        if (IamMaster) { // master here
 
+
+        if (IamMaster) { // master here
             if (DataPacket[0] == 'P') {
                 // Look1(millis());
                 // Look(" Pupil is alive");
             }
-            if (BuddyON)
-                Look("Buddy is ON");
-            else
-                Look("Buddy is OFF");
-            // if (!BuddyON){
-            //     StopBuddyListen(); // MASTER -> CONTROL  HEER <<<<<< *******
-            // }
+            if (!BuddyON)
+            {
+                StopBuddyListen(); // MASTER -> CONTROL  HEER <<<<<< *******
+            }
+            DelayWithDog(3);
+            
         }
-        DelayWithDog(3);
         FlushFifos();
     }
 }
-
 //*************************************************************************************************************************
 
 void DoWirelessBuddy() // only called in when not in LISTENMODE
