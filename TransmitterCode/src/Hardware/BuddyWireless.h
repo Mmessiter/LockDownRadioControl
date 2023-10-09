@@ -210,8 +210,7 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
     char Master_in_Control[2] = "S"; // = Shut Up, send nothing
     char Pupil_in_Control[2]  = "O"; // = OK to send data
     char Ack[2]               = "P"; // Pupil ack
-    // Look1(millis());
-    // Look("  GetSpecialPacket");
+   
     if (IamMaster) { // master here
         if (BuddyON)
         {
@@ -250,11 +249,12 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
             }
             if (!BuddyON)
             {
+                DelayWithDog(30); 
                 StopBuddyListen(); // MASTER -> CONTROL  HEER <<<<<< *******
             }
-            DelayWithDog(3);
             
         }
+        DelayWithDog(3); 
         FlushFifos();
     }
 }
