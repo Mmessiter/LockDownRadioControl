@@ -201,8 +201,8 @@ void GreenLedOn()
     { // no need to repeat unless it is blinking
         if (!LedIsBlinking) {
             ShowComms();
-            if (AnnounceConnected && !BuddyPupilOnWireless) {
-                PlaySound(CONNECTEDMSG);
+            if (AnnounceConnected && !BuddyPupilOnWireless && !BuddyMasterOnWireless) {
+                PlaySound(CONNECTEDMSG); // not here
                 ModelMatched = true;
                 BoundFlag    = true;
                 DelayWithDog(750);
