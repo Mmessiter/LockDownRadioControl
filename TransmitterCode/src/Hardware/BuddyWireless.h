@@ -249,7 +249,7 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
             }
             if (!BuddyON)
             {
-                DelayWithDog(30); 
+                DelayWithDog(3); 
                 StopBuddyListen(); // MASTER -> CONTROL  HEER <<<<<< *******
             }
             

@@ -202,7 +202,7 @@ void GreenLedOn()
         if (!LedIsBlinking) {
             ShowComms();
             if (AnnounceConnected && !BuddyPupilOnWireless && !BuddyMasterOnWireless) {
-                PlaySound(CONNECTEDMSG); // not here
+                PlaySound(CONNECTEDMSG); 
                 ModelMatched = true;
                 BoundFlag    = true;
                 DelayWithDog(750);
