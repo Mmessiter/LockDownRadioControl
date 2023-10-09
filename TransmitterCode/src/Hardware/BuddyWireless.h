@@ -7,6 +7,7 @@
     #define SPECIAL_PACKET_CHANNEL 125 // Which channel for the special packets
     #define INTERBUDDYRATE         205 // 5 times a second (Fails below 200)
     #define SHORT_DELAY            200 // ... microseconds
+    #define LONGER_DELAY           1   // ... milliseconds
 
 //*************************************************************************************************************************
 
@@ -27,7 +28,7 @@ bool GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
         ErrorCounter    = 0;
         PlaySound(MASTERMSG);
         StartBuddyListen(); 
-        DelayWithDog(5);
+        DelayWithDog(LONGER_DELAY);
         FlushFifos();
         return Master_is_Alive;
     }
@@ -60,15 +61,11 @@ bool GetPupilAck() // Master gets Ack from pupil while MASTER in control
     }
     FlushFifos();
     if (FailureCounter > SPECIAL_PACKET_COUNT) {
-        //  Look1(millis());
-        //  Look(" Pupil is sending wierd acknowledgements");
         Pupil_is_Alive = false;
-        //  Look(AckSpecial[0]);
     }
     if (SuccessCounter == SPECIAL_PACKET_COUNT) {
         Pupil_is_Alive = true;
         FailureCounter = 0;
-        SuccessCounter = 0;
     }
     return Pupil_is_Alive;
 }
@@ -99,7 +96,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
                 if (GetPupilAck()) {
                     StartBuddyListen(); // MASTER -> LISTEN  HEER <<<<<< *******
                     PlaySound(BUDDYMSG);
-                    DelayWithDog(5);
+                    DelayWithDog(LONGER_DELAY);
                     LastPassivePacketTime = millis();
                     return;
                 }
@@ -115,7 +112,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
                                 //  Look("Failed even to send a P to Master"); //  copout
             StartBuddyListen(); // <<<<<<<<<<<<<<<<<<< PUPIL -> LISTEN HEER <<<<<< *******
             PlaySound(MASTERMSG);
-            DelayWithDog(5);
+            DelayWithDog(LONGER_DELAY);
             FlushFifos();
         }
         if (CurrentMode == LISTENMODE) return; // control might have ceased
@@ -158,14 +155,14 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
             }
             if (DataPacket[0] == Pupil_in_Control[0]) {
                 StopBuddyListen(); // PUPIL -> CONTROL  HEER <<<<<< *******
-                DelayWithDog(5);
+                DelayWithDog(LONGER_DELAY);
                 return;
             }
         }
-        DelayWithDog(5);
+        DelayWithDog(LONGER_DELAY);
         FlushFifos();
         if (TakeControlBackNow) {
-            DelayWithDog(5);
+            DelayWithDog(LONGER_DELAY);
             StopBuddyListen(); // MASTER RECLAIMS CONTROL  HEER <<<<<< *******
                                // Look("Master is taking control back");
         }
