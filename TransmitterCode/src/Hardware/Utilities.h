@@ -884,6 +884,7 @@ void ShowConnectionQuality()
     char Visible[]                = "vis Quality,1";
     char TXModuleMSG[]            = "** Using TX module **";
 
+    if (BuddyPupilOnWireless) return;
     if (PPMdata.UseTXModule) SendText(FrontView_Connected, TXModuleMSG);
     if (!LedWasGreen) return;
     SendValue(Quality, ConnectionQuality); // show quality of connection in progress bar

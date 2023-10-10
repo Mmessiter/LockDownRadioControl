@@ -27,7 +27,7 @@ bool GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
         Master_is_Alive = true;
         ErrorCounter    = 0;
         PlaySound(MASTERMSG);
-        StartBuddyListen(); 
+        StartBuddyListen();
         DelayWithDog(LONGER_DELAY);
         FlushFifos();
         return Master_is_Alive;
@@ -47,7 +47,7 @@ bool GetPupilAck() // Master gets Ack from pupil while MASTER in control
     static uint8_t FailureCounter = 0;
     static uint8_t SuccessCounter = 0;
     static bool    Pupil_is_Alive = false;
-    uint8_t AckSpecial[2]; // simple ack
+    uint8_t        AckSpecial[2]; // simple ack
 
     Radio1.read(&AckSpecial, 2);
     if (AckSpecial[0] == 'P') // ='P' pupil's only possible ack
@@ -109,7 +109,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
         }
         else {                  // failed to send P to master while pupil in control
                                 //  Look("Failed even to send a P to Master"); //  copout
-            StartBuddyListen(); // <<<<<<<<<<<<<<<<<<< PUPIL -> LISTEN HEER <<<<<< *******
+            StartBuddyListen(); // <<<<<<<<<<<<<<<<<<< PUPIL -> LISTEN <<<<<< *******
             PlaySound(MASTERMSG);
             DelayWithDog(LONGER_DELAY);
             FlushFifos();
@@ -136,12 +136,12 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
         if (IamMaster) { // master here
             if (BuddyON)
             {
-                Ack[0] = 'O'; // ok to continue sending - you're in charge
+                Ack[0]             = 'O'; // ok to continue sending - you're in charge
                 TakeControlBackNow = false;
             }
             if (!BuddyON)
             {
-                Ack[0] = 'S'; // shut up now as buddy is now off.... *********
+                Ack[0]             = 'S'; // shut up now as buddy is now off.... *********
                 TakeControlBackNow = true;
             }
         }
@@ -150,9 +150,11 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
         delayMicroseconds(SHORT_DELAY);
         Radio1.read(&DataPacket, sizeof(DataPacket));
         if (!IamMaster) { // pupil here
-            if (DataPacket[0] == Master_in_Control[0]) { } // no action needed
+            if (DataPacket[0] == Master_in_Control[0]) {
+            } // no action needed
             if (DataPacket[0] == Pupil_in_Control[0]) {
                 StopBuddyListen(); // PUPIL -> CONTROL  HEER <<<<<< *******
+
                 DelayWithDog(LONGER_DELAY);
                 return;
             }
@@ -210,6 +212,8 @@ void StopBuddyListen()
     Connected    = true;
     GreenLedOn();
     CurrentMode = NORMAL;
+    RestoreBrightness();
+    for (int i = 0; i < CHANNELSUSED; ++i) ShownBuffer[i] = 1700; // to force a redraw
 }
 //*************************************************************************************************************************
 
@@ -217,6 +221,7 @@ void StartBuddyListen()
 {
     uint64_t pip = TeensyMACAddPipe;
     if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;
+    char Ch_Lables[16][5] = {"Ch1", "Ch2", "Ch3", "Ch4", "Ch5", "Ch6", "Ch7", "Ch8", "Ch9", "Ch10", "Ch11", "Ch12", "Ch13", "Ch14", "Ch15", "Ch16"};
     Radio1.setPALevel(RF24_PA_MAX);
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();        // needed
@@ -232,8 +237,12 @@ void StartBuddyListen()
     ModelMatched = false;
     BoundFlag    = false;
     Connected    = false;
-    CurrentMode  = LISTENMODE;
     FlushFifos();
     BlueLedOn();
+    CurrentMode = LISTENMODE;
+    for (int i = 0; i < CHANNELSUSED; ++i) {
+        SendValue(Ch_Lables[i], 0);
+        ShownBuffer[i] = 0;
+    }
 }
 #endif

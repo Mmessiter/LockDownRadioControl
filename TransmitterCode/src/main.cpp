@@ -202,7 +202,7 @@ void GreenLedOn()
         if (!LedIsBlinking) {
             ShowComms();
             if (AnnounceConnected && !BuddyPupilOnWireless && !BuddyMasterOnWireless) {
-                PlaySound(CONNECTEDMSG); 
+                PlaySound(CONNECTEDMSG);
                 ModelMatched = true;
                 BoundFlag    = true;
                 DelayWithDog(750);
@@ -211,7 +211,6 @@ void GreenLedOn()
                 PlaySound(BUDDYMSG);
                 ModelMatched = true;
                 BoundFlag    = true;
-                
             }
             if (AnnounceConnected && BuddyMasterOnWireless) {
                 PlaySound(MASTERMSG);
@@ -479,7 +478,8 @@ FASTRUN void ShowComms()
     char         FrontView_RXBV[]       = "RXBV";
     char         Msg_CnctdBuddyMast[]   = "* MASTER has control *";
     char         Msg_CnctdBuddySlave[]  = "* BUDDY has control *";
-    char         MsgBuddying[]          = "* Buddy *";
+    char         MsgBuddying[]          = "* PPM Buddy *";
+    char         MsgBuddyingWL[]        = "* Wireless Buddy *";
     char         DataView_pps[]         = "pps"; // These are label names in the NEXTION data screen. They are best kept short.
     char         DataView_lps[]         = "lps";
     char         DataView_Alt[]         = "alt";
@@ -563,7 +563,8 @@ FASTRUN void ShowComms()
             default:
                 break;
         }
-        if (BuddyPupilOnPPM) SendText(FrontView_Connected, MsgBuddying);
+        if (BuddyPupilOnPPM) SendText(FrontView_Connected, MsgBuddying); // heer
+        if (BuddyPupilOnWireless) SendText(FrontView_Connected, MsgBuddyingWL);
         if (LedWasGreen) {
             if (BoundFlag) {
                 if (!BuddyMasterOnPPM) {
@@ -5726,8 +5727,8 @@ FASTRUN void ButtonWasPressed()
         } NextionCommand;
         NextionCommand.First4Bytes[0] = TextIn[0];
         NextionCommand.First4Bytes[1] = TextIn[1];
-        NextionCommand.First4Bytes[2] = 0; 
-        NextionCommand.First4Bytes[3] = 0; 
+        NextionCommand.First4Bytes[2] = 0;
+        NextionCommand.First4Bytes[3] = 0;
         uint32_t NumberedCommand      = NextionCommand.FirstDWord - 128;
 
 #ifdef DB_NEXTION
@@ -7007,18 +7008,18 @@ void CheckMotorOff()
 
 void GetBank()
 { //  and  motor switch and safety switch ETC ...
- 
+
     // static uint32_t LastBankRead = 0;
     // if (millis() - LastBankRead < 200) return;
     // LastBankRead = millis();
-    
+
     char FrontView_Hours[] = "Hours";
     char FrontView_Mins[]  = "Mins";
     char FrontView_Secs[]  = "Secs";
     char WarnOff[]         = "vis Warning,0";
 
     if ((CurrentMode != NORMAL) && (CurrentMode != LISTENMODE)) return; // not needed if calibrating
-   
+
     SafetyON = false;
     BuddyON  = false;
 
