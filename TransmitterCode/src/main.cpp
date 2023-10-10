@@ -4313,6 +4313,8 @@ void EndBuddyView()
     if (BuddyPupilOnWireless)
     {
         StartBuddyListen();
+    } else {
+        TryOtherPipe(); // don't  stay on wrong pipe 
     }
 }
 
