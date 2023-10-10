@@ -4309,6 +4309,10 @@ void EndBuddyView()
     {
         digitalWrite(POWER_OFF_PIN, HIGH);
     }
+    if (BuddyPupilOnWireless)
+    {
+        StartBuddyListen();
+    }
 }
 
 /*********************************************************************************************************************************/
