@@ -2418,29 +2418,31 @@ FLASHMEM void setup()
     ConfigureStickMode();
     WarningTimer = millis();
     CheckMotorOff();
-    if (MotorEnabled) {
-        ErrorState = MOTORISON;
-        SendNoData = true;
-    }
-    if (!UseMotorKill) ShowMotor(1);
-    if (SafetyON) ShowSafetyIsOn();
 
-    if (ErrorState) {
-        SendCommand(WarnNow);
-        if (ErrorState == CHECKSUMERROR) {
-            SendText(Warning, err_chksm);
+    if (!BuddyPupilOnWireless) { // when pupil is buddying wirelessly, these potential errors are ignored
+        if (MotorEnabled) {
+            ErrorState = MOTORISON;
+            SendNoData = true;
         }
-        if (ErrorState == MODELSFILENOTFOUND) {
-            SendText(Warning, err_404);
-        }
-        if (ErrorState == MOTORISON) {
-            SendText(Warning, err_MotorOn);
-            PlaySound(MOTORON);
-            DelayWithDog(1200);
-            PlaySound(PLSTURNOFF);
+        if (!UseMotorKill) ShowMotor(1);
+        if (SafetyON) ShowSafetyIsOn();
+        if (ErrorState)
+        {
+            SendCommand(WarnNow);
+            if (ErrorState == CHECKSUMERROR) {
+                SendText(Warning, err_chksm);
+            }
+            if (ErrorState == MODELSFILENOTFOUND) {
+                SendText(Warning, err_404);
+            }
+            if (ErrorState == MOTORISON) {
+                SendText(Warning, err_MotorOn);
+                PlaySound(MOTORON);
+                DelayWithDog(1200);
+                PlaySound(PLSTURNOFF);
+            }
         }
     }
-    // StopBuddyListen();
     if (BuddyPupilOnWireless)
     {
         StartBuddyListen();
@@ -7602,11 +7604,11 @@ void CheckPowerOffButton()
 
     if (!digitalRead(BUTTON_SENSE_PIN)) {
         GotoFrontView();
-        if (!LedWasGreen && !PPMdata.UseTXModule)
+        if (!LedWasGreen && !PPMdata.UseTXModule && !BuddyMasterOnWireless && !BuddyPupilOnWireless)
         {
             SimulateCloseDown(); // if not connected power off immediately
         }
-        else
+        if (LedWasGreen || PPMdata.UseTXModule || BuddyMasterOnWireless || BuddyPupilOnWireless)
         {
             if (!PowerOffTimer) {
                 RestoreBrightness();

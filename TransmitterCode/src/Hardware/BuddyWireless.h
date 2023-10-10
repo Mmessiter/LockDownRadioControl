@@ -192,7 +192,7 @@ void DoWirelessBuddy() // only called in when not in LISTENMODE
 }
 
 //*************************************************************************************************************************
-void StopBuddyListen()
+void StopBuddyListen() // here the transmitter takes control
 {
     uint64_t pip = TeensyMACAddPipe;
     if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;
@@ -222,6 +222,7 @@ void StartBuddyListen()
     uint64_t pip = TeensyMACAddPipe;
     if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;
     char Ch_Lables[16][5] = {"Ch1", "Ch2", "Ch3", "Ch4", "Ch5", "Ch6", "Ch7", "Ch8", "Ch9", "Ch10", "Ch11", "Ch12", "Ch13", "Ch14", "Ch15", "Ch16"};
+    //char cmd[]            = "dim=10";
     Radio1.setPALevel(RF24_PA_MAX);
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();        // needed
@@ -244,5 +245,6 @@ void StartBuddyListen()
         SendValue(Ch_Lables[i], 0);
         ShownBuffer[i] = 0;
     }
+    //SendCommand(cmd);
 }
 #endif
