@@ -884,7 +884,6 @@ void ShowConnectionQuality()
     char Visible[]                = "vis Quality,1";
     char TXModuleMSG[]            = "** Using TX module **";
 
-    if (BuddyPupilOnWireless) return;
     if (PPMdata.UseTXModule) SendText(FrontView_Connected, TXModuleMSG);
     if (!LedWasGreen) return;
     SendValue(Quality, ConnectionQuality); // show quality of connection in progress bar
@@ -896,7 +895,9 @@ void ShowConnectionQuality()
     if ((ConnectionQuality >= 50) && (ConnectionQuality < 75)) strcat(Msgbuf, Msg_ConnectedMarginal);
     if ((ConnectionQuality >= 25) && (ConnectionQuality < 50)) strcat(Msgbuf, Msg_ConnectedWeak);
     if ((ConnectionQuality >= 1) && (ConnectionQuality < 25)) strcat(Msgbuf, Msg_ConnectedVWeak);
-    SendText(FrontView_Connected, Msgbuf);
+    
+     if(!WirelessBuddy)  SendText(FrontView_Connected, Msgbuf);
+    
     SendCommand(Visible);
 }
 

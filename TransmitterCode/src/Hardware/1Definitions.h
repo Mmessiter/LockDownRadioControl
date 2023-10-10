@@ -557,8 +557,8 @@ void             SetUKFrequencies();
 uint16_t         MakeTwobytes(bool* f);
 void             SendSpecialPacket(bool IamMaster);
 void             GetSpecialPacket(bool IamMaster);
-void             StartBuddyListen();
-void             StopBuddyListen();
+void             StartBuddyListen(bool IamMaster);
+void             StopBuddyListen(bool IamMaster);
 void             DoWirelessBuddy();
 // **************************************************************************
 //                            GLOBAL DATA                                   *

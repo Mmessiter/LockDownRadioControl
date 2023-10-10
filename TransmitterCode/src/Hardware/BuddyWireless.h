@@ -27,7 +27,7 @@ bool GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
         Master_is_Alive = true;
         ErrorCounter    = 0;
         PlaySound(MASTERMSG);
-        StartBuddyListen();
+        StartBuddyListen(0);
         DelayWithDog(LONGER_DELAY);
         FlushFifos();
         return Master_is_Alive;
@@ -93,7 +93,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
         {
             if (Radio1.write(&Pupil_in_Control, sizeof(Pupil_in_Control))) { // SEND O to Pupil
                 if (GetPupilAck()) {
-                    StartBuddyListen(); // MASTER -> LISTEN  HEER <<<<<< *******
+                    StartBuddyListen(1); // MASTER -> LISTEN  HEER <<<<<< *******
                     PlaySound(BUDDYMSG);
                     DelayWithDog(LONGER_DELAY);
                     LastPassivePacketTime = millis();
@@ -107,9 +107,9 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
             delayMicroseconds(SHORT_DELAY);
             GetMasterAck();
         }
-        else {                  // failed to send P to master while pupil in control
-                                //  Look("Failed even to send a P to Master"); //  copout
-            StartBuddyListen(); // <<<<<<<<<<<<<<<<<<< PUPIL -> LISTEN <<<<<< *******
+        else {                   // failed to send P to master while pupil in control
+                                 //  Look("Failed even to send a P to Master"); //  copout
+            StartBuddyListen(0); // <<<<<<<<<<<<<<<<<<< PUPIL -> LISTEN <<<<<< *******
             PlaySound(MASTERMSG);
             DelayWithDog(LONGER_DELAY);
             FlushFifos();
@@ -153,7 +153,7 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
             if (DataPacket[0] == Master_in_Control[0]) {
             } // no action needed
             if (DataPacket[0] == Pupil_in_Control[0]) {
-                StopBuddyListen(); // PUPIL -> CONTROL  HEER <<<<<< *******
+                StopBuddyListen(0); // PUPIL -> CONTROL  HEER <<<<<< *******
 
                 DelayWithDog(LONGER_DELAY);
                 return;
@@ -163,14 +163,14 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
         FlushFifos();
         if (TakeControlBackNow) {
             DelayWithDog(LONGER_DELAY);
-            StopBuddyListen(); // MASTER RECLAIMS CONTROL  HEER <<<<<< *******
+            StopBuddyListen(1); // MASTER RECLAIMS CONTROL  HEER <<<<<< *******
         }
         LastPassivePacketTime = millis();
     }
     else { // no packet arrived  Pupil's dead!!
         if (IamMaster) {
             if (millis() - LastPassivePacketTime > INTERBUDDYRATE + 50) {
-                StopBuddyListen(); // MASTER RECLAIMS CONTROL  HEER <<<<<< *******
+                StopBuddyListen(1); // MASTER RECLAIMS CONTROL  HEER <<<<<< *******
             }
         }
     }
@@ -192,8 +192,13 @@ void DoWirelessBuddy() // only called in when not in LISTENMODE
 }
 
 //*************************************************************************************************************************
-void StopBuddyListen() // here the transmitter takes control
+void StopBuddyListen(bool IamMaster) // here the transmitter takes control
 {
+
+    char     FrontView_Connected[] = "Connected";
+    char     buddymsg[]            = "* WIRELESS BUDDY! *";
+    char     MasterMsg[]           = "* WIRELESS MASTER! *";
+    char     InVisible[]           = "vis Quality,0";
     uint64_t pip = TeensyMACAddPipe;
     if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;
     Radio1.setPALevel(RF24_PA_MAX);
@@ -213,13 +218,22 @@ void StopBuddyListen() // here the transmitter takes control
     GreenLedOn();
     CurrentMode = NORMAL;
     RestoreBrightness();
-    for (int i = 0; i < CHANNELSUSED; ++i) ShownBuffer[i] = 1700; // to force a redraw
+    if (IamMaster)
+        SendText(FrontView_Connected, MasterMsg);
+    else
+        SendText(FrontView_Connected, buddymsg);
+    SendCommand(InVisible);
+    ShowConnectionQuality();
 }
 //*************************************************************************************************************************
 
-void StartBuddyListen()
+void StartBuddyListen(bool IamMaster)
 {
-    uint64_t pip = TeensyMACAddPipe;
+    char     FrontView_Connected[] = "Connected";
+    char     buddymsg[]            = "(Wireless Buddy)";
+    char     MasterMsg[]           = "(Wireless Master)";
+    char     InVisible[]           = "vis Quality,0";
+    uint64_t pip                   = TeensyMACAddPipe;
     if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;
     char Ch_Lables[16][5] = {"Ch1", "Ch2", "Ch3", "Ch4", "Ch5", "Ch6", "Ch7", "Ch8", "Ch9", "Ch10", "Ch11", "Ch12", "Ch13", "Ch14", "Ch15", "Ch16"};
     Radio1.setPALevel(RF24_PA_MAX);
@@ -244,5 +258,11 @@ void StartBuddyListen()
         SendValue(Ch_Lables[i], 0);
         ShownBuffer[i] = 0;
     }
+    if (IamMaster)
+        SendText(FrontView_Connected, MasterMsg);
+    else
+        SendText(FrontView_Connected, buddymsg);
+
+    SendCommand(InVisible);
 }
 #endif

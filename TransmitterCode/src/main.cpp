@@ -480,7 +480,6 @@ FASTRUN void ShowComms()
     char         Msg_CnctdBuddyMast[]   = "* MASTER has control *";
     char         Msg_CnctdBuddySlave[]  = "* BUDDY has control *";
     char         MsgBuddying[]          = "* PPM Buddy *";
-    char         MsgBuddyingWL[]        = "* Wireless Buddy *";
     char         DataView_pps[]         = "pps"; // These are label names in the NEXTION data screen. They are best kept short.
     char         DataView_lps[]         = "lps";
     char         DataView_Alt[]         = "alt";
@@ -565,7 +564,6 @@ FASTRUN void ShowComms()
                 break;
         }
         if (BuddyPupilOnPPM) SendText(FrontView_Connected, MsgBuddying); // heer
-        if (BuddyPupilOnWireless) SendText(FrontView_Connected, MsgBuddyingWL);
         if (LedWasGreen) {
             if (BoundFlag) {
                 if (!BuddyMasterOnPPM) {
@@ -2444,9 +2442,18 @@ FLASHMEM void setup()
             }
         }
     }
+    if (BuddyPupilOnWireless && BuddyMasterOnWireless){
+        BuddyPupilOnWireless=false;
+        BuddyMasterOnWireless=false;
+    }
+
+    if (BuddyMasterOnWireless)
+    {
+        StopBuddyListen(1);
+    }
     if (BuddyPupilOnWireless)
     {
-        StartBuddyListen();
+        StartBuddyListen(0);
     }
 }
 /*********************************************************************************************************************************/
@@ -4312,7 +4319,7 @@ void EndBuddyView()
     }
     if (BuddyPupilOnWireless)
     {
-        StartBuddyListen();
+        StartBuddyListen(0);
     } else {
         TryOtherPipe(); // don't  stay on wrong pipe 
     }
