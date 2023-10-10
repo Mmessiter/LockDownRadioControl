@@ -4305,7 +4305,7 @@ void EndBuddyView()
     SendCommand(pRXSetupView);
     CurrentView = RXSETUPVIEW;
     UpdateModelsNameEveryWhere();
-    if (((OldPupilOnPPM != BuddyPupilOnPPM) || (OldMasterOnPPM != BuddyMasterOnPPM)) && (!WirelessBuddy))
+    if (((OldPupilOnPPM != BuddyPupilOnPPM) || (OldMasterOnPPM != BuddyMasterOnPPM)) && !WirelessBuddy)
     {
         digitalWrite(POWER_OFF_PIN, HIGH);
     }
