@@ -2318,7 +2318,7 @@ FLASHMEM void setup()
     char WarnNow[]              = "vis Warning,1";
     char Warning[]              = "Warning";
     char ModelsFile[]           = "models.dat";
-    char MasterMsg[]            = "* WIRELESS MASTER! *";
+    
 
     pinMode(REDLED, OUTPUT);
     pinMode(GREENLED, OUTPUT);
@@ -2443,9 +2443,25 @@ FLASHMEM void setup()
             }
         }
     }
-    if (BuddyPupilOnWireless && BuddyMasterOnWireless) {
+    RationaliseBuddy();
+}
+/*********************************************************************************************************************************/
+void RationaliseBuddy()
+{
+    char FrontView_Connected[] = "Connected";
+    char MasterMsg[]           = "* WIRELESS MASTER! *";
+    if (BuddyPupilOnWireless && BuddyMasterOnWireless)
+    {
         BuddyPupilOnWireless  = false;
         BuddyMasterOnWireless = false;
+        WirelessBuddy         = false;
+    }
+    if (!WirelessBuddy) {
+        BuddyPupilOnWireless  = false;
+        BuddyMasterOnWireless = false;
+    }
+    if (!BuddyPupilOnWireless && !BuddyMasterOnWireless) {
+        WirelessBuddy = false;
     }
 
     if (BuddyMasterOnWireless)
@@ -2457,8 +2473,6 @@ FLASHMEM void setup()
         StartBuddyListen(0);
     }
 }
-/*********************************************************************************************************************************/
-
 void GetStatistics()
 {
     if (RangeTestGoodPackets) PacketsPerSecond = RangeTestGoodPackets;
@@ -4318,10 +4332,13 @@ void EndBuddyView()
     {
         digitalWrite(POWER_OFF_PIN, HIGH);
     }
+    RationaliseBuddy();
+
     if (BuddyPupilOnWireless)
     {
         StartBuddyListen(0);
     }
+
     else {
         TryOtherPipe(); // don't  stay on wrong pipe
     }
