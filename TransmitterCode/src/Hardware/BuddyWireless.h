@@ -26,12 +26,12 @@ void GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
 
 //*************************************************************************************************************************
 
-bool GetPupilAck() // Master gets Ack from pupil while MASTER in control
+void GetPupilAck() // Master gets Ack from pupil while MASTER in control
 {
-    uint8_t AckSpecial[2]; // simple ack
-    Radio1.read(&AckSpecial, 2);
+    uint8_t AckSpecial[2];       // simple ack
+    Radio1.read(&AckSpecial, 2); // don't care what it is
     FlushFifos();
-    return true;
+    return;
 }
 //*************************************************************************************************************************
 
@@ -51,14 +51,14 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
         {
             delayMicroseconds(SHORT_DELAY);
             if (Radio1.write(&Master_in_Control, sizeof(Master_in_Control))) {
-                GetPupilAck(); // get ack from pupil - it's handled there
+                GetPupilAck(); // get ack from pupil
             }
         }
         if (BuddyON) //  PUPIL goes into CONTROL
         {
-            if (Radio1.write(&Pupil_in_Control, sizeof(Pupil_in_Control))) { // SEND O to Pupil. If can't, he's dead
-                GetPupilAck();                                               
-                StartBuddyListen(1);                                         // MASTER -> LISTEN  HEER <<<<<< *******
+            if (Radio1.write(&Pupil_in_Control, sizeof(Pupil_in_Control))) { // SEND O to Pupil. If we can't, he's dead
+                GetPupilAck();
+                StartBuddyListen(1); // MASTER -> LISTEN  (Pupil took control) HEER <<<<<< *******
                 PlaySound(BUDDYMSG);
                 DelayWithDog(LONGER_DELAY);
                 LastPassivePacketTime = millis();
@@ -70,13 +70,14 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
         if (Radio1.write(&Pupil_is_Alive, sizeof(Pupil_is_Alive))) { // send P to master
             delayMicroseconds(SHORT_DELAY);
             GetMasterAck();
+           // Look("OK!");
         }
         else {
             StartBuddyListen(0);  // <<<<<<<<<<<<<<<<<<< FAILSAFE PUPIL -> LISTEN <<<<<< *******
             PlaySound(MASTERMSG); // master must be back in control so pupil must shut up
             DelayWithDog(LONGER_DELAY);
             FlushFifos();
-            //  Look("Failsafed back to Master");
+          //  Look("Failsafed back to Master");
         }
         if (CurrentMode == LISTENMODE) return; // control might have ceased
     }
