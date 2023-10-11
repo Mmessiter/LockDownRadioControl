@@ -28,7 +28,7 @@ void GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
 
 bool GetPupilAck() // Master gets Ack from pupil while MASTER in control
 {
-    uint8_t        AckSpecial[2]; // simple ack
+    uint8_t AckSpecial[2]; // simple ack
     Radio1.read(&AckSpecial, 2);
     FlushFifos();
     return true;
@@ -56,14 +56,13 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
         }
         if (BuddyON) //  PUPIL goes into CONTROL
         {
-            if (Radio1.write(&Pupil_in_Control, sizeof(Pupil_in_Control))) { // SEND O to Pupil
-                if (GetPupilAck()) {
-                    StartBuddyListen(1); // MASTER -> LISTEN  HEER <<<<<< *******
-                    PlaySound(BUDDYMSG);
-                    DelayWithDog(LONGER_DELAY);
-                    LastPassivePacketTime = millis();
-                    return;
-                }
+            if (Radio1.write(&Pupil_in_Control, sizeof(Pupil_in_Control))) { // SEND O to Pupil. If can't, he's dead
+                GetPupilAck();                                               
+                StartBuddyListen(1);                                         // MASTER -> LISTEN  HEER <<<<<< *******
+                PlaySound(BUDDYMSG);
+                DelayWithDog(LONGER_DELAY);
+                LastPassivePacketTime = millis();
+                return;
             }
         }
     }
