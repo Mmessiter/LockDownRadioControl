@@ -343,6 +343,7 @@ var 1Definitions_8h =
     [ "PreScan", "1Definitions_8h.html#a5e3e764f8311564f5e20c3a838b25c07", null ],
     [ "Procrastinate", "1Definitions_8h.html#a760609a682300dfe6bfaac737fd4d5eb", null ],
     [ "Radio1", "1Definitions_8h.html#a621c346e4b1d9b24b9a5bda63d0f0f52", null ],
+    [ "RationaliseBuddy", "1Definitions_8h.html#aa65533089f2afae4789e1f1882ec78ad", null ],
     [ "ReadCheckSum32", "1Definitions_8h.html#a3c809856d2abf6b6f804e2fbe68d06f5", null ],
     [ "ReadOneModel", "1Definitions_8h.html#ac7a5ec6cf2ed7b50bd291f821e886302", null ],
     [ "ReadSwitches", "1Definitions_8h.html#ab0af36f3442ad4f2d0b716c14c7d6085", null ],

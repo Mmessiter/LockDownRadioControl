@@ -157,6 +157,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "PointSelect", "TransmitterCode_2src_2main_8cpp.html#ac7ef59496adda1ac4c905b854056a8f7", null ],
     [ "PointUp", "TransmitterCode_2src_2main_8cpp.html#a40c056b9758bef5cf5c986926ccf2313", null ],
     [ "PopulateMacrosView", "TransmitterCode_2src_2main_8cpp.html#a58fe79634784085398cb1f382f6bf57d", null ],
+    [ "RationaliseBuddy", "TransmitterCode_2src_2main_8cpp.html#aa65533089f2afae4789e1f1882ec78ad", null ],
     [ "ReadCheckSum32", "TransmitterCode_2src_2main_8cpp.html#a3c809856d2abf6b6f804e2fbe68d06f5", null ],
     [ "ReadCHSwitch", "TransmitterCode_2src_2main_8cpp.html#aeed3be7dfc45cde2e9e9d3578c104760", null ],
     [ "ReadDRSwitch", "TransmitterCode_2src_2main_8cpp.html#a0d5901e43a27733953343dd462178ada", null ],
