@@ -180,6 +180,7 @@ void StopBuddyListen(bool IamMaster) // here the transmitter takes control
     GreenLedOn();
     CurrentMode = NORMAL;
     RestoreBrightness();
+   
     if (IamMaster)
         SendText(FrontView_Connected, MasterMsg);
     else

@@ -1,7 +1,7 @@
 /** @file TransmitterCode/src/main.cpp
  * // Malcolm Messiter 2020 - 2023
  * @brief This is the main file for the transmitter code.
- * 
+ *
  * @page TransmitterCode...
  * @section LockDown Radio Control Features list, so far:
  * - Uses Teensy 4.1 MCU (at 600 Mhz) with nRF24L01+ transceiver
@@ -2318,6 +2318,7 @@ FLASHMEM void setup()
     char WarnNow[]              = "vis Warning,1";
     char Warning[]              = "Warning";
     char ModelsFile[]           = "models.dat";
+    char MasterMsg[]            = "* WIRELESS MASTER! *";
 
     pinMode(REDLED, OUTPUT);
     pinMode(GREENLED, OUTPUT);
@@ -2442,14 +2443,14 @@ FLASHMEM void setup()
             }
         }
     }
-    if (BuddyPupilOnWireless && BuddyMasterOnWireless){
-        BuddyPupilOnWireless=false;
-        BuddyMasterOnWireless=false;
+    if (BuddyPupilOnWireless && BuddyMasterOnWireless) {
+        BuddyPupilOnWireless  = false;
+        BuddyMasterOnWireless = false;
     }
 
     if (BuddyMasterOnWireless)
     {
-        StopBuddyListen(1);
+        SendText(FrontView_Connected, MasterMsg);
     }
     if (BuddyPupilOnWireless)
     {
@@ -4320,8 +4321,9 @@ void EndBuddyView()
     if (BuddyPupilOnWireless)
     {
         StartBuddyListen(0);
-    } else {
-        TryOtherPipe(); // don't  stay on wrong pipe 
+    }
+    else {
+        TryOtherPipe(); // don't  stay on wrong pipe
     }
 }
 
