@@ -3,7 +3,6 @@
 #include "Hardware/1Definitions.h"
 #ifndef BUDDYWIRELESS_H
     #define BUDDYWIRELESS_H
-    #define SPECIAL_PACKET_COUNT   1   // How many special packets to send
     #define SPECIAL_PACKET_CHANNEL 125 // Which channel for the special packets
     #define INTERBUDDYRATE         205 // 5 times a second (Fails below 200)
     #define SHORT_DELAY            200 // ... microseconds
@@ -11,62 +10,28 @@
 
 //*************************************************************************************************************************
 
-bool GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
+void GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
 {
-    static bool    Master_is_Alive = false;
-    static uint8_t ErrorCounter    = 0;
-    char           AckSpecial[2]   = " "; // simple ack
-
+    char AckSpecial[2] = " "; // simple ack
     Radio1.read(&AckSpecial, 2);
-    if (AckSpecial[0] == 'O') { // OK to continue sending. no action needed
-        Master_is_Alive = true;
-        ErrorCounter    = 0;
-    }
-
-    if (AckSpecial[0] == 'S') { // PUPIL -> LISTEN HEER <<<<<< *******
-        Master_is_Alive = true;
-        ErrorCounter    = 0;
+    if (AckSpecial[0] == 'O') return; // OK to continue sending. no action needed
+    if (AckSpecial[0] == 'S') {       // PUPIL -> LISTEN HEER <<<<<< *******
         PlaySound(MASTERMSG);
         StartBuddyListen(0);
         DelayWithDog(LONGER_DELAY);
-        FlushFifos();
-        return Master_is_Alive;
-    }
-    if (ErrorCounter == SPECIAL_PACKET_COUNT) {
-        Master_is_Alive = false;
-        ErrorCounter    = 0;
     }
     FlushFifos();
-    return Master_is_Alive;
+    return;
 }
 
 //*************************************************************************************************************************
 
 bool GetPupilAck() // Master gets Ack from pupil while MASTER in control
 {
-    static uint8_t FailureCounter = 0;
-    static uint8_t SuccessCounter = 0;
-    static bool    Pupil_is_Alive = false;
     uint8_t        AckSpecial[2]; // simple ack
-
     Radio1.read(&AckSpecial, 2);
-    if (AckSpecial[0] == 'P') // ='P' pupil's only possible ack
-    {
-        FailureCounter = 0;
-        ++SuccessCounter;
-    }
-    else { // bad ack
-        ++FailureCounter;
-        SuccessCounter = 0;
-    }
     FlushFifos();
-    if (FailureCounter == SPECIAL_PACKET_COUNT) {
-        Pupil_is_Alive = false;
-    }
-    if (SuccessCounter == SPECIAL_PACKET_COUNT) {
-        Pupil_is_Alive = true;
-    }
-    return Pupil_is_Alive;
+    return true;
 }
 //*************************************************************************************************************************
 
@@ -107,12 +72,12 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
             delayMicroseconds(SHORT_DELAY);
             GetMasterAck();
         }
-        else {                   // failed to send P to master while pupil in control
-                                 //  Look("Failed even to send a P to Master"); //  FAILSAFE
-            StartBuddyListen(0); // <<<<<<<<<<<<<<<<<<< FAILSAFE PUPIL -> LISTEN <<<<<< *******
-            PlaySound(MASTERMSG);
+        else {
+            StartBuddyListen(0);  // <<<<<<<<<<<<<<<<<<< FAILSAFE PUPIL -> LISTEN <<<<<< *******
+            PlaySound(MASTERMSG); // master must be back in control so pupil must shut up
             DelayWithDog(LONGER_DELAY);
             FlushFifos();
+            //  Look("Failsafed back to Master");
         }
         if (CurrentMode == LISTENMODE) return; // control might have ceased
     }
@@ -154,18 +119,17 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
             } // no action needed
             if (DataPacket[0] == Pupil_in_Control[0]) {
                 StopBuddyListen(0); // PUPIL -> CONTROL  HEER <<<<<< *******
-
                 DelayWithDog(LONGER_DELAY);
                 return;
             }
         }
         DelayWithDog(LONGER_DELAY);
-        FlushFifos();
         if (TakeControlBackNow) {
             DelayWithDog(LONGER_DELAY);
             StopBuddyListen(1); // MASTER RECLAIMS CONTROL  HEER <<<<<< *******
         }
         LastPassivePacketTime = millis();
+        FlushFifos();
     }
     else { // no packet arrived  Pupil's dead!!
         if (IamMaster) {
@@ -199,7 +163,7 @@ void StopBuddyListen(bool IamMaster) // here the transmitter takes control
     char     buddymsg[]            = "* WIRELESS BUDDY! *";
     char     MasterMsg[]           = "* WIRELESS MASTER! *";
     char     InVisible[]           = "vis Quality,0";
-    uint64_t pip = TeensyMACAddPipe;
+    uint64_t pip                   = TeensyMACAddPipe;
     if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;
     Radio1.setPALevel(RF24_PA_MAX);
     Radio1.setDataRate(RF24_250KBPS);
