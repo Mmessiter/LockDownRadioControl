@@ -71,9 +71,9 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
             delayMicroseconds(SHORT_DELAY);
             GetMasterAck();
         }
-        else {
+        else {                    // master must be either back in control, or ** dead ***. Pupil will shut up in either case
             StartBuddyListen(0);  // <<<<<<<<<<<<<<<<<<<  PUPIL -> LISTEN <<<<<< *******
-            PlaySound(MASTERMSG); // master must be either back in control, or ** dead ***. Pupil will shut up in either case
+            PlaySound(MASTERMSG); 
             DelayWithDog(LONGER_DELAY);
             FlushFifos();
         }
