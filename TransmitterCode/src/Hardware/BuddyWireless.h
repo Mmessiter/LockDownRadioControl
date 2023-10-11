@@ -3,7 +3,7 @@
 #include "Hardware/1Definitions.h"
 #ifndef BUDDYWIRELESS_H
     #define BUDDYWIRELESS_H
-    #define SPECIAL_PACKET_COUNT   3   // How many special packets to send
+    #define SPECIAL_PACKET_COUNT   1   // How many special packets to send
     #define SPECIAL_PACKET_CHANNEL 125 // Which channel for the special packets
     #define INTERBUDDYRATE         205 // 5 times a second (Fails below 200)
     #define SHORT_DELAY            200 // ... microseconds
@@ -32,7 +32,7 @@ bool GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
         FlushFifos();
         return Master_is_Alive;
     }
-    if (ErrorCounter > SPECIAL_PACKET_COUNT) {
+    if (ErrorCounter == SPECIAL_PACKET_COUNT) {
         Master_is_Alive = false;
         ErrorCounter    = 0;
     }
@@ -60,7 +60,7 @@ bool GetPupilAck() // Master gets Ack from pupil while MASTER in control
         SuccessCounter = 0;
     }
     FlushFifos();
-    if (FailureCounter > SPECIAL_PACKET_COUNT) {
+    if (FailureCounter == SPECIAL_PACKET_COUNT) {
         Pupil_is_Alive = false;
     }
     if (SuccessCounter == SPECIAL_PACKET_COUNT) {
@@ -107,10 +107,11 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
             delayMicroseconds(SHORT_DELAY);
             GetMasterAck();
         }
-        else {                   // failed to send P to master while pupil in control
+       else {                   // failed to send P to master while pupil in control
                                  //  Look("Failed even to send a P to Master"); //  copout
-            StartBuddyListen(0); // <<<<<<<<<<<<<<<<<<< PUPIL -> LISTEN <<<<<< *******
+            StartBuddyListen(0); // <<<<<<<<<<<<<<<<<<< FAILSAFE PUPIL -> LISTEN <<<<<< *******
             PlaySound(MASTERMSG);
+          //  Look("COPOUT");
             DelayWithDog(LONGER_DELAY);
             FlushFifos();
         }
