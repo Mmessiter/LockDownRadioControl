@@ -148,7 +148,7 @@ var searchData=
   ['getoverallsuccessrate_145',['GetOverallSuccessRate',['../TransmitterCode_2src_2main_8cpp.html#aed2ffdf0e904c6c985ac806ab6f294c1',1,'main.cpp']]],
   ['getpassthroughstatus_146',['getPassthroughStatus',['../classMPU6050.html#af2820067b73f177d985ed81e894281b0',1,'MPU6050']]],
   ['getproduct_147',['getProduct',['../classQuaternion.html#a3ff8405ed92a3ca16de656e6c83b4028',1,'Quaternion']]],
-  ['getpupilack_148',['GetPupilAck',['../BuddyWireless_8h.html#acd7b7f2bd0c01d9f7a3230e4d2f2ec7d',1,'BuddyWireless.h']]],
+  ['getpupilack_148',['GetPupilAck',['../BuddyWireless_8h.html#af59c2527be7a67d6b09dd467f3123d55',1,'BuddyWireless.h']]],
   ['getrate_149',['getRate',['../classMPU6050.html#a887a173e079980505763ffd1aa9fec05',1,'MPU6050']]],
   ['getreadcal_150',['getReadCal',['../classSBUS.html#a23dee3cadb6755157b32b8b16b10ccfe',1,'SBUS']]],
   ['getreturncode_151',['GetReturnCode',['../1Definitions_8h.html#a43937dd3d9c795271fd9c3eb3c6b6410',1,'GetReturnCode():&#160;Nextion.h'],['../Nextion_8h.html#a43937dd3d9c795271fd9c3eb3c6b6410',1,'GetReturnCode():&#160;Nextion.h']]],
