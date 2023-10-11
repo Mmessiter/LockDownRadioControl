@@ -17,7 +17,7 @@ void GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
     if (AckSpecial[0] == 'O') return; // OK to continue sending. no action needed
     if (AckSpecial[0] == 'S') {       // PUPIL -> LISTEN HEER <<<<<< *******
         PlaySound(MASTERMSG);
-        StartBuddyListen(0);
+        StartBuddyListen(0);          // 'S' from Master = Shut Up now, send nothing
         DelayWithDog(LONGER_DELAY);
     }
     FlushFifos();
@@ -70,14 +70,12 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
         if (Radio1.write(&Pupil_is_Alive, sizeof(Pupil_is_Alive))) { // send P to master
             delayMicroseconds(SHORT_DELAY);
             GetMasterAck();
-           // Look("OK!");
         }
         else {
-            StartBuddyListen(0);  // <<<<<<<<<<<<<<<<<<< FAILSAFE PUPIL -> LISTEN <<<<<< *******
-            PlaySound(MASTERMSG); // master must be back in control so pupil must shut up
+            StartBuddyListen(0);  // <<<<<<<<<<<<<<<<<<<  PUPIL -> LISTEN <<<<<< *******
+            PlaySound(MASTERMSG); // master must be either back in control, or ** dead ***. Pupil will shut up in either case
             DelayWithDog(LONGER_DELAY);
             FlushFifos();
-          //  Look("Failsafed back to Master");
         }
         if (CurrentMode == LISTENMODE) return; // control might have ceased
     }
