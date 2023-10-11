@@ -107,11 +107,10 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
             delayMicroseconds(SHORT_DELAY);
             GetMasterAck();
         }
-       else {                   // failed to send P to master while pupil in control
-                                 //  Look("Failed even to send a P to Master"); //  copout
+        else {                   // failed to send P to master while pupil in control
+                                 //  Look("Failed even to send a P to Master"); //  FAILSAFE
             StartBuddyListen(0); // <<<<<<<<<<<<<<<<<<< FAILSAFE PUPIL -> LISTEN <<<<<< *******
             PlaySound(MASTERMSG);
-          //  Look("COPOUT");
             DelayWithDog(LONGER_DELAY);
             FlushFifos();
         }
