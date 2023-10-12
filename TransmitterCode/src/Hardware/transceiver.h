@@ -3,7 +3,6 @@
 #include <Arduino.h>
 #include "Hardware/1Definitions.h"
 
-
 #ifndef TRANSCEIVER_H
     #define TRANSCEIVER_H
 
@@ -243,7 +242,7 @@ FASTRUN void SendData()
         }
     }
     else {
-        DoWirelessBuddy(); // use free time to deal with wireless buddy
+        if (WirelessBuddy) DoWirelessBuddy(); // use any spare milliseconds to deal with wireless buddy, in in use.
     }
 }
 /***********************************************************************************************************/

@@ -1,4 +1,7 @@
 // *************************************** BuddyWireless.h  *****************************************
+
+// This is the code for the wireless buddy system. Its functions are called from the main loop, and the SendData() function.
+
 #include <Arduino.h>
 #include "Hardware/1Definitions.h"
 #ifndef BUDDYWIRELESS_H
@@ -222,7 +225,7 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
 }
 //*************************************************************************************************************************
 
-void DoWirelessBuddy() // only called in when not in LISTENMODE
+void DoWirelessBuddy() // only called in when not in LISTENMODE and when wireless buddy is on
 {
     static uint32_t InterBuddyTimer = 0;
     if (((millis() - LastPacketSentTime)) > 6) { // if there is time, communicate with other buddy tx
