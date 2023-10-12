@@ -7,6 +7,7 @@
     #define INTERBUDDYRATE         205 // 5 times a second (Fails below 200)
     #define SHORT_DELAY            200 // ... microseconds
     #define LONGER_DELAY           1   // ... milliseconds
+    #define LOSTCONTACTTHRESHOLD   3
 
 //*************************************************************************************************************************
 // This function is called by Pupil and the Master was Detected - or not Detected.
@@ -16,7 +17,7 @@ void MasterDetected(bool Detected)
     static uint16_t LostMasterCount = 0;
     char            Mlost[]         = "Master not found";
     char            Mfound[]        = "Master found!";
-    char            wb[]            = "wb";
+    char            wb[]            = "wb"; // wb is the name of the label on front view
     char            YesVisible[]    = "vis wb,1";
 
     if (Detected) {
@@ -29,7 +30,7 @@ void MasterDetected(bool Detected)
     }
     else {
         ++LostMasterCount;
-        if (LostMasterCount > 3) {
+        if (LostMasterCount > LOSTCONTACTTHRESHOLD) {
             if (MasterIsAlive != 2) {
                 SendText(wb, Mlost);
                 SendCommand(YesVisible);
@@ -45,9 +46,9 @@ void MasterDetected(bool Detected)
 void PupilDetected(bool Detected)
 {
     static uint16_t LostPupilCount = 0;
-    char            Mlost[]        = "Pupil not found";
-    char            Mfound[]       = "Pupil found!";
-    char            wb[]           = "wb";
+    char            Mlost[]        = "Buddy not found";
+    char            Mfound[]       = "Buddy found!";
+    char            wb[]           = "wb"; // wb is the name of the label on front view
     char            YesVisible[]   = "vis wb,1";
     if (Detected) {
         LostPupilCount = 0;
@@ -59,7 +60,7 @@ void PupilDetected(bool Detected)
     }
     else {
         ++LostPupilCount;
-        if (LostPupilCount > 3) {
+        if (LostPupilCount > LOSTCONTACTTHRESHOLD) {
             if (PupilIsAlive != 2) {
                 SendText(wb, Mlost);
                 SendCommand(YesVisible);
