@@ -22,7 +22,7 @@ void MasterDetected(bool Detected)
 
     if (Detected) {
         LostMasterCount = 0;
-        if (MasterIsAlive != 1) {
+        if (MasterIsAlive != 1) { // MasterIsAlive = 1 means Master was already alive
             SendText(wb, Mfound);
             SendCommand(YesVisible);
             MasterIsAlive = 1;
@@ -31,7 +31,7 @@ void MasterDetected(bool Detected)
     else {
         ++LostMasterCount;
         if (LostMasterCount > LOSTCONTACTTHRESHOLD) {
-            if (MasterIsAlive != 2) {
+            if (MasterIsAlive != 2) { // MasterIsAlive = 2 means Master was already dead
                 SendText(wb, Mlost);
                 SendCommand(YesVisible);
                 MasterIsAlive = 2;
@@ -52,7 +52,7 @@ void PupilDetected(bool Detected)
     char            YesVisible[]   = "vis wb,1";
     if (Detected) {
         LostPupilCount = 0;
-        if (PupilIsAlive != 1) {
+        if (PupilIsAlive != 1) { // PupilIsAlive = 1 means Pupil was already alive
             SendText(wb, Mfound);
             SendCommand(YesVisible);
             PupilIsAlive = 1;
@@ -61,7 +61,7 @@ void PupilDetected(bool Detected)
     else {
         ++LostPupilCount;
         if (LostPupilCount > LOSTCONTACTTHRESHOLD) {
-            if (PupilIsAlive != 2) {
+            if (PupilIsAlive != 2) { // PupilIsAlive = 2 means Pupil was already dead
                 SendText(wb, Mlost);
                 SendCommand(YesVisible);
                 PupilIsAlive = 2;
