@@ -10,6 +10,7 @@
 
 //*************************************************************************************************************************
 // This function is called by Pupil and the Master was Detected - or not Detected.
+// After 30000 failed detections, the Master is declared dead, and a message is changed on front view.
 void MasterDetected(bool Detected)
 {
     static uint16_t LostMasterCount = 0;
@@ -41,6 +42,7 @@ void MasterDetected(bool Detected)
 
 //*************************************************************************************************************************
 // This function is called by Master when the Pupil was Detected - or not Detected.
+// After 2 failed detections, the Pupil is declared dead, and a message is changed on front view.
 void PupilDetected(bool Detected)
 {
     static uint16_t LostPupilCount = 0;
@@ -71,6 +73,8 @@ void PupilDetected(bool Detected)
 //*************************************************************************************************************************
 
 void GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
+// if ack is 'S' then master is taking control back
+// if ack is 'O' then master is ok with pupil staying in control
 {
     char AckSpecial[2] = " "; // simple ack
     Radio1.read(&AckSpecial, 2);
@@ -88,6 +92,7 @@ void GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
 //*************************************************************************************************************************
 
 void GetPupilAck() // Master gets Ack from pupil while MASTER in control
+// if ack exists at all then pupil is alive
 {
     uint8_t AckSpecial[2];       // simple ack
     Radio1.read(&AckSpecial, 2); // don't care what it is
@@ -97,7 +102,8 @@ void GetPupilAck() // Master gets Ack from pupil while MASTER in control
 }
 //*************************************************************************************************************************
 
-void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
+void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx while in control. This is called about 5 times a second.
+// hence the sender always stays in send mode, and the silent tx stays in receive (LISTEN) mode, only switching to send when takes control.
 {
     uint8_t Master_in_Control[2] = "S"; // = Shut Up, send nothing
     uint8_t Pupil_in_Control[2]  = "O"; // = OK to send data
