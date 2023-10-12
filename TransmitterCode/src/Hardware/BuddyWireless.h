@@ -7,7 +7,7 @@
     #define INTERBUDDYRATE         205 // 5 times a second (Fails below 200)
     #define SHORT_DELAY            200 // ... microseconds
     #define LONGER_DELAY           1   // ... milliseconds
-    #define LOSTCONTACTTHRESHOLD   3
+    #define LOSTCONTACTTHRESHOLD   3   // 3 fails in a row and we declare the buddy dead
 
 //*************************************************************************************************************************
 // This function is called by Pupil and the Master was Detected - or not Detected.
