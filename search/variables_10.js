@@ -50,10 +50,11 @@ var searchData=
   ['previouspowerofftimer_47',['PreviousPowerOffTimer',['../1Definitions_8h.html#aa0f21f6821e047d682752823a78bbb28',1,'1Definitions.h']]],
   ['print_5fcounter_48',['print_counter',['../Quadcopter_2src_2main_8cpp.html#a4f2748b40ccb482e2bd1120f31171ad2',1,'main.cpp']]],
   ['progmem_49',['PROGMEM',['../MPU6050__6Axis__MotionApps20_8h.html#ac511f931ef6563ffe04d50234287ecb6',1,'PROGMEM():&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#ac511f931ef6563ffe04d50234287ecb6',1,'PROGMEM():&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#a9ef67ec0ac01c37764f8e0f73b1e4b81',1,'PROGMEM():&#160;MPU6050_9Axis_MotionApps41.h']]],
-  ['purpose_50',['Purpose',['../structPayload.html#ac18701f2aa35ebd8402f45f840d5c445',1,'Payload']]],
-  ['pwmpins_51',['PWMPins',['../ReceiverCode_2src_2main_8cpp.html#a19f864fa6bdea0867325f70e162c92ef',1,'main.cpp']]],
-  ['pwr_5fcycle_52',['PWR_CYCLE',['../classMPU9250.html#aa45b7c35140a74784f0dbb10d4a9b064',1,'MPU9250']]],
-  ['pwr_5fmgmnt_5f1_53',['PWR_MGMNT_1',['../classMPU9250.html#aa0bc719f1a0caff0f1864618a2a2fa80',1,'MPU9250']]],
-  ['pwr_5fmgmnt_5f2_54',['PWR_MGMNT_2',['../classMPU9250.html#af2ddd3ae16ad94754edb57aade224e1e',1,'MPU9250']]],
-  ['pwr_5freset_55',['PWR_RESET',['../classMPU9250.html#a729a11aa2cf968263b87934fd849478c',1,'MPU9250']]]
+  ['pupilisalive_50',['PupilIsAlive',['../1Definitions_8h.html#a67fb2e738afb8ad08fc01f95b138c79f',1,'1Definitions.h']]],
+  ['purpose_51',['Purpose',['../structPayload.html#ac18701f2aa35ebd8402f45f840d5c445',1,'Payload']]],
+  ['pwmpins_52',['PWMPins',['../ReceiverCode_2src_2main_8cpp.html#a19f864fa6bdea0867325f70e162c92ef',1,'main.cpp']]],
+  ['pwr_5fcycle_53',['PWR_CYCLE',['../classMPU9250.html#aa45b7c35140a74784f0dbb10d4a9b064',1,'MPU9250']]],
+  ['pwr_5fmgmnt_5f1_54',['PWR_MGMNT_1',['../classMPU9250.html#aa0bc719f1a0caff0f1864618a2a2fa80',1,'MPU9250']]],
+  ['pwr_5fmgmnt_5f2_55',['PWR_MGMNT_2',['../classMPU9250.html#af2ddd3ae16ad94754edb57aade224e1e',1,'MPU9250']]],
+  ['pwr_5freset_56',['PWR_RESET',['../classMPU9250.html#a729a11aa2cf968263b87934fd849478c',1,'MPU9250']]]
 ];
