@@ -9,23 +9,22 @@
     #define LONGER_DELAY           1   // ... milliseconds
 
 //*************************************************************************************************************************
-// This function is called when the Pupil is in control and the Master was Detected - or not Detected.
+// This function is called by Pupil and the Master was Detected - or not Detected.
 void MasterDetected(bool Detected)
 {
     static uint16_t LostMasterCount = 0;
-    static uint8_t  MasterIsAlive   = 0;
     char            Mlost[]         = "Master not seen";
     char            Mfound[]        = "Master found!";
     char            wb[]            = "wb";
-    char            YesVisible[]     = "vis wb,1";
+    char            YesVisible[]    = "vis wb,1";
 
     if (Detected) {
         LostMasterCount = 0;
-       if (MasterIsAlive != 1) {
+        if (MasterIsAlive != 1) {
             SendText(wb, Mfound);
             SendCommand(YesVisible);
             MasterIsAlive = 1;
-       }
+        }
     }
     else {
         ++LostMasterCount;
@@ -39,16 +38,16 @@ void MasterDetected(bool Detected)
     }
 }
 
+
 //*************************************************************************************************************************
-// This function is called when the Master is in control and the Pupil was Detected - or not Detected.
+// This function is called by Master when the Pupil was Detected - or not Detected.
 void PupilDetected(bool Detected)
 {
     static uint16_t LostPupilCount = 0;
-    static uint8_t  PupilIsAlive   = 0;
-    char            Mlost[]         = "Pupil not seen";
-    char            Mfound[]        = "Pupil found!";
-    char            wb[]            = "wb";
-    char            YesVisible[]    = "vis wb,1";
+    char            Mlost[]        = "Pupil not seen";
+    char            Mfound[]       = "Pupil found!";
+    char            wb[]           = "wb";
+    char            YesVisible[]   = "vis wb,1";
     if (Detected) {
         LostPupilCount = 0;
         if (PupilIsAlive != 1) {
@@ -115,10 +114,10 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx
             delayMicroseconds(SHORT_DELAY);
             if (Radio1.write(&Master_in_Control, sizeof(Master_in_Control))) {
                 GetPupilAck(); // get ack from pupil
-            }else{
+            }
+            else {
                 PupilDetected(false);
             }
-
         }
         if (BuddyON) //  PUPIL goes into CONTROL
         {
@@ -210,7 +209,6 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
         if (!IamMaster) {
             MasterDetected(false);
         }
-       
     }
 }
 //*************************************************************************************************************************

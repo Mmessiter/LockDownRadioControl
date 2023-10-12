@@ -2318,7 +2318,6 @@ FLASHMEM void setup()
     char WarnNow[]              = "vis Warning,1";
     char Warning[]              = "Warning";
     char ModelsFile[]           = "models.dat";
-    
 
     pinMode(REDLED, OUTPUT);
     pinMode(GREENLED, OUTPUT);
@@ -2450,6 +2449,10 @@ void RationaliseBuddy()
 {
     char FrontView_Connected[] = "Connected";
     char MasterMsg[]           = "* WIRELESS MASTER! *";
+
+    PupilIsAlive  = 0;
+    MasterIsAlive = 0;
+
     if (BuddyPupilOnWireless && BuddyMasterOnWireless)
     {
         BuddyPupilOnWireless  = false;
@@ -2473,6 +2476,7 @@ void RationaliseBuddy()
         StartBuddyListen(0);
     }
 }
+/*********************************************************************************************************************************/
 void GetStatistics()
 {
     if (RangeTestGoodPackets) PacketsPerSecond = RangeTestGoodPackets;
@@ -7433,6 +7437,9 @@ void GotoFrontView()
     char fms[4][4]             = {{"fm1"}, {"fm2"}, {"fm3"}, {"fm4"}};
     char FrontView_Connected[] = "Connected";
     char page_FrontView[]      = "page FrontView";
+
+    PupilIsAlive  = 0;
+    MasterIsAlive = 0;
 
     if (CurrentView != FRONTVIEW) {
         if (CurrentView == SCANVIEW) DoScanEnd();
