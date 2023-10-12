@@ -124,7 +124,7 @@ void SendModelFile()
     }
     Radio1.setChannel(FILECHANNEL);
     Radio1.setPALevel(FILEPALEVEL, true);
-    Radio1.setRetries(15, 15);
+    Radio1.setRetries(2, 15);
     Radio1.openWritingPipe(TXPipe);
     Radio1.stopListening();
     DelayWithDog(4);
@@ -159,10 +159,8 @@ void SendModelFile()
             Fposition += BUFFERSIZE;
             if (Fposition > Fsize) Fposition = Fsize;
         }
-
-        DelayWithDog(50);
-        Radio1.write(&Fbuffer, BUFFERSIZE + 4);
-        Radio1.read(&Fack, sizeof(Fack)); // ignore the ACK
+        Radio1.write(&Fbuffer, BUFFERSIZE + 4); //  we need error checking!!!
+        Radio1.read(&Fack, sizeof(Fack));
 
     #ifdef DB_MODEL_EXCHANGE
         Serial.println(PacketNumber);
@@ -198,6 +196,11 @@ void SendModelFile()
     CurrentView = MODELSVIEW;
     CloseModelsFile();
 }
+
+/***************************************************************************************************************************************************/
+/**************************************************** RECEIVE A MODEL FILE *************************************************************************/
+/***************************************************************************************************************************************************/
+
 /** @brief RECEIVE A MODEL FILE */
 void ReceiveModelFile()
 {
@@ -218,7 +221,7 @@ void ReceiveModelFile()
     unsigned long Fposition      = 0;
     float         SecondsElapsed = 0;
     uint8_t       p              = 5;
-    char          nb1[20];
+    char          nb1[40];
 
     char Received[] = "Received ";
     char of[]       = " of ";
@@ -245,7 +248,7 @@ void ReceiveModelFile()
         InitRadio(DefaultPipe);
     }
     RXPipe = FILEPIPEADDRESS;
-    Radio1.setRetries(15, 15);
+    Radio1.setRetries(2, 15);
     Radio1.setChannel(FILECHANNEL);
     Radio1.flush_tx();
     Radio1.flush_rx();
@@ -296,9 +299,8 @@ void ReceiveModelFile()
         }
     } // *First* packet must have arrived!
 
-    Radio1.writeAckPayload(1, &Fack, sizeof(Fack)); //  Ack first packet
-    Radio1.read(&Fbuffer, BUFFERSIZE + 4);          //  Read it
-
+    Radio1.writeAckPayload(1, &Fack, sizeof(Fack)); //  Send first ack
+    Radio1.read(&Fbuffer, BUFFERSIZE + 4);          //  Read first packet
     SendCommand(ProgressStart);
     SendValue(Progress, p);
     SendText(ModelsView_filename, Receiving);
@@ -308,9 +310,9 @@ void ReceiveModelFile()
     Fsize += Fbuffer[BUFFERSIZE + 2] << 16;
     Fsize += Fbuffer[BUFFERSIZE + 3] << 24; //  Get file size
 
-    for (int q = 0; q < 5; ++q) { 
+    for (int q = 0; q < 5; ++q) {
         BuddyMacAddress[q] = Fbuffer[q + 16]; // sender's macaddress is in buffer at offset 16 - get it heer!
-      //  if (q == 0) ++BuddyMacAddress[q];     // add one to lowest byte to make it unique // heer!!
+                                              //  if (q == 0) ++BuddyMacAddress[q];     // add one to lowest byte to make it unique // heer!!
     }
 
     #ifdef DB_MODEL_EXCHANGE
@@ -349,6 +351,9 @@ void ReceiveModelFile()
             strcat(msg, Str(nb1, Fsize, 0));
             ShowFileProgress(msg);
         }
+        else {
+           // NoPacketArrivedYet(PacketArrivalTime); // error handling here! ....
+        }
     }
     SendValue(Progress, 100);
     WriteEntireBuffer();
@@ -357,7 +362,7 @@ void ReceiveModelFile()
     DelayWithDog(500);
     SendText(ModelsView_filename, SingleModelFile);
 
-    // **************************************** Below Here the new model is imported for immediate use
+    // Below Here the new model is imported for immediate use
 
     SingleModelFlag = true;
     ReadOneModel(1);
@@ -390,4 +395,4 @@ void ReceiveModelFile()
 }
 // ***********************************************************************************************************
 
-    #endif
+#endif

@@ -561,11 +561,12 @@ void             StartBuddyListen(bool IamMaster);
 void             StopBuddyListen(bool IamMaster);
 void             DoWirelessBuddy();
 void             RationaliseBuddy();
-    // **************************************************************************
-    //                            GLOBAL DATA                                   *
-    //***************************************************************************
 
-    RF24 Radio1(CE_PIN, CSN_PIN);
+// **************************************************************************
+//                            GLOBAL DATA                                   *
+//***************************************************************************
+
+RF24          Radio1(CE_PIN, CSN_PIN);
 WDT_T4<WDT3>  TeensyWatchDog;
 WDT_timings_t WatchDogConfig;
 byte          Mixes[MAXMIXES + 1][17];                      // 17 possible elements per mix. NOTHING to do with channels count!!!
