@@ -14,7 +14,7 @@
 void MasterDetected(bool Detected)
 {
     static uint16_t LostMasterCount = 0;
-    char            Mlost[]         = "Master not seen";
+    char            Mlost[]         = "Master not found";
     char            Mfound[]        = "Master found!";
     char            wb[]            = "wb";
     char            YesVisible[]    = "vis wb,1";
@@ -46,7 +46,7 @@ void MasterDetected(bool Detected)
 void PupilDetected(bool Detected)
 {
     static uint16_t LostPupilCount = 0;
-    char            Mlost[]        = "Pupil not seen";
+    char            Mlost[]        = "Pupil not found";
     char            Mfound[]       = "Pupil found!";
     char            wb[]           = "wb";
     char            YesVisible[]   = "vis wb,1";
@@ -79,7 +79,7 @@ void GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
     char AckSpecial[2] = " "; // simple ack
     Radio1.read(&AckSpecial, 2);
     if (AckSpecial[0] == 'O') return; // OK to continue sending. no action needed
-    if (AckSpecial[0] == 'S') {       // PUPIL -> LISTEN HEER <<<<<< *******
+    if (AckSpecial[0] == 'S') {       // PUPIL -> LISTEN  <<<<<< *******
         PlaySound(MASTERMSG);
         StartBuddyListen(0); // 'S' from Master = Shut Up now, send nothing
         DelayWithDog(LONGER_DELAY);
@@ -129,7 +129,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx whil
         {
             if (Radio1.write(&Pupil_in_Control, sizeof(Pupil_in_Control))) { // SEND O to Pupil. If we can't, he's dead
                 GetPupilAck();
-                StartBuddyListen(1); // MASTER -> LISTEN  (Pupil took control) HEER <<<<<< *******
+                StartBuddyListen(1); // MASTER -> LISTEN  (Pupil took control)  <<<<<< *******
                 PlaySound(BUDDYMSG);
                 DelayWithDog(LONGER_DELAY);
                 LastPassivePacketTime = millis();
@@ -193,7 +193,7 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
             if (DataPacket[0] == Master_in_Control[0]) {
             } // no action needed
             if (DataPacket[0] == Pupil_in_Control[0]) {
-                StopBuddyListen(0); // PUPIL -> CONTROL  HEER <<<<<< *******
+                StopBuddyListen(0); // PUPIL -> CONTROL   <<<<<< *******
                 DelayWithDog(LONGER_DELAY);
                 return;
             }
@@ -201,15 +201,15 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
         DelayWithDog(LONGER_DELAY);
         if (TakeControlBackNow) {
             DelayWithDog(LONGER_DELAY);
-            StopBuddyListen(1); // MASTER RECLAIMS CONTROL  HEER <<<<<< *******
+            StopBuddyListen(1); // MASTER RECLAIMS CONTROL   <<<<<< *******
         }
         LastPassivePacketTime = millis();
         FlushFifos();
     }
-    else { // no packet arrived  Pupil's dead!!
+    else { // no packet arrived so maybe Pupil's dead, better grab control back
         if (IamMaster) {
-            if (millis() - LastPassivePacketTime > INTERBUDDYRATE + 50) {
-                StopBuddyListen(1); // MASTER RECLAIMS CONTROL  HEER <<<<<< *******
+            if (millis() - LastPassivePacketTime > INTERBUDDYRATE + 10) {
+                StopBuddyListen(1); // MASTER RECLAIMS CONTROL   <<<<<< *******
             }
         }
         if (!IamMaster) {
