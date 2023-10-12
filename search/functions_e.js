@@ -21,5 +21,6 @@ var searchData=
   ['printrollpitchyaw_18',['printRollPitchYaw',['../Quadcopter_2src_2main_8cpp.html#af58905571a8592d536b2f10f243e0ce9',1,'main.cpp']]],
   ['printservocommands_19',['printServoCommands',['../Quadcopter_2src_2main_8cpp.html#ab3633f479d5122bce26384264d64f657',1,'main.cpp']]],
   ['procrastinate_20',['Procrastinate',['../1Definitions_8h.html#a760609a682300dfe6bfaac737fd4d5eb',1,'1Definitions.h']]],
-  ['prodradio_21',['ProdRadio',['../radio_8h.html#a62f1498f67d7e438905ae486bc27044f',1,'radio.h']]]
+  ['prodradio_21',['ProdRadio',['../radio_8h.html#a62f1498f67d7e438905ae486bc27044f',1,'radio.h']]],
+  ['pupildetected_22',['PupilDetected',['../BuddyWireless_8h.html#a89fc05df708fec875356b62d21b2ce7b',1,'BuddyWireless.h']]]
 ];

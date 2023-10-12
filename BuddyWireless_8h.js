@@ -8,6 +8,8 @@ var BuddyWireless_8h =
     [ "GetMasterAck", "BuddyWireless_8h.html#ab011d1af38c6c236733cf3a86b5a8b50", null ],
     [ "GetPupilAck", "BuddyWireless_8h.html#af59c2527be7a67d6b09dd467f3123d55", null ],
     [ "GetSpecialPacket", "BuddyWireless_8h.html#a6b6be9f7d9ac75c161d1dc492961bebf", null ],
+    [ "MasterDetected", "BuddyWireless_8h.html#a9028cb650cb079d28bc5dfc307242bb3", null ],
+    [ "PupilDetected", "BuddyWireless_8h.html#a89fc05df708fec875356b62d21b2ce7b", null ],
     [ "SendSpecialPacket", "BuddyWireless_8h.html#acaaa9b3fb98db4a2c2bec422c5178f1c", null ],
     [ "StartBuddyListen", "BuddyWireless_8h.html#a20625865343fced238023ed021d980f9", null ],
     [ "StopBuddyListen", "BuddyWireless_8h.html#a48deaa676a577a781ebfe3a7c24aa2f5", null ]
