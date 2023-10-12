@@ -1,5 +1,6 @@
 var NAVTREEINDEX10 =
 {
+"classMPU9250.html#ac7a02a1a77fe8bf5a477cc37820d2f27":[4,0,2,227],
 "classMPU9250.html#ac909d3078a23d24d44fb8852f9371c40":[4,0,2,35],
 "classMPU9250.html#acaf2ae31cfdeb6d47b922996feb55b69":[4,0,2,4],
 "classMPU9250.html#acfc8adb5dcfe24eb35f2a82377c0d8a0":[4,0,2,43],
@@ -196,8 +197,8 @@ var NAVTREEINDEX10 =
 "elapsedMillis_8h.html":[5,0,0,0,0,2,0],
 "elapsedMillis_8h_source.html":[5,0,0,0,0,2,0],
 "files.html":[5,0],
-"functions.html":[4,3,0,0],
 "functions.html":[4,3,0],
+"functions.html":[4,3,0,0],
 "functions_a.html":[4,3,0,1],
 "functions_b.html":[4,3,0,2],
 "functions_c.html":[4,3,0,3],
@@ -235,8 +236,8 @@ var NAVTREEINDEX10 =
 "functions_t.html":[4,3,0,16],
 "functions_u.html":[4,3,0,17],
 "functions_v.html":[4,3,0,18],
-"functions_vars.html":[4,3,2],
 "functions_vars.html":[4,3,2,0],
+"functions_vars.html":[4,3,2],
 "functions_vars_a.html":[4,3,2,1],
 "functions_vars_b.html":[4,3,2,2],
 "functions_vars_c.html":[4,3,2,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX10 =
 "functions_vars_l.html":[4,3,2,9],
 "functions_vars_m.html":[4,3,2,10],
 "functions_vars_p.html":[4,3,2,11],
-"functions_vars_r.html":[4,3,2,12],
-"functions_vars_s.html":[4,3,2,13]
+"functions_vars_r.html":[4,3,2,12]
 };

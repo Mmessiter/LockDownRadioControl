@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"BuddyWireless_8h_source.html":[5,0,3,0,0,2],
 "I2Cdev_8cpp.html":[5,0,0,0,0,0,1],
 "I2Cdev_8cpp.html#af7b7dc9a200cb1404c280bd500fd1551":[5,0,0,0,0,0,1,0],
 "I2Cdev_8cpp_source.html":[5,0,0,0,0,0,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "MPU6050_8h.html#aa143953c1136c1c7db038cb88e4ee92f":[5,0,0,0,0,0,4,39],
 "MPU6050_8h.html#aa1a6f7f2b079583c5478f7126f7ca3d6":[5,0,0,0,0,0,4,205],
 "MPU6050_8h.html#aa24a8f0d1285c74a94c7407a94d4be9b":[5,0,0,0,0,0,4,291],
-"MPU6050_8h.html#aa27e7511d60ab2f0d99b4bb138539e25":[5,0,0,0,0,0,4,68],
-"MPU6050_8h.html#aa4318f7e67df92b06d81356b38048a6d":[5,0,0,0,0,0,4,266]
+"MPU6050_8h.html#aa27e7511d60ab2f0d99b4bb138539e25":[5,0,0,0,0,0,4,68]
 };
