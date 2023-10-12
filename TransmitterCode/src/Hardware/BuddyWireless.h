@@ -29,7 +29,7 @@ void MasterDetected(bool Detected)
     }
     else {
         ++LostMasterCount;
-        if (LostMasterCount > 30000) {
+        if (LostMasterCount > 3) {
             if (MasterIsAlive != 2) {
                 SendText(wb, Mlost);
                 SendCommand(YesVisible);
@@ -38,7 +38,6 @@ void MasterDetected(bool Detected)
         }
     }
 }
-
 
 //*************************************************************************************************************************
 // This function is called by Master when the Pupil was Detected - or not Detected.
@@ -213,7 +212,10 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
             }
         }
         if (!IamMaster) {
-            MasterDetected(false);
+            if (millis() - LastPassivePacketTime > INTERBUDDYRATE + 10) {
+                MasterDetected(false);
+                LastPassivePacketTime = millis();
+            }
         }
     }
 }
