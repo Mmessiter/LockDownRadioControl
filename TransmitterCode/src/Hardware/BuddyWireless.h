@@ -10,7 +10,7 @@
 
 //*************************************************************************************************************************
 // This function is called by Pupil and the Master was Detected - or not Detected.
-// After 30000 failed detections, the Master is declared dead, and a message is changed on front view.
+// After 3 failed detections, the Master is declared dead, and a message is changed on front view.
 void MasterDetected(bool Detected)
 {
     static uint16_t LostMasterCount = 0;
@@ -41,7 +41,7 @@ void MasterDetected(bool Detected)
 
 //*************************************************************************************************************************
 // This function is called by Master when the Pupil was Detected - or not Detected.
-// After 2 failed detections, the Pupil is declared dead, and a message is changed on front view.
+// After 3 failed detections, the Pupil is declared dead, and a message is changed on front view.
 void PupilDetected(bool Detected)
 {
     static uint16_t LostPupilCount = 0;
@@ -59,7 +59,7 @@ void PupilDetected(bool Detected)
     }
     else {
         ++LostPupilCount;
-        if (LostPupilCount > 2) {
+        if (LostPupilCount > 3) {
             if (PupilIsAlive != 2) {
                 SendText(wb, Mlost);
                 SendCommand(YesVisible);
