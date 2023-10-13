@@ -9,7 +9,7 @@
     #define SPECIAL_PACKET_CHANNEL 125 // Which channel for the special packets
     #define INTERBUDDYRATE         205 // 5 times a second (Fails below 200)
     #define SHORT_DELAY            200 // ... microseconds
-    #define LONGER_DELAY           1   // ... milliseconds
+    #define LONGER_DELAY           2   // ... milliseconds
     #define LOSTCONTACTTHRESHOLD   3   // 3 fails in a row and we declare the buddy dead
 
 //*************************************************************************************************************************
@@ -111,6 +111,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx whil
     uint8_t Master_in_Control[2] = "S"; // = Shut Up, send nothing
     uint8_t Pupil_in_Control[2]  = "O"; // = OK to send data
     uint8_t Pupil_is_Alive[2]    = "P";
+    //  static uint8_t Ack_lost             = 0;
     FlushFifos();
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
     delayMicroseconds(SHORT_DELAY);
@@ -146,15 +147,28 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx whil
     if (!IamMaster) {                                                // pupil area when in control *************************************************************
         if (Radio1.write(&Pupil_is_Alive, sizeof(Pupil_is_Alive))) { // send P to master
             MasterDetected(true);
-            delayMicroseconds(SHORT_DELAY);
             GetMasterAck();
         }
-        else {                   // master must be either back in control, or ** dead ***. Pupil will shut up in either case
-            StartBuddyListen(0); // <<<<<<<<<<<<<<<<<<<  PUPIL -> LISTEN <<<<<< *******
-            MasterDetected(false);
-            PlaySound(MASTERMSG);
-            DelayWithDog(LONGER_DELAY);
-            FlushFifos();
+        else {
+            DelayWithDog(LONGER_DELAY);                                  // first try failed, try again
+            if (Radio1.write(&Pupil_is_Alive, sizeof(Pupil_is_Alive))) { // send P to master
+                MasterDetected(true);
+                GetMasterAck();
+            }
+            else {
+                DelayWithDog(LONGER_DELAY);                                  // second try failed, try a third time
+                if (Radio1.write(&Pupil_is_Alive, sizeof(Pupil_is_Alive))) { // send P to master
+                    MasterDetected(true);
+                    GetMasterAck();
+                }
+                else { // master must be either back in control, or ** dead ***. Pupil will shut up in either case
+                    MasterDetected(false);
+                    StartBuddyListen(0); // <<<<<<<<<<<<<<<<<<<  PUPIL -> LISTEN <<<<<< *******
+                    PlaySound(MASTERMSG);
+                    DelayWithDog(LONGER_DELAY);
+                    FlushFifos();
+                }
+            }
         }
         if (CurrentMode == LISTENMODE) return; // control might have ceased
     }
