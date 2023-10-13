@@ -166,7 +166,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx whil
 
 //*************************************************************************************************************************
 
-void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
+void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx. This function is called from main loop
 {
     char DataPacket[2]        = " ";
     char Master_in_Control[2] = "S"; // = Shut Up, send nothing
@@ -224,7 +224,7 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
 }
 //*************************************************************************************************************************
 
-void DoWirelessBuddy() // only called in when not in LISTENMODE and when wireless buddy is on
+void DoWirelessBuddy() // only called from SendData() in when not in LISTENMODE and when wireless buddy is on
 {
     static uint32_t InterBuddyTimer = 0;
     if (((millis() - LastPacketSentTime)) > 6) { // if there is time, communicate with other buddy tx
