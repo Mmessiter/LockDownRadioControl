@@ -300,6 +300,7 @@ void ReceiveModelFile()
     } // *First* packet must have arrived!
 
     Radio1.writeAckPayload(1, &Fack, sizeof(Fack)); //  Send first ack
+    DelayWithDog(5);
     Radio1.read(&Fbuffer, BUFFERSIZE + 4);          //  Read first packet
     SendCommand(ProgressStart);
     SendValue(Progress, p);
@@ -339,6 +340,7 @@ void ReceiveModelFile()
         }
         if (Radio1.available()) {
             Radio1.writeAckPayload(1, &Fack, sizeof(Fack));
+            DelayWithDog(5);
             Radio1.read(&Fbuffer, BUFFERSIZE + 4);
             StoreBuffer(Fbuffer, BUFFERSIZE); // Store it in ram for now rather than disk it
             Fposition += BUFFERSIZE;
