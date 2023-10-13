@@ -183,7 +183,7 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
             }
             if (!BuddyON)
             {
-                Ack[0]             = 'S'; // shut up now as buddy is now off.... *********
+                Ack[0]             = 'S'; // shut up NOW please,  I'm taking over  *********
                 TakeControlBackNow = true;
             }
         }
