@@ -50,66 +50,65 @@ uint8_t             PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 9 PWMs
 SBUS                MySbus(SBUSPORT);                                  // SBUS
 PulsePositionOutput PPMOutput;                                         // PPM
 
-bool                BoundFlag      = false; /** indicates if receiver paired with transmitter */
-bool                ServosAttached = false;
-uint16_t            SbusChannels[CHANNELSUSED + 1]; // Just one spare
-uint32_t            SBUSTimer = 0;
-bool                FailSafeChannel[17];
-bool                FailSafeDataLoaded = false;
-uint8_t             FS_byte1           = 0; // All 16 failsafe channel flags are in these two bytes
-uint8_t             FS_byte2           = 0;
-uint32_t            ReconnectedMoment;
-uint16_t            BaroAltitude;
-float               BaroTemperature;
-float               INA219Volts       = 0;
-uint32_t            SensorTime        = 0;
-uint32_t            SensorHubAccessed = 0;
-uint16_t            Qnh               = 0; // Pressure at sea level here and now (defined at TX)
-uint16_t            OldQnh            = 0;
-uint8_t             SatellitesGPS;
-float               LatitudeGPS;
-float               LongitudeGPS;
-float               SpeedGPS;
-float               AngleGPS;
-bool                GpsFix = false;
-float               AltitudeGPS;
-float               DistanceGPS;
-float               CourseToGPS;
-uint8_t             DayGPS;
-uint8_t             MonthGPS;
-uint8_t             YearGPS;
-uint8_t             HoursGPS;
-uint8_t             MinsGPS;
-uint8_t             SecsGPS;
-uint16_t            CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
-bool                SensorHubDead       = false;
-uint32_t            NewConnectionMoment = 0;
-bool                QNHSent             = false;
-uint8_t             MacAddress[9]       = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-bool                ModelMatched        = false;
-uint8_t             TheReceivedPipe[6];
-uint8_t             TheCurrentPipe[6];
-bool                FirstConnection = true;
-bool                FailedSafe      = true; // Starting up as the same as after failsafe
-uint32_t            MostRecentHop;
-uint8_t             PPMChannelOrder[CHANNELSUSED] = {2, 3, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
-uint8_t             PPMChannelCount               = 8;
-bool                UseSBUS                       = true;
-bool                NewData                       = false;
-uint16_t            pcount                        = 0; // how many pipes so far received from TX
-bool                Blinking                      = false;
-uint8_t             BlinkValue                    = 1;
-uint32_t            BlinkTimer                    = 0;
-uint8_t             MacAddressSentCounter         = 0;
-WDT_T4<WDT3>        TeensyWatchDog;
-WDT_timings_t       WatchDogConfig;
-uint32_t            LastDogKick = 0;
-bool                LedIsOn     = false;
-uint8_t*            PipePointer;
-uint8_t             Pipnum         =  PIPENUMBER;
-uint8_t             DefaultPipe[6] = {0x23, 0x94, 0x3e, 0xbe, 0xb7, 0x00};
-uint8_t             CurrentPipe[6];
-
+bool          BoundFlag      = false; /** indicates if receiver paired with transmitter */
+bool          ServosAttached = false;
+uint16_t      SbusChannels[CHANNELSUSED + 1]; // Just one spare
+uint32_t      SBUSTimer = 0;
+bool          FailSafeChannel[17];
+bool          FailSafeDataLoaded = false;
+uint8_t       FS_byte1           = 0; // All 16 failsafe channel flags are in these two bytes
+uint8_t       FS_byte2           = 0;
+uint32_t      ReconnectedMoment;
+uint16_t      BaroAltitude;
+float         BaroTemperature;
+float         INA219Volts       = 0;
+uint32_t      SensorTime        = 0;
+uint32_t      SensorHubAccessed = 0;
+uint16_t      Qnh               = 0; // Pressure at sea level here and now (defined at TX)
+uint16_t      OldQnh            = 0;
+uint8_t       SatellitesGPS;
+float         LatitudeGPS;
+float         LongitudeGPS;
+float         SpeedGPS;
+float         AngleGPS;
+bool          GpsFix = false;
+float         AltitudeGPS;
+float         DistanceGPS;
+float         CourseToGPS;
+uint8_t       DayGPS;
+uint8_t       MonthGPS;
+uint8_t       YearGPS;
+uint8_t       HoursGPS;
+uint8_t       MinsGPS;
+uint8_t       SecsGPS;
+uint16_t      CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
+bool          SensorHubDead       = false;
+uint32_t      NewConnectionMoment = 0;
+bool          QNHSent             = false;
+uint8_t       MacAddress[9]       = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+bool          ModelMatched        = false;
+uint8_t       TheReceivedPipe[6];
+uint8_t       TheCurrentPipe[6];
+bool          FirstConnection = true;
+bool          FailedSafe      = true; // Starting up as the same as after failsafe
+uint32_t      MostRecentHop;
+uint8_t       PPMChannelOrder[CHANNELSUSED] = {2, 3, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+uint8_t       PPMChannelCount               = 8;
+bool          UseSBUS                       = true;
+bool          NewData                       = false;
+uint16_t      pcount                        = 0; // how many pipes so far received from TX
+bool          Blinking                      = false;
+uint8_t       BlinkValue                    = 1;
+uint32_t      BlinkTimer                    = 0;
+uint8_t       MacAddressSentCounter         = 0;
+WDT_T4<WDT3>  TeensyWatchDog;
+WDT_timings_t WatchDogConfig;
+uint32_t      LastDogKick = 0;
+bool          LedIsOn     = false;
+uint8_t*      PipePointer;
+uint8_t       Pipnum         = PIPENUMBER;
+uint8_t       DefaultPipe[6] = {0x23, 0x94, 0x3e, 0xbe, 0xb7, 0x00};
+uint8_t       CurrentPipe[6];
 
 /************************************************************************************************************/
 
@@ -234,14 +233,14 @@ void UseReceivedData()
 /************************************************************************************************************/
 bool ReadData()
 {
-    Connected                  = false;
+    Connected = false;
     if (CurrentRadio->available(&Pipnum))
     { // This is the only call that actually reads the radio
-     //  Serial.println(Pipnum);
+      //  Serial.println(Pipnum);
         LoadAckPayload();
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
-        delayMicroseconds(1500);                                       // N.B. SOME DUFF NRF24L01 TRANSCEIVERS NEED THIS PAUSE. But not all.
+        delay(5);                                                      // must allow time for the ack payload to be sent
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));   //  ** >> Read new data from master << **
         Connected = true;
         NewData   = true;
@@ -605,7 +604,7 @@ FASTRUN void ReceiveData()
         Reconnect(); // Try to reconnect.
     }
 
-    if (!ReadData()) { 
+    if (!ReadData()) {
         if (millis() - SBUSTimer >= SBUSRATE) { // No new packet yet - but maybe it's time to dispatch the last?
             if (BoundFlag && (millis() > 10000)) {
                 if (Connected) {
