@@ -158,13 +158,11 @@ void KickTheDog()
 
 bool CheckCrazyValues()
 { // might come when binding
-
-    for (int i = 0; i < 15; ++i) {
+    for (int i = 0; i < 7; ++i) {
         if ((ReceivedData[i] < MINMICROS) || (ReceivedData[i] > MAXMICROS)) return false;
     }
     return true;
 }
-
 /************************************************************************************************************/
 
 void MoveServos()
