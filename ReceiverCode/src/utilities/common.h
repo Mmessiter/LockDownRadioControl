@@ -47,7 +47,7 @@
 
 // ********************* >>> FHSS params <<< *******************************************
 
-#define HOPTIME                   0 // was 80 ms between channel changes
+#define HOPTIME                   0 // was 80 ms between channel changes. But now it hops after every packet!
 #define RECONNECT_CHANNELS_COUNT  3  // was 3 How many channels to try when reconnecting
 #define RECONNECT_CHANNELS_OFFSET 12 // was 12 Offset in the array to begin getting reconnect channels
 
