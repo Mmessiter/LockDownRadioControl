@@ -183,13 +183,12 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
             }
             if (!BuddyON)
             {
-                Ack[0]             = 'S'; // shut up now  buddy please turn off.... *********
+                Ack[0]             = 'S'; // shut up now as buddy is now off.... *********
                 TakeControlBackNow = true;
             }
         }
-       // delayMicroseconds(SHORT_DELAY);
         Radio1.writeAckPayload(1, &Ack, 2); // Acknowledge the packet
-        delayMicroseconds(SHORT_DELAY);
+        DelayWithDog(12);
         Radio1.read(&DataPacket, sizeof(DataPacket));
         if (!IamMaster) { // pupil here
             MasterDetected(true);
