@@ -245,9 +245,7 @@ bool ReadData()
         Connected = true;
         NewData   = true;
     }
-    if (Connected) { // Only 1 'connected' call in about 460! So ...
-        UseReceivedData();
-    }
+    if (Connected) UseReceivedData();
     return Connected;
 }
 
