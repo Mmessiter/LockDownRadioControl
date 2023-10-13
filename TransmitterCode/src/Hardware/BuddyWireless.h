@@ -188,7 +188,7 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
             }
         }
         Radio1.writeAckPayload(1, &Ack, 2); // Acknowledge the packet
-        DelayWithDog(12);
+        DelayWithDog(5);                    // <-  ** MUST ** allow the ACK time to get going, otherwise the sender sees a failed packet      <<<<<<<<<<<<<< ************** !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         Radio1.read(&DataPacket, sizeof(DataPacket));
         if (!IamMaster) { // pupil here
             MasterDetected(true);
