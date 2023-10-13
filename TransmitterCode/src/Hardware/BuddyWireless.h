@@ -9,7 +9,7 @@
     #define SPECIAL_PACKET_CHANNEL 125 // Which channel for the special packets
     #define INTERBUDDYRATE         205 // 5 times a second (Fails below 200)
     #define SHORT_DELAY            200 // ... microseconds
-    #define LONGER_DELAY           2   // ... milliseconds
+    #define LONGER_DELAY           1   // ... milliseconds
     #define LOSTCONTACTTHRESHOLD   3   // 3 fails in a row and we declare the buddy dead
 
 //*************************************************************************************************************************
@@ -161,12 +161,19 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx whil
                     MasterDetected(true);
                     GetMasterAck();
                 }
-                else { // master must be either back in control, or ** dead ***. Pupil will shut up in either case
-                    MasterDetected(false);
-                    StartBuddyListen(0); // <<<<<<<<<<<<<<<<<<<  PUPIL -> LISTEN <<<<<< *******
-                    PlaySound(MASTERMSG);
-                    DelayWithDog(LONGER_DELAY);
-                    FlushFifos();
+                else {
+                    DelayWithDog(LONGER_DELAY);                                  // third try failed, try a fourth time
+                    if (Radio1.write(&Pupil_is_Alive, sizeof(Pupil_is_Alive))) { // send P to master
+                        MasterDetected(true);
+                        GetMasterAck();
+                    }
+                    else { // master must be either back in control, or ** dead ***. Pupil will shut up in either case
+                        MasterDetected(false);
+                        StartBuddyListen(0); // <<<<<<<<<<<<<<<<<<<  PUPIL -> LISTEN <<<<<< *******
+                        PlaySound(MASTERMSG);
+                        DelayWithDog(LONGER_DELAY);
+                        FlushFifos();
+                    }
                 }
             }
         }
