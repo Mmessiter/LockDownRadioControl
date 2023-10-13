@@ -236,7 +236,6 @@ bool ReadData()
     Connected = false;
     if (CurrentRadio->available(&Pipnum))
     { // This is the only call that actually reads the radio
-      //  Serial.println(Pipnum);
         LoadAckPayload();
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
