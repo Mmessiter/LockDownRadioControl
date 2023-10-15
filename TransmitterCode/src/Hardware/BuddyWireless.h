@@ -239,9 +239,9 @@ void DoWirelessBuddy() // only called from SendData() in when not in LISTENMODE 
 }
 
 //*************************************************************************************************************************
+// Yes I know - many of these settings are not needed as they were already set.
 void StopBuddyListen(bool IamMaster) // here the transmitter takes control
 {
-
     char     FrontView_Connected[] = "Connected";
     char     buddymsg[]            = "* WIRELESS BUDDY! *";
     char     MasterMsg[]           = "* WIRELESS MASTER! *";
@@ -274,7 +274,7 @@ void StopBuddyListen(bool IamMaster) // here the transmitter takes control
     ShowConnectionQuality();
 }
 //*************************************************************************************************************************
-
+// Yes I know - many of these settings are not needed as they were already set.
 void StartBuddyListen(bool IamMaster)
 {
     char     FrontView_Connected[] = "Connected";
