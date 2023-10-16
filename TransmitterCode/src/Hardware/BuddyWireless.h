@@ -6,12 +6,12 @@
 #include "Hardware/1Definitions.h"
 #ifndef BUDDYWIRELESS_H
     #define BUDDYWIRELESS_H
-    #define SPECIAL_PACKET_CHANNEL 136 // Which channel for the special packets
+    #define SPECIAL_PACKET_CHANNEL 125 // Which channel for the special packets
     #define INTERBUDDYRATE         205 // 5 times a second (Fails below 200)
     #define SHORT_DELAY            200 // ... microseconds
     #define LONGER_DELAY           1   // ... milliseconds
     #define LOSTCONTACTTHRESHOLD   6   // 6 fails in a row and we declare the buddy dead
-//  #define USEENCRYPTEDPIPE     // This is not quite working yet     
+//  #define USEENCRYPTEDPIPE     // This is not quite working yet  ....   
    
 #ifdef   USEENCRYPTEDPIPE   
     #define ENCRYPT_KEY            0xFEADFEADBB    // The encryption key :-)
