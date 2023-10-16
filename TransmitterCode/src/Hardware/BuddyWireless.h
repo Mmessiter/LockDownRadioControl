@@ -6,11 +6,19 @@
 #include "Hardware/1Definitions.h"
 #ifndef BUDDYWIRELESS_H
     #define BUDDYWIRELESS_H
-    #define SPECIAL_PACKET_CHANNEL 125 // Which channel for the special packets
+    #define SPECIAL_PACKET_CHANNEL 136 // Which channel for the special packets
     #define INTERBUDDYRATE         205 // 5 times a second (Fails below 200)
     #define SHORT_DELAY            200 // ... microseconds
     #define LONGER_DELAY           1   // ... milliseconds
-    #define LOSTCONTACTTHRESHOLD   6   // 3 fails in a row and we declare the buddy dead
+    #define LOSTCONTACTTHRESHOLD   6   // 6 fails in a row and we declare the buddy dead
+//  #define USEENCRYPTEDPIPE     // This is not quite working yet     
+   
+#ifdef   USEENCRYPTEDPIPE   
+    #define ENCRYPT_KEY            0xFEADFEADBB    // The encryption key :-)
+    #define DELAYAFTERACK          10
+#else
+    #define DELAYAFTERACK          5
+#endif
 
 //*************************************************************************************************************************
 // This function is called by Pupil and the Master was Detected - or not Detected.
@@ -112,6 +120,16 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx whil
     uint8_t Pupil_in_Control[2]  = "O"; // = OK to send data
     uint8_t Pupil_is_Alive[2]    = "P";
     FlushFifos();
+   
+#ifdef USEENCRYPTEDPIPE
+    if (IamMaster){
+            Radio1.openWritingPipe(TeensyMACAddPipe ^ ENCRYPT_KEY); // send to inverted pipe address
+    }else{
+            Radio1.openWritingPipe(BuddyMACAddPipe ^ ENCRYPT_KEY); // send to inverted pipe address 
+    }
+      delayMicroseconds(SHORT_DELAY);
+#endif
+
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
     delayMicroseconds(SHORT_DELAY);
     Radio1.stopListening();
@@ -158,6 +176,11 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx whil
         }
         if (CurrentMode == LISTENMODE) return; // control might have ceased
     }
+#ifdef USEENCRYPTEDPIPE    
+    if (IamMaster)  Radio1.openWritingPipe(TeensyMACAddPipe); // restore the proper pipe address
+    if (!IamMaster) Radio1.openWritingPipe(BuddyMACAddPipe); // restore the proper pipe address
+    delayMicroseconds(SHORT_DELAY);
+#endif
     Radio1.setChannel(CurrentChannel); // restore the proper frequency
     delayMicroseconds(SHORT_DELAY);
     Radio1.stopListening();
@@ -188,7 +211,7 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
             }
         }
         Radio1.writeAckPayload(1, &Ack, 2); // Acknowledge the packet
-        DelayWithDog(5);                    // <-  ** MUST ** allow the ACK time to get going, otherwise the sender sees a failed packet      <<<<<<<<<<<<<< ************** !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        DelayWithDog(DELAYAFTERACK);                    // <-  ** MUST ** allow the ACK time to get going, otherwise the sender sees a failed packet      <<<<<<<<<<<<<< ************** !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         Radio1.read(&DataPacket, sizeof(DataPacket));
         if (!IamMaster) { // pupil here
             MasterDetected(true);
@@ -247,7 +270,7 @@ void StopBuddyListen(bool IamMaster) // here the transmitter takes control
     char     MasterMsg[]           = "* WIRELESS MASTER! *";
     char     InVisible[]           = "vis Quality,0";
     uint64_t pip                   = TeensyMACAddPipe;
-    if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;
+    if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;    
     Radio1.setPALevel(RF24_PA_MAX);
     Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();
@@ -281,8 +304,23 @@ void StartBuddyListen(bool IamMaster)
     char     buddymsg[]            = "(Wireless Buddy)";
     char     MasterMsg[]           = "(Wireless Master)";
     char     InVisible[]           = "vis Quality,0";
-    uint64_t pip                   = TeensyMACAddPipe;
-    if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;
+    uint64_t pip                  = TeensyMACAddPipe;            
+    if (BuddyPupilOnWireless){
+#ifdef USEENCRYPTEDPIPE
+         pip = BuddyMACAddPipe ^ ENCRYPT_KEY; // heer we use the inverted pipe address
+#else
+         pip = BuddyMACAddPipe;
+#endif
+    }
+
+     if (BuddyMasterOnWireless){
+#ifdef USEENCRYPTEDPIPE
+         pip = TeensyMACAddPipe ^ ENCRYPT_KEY; // heer we use the inverted pipe address
+#else
+         pip = TeensyMACAddPipe;
+#endif
+    }
+
     char Ch_Lables[16][5] = {"Ch1", "Ch2", "Ch3", "Ch4", "Ch5", "Ch6", "Ch7", "Ch8", "Ch9", "Ch10", "Ch11", "Ch12", "Ch13", "Ch14", "Ch15", "Ch16"};
     Radio1.setPALevel(RF24_PA_MAX);
     Radio1.setDataRate(RF24_250KBPS);
