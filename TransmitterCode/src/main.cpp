@@ -173,8 +173,11 @@ void RedLedOn()
             SendCommand(WarnOff);
             SendCommand(InVisible);
         }
-        if (UseLog) LogDisConnection();
-        if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
+        
+        if (!WirelessBuddy){
+            if (UseLog) LogDisConnection();
+            if (AnnounceConnected) PlaySound(DISCONNECTEDMSG);
+        }
     }
 
     LedWasRed = true;
@@ -2448,7 +2451,7 @@ FLASHMEM void setup()
 void RationaliseBuddy()
 {
     char FrontView_Connected[] = "Connected";
-    char MasterMsg[]           = "* WIRELESS MASTER! *";
+    char MasterMsg[]           = "* YOU HAVE CONTROL *";
 
     PupilIsAlive  = 0;
     MasterIsAlive = 0;
@@ -7644,11 +7647,11 @@ void CheckPowerOffButton()
 
     if (!digitalRead(BUTTON_SENSE_PIN)) {
         GotoFrontView();
-        if (!LedWasGreen && !PPMdata.UseTXModule && !BuddyMasterOnWireless && !BuddyPupilOnWireless)
+        if (!LedWasGreen && !PPMdata.UseTXModule && !BuddyMasterOnWireless)
         {
             SimulateCloseDown(); // if not connected power off immediately
         }
-        if (LedWasGreen || PPMdata.UseTXModule || BuddyMasterOnWireless || BuddyPupilOnWireless)
+        if (LedWasGreen || PPMdata.UseTXModule || BuddyMasterOnWireless )
         {
             if (!PowerOffTimer) {
                 RestoreBrightness();

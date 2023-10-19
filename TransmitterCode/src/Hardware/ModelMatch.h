@@ -45,6 +45,13 @@ void CompareModelsIDs()
 {                             // The saved MacAddress is compared with the one just received from the model ... etc ...
     uint8_t SavedModelNumber = ModelNumber;
     if (BuddyPupilOnWireless) return; //  Don't do this if we are a pupil
+   
+    if (BuddyMasterOnWireless){
+        ModelMatched=true;
+        BoundFlag = true;
+        return;
+    }
+
     if (ModelMatched) return; // must not change when model connected
     GotoFrontView();
     RestoreBrightness();
