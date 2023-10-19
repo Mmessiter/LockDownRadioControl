@@ -1,6 +1,5 @@
 var BuddyWireless_8h =
 [
-    [ "DELAYAFTERACK", "BuddyWireless_8h.html#a81dae00008c15e7f28783822b32ba1d0", null ],
     [ "INTERBUDDYRATE", "BuddyWireless_8h.html#a1240c6070d0173cca5d14458a2a71847", null ],
     [ "LONGER_DELAY", "BuddyWireless_8h.html#ae7ccabc87d888235fa119a3f20d29d15", null ],
     [ "LOSTCONTACTTHRESHOLD", "BuddyWireless_8h.html#adc8ab6e023609f6548762eea2746eea1", null ],
