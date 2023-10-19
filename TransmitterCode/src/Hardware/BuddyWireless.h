@@ -266,8 +266,8 @@ void DoWirelessBuddy() // only called from SendData() in when not in LISTENMODE 
 void StopBuddyListen(bool IamMaster) // here the transmitter takes control
 {
     char     FrontView_Connected[] = "Connected";
-    char     buddymsg[]            = "* WIRELESS BUDDY! *";
-    char     MasterMsg[]           = "* WIRELESS MASTER! *";
+    char     buddymsg[]            = "* YOU HAVE CONTROL *";
+    char     MasterMsg[]           = "* YOU HAVE CONTROL *";
     char     InVisible[]           = "vis Quality,0";
     uint64_t pip                   = TeensyMACAddPipe;
     if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;    

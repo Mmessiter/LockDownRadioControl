@@ -2448,7 +2448,7 @@ FLASHMEM void setup()
 void RationaliseBuddy()
 {
     char FrontView_Connected[] = "Connected";
-    char MasterMsg[]           = "* WIRELESS MASTER! *";
+    char MasterMsg[]           = "* YOU HAVE CONTROL *";
 
     PupilIsAlive  = 0;
     MasterIsAlive = 0;
