@@ -7,17 +7,19 @@
 #ifndef BUDDYWIRELESS_H
     #define BUDDYWIRELESS_H
     #define SPECIAL_PACKET_CHANNEL 125 // Which channel for the special packets
-    #define INTERBUDDYRATE         205 // 5 times a second (Fails below 200)
+ 
     #define SHORT_DELAY            200 // ... microseconds
     #define LONGER_DELAY           1   // ... milliseconds
     #define LOSTCONTACTTHRESHOLD   6   // 6 fails in a row and we declare the buddy dead
-//  #define USEENCRYPTEDPIPE     // This is not quite working yet  ....   
+    //#define USEENCRYPTEDPIPE     // This is not quite working yet  ....   
    
 #ifdef   USEENCRYPTEDPIPE   
     #define ENCRYPT_KEY            0xFEADFEADBB    // The encryption key :-)
     #define DELAYAFTERACK          10
+    #define INTERBUDDYRATE         300 // about 3 times a second ??
 #else
     #define DELAYAFTERACK          5
+    #define INTERBUDDYRATE         175 // about 5.7 times a second (Fails below 175)
 #endif
 
 //*************************************************************************************************************************
@@ -262,7 +264,6 @@ void DoWirelessBuddy() // only called from SendData() in when not in LISTENMODE 
 }
 
 //*************************************************************************************************************************
-// Yes I know - many of these settings are not needed as they were already set.
 void StopBuddyListen(bool IamMaster) // here the transmitter takes control
 {
     char     FrontView_Connected[] = "Connected";
@@ -271,17 +272,12 @@ void StopBuddyListen(bool IamMaster) // here the transmitter takes control
     char     InVisible[]           = "vis Quality,0";
     uint64_t pip                   = TeensyMACAddPipe;
     if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;    
-    Radio1.setPALevel(RF24_PA_MAX);
-    Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();
     Radio1.enableDynamicPayloads();   // needed
-    Radio1.setAddressWidth(5);        // use 5 bytes for addresses
-    Radio1.setCRCLength(RF24_CRC_16); // could be 8 or disabled
     Radio1.setAutoAck(true);          // we want acks
     Radio1.maskIRQ(1, 1, 1);          // no interrupts - seems NEEDED at the moment
     Radio1.openWritingPipe(pip);
     Radio1.stopListening();
-    delayMicroseconds(SHORT_DELAY);
     ModelMatched = true;
     BoundFlag    = true;
     Connected    = true;
@@ -297,12 +293,11 @@ void StopBuddyListen(bool IamMaster) // here the transmitter takes control
     ShowConnectionQuality();
 }
 //*************************************************************************************************************************
-// Yes I know - many of these settings are not needed as they were already set.
 void StartBuddyListen(bool IamMaster)
 {
     char     FrontView_Connected[] = "Connected";
-    char     buddymsg[]            = "(Wireless Buddy)";
-    char     MasterMsg[]           = "(Wireless Master)";
+    char     buddymsg[]            = "MASTER HAS CONTROL";
+    char     MasterMsg[]           = "BUDDY HAS CONTROL";
     char     InVisible[]           = "vis Quality,0";
     uint64_t pip                  = TeensyMACAddPipe;            
     if (BuddyPupilOnWireless){
@@ -322,12 +317,8 @@ void StartBuddyListen(bool IamMaster)
     }
 
     char Ch_Lables[16][5] = {"Ch1", "Ch2", "Ch3", "Ch4", "Ch5", "Ch6", "Ch7", "Ch8", "Ch9", "Ch10", "Ch11", "Ch12", "Ch13", "Ch14", "Ch15", "Ch16"};
-    Radio1.setPALevel(RF24_PA_MAX);
-    Radio1.setDataRate(RF24_250KBPS);
     Radio1.enableAckPayload();        // needed
     Radio1.enableDynamicPayloads();   // needed
-    Radio1.setAddressWidth(5);        // use 5 bytes for addresses
-    Radio1.setCRCLength(RF24_CRC_16); // could be 8 or disabled
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
     Radio1.setAutoAck(true); // we want acks
     Radio1.maskIRQ(1, 1, 1); // no interrupts - seems NEEDED at the moment
