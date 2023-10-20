@@ -14,8 +14,7 @@
     #define INTERBUDDYRATE         200 // about 5 times a second (Fails below 175)
     #define DELAYAFTERACK          5
     #define ENCRYPT_KEY            0xFEADFEADBB    // The encryption key :-)
-    
- //   #define USEENCRYPTEDPIPE   
+   // #define USEENCRYPTEDPIPE   
   
   
 //*************************************************************************************************************************
@@ -121,7 +120,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx whil
    
 #ifdef USEENCRYPTEDPIPE
         if (IamMaster)   Radio1.openWritingPipe(TeensyMACAddPipe ^ ENCRYPT_KEY); // send to encrypted pipe address
-        if (!IamMaster)  Radio1.openWritingPipe(BuddyMACAddPipe ^ ENCRYPT_KEY); // send to encrypted pipe address 
+        if (!IamMaster)  Radio1.openWritingPipe(BuddyMACAddPipe ^ ENCRYPT_KEY);  // send to encrypted pipe address 
         delayMicroseconds(SHORT_DELAY);
 #endif
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
@@ -185,7 +184,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx whil
 void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx. This function is called from main loop
 {
     char DataPacket[2]        = " ";
-    char Master_in_Control[2] = "S"; // = Shut Up, send nothing
+   // char Master_in_Control[2] = "S"; // = Shut Up, send nothing
     char Pupil_in_Control[2]  = "O"; // = OK to send data
     char Ack[2]               = "P"; // Pupil ack
     bool TakeControlBackNow   = false;
@@ -208,8 +207,7 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
         Radio1.read(&DataPacket, sizeof(DataPacket));
         if (!IamMaster) { // pupil here
             MasterDetected(true);
-            if (DataPacket[0] == Master_in_Control[0]) {
-            } // no action needed
+       
             if (DataPacket[0] == Pupil_in_Control[0]) {
                 StopBuddyListen(0); // PUPIL -> CONTROL   <<<<<< *******
                 DelayWithDog(LONGER_DELAY);
