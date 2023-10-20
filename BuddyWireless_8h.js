@@ -1,11 +1,13 @@
 var BuddyWireless_8h =
 [
     [ "DELAYAFTERACK", "BuddyWireless_8h.html#a81dae00008c15e7f28783822b32ba1d0", null ],
+    [ "ENCRYPT_KEY", "BuddyWireless_8h.html#a6605e7b4cc71cfc4a06e0f2a019fca0a", null ],
     [ "INTERBUDDYRATE", "BuddyWireless_8h.html#a1240c6070d0173cca5d14458a2a71847", null ],
     [ "LONGER_DELAY", "BuddyWireless_8h.html#ae7ccabc87d888235fa119a3f20d29d15", null ],
     [ "LOSTCONTACTTHRESHOLD", "BuddyWireless_8h.html#adc8ab6e023609f6548762eea2746eea1", null ],
     [ "SHORT_DELAY", "BuddyWireless_8h.html#ac4eb562b9427778a7da4e852e6c02d41", null ],
     [ "SPECIAL_PACKET_CHANNEL", "BuddyWireless_8h.html#ad880cebd97490afa89660ab3c0298fed", null ],
+    [ "USEENCRYPTEDPIPE", "BuddyWireless_8h.html#a9e709e25a53ed6664c4f8fc526b4bd7d", null ],
     [ "DoWirelessBuddy", "BuddyWireless_8h.html#a7d9257c21af6e77d71dba241aa349692", null ],
     [ "GetMasterAck", "BuddyWireless_8h.html#ab011d1af38c6c236733cf3a86b5a8b50", null ],
     [ "GetPupilAck", "BuddyWireless_8h.html#af59c2527be7a67d6b09dd467f3123d55", null ],
