@@ -15,7 +15,7 @@
     #define DELAYAFTERACK          5
     #define ENCRYPT_KEY            0xFEADFEADBB    // The encryption key :-)
     
-    #define USEENCRYPTEDPIPE   
+ //   #define USEENCRYPTEDPIPE   
   
   
 //*************************************************************************************************************************
