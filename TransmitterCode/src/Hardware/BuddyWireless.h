@@ -11,7 +11,7 @@
     #define SHORT_DELAY            200 // ... microseconds
     #define LONGER_DELAY           1   // ... milliseconds
     #define LOSTCONTACTTHRESHOLD   6   // 6 fails in a row and we declare the buddy dead
-    //#define USEENCRYPTEDPIPE     // This is not quite working yet  ....   
+   //#define USEENCRYPTEDPIPE     // This is not quite working yet  ....   
    
 #ifdef   USEENCRYPTEDPIPE   
     #define ENCRYPT_KEY            0xFEADFEADBB    // The encryption key :-)
@@ -226,8 +226,9 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
             }
         }
         DelayWithDog(LONGER_DELAY);
-        if (TakeControlBackNow) {
+        if (TakeControlBackNow) { // heer?
             DelayWithDog(LONGER_DELAY);
+           // DelayWithDog(20);
             StopBuddyListen(1); // MASTER RECLAIMS CONTROL   <<<<<< *******
         }
         LastPassivePacketTime = millis();
