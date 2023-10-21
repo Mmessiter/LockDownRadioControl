@@ -152,7 +152,7 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx whil
            GetMasterAck();
         }
         else {                   // master must be either back in control, or ** dead ***. Pupil will shut up in either case
-            StartBuddyListen(0); // <<<<<<<<<<<<<<<<<<<  PUPIL -> LISTEN <<<<<< *******
+            StartBuddyListen(0); // <<<<<<<<<<<<<<<<<<<  PUPIL -> LISTEN <<<<<< ******* THIS SHOULD NEVER OCCUR ?! will sort out later ... meanwhile it just works
             MasterDetected(false);
             PlaySound(MASTERMSG);
             DelayWithDog(LONGER_DELAY);
