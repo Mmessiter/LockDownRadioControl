@@ -7,7 +7,6 @@
 #ifndef BUDDYWIRELESS_H
     #define BUDDYWIRELESS_H
     #define SPECIAL_PACKET_CHANNEL 125 // Which channel for the special packets
- 
     #define SHORT_DELAY            260 // ... microseconds
     #define LONGER_DELAY           1   // ... milliseconds
     #define LOSTCONTACTTHRESHOLD   6   // 6 fails in a row and we declare the buddy dead
@@ -15,7 +14,6 @@
     #define DELAYAFTERACK          5
     #define ENCRYPT_KEY            0xFEADFEADBB    // The encryption key :-)
     #define USEENCRYPTEDPIPE   
-  
   
 //*************************************************************************************************************************
 // This function is called by Pupil and the Master was Detected - or not Detected.
@@ -178,7 +176,6 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx whil
 void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx. This function is called from main loop
 {
     char DataPacket[2]        = " ";
-   // char Master_in_Control[2] = "S"; // = Shut Up, send nothing
     char Pupil_in_Control[2]  = "O"; // = OK to send data
     char Ack[2]               = "P"; // Pupil ack
     bool TakeControlBackNow   = false;
@@ -218,12 +215,12 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
     }
     else { // no packet arrived so maybe Pupil's dead, better grab control back
         if (IamMaster) {
-            if (millis() - LastPassivePacketTime > INTERBUDDYRATE + 100) {
+            if (millis() - LastPassivePacketTime > 500) {
                 StopBuddyListen(1); // MASTER RECLAIMS CONTROL   <<<<<< *******
             }
         }
         if (!IamMaster) {
-            if (millis() - LastPassivePacketTime > INTERBUDDYRATE + 100) {
+            if (millis() - LastPassivePacketTime > 500) {
                 MasterDetected(false);
                 LastPassivePacketTime = millis();
             }
@@ -283,6 +280,7 @@ void StartBuddyListen(bool IamMaster)
     char     InVisible[]           = "vis Quality,0";
     uint64_t pip                  = TeensyMACAddPipe;            
     if (BuddyPupilOnWireless){
+
 #ifdef USEENCRYPTEDPIPE
          pip = BuddyMACAddPipe ^ ENCRYPT_KEY; // heer we use the encrypted pipe address
 #else
@@ -296,8 +294,8 @@ void StartBuddyListen(bool IamMaster)
 #else
          pip = TeensyMACAddPipe;
 #endif
-    }
 
+    }
     char Ch_Lables[16][5] = {"Ch1", "Ch2", "Ch3", "Ch4", "Ch5", "Ch6", "Ch7", "Ch8", "Ch9", "Ch10", "Ch11", "Ch12", "Ch13", "Ch14", "Ch15", "Ch16"};
     Radio1.enableAckPayload();        // needed
     Radio1.enableDynamicPayloads();   // needed
