@@ -305,9 +305,9 @@ void StartBuddyListen(bool IamMaster)
     Radio1.openReadingPipe(1, pip);
     delayMicroseconds(SHORT_DELAY);
     Radio1.startListening();
-    ModelMatched = false;
-    BoundFlag    = false;
-    Connected    = false;
+    ModelMatched = true;
+    BoundFlag    = true;
+    Connected    = true;
     FlushFifos();
     BlueLedOn();
     CurrentMode = LISTENMODE;
