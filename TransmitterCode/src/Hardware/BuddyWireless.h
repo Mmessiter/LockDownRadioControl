@@ -28,6 +28,7 @@ void MasterDetected(bool Detected)
 
     if (Detected) {
         LostMasterCount = 0;
+        LastPassivePacketTime = millis(); // reset the timer
         if (MasterIsAlive != 1) { // MasterIsAlive = 1 means Master was already alive
             SendText(wb, Mfound);
             SendCommand(YesVisible);
@@ -58,6 +59,7 @@ void PupilDetected(bool Detected)
     char            YesVisible[]   = "vis wb,1";
     if (Detected) {
         LostPupilCount = 0;
+        LastPassivePacketTime = millis(); // reset the timer
         if (PupilIsAlive != 1) { // PupilIsAlive = 1 means Pupil was already alive
             SendText(wb, Mfound);
             SendCommand(YesVisible);
@@ -213,12 +215,12 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
     }
     else { // no packet arrived so maybe Pupil's dead, better grab control back
         if (IamMaster) {
-            if (millis() - LastPassivePacketTime > 500) {
+            if (millis() - LastPassivePacketTime > 700) {
                 StopBuddyListen(1); // MASTER RECLAIMS CONTROL   <<<<<< *******
             }
         }
         if (!IamMaster) {
-            if (millis() - LastPassivePacketTime > 500) {
+            if (millis() - LastPassivePacketTime > 700) {
                 MasterDetected(false);
                 LastPassivePacketTime = millis();
             }
