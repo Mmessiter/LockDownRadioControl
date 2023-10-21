@@ -198,7 +198,6 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
         Radio1.read(&DataPacket, sizeof(DataPacket));
         if (!IamMaster) { // pupil here
             MasterDetected(true);
-       
             if (DataPacket[0] == Pupil_in_Control[0]) {
                 StopBuddyListen(0); // PUPIL -> CONTROL   <<<<<< *******
                 DelayWithDog(LONGER_DELAY);
@@ -206,8 +205,7 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
             }
         }
         DelayWithDog(LONGER_DELAY);
-        if (TakeControlBackNow) { // heer?
-            DelayWithDog(LONGER_DELAY);
+        if (TakeControlBackNow) { 
             StopBuddyListen(1); // MASTER RECLAIMS CONTROL   <<<<<< *******
         }
         LastPassivePacketTime = millis();
