@@ -8,13 +8,13 @@
     #define BUDDYWIRELESS_H
     #define SPECIAL_PACKET_CHANNEL 125 // Which channel for the special packets
  
-    #define SHORT_DELAY            250 // ... microseconds
+    #define SHORT_DELAY            260 // ... microseconds
     #define LONGER_DELAY           1   // ... milliseconds
     #define LOSTCONTACTTHRESHOLD   6   // 6 fails in a row and we declare the buddy dead
     #define INTERBUDDYRATE         200 // about 5 times a second (Fails below 175)
     #define DELAYAFTERACK          5
     #define ENCRYPT_KEY            0xFEADFEADBB    // The encryption key :-)
-   // #define USEENCRYPTEDPIPE   
+ //   #define USEENCRYPTEDPIPE   
   
   
 //*************************************************************************************************************************
