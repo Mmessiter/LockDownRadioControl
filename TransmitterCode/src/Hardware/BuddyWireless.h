@@ -14,7 +14,7 @@
     #define INTERBUDDYRATE         200 // about 5 times a second (Fails below 175)
     #define DELAYAFTERACK          5
     #define ENCRYPT_KEY            0xFEADFEADBB    // The encryption key :-)
- //   #define USEENCRYPTEDPIPE   
+    #define USEENCRYPTEDPIPE   
   
   
 //*************************************************************************************************************************
@@ -88,13 +88,11 @@ void GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
     Radio1.read(&AckSpecial, 2);
     if (AckSpecial[0] == 'O') return; // OK to continue sending. no action needed
     if (AckSpecial[0] == 'S') {       // PUPIL -> LISTEN  <<<<<< *******
-        PlaySound(MASTERMSG);
+        PlaySound(MASTERMSG);  
         StartBuddyListen(0); // 'S' from Master = Shut Up now, send nothing
         DelayWithDog(LONGER_DELAY);
     }
-    FlushFifos();
     MasterDetected(true); // Master is alive
-    return;
 }
 
 //*************************************************************************************************************************
@@ -105,8 +103,6 @@ void GetPupilAck() // Master gets Ack from pupil while MASTER in control
     uint8_t AckSpecial[2];       // simple ack
     Radio1.read(&AckSpecial, 2); // don't care what it is
     PupilDetected(true);         // Pupil is alive
-    FlushFifos();
-    return;
 }
 //*************************************************************************************************************************
 
@@ -144,7 +140,6 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx whil
                 GetPupilAck();
                 StartBuddyListen(1); // MASTER -> LISTEN  (Pupil took control)  <<<<<< *******
                 PlaySound(BUDDYMSG);
-                DelayWithDog(LONGER_DELAY);
                 LastPassivePacketTime = millis();
                 return;
             }
@@ -154,10 +149,9 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx whil
         }
     }
     if (!IamMaster) {                                                // pupil area when in control *************************************************************
-         DelayWithDog(LONGER_DELAY);
+        delayMicroseconds(SHORT_DELAY);
         if (Radio1.write(&Pupil_is_Alive, sizeof(Pupil_is_Alive))) { // send P to master
            GetMasterAck();
-           MasterDetected(true);
         }
         else {                   // master must be either back in control, or ** dead ***. Pupil will shut up in either case
             StartBuddyListen(0); // <<<<<<<<<<<<<<<<<<<  PUPIL -> LISTEN <<<<<< *******
@@ -224,12 +218,12 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
     }
     else { // no packet arrived so maybe Pupil's dead, better grab control back
         if (IamMaster) {
-            if (millis() - LastPassivePacketTime > INTERBUDDYRATE + 10) {
+            if (millis() - LastPassivePacketTime > INTERBUDDYRATE + 100) {
                 StopBuddyListen(1); // MASTER RECLAIMS CONTROL   <<<<<< *******
             }
         }
         if (!IamMaster) {
-            if (millis() - LastPassivePacketTime > INTERBUDDYRATE + 10) {
+            if (millis() - LastPassivePacketTime > INTERBUDDYRATE + 100) {
                 MasterDetected(false);
                 LastPassivePacketTime = millis();
             }
