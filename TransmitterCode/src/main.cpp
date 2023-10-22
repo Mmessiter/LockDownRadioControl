@@ -7767,7 +7767,7 @@ void GetBuddyData()
 /************************************************************************************************************/
 
 FASTRUN void loop()
-{
+{  
     ManageTransmitter();   // Do the needed chores ... (if there's time)
     GetNewChannelValues(); // Load SendBuffer with new servo positions very frequently
     if (CurrentMode < 3) {

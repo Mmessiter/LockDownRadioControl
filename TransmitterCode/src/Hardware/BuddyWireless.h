@@ -319,7 +319,7 @@ void StartBuddyListen(bool IamMaster)
         SendText(FrontView_Connected, MasterMsg);
     else
         SendText(FrontView_Connected, buddymsg);
-
     SendCommand(InVisible);
+    LostContactFlag = false;
 }
 #endif
