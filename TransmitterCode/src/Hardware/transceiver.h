@@ -114,7 +114,7 @@ FASTRUN void FailedPacket()
     ++RecentPacketsLost;     // this is to keep track of events when receiver is off
     if (!LostContactFlag) {
         if (RecentPacketsLost >= FHSS_data::LostContactCutOff) {
-            LostContactFlag = true;
+            LostContactFlag =   true;
             Reconnected     = false;
             GapStart        = millis(); // To keep track of this gap's length
         }

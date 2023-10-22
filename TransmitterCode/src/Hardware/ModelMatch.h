@@ -23,7 +23,7 @@ void IDNotFound(uint8_t SavedModelNumber)
         strcat(buf2, ModelName);
         MsgBox(GoFrontView, buf2);
         BindNow();
-        UpdateModelsNameEveryWhere(); 
+        UpdateModelsNameEveryWhere();
         AMSnotfound = false;
         return;
     }

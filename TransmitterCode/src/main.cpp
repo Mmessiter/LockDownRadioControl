@@ -2489,9 +2489,9 @@ int InStrng(char* text1, char* text2)
 {
     for (uint16_t j = 0; j < strlen(text2); ++j) {
         bool flag = false;
-        for (uint16_t i = 0; i<strlen(text1); ++i) {
+        for (uint16_t i = 0; i < strlen(text1); ++i) {
             if (text1[i] != text2[i + j]) {
-                flag = true;
+                flag  =    true;
                 break;
             }
         }
