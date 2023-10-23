@@ -7048,28 +7048,15 @@ void CheckMotorOff()
 void GetBank()
 { //  and  motor switch and safety switch ETC ...
 
-    // static uint32_t LastBankRead = 0;
-    // if (millis() - LastBankRead < 200) return;
-    // LastBankRead = millis();
-
     char FrontView_Hours[] = "Hours";
     char FrontView_Mins[]  = "Mins";
     char FrontView_Secs[]  = "Secs";
     char WarnOff[]         = "vis Warning,0";
-
     if ((CurrentMode != NORMAL) && (CurrentMode != LISTENMODE)) return; // not needed if calibrating
-
     SafetyON = false;
     BuddyON  = false;
-
     DualRateInUse = 4;
-
     MotorEnabled = !UseMotorKill; //  If not using motor switch then motor is always enabled.
-
-    if ((Autoswitch == 1) && (Switch[7] == SWITCH1Reversed)) MotorEnabled = true;
-    if ((Autoswitch == 2) && (Switch[5] == SWITCH2Reversed)) MotorEnabled = true;
-    if ((Autoswitch == 3) && (Switch[1] == SWITCH3Reversed)) MotorEnabled = true;
-    if ((Autoswitch == 4) && (Switch[2] == SWITCH4Reversed)) MotorEnabled = true;
 
     if ((SafetySwitch == 1) && (Switch[7] == SWITCH1Reversed)) SafetyON = true;
     if ((SafetySwitch == 2) && (Switch[5] == SWITCH2Reversed)) SafetyON = true;
@@ -7114,7 +7101,6 @@ void GetBank()
                     break;
             }
         }
-        // if (UseLog) LogNewRATE();
     }
 
     if (FMSwitch == 4) ReadFMSwitch(Switch[2], Switch[3], SWITCH4Reversed);
@@ -7122,10 +7108,31 @@ void GetBank()
     if (FMSwitch == 2) ReadFMSwitch(Switch[4], Switch[5], SWITCH2Reversed);
     if (FMSwitch == 1) ReadFMSwitch(Switch[6], Switch[7], SWITCH1Reversed);
 
-    if (Autoswitch == 1 && Switch[6] == SWITCH1Reversed) Bank = 4; // Flight mode 4 (Auto) overrides modes 1,2,3.
-    if (Autoswitch == 2 && Switch[4] == SWITCH2Reversed) Bank = 4;
-    if (Autoswitch == 3 && Switch[1] == SWITCH3Reversed) Bank = 4;
-    if (Autoswitch == 4 && Switch[3] == SWITCH4Reversed) Bank = 4;
+    if (SWITCH1Reversed){
+            if ((Autoswitch == 1) && (!Switch[6])) MotorEnabled = true;
+    }else{
+            if ((Autoswitch == 1) && (!Switch[7])) MotorEnabled = true;
+    }
+    if (SWITCH2Reversed){
+            if ((Autoswitch == 2) && (!Switch[4])) MotorEnabled = true;
+    }else{
+            if ((Autoswitch == 2) && (!Switch[5])) MotorEnabled = true;
+    }
+    if (SWITCH3Reversed){
+            if ((Autoswitch == 3) && (!Switch[0])) MotorEnabled = true;
+    }else{
+            if ((Autoswitch == 3) && (!Switch[1])) MotorEnabled = true;
+    }
+    if (SWITCH4Reversed){
+            if ((Autoswitch == 4) && (!Switch[2])) MotorEnabled = true;
+    }else{
+            if ((Autoswitch == 4) && (!Switch[3])) MotorEnabled = true;
+    }
+    if  ((Autoswitch == 1) && (!Switch[6] && !Switch[7])) Bank = 4;      // Flight mode 4 (Auto) overrides modes 1,2,3.  
+    if  ((Autoswitch == 2) && (!Switch[4] && !Switch[5])) Bank = 4;      // Flight mode 4 (Auto) overrides modes 1,2,3.  
+    if  ((Autoswitch == 3) && (!Switch[1] && !Switch[0])) Bank = 4;      // Flight mode 4 (Auto) overrides modes 1,2,3.  
+    if  ((Autoswitch == 4) && (!Switch[3] && !Switch[2])) Bank = 4;      // Flight mode 4 (Auto) overrides modes 1,2,3.  
+    if  (!MotorEnabled) Bank = 4;
 
     if (SafetyWasOn != SafetyON) {
         if (SafetyON)
