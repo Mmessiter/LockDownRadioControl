@@ -2470,11 +2470,11 @@ void RationaliseBuddy()
     if (BuddyMasterOnWireless)
     {
         SendText(FrontView_Connected, MasterMsg);
+        StopBuddyListen(1);
+    } else {
+        ModelMatched    =    false;
     }
-    if (BuddyPupilOnWireless)
-    {
-        StartBuddyListen(0);
-    }
+    if (BuddyPupilOnWireless) StartBuddyListen(0);
 }
 /*********************************************************************************************************************************/
 void GetStatistics()
@@ -4332,20 +4332,8 @@ void EndBuddyView()
     SendCommand(pRXSetupView);
     CurrentView = RXSETUPVIEW;
     UpdateModelsNameEveryWhere();
-    if (((OldPupilOnPPM != BuddyPupilOnPPM) || (OldMasterOnPPM != BuddyMasterOnPPM)) && !WirelessBuddy)
-    {
-        digitalWrite(POWER_OFF_PIN, HIGH);
-    }
+    if (((OldPupilOnPPM != BuddyPupilOnPPM) || (OldMasterOnPPM != BuddyMasterOnPPM)) && !WirelessBuddy) digitalWrite(POWER_OFF_PIN, HIGH);
     RationaliseBuddy();
-
-    if (BuddyPupilOnWireless)
-    {
-        StartBuddyListen(0);
-    }
-
-    else {
-        TryOtherPipe(); // don't  stay on wrong pipe
-    }
 }
 
 /*********************************************************************************************************************************/
