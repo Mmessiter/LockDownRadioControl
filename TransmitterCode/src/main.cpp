@@ -7043,32 +7043,29 @@ void CheckMotorOff()
     MotorWasEnabled = MotorEnabled;
 }
 
+
 /************************************************************************************************************/
 
-void GetBank()
-{ //  and  motor switch and safety switch ETC ...
-
-    char FrontView_Hours[] = "Hours";
-    char FrontView_Mins[]  = "Mins";
-    char FrontView_Secs[]  = "Secs";
-    char WarnOff[]         = "vis Warning,0";
-    if ((CurrentMode != NORMAL) && (CurrentMode != LISTENMODE)) return; // not needed if calibrating
-    SafetyON = false;
-    BuddyON  = false;
-    DualRateInUse = 4;
-    MotorEnabled = !UseMotorKill; //  If not using motor switch then motor is always enabled.
-
+void ReadSafetySwitch(){
     if ((SafetySwitch == 1) && (Switch[7] == SWITCH1Reversed)) SafetyON = true;
     if ((SafetySwitch == 2) && (Switch[5] == SWITCH2Reversed)) SafetyON = true;
     if ((SafetySwitch == 3) && (Switch[1] == SWITCH3Reversed)) SafetyON = true;
     if ((SafetySwitch == 4) && (Switch[2] == SWITCH4Reversed)) SafetyON = true;
+}
 
+
+/************************************************************************************************************/
+void ReadBuddySwitch(){
     if (BuddyMasterOnPPM || BuddyMasterOnWireless) {
         if ((BuddySwitch == 1) && (Switch[7] == SWITCH1Reversed)) BuddyON = true;
         if ((BuddySwitch == 2) && (Switch[5] == SWITCH2Reversed)) BuddyON = true;
         if ((BuddySwitch == 3) && (Switch[1] == SWITCH3Reversed)) BuddyON = true;
         if ((BuddySwitch == 4) && (Switch[2] == SWITCH4Reversed)) BuddyON = true;
     }
+}
+
+/************************************************************************************************************/
+ void ReadDualRateSwitch(){
 
     if (DualRatesSwitch == 4) ReadDRSwitch(Switch[2], Switch[3], SWITCH4Reversed);
     if (DualRatesSwitch == 3) ReadDRSwitch(Switch[0], Switch[1], SWITCH3Reversed);
@@ -7102,12 +7099,18 @@ void GetBank()
             }
         }
     }
+ }
 
+/************************************************************************************************************/
+ void  ReadFlightModeSwitch(){
     if (FMSwitch == 4) ReadFMSwitch(Switch[2], Switch[3], SWITCH4Reversed);
     if (FMSwitch == 3) ReadFMSwitch(Switch[0], Switch[1], SWITCH3Reversed);
     if (FMSwitch == 2) ReadFMSwitch(Switch[4], Switch[5], SWITCH2Reversed);
     if (FMSwitch == 1) ReadFMSwitch(Switch[6], Switch[7], SWITCH1Reversed);
+ }
 
+/************************************************************************************************************/
+ void ReadAutoAndMotorSwitch(){
     if (SWITCH1Reversed){
             if ((Autoswitch == 1) && (!Switch[6])) MotorEnabled = true;
     }else{
@@ -7133,6 +7136,27 @@ void GetBank()
     if  ((Autoswitch == 3) && (!Switch[1] && !Switch[0])) Bank = 4;      // Flight mode 4 (Auto) overrides modes 1,2,3.  
     if  ((Autoswitch == 4) && (!Switch[3] && !Switch[2])) Bank = 4;      // Flight mode 4 (Auto) overrides modes 1,2,3.  
     if  (!MotorEnabled) Bank = 4;
+
+ }
+
+/************************************************************************************************************/
+void GetBank()   // ... and the other three switches
+{ 
+    char FrontView_Hours[] = "Hours";
+    char FrontView_Mins[]  = "Mins";
+    char FrontView_Secs[]  = "Secs";
+    char WarnOff[]         = "vis Warning,0";
+    if ((CurrentMode != NORMAL) && (CurrentMode != LISTENMODE)) return; // not needed if calibrating
+    SafetyON = false;
+    BuddyON  = false;
+    DualRateInUse = 4;
+    MotorEnabled = !UseMotorKill; //  If not using motor switch then motor is always enabled.
+
+    ReadSafetySwitch();
+    ReadBuddySwitch();
+    ReadDualRateSwitch();
+    ReadFlightModeSwitch();
+    ReadAutoAndMotorSwitch();
 
     if (SafetyWasOn != SafetyON) {
         if (SafetyON)
