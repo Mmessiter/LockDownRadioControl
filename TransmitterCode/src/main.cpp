@@ -7135,8 +7135,7 @@ void ReadBuddySwitch(){
     if  ((Autoswitch == 2) && (!Switch[4] && !Switch[5])) Bank = 4;      // Flight mode 4 (Auto) overrides modes 1,2,3.  
     if  ((Autoswitch == 3) && (!Switch[1] && !Switch[0])) Bank = 4;      // Flight mode 4 (Auto) overrides modes 1,2,3.  
     if  ((Autoswitch == 4) && (!Switch[3] && !Switch[2])) Bank = 4;      // Flight mode 4 (Auto) overrides modes 1,2,3.  
-    if  (!MotorEnabled) Bank = 4;
-
+    if  (!MotorEnabled) Bank = 4;                                        // Motor off uses bank 4
  }
 
 /************************************************************************************************************/
@@ -7147,10 +7146,12 @@ void GetBank()   // ... and the other three switches
     char FrontView_Secs[]  = "Secs";
     char WarnOff[]         = "vis Warning,0";
     if ((CurrentMode != NORMAL) && (CurrentMode != LISTENMODE)) return; // not needed if calibrating
-    SafetyON = false;
+    
+    
+    SafetyON = false;                              // set defaults that might change later
     BuddyON  = false;
     DualRateInUse = 4;
-    MotorEnabled = !UseMotorKill; //  If not using motor switch then motor is always enabled.
+    MotorEnabled = !UseMotorKill;                  //  If not using motor switch then motor is always enabled.
 
     ReadSafetySwitch();
     ReadBuddySwitch();
