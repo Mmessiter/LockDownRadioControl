@@ -46,11 +46,13 @@ void CompareModelsIDs()
     uint8_t SavedModelNumber = ModelNumber;
     if (BuddyPupilOnWireless) return;   //  Don't do this if we are a pupil
     if (BuddyON) return;                //  Don't do this if buddy is on
-    if (BuddyMasterOnWireless) {
-        ModelMatched = true;
-        GreenLedOn();
-        return;
-    }
+   
+    // if (BuddyMasterOnWireless) {
+    //     ModelMatched = true;
+    //     GreenLedOn();
+    //     return;
+    // }
+   
     if (ModelMatched) return;           // must not change when model connected
     GotoFrontView();
     RestoreBrightness();

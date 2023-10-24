@@ -2449,7 +2449,7 @@ void RationaliseBuddy()
 {
     char FrontView_Connected[] = "Connected";
     char MasterMsg[]           = "* YOU HAVE CONTROL *";
-
+    
     PupilIsAlive  = 0;
     MasterIsAlive = 0;
 
@@ -2471,9 +2471,11 @@ void RationaliseBuddy()
     {
         SendText(FrontView_Connected, MasterMsg);
         StopBuddyListen(1);
+    
     } else {
-        ModelMatched    =    false;
+        ModelMatched = false;
     }
+    
     if (BuddyPupilOnWireless) StartBuddyListen(0);
 }
 /*********************************************************************************************************************************/
