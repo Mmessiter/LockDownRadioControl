@@ -15,6 +15,15 @@ void IDNotFound(uint8_t SavedModelNumber)
     char buf1[]         = "Connecting to ";
     char buf2[70];
     
+    if (WirelessBuddy) {                                // use current if wireless buddy
+        ModelNumber = PreviousModelNumber;
+        ReadOneModel(ModelNumber);
+        BindNow();
+        UpdateModelsNameEveryWhere();
+        AMSnotfound = false;
+        return;
+    }
+    
     GetConfirmation(GoFrontView, buf);
     if (Confirmed[0] != 'Y') {
         ModelNumber = PreviousModelNumber;
@@ -46,13 +55,6 @@ void CompareModelsIDs()
     uint8_t SavedModelNumber = ModelNumber;
     if (BuddyPupilOnWireless) return;   //  Don't do this if we are a pupil
     if (BuddyON) return;                //  Don't do this if buddy is on
-   
-    // if (BuddyMasterOnWireless) {
-    //     ModelMatched = true;
-    //     GreenLedOn();
-    //     return;
-    // }
-   
     if (ModelMatched) return;           // must not change when model connected
     GotoFrontView();
     RestoreBrightness();
