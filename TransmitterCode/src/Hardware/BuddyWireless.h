@@ -12,11 +12,11 @@
     #define LOSTCONTACTTHRESHOLD   6                // 6 fails in a row and we declare the buddy dead
     #define INTERBUDDYRATE         200              // 5 times a second 
     #define DELAYAFTERACK          5                // ms
-    #define ENCRYPT_KEY            0xFEADFEADBB     // The encryption key :-)
+    #define ENCRYPT_KEY            0xFEADFEADBB     // The encryption key used for the Pipe address between transmitters :-)
  
 //*************************************************************************************************************************
 // This function is called by Pupil and the Master was Detected - or not Detected.
-// After 3 failed detections, the Master is declared dead, and a message is changed on front view.
+// After 6 failed detections, the Master is declared dead, and a message is changed on front view.
 void MasterDetected(bool Detected)
 {
     static uint16_t LostMasterCount = 0;
@@ -48,7 +48,7 @@ void MasterDetected(bool Detected)
 
 //*************************************************************************************************************************
 // This function is called by Master when the Pupil was Detected - or not Detected.
-// After 3 failed detections, the Pupil is declared dead, and a message is changed on front view.
+// After 6 failed detections, the Pupil is declared dead, and a message is changed on front view.
 void PupilDetected(bool Detected)
 {
     static uint16_t LostPupilCount = 0;
