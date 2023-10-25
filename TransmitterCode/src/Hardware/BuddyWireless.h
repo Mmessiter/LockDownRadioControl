@@ -166,12 +166,13 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx whil
     delayMicroseconds(SHORT_DELAY);
     Radio1.stopListening();
     delayMicroseconds(SHORT_DELAY);
-    
-    // delayMicroseconds(SHORT_DELAY); // no need to restore the channel as it hops anyway!
-    // Radio1.setChannel(CurrentChannel); // restore the proper frequency
-    // delayMicroseconds(SHORT_DELAY);
-    // Radio1.stopListening();
-    // delayMicroseconds(SHORT_DELAY);
+    /*
+    delayMicroseconds(SHORT_DELAY); // no need to restore the channel as it hops anyway!
+    Radio1.setChannel(CurrentChannel); // restore the proper frequency
+    delayMicroseconds(SHORT_DELAY);
+    Radio1.stopListening();
+    delayMicroseconds(SHORT_DELAY);
+    */
 }
 
 //*************************************************************************************************************************
