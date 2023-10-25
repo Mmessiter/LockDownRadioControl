@@ -10,11 +10,10 @@
     #define SHORT_DELAY            260              // ... microseconds
     #define LONGER_DELAY           1                // ... milliseconds
     #define LOSTCONTACTTHRESHOLD   6                // 6 fails in a row and we declare the buddy dead
-    #define INTERBUDDYRATE         200              // about 5 times a second (Fails below 175)
+    #define INTERBUDDYRATE         200              // 5 times a second 
     #define DELAYAFTERACK          5                // ms
     #define ENCRYPT_KEY            0xFEADFEADBB     // The encryption key :-)
-    #define USEENCRYPTEDPIPE                        // The encrypted pipe address is used for inter-transmitter communication so it's never seen by the receiver
-  
+ 
 //*************************************************************************************************************************
 // This function is called by Pupil and the Master was Detected - or not Detected.
 // After 3 failed detections, the Master is declared dead, and a message is changed on front view.
@@ -114,11 +113,10 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx whil
     uint8_t Pupil_is_Alive[2]    = "P";
     FlushFifos();
    
-#ifdef USEENCRYPTEDPIPE
-        if (IamMaster)   Radio1.openWritingPipe(TeensyMACAddPipe ^ ENCRYPT_KEY); // send to encrypted pipe address
-        if (!IamMaster)  Radio1.openWritingPipe(BuddyMACAddPipe ^ ENCRYPT_KEY);  // send to encrypted pipe address 
-        delayMicroseconds(SHORT_DELAY);
-#endif
+    if (IamMaster)   Radio1.openWritingPipe(TeensyMACAddPipe ^ ENCRYPT_KEY); // send to encrypted pipe address
+    if (!IamMaster)  Radio1.openWritingPipe(BuddyMACAddPipe ^ ENCRYPT_KEY);  // send to encrypted pipe address 
+    delayMicroseconds(SHORT_DELAY);
+
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
     delayMicroseconds(SHORT_DELAY);
     Radio1.stopListening();
@@ -162,11 +160,11 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx whil
         }
         if (CurrentMode == LISTENMODE) return; // control might have ceased
     }
-#ifdef USEENCRYPTEDPIPE    
+
     if (IamMaster)  Radio1.openWritingPipe(TeensyMACAddPipe); // restore the proper pipe address
     if (!IamMaster) Radio1.openWritingPipe(BuddyMACAddPipe); // restore the proper pipe address
     delayMicroseconds(SHORT_DELAY);
-#endif
+
     Radio1.setChannel(CurrentChannel); // restore the proper frequency
     delayMicroseconds(SHORT_DELAY);
     Radio1.stopListening();
@@ -229,14 +227,14 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
 }
 //*************************************************************************************************************************
 
-void DoWirelessBuddy() // only called from SendData() in when not in LISTENMODE and when wireless buddy is on
+void DoWirelessBuddy()                                              //  Called from SendData() in when not in LISTENMODE and when wireless buddy is on
 {
-    static uint32_t InterBuddyTimer = 0;
-    if (((millis() - LastPacketSentTime)) > 6) { // if there is time, communicate with other buddy tx
+    static uint32_t InterBuddyTimer = millis();
+    if ((millis() - LastPacketSentTime) < 5) {                      // if there is time, communicate with other buddy tx (Fails below 4)
         {
             if ((millis() - InterBuddyTimer) >= INTERBUDDYRATE) {
-                if (BuddyPupilOnWireless) SendSpecialPacket(0);
-                if (BuddyMasterOnWireless) SendSpecialPacket(1);
+                if (BuddyPupilOnWireless) SendSpecialPacket(0);     // takes aboout 4 - 5 ms
+                if (BuddyMasterOnWireless) SendSpecialPacket(1);    // takes aboout 4 - 5 ms
                 InterBuddyTimer = millis();
             }
         }
@@ -279,23 +277,8 @@ void StartBuddyListen(bool IamMaster)
     char     MasterMsg[]           = "BUDDY HAS CONTROL";
     char     InVisible[]           = "vis Quality,0";
     uint64_t pip                  = TeensyMACAddPipe;            
-    if (BuddyPupilOnWireless){
-
-#ifdef USEENCRYPTEDPIPE
-         pip = BuddyMACAddPipe ^ ENCRYPT_KEY; // heer we use the encrypted pipe address
-#else
-         pip = BuddyMACAddPipe;
-#endif
-    }
-
-     if (BuddyMasterOnWireless){
-#ifdef USEENCRYPTEDPIPE
-         pip = TeensyMACAddPipe ^ ENCRYPT_KEY; // heer we use the encrypted pipe address
-#else
-         pip = TeensyMACAddPipe;
-#endif
-
-    }
+    if (BuddyPupilOnWireless)  pip = BuddyMACAddPipe ^  ENCRYPT_KEY; // heer we use the encrypted pipe address
+    if (BuddyMasterOnWireless) pip = TeensyMACAddPipe ^ ENCRYPT_KEY; // heer we use the encrypted pipe address
     char Ch_Lables[16][5] = {"Ch1", "Ch2", "Ch3", "Ch4", "Ch5", "Ch6", "Ch7", "Ch8", "Ch9", "Ch10", "Ch11", "Ch12", "Ch13", "Ch14", "Ch15", "Ch16"};
     Radio1.enableAckPayload();        // needed
     Radio1.enableDynamicPayloads();   // needed
@@ -321,5 +304,7 @@ void StartBuddyListen(bool IamMaster)
         SendText(FrontView_Connected, buddymsg);
     SendCommand(InVisible);
     LostContactFlag = false;
+   // RestoreDimness();
+    RestoreBrightness();
 }
 #endif

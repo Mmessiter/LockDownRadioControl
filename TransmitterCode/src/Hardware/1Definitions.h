@@ -561,6 +561,7 @@ void             StartBuddyListen(bool IamMaster);
 void             StopBuddyListen(bool IamMaster);
 void             DoWirelessBuddy();
 void             RationaliseBuddy();
+void             RestoreDimness();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *

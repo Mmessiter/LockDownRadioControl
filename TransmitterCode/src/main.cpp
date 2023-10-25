@@ -2466,17 +2466,15 @@ void RationaliseBuddy()
     if (!BuddyPupilOnWireless && !BuddyMasterOnWireless) {
         WirelessBuddy = false;
     }
-
-    if (BuddyMasterOnWireless)
-    {
-        SendText(FrontView_Connected, MasterMsg);
-        StopBuddyListen(1);
-    
-    } else {
-        ModelMatched = false;
+    if (WirelessBuddy){
+        if (BuddyMasterOnWireless) {
+            SendText(FrontView_Connected, MasterMsg);
+            StopBuddyListen(1);
+        } else {
+            ModelMatched = false;
+        } 
+        if (BuddyPupilOnWireless) StartBuddyListen(0);
     }
-    
-    if (BuddyPupilOnWireless) StartBuddyListen(0);
 }
 /*********************************************************************************************************************************/
 void GetStatistics()
@@ -3986,6 +3984,14 @@ void RestoreBrightness()
     SendCommand(cmd);
     ScreenTimeTimer = millis(); // reset screen counter
 }
+
+/*********************************************************************************************************************************/
+
+void RestoreDimness(){
+    char dim[] = "dim=10";
+    SendCommand(dim);
+}
+
 /*********************************************************************************************************************************/
 
 void ZeroDataScreen()

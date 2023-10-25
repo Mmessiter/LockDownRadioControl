@@ -241,9 +241,7 @@ FASTRUN void SendData()
             FailedPacket();
         }
     }
-    else {
-        if (WirelessBuddy) DoWirelessBuddy(); // use any spare milliseconds to deal with wireless buddy, in in use.
-    }
+    if (WirelessBuddy) DoWirelessBuddy();                       // use any spare milliseconds to deal with wireless buddy, if in use.
 }
 /***********************************************************************************************************/
 void DoScanEnd()
