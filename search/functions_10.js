@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['radio1_0',['Radio1',['../1Definitions_8h.html#a621c346e4b1d9b24b9a5bda63d0f0f52',1,'Radio1(CE_PIN, CSN_PIN):&#160;1Definitions.h'],['../radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a',1,'Radio1(pinCE1, pinCSN1):&#160;radio.h']]],
+  ['radio1_0',['Radio1',['../radio_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a',1,'Radio1(pinCE1, pinCSN1):&#160;radio.h'],['../1Definitions_8h.html#a621c346e4b1d9b24b9a5bda63d0f0f52',1,'Radio1(CE_PIN, CSN_PIN):&#160;1Definitions.h']]],
   ['radio2_1',['Radio2',['../radio_8h.html#a8b76f3c338025926421c7b308405bbfd',1,'radio.h']]],
-  ['rationalisebuddy_2',['RationaliseBuddy',['../TransmitterCode_2src_2main_8cpp.html#aa65533089f2afae4789e1f1882ec78ad',1,'RationaliseBuddy():&#160;main.cpp'],['../1Definitions_8h.html#aa65533089f2afae4789e1f1882ec78ad',1,'RationaliseBuddy():&#160;main.cpp']]],
+  ['rationalisebuddy_2',['RationaliseBuddy',['../1Definitions_8h.html#aa65533089f2afae4789e1f1882ec78ad',1,'RationaliseBuddy():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aa65533089f2afae4789e1f1882ec78ad',1,'RationaliseBuddy():&#160;main.cpp']]],
   ['read_3',['read',['../classSBUS.html#a44376d88b040d2cdf85f1a6d93633935',1,'SBUS']]],
   ['readak8963registers_4',['readAK8963Registers',['../classMPU9250.html#a8882aa5158664912c4d4354739d2bc23',1,'MPU9250']]],
   ['readautoandmotorswitch_5',['ReadAutoAndMotorSwitch',['../TransmitterCode_2src_2main_8cpp.html#a5d1fba24b4512dfb5c95b2820b65a112',1,'main.cpp']]],
@@ -29,7 +29,7 @@ var searchData=
   ['readmemoryblock_26',['readMemoryBlock',['../classMPU6050.html#a04d8d5e7b62605aed15f07f52afa74ca',1,'MPU6050']]],
   ['readmemorybyte_27',['readMemoryByte',['../classMPU6050.html#a4fb50ebcff2f4e686e3fbbafb70a1f75',1,'MPU6050']]],
   ['readnewswitchfunction_28',['ReadNewSwitchFunction',['../TransmitterCode_2src_2main_8cpp.html#a2521ceba7d91302765db4720e3367127',1,'main.cpp']]],
-  ['readonemodel_29',['ReadOneModel',['../1Definitions_8h.html#ac7a5ec6cf2ed7b50bd291f821e886302',1,'ReadOneModel(uint32_t Mnum):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ac7a5ec6cf2ed7b50bd291f821e886302',1,'ReadOneModel(uint32_t Mnum):&#160;main.cpp']]],
+  ['readonemodel_29',['ReadOneModel',['../TransmitterCode_2src_2main_8cpp.html#ac7a5ec6cf2ed7b50bd291f821e886302',1,'ReadOneModel(uint32_t Mnum):&#160;main.cpp'],['../1Definitions_8h.html#ac7a5ec6cf2ed7b50bd291f821e886302',1,'ReadOneModel(uint32_t Mnum):&#160;main.cpp']]],
   ['readothersensors_30',['ReadOtherSensors',['../SensorHubT32_2src_2main_8cpp.html#a8ace27b0e3d8efecd55ad071506aa86d',1,'main.cpp']]],
   ['readregisters_31',['readRegisters',['../classMPU9250.html#a1c68fa77b74761fdb2eac5f7c0887f48',1,'MPU9250']]],
   ['readsafetyswitch_32',['ReadSafetySwitch',['../TransmitterCode_2src_2main_8cpp.html#a31d407a2e20f041aca342514bda18123',1,'main.cpp']]],
@@ -70,10 +70,11 @@ var searchData=
   ['resettransmittersettings_67',['ResetTransmitterSettings',['../1Definitions_8h.html#a5c7f22bae35d5d6df9d54fe79dbb8401',1,'ResetTransmitterSettings():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a5c7f22bae35d5d6df9d54fe79dbb8401',1,'ResetTransmitterSettings():&#160;main.cpp']]],
   ['restorebrightness_68',['RestoreBrightness',['../1Definitions_8h.html#a49da3478d89a22069e29c7f00cb46a5f',1,'RestoreBrightness():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a49da3478d89a22069e29c7f00cb46a5f',1,'RestoreBrightness():&#160;main.cpp']]],
   ['restorecurrentmodel_69',['RestoreCurrentModel',['../TransmitterCode_2src_2main_8cpp.html#aa1f353c2c61131eeafa77c6e67608e45',1,'main.cpp']]],
-  ['rotate_70',['rotate',['../classVectorInt16.html#ac7bf149db0a2b66d7683b87ebeb2dfc5',1,'VectorInt16::rotate()'],['../classVectorFloat.html#afef0e6d631fb1eb67b6913e90730aa9e',1,'VectorFloat::rotate()']]],
-  ['rudderlefttrim_71',['RudderLeftTrim',['../TransmitterCode_2src_2main_8cpp.html#ae96314eac241d2716e7ebda1fc658ec4',1,'main.cpp']]],
-  ['rudderrighttrim_72',['RudderRightTrim',['../TransmitterCode_2src_2main_8cpp.html#a77a49849e3aa20dc1aadce0fe00de798',1,'main.cpp']]],
-  ['runmacro_73',['RunMacro',['../macros_8h.html#a91fb686ba2d3111821721ab33b442918',1,'macros.h']]],
-  ['rxoptionsviewstart_74',['RXOptionsViewStart',['../TransmitterCode_2src_2main_8cpp.html#af9735ed306706d15b52bef04ac954bd9',1,'main.cpp']]],
-  ['rxsetup1end_75',['RXSetup1End',['../TransmitterCode_2src_2main_8cpp.html#a2e0aa19fa93c1bacd9b4600025f33594',1,'main.cpp']]]
+  ['restoredimness_70',['RestoreDimness',['../1Definitions_8h.html#a648fc75947f973d46fbcc9b20fdca7f9',1,'RestoreDimness():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a648fc75947f973d46fbcc9b20fdca7f9',1,'RestoreDimness():&#160;main.cpp']]],
+  ['rotate_71',['rotate',['../classVectorInt16.html#ac7bf149db0a2b66d7683b87ebeb2dfc5',1,'VectorInt16::rotate()'],['../classVectorFloat.html#afef0e6d631fb1eb67b6913e90730aa9e',1,'VectorFloat::rotate()']]],
+  ['rudderlefttrim_72',['RudderLeftTrim',['../TransmitterCode_2src_2main_8cpp.html#ae96314eac241d2716e7ebda1fc658ec4',1,'main.cpp']]],
+  ['rudderrighttrim_73',['RudderRightTrim',['../TransmitterCode_2src_2main_8cpp.html#a77a49849e3aa20dc1aadce0fe00de798',1,'main.cpp']]],
+  ['runmacro_74',['RunMacro',['../macros_8h.html#a91fb686ba2d3111821721ab33b442918',1,'macros.h']]],
+  ['rxoptionsviewstart_75',['RXOptionsViewStart',['../TransmitterCode_2src_2main_8cpp.html#af9735ed306706d15b52bef04ac954bd9',1,'main.cpp']]],
+  ['rxsetup1end_76',['RXSetup1End',['../TransmitterCode_2src_2main_8cpp.html#a2e0aa19fa93c1bacd9b4600025f33594',1,'main.cpp']]]
 ];

@@ -355,6 +355,7 @@ var 1Definitions_8h =
     [ "ResetAllTrims", "1Definitions_8h.html#a883e18dbafdf41d3451879db47ab113f", null ],
     [ "ResetTransmitterSettings", "1Definitions_8h.html#a5c7f22bae35d5d6df9d54fe79dbb8401", null ],
     [ "RestoreBrightness", "1Definitions_8h.html#a49da3478d89a22069e29c7f00cb46a5f", null ],
+    [ "RestoreDimness", "1Definitions_8h.html#a648fc75947f973d46fbcc9b20fdca7f9", null ],
     [ "SaveAllParameters", "1Definitions_8h.html#a92c5dada5e5ef70261391557464f2d19", null ],
     [ "SaveCurrentModel", "1Definitions_8h.html#af5e8d51b8f0fb2cfc985ca3de187cc8a", null ],
     [ "SaveOneModel", "1Definitions_8h.html#ab5210e90502030d9f8864752dd70dc20", null ],

@@ -2,7 +2,7 @@ var NAVTREEINDEX3 =
 {
 "BuddyWireless_8h.html#adc8ab6e023609f6548762eea2746eea1":[5,0,3,0,0,2,4],
 "BuddyWireless_8h.html#ae7ccabc87d888235fa119a3f20d29d15":[5,0,3,0,0,2,3],
-"BuddyWireless_8h.html#af59c2527be7a67d6b09dd467f3123d55":[5,0,3,0,0,2,10],
+"BuddyWireless_8h.html#af59c2527be7a67d6b09dd467f3123d55":[5,0,3,0,0,2,9],
 "BuddyWireless_8h_source.html":[5,0,3,0,0,2],
 "I2Cdev_8cpp.html":[5,0,0,0,0,0,1],
 "I2Cdev_8cpp.html#af7b7dc9a200cb1404c280bd500fd1551":[5,0,0,0,0,0,1,0],

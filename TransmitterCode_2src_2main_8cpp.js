@@ -180,6 +180,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "ResetTransmitterSettings", "TransmitterCode_2src_2main_8cpp.html#a5c7f22bae35d5d6df9d54fe79dbb8401", null ],
     [ "RestoreBrightness", "TransmitterCode_2src_2main_8cpp.html#a49da3478d89a22069e29c7f00cb46a5f", null ],
     [ "RestoreCurrentModel", "TransmitterCode_2src_2main_8cpp.html#aa1f353c2c61131eeafa77c6e67608e45", null ],
+    [ "RestoreDimness", "TransmitterCode_2src_2main_8cpp.html#a648fc75947f973d46fbcc9b20fdca7f9", null ],
     [ "RudderLeftTrim", "TransmitterCode_2src_2main_8cpp.html#ae96314eac241d2716e7ebda1fc658ec4", null ],
     [ "RudderRightTrim", "TransmitterCode_2src_2main_8cpp.html#a77a49849e3aa20dc1aadce0fe00de798", null ],
     [ "RXOptionsViewStart", "TransmitterCode_2src_2main_8cpp.html#af9735ed306706d15b52bef04ac954bd9", null ],
