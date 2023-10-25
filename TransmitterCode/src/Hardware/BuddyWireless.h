@@ -165,14 +165,10 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx whil
     if (!IamMaster) Radio1.openWritingPipe(BuddyMACAddPipe); // restore the proper pipe address
     delayMicroseconds(SHORT_DELAY);
     Radio1.stopListening();
-    delayMicroseconds(SHORT_DELAY);
-    /*
-    delayMicroseconds(SHORT_DELAY); // no need to restore the channel as it hops anyway!
+    delayMicroseconds(SHORT_DELAY); 
     Radio1.setChannel(CurrentChannel); // restore the proper frequency
     delayMicroseconds(SHORT_DELAY);
     Radio1.stopListening();
-    delayMicroseconds(SHORT_DELAY);
-    */
 }
 
 //*************************************************************************************************************************
