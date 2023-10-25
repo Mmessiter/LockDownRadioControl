@@ -87,8 +87,8 @@ void GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
     Radio1.read(&AckSpecial, 2);
     if (AckSpecial[0] == 'O') return; // OK to continue sending. no action needed
     if (AckSpecial[0] == 'S') {       // PUPIL -> LISTEN  <<<<<< *******
-        PlaySound(MASTERMSG);  
         StartBuddyListen(0); // 'S' from Master = Shut Up now, send nothing
+        PlaySound(MASTERMSG);  
         DelayWithDog(LONGER_DELAY);
     }
     MasterDetected(true); // Master is alive
