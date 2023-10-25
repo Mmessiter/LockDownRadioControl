@@ -380,22 +380,23 @@ float HopsPerSec = 0;
 
 FASTRUN void HopToNextChannel()
 {
+    static uint16_t hopcount   = 0;
     Radio1.setChannel(NextChannel); // Hop !
     CurrentChannel = NextChannel;   // save it for later
     delayMicroseconds(150);
     Radio1.stopListening(); // Transmit only
     delayMicroseconds(150);
+     ++hopcount;
 
     #ifdef DB_FHSS
     if (BoundFlag && Connected && ModelMatched) {
         float           ch         = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber);
         float           Freq       = 2.4;
-        static uint16_t hopcount   = 0;
         static uint32_t hoptime    = 0;
         static uint16_t HopsPerSec = 0;
         Look1("  Hops per second: ");
         Serial.print(HopsPerSec);
-        ++hopcount;
+       
         if ((millis() - hoptime) >= 1000) {
             hoptime    = millis();
             HopsPerSec = hopcount;
