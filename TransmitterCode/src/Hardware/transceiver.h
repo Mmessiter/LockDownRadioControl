@@ -227,7 +227,7 @@ FASTRUN void SendData()
         Connected = false;                                       // Assume the worst until ACK is received.
         FlushFifos();                                            // This avoids a lockup that happens when the FIFO gets full.
         LoadPacketData();                                        // extra parameters appended to the data packet
-        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30??)
+        Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30)
         if (Radio1.write(&CompressedData, SizeOfCompressedData)) {SuccessfulPacket();} else {FailedPacket();}
     }else{
         if (WirelessBuddy) DoWirelessBuddy();                    // takes about 4 - 5 ms ...use spare milliseconds to deal with wireless buddy,if in use
