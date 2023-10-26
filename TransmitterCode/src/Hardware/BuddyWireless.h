@@ -9,7 +9,7 @@
     #define SPECIAL_PACKET_CHANNEL 123              // Which channel for the special packets
     #define SHORT_DELAY            260              // ... microseconds
     #define LONGER_DELAY           1                // ... milliseconds
-    #define LOSTCONTACTTHRESHOLD   6                // 6 fails in a row and we declare the buddy dead
+    #define LOSTCONTACTTHRESHOLD   2                // 2 fails in a row and we declare the buddy dead
     #define INTERBUDDYRATE         200              // 5 times a second 
     #define DELAYAFTERACK          5                // ms
     #define ENCRYPT_KEY            0xFEADFEADBB     // The encryption key used for the Pipe address between transmitters :-)
@@ -227,17 +227,13 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
 }
 //*************************************************************************************************************************
 
-void DoWirelessBuddy()                                              //  Called from SendData() in when not in LISTENMODE and when wireless buddy is on
+void DoWirelessBuddy()                                      //  Called from SendData() in when not in LISTENMODE and when wireless buddy is on
 {
-    static uint32_t InterBuddyTimer = millis();
-    if ((millis() - LastPacketSentTime) < 5) {                      // if there is time, communicate with other buddy tx (Fails below 4)
-        {
-            if ((millis() - InterBuddyTimer) >= INTERBUDDYRATE) {
-                if (BuddyPupilOnWireless) SendSpecialPacket(0);     // takes aboout 4 - 5 ms
-                if (BuddyMasterOnWireless) SendSpecialPacket(1);    // takes aboout 4 - 5 ms
-                InterBuddyTimer = millis();
-            }
-        }
+    static uint32_t InterBuddyTimer = 0;
+    if ((millis() - InterBuddyTimer) >= INTERBUDDYRATE) {
+        if (BuddyPupilOnWireless) SendSpecialPacket(0);     // takes about 4 - 5 ms
+        if (BuddyMasterOnWireless) SendSpecialPacket(1);    // takes about 4 - 5 ms
+        InterBuddyTimer = millis();
     }
 }
 
@@ -304,7 +300,6 @@ void StartBuddyListen(bool IamMaster)
         SendText(FrontView_Connected, buddymsg);
     SendCommand(InVisible);
     LostContactFlag = false;
-   // RestoreDimness();
     RestoreBrightness();
 }
 #endif
