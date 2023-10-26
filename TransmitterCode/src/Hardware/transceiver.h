@@ -221,7 +221,7 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 FASTRUN void SendData()
 {
     if (SendNoData) return;
-    if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { // LastPacketSentTime is set to zero when a packet failed to send
+    if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { 
         LastPacketSentTime = millis();
         if (BuddyPupilOnPPM) { SendViaPPM(); return; }           // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         Connected = false;                                       // Assume the worst until ACK is received.
