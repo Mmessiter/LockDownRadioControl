@@ -2443,13 +2443,14 @@ FLASHMEM void setup()
         }
     }
     RationaliseBuddy();
+    ModelMatched = false;
+    BoundFlag    = false;
+    Connected    = false;
 }
 /*********************************************************************************************************************************/
 void RationaliseBuddy()
 {
-    char FrontView_Connected[] = "Connected";
-    char MasterMsg[]           = "* YOU HAVE CONTROL *";
-    
+   
     PupilIsAlive  = 0;
     MasterIsAlive = 0;
 
@@ -2468,7 +2469,6 @@ void RationaliseBuddy()
     }
     if (WirelessBuddy){
         if (BuddyMasterOnWireless) {
-            SendText(FrontView_Connected, MasterMsg);
             StopBuddyListen(1);
         } else {
             ModelMatched = false;
@@ -5607,6 +5607,18 @@ void SelectChannelOrder()
 }
 
 /******************************************************************************************************************************/
+void ResetClock() // heer
+{
+     char page_OptionView2[]    = "page OptionView2";
+     char Prompt[]              = "Reset clock?";   
+     char Done[]                = "Clock reset!";    
+     
+    if (GetConfirmation(page_OptionView2, Prompt)) {
+        SetDS1307ToCompilerTime();
+        MsgBox(page_OptionView2, Done);
+    }
+}
+/******************************************************************************************************************************/
 
 void TXModuleViewEnd()
 {
@@ -5660,7 +5672,7 @@ void TXModuleViewEnd()
 /******************************************************************************************************************************/
 
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 71 // One more than final one, because first is number zero
+#define LASTFUNCTION 72 // One more than final one, because first is number zero
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                    // 0
@@ -5733,7 +5745,9 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     TXModuleViewEnd,          // 67
     DeleteModelID,            // 68
     StartPong,                // 69
-    StoreModelID              // 70
+    StoreModelID,             // 70
+    ResetClock                // 71
+
 
 }; // list will become longer ...
 

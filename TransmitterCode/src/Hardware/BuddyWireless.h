@@ -241,8 +241,7 @@ void DoWirelessBuddy()                                      //  Called from Send
 void StopBuddyListen(bool IamMaster) // here the transmitter takes control
 {
     char     FrontView_Connected[] = "Connected";
-    char     buddymsg[]            = "* YOU HAVE CONTROL *";
-    char     MasterMsg[]           = "* YOU HAVE CONTROL *";
+    char     ControlMsg[]          = "* YOU HAVE CONTROL *";
     char     InVisible[]           = "vis Quality,0";
     uint64_t pip                   = TeensyMACAddPipe;
     if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;    
@@ -252,17 +251,15 @@ void StopBuddyListen(bool IamMaster) // here the transmitter takes control
     Radio1.maskIRQ(1, 1, 1);          // no interrupts - seems NEEDED at the moment
     Radio1.openWritingPipe(pip);
     Radio1.stopListening();
-    ModelMatched = true;
-    BoundFlag    = true;
-    Connected    = true;
     GreenLedOn();
     CurrentMode = NORMAL;
     RestoreBrightness();
-    if (IamMaster)
-        SendText(FrontView_Connected, MasterMsg);
-    else
-        SendText(FrontView_Connected, buddymsg);
+    if (IamMaster) {if (ModelMatched) SendText(FrontView_Connected, ControlMsg);}
+    else           {SendText(FrontView_Connected, ControlMsg);}
     SendCommand(InVisible);
+    ModelMatched = true;
+    BoundFlag    = true;
+    Connected    = true;
     ShowConnectionQuality();
 }
 //*************************************************************************************************************************
