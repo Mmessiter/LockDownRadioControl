@@ -176,6 +176,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "ReduceLimits", "TransmitterCode_2src_2main_8cpp.html#ad875fe28566f35ffc5f90e73d0089fc6", null ],
     [ "RefreshLog", "TransmitterCode_2src_2main_8cpp.html#a816b0ec602ed068bb08647d951681993", null ],
     [ "RenameFile", "TransmitterCode_2src_2main_8cpp.html#a9d94366336f1e5fd43edb9c24bec5821", null ],
+    [ "ResetClock", "TransmitterCode_2src_2main_8cpp.html#a75875d66db3193e4034c3768c175f8ef", null ],
     [ "ResetSwitchNumbers", "TransmitterCode_2src_2main_8cpp.html#ac1eb66fa4c391f27c315e687f5335015", null ],
     [ "ResetTransmitterSettings", "TransmitterCode_2src_2main_8cpp.html#a5c7f22bae35d5d6df9d54fe79dbb8401", null ],
     [ "RestoreBrightness", "TransmitterCode_2src_2main_8cpp.html#a49da3478d89a22069e29c7f00cb46a5f", null ],
