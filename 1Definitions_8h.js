@@ -405,8 +405,6 @@ var 1Definitions_8h =
     [ "AudioVolume", "1Definitions_8h.html#adddcbca54e7b49592c3f6c360bf04494", null ],
     [ "AutoModelSelect", "1Definitions_8h.html#a77387f8b9f18e9b75448e01d821ae17e", null ],
     [ "Autoswitch", "1Definitions_8h.html#a5b8bae72a42da5c8a19ad3b4c1692538", null ],
-    [ "b12isGrey", "1Definitions_8h.html#a0070f1201c3b616bcef9519caa36a81c", null ],
-    [ "b5isGrey", "1Definitions_8h.html#a2cacff4290d454b1134b62c183e4e17a", null ],
     [ "BackGroundColour", "1Definitions_8h.html#a59c3d8b001e63150ebf11e3d9d6dca5b", null ],
     [ "Bank", "1Definitions_8h.html#a22e13a2a5c7a6d6776b46f5341bda026", null ],
     [ "BanksInUse", "1Definitions_8h.html#a2f3f9bbd2850e612adc826db0714d9ef", null ],

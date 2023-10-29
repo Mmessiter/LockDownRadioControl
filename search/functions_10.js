@@ -53,7 +53,7 @@ var searchData=
   ['recordspacketsuccess_50',['RecordsPacketSuccess',['../transceiver_8h.html#afc091b5942e21a03f6dc8635d5e519ba',1,'transceiver.h']]],
   ['redledon_51',['RedLedOn',['../1Definitions_8h.html#a7d34cec6e8edc20c8b50424e15dcc7c7',1,'RedLedOn():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a7d34cec6e8edc20c8b50424e15dcc7c7',1,'RedLedOn():&#160;main.cpp']]],
   ['reducelimits_52',['ReduceLimits',['../TransmitterCode_2src_2main_8cpp.html#ad875fe28566f35ffc5f90e73d0089fc6',1,'main.cpp']]],
-  ['reenablescanbutton_53',['ReEnableScanButton',['../1Definitions_8h.html#a0a3d89dfcfab70c6cbc50401fff1afeb',1,'ReEnableScanButton():&#160;Utilities.h'],['../Utilities_8h.html#a0a3d89dfcfab70c6cbc50401fff1afeb',1,'ReEnableScanButton():&#160;Utilities.h']]],
+  ['reenablescanbutton_53',['ReEnableScanButton',['../1Definitions_8h.html#a0a3d89dfcfab70c6cbc50401fff1afeb',1,'1Definitions.h']]],
   ['refreshlog_54',['RefreshLog',['../TransmitterCode_2src_2main_8cpp.html#a816b0ec602ed068bb08647d951681993',1,'main.cpp']]],
   ['renamefile_55',['RenameFile',['../TransmitterCode_2src_2main_8cpp.html#a9d94366336f1e5fd43edb9c24bec5821',1,'main.cpp']]],
   ['reset_56',['reset',['../classMPU6050.html#a7100b6d276c3c8664cf00d768b7b0dee',1,'MPU6050']]],
