@@ -7,10 +7,10 @@
 #ifndef BUDDYWIRELESS_H
     #define BUDDYWIRELESS_H
     #define SPECIAL_PACKET_CHANNEL 123              // Which channel for the special packets
-    #define SHORT_DELAY            260              // ... microseconds
+    #define SHORT_DELAY            130              // ... microseconds
     #define LONGER_DELAY           1                // ... milliseconds
     #define LOSTCONTACTTHRESHOLD   2                // 2 fails in a row and we declare the buddy dead
-    #define INTERBUDDYRATE         200              // 5 times a second 
+    #define INTERBUDDYRATE         100              // 10 times a second 
     #define DELAYAFTERACK          5                // ms
     #define ENCRYPT_KEY            0xFEADFEADBB     // The encryption key used for the Pipe address between transmitters :-)
  
@@ -116,7 +116,6 @@ void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx whil
     if (IamMaster)   Radio1.openWritingPipe(TeensyMACAddPipe ^ ENCRYPT_KEY); // send to encrypted pipe address
     if (!IamMaster)  Radio1.openWritingPipe(BuddyMACAddPipe ^ ENCRYPT_KEY);  // send to encrypted pipe address 
     delayMicroseconds(SHORT_DELAY);
-
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
     delayMicroseconds(SHORT_DELAY);
     Radio1.stopListening();
@@ -205,7 +204,7 @@ void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx
             }
         }
         DelayWithDog(LONGER_DELAY);
-        if (TakeControlBackNow) { 
+        if (TakeControlBackNow && IamMaster) { 
             StopBuddyListen(1); // MASTER RECLAIMS CONTROL   <<<<<< *******
         }
         LastPassivePacketTime = millis();

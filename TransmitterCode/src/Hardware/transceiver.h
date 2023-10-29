@@ -54,7 +54,7 @@ void LoadPacketData()
     FS_Byte2                     = uint8_t(Twobytes & 0x00FF);
     SendBuffer[CHANNELSUSED + 1] = 0;
     SendBuffer[CHANNELSUSED + 2] = 0;
-    // Look (PacketNumber);
+   // Look (PacketNumber);
     switch (PacketNumber) {
         case 0:
 
@@ -401,7 +401,7 @@ FASTRUN void HopToNextChannel()
         PStartTime = millis();
     }
     #endif
-    if (PacketNumber > PACKETNUMBERMAX) PacketNumber = 0; // reset packet number if it gets too big
+    if (PacketNumber >= PACKETNUMBERMAX) PacketNumber = 0; // reset packet number if it gets too big
 }
 /*********************************************************************************************************************************/
 
