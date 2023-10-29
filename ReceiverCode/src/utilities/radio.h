@@ -295,7 +295,7 @@ void HopToNextChannel()
 void ConfigureRadio()
 {
     CurrentRadio->setPALevel(RF24_PA_MAX);
-    CurrentRadio->setDataRate(RF24_250KBPS);
+    CurrentRadio->setDataRate(DATARATE);
     CurrentRadio->enableAckPayload();        // needed
     CurrentRadio->setRetries(2, 2);          // automatic retries // was 2,0
     CurrentRadio->enableDynamicPayloads();   // needed

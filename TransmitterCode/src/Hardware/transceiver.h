@@ -202,7 +202,7 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 {
     Radio1.begin();
     Radio1.setPALevel(RF24_PA_MAX, true);
-    Radio1.setDataRate(RF24_250KBPS);
+    Radio1.setDataRate(DATARATE);   
     Radio1.enableAckPayload();
     Radio1.openWritingPipe(Pipe);
     Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait);
