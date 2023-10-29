@@ -124,7 +124,6 @@ FASTRUN void FailedPacket()
         {
             if (!LedWasRed) { // Put on red led - receiver must be off
                 RedLedOn();
-                ReEnableScanButton();
             }
         }
         TryToReconnect();

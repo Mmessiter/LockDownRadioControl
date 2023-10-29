@@ -4200,8 +4200,6 @@ void ExitMacrosView()
     MacrosBuffer[n][MACRODURATION]       = GetValue(Duration);
     UseMacros                            = true;
     SaveOneModel(ModelNumber);
-    b5isGrey  = false;
-    b12isGrey = false;
     SendCommand(pRXSetupView);
     CurrentView = RXSETUPVIEW;
     UpdateModelsNameEveryWhere();
@@ -4223,8 +4221,6 @@ void EndReverseView()
         if (GetValue(fs[i])) ReversedChannelBITS |= 1 << i; // set a BIT
     }
     SaveOneModel(ModelNumber);
-    b5isGrey  = false;
-    b12isGrey = false;
     SendCommand(pRXSetupView);
     CurrentView = RXSETUPVIEW;
     UpdateModelsNameEveryWhere();
@@ -4335,8 +4331,6 @@ void EndBuddyView()
         }
     }
     SaveAllParameters();
-    b5isGrey  = false;
-    b12isGrey = false;
     SendCommand(pRXSetupView);
     CurrentView = RXSETUPVIEW;
     UpdateModelsNameEveryWhere();
@@ -4437,7 +4431,6 @@ void GotoModelsView()
 {
     char GoModelsView[] = "page ModelsView";
 
-    if (ModelMatched) return; // must not change when model connected
     SaveCurrentModel();
     SendCommand(GoModelsView);
     CurrentView = MODELSVIEW;
@@ -5144,8 +5137,6 @@ void StartModelSetup()
         SendCommand(ProgressEnd);
     }
 
-    b5isGrey  = false;
-    b12isGrey = false;
     SendCommand(GotoModelSetup);
     CurrentView = RXSETUPVIEW;
     SaveOneModel(ModelNumber);
@@ -5799,8 +5790,7 @@ FASTRUN void ButtonWasPressed()
                                                       // **********************************************************************************************************************************
                 NumberedFunctions[NumberedCommand](); // Call the needed function -- with a function pointer                     *
                                                       // **********************************************************************************************************************************
-                b5isGrey  = false;
-                b12isGrey = false;
+           
                 ClearText();
                 return;
             }
@@ -6043,8 +6033,6 @@ FASTRUN void ButtonWasPressed()
             LastTimeRead = 0;
             SaveTransmitterParameters();
             UpdateModelsNameEveryWhere();
-            b5isGrey  = false;
-            b12isGrey = false;
             ClearText();
             return;
         }
@@ -6056,8 +6044,6 @@ FASTRUN void ButtonWasPressed()
             LastTimeRead = 0;
             CurrentMode  = NORMAL;
             CurrentView  = TXSETUPVIEW;
-            b5isGrey     = false;
-            b12isGrey    = false;
             ClearText();
             UpdateModelsNameEveryWhere();
             return;
@@ -6126,8 +6112,6 @@ FASTRUN void ButtonWasPressed()
             SendCommand(page_SetupView);
             LastTimeRead = 0;
             CurrentMode  = NORMAL;
-            b5isGrey     = false;
-            b12isGrey    = false;
             SendCommand(ProgressEnd);
             UpdateModelsNameEveryWhere();
             ClearText();
@@ -6138,8 +6122,6 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(DataEnd, TextIn) > 0) { //  Exit from Data screen
             SendCommand(page_RXSetupView);
             CurrentView = RXSETUPVIEW;
-            b5isGrey    = false;
-            b12isGrey   = false;
             CurrentMode = NORMAL;
             UpdateModelsNameEveryWhere();
             ClearText();
@@ -6171,8 +6153,6 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(Scan_End, TextIn) > 0) { //  goto setup screen from Scan screen
             CurrentView = TXSETUPVIEW;
-            b5isGrey    = false;
-            b12isGrey   = false;
             SendCommand(page_SetupView);
             LastTimeRead = 0;
             DoScanEnd();
@@ -6270,11 +6250,6 @@ FASTRUN void ButtonWasPressed()
             CurrentView = SavedCurrentView;
 
             if (CurrentView == PONGVIEW) StartPong();
-
-            if ((CurrentView == RXSETUPVIEW) || (CurrentView == TXSETUPVIEW)) {
-                b5isGrey  = false;
-                b12isGrey = false;
-            }
 
             if (CurrentView == GRAPHVIEW) {
                 DisplayCurveAndServoPos();
@@ -6420,8 +6395,6 @@ FASTRUN void ButtonWasPressed()
             UpdateButtonLabels();
             CurrentView = RXSETUPVIEW;
             SendCommand(page_RXSetupView);
-            b5isGrey     = false;
-            b12isGrey    = false;
             LastTimeRead = 0;
             ClearText();
             return;
@@ -6650,8 +6623,6 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(GoSetupView, TextIn) > 0) {
             CurrentView = TXSETUPVIEW;
             SendCommand(page_SetupView);
-            b5isGrey  = false;
-            b12isGrey = false;
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
@@ -6676,8 +6647,6 @@ FASTRUN void ButtonWasPressed()
             SendValue(FrontView_Highlight, HighlightColour);
             SaveTransmitterParameters();
             CurrentView = TXSETUPVIEW;
-            b5isGrey    = false;
-            b12isGrey   = false;
             SendCommand(page_SetupView);
             LastTimeRead = 0;
             UpdateModelsNameEveryWhere();
@@ -6779,17 +6748,13 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(Fhss_View, TextIn)) {
-
-            if ((!b5isGrey)) // no scan while connected!!!
-            {
-                if (PPMdata.UseTXModule) InitRadio(DefaultPipe); // because scan fails if radio isn't initialised
-                SendCommand(page_FhssView);
-                DrawFhssBox();
-                DoScanInit();
-                CurrentMode = SCANWAVEBAND;
-                CurrentView = SCANVIEW;
-                BlueLedOn();
-            }
+            if (PPMdata.UseTXModule) InitRadio(DefaultPipe); // because scan fails if radio isn't initialised
+            SendCommand(page_FhssView);
+            DrawFhssBox();
+            DoScanInit();
+            CurrentMode = SCANWAVEBAND;
+            CurrentView = SCANVIEW;
+            BlueLedOn();         
             ClearText();
             return;
         }
@@ -7770,10 +7735,10 @@ void FASTRUN ManageTransmitter()
             if (CurrentView == FRONTVIEW) ShowMotorTimer(); // Screen Timer
             return;                                         // That's enough housekeeping this time around
         }
-        if (RightNow - LastScanButtonCheck >= 100) {
-            if ((CurrentView == TXSETUPVIEW) || (CurrentView == RXSETUPVIEW)) CheckScanButton();
-            LastScanButtonCheck = millis();
-        }
+        // if (RightNow - LastScanButtonCheck >= 100) {
+        //     if ((CurrentView == TXSETUPVIEW) || (CurrentView == RXSETUPVIEW)) CheckScanButton();
+        //     LastScanButtonCheck = millis();
+        // }
         ReadSwitches();       // Check switch positions 20 times a second
         CheckHardwareTrims(); // Trims 20 times a second
         GetBank();            // Must not call too often

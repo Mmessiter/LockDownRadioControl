@@ -925,35 +925,6 @@ FASTRUN void DoReverseSense()
         }
     }
 }
-/************************************************************************************************************/
-void ReEnableScanButton() // Scan button AND models button
-{
-    char b5NOTGreyed[]  = "b5.pco=";
-    char b12NOTGreyed[] = "b12.pco=";
-    char b1NOTGreyed[]  = "b1.pco=";
-
-    char nb[20];
-    char cmd[40];
-
-    Str(nb, ForeGroundColour, 0);
-
-    if (CurrentView == TXSETUPVIEW && b5isGrey) {
-        strcpy(cmd, b5NOTGreyed);
-        strcat(cmd, nb);
-        SendCommand(cmd);
-        strcpy(cmd, b1NOTGreyed);
-        strcat(cmd, nb);
-        SendCommand(cmd);
-        b5isGrey = false;
-    }
-
-    if (CurrentView == RXSETUPVIEW && b12isGrey) {
-        strcpy(cmd, b12NOTGreyed);
-        strcat(cmd, nb);
-        SendCommand(cmd);
-        b12isGrey = false;
-    }
-}
 
 /************************************************************************************************************/
 void DelayWithDog(uint32_t HowLong)
@@ -979,29 +950,5 @@ void Look1(const any& value) // this is a template function that can print anyth
     Serial.print(value);
 }
 
-/************************************************************************************************************/
-
-void CheckScanButton() // Scan button AND models button
-{
-    char b5Greyed[]  = "b5.pco=33840";
-    char b12Greyed[] = "b12.pco=33840";
-    char b1Greyed[]  = "b1.pco=33840";
-
-    if (ModelMatched) {
-        if (CurrentView == TXSETUPVIEW) {
-            if (!b5isGrey) {
-                SendCommand(b5Greyed);
-                SendCommand(b1Greyed);
-                b5isGrey = true;
-            }
-        }
-        if (CurrentView == RXSETUPVIEW) {
-            if (!b12isGrey) {
-                SendCommand(b12Greyed);
-                b12isGrey = true;
-            }
-        }
-    }
-}
 /************************************************************************************************************/
 #endif 
