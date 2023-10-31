@@ -22,6 +22,5 @@ var searchData=
   ['inactivitymaximum_19',['INACTIVITYMAXIMUM',['../1Definitions_8h.html#a6f6e4e8e296f81b3dd22980c49168662',1,'1Definitions.h']]],
   ['inactivityminimum_20',['INACTIVITYMINIMUM',['../1Definitions_8h.html#a0da025fab2b31f5ffb073d6e12fe7fde',1,'1Definitions.h']]],
   ['inactivitytimeout_21',['INACTIVITYTIMEOUT',['../1Definitions_8h.html#afc6ed518e5867e4d7095ec597eae9443',1,'1Definitions.h']]],
-  ['inputs_5fview_22',['INPUTS_VIEW',['../1Definitions_8h.html#aa2bec27575ce278d56e8d9f844dfe72e',1,'1Definitions.h']]],
-  ['interbuddyrate_23',['INTERBUDDYRATE',['../BuddyWireless_8h.html#a1240c6070d0173cca5d14458a2a71847',1,'BuddyWireless.h']]]
+  ['inputs_5fview_22',['INPUTS_VIEW',['../1Definitions_8h.html#aa2bec27575ce278d56e8d9f844dfe72e',1,'1Definitions.h']]]
 ];
