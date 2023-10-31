@@ -12,9 +12,9 @@
     #define LOSTCONTACTTHRESHOLD   2                // 2 fails in a row and we declare the buddy dead
     #define INTERBUDDYRATE         10               // 100 times a second 
     #define DELAYAFTERACK          1                // ms
-    #define ENCRYPT_KEY            0xFEADFEADBB     // The encryption key used for the Pipe address between transmitters :-)
-    #define FASTDATARATE           RF24_2MBPS       // 2MBPS
-    #define NORMALDATARATE         RF24_250KBPS     // 250KBPS
+    #define ENCRYPT_KEY            0xFEADFEADBB     // The encryption key used  for the Pipe address between transmitters :-)
+    #define FASTDATARATE           RF24_1MBPS       // 2 MBPS   = RF24_2MBPS  1 MBPS = RF24_1MBPS
+    #define NORMALDATARATE         RF24_250KBPS     // 250 KBPS = RF24_250KBPS
          
 //*************************************************************************************************************************
 void GetSlaveChannelValuesWireless(){                                           // Very Like the PPM function only a bit simpler
@@ -105,10 +105,10 @@ void PupilDetected(bool Detected)
 //*************************************************************************************************************************
 void GetPupilAck()                                              // Master gets Ack from pupil which contains all the pupil's control data !! << ************** !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 {
-    uint16_t AckSpecial[COMPRESSEDWORDS];                       // Longer ack contains all the pupil's control data
-    if (Radio1.available()) {
-        Radio1.read(&AckSpecial, sizeof AckSpecial);
-        Decompress(BuddyBuffer, AckSpecial, UNCOMPRESSEDWORDS); // decompress the data
+    uint16_t AckSpecial[COMPRESSEDWORDS];                       // Ack payload will contain all the pupil's control data
+    if (Radio1.available()) {                                   // if a packet has arrived
+        Radio1.read(&AckSpecial, sizeof AckSpecial);            // read the packet
+        Decompress(BuddyBuffer, AckSpecial, UNCOMPRESSEDWORDS); // decompress the data into buddybuffer
     }
 }
 //*************************************************************************************************************************
@@ -118,11 +118,11 @@ void SendSpecialPacket() // here the MASTER sends to PUPIL tx. This is called ab
     char AnyData[] = "M";                                       // Send M to indicate Master is ON
     if (BuddyON) AnyData[0] = 'B';                              // Send B to indicate Buddy is ON
     Radio1.openWritingPipe(TeensyMACAddPipe ^ ENCRYPT_KEY);     // send to encrypted pipe address
-    Radio1.setDataRate(FASTDATARATE);                           //  2MBPS
+    Radio1.setDataRate(FASTDATARATE);                           // 1MBPS
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
     if (Radio1.write(&AnyData, sizeof(AnyData))) {
         GetPupilAck();                                          // get ack from pupil WITH HIS CONTROL DATA!!
-        PupilDetected(true); 
+        PupilDetected(true);                                    // pupil is alive
     } else {
         PupilDetected(false);                                   // pupil is dead
     }
@@ -163,7 +163,7 @@ void GetSpecialPacket()                                                         
 //*************************************************************************************************************************
 void StartBuddyListen(bool IamMaster)
 {
-    Radio1.setDataRate(FASTDATARATE);
+    Radio1.setDataRate(FASTDATARATE);           // 1 MBPS
     Radio1.enableAckPayload();                  // needed
     Radio1.enableDynamicPayloads();             // needed
     Radio1.setAutoAck(true);                    // we want acks
