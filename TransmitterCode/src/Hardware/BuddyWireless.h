@@ -6,13 +6,12 @@
 #include "Hardware/1Definitions.h"
 #ifndef BUDDYWIRELESS_H
     #define BUDDYWIRELESS_H
-    #define SPECIAL_PACKET_CHANNEL 123              // Which channel for the special packets
+    #define SPECIAL_PACKET_CHANNEL 125              // Which channel for the special packets
     #define SHORT_DELAY            130              // ... microseconds
     #define LONGER_DELAY           1                // ... milliseconds
-    #define LOSTCONTACTTHRESHOLD   2                // 2 fails in a row and we declare the buddy dead
-    #define INTERBUDDYRATE         10               // 100 times a second 
+    #define LOSTCONTACTTHRESHOLD   2                // 2 fails in a row and we declare the buddy or master dead
     #define DELAYAFTERACK          1                // ms
-    #define ENCRYPT_KEY            0xFEADFEADBB     // The encryption key used  for the Pipe address between transmitters :-)
+    #define ENCRYPT_KEY            0xFEADFEADBB     // The encryption key used for the Pipe address between the transmitters 
     #define FASTDATARATE           RF24_1MBPS       // 2 MBPS   = RF24_2MBPS  1 MBPS = RF24_1MBPS
     #define NORMALDATARATE         RF24_250KBPS     // 250 KBPS = RF24_250KBPS
          
@@ -24,14 +23,13 @@ void GetSlaveChannelValuesWireless(){                                           
         for (int j = 0; j < CHANNELSUSED; ++j) {                                // While slave has control, his stick data replaces some of ours
             if (BuddyControlled & 1 << (j)) SendBuffer[j] = BuddyBuffer[j];     // Test if this channel is buddy controlled. If not leave it unchanged
         }
-
-        if (!SlaveHasControl) { // Buddy is now On
+        if (!SlaveHasControl) {                                                 // Buddy is now On
             PlaySound(BUDDYMSG);                                                // Announce the Buddy is now in control
             LastShowTime    = 0;
             SlaveHasControl = true;
         }
     }
-    else { // Buddy is now Off
+    else {                                                                      // Buddy is now Off
         if (SlaveHasControl) {
             PlaySound(MASTERMSG);                                               // Announce the Master is now in control
             LastShowTime    = 0;
