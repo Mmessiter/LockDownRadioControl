@@ -133,25 +133,25 @@ void SendSpecialPacket() // here the MASTER sends to PUPIL tx. This is called ab
 
 //*************************************************************************************************************************
 
-void GetSpecialPacket()                                                               // here the PUPIL tx gets from MASTER tx. This function is called from main loop
+void GetSpecialPacket()                                                                 // here the PUPIL tx gets from MASTER tx. This function is called from main loop
 {
     static bool MasterIsInControl = true;
-    char DataPacket[2];
-    if (Radio1.available()) {
+    char DataPacket[2];                                                                 // place to store the received data
+    if (Radio1.available()) {                                                           // if a packet has arrived
         Radio1.writeAckPayload(1, &CompressedData, sizeof CompressedData);              // Acknowledge the packet BY SENDING MY CHANNEL DATA!
         DelayWithDog(DELAYAFTERACK);                                                    // <-  ** MUST ** allow the ACK time to get going, otherwise the sender sees a failed packet      <<<<<<<<<<<<<< ************** !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         Radio1.read(&DataPacket, sizeof(DataPacket));                                   // read the packet
         if ((DataPacket[0] == 'B') && (MasterIsInControl)) {                            // Buddy is now in control
-            MasterIsInControl = false;
-            PlaySound(BUDDYMSG);
+            MasterIsInControl = false;                                                  // Buddy is now in control
+            PlaySound(BUDDYMSG);                                                        // Announce the Buddy is now in control
         }
         if ((DataPacket[0] == 'M') && (!MasterIsInControl)) {                           // Master is now in control
-            MasterIsInControl = true;
-            PlaySound(MASTERMSG);
+            MasterIsInControl = true;                                                   // Master is now in control
+            PlaySound(MASTERMSG);                                                       // Announce the Master is now in control
         }
-        MasterDetected(true);
-        LastPassivePacketTime = millis();
-        FlushFifos();
+        MasterDetected(true);                                                           // Master is alive
+        LastPassivePacketTime = millis();                                               // reset the timer
+        FlushFifos();                                                                   // flush the fifos
     }
     else { // no packet arrived so maybe master's dead
         if (millis() - LastPassivePacketTime > 700) {

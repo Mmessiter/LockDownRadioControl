@@ -30,7 +30,7 @@
 
     #define TXVERSION_MAJOR   2
     #define TXVERSION_MINOR   2
-    #define TXVERSION_MINIMUS 8 //   October 2023
+    #define TXVERSION_MINIMUS 9 //   November 2023
 
 // **************************************************************************
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
