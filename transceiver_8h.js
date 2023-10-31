@@ -7,6 +7,7 @@ var transceiver_8h =
     [ "BufferTeensyMACAddPipe", "transceiver_8h.html#a8c4da8345a38bb20db07dcaac7af9c05", null ],
     [ "CheckPipeNibbles", "transceiver_8h.html#acd761b7a3274515f60af86504f70fcd6", null ],
     [ "Compress", "transceiver_8h.html#a1ddd5e8d5bd649dd98ce3710fbff651b", null ],
+    [ "Decompress", "transceiver_8h.html#a6feccc8c0583de3235616d42076f1371", null ],
     [ "DisplayPipe", "transceiver_8h.html#ab8a2a13d9c9cb089a3adc17ce3332f08", null ],
     [ "DoScanEnd", "transceiver_8h.html#a31fb6a46af68482e107cddee58dfb677", null ],
     [ "DoScanInit", "transceiver_8h.html#a77c4a4ffa609df08830ccece07bf283b", null ],
