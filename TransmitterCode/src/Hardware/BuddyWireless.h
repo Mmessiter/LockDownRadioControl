@@ -133,7 +133,7 @@ void SendSpecialPacket() // here the MASTER sends to PUPIL tx. This is called ab
 
 //*************************************************************************************************************************
 
-void GetSpecialPacket()                                                           // here the PUPIL tx gets from MASTER tx. This function is called from main loop
+void GetSpecialPacket()                                                               // here the PUPIL tx gets from MASTER tx. This function is called from main loop
 {
     static bool MasterIsInControl = true;
     char DataPacket[2];
@@ -172,9 +172,6 @@ void StartBuddyListen(bool IamMaster)
     delayMicroseconds(SHORT_DELAY);
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
     Radio1.startListening();
-    ModelMatched = true;
-    BoundFlag    = true;
-    Connected    = true;
     FlushFifos();
     BlueLedOn();
     CurrentMode = LISTENMODE;

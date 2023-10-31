@@ -1803,7 +1803,6 @@ bool LoadAllParameters()
     MemoryForTransmtter = SDCardAddress;
     if ((ModelNumber < 1) || (ModelNumber > 99)) ModelNumber = 1;
     ReadOneModel(ModelNumber);
-    // ShowRemoteID(); // just for testing
     return true;
 }
 
@@ -2434,9 +2433,6 @@ FLASHMEM void setup()
         }
     }
     RationaliseBuddy();
-    ModelMatched = false;
-    BoundFlag    = false;
-    Connected    = false;
 }
 /*********************************************************************************************************************************/
 void RationaliseBuddy()
@@ -2456,12 +2452,7 @@ void RationaliseBuddy()
     if (!BuddyPupilOnWireless && !BuddyMasterOnWireless) {
         WirelessBuddy = false;
     }
-    if (WirelessBuddy){
-        if (!BuddyMasterOnWireless) {
-            ModelMatched = false;
-        } 
-        if (BuddyPupilOnWireless) StartBuddyListen(0);
-    }
+    if (BuddyPupilOnWireless) StartBuddyListen(0);
 }
 /*********************************************************************************************************************************/
 void GetStatistics()
@@ -4323,12 +4314,15 @@ void EndBuddyView()
     UpdateModelsNameEveryWhere();
     if (((OldPupilOnPPM != BuddyPupilOnPPM) || (OldMasterOnPPM != BuddyMasterOnPPM)) && !WirelessBuddy) digitalWrite(POWER_OFF_PIN, HIGH);
     RationaliseBuddy();
+    if (BuddyPupilOnWireless) {
+        GotoFrontView();
+        CurrentMode = LISTENMODE;
+    }
 }
 
 /*********************************************************************************************************************************/
 FASTRUN void DisplayCurveAndServoPos()
 {
-
     ClearBox();
     DelayWithDog(5);
     SavedLineX = 52735; // just to be massvely different
