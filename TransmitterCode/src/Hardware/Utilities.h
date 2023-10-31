@@ -895,9 +895,7 @@ void ShowConnectionQuality()
     if ((ConnectionQuality >= 50) && (ConnectionQuality < 75)) strcat(Msgbuf, Msg_ConnectedMarginal);
     if ((ConnectionQuality >= 25) && (ConnectionQuality < 50)) strcat(Msgbuf, Msg_ConnectedWeak);
     if ((ConnectionQuality >= 1) && (ConnectionQuality < 25)) strcat(Msgbuf, Msg_ConnectedVWeak);
-    
-     if(!WirelessBuddy)  SendText(FrontView_Connected, Msgbuf);
-    
+    SendText(FrontView_Connected, Msgbuf);
     SendCommand(Visible);
 }
 

@@ -5,7 +5,6 @@
 #ifndef BUDDYPPM_H
     #define BUDDYPPM_H
 
-
 //*************************************************************************************************************************
 
 // This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE buddy switch is on
@@ -19,7 +18,7 @@ void GetSlaveChannelValuesPPM() // MASTER code
                 uint16_t PpmIn = PPMdata.PPMInputBuddy.read(j + 1); // read EVERY channel
                 if (BuddyControlled & 1 << (j)) {                   // Test if this channel is buddy controlled. If not leave it unchanged
                     SendBuffer[j] = PpmIn;
-                    PPMBuffer[j]  = PpmIn;
+                    BuddyBuffer[j]  = PpmIn;
                 }
             }
             if (!SlaveHasControl) { // Buddy is now On
@@ -30,7 +29,7 @@ void GetSlaveChannelValuesPPM() // MASTER code
         }
         else {
             for (int j = 0; j < CHANNELSUSED; ++j) { // reuse old data if no new is available.
-                if (BuddyControlled & 1 << (j)) SendBuffer[j] = PPMBuffer[j];
+                if (BuddyControlled & 1 << (j)) SendBuffer[j] = BuddyBuffer[j];
             }
         }
     }

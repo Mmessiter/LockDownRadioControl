@@ -202,21 +202,11 @@ void GreenLedOn()
     { // no need to repeat unless it is blinking
         if (!LedIsBlinking) {
             ShowComms();
-            if (AnnounceConnected && !BuddyPupilOnWireless && !BuddyMasterOnWireless) {
+            if (AnnounceConnected) {
                 PlaySound(CONNECTEDMSG);
                 ModelMatched = true;
                 BoundFlag    = true;
                 DelayWithDog(750);
-            }
-            if (AnnounceConnected && BuddyPupilOnWireless) {
-                PlaySound(BUDDYMSG);
-                ModelMatched = true;
-                BoundFlag    = true;
-            }
-            if (AnnounceConnected && BuddyMasterOnWireless) {
-                PlaySound(MASTERMSG);
-                ModelMatched = true;
-                BoundFlag    = true;
             }
         }
         if (UseLog) {
@@ -479,7 +469,7 @@ FASTRUN void ShowComms()
     char         FrontView_RXBV[]       = "RXBV";
     char         Msg_CnctdBuddyMast[]   = "* MASTER has control *";
     char         Msg_CnctdBuddySlave[]  = "* BUDDY has control *";
-    char         MsgBuddying[]          = "* PPM Buddy *";
+    char         MsgBuddying[]          = "* Buddy *";
     char         DataView_pps[]         = "pps"; // These are label names in the NEXTION data screen. They are best kept short.
     char         DataView_lps[]         = "lps";
     char         DataView_Alt[]         = "alt";
@@ -563,10 +553,11 @@ FASTRUN void ShowComms()
             default:
                 break;
         }
-        if (BuddyPupilOnPPM) SendText(FrontView_Connected, MsgBuddying); // heer
+        if (BuddyPupilOnPPM || BuddyPupilOnWireless) SendText(FrontView_Connected, MsgBuddying); // heer
+        
         if (LedWasGreen) {
             if (BoundFlag) {
-                if (!BuddyMasterOnPPM) {
+                if (!BuddyMasterOnPPM && !BuddyMasterOnWireless) {
                     if (!Reconnected) {
                         ShowConnectionQuality();
                         Reconnected = true;
@@ -2450,10 +2441,8 @@ FLASHMEM void setup()
 /*********************************************************************************************************************************/
 void RationaliseBuddy()
 {
-   
     PupilIsAlive  = 0;
     MasterIsAlive = 0;
-
     if (BuddyPupilOnWireless && BuddyMasterOnWireless)
     {
         BuddyPupilOnWireless  = false;
@@ -2468,9 +2457,7 @@ void RationaliseBuddy()
         WirelessBuddy = false;
     }
     if (WirelessBuddy){
-        if (BuddyMasterOnWireless) {
-            StopBuddyListen(1);
-        } else {
+        if (!BuddyMasterOnWireless) {
             ModelMatched = false;
         } 
         if (BuddyPupilOnWireless) StartBuddyListen(0);
@@ -7653,11 +7640,11 @@ void CheckPowerOffButton()
 
     if (!digitalRead(BUTTON_SENSE_PIN)) {
         GotoFrontView();
-        if (!LedWasGreen && !PPMdata.UseTXModule && !BuddyMasterOnWireless && !BuddyPupilOnWireless)
+        if (!LedWasGreen && !PPMdata.UseTXModule)
         {
             SimulateCloseDown(); // if not connected power off immediately
         }
-        if (LedWasGreen || PPMdata.UseTXModule || BuddyMasterOnWireless || BuddyPupilOnWireless)
+        if (LedWasGreen || PPMdata.UseTXModule)
         {
             if (!PowerOffTimer) {
                 RestoreBrightness();
@@ -7718,6 +7705,7 @@ void FASTRUN ManageTransmitter()
     KickTheDog(); // Watchdog ... ALWAYS!
 
     if ((PACEMAKER - TXPacketElapsed <= TIMEFORTXMANAGMENT) && ModelMatched) {
+       // Look("BANANAS");
         return; // If it's almost time to send data, then do not start some other task which might easily take longer.
     }
 
@@ -7735,10 +7723,6 @@ void FASTRUN ManageTransmitter()
             if (CurrentView == FRONTVIEW) ShowMotorTimer(); // Screen Timer
             return;                                         // That's enough housekeeping this time around
         }
-        // if (RightNow - LastScanButtonCheck >= 100) {
-        //     if ((CurrentView == TXSETUPVIEW) || (CurrentView == RXSETUPVIEW)) CheckScanButton();
-        //     LastScanButtonCheck = millis();
-        // }
         ReadSwitches();       // Check switch positions 20 times a second
         CheckHardwareTrims(); // Trims 20 times a second
         GetBank();            // Must not call too often
@@ -7769,7 +7753,8 @@ void FixMotorChannel()
 /************************************************************************************************************/
 void GetBuddyData()
 {
-    if (BuddyMasterOnPPM) GetSlaveChannelValuesPPM(); // Get buddy data and maybe use it.
+    if (BuddyMasterOnPPM)       GetSlaveChannelValuesPPM();         // Get buddy PPM data and maybe use it.
+    if (BuddyMasterOnWireless)  GetSlaveChannelValuesWireless();    // Get buddy Wireless data and maybe use it.
 }
 /************************************************************************************************************/
 // LOOP
@@ -7821,8 +7806,12 @@ FASTRUN void loop()
         case PONGMODE: // 5
             PlayPong();
             break;
-        case LISTENMODE: // 6  ... listen only ... for buddying
-            GetSpecialPacket(BuddyMasterOnWireless);
+        case LISTENMODE:                                             // 6  ... listen only ... for wireless buddying
+            GetNewChannelValues();                                   // Read sticks and trims and switches etc
+            ShowServoPos();
+            LoadPacketData();                                        // extra parameters appended to the data packet
+            Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30)
+            GetSpecialPacket();                                      // Get the special packet and send our control data in the ask payload
             break;
         default:
             break;

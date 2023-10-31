@@ -80,7 +80,7 @@
     #define CHARSMAX               120                       // Max length for char arrays
     #define UNCOMPRESSEDWORDS      20                        // DATA TO SEND = 40  bytes
     #define COMPRESSEDWORDS        UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
-    #define TIMEFORTXMANAGMENT     3                         // How many ms must remain spare between data packets before daring to undertake more trivial tasks
+    #define TIMEFORTXMANAGMENT     3                         // 3? How many ms must remain spare between data packets before daring to undertake more trivial tasks
     #define DEFAULTLEDBRIGHTNESS   20                        // LED brightness
     #define DEFAULTPOWEROFFWARNING 3                         // Default time to warn before cutting power
     #define MAXDUALRATE            200
@@ -491,6 +491,7 @@ void          LogLongestGap();
 void          LogThisModel();
 void          Force_ReDisplay();
 FASTRUN void  Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint8_t uncompressed_size);
+FASTRUN void  Decompress(uint16_t* uncompressed_buf, uint16_t* compressed_buf, uint8_t uncompressed_size);
 FASTRUN void  BufferTeensyMACAddPipe();
 void          ExecuteMacro();
 template<typename any>
@@ -557,13 +558,15 @@ void             ReConfigureRadio();
 void             SetTestFrequencies();
 void             SetUKFrequencies();
 uint16_t         MakeTwobytes(bool* f);
-void             SendSpecialPacket(bool IamMaster);
-void             GetSpecialPacket(bool IamMaster);
-void             StartBuddyListen(bool IamMaster);
-void             StopBuddyListen(bool IamMaster);
+void             SendSpecialPacket();
+void             GetSpecialPacket();
+void             StartBuddyListen();
+void             StopBuddyListen();
 void             DoWirelessBuddy();
 void             RationaliseBuddy();
 void             RestoreDimness();
+void             ShowConnectionQuality();
+void             GetSlaveChannelValuesWireless();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
@@ -595,7 +598,7 @@ char          na[]             = "";
 uint8_t       StepSize[16]     = {0, 0, 0, 0, 0, 0, 0, 0, 5, 25, 5, 25, 5, 25, 5, 25}; //    How far to move each time on slow servos
 uint16_t      CurrentPosition[UNCOMPRESSEDWORDS];                                      //    Position from which a slow servo started (0 = not started yet)
 uint16_t      SendBuffer[UNCOMPRESSEDWORDS];                                           //    Data to send to rx (16 words)
-uint16_t      PPMBuffer[UNCOMPRESSEDWORDS];                                            //
+uint16_t      BuddyBuffer[UNCOMPRESSEDWORDS];                                          //    Data from wireless or PPM buddy (16 words)
 uint16_t      ShownBuffer[UNCOMPRESSEDWORDS];                                          //    Data shown before
 uint16_t      LastBuffer[CHANNELSUSED + 1];                                            //    Used to spot any change
 uint16_t      PreMixBuffer[CHANNELSUSED + 1];                                          //    Data collected from sticks

@@ -1,6 +1,6 @@
 // *************************************** BuddyWireless.h  *****************************************
 
-// This is the code for the wireless buddy system. Its functions are called from the main loop, and the SendData() function.
+// This is the code for the wireless buddy system. Its functions are called from the main loop, and from the SendData() function.
 
 #include <Arduino.h>
 #include "Hardware/1Definitions.h"
@@ -10,10 +10,35 @@
     #define SHORT_DELAY            130              // ... microseconds
     #define LONGER_DELAY           1                // ... milliseconds
     #define LOSTCONTACTTHRESHOLD   2                // 2 fails in a row and we declare the buddy dead
-    #define INTERBUDDYRATE         100              // 10 times a second 
-    #define DELAYAFTERACK          5                // ms
+    #define INTERBUDDYRATE         10               // 100 times a second 
+    #define DELAYAFTERACK          1                // ms
     #define ENCRYPT_KEY            0xFEADFEADBB     // The encryption key used for the Pipe address between transmitters :-)
- 
+    #define FASTDATARATE           RF24_2MBPS       // 2MBPS
+    #define NORMALDATARATE         RF24_250KBPS     // 250KBPS
+         
+//*************************************************************************************************************************
+void GetSlaveChannelValuesWireless(){                                           // Very Like the PPM function only a bit simpler
+
+        if (PupilIsAlive == 2) BuddyON = false;                                 // If pupil is dead, then Buddy is off
+        if (BuddyON) {
+        for (int j = 0; j < CHANNELSUSED; ++j) {                                // While slave has control, his stick data replaces some of ours
+            if (BuddyControlled & 1 << (j)) SendBuffer[j] = BuddyBuffer[j];     // Test if this channel is buddy controlled. If not leave it unchanged
+        }
+
+        if (!SlaveHasControl) { // Buddy is now On
+            PlaySound(BUDDYMSG);                                                // Announce the Buddy is now in control
+            LastShowTime    = 0;
+            SlaveHasControl = true;
+        }
+    }
+    else { // Buddy is now Off
+        if (SlaveHasControl) {
+            PlaySound(MASTERMSG);                                               // Announce the Master is now in control
+            LastShowTime    = 0;
+            SlaveHasControl = false;
+        }
+    }
+}
 //*************************************************************************************************************************
 // This function is called by Pupil and the Master was Detected - or not Detected.
 // After 6 failed detections, the Master is declared dead, and a message is changed on front view.
@@ -78,207 +103,74 @@ void PupilDetected(bool Detected)
 }
 
 //*************************************************************************************************************************
-
-void GetMasterAck() // Here Pupil gets Ack from master while Pupil is in control
-// if ack is 'S' then master is taking control back
-// if ack is 'O' then master is ok with pupil staying in control
+void GetPupilAck()                                              // Master gets Ack from pupil which contains all the pupil's control data !! << ************** !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 {
-    char AckSpecial[2] = " "; // simple ack
-    Radio1.read(&AckSpecial, 2);
-    if (AckSpecial[0] == 'O') return; // OK to continue sending. no action needed
-    if (AckSpecial[0] == 'S') {       // PUPIL -> LISTEN  <<<<<< *******
-        StartBuddyListen(0); // 'S' from Master = Shut Up now, send nothing
-        PlaySound(MASTERMSG);  
-        DelayWithDog(LONGER_DELAY);
-    }
-    MasterDetected(true); // Master is alive
-}
-
-//*************************************************************************************************************************
-
-void GetPupilAck() // Master gets Ack from pupil while MASTER in control
-// if ack exists at all then pupil is alive
-{
-    uint8_t AckSpecial[2];       // simple ack
-    Radio1.read(&AckSpecial, 2); // don't care what it is
-    PupilDetected(true);         // Pupil is alive
-}
-//*************************************************************************************************************************
-
-void SendSpecialPacket(bool IamMaster) // here the sender sends to other tx while in control. This is called about 5 times a second.
-// hence the sender always stays in send mode, and the silent tx stays in receive (LISTEN) mode, only switching to send when takes control.
-{
-    uint8_t Master_in_Control[2] = "S"; // = Shut Up, send nothing
-    uint8_t Pupil_in_Control[2]  = "O"; // = OK to send data
-    uint8_t Pupil_is_Alive[2]    = "P";
-    FlushFifos();
-   
-    if (IamMaster)   Radio1.openWritingPipe(TeensyMACAddPipe ^ ENCRYPT_KEY); // send to encrypted pipe address
-    if (!IamMaster)  Radio1.openWritingPipe(BuddyMACAddPipe ^ ENCRYPT_KEY);  // send to encrypted pipe address 
-    delayMicroseconds(SHORT_DELAY);
-    Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
-    delayMicroseconds(SHORT_DELAY);
-    Radio1.stopListening();
-    delayMicroseconds(SHORT_DELAY);
-    if (IamMaster) {
-        if (!BuddyON)
-        {
-            delayMicroseconds(SHORT_DELAY);
-            if (Radio1.write(&Master_in_Control, sizeof(Master_in_Control))) {
-                GetPupilAck(); // get ack from pupil
-            }
-            else {
-                PupilDetected(false);
-            }
-        }
-        if (BuddyON) //  PUPIL goes into CONTROL
-        {
-            if (Radio1.write(&Pupil_in_Control, sizeof(Pupil_in_Control))) { // SEND O to Pupil. If we can't, he's dead
-                GetPupilAck();
-                StartBuddyListen(1); // MASTER -> LISTEN  (Pupil took control)  <<<<<< *******
-                PlaySound(BUDDYMSG);
-                LastPassivePacketTime = millis();
-                return;
-            }
-            else {
-                PupilDetected(false);
-            }
-        }
-    }
-    if (!IamMaster) {                                                // pupil area when in control *************************************************************
-        delayMicroseconds(SHORT_DELAY);
-        if (Radio1.write(&Pupil_is_Alive, sizeof(Pupil_is_Alive))) { // send P to master
-           GetMasterAck();
-        }
-        else {                   // master must be either back in control, or ** dead ***. Pupil will shut up in either case
-            StartBuddyListen(0); // <<<<<<<<<<<<<<<<<<<  PUPIL -> LISTEN <<<<<< ******* THIS SHOULD NEVER OCCUR ?! will sort out later ... meanwhile it just works
-            MasterDetected(false);
-            PlaySound(MASTERMSG);
-            DelayWithDog(LONGER_DELAY);
-            FlushFifos();
-        }
-        if (CurrentMode == LISTENMODE) return; // control might have ceased
-    }
-
-    if (IamMaster)  Radio1.openWritingPipe(TeensyMACAddPipe); // restore the proper pipe address
-    if (!IamMaster) Radio1.openWritingPipe(BuddyMACAddPipe); // restore the proper pipe address
-    delayMicroseconds(SHORT_DELAY);
-    Radio1.stopListening();
-    delayMicroseconds(SHORT_DELAY); 
-    Radio1.setChannel(CurrentChannel); // restore the proper frequency
-    delayMicroseconds(SHORT_DELAY);
-    Radio1.stopListening();
-}
-
-//*************************************************************************************************************************
-
-void GetSpecialPacket(bool IamMaster) // here the passive tx gets from active tx. This function is called from main loop
-{
-    char DataPacket[2]        = " ";
-    char Pupil_in_Control[2]  = "O"; // = OK to send data
-    char Ack[2]               = "P"; // Pupil ack
-    bool TakeControlBackNow   = false;
-
+    uint16_t AckSpecial[COMPRESSEDWORDS];                       // Longer ack contains all the pupil's control data
     if (Radio1.available()) {
-        if (IamMaster) { // master here
-            if (BuddyON)
-            {
-                Ack[0]             = 'O'; // ok to continue sending - you're in charge
-                TakeControlBackNow = false;
-            }
-            if (!BuddyON)
-            {
-                Ack[0]             = 'S'; // shut up NOW please,  I'm taking over  *********
-                TakeControlBackNow = true;
-            }
+        Radio1.read(&AckSpecial, sizeof AckSpecial);
+        Decompress(BuddyBuffer, AckSpecial, UNCOMPRESSEDWORDS); // decompress the data
+    }
+}
+//*************************************************************************************************************************
+
+void SendSpecialPacket() // here the MASTER sends to PUPIL tx. This is called about 100 times a second.
+{
+    char AnyData[] = "M";                                       // Send M to indicate Master is ON
+    if (BuddyON) AnyData[0] = 'B';                              // Send B to indicate Buddy is ON
+    Radio1.openWritingPipe(TeensyMACAddPipe ^ ENCRYPT_KEY);     // send to encrypted pipe address
+    Radio1.setDataRate(FASTDATARATE);                           //  2MBPS
+    Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
+    if (Radio1.write(&AnyData, sizeof(AnyData))) {
+        GetPupilAck();                                          // get ack from pupil WITH HIS CONTROL DATA!!
+        PupilDetected(true); 
+    } else {
+        PupilDetected(false);                                   // pupil is dead
+    }
+    Radio1.setDataRate(NORMALDATARATE);                         // restore the proper data rate
+    Radio1.openWritingPipe(TeensyMACAddPipe);                   // restore the proper pipe address
+    Radio1.setChannel(CurrentChannel);                          // restore the proper frequency ....stop listening ???
+}
+
+//*************************************************************************************************************************
+
+void GetSpecialPacket()                                                           // here the PUPIL tx gets from MASTER tx. This function is called from main loop
+{
+    static bool MasterIsInControl = true;
+    char DataPacket[2];
+    if (Radio1.available()) {
+        Radio1.writeAckPayload(1, &CompressedData, sizeof CompressedData);              // Acknowledge the packet BY SENDING MY CHANNEL DATA!
+        DelayWithDog(DELAYAFTERACK);                                                    // <-  ** MUST ** allow the ACK time to get going, otherwise the sender sees a failed packet      <<<<<<<<<<<<<< ************** !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        Radio1.read(&DataPacket, sizeof(DataPacket));                                   // read the packet
+        if ((DataPacket[0] == 'B') && (MasterIsInControl)) {                            // Buddy is now in control
+            MasterIsInControl = false;
+            PlaySound(BUDDYMSG);
         }
-        Radio1.writeAckPayload(1, &Ack, 2); // Acknowledge the packet
-        DelayWithDog(DELAYAFTERACK);                    // <-  ** MUST ** allow the ACK time to get going, otherwise the sender sees a failed packet      <<<<<<<<<<<<<< ************** !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        Radio1.read(&DataPacket, sizeof(DataPacket));
-        if (!IamMaster) { // pupil here
-            MasterDetected(true);
-            if (DataPacket[0] == Pupil_in_Control[0]) {
-                StopBuddyListen(0); // PUPIL -> CONTROL   <<<<<< *******
-                DelayWithDog(LONGER_DELAY);
-                return;
-            }
+        if ((DataPacket[0] == 'M') && (!MasterIsInControl)) {                           // Master is now in control
+            MasterIsInControl = true;
+            PlaySound(MASTERMSG);
         }
-        DelayWithDog(LONGER_DELAY);
-        if (TakeControlBackNow && IamMaster) { 
-            StopBuddyListen(1); // MASTER RECLAIMS CONTROL   <<<<<< *******
-        }
+        MasterDetected(true);
         LastPassivePacketTime = millis();
         FlushFifos();
     }
-    else { // no packet arrived so maybe Pupil's dead, better grab control back
-        if (IamMaster) {
-            if (millis() - LastPassivePacketTime > 700) {
-                StopBuddyListen(1); // MASTER RECLAIMS CONTROL   <<<<<< *******
-            }
-        }
-        if (!IamMaster) {
-            if (millis() - LastPassivePacketTime > 700) {
-                MasterDetected(false);
-                LastPassivePacketTime = millis();
-            }
+    else { // no packet arrived so maybe master's dead
+        if (millis() - LastPassivePacketTime > 700) {
+            MasterDetected(false);
+            LastPassivePacketTime = millis();
         }
     }
-}
-//*************************************************************************************************************************
-
-void DoWirelessBuddy()                                      //  Called from SendData() in when not in LISTENMODE and when wireless buddy is on
-{
-    static uint32_t InterBuddyTimer = 0;
-    if ((millis() - InterBuddyTimer) >= INTERBUDDYRATE) {
-        if (BuddyPupilOnWireless) SendSpecialPacket(0);     // takes about 4 - 5 ms
-        if (BuddyMasterOnWireless) SendSpecialPacket(1);    // takes about 4 - 5 ms
-        InterBuddyTimer = millis();
-    }
-}
-
-//*************************************************************************************************************************
-void StopBuddyListen(bool IamMaster) // here the transmitter takes control
-{
-    char     FrontView_Connected[] = "Connected";
-    char     ControlMsg[]          = "* YOU HAVE CONTROL *";
-    char     InVisible[]           = "vis Quality,0";
-    uint64_t pip                   = TeensyMACAddPipe;
-    if (BuddyPupilOnWireless) pip = BuddyMACAddPipe;    
-    Radio1.enableAckPayload();
-    Radio1.enableDynamicPayloads();   // needed
-    Radio1.setAutoAck(true);          // we want acks
-    Radio1.maskIRQ(1, 1, 1);          // no interrupts - seems NEEDED at the moment
-    Radio1.openWritingPipe(pip);
-    Radio1.stopListening();
-    GreenLedOn();
-    CurrentMode = NORMAL;
-    RestoreBrightness();
-    if (IamMaster) {if (ModelMatched) SendText(FrontView_Connected, ControlMsg);}
-    else           {SendText(FrontView_Connected, ControlMsg);}
-    SendCommand(InVisible);
-    ModelMatched = true;
-    BoundFlag    = true;
-    Connected    = true;
-    ShowConnectionQuality();
 }
 //*************************************************************************************************************************
 void StartBuddyListen(bool IamMaster)
 {
-    char     FrontView_Connected[] = "Connected";
-    char     buddymsg[]            = "MASTER HAS CONTROL";
-    char     MasterMsg[]           = "BUDDY HAS CONTROL";
-    char     InVisible[]           = "vis Quality,0";
-    uint64_t pip                  = TeensyMACAddPipe;            
-    if (BuddyPupilOnWireless)  pip = BuddyMACAddPipe ^  ENCRYPT_KEY; // heer we use the encrypted pipe address
-    if (BuddyMasterOnWireless) pip = TeensyMACAddPipe ^ ENCRYPT_KEY; // heer we use the encrypted pipe address
-    char Ch_Lables[16][5] = {"Ch1", "Ch2", "Ch3", "Ch4", "Ch5", "Ch6", "Ch7", "Ch8", "Ch9", "Ch10", "Ch11", "Ch12", "Ch13", "Ch14", "Ch15", "Ch16"};
-    Radio1.enableAckPayload();        // needed
-    Radio1.enableDynamicPayloads();   // needed
-    Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
-    Radio1.setAutoAck(true); // we want acks
-    Radio1.maskIRQ(1, 1, 1); // no interrupts - seems NEEDED at the moment
-    Radio1.openReadingPipe(1, pip);
+    Radio1.setDataRate(FASTDATARATE);
+    Radio1.enableAckPayload();                  // needed
+    Radio1.enableDynamicPayloads();             // needed
+    Radio1.setAutoAck(true);                    // we want acks
+    Radio1.maskIRQ(1, 1, 1);                    // no interrupts - seems NEEDED at the moment
+    Radio1.openReadingPipe(1, BuddyMACAddPipe ^  ENCRYPT_KEY);
     delayMicroseconds(SHORT_DELAY);
+    Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
     Radio1.startListening();
     ModelMatched = true;
     BoundFlag    = true;
@@ -286,16 +178,8 @@ void StartBuddyListen(bool IamMaster)
     FlushFifos();
     BlueLedOn();
     CurrentMode = LISTENMODE;
-    for (int i = 0; i < CHANNELSUSED; ++i) {
-        SendValue(Ch_Lables[i], 0);
-        ShownBuffer[i] = 0;
-    }
-    if (IamMaster)
-        SendText(FrontView_Connected, MasterMsg);
-    else
-        SendText(FrontView_Connected, buddymsg);
-    SendCommand(InVisible);
     LostContactFlag = false;
     RestoreBrightness();
 }
+//************************************************************************************************************************
 #endif
