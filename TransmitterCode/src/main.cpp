@@ -7699,9 +7699,10 @@ void FASTRUN ManageTransmitter()
     KickTheDog(); // Watchdog ... ALWAYS!
 
     if ((PACEMAKER - TXPacketElapsed <= TIMEFORTXMANAGMENT) && ModelMatched) {
-       // Look("BANANAS");
         return; // If it's almost time to send data, then do not start some other task which might easily take longer.
     }
+
+    if (BuddyPupilOnWireless) CurrentMode = LISTENMODE; // Buddy pupil is listening only
 
     CheckPowerOffButton();        // Pretty obvious really ...
     CheckForNextionButtonPress(); // Pretty obvious really ...
