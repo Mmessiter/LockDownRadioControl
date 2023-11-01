@@ -34,12 +34,13 @@ var searchData=
   ['doslowservos_31',['DoSlowServos',['../TransmitterCode_2src_2main_8cpp.html#a7a6560a77b8c4dd3925760790beafbd5',1,'main.cpp']]],
   ['dotherequest_32',['DoTheRequest',['../SensorHubT32_2src_2main_8cpp.html#aa813a4b38095c6683d78bdf2baa33f69',1,'main.cpp']]],
   ['dowirelessbuddy_33',['DoWirelessBuddy',['../1Definitions_8h.html#a7d9257c21af6e77d71dba241aa349692',1,'1Definitions.h']]],
-  ['downlog_34',['DownLog',['../TransmitterCode_2src_2main_8cpp.html#a01be76cc3bf8a963f987ae47916dc8d3',1,'main.cpp']]],
-  ['drawbox_35',['DrawBox',['../1Definitions_8h.html#a705c97485d6142131c03577ec14134e7',1,'DrawBox(int x1, int y1, int x2, int y2, int c):&#160;Utilities.h'],['../Utilities_8h.html#a060d8c4636339f7e6760cf835307530e',1,'DrawBox(int x1, int y1, int x2, int y2, int c):&#160;Utilities.h']]],
-  ['drawdot_36',['DrawDot',['../Utilities_8h.html#ad0feb21fbea69455d1d206f142b563ac',1,'Utilities.h']]],
-  ['drawfhssbox_37',['DrawFhssBox',['../1Definitions_8h.html#a6bdc6419b47dda71d0d2c8faf652adc2',1,'DrawFhssBox():&#160;transceiver.h'],['../transceiver_8h.html#a6bdc6419b47dda71d0d2c8faf652adc2',1,'DrawFhssBox():&#160;transceiver.h']]],
-  ['drawline_38',['DrawLine',['../1Definitions_8h.html#acbef1d41e1bd646b60a6e8afd9c66880',1,'DrawLine(int x1, int y1, int x2, int y2, int c):&#160;Utilities.h'],['../Utilities_8h.html#acbef1d41e1bd646b60a6e8afd9c66880',1,'DrawLine(int x1, int y1, int x2, int y2, int c):&#160;Utilities.h']]],
-  ['dualratesend_39',['DualRatesEnd',['../TransmitterCode_2src_2main_8cpp.html#acaf005c908c2b6706d7ab9579f456ca8',1,'main.cpp']]],
-  ['dualratesrefresh_40',['DualRatesRefresh',['../TransmitterCode_2src_2main_8cpp.html#af110521855e780717b5248c3aacc799e',1,'main.cpp']]],
-  ['dualratesstart_41',['DualRatesStart',['../TransmitterCode_2src_2main_8cpp.html#a6e3590b95598a6cced18d591c2e1879f',1,'main.cpp']]]
+  ['dowirelessbuddylisten_34',['DoWirelessBuddyListen',['../TransmitterCode_2src_2main_8cpp.html#ad2c7ed441d88f2a2b2fca83ff61e714d',1,'main.cpp']]],
+  ['downlog_35',['DownLog',['../TransmitterCode_2src_2main_8cpp.html#a01be76cc3bf8a963f987ae47916dc8d3',1,'main.cpp']]],
+  ['drawbox_36',['DrawBox',['../1Definitions_8h.html#a705c97485d6142131c03577ec14134e7',1,'DrawBox(int x1, int y1, int x2, int y2, int c):&#160;Utilities.h'],['../Utilities_8h.html#a060d8c4636339f7e6760cf835307530e',1,'DrawBox(int x1, int y1, int x2, int y2, int c):&#160;Utilities.h']]],
+  ['drawdot_37',['DrawDot',['../Utilities_8h.html#ad0feb21fbea69455d1d206f142b563ac',1,'Utilities.h']]],
+  ['drawfhssbox_38',['DrawFhssBox',['../1Definitions_8h.html#a6bdc6419b47dda71d0d2c8faf652adc2',1,'DrawFhssBox():&#160;transceiver.h'],['../transceiver_8h.html#a6bdc6419b47dda71d0d2c8faf652adc2',1,'DrawFhssBox():&#160;transceiver.h']]],
+  ['drawline_39',['DrawLine',['../1Definitions_8h.html#acbef1d41e1bd646b60a6e8afd9c66880',1,'DrawLine(int x1, int y1, int x2, int y2, int c):&#160;Utilities.h'],['../Utilities_8h.html#acbef1d41e1bd646b60a6e8afd9c66880',1,'DrawLine(int x1, int y1, int x2, int y2, int c):&#160;Utilities.h']]],
+  ['dualratesend_40',['DualRatesEnd',['../TransmitterCode_2src_2main_8cpp.html#acaf005c908c2b6706d7ab9579f456ca8',1,'main.cpp']]],
+  ['dualratesrefresh_41',['DualRatesRefresh',['../TransmitterCode_2src_2main_8cpp.html#af110521855e780717b5248c3aacc799e',1,'main.cpp']]],
+  ['dualratesstart_42',['DualRatesStart',['../TransmitterCode_2src_2main_8cpp.html#a6e3590b95598a6cced18d591c2e1879f',1,'main.cpp']]]
 ];
