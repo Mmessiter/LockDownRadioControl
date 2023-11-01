@@ -14,5 +14,5 @@ var BuddyWireless_8h =
     [ "MasterDetected", "BuddyWireless_8h.html#a9028cb650cb079d28bc5dfc307242bb3", null ],
     [ "PupilDetected", "BuddyWireless_8h.html#a89fc05df708fec875356b62d21b2ce7b", null ],
     [ "SendSpecialPacket", "BuddyWireless_8h.html#a41c327908c92572d0d3eebbb19160d86", null ],
-    [ "StartBuddyListen", "BuddyWireless_8h.html#a20625865343fced238023ed021d980f9", null ]
+    [ "StartBuddyListen", "BuddyWireless_8h.html#a1edeacb3cc2ed18a8ba2c736d1f3542e", null ]
 ];

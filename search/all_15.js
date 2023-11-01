@@ -305,7 +305,7 @@ var searchData=
   ['spi_5fls_5fclock_302',['SPI_LS_CLOCK',['../classMPU9250.html#ab9ce9097ac03b8ad6ef30b78362453ba',1,'MPU9250']]],
   ['spi_5fread_303',['SPI_READ',['../classMPU9250.html#a29bf81faea471af3a3acdcc6fea7e6b3',1,'MPU9250']]],
   ['startbanknames_304',['StartBankNames',['../TransmitterCode_2src_2main_8cpp.html#a0ae3d4fad1e79724448c269efc4da9ec',1,'main.cpp']]],
-  ['startbuddylisten_305',['StartBuddyListen',['../1Definitions_8h.html#a1edeacb3cc2ed18a8ba2c736d1f3542e',1,'StartBuddyListen():&#160;1Definitions.h'],['../BuddyWireless_8h.html#a20625865343fced238023ed021d980f9',1,'StartBuddyListen(bool IamMaster):&#160;BuddyWireless.h']]],
+  ['startbuddylisten_305',['StartBuddyListen',['../1Definitions_8h.html#a1edeacb3cc2ed18a8ba2c736d1f3542e',1,'StartBuddyListen():&#160;BuddyWireless.h'],['../BuddyWireless_8h.html#a1edeacb3cc2ed18a8ba2c736d1f3542e',1,'StartBuddyListen():&#160;BuddyWireless.h']]],
   ['startbuddyview_306',['StartBuddyView',['../TransmitterCode_2src_2main_8cpp.html#aaf48dfa7ac69b0baa5134fd9547f722c',1,'main.cpp']]],
   ['startinactvitytimeout_307',['StartInactvityTimeout',['../1Definitions_8h.html#a793b7bcd77531c95fe72ed4356d421c8',1,'StartInactvityTimeout():&#160;Utilities.h'],['../Utilities_8h.html#a793b7bcd77531c95fe72ed4356d421c8',1,'StartInactvityTimeout():&#160;Utilities.h']]],
   ['startlocation_308',['StartLocation',['../1Definitions_8h.html#a3d13608c0de514d44371734e8063f278',1,'1Definitions.h']]],

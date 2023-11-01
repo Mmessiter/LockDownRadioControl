@@ -200,7 +200,7 @@ var searchData=
   ['sortdirectory_197',['SortDirectory',['../TransmitterCode_2src_2main_8cpp.html#a113f8bee0942b732f19881466ef0f42d',1,'main.cpp']]],
   ['soundbank_198',['SoundBank',['../TransmitterCode_2src_2main_8cpp.html#a030ff9af8fc6b06c659a3c56ab7d2ff2',1,'main.cpp']]],
   ['startbanknames_199',['StartBankNames',['../TransmitterCode_2src_2main_8cpp.html#a0ae3d4fad1e79724448c269efc4da9ec',1,'main.cpp']]],
-  ['startbuddylisten_200',['StartBuddyListen',['../1Definitions_8h.html#a1edeacb3cc2ed18a8ba2c736d1f3542e',1,'StartBuddyListen():&#160;1Definitions.h'],['../BuddyWireless_8h.html#a20625865343fced238023ed021d980f9',1,'StartBuddyListen(bool IamMaster):&#160;BuddyWireless.h']]],
+  ['startbuddylisten_200',['StartBuddyListen',['../1Definitions_8h.html#a1edeacb3cc2ed18a8ba2c736d1f3542e',1,'StartBuddyListen():&#160;BuddyWireless.h'],['../BuddyWireless_8h.html#a1edeacb3cc2ed18a8ba2c736d1f3542e',1,'StartBuddyListen():&#160;BuddyWireless.h']]],
   ['startbuddyview_201',['StartBuddyView',['../TransmitterCode_2src_2main_8cpp.html#aaf48dfa7ac69b0baa5134fd9547f722c',1,'main.cpp']]],
   ['startinactvitytimeout_202',['StartInactvityTimeout',['../1Definitions_8h.html#a793b7bcd77531c95fe72ed4356d421c8',1,'StartInactvityTimeout():&#160;Utilities.h'],['../Utilities_8h.html#a793b7bcd77531c95fe72ed4356d421c8',1,'StartInactvityTimeout():&#160;Utilities.h']]],
   ['startlogfile_203',['StartLogFile',['../1Definitions_8h.html#a514afc8dd077db77334696ca719a99b7',1,'1Definitions.h']]],

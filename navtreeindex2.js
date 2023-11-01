@@ -239,7 +239,7 @@ var NAVTREEINDEX2 =
 "BuddyPPM_8h.html#a9c9e7f489bda19dbb591d5cdac3fa45b":[5,0,3,0,0,1,0],
 "BuddyPPM_8h_source.html":[5,0,3,0,0,1],
 "BuddyWireless_8h.html":[5,0,3,0,0,2],
-"BuddyWireless_8h.html#a20625865343fced238023ed021d980f9":[5,0,3,0,0,2,14],
+"BuddyWireless_8h.html#a1edeacb3cc2ed18a8ba2c736d1f3542e":[5,0,3,0,0,2,14],
 "BuddyWireless_8h.html#a41c327908c92572d0d3eebbb19160d86":[5,0,3,0,0,2,13],
 "BuddyWireless_8h.html#a6502350c093f8c8e435b9bfaa6d13453":[5,0,3,0,0,2,5],
 "BuddyWireless_8h.html#a6605e7b4cc71cfc4a06e0f2a019fca0a":[5,0,3,0,0,2,1],
