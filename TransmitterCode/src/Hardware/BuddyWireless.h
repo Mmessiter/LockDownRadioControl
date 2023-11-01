@@ -159,7 +159,7 @@ void GetSpecialPacket()                                                         
     }
 }
 //*************************************************************************************************************************
-void StartBuddyListen(bool IamMaster)
+void StartBuddyListen()
 {
     Radio1.setDataRate(FASTDATARATE);           // 1 MBPS
     Radio1.enableAckPayload();                  // needed

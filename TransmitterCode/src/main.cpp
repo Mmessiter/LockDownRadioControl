@@ -2452,7 +2452,7 @@ void RationaliseBuddy()
     if (!BuddyPupilOnWireless && !BuddyMasterOnWireless) {
         WirelessBuddy = false;
     }
-    if (BuddyPupilOnWireless) StartBuddyListen(0);
+    if (BuddyPupilOnWireless) StartBuddyListen();
 }
 /*********************************************************************************************************************************/
 void GetStatistics()
@@ -4316,7 +4316,6 @@ void EndBuddyView()
     RationaliseBuddy();
     if (BuddyPupilOnWireless) {
         GotoFrontView();
-        CurrentMode = LISTENMODE;
     }
 }
 
@@ -5730,8 +5729,6 @@ FASTRUN void ButtonWasPressed()
 {
     if (strlen(TextIn) > 0) {
         StartInactvityTimeout();
-
-        if ((CurrentMode == LISTENMODE) && (BuddyMasterOnWireless)) return; // ignore all button presses if Master in listen mode
 
         ScreenTimeTimer = millis(); // reset screen timeout counter
         if (ScreenIsOff) {
@@ -7452,6 +7449,7 @@ void GotoFrontView()
         SendText(fms[i], BankTexts[BanksInUse[i]]);
     }
     UpdateTrimView();
+    if (BuddyPupilOnWireless) StartBuddyListen();
 }
 /************************************************************************************************************/
 
@@ -7701,9 +7699,6 @@ void FASTRUN ManageTransmitter()
     if ((PACEMAKER - TXPacketElapsed <= TIMEFORTXMANAGMENT) && ModelMatched) {
         return; // If it's almost time to send data, then do not start some other task which might easily take longer.
     }
-
-    if (BuddyPupilOnWireless) CurrentMode = LISTENMODE; // Buddy pupil is listening only
-
     CheckPowerOffButton();        // Pretty obvious really ...
     CheckForNextionButtonPress(); // Pretty obvious really ...
 
