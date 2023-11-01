@@ -99,7 +99,11 @@ void PupilDetected(bool Detected)
 }
 
 //*************************************************************************************************************************
-void GetPupilAck()                                              // Master gets Ack from pupil which contains all the pupil's control data !! << ************** !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// Master gets Ack from pupil. 
+// Pupil's Ack Payload contains the pupil's control data (in BuddyBuffer[]) which is compressed and must be decompressed before use.
+// This function is called from SendSpecialPacket() which is called from the main loop.
+// GetSlaveChannelValuesWireless() then uses the BuddyBuffer data to replace some or all of the Master's control data. 
+void GetPupilAck()                                    
 {
     uint16_t AckSpecial[COMPRESSEDWORDS];                       // Ack payload will contain all the pupil's control data
     if (Radio1.available()) {                                   // if a packet has arrived
