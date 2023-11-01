@@ -128,12 +128,12 @@ void SetATrimDefinition(int i)
                 TrimDefined[2] = true;
             }
             if (i == 4) {
-                TrimNumber[4] = TRIM3A;
-                TrimNumber[5] = TRIM3B;
-            }
-            if (i == 5) {
                 TrimNumber[5] = TRIM3A;
                 TrimNumber[4] = TRIM3B;
+            }
+            if (i == 5) {
+                TrimNumber[4] = TRIM3A;
+                TrimNumber[5] = TRIM3B;
             }
         }
     }
@@ -226,7 +226,7 @@ int GetTrimAmount(uint8_t InputChannel)
     if ((tt == 1) && (SticksMode == 2)) {   // bug fix for mode 2 throttle trim - it was reversed
         TrimAmount = 80 - TrimAmount;
     }
-    if ((tt == 2) && (SticksMode == 1)) {   // bug fix for mode 1 throttle trim - it was reversed
+    if ((tt == 1) && (SticksMode == 1)) {   // bug fix for mode 1 throttle trim - it was reversed
         TrimAmount = 80 - TrimAmount;
     }
 
