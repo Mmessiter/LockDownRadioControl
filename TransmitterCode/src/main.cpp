@@ -467,8 +467,6 @@ FASTRUN void ShowComms()
 
     char         FrontView_AckPayload[] = "AckPayload";
     char         FrontView_RXBV[]       = "RXBV";
-   // char         Msg_CnctdBuddyMast[]   = "* MASTER has control *";
-   // char         Msg_CnctdBuddySlave[]  = "* BUDDY has control *";
     char         MsgBuddying[]          = "* Buddy *";
     char         DataView_pps[]         = "pps"; // These are label names in the NEXTION data screen. They are best kept short.
     char         DataView_lps[]         = "lps";

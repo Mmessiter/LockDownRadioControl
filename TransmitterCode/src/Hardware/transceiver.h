@@ -214,8 +214,10 @@ void SuccessfulPacket()
         GreenLedOn();
     }
     CheckGapsLength();
-    Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs,
-    ParseAckPayload();
+    if (Radio1.available()){
+        Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs,
+        ParseAckPayload();
+    }
     StartInactvityTimeout();
     LostContactFlag = false;
 }

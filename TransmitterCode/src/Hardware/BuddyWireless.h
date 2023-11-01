@@ -12,8 +12,8 @@
     #define LOSTCONTACTTHRESHOLD   2                // 2 fails in a row and we declare the buddy or master dead
     #define DELAYAFTERACK          1                // ms
     #define ENCRYPT_KEY            0xFEADFEADBB     // The encryption key used for the Pipe address between the transmitters 
-    #define FASTDATARATE           RF24_1MBPS       // 2 MBPS   = RF24_2MBPS  1 MBPS = RF24_1MBPS
-    #define NORMALDATARATE         RF24_250KBPS     // 250 KBPS = RF24_250KBPS
+    #define FASTDATARATE           RF24_1MBPS       // 2 MBPS = RF24_2MBPS ; 1 MBPS = RF24_1MBPS
+ 
          
 //*************************************************************************************************************************
 void GetSlaveChannelValuesWireless(){                                           // Very Like the PPM function only a bit simpler
@@ -21,18 +21,16 @@ void GetSlaveChannelValuesWireless(){                                           
         if (PupilIsAlive == 2) BuddyON = false;                                 // If pupil is dead, then Buddy is off
         if (BuddyON) {
         for (int j = 0; j < CHANNELSUSED; ++j) {                                // While slave has control, his stick data replaces some of ours
-            if (BuddyControlled & 1 << (j)) SendBuffer[j] = BuddyBuffer[j];     // Test if this channel is buddy controlled. If not leave it unchanged
+            if (BuddyControlled & 1 << (j)) SendBuffer[j] = BuddyBuffer[j];     // Test if this channel is buddy controlled. If not leave it unchanged otherwise replace it with the buddy's value
         }
-        if (!SlaveHasControl) {                                                 // Buddy is now On
+        if (!SlaveHasControl) {                                                 // Buddy has turned On
             PlaySound(BUDDYMSG);                                                // Announce the Buddy is now in control
-            LastShowTime    = 0;
             SlaveHasControl = true;
         }
     }
-    else {                                                                      // Buddy is now Off
-        if (SlaveHasControl) {
+    else {                                                                      
+        if (SlaveHasControl) {                                                  // Buddy has turned Off
             PlaySound(MASTERMSG);                                               // Announce the Master is now in control
-            LastShowTime    = 0;
             SlaveHasControl = false;
         }
     }
@@ -124,7 +122,7 @@ void SendSpecialPacket() // here the MASTER sends to PUPIL tx. This is called ab
     } else {
         PupilDetected(false);                                   // pupil is dead
     }
-    Radio1.setDataRate(NORMALDATARATE);                         // restore the proper data rate
+    Radio1.setDataRate(DATARATE);                               // restore the proper data rate
     Radio1.openWritingPipe(TeensyMACAddPipe);                   // restore the proper pipe address
     Radio1.setChannel(CurrentChannel);                          // restore the proper frequency ....stop listening ???
 }
@@ -138,7 +136,7 @@ void GetSpecialPacket()                                                         
     if (Radio1.available()) {                                                           // if a packet has arrived
         Radio1.writeAckPayload(1, &CompressedData, sizeof CompressedData);              // Acknowledge the packet BY SENDING MY CHANNEL DATA!
         DelayWithDog(DELAYAFTERACK);                                                    // <-  ** MUST ** allow the ACK time to get going, otherwise the sender sees a failed packet      <<<<<<<<<<<<<< ************** !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        Radio1.read(&DataPacket, sizeof(DataPacket));                                   // read the packet
+        if (Radio1.available()) Radio1.read(&DataPacket, sizeof(DataPacket));           // read the packet if its still there
         if ((DataPacket[0] == 'B') && (MasterIsInControl)) {                            // Buddy is now in control
             MasterIsInControl = false;                                                  // Buddy is now in control
             PlaySound(BUDDYMSG);                                                        // Announce the Buddy is now in control

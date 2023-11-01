@@ -17,7 +17,7 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   2
-#define RXVERSION_MINIMUS 8 // October 2023
+#define RXVERSION_MINIMUS 9 // November 2023
 
 // #define DB_FHSS
 // #define DB_SENSORS
@@ -26,8 +26,8 @@
 // #define DB_RXTIMERS
 
 //**************************************************************************************************************************
-   #define SECOND_TRANSCEIVER    // >>>>>>>>>>>>>>>>   ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< ****
-   #define DATARATE RF24_250KBPS // RF24_250KBPS, RF24_1MBPS, RF24_2MBPS
+#define SECOND_TRANSCEIVER    // >>>>>>>>>>>>>>>>   ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< ****
+#define DATARATE RF24_250KBPS // RF24_250KBPS, RF24_1MBPS, RF24_2MBPS
 //**************************************************************************************************************************
 
 // **************************************************************************
