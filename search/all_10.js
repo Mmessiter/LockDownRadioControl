@@ -18,8 +18,7 @@ var searchData=
   ['nopressed_15',['NoPressed',['../TransmitterCode_2src_2main_8cpp.html#a3e94c54a32cece9adbfc29791658d04e',1,'main.cpp']]],
   ['normal_16',['NORMAL',['../1Definitions_8h.html#a1291f416b069313021b519eea62d5bf1',1,'1Definitions.h']]],
   ['normalb_17',['NORMALB',['../1Definitions_8h.html#a83d7d6582885c30fe3fa4511c7584348',1,'1Definitions.h']]],
-  ['normaldatarate_18',['NORMALDATARATE',['../BuddyWireless_8h.html#a6502350c093f8c8e435b9bfaa6d13453',1,'BuddyWireless.h']]],
-  ['normalisetheradio_19',['NormaliseTheRadio',['../1Definitions_8h.html#a0708fa5166a126be25283b6cfaff6227',1,'NormaliseTheRadio():&#160;transceiver.h'],['../transceiver_8h.html#a0708fa5166a126be25283b6cfaff6227',1,'NormaliseTheRadio():&#160;transceiver.h']]],
-  ['normalize_20',['normalize',['../classQuaternion.html#a48e6bafb249c895ed25f29dc9170e11e',1,'Quaternion::normalize()'],['../classVectorFloat.html#a112eaf8758a6f51b96ed1ccb71700495',1,'VectorFloat::normalize()'],['../classVectorInt16.html#aefdadb30fbc20b564bbbf0b1a885e349',1,'VectorInt16::normalize()']]],
-  ['numberedfunctions_21',['NumberedFunctions',['../TransmitterCode_2src_2main_8cpp.html#abb4fb8e30aec6f80bfcb85d5f4c7931f',1,'main.cpp']]]
+  ['normalisetheradio_18',['NormaliseTheRadio',['../1Definitions_8h.html#a0708fa5166a126be25283b6cfaff6227',1,'NormaliseTheRadio():&#160;transceiver.h'],['../transceiver_8h.html#a0708fa5166a126be25283b6cfaff6227',1,'NormaliseTheRadio():&#160;transceiver.h']]],
+  ['normalize_19',['normalize',['../classQuaternion.html#a48e6bafb249c895ed25f29dc9170e11e',1,'Quaternion::normalize()'],['../classVectorFloat.html#a112eaf8758a6f51b96ed1ccb71700495',1,'VectorFloat::normalize()'],['../classVectorInt16.html#aefdadb30fbc20b564bbbf0b1a885e349',1,'VectorInt16::normalize()']]],
+  ['numberedfunctions_20',['NumberedFunctions',['../TransmitterCode_2src_2main_8cpp.html#abb4fb8e30aec6f80bfcb85d5f4c7931f',1,'main.cpp']]]
 ];

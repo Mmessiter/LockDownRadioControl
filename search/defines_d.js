@@ -6,6 +6,5 @@ var searchData=
   ['nineminutes_3',['NINEMINUTES',['../1Definitions_8h.html#afa357420dae8e3c614be8ef42e626ee3',1,'1Definitions.h']]],
   ['noerror_4',['NOERROR',['../1Definitions_8h.html#a7c8e007a5b28cfb6d606095153d7e764',1,'1Definitions.h']]],
   ['normal_5',['NORMAL',['../1Definitions_8h.html#a1291f416b069313021b519eea62d5bf1',1,'1Definitions.h']]],
-  ['normalb_6',['NORMALB',['../1Definitions_8h.html#a83d7d6582885c30fe3fa4511c7584348',1,'1Definitions.h']]],
-  ['normaldatarate_7',['NORMALDATARATE',['../BuddyWireless_8h.html#a6502350c093f8c8e435b9bfaa6d13453',1,'BuddyWireless.h']]]
+  ['normalb_6',['NORMALB',['../1Definitions_8h.html#a83d7d6582885c30fe3fa4511c7584348',1,'1Definitions.h']]]
 ];

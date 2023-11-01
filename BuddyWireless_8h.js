@@ -5,7 +5,6 @@ var BuddyWireless_8h =
     [ "FASTDATARATE", "BuddyWireless_8h.html#aa09c1d127dd05034131c7e50f64d3a02", null ],
     [ "LONGER_DELAY", "BuddyWireless_8h.html#ae7ccabc87d888235fa119a3f20d29d15", null ],
     [ "LOSTCONTACTTHRESHOLD", "BuddyWireless_8h.html#adc8ab6e023609f6548762eea2746eea1", null ],
-    [ "NORMALDATARATE", "BuddyWireless_8h.html#a6502350c093f8c8e435b9bfaa6d13453", null ],
     [ "SHORT_DELAY", "BuddyWireless_8h.html#ac4eb562b9427778a7da4e852e6c02d41", null ],
     [ "SPECIAL_PACKET_CHANNEL", "BuddyWireless_8h.html#ad880cebd97490afa89660ab3c0298fed", null ],
     [ "GetPupilAck", "BuddyWireless_8h.html#af59c2527be7a67d6b09dd467f3123d55", null ],
