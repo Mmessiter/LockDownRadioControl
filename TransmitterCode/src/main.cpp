@@ -467,8 +467,8 @@ FASTRUN void ShowComms()
 
     char         FrontView_AckPayload[] = "AckPayload";
     char         FrontView_RXBV[]       = "RXBV";
-    char         Msg_CnctdBuddyMast[]   = "* MASTER has control *";
-    char         Msg_CnctdBuddySlave[]  = "* BUDDY has control *";
+   // char         Msg_CnctdBuddyMast[]   = "* MASTER has control *";
+   // char         Msg_CnctdBuddySlave[]  = "* BUDDY has control *";
     char         MsgBuddying[]          = "* Buddy *";
     char         DataView_pps[]         = "pps"; // These are label names in the NEXTION data screen. They are best kept short.
     char         DataView_lps[]         = "lps";
@@ -554,22 +554,11 @@ FASTRUN void ShowComms()
                 break;
         }
         if (BuddyPupilOnPPM || BuddyPupilOnWireless) SendText(FrontView_Connected, MsgBuddying); // heer
-        
         if (LedWasGreen) {
             if (BoundFlag) {
-                if (!BuddyMasterOnPPM && !BuddyMasterOnWireless) {
-                    if (!Reconnected) {
-                        ShowConnectionQuality();
-                        Reconnected = true;
-                    }
-                }
-                else {
-                    if (!SlaveHasControl) {
-                        SendText(FrontView_Connected, Msg_CnctdBuddyMast);
-                    }
-                    else {
-                        SendText(FrontView_Connected, Msg_CnctdBuddySlave);
-                    }
+                if (!Reconnected) {
+                    ShowConnectionQuality();
+                    Reconnected = true;        
                 }
                 StartInactvityTimeout();
             }
@@ -7739,12 +7728,19 @@ void FixMotorChannel()
         SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.
     }
 }
-
 /************************************************************************************************************/
-void GetBuddyData()
+void GetBuddyData()                                                 // For Master only
 {
     if (BuddyMasterOnPPM)       GetSlaveChannelValuesPPM();         // Get buddy PPM data and maybe use it.
     if (BuddyMasterOnWireless)  GetSlaveChannelValuesWireless();    // Get buddy Wireless data and maybe use it.
+}
+/************************************************************************************************************/
+void DoWirelessBuddyListen(){                                // For Slave only
+    GetNewChannelValues();                                   // Read sticks and trims and switches etc
+    ShowServoPos();
+    LoadPacketData();                                        // extra parameters appended to the data packet
+    Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30)
+    GetSpecialPacket();                                      // Get the special packet and send our control data in the ask payload
 }
 /************************************************************************************************************/
 // LOOP
@@ -7796,12 +7792,8 @@ FASTRUN void loop()
         case PONGMODE: // 5
             PlayPong();
             break;
-        case LISTENMODE:                                             // 6  ... listen only ... for wireless buddying
-            GetNewChannelValues();                                   // Read sticks and trims and switches etc
-            ShowServoPos();
-            LoadPacketData();                                        // extra parameters appended to the data packet
-            Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30)
-            GetSpecialPacket();                                      // Get the special packet and send our control data in the ask payload
+        case LISTENMODE:                                             // 6  ... listen only ... for wireless buddy
+            DoWirelessBuddyListen();
             break;
         default:
             break;
