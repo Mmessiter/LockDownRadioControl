@@ -1,9 +1,27 @@
-The buddy box function uses a wire between the two transmitters that is a standard 3.5 mm jack stereo or mono audio cable.||
+Wireless Buddy-Boxing:||
 
-When using the Buddy box feature, one switch must be defined as 'Buddy'. It's best if this is a spring-return switch. Connect two transmitters with a normal 3.5 mm jack audio cable to test, and if the Buddy function is not at the ideal switch position, re-calibrate the switches and/or reverse the Buddy switch sense.
-Don't forget to select which channels are enabled for the Buddy. Any channels not selected will remain always under the control of the Master.||
 
-After changing the buddy settings, the transmitter must be re-started.
+This feature allows dual control which is very helpful especially when teaching beginners to fly.||
+
+It needs two transmitters of course, one for the 'Master' and one for the pupil or 'Buddy'.||
+
+The Master uses a switch on the Master's transmitter to give control to the Buddy - and to take control back.||
+
+When using the Buddy box feature, a switch on the Master transmitter must be defined as 'Buddy'. It's probably best if this is a spring-return switch. ||
+
+On the Master transmitter, you must select which channels are enabled for the Buddy. Any channels not selected will remain always under the control of the Master even after selecting Buddy with the switch.||
+
+The same model memory should be loaded on both transmitters, and the Buddy (pupil) needs to know the ID of the Master transmitter. Both of these are easily achieved by sending the model memory from the Master to the pupil wirelessly. Embedded in the data sent is the needed ID of the sending transmitter. ||
+
+When moving the Buddy switch, both transmitters will announce either 'Master' or 'Buddy' in order to make clear who is in control.||
+
+Wired Buddy-Boxing:||
+
+The wireless buddy feature is not yet supported when using a third party transmitter module. Nonetheless Buddy-boxing is still supported by using a wire.||
+
+Connect the two transmitters with a normal 3.5 mm jack audio cable, mono or stereo.||
+
+After changing the wired buddy settings, the transmitter must be re-started.||
 
 The selected buddy channels are saved on a per model basis.||
 
