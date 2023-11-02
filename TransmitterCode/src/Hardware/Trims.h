@@ -128,7 +128,7 @@ void SetATrimDefinition(int i)
                 TrimDefined[2] = true;
             }
             if (i == 4) {
-                TrimNumber[4] = TRIM3A;
+                TrimNumber[4] = TRIM3A; //heer
                 TrimNumber[5] = TRIM3B;
             }
             if (i == 5) {
@@ -221,16 +221,7 @@ int GetTrimAmount(uint8_t InputChannel)
         if (InputChannel == 1) tt = 2;
         if (InputChannel == 2) tt = 1;
     }
-    int TrimAmount = (Trims[Bank][tt] - 80) * TrimMultiplier; // TRIMS on lower four input channels (80 is mid point !! (range 40 - 80 - 120))
-   
-    if ((tt == 1) && (SticksMode == 2)) {   // bug fix for mode 2 throttle trim - it was reversed
-        TrimAmount = 80 - TrimAmount;
-    }
-    if ((tt == 2) && (SticksMode == 1)) {   // bug fix for mode 1 throttle trim - it was reversed
-        TrimAmount = 80 - TrimAmount;
-    }
-
-    return TrimAmount;
+  return (Trims[Bank][tt] - 80) * TrimMultiplier;
 }
 
 /*********************************************************************************************************************************/
