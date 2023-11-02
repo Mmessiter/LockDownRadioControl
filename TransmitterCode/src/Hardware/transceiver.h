@@ -32,7 +32,7 @@ void Decompress(uint16_t* uncompressed_buf, uint16_t* compressed_buf, uint8_t un
     }
 }
 
-
+/************************************************************************************************************/
 
 // This functions performs lossless compression on the data sent to receiver, to keep it below 32 bytes
 // and minimise latency. The receiver de-compresses of course.
