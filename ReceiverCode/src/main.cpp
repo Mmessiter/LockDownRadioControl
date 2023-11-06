@@ -616,6 +616,7 @@ FASTRUN void ReceiveData()
 
 FLASHMEM void ScanI2c()
 {
+      
     for (uint8_t i = 1; i < 127; ++i) {
         Wire.beginTransmission(i);
 
@@ -627,6 +628,8 @@ FLASHMEM void ScanI2c()
 #endif
             }
             if (i == 0x40) {
+             delay(3000);
+        Serial.println("INA219Connected!");
                 INA219Connected = true;
 #ifdef DB_SENSORS
                 Serial.println("INA219 voltage meter detected!");

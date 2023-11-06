@@ -35,7 +35,7 @@ void ShowFileTransferWindow()
 void StoreBuffer(char* Buf, uint32_t len)
 {
     for (uint16_t i = 0; i < len; ++i) {
-        if ((NewFileBufferPointer + i) > MAXFILELEN) break;
+        if ((NewFileBufferPointer + i) >= MAXFILELEN) break;
         NewFileBuffer[NewFileBufferPointer + i] = Buf[i];
     }
     NewFileBufferPointer += len;
