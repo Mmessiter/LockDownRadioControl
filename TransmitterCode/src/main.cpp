@@ -6706,7 +6706,7 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(Fhss_View, TextIn)) {
-            if (PPMdata.UseTXModule) InitRadio(DefaultPipe); // because scan fails if radio isn't initialised
+       //     if (PPMdata.UseTXModule) InitRadio(DefaultPipe); // because scan fails if radio isn't initialised
             SendCommand(page_FhssView);
             DrawFhssBox();
             DoScanInit();
