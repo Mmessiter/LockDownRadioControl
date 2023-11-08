@@ -551,7 +551,7 @@ FASTRUN void ShowComms()
             default:
                 break;
         }
-        if (BuddyPupilOnPPM || BuddyPupilOnWireless) SendText(FrontView_Connected, MsgBuddying); // heer
+        if (BuddyPupilOnPPM || BuddyPupilOnWireless) SendText(FrontView_Connected, MsgBuddying);
         if (LedWasGreen) {
             if (BoundFlag) {
                 if (!Reconnected) {
@@ -612,8 +612,8 @@ FASTRUN void ShowComms()
         for (int i = 0; i < 5; ++i) {
             Vbuf[i] = 0;
         }
-        for (int i = 5; i > 0; --i) {              //**
-            snprintf(nb2, 4, "%X", MacAddress[i]); // heer
+        for (int i = 5; i > 0; --i) {             
+            snprintf(nb2, 4, "%X", MacAddress[i]); 
             strcat(Vbuf, nb2);
             strcat(Vbuf, " ");
         }
@@ -2337,17 +2337,10 @@ FLASHMEM void setup()
     if (PPMdata.UseTXModule)
     {
         PPMdata.PPMOutputModule.begin(PPMPORT);
-        SelectChannelOrder();
+        SelectChannelOrder(); // heer
     }
-    else
-    {
-        InitRadio(DefaultPipe);
-    }
-
-#else
+ #endif
     InitRadio(DefaultPipe);
-#endif
-
     if (BuddyMasterOnPPM) {
         PPMdata.PPMInputBuddy.begin(BUDDYPPMPORT);
     }
@@ -5565,7 +5558,7 @@ void SelectChannelOrder()
 }
 
 /******************************************************************************************************************************/
-void ResetClock() // heer
+void ResetClock() 
 {
      char page_OptionView2[]    = "page OptionView2";
      char Prompt[]              = "Reset clock?";   
@@ -7716,6 +7709,7 @@ void SendPPM()
     for (int j = 0; j < PPMdata.PPMChannelsNumber; ++j) {
         PPMdata.PPMOutputModule.write(*(PPMdata.PPMChannelOrder + j), SendBuffer[j]);
     }
+    if (BuddyMasterOnWireless) SendSpecialPacket();          // takes about 4 - 5 ms. Gets buddy control data in ACK payload // heer
 }
 #endif
 
