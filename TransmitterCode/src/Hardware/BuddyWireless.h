@@ -20,7 +20,6 @@ void GetSlaveChannelValuesWireless(){                                           
 
         if (PupilIsAlive == 2) BuddyON = false;                                 // If pupil is dead, then Buddy is off
         if (BuddyON) {
-            if (BuddyControlled & 1 << (j)) SendBuffer[j] = BuddyBuffer[j];     // Test if this channel is buddy controlled. If not leave it unchanged otherwise replace it with the buddy's value
         for (int j = 0; j <= CHANNELSUSED; ++j) {                               // While slave has control, his stick data replaces some of ours
             if (BuddyControlled & (1 << j)) SendBuffer[j] = BuddyBuffer[j];     // Test if this channel is buddy controlled. If not leave it unchanged otherwise replace it with the buddy's value
         }
