@@ -971,7 +971,7 @@ GetNewChannelValues()
         PreMixBuffer[OutputChannel] = constrain(OutputValue, MINMICROS, MAXMICROS);
         SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel];
     }
-    if (CurrentMode == NORMAL) {
+    if ((CurrentMode == NORMAL) || (CurrentMode == LISTENMODE)) { // normal or Buddy pupil mode
         DoSlowServos();   // Some servos may need to be slowed down
         DoRouteOutputs(); // This function might re-route outputs to user-defined channels (Before reversing)
         DoReverseSense(); // This function reverses servos if needed (After routing)
