@@ -148,6 +148,9 @@
 #include "Hardware/BuddyWireless.h"
 
 /*********************************************************************************************************************************/
+void testdebug(){
+   Look(SendBuffer[15]);
+}
 
 void RedLedOn()
 {
@@ -693,6 +696,7 @@ FASTRUN uint16_t GetStickInput(uint8_t l) // This returns the proper output - no
             break;
     }
     return k;
+      
 }
 
 /*********************************************************************************************************************************/
@@ -953,6 +957,7 @@ void DoRouteOutputs()
 FASTRUN void
 GetNewChannelValues()
 {
+    SendBuffer[15]=0; // heer
     if (NewCompressNeeded) return; // Have we compressed the last one yet?
     NewCompressNeeded = true;      // Yes indeed. It's therefore time for new data.
     uint16_t OutputValue, InputChannel, InputValue, OutputChannel;
@@ -971,12 +976,15 @@ GetNewChannelValues()
         PreMixBuffer[OutputChannel] = constrain(OutputValue, MINMICROS, MAXMICROS);
         SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel];
     }
+ 
     if ((CurrentMode == NORMAL) || (CurrentMode == LISTENMODE)) { // normal or Buddy pupil mode
         DoSlowServos();   // Some servos may need to be slowed down
         DoRouteOutputs(); // This function might re-route outputs to user-defined channels (Before reversing)
         DoReverseSense(); // This function reverses servos if needed (After routing)
         DoMixes();        // Mixes the OUTPUT :-)
+       
     }
+   
 }
 /*********************************************************************************************************************************/
 
@@ -2240,7 +2248,7 @@ void GetTeensyMacAddress()
     for (int i = 1; i < 6; ++i) {
         MacAddress[i] = CheckPipeNibbles(MacAddress[i]); // Fix PIPE if needed !
     }
-    //   MacAddress[1] = 0x42; // for buddy box ... heer
+    //   MacAddress[1] = 0x42; // for buddy box
 
 #ifdef DB_BIND
     Serial.println("");
@@ -2337,7 +2345,7 @@ FLASHMEM void setup()
     if (PPMdata.UseTXModule)
     {
         PPMdata.PPMOutputModule.begin(PPMPORT);
-        SelectChannelOrder(); // heer
+        SelectChannelOrder();
     }
  #endif
     InitRadio(DefaultPipe);
@@ -7154,6 +7162,7 @@ void GetBank()   // ... and the other three switches
     Channel10SwitchValue = CheckSwitch(Channel10Switch);
     Channel11SwitchValue = CheckSwitch(Channel11Switch);
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
+    
     if (Bank != PreviousBank) {
         RestoreBrightness();
         LastTimeRead = 0;
@@ -7709,14 +7718,14 @@ void SendPPM()
     for (int j = 0; j < PPMdata.PPMChannelsNumber; ++j) {
         PPMdata.PPMOutputModule.write(*(PPMdata.PPMChannelOrder + j), SendBuffer[j]);
     }
-    if (BuddyMasterOnWireless) SendSpecialPacket();          // takes about 4 - 5 ms. Gets buddy control data in ACK payload // heer
+    if (BuddyMasterOnWireless) SendSpecialPacket();          // takes about 4 - 5 ms. Gets buddy control data in ACK payload 
 }
 #endif
 
 /************************************************************************************************************/
 void FixMotorChannel()
 {
-    if (!MotorEnabled && !BuddyON) {
+    if (!MotorEnabled) {   // fix later! for buddy on (if !buddyON)
         SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.
     }
 }
@@ -7735,28 +7744,29 @@ void DoWirelessBuddyListen(){                                // For Slave only
     Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30)
     GetSpecialPacket();                                      // Get the special packet and send our control data in the ask payload
 }
+
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
 
 FASTRUN void loop()
 {  
-    ManageTransmitter();   // Do the needed chores ... (if there's time)
-    GetNewChannelValues(); // Load SendBuffer with new servo positions very frequently
-    if (CurrentMode < 3) {
+   ManageTransmitter();   // Do the needed chores ... (if there's time)
+   GetNewChannelValues(); // Load SendBuffer with new servo positions very frequently
+   if (CurrentMode < 3) {
         if (UseMacros) ExecuteMacro(); // Modify it if macro is running
         if (BuddyPupilOnPPM) {
             NewCompressNeeded = false; // Fake it as Buddy does not send compressed data
             ShowServoPos();
         }
         else {                 // Skip these next lines when buddying as a slave
-            GetBuddyData();    // Only if master
             FixMotorChannel(); // Maybe force it low BEFORE Binding data is added
+            GetBuddyData();    // Only if master
             ShowServoPos();    // Show servo positions to user
             SendBindingPipe(); // Only if not bound yet - overwrite low throttle setting
         }
     }
-
+  
     switch (CurrentMode) {
         case NORMAL: // 0
 #ifdef TXMODULESUPPORT
