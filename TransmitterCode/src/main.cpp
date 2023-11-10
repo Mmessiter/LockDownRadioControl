@@ -103,7 +103,7 @@
  * | 39         |TRIM (CH3b)|
  * | 40         |TRIM (CH4a)|
  * | 41         |TRIM (CH4b)|
- * | 42         Built-in SD card
+ * | 42         Built-in SD card <<
  * | 43         Built-in SD card
  * | 44         Built-in SD card
  * | 45         Built-in SD card
@@ -148,9 +148,6 @@
 #include "Hardware/BuddyWireless.h"
 
 /*********************************************************************************************************************************/
-void testdebug(){
-   Look(SendBuffer[15]);
-}
 
 void RedLedOn()
 {
@@ -554,7 +551,7 @@ FASTRUN void ShowComms()
             default:
                 break;
         }
-        if (BuddyPupilOnPPM || BuddyPupilOnWireless) SendText(FrontView_Connected, MsgBuddying);
+        if (BuddyPupilOnPPM || BuddyPupilOnWireless) SendText(FrontView_Connected, MsgBuddying); // heer
         if (LedWasGreen) {
             if (BoundFlag) {
                 if (!Reconnected) {
@@ -615,8 +612,8 @@ FASTRUN void ShowComms()
         for (int i = 0; i < 5; ++i) {
             Vbuf[i] = 0;
         }
-        for (int i = 5; i > 0; --i) {             
-            snprintf(nb2, 4, "%X", MacAddress[i]); 
+        for (int i = 5; i > 0; --i) {              //**
+            snprintf(nb2, 4, "%X", MacAddress[i]); // heer
             strcat(Vbuf, nb2);
             strcat(Vbuf, " ");
         }
@@ -672,32 +669,24 @@ FASTRUN uint16_t GetStickInput(uint8_t l) // This returns the proper output - no
     uint16_t k = 0;
     switch (l) {
         case 8:
-            if (Channel9Switch){
-                if (Channel9SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][8]);
-                if (Channel9SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][8]);
-                if (Channel9SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][8]);
-            }
+            if (Channel9SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][8]);
+            if (Channel9SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][8]);
+            if (Channel9SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][8]);
             break;
         case 9:
-         if (Channel10Switch){
-                if (Channel10SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][9]);
-                if (Channel10SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][9]);
-                if (Channel10SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][9]);
-            }
+            if (Channel10SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][9]);
+            if (Channel10SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][9]);
+            if (Channel10SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][9]);
             break;
         case 10:
-            if (Channel11Switch){
-                if (Channel11SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][10]);
-                if (Channel11SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][10]);
-                if (Channel11SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][10]);
-            }
+            if (Channel11SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][10]);
+            if (Channel11SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][10]);
+            if (Channel11SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][10]);
             break;
         case 11:
-            if (Channel12Switch){
-                if (Channel12SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][11]);
-                if (Channel12SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][11]);
-                if (Channel12SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][11]);
-            }
+            if (Channel12SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][11]);
+            if (Channel12SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][11]);
+            if (Channel12SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][11]);
             break;
         default:
             k = IntoHigherRes(90); // channels 13,14,15,16 are simply centred
@@ -705,38 +694,31 @@ FASTRUN uint16_t GetStickInput(uint8_t l) // This returns the proper output - no
     }
     return k;
 }
+
 /*********************************************************************************************************************************/
 FASTRUN uint16_t GetStickInputInputOnly(uint8_t l) // This returns the input only
 {
     uint16_t k = 0;
     switch (l) {
         case 8:
-            if (Channel9Switch){
-                if (Channel9SwitchValue == 0) k = ChannelMin[l];
-                if (Channel9SwitchValue == 90) k = ChannelCentre[l];
-                if (Channel9SwitchValue == 180) k = ChannelMax[l];
-            }
+            if (Channel9SwitchValue == 0) k = ChannelMin[l];
+            if (Channel9SwitchValue == 90) k = ChannelCentre[l];
+            if (Channel9SwitchValue == 180) k = ChannelMax[l];
             break;
         case 9:
-            if (Channel10Switch){
-                if (Channel10SwitchValue == 0) k = ChannelMin[l];
-                if (Channel10SwitchValue == 90) k = ChannelCentre[l];
-                if (Channel10SwitchValue == 180) k = ChannelMax[l];
-            }
+            if (Channel10SwitchValue == 0) k = ChannelMin[l];
+            if (Channel10SwitchValue == 90) k = ChannelCentre[l];
+            if (Channel10SwitchValue == 180) k = ChannelMax[l];
             break;
         case 10:
-            if (Channel11Switch){
-                if (Channel11SwitchValue == 0) k = ChannelMin[l];
-                if (Channel11SwitchValue == 90) k = ChannelCentre[l];
-                if (Channel11SwitchValue == 180) k = ChannelMax[l];
-            }
+            if (Channel11SwitchValue == 0) k = ChannelMin[l];
+            if (Channel11SwitchValue == 90) k = ChannelCentre[l];
+            if (Channel11SwitchValue == 180) k = ChannelMax[l];
             break;
         case 11:
-            if (Channel12Switch){
-                if (Channel12SwitchValue == 0) k = ChannelMin[l];
-                if (Channel12SwitchValue == 90) k = ChannelCentre[l];
-                if (Channel12SwitchValue == 180) k = ChannelMax[l];
-            }
+            if (Channel12SwitchValue == 0) k = ChannelMin[l];
+            if (Channel12SwitchValue == 90) k = ChannelCentre[l];
+            if (Channel12SwitchValue == 180) k = ChannelMax[l];
             break;
         default:
             k = 1500; // Centre because no input possible
@@ -989,7 +971,7 @@ GetNewChannelValues()
         PreMixBuffer[OutputChannel] = constrain(OutputValue, MINMICROS, MAXMICROS);
         SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel];
     }
-    if ((CurrentMode == NORMAL) || (CurrentMode == LISTENMODE)) { // normal or Buddy pupil mode
+    if (CurrentMode == NORMAL) {
         DoSlowServos();   // Some servos may need to be slowed down
         DoRouteOutputs(); // This function might re-route outputs to user-defined channels (Before reversing)
         DoReverseSense(); // This function reverses servos if needed (After routing)
@@ -2258,7 +2240,7 @@ void GetTeensyMacAddress()
     for (int i = 1; i < 6; ++i) {
         MacAddress[i] = CheckPipeNibbles(MacAddress[i]); // Fix PIPE if needed !
     }
-    //   MacAddress[1] = 0x42; // for buddy box
+    //   MacAddress[1] = 0x42; // for buddy box ... heer
 
 #ifdef DB_BIND
     Serial.println("");
@@ -2357,8 +2339,15 @@ FLASHMEM void setup()
         PPMdata.PPMOutputModule.begin(PPMPORT);
         SelectChannelOrder();
     }
- #endif
+    else
+    {
+        InitRadio(DefaultPipe);
+    }
+
+#else
     InitRadio(DefaultPipe);
+#endif
+
     if (BuddyMasterOnPPM) {
         PPMdata.PPMInputBuddy.begin(BUDDYPPMPORT);
     }
@@ -5576,7 +5565,7 @@ void SelectChannelOrder()
 }
 
 /******************************************************************************************************************************/
-void ResetClock() 
+void ResetClock() // heer
 {
      char page_OptionView2[]    = "page OptionView2";
      char Prompt[]              = "Reset clock?";   
@@ -6724,7 +6713,7 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(Fhss_View, TextIn)) {
-       //     if (PPMdata.UseTXModule) InitRadio(DefaultPipe); // because scan fails if radio isn't initialised
+            if (PPMdata.UseTXModule) InitRadio(DefaultPipe); // because scan fails if radio isn't initialised
             SendCommand(page_FhssView);
             DrawFhssBox();
             DoScanInit();
@@ -7172,7 +7161,6 @@ void GetBank()   // ... and the other three switches
     Channel10SwitchValue = CheckSwitch(Channel10Switch);
     Channel11SwitchValue = CheckSwitch(Channel11Switch);
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
-    
     if (Bank != PreviousBank) {
         RestoreBrightness();
         LastTimeRead = 0;
@@ -7728,14 +7716,13 @@ void SendPPM()
     for (int j = 0; j < PPMdata.PPMChannelsNumber; ++j) {
         PPMdata.PPMOutputModule.write(*(PPMdata.PPMChannelOrder + j), SendBuffer[j]);
     }
-    if (BuddyMasterOnWireless) SendSpecialPacket();          // takes about 4 - 5 ms. Gets buddy control data in ACK payload 
 }
 #endif
 
 /************************************************************************************************************/
 void FixMotorChannel()
 {
-    if (!MotorEnabled && !BuddyON) {   // fix later! for buddy on ( && !buddyON) heer 
+    if (!MotorEnabled && !BuddyON) {
         SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.
     }
 }
@@ -7748,35 +7735,33 @@ void GetBuddyData()                                                 // For Maste
 /************************************************************************************************************/
 void DoWirelessBuddyListen(){                                // For Slave only
     GetNewChannelValues();                                   // Read sticks and trims and switches etc
-    FixMotorChannel();
     ShowServoPos();
     LoadPacketData();                                        // extra parameters appended to the data packet
     Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30)
     GetSpecialPacket();                                      // Get the special packet and send our control data in the ask payload
 }
-
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
 
 FASTRUN void loop()
 {  
-   ManageTransmitter();   // Do the needed chores ... (if there's time)
-   GetNewChannelValues(); // Load SendBuffer with new servo positions very frequently
-   if (CurrentMode < 3) {
+    ManageTransmitter();   // Do the needed chores ... (if there's time)
+    GetNewChannelValues(); // Load SendBuffer with new servo positions very frequently
+    if (CurrentMode < 3) {
         if (UseMacros) ExecuteMacro(); // Modify it if macro is running
         if (BuddyPupilOnPPM) {
             NewCompressNeeded = false; // Fake it as Buddy does not send compressed data
             ShowServoPos();
         }
         else {                 // Skip these next lines when buddying as a slave
-            FixMotorChannel(); // Maybe force it low BEFORE Binding data is added
             GetBuddyData();    // Only if master
+            FixMotorChannel(); // Maybe force it low BEFORE Binding data is added
             ShowServoPos();    // Show servo positions to user
             SendBindingPipe(); // Only if not bound yet - overwrite low throttle setting
         }
     }
-  
+
     switch (CurrentMode) {
         case NORMAL: // 0
 #ifdef TXMODULESUPPORT
