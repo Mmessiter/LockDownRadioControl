@@ -7729,6 +7729,7 @@ void GetBuddyData()                                                 // For Maste
 /************************************************************************************************************/
 void DoWirelessBuddyListen(){                                // For Slave only
     GetNewChannelValues();                                   // Read sticks and trims and switches etc
+    FixMotorChannel();
     ShowServoPos();
     LoadPacketData();                                        // extra parameters appended to the data packet
     Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30)
