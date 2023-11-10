@@ -133,7 +133,7 @@ void SendSpecialPacket() // here the MASTER sends to PUPIL tx. This is called ab
 
 //*************************************************************************************************************************
 
-void GetSpecialPacket()                                                                 // here the PUPIL tx gets from MASTER tx. This function is called from main loop
+void GetSpecialPacket()                                                                 // here the PUPIL tx gets from MASTER tx. This function is called from main loop ...
 {
     static bool MasterIsInControl = true;
     char DataPacket[] = "X";                                                            // place to store the received data
