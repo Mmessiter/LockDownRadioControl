@@ -672,33 +672,39 @@ FASTRUN uint16_t GetStickInput(uint8_t l) // This returns the proper output - no
     uint16_t k = 0;
     switch (l) {
         case 8:
-            if (Channel9SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][8]);
-            if (Channel9SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][8]);
-            if (Channel9SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][8]);
+            if (Channel9Switch){
+                if (Channel9SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][8]);
+                if (Channel9SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][8]);
+                if (Channel9SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][8]);
+            }
             break;
         case 9:
-            if (Channel10SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][9]);
-            if (Channel10SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][9]);
-            if (Channel10SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][9]);
+         if (Channel10Switch){
+                if (Channel10SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][9]);
+                if (Channel10SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][9]);
+                if (Channel10SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][9]);
+            }
             break;
         case 10:
-            if (Channel11SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][10]);
-            if (Channel11SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][10]);
-            if (Channel11SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][10]);
+            if (Channel11Switch){
+                if (Channel11SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][10]);
+                if (Channel11SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][10]);
+                if (Channel11SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][10]);
+            }
             break;
         case 11:
-            if (Channel12SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][11]);
-            if (Channel12SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][11]);
-            if (Channel12SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][11]);
+            if (Channel12Switch){
+                if (Channel12SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][11]);
+                if (Channel12SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][11]);
+                if (Channel12SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][11]);
+            }
             break;
         default:
             k = IntoHigherRes(90); // channels 13,14,15,16 are simply centred
             break;
     }
     return k;
-      
 }
-
 /*********************************************************************************************************************************/
 FASTRUN uint16_t GetStickInputInputOnly(uint8_t l) // This returns the input only
 {
@@ -7721,7 +7727,7 @@ void SendPPM()
 /************************************************************************************************************/
 void FixMotorChannel()
 {
-    if (!MotorEnabled) {   // fix later! for buddy on (if !buddyON)
+    if (!MotorEnabled && !BuddyON) {   // fix later! for buddy on ( && !buddyON) heer 
         SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.
     }
 }
