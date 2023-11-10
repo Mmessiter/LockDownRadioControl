@@ -711,24 +711,32 @@ FASTRUN uint16_t GetStickInputInputOnly(uint8_t l) // This returns the input onl
     uint16_t k = 0;
     switch (l) {
         case 8:
-            if (Channel9SwitchValue == 0) k = ChannelMin[l];
-            if (Channel9SwitchValue == 90) k = ChannelCentre[l];
-            if (Channel9SwitchValue == 180) k = ChannelMax[l];
+            if (Channel9Switch){
+                if (Channel9SwitchValue == 0) k = ChannelMin[l];
+                if (Channel9SwitchValue == 90) k = ChannelCentre[l];
+                if (Channel9SwitchValue == 180) k = ChannelMax[l];
+            }
             break;
         case 9:
-            if (Channel10SwitchValue == 0) k = ChannelMin[l];
-            if (Channel10SwitchValue == 90) k = ChannelCentre[l];
-            if (Channel10SwitchValue == 180) k = ChannelMax[l];
+            if (Channel10Switch){
+                if (Channel10SwitchValue == 0) k = ChannelMin[l];
+                if (Channel10SwitchValue == 90) k = ChannelCentre[l];
+                if (Channel10SwitchValue == 180) k = ChannelMax[l];
+            }
             break;
         case 10:
-            if (Channel11SwitchValue == 0) k = ChannelMin[l];
-            if (Channel11SwitchValue == 90) k = ChannelCentre[l];
-            if (Channel11SwitchValue == 180) k = ChannelMax[l];
+            if (Channel11Switch){
+                if (Channel11SwitchValue == 0) k = ChannelMin[l];
+                if (Channel11SwitchValue == 90) k = ChannelCentre[l];
+                if (Channel11SwitchValue == 180) k = ChannelMax[l];
+            }
             break;
         case 11:
-            if (Channel12SwitchValue == 0) k = ChannelMin[l];
-            if (Channel12SwitchValue == 90) k = ChannelCentre[l];
-            if (Channel12SwitchValue == 180) k = ChannelMax[l];
+            if (Channel12Switch){
+                if (Channel12SwitchValue == 0) k = ChannelMin[l];
+                if (Channel12SwitchValue == 90) k = ChannelCentre[l];
+                if (Channel12SwitchValue == 180) k = ChannelMax[l];
+            }
             break;
         default:
             k = 1500; // Centre because no input possible
