@@ -957,7 +957,6 @@ void DoRouteOutputs()
 FASTRUN void
 GetNewChannelValues()
 {
-    SendBuffer[15]=0; // heer
     if (NewCompressNeeded) return; // Have we compressed the last one yet?
     NewCompressNeeded = true;      // Yes indeed. It's therefore time for new data.
     uint16_t OutputValue, InputChannel, InputValue, OutputChannel;
@@ -976,15 +975,12 @@ GetNewChannelValues()
         PreMixBuffer[OutputChannel] = constrain(OutputValue, MINMICROS, MAXMICROS);
         SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel];
     }
- 
     if ((CurrentMode == NORMAL) || (CurrentMode == LISTENMODE)) { // normal or Buddy pupil mode
         DoSlowServos();   // Some servos may need to be slowed down
         DoRouteOutputs(); // This function might re-route outputs to user-defined channels (Before reversing)
         DoReverseSense(); // This function reverses servos if needed (After routing)
         DoMixes();        // Mixes the OUTPUT :-)
-       
     }
-   
 }
 /*********************************************************************************************************************************/
 
