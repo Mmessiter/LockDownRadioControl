@@ -103,7 +103,7 @@
  * | 39         |TRIM (CH3b)|
  * | 40         |TRIM (CH4a)|
  * | 41         |TRIM (CH4b)|
- * | 42         Built-in SD card <<
+ * | 42         Built-in SD card 
  * | 43         Built-in SD card
  * | 44         Built-in SD card
  * | 45         Built-in SD card

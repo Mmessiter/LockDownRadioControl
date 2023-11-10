@@ -136,7 +136,7 @@ void SendSpecialPacket() // here the MASTER sends to PUPIL tx. This is called ab
 void GetSpecialPacket()                                                                 // here the PUPIL tx gets from MASTER tx. This function is called from main loop
 {
     static bool MasterIsInControl = true;
-    char DataPacket[] = "X";                                                                 // place to store the received data
+    char DataPacket[] = "X";                                                            // place to store the received data
     if (Radio1.available()) {                                                           // if a packet has arrived
         Radio1.writeAckPayload(1, &CompressedData, sizeof CompressedData);              // Acknowledge the packet BY SENDING MY CHANNEL DATA!
         DelayWithDog(DELAYAFTERACK);                                                    // <-  ** MUST ** allow the ACK time to get going, otherwise the sender sees a failed packet      <<<<<<<<<<<<<< ************** !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
