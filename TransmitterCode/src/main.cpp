@@ -953,29 +953,29 @@ void DoRouteOutputs()
 FASTRUN void
 GetNewChannelValues()
 {
-    if (NewCompressNeeded) return; // Have we compressed the last one yet?
-    NewCompressNeeded = true;      // Yes indeed. It's therefore time for new data.
+    if (NewCompressNeeded) return;                                              // Have we compressed the last one yet?
+    NewCompressNeeded = true;                                                   // No. It's therefore time for new data.
     uint16_t OutputValue, InputChannel, InputValue, OutputChannel;
-    for (OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) { // Do every channel
-        InputChannel = InPutStick[OutputChannel];                            // Input sticks knobs & switches are mapped by user
-        GetCurveDots(OutputChannel, DualRateValue);                          // This for the Dual Rates function
-        if (InputChannel > 7) {                                              // Must be a switch if over 7
-            OutputValue = GetStickInput(InputChannel);                       // Four 3 postion switches
+    for (OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {    // Do 16 channels
+        InputChannel = InPutStick[OutputChannel];                               // Input sticks knobs & switches are mapped by user
+        GetCurveDots(OutputChannel, DualRateValue);                             // This for the Dual Rates function
+        if (InputChannel > 7) {                                                 // Must be a switch if over 7
+            OutputValue = GetStickInput(InputChannel);                          // Four 3 postion switches
         }
-        else {                                                                                                           // i.e. l <= 7 so it's a Stick/knob/switch
-            InputValue  = AnalogueReed(InputChannel);                                                                    // Get values from sticks' pots then ADD TRIM then interpolate them.
+        else {                                                                  // i.e. l <= 7 so it's a Stick/knob/switch
+            InputValue  = AnalogueReed(InputChannel);                           // Get values from sticks' pots then ADD TRIM then interpolate them.
             OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputValue, InputChannel, OutputChannel); // Use function pointer array to invoke selected interpolation.
         }
-        OutputValue += GetTrimAmount(InputChannel);                        // Add trim AFTER doing rates
-        OutputValue += (SubTrims[OutputChannel] - 127) * (TrimMultiplier); // ADD SUBTRIM to output channel, not mapped input channel (Range 0 - 127 - 254)
+        OutputValue += GetTrimAmount(InputChannel);                             // Add trim AFTER doing rates
+        OutputValue += (SubTrims[OutputChannel] - 127) * (TrimMultiplier);      // ADD SUBTRIM to output channel, not mapped input channel (Range 0 - 127 - 254)
         PreMixBuffer[OutputChannel] = constrain(OutputValue, MINMICROS, MAXMICROS);
         SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel];
     }
     if (CurrentMode == NORMAL || CurrentMode == LISTENMODE) {
-        DoSlowServos();   // Some servos may need to be slowed down
-        DoRouteOutputs(); // This function might re-route outputs to user-defined channels (Before reversing)
-        DoReverseSense(); // This function reverses servos if needed (After routing)
-        DoMixes();        // Mixes the OUTPUT :-)
+        DoSlowServos();                                                         // Some servos may need to be slowed down
+        DoRouteOutputs();                                                       // This function might re-route outputs to user-defined channels (Before reversing)
+        DoReverseSense();                                                       // This function reverses servos if needed (After routing)
+        DoMixes();                                                              // Mixes the OUTPUT :-)
     }
 }
 /*********************************************************************************************************************************/
