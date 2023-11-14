@@ -915,9 +915,9 @@ bool     CurrentPipe         = 0;
 bool     AMSnotfound         = false;
 uint8_t  ScanSensitivity     = 42;
 uint8_t  CurrentChannel      = 0;
-
-uint8_t PupilIsAlive  = 0;
-uint8_t MasterIsAlive = 0;
+uint8_t  PupilIsAlive        = 0;
+uint8_t  MasterIsAlive       = 0;
+bool     BuddyModelCorrect   = false;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
