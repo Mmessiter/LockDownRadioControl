@@ -427,6 +427,7 @@ var 1Definitions_8h =
     [ "BuddyMacAddress", "1Definitions_8h.html#a5c82e425a6456b68b1237fd44b03c86c", null ],
     [ "BuddyMasterOnPPM", "1Definitions_8h.html#a15c1772f7ca4eae477fdc6a5a1546156", null ],
     [ "BuddyMasterOnWireless", "1Definitions_8h.html#a8aa88cb7271908e9389dd63fc08e965a", null ],
+    [ "BuddyModelCorrect", "1Definitions_8h.html#a2042ef73e7afbd9708ce908ffa5fd251", null ],
     [ "BuddyON", "1Definitions_8h.html#a2134130b3bde6e04237bca0aab2c22ef", null ],
     [ "BuddyPupilOnPPM", "1Definitions_8h.html#ad0fba269cc9a3aa9400013a6b80cbd09", null ],
     [ "BuddyPupilOnWireless", "1Definitions_8h.html#a4f545e5688bbbd16b52e1ab80e1ae69b", null ],
