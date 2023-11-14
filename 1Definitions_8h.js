@@ -581,6 +581,7 @@ var 1Definitions_8h =
     [ "Mixes", "1Definitions_8h.html#a865c3e7afa9537006ca2ba776d6f6dda", null ],
     [ "MixNumber", "1Definitions_8h.html#a0d282903963a177c43890298809943aa", null ],
     [ "ModelAltitude", "1Definitions_8h.html#a84b479fce1f1a09c4920d89401a81511", null ],
+    [ "ModelChanged", "1Definitions_8h.html#adeacf39af6f8bff445f9af73a56cb9b4", null ],
     [ "ModelDefined", "1Definitions_8h.html#a7de8ce7890864d7765fca744338c4759", null ],
     [ "ModelIdentified", "1Definitions_8h.html#adf67cd7c0b0e663e2498f870ca6405b6", null ],
     [ "ModelMatched", "1Definitions_8h.html#abafce2220b6ad57b4be99289a7953a0c", null ],
