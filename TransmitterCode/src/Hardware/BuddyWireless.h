@@ -85,6 +85,7 @@ void MasterDetected(bool Detected)
             if (MasterIsAlive != 2) { // MasterIsAlive = 2 means Master was already dead
                 SendText(wb, Mlost);
                 SendCommand(YesVisible);
+                BuddyModelCorrect = false;  
                 MasterIsAlive = 2;
             }
         }
@@ -147,9 +148,11 @@ void SendSpecialPacket() // here the MASTER sends to PUPIL tx. This is called ab
     spd SpecialPacketData;
    
     SpecialPacketData.ModelID =  ModelsMacUnionSaved.Val64;     // send the model ID
-    SpecialPacketData.Command[0] = 'M';                         // Send M to indicate Master is ON
-    if (BuddyON)  SpecialPacketData.Command[0] = 'B';           // Send B to indicate Buddy is ON
+    SpecialPacketData.Command[0]                    = 'M';      // Send M to indicate Master is ON
+    if (BuddyON)       SpecialPacketData.Command[0] = 'B';      // Send B to indicate Buddy is ON
     if (!ModelMatched) SpecialPacketData.Command[0] = 'I';      // Send I to indicate Model we must match models
+    if (ModelChanged)  SpecialPacketData.Command[0] = 'C';      // Send C to indicate Model has changed
+    ModelChanged = false;                                       // reset the flag
     Radio1.openWritingPipe(TeensyMACAddPipe ^ ENCRYPT_KEY);     // send to encrypted pipe address
     Radio1.setDataRate(FASTDATARATE);                           // 1MBPS
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
@@ -169,12 +172,10 @@ void SendSpecialPacket() // here the MASTER sends to PUPIL tx. This is called ab
 void GetSpecialPacket()                                                                 // here the PUPIL tx gets from MASTER tx. This function is called from main loop ...
 {
     static bool MasterIsInControl = true; 
-   
-
     struct spd {
         char        Command[2];
         uint64_t    ModelID = 0;
-    } ;
+    };
     spd SpecialPacketData;
    
     if (Radio1.available()) {                                                           // if a packet has arrived
@@ -183,29 +184,34 @@ void GetSpecialPacket()                                                         
         if (Radio1.available()){ 
             Radio1.read(&SpecialPacketData, sizeof SpecialPacketData);                  // read the packet if its still there
             
-            if ((SpecialPacketData.Command[0] == 'B') && (MasterIsInControl)) {             // Buddy is now in control
-                MasterIsInControl = false;                                                  // Buddy is now in control
-                PlaySound(BUDDYMSG);                                                        // Announce the Buddy is now in control
+            if ((SpecialPacketData.Command[0] == 'B') && (MasterIsInControl)) {         // Buddy is now in control
+                MasterIsInControl = false;                                              // Buddy is now in control
+                PlaySound(BUDDYMSG);                                                    // Announce the Buddy is now in control
+            }
+            
+            if ((SpecialPacketData.Command[0] == 'M') && (!MasterIsInControl)) {         // Master is now in control
+                MasterIsInControl = true;                                                // Master is now in control
+                PlaySound(MASTERMSG);                                                    // Announce the Master is now in control
+            }
+            
+            if (SpecialPacketData.Command[0] == 'C') {                                   // Model has changed
+                SpecialPacketData.Command[0] =  'I';                                     // must rematch models
+                BuddyModelCorrect = false;                                               // Buddy model is not correct
+            }
+            
+            if ((SpecialPacketData.Command[0] == 'I') && (!BuddyModelCorrect)){          // If C arrived then we will do this too
+                if (SpecialPacketData.ModelID == ModelsMacUnionSaved.Val64) {            // if the model ID matches
+                    PlaySound(MMMATCHED);
+                    BuddyModelCorrect = true;
+                    DelayWithDog(1500);                            
+                }else{
+                    LoadCorrectModel(SpecialPacketData.ModelID);                         // load the correct model
+                }
             }
         
-            if ((SpecialPacketData.Command[0] == 'M') && (!MasterIsInControl)) {            // Master is now in control
-                MasterIsInControl = true;                                                   // Master is now in control
-                PlaySound(MASTERMSG);                                                       // Announce the Master is now in control
-            }
-
-            if ((SpecialPacketData.Command[0] == 'I') && (!BuddyModelCorrect)){             // heer
-                    if (SpecialPacketData.ModelID == ModelsMacUnionSaved.Val64) {           // if the model ID matches
-                        PlaySound(MMMATCHED);
-                        BuddyModelCorrect = true;
-                        DelayWithDog(1500);                            
-                    }else{
-                        LoadCorrectModel(SpecialPacketData.ModelID);                        // load the correct model
-                    }
-             }
-        
-        MasterDetected(true);                                                           // Master is alive
-        LastPassivePacketTime = millis();                                               // reset the timer
-        FlushFifos();                                                                   // flush the fifos
+        MasterDetected(true);                                                             // Master is alive
+        LastPassivePacketTime = millis();                                                 // reset the timer
+        FlushFifos();                                                                     // flush the fifos
     }
     }
     else { // no packet arrived so maybe master's dead
@@ -232,6 +238,7 @@ void StartBuddyListen()
     BlueLedOn();
     CurrentMode = LISTENMODE;
     LostContactFlag = false;
+    BuddyModelCorrect = false;  
     RestoreBrightness();
 }
 //************************************************************************************************************************
