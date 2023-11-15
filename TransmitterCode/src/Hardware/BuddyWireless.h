@@ -17,6 +17,7 @@
 //*************************************************************************************************************************
 
 void LoadCorrectModel(uint64_t ModelID){                                    //  Gets Buddy onto same model as master, quietly.                                            
+    uint32_t SavedModelNumber = ModelNumber;                                 //  Save the current model number
     ModelMatched = false;
     ModelNumber = 0;
     while (!ModelMatched && (ModelNumber < MAXMODELNUMBER - 1)) {           //  Try to match the ID with a saved one
@@ -27,6 +28,10 @@ void LoadCorrectModel(uint64_t ModelID){                                    //  
     if (ModelMatched) {                                                     //  Found it!
         UpdateModelsNameEveryWhere();                                       //  Show it everywhere.
         SaveAllParameters();                                                //  Save it
+        GotoFrontView();
+    }else{
+        ModelNumber = SavedModelNumber;                                     //  Restore the current model number
+        ReadOneModel(ModelNumber);                                          //  Restore the current model 
         GotoFrontView();
     }
 }
@@ -129,8 +134,8 @@ void GetPupilAck()
 }
 //*************************************************************************************************************************
 
-void SendSpecialPacket() // here the MASTER sends to PUPIL tx. This is called about 100 times a second.
-{
+void SendSpecialPacket()                                        // Here the MASTER sends to PUPIL tx. This is called about 100 times a second.
+{                                                               // Master Sends M or B to indicate whether Buddy is on or off, and the ID of the model which should be loaded.
     struct spd
     {
         char        Command[2];
@@ -165,8 +170,8 @@ void CheckModelMatchesMaster(uint64_t ModelID){
 }
 //*************************************************************************************************************************
 
-void GetSpecialPacket()                                                                 // here the PUPIL tx gets from MASTER tx. This function is called from main loop ...
-{
+void GetSpecialPacket()                                                                 // here the PUPIL tx gets from MASTER tx. This function is called from main loop about 100 times a second.
+{                                                                                       // Master tells Pupil whether buddy is on or off, and the ID of the model which should be loaded.
     static bool MasterIsInControl = true; 
    
     struct spd {
@@ -177,7 +182,7 @@ void GetSpecialPacket()                                                         
    
     if (Radio1.available()) {                                                           // if a packet has arrived
         Radio1.writeAckPayload(1, &CompressedData, sizeof CompressedData);              // Acknowledge the packet BY SENDING MY CHANNEL DATA!
-        DelayWithDog(DELAYAFTERACK);                                                    // <-  ** MUST ** allow the ACK time to get going, otherwise the sender sees a failed packet      <<<<<<<<<<<<<< ************** !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        DelayWithDog(DELAYAFTERACK);                                                    // <-  ** MUST ** allow the ACK time to get going, otherwise the sender sees a failed packet    
         if (Radio1.available()){ 
             Radio1.read(&SpecialPacketData, sizeof SpecialPacketData);                  // read the packet if its still there
             if ((SpecialPacketData.Command[0] == 'B') && (MasterIsInControl)) {         // Buddy is now in control
@@ -188,7 +193,7 @@ void GetSpecialPacket()                                                         
                 MasterIsInControl = true;                                                // Master is now in control
                 PlaySound(MASTERMSG);                                                    // Announce the Master is now in control
             }
-            CheckModelMatchesMaster(SpecialPacketData.ModelID);                          // check the model ID (once every second
+            CheckModelMatchesMaster(SpecialPacketData.ModelID);                          // check the model ID (once every second) and load the correct model if it !matches
             MasterDetected(true);                                                        // Master is alive
             LastPassivePacketTime = millis();                                            // reset the timer
             FlushFifos();                                                                // flush the fifos
