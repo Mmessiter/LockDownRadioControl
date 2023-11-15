@@ -1,6 +1,7 @@
 var radio_8h =
 [
     [ "Payload", "structPayload.html", "structPayload" ],
+    [ "MAXTRIESPERTRANSCEIVER", "radio_8h.html#a4a03f701a3917500a6060344738e5fd4", null ],
     [ "BindModel", "radio_8h.html#aa0c6905579a33aef28d737d43676cbbd", null ],
     [ "BlinkLed", "radio_8h.html#aa477cf7453bb57dab00e7b654f62cb13", null ],
     [ "CheckWhetherItsTimeToHop", "radio_8h.html#ad21c5c00ff554736e4e21cee13773cd5", null ],
