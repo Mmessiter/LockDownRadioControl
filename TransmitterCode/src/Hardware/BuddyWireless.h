@@ -16,26 +16,18 @@
  
 //*************************************************************************************************************************
 
-void LoadCorrectModel(uint64_t ModelID){                                                // Gets Buddy onto same model as master
-    if (AutoModelSelect) {                                                              //  It's not a match so search for it.
-        ModelMatched = false;
-        ModelNumber = 0;
-        while ((ModelMatched == false) && (ModelNumber < MAXMODELNUMBER - 1)) { //  Try to match the ID with a saved one
-            ++ModelNumber;
-            ReadOneModel(ModelNumber);
-            if ((ModelID == ModelsMacUnionSaved.Val64)) ModelMatched = true; //  Found it!
-        }
-        if (ModelMatched) {               //  Found it!
-            UpdateModelsNameEveryWhere(); //  Use it everywhere.
-             BuddyModelCorrect = true;
-            if (AnnounceConnected)
-            {
-                PlaySound(MMFOUND);
-                DelayWithDog(1500);
-            }
-            SaveAllParameters(); //  Save it
-            GotoFrontView();
-        }
+void LoadCorrectModel(uint64_t ModelID){                                    //  Gets Buddy onto same model as master, quietly.                                            
+    ModelMatched = false;
+    ModelNumber = 0;
+    while (!ModelMatched && (ModelNumber < MAXMODELNUMBER - 1)) {           //  Try to match the ID with a saved one
+        ++ModelNumber;
+        ReadOneModel(ModelNumber);
+        if ((ModelID == ModelsMacUnionSaved.Val64)) ModelMatched = true;    //  Found it!
+    }
+    if (ModelMatched) {                                                     //  Found it!
+        UpdateModelsNameEveryWhere();                                       //  Show it everywhere.
+        SaveAllParameters();                                                //  Save it
+        GotoFrontView();
     }
 }
 
@@ -45,7 +37,7 @@ void GetSlaveChannelValuesWireless(){                                           
         if (PupilIsAlive == 2) BuddyON = false;                                 // If pupil is dead, then Buddy is off
         if (BuddyON) {
         for (int j = 0; j < CHANNELSUSED; ++j) {                                // While slave has control, his stick data replaces some of ours
-           if (BuddyControlled & (1 << j)) SendBuffer[j] = BuddyBuffer[j];     // Test if this channel is buddy controlled. If not leave it unchanged otherwise replace it with the buddy's value
+           if (BuddyControlled & (1 << j)) SendBuffer[j] = BuddyBuffer[j];      // Test if this channel is buddy controlled. If not leave it unchanged otherwise replace it with the buddy's value
         }
         if (!SlaveHasControl) {                                                 // Buddy has turned On
             PlaySound(BUDDYMSG);                                                // Announce the Buddy is now in control
@@ -84,8 +76,7 @@ void MasterDetected(bool Detected)
         if (LostMasterCount > LOSTCONTACTTHRESHOLD) {
             if (MasterIsAlive != 2) { // MasterIsAlive = 2 means Master was already dead
                 SendText(wb, Mlost);
-                SendCommand(YesVisible);
-                BuddyModelCorrect = false;  
+                SendCommand(YesVisible); 
                 MasterIsAlive = 2;
             }
         }
@@ -147,12 +138,9 @@ void SendSpecialPacket() // here the MASTER sends to PUPIL tx. This is called ab
     };
     spd SpecialPacketData;
    
-    SpecialPacketData.ModelID =  ModelsMacUnionSaved.Val64;     // send the model ID
+    SpecialPacketData.ModelID =  ModelsMacUnionSaved.Val64;     // send the model ID so that pupil can check it
     SpecialPacketData.Command[0]                    = 'M';      // Send M to indicate Master is ON
     if (BuddyON)       SpecialPacketData.Command[0] = 'B';      // Send B to indicate Buddy is ON
-    if (!ModelMatched) SpecialPacketData.Command[0] = 'I';      // Send I to indicate Model we must match models
-    if (ModelChanged)  SpecialPacketData.Command[0] = 'C';      // Send C to indicate Model has changed
-    ModelChanged = false;                                       // reset the flag
     Radio1.openWritingPipe(TeensyMACAddPipe ^ ENCRYPT_KEY);     // send to encrypted pipe address
     Radio1.setDataRate(FASTDATARATE);                           // 1MBPS
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
@@ -164,14 +152,23 @@ void SendSpecialPacket() // here the MASTER sends to PUPIL tx. This is called ab
     }
     Radio1.setDataRate(DATARATE);                               // restore the proper data rate
     Radio1.openWritingPipe(TeensyMACAddPipe);                   // restore the proper pipe address
-    Radio1.setChannel(CurrentChannel);                          // restore the proper frequency ....stop listening ???
+    Radio1.setChannel(CurrentChannel);                          // restore the proper frequency channel
 }
+//*************************************************************************************************************************
 
+void CheckModelMatchesMaster(uint64_t ModelID){
+    static uint32_t LastModelIDCheckTime = 0;                                    // The pupil checks the model ID once every second and loads the correct model if it !matches
+    if (millis()-LastModelIDCheckTime > 1000) {                                  // check the model ID once every second
+        LastModelIDCheckTime = millis();
+        if (ModelID!= ModelsMacUnionSaved.Val64) LoadCorrectModel(ModelID);      // if the model ID !matches, then load the correct model    
+    }
+}
 //*************************************************************************************************************************
 
 void GetSpecialPacket()                                                                 // here the PUPIL tx gets from MASTER tx. This function is called from main loop ...
 {
     static bool MasterIsInControl = true; 
+   
     struct spd {
         char        Command[2];
         uint64_t    ModelID = 0;
@@ -183,38 +180,21 @@ void GetSpecialPacket()                                                         
         DelayWithDog(DELAYAFTERACK);                                                    // <-  ** MUST ** allow the ACK time to get going, otherwise the sender sees a failed packet      <<<<<<<<<<<<<< ************** !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         if (Radio1.available()){ 
             Radio1.read(&SpecialPacketData, sizeof SpecialPacketData);                  // read the packet if its still there
-            
             if ((SpecialPacketData.Command[0] == 'B') && (MasterIsInControl)) {         // Buddy is now in control
                 MasterIsInControl = false;                                              // Buddy is now in control
                 PlaySound(BUDDYMSG);                                                    // Announce the Buddy is now in control
             }
-            
             if ((SpecialPacketData.Command[0] == 'M') && (!MasterIsInControl)) {         // Master is now in control
                 MasterIsInControl = true;                                                // Master is now in control
                 PlaySound(MASTERMSG);                                                    // Announce the Master is now in control
             }
-            
-            if (SpecialPacketData.Command[0] == 'C') {                                   // Model has changed
-                SpecialPacketData.Command[0] =  'I';                                     // must rematch models
-                BuddyModelCorrect = false;                                               // Buddy model is not correct
-            }
-            
-            if ((SpecialPacketData.Command[0] == 'I') && (!BuddyModelCorrect)){          // If C arrived then we will do this too
-                if (SpecialPacketData.ModelID == ModelsMacUnionSaved.Val64) {            // if the model ID matches
-                    PlaySound(MMMATCHED);
-                    BuddyModelCorrect = true;
-                    DelayWithDog(1500);                            
-                }else{
-                    LoadCorrectModel(SpecialPacketData.ModelID);                         // load the correct model
-                }
-            }
+            CheckModelMatchesMaster(SpecialPacketData.ModelID);                          // check the model ID (once every second
+            MasterDetected(true);                                                        // Master is alive
+            LastPassivePacketTime = millis();                                            // reset the timer
+            FlushFifos();                                                                // flush the fifos
+        }
+    }else{ // no packet arrived so maybe master's dead
         
-        MasterDetected(true);                                                             // Master is alive
-        LastPassivePacketTime = millis();                                                 // reset the timer
-        FlushFifos();                                                                     // flush the fifos
-    }
-    }
-    else { // no packet arrived so maybe master's dead
         if (millis() - LastPassivePacketTime > 700) {
             MasterDetected(false);
             LastPassivePacketTime = millis();
@@ -238,7 +218,6 @@ void StartBuddyListen()
     BlueLedOn();
     CurrentMode = LISTENMODE;
     LostContactFlag = false;
-    BuddyModelCorrect = false;  
     RestoreBrightness();
 }
 //************************************************************************************************************************

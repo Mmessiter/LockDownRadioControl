@@ -167,7 +167,6 @@ void RedLedOn()
         ModelsMacUnion.Val64 = 0;
         RangeTestGoodPackets = 0;
         RecentPacketsLost    = 0;
-        ModelChanged         = false;
         SetUKFrequencies();
         if (CurrentView == FRONTVIEW) {
             SendText(FrontView_Connected, na);
@@ -5431,7 +5430,6 @@ void ModelViewEnd()
         BindNow();
         AMSnotfound = false;
     }
-    ModelChanged = true; // in case of wireless buddy. He needs to know this.
     GotoFrontView();
 }
 

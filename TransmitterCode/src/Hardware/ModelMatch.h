@@ -80,7 +80,6 @@ void CompareModelsIDs()
                 }
                 if (ModelMatched) {               //  Found it!
                     UpdateModelsNameEveryWhere(); //  Use it everywhere.
-                    ModelChanged = true;
                     if (AnnounceConnected)
                     {
                         PlaySound(MMFOUND);

@@ -855,7 +855,6 @@ uint8_t   ConnectionAssessSeconds = 1;
 uint32_t  PreviousPowerOffTimer   = 0;
 bool      ModelIdentified         = false;
 bool      ModelMatched            = false;
-bool      ModelChanged            = false;
 bool      AutoModelSelect         = true;
 uint32_t  TrimTimer               = 0;
 uint32_t  LastPassivePacketTime   = 0;
@@ -918,7 +917,6 @@ uint8_t  ScanSensitivity     = 42;
 uint8_t  CurrentChannel      = 0;
 uint8_t  PupilIsAlive        = 0;
 uint8_t  MasterIsAlive       = 0;
-bool     BuddyModelCorrect   = false;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
