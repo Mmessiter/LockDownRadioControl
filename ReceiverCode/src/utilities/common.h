@@ -19,7 +19,7 @@
 #define RXVERSION_MINOR   2
 #define RXVERSION_MINIMUS 9 // November 2023
 
-// #define DB_FHSS
+ // #define DB_FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE
@@ -112,5 +112,6 @@ uint8_t FHSS_Channels1[42] = {93, 111, 107, 103, 106, 97, 108, 102, 118, 104, 10
 /************************************************************************************************************/
 
 void HopToNextChannel();
+void MeasureLoopSpeed();
 
 #endif // defined (_SRC_UTILITIES_COMMON_H)

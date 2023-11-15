@@ -57,7 +57,6 @@ extern uint32_t NewConnectionMoment;
 extern void     BindModel();
 extern void     FailSafe(); // defined in main.cpp
 extern void     ClearAckPayload();
-// extern void         ShowHopDurationEtc();
 extern void         ReadSensorHub();
 extern void         SetUKFrequencies();
 extern void         MoveServos();
@@ -244,34 +243,39 @@ FLASHMEM void GetOldPipe()
 #endif
 }
 
-#ifdef DB_FHSS
-float PacketStartTime = 0;
+
 /************************************************************************************************************/
 /*
  * Print out some FHSS information about the channel hopping implementation
  */
+
+#ifdef DB_FHSS
 void ShowHopDurationEtc()
 {
+    static uint32_t LastTimeCalled = 0;
+    static uint16_t hps = 0;
+    static uint16_t HopsPerSecond = 0;
+    static uint32_t PacketStartTime = 0;
 
-    float   freq          = 2.4 + (float)NextChannel / 1000;
-    uint8_t OnePacketTime = (millis() - PacketStartTime);
-
+    if (millis() - LastTimeCalled >= 1000)
+    {
+         HopsPerSecond = hps;
+         hps = 0;
+         LastTimeCalled = millis();
+    }
+    ++hps;
+    
+    float   freq  = 2.4 + (float)NextChannel / 1000;
     Serial.print("Hop duration: ");
-    Serial.print(int(millis() - PacketStartTime));
-    Serial.print("ms.  Current packet number: ");
-    Serial.print(PacketNumber);
-    Serial.print("  Average Time per packet: ");
-    Serial.print(OnePacketTime);
-    Serial.print("ms.  Next frequency: ");
+    Serial.print(millis() - PacketStartTime);
+    Serial.print("ms ");
+    if ((millis() - PacketStartTime)<100) Serial.print(" ");
+    Serial.print(" Next frequency: ");
     Serial.print(freq, 3);
-    Serial.print(BoundFlag ? " Bound!" : " NOT Bound");
-    Serial.print("  Radio: ");
-    Serial.print(ThisRadio);
-    uint8_t HopsPerSecond = 1000 / OnePacketTime;
-
     Serial.print("  Hops per second: ");
     Serial.print(HopsPerSecond);
     Serial.println("");
+    PacketStartTime = millis();
 }
 #endif
 
@@ -286,7 +290,7 @@ void HopToNextChannel()
     CurrentRadio->startListening();
 #ifdef DB_FHSS
     ShowHopDurationEtc();
-    PacketStartTime = millis();
+   
 #endif
 }
 
@@ -401,6 +405,8 @@ void KeepSbusHappy()
 
 FASTRUN void Reconnect()
 { // This is called when contact is lost, to reconnect ASAP
+    #define MAXTRIESPERTRANSCEIVER 6
+   
     uint32_t SearchStartTime  = millis();
     uint8_t  ReconnectChannel = *(FHSSRecoveryPointer + ReconnectIndex); // Get a reconnect channel
     uint8_t  PreviousRadio    = ThisRadio;
@@ -424,14 +430,16 @@ FASTRUN void Reconnect()
         CurrentRadio->setChannel(ReconnectChannel);
         delayMicroseconds(300);
         ++Attempts;
-        if (Attempts < 3) {
+        if (Attempts < MAXTRIESPERTRANSCEIVER) {
             TryToConnectNow();
+            //    Serial.println(ThisRadio);
         }
         if (!Connected) {
 
 #ifdef SECOND_TRANSCEIVER
-            if (Attempts >= 3) {
+            if (Attempts >= MAXTRIESPERTRANSCEIVER) {
                 TryTheOtherTransceiver(ReconnectChannel);
+            
                 Attempts = 0;
             }
 #else

@@ -763,7 +763,6 @@ FLASHMEM void setup()
 
 void BlinkLed()
 {
-
     if ((millis() - BlinkTimer) > 100) {
         BlinkTimer = millis();
         BlinkValue ^= 1;
@@ -775,12 +774,28 @@ void BlinkLed()
         }
     }
 }
+
+/************************************************************************************************************/
+
+void MeasureLoopSpeed(){
+    static uint32_t LastTime = 0;
+    static uint32_t lcount = 0;
+    if (millis()-LastTime >= 1000){
+       LastTime = millis();
+       Serial.print("Loop speed: ");
+       Serial.print(lcount);
+       Serial.println(" Hz");
+       lcount = 0;
+   }
+   ++lcount;
+}
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
 
 void loop()
 {
+   // MeasureLoopSpeed();
     KickTheDog();
     ReceiveData();
     if (Blinking) BlinkLed();
