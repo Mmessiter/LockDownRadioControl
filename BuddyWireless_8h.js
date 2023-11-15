@@ -7,6 +7,7 @@ var BuddyWireless_8h =
     [ "LOSTCONTACTTHRESHOLD", "BuddyWireless_8h.html#adc8ab6e023609f6548762eea2746eea1", null ],
     [ "SHORT_DELAY", "BuddyWireless_8h.html#ac4eb562b9427778a7da4e852e6c02d41", null ],
     [ "SPECIAL_PACKET_CHANNEL", "BuddyWireless_8h.html#ad880cebd97490afa89660ab3c0298fed", null ],
+    [ "CheckModelMatchesMaster", "BuddyWireless_8h.html#abe67b2cf1cd907bd032ea0a712f1c4cb", null ],
     [ "GetPupilAck", "BuddyWireless_8h.html#af59c2527be7a67d6b09dd467f3123d55", null ],
     [ "GetSlaveChannelValuesWireless", "BuddyWireless_8h.html#a790b14444d8cdb4c3ae4e9884e3550d7", null ],
     [ "GetSpecialPacket", "BuddyWireless_8h.html#af63784896d400ae2d75d57852e143ca1", null ],
