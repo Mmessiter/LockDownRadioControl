@@ -177,6 +177,7 @@ var 1Definitions_8h =
     [ "PPMPORT", "1Definitions_8h.html#a95812254c835135cc2281a48a97d7664", null ],
     [ "PROPOCHANNELS", "1Definitions_8h.html#a19677884790860fea7a21dae72e1b862", null ],
     [ "Purple", "1Definitions_8h.html#a5168ce33eb581e85fbfa454e89012bfb", null ],
+    [ "QUIETCHANNEL", "1Definitions_8h.html#afbeb8aa47d71205374e543096473bac4", null ],
     [ "RANGEMAX", "1Definitions_8h.html#a152ff5774ac656fc5f23664a214a8b53", null ],
     [ "RANGEMIN", "1Definitions_8h.html#a2279f0fac9f7362b46f3c53ae91a5ce8", null ],
     [ "RATE1", "1Definitions_8h.html#ad35dcec60fb61a3768da09d05a16c5a7", null ],

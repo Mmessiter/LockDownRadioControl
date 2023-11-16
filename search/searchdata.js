@@ -9,7 +9,7 @@ var indexSectionsWithContent =
   6: "p",
   7: "adgl",
   8: "adgl",
-  9: "_abcdefghiklmnoprstuwxy",
+  9: "_abcdefghiklmnopqrstuwxy",
   10: ".lr"
 };
 

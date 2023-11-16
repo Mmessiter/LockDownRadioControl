@@ -1,26 +1,4 @@
 var searchData=
 [
-  ['rangemax_0',['RANGEMAX',['../1Definitions_8h.html#a152ff5774ac656fc5f23664a214a8b53',1,'RANGEMAX():&#160;1Definitions.h'],['../common_8h.html#a152ff5774ac656fc5f23664a214a8b53',1,'RANGEMAX():&#160;common.h']]],
-  ['rangemin_1',['RANGEMIN',['../common_8h.html#a2279f0fac9f7362b46f3c53ae91a5ce8',1,'RANGEMIN():&#160;common.h'],['../1Definitions_8h.html#a2279f0fac9f7362b46f3c53ae91a5ce8',1,'RANGEMIN():&#160;1Definitions.h']]],
-  ['rate1_2',['RATE1',['../1Definitions_8h.html#ad35dcec60fb61a3768da09d05a16c5a7',1,'1Definitions.h']]],
-  ['rate2_3',['RATE2',['../1Definitions_8h.html#a83b34f9971fcd11d43f6da5dd51e74c5',1,'1Definitions.h']]],
-  ['rate3_4',['RATE3',['../1Definitions_8h.html#a1dd2b1861fe9917fe9311cac14025c32',1,'1Definitions.h']]],
-  ['receive_5ftimeout_5',['RECEIVE_TIMEOUT',['../common_8h.html#a4c69942f01447fa7563c5726c7d8abf2',1,'common.h']]],
-  ['reconnect_5fchannels_5fcount_6',['RECONNECT_CHANNELS_COUNT',['../common_8h.html#a2e43bf9a06b03c08517e35fb1c553350',1,'RECONNECT_CHANNELS_COUNT():&#160;common.h'],['../1Definitions_8h.html#a2e43bf9a06b03c08517e35fb1c553350',1,'RECONNECT_CHANNELS_COUNT():&#160;1Definitions.h']]],
-  ['reconnect_5fchannels_5foffset_7',['RECONNECT_CHANNELS_OFFSET',['../common_8h.html#a14bded97c573ee3cd3847653da3dc2a0',1,'common.h']]],
-  ['reconnect_5fchannels_5fstart_8',['RECONNECT_CHANNELS_START',['../1Definitions_8h.html#a1d74cf6f6bbce0a927f69d545139f301',1,'1Definitions.h']]],
-  ['reconnectgap_9',['RECONNECTGAP',['../common_8h.html#a00a419fbe253e6e9cb4d716d02d0b2b7',1,'common.h']]],
-  ['red_10',['Red',['../1Definitions_8h.html#ae8e246fd7335d7e27ab04150cbc418ba',1,'1Definitions.h']]],
-  ['red_5fled_5fon_5ftime_11',['RED_LED_ON_TIME',['../1Definitions_8h.html#ab939b00b86d17d03b6fdfe585f06396d',1,'1Definitions.h']]],
-  ['redled_12',['REDLED',['../1Definitions_8h.html#a1a93f984896e07e32aff39c2e0fb4459',1,'1Definitions.h']]],
-  ['renamemodelview_13',['RENAMEMODELVIEW',['../1Definitions_8h.html#aa884d82119bb2d0474b99df986587972',1,'1Definitions.h']]],
-  ['retrycount_14',['RETRYCOUNT',['../1Definitions_8h.html#a0cf4668725c06b3a6d64a2895c906379',1,'1Definitions.h']]],
-  ['retrywait_15',['RETRYWAIT',['../1Definitions_8h.html#aadc879b4b6396135d31e22c22955a753',1,'1Definitions.h']]],
-  ['reverseview_16',['REVERSEVIEW',['../1Definitions_8h.html#a3bedd97d2e81444eda8c2d43050b88c9',1,'1Definitions.h']]],
-  ['rightpaddlex_17',['RIGHTPADDLEX',['../1Definitions_8h.html#ac486479fd9b023454968dd48a4ebefa4',1,'1Definitions.h']]],
-  ['rxsetupview_18',['RXSETUPVIEW',['../1Definitions_8h.html#a780837bb310f271084ffc0720d6be13b',1,'1Definitions.h']]],
-  ['rxsetupview1_19',['RXSETUPVIEW1',['../1Definitions_8h.html#aaf6268b3ed41c0e18d11de29157837b8',1,'1Definitions.h']]],
-  ['rxversion_5fmajor_20',['RXVERSION_MAJOR',['../common_8h.html#a2b147d5155fcf962e9f1c4885b32c67d',1,'common.h']]],
-  ['rxversion_5fminimus_21',['RXVERSION_MINIMUS',['../common_8h.html#a46d5105ccf92f7e44b10af6fd51772a8',1,'common.h']]],
-  ['rxversion_5fminor_22',['RXVERSION_MINOR',['../common_8h.html#adeb76229aa4087c3bc1e1fd17bd865b2',1,'common.h']]]
+  ['quietchannel_0',['QUIETCHANNEL',['../1Definitions_8h.html#afbeb8aa47d71205374e543096473bac4',1,'1Definitions.h']]]
 ];
