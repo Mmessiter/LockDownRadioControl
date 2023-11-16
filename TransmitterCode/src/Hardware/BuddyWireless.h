@@ -6,10 +6,10 @@
 #include "Hardware/1Definitions.h"
 #ifndef BUDDYWIRELESS_H
     #define BUDDYWIRELESS_H
-    #define SPECIAL_PACKET_CHANNEL 125              // Which channel for the special packets
+    #define SPECIAL_PACKET_CHANNEL QUIETCHANNEL     // Which channel for the special packets
     #define SHORT_DELAY            130              // ... microseconds
     #define LONGER_DELAY           1                // ... milliseconds
-    #define LOSTCONTACTTHRESHOLD   2                // 2 fails in a row and we declare the buddy or master dead
+    #define LOSTCONTACTTHRESHOLD   6                // 2 fails in a row and we declare the buddy or master dead
     #define DELAYAFTERACK          1                // ms
     #define ENCRYPT_KEY            0xFEADFEADBB     // The encryption key used for the Pipe address between the transmitters 
     #define FASTDATARATE           RF24_1MBPS       // 2 MBPS = RF24_2MBPS; 1 MBPS = RF24_1MBPS <<

@@ -344,18 +344,23 @@ void ScanAllChannels(bool cls)
     char           fyll[] = "fill ";
     char           NewYellow[15];
     char           NA[1] = ""; // blank one
-    static uint8_t AllChannels[127];
-    static uint8_t NoCarrier[127];
+    static uint8_t  AllChannels[127];
+    static uint8_t  NoCarrier[127];
+    static uint32_t TotalHits[127];
+
+    char Quietest[] = "Quietest";
+    char Noisyest[] = "Noisyest";
 
     if (cls) {
         for (int i = 0; i < 125; i++) {
             NoCarrier[i]   = 0;
             AllChannels[i] = 0;
+            TotalHits[i]   = 0;
         }
         return;
     }
     Str(NewYellow, HighlightColour, 0);
-    for (Sc = 1; Sc <= 125; ++Sc) {
+    for (Sc = 0; Sc <= 125; ++Sc) {
         if (NEXTION.available()) return; // in case someone wants to stop!
         Radio1.setChannel(Sc);
         Radio1.startListening();
@@ -368,6 +373,7 @@ void ScanAllChannels(bool cls)
         if (Radio1.testCarrier()) {
             if (AllChannels[Sc] < (250)) {
                 AllChannels[Sc] += BlobHeight;
+                ++TotalHits[Sc];
                 SendCharArray(CB, fyll, Str(NB, x2, 1), Str(NB1, (y2), 1), Str(NB2, 5, 1), Str(NB3, BlobHeight, 1), NewYellow, NA, NA, NA, NA, NA, NA);
             }
         }
@@ -382,6 +388,37 @@ void ScanAllChannels(bool cls)
             }
         }
     }
+    
+   static uint16_t BestScore    =  0; 
+   static uint16_t WorstScore   =  0; 
+
+    
+    for (Sc = 0; Sc < 83; ++Sc){
+        if (TotalHits[Sc] <= TotalHits[BestScore]) BestScore = Sc;
+        if (TotalHits[Sc] >= TotalHits[WorstScore]) WorstScore = Sc;
+    }
+
+    // Look1("Quietest Channel: ");
+    // Look1(BestScore);
+    // Look1("  Hits: ");
+    // Look1(TotalHits[BestScore]);
+    // Look1("        ");
+
+
+    // Look1("Busiest Channel: ");
+    // Look1(WorstScore);
+    // Look1("  Hits: ");
+    // Look1(TotalHits[WorstScore]);
+    // Look1("   ");
+
+
+    SendValue(Quietest, BestScore);
+    SendValue(Noisyest, WorstScore);
+
+
+    // Look(millis());
+ 
+
 }
 
     #ifdef DB_FHSS

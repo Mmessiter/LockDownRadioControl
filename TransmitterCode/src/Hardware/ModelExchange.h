@@ -15,7 +15,7 @@
     #define BUFFERSIZE      28             // + 4 = 32
     #define FILEDATARATE    RF24_250KBPS
     #define FILEPALEVEL     RF24_PA_MAX
-    #define FILECHANNEL     123
+    #define FILECHANNEL     QUIETCHANNEL
     #define FILETIMEOUT     30
 
 /*********************************************************************************************************************************/
