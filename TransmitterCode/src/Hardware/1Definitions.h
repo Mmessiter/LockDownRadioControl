@@ -107,7 +107,7 @@
     #define LOSTCONTACTCUTOFF        2              // How many packets to 'lose' before reconnect triggers
     #define RECONNECT_CHANNELS_COUNT 3              // was 3  // How many channels to try when reconnecting
     #define RECONNECT_CHANNELS_START 12             // was 12 // Offset into channels' array
-    #define QUIETCHANNEL             48
+    #define QUIETCHANNEL             5              // Maybe 5 ?
   
 
 // **************************************************************************

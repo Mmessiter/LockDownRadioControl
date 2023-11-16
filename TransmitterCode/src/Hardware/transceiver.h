@@ -393,30 +393,16 @@ void ScanAllChannels(bool cls)
     
    static uint16_t BestScore    =  0; 
    static uint16_t WorstScore   =  0; 
-
     
     for (Sc = 0; Sc < 83; ++Sc){
         if (TotalHits[Sc] <= TotalHits[BestScore]) BestScore = Sc;
         if (TotalHits[Sc] >= TotalHits[WorstScore]) WorstScore = Sc;
     }
 
-    // Look1("Quietest Channel: ");
-    // Look1(BestScore);
-    // Look1("  Hits: ");
-    // Look1(TotalHits[BestScore]);
-    // Look1("        ");
-    // Look1("Busiest Channel: ");
-    // Look1(WorstScore);
-    // Look1("  Hits: ");
-    // Look1(TotalHits[WorstScore]);
-    // Look1("   ");
-    // Look(millis());
- 
     SendValue(Quietest, BestScore);
     SendValue(Noisyest, WorstScore);
     SendValue(Count1, TotalHits[WorstScore]);
     SendValue(Count, TotalHits[BestScore]);
-
 }
 
     #ifdef DB_FHSS
