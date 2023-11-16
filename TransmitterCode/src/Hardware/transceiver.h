@@ -350,6 +350,8 @@ void ScanAllChannels(bool cls)
 
     char Quietest[] = "Quietest";
     char Noisyest[] = "Noisyest";
+    char Count[]    = "Count";
+    char Count1[]   = "Count1";
 
     if (cls) {
         for (int i = 0; i < 125; i++) {
@@ -403,21 +405,17 @@ void ScanAllChannels(bool cls)
     // Look1("  Hits: ");
     // Look1(TotalHits[BestScore]);
     // Look1("        ");
-
-
     // Look1("Busiest Channel: ");
     // Look1(WorstScore);
     // Look1("  Hits: ");
     // Look1(TotalHits[WorstScore]);
     // Look1("   ");
-
-
-    SendValue(Quietest, BestScore);
-    SendValue(Noisyest, WorstScore);
-
-
     // Look(millis());
  
+    SendValue(Quietest, BestScore);
+    SendValue(Noisyest, WorstScore);
+    SendValue(Count1, TotalHits[WorstScore]);
+    SendValue(Count, TotalHits[BestScore]);
 
 }
 
