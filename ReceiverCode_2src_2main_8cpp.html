@@ -104,11 +104,24 @@ $(document).ready(function(){initNavTree('ReceiverCode_2src_2main_8cpp.html','')
   <div class="headertitle"><div class="title">main.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="radio_8h_source.html">utilities/radio.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &lt;Arduino.h&gt;</code><br />
+<code>#include &lt;SPI.h&gt;</code><br />
+<code>#include &lt;RF24.h&gt;</code><br />
+<code>#include &lt;Adafruit_INA219.h&gt;</code><br />
+<code>#include &lt;stdint.h&gt;</code><br />
+<code>#include &lt;EEPROM.h&gt;</code><br />
+<code>#include &lt;Wire.h&gt;</code><br />
+<code>#include &lt;Servo.h&gt;</code><br />
+<code>#include &lt;<a class="el" href="SBUS_8h_source.html">SBUS.h</a>&gt;</code><br />
+<code>#include &lt;PulsePosition.h&gt;</code><br />
+<code>#include &lt;Watchdog_t4.h&gt;</code><br />
+<code>#include &quot;<a class="el" href="common_8h_source.html">utilities/common.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="radio_8h_source.html">utilities/radio.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="pid_8h_source.html">utilities/pid.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for main.cpp:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="ReceiverCode_2src_2main_8cpp__incl.svg" width="1040" height="330"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="ReceiverCode_2src_2main_8cpp__incl.svg" width="1362" height="256"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 </div>
@@ -125,6 +138,8 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:a9692998537a18fea0930c692647e25ad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ReceiverCode_2src_2main_8cpp.html#a9692998537a18fea0930c692647e25ad">DelayMillis</a> (uint16_t ms)</td></tr>
+<tr class="separator:a9692998537a18fea0930c692647e25ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b232e8049c83655363495df07fc96d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ReceiverCode_2src_2main_8cpp.html#a7b232e8049c83655363495df07fc96d9">LoadFailSafeData</a> ()</td></tr>
 <tr class="separator:a7b232e8049c83655363495df07fc96d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6a495c5560f12cc3fd3df9454927d681"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ReceiverCode_2src_2main_8cpp.html#a6a495c5560f12cc3fd3df9454927d681">MapToSBUS</a> ()</td></tr>
@@ -181,8 +196,6 @@ Functions</h2></td></tr>
 <tr class="separator:a17699f358cf9f7c3155a9c5daf8ff13c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa477cf7453bb57dab00e7b654f62cb13"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ReceiverCode_2src_2main_8cpp.html#aa477cf7453bb57dab00e7b654f62cb13">BlinkLed</a> ()</td></tr>
 <tr class="separator:aa477cf7453bb57dab00e7b654f62cb13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad2cd2478704b6871c4a46ce512230c80"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ReceiverCode_2src_2main_8cpp.html#ad2cd2478704b6871c4a46ce512230c80">MeasureLoopSpeed</a> ()</td></tr>
-<tr class="separator:ad2cd2478704b6871c4a46ce512230c80"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe461d27b9c48d5921c00d521181f12f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ReceiverCode_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f">loop</a> ()</td></tr>
 <tr class="separator:afe461d27b9c48d5921c00d521181f12f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -382,7 +395,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00250">250</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00274">274</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -413,7 +426,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00290">290</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00314">314</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -444,7 +457,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00764">764</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00788">788</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -475,11 +488,43 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00159">159</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00183">183</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><iframe scrolling="no" frameborder="0" src="ReceiverCode_2src_2main_8cpp_ae5188cdc179ab32d9a36de911e3a2d45_icgraph.svg" width="2244" height="831"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+</div>
+
+</div>
+</div>
+<a id="a9692998537a18fea0930c692647e25ad" name="a9692998537a18fea0930c692647e25ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9692998537a18fea0930c692647e25ad">&#9670;&#160;</a></span>DelayMillis()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DelayMillis </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>ms</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00130">130</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="ReceiverCode_2src_2main_8cpp_a9692998537a18fea0930c692647e25ad_cgraph.svg" width="400" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="ReceiverCode_2src_2main_8cpp_a9692998537a18fea0930c692647e25ad_icgraph.svg" width="787" height="187"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -501,7 +546,7 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <p >Execute FailSafe data from EEPROM. </p>
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00199">199</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00223">223</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -532,7 +577,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00149">149</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00173">173</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -557,7 +602,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00115">115</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00139">139</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -582,11 +627,11 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00796">796</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00806">806</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="ReceiverCode_2src_2main_8cpp_afe461d27b9c48d5921c00d521181f12f_cgraph.svg" width="1364" height="1040"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="ReceiverCode_2src_2main_8cpp_afe461d27b9c48d5921c00d521181f12f_cgraph.svg" width="1326" height="1063"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -608,7 +653,7 @@ Here is the call graph for this function:</div>
 </div><div class="memdoc">
 <p >Map servo channels' data from ReceivedData buffer into SbusChannels buffer </p>
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00138">138</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00162">162</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -633,7 +678,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00343">343</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00367">367</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -646,25 +691,6 @@ Here is the caller graph for this function:</div>
 <div class="center"><iframe scrolling="no" frameborder="0" src="ReceiverCode_2src_2main_8cpp_a5ae8a2aa29e834880ccf370c7547961b_icgraph.svg" width="986" height="86"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
-
-</div>
-</div>
-<a id="ad2cd2478704b6871c4a46ce512230c80" name="ad2cd2478704b6871c4a46ce512230c80"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad2cd2478704b6871c4a46ce512230c80">&#9670;&#160;</a></span>MeasureLoopSpeed()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void MeasureLoopSpeed </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00780">780</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -683,7 +709,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00168">168</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00192">192</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -714,11 +740,11 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00677">677</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00701">701</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="ReceiverCode_2src_2main_8cpp_a5b90f51dfaa1795437ab024e8ab778d5_cgraph.svg" width="1595" height="1036"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="ReceiverCode_2src_2main_8cpp_a5b90f51dfaa1795437ab024e8ab778d5_cgraph.svg" width="1559" height="939"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <div class="dynheader">
@@ -745,11 +771,11 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00232">232</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00256">256</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="ReceiverCode_2src_2main_8cpp_a07ca94db0e305e9c01ec51e417576308_cgraph.svg" width="1170" height="534"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="ReceiverCode_2src_2main_8cpp_a07ca94db0e305e9c01ec51e417576308_cgraph.svg" width="1172" height="584"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <div class="dynheader">
@@ -777,7 +803,7 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <p >Read extra parameters from the transmitter. extra parameters are sent using the last few words bytes in every data packet. the parameter sent is defined by the packet number &amp; the packet number defined the transmitter. </p>
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00376">376</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00400">400</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -808,7 +834,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00326">326</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00350">350</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -833,7 +859,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00432">432</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00456">456</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -869,7 +895,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00349">349</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00373">373</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -894,11 +920,11 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00578">578</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00602">602</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="ReceiverCode_2src_2main_8cpp_a06807a4f185694d37f774702ba74db0a_cgraph.svg" width="1418" height="986"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="ReceiverCode_2src_2main_8cpp_a06807a4f185694d37f774702ba74db0a_cgraph.svg" width="1384" height="871"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <div class="dynheader">
@@ -925,7 +951,13 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00642">642</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00666">666</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><iframe scrolling="no" frameborder="0" src="ReceiverCode_2src_2main_8cpp_a96891035aa9f064462b6a614c5878f51_cgraph.svg" width="575" height="36"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+</div>
+</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -950,7 +982,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00617">617</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00641">641</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -975,7 +1007,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00357">357</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00381">381</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1007,7 +1039,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00335">335</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00359">359</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1032,7 +1064,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00555">555</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00579">579</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1057,11 +1089,11 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00702">702</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00726">726</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="ReceiverCode_2src_2main_8cpp_a17699f358cf9f7c3155a9c5daf8ff13c_cgraph.svg" width="1334" height="1240"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="ReceiverCode_2src_2main_8cpp_a17699f358cf9f7c3155a9c5daf8ff13c_cgraph.svg" width="1390" height="1080"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -1083,7 +1115,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00669">669</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00693">693</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1108,7 +1140,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00278">278</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00302">302</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1133,7 +1165,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00268">268</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00292">292</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1158,7 +1190,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00218">218</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00242">242</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1189,7 +1221,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00663">663</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00687">687</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -1212,7 +1244,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00075">75</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00091">91</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1228,7 +1260,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00073">73</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00089">89</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1244,7 +1276,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00062">62</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00078">78</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1260,7 +1292,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00063">63</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00079">79</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1276,7 +1308,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00100">100</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00116">116</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1292,7 +1324,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00102">102</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00118">118</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1308,7 +1340,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00101">101</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00117">117</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1324,7 +1356,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00053">53</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00069">69</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1340,7 +1372,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00084">84</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00100">100</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1356,7 +1388,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00077">77</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00093">93</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1372,7 +1404,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00111">111</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00127">127</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1388,7 +1420,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00078">78</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00094">94</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1404,7 +1436,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00110">110</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00126">126</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1420,7 +1452,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00076">76</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00092">92</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1436,7 +1468,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00093">93</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00109">109</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1452,7 +1484,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00057">57</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00073">73</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1468,7 +1500,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00058">58</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00074">74</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1484,7 +1516,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00092">92</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00108">108</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1500,7 +1532,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00059">59</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00075">75</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1516,7 +1548,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00060">60</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00076">76</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1532,7 +1564,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00074">74</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00090">90</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1548,7 +1580,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00081">81</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00097">97</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1564,7 +1596,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00046">46</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00062">62</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1580,7 +1612,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00064">64</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00080">80</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1596,7 +1628,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00106">106</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00122">122</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1612,7 +1644,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00070">70</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00086">86</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1628,7 +1660,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00107">107</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00123">123</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1644,7 +1676,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00071">71</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00087">87</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1660,7 +1692,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00088">88</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00104">104</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1676,7 +1708,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00103">103</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00119">119</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1692,7 +1724,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00048">48</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00064">64</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1708,7 +1740,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00082">82</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00098">98</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1724,7 +1756,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00089">89</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00105">105</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1740,7 +1772,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00079">79</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00095">95</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1756,7 +1788,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00094">94</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00110">110</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1790,7 +1822,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00086">86</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00102">102</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1806,7 +1838,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00098">98</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00114">114</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1822,7 +1854,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00068">68</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00084">84</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1838,7 +1870,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00099">99</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00115">115</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1854,7 +1886,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00108">108</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00124">124</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1870,7 +1902,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00109">109</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00125">125</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1886,7 +1918,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00096">96</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00112">112</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1902,7 +1934,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00095">95</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00111">111</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1918,7 +1950,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00051">51</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00067">67</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1934,7 +1966,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00049">49</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00065">65</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1950,7 +1982,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00067">67</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00083">83</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1966,7 +1998,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00087">87</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00103">103</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1982,7 +2014,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00061">61</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00077">77</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -1998,7 +2030,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00069">69</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00085">85</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -2014,7 +2046,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00055">55</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00071">71</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -2030,7 +2062,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00056">56</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00072">72</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -2046,7 +2078,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00083">83</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00099">99</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -2062,7 +2094,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00066">66</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00082">82</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -2078,7 +2110,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00047">47</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00063">63</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -2094,7 +2126,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00085">85</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00101">101</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -2110,7 +2142,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00065">65</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00081">81</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -2127,7 +2159,7 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <p >indicates if receiver paired with transmitter </p>
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00054">54</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00070">70</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -2143,7 +2175,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00072">72</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00088">88</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -2159,7 +2191,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00104">104</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00120">120</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -2175,7 +2207,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00091">91</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00107">107</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -2191,7 +2223,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00090">90</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00106">106</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -2207,7 +2239,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00097">97</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00113">113</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -2223,7 +2255,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00105">105</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00121">121</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
@@ -2239,7 +2271,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00080">80</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00096">96</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 
 </div>
 </div>
