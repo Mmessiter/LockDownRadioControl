@@ -67,7 +67,6 @@ var ReceiverCode_2src_2main_8cpp =
     [ "MinsGPS", "ReceiverCode_2src_2main_8cpp.html#ad3b8d1f00f2046a53bd3c5c997af2abb", null ],
     [ "ModelMatched", "ReceiverCode_2src_2main_8cpp.html#abafce2220b6ad57b4be99289a7953a0c", null ],
     [ "MonthGPS", "ReceiverCode_2src_2main_8cpp.html#a0944456d2dbd7c1deb2abba2532afe24", null ],
-    [ "MostRecentHop", "ReceiverCode_2src_2main_8cpp.html#a714d525bca8203ed425c37a33e8c5419", null ],
     [ "MySbus", "ReceiverCode_2src_2main_8cpp.html#a4c80b3036b9eb8438e1564693e122f68", null ],
     [ "NewConnectionMoment", "ReceiverCode_2src_2main_8cpp.html#a5ce4b7c421146d2957e4ae7c91118661", null ],
     [ "NewData", "ReceiverCode_2src_2main_8cpp.html#ab6eca5cb54b625d65d257370332a51a0", null ],

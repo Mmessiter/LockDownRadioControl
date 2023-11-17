@@ -57,5 +57,6 @@ var common_8h =
     [ "FHSSRecoveryPointer", "common_8h.html#a90e15e9a52f172f55e92f5c86bcb5b29", null ],
     [ "FrequencyCount", "common_8h.html#a2cecb6d8a82a88635e2c10438fedf092", null ],
     [ "INA219Connected", "common_8h.html#a8251d20351fc918ea452ad591c75116e", null ],
-    [ "LastPacketArrivalTime", "common_8h.html#a9ac62185b964d18f5843146fce5b0063", null ]
+    [ "LastPacketArrivalTime", "common_8h.html#a9ac62185b964d18f5843146fce5b0063", null ],
+    [ "MPU6050Connected", "common_8h.html#ae1b4d7a19b953a18531ad4ac365f81a4", null ]
 ];
