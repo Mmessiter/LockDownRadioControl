@@ -3,23 +3,12 @@
 #ifndef _SRC_UTILITIES_COMMON_H
 #define _SRC_UTILITIES_COMMON_H
 
-#include <SPI.h>
-#include <RF24.h>
-#include <Adafruit_INA219.h>
-#include <stdint.h>
-#include <EEPROM.h>
-#include <Wire.h>
-#include <Servo.h>
-#include <SBUS.h>
-#include "utilities/radio.h"
-#include <PulsePosition.h>
-#include <Watchdog_t4.h>
-
+#include <Arduino.h>
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   2
 #define RXVERSION_MINIMUS 9 // November 2023
 
- // #define DB_FHSS
+// #define DB_FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE
@@ -112,6 +101,9 @@ uint8_t FHSS_Channels1[42] = {93, 111, 107, 103, 106, 97, 108, 102, 118, 104, 10
 /************************************************************************************************************/
 
 void HopToNextChannel();
-void MeasureLoopSpeed();
+void DoStabilsation();
+void DelayMillis(uint16_t ms);
+void PIDEntryPoint();
+void DoStabilsation();
 
 #endif // defined (_SRC_UTILITIES_COMMON_H)

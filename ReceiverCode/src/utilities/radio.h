@@ -2,7 +2,8 @@
 // Malcolm Messiter 2020 - 2023
 #ifndef _SRC_UTILITIES_RADIO_H
 #define _SRC_UTILITIES_RADIO_H
-#include "common.h"
+
+#include "utilities/common.h"
 
 RF24     Radio1(pinCE1, pinCSN1);
 RF24     Radio2(pinCE2, pinCSN2);
@@ -329,7 +330,9 @@ void TryToConnectNow()
     uint32_t ATimer;
     CurrentRadio->startListening();
     ATimer = millis();
-    while ((!CurrentRadio->available(&Pipnum)) && (millis() - ATimer) < LISTEN_PERIOD) {
+    while ((!CurrentRadio->available(&Pipnum)) && (millis() - ATimer) < LISTEN_PERIOD) 
+    {
+        DoStabilsation();  
     }
     Connected = CurrentRadio->available(&Pipnum);
 }
@@ -340,7 +343,7 @@ void ProdRadio(uint8_t Recon_Ch)
 { // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
     ConfigureRadio();
     CurrentRadio->setChannel(Recon_Ch);
-    delay(3);
+    DelayMillis(3);
     TryToConnectNow();
 }
 
@@ -361,7 +364,7 @@ void SwapChipEnableLines()
         digitalWrite(pinCSN2, CSN_ON);
         digitalWrite(pinCE2, CE_ON);
     }
-    delay(1); // Allow swap over a little time to be noticed ...
+    DelayMillis(1); // Allow swap over a little time to be noticed ...
 }
 
 /************************************************************************************************************/
@@ -423,7 +426,7 @@ FASTRUN void Reconnect()
         CurrentRadio->stopListening();
         CurrentRadio->flush_tx();
         CurrentRadio->flush_rx();
-        delay(3);                                                   // NEEDED!
+        DelayMillis(3);                                                   // NEEDED!
         ReconnectChannel = *(FHSSRecoveryPointer + ReconnectIndex); // Get a reconnect channel
         ++ReconnectIndex;
         if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_OFFSET) ReconnectIndex = RECONNECT_CHANNELS_OFFSET;
@@ -432,14 +435,12 @@ FASTRUN void Reconnect()
         ++Attempts;
         if (Attempts < MAXTRIESPERTRANSCEIVER) {
             TryToConnectNow();
-            //    Serial.println(ThisRadio);
         }
         if (!Connected) {
 
 #ifdef SECOND_TRANSCEIVER
             if (Attempts >= MAXTRIESPERTRANSCEIVER) {
                 TryTheOtherTransceiver(ReconnectChannel);
-            
                 Attempts = 0;
             }
 #else

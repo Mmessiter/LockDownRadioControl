@@ -41,7 +41,23 @@
  *
  * @see ReceiverCode/src/main.cpp
  */
+
+#include <Arduino.h>
+#include <SPI.h>
+#include <RF24.h>
+#include <Adafruit_INA219.h>
+#include <stdint.h>
+#include <EEPROM.h>
+#include <Wire.h>
+#include <Servo.h>
+#include <SBUS.h>
+#include <PulsePosition.h>
+#include <Watchdog_t4.h>
+
+#include "utilities/common.h"
 #include "utilities/radio.h"
+#include "utilities/pid.h"
+
 
 Adafruit_INA219     ina219;
 bool                SensorHubConnected = false; //  GPS (Adafruit Ultimate GPS) ?
@@ -110,6 +126,14 @@ uint8_t       Pipnum         = PIPENUMBER;
 uint8_t       DefaultPipe[6] = {0x23, 0x94, 0x3e, 0xbe, 0xb7, 0x00};
 uint8_t       CurrentPipe[6];
 
+
+void DelayMillis(uint16_t ms) // heer
+{
+    uint32_t tt = millis();
+    while (millis() - tt < ms) {
+        DoStabilsation();
+    }
+}   
 /************************************************************************************************************/
 
 void LoadFailSafeData()
@@ -237,7 +261,7 @@ bool ReadData()
         LoadAckPayload();
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
-        delay(5);                                                      // must allow time for the ack payload to be sent
+        DelayMillis(5);                                                      // must allow time for the ack payload to be sent
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));   //  ** >> Read new data from master << **
         Connected = true;
         NewData   = true;
@@ -645,12 +669,12 @@ void SaveFailSafeData()
     uint8_t FS_Offset = FS_EEPROM_OFFSET;
     for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
         EEPROM.update(i + FS_Offset, (map(ReceivedData[i], MINMICROS, MAXMICROS, 0, 180))); // save servo positions lower res: 8 bits
-        delay(1);
+        DelayMillis(1);
     }
     FS_Offset += CHANNELSUSED;
     for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
         EEPROM.update(i + FS_Offset, FailSafeChannel[i]); // save flags
-        delay(1);
+        DelayMillis(1);
     }
 #ifdef DB_FAILSAFE
     Serial.println("Fail safe settings are saved!");
@@ -776,26 +800,12 @@ void BlinkLed()
 }
 
 /************************************************************************************************************/
-
-void MeasureLoopSpeed(){
-    static uint32_t LastTime = 0;
-    static uint32_t lcount = 0;
-    if (millis()-LastTime >= 1000){
-       LastTime = millis();
-       Serial.print("Loop speed: ");
-       Serial.print(lcount);
-       Serial.println(" Hz");
-       lcount = 0;
-   }
-   ++lcount;
-}
-/************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
 
 void loop()
 {
-   // MeasureLoopSpeed();
+    DoStabilsation();
     KickTheDog();
     ReceiveData();
     if (Blinking) BlinkLed();
