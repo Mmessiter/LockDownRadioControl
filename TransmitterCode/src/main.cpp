@@ -1872,15 +1872,15 @@ FLASHMEM void GetTXVersionNumber()
 FASTRUN void SetUKFrequencies()
 {
     FHSS_data::FHSSChPointer       = FHSS_data::FHSS_Channels;
-    FHSS_data::UkRules             = true;
     FHSS_data::FHSSRecoveryPointer = FHSS_data::FHSS_Channels;
+    FHSS_data::UkRules             = true;
 }
 /************************************************************************************************************/
 FASTRUN void SetTestFrequencies()
 {
     FHSS_data::FHSSChPointer       = FHSS_data::FHSS_Channels1;
-    FHSS_data::UkRules             = false;
     FHSS_data::FHSSRecoveryPointer = FHSS_data::FHSS_Channels1;
+    FHSS_data::UkRules             = false;
 }
 /************************************************************************************************************/
 FASTRUN void CreateTimeStamp(char* DateAndTime)
@@ -6022,7 +6022,7 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(UKRULES, TextIn) > 0) { // UK Offcom regulations?
             ++FHSS_data::UkRulesCounter;
             if (FHSS_data::UkRulesCounter == 1) SwapWaveBandTimer = millis();
-            if (FHSS_data::UkRulesCounter == 3) {
+            if (FHSS_data::UkRulesCounter == 5) {
 
                 if ((millis() - SwapWaveBandTimer) < 5000) { // pressed three times in under 5 seconds?!
                     if (!FHSS_data::UkRules) {
