@@ -81,6 +81,7 @@
 uint32_t LastPacketArrivalTime = 0;
 bool     FailSafeSave          = false;
 bool     INA219Connected       = false; //  Volts from INA219 ?
+bool     MPU6050Connected      = false; //  Accelerometer and Gyro from MPU6050 ?
 void     ReadExtraParameters();
 
 uint8_t* FHSSChPointer; // Pointer for FHSS channels' array

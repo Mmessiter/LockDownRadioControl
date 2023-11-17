@@ -107,7 +107,6 @@ uint8_t       TheReceivedPipe[6];
 uint8_t       TheCurrentPipe[6];
 bool          FirstConnection = true;
 bool          FailedSafe      = true; // Starting up as the same as after failsafe
-uint32_t      MostRecentHop;
 uint8_t       PPMChannelOrder[CHANNELSUSED] = {2, 3, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 uint8_t       PPMChannelCount               = 8;
 bool          UseSBUS                       = true;
@@ -648,17 +647,24 @@ FLASHMEM void ScanI2c()
             if (i == SENSOR_HUB_I2C_ADDRESS) {
                 SensorHubConnected = true;
 #ifdef DB_SENSORS
-                Serial.println("Sensor Hub with Adafruit Ultimate GPS etc. detected!");
+                Serial.println("Sensor Hub with Adafruit Ultimate GPS etc. detected");
 #endif
             }
             if (i == 0x40) {
-             delay(3000);
-        Serial.println("INA219Connected!");
                 INA219Connected = true;
 #ifdef DB_SENSORS
+                delay(3000);
                 Serial.println("INA219 voltage meter detected!");
 #endif
             }
+            if (i == 0x68) {
+                MPU6050Connected = true;
+#ifdef DB_SENSORS
+                delay(3000);
+                Serial.println("MPU 6050 detected");  
+#endif 
+            }
+
         }
     }
 }

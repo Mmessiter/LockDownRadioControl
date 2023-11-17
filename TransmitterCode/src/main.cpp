@@ -6024,7 +6024,7 @@ FASTRUN void ButtonWasPressed()
             if (FHSS_data::UkRulesCounter == 1) SwapWaveBandTimer = millis();
             if (FHSS_data::UkRulesCounter == 5) {
 
-                if ((millis() - SwapWaveBandTimer) < 5000) { // pressed three times in under 5 seconds?!
+                if ((millis() - SwapWaveBandTimer) < 5000) { // pressed 5 times in under 5 seconds?!
                     if (!FHSS_data::UkRules) {
                         SwapWaveBand       = 1;
                         FHSS_data::UkRules = true;
