@@ -68,7 +68,7 @@
 #define pinCE2           21                          // NRF2
 #define FAILSAFE_TIMEOUT 2000                        // two seconds until failsafe
 
-#define UNCOMPRESSEDWORDS  20                        //   16 Channels plus extra 4 16 BIT values
+#define UNCOMPRESSEDWORDS  20                        //   16 Channels plus extra 4 12 BIT values
 #define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // = 16 WORDS  with no extra
 #define CSN_ON             LOW
 #define CSN_OFF            HIGH
