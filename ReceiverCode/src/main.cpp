@@ -59,6 +59,7 @@
 #include "utilities/pid.h"
 
 
+
 Adafruit_INA219     ina219;
 bool                SensorHubConnected = false; //  GPS (Adafruit Ultimate GPS) ?
 Servo               MCMServo[SERVOSUSED];
@@ -126,7 +127,7 @@ uint8_t       DefaultPipe[6] = {0x23, 0x94, 0x3e, 0xbe, 0xb7, 0x00};
 uint8_t       CurrentPipe[6];
 
 
-void DelayMillis(uint16_t ms) // heer
+void DelayMillis(uint16_t ms) // This replaces any delay() calls
 {
     uint32_t tt = millis();
     while (millis() - tt < ms) {
@@ -260,7 +261,7 @@ bool ReadData()
         LoadAckPayload();
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
-        DelayMillis(5);                                                      // must allow time for the ack payload to be sent
+        DelayMillis(5);                                                // must allow time for the ack payload to be sent
         CurrentRadio->read(&CompressedData, sizeof(CompressedData));   //  ** >> Read new data from master << **
         Connected = true;
         NewData   = true;

@@ -5,10 +5,10 @@
 
 #include <Arduino.h>
 #define RXVERSION_MAJOR   2
-#define RXVERSION_MINOR   2
-#define RXVERSION_MINIMUS 9 // November 2023
+#define RXVERSION_MINOR   3
+#define RXVERSION_MINIMUS 0 // November 2023
 
-// #define DB_FHSS
+ //#define DB_FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE

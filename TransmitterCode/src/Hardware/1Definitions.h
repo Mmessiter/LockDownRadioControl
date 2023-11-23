@@ -1,3 +1,5 @@
+#ifndef Definitions_H
+    #define Definitions_H
 // ******************** 1Definitions.h  (+1 to put at top of list!) ************
 //     This header file has many prototypes, definitions                      *
 // ****************************************************************************
@@ -14,8 +16,6 @@
 #include <InterpolationLib.h>
 
 
-#ifndef Definitions_H
-    #define Definitions_H
 
 // **************************************************************************
 //     SUPPORT FOR TX MODULE AND NEW PCB Version                            *
@@ -29,8 +29,8 @@
 //***************************************************************************
 
     #define TXVERSION_MAJOR   2
-    #define TXVERSION_MINOR   2
-    #define TXVERSION_MINIMUS 9 //   November 2023
+    #define TXVERSION_MINOR   3
+    #define TXVERSION_MINIMUS 0 //   November 2023
 
 // **************************************************************************
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
@@ -100,6 +100,7 @@
 
 
     #define DATARATE                 RF24_250KBPS   // RF24_250KBPS or RF24_1MBPS or RF24_2MBPS
+    #define FASTDATARATE             RF24_2MBPS     // 2 MBPS = RF24_2MBPS; 1 MBPS = RF24_1MBPS <<
     #define PERFECTPACKETSPERSECOND  100            // Flat out perfect packets per second
     #define PACEMAKER                10             // was 7. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
     #define RETRYCOUNT               2              // was 2. Auto retries inside nRF24L01. MAX is 15. Fails below 2.

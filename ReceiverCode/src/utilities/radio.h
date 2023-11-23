@@ -332,7 +332,7 @@ void TryToConnectNow()
     ATimer = millis();
     while ((!CurrentRadio->available(&Pipnum)) && (millis() - ATimer) < LISTEN_PERIOD) 
     {
-        DoStabilsation();  
+        DoStabilsation();                               // while connecting, do some other stuff (Stabilisation, GPS, etc)
     }
     Connected = CurrentRadio->available(&Pipnum);
 }

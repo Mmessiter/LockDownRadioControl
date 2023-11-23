@@ -12,7 +12,7 @@
     #define LOSTCONTACTTHRESHOLD   6                // 6 fails in a row and we declare the buddy or master dead
     #define DELAYAFTERACK          1                // ms
     #define ENCRYPT_KEY            0xFEADFEADBB     // The encryption key used for the Pipe address between the transmitters 
-    #define FASTDATARATE           RF24_1MBPS       // 2 MBPS = RF24_2MBPS; 1 MBPS = RF24_1MBPS <<
+   
  
 //*************************************************************************************************************************
 
@@ -147,7 +147,7 @@ void SendSpecialPacket()                                        // Here the MAST
     SpecialPacketData.Command[0]                    = 'M';      // Send M to indicate Master is ON
     if (BuddyON)       SpecialPacketData.Command[0] = 'B';      // Send B to indicate Buddy is ON
     Radio1.openWritingPipe(TeensyMACAddPipe ^ ENCRYPT_KEY);     // send to encrypted pipe address
-    Radio1.setDataRate(FASTDATARATE);                           // 1MBPS
+    Radio1.setDataRate(FASTDATARATE);                           // 2MBPS
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
     if (Radio1.write(&SpecialPacketData, sizeof SpecialPacketData)) {
         GetPupilAck();                                          // get ack from pupil WITH HIS CONTROL DATA!!
@@ -210,7 +210,7 @@ void GetSpecialPacket()                                                         
 //*************************************************************************************************************************
 void StartBuddyListen()
 {
-    Radio1.setDataRate(FASTDATARATE);           // 1 MBPS
+    Radio1.setDataRate(FASTDATARATE);           // 2 MBPS
     Radio1.enableAckPayload();                  // needed
     Radio1.enableDynamicPayloads();             // needed
     Radio1.setAutoAck(true);                    // we want acks
