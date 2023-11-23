@@ -129,7 +129,7 @@ void GetPupilAck()
     uint16_t AckSpecial[COMPRESSEDWORDS];                       // Ack payload will contain all the pupil's control data
     if (Radio1.available()) {                                   // if a packet has arrived
         Radio1.read(&AckSpecial, sizeof AckSpecial);            // read the packet
-        Decompress(BuddyBuffer, AckSpecial, UNCOMPRESSEDWORDS); // decompress the data into buddybuffer
+        Decompress(BuddyBuffer, AckSpecial, UNCOMPRESSEDWORDS); // decompress the data into buddybuffer array
     }
 }
 //*************************************************************************************************************************
