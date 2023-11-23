@@ -77,17 +77,17 @@ var NAVTREEINDEX =
 [
 "1Definitions_8h.html",
 "1Definitions_8h.html#a5d4f7906962f2c612f1eeabd809f2f52",
-"1Definitions_8h.html#aabc53aa7e6353d8f58b8ae93fd015fab",
+"1Definitions_8h.html#aab957a0fe1c92d227cced2922967fb97",
 "BuddyWireless_8h.html#ac4eb562b9427778a7da4e852e6c02d41",
 "MPU6050_8h.html#a9ffad45588f9e6c49842bbe8c57335f6",
 "ModelMatch_8h.html",
 "Quadcopter_2src_2main_8cpp.html#af54b83a4e676aa5db6ab0f245b5726ee",
 "TransmitterCode_2src_2main_8cpp.html#a4abc073f79b7ab2a2b4429990420cbf0",
 "Utilities_8h.html#aa55ce3dfb919da5cebf61d1f2d2a96b7",
-"classMPU6050.html#ad96c7a75a39327ebaae01386bcbc58dd",
-"classMPU9250.html#ab83c85ca5103d4baf46d800f1bc5e52c",
-"functions_s.html",
-"radio_8h.html#abafce2220b6ad57b4be99289a7953a0c"
+"classMPU6050.html#ace244415128ad7a38293ad6808b7face",
+"classMPU9250.html#ab3508ddaf5d02555e0055a17bafe7667",
+"functions_g.html",
+"radio_8h.html#aa0c6905579a33aef28d737d43676cbbd"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

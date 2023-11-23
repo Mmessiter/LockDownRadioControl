@@ -4,7 +4,7 @@ var searchData=
   ['failed_1',['Failed',['../ReceiverCode_2src_2main_8cpp.html#aed7f6b5b10b7b8235e38d72a5dfc20d8',1,'main.cpp']]],
   ['failsafe_5ftimeout_2',['FAILSAFE_TIMEOUT',['../common_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c',1,'common.h']]],
   ['failsafe_5fview_3',['FAILSAFE_VIEW',['../1Definitions_8h.html#a1ef5fc5af54a467bfc4d8fd805081e3c',1,'1Definitions.h']]],
-  ['fastdatarate_4',['FASTDATARATE',['../BuddyWireless_8h.html#aa09c1d127dd05034131c7e50f64d3a02',1,'BuddyWireless.h']]],
+  ['fastdatarate_4',['FASTDATARATE',['../1Definitions_8h.html#aa09c1d127dd05034131c7e50f64d3a02',1,'1Definitions.h']]],
   ['filechannel_5',['FILECHANNEL',['../ModelExchange_8h.html#a25a02fd19ba6092af59f73a9de071bd2',1,'ModelExchange.h']]],
   ['filedatarate_6',['FILEDATARATE',['../ModelExchange_8h.html#a632cdd81885fffa95960e573cc6b42b3',1,'ModelExchange.h']]],
   ['fileexchangeview_7',['FILEEXCHANGEVIEW',['../1Definitions_8h.html#afcc84f58e148f2124a4a2cc47f9bfa00',1,'1Definitions.h']]],

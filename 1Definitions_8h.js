@@ -66,6 +66,7 @@ var 1Definitions_8h =
     [ "EXPONENTIALCURVES", "1Definitions_8h.html#a0681550b8fd26c741ffd8c6447a64f82", null ],
     [ "EXTRAPONG", "1Definitions_8h.html#a36f8bd51861e67da0f91c9d70340d665", null ],
     [ "FAILSAFE_VIEW", "1Definitions_8h.html#a1ef5fc5af54a467bfc4d8fd805081e3c", null ],
+    [ "FASTDATARATE", "1Definitions_8h.html#aa09c1d127dd05034131c7e50f64d3a02", null ],
     [ "FILEEXCHANGEVIEW", "1Definitions_8h.html#afcc84f58e148f2124a4a2cc47f9bfa00", null ],
     [ "FILESVIEW", "1Definitions_8h.html#aaed5fa6e1bbaac4e862e2acad1cb145d", null ],
     [ "FIVE", "1Definitions_8h.html#a18ced145d1fdc806b5006bd4c2857026", null ],
