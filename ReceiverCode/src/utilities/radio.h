@@ -323,6 +323,7 @@ FLASHMEM void InitCurrentRadio()
     HopStart    = millis();
 }
 
+
 /************************************ Try to connect  ... *********************************************/
 
 void TryToConnectNow()
@@ -330,11 +331,12 @@ void TryToConnectNow()
     uint32_t ATimer;
     CurrentRadio->startListening();
     ATimer = millis();
-    while ((!CurrentRadio->available(&Pipnum)) && (millis() - ATimer) < LISTEN_PERIOD) 
-    {
-        DoStabilsation();                               // while connecting, do some other stuff (Stabilisation, GPS, etc)
-    }
+    while ((!CurrentRadio->available(&Pipnum)) && (millis() - ATimer) < LISTEN_PERIOD) {DoStabilsation();}       // while connecting, do some other stuff (Stabilisation, GPS, etc)
     Connected = CurrentRadio->available(&Pipnum);
+    if (FirstFHSSConnection && Connected){
+        FirstFHSSConnection = false;
+        THEReconnectChannel = ReconnectChannel;   // Save this channel for later reconnections
+    }
 }
 
 /************************************************************************************************************/
@@ -410,11 +412,11 @@ FASTRUN void Reconnect()
 { // This is called when contact is lost, to reconnect ASAP
     #define MAXTRIESPERTRANSCEIVER 6
    
-    uint32_t SearchStartTime  = millis();
-    uint8_t  ReconnectChannel = *(FHSSRecoveryPointer + ReconnectIndex); // Get a reconnect channel
+    uint32_t SearchStartTime  = millis(); 
     uint8_t  PreviousRadio    = ThisRadio;
     uint8_t  Attempts         = 0;
-
+    
+    ReconnectChannel = *(FHSSRecoveryPointer + ReconnectIndex); // Get a reconnect channel     
     if (ThisRadio == 1) RX1TotalTime += (millis() - ReconnectedMoment); // keep track of how long on each
     if (ThisRadio == 2) RX2TotalTime += (millis() - ReconnectedMoment);
 
@@ -427,9 +429,17 @@ FASTRUN void Reconnect()
         CurrentRadio->flush_tx();
         CurrentRadio->flush_rx();
         DelayMillis(3);                                                   // NEEDED!
-        ReconnectChannel = *(FHSSRecoveryPointer + ReconnectIndex); // Get a reconnect channel
-        ++ReconnectIndex;
-        if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_OFFSET) ReconnectIndex = RECONNECT_CHANNELS_OFFSET;
+     
+       if (FirstFHSSConnection) {
+            ReconnectChannel = *(FHSSRecoveryPointer + ReconnectIndex); // Get a reconnect channel
+          //  Serial.print ("Trying: ");
+          //  Serial.println(ReconnectChannel);
+            ++ReconnectIndex;
+            if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_OFFSET) ReconnectIndex = RECONNECT_CHANNELS_OFFSET;
+       } else{
+             ReconnectChannel = THEReconnectChannel; // Use ONLY the saved channel for reconnections
+       }
+     
         CurrentRadio->setChannel(ReconnectChannel);
         delayMicroseconds(300);
         ++Attempts;
@@ -455,8 +465,9 @@ FASTRUN void Reconnect()
         }
     } //  cannot pass here if not connected
       //  must have connected by here
-      //  Serial.print("Reconnect channel: ");
+      //  Serial.print ("Reconnected on: ");
       //  Serial.println(ReconnectChannel);
+
 
     FailSafeSent = false;
     if (PreviousRadio != ThisRadio) ++RadioSwaps; // Count the radio swaps

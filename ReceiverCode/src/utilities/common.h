@@ -6,9 +6,9 @@
 #include <Arduino.h>
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   3
-#define RXVERSION_MINIMUS 0 // November 2023
+#define RXVERSION_MINIMUS 1 // November 2023
 
- //#define DB_FHSS
+// #define DB_FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE
@@ -37,9 +37,9 @@
 
 // ********************* >>> FHSS params <<< *******************************************
 
-#define HOPTIME                   0 // was 80 ms between channel changes. But now it hops after every packet!
-#define RECONNECT_CHANNELS_COUNT  3  // was 3 How many channels to try when reconnecting
-#define RECONNECT_CHANNELS_OFFSET 12 // was 12 Offset in the array to begin getting reconnect channels
+#define HOPTIME                   0    // was 80 ms between channel changes. But now it hops after every packet!
+#define RECONNECT_CHANNELS_COUNT  83   // was 3 How many channels to try when FIRST connecting
+#define RECONNECT_CHANNELS_OFFSET 0    // was 12 Offset in the array to begin getting reconnect channels
 
 // *****************************************************************************************
 #define PIPENUMBER       1
@@ -78,11 +78,13 @@
 #define FS_EEPROM_OFFSET   BIND_EEPROM_OFFSET + 8 // use 16 bytes from here
 #define PIPES_TO_COMPARE   8
 
-uint32_t LastPacketArrivalTime = 0;
-bool     FailSafeSave          = false;
-bool     INA219Connected       = false; //  Volts from INA219 ?
-bool     MPU6050Connected      = false; //  Accelerometer and Gyro from MPU6050 ?
-void     ReadExtraParameters();
+uint32_t  LastPacketArrivalTime = 0;
+bool      FailSafeSave          = false;
+bool      INA219Connected       = false; //  Volts from INA219 ?
+bool      MPU6050Connected      = false; //  Accelerometer and Gyro from MPU6050 ?
+uint8_t   ReconnectChannel      = 0;
+bool      FirstFHSSConnection   = true;
+uint8_t   THEReconnectChannel   = 0;
 
 uint8_t* FHSSChPointer; // Pointer for FHSS channels' array
 
@@ -106,5 +108,6 @@ void DoStabilsation();
 void DelayMillis(uint16_t ms);
 void PIDEntryPoint();
 void DoStabilsation();
+void ReadExtraParameters();
 
 #endif // defined (_SRC_UTILITIES_COMMON_H)

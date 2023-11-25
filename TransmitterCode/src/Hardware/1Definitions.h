@@ -30,7 +30,7 @@
 
     #define TXVERSION_MAJOR   2
     #define TXVERSION_MINOR   3
-    #define TXVERSION_MINIMUS 0 //   November 2023
+    #define TXVERSION_MINIMUS 1 //   November 2023
 
 // **************************************************************************
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
@@ -106,8 +106,10 @@
     #define RETRYCOUNT               2              // was 2. Auto retries inside nRF24L01. MAX is 15. Fails below 2.
     #define RETRYWAIT                1              // was 1. 250us = Wait between retries (RetryWait+1 * 250us))
     #define LOSTCONTACTCUTOFF        2              // How many packets to 'lose' before reconnect triggers
-    #define RECONNECT_CHANNELS_COUNT 3              // was 3  // How many channels to try when reconnecting
-    #define RECONNECT_CHANNELS_START 12             // was 12 // Offset into channels' array
+   
+    #define RECONNECT_CHANNELS_START 0              // was 12 // Offset into channels' array
+    #define RECONNECT_CHANNELS_COUNT 83             // was 3  // How many channels to try when FIRST connecting  
+   
     #define QUIETCHANNEL             5              // This was found to be the least busy channel in the 2.4GHz band in my house
   
 
@@ -821,14 +823,10 @@ uint16_t  SpecialColour       = Red;
 bool      Reconnected         = false;
 uint8_t   LowBattery          = LOWBATTERY;
 uint16_t  SbusRepeats         = 0;
-uint16_t  SavedSbusRepeats    = 0;
 bool      RXVoltsDetected     = false;
 uint16_t  RadioSwaps          = 0;
 uint16_t  RX1TotalTime        = 0;
 uint16_t  RX2TotalTime        = 0;
-uint16_t  SavedRadioSwaps     = 0;
-uint16_t  SavedRX1TotalTime   = 0;
-uint16_t  SavedRX2TotalTime   = 0;
 uint8_t   AudioVolume         = 50;
 uint32_t  WarningTimer        = 0;
 uint32_t  ScreenTimeTimer     = 0;
@@ -845,7 +843,8 @@ bool      AnnounceConnected   = true;
 bool      CopyTrimsToAll      = true;
 uint16_t  ReversedChannelBITS = 0; // 16 BIT for 16 Channels
 uint16_t  SavedLineX          = 12345;
-bool      FirstConnection     = true;
+bool      FirstFHSSConnection = true;
+uint8_t   ReConnectChannel    = 0;
 File      LogFileNumber;
 bool      LogFileOpen             = false;
 bool      ShowVPC                 = false;

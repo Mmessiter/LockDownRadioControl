@@ -78,7 +78,6 @@ void LoadPacketData()
     FS_Byte2                     = uint8_t(Twobytes & 0x00FF);
     SendBuffer[CHANNELSUSED + 1] = 0;
     SendBuffer[CHANNELSUSED + 2] = 0;
-   // Look (PacketNumber);
     switch (PacketNumber) {
         case 0:
 
@@ -185,9 +184,13 @@ void TryToReconnect()
     if (!LedWasGreen) {
         TryOtherPipe(); // BUT NOT while connected to model!
     }
-    ++ReconnectionIndex;
-    if (ReconnectionIndex >= FHSS_data::ReconnectChannelsCount) ReconnectionIndex = 0;
-    NextChannel = *(FHSS_data::FHSSRecoveryPointer + FHSS_data::ReconnectChannelsStart + ReconnectionIndex); //  reconnect channel (selected from three)
+   if (FirstFHSSConnection){
+        ++ReconnectionIndex;
+        if (ReconnectionIndex >= FHSS_data::ReconnectChannelsCount) ReconnectionIndex = 0;
+            NextChannel = *(FHSS_data::FHSSRecoveryPointer + FHSS_data::ReconnectChannelsStart + ReconnectionIndex); //  First connection on any channel 0 - 80
+    } else {
+        NextChannel = ReConnectChannel;
+    }
     HopToNextChannel();
 }
 
@@ -253,7 +256,18 @@ FASTRUN void SendData()
         FlushFifos();                                            // This avoids a lockup that happens when the FIFO gets full.
         LoadPacketData();                                        // extra parameters appended to the data packet
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30)
-        if (Radio1.write(&CompressedData, SizeOfCompressedData)) {SuccessfulPacket();} else {FailedPacket();}
+        if (Radio1.write(&CompressedData, SizeOfCompressedData)) {
+
+            if (FirstFHSSConnection){
+                ReConnectChannel = CurrentChannel;
+                FirstFHSSConnection= false;
+                Look("First connection on channel: ");
+                Look(ReConnectChannel);
+            }
+             SuccessfulPacket();
+            } else {
+                FailedPacket();
+            }
         if (BuddyMasterOnWireless) SendSpecialPacket();          // takes about 4 - 5 ms. Gets buddy control data in ACK payload   
     }
 }

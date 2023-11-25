@@ -167,6 +167,7 @@ void RedLedOn()
         ModelsMacUnion.Val64 = 0;
         RangeTestGoodPackets = 0;
         RecentPacketsLost    = 0;
+        FirstFHSSConnection  = true;
         SetUKFrequencies();
         if (CurrentView == FRONTVIEW) {
             SendText(FrontView_Connected, na);
@@ -212,10 +213,7 @@ void GreenLedOn()
         if (UseLog) {
             LogConnection();
         }
-        if (FirstConnection) { // Zero data on first connection after reboot
-            ZeroDataScreen();
-            FirstConnection = false;
-        }
+        ZeroDataScreen();   // new connection = new data
         LedWasRed   = false;
         LedWasGreen = true;
         analogWrite(BLUELED, 0);
@@ -576,21 +574,19 @@ FASTRUN void ShowComms()
         SendText(DataView_Rx, ThisRadio);
         SendText(DataView_rxv, ReceiverVersionNumber);
         SendValue(DataView_Ls, GapLongest);
-        SendValue(DataView_Ts, RadioSwaps - SavedRadioSwaps);
-        SendValue(DataView_Sg, RX1TotalTime - SavedRX1TotalTime);
+        SendValue(DataView_Ts, RadioSwaps);
+        SendValue(DataView_Sg, RX1TotalTime);
         SendValue(DataView_Ag, GapAverage);
-        SendValue(DataView_Gc, RX2TotalTime - SavedRX2TotalTime);
-        snprintf(Vbuf, 7, "%d", (int)SbusRepeats - SavedSbusRepeats);
+        SendValue(DataView_Gc, RX2TotalTime );
+        snprintf(Vbuf, 7, "%d", (int)SbusRepeats);
         SendText(Sbs, Vbuf);
         SendValue(DataView_lps, TotalLostPackets / 2);
-
         TempModelId = ModelsMacUnionSaved.Val32[0];
         snprintf(Vbuf, 9, "%X", TempModelId);
         if (TempModelId) SendText(IdStored, Vbuf);
         TempModelId = ModelsMacUnionSaved.Val32[1];
         snprintf(Vbuf, 9, "%X", TempModelId);
         if (TempModelId) SendText(IdStored1, Vbuf);
-
         TempModelId = ModelsMacUnion.Val32[0];
         snprintf(Vbuf, 9, "%X", TempModelId);
         if (TempModelId) SendText(IdReceived, Vbuf);
@@ -3972,10 +3968,6 @@ void ZeroDataScreen()
     ThisGap            = 0;
     GPSMaxDistance     = 0;
     GPSMaxSpeed        = 0;
-    SavedRadioSwaps    = RadioSwaps; // Cannot easily zero these, so do a subtraction
-    SavedRX1TotalTime  = RX1TotalTime;
-    SavedRX2TotalTime  = RX2TotalTime;
-    SavedSbusRepeats   = SbusRepeats;
     LastShowTime       = 0; // for instant redisplay
 }
 /***************************************************** ReadNewSwitchFunction ****************************************************************************/
