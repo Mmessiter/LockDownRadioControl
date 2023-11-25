@@ -55,8 +55,11 @@ var common_8h =
     [ "FHSS_Channels1", "common_8h.html#aeea38114c49f6b6dbe375b7a64acdccb", null ],
     [ "FHSSChPointer", "common_8h.html#a76b48a1dfbe2bd97ee5e0479ff16e8ef", null ],
     [ "FHSSRecoveryPointer", "common_8h.html#a90e15e9a52f172f55e92f5c86bcb5b29", null ],
+    [ "FirstFHSSConnection", "common_8h.html#ab8bdb7b749f63e9e630db915df0e017d", null ],
     [ "FrequencyCount", "common_8h.html#a2cecb6d8a82a88635e2c10438fedf092", null ],
     [ "INA219Connected", "common_8h.html#a8251d20351fc918ea452ad591c75116e", null ],
     [ "LastPacketArrivalTime", "common_8h.html#a9ac62185b964d18f5843146fce5b0063", null ],
-    [ "MPU6050Connected", "common_8h.html#ae1b4d7a19b953a18531ad4ac365f81a4", null ]
+    [ "MPU6050Connected", "common_8h.html#ae1b4d7a19b953a18531ad4ac365f81a4", null ],
+    [ "ReconnectChannel", "common_8h.html#aff74788ae1118de652848453b4152a9d", null ],
+    [ "THEReconnectChannel", "common_8h.html#ae9d286a6963f957a16854c07dbb76062", null ]
 ];
