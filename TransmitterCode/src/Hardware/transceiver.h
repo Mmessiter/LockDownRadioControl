@@ -257,7 +257,6 @@ FASTRUN void SendData()
         LoadPacketData();                                        // extra parameters appended to the data packet
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30)
         if (Radio1.write(&CompressedData, SizeOfCompressedData)) {
-
             if (FirstFHSSConnection){
                 ReConnectChannel = CurrentChannel;
                 FirstFHSSConnection= false;
