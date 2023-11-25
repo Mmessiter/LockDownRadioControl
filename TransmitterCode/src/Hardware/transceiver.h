@@ -78,11 +78,12 @@ void LoadPacketData()
     FS_Byte2                     = uint8_t(Twobytes & 0x00FF);
     SendBuffer[CHANNELSUSED + 1] = 0;
     SendBuffer[CHANNELSUSED + 2] = 0;
-    SendBuffer[CHANNELSUSED + 3] = 0;   // 4 available!
+    SendBuffer[CHANNELSUSED + 3] = 0;   // 4 available. but no more!
     switch (PacketNumber) {
         case 0:
 
             //  SendBuffer[CHANNELSUSED + 2] = NOTUSEDYET;
+            //  SendBuffer[CHANNELSUSED + 3] = NOTUSEDYET;
 
             if (((millis() - FailSafeTimer) > 1500) && SaveFailSafeNow) {
                 SendBuffer[CHANNELSUSED + 1] = SaveFailSafeNow; // FailSafeSaveMoment
