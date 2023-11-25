@@ -64,7 +64,7 @@ FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint
 // 20 x 16bit words are sent compressed to only 15 (30 bytes)
 // 4 16 bit words are vacant for other stuff (8 bytes)
 // Extra data can be send using the last 10 bytes of each data packet.
-// These are defined by the packet number.
+// These are defined by the packet number. ONLY THE LOW 12 BITS ARE ACTUALLY SENT
 
 void LoadPacketData()
 {
@@ -78,6 +78,7 @@ void LoadPacketData()
     FS_Byte2                     = uint8_t(Twobytes & 0x00FF);
     SendBuffer[CHANNELSUSED + 1] = 0;
     SendBuffer[CHANNELSUSED + 2] = 0;
+    SendBuffer[CHANNELSUSED + 3] = 0;   // 4 available!
     switch (PacketNumber) {
         case 0:
 
