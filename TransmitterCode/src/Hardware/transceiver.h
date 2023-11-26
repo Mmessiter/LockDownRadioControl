@@ -253,11 +253,9 @@ FASTRUN void SendData()
         if (Radio1.write(&CompressedData, SizeOfCompressedData)) {
             if (FirstFHSSConnection){
                 ReConnectChannel = CurrentChannel;
-                FirstFHSSConnection= false;
-                Look("First connection on channel: ");
-                Look(ReConnectChannel);
+                FirstFHSSConnection = false;
             }
-             SuccessfulPacket();
+            SuccessfulPacket();
             } else {
                 FailedPacket();
             }
