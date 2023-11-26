@@ -104,7 +104,7 @@
     #define PACEMAKER                10             // was 7. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
     #define RETRYCOUNT               2              // was 2. Auto retries inside nRF24L01. MAX is 15. Fails below 2.
     #define RETRYWAIT                1              // was 1. 250us = Wait between retries (RetryWait+1 * 250us))
-    #define LOSTCONTACTCUTOFF        2              // How many packets to 'lose' before reconnect triggers
+    #define LOSTCONTACTCUTOFF        1              // How many packets to 'lose' before reconnect triggers
    
     #define RECONNECT_CHANNELS_START 0              // was 12 // Offset into channels' array
     #define RECONNECT_CHANNELS_COUNT 83             // was 3  // How many channels to try when FIRST connecting  
