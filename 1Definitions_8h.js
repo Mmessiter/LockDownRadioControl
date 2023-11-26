@@ -493,7 +493,6 @@ var 1Definitions_8h =
     [ "FileCheckSum", "1Definitions_8h.html#a3599a8cc821fe5b0b952a192a6992144", null ],
     [ "FileError", "1Definitions_8h.html#a9b313f53ee84b82b622e9f186d0bbb81", null ],
     [ "FileNumberInView", "1Definitions_8h.html#a9ddb35e0a6d43d40e1c43a81040db76b", null ],
-    [ "FirstFHSSConnection", "1Definitions_8h.html#ab8bdb7b749f63e9e630db915df0e017d", null ],
     [ "FMSwitch", "1Definitions_8h.html#a452f6aed1252d3f1da8a0ceb07552c07", null ],
     [ "ForeGroundColour", "1Definitions_8h.html#a029840d27a3c9954aa481d494df4ace6", null ],
     [ "GapAverage", "1Definitions_8h.html#ad656113b013dd90ec2b95f43559ea559", null ],
