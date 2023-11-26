@@ -136,23 +136,17 @@ void RecordsPacketSuccess(uint8_t s)
 FASTRUN void FailedPacket()
 {
     RecordsPacketSuccess(0); // Record a failure
-    ++RecentPacketsLost;     // this is to keep track of events when receiver is off
-    if (!LostContactFlag) {
-        if (RecentPacketsLost >= FHSS_data::LostContactCutOff) {
-            LostContactFlag =   true;
-            Reconnected     = false;
-            GapStart        = millis(); // To keep track of this gap's length
-        }
+    ++RecentPacketsLost;     // this is to keep track of events when receiver is off  
+    LostContactFlag =   true;
+    Reconnected     =   false;
+    if (!GapStart) 
+    {
+        GapStart  = millis();  // To keep track of this gap's length
+    } else 
+    {
+        if (((millis() - GapStart) > RED_LED_ON_TIME) && (!LedWasRed)) RedLedOn(); // Put on red led - receiver must be off
     }
-    if (LostContactFlag) {
-        if ((millis() - GapStart) > RED_LED_ON_TIME) // Receiver gone home?
-        {
-            if (!LedWasRed) { // Put on red led - receiver must be off
-                RedLedOn();
-            }
-        }
-        TryToReconnect();
-    }
+    TryToReconnect();
     int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF HERE!!
 }
