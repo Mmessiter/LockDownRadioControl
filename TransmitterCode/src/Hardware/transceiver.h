@@ -177,13 +177,11 @@ FASTRUN void TryOtherPipe()
 void TryToReconnect()
 {
     if (BuddyPupilOnPPM) return;
-    if (!LedWasGreen) {
-        TryOtherPipe(); // BUT NOT while connected to model!
-    }
-   if (FirstFHSSConnection){
+    if (!LedWasGreen) TryOtherPipe(); // BUT NOT while connected to model!
+    if (FirstFHSSConnection){
         ++ReconnectionIndex;
         if (ReconnectionIndex >= FHSS_data::ReconnectChannelsCount) ReconnectionIndex = 0;
-            NextChannel = *(FHSS_data::FHSSRecoveryPointer + FHSS_data::ReconnectChannelsStart + ReconnectionIndex); //  First connection on any channel 0 - 80
+            NextChannel = *(FHSS_data::FHSSRecoveryPointer + FHSS_data::ReconnectChannelsStart + ReconnectionIndex); //  First connection on any channel 0 - 83
     } else {
         NextChannel = ReConnectChannel;
     }
