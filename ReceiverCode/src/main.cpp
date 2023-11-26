@@ -236,8 +236,6 @@ void FailSafe()
     FailedSafe   = true;
     TurnLedOff();
     MacAddressSentCounter = 0;
-    FirstFHSSConnection =   true;
-    // Serial.println("Failsafe!");
 }
 /************************************************************************************************************/
 void UseReceivedData()

@@ -29,7 +29,7 @@
 
     #define TXVERSION_MAJOR   2
     #define TXVERSION_MINOR   3
-    #define TXVERSION_MINIMUS 1 //   November 2023
+    #define TXVERSION_MINIMUS 2 //   November 2023
 
 // **************************************************************************
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
@@ -104,8 +104,8 @@
     #define PACEMAKER                10             // was 7. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
     #define RETRYCOUNT               2              // was 2. Auto retries inside nRF24L01. MAX is 15. Fails below 2.
     #define RETRYWAIT                1              // was 1. 250us = Wait between retries (RetryWait+1 * 250us))
-    #define RECONNECT_CHANNELS_START 0              // was 12 // Offset into channels' array
-    #define RECONNECT_CHANNELS_COUNT 83             // was 3  // How many channels to try when FIRST connecting  
+    #define RECONNECT_CHANNELS_START 12             // was 12 // Offset into channels' array
+    #define RECONNECT_CHANNELS_COUNT 3              // was 3  // How many channels to try when FIRST connecting  
     #define QUIETCHANNEL             5              // This was found to be the least busy channel in the 2.4GHz band in my house
   
 
@@ -839,7 +839,7 @@ bool      AnnounceConnected   = true;
 bool      CopyTrimsToAll      = true;
 uint16_t  ReversedChannelBITS = 0; // 16 BIT for 16 Channels
 uint16_t  SavedLineX          = 12345;
-bool      FirstFHSSConnection = true;
+//bool      FirstFHSSConnection = true;
 uint8_t   ReConnectChannel    = 0;
 File      LogFileNumber;
 bool      LogFileOpen             = false;

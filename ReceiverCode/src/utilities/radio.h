@@ -333,10 +333,7 @@ void TryToConnectNow()
     ATimer = millis();
     while ((!CurrentRadio->available(&Pipnum)) && (millis() - ATimer) < LISTEN_PERIOD) {DoStabilsation();}       // while connecting, do some other stuff (Stabilisation, GPS, etc)
     Connected = CurrentRadio->available(&Pipnum);
-    if (FirstFHSSConnection && Connected){
-        FirstFHSSConnection = false;
-        THEReconnectChannel = ReconnectChannel;   // Save this channel for later reconnections
-    }
+    
 }
 
 /************************************************************************************************************/
@@ -428,18 +425,10 @@ FASTRUN void Reconnect()
         CurrentRadio->stopListening();
         CurrentRadio->flush_tx();
         CurrentRadio->flush_rx();
-        DelayMillis(3);                                                   // NEEDED!
-     
-       if (FirstFHSSConnection) {
-            ReconnectChannel = *(FHSSRecoveryPointer + ReconnectIndex); // Get a reconnect channel
-          //  Serial.print ("Trying: ");
-          //  Serial.println(ReconnectChannel);
-            ++ReconnectIndex;
-            if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_OFFSET) ReconnectIndex = RECONNECT_CHANNELS_OFFSET;
-       } else{
-             ReconnectChannel = THEReconnectChannel; // Use ONLY the saved channel for reconnections
-       }
-     
+        DelayMillis(3);                                                   // NEEDED!         
+        ReconnectChannel = *(FHSSRecoveryPointer + ReconnectIndex); // Get a reconnect channel
+        ++ReconnectIndex;
+        if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_OFFSET) ReconnectIndex = RECONNECT_CHANNELS_OFFSET;
         CurrentRadio->setChannel(ReconnectChannel);
         delayMicroseconds(300);
         ++Attempts;

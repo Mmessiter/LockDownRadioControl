@@ -6,7 +6,7 @@
 #include <Arduino.h>
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   3
-#define RXVERSION_MINIMUS 1 // November 2023
+#define RXVERSION_MINIMUS 2 // November 2023
 
 // #define DB_FHSS
 // #define DB_SENSORS
@@ -15,7 +15,7 @@
 // #define DB_RXTIMERS
 
 //**************************************************************************************************************************
-#define SECOND_TRANSCEIVER    // >>>>>>>>>>>>>>>>   ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< ****
+//#define SECOND_TRANSCEIVER    // >>>>>>>>>>>>>>>>   ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< ****
 #define DATARATE RF24_250KBPS // RF24_250KBPS, RF24_1MBPS, RF24_2MBPS
 //**************************************************************************************************************************
 
@@ -38,8 +38,8 @@
 // ********************* >>> FHSS params <<< *******************************************
 
 #define HOPTIME                   0    // was 80 ms between channel changes. But now it hops after every packet!
-#define RECONNECT_CHANNELS_COUNT  83   // was 3 How many channels to try when FIRST connecting
-#define RECONNECT_CHANNELS_OFFSET 0    // was 12 Offset in the array to begin getting reconnect channels
+#define RECONNECT_CHANNELS_COUNT  3   // was 3 How many channels to try when FIRST connecting
+#define RECONNECT_CHANNELS_OFFSET 12    // was 12 Offset in the array to begin getting reconnect channels
 
 // *****************************************************************************************
 #define PIPENUMBER       1
@@ -83,8 +83,7 @@ bool      FailSafeSave          = false;
 bool      INA219Connected       = false; //  Volts from INA219 ?
 bool      MPU6050Connected      = false; //  Accelerometer and Gyro from MPU6050 ?
 uint8_t   ReconnectChannel      = 0;
-bool      FirstFHSSConnection   = true;
-uint8_t   THEReconnectChannel   = 0;
+
 
 uint8_t* FHSSChPointer; // Pointer for FHSS channels' array
 

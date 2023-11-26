@@ -167,7 +167,6 @@ void RedLedOn()
         ModelsMacUnion.Val64 = 0;
         RangeTestGoodPackets = 0;
         RecentPacketsLost    = 0;
-        FirstFHSSConnection  = true;
         SetUKFrequencies();
         if (CurrentView == FRONTVIEW) {
             SendText(FrontView_Connected, na);

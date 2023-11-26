@@ -178,13 +178,12 @@ void TryToReconnect()
 {
     if (BuddyPupilOnPPM) return;
     if (!LedWasGreen) TryOtherPipe(); // BUT NOT while connected to model!
-    if (FirstFHSSConnection){
-        ++ReconnectionIndex;
-        if (ReconnectionIndex >= FHSS_data::ReconnectChannelsCount) ReconnectionIndex = 0;
-            NextChannel = *(FHSS_data::FHSSRecoveryPointer + FHSS_data::ReconnectChannelsStart + ReconnectionIndex); //  First connection on any channel 0 - 83
-    } else {
-        NextChannel = ReConnectChannel;
-    }
+    ++ReconnectionIndex;
+    if (ReconnectionIndex >= FHSS_data::ReconnectChannelsCount) ReconnectionIndex = 0;
+    NextChannel = *(FHSS_data::FHSSRecoveryPointer + FHSS_data::ReconnectChannelsStart + ReconnectionIndex); //  First connection on any channel 0 - 83
+
+    Look(NextChannel);
+
     HopToNextChannel();
 }
 
@@ -251,10 +250,10 @@ FASTRUN void SendData()
         LoadPacketData();                                        // extra parameters appended to the data packet
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30)
         if (Radio1.write(&CompressedData, SizeOfCompressedData)) {
-            if (FirstFHSSConnection){
-                ReConnectChannel = CurrentChannel;
-                FirstFHSSConnection = false;
-            }
+            // if (FirstFHSSConnection){
+            //     ReConnectChannel = CurrentChannel;
+            //     FirstFHSSConnection = false;
+            // }
             SuccessfulPacket();
             } else {
                 FailedPacket();
