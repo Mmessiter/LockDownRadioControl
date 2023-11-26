@@ -27,9 +27,8 @@ var searchData=
   ['logrxswaps_24',['LogRXSwaps',['../1Definitions_8h.html#a16515797c15a76da539562acaa1e1275',1,'1Definitions.h']]],
   ['longitudegps_25',['LongitudeGPS',['../ReceiverCode_2src_2main_8cpp.html#afabe4c9d9760f8606aa408474e3d626c',1,'LongitudeGPS():&#160;main.cpp'],['../radio_8h.html#afabe4c9d9760f8606aa408474e3d626c',1,'LongitudeGPS():&#160;main.cpp']]],
   ['looptimer_26',['LoopTimer',['../SensorHubT32_2src_2main_8cpp.html#a46536419f1b2ee88934f4f812fd6140c',1,'main.cpp']]],
-  ['lostcontactcutoff_27',['LostContactCutOff',['../namespaceFHSS__data.html#a83f27298de46f99f51c0bc4d140f028a',1,'FHSS_data']]],
-  ['lostcontactflag_28',['LostContactFlag',['../1Definitions_8h.html#ad5f463902789a79fc622b3befd9409b9',1,'1Definitions.h']]],
-  ['lowbattery_29',['LowBattery',['../1Definitions_8h.html#a841a740574f81e5bb80ea1a16f704be5',1,'1Definitions.h']]],
-  ['lowvoltstimer_30',['LowVoltstimer',['../1Definitions_8h.html#aff9eea2f8a1a10bc94b26b1f84b7b27b',1,'1Definitions.h']]],
-  ['lp_5faccel_5fodr_31',['LP_ACCEL_ODR',['../classMPU9250.html#a20a0eee49ffef67d73ba8275486ba47e',1,'MPU9250']]]
+  ['lostcontactflag_27',['LostContactFlag',['../1Definitions_8h.html#ad5f463902789a79fc622b3befd9409b9',1,'1Definitions.h']]],
+  ['lowbattery_28',['LowBattery',['../1Definitions_8h.html#a841a740574f81e5bb80ea1a16f704be5',1,'1Definitions.h']]],
+  ['lowvoltstimer_29',['LowVoltstimer',['../1Definitions_8h.html#aff9eea2f8a1a10bc94b26b1f84b7b27b',1,'1Definitions.h']]],
+  ['lp_5faccel_5fodr_30',['LP_ACCEL_ODR',['../classMPU9250.html#a20a0eee49ffef67d73ba8275486ba47e',1,'MPU9250']]]
 ];
