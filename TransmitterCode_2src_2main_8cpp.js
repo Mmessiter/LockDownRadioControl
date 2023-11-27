@@ -249,6 +249,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "UpdateSwitchesView", "TransmitterCode_2src_2main_8cpp.html#ad2376976bcbc43d81e55e5b58ce2818d", null ],
     [ "UpLog", "TransmitterCode_2src_2main_8cpp.html#a2206c19b4fc075f4c9f1bb957ca89e1d", null ],
     [ "UseFullRate", "TransmitterCode_2src_2main_8cpp.html#a8f53f86499d740b350f7b6d791c90497", null ],
+    [ "WarnUserOfVersionsMismatch", "TransmitterCode_2src_2main_8cpp.html#a7d321cdde32c31b15ca1080fda6743c8", null ],
     [ "WatchDogCallBack", "TransmitterCode_2src_2main_8cpp.html#ae410be09c6f449451d8f2327fd895c7d", null ],
     [ "WordWrap", "TransmitterCode_2src_2main_8cpp.html#a6d6ab5dcee82c319640e3a0a0537ebf7", null ],
     [ "WriteBackup", "TransmitterCode_2src_2main_8cpp.html#a587550ef1abb518e4562576aa2b7bbd7", null ],
