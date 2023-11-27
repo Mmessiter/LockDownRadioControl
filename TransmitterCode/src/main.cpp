@@ -7322,24 +7322,30 @@ FASTRUN void ReadSwitches() // and indeed read digital trims if these are fitted
 
 /************************************************************************************************************/
 
-void CompareVersionNumbers(){   //warn if TX and RX versions don't match
-
-static bool Donethis = false;
-    if (Donethis) return;
-     char TXVersionNumber[] = "Mismatch! TX=";
-     char RXVersionNumber[] = " but RX=";
-     char Prompt[50];
-     char FrontView[] = "page FrontView";
-    if (strlen(ReceiverVersionNumber) > 5) return; // too long for a version number. Probably binding data !
-    Donethis = true;
-    if (strcmp(ReceiverVersionNumber, TransmitterVersionNumber) == 0) {
-        return;
-    }else{
+void WarnUserOfVersionsMismatch(){
+ char TXVersionNumber[] = "Mismatch! TX=";
+        char RXVersionNumber[] = " but RX=";
+        char Prompt[50];
+        char FrontView[]       = "page FrontView";
         strcpy(Prompt, TXVersionNumber);
         strcat(Prompt, TransmitterVersionNumber);
         strcat(Prompt, RXVersionNumber);
         strcat(Prompt, ReceiverVersionNumber);
         MsgBox(FrontView,Prompt);
+}
+
+/************************************************************************************************************/
+
+void CompareVersionNumbers(){   //warn if TX and RX versions don't match
+
+static bool Donethis = false;
+    if (Donethis) return;
+    if (strlen(ReceiverVersionNumber) > 5) return; // too long for a version number. Probably binding data !
+    Donethis = true;
+    if (strcmp(ReceiverVersionNumber, TransmitterVersionNumber) == 0) {
+        return;
+    }else{
+        WarnUserOfVersionsMismatch();
     }
 }
 
