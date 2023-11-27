@@ -342,7 +342,7 @@ void ProdRadio(uint8_t Recon_Ch)
 { // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
     ConfigureRadio();
     CurrentRadio->setChannel(Recon_Ch);
-    DelayMillis(3);
+    delayMicroseconds(200); // NEEDED ???
     TryToConnectNow();
 }
 
@@ -363,7 +363,7 @@ void SwapChipEnableLines()
         digitalWrite(pinCSN2, CSN_ON);
         digitalWrite(pinCE2, CE_ON);
     }
-    DelayMillis(1); // Allow swap over a little time to be noticed ...
+    delayMicroseconds(200); // Allow swap over a little time to be noticed ...
 }
 
 /************************************************************************************************************/
@@ -421,16 +421,14 @@ FASTRUN void Reconnect()
         if (Blinking) BlinkLed();
         KickTheDog();
         if (BoundFlag) KeepSbusHappy(); // Some SBUS systems timeout FAST, so resend old data to keep it happy
-        delayMicroseconds(300);
         CurrentRadio->stopListening();
         CurrentRadio->flush_tx();
         CurrentRadio->flush_rx();
-        DelayMillis(3);                                                   // NEEDED!         
-        ReconnectChannel = *(FHSSRecoveryPointer + ReconnectIndex); // Get a reconnect channel
-        ++ReconnectIndex;
-        if (ReconnectIndex >= RECONNECT_CHANNELS_COUNT + RECONNECT_CHANNELS_OFFSET) ReconnectIndex = RECONNECT_CHANNELS_OFFSET;
+        ReconnectChannel = FHSS_Recovery_Channels[ReconnectIndex];
+        ++ReconnectIndex;           
+        if (ReconnectIndex >= 3) ReconnectIndex = 0;
         CurrentRadio->setChannel(ReconnectChannel);
-        delayMicroseconds(300);
+        delayMicroseconds(200);
         ++Attempts;
         if (Attempts < MAXTRIESPERTRANSCEIVER) {
             TryToConnectNow();

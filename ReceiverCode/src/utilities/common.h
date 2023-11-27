@@ -6,7 +6,7 @@
 #include <Arduino.h>
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   3
-#define RXVERSION_MINIMUS 2 // November 2023
+#define RXVERSION_MINIMUS 3 // November 2023
 
 // #define DB_FHSS
 // #define DB_SENSORS
@@ -84,6 +84,8 @@ bool      INA219Connected       = false; //  Volts from INA219 ?
 bool      MPU6050Connected      = false; //  Accelerometer and Gyro from MPU6050 ?
 uint8_t   ReconnectChannel      = 0;
 
+
+uint8_t FHSS_Recovery_Channels[3] = {15, 71, 82};                       // three channels used for Recovery
 
 uint8_t* FHSSChPointer; // Pointer for FHSS channels' array
 

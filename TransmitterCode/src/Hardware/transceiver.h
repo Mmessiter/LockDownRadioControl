@@ -179,8 +179,8 @@ void TryToReconnect()
     if (BuddyPupilOnPPM) return;
     if (!LedWasGreen) TryOtherPipe(); // BUT NOT while connected to model!
     ++ReconnectionIndex;
-    if (ReconnectionIndex >= FHSS_data::ReconnectChannelsCount) ReconnectionIndex = 0;
-    NextChannel = *(FHSS_data::FHSSRecoveryPointer + FHSS_data::ReconnectChannelsStart + ReconnectionIndex); 
+    if (ReconnectionIndex >= 3) ReconnectionIndex = 0;
+    NextChannel = FHSS_data::FHSS_Recovery_Channels[ReconnectionIndex];
     HopToNextChannel();
 }
 
