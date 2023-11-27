@@ -7339,7 +7339,6 @@ void WarnUserOfVersionsMismatch(){
 
 void CompareVersionNumbers(){   //warn if TX and RX versions don't match
 
-bool VersionsCompared = false;
     if (VersionsCompared) return;
     if (strlen(ReceiverVersionNumber) > 5) return; // too long for a version number. Probably binding data !
     VersionsCompared = true;
