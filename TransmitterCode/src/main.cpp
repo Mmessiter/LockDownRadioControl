@@ -7342,7 +7342,7 @@ static bool Donethis = false;
     if (Donethis) return;
     if (strlen(ReceiverVersionNumber) > 5) return; // too long for a version number. Probably binding data !
     Donethis = true;
-    if (strcmp(ReceiverVersionNumber, TransmitterVersionNumber) == 0) {
+    if (!strcmp(ReceiverVersionNumber, TransmitterVersionNumber)) {
         return;
     }else{
         WarnUserOfVersionsMismatch();
