@@ -187,17 +187,17 @@ void RedLedOn()
 
 void GreenLedOn()
 {
+ 
+  
     if (!ModelMatched) return; // no green led for wrong model
     if (!LedWasGreen) {
         ClearSuccessRate();
         LastShowTime = 0;
     }
-
     TotalLostPackets  = 0;
     TotalGoodPackets  = 0;
     RecentPacketsLost = 0;
     GapLongest        = 0;
-
     if (!LedWasGreen || LedIsBlinking)
     { // no need to repeat unless it is blinking
         if (!LedIsBlinking) {
@@ -607,8 +607,8 @@ FASTRUN void ShowComms()
         for (int i = 0; i < 5; ++i) {
             Vbuf[i] = 0;
         }
-        for (int i = 5; i > 0; --i) {              //**
-            snprintf(nb2, 4, "%X", MacAddress[i]); // heer
+        for (int i = 5; i > 0; --i) {            
+            snprintf(nb2, 4, "%X", MacAddress[i]);
             strcat(Vbuf, nb2);
             strcat(Vbuf, " ");
         }
@@ -2235,7 +2235,7 @@ void GetTeensyMacAddress()
     for (int i = 1; i < 6; ++i) {
         MacAddress[i] = CheckPipeNibbles(MacAddress[i]); // Fix PIPE if needed !
     }
-    //   MacAddress[1] = 0x42; // for buddy box ... heer
+    //   MacAddress[1] = 0x42; // for buddy box ... 
 
 #ifdef DB_BIND
     Serial.println("");
@@ -5556,7 +5556,7 @@ void SelectChannelOrder()
 }
 
 /******************************************************************************************************************************/
-void ResetClock() // heer
+void ResetClock() 
 {
      char page_OptionView2[]    = "page OptionView2";
      char Prompt[]              = "Reset clock?";   
@@ -7319,7 +7319,32 @@ FASTRUN void ReadSwitches() // and indeed read digital trims if these are fitted
         TrimRepeatSpeed = DEFAULTTRIMREPEATSPEED; // Restore default trim repeat speed
     }
 }
+
 /************************************************************************************************************/
+
+void CompareVersionNumbers(){   //warn if TX and RX versions don't match
+
+static bool Donethis = false;
+    if (Donethis) return;
+     char TXVersionNumber[] = "Mismatch! TX=";
+     char RXVersionNumber[] = " but RX=";
+     char Prompt[50];
+     char FrontView[] = "page FrontView";
+    if (strlen(ReceiverVersionNumber) > 5) return; // too long for a version number. Probably binding data !
+    Donethis = true;
+    if (strcmp(ReceiverVersionNumber, TransmitterVersionNumber) == 0) {
+        return;
+    }else{
+        strcpy(Prompt, TXVersionNumber);
+        strcat(Prompt, TransmitterVersionNumber);
+        strcat(Prompt, RXVersionNumber);
+        strcat(Prompt, ReceiverVersionNumber);
+        MsgBox(FrontView,Prompt);
+    }
+}
+
+/************************************************************************************************************/
+
 
 void GetRXVersionNumber()
 {
@@ -7335,6 +7360,7 @@ void GetRXVersionNumber()
     strcat(ReceiverVersionNumber, nbuf);
     Str(nbuf, AckPayload.Byte4, 0);
     strcat(ReceiverVersionNumber, nbuf);
+    CompareVersionNumbers();
 }
 
 /************************************************************************************************************/

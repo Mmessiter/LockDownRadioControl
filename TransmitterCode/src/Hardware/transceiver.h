@@ -180,10 +180,7 @@ void TryToReconnect()
     if (!LedWasGreen) TryOtherPipe(); // BUT NOT while connected to model!
     ++ReconnectionIndex;
     if (ReconnectionIndex >= FHSS_data::ReconnectChannelsCount) ReconnectionIndex = 0;
-    NextChannel = *(FHSS_data::FHSSRecoveryPointer + FHSS_data::ReconnectChannelsStart + ReconnectionIndex); //  First connection on any channel 0 - 83
-
-    Look(NextChannel);
-
+    NextChannel = *(FHSS_data::FHSSRecoveryPointer + FHSS_data::ReconnectChannelsStart + ReconnectionIndex); 
     HopToNextChannel();
 }
 
@@ -249,15 +246,7 @@ FASTRUN void SendData()
         FlushFifos();                                            // This avoids a lockup that happens when the FIFO gets full.
         LoadPacketData();                                        // extra parameters appended to the data packet
         Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30)
-        if (Radio1.write(&CompressedData, SizeOfCompressedData)) {
-            // if (FirstFHSSConnection){
-            //     ReConnectChannel = CurrentChannel;
-            //     FirstFHSSConnection = false;
-            // }
-            SuccessfulPacket();
-            } else {
-                FailedPacket();
-            }
+        if (Radio1.write(&CompressedData, SizeOfCompressedData)) {SuccessfulPacket();} else {FailedPacket();}
         if (BuddyMasterOnWireless) SendSpecialPacket();          // takes about 4 - 5 ms. Gets buddy control data in ACK payload   
     }
 }
