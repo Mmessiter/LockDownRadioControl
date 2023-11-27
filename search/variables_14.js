@@ -19,7 +19,7 @@ var searchData=
   ['totalgoodpackets_16',['TotalGoodPackets',['../1Definitions_8h.html#aad84d73721a07bae1ea3f8f72d6bd207',1,'1Definitions.h']]],
   ['totallostpackets_17',['TotalLostPackets',['../1Definitions_8h.html#add763855be5b4be56770f98ca20d0ad4',1,'1Definitions.h']]],
   ['transmitterlastmanaged_18',['TransmitterLastManaged',['../1Definitions_8h.html#a1942ba53f270789e316c552c4a81b762',1,'1Definitions.h']]],
-  ['transmitterversionnumber_19',['TransmitterVersionNumber',['../1Definitions_8h.html#a2877a4cd1def41fb3d62006d88ef5de6',1,'1Definitions.h']]],
+  ['transmitterversionnumber_19',['TransmitterVersionNumber',['../1Definitions_8h.html#a38dd5dd256d7642a4c07bec031798558',1,'1Definitions.h']]],
   ['trimclicks_20',['TrimClicks',['../1Definitions_8h.html#ae72cd49c59d06c6160b52860f2c73f1a',1,'1Definitions.h']]],
   ['trimdefined_21',['TrimDefined',['../1Definitions_8h.html#a637b67a91d76737f0574a633348cc114',1,'1Definitions.h']]],
   ['trimmultiplier_22',['TrimMultiplier',['../1Definitions_8h.html#ae46d51cc5056395aceef8ac04871e00c',1,'1Definitions.h']]],
