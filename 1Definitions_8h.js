@@ -488,6 +488,7 @@ var 1Definitions_8h =
     [ "FailSafeTimer", "1Definitions_8h.html#abe06b5671242a2e75a695a87a3159a00", null ],
     [ "FHSS_Channels", "1Definitions_8h.html#a181cb451e5e95fa7cfcb19fff25b9318", null ],
     [ "FHSS_Channels1", "1Definitions_8h.html#ad8722ceeae8ace980fb37a0bb74579d2", null ],
+    [ "FHSS_Recovery_Channels", "1Definitions_8h.html#aa1f9b3ad9f232675b6ecfa6fcbdf2597", null ],
     [ "FHSSChPointer", "1Definitions_8h.html#a9d000f86fb280637a15ae47d0a339023", null ],
     [ "FHSSRecoveryPointer", "1Definitions_8h.html#a3bc5776f7d9f04adaf25d4659c02f92e", null ],
     [ "FileCheckSum", "1Definitions_8h.html#a3599a8cc821fe5b0b952a192a6992144", null ],

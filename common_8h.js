@@ -53,6 +53,7 @@ var common_8h =
     [ "FailSafeSave", "common_8h.html#a332eaa61dd85cd649cf62de2345e246e", null ],
     [ "FHSS_Channels", "common_8h.html#ad8056611eb984e8cacf9f0e526815a99", null ],
     [ "FHSS_Channels1", "common_8h.html#aeea38114c49f6b6dbe375b7a64acdccb", null ],
+    [ "FHSS_Recovery_Channels", "common_8h.html#a45400cd0009b7631aa0d578dbbac2a90", null ],
     [ "FHSSChPointer", "common_8h.html#a76b48a1dfbe2bd97ee5e0479ff16e8ef", null ],
     [ "FHSSRecoveryPointer", "common_8h.html#a90e15e9a52f172f55e92f5c86bcb5b29", null ],
     [ "FrequencyCount", "common_8h.html#a2cecb6d8a82a88635e2c10438fedf092", null ],
