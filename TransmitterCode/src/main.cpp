@@ -167,6 +167,7 @@ void RedLedOn()
         ModelsMacUnion.Val64 = 0;
         RangeTestGoodPackets = 0;
         RecentPacketsLost    = 0;
+        VersionsCompared     = false;
         SetUKFrequencies();
         if (CurrentView == FRONTVIEW) {
             SendText(FrontView_Connected, na);
@@ -7338,10 +7339,10 @@ void WarnUserOfVersionsMismatch(){
 
 void CompareVersionNumbers(){   //warn if TX and RX versions don't match
 
-static bool Donethis = false;
-    if (Donethis) return;
+bool VersionsCompared = false;
+    if (VersionsCompared) return;
     if (strlen(ReceiverVersionNumber) > 5) return; // too long for a version number. Probably binding data !
-    Donethis = true;
+    VersionsCompared = true;
     if (!strcmp(ReceiverVersionNumber, TransmitterVersionNumber)) {
         return;
     }else{
