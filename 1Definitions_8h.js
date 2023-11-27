@@ -721,6 +721,7 @@ var 1Definitions_8h =
     [ "UseMacros", "1Definitions_8h.html#a42a6363bff83773c1b99caa06aebb1f5", null ],
     [ "UseMotorKill", "1Definitions_8h.html#ad76445c097f9d33a6935be5c2489bd34", null ],
     [ "ValueSent", "1Definitions_8h.html#ace7e8fecf64d2c788fd0e7d5fe0c47fe", null ],
+    [ "VersionsCompared", "1Definitions_8h.html#a2789db08c072ee75b4349d64a8386c52", null ],
     [ "WarningSound", "1Definitions_8h.html#a31b92b91cb0e2c3cb18a38c4f9095616", null ],
     [ "WarningTimer", "1Definitions_8h.html#a762d0bd8b884aee82ec41f594c470b87", null ],
     [ "WatchDogConfig", "1Definitions_8h.html#abf278d2a0f4b093a96fd83a6f635d8c8", null ],
