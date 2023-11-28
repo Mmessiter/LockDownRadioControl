@@ -209,7 +209,13 @@ uint8_t       YearGPS;
 uint8_t       HoursGPS;
 uint8_t       MinsGPS;
 uint8_t       SecsGPS;
-uint16_t      CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
+
+struct  CD{
+    uint16_t      Dataflags = 0;                    // might send 32 bytes eventually
+    uint16_t      CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
+};
+CD DataToSend;
+
 bool          SensorHubDead       = false;
 uint32_t      NewConnectionMoment = 0;
 bool          QNHSent             = false;

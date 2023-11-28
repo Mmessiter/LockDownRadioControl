@@ -107,15 +107,15 @@ void ReadExtraParameters()
             break;
 
         case 6:
-          ++ Randomized_Recovery_Channels_Counter;
-            if (Randomized_Recovery_Channels_Counter < 20) { // not forever!
+            if (Randomized_Recovery_Channels_Counter < 30) { // not forever!
+                ++Randomized_Recovery_Channels_Counter;
                 Randomized_Recovery_Channels[0] = ReceivedData[CHANNELSUSED + 1];
                 Randomized_Recovery_Channels[1] = ReceivedData[CHANNELSUSED + 2];
                 UseRandomizedRecoveryChannels();                             // Use randomized reconnection channels so that won't be the same as other user 
                 
             }
             case 7:
-            if (Randomized_Recovery_Channels_Counter < 20) { // not forever!
+            if (Randomized_Recovery_Channels_Counter < 30) { // not forever!
                 Randomized_Recovery_Channels[2] = ReceivedData[CHANNELSUSED + 1];
                 UseRandomizedRecoveryChannels();                             // Use randomized reconnection channels so that won't be the same as other user 
             }
@@ -142,7 +142,7 @@ void MapToSBUS()
 /************************************************************************************************************/
 void UseReceivedData()
 {
-    Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS); // Decompress only the most recent data
+    Decompress(ReceivedData, DataToSend.CompressedData, UNCOMPRESSEDWORDS); // Decompress only the most recent data
     ReadExtraParameters();                                       // Look at parameters sent with packet
     MapToSBUS();                                                 // Get SBUS data ready
     LastPacketArrivalTime = millis();                            // Note the arrival time
@@ -164,8 +164,8 @@ bool ReadData()
         LoadAckPayload();
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
-        DelayMillis(5);                                                // must allow time for the ack payload to be sent
-        CurrentRadio->read(&CompressedData, sizeof(CompressedData));   //  ** >> Read new data from master << **
+        DelayMillis(6);                                                
+        CurrentRadio->read(&DataToSend.CompressedData, 30);   //  ** >> Read new data from master << **
         Connected = true;
         NewData   = true;
     }
@@ -451,7 +451,7 @@ void ProdRadio(uint8_t Recon_Ch)
 { // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
     ConfigureRadio();
     CurrentRadio->setChannel(Recon_Ch);
-    delayMicroseconds(200); // NEEDED ???
+   delayMicroseconds(200); // NEEDED ???
     TryToConnectNow();
 }
 
@@ -472,7 +472,7 @@ void SwapChipEnableLines()
         digitalWrite(pinCSN2, CSN_ON);
         digitalWrite(pinCE2, CE_ON);
     }
-    delayMicroseconds(200); // Allow swap over a little time to be noticed ...
+   delayMicroseconds(200); // Allow swap over a little time to be noticed ...
 }
 
 /************************************************************************************************************/
@@ -490,6 +490,7 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch)
     }
     SwapChipEnableLines();
     ProdRadio(Recon_Ch);
+    DelayMillis(1);
 }
 #endif // defined (SECOND_TRANSCEIVER)
 
@@ -531,13 +532,15 @@ FASTRUN void Reconnect()
         KickTheDog();
         if (BoundFlag) KeepSbusHappy(); // Some SBUS systems timeout FAST, so resend old data to keep it happy
         CurrentRadio->stopListening();
+       delayMicroseconds(200);
         CurrentRadio->flush_tx();
         CurrentRadio->flush_rx();
+       delayMicroseconds(200);
         ReconnectChannel = FHSS_Recovery_Channels[ReconnectIndex];
         ++ReconnectIndex;           
         if (ReconnectIndex >= 3) ReconnectIndex = 0;
         CurrentRadio->setChannel(ReconnectChannel);
-        delayMicroseconds(200);
+       delayMicroseconds(200);
         ++Attempts;
         if (Attempts < MAXTRIESPERTRANSCEIVER) {
             TryToConnectNow();
@@ -562,8 +565,8 @@ FASTRUN void Reconnect()
     }   //  cannot pass here if not connected
         //  must have connected by here
        
-        //  Look1 ("Reconnected on channel ");
-        //  Look  (ReconnectChannel);
+         Look1 ("Reconnected on channel ");
+          Look  (ReconnectChannel);
        
   
     FailSafeSent = false;

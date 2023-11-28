@@ -754,7 +754,14 @@ uint8_t         SaveBank             = 0;
 bool            FailSafeChannel[CHANNELSUSED + 1];
 bool            SaveFailSafeNow = false;
 uint32_t        FailSafeTimer;
-uint16_t        CompressedData[COMPRESSEDWORDS]; // = 15 words, 30 bytes
+
+struct CD{
+    uint16_t        DataFlags = 42;
+    uint16_t        CompressedData[COMPRESSEDWORDS]; // = 15 words, 30 bytes
+};
+CD Datatosend;
+
+
 uint8_t         SizeOfCompressedData;            // = 30
 uint32_t        Inactivity_Timeout = INACTIVITYTIMEOUT;
 uint32_t        Inactivity_Start   = 0;

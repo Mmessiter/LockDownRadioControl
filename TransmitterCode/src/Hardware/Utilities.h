@@ -923,6 +923,9 @@ bool AnyMatches(uint8_t a, uint8_t b, uint8_t c)
 
 // ******************************************************************************************************************************
 void RandomiseTheRecoveryChannels(){
+
+  //  return;
+
     if (RTC.read(tm)) {
         ReadTheRTC();
         randomSeed(tm.Second);

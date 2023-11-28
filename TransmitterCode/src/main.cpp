@@ -2377,7 +2377,7 @@ FLASHMEM void setup()
     //  ***************************************************************************************
     BoundFlag = false;
     StartInactvityTimeout();
-    SizeOfCompressedData = sizeof(CompressedData);
+    SizeOfCompressedData = sizeof(Datatosend.CompressedData);
     GetTXVersionNumber();
 
     SetUKFrequencies();
@@ -7764,7 +7764,7 @@ void DoWirelessBuddyListen(){                                // For Slave only
     FixMotorChannel(); 
     ShowServoPos();
     LoadPacketData();                                        // extra parameters appended to the data packet
-    Compress(CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30)
+    Compress(Datatosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30)
     GetSpecialPacket();                                      // Get the special packet and send our control data in the ask payload
 }
 /************************************************************************************************************/
