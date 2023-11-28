@@ -2,7 +2,7 @@ var searchData=
 [
   ['radioswaps_0',['RadioSwaps',['../common_8h.html#aff48e1463bf663c156032302d0161c98',1,'RadioSwaps():&#160;common.h'],['../1Definitions_8h.html#a2f472b4c6d8312622d666f82bc1c78fb',1,'RadioSwaps():&#160;1Definitions.h']]],
   ['randomized_5frecovery_5fchannels_1',['Randomized_Recovery_Channels',['../common_8h.html#a1a5ac6626addce37be03f2bcbbcec84b',1,'Randomized_Recovery_Channels():&#160;common.h'],['../namespaceFHSS__data.html#a35a97bad66458445650bb921487518d8',1,'FHSS_data::Randomized_Recovery_Channels()']]],
-  ['randomized_5frecovery_5fchannels_5fcounter_2',['Randomized_Recovery_Channels_Counter',['../common_8h.html#ac162dc8abf35a8a2d6adb5138f762ccc',1,'Randomized_Recovery_Channels_Counter():&#160;common.h'],['../1Definitions_8h.html#ac162dc8abf35a8a2d6adb5138f762ccc',1,'Randomized_Recovery_Channels_Counter():&#160;1Definitions.h']]],
+  ['randomized_5frecovery_5fchannels_5fcounter_2',['Randomized_Recovery_Channels_Counter',['../common_8h.html#a2d439a8558cff2d7ad534d1496dd6307',1,'Randomized_Recovery_Channels_Counter():&#160;common.h'],['../1Definitions_8h.html#a2d439a8558cff2d7ad534d1496dd6307',1,'Randomized_Recovery_Channels_Counter():&#160;1Definitions.h']]],
   ['rangetestgoodpackets_3',['RangeTestGoodPackets',['../1Definitions_8h.html#a8a5b55d644bb404cd6cdf61c5a85f822',1,'1Definitions.h']]],
   ['rangeteststart_4',['RangeTestStart',['../1Definitions_8h.html#a8e7018af38f2b48314416c9559cb39e0',1,'1Definitions.h']]],
   ['readtimeout_5',['readTimeout',['../classI2Cdev.html#ae2125796e0948127fc15031650111e82',1,'I2Cdev']]],
