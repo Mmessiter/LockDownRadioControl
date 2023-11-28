@@ -60,73 +60,6 @@
 
 
 
-Adafruit_INA219     ina219;
-bool                SensorHubConnected = false; //  GPS (Adafruit Ultimate GPS) ?
-Servo               MCMServo[SERVOSUSED];
-uint8_t             PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 9 PWMs, remaining 7 via sbus
-SBUS                MySbus(SBUSPORT);                                  // SBUS
-PulsePositionOutput PPMOutput;                                         // PPM
-
-bool          BoundFlag      = false; /** indicates if receiver paired with transmitter */
-bool          ServosAttached = false;
-uint16_t      SbusChannels[CHANNELSUSED + 1]; // Just one spare
-uint32_t      SBUSTimer = 0;
-bool          FailSafeChannel[17];
-bool          FailSafeDataLoaded = false;
-uint8_t       FS_byte1           = 0; // All 16 failsafe channel flags are in these two bytes
-uint8_t       FS_byte2           = 0;
-uint32_t      ReconnectedMoment;
-uint16_t      BaroAltitude;
-float         BaroTemperature;
-float         INA219Volts       = 0;
-uint32_t      SensorTime        = 0;
-uint32_t      SensorHubAccessed = 0;
-uint16_t      Qnh               = 0; // Pressure at sea level here and now (defined at TX)
-uint16_t      OldQnh            = 0;
-uint8_t       SatellitesGPS;
-float         LatitudeGPS;
-float         LongitudeGPS;
-float         SpeedGPS;
-float         AngleGPS;
-bool          GpsFix = false;
-float         AltitudeGPS;
-float         DistanceGPS;
-float         CourseToGPS;
-uint8_t       DayGPS;
-uint8_t       MonthGPS;
-uint8_t       YearGPS;
-uint8_t       HoursGPS;
-uint8_t       MinsGPS;
-uint8_t       SecsGPS;
-uint16_t      CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
-bool          SensorHubDead       = false;
-uint32_t      NewConnectionMoment = 0;
-bool          QNHSent             = false;
-uint8_t       MacAddress[9]       = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-bool          ModelMatched        = false;
-uint8_t       TheReceivedPipe[6];
-uint8_t       TheCurrentPipe[6];
-bool          FirstConnection = true;
-bool          FailedSafe      = true; // Starting up as the same as after failsafe
-uint8_t       PPMChannelOrder[CHANNELSUSED] = {2, 3, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
-uint8_t       PPMChannelCount               = 8;
-bool          UseSBUS                       = true;
-bool          NewData                       = false;
-uint16_t      pcount                        = 0; // how many pipes so far received from TX
-bool          Blinking                      = false;
-uint8_t       BlinkValue                    = 1;
-uint32_t      BlinkTimer                    = 0;
-uint8_t       MacAddressSentCounter         = 0;
-WDT_T4<WDT3>  TeensyWatchDog;
-WDT_timings_t WatchDogConfig;
-uint32_t      LastDogKick = 0;
-bool          LedIsOn     = false;
-uint8_t*      PipePointer;
-uint8_t       Pipnum         = PIPENUMBER;
-uint8_t       DefaultPipe[6] = {0x23, 0x94, 0x3e, 0xbe, 0xb7, 0x00};
-uint8_t       CurrentPipe[6];
-
-
 void DelayMillis(uint16_t ms) // This replaces any delay() calls
 {
     uint32_t tt = millis();
@@ -156,17 +89,7 @@ void LoadFailSafeData()
 #endif
 }
 
-/************************************************************************************************************/
 
-/** Map servo channels' data from ReceivedData buffer into SbusChannels buffer */
-void MapToSBUS()
-{
-    if (Connected) {
-        for (int j = 0; j < CHANNELSUSED; ++j) {
-            SbusChannels[j] = static_cast<uint16_t>(map(ReceivedData[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX));
-        }
-    }
-}
 
 /************************************************************************************************************/
 
@@ -235,38 +158,8 @@ void FailSafe()
     FailSafeSent = true; // Once is enough
     FailedSafe   = true;
     TurnLedOff();
+    UseDefaultRecoveryChannels();
     MacAddressSentCounter = 0;
-}
-/************************************************************************************************************/
-void UseReceivedData()
-{
-    Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS); // Decompress only the most recent data
-    ReadExtraParameters();                                       // Look at parameters sent with packet
-    MapToSBUS();                                                 // Get SBUS data ready
-    LastPacketArrivalTime = millis();                            // Note the arrival time
-    if (HopNow) {                                                // This flag gets set in LoadAckPayload();
-        HopToNextChannel();                                      // Ack payload instructed us to Hop at next opportunity. So hop now ...
-        HopNow   = false;                                        // ... and clear the flag,
-        HopStart = millis();                                     // ... and start the timer.
-    }
-}
-
-/************************************************************************************************************/
-bool ReadData()
-{
-    Connected = false;
-    if (CurrentRadio->available(&Pipnum))
-    { // This is the only call that actually reads the radio
-        LoadAckPayload();
-        CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
-        CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
-        DelayMillis(5);                                                // must allow time for the ack payload to be sent
-        CurrentRadio->read(&CompressedData, sizeof(CompressedData));   //  ** >> Read new data from master << **
-        Connected = true;
-        NewData   = true;
-    }
-    if (Connected) UseReceivedData();
-    return Connected;
 }
 
 /************************************************************************************************************/
@@ -392,60 +285,21 @@ void SendQnhToSensorHub()
 }
 
 /************************************************************************************************************/
-/** Read extra parameters from the transmitter.
- * extra parameters are sent using the last few words bytes in every data packet.
- * the parameter sent is defined by the packet number & the packet number defined the transmitter.
- */
-void ReadExtraParameters()
+
+template<typename any>
+void Look(const any& value) // this is a template function that can print anything but cannot be used to change anything
 {
-    uint16_t TwoBytes = 0;
-    uint8_t  SwapWaveBand;
-    PacketNumber = ReceivedData[CHANNELSUSED];
-
-    switch (PacketNumber) {
-        case 0:
-            //  bn = ReceivedData[CHANNELSUSED + 2]; // not used yet
-
-            FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
-            if (FailSafeSave) {
-                TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
-                RebuildFlags(FailSafeChannel, TwoBytes);
-            }
-            break;
-        case 1:
-            FS_byte1 = ReceivedData[CHANNELSUSED + 1]; // These 2 bytes are 16 failsafe flags
-            FS_byte2 = ReceivedData[CHANNELSUSED + 2]; // These 2 bytes are 16 failsafe flags
-            break;
-        case 2:
-            Qnh = (ReceivedData[CHANNELSUSED + 1]) << 8; // 16 bits sent as two bytes for pressure here at sea level
-            Qnh += ReceivedData[CHANNELSUSED + 2];
-            if (OldQnh != Qnh) SendQnhToSensorHub();
-            OldQnh = Qnh; // Send new one once only
-            break;
-        case 3:
-            if ((ReceivedData[CHANNELSUSED + 2]) == 255) { // Mark this location
-                MarkHere();
-                ReceivedData[CHANNELSUSED + 2] = 0; // ... Once only
-            }
-            break;
-        case 4:
-            ModelMatched = ReceivedData[CHANNELSUSED + 1];
-            SwapWaveBand = ReceivedData[CHANNELSUSED + 2];
-            if (SwapWaveBand > 0) {
-                if (SwapWaveBand == 1) SetUKFrequencies();
-                if (SwapWaveBand == 2) SetTestFrequencies();
-            }
-            break;
-        case 5:
-            UseSBUS         = (bool)ReceivedData[CHANNELSUSED + 1]; // if false means PPM
-            PPMChannelCount = ReceivedData[CHANNELSUSED + 2];
-            break;
-
-        default:
-            break;
-    }
-    return;
+    Serial.println(value);
 }
+
+/************************************************************************************************************/
+template<typename any>
+void Look1(const any& value) // this is a template function that can print anything but cannot be used to change anything
+{
+    Serial.print(value);
+}
+
+
 // ***************************************************************************************************************************************************
 // Here the GPS (Sensor) HUB is asked for 7 bytes of data over I2C.
 // The first IDLEN (=3) bytes are the ID (LAT, LNG, etc...)
@@ -596,44 +450,6 @@ void SensorHubHasFailed()
     SensorHubDead   = true; // This flag inhibits further attempts to call the hub, which might save a model.
 }
 
-// ******************************************************************************************************************************************************************
-
-FASTRUN void ReceiveData()
-{
-    uint32_t TimeTest;
-
-    if (Connected) {
-
-        if ((millis() - SensorHubAccessed) > 10) {                               //  Reading Sensor hub 100 x per second should be enough
-            if (millis() - LastPacketArrivalTime < 1) {                          //  If, and only if, we have still absolutely loads of time, do stuff now while waiting ...
-                SensorHubAccessed = millis();                                    //  Note the moment of last attempted read.
-                if (!SensorHubDead) {                                            //  Better check it hasn't died.
-                    TimeTest = millis();                                         //  Time the I2C calls. If too long, don't repeat it ... save the model.
-                    if (SensorHubConnected) ReadTheSensorHub();                  //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
-                    if (INA219Connected) INA219Volts = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected separately (as will be needed on 'planes with no GPS fitted.)
-                    if ((millis() - NewConnectionMoment) > 5000) {
-                        if ((millis() - TimeTest) > 6) SensorHubHasFailed(); //  If sensor hub and/or INA219 fails, don't bother calling either again (It normally returns within 2 ms.
-                    }
-                }
-            }
-        }
-    }
-    if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {
-        Reconnect(); // Try to reconnect.
-    }
-
-    if (!ReadData()) {
-        if (millis() - SBUSTimer >= SBUSRATE) { // No new packet yet - but maybe it's time to dispatch the last?
-            if (BoundFlag && (millis() > 10000)) {
-                if (Connected) {
-                    KeepSbusHappy(); // if it's time - send a SBUS packet. It might be new data.
-                    --SbusRepeats;   // It's not really a "repeat".
-                }
-            }
-        }
-    }
-}
-/************************************************************************************************************/
 
 // Discover what was connected on I2C
 

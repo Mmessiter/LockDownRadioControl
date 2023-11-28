@@ -106,6 +106,189 @@ struct Payload
 Payload AckPayload;
 uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed etc. (=6)
 
+
+
+// ******************************************************************************************************************************
+void UseRandomizedRecoveryChannels(){
+
+      FHSS_Recovery_Channels[0] =  Randomized_Recovery_Channels[0];
+      FHSS_Recovery_Channels[1] =  Randomized_Recovery_Channels[1];
+      FHSS_Recovery_Channels[2] =  Randomized_Recovery_Channels[2];
+}
+// ******************************************************************************************************************************
+void UseDefaultRecoveryChannels(){
+       FHSS_Recovery_Channels[0]        =  Default_Recovery_Channels[0];
+       FHSS_Recovery_Channels[1]        =  Default_Recovery_Channels[1];
+       FHSS_Recovery_Channels[2]        =  Default_Recovery_Channels[2];
+       Randomized_Recovery_Channels[0]  =  Default_Recovery_Channels[0]; // reset Randomized_Recovery_Channels to default in case they are used too early
+       Randomized_Recovery_Channels[1]  =  Default_Recovery_Channels[1];
+       Randomized_Recovery_Channels[2]  =  Default_Recovery_Channels[2];
+
+       Randomized_Recovery_Channels_Counter = 0;
+}
+
+/************************************************************************************************************/
+/** Read extra parameters from the transmitter.
+ * extra parameters are sent using the last few words bytes in every data packet.
+ * the parameter sent is defined by the packet number & the packet number defined the transmitter.
+ */
+void ReadExtraParameters()
+{
+    uint16_t TwoBytes = 0;
+    uint8_t  SwapWaveBand;
+    PacketNumber = ReceivedData[CHANNELSUSED];
+   
+
+    switch (PacketNumber) {
+        case 0:
+           
+
+            FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
+        //  GuessWhat = ReceivedData[CHANNELSUSED + 2]; // not used yet
+        //  GuessWhat = ReceivedData[CHANNELSUSED + 3]; // not used yet
+            if (FailSafeSave) {
+                TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
+                RebuildFlags(FailSafeChannel, TwoBytes);
+            }
+            break;
+        case 1:
+            FS_byte1  = ReceivedData[CHANNELSUSED + 1]; // These 2 bytes are 16 failsafe flags
+            FS_byte2  = ReceivedData[CHANNELSUSED + 2]; // These 2 bytes are 16 failsafe flags
+        //  GuessWhat = ReceivedData[CHANNELSUSED + 3]; // not used yet
+            break;
+        case 2:
+            Qnh = (ReceivedData[CHANNELSUSED + 1]) << 8; // 16 bits sent as two bytes for pressure here at sea level
+            Qnh += ReceivedData[CHANNELSUSED + 2];
+        //  GuessWhat = ReceivedData[CHANNELSUSED + 3]; // not used yet
+            if (OldQnh != Qnh) SendQnhToSensorHub();
+            OldQnh = Qnh; // Send new one once only
+            break;
+        case 3:
+        //  GuessWhat = ReceivedData[CHANNELSUSED + 1]; // not used yet
+        //  GuessWhat = ReceivedData[CHANNELSUSED + 0]; // not used yet
+            if ((ReceivedData[CHANNELSUSED + 2]) == 255) { // Mark this location
+                MarkHere();
+                ReceivedData[CHANNELSUSED + 2] = 0; // ... Once only
+            }
+            break;
+        case 4:
+            ModelMatched = ReceivedData[CHANNELSUSED + 1];
+            SwapWaveBand = ReceivedData[CHANNELSUSED + 2];
+        //  GuessWhat    = ReceivedData[CHANNELSUSED + 3]; // not used yet
+            if (SwapWaveBand > 0) {
+                if (SwapWaveBand == 1) SetUKFrequencies();
+                if (SwapWaveBand == 2) SetTestFrequencies();
+            }
+            break;
+        case 5:
+            UseSBUS         = (bool)ReceivedData[CHANNELSUSED + 1]; // if false means PPM
+            PPMChannelCount = ReceivedData[CHANNELSUSED + 2];
+        //  GuessWhat       = ReceivedData[CHANNELSUSED + 3]; // not used yet
+            break;
+
+        case 6:
+        
+            Randomized_Recovery_Channels[0] = ReceivedData[CHANNELSUSED + 1];
+            Randomized_Recovery_Channels[1] = ReceivedData[CHANNELSUSED + 2];
+            Randomized_Recovery_Channels[2] = ReceivedData[CHANNELSUSED + 3];
+            ++ Randomized_Recovery_Channels_Counter;
+            if (Randomized_Recovery_Channels_Counter < 10) {
+                UseRandomizedRecoveryChannels();                             // Use randomized reconnection channels so that won't be the same as other users
+            }
+
+        default:
+            break;
+    }
+    return;
+}
+
+/************************************************************************************************************/
+
+/** Map servo channels' data from ReceivedData buffer into SbusChannels buffer */
+void MapToSBUS()
+{
+    if (Connected) {
+        for (int j = 0; j < CHANNELSUSED; ++j) {
+            SbusChannels[j] = static_cast<uint16_t>(map(ReceivedData[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX));
+        }
+    }
+}
+/************************************************************************************************************/
+void UseReceivedData()
+{
+    Decompress(ReceivedData, CompressedData, UNCOMPRESSEDWORDS); // Decompress only the most recent data
+    ReadExtraParameters();                                       // Look at parameters sent with packet
+    MapToSBUS();                                                 // Get SBUS data ready
+    LastPacketArrivalTime = millis();                            // Note the arrival time
+    if (HopNow) {                                                // This flag gets set in LoadAckPayload();
+        HopToNextChannel();                                      // Ack payload instructed us to Hop at next opportunity. So hop now ...
+        HopNow   = false;                                        // ... and clear the flag,
+        HopStart = millis();                                     // ... and start the timer.
+    }
+}
+
+
+
+/************************************************************************************************************/
+bool ReadData()
+{
+    Connected = false;
+    if (CurrentRadio->available(&Pipnum))
+    { // This is the only call that actually reads the radio
+        LoadAckPayload();
+        CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
+        CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
+        DelayMillis(5);                                                // must allow time for the ack payload to be sent
+        CurrentRadio->read(&CompressedData, sizeof(CompressedData));   //  ** >> Read new data from master << **
+        Connected = true;
+        NewData   = true;
+    }
+    if (Connected) UseReceivedData();
+    return Connected;
+}
+
+
+// ******************************************************************************************************************************************************************
+
+FASTRUN void ReceiveData()
+{
+    uint32_t TimeTest;
+
+    if (Connected) {
+
+        if ((millis() - SensorHubAccessed) > 10) {                               //  Reading Sensor hub 100 x per second should be enough
+            if (millis() - LastPacketArrivalTime < 1) {                          //  If, and only if, we have still absolutely loads of time, do stuff now while waiting ...
+                SensorHubAccessed = millis();                                    //  Note the moment of last attempted read.
+                if (!SensorHubDead) {                                            //  Better check it hasn't died.
+                    TimeTest = millis();                                         //  Time the I2C calls. If too long, don't repeat it ... save the model.
+                    if (SensorHubConnected) ReadTheSensorHub();                  //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
+                    if (INA219Connected) INA219Volts = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected separately (as will be needed on 'planes with no GPS fitted.)
+                    if ((millis() - NewConnectionMoment) > 5000) {
+                        if ((millis() - TimeTest) > 6) SensorHubHasFailed(); //  If sensor hub and/or INA219 fails, don't bother calling either again (It normally returns within 2 ms.
+                    }
+                }
+            }
+        }
+    }
+    if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {
+        Reconnect(); // Try to reconnect.
+    }
+
+    if (!ReadData()) {
+        if (millis() - SBUSTimer >= SBUSRATE) { // No new packet yet - but maybe it's time to dispatch the last?
+            if (BoundFlag && (millis() > 10000)) {
+                if (Connected) {
+                    KeepSbusHappy(); // if it's time - send a SBUS packet. It might be new data.
+                    --SbusRepeats;   // It's not really a "repeat".
+                }
+            }
+        }
+    }
+}
+/************************************************************************************************************/
+
+
+
 /************************************************************************************************************/
 
 // This allows a new array of pseudo-random channel numbers to be used.
@@ -450,10 +633,10 @@ FASTRUN void Reconnect()
                 if (!FailSafeSent) FailSafe();
             }
         }
-    } //  cannot pass here if not connected
-      //  must have connected by here
-      //  Serial.print ("Reconnected on: ");
-      //  Serial.println(ReconnectChannel);
+    }   //  cannot pass here if not connected
+        //  must have connected by here
+        // Look1 ("Reconnected on channel ");
+        // Look  (ReconnectChannel);
 
 
     FailSafeSent = false;

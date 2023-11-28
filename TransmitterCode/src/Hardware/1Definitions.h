@@ -567,6 +567,9 @@ void             RationaliseBuddy();
 void             RestoreDimness();
 void             ShowConnectionQuality();
 void             GetSlaveChannelValuesWireless();
+void             RandomiseTheRecoveryChannels();
+void             UseRandomizedRecoveryChannels();
+void             UseDefaultRecoveryChannels();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
@@ -810,8 +813,6 @@ uint32_t  SwapWaveBandTimer   = 0;
 uint8_t   SwapWaveBand        = 0;
 uint16_t  TrimMultiplier      = 2; // How much to multiply trim by
 uint8_t   DateFix             = 0;
-// bool      b5isGrey            = false;
-// bool      b12isGrey           = false;
 uint16_t  BackGroundColour    = 214;
 uint16_t  ForeGroundColour    = White;
 uint16_t  HighlightColour     = Yellow;
@@ -839,7 +840,6 @@ bool      AnnounceConnected   = true;
 bool      CopyTrimsToAll      = true;
 uint16_t  ReversedChannelBITS = 0; // 16 BIT for 16 Channels
 uint16_t  SavedLineX          = 12345;
-//bool      FirstFHSSConnection = true;
 uint8_t   ReConnectChannel    = 0;
 File      LogFileNumber;
 bool      LogFileOpen             = false;
@@ -922,7 +922,9 @@ bool     VersionsCompared    = false;
 
 namespace FHSS_data {
     
-uint8_t FHSS_Recovery_Channels[3] = {15, 71, 82};                       // three channels used for Recovery
+uint8_t Default_Recovery_Channels[3]    = {15, 71, 82};                       // three default channels used for Recovery
+uint8_t Randomized_Recovery_Channels[3] = {15, 71, 82};                       // three randomised channels used for Recovery
+uint8_t Used_Recovery_Channels[3]       = {15, 71, 82};                       // the ones to use
 
 uint8_t FHSS_Channels1[42] = {93, 111, 107, 103, 106, 97, 108, 102, 118, // TEST array
                               104, 101, 109, 98, 113, 124, 115, 91, 96, 85, 117, 89, 99, 114, 87, 112,

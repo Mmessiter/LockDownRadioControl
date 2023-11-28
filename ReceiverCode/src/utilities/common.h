@@ -14,10 +14,10 @@
 // #define DB_FAILSAFE
 // #define DB_RXTIMERS
 
-//**************************************************************************************************************************
-#define SECOND_TRANSCEIVER    // >>>>>>>>>>>>>>>>   ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< ****
+
+#define SECOND_TRANSCEIVER    // >>>>>>>>>>>>>>>>   ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 #define DATARATE RF24_250KBPS // RF24_250KBPS, RF24_1MBPS, RF24_2MBPS
-//**************************************************************************************************************************
+
 
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
@@ -85,7 +85,9 @@ bool      MPU6050Connected      = false; //  Accelerometer and Gyro from MPU6050
 uint8_t   ReconnectChannel      = 0;
 
 
-uint8_t FHSS_Recovery_Channels[3] = {15, 71, 82};                       // three channels used for Recovery
+uint8_t FHSS_Recovery_Channels[3]           = {15, 71, 82};                       // three channels used for Recovery
+uint8_t Randomized_Recovery_Channels[3]     = {15, 71, 82};                       // later these three channels used for Recovery get randomized
+uint8_t Default_Recovery_Channels[3]        = {15, 71, 82};                       // three channels used for Recovery
 
 uint8_t* FHSSChPointer; // Pointer for FHSS channels' array
 
@@ -110,5 +112,93 @@ void DelayMillis(uint16_t ms);
 void PIDEntryPoint();
 void DoStabilsation();
 void ReadExtraParameters();
+FASTRUN void ReadTheSensorHub();
+void SensorHubHasFailed();
+FASTRUN void Reconnect();
+void LoadAckPayload();
+void Decompress(uint16_t* uncompressed_buf, uint16_t* compressed_buf, uint8_t uncompressed_size);
+void KeepSbusHappy();
+void RebuildFlags(bool* f, uint16_t tb);
+void SendQnhToSensorHub();
+void MarkHere();
+void SetTestFrequencies();
+void UseDefaultRecoveryChannels();
+void UseRandomizedRecoveryChannels();
+
+template<typename any>
+void Look(const any& value);
+
+template<typename any>
+void Look1(const any& value);
+
+Adafruit_INA219     ina219;
+bool                SensorHubConnected = false; //  GPS (Adafruit Ultimate GPS) ?
+Servo               MCMServo[SERVOSUSED];
+uint8_t             PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 9 PWMs, remaining 7 via sbus
+SBUS                MySbus(SBUSPORT);                                  // SBUS
+PulsePositionOutput PPMOutput;                                         // PPM
+
+bool          BoundFlag      = false; /** indicates if receiver paired with transmitter */
+bool          ServosAttached = false;
+uint16_t      SbusChannels[CHANNELSUSED + 1]; // Just one spare
+uint32_t      SBUSTimer = 0;
+bool          FailSafeChannel[17];
+bool          FailSafeDataLoaded = false;
+uint8_t       FS_byte1           = 0; // All 16 failsafe channel flags are in these two bytes
+uint8_t       FS_byte2           = 0;
+uint32_t      ReconnectedMoment;
+uint16_t      BaroAltitude;
+float         BaroTemperature;
+float         INA219Volts       = 0;
+uint32_t      SensorTime        = 0;
+uint32_t      SensorHubAccessed = 0;
+uint16_t      Qnh               = 0; // Pressure at sea level here and now (defined at TX)
+uint16_t      OldQnh            = 0;
+uint8_t       SatellitesGPS;
+float         LatitudeGPS;
+float         LongitudeGPS;
+float         SpeedGPS;
+float         AngleGPS;
+bool          GpsFix = false;
+float         AltitudeGPS;
+float         DistanceGPS;
+float         CourseToGPS;
+uint8_t       DayGPS;
+uint8_t       MonthGPS;
+uint8_t       YearGPS;
+uint8_t       HoursGPS;
+uint8_t       MinsGPS;
+uint8_t       SecsGPS;
+uint16_t      CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
+bool          SensorHubDead       = false;
+uint32_t      NewConnectionMoment = 0;
+bool          QNHSent             = false;
+uint8_t       MacAddress[9]       = {0, 0, 0, 0, 0, 0, 0, 0, 0};
+bool          ModelMatched        = false;
+uint8_t       TheReceivedPipe[6];
+uint8_t       TheCurrentPipe[6];
+bool          FirstConnection = true;
+bool          FailedSafe      = true; // Starting up as the same as after failsafe
+uint8_t       PPMChannelOrder[CHANNELSUSED] = {2, 3, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+uint8_t       PPMChannelCount               = 8;
+bool          UseSBUS                       = true;
+bool          NewData                       = false;
+uint16_t      pcount                        = 0; // how many pipes so far received from TX
+bool          Blinking                      = false;
+uint8_t       BlinkValue                    = 1;
+uint32_t      BlinkTimer                    = 0;
+uint8_t       MacAddressSentCounter         = 0;
+WDT_T4<WDT3>  TeensyWatchDog;
+WDT_timings_t WatchDogConfig;
+uint32_t      LastDogKick = 0;
+bool          LedIsOn     = false;
+uint8_t*      PipePointer;
+uint8_t       Pipnum         = PIPENUMBER;
+uint8_t       DefaultPipe[6] = {0x23, 0x94, 0x3e, 0xbe, 0xb7, 0x00};
+uint8_t       CurrentPipe[6];
+uint32_t      Randomized_Recovery_Channels_Counter = 0;
+
+
+
 
 #endif // defined (_SRC_UTILITIES_COMMON_H)

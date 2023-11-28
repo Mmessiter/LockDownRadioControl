@@ -168,6 +168,7 @@ void RedLedOn()
         RangeTestGoodPackets = 0;
         RecentPacketsLost    = 0;
         VersionsCompared     = false;
+        UseDefaultRecoveryChannels();
         SetUKFrequencies();
         if (CurrentView == FRONTVIEW) {
             SendText(FrontView_Connected, na);
@@ -2416,6 +2417,7 @@ FLASHMEM void setup()
         }
     }
     RationaliseBuddy();
+    RandomiseTheRecoveryChannels();
 }
 /*********************************************************************************************************************************/
 void RationaliseBuddy()
@@ -7337,7 +7339,7 @@ void WarnUserOfVersionsMismatch(){
 
 /************************************************************************************************************/
 
-void CompareVersionNumbers(){   //warn if TX and RX versions don't match
+void CompareVersionNumbers(){                       // Warn  user if TX and RX versions don't match
 
     if (VersionsCompared) return;
     if (strlen(ReceiverVersionNumber) > 5) return; // too long for a version number. Probably binding data !

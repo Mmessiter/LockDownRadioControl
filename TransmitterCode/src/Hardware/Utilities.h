@@ -912,6 +912,44 @@ FASTRUN float MapWithExponential(float xx, float Xxmin, float Xxmax, float Yymin
     return map(xx, Xxmin, Xxmax, Yymin, Yymax);
 }
 
+// ******************************************************************************************************************************
+bool AnyMatches(uint8_t a, uint8_t b, uint8_t c)
+{
+    if (a == b) return true;
+    if (a == c) return true;
+    if (b == c) return true;
+    return false;
+}
+
+// ******************************************************************************************************************************
+void RandomiseTheRecoveryChannels(){
+    if (RTC.read(tm)) {
+        ReadTheRTC();
+        randomSeed(tm.Second);
+    }
+    FHSS_data::Randomized_Recovery_Channels[0] = random(0,83);
+    FHSS_data::Randomized_Recovery_Channels[1] = random(0,83);
+    FHSS_data::Randomized_Recovery_Channels[2] = random(0,83);
+  while (AnyMatches (FHSS_data::Randomized_Recovery_Channels[0],FHSS_data::Randomized_Recovery_Channels[1],FHSS_data::Randomized_Recovery_Channels[2])){  // must all be different channels
+        FHSS_data::Randomized_Recovery_Channels[0] = random(0,83);
+        FHSS_data::Randomized_Recovery_Channels[1] = random(0,83);
+        FHSS_data::Randomized_Recovery_Channels[2] = random(0,83);
+  }
+}
+// ******************************************************************************************************************************
+void UseRandomizedRecoveryChannels(){
+
+        FHSS_data::Used_Recovery_Channels[0] =  FHSS_data::Randomized_Recovery_Channels[0];
+        FHSS_data::Used_Recovery_Channels[1] =  FHSS_data::Randomized_Recovery_Channels[1];
+        FHSS_data::Used_Recovery_Channels[2] =  FHSS_data::Randomized_Recovery_Channels[2];
+}
+// ******************************************************************************************************************************
+void UseDefaultRecoveryChannels(){
+        FHSS_data::Used_Recovery_Channels[0] =  FHSS_data::Default_Recovery_Channels[0];
+        FHSS_data::Used_Recovery_Channels[1] =  FHSS_data::Default_Recovery_Channels[1];
+        FHSS_data::Used_Recovery_Channels[2] =  FHSS_data::Default_Recovery_Channels[2];
+
+}
 /******************************************** CHANNEL REVERSE FUNCTION **********************************************************/
 
 FASTRUN void DoReverseSense()

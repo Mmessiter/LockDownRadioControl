@@ -72,21 +72,25 @@ void LoadPacketData()
     uint8_t  FS_Byte1;
     uint8_t  FS_Byte2;
     char     ProgressEnd[]       = "vis Progress,0";
-    SendBuffer[CHANNELSUSED]     = PacketNumber;
+ 
     Twobytes                     = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
-    FS_Byte1                     = uint8_t(Twobytes >> 8);        // sent as two bytes
+    FS_Byte1                     = uint8_t(Twobytes >> 8);        // sent as two bytes   
     FS_Byte2                     = uint8_t(Twobytes & 0x00FF);
+    
     SendBuffer[CHANNELSUSED + 1] = 0;
     SendBuffer[CHANNELSUSED + 2] = 0;
     SendBuffer[CHANNELSUSED + 3] = 0;   // 4 available. but no more!
+    SendBuffer[CHANNELSUSED]     = PacketNumber;   // ALWYAS SENT!
+    
     switch (PacketNumber) {
         case 0:
 
-            //  SendBuffer[CHANNELSUSED + 2] = NOTUSEDYET;
-            //  SendBuffer[CHANNELSUSED + 3] = NOTUSEDYET;
+          
 
             if (((millis() - FailSafeTimer) > 1500) && SaveFailSafeNow) {
                 SendBuffer[CHANNELSUSED + 1] = SaveFailSafeNow; // FailSafeSaveMoment
+            //  SendBuffer[CHANNELSUSED + 2] = NOTUSEDYET;
+            //  SendBuffer[CHANNELSUSED + 3] = NOTUSEDYET;
                 SaveFailSafeNow              = false;           // once should do it.
                 SendCommand(ProgressEnd);
             }
@@ -94,21 +98,25 @@ void LoadPacketData()
         case 1:
             SendBuffer[CHANNELSUSED + 1] = FS_Byte2; // these are failsafe flags
             SendBuffer[CHANNELSUSED + 2] = FS_Byte1; // these are failsafe flags
+            //  SendBuffer[CHANNELSUSED + 3] = NOTUSEDYET;
             break;
         case 2:
             SendBuffer[CHANNELSUSED + 1] = Qnh >> 8;     // (HiByte)   Qnh is current atmospheric pressure at sea level here (an aviation term)
             SendBuffer[CHANNELSUSED + 2] = Qnh & 0x00ff; // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
+        //  SendBuffer[CHANNELSUSED + 3] = NOTUSEDYET;
             break;
         case 3:
             if (GPSMarkHere) {
                 SendBuffer[CHANNELSUSED + 1] = 0;
                 SendBuffer[CHANNELSUSED + 2] = GPSMarkHere;
+            //  SendBuffer[CHANNELSUSED + 3] = NOTUSEDYET;
                 GPSMarkHere                  = 0;
             }
             break;
         case 4:
             SendBuffer[CHANNELSUSED + 1] = ModelMatched; // let receiver know whether correct model is loaded.
             SendBuffer[CHANNELSUSED + 2] = SwapWaveBand;
+        //  SendBuffer[CHANNELSUSED + 3] = NOTUSEDYET;
             if (SwapWaveBand == 2) SetTestFrequencies();
             if (SwapWaveBand == 1) SetUKFrequencies();
             SwapWaveBand = 0;
@@ -116,8 +124,15 @@ void LoadPacketData()
 
         case 5:
             SendBuffer[CHANNELSUSED + 1] = PPMdata.UseSBUSFromRX;   // 1 - 0
-            SendBuffer[CHANNELSUSED + 2] = PPMdata.PPMChannelCount; //
+            SendBuffer[CHANNELSUSED + 2] = PPMdata.PPMChannelCount; 
+        //  SendBuffer[CHANNELSUSED + 3] = NOTUSEDYET;
             break;
+
+        case 6:
+            SendBuffer[CHANNELSUSED + 1] = FHSS_data::Randomized_Recovery_Channels[0];
+            SendBuffer[CHANNELSUSED + 2] = FHSS_data::Randomized_Recovery_Channels[1];
+            SendBuffer[CHANNELSUSED + 3] = FHSS_data::Randomized_Recovery_Channels[2];
+            UseRandomizedRecoveryChannels();
 
         default: break;
     }
@@ -180,7 +195,7 @@ void TryToReconnect()
     if (!LedWasGreen) TryOtherPipe(); // BUT NOT while connected to model!
     ++ReconnectionIndex;
     if (ReconnectionIndex >= 3) ReconnectionIndex = 0;
-    NextChannel = FHSS_data::FHSS_Recovery_Channels[ReconnectionIndex];
+    NextChannel = FHSS_data::Used_Recovery_Channels[ReconnectionIndex];
     HopToNextChannel();
 }
 
