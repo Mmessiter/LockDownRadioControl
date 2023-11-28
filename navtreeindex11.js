@@ -1,5 +1,6 @@
 var NAVTREEINDEX11 =
 {
+"functions_d.html":[4,3,0,4],
 "functions_e.html":[4,3,0,5],
 "functions_enum.html":[4,3,3],
 "functions_eval.html":[4,3,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX11 =
 "radio_8h.html#a5f57423b51a89ce596c324bbf359a6cb":[5,0,1,0,0,2,44],
 "radio_8h.html#a62cc4d43d463897ef0d417150d6e7f3f":[5,0,1,0,0,2,97],
 "radio_8h.html#a62ec0168b1eea5f5c14f663d9217574d":[5,0,1,0,0,2,12],
-"radio_8h.html#a62f1498f67d7e438905ae486bc27044f":[5,0,1,0,0,2,20],
-"radio_8h.html#a632401c7e72610ff0a0678358b6877ad":[5,0,1,0,0,2,33]
+"radio_8h.html#a62f1498f67d7e438905ae486bc27044f":[5,0,1,0,0,2,20]
 };
