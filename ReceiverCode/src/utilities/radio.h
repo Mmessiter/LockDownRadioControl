@@ -119,9 +119,6 @@ void ReadExtraParameters()
                 Randomized_Recovery_Channels[2] = ReceivedData[CHANNELSUSED + 1];
                 UseRandomizedRecoveryChannels();                             // Use randomized reconnection channels so that won't be the same as other user 
             }
-
-
-
         default:
             break;
     }
@@ -247,8 +244,7 @@ void CopyCurrentPipe(uint8_t* p, uint8_t pn)
     }
     PipePointer = p;
     Pipnum      = pn;
-    // Serial.print("Current pipenum: ");
-    // Serial.println(Pipnum);
+  
 }
 //************************************************************************************************************/
 void SetNewPipe()
@@ -564,9 +560,8 @@ FASTRUN void Reconnect()
         }
     }   //  cannot pass here if not connected
         //  must have connected by here
-       
-         Look1 ("Reconnected on channel ");
-          Look  (ReconnectChannel);
+         // Look1 ("Reconnected on channel ");
+         // Look  (ReconnectChannel);
        
   
     FailSafeSent = false;
