@@ -1,5 +1,6 @@
 var common_8h =
 [
+    [ "CD", "structCD.html", "structCD" ],
     [ "BIND_EEPROM_OFFSET", "common_8h.html#a9711a7159ecb22d58fd6331700663ee7", null ],
     [ "BINDPLUG_PIN", "common_8h.html#a9986f66313bda8d791f5f4ec246d5709", null ],
     [ "BOUNDPIPENUMBER", "common_8h.html#a5f3f2939c5f5efcee13dc77b62dbaeb4", null ],
@@ -84,11 +85,11 @@ var common_8h =
     [ "BlinkTimer", "common_8h.html#a79ef591b711372e0f452e2afe8d2a718", null ],
     [ "BlinkValue", "common_8h.html#a869d8c74a47ad8ee055d516a6b66027e", null ],
     [ "BoundFlag", "common_8h.html#a44d37e4e8af884bf172344c0835a5593", null ],
-    [ "CompressedData", "common_8h.html#aa16611ba89205c8cb9e75353ce1ad032", null ],
     [ "Connected", "common_8h.html#a5318db734c71b1b08208ef690f1f0146", null ],
     [ "CourseToGPS", "common_8h.html#a1a4e211f9858a5d6d61d11e5679a71f3", null ],
     [ "CurrentPipe", "common_8h.html#a8accdcf1df9fea74266e2f169346cc81", null ],
     [ "CurrentRadio", "common_8h.html#a7bca81159d93f215060f40f45f19b0de", null ],
+    [ "DataToSend", "common_8h.html#ae179c6f59e4de509ff9d25e72b0fb906", null ],
     [ "DayGPS", "common_8h.html#a4c722ec4fa2ff675bd4a2d511e80cd6e", null ],
     [ "Default_Recovery_Channels", "common_8h.html#ae585546b402ec3d06317a60d9acbbf3c", null ],
     [ "DefaultPipe", "common_8h.html#ac17bcdae8bda705ade2cf0935e12853d", null ],

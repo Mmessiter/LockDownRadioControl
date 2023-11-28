@@ -44,7 +44,7 @@ var searchData=
   ['clock_5fsel_5fpll_41',['CLOCK_SEL_PLL',['../classMPU9250.html#a1a52c1e61766f509eea69cb6d1fbbc56',1,'MPU9250']]],
   ['clockspoken_42',['ClockSpoken',['../1Definitions_8h.html#a235116408ba9ac496c2a243a340888e5',1,'1Definitions.h']]],
   ['clockspoken1_43',['ClockSpoken1',['../1Definitions_8h.html#af6cab75e259de8cad651fc31410602ea',1,'1Definitions.h']]],
-  ['compresseddata_44',['CompressedData',['../common_8h.html#aa16611ba89205c8cb9e75353ce1ad032',1,'CompressedData():&#160;common.h'],['../1Definitions_8h.html#aa16611ba89205c8cb9e75353ce1ad032',1,'CompressedData():&#160;1Definitions.h']]],
+  ['compresseddata_44',['CompressedData',['../structCD.html#a5130cfe326ee5a71809416978fc316d5',1,'CD']]],
   ['config_45',['CONFIG',['../classMPU9250.html#aab05dcc81b5628ed687e152263c52966',1,'MPU9250']]],
   ['confirmed_46',['Confirmed',['../1Definitions_8h.html#a5034d37305ec158f8bc486558dcd8f53',1,'1Definitions.h']]],
   ['connected_47',['Connected',['../common_8h.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;common.h'],['../1Definitions_8h.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;1Definitions.h']]],

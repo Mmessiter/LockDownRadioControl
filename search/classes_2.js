@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['lowlatencyfilter_0',['LowLatencyFilter',['../classLowLatencyFilter.html',1,'']]]
+  ['kalmanfilter_0',['KalmanFilter',['../classKalmanFilter.html',1,'']]]
 ];

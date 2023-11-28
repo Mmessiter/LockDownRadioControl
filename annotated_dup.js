@@ -1,5 +1,6 @@
 var annotated_dup =
 [
+    [ "CD", "structCD.html", "structCD" ],
     [ "I2Cdev", "classI2Cdev.html", "classI2Cdev" ],
     [ "KalmanFilter", "classKalmanFilter.html", "classKalmanFilter" ],
     [ "LowLatencyFilter", "classLowLatencyFilter.html", "classLowLatencyFilter" ],

@@ -1,5 +1,6 @@
 var 1Definitions_8h =
 [
+    [ "CD", "structCD.html", "structCD" ],
     [ "uMacReceived", "unionuMacReceived.html", "unionuMacReceived" ],
     [ "uMacStored", "unionuMacStored.html", "unionuMacStored" ],
     [ "AEROBATICS", "1Definitions_8h.html#a7df635dd9a2363e735cdd7d66ecd2c41", null ],
@@ -457,7 +458,6 @@ var 1Definitions_8h =
     [ "ClickY", "1Definitions_8h.html#a85578a4e235e2836fdbbfa037bcb5805", null ],
     [ "ClockSpoken", "1Definitions_8h.html#a235116408ba9ac496c2a243a340888e5", null ],
     [ "ClockSpoken1", "1Definitions_8h.html#af6cab75e259de8cad651fc31410602ea", null ],
-    [ "CompressedData", "1Definitions_8h.html#aa16611ba89205c8cb9e75353ce1ad032", null ],
     [ "Confirmed", "1Definitions_8h.html#a5034d37305ec158f8bc486558dcd8f53", null ],
     [ "Connected", "1Definitions_8h.html#a5318db734c71b1b08208ef690f1f0146", null ],
     [ "ConnectionAssessSeconds", "1Definitions_8h.html#ac58a25a73bcc60b4f892b7ad285d7adc", null ],
@@ -470,6 +470,7 @@ var 1Definitions_8h =
     [ "CurrentPosition", "1Definitions_8h.html#ade76e94669870d42879b18f17505f967", null ],
     [ "CurrentView", "1Definitions_8h.html#a2c76c41cd62573eb7227882fc9b9e557", null ],
     [ "CurveDots", "1Definitions_8h.html#a434509284a88e9637c9b9847efe0b0e0", null ],
+    [ "Datatosend", "1Definitions_8h.html#a6c240ce43864f8d35d002bfd4e3c37b6", null ],
     [ "DateFix", "1Definitions_8h.html#af963d49af3aeb834d322601d3c3e3d04", null ],
     [ "Default_Recovery_Channels", "1Definitions_8h.html#ab1f338051472df8c12ff83e018831321", null ],
     [ "DefaultPipe", "1Definitions_8h.html#a0b9fd9f8e85725c128617f006132ea57", null ],

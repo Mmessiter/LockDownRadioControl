@@ -1,5 +1,6 @@
 var hierarchy =
 [
+    [ "CD", "structCD.html", null ],
     [ "I2Cdev", "classI2Cdev.html", null ],
     [ "KalmanFilter", "classKalmanFilter.html", null ],
     [ "LowLatencyFilter", "classLowLatencyFilter.html", null ],
