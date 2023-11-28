@@ -279,7 +279,7 @@ FASTRUN void SendData()
         LoadPacketData();                                        // extra parameters appended to the data packet
         Datatosend.DataFlags = 42;
         Compress(Datatosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30)
-        if (Radio1.write(&Datatosend.CompressedData, SizeOfCompressedData)) {SuccessfulPacket();} else {FailedPacket();}   
+        if (Radio1.write(&Datatosend.DataFlags, SizeOfCompressedData+2)) {SuccessfulPacket();} else {FailedPacket();}   
         if (BuddyMasterOnWireless) SendSpecialPacket();          // takes about 4 - 5 ms. Gets buddy control data in ACK payload   
     }
 }

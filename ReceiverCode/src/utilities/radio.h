@@ -162,7 +162,7 @@ bool ReadData()
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
         DelayMillis(6);                                                
-        CurrentRadio->read(&DataToSend.CompressedData, 30);   //  ** >> Read new data from master << **
+        CurrentRadio->read(&DataToSend.Dataflags, 32);   //  ** >> Read new data from master << **
         Connected = true;
         NewData   = true;
     }
@@ -447,7 +447,7 @@ void ProdRadio(uint8_t Recon_Ch)
 { // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
     ConfigureRadio();
     CurrentRadio->setChannel(Recon_Ch);
-   delayMicroseconds(200); // NEEDED ???
+    delayMicroseconds(200); // NEEDED ???
     TryToConnectNow();
 }
 
@@ -468,7 +468,7 @@ void SwapChipEnableLines()
         digitalWrite(pinCSN2, CSN_ON);
         digitalWrite(pinCE2, CE_ON);
     }
-   delayMicroseconds(200); // Allow swap over a little time to be noticed ...
+    delayMicroseconds(200); // Allow swap over a little time to be noticed ...
 }
 
 /************************************************************************************************************/

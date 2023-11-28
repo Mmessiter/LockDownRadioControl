@@ -756,11 +756,10 @@ bool            SaveFailSafeNow = false;
 uint32_t        FailSafeTimer;
 
 struct CD{
-    uint16_t        DataFlags = 42;
-    uint16_t        CompressedData[COMPRESSEDWORDS]; // = 15 words, 30 bytes
+    uint16_t        DataFlags = 42;                  //  =  1 word,   2 bytes
+    uint16_t        CompressedData[COMPRESSEDWORDS]; //  = 15 words, 30 bytes
 };
 CD Datatosend;
-
 
 uint8_t         SizeOfCompressedData;            // = 30
 uint32_t        Inactivity_Timeout = INACTIVITYTIMEOUT;
