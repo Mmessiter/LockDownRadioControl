@@ -137,7 +137,7 @@ void LoadPacketData()
             }
             break;
         case 7:
-            if (Randomized_Recovery_Channels_Counter < 20) { // not forever!
+            if (Randomized_Recovery_Channels_Counter < 30) { // not forever!
                 if (ModelMatched && BoundFlag) {  
                 SendBuffer[CHANNELSUSED + 1] = FHSS_data::Randomized_Recovery_Channels[2];
                 UseRandomizedRecoveryChannels();
