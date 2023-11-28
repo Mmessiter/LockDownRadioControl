@@ -5,9 +5,9 @@ var searchData=
   ['makelogfilename_2',['MakeLogFileName',['../TransmitterCode_2src_2main_8cpp.html#a05c7b4e0b98f9b97eebf9617442de6a5',1,'main.cpp']]],
   ['maketwobytes_3',['MakeTwobytes',['../1Definitions_8h.html#a5aa4888b924a4f1d95e9cedc3004f2b6',1,'MakeTwobytes(bool *f):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a5aa4888b924a4f1d95e9cedc3004f2b6',1,'MakeTwobytes(bool *f):&#160;main.cpp']]],
   ['managetransmitter_4',['ManageTransmitter',['../TransmitterCode_2src_2main_8cpp.html#a558ea014e230b7caa54ce5a37ad29b22',1,'main.cpp']]],
-  ['maptosbus_5',['MapToSBUS',['../ReceiverCode_2src_2main_8cpp.html#a6a495c5560f12cc3fd3df9454927d681',1,'main.cpp']]],
+  ['maptosbus_5',['MapToSBUS',['../radio_8h.html#a6a495c5560f12cc3fd3df9454927d681',1,'radio.h']]],
   ['mapwithexponential_6',['MapWithExponential',['../Utilities_8h.html#a927484b01116cd14fd1ade706bc06d51',1,'Utilities.h']]],
-  ['markhere_7',['MarkHere',['../ReceiverCode_2src_2main_8cpp.html#a5ae8a2aa29e834880ccf370c7547961b',1,'main.cpp']]],
+  ['markhere_7',['MarkHere',['../common_8h.html#a5ae8a2aa29e834880ccf370c7547961b',1,'MarkHere():&#160;main.cpp'],['../ReceiverCode_2src_2main_8cpp.html#a5ae8a2aa29e834880ccf370c7547961b',1,'MarkHere():&#160;main.cpp']]],
   ['masterdetected_8',['MasterDetected',['../BuddyWireless_8h.html#a9028cb650cb079d28bc5dfc307242bb3',1,'BuddyWireless.h']]],
   ['maybeaddzero_9',['MayBeAddZero',['../Utilities_8h.html#ae310e7fc6397929ae886869c05cbc334',1,'Utilities.h']]],
   ['modelviewend_10',['ModelViewEnd',['../TransmitterCode_2src_2main_8cpp.html#ae9f91b9da28f2e1e2fb126961f03c31c',1,'main.cpp']]],
@@ -20,5 +20,6 @@ var searchData=
   ['moveservos_17',['MoveServos',['../ReceiverCode_2src_2main_8cpp.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp'],['../radio_8h.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp']]],
   ['mpu6050_18',['MPU6050',['../classMPU6050.html#a50b99a2a37c9d8708e807ef90b31df9b',1,'MPU6050']]],
   ['mpu9250_19',['MPU9250',['../classMPU9250.html#acaf2ae31cfdeb6d47b922996feb55b69',1,'MPU9250::MPU9250()'],['../classMPU9250FIFO.html#a4b15facd0ce38964d241db56b1c57f75',1,'MPU9250FIFO::MPU9250(SPIClass &amp;bus, uint8_t csPin)'],['../classMPU9250FIFO.html#acaf2ae31cfdeb6d47b922996feb55b69',1,'MPU9250FIFO::MPU9250(TwoWire &amp;bus, uint8_t address)'],['../classMPU9250.html#a4b15facd0ce38964d241db56b1c57f75',1,'MPU9250::MPU9250()']]],
-  ['msgbox_20',['MsgBox',['../1Definitions_8h.html#a6f5b0f1e4ca75768c16c4dd93f92a8de',1,'MsgBox(char *goback, char *Prompt):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a6f5b0f1e4ca75768c16c4dd93f92a8de',1,'MsgBox(char *goback, char *Prompt):&#160;main.cpp']]]
+  ['msgbox_20',['MsgBox',['../1Definitions_8h.html#a6f5b0f1e4ca75768c16c4dd93f92a8de',1,'MsgBox(char *goback, char *Prompt):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a6f5b0f1e4ca75768c16c4dd93f92a8de',1,'MsgBox(char *goback, char *Prompt):&#160;main.cpp']]],
+  ['mysbus_21',['MySbus',['../common_8h.html#a5424788640aaa8d535d6ea077949ef82',1,'common.h']]]
 ];

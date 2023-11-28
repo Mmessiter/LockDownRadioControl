@@ -2,8 +2,8 @@ var searchData=
 [
   ['na_0',['na',['../1Definitions_8h.html#a7137c2210b87f07e6bd33a64c4f6759b',1,'1Definitions.h']]],
   ['newcompressneeded_1',['NewCompressNeeded',['../1Definitions_8h.html#a37ebe494d562386d4f9f00b629d4cf1a',1,'1Definitions.h']]],
-  ['newconnectionmoment_2',['NewConnectionMoment',['../ReceiverCode_2src_2main_8cpp.html#a5ce4b7c421146d2957e4ae7c91118661',1,'NewConnectionMoment():&#160;main.cpp'],['../radio_8h.html#a5ce4b7c421146d2957e4ae7c91118661',1,'NewConnectionMoment():&#160;main.cpp']]],
-  ['newdata_3',['NewData',['../ReceiverCode_2src_2main_8cpp.html#ab6eca5cb54b625d65d257370332a51a0',1,'NewData():&#160;main.cpp'],['../radio_8h.html#ab6eca5cb54b625d65d257370332a51a0',1,'NewData():&#160;main.cpp']]],
+  ['newconnectionmoment_2',['NewConnectionMoment',['../common_8h.html#a5ce4b7c421146d2957e4ae7c91118661',1,'NewConnectionMoment():&#160;common.h'],['../radio_8h.html#a5ce4b7c421146d2957e4ae7c91118661',1,'NewConnectionMoment():&#160;common.h']]],
+  ['newdata_3',['NewData',['../common_8h.html#ab6eca5cb54b625d65d257370332a51a0',1,'NewData():&#160;common.h'],['../radio_8h.html#ab6eca5cb54b625d65d257370332a51a0',1,'NewData():&#160;common.h']]],
   ['newfilebuffer_4',['NewFileBuffer',['../1Definitions_8h.html#a7eaf7514909d5b2d72a7d85d46e4424c',1,'1Definitions.h']]],
   ['newfilebufferpointer_5',['NewFileBufferPointer',['../1Definitions_8h.html#a1ca852f79f9cbe1f4ccb5d4ffc287aa9',1,'1Definitions.h']]],
   ['newpcb_6',['NEWPCB',['../1Definitions_8h.html#a7494653ff9b81d7068c2f8095e97648b',1,'1Definitions.h']]],

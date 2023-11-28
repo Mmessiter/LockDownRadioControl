@@ -9,6 +9,6 @@ var searchData=
   ['hoptime_6',['HOPTIME',['../common_8h.html#a57d506b5f34172770c8d645c12cb5ba2',1,'common.h']]],
   ['hoptonextchannel_7',['HopToNextChannel',['../common_8h.html#a62ec0168b1eea5f5c14f663d9217574d',1,'HopToNextChannel():&#160;radio.h'],['../radio_8h.html#a62ec0168b1eea5f5c14f663d9217574d',1,'HopToNextChannel():&#160;radio.h'],['../1Definitions_8h.html#a62ec0168b1eea5f5c14f663d9217574d',1,'HopToNextChannel():&#160;radio.h'],['../transceiver_8h.html#a52aa3e80bccf5e75346c93fdae63122d',1,'HopToNextChannel():&#160;transceiver.h']]],
   ['hours_8',['Hours',['../1Definitions_8h.html#aad0ac7c3fa58b68dbc76618d993683ee',1,'1Definitions.h']]],
-  ['hoursgps_9',['HoursGPS',['../ReceiverCode_2src_2main_8cpp.html#acbe14cc301f6ba68e2431684bf688916',1,'HoursGPS():&#160;main.cpp'],['../radio_8h.html#acbe14cc301f6ba68e2431684bf688916',1,'HoursGPS():&#160;main.cpp']]],
+  ['hoursgps_9',['HoursGPS',['../common_8h.html#acbe14cc301f6ba68e2431684bf688916',1,'HoursGPS():&#160;common.h'],['../radio_8h.html#acbe14cc301f6ba68e2431684bf688916',1,'HoursGPS():&#160;common.h']]],
   ['hover_10',['HOVER',['../1Definitions_8h.html#acde728d65e290bc02e988924ea1bf3fa',1,'1Definitions.h']]]
 ];

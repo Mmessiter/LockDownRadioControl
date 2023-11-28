@@ -6,7 +6,7 @@ var searchData=
   ['warningtimer_3',['WarningTimer',['../1Definitions_8h.html#a762d0bd8b884aee82ec41f594c470b87',1,'1Definitions.h']]],
   ['warnuserofversionsmismatch_4',['WarnUserOfVersionsMismatch',['../TransmitterCode_2src_2main_8cpp.html#a7d321cdde32c31b15ca1080fda6743c8',1,'main.cpp']]],
   ['watchdogcallback_5',['WatchDogCallBack',['../TransmitterCode_2src_2main_8cpp.html#ae410be09c6f449451d8f2327fd895c7d',1,'WatchDogCallBack():&#160;main.cpp'],['../ReceiverCode_2src_2main_8cpp.html#ae410be09c6f449451d8f2327fd895c7d',1,'WatchDogCallBack():&#160;main.cpp']]],
-  ['watchdogconfig_6',['WatchDogConfig',['../1Definitions_8h.html#abf278d2a0f4b093a96fd83a6f635d8c8',1,'WatchDogConfig():&#160;1Definitions.h'],['../ReceiverCode_2src_2main_8cpp.html#abf278d2a0f4b093a96fd83a6f635d8c8',1,'WatchDogConfig():&#160;main.cpp']]],
+  ['watchdogconfig_6',['WatchDogConfig',['../1Definitions_8h.html#abf278d2a0f4b093a96fd83a6f635d8c8',1,'WatchDogConfig():&#160;1Definitions.h'],['../common_8h.html#abf278d2a0f4b093a96fd83a6f635d8c8',1,'WatchDogConfig():&#160;common.h']]],
   ['watchdogmaxrate_7',['WATCHDOGMAXRATE',['../1Definitions_8h.html#af3358f12fbced88c655895c7e56f1ca6',1,'WATCHDOGMAXRATE():&#160;1Definitions.h'],['../common_8h.html#af3358f12fbced88c655895c7e56f1ca6',1,'WATCHDOGMAXRATE():&#160;common.h']]],
   ['watchdogtimeout_8',['WATCHDOGTIMEOUT',['../1Definitions_8h.html#a263fd3c52a680256641d33815e7ef6a4',1,'WATCHDOGTIMEOUT():&#160;1Definitions.h'],['../common_8h.html#a263fd3c52a680256641d33815e7ef6a4',1,'WATCHDOGTIMEOUT():&#160;common.h']]],
   ['weakmsg_9',['WEAKMSG',['../1Definitions_8h.html#ab307882b2cf0f392aad17febe154494a',1,'1Definitions.h']]],

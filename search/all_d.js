@@ -7,7 +7,7 @@ var searchData=
   ['kd_5froll_5fangle_4',['Kd_roll_angle',['../Quadcopter_2src_2main_8cpp.html#a66ab401162f7e33090db7604d7ec76c2',1,'main.cpp']]],
   ['kd_5froll_5frate_5',['Kd_roll_rate',['../Quadcopter_2src_2main_8cpp.html#af918e54d5489c203d07c52461dbb8029',1,'main.cpp']]],
   ['kd_5fyaw_6',['Kd_yaw',['../Quadcopter_2src_2main_8cpp.html#a6268c9e7e07a8020e13bdf90dcab056d',1,'main.cpp']]],
-  ['keepsbushappy_7',['KeepSbusHappy',['../radio_8h.html#a6f74cdb7b32a3aa9e9342661bd44ad1a',1,'radio.h']]],
+  ['keepsbushappy_7',['KeepSbusHappy',['../common_8h.html#a6f74cdb7b32a3aa9e9342661bd44ad1a',1,'KeepSbusHappy():&#160;radio.h'],['../radio_8h.html#a6f74cdb7b32a3aa9e9342661bd44ad1a',1,'KeepSbusHappy():&#160;radio.h']]],
   ['ki_5fpitch_5fangle_8',['Ki_pitch_angle',['../Quadcopter_2src_2main_8cpp.html#aa667d21607d6c03411926cd66088b0dd',1,'main.cpp']]],
   ['ki_5fpitch_5frate_9',['Ki_pitch_rate',['../Quadcopter_2src_2main_8cpp.html#aefc06a3e989cc4bd0cc423ba0273de05',1,'main.cpp']]],
   ['ki_5froll_5fangle_10',['Ki_roll_angle',['../Quadcopter_2src_2main_8cpp.html#a9dbda8cd7ff103eeb0beb98a35848d5f',1,'main.cpp']]],

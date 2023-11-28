@@ -1,6 +1,7 @@
 var Utilities_8h =
 [
     [ "AdjustDateTime", "Utilities_8h.html#a9de4ea8e761b5f0e537f6f326f9ad429", null ],
+    [ "AnyMatches", "Utilities_8h.html#a17ff9f21040f9f831b6b01065f9285d8", null ],
     [ "Ascii", "Utilities_8h.html#a3a793f5d71f6db34ad82272d211f8954", null ],
     [ "bcdToDec", "Utilities_8h.html#a5e5cbc12559842867d90e19b7ecf4a8c", null ],
     [ "BlueLedOn", "Utilities_8h.html#aa1f9aec467eb00917ad9ffdc0bd5b20d", null ],
@@ -45,6 +46,7 @@ var Utilities_8h =
     [ "MapWithExponential", "Utilities_8h.html#a927484b01116cd14fd1ade706bc06d51", null ],
     [ "MayBeAddZero", "Utilities_8h.html#ae310e7fc6397929ae886869c05cbc334", null ],
     [ "PlaySound", "Utilities_8h.html#aa490b4664b0a4498d53b30b82287d5df", null ],
+    [ "RandomiseTheRecoveryChannels", "Utilities_8h.html#a53b587c4008ec71fe00d1915ccca1974", null ],
     [ "ReadTheRTC", "Utilities_8h.html#a7a48851f0d38e4a0dd727a30d9515cf1", null ],
     [ "ReadTime", "Utilities_8h.html#a483cced19b61975f76957f5696425fe9", null ],
     [ "Reboot", "Utilities_8h.html#a374524dc113357d2ed6b8622f6ea85a8", null ],
@@ -57,5 +59,7 @@ var Utilities_8h =
     [ "ShowMixValues", "Utilities_8h.html#a9cf57d14f56372d539472d6e1cc79a77", null ],
     [ "StartInactvityTimeout", "Utilities_8h.html#a793b7bcd77531c95fe72ed4356d421c8", null ],
     [ "Str", "Utilities_8h.html#a590a9174319918d7e3d7baca323fcf26", null ],
-    [ "SynchRTCwithGPSTime", "Utilities_8h.html#abb1ea95b6b3f033883aa87682d3240ab", null ]
+    [ "SynchRTCwithGPSTime", "Utilities_8h.html#abb1ea95b6b3f033883aa87682d3240ab", null ],
+    [ "UseDefaultRecoveryChannels", "Utilities_8h.html#a23be886d0f26b1bd0487babfb4d7ed7e", null ],
+    [ "UseRandomizedRecoveryChannels", "Utilities_8h.html#a03cd5e24f66a381a38effaa16922c0a8", null ]
 ];
