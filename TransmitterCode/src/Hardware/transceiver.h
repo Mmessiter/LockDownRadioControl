@@ -80,7 +80,7 @@ void LoadPacketData()
 
     SendBuffer[CHANNELSUSED]     = PacketNumber;   // ALWYAS SENT!
     SendBuffer[CHANNELSUSED + 1] = 0;
-    SendBuffer[CHANNELSUSED + 2] = 0;  // 4 bytes available. but no more!
+    SendBuffer[CHANNELSUSED + 2] = 0;  // 2 uint16_t available, but not more. Can use the low 12 BITS only of each because of the compression.
    
     if (PacketNumber >= PACKETNUMBERMAX) PacketNumber = 0; // PACKETNUMBERMAX can be changed in 1Definitions.h
 
@@ -139,18 +139,19 @@ void LoadPacketData()
         case 7:
             if (Randomized_Recovery_Channels_Counter < 30) { // not forever!
                 if (ModelMatched && BoundFlag) {  
-                SendBuffer[CHANNELSUSED + 1] = FHSS_data::Randomized_Recovery_Channels[2];
-                UseRandomizedRecoveryChannels();
+                    SendBuffer[CHANNELSUSED + 1] = FHSS_data::Randomized_Recovery_Channels[2];
+                    UseRandomizedRecoveryChannels();
+                }
+                    if (!ModelMatched || !BoundFlag)  
+                {
+                    SendBuffer[CHANNELSUSED + 1] = FHSS_data::Default_Recovery_Channels[2];
+                    UseDefaultRecoveryChannels();
+                }
             }
-            if (!ModelMatched || !BoundFlag)  
-            {
-                SendBuffer[CHANNELSUSED + 1] = FHSS_data::Default_Recovery_Channels[2];
-                UseDefaultRecoveryChannels();
-            }
-        }
-        break;
+            break;
 
-        default: break;
+        default: 
+            break;
     }
 }
 

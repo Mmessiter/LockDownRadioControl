@@ -915,7 +915,7 @@ uint8_t  CurrentChannel      = 0;
 uint8_t  PupilIsAlive        = 0;
 uint8_t  MasterIsAlive       = 0;
 bool     VersionsCompared    = false;
-uint32_t Randomized_Recovery_Channels_Counter = 0;
+uint8_t  Randomized_Recovery_Channels_Counter = 0;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
@@ -923,7 +923,7 @@ uint32_t Randomized_Recovery_Channels_Counter = 0;
 
 namespace FHSS_data {
     
-uint8_t Default_Recovery_Channels[3]    = {15, 71, 82};                       // three default channels used for Recovery
+uint8_t Default_Recovery_Channels[3]    = {15, 71, 82};                       // three default channels used for Recovery. THESE DON'T CHANGE
 uint8_t Randomized_Recovery_Channels[3] = {15, 71, 82};                       // three randomised channels used for Recovery
 uint8_t Used_Recovery_Channels[3]       = {15, 71, 82};                       // the ones to use
 
@@ -944,7 +944,6 @@ uint8_t  NextChannelNumber      = 0;
 uint8_t  PaceMaker              = PACEMAKER;                // now variables are used
 uint8_t  RetryCount             = RETRYCOUNT;               // now variables are used
 uint8_t  RetryWait              = RETRYWAIT;                // now variables are used
-
 uint8_t  ReconnectChannelsCount = RECONNECT_CHANNELS_COUNT; // now variables are used
 uint8_t  ReconnectChannelsStart = RECONNECT_CHANNELS_START; // now variables are used
 

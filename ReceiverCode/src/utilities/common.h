@@ -236,7 +236,7 @@ uint8_t*      PipePointer;
 uint8_t       Pipnum         = PIPENUMBER;
 uint8_t       DefaultPipe[6] = {0x23, 0x94, 0x3e, 0xbe, 0xb7, 0x00};
 uint8_t       CurrentPipe[6];
-uint32_t      Randomized_Recovery_Channels_Counter = 0;
+uint8_t       Randomized_Recovery_Channels_Counter = 0;
 
 
 
