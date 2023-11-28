@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['failedsafe_0',['FailedSafe',['../common_8h.html#a6aa44585f8f06cb4f4760da8352b2df7',1,'FailedSafe():&#160;common.h'],['../radio_8h.html#a6aa44585f8f06cb4f4760da8352b2df7',1,'FailedSafe():&#160;common.h']]],
+  ['failedsafe_0',['FailedSafe',['../common_8h.html#a6aa44585f8f06cb4f4760da8352b2df7',1,'common.h']]],
   ['failsafechannel_1',['FailSafeChannel',['../common_8h.html#aeda79da3882f657a3eaefc5800122da5',1,'FailSafeChannel():&#160;common.h'],['../1Definitions_8h.html#adcce7cd9ef6dc6629d7409fc5f5c13fc',1,'FailSafeChannel():&#160;1Definitions.h']]],
   ['failsafedataloaded_2',['FailSafeDataLoaded',['../common_8h.html#a08ed7a870be8e84ae26ee0b972866bb3',1,'common.h']]],
   ['failsafesave_3',['FailSafeSave',['../common_8h.html#a332eaa61dd85cd649cf62de2345e246e',1,'common.h']]],
-  ['failsafesent_4',['FailSafeSent',['../radio_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90',1,'radio.h']]],
+  ['failsafesent_4',['FailSafeSent',['../common_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90',1,'common.h']]],
   ['failsafetimer_5',['FailSafeTimer',['../1Definitions_8h.html#abe06b5671242a2e75a695a87a3159a00',1,'1Definitions.h']]],
   ['fhss_5fchannels_6',['FHSS_Channels',['../namespaceFHSS__data.html#a181cb451e5e95fa7cfcb19fff25b9318',1,'FHSS_data::FHSS_Channels()'],['../common_8h.html#ad8056611eb984e8cacf9f0e526815a99',1,'FHSS_Channels():&#160;common.h']]],
   ['fhss_5fchannels1_7',['FHSS_Channels1',['../namespaceFHSS__data.html#ad8722ceeae8ace980fb37a0bb74579d2',1,'FHSS_data::FHSS_Channels1()'],['../common_8h.html#aeea38114c49f6b6dbe375b7a64acdccb',1,'FHSS_Channels1():&#160;common.h']]],

@@ -5,7 +5,7 @@ var searchData=
   ['yaw_5fimu_2',['yaw_IMU',['../Quadcopter_2src_2main_8cpp.html#a79786319b2e82cc85d12e40f05552f3d',1,'main.cpp']]],
   ['yaw_5fpassthru_3',['yaw_passthru',['../Quadcopter_2src_2main_8cpp.html#a1a1eb6963f159cd3406cf73f33257462',1,'main.cpp']]],
   ['yaw_5fpid_4',['yaw_PID',['../Quadcopter_2src_2main_8cpp.html#a434367ccb122d4d9911d90be60e42484',1,'main.cpp']]],
-  ['yeargps_5',['YearGPS',['../common_8h.html#a4a1012a9dfe5632ac326ce712f311472',1,'YearGPS():&#160;common.h'],['../radio_8h.html#a4a1012a9dfe5632ac326ce712f311472',1,'YearGPS():&#160;common.h']]],
+  ['yeargps_5',['YearGPS',['../common_8h.html#a4a1012a9dfe5632ac326ce712f311472',1,'common.h']]],
   ['yf_6',['YF',['../pid_8h.html#ae7153fe121e1f00ec05ef717cd4f7126',1,'pid.h']]],
   ['ypoint_7',['yPoint',['../1Definitions_8h.html#ac57deb5507c3835634b98d51b5d13c9b',1,'1Definitions.h']]],
   ['ypoints_8',['yPoints',['../1Definitions_8h.html#aff20e4985ae632d4c59eeb3d772874c9',1,'1Definitions.h']]],

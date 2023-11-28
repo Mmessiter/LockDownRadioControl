@@ -1,10 +1,10 @@
 var searchData=
 [
   ['datefix_0',['DateFix',['../1Definitions_8h.html#af963d49af3aeb834d322601d3c3e3d04',1,'1Definitions.h']]],
-  ['daygps_1',['DayGPS',['../common_8h.html#a4c722ec4fa2ff675bd4a2d511e80cd6e',1,'DayGPS():&#160;common.h'],['../radio_8h.html#a4c722ec4fa2ff675bd4a2d511e80cd6e',1,'DayGPS():&#160;common.h']]],
+  ['daygps_1',['DayGPS',['../common_8h.html#a4c722ec4fa2ff675bd4a2d511e80cd6e',1,'common.h']]],
   ['debugtimer_2',['DebugTimer',['../SensorHubT32_2src_2main_8cpp.html#a7867e45e2d19ce05cda4ef2692ee0dbe',1,'main.cpp']]],
   ['default_5frecovery_5fchannels_3',['Default_Recovery_Channels',['../common_8h.html#ae585546b402ec3d06317a60d9acbbf3c',1,'Default_Recovery_Channels():&#160;common.h'],['../namespaceFHSS__data.html#ab1f338051472df8c12ff83e018831321',1,'FHSS_data::Default_Recovery_Channels()']]],
-  ['defaultpipe_4',['DefaultPipe',['../common_8h.html#ac17bcdae8bda705ade2cf0935e12853d',1,'DefaultPipe():&#160;common.h'],['../radio_8h.html#ac17bcdae8bda705ade2cf0935e12853d',1,'DefaultPipe():&#160;common.h'],['../1Definitions_8h.html#a0b9fd9f8e85725c128617f006132ea57',1,'DefaultPipe():&#160;1Definitions.h']]],
+  ['defaultpipe_4',['DefaultPipe',['../common_8h.html#ac17bcdae8bda705ade2cf0935e12853d',1,'DefaultPipe():&#160;common.h'],['../1Definitions_8h.html#a0b9fd9f8e85725c128617f006132ea57',1,'DefaultPipe():&#160;1Definitions.h']]],
   ['defaultswitchnumber_5',['DefaultSwitchNumber',['../1Definitions_8h.html#a0040cba31e48ea25f429ce1668f8c21f',1,'1Definitions.h']]],
   ['definingtrims_6',['DefiningTrims',['../1Definitions_8h.html#a53d8c3d55ec5cdfd424929c62efe1677',1,'1Definitions.h']]],
   ['deltagmt_7',['DeltaGMT',['../1Definitions_8h.html#ab509e0e6c824d1a805643fbdae7a9a5e',1,'1Definitions.h']]],
@@ -14,7 +14,7 @@ var searchData=
   ['destinationlat_11',['DestinationLat',['../SensorHubT32_2src_2main_8cpp.html#a8c2d07492cf82a17c5cd61777bed8b63',1,'main.cpp']]],
   ['destinationlng_12',['DestinationLng',['../SensorHubT32_2src_2main_8cpp.html#a68d045f3a8018e98f4701013f7ac0a64',1,'main.cpp']]],
   ['dis_5fgyro_13',['DIS_GYRO',['../classMPU9250.html#abb9b02dd2f4b7d031c22bfb1422d5367',1,'MPU9250']]],
-  ['distancegps_14',['DistanceGPS',['../common_8h.html#a6f76c248ca5e727e482873f5328587e1',1,'DistanceGPS():&#160;common.h'],['../radio_8h.html#a6f76c248ca5e727e482873f5328587e1',1,'DistanceGPS():&#160;common.h']]],
+  ['distancegps_14',['DistanceGPS',['../common_8h.html#a6f76c248ca5e727e482873f5328587e1',1,'common.h']]],
   ['doingchecksm_15',['DoingCheckSm',['../1Definitions_8h.html#ad29c29032645ef06ffdf1cd62974c96f',1,'1Definitions.h']]],
   ['drate1_16',['Drate1',['../1Definitions_8h.html#a53914b50c8322a320269b7635587fc05',1,'1Definitions.h']]],
   ['drate2_17',['Drate2',['../1Definitions_8h.html#a83c12aaa15d3f764a2f1f84f0f55187d',1,'1Definitions.h']]],

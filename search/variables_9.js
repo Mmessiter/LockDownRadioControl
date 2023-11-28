@@ -12,7 +12,7 @@ var searchData=
   ['i_5flimit_9',['i_limit',['../Quadcopter_2src_2main_8cpp.html#a1dd74ecfd9bb023afa0798103dd539ad',1,'main.cpp']]],
   ['ina219_10',['ina219',['../1Definitions_8h.html#a69393b86406e49dbacfbabd283877495',1,'ina219():&#160;1Definitions.h'],['../SensorHubT32_2src_2main_8cpp.html#a69393b86406e49dbacfbabd283877495',1,'ina219():&#160;main.cpp'],['../common_8h.html#a69393b86406e49dbacfbabd283877495',1,'ina219():&#160;common.h']]],
   ['ina219connected_11',['INA219Connected',['../common_8h.html#a8251d20351fc918ea452ad591c75116e',1,'common.h']]],
-  ['ina219volts_12',['INA219Volts',['../SensorHubT32_2src_2main_8cpp.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;main.cpp'],['../radio_8h.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;common.h'],['../common_8h.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;common.h']]],
+  ['ina219volts_12',['INA219Volts',['../SensorHubT32_2src_2main_8cpp.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;main.cpp'],['../common_8h.html#ad84d94b7259bcf40213f0af9be706ee7',1,'INA219Volts():&#160;common.h']]],
   ['inactivity_5fstart_13',['Inactivity_Start',['../1Definitions_8h.html#a42f848041eda5cd5b98d334ab44a15a1',1,'1Definitions.h']]],
   ['inactivity_5ftimeout_14',['Inactivity_Timeout',['../1Definitions_8h.html#ae99f193f5a3e06508bbe4b32ee91a963',1,'1Definitions.h']]],
   ['inputstick_15',['InPutStick',['../1Definitions_8h.html#ab9d98ee9d26a1af8f20291fd0b717056',1,'1Definitions.h']]],
@@ -37,7 +37,7 @@ var searchData=
   ['integral_5froll_5fprev_5fol_34',['integral_roll_prev_ol',['../Quadcopter_2src_2main_8cpp.html#a87d8850019e32f1f6d82eb15f6df22bc',1,'main.cpp']]],
   ['integral_5fyaw_35',['integral_yaw',['../Quadcopter_2src_2main_8cpp.html#ad18d69722ad518bd258969f72b57fdb0',1,'main.cpp']]],
   ['integral_5fyaw_5fprev_36',['integral_yaw_prev',['../Quadcopter_2src_2main_8cpp.html#af6f1ae4bc8203051100523cc2ebaba89',1,'main.cpp']]],
-  ['interations_37',['Interations',['../radio_8h.html#ac8e10a08e9da70138c4a8459c6902d7d',1,'radio.h']]],
+  ['interations_37',['Interations',['../common_8h.html#ac8e10a08e9da70138c4a8459c6902d7d',1,'common.h']]],
   ['interpolate_38',['Interpolate',['../TransmitterCode_2src_2main_8cpp.html#ac8ce9c3b3ac8639fb34ffe64bef87c34',1,'main.cpp']]],
   ['interpolationtypes_39',['InterpolationTypes',['../1Definitions_8h.html#a5424ceb23e086124c417474911365a58',1,'1Definitions.h']]]
 ];
