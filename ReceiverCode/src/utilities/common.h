@@ -78,6 +78,37 @@
 #define FS_EEPROM_OFFSET   BIND_EEPROM_OFFSET + 8 // use 16 bytes from here
 #define PIPES_TO_COMPARE   8
 
+
+
+
+RF24     Radio1(pinCE1, pinCSN1);
+RF24     Radio2(pinCE2, pinCSN2);
+RF24*    CurrentRadio = &Radio1;
+bool     Connected    = false;
+bool     SaveNewBind  = true;
+bool     HopNow       = false;
+uint8_t  ThisRadio    = 1;
+uint8_t  SavedPipeAddress[8];
+uint8_t  NextChannelNumber = 0;
+uint8_t  NextChannel;
+uint8_t  ReconnectIndex = RECONNECT_CHANNELS_OFFSET;
+uint8_t  PacketNumber;
+uint16_t ReceivedData[UNCOMPRESSEDWORDS]; //  20 x 16 BIT words
+uint16_t PreviousData[UNCOMPRESSEDWORDS]; /** Previously received data (used for servos. Hence not sent if unchanged) */
+uint16_t Interations = 0;
+uint32_t HopStart;
+uint64_t NewPipeMaybe = 0;
+uint64_t PreviousNewPipes[PIPES_TO_COMPARE];
+uint8_t  PreviousNewPipesIndex = 0;
+bool     FailSafeSent          = true;
+uint16_t SbusRepeats           = 0;
+uint32_t RX1TotalTime          = 0;
+uint32_t RX2TotalTime          = 0;
+uint32_t RadioSwaps            = 0;
+
+
+
+
 uint32_t  LastPacketArrivalTime = 0;
 bool      FailSafeSave          = false;
 bool      INA219Connected       = false; //  Volts from INA219 ?
@@ -124,6 +155,15 @@ void MarkHere();
 void SetTestFrequencies();
 void UseDefaultRecoveryChannels();
 void UseRandomizedRecoveryChannels();
+void KickTheDog();
+void SetUKFrequencies();
+void BindModel();
+void ReadSavedPipe(); // read only 6 bytes
+void MoveServos();  
+void BlinkLed();
+void FailSafe();
+void TurnLedOff();
+void TurnLedOn();
 
 template<typename any>
 void Look(const any& value);
