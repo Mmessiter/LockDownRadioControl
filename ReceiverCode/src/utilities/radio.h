@@ -107,7 +107,7 @@ void ReadExtraParameters()
             break;
 
         case 6:
-            if (Randomized_Recovery_Channels_Counter < 30) { // not forever!
+            if (Randomized_Recovery_Channels_Counter < 20) { // not forever!
                 ++Randomized_Recovery_Channels_Counter;
                 Randomized_Recovery_Channels[0] = ReceivedData[CHANNELSUSED + 1];
                 Randomized_Recovery_Channels[1] = ReceivedData[CHANNELSUSED + 2];
@@ -115,7 +115,7 @@ void ReadExtraParameters()
                 
             }
             case 7:
-            if (Randomized_Recovery_Channels_Counter < 30) { // not forever!
+            if (Randomized_Recovery_Channels_Counter < 20) { // not forever!
                 Randomized_Recovery_Channels[2] = ReceivedData[CHANNELSUSED + 1];
                 UseRandomizedRecoveryChannels();                             // Use randomized reconnection channels so that won't be the same as other user 
             }
@@ -532,15 +532,15 @@ FASTRUN void Reconnect()
         KickTheDog();
         if (BoundFlag) KeepSbusHappy(); // Some SBUS systems timeout FAST, so resend old data to keep it happy
         CurrentRadio->stopListening();
-       delayMicroseconds(200);
+        delayMicroseconds(200);
         CurrentRadio->flush_tx();
         CurrentRadio->flush_rx();
-       delayMicroseconds(200);
+        delayMicroseconds(200);
         ReconnectChannel = FHSS_Recovery_Channels[ReconnectIndex];
         ++ReconnectIndex;           
         if (ReconnectIndex >= 3) ReconnectIndex = 0;
         CurrentRadio->setChannel(ReconnectChannel);
-       delayMicroseconds(200);
+        delayMicroseconds(200);
         ++Attempts;
         if (Attempts < MAXTRIESPERTRANSCEIVER) {
             TryToConnectNow();
