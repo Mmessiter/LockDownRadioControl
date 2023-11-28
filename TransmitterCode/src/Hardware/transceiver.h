@@ -129,10 +129,17 @@ void LoadPacketData()
             break;
 
         case 6:
-            SendBuffer[CHANNELSUSED + 1] = FHSS_data::Randomized_Recovery_Channels[0];
-            SendBuffer[CHANNELSUSED + 2] = FHSS_data::Randomized_Recovery_Channels[1];
-            SendBuffer[CHANNELSUSED + 3] = FHSS_data::Randomized_Recovery_Channels[2];
-            UseRandomizedRecoveryChannels();
+           if (ModelMatched && Connected && BoundFlag) {
+              SendBuffer[CHANNELSUSED + 1] = FHSS_data::Randomized_Recovery_Channels[0];
+              SendBuffer[CHANNELSUSED + 2] = FHSS_data::Randomized_Recovery_Channels[1];
+              SendBuffer[CHANNELSUSED + 3] = FHSS_data::Randomized_Recovery_Channels[2];
+              UseRandomizedRecoveryChannels();
+            }else{
+              SendBuffer[CHANNELSUSED + 1] = FHSS_data::Default_Recovery_Channels[0];
+              SendBuffer[CHANNELSUSED + 2] = FHSS_data::Default_Recovery_Channels[1];
+              SendBuffer[CHANNELSUSED + 3] = FHSS_data::Default_Recovery_Channels[2];
+              UseDefaultRecoveryChannels();
+            }
 
         default: break;
     }

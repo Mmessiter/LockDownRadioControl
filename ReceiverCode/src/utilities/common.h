@@ -6,7 +6,7 @@
 #include <Arduino.h>
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   3
-#define RXVERSION_MINIMUS 3 // November 2023
+#define RXVERSION_MINIMUS 4 // November 2023
 
 // #define DB_FHSS
 // #define DB_SENSORS

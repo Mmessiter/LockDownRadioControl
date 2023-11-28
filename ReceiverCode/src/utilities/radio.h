@@ -187,15 +187,14 @@ void ReadExtraParameters()
             break;
 
         case 6:
-        
             Randomized_Recovery_Channels[0] = ReceivedData[CHANNELSUSED + 1];
             Randomized_Recovery_Channels[1] = ReceivedData[CHANNELSUSED + 2];
             Randomized_Recovery_Channels[2] = ReceivedData[CHANNELSUSED + 3];
             ++ Randomized_Recovery_Channels_Counter;
-            if (Randomized_Recovery_Channels_Counter < 10) {
+            if (Randomized_Recovery_Channels_Counter < 20) {
                 UseRandomizedRecoveryChannels();                             // Use randomized reconnection channels so that won't be the same as other users
+                Look(millis()); 
             }
-
         default:
             break;
     }
