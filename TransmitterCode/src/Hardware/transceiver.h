@@ -82,7 +82,8 @@ void LoadPacketData()
     SendBuffer[CHANNELSUSED + 1] = 0;
     SendBuffer[CHANNELSUSED + 2] = 0;  // 4 bytes available. but no more!
    
-    
+    if (PacketNumber >= PACKETNUMBERMAX) PacketNumber = 0; // PACKETNUMBERMAX can be changed in 1Definitions.h
+
     switch (PacketNumber) {
         case 0:
             //  SendBuffer[CHANNELSUSED + 2] = NOTUSEDYET;
@@ -125,7 +126,7 @@ void LoadPacketData()
                 ++ Randomized_Recovery_Channels_Counter;
                 if (ModelMatched && BoundFlag) {     
                     SendBuffer[CHANNELSUSED + 1] = FHSS_data::Randomized_Recovery_Channels[0];
-                    SendBuffer[CHANNELSUSED + 2] = FHSS_data::Randomized_Recovery_Channels[1];  // todo ALL THREE BYTES
+                    SendBuffer[CHANNELSUSED + 2] = FHSS_data::Randomized_Recovery_Channels[1]; 
                 }
                 if (!ModelMatched || !BoundFlag)  
                 {
@@ -469,7 +470,7 @@ FASTRUN void HopToNextChannel()
         PStartTime = millis();
     }
     #endif
-    if (PacketNumber >= PACKETNUMBERMAX) PacketNumber = 0; // reset packet number if it gets too big
+   
 }
 /*********************************************************************************************************************************/
 

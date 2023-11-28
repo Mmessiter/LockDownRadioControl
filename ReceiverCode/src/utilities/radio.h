@@ -635,10 +635,11 @@ FASTRUN void Reconnect()
         }
     }   //  cannot pass here if not connected
         //  must have connected by here
-        // Look1 ("Reconnected on channel ");
-        // Look  (ReconnectChannel);
-
-
+       
+        //  Look1 ("Reconnected on channel ");
+        //  Look  (ReconnectChannel);
+       
+  
     FailSafeSent = false;
     if (PreviousRadio != ThisRadio) ++RadioSwaps; // Count the radio swaps
     ReconnectedMoment = millis();                 // Save this moment
