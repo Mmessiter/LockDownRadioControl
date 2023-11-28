@@ -168,6 +168,7 @@ void RedLedOn()
         RangeTestGoodPackets = 0;
         RecentPacketsLost    = 0;
         VersionsCompared     = false;
+        Randomized_Recovery_Channels_Counter = 0;
         UseDefaultRecoveryChannels();
         SetUKFrequencies();
         if (CurrentView == FRONTVIEW) {

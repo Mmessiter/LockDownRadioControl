@@ -915,6 +915,7 @@ uint8_t  CurrentChannel      = 0;
 uint8_t  PupilIsAlive        = 0;
 uint8_t  MasterIsAlive       = 0;
 bool     VersionsCompared    = false;
+uint32_t Randomized_Recovery_Channels_Counter = 0;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
