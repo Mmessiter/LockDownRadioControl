@@ -211,7 +211,7 @@ uint8_t       MinsGPS;
 uint8_t       SecsGPS;
 
 struct  CD{
-    uint16_t      Dataflags = 0;                    // might send 32 bytes eventually
+    uint16_t      Dataflags = 0;                   //  send 32 bytes !
     uint16_t      CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
 };
 CD DataToSend;
