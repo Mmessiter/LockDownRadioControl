@@ -137,15 +137,14 @@ void ReadExtraParameters()
     uint16_t TwoBytes = 0;
     uint8_t  SwapWaveBand;
     PacketNumber = ReceivedData[CHANNELSUSED];
+    
+    // NB: ReceivedData[CHANNELSUSED + 3]; cannot be used
    
 
     switch (PacketNumber) {
         case 0:
-           
-
             FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
-        //  GuessWhat = ReceivedData[CHANNELSUSED + 2]; // not used yet
-        //  GuessWhat = ReceivedData[CHANNELSUSED + 3]; // not used yet
+   
             if (FailSafeSave) {
                 TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
                 RebuildFlags(FailSafeChannel, TwoBytes);
@@ -154,18 +153,15 @@ void ReadExtraParameters()
         case 1:
             FS_byte1  = ReceivedData[CHANNELSUSED + 1]; // These 2 bytes are 16 failsafe flags
             FS_byte2  = ReceivedData[CHANNELSUSED + 2]; // These 2 bytes are 16 failsafe flags
-        //  GuessWhat = ReceivedData[CHANNELSUSED + 3]; // not used yet
             break;
         case 2:
             Qnh = (ReceivedData[CHANNELSUSED + 1]) << 8; // 16 bits sent as two bytes for pressure here at sea level
             Qnh += ReceivedData[CHANNELSUSED + 2];
-        //  GuessWhat = ReceivedData[CHANNELSUSED + 3]; // not used yet
             if (OldQnh != Qnh) SendQnhToSensorHub();
             OldQnh = Qnh; // Send new one once only
             break;
         case 3:
         //  GuessWhat = ReceivedData[CHANNELSUSED + 1]; // not used yet
-        //  GuessWhat = ReceivedData[CHANNELSUSED + 0]; // not used yet
             if ((ReceivedData[CHANNELSUSED + 2]) == 255) { // Mark this location
                 MarkHere();
                 ReceivedData[CHANNELSUSED + 2] = 0; // ... Once only
@@ -174,7 +170,6 @@ void ReadExtraParameters()
         case 4:
             ModelMatched = ReceivedData[CHANNELSUSED + 1];
             SwapWaveBand = ReceivedData[CHANNELSUSED + 2];
-        //  GuessWhat    = ReceivedData[CHANNELSUSED + 3]; // not used yet
             if (SwapWaveBand > 0) {
                 if (SwapWaveBand == 1) SetUKFrequencies();
                 if (SwapWaveBand == 2) SetTestFrequencies();
@@ -183,7 +178,6 @@ void ReadExtraParameters()
         case 5:
             UseSBUS         = (bool)ReceivedData[CHANNELSUSED + 1]; // if false means PPM
             PPMChannelCount = ReceivedData[CHANNELSUSED + 2];
-        //  GuessWhat       = ReceivedData[CHANNELSUSED + 3]; // not used yet
             break;
 
         case 6:
@@ -191,9 +185,17 @@ void ReadExtraParameters()
             if (Randomized_Recovery_Channels_Counter < 20) { // not forever!
                 Randomized_Recovery_Channels[0] = ReceivedData[CHANNELSUSED + 1];
                 Randomized_Recovery_Channels[1] = ReceivedData[CHANNELSUSED + 2];
-                Randomized_Recovery_Channels[2] = ReceivedData[CHANNELSUSED + 3];
+                UseRandomizedRecoveryChannels();                             // Use randomized reconnection channels so that won't be the same as other user 
+                
+            }
+            case 7:
+            if (Randomized_Recovery_Channels_Counter < 20) { // not forever!
+                Randomized_Recovery_Channels[2] = ReceivedData[CHANNELSUSED + 1];
                 UseRandomizedRecoveryChannels();                             // Use randomized reconnection channels so that won't be the same as other user 
             }
+
+
+
         default:
             break;
     }
