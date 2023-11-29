@@ -27,7 +27,7 @@ var searchData=
   ['boxright_24',['BoxRight',['../1Definitions_8h.html#a1c9a0f315590595ea96610c5bc1ced78',1,'1Definitions.h']]],
   ['boxtop_25',['BoxTop',['../1Definitions_8h.html#a14af89f3ce30e043d543d77e144a843b',1,'1Definitions.h']]],
   ['brightness_26',['Brightness',['../1Definitions_8h.html#adb3b4a5ffa0c290576c837177b5385a0',1,'1Definitions.h']]],
-  ['buddybuffer_27',['BuddyBuffer',['../1Definitions_8h.html#aa229ff7c2d96650e741e29a06c424ac9',1,'1Definitions.h']]],
+  ['buddybuffer_27',['BuddyBuffer',['../1Definitions_8h.html#ac820332c4e7b285bc78564ac677b0f12',1,'1Definitions.h']]],
   ['buddycontrolled_28',['BuddyControlled',['../1Definitions_8h.html#a5c21772263bd77182ecf11e45dc773a5',1,'1Definitions.h']]],
   ['buddymacaddpipe_29',['BuddyMACAddPipe',['../1Definitions_8h.html#ab95a8f00424b1d01a20ab9636b333225',1,'1Definitions.h']]],
   ['buddymacaddress_30',['BuddyMacAddress',['../1Definitions_8h.html#a5c82e425a6456b68b1237fd44b03c86c',1,'1Definitions.h']]],
