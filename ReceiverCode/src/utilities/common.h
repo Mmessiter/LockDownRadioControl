@@ -4,6 +4,7 @@
 #define _SRC_UTILITIES_COMMON_H
 
 #include <Arduino.h>
+#include <RF24.h>
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   3
 #define RXVERSION_MINIMUS 4 // November 2023
@@ -45,16 +46,20 @@
 #define PIPENUMBER       1
 #define BOUNDPIPENUMBER  1
 
+#define CHANNELSSENT       16                          //   <<<<<< ******* will become 8 ...
+#define CHANNELSUSED       16                          //
+#define UNCOMPRESSEDWORDS  CHANNELSSENT + 4            //   16 Channels plus extra 4 12 BIT values
+#define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4   // = 16 WORDS  with no extra
+#define RECEIVEBUFFERSIZE  CHANNELSUSED + 4
 
-#define FREQUENCYSCOUNT  82      // uses 82 different channels
-#define FREQUENCYSCOUNT1 41      // uses 41 different test channels
+#define FREQUENCYSCOUNT  82                             // uses 82 different channels
+#define FREQUENCYSCOUNT1 41                             // uses 41 different test channels
 
-#define CHANNELSUSED     16      //
-#define SERVOSUSED       9       // But all 16 are available via SBUS
-#define SBUSRATE         10      // SBUS frame every 10 milliseconds
-#define SBUSPORT         Serial3 // = 14
-#define PPMPORT          14      // same as SBUS
-#define RECONNECTGAP     25      // Send no data to servos for 25 ms after a reconnect (10 was not quite enough)
+#define SERVOSUSED       9                              // But all 16 are available via SBUS
+#define SBUSRATE         10                             // SBUS frame every 10 milliseconds
+#define SBUSPORT         Serial3                        // = 14
+#define PPMPORT          14                             // same as SBUS
+#define RECONNECTGAP     25                             // Send no data to servos for 25 ms after a reconnect (10 was not quite enough)
 #define MINMICROS        500
 #define MAXMICROS        2500
 #define LED_PIN          LED_BUILTIN
@@ -67,9 +72,6 @@
 #define pinCSN2          20                          // NRF2
 #define pinCE2           21                          // NRF2
 #define FAILSAFE_TIMEOUT 2000                        // two seconds until failsafe
-
-#define UNCOMPRESSEDWORDS  20                        //   16 Channels plus extra 4 12 BIT values
-#define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4 // = 16 WORDS  with no extra
 #define CSN_ON             LOW
 #define CSN_OFF            HIGH
 #define CE_ON              HIGH
@@ -93,8 +95,8 @@ uint8_t  NextChannelNumber = 0;
 uint8_t  NextChannel;
 uint8_t  ReconnectIndex = RECONNECT_CHANNELS_OFFSET;
 uint8_t  PacketNumber;
-uint16_t ReceivedData[UNCOMPRESSEDWORDS]; //  20 x 16 BIT words
-uint16_t PreviousData[UNCOMPRESSEDWORDS]; /** Previously received data (used for servos. Hence not sent if unchanged) */
+uint16_t ReceivedData[RECEIVEBUFFERSIZE]; //  20 x 16 BIT words
+uint16_t PreviousData[RECEIVEBUFFERSIZE]; /** Previously received data (used for servos. Hence not sent if unchanged) */
 uint16_t Interations = 0;
 uint32_t HopStart;
 uint64_t NewPipeMaybe = 0;
@@ -215,6 +217,8 @@ struct  CD{
     uint16_t      CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
 };
 CD DataToSend;
+
+uint16_t SizeOfDataToSend = sizeof(DataToSend.Dataflags) + sizeof(DataToSend.CompressedData);
 
 bool          SensorHubDead       = false;
 uint32_t      NewConnectionMoment = 0;

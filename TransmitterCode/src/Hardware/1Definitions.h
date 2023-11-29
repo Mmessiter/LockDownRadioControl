@@ -59,9 +59,13 @@
         #define CSN_PIN      10 // for SPI to nRF24L01
         #define BUDDYPPMPORT 6  // Buddybox PPM pin
     #endif
-
-    #define DEFAULTPIPEADDRESS     0xB7BE3E9423LL // Pipe address for startup - any value but MUST match RX
-    #define CHANNELSUSED           16             // 16 Channels
+    
+    #define CHANNELSSENT           16                         // 8 ???
+    #define CHANNELSUSED           16                         // 16 Channels
+    #define UNCOMPRESSEDWORDS      CHANNELSSENT + 4           // DATA TO SEND 
+    #define COMPRESSEDWORDS        UNCOMPRESSEDWORDS * 3 / 4  // UNCOMPRESSED DATA MUST BE DIVISIBLE BY 4
+    #define SENDBUFFERSIZE         CHANNELSUSED + 4          
+    #define DEFAULTPIPEADDRESS     0xB7BE3E9423LL // Pipe address for startup - any value but MUST match RX 
     #define MAXMIXES               32             // 32 mixes
     #define TICKSPERMINUTE         60000          // millis() = 60000 per minute
     #define PROPOCHANNELS          8              // Only 4 have knobs / 2 sticks (= 4 hall sensors)
@@ -77,9 +81,8 @@
     #define MAXLINES               30                        // text to load at once for log and help screens
     #define DEFAULT_EXPO           50                        // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
     #define CHARSMAX               120                       // Max length for char arrays
-    #define UNCOMPRESSEDWORDS      20                        // DATA TO SEND = 40  bytes
-    #define COMPRESSEDWORDS        UNCOMPRESSEDWORDS * 3 / 4 // COMPRESSED DATA SENT = 30  bytes
-    #define TIMEFORTXMANAGMENT     3                         // 3? How many ms must remain spare between data packets before daring to undertake more trivial tasks
+ 
+   
     #define DEFAULTLEDBRIGHTNESS   20                        // LED brightness
     #define DEFAULTPOWEROFFWARNING 3                         // Default time to warn before cutting power
     #define MAXDUALRATE            200
@@ -101,7 +104,10 @@
     #define DATARATE                 RF24_250KBPS   // RF24_250KBPS or RF24_1MBPS or RF24_2MBPS
     #define FASTDATARATE             RF24_2MBPS     // 2 MBPS = RF24_2MBPS; 1 MBPS = RF24_1MBPS <<
     #define PERFECTPACKETSPERSECOND  100            // Flat out perfect packets per second
-    #define PACEMAKER                10             // was 7. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+    
+    #define PACEMAKER                10              // was 10.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+    #define TIMEFORTXMANAGMENT       3               // was 3.   How many ms must remain spare between data packets before daring to undertake more trivial tasks
+    
     #define RETRYCOUNT               2              // was 2. Auto retries inside nRF24L01. MAX is 15. Fails below 2.
     #define RETRYWAIT                1              // was 1. 250us = Wait between retries (RetryWait+1 * 250us))
     #define RECONNECT_CHANNELS_START 12             // was 12 // Offset into channels' array
@@ -599,10 +605,12 @@ uint8_t       GPSMarkHere      = 0;
 uint16_t      TrimRepeatSpeed  = 600;
 char          na[]             = "";
 uint8_t       StepSize[16]     = {0, 0, 0, 0, 0, 0, 0, 0, 5, 25, 5, 25, 5, 25, 5, 25}; //    How far to move each time on slow servos
-uint16_t      CurrentPosition[UNCOMPRESSEDWORDS];                                      //    Position from which a slow servo started (0 = not started yet)
-uint16_t      SendBuffer[UNCOMPRESSEDWORDS];                                           //    Data to send to rx (16 words)
-uint16_t      BuddyBuffer[UNCOMPRESSEDWORDS];                                          //    Data from wireless or PPM buddy (16 words)
-uint16_t      ShownBuffer[UNCOMPRESSEDWORDS];                                          //    Data shown before
+
+uint16_t      CurrentPosition[SENDBUFFERSIZE];                                      //    Position from which a slow servo started (0 = not started yet)
+uint16_t      SendBuffer[SENDBUFFERSIZE];                                           //    Data to send to rx (16 words)
+uint16_t      BuddyBuffer[SENDBUFFERSIZE];                                          //    Data from wireless or PPM buddy (16 words)
+uint16_t      ShownBuffer[SENDBUFFERSIZE];                                          //    Data shown before
+
 uint16_t      LastBuffer[CHANNELSUSED + 1];                                            //    Used to spot any change
 uint16_t      PreMixBuffer[CHANNELSUSED + 1];                                          //    Data collected from sticks
 uint8_t       MaxDegrees[5][CHANNELSUSED + 1];                                         //    Max degrees (180)
@@ -756,12 +764,14 @@ bool            SaveFailSafeNow = false;
 uint32_t        FailSafeTimer;
 
 struct CD{
-    uint16_t        DataFlags = 42;                  //  =  1 word,   2 bytes
-    uint16_t        CompressedData[COMPRESSEDWORDS]; //  = 15 words, 30 bytes
+    uint16_t        DataFlags = 42;                    //  =  1 word,   2 bytes
+    uint16_t        CompressedData[COMPRESSEDWORDS];   //  = 15 words, 30 bytes
 };
 CD Datatosend;
 
+uint16_t        SizeOfDatatosend = sizeof(Datatosend); // = 32
 uint8_t         SizeOfCompressedData;            // = 30
+
 uint32_t        Inactivity_Timeout = INACTIVITYTIMEOUT;
 uint32_t        Inactivity_Start   = 0;
 tmElements_t    tm;

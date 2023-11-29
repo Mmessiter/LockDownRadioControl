@@ -62,14 +62,14 @@ void ReadExtraParameters()
 {
     uint16_t TwoBytes = 0;
     uint8_t  SwapWaveBand;
-    PacketNumber = ReceivedData[CHANNELSUSED];
+    PacketNumber = ReceivedData[CHANNELSSENT];
     
-    // NB: ReceivedData[CHANNELSUSED + 3]; cannot be used
+    // NB: ReceivedData[CHANNELSSENT + 3]; cannot be used
    
 
     switch (PacketNumber) {
         case 0:
-            FailSafeSave = bool(ReceivedData[CHANNELSUSED + 1]);
+            FailSafeSave = bool(ReceivedData[CHANNELSSENT + 1]);
    
             if (FailSafeSave) {
                 TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
@@ -77,46 +77,46 @@ void ReadExtraParameters()
             }
             break;
         case 1:
-            FS_byte1  = ReceivedData[CHANNELSUSED + 1]; // These 2 bytes are 16 failsafe flags
-            FS_byte2  = ReceivedData[CHANNELSUSED + 2]; // These 2 bytes are 16 failsafe flags
+            FS_byte1  = ReceivedData[CHANNELSSENT + 1]; // These 2 bytes are 16 failsafe flags
+            FS_byte2  = ReceivedData[CHANNELSSENT + 2]; // These 2 bytes are 16 failsafe flags
             break;
         case 2:
-            Qnh = (ReceivedData[CHANNELSUSED + 1]) << 8; // 16 bits sent as two bytes for pressure here at sea level
-            Qnh += ReceivedData[CHANNELSUSED + 2];
+            Qnh = (ReceivedData[CHANNELSSENT + 1]) << 8; // 16 bits sent as two bytes for pressure here at sea level
+            Qnh += ReceivedData[CHANNELSSENT + 2];
             if (OldQnh != Qnh) SendQnhToSensorHub();
             OldQnh = Qnh; // Send new one once only
             break;
         case 3:
-        //  GuessWhat = ReceivedData[CHANNELSUSED + 1]; // not used yet
-            if ((ReceivedData[CHANNELSUSED + 2]) == 255) { // Mark this location
+        //  GuessWhat = ReceivedData[CHANNELSSENT + 1]; // not used yet
+            if ((ReceivedData[CHANNELSSENT + 2]) == 255) { // Mark this location
                 MarkHere();
-                ReceivedData[CHANNELSUSED + 2] = 0; // ... Once only
+                ReceivedData[CHANNELSSENT + 2] = 0; // ... Once only
             }
             break;
         case 4:
-            ModelMatched = ReceivedData[CHANNELSUSED + 1];
-            SwapWaveBand = ReceivedData[CHANNELSUSED + 2];
+            ModelMatched = ReceivedData[CHANNELSSENT + 1];
+            SwapWaveBand = ReceivedData[CHANNELSSENT + 2];
             if (SwapWaveBand > 0) {
                 if (SwapWaveBand == 1) SetUKFrequencies();
                 if (SwapWaveBand == 2) SetTestFrequencies();
             }
             break;
         case 5:
-            UseSBUS         = (bool)ReceivedData[CHANNELSUSED + 1]; // if false means PPM
-            PPMChannelCount = ReceivedData[CHANNELSUSED + 2];
+            UseSBUS         = (bool)ReceivedData[CHANNELSSENT + 1]; // if false means PPM
+            PPMChannelCount = ReceivedData[CHANNELSSENT + 2];
             break;
 
         case 6:
             if (Randomized_Recovery_Channels_Counter < 20) { // not forever!
                 ++Randomized_Recovery_Channels_Counter;
-                Randomized_Recovery_Channels[0] = ReceivedData[CHANNELSUSED + 1];
-                Randomized_Recovery_Channels[1] = ReceivedData[CHANNELSUSED + 2];
+                Randomized_Recovery_Channels[0] = ReceivedData[CHANNELSSENT + 1];
+                Randomized_Recovery_Channels[1] = ReceivedData[CHANNELSSENT + 2];
                 UseRandomizedRecoveryChannels();                             // Use randomized reconnection channels so that won't be the same as other user 
                 
             }
             case 7:
             if (Randomized_Recovery_Channels_Counter < 20) { // not forever!
-                Randomized_Recovery_Channels[2] = ReceivedData[CHANNELSUSED + 1];
+                Randomized_Recovery_Channels[2] = ReceivedData[CHANNELSSENT + 1];
                 UseRandomizedRecoveryChannels();                             // Use randomized reconnection channels so that won't be the same as other user 
             }
         default:
@@ -148,9 +148,8 @@ void UseReceivedData()
         HopNow   = false;                                        // ... and clear the flag,
         HopStart = millis();                                     // ... and start the timer.
     }
+   //Look(ReceivedData[14]);
 }
-
-
 
 /************************************************************************************************************/
 bool ReadData()
@@ -161,15 +160,15 @@ bool ReadData()
         LoadAckPayload();
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
-        DelayMillis(6);                                                
-        CurrentRadio->read(&DataToSend.Dataflags, 32);   //  ** >> Read new data from master << **
+        DelayMillis(2);       
+        CurrentRadio->read(&DataToSend, SizeOfDataToSend);   //  ** >> Read new data from master << **
+       // Look(SizeOfDataToSend);
         Connected = true;
         NewData   = true;
     }
     if (Connected) UseReceivedData();
     return Connected;
 }
-
 
 // ******************************************************************************************************************************************************************
 
