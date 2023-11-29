@@ -60,11 +60,13 @@
         #define BUDDYPPMPORT 6  // Buddybox PPM pin
     #endif
     
-    #define CHANNELSSENT           16                         // 8 ???
-    #define CHANNELSUSED           16                         // 16 Channels
-    #define UNCOMPRESSEDWORDS      CHANNELSSENT + 4           // DATA TO SEND 
-    #define COMPRESSEDWORDS        UNCOMPRESSEDWORDS * 3 / 4  // UNCOMPRESSED DATA MUST BE DIVISIBLE BY 4
-    #define SENDBUFFERSIZE         CHANNELSUSED + 4          
+    #define CHANNELSSENT           16                          // 8 ???
+    #define CHANNELSUSED           16                          // 16 Channels
+    #define UNCOMPRESSEDWORDS      (CHANNELSSENT + 4)          // DATA TO SEND  *********** (BRACKETS ARE IMPORTANT) *********** 
+    #define COMPRESSEDWORDS        (UNCOMPRESSEDWORDS * 3 / 4) // UNCOMPRESSED DATA MUST BE DIVISIBLE BY 4
+    #define SENDBUFFERSIZE         (CHANNELSUSED + 4)          
+
+
     #define DEFAULTPIPEADDRESS     0xB7BE3E9423LL // Pipe address for startup - any value but MUST match RX 
     #define MAXMIXES               32             // 32 mixes
     #define TICKSPERMINUTE         60000          // millis() = 60000 per minute

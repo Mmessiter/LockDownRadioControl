@@ -46,11 +46,20 @@
 #define PIPENUMBER       1
 #define BOUNDPIPENUMBER  1
 
-#define CHANNELSSENT       16                          //   <<<<<< ******* will become 8 ...
-#define CHANNELSUSED       16                          //
-#define UNCOMPRESSEDWORDS  CHANNELSSENT + 4            //   16 Channels plus extra 4 12 BIT values
-#define COMPRESSEDWORDS    UNCOMPRESSEDWORDS * 3 / 4   // = 16 WORDS  with no extra
-#define RECEIVEBUFFERSIZE  CHANNELSUSED + 4
+#define CHANNELSSENT       16                            //  
+#define CHANNELSUSED       16                            //
+#define UNCOMPRESSEDWORDS  (CHANNELSSENT + 4)            //   = 20 WORDS (40 bytes)
+#define COMPRESSEDWORDS    (UNCOMPRESSEDWORDS * 3 / 4)   //   = 30 bytes
+#define RECEIVEBUFFERSIZE  (CHANNELSUSED + 4)
+
+struct  CD{
+    uint16_t      Dataflags = 0;                   //  send 32 bytes !
+    uint16_t      CompressedData[COMPRESSEDWORDS]; 
+};
+CD DataToSend;
+
+uint16_t SizeOfDataToSend = sizeof(DataToSend);// .Dataflags) + sizeof(DataToSend.CompressedData);
+
 
 #define FREQUENCYSCOUNT  82                             // uses 82 different channels
 #define FREQUENCYSCOUNT1 41                             // uses 41 different test channels
@@ -212,13 +221,6 @@ uint8_t       HoursGPS;
 uint8_t       MinsGPS;
 uint8_t       SecsGPS;
 
-struct  CD{
-    uint16_t      Dataflags = 0;                   //  send 32 bytes !
-    uint16_t      CompressedData[COMPRESSEDWORDS]; // 30 bytes -> 40 bytes when uncompressed
-};
-CD DataToSend;
-
-uint16_t SizeOfDataToSend = sizeof(DataToSend.Dataflags) + sizeof(DataToSend.CompressedData);
 
 bool          SensorHubDead       = false;
 uint32_t      NewConnectionMoment = 0;

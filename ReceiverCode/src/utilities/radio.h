@@ -162,7 +162,7 @@ bool ReadData()
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
         DelayMillis(2);       
         CurrentRadio->read(&DataToSend, SizeOfDataToSend);   //  ** >> Read new data from master << **
-       // Look(SizeOfDataToSend);
+        Look(SizeOfDataToSend);
         Connected = true;
         NewData   = true;
     }
