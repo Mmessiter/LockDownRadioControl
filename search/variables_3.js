@@ -57,7 +57,7 @@ var searchData=
   ['currentmode_54',['CurrentMode',['../1Definitions_8h.html#aacabee92eb3ddd2e3cf31695c00a912e',1,'1Definitions.h']]],
   ['currentpipe_55',['CurrentPipe',['../common_8h.html#a8accdcf1df9fea74266e2f169346cc81',1,'CurrentPipe():&#160;common.h'],['../1Definitions_8h.html#ad822a6e47865e57ae25f51c6c0eea7de',1,'CurrentPipe():&#160;1Definitions.h']]],
   ['currentpoint_56',['CurrentPoint',['../1Definitions_8h.html#af10ffe07503b33fd55065fd9021e17e7',1,'1Definitions.h']]],
-  ['currentposition_57',['CurrentPosition',['../1Definitions_8h.html#a483c18094929ab1172c268e76fbb962e',1,'1Definitions.h']]],
+  ['currentposition_57',['CurrentPosition',['../1Definitions_8h.html#ad46bd090bda2877738cc95246e6ba503',1,'1Definitions.h']]],
   ['currentradio_58',['CurrentRadio',['../common_8h.html#a7bca81159d93f215060f40f45f19b0de',1,'common.h']]],
   ['currentview_59',['CurrentView',['../1Definitions_8h.html#a2c76c41cd62573eb7227882fc9b9e557',1,'1Definitions.h']]],
   ['curvedots_60',['CurveDots',['../1Definitions_8h.html#a434509284a88e9637c9b9847efe0b0e0',1,'1Definitions.h']]]

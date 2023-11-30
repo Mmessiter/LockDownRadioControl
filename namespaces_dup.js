@@ -9,8 +9,6 @@ var namespaces_dup =
       [ "NextChannelNumber", "namespaceFHSS__data.html#a052746df02560319bc39fa4c7d87408e", null ],
       [ "PaceMaker", "namespaceFHSS__data.html#a99dc8e91f9f022271674b0d7923a5a4d", null ],
       [ "Randomized_Recovery_Channels", "namespaceFHSS__data.html#a35a97bad66458445650bb921487518d8", null ],
-      [ "ReconnectChannelsCount", "namespaceFHSS__data.html#afa30ad5fdd40a7ddb57966dd4158608c", null ],
-      [ "ReconnectChannelsStart", "namespaceFHSS__data.html#a47d2953126e26a3795df425ce358f710", null ],
       [ "RetryCount", "namespaceFHSS__data.html#ae8ce3cb8a245c0b0bd6a401c3a39e708", null ],
       [ "RetryWait", "namespaceFHSS__data.html#a44efaec885381f16becf823f63b385d2", null ],
       [ "UkRules", "namespaceFHSS__data.html#a5dacaf20c4eebf662d8c33089bccfad7", null ],

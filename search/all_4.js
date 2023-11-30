@@ -61,7 +61,7 @@ var searchData=
   ['boxtop_58',['BoxTop',['../1Definitions_8h.html#a14af89f3ce30e043d543d77e144a843b',1,'1Definitions.h']]],
   ['brightness_59',['Brightness',['../1Definitions_8h.html#adb3b4a5ffa0c290576c837177b5385a0',1,'1Definitions.h']]],
   ['brown_60',['Brown',['../1Definitions_8h.html#a3057a3f4d88842d385cd5ad6c5ddf80f',1,'1Definitions.h']]],
-  ['buddybuffer_61',['BuddyBuffer',['../1Definitions_8h.html#ac820332c4e7b285bc78564ac677b0f12',1,'1Definitions.h']]],
+  ['buddybuffer_61',['BuddyBuffer',['../1Definitions_8h.html#a037b4b75d909337d80088cac2f180edf',1,'1Definitions.h']]],
   ['buddychview_62',['BUDDYCHVIEW',['../1Definitions_8h.html#a292f677c644b13c00f8026f08ee648c9',1,'1Definitions.h']]],
   ['buddychviewend_63',['BuddyChViewEnd',['../TransmitterCode_2src_2main_8cpp.html#ad332e97e29352b9b7bf0ada90b4dcf06',1,'main.cpp']]],
   ['buddychviewstart_64',['BuddyChViewStart',['../TransmitterCode_2src_2main_8cpp.html#ab1bdf189a2e5d2c6252095abeb660e79',1,'main.cpp']]],
