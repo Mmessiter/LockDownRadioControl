@@ -61,45 +61,45 @@
     #endif
     
 
-    #define PACEMAKER              10                           // was 10.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-    #define TIMEFORTXMANAGMENT     3                            // was 3.   How many ms must remain spare between data packets before daring to undertake more trivial tasks
+    #define PACEMAKER              5                           // was 10. 5 is probably MIN.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+    #define TIMEFORTXMANAGMENT     1                           // was 3.   How many ms must remain spare between data packets before daring to undertake more trivial tasks
 
-    #define CHANNELSSENT           16                          // 8 later!!
+    #define CHANNELSSENT           8                           // 8 later!!
     #define CHANNELSUSED           16                          // 16 Channels
     #define UNCOMPRESSEDWORDS      (CHANNELSSENT + 4)          // DATA TO SEND WHEN COMPRESSED    *********** (BRACKETS ARE IMPORTANT !!) *********** 
     #define COMPRESSEDWORDS        (UNCOMPRESSEDWORDS * 3 / 4) // UNCOMPRESSED DATA MUST BE DIVISIBLE BY 4
     #define SENDBUFFERSIZE         (CHANNELSUSED + 4) 
 
-    #define DEFAULTPIPEADDRESS     0xB7BE3E9423LL // Pipe address for startup - any value but MUST match RX 
-    #define MAXMIXES               32             // 32 mixes
-    #define TICKSPERMINUTE         60000          // millis() = 60000 per minute
-    #define PROPOCHANNELS          8              // Only 4 have knobs / 2 sticks (= 4 hall sensors)
-    #define BANKSWITCH             4              // Default MODE switch
-    #define AUTOSWITCH             1              // Default AUTO switch
-    #define BANKSUSED              4              // Flight modes (AKA Banks)
-    #define LOWBATTERY             42             // Default percent for warning (User definable)
+    #define DEFAULTPIPEADDRESS     0xB7BE3E9423LL               // Pipe address for startup - any value but MUST match RX 
+    #define MAXMIXES               32                           // 32 mixes
+    #define TICKSPERMINUTE         60000                        // millis() = 60000 per minute
+    #define PROPOCHANNELS          8                            // Only 4 have knobs / 2 sticks (= 4 hall sensors)
+    #define BANKSWITCH             4                            // Default MODE switch
+    #define AUTOSWITCH             1                            // Default AUTO switch
+    #define BANKSUSED              4                            // Flight modes (AKA Banks)
+    #define LOWBATTERY             42                           // Default percent for warning (User definable)
     #define DEFAULTTRIMREPEATSPEED 600
-    #define INACTIVITYTIMEOUT      10 * TICKSPERMINUTE       // Default time after which to switch off
-    #define INACTIVITYMINIMUM      05 * TICKSPERMINUTE       // Inactivity timeout minimum is 5 minutes
-    #define INACTIVITYMAXIMUM      30 * TICKSPERMINUTE       // Inactivity timeout maximum is 30 minutes
-    #define DS1307_ADDRESS         0x68                      // I2C address for RTC
-    #define MAXLINES               30                        // text to load at once for log and help screens
-    #define DEFAULT_EXPO           50                        // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
-    #define CHARSMAX               120                       // Max length for char arrays
+    #define INACTIVITYTIMEOUT      10 * TICKSPERMINUTE          // Default time after which to switch off
+    #define INACTIVITYMINIMUM      05 * TICKSPERMINUTE          // Inactivity timeout minimum is 5 minutes
+    #define INACTIVITYMAXIMUM      30 * TICKSPERMINUTE          // Inactivity timeout maximum is 30 minutes
+    #define DS1307_ADDRESS         0x68                         // I2C address for RTC
+    #define MAXLINES               30                           // text to load at once for log and help screens
+    #define DEFAULT_EXPO           50                           // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
+    #define CHARSMAX               120                          // Max length for char arrays
  
    
-    #define DEFAULTLEDBRIGHTNESS   20                        // LED brightness
-    #define DEFAULTPOWEROFFWARNING 3                         // Default time to warn before cutting power
+    #define DEFAULTLEDBRIGHTNESS   20                           // LED brightness
+    #define DEFAULTPOWEROFFWARNING 3                            // Default time to warn before cutting power
     #define MAXDUALRATE            200
     #define MAXBUFFERSIZE          1024 * 6
     #define MAXMODELNUMBER         91
-    #define RED_LED_ON_TIME        3500  // How many ms of no connection before RED led comes on
-    #define LOW_VOLTAGE_TIME       10000 // How many ms to endure low voltage before announcing it. (10 seconds)
-    #define MAXSHOWCOMMSSESCONDS   6     // Assess average connection quality over most recent 6 seconds continously
-    #define SHOWCOMMSDELAY         1000  // ms pauses between updated info on NEXTION
-    #define WARMUPDELAY            300   // fails at 200 so must be >200 ...
-    #define SCREENCHANGEWAIT       100   // allow time for screen to appear
-    #define PACKETNUMBERMAX        11    // only 7 are so far in use
+    #define RED_LED_ON_TIME        3500                         // How many ms of no connection before RED led comes on
+    #define LOW_VOLTAGE_TIME       10000                        // How many ms to endure low voltage before announcing it. (10 seconds)
+    #define MAXSHOWCOMMSSESCONDS   6                            // Assess average connection quality over most recent 6 seconds continously
+    #define SHOWCOMMSDELAY         1000                         // ms pauses between updated info on NEXTION
+    #define WARMUPDELAY            300                          // fails at 200 so must be >200 ...
+    #define SCREENCHANGEWAIT       100                          // allow time for screen to appear
+    #define PACKETNUMBERMAX        11                           // only 7 are so far in use
 
 // **************************************************************************
 //                            FHSS PARAMETERS                               *

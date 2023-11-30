@@ -45,7 +45,7 @@
 #define PIPENUMBER       1
 #define BOUNDPIPENUMBER  1
 
-#define CHANNELSSENT       16                             //    will be 8 later 
+#define CHANNELSSENT       8                             //    will be 8 later 
 #define CHANNELSUSED       16                            //
 #define UNCOMPRESSEDWORDS  (CHANNELSSENT + 4)            //   = 20 WORDS (40 bytes)
 #define COMPRESSEDWORDS    (UNCOMPRESSEDWORDS * 3 / 4)   //   = 30 bytes
