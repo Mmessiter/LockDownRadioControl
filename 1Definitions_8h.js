@@ -629,6 +629,7 @@ var 1Definitions_8h =
     [ "Randomized_Recovery_Channels_Counter", "1Definitions_8h.html#a2d439a8558cff2d7ad534d1496dd6307", null ],
     [ "RangeTestGoodPackets", "1Definitions_8h.html#a8a5b55d644bb404cd6cdf61c5a85f822", null ],
     [ "RangeTestStart", "1Definitions_8h.html#a8e7018af38f2b48314416c9559cb39e0", null ],
+    [ "RawDataBuffer", "1Definitions_8h.html#a0f07c6dbcdbb5c41cf0b08fdfa70fd7f", null ],
     [ "ReceiverVersionNumber", "1Definitions_8h.html#a559ac5e951f830715024de0cbb698a36", null ],
     [ "RecentPacketsLost", "1Definitions_8h.html#a75bea305c82af413e997a07f6554ff93", null ],
     [ "RecentStartLine", "1Definitions_8h.html#a1c51abf9c65ed93e152859c5c080f578", null ],

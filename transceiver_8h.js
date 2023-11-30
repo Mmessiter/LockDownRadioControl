@@ -12,6 +12,7 @@ var transceiver_8h =
     [ "DoScanEnd", "transceiver_8h.html#a31fb6a46af68482e107cddee58dfb677", null ],
     [ "DoScanInit", "transceiver_8h.html#a77c4a4ffa609df08830ccece07bf283b", null ],
     [ "DrawFhssBox", "transceiver_8h.html#a6bdc6419b47dda71d0d2c8faf652adc2", null ],
+    [ "EncodeTheChangedChannels", "transceiver_8h.html#aed4c2b4045a7544e5d05096995caa585", null ],
     [ "FailedPacket", "transceiver_8h.html#a5fbd3c8613a4163425c94965704ce5f8", null ],
     [ "FlushFifos", "transceiver_8h.html#a07c27b4e208198453c70876517926052", null ],
     [ "HopToNextChannel", "transceiver_8h.html#a52aa3e80bccf5e75346c93fdae63122d", null ],
