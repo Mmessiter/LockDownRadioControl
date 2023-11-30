@@ -60,12 +60,15 @@
         #define BUDDYPPMPORT 6  // Buddybox PPM pin
     #endif
     
-    #define CHANNELSSENT           8                           // 8 later!!
+
+    #define PACEMAKER              10                           // was 10.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+    #define TIMEFORTXMANAGMENT     3                            // was 3.   How many ms must remain spare between data packets before daring to undertake more trivial tasks
+
+    #define CHANNELSSENT           16                          // 8 later!!
     #define CHANNELSUSED           16                          // 16 Channels
     #define UNCOMPRESSEDWORDS      (CHANNELSSENT + 4)          // DATA TO SEND WHEN COMPRESSED    *********** (BRACKETS ARE IMPORTANT !!) *********** 
     #define COMPRESSEDWORDS        (UNCOMPRESSEDWORDS * 3 / 4) // UNCOMPRESSED DATA MUST BE DIVISIBLE BY 4
-    #define SENDBUFFERSIZE         (CHANNELSUSED + 4)          
-
+    #define SENDBUFFERSIZE         (CHANNELSUSED + 4) 
 
     #define DEFAULTPIPEADDRESS     0xB7BE3E9423LL // Pipe address for startup - any value but MUST match RX 
     #define MAXMIXES               32             // 32 mixes
@@ -106,14 +109,8 @@
     #define DATARATE                 RF24_250KBPS   // RF24_250KBPS or RF24_1MBPS or RF24_2MBPS
     #define FASTDATARATE             RF24_1MBPS     // 2 MBPS = RF24_2MBPS; 1 MBPS = RF24_1MBPS <<
     #define PERFECTPACKETSPERSECOND  100            // Flat out perfect packets per second
-    
-    #define PACEMAKER                10              // was 10.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-    #define TIMEFORTXMANAGMENT       3               // was 3.   How many ms must remain spare between data packets before daring to undertake more trivial tasks
-    
     #define RETRYCOUNT               2              // was 2. Auto retries inside nRF24L01. MAX is 15. Fails below 2.
     #define RETRYWAIT                1              // was 1. 250us = Wait between retries (RetryWait+1 * 250us))
-    #define RECONNECT_CHANNELS_START 12             // was 12 // Offset into channels' array
-    #define RECONNECT_CHANNELS_COUNT 3              // was 3  // How many channels to try when FIRST connecting  
     #define QUIETCHANNEL             5              // This was found to be the least busy channel in the 2.4GHz band in my house
   
 
@@ -608,11 +605,11 @@ uint16_t      TrimRepeatSpeed  = 600;
 char          na[]             = "";
 uint8_t       StepSize[16]     = {0, 0, 0, 0, 0, 0, 0, 0, 5, 25, 5, 25, 5, 25, 5, 25}; //    How far to move each time on slow servos
 
-uint16_t      CurrentPosition[SENDBUFFERSIZE];                                      //    Position from which a slow servo started (0 = not started yet)
-uint16_t      SendBuffer[SENDBUFFERSIZE];                                           //    Data to send to rx (16 words)
-uint16_t      BuddyBuffer[SENDBUFFERSIZE];                                          //    Data from wireless or PPM buddy (16 words)
-uint16_t      ShownBuffer[SENDBUFFERSIZE];                                          //    Data shown before
-uint16_t      RawDataBuffer[SENDBUFFERSIZE];                                        //    Data as actually sent
+uint16_t      CurrentPosition[SENDBUFFERSIZE+1];                                      //    Position from which a slow servo started (0 = not started yet)
+uint16_t      SendBuffer[SENDBUFFERSIZE+1];                                           //    Data to send to rx (16 words)
+uint16_t      BuddyBuffer[SENDBUFFERSIZE+1];                                          //    Data from wireless or PPM buddy (16 words)
+uint16_t      ShownBuffer[SENDBUFFERSIZE+1];                                          //    Data shown before
+uint16_t      RawDataBuffer[SENDBUFFERSIZE+1];                                        //    Data as actually sent
 uint16_t      LastBuffer[CHANNELSUSED + 1];                                         //    Used to spot any change
 uint16_t      PreMixBuffer[CHANNELSUSED + 1];                                       //    Data collected from sticks
 uint8_t       MaxDegrees[5][CHANNELSUSED + 1];                                      //    Max degrees (180)
@@ -962,8 +959,6 @@ uint8_t  NextChannelNumber      = 0;
 uint8_t  PaceMaker              = PACEMAKER;                // now variables are used
 uint8_t  RetryCount             = RETRYCOUNT;               // now variables are used
 uint8_t  RetryWait              = RETRYWAIT;                // now variables are used
-uint8_t  ReconnectChannelsCount = RECONNECT_CHANNELS_COUNT; // now variables are used
-uint8_t  ReconnectChannelsStart = RECONNECT_CHANNELS_START; // now variables are used
 
 } // namespace FHSS_data
 

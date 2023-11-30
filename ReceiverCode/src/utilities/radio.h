@@ -64,9 +64,6 @@ void ReadExtraParameters()
     uint8_t  SwapWaveBand;
     PacketNumber = RawDataIn[CHANNELSSENT];
     
-    // NB: RawDataIn[CHANNELSSENT + 3]; cannot be used
-   
-
     switch (PacketNumber) {
         case 0:
             FailSafeSave = bool(RawDataIn[CHANNELSSENT + 1]);

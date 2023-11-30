@@ -39,27 +39,25 @@
 // ********************* >>> FHSS params <<< *******************************************
 
 #define HOPTIME                   0    // was 80 ms between channel changes. But now it hops after every packet!
-#define RECONNECT_CHANNELS_COUNT  3   // was 3 How many channels to try when FIRST connecting
-#define RECONNECT_CHANNELS_OFFSET 12    // was 12 Offset in the array to begin getting reconnect channels
 
-// *****************************************************************************************
+// *************************************************************************************
+
 #define PIPENUMBER       1
 #define BOUNDPIPENUMBER  1
 
-#define CHANNELSSENT       8                            //    will be 8 later 
+#define CHANNELSSENT       16                             //    will be 8 later 
 #define CHANNELSUSED       16                            //
 #define UNCOMPRESSEDWORDS  (CHANNELSSENT + 4)            //   = 20 WORDS (40 bytes)
 #define COMPRESSEDWORDS    (UNCOMPRESSEDWORDS * 3 / 4)   //   = 30 bytes
-#define RECEIVEBUFFERSIZE  (CHANNELSUSED + 4)
+#define RECEIVEBUFFERSIZE  (CHANNELSUSED + 4)        
 
 struct  CD{
     uint16_t      Dataflags = 0;                   //  send 32 bytes !
-    uint16_t      CompressedData[COMPRESSEDWORDS]; //  9 x 16 bits = 18 bytes
+    uint16_t      CompressedData[COMPRESSEDWORDS]; // 
 };
 CD DataToSend;
 
-uint16_t SizeOfDataToSend = sizeof(DataToSend);// .Dataflags) + sizeof(DataToSend.CompressedData);
-
+uint16_t SizeOfDataToSend = sizeof(DataToSend);
 
 #define FREQUENCYSCOUNT  82                             // uses 82 different channels
 #define FREQUENCYSCOUNT1 41                             // uses 41 different test channels
@@ -102,11 +100,11 @@ uint8_t  ThisRadio    = 1;
 uint8_t  SavedPipeAddress[8];
 uint8_t  NextChannelNumber = 0;
 uint8_t  NextChannel;
-uint8_t  ReconnectIndex = RECONNECT_CHANNELS_OFFSET;
+uint8_t  ReconnectIndex = 0;
 uint8_t  PacketNumber;
-uint16_t RawDataIn[RECEIVEBUFFERSIZE];    //  20 x 16 BIT words
-uint16_t ReceivedData[RECEIVEBUFFERSIZE]; //  20 x 16 BIT words
-uint16_t PreviousData[RECEIVEBUFFERSIZE]; /** Previously received data (used for servos. Hence not sent if unchanged) */
+uint16_t RawDataIn    [RECEIVEBUFFERSIZE+1]; //  21 x 16 BIT words
+uint16_t ReceivedData [RECEIVEBUFFERSIZE+1]; //  21 x 16 BIT words
+uint16_t PreviousData [RECEIVEBUFFERSIZE+1]; //** Previously received data (used for servos. Hence not sent if unchanged) */
 uint16_t Interations = 0;
 uint32_t HopStart;
 uint64_t NewPipeMaybe = 0;
