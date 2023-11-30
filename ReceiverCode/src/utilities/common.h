@@ -46,7 +46,7 @@
 #define PIPENUMBER       1
 #define BOUNDPIPENUMBER  1
 
-#define CHANNELSSENT       16                            //  
+#define CHANNELSSENT       8                            //    will be 8 later 
 #define CHANNELSUSED       16                            //
 #define UNCOMPRESSEDWORDS  (CHANNELSSENT + 4)            //   = 20 WORDS (40 bytes)
 #define COMPRESSEDWORDS    (UNCOMPRESSEDWORDS * 3 / 4)   //   = 30 bytes
@@ -54,7 +54,7 @@
 
 struct  CD{
     uint16_t      Dataflags = 0;                   //  send 32 bytes !
-    uint16_t      CompressedData[COMPRESSEDWORDS]; 
+    uint16_t      CompressedData[COMPRESSEDWORDS]; //  9 x 16 bits = 18 bytes
 };
 CD DataToSend;
 
@@ -104,6 +104,7 @@ uint8_t  NextChannelNumber = 0;
 uint8_t  NextChannel;
 uint8_t  ReconnectIndex = RECONNECT_CHANNELS_OFFSET;
 uint8_t  PacketNumber;
+uint16_t RawDataIn[RECEIVEBUFFERSIZE];    //  20 x 16 BIT words
 uint16_t ReceivedData[RECEIVEBUFFERSIZE]; //  20 x 16 BIT words
 uint16_t PreviousData[RECEIVEBUFFERSIZE]; /** Previously received data (used for servos. Hence not sent if unchanged) */
 uint16_t Interations = 0;

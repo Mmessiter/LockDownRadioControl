@@ -62,14 +62,14 @@ void ReadExtraParameters()
 {
     uint16_t TwoBytes = 0;
     uint8_t  SwapWaveBand;
-    PacketNumber = ReceivedData[CHANNELSSENT];
+    PacketNumber = RawDataIn[CHANNELSSENT];
     
-    // NB: ReceivedData[CHANNELSSENT + 3]; cannot be used
+    // NB: RawDataIn[CHANNELSSENT + 3]; cannot be used
    
 
     switch (PacketNumber) {
         case 0:
-            FailSafeSave = bool(ReceivedData[CHANNELSSENT + 1]);
+            FailSafeSave = bool(RawDataIn[CHANNELSSENT + 1]);
    
             if (FailSafeSave) {
                 TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
@@ -77,46 +77,46 @@ void ReadExtraParameters()
             }
             break;
         case 1:
-            FS_byte1  = ReceivedData[CHANNELSSENT + 1]; // These 2 bytes are 16 failsafe flags
-            FS_byte2  = ReceivedData[CHANNELSSENT + 2]; // These 2 bytes are 16 failsafe flags
+            FS_byte1  = RawDataIn[CHANNELSSENT + 1]; // These 2 bytes are 16 failsafe flags
+            FS_byte2  = RawDataIn[CHANNELSSENT + 2]; // These 2 bytes are 16 failsafe flags
             break;
         case 2:
-            Qnh = (ReceivedData[CHANNELSSENT + 1]) << 8; // 16 bits sent as two bytes for pressure here at sea level
-            Qnh += ReceivedData[CHANNELSSENT + 2];
+            Qnh = (RawDataIn[CHANNELSSENT + 1]) << 8; // 16 bits sent as two bytes for pressure here at sea level
+            Qnh += RawDataIn[CHANNELSSENT + 2];
             if (OldQnh != Qnh) SendQnhToSensorHub();
             OldQnh = Qnh; // Send new one once only
             break;
         case 3:
-        //  GuessWhat = ReceivedData[CHANNELSSENT + 1]; // not used yet
-            if ((ReceivedData[CHANNELSSENT + 2]) == 255) { // Mark this location
+        //  GuessWhat = RawDataIn[CHANNELSSENT + 1]; // not used yet
+            if ((RawDataIn[CHANNELSSENT + 2]) == 255) { // Mark this location
                 MarkHere();
-                ReceivedData[CHANNELSSENT + 2] = 0; // ... Once only
+                RawDataIn[CHANNELSSENT + 2] = 0; // ... Once only
             }
             break;
         case 4:
-            ModelMatched = ReceivedData[CHANNELSSENT + 1];
-            SwapWaveBand = ReceivedData[CHANNELSSENT + 2];
+            ModelMatched = RawDataIn[CHANNELSSENT + 1];
+            SwapWaveBand = RawDataIn[CHANNELSSENT + 2];
             if (SwapWaveBand > 0) {
                 if (SwapWaveBand == 1) SetUKFrequencies();
                 if (SwapWaveBand == 2) SetTestFrequencies();
             }
             break;
         case 5:
-            UseSBUS         = (bool)ReceivedData[CHANNELSSENT + 1]; // if false means PPM
-            PPMChannelCount = ReceivedData[CHANNELSSENT + 2];
+            UseSBUS         = (bool)RawDataIn[CHANNELSSENT + 1]; // if false means PPM
+            PPMChannelCount = RawDataIn[CHANNELSSENT + 2];
             break;
 
         case 6:
             if (Randomized_Recovery_Channels_Counter < 20) { // not forever!
                 ++Randomized_Recovery_Channels_Counter;
-                Randomized_Recovery_Channels[0] = ReceivedData[CHANNELSSENT + 1];
-                Randomized_Recovery_Channels[1] = ReceivedData[CHANNELSSENT + 2];
+                Randomized_Recovery_Channels[0] = RawDataIn[CHANNELSSENT + 1];
+                Randomized_Recovery_Channels[1] = RawDataIn[CHANNELSSENT + 2];
                 UseRandomizedRecoveryChannels();                             // Use randomized reconnection channels so that won't be the same as other user 
                 
             }
             case 7:
             if (Randomized_Recovery_Channels_Counter < 20) { // not forever!
-                Randomized_Recovery_Channels[2] = ReceivedData[CHANNELSSENT + 1];
+                Randomized_Recovery_Channels[2] = RawDataIn[CHANNELSSENT + 1];
                 UseRandomizedRecoveryChannels();                             // Use randomized reconnection channels so that won't be the same as other user 
             }
         default:
@@ -136,11 +136,26 @@ void MapToSBUS()
         }
     }
 }
+
+
+/************************************************************************************************************/
+
+void RearrangeTheChannels(){
+
+    // This function looks at the 16 BITS of DataToSend.DataFlags and rearranges the channels accordingly.
+
+    for (int i = 0; i < CHANNELSUSED; ++i) {  // later! ...
+        ReceivedData[i] = RawDataIn[i];
+    }
+}
+
+
 /************************************************************************************************************/
 void UseReceivedData()
 {
-    Decompress(ReceivedData, DataToSend.CompressedData, UNCOMPRESSEDWORDS); // Decompress only the most recent data
-    ReadExtraParameters();                                       // Look at parameters sent with packet
+    Decompress(RawDataIn, DataToSend.CompressedData, UNCOMPRESSEDWORDS); // Decompress only the most recent data
+    ReadExtraParameters();                                       // works on RawDataIn ... look at parameters sent with packet
+    if (BoundFlag && ModelMatched) RearrangeTheChannels();       // Rearrange the channels for actual control since only changed ones are sent
     MapToSBUS();                                                 // Get SBUS data ready
     LastPacketArrivalTime = millis();                            // Note the arrival time
     if (HopNow) {                                                // This flag gets set in LoadAckPayload();
@@ -148,7 +163,6 @@ void UseReceivedData()
         HopNow   = false;                                        // ... and clear the flag,
         HopStart = millis();                                     // ... and start the timer.
     }
-   //Look(ReceivedData[14]);
 }
 
 /************************************************************************************************************/
@@ -162,7 +176,6 @@ bool ReadData()
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
         DelayMillis(2);       
         CurrentRadio->read(&DataToSend, SizeOfDataToSend);   //  ** >> Read new data from master << **
-        Look(SizeOfDataToSend);
         Connected = true;
         NewData   = true;
     }

@@ -265,6 +265,20 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 }
 
 /************************************************************************************************************/
+void EncodeTheChangedChannels(){
+
+    if (BoundFlag && ModelMatched) {
+        for (int i = 0; i < CHANNELSUSED; ++i){ // Later!!
+            RawDataBuffer[i] = SendBuffer[i];
+        }
+    }else{
+        for (int i = 0; i < CHANNELSUSED; ++i){ 
+            RawDataBuffer[i] = SendBuffer[i];
+        }
+    }
+}
+
+/************************************************************************************************************/
 /********************************* Function to send data to receiver ****************************************/
 /************************************************************************************************************/
 
@@ -277,7 +291,8 @@ FASTRUN void SendData()
         Connected = false;                                       // Assume the worst until ACK is received.
         FlushFifos();                                            // This avoids a lockup that happens when the FIFO gets full.
         LoadPacketData();                                        // extra parameters appended to the data packet
-        Compress(Datatosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30) 
+        EncodeTheChangedChannels();                             
+        Compress(Datatosend.CompressedData, RawDataBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30) 
         if (Radio1.write(&Datatosend, SizeOfDatatosend)) {SuccessfulPacket();} else {FailedPacket();}   
         if (BuddyMasterOnWireless) SendSpecialPacket();          // takes about 4 - 5 ms. Gets buddy control data in ACK payload   
     }

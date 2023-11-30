@@ -60,9 +60,9 @@
         #define BUDDYPPMPORT 6  // Buddybox PPM pin
     #endif
     
-    #define CHANNELSSENT           16                          // 8 ???
+    #define CHANNELSSENT           8                           // 8 later!!
     #define CHANNELSUSED           16                          // 16 Channels
-    #define UNCOMPRESSEDWORDS      (CHANNELSSENT + 4)          // DATA TO SEND  *********** (BRACKETS ARE IMPORTANT) *********** 
+    #define UNCOMPRESSEDWORDS      (CHANNELSSENT + 4)          // DATA TO SEND WHEN COMPRESSED    *********** (BRACKETS ARE IMPORTANT !!) *********** 
     #define COMPRESSEDWORDS        (UNCOMPRESSEDWORDS * 3 / 4) // UNCOMPRESSED DATA MUST BE DIVISIBLE BY 4
     #define SENDBUFFERSIZE         (CHANNELSUSED + 4)          
 
@@ -104,7 +104,7 @@
 
 
     #define DATARATE                 RF24_250KBPS   // RF24_250KBPS or RF24_1MBPS or RF24_2MBPS
-    #define FASTDATARATE             RF24_2MBPS     // 2 MBPS = RF24_2MBPS; 1 MBPS = RF24_1MBPS <<
+    #define FASTDATARATE             RF24_1MBPS     // 2 MBPS = RF24_2MBPS; 1 MBPS = RF24_1MBPS <<
     #define PERFECTPACKETSPERSECOND  100            // Flat out perfect packets per second
     
     #define PACEMAKER                10              // was 10.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
@@ -612,15 +612,15 @@ uint16_t      CurrentPosition[SENDBUFFERSIZE];                                  
 uint16_t      SendBuffer[SENDBUFFERSIZE];                                           //    Data to send to rx (16 words)
 uint16_t      BuddyBuffer[SENDBUFFERSIZE];                                          //    Data from wireless or PPM buddy (16 words)
 uint16_t      ShownBuffer[SENDBUFFERSIZE];                                          //    Data shown before
-
-uint16_t      LastBuffer[CHANNELSUSED + 1];                                            //    Used to spot any change
-uint16_t      PreMixBuffer[CHANNELSUSED + 1];                                          //    Data collected from sticks
-uint8_t       MaxDegrees[5][CHANNELSUSED + 1];                                         //    Max degrees (180)
-uint8_t       MidHiDegrees[5][CHANNELSUSED + 1];                                       //    MidHi degrees (135)
-uint8_t       CentreDegrees[5][CHANNELSUSED + 1];                                      //    Middle degrees (90)
-uint8_t       MidLowDegrees[5][CHANNELSUSED + 1];                                      //    MidLow Degrees (45)
-uint8_t       MinDegrees[5][CHANNELSUSED + 1];                                         //    Min Degrees (0)
-uint8_t       SubTrims[CHANNELSUSED + 1];                                              //    Subtrims
+uint16_t      RawDataBuffer[SENDBUFFERSIZE];                                        //    Data as actually sent
+uint16_t      LastBuffer[CHANNELSUSED + 1];                                         //    Used to spot any change
+uint16_t      PreMixBuffer[CHANNELSUSED + 1];                                       //    Data collected from sticks
+uint8_t       MaxDegrees[5][CHANNELSUSED + 1];                                      //    Max degrees (180)
+uint8_t       MidHiDegrees[5][CHANNELSUSED + 1];                                    //    MidHi degrees (135)
+uint8_t       CentreDegrees[5][CHANNELSUSED + 1];                                   //    Middle degrees (90)
+uint8_t       MidLowDegrees[5][CHANNELSUSED + 1];                                   //    MidLow Degrees (45)
+uint8_t       MinDegrees[5][CHANNELSUSED + 1];                                      //    Min Degrees (0)
+uint8_t       SubTrims[CHANNELSUSED + 1];                                           //    Subtrims
 uint8_t       SubTrimToEdit      = 0;
 uint32_t      LastPacketSentTime = 0;
 uint8_t       Bank               = 1;
