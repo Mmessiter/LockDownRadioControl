@@ -61,8 +61,8 @@
     #endif
     
 
-    #define PACEMAKER              5                           // was 10. 5 is probably MIN.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-    #define TIMEFORTXMANAGMENT     1                           // was 3.   How many ms must remain spare between data packets before daring to undertake more trivial tasks
+    #define PACEMAKER              10                           // was 10. 5 is probably MIN.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+    #define TIMEFORTXMANAGMENT     2                            // was 3.   How many ms must remain spare between data packets before daring to undertake more trivial tasks
 
     #define CHANNELSSENT           8                           // 8 later!!
     #define CHANNELSUSED           16                          // 16 Channels
@@ -85,9 +85,7 @@
     #define DS1307_ADDRESS         0x68                         // I2C address for RTC
     #define MAXLINES               30                           // text to load at once for log and help screens
     #define DEFAULT_EXPO           50                           // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
-    #define CHARSMAX               120                          // Max length for char arrays
- 
-   
+    #define CHARSMAX               120                          // Max length for char arrays  
     #define DEFAULTLEDBRIGHTNESS   20                           // LED brightness
     #define DEFAULTPOWEROFFWARNING 3                            // Default time to warn before cutting power
     #define MAXDUALRATE            200
@@ -931,6 +929,7 @@ uint8_t  PupilIsAlive        = 0;
 uint8_t  MasterIsAlive       = 0;
 bool     VersionsCompared    = false;
 uint8_t  Randomized_Recovery_Channels_Counter = 0;
+uint32_t LedGreenMoment        = 0;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

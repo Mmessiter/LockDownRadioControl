@@ -139,11 +139,23 @@ void MapToSBUS()
 
 void RearrangeTheChannels(){
 
+    static uint16_t PreviousRData[CHANNELSUSED];
+
     // This function looks at the 16 BITS of DataToSend.DataFlags and rearranges the channels accordingly.
 
-    for (int i = 0; i < CHANNELSUSED; ++i) {  // later! ...
-        ReceivedData[i] = RawDataIn[i];
+    // for (int i = 0; i < CHANNELSUSED; ++i) {  
+    //     ReceivedData[i] = RawDataIn[i];
+    // }
+    
+    for (int i = 0; i < CHANNELSUSED; ++i) {  
+        if (DataToSend.Dataflags & (1 << i)) { // if bit is set, set the channel, Otherwise leave it alone
+            ReceivedData[i]  = RawDataIn[i];
+            PreviousRData[i] = RawDataIn[i];
+        }else{
+            ReceivedData[i] = PreviousRData[i];
+        }
     }
+    Look(ReceivedData[15]);
 }
 
 

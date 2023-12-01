@@ -197,6 +197,7 @@ void GreenLedOn()
         ClearSuccessRate();
         LastShowTime = 0;
     }
+    LedGreenMoment = millis();
     TotalLostPackets  = 0;
     TotalGoodPackets  = 0;
     RecentPacketsLost = 0;

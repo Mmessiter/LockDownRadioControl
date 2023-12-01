@@ -264,18 +264,42 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     GapSum = 0;
 }
 
+ 
+
+
+
 /************************************************************************************************************/
 void EncodeTheChangedChannels(){
+  
+  
+     uint16_t PreviousBuffer[CHANNELSUSED];
+    uint8_t p = 0;
+    Datatosend.DataFlags = 0; // clear the dataflags byte
 
-    if (BoundFlag && ModelMatched) {
-        for (int i = 0; i < CHANNELSUSED; ++i){ // Later!!
-            RawDataBuffer[i] = SendBuffer[i];
-        }
-    }else{
+    // for (int i = 0; i < CHANNELSUSED; ++i){     // remove later!
+    //     RawDataBuffer[i] = SendBuffer[i];    
+    // }
+    //  return; // Hmmm .....
+      
+        if (BoundFlag && ModelMatched) {
+                SendBuffer[15] = 1500;
+                Look (SendBuffer[15]);
+      
         for (int i = 0; i < CHANNELSUSED; ++i){ 
+            if (SendBuffer[i] != PreviousBuffer[i]) {
+                    RawDataBuffer[p]  = SendBuffer[i];          // load a changed channel into the rawdatabuffer 
+                    PreviousBuffer[i] = SendBuffer[i];          // save it for next time
+                    Datatosend.DataFlags |= (1 << i);           // set the bit in the dataflags byte
+                    ++p;                                        // increment the rawdatabuffer index
+            } 
+        }
+        
+    }else{
+        for (int i = 0; i < CHANNELSUSED; ++i){                 // if not bound or model not matched, send first 8 channels only
             RawDataBuffer[i] = SendBuffer[i];
         }
     }
+  //  Look(p);
 }
 
 /************************************************************************************************************/
