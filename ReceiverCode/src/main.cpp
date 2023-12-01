@@ -158,7 +158,6 @@ void FailSafe()
     FailSafeSent = true; // Once is enough
     FailedSafe   = true;
     TurnLedOff();
-    UseDefaultRecoveryChannels();
     MacAddressSentCounter = 0;
 }
 

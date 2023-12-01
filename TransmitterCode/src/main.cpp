@@ -169,7 +169,6 @@ void RedLedOn()
         RecentPacketsLost    = 0;
         VersionsCompared     = false;
         Randomized_Recovery_Channels_Counter = 0;
-        UseDefaultRecoveryChannels();
         SetUKFrequencies();
         if (CurrentView == FRONTVIEW) {
             SendText(FrontView_Connected, na);
@@ -2419,7 +2418,7 @@ FLASHMEM void setup()
         }
     }
     RationaliseBuddy();
-    RandomiseTheRecoveryChannels();
+   // RandomiseTheRecoveryChannels();
 }
 /*********************************************************************************************************************************/
 void RationaliseBuddy()

@@ -121,35 +121,6 @@ void LoadPacketData()
             SendBuffer[CHANNELSSENT + 2] = PPMdata.PPMChannelCount; 
             break;
 
-        case 6:
-            // if (Randomized_Recovery_Channels_Counter < 30) { // not forever!
-            //     ++ Randomized_Recovery_Channels_Counter;
-            //     if (ModelMatched && BoundFlag) {     
-            //         SendBuffer[CHANNELSSENT + 1] = FHSS_data::Randomized_Recovery_Channels[0];
-            //         SendBuffer[CHANNELSSENT + 2] = FHSS_data::Randomized_Recovery_Channels[1]; 
-            //     }
-            //     if (!ModelMatched || !BoundFlag)  
-            //     {
-            //         SendBuffer[CHANNELSSENT + 1] = FHSS_data::Default_Recovery_Channels[0];
-            //         SendBuffer[CHANNELSSENT + 2] = FHSS_data::Default_Recovery_Channels[1];
-            //         UseDefaultRecoveryChannels();
-            //     }
-            // }
-            break;
-        case 7:
-            // if (Randomized_Recovery_Channels_Counter < 30) { // not forever!
-            //     if (ModelMatched && BoundFlag) {  
-            //         SendBuffer[CHANNELSSENT + 1] = FHSS_data::Randomized_Recovery_Channels[2];
-            //         UseRandomizedRecoveryChannels();
-            //     }
-            //         if (!ModelMatched || !BoundFlag)  
-            //     {
-            //         SendBuffer[CHANNELSSENT + 1] = FHSS_data::Default_Recovery_Channels[2];
-            //         UseDefaultRecoveryChannels();
-            //     }
-            // }
-            break;
-
         default: 
             break;
     }
@@ -178,7 +149,7 @@ FASTRUN void FailedPacket()
         {
             if (((millis() - GapStart) > RED_LED_ON_TIME) && (!LedWasRed)) RedLedOn(); // Put on red led - receiver must be off
         }
-        TryToReconnect();
+    TryToReconnect();
     int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF HERE!!
 }

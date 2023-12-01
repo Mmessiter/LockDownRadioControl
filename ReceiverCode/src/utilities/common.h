@@ -9,7 +9,7 @@
 #define RXVERSION_MINOR   3
 #define RXVERSION_MINIMUS 4 // November 2023
 
-// #define DB_FHSS
+ // #define DB_FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE
@@ -38,14 +38,14 @@
 
 // ********************* >>> FHSS params <<< *******************************************
 
-#define HOPTIME                   80    // was 80 ms between channel changes. 
+#define HOPTIME                   0    // was 80 ms between channel changes. 
 
 // *************************************************************************************
 
 #define PIPENUMBER       1
 #define BOUNDPIPENUMBER  1
 
- //#define USE_NEW_CHANNEL_MAPPING true 
+//#define USE_NEW_CHANNEL_MAPPING true 
 
 #ifdef USE_NEW_CHANNEL_MAP
     #define CHANNELSSENT       8       
@@ -122,28 +122,15 @@ uint16_t SbusRepeats           = 0;
 uint32_t RX1TotalTime          = 0;
 uint32_t RX2TotalTime          = 0;
 uint32_t RadioSwaps            = 0;
-
-
-
-
 uint32_t  LastPacketArrivalTime = 0;
 bool      FailSafeSave          = false;
 bool      INA219Connected       = false; //  Volts from INA219 ?
 bool      MPU6050Connected      = false; //  Accelerometer and Gyro from MPU6050 ?
 uint8_t   ReconnectChannel      = 0;
-
-
-uint8_t FHSS_Recovery_Channels[3]           = {15, 71, 82};                       // three channels used for Recovery
-uint8_t Randomized_Recovery_Channels[3]     = {15, 71, 82};                       // later these three channels used for Recovery get randomized
-uint8_t Default_Recovery_Channels[3]        = {15, 71, 82};                       // three channels used for Recovery
-
-uint8_t* FHSSChPointer; // Pointer for FHSS channels' array
-
-uint8_t* FHSSRecoveryPointer;           // Pointer for FHSS channels' array for recovery
-
-uint8_t FrequencyCount    = FREQUENCYSCOUNT;
-
-uint8_t FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 16, 72, // These are good for UK
+uint8_t   FHSS_Recovery_Channels[3]           = {15, 71, 82};                       // three possible channels used for Recovery
+uint8_t*  FHSSChPointer; // Pointer for FHSS channels' array
+uint8_t   FrequencyCount    = FREQUENCYSCOUNT;
+uint8_t   FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 16, 72, // These are good for UK
                              35, 57, 45, 29, 75, 3, 41, 62, 11, 9, 77, 37, 8, 31, 36, 18, 17, 50, 78, 73, 30, 79, 6, 23, 40,
                              54, 12, 80, 53, 22, 1, 74, 39, 58, 63, 70, 52, 42, 25, 43, 26, 14, 38, 48, 68, 33, 27, 60, 44, 46,
                              56, 7, 81, 5, 65, 4, 10};

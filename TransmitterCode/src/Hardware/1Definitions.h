@@ -62,10 +62,10 @@
     
 
 
-   // #define USE_NEW_CHANNEL_MAPPING true 
+  //  #define USE_NEW_CHANNEL_MAPPING true 
 
 
-    #define PACEMAKER              5                           // was 10. 5 is probably MIN.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+    #define PACEMAKER              7                            // was 10. 5 is probably MIN.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
     #define TIMEFORTXMANAGMENT     2                            // was 3.   How many ms must remain spare between data packets before daring to undertake more trivial task
     
     #ifdef USE_NEW_CHANNEL_MAPPING
@@ -106,7 +106,7 @@
     #define SHOWCOMMSDELAY         1000                         // ms pauses between updated info on NEXTION
     #define WARMUPDELAY            300                          // fails at 200 so must be >200 ...
     #define SCREENCHANGEWAIT       100                          // allow time for screen to appear
-    #define PACKETNUMBERMAX        11                           // only 7 are so far in use
+    #define PACKETNUMBERMAX        150                          // only 7 are so far in use but by making this larger we make updates infrequent
 
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
@@ -606,7 +606,7 @@ uint16_t      PacketsPerSecond = 0;
 uint8_t       PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS]; // Here we record some history
 uint32_t      TotalLostPackets = 0;
 uint32_t      TotalGoodPackets = 0;
-uint8_t       PacketNumber     = 0;
+uint16_t      PacketNumber     = 0;
 uint8_t       GPSMarkHere      = 0;
 uint16_t      TrimRepeatSpeed  = 600;
 char          na[]             = "";

@@ -921,36 +921,6 @@ bool AnyMatches(uint8_t a, uint8_t b, uint8_t c)
     return false;
 }
 
-// ******************************************************************************************************************************
-void RandomiseTheRecoveryChannels(){
-
-    if (RTC.read(tm)) {
-        ReadTheRTC();
-        randomSeed(tm.Second);
-    }
-    FHSS_data::Randomized_Recovery_Channels[0] = random(0,83);
-    FHSS_data::Randomized_Recovery_Channels[1] = random(0,83);
-    FHSS_data::Randomized_Recovery_Channels[2] = random(0,83);
-  while (AnyMatches (FHSS_data::Randomized_Recovery_Channels[0],FHSS_data::Randomized_Recovery_Channels[1],FHSS_data::Randomized_Recovery_Channels[2])){  // must all be different channels
-        FHSS_data::Randomized_Recovery_Channels[0] = random(0,83);
-        FHSS_data::Randomized_Recovery_Channels[1] = random(0,83);
-        FHSS_data::Randomized_Recovery_Channels[2] = random(0,83);
-  }
-}
-// ******************************************************************************************************************************
-void UseRandomizedRecoveryChannels(){
-
-        FHSS_data::Used_Recovery_Channels[0] =  FHSS_data::Randomized_Recovery_Channels[0];
-        FHSS_data::Used_Recovery_Channels[1] =  FHSS_data::Randomized_Recovery_Channels[1];
-        FHSS_data::Used_Recovery_Channels[2] =  FHSS_data::Randomized_Recovery_Channels[2];
-}
-// ******************************************************************************************************************************
-void UseDefaultRecoveryChannels(){
-        FHSS_data::Used_Recovery_Channels[0] =  FHSS_data::Default_Recovery_Channels[0];
-        FHSS_data::Used_Recovery_Channels[1] =  FHSS_data::Default_Recovery_Channels[1];
-        FHSS_data::Used_Recovery_Channels[2] =  FHSS_data::Default_Recovery_Channels[2];
-
-}
 /******************************************** CHANNEL REVERSE FUNCTION **********************************************************/
 
 FASTRUN void DoReverseSense()
@@ -969,8 +939,7 @@ void DelayWithDog(uint32_t HowLong)
     uint32_t ThisMoment = millis();
     while ((millis() - ThisMoment) < HowLong) {
         KickTheDog();
-    
-        //  if (BoundFlag && Connected && ModelMatched && CurrentView != FRONTVIEW) SendData();
+       //  if (BoundFlag && Connected && ModelMatched && CurrentView != FRONTVIEW) SendData();
     }
 }
 /************************************************************************************************************/

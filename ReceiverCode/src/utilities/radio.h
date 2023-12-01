@@ -33,26 +33,6 @@ Payload AckPayload;
 uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed etc. (=6)
 
 
-
-// ******************************************************************************************************************************
-void UseRandomizedRecoveryChannels(){
-
-      FHSS_Recovery_Channels[0] =  Randomized_Recovery_Channels[0];
-      FHSS_Recovery_Channels[1] =  Randomized_Recovery_Channels[1];
-      FHSS_Recovery_Channels[2] =  Randomized_Recovery_Channels[2];
-}
-// ******************************************************************************************************************************
-void UseDefaultRecoveryChannels(){
-       FHSS_Recovery_Channels[0]        =  Default_Recovery_Channels[0];
-       FHSS_Recovery_Channels[1]        =  Default_Recovery_Channels[1];
-       FHSS_Recovery_Channels[2]        =  Default_Recovery_Channels[2];
-       Randomized_Recovery_Channels[0]  =  Default_Recovery_Channels[0]; // reset Randomized_Recovery_Channels to default in case they are used too early
-       Randomized_Recovery_Channels[1]  =  Default_Recovery_Channels[1];
-       Randomized_Recovery_Channels[2]  =  Default_Recovery_Channels[2];
-
-       Randomized_Recovery_Channels_Counter = 0;
-}
-
 /************************************************************************************************************/
 /** Read extra parameters from the transmitter.
  * extra parameters are sent using the last few words bytes in every data packet.
@@ -102,21 +82,7 @@ void ReadExtraParameters()
             UseSBUS         = (bool)RawDataIn[CHANNELSSENT + 1]; // if false means PPM
             PPMChannelCount = RawDataIn[CHANNELSSENT + 2];
             break;
-
-        case 6:
-            // if (Randomized_Recovery_Channels_Counter < 20) { // not forever!
-            //     ++Randomized_Recovery_Channels_Counter;
-            //     Randomized_Recovery_Channels[0] = RawDataIn[CHANNELSSENT + 1];
-            //     Randomized_Recovery_Channels[1] = RawDataIn[CHANNELSSENT + 2];
-            //     UseRandomizedRecoveryChannels();                             // Use randomized reconnection channels so that won't be the same as other user  
-           // }
-            break;
-            case 7:
-            // if (Randomized_Recovery_Channels_Counter < 20) { // not forever!
-            //     Randomized_Recovery_Channels[2] = RawDataIn[CHANNELSSENT + 1];
-            //     UseRandomizedRecoveryChannels();                             // Use randomized reconnection channels so that won't be the same as other user 
-            // }
-            break;
+        
          default:
             break;
     }
@@ -253,8 +219,7 @@ FASTRUN void ReceiveData()
 
 void SetTestFrequencies()
 {
-    FHSSRecoveryPointer = FHSS_Channels1;
-    FHSSChPointer       = FHSS_Channels1;
+     FHSSChPointer       = FHSS_Channels1;
     FrequencyCount      = FREQUENCYSCOUNT1;
 }
 /************************************************************************************************************/
@@ -264,7 +229,6 @@ void SetTestFrequencies()
 
 void SetUKFrequencies()
 {
-    FHSSRecoveryPointer = FHSS_Channels;
     FHSSChPointer       = FHSS_Channels;
     FrequencyCount      = FREQUENCYSCOUNT;
 }
@@ -553,7 +517,6 @@ FASTRUN void Reconnect()
     uint8_t  PreviousRadio    = ThisRadio;
     uint8_t  Attempts         = 0;
     
-    ReconnectChannel = *(FHSSRecoveryPointer + ReconnectIndex); // Get a reconnect channel     
     if (ThisRadio == 1) RX1TotalTime += (millis() - ReconnectedMoment); // keep track of how long on each
     if (ThisRadio == 2) RX2TotalTime += (millis() - ReconnectedMoment);
 
