@@ -5,11 +5,14 @@
 
 #include <Arduino.h>
 #include <RF24.h>
+#include <PulsePosition.h>
+#include <Adafruit_INA219.h>
+
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   3
 #define RXVERSION_MINIMUS 4 // November 2023
 
- // #define DB_FHSS
+// #define DB_FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE
@@ -33,8 +36,8 @@
 
 // ********************* >>> Reconnect params <<< ***************************************
 
-#define LISTEN_PERIOD            14  //  14 (How many ms to listen for TX in Reconnect())
-#define RECEIVE_TIMEOUT          14  //  14  (<=9 fails, >=11 OK)
+#define LISTEN_PERIOD           14   //  14 (How many ms to listen for TX in Reconnect())
+#define RECEIVE_TIMEOUT         11   //  was 14  (should be about 4 ms more that TX's PACEMAKER)
 
 // ********************* >>> FHSS params <<< *******************************************
 
