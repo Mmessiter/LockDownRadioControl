@@ -327,7 +327,6 @@ void EncodeTheChangedChannels(){
 
 FASTRUN void SendData()
 {
-
     static bool DoneBuddy = false;
     if (SendNoData) return;
     if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { 
@@ -348,7 +347,6 @@ FASTRUN void SendData()
 #else
         if (Radio1.write(&Datatosend.CompressedData, SizeOfDatatosend-2)) {SuccessfulPacket();} else {FailedPacket();}  
 #endif
-        
         DoneBuddy = false; 
     }else{
         if (!DoneBuddy){
