@@ -50,7 +50,7 @@
 
  #define USE_NEW_CHANNEL_MAPPING true 
 
-#ifdef USE_NEW_CHANNEL_MAP
+#ifdef USE_NEW_CHANNEL_MAPPING
     #define CHANNELSSENT       8       
 #else
     #define CHANNELSSENT       16       

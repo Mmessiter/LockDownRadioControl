@@ -235,64 +235,22 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     GapSum = 0;
 }
 
- 
-
-
-
 /************************************************************************************************************/
 void EncodeTheChangedChannels(){
-  
-#ifndef USE_NEW_CHANNEL_MAPPING
-
-     for (int i = 0; i < CHANNELSUSED; ++i){     // remove later!
-         RawDataBuffer[i] = SendBuffer[i];    
-     }
-      return; // Copout code that just does first 8 channels
-#else
-      
+#ifdef USE_NEW_CHANNEL_MAPPING
     static uint16_t PreviousBuffer[CHANNELSUSED];
-   
-    static uint32_t LocalTimer1 = 0 ;
-    static uint32_t LocalTimer2 = 0 ;
-
-
-    if (BoundFlag && ModelMatched) {
-
-         if (millis() - LocalTimer1 > 95) {
-            LocalTimer1 = millis();                          // Force first 8 channels to be sent
-            for (int i = 0; i < CHANNELSUSED/2; ++i){ 
-                PreviousBuffer[i] = 0;                      // to be sure is different
-                PreviousBuffer[i+8] = SendBuffer[i+8];      // to be sure is NOT different
-                }
-        }
-
-        if (millis() - LocalTimer2 > 105) {                     // Force only last 8 channels to be sent 
-            LocalTimer2 = millis();
-            for (int i = CHANNELSUSED/2; i < CHANNELSUSED; ++i){ 
-                PreviousBuffer[i] = 0;                          // to be sure is different
-                PreviousBuffer[i-8] = SendBuffer[i-8];          // to be sure is NOT different
-                }
-        }
-        uint8_t p = 0;
-        Datatosend.DataFlags = 0; // clear the dataflags byte
-        for (int i = 0; i < CHANNELSUSED; ++i){          
-            if (abs(SendBuffer[i] != PreviousBuffer[i]) && (p < CHANNELSSENT)) {
-                    RawDataBuffer[p]  = SendBuffer[i];          // load a changed channel into the rawdatabuffer 
-                    PreviousBuffer[i] = SendBuffer[i];          // save it for next time
-                    Datatosend.DataFlags |= (1 << i);           // set the bit in the dataflags byte
-                    ++p;                                        // increment the rawdatabuffer index
-            } 
-        }
-        
-    }else{
-        for (int i = 0; i < CHANNELSUSED; ++i){                 // if not bound or model not matched, send first 8 channels only
-            RawDataBuffer[i] = SendBuffer[i];
-        }
+    uint8_t p = 0;
+    Datatosend.DataFlags = 0; // clear the dataflags 16 BIT WORD
+    for (int i = 0; i < CHANNELSUSED; ++i){          
+        if ((SendBuffer[i] != PreviousBuffer[i]) && (p < CHANNELSSENT)) {
+                RawDataBuffer[p]  = SendBuffer[i];          // load a changed channel into the rawdatabuffer 
+                PreviousBuffer[i] = SendBuffer[i];          // save it for next time
+                Datatosend.DataFlags |= (1 << i);           // set the bit in the dataflags byte
+                ++p;                                        // increment the rawdatabuffer index
+        } 
     }
-   // Serial.println(Datatosend.DataFlags, BIN);
 #endif
 }
-
 /************************************************************************************************************/
 /********************************* Function to send data to receiver ****************************************/
 /************************************************************************************************************/
