@@ -19,7 +19,7 @@ var searchData=
   ['fhss_5fdata_16',['FHSS_data',['../namespaceFHSS__data.html',1,'']]],
   ['fhss_5frecovery_5fchannels_17',['FHSS_Recovery_Channels',['../common_8h.html#a45400cd0009b7631aa0d578dbbac2a90',1,'common.h']]],
   ['fhsschpointer_18',['FHSSChPointer',['../common_8h.html#a76b48a1dfbe2bd97ee5e0479ff16e8ef',1,'FHSSChPointer():&#160;common.h'],['../namespaceFHSS__data.html#a9d000f86fb280637a15ae47d0a339023',1,'FHSS_data::FHSSChPointer()']]],
-  ['fhssrecoverypointer_19',['FHSSRecoveryPointer',['../common_8h.html#a90e15e9a52f172f55e92f5c86bcb5b29',1,'FHSSRecoveryPointer():&#160;common.h'],['../namespaceFHSS__data.html#a3bc5776f7d9f04adaf25d4659c02f92e',1,'FHSS_data::FHSSRecoveryPointer()']]],
+  ['fhssrecoverypointer_19',['FHSSRecoveryPointer',['../namespaceFHSS__data.html#a3bc5776f7d9f04adaf25d4659c02f92e',1,'FHSS_data']]],
   ['fifo_5faccel_20',['FIFO_ACCEL',['../classMPU9250.html#ad24cca1803d0d63bcf8f0c800170e03a',1,'MPU9250']]],
   ['fifo_5fcount_21',['FIFO_COUNT',['../classMPU9250.html#a1b50ee530507b784e6bc3aa9195c9b80',1,'MPU9250']]],
   ['fifo_5fen_22',['FIFO_EN',['../classMPU9250.html#a519b84b75228f1f80ba52ef5094f7281',1,'MPU9250']]],

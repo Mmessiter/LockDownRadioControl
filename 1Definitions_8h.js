@@ -608,7 +608,7 @@ var 1Definitions_8h =
     [ "NextChannelNumber", "1Definitions_8h.html#a052746df02560319bc39fa4c7d87408e", null ],
     [ "OneModelMemory", "1Definitions_8h.html#af41e1522d47ccad6267f971f13cb6f79", null ],
     [ "PaceMaker", "1Definitions_8h.html#a99dc8e91f9f022271674b0d7923a5a4d", null ],
-    [ "PacketNumber", "1Definitions_8h.html#a09cb370d93005b5a43e932a3d6093ea2", null ],
+    [ "PacketNumber", "1Definitions_8h.html#afe41d3be378c52d1dc2c6e8310ac9a0e", null ],
     [ "PacketsHistoryBuffer", "1Definitions_8h.html#a5fd9d2e94559949fda4aaeb906fa0029", null ],
     [ "PacketsPerSecond", "1Definitions_8h.html#aa7dff891c96c5574f3a8dfb38a1aad0d", null ],
     [ "PausedSecs", "1Definitions_8h.html#a39d02faa564fd940b3d34bb1ea0f2599", null ],

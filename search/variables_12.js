@@ -1,7 +1,7 @@
 var searchData=
 [
   ['radioswaps_0',['RadioSwaps',['../common_8h.html#aff48e1463bf663c156032302d0161c98',1,'RadioSwaps():&#160;common.h'],['../1Definitions_8h.html#a2f472b4c6d8312622d666f82bc1c78fb',1,'RadioSwaps():&#160;1Definitions.h']]],
-  ['randomized_5frecovery_5fchannels_1',['Randomized_Recovery_Channels',['../common_8h.html#a1a5ac6626addce37be03f2bcbbcec84b',1,'Randomized_Recovery_Channels():&#160;common.h'],['../namespaceFHSS__data.html#a35a97bad66458445650bb921487518d8',1,'FHSS_data::Randomized_Recovery_Channels()']]],
+  ['randomized_5frecovery_5fchannels_1',['Randomized_Recovery_Channels',['../namespaceFHSS__data.html#a35a97bad66458445650bb921487518d8',1,'FHSS_data']]],
   ['randomized_5frecovery_5fchannels_5fcounter_2',['Randomized_Recovery_Channels_Counter',['../common_8h.html#a2d439a8558cff2d7ad534d1496dd6307',1,'Randomized_Recovery_Channels_Counter():&#160;common.h'],['../1Definitions_8h.html#a2d439a8558cff2d7ad534d1496dd6307',1,'Randomized_Recovery_Channels_Counter():&#160;1Definitions.h']]],
   ['rangetestgoodpackets_3',['RangeTestGoodPackets',['../1Definitions_8h.html#a8a5b55d644bb404cd6cdf61c5a85f822',1,'1Definitions.h']]],
   ['rangeteststart_4',['RangeTestStart',['../1Definitions_8h.html#a8e7018af38f2b48314416c9559cb39e0',1,'1Definitions.h']]],
@@ -14,8 +14,8 @@ var searchData=
   ['recentpacketslost_11',['RecentPacketsLost',['../1Definitions_8h.html#a75bea305c82af413e997a07f6554ff93',1,'1Definitions.h']]],
   ['recentstartline_12',['RecentStartLine',['../1Definitions_8h.html#a1c51abf9c65ed93e152859c5c080f578',1,'1Definitions.h']]],
   ['recenttextfile_13',['RecentTextFile',['../1Definitions_8h.html#a850ebf7e5e2cefc8e47c06ad7523e9b8',1,'1Definitions.h']]],
-  ['reconnectchannel_14',['ReConnectChannel',['../1Definitions_8h.html#a00c739eb670d33ce9b84f4576a4eb8ff',1,'1Definitions.h']]],
-  ['reconnectchannel_15',['ReconnectChannel',['../common_8h.html#aff74788ae1118de652848453b4152a9d',1,'common.h']]],
+  ['reconnectchannel_14',['ReconnectChannel',['../common_8h.html#aff74788ae1118de652848453b4152a9d',1,'common.h']]],
+  ['reconnectchannel_15',['ReConnectChannel',['../1Definitions_8h.html#a00c739eb670d33ce9b84f4576a4eb8ff',1,'1Definitions.h']]],
   ['reconnected_16',['Reconnected',['../1Definitions_8h.html#a0f8aa0f6f0fca3b57e848eec8d23724e',1,'1Definitions.h']]],
   ['reconnectedmoment_17',['ReconnectedMoment',['../common_8h.html#ae6657a547a79d8e304b8ddeb3f6a38e0',1,'common.h']]],
   ['reconnectindex_18',['ReconnectIndex',['../common_8h.html#a90d98310365e78ee5ec06aaa7a4092f1',1,'common.h']]],

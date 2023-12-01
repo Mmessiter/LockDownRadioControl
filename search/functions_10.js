@@ -2,7 +2,7 @@ var searchData=
 [
   ['radio1_0',['Radio1',['../common_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a',1,'Radio1(pinCE1, pinCSN1):&#160;common.h'],['../1Definitions_8h.html#a621c346e4b1d9b24b9a5bda63d0f0f52',1,'Radio1(CE_PIN, CSN_PIN):&#160;1Definitions.h']]],
   ['radio2_1',['Radio2',['../common_8h.html#a8b76f3c338025926421c7b308405bbfd',1,'common.h']]],
-  ['randomisetherecoverychannels_2',['RandomiseTheRecoveryChannels',['../1Definitions_8h.html#a53b587c4008ec71fe00d1915ccca1974',1,'RandomiseTheRecoveryChannels():&#160;Utilities.h'],['../Utilities_8h.html#a53b587c4008ec71fe00d1915ccca1974',1,'RandomiseTheRecoveryChannels():&#160;Utilities.h']]],
+  ['randomisetherecoverychannels_2',['RandomiseTheRecoveryChannels',['../1Definitions_8h.html#a53b587c4008ec71fe00d1915ccca1974',1,'1Definitions.h']]],
   ['rationalisebuddy_3',['RationaliseBuddy',['../1Definitions_8h.html#aa65533089f2afae4789e1f1882ec78ad',1,'RationaliseBuddy():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aa65533089f2afae4789e1f1882ec78ad',1,'RationaliseBuddy():&#160;main.cpp']]],
   ['read_4',['read',['../classSBUS.html#a44376d88b040d2cdf85f1a6d93633935',1,'SBUS']]],
   ['readak8963registers_5',['readAK8963Registers',['../classMPU9250.html#a8882aa5158664912c4d4354739d2bc23',1,'MPU9250']]],
