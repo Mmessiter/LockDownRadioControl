@@ -37,7 +37,7 @@
 // ********************* >>> Reconnect params <<< ***************************************
 
 #define LISTEN_PERIOD           14   //  14 (How many ms to listen for TX in Reconnect())
-#define RECEIVE_TIMEOUT         14   //  was 14  (should be about 4 ms more that TX's PACEMAKER)
+
 
 // ********************* >>> FHSS params <<< *******************************************
 
@@ -52,8 +52,10 @@
 
 #ifdef USE_NEW_CHANNEL_MAPPING
     #define CHANNELSSENT       8       
+    #define RECEIVE_TIMEOUT    14   //  was 14  (should be about 4 ms more that TX's PACEMAKER)
 #else
     #define CHANNELSSENT       16       
+    #define RECEIVE_TIMEOUT    14   //  was 14  (should be about 4 ms more that TX's PACEMAKER)
 #endif
 
 #define CHANNELSUSED       16                            //

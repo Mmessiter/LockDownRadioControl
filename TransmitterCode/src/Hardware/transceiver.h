@@ -257,7 +257,7 @@ void EncodeTheChangedChannels(){
 
 FASTRUN void SendData()
 {
-    static bool DoneBuddy = false;
+  //  static bool DoneBuddy = false;
     if (SendNoData) return;
     if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { 
         LastPacketSentTime = millis();
@@ -268,22 +268,13 @@ FASTRUN void SendData()
 #ifdef USE_NEW_CHANNEL_MAPPING  
         EncodeTheChangedChannels();                              
         Compress(Datatosend.CompressedData, RawDataBuffer, UNCOMPRESSEDWORDS); // Compress 
-#endif
-#ifndef USE_NEW_CHANNEL_MAPPING
-        Compress(Datatosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 
-#endif
-#ifdef USE_NEW_CHANNEL_MAPPING  
         if (Radio1.write(&Datatosend, SizeOfDatatosend)) {SuccessfulPacket();} else {FailedPacket();}  
 #else
+        Compress(Datatosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 
         if (Radio1.write(&Datatosend.CompressedData, SizeOfDatatosend-2)) {SuccessfulPacket();} else {FailedPacket();}  
 #endif
-        DoneBuddy = false; 
-    }else{
-        if (!DoneBuddy){
-            DoneBuddy = true;
-            if (BuddyMasterOnWireless) SendSpecialPacket();          // takes about 4 - 5 ms. Gets buddy control data in ACK payload  
-        } 
     }
+    if (BuddyMasterOnWireless) SendSpecialPacket();          // takes about 4 - 5 ms. Gets buddy control data in ACK payload  
 }
 /***********************************************************************************************************/
 void DoScanEnd()
