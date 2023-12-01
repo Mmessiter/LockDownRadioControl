@@ -139,32 +139,40 @@ void MapToSBUS()
 
 void RearrangeTheChannels(){
 
-    static uint16_t PreviousRData[CHANNELSUSED];
-
-    // This function looks at the 16 BITS of DataToSend.DataFlags and rearranges the channels accordingly.
-
-    // for (int i = 0; i < CHANNELSUSED; ++i) {  
-    //     ReceivedData[i] = RawDataIn[i];
-    // }
-    
+#ifndef USE_NEW_CHANNEL_MAPPING
     for (int i = 0; i < CHANNELSUSED; ++i) {  
+        ReceivedData[i] = RawDataIn[i];  // copout when below isnt working!
+    }
+    return;
+
+#endif
+
+#ifdef USE_NEW_CHANNEL_MAPPING
+ //  This function looks at the 16 BITS of DataToSend.DataFlags and rearranges the channels accordingly.
+    static uint16_t PreviousRData[CHANNELSUSED];
+    for (int i = 0; i < CHANNELSUSED; ++i) {  
+        uint8_t p = 0;
         if (DataToSend.Dataflags & (1 << i)) { // if bit is set, set the channel, Otherwise leave it alone
-            ReceivedData[i]  = RawDataIn[i];
-            PreviousRData[i] = RawDataIn[i];
+            ReceivedData[i]  = RawDataIn[p];
+            PreviousRData[i] = RawDataIn[p];
+            ++p;
         }else{
-            ReceivedData[i] = PreviousRData[i];
+            ReceivedData[i]  = PreviousRData[i];
         }
     }
-    Look(ReceivedData[15]);
+#endif
 }
-
 
 /************************************************************************************************************/
 void UseReceivedData()
 {
-    Decompress(RawDataIn, DataToSend.CompressedData, UNCOMPRESSEDWORDS); // Decompress only the most recent data
+#ifdef USE_NEW_CHANNEL_MAPPING
+    Decompress(RawDataIn, DataToSend.CompressedData, UNCOMPRESSEDWORDS);    // Decompress only the most recent data
+    RearrangeTheChannels();                                                 // Rearrange the channels for actual control since only changed ones are sent
+#else
+    Decompress(ReceivedData, DataToSend.CompressedData, UNCOMPRESSEDWORDS); // Decompress only the most recent data
+#endif
     ReadExtraParameters();                                       // works on RawDataIn ... look at parameters sent with packet
-    if (BoundFlag && ModelMatched) RearrangeTheChannels();       // Rearrange the channels for actual control since only changed ones are sent
     MapToSBUS();                                                 // Get SBUS data ready
     LastPacketArrivalTime = millis();                            // Note the arrival time
     if (HopNow) {                                                // This flag gets set in LoadAckPayload();
@@ -184,7 +192,11 @@ bool ReadData()
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
         DelayMillis(2);       
+#ifdef USE_NEW_CHANNEL_MAPPING
         CurrentRadio->read(&DataToSend, SizeOfDataToSend);   //  ** >> Read new data from master << **
+#else
+        CurrentRadio->read(&DataToSend.CompressedData, SizeOfDataToSend-2);   //  ** >> Read new data from master << **
+#endif 
         Connected = true;
         NewData   = true;
     }

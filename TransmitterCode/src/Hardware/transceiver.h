@@ -271,22 +271,40 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 /************************************************************************************************************/
 void EncodeTheChangedChannels(){
   
-  
-     uint16_t PreviousBuffer[CHANNELSUSED];
-    uint8_t p = 0;
-    Datatosend.DataFlags = 0; // clear the dataflags byte
+#ifndef USE_NEW_CHANNEL_MAPPING
 
-    // for (int i = 0; i < CHANNELSUSED; ++i){     // remove later!
-    //     RawDataBuffer[i] = SendBuffer[i];    
-    // }
-    //  return; // Hmmm .....
+     for (int i = 0; i < CHANNELSUSED; ++i){     // remove later!
+         RawDataBuffer[i] = SendBuffer[i];    
+     }
+      return; // Copout code that just does first 8 channels
+#else
       
-        if (BoundFlag && ModelMatched) {
-                SendBuffer[15] = 1500;
-                Look (SendBuffer[15]);
-      
-        for (int i = 0; i < CHANNELSUSED; ++i){ 
-            if (SendBuffer[i] != PreviousBuffer[i]) {
+    static uint16_t PreviousBuffer[CHANNELSUSED];
+    Datatosend.DataFlags = 0; // clear the dataflags byte
+    static uint32_t LocalTimer1 = 0 ;
+    static uint32_t LocalTimer2 = 0 ;
+
+
+    if (BoundFlag && ModelMatched) {
+
+         if (millis() - LocalTimer1 > 50) {
+            LocalTimer1 = millis();                          // Force first 8 channels to be sent
+            for (int i = 0; i < CHANNELSUSED/2; ++i){ 
+                PreviousBuffer[i] = 0;                      // to be sure is different
+                PreviousBuffer[i+8] = SendBuffer[i+8];      // to be sure is NOT different
+                }
+        }
+
+        if (millis() - LocalTimer2 > 52) {                    // Force last 8 channels to be sent 
+            LocalTimer2 = millis();
+            for (int i = CHANNELSUSED/2; i < CHANNELSUSED; ++i){ 
+                PreviousBuffer[i] = 0;                          // to be sure is different
+                PreviousBuffer[i-8] = SendBuffer[i-8];          // to be sure is NOT different
+                }
+        }
+        uint8_t p = 0;
+        for (int i = 0; i < CHANNELSUSED; ++i){          
+            if ((SendBuffer[i] != PreviousBuffer[i]) && (p < CHANNELSSENT)) {
                     RawDataBuffer[p]  = SendBuffer[i];          // load a changed channel into the rawdatabuffer 
                     PreviousBuffer[i] = SendBuffer[i];          // save it for next time
                     Datatosend.DataFlags |= (1 << i);           // set the bit in the dataflags byte
@@ -299,7 +317,8 @@ void EncodeTheChangedChannels(){
             RawDataBuffer[i] = SendBuffer[i];
         }
     }
-  //  Look(p);
+    Serial.println(Datatosend.DataFlags, BIN);
+#endif
 }
 
 /************************************************************************************************************/
@@ -317,9 +336,19 @@ FASTRUN void SendData()
         Connected = false;                                       // Assume the worst until ACK is received.
         FlushFifos();                                            // This avoids a lockup that happens when the FIFO gets full.
         LoadPacketData();                                        // extra parameters appended to the data packet
-        EncodeTheChangedChannels();                             
+#ifdef USE_NEW_CHANNEL_MAPPING  
+        EncodeTheChangedChannels();                              
         Compress(Datatosend.CompressedData, RawDataBuffer, UNCOMPRESSEDWORDS); // Compress 
+#endif
+#ifndef USE_NEW_CHANNEL_MAPPING
+        Compress(Datatosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 
+#endif
+#ifdef USE_NEW_CHANNEL_MAPPING  
         if (Radio1.write(&Datatosend, SizeOfDatatosend)) {SuccessfulPacket();} else {FailedPacket();}  
+#else
+        if (Radio1.write(&Datatosend.CompressedData, SizeOfDatatosend-2)) {SuccessfulPacket();} else {FailedPacket();}  
+#endif
+        
         DoneBuddy = false; 
     }else{
         if (!DoneBuddy){
