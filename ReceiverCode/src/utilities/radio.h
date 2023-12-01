@@ -502,7 +502,7 @@ void KeepSbusHappy()
             ++SbusRepeats;     // Count these repeats out of pure curiosity
             Connected = true;  // To force re-sending this older data
             MoveServos();      // This call also sends an SBUS packet
-            Connected = false; // Not in fact connnected of course
+            Connected = false; // Not in fact connected of course. I lied earlier.
         }
     }
 }

@@ -37,7 +37,7 @@
 // ********************* >>> Reconnect params <<< ***************************************
 
 #define LISTEN_PERIOD           14   //  14 (How many ms to listen for TX in Reconnect())
-#define RECEIVE_TIMEOUT         11   //  was 14  (should be about 4 ms more that TX's PACEMAKER)
+#define RECEIVE_TIMEOUT         14   //  was 14  (should be about 4 ms more that TX's PACEMAKER)
 
 // ********************* >>> FHSS params <<< *******************************************
 
