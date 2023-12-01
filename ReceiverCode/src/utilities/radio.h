@@ -104,19 +104,20 @@ void ReadExtraParameters()
             break;
 
         case 6:
-            if (Randomized_Recovery_Channels_Counter < 20) { // not forever!
-                ++Randomized_Recovery_Channels_Counter;
-                Randomized_Recovery_Channels[0] = RawDataIn[CHANNELSSENT + 1];
-                Randomized_Recovery_Channels[1] = RawDataIn[CHANNELSSENT + 2];
-                UseRandomizedRecoveryChannels();                             // Use randomized reconnection channels so that won't be the same as other user 
-                
-            }
+            // if (Randomized_Recovery_Channels_Counter < 20) { // not forever!
+            //     ++Randomized_Recovery_Channels_Counter;
+            //     Randomized_Recovery_Channels[0] = RawDataIn[CHANNELSSENT + 1];
+            //     Randomized_Recovery_Channels[1] = RawDataIn[CHANNELSSENT + 2];
+            //     UseRandomizedRecoveryChannels();                             // Use randomized reconnection channels so that won't be the same as other user  
+           // }
+            break;
             case 7:
-            if (Randomized_Recovery_Channels_Counter < 20) { // not forever!
-                Randomized_Recovery_Channels[2] = RawDataIn[CHANNELSSENT + 1];
-                UseRandomizedRecoveryChannels();                             // Use randomized reconnection channels so that won't be the same as other user 
-            }
-        default:
+            // if (Randomized_Recovery_Channels_Counter < 20) { // not forever!
+            //     Randomized_Recovery_Channels[2] = RawDataIn[CHANNELSSENT + 1];
+            //     UseRandomizedRecoveryChannels();                             // Use randomized reconnection channels so that won't be the same as other user 
+            // }
+            break;
+         default:
             break;
     }
     return;

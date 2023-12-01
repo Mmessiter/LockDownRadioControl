@@ -122,32 +122,32 @@ void LoadPacketData()
             break;
 
         case 6:
-            if (Randomized_Recovery_Channels_Counter < 30) { // not forever!
-                ++ Randomized_Recovery_Channels_Counter;
-                if (ModelMatched && BoundFlag) {     
-                    SendBuffer[CHANNELSSENT + 1] = FHSS_data::Randomized_Recovery_Channels[0];
-                    SendBuffer[CHANNELSSENT + 2] = FHSS_data::Randomized_Recovery_Channels[1]; 
-                }
-                if (!ModelMatched || !BoundFlag)  
-                {
-                    SendBuffer[CHANNELSSENT + 1] = FHSS_data::Default_Recovery_Channels[0];
-                    SendBuffer[CHANNELSSENT + 2] = FHSS_data::Default_Recovery_Channels[1];
-                    UseDefaultRecoveryChannels();
-                }
-            }
+            // if (Randomized_Recovery_Channels_Counter < 30) { // not forever!
+            //     ++ Randomized_Recovery_Channels_Counter;
+            //     if (ModelMatched && BoundFlag) {     
+            //         SendBuffer[CHANNELSSENT + 1] = FHSS_data::Randomized_Recovery_Channels[0];
+            //         SendBuffer[CHANNELSSENT + 2] = FHSS_data::Randomized_Recovery_Channels[1]; 
+            //     }
+            //     if (!ModelMatched || !BoundFlag)  
+            //     {
+            //         SendBuffer[CHANNELSSENT + 1] = FHSS_data::Default_Recovery_Channels[0];
+            //         SendBuffer[CHANNELSSENT + 2] = FHSS_data::Default_Recovery_Channels[1];
+            //         UseDefaultRecoveryChannels();
+            //     }
+            // }
             break;
         case 7:
-            if (Randomized_Recovery_Channels_Counter < 30) { // not forever!
-                if (ModelMatched && BoundFlag) {  
-                    SendBuffer[CHANNELSSENT + 1] = FHSS_data::Randomized_Recovery_Channels[2];
-                    UseRandomizedRecoveryChannels();
-                }
-                    if (!ModelMatched || !BoundFlag)  
-                {
-                    SendBuffer[CHANNELSSENT + 1] = FHSS_data::Default_Recovery_Channels[2];
-                    UseDefaultRecoveryChannels();
-                }
-            }
+            // if (Randomized_Recovery_Channels_Counter < 30) { // not forever!
+            //     if (ModelMatched && BoundFlag) {  
+            //         SendBuffer[CHANNELSSENT + 1] = FHSS_data::Randomized_Recovery_Channels[2];
+            //         UseRandomizedRecoveryChannels();
+            //     }
+            //         if (!ModelMatched || !BoundFlag)  
+            //     {
+            //         SendBuffer[CHANNELSSENT + 1] = FHSS_data::Default_Recovery_Channels[2];
+            //         UseDefaultRecoveryChannels();
+            //     }
+            // }
             break;
 
         default: 
@@ -170,15 +170,15 @@ FASTRUN void FailedPacket()
     RecordsPacketSuccess(0); // Record a failure
     ++RecentPacketsLost;     // this is to keep track of events when receiver is off  
     LostContactFlag =   true;
-    Reconnected     =   false;
+    Reconnected     =   false; 
     if (!GapStart) 
-    {
-        GapStart  = millis();  // To keep track of this gap's length
+        {
+            GapStart  = millis();  // To keep track of this gap's length
     } else 
-    {
-        if (((millis() - GapStart) > RED_LED_ON_TIME) && (!LedWasRed)) RedLedOn(); // Put on red led - receiver must be off
-    }
-    TryToReconnect();
+        {
+            if (((millis() - GapStart) > RED_LED_ON_TIME) && (!LedWasRed)) RedLedOn(); // Put on red led - receiver must be off
+        }
+        TryToReconnect();
     int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF HERE!!
 }

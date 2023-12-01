@@ -38,7 +38,7 @@
 
 // ********************* >>> FHSS params <<< *******************************************
 
-#define HOPTIME                   0    // was 80 ms between channel changes. But now it hops after every packet!
+#define HOPTIME                   80    // was 80 ms between channel changes. 
 
 // *************************************************************************************
 

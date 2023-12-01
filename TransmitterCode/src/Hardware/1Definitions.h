@@ -65,7 +65,7 @@
    // #define USE_NEW_CHANNEL_MAPPING true 
 
 
-    #define PACEMAKER              11                           // was 10. 5 is probably MIN.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+    #define PACEMAKER              5                           // was 10. 5 is probably MIN.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
     #define TIMEFORTXMANAGMENT     2                            // was 3.   How many ms must remain spare between data packets before daring to undertake more trivial task
     
     #ifdef USE_NEW_CHANNEL_MAPPING
