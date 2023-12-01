@@ -44,6 +44,7 @@ var common_8h =
     [ "SENSOR_HUB_I2C_ADDRESS", "common_8h.html#a07a2f33887ffa40ffbc3b895fcfc1999", null ],
     [ "SERVOSUSED", "common_8h.html#ab1515f8a159ef919c7afb5a1d71f55a3", null ],
     [ "UNCOMPRESSEDWORDS", "common_8h.html#a0c40a351a0c0e01fbd5e5b1b0187eb48", null ],
+    [ "USE_NEW_CHANNEL_MAPPING", "common_8h.html#a1ed057da7a99de884193cde4e0f9fabf", null ],
     [ "WATCHDOGMAXRATE", "common_8h.html#af3358f12fbced88c655895c7e56f1ca6", null ],
     [ "WATCHDOGTIMEOUT", "common_8h.html#a263fd3c52a680256641d33815e7ef6a4", null ],
     [ "BindModel", "common_8h.html#aa0c6905579a33aef28d737d43676cbbd", null ],
