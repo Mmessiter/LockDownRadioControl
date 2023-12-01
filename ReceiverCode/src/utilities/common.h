@@ -48,7 +48,7 @@
 #define PIPENUMBER       1
 #define BOUNDPIPENUMBER  1
 
-//#define USE_NEW_CHANNEL_MAPPING true 
+ #define USE_NEW_CHANNEL_MAPPING true 
 
 #ifdef USE_NEW_CHANNEL_MAP
     #define CHANNELSSENT       8       

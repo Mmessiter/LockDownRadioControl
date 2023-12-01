@@ -251,14 +251,14 @@ void EncodeTheChangedChannels(){
 #else
       
     static uint16_t PreviousBuffer[CHANNELSUSED];
-    Datatosend.DataFlags = 0; // clear the dataflags byte
+   
     static uint32_t LocalTimer1 = 0 ;
     static uint32_t LocalTimer2 = 0 ;
 
 
     if (BoundFlag && ModelMatched) {
 
-         if (millis() - LocalTimer1 > 50) {
+         if (millis() - LocalTimer1 > 95) {
             LocalTimer1 = millis();                          // Force first 8 channels to be sent
             for (int i = 0; i < CHANNELSUSED/2; ++i){ 
                 PreviousBuffer[i] = 0;                      // to be sure is different
@@ -266,7 +266,7 @@ void EncodeTheChangedChannels(){
                 }
         }
 
-        if (millis() - LocalTimer2 > 52) {                    // Force last 8 channels to be sent 
+        if (millis() - LocalTimer2 > 105) {                     // Force only last 8 channels to be sent 
             LocalTimer2 = millis();
             for (int i = CHANNELSUSED/2; i < CHANNELSUSED; ++i){ 
                 PreviousBuffer[i] = 0;                          // to be sure is different
@@ -274,8 +274,9 @@ void EncodeTheChangedChannels(){
                 }
         }
         uint8_t p = 0;
+        Datatosend.DataFlags = 0; // clear the dataflags byte
         for (int i = 0; i < CHANNELSUSED; ++i){          
-            if ((SendBuffer[i] != PreviousBuffer[i]) && (p < CHANNELSSENT)) {
+            if (abs(SendBuffer[i] != PreviousBuffer[i]) && (p < CHANNELSSENT)) {
                     RawDataBuffer[p]  = SendBuffer[i];          // load a changed channel into the rawdatabuffer 
                     PreviousBuffer[i] = SendBuffer[i];          // save it for next time
                     Datatosend.DataFlags |= (1 << i);           // set the bit in the dataflags byte
@@ -288,7 +289,7 @@ void EncodeTheChangedChannels(){
             RawDataBuffer[i] = SendBuffer[i];
         }
     }
-    Serial.println(Datatosend.DataFlags, BIN);
+   // Serial.println(Datatosend.DataFlags, BIN);
 #endif
 }
 

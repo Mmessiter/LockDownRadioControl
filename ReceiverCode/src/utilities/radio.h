@@ -103,22 +103,12 @@ void MapToSBUS()
 
 
 /************************************************************************************************************/
-
-void RearrangeTheChannels(){
-
-#ifndef USE_NEW_CHANNEL_MAPPING
-    for (int i = 0; i < CHANNELSUSED; ++i) {  
-        ReceivedData[i] = RawDataIn[i];  // copout when below isnt working!
-    }
-    return;
-
-#endif
-
 #ifdef USE_NEW_CHANNEL_MAPPING
+void RearrangeTheChannels(){
  //  This function looks at the 16 BITS of DataToSend.DataFlags and rearranges the channels accordingly.
     static uint16_t PreviousRData[CHANNELSUSED];
+    uint8_t p = 0;
     for (int i = 0; i < CHANNELSUSED; ++i) {  
-        uint8_t p = 0;
         if (DataToSend.Dataflags & (1 << i)) { // if bit is set, set the channel, Otherwise leave it alone
             ReceivedData[i]  = RawDataIn[p];
             PreviousRData[i] = RawDataIn[p];
@@ -127,8 +117,9 @@ void RearrangeTheChannels(){
             ReceivedData[i]  = PreviousRData[i];
         }
     }
-#endif
 }
+#endif
+
 
 /************************************************************************************************************/
 void UseReceivedData()
