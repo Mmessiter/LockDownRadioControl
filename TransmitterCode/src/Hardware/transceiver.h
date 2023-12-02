@@ -284,7 +284,7 @@ FASTRUN void SendData()
         LoadPacketData();                                        // extra parameters appended to the data packet
 #ifdef USE_NEW_CHANNEL_MAPPING  
         uint8_t p = EncodeTheChangedChannels();
-         if (p < 4) SendExtraParamemters(p);                      // If less than 4 channels have changed, send extra parameters in last four bytes
+         if (p < 4) SendExtraParamemters(p);                      // If fewer than 4 channels have changed, send extra parameters in last four bytes
              
         Compress(Datatosend.CompressedData, RawDataBuffer, UNCOMPRESSEDWORDS);                          // Compress 
         if (Radio1.write(&Datatosend, SizeOfDatatosend)) {SuccessfulPacket();} else {FailedPacket();}   // Send the data packet complete with DataFlags 
