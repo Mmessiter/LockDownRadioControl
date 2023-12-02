@@ -234,9 +234,10 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     Radio1.setCRCLength(RF24_CRC_16);
     GapSum = 0;
 }
-#ifdef USE_NEW_CHANNEL_MAPPING
+
 /************************************************************************************************************/
-void EncodeTheChangedChannels(){
+#ifdef USE_NEW_CHANNEL_MAPPING
+uint8_t EncodeTheChangedChannels(){
     static uint16_t PreviousBuffer[CHANNELSUSED];
     static uint32_t Localtimer = 0;
     uint8_t p = 0;
@@ -254,6 +255,7 @@ void EncodeTheChangedChannels(){
                 ++p;                                        // increment the rawdatabuffer index
         } 
     }
+    return p; // Return the number of channels that have changed 
 }
 #endif
 /************************************************************************************************************/
@@ -262,6 +264,7 @@ void EncodeTheChangedChannels(){
 
 FASTRUN void SendData()
 {
+    uint8_t p = 0;  
     if (SendNoData) return;
     if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { 
         LastPacketSentTime = millis();
@@ -270,7 +273,10 @@ FASTRUN void SendData()
         FlushFifos();                                            // This avoids a lockup that happens when the FIFO gets full.
         LoadPacketData();                                        // extra parameters appended to the data packet
 #ifdef USE_NEW_CHANNEL_MAPPING  
-        EncodeTheChangedChannels();                              
+        p = EncodeTheChangedChannels();                              
+        
+     //   Look(p);
+
         Compress(Datatosend.CompressedData, RawDataBuffer, UNCOMPRESSEDWORDS);                          // Compress 
         if (Radio1.write(&Datatosend, SizeOfDatatosend)) {SuccessfulPacket();} else {FailedPacket();}   // Send the data packet complete with DataFlags 
 #else
@@ -297,7 +303,6 @@ void DoScanInit()
     BoundFlag   = false;
     ScanAllChannels(true);
 }
-
     /************************************************************************************************************/
     // This function draws or re-draws and clears the box that display wave band scanning information
     #define xx1      90 // Needed below... Edit xx1,yy1 to move box ....
