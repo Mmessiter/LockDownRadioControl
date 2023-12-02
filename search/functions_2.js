@@ -30,7 +30,7 @@ var searchData=
   ['checkmodelname_27',['CheckModelName',['../1Definitions_8h.html#a5c0f1fd26cdd6ecde365f521060158ba',1,'CheckModelName():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a5c0f1fd26cdd6ecde365f521060158ba',1,'CheckModelName():&#160;main.cpp']]],
   ['checkmotoroff_28',['CheckMotorOff',['../1Definitions_8h.html#a2f7d73b3096c884b2ace4b3399268325',1,'CheckMotorOff():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a2f7d73b3096c884b2ace4b3399268325',1,'CheckMotorOff():&#160;main.cpp']]],
   ['checkoutputchannels_29',['CheckOutPutChannels',['../TransmitterCode_2src_2main_8cpp.html#a81f424711e329d4db746d65d6cbc7b1f',1,'main.cpp']]],
-  ['checkpipenibbles_30',['CheckPipeNibbles',['../1Definitions_8h.html#acd761b7a3274515f60af86504f70fcd6',1,'CheckPipeNibbles(uint8_t b):&#160;transceiver.h'],['../transceiver_8h.html#acd761b7a3274515f60af86504f70fcd6',1,'CheckPipeNibbles(uint8_t b):&#160;transceiver.h']]],
+  ['checkpipenibbles_30',['CheckPipeNibbles',['../1Definitions_8h.html#acd761b7a3274515f60af86504f70fcd6',1,'1Definitions.h']]],
   ['checkpoweroffbutton_31',['CheckPowerOffButton',['../1Definitions_8h.html#a6ae37c6938b8c10b83d1bc74e8643bd9',1,'CheckPowerOffButton():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a6ae37c6938b8c10b83d1bc74e8643bd9',1,'CheckPowerOffButton():&#160;main.cpp']]],
   ['checkrange_32',['CheckRange',['../1Definitions_8h.html#a01c7a0b0de94ec72fe070ea9f90dc2ec',1,'CheckRange(int v, int min, int max):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a01c7a0b0de94ec72fe070ea9f90dc2ec',1,'CheckRange(int v, int min, int max):&#160;main.cpp']]],
   ['checkrxvolts_33',['CheckRXVolts',['../TransmitterCode_2src_2main_8cpp.html#a3014b0aec0f1343c2fd7b480bd5e0425',1,'main.cpp']]],
