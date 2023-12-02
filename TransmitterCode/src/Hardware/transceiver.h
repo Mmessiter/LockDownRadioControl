@@ -239,8 +239,14 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 void EncodeTheChangedChannels(){
 #ifdef USE_NEW_CHANNEL_MAPPING
     static uint16_t PreviousBuffer[CHANNELSUSED];
+    static uint32_t Localtimer = 0;
     uint8_t p = 0;
     Datatosend.DataFlags = 0; // clear the dataflags 16 BIT WORD
+
+    if ((millis() - Localtimer) > 333) { // every 1/3 second force update
+        Localtimer = millis();
+        for (int i = 0; i < CHANNELSUSED; ++i)   PreviousBuffer[i] = 0;
+    }
     for (int i = 0; i < CHANNELSUSED; ++i){          
         if ((SendBuffer[i] != PreviousBuffer[i]) && (p < CHANNELSSENT)) {
                 RawDataBuffer[p]  = SendBuffer[i];          // load a changed channel into the rawdatabuffer 
@@ -249,8 +255,10 @@ void EncodeTheChangedChannels(){
                 ++p;                                        // increment the rawdatabuffer index
         } 
     }
-#endif
+  //  Serial.println(Datatosend.DataFlags, BIN);
+   // Look(p);
 }
+#endif
 /************************************************************************************************************/
 /********************************* Function to send data to receiver ****************************************/
 /************************************************************************************************************/
@@ -271,9 +279,10 @@ FASTRUN void SendData()
 #else
         Compress(Datatosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 
         if (Radio1.write(&Datatosend.CompressedData, SizeOfDatatosend-2)) {SuccessfulPacket();} else {FailedPacket();}  
-#endif
+#endif    
+    }else{
+        if (BuddyMasterOnWireless) SendSpecialPacket();          // takes about 4 - 5 ms. Gets buddy control data in ACK payload 
     }
-    if (BuddyMasterOnWireless) SendSpecialPacket();          // takes about 4 - 5 ms. Gets buddy control data in ACK payload 
 }
 /***********************************************************************************************************/
 void DoScanEnd()

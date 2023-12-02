@@ -65,7 +65,7 @@
 
 #ifdef USE_NEW_CHANNEL_MAPPING
     #define CHANNELSSENT           8       
-    #define PACEMAKER              10                            // was 10. 5 is probably MIN.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+    #define PACEMAKER              6                             // was 10. 5 is probably the MIN.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
     #define TIMEFORTXMANAGMENT     2                             // was 3.   How many ms must remain spare between data packets before daring to undertake more trivial task
                          
 #else
@@ -115,7 +115,7 @@
 
 
     #define DATARATE                 RF24_250KBPS   // RF24_250KBPS or RF24_1MBPS or RF24_2MBPS
-    #define FASTDATARATE             RF24_1MBPS     // 2 MBPS = RF24_2MBPS; 1 MBPS = RF24_1MBPS <<
+    #define FASTDATARATE             RF24_2MBPS     // 2 MBPS = RF24_2MBPS; 1 MBPS = RF24_1MBPS <<
     #define PERFECTPACKETSPERSECOND  100            // Flat out perfect packets per second
     #define RETRYCOUNT               2              // was 2. Auto retries inside nRF24L01. MAX is 15. Fails below 2.
     #define RETRYWAIT                1              // was 1. 250us = Wait between retries (RetryWait+1 * 250us))
