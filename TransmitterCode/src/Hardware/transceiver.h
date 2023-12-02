@@ -255,8 +255,6 @@ void EncodeTheChangedChannels(){
                 ++p;                                        // increment the rawdatabuffer index
         } 
     }
-  //  Serial.println(Datatosend.DataFlags, BIN);
-   // Look(p);
 }
 #endif
 /************************************************************************************************************/
