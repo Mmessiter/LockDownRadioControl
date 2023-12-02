@@ -234,10 +234,9 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     Radio1.setCRCLength(RF24_CRC_16);
     GapSum = 0;
 }
-
+#ifdef USE_NEW_CHANNEL_MAPPING
 /************************************************************************************************************/
 void EncodeTheChangedChannels(){
-#ifdef USE_NEW_CHANNEL_MAPPING
     static uint16_t PreviousBuffer[CHANNELSUSED];
     static uint32_t Localtimer = 0;
     uint8_t p = 0;
@@ -276,7 +275,7 @@ FASTRUN void SendData()
         if (Radio1.write(&Datatosend, SizeOfDatatosend)) {SuccessfulPacket();} else {FailedPacket();}   // Send the data packet complete with DataFlags 
 #else
         Compress(Datatosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 
-        if (Radio1.write(&Datatosend.CompressedData, SizeOfDatatosend-2)) {SuccessfulPacket();} else {FailedPacket();}  
+        if (Radio1.write(&Datatosend.CompressedData,SizeOfCompressedData)) {SuccessfulPacket();} else {FailedPacket();}  
 #endif    
     }else{
         if (BuddyMasterOnWireless) SendSpecialPacket();          // takes about 4 - 5 ms. Gets buddy control data in ACK payload 

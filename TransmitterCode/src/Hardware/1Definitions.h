@@ -15,7 +15,6 @@
 #include <DS1307RTC.h>
 #include <InterpolationLib.h>
 
-
 // **************************************************************************
 //     SUPPORT FOR TX MODULE AND NEW PCB Version                            *
 // **************************************************************************
@@ -72,7 +71,6 @@
     #define CHANNELSSENT           16 
     #define PACEMAKER              10                           // was 10. 5 is probably MIN.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
     #define TIMEFORTXMANAGMENT     3                            // was 3.   How many ms must remain spare between data packets before daring to undertake more trivial task
-    
 #endif
 
     #define CHANNELSUSED           16                          // 16 Channels
@@ -107,7 +105,7 @@
     #define SHOWCOMMSDELAY         1000                         // ms pauses between updated info on NEXTION
     #define WARMUPDELAY            300                          // fails at 200 so must be >200 ...
     #define SCREENCHANGEWAIT       100                          // allow time for screen to appear
-    #define PACKETNUMBERMAX        150                          // only 7 are so far in use but by making this larger we make updates infrequent
+    #define PACKETNUMBERMAX        10                          // only 7 are so far in use but by making this larger we make updates infrequent
 
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
@@ -613,11 +611,11 @@ uint16_t      TrimRepeatSpeed  = 600;
 char          na[]             = "";
 uint8_t       StepSize[16]     = {0, 0, 0, 0, 0, 0, 0, 0, 5, 25, 5, 25, 5, 25, 5, 25}; //    How far to move each time on slow servos
 
-uint16_t      CurrentPosition[SENDBUFFERSIZE+1];                                      //    Position from which a slow servo started (0 = not started yet)
-uint16_t      SendBuffer[SENDBUFFERSIZE+1];                                           //    Data to send to rx (16 words)
-uint16_t      BuddyBuffer[SENDBUFFERSIZE+1];                                          //    Data from wireless or PPM buddy (16 words)
-uint16_t      ShownBuffer[SENDBUFFERSIZE+1];                                          //    Data shown before
-uint16_t      RawDataBuffer[SENDBUFFERSIZE+1];                                        //    Data as actually sent
+uint16_t      CurrentPosition[SENDBUFFERSIZE+1];                                    //    Position from which a slow servo started (0 = not started yet)
+uint16_t      SendBuffer[SENDBUFFERSIZE+1];                                         //    Data to send to rx (16 words)
+uint16_t      BuddyBuffer[SENDBUFFERSIZE+1];                                        //    Data from wireless or PPM buddy (16 words)
+uint16_t      ShownBuffer[SENDBUFFERSIZE+1];                                        //    Data shown before
+uint16_t      RawDataBuffer[SENDBUFFERSIZE+1];                                      //    Data as actually sent
 uint16_t      LastBuffer[CHANNELSUSED + 1];                                         //    Used to spot any change
 uint16_t      PreMixBuffer[CHANNELSUSED + 1];                                       //    Data collected from sticks
 uint8_t       MaxDegrees[5][CHANNELSUSED + 1];                                      //    Max degrees (180)
@@ -776,9 +774,8 @@ struct CD{
 };
 CD Datatosend;
 
-uint16_t        SizeOfDatatosend = sizeof(Datatosend); // = 32
-uint8_t         SizeOfCompressedData;            // = 30
-
+uint16_t        SizeOfDatatosend = sizeof(Datatosend); 
+uint8_t         SizeOfCompressedData = sizeof(Datatosend.CompressedData);          
 uint32_t        Inactivity_Timeout = INACTIVITYTIMEOUT;
 uint32_t        Inactivity_Start   = 0;
 tmElements_t    tm;

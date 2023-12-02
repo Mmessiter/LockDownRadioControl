@@ -43,10 +43,10 @@ void ReadExtraParameters()
     uint16_t TwoBytes = 0;
     uint8_t  SwapWaveBand;
     PacketNumber = RawDataIn[CHANNELSSENT];
-    
     switch (PacketNumber) {
         case 0:
             FailSafeSave = bool(RawDataIn[CHANNELSSENT + 1]);
+            
    
             if (FailSafeSave) {
                 TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
@@ -138,7 +138,6 @@ void UseReceivedData()
         HopNow   = false;                                        // ... and clear the flag,
         HopStart = millis();                                     // ... and start the timer.
     }
-   // Look (ReceivedData[14]);                                      // Get the channel number
 }
 
 /************************************************************************************************************/

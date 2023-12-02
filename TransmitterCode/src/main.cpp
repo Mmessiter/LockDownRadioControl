@@ -2377,9 +2377,7 @@ FLASHMEM void setup()
     //  ***************************************************************************************
     BoundFlag = false;
     StartInactvityTimeout();
-    SizeOfCompressedData = sizeof(Datatosend.CompressedData);
     GetTXVersionNumber();
-
     SetUKFrequencies();
     ScreenTimeTimer = millis();
     RestoreBrightness();

@@ -153,7 +153,6 @@ void FailSafe()
         MoveServos();
         Connected = false; // I lied earlier - we're not really connected.
     }
-
     SetUKFrequencies();  // default startup conditions
     FailSafeSent = true; // Once is enough
     FailedSafe   = true;
@@ -488,6 +487,7 @@ void SaveFailSafeData()
 {
     // FailSafe data occupies EEPROM from offset FS_EEPROM_OFFSET
     uint8_t FS_Offset = FS_EEPROM_OFFSET;
+
     for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
         EEPROM.update(i + FS_Offset, (map(ReceivedData[i], MINMICROS, MAXMICROS, 0, 180))); // save servo positions lower res: 8 bits
         DelayMillis(1);
