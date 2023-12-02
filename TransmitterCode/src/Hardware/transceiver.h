@@ -243,13 +243,11 @@ uint8_t EncodeTheChangedChannels(){
     uint8_t p = 0;
     Datatosend.DataFlags = 0; // clear the dataflags 16 BIT WORD
 
-    if ((millis() - Localtimer) > 333) { // every 1/3 second force update
+    if ((millis() - Localtimer) > 500) { // every 1/2 second force update
         Localtimer = millis();
-        for (int i = 0; i < CHANNELSUSED; ++i)   PreviousBuffer[i] = 0;
+        for (int i = 0; i < CHANNELSUSED; ++i)   PreviousBuffer[i] = 0;  // force update
     }
-    for (int i = 0; i < CHANNELSUSED; ++i){          
-              
-             
+    for (int i = 0; i < CHANNELSUSED; ++i){          // check for changed channels
                 if ((SendBuffer[i] != PreviousBuffer[i]) && (p < CHANNELSSENT)) {
                 RawDataBuffer[p]  = SendBuffer[i];          // load a changed channel into the rawdatabuffer 
                 PreviousBuffer[i] = SendBuffer[i];          // save it for next time
@@ -287,7 +285,7 @@ FASTRUN void SendData()
 #ifdef USE_NEW_CHANNEL_MAPPING  
         uint8_t p = EncodeTheChangedChannels();
         // if (p < 4) SendExtraParamemters(p);                    // If fewer than 4 channels have changed, send extra parameters in last four bytes
-         p = ((float) p * 1.5) + 3 ;                               // 1.5 is the compression ratio. 2 is the number of extra bytes for flags. 1 byte for luck!
+         p = ((float) p * 1.5) + 3 ;                              // 1.5 is the compression ratio. 2 is the number of extra bytes for flags. 1 byte for luck!
         // Look(p);
          Compress(Datatosend.CompressedData, RawDataBuffer, UNCOMPRESSEDWORDS);                          // Compress 
          if (Radio1.write(&Datatosend, p)) {SuccessfulPacket();} else {FailedPacket();}                  // Send the data packet complete with DataFlags 
