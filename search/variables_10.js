@@ -31,7 +31,7 @@ var searchData=
   ['ppmchannelorder2_28',['PPMChannelOrder2',['../structPPMArea.html#a0be2173ac79cabafe4f149db60ce052c',1,'PPMArea']]],
   ['ppmchannelorder3_29',['PPMChannelOrder3',['../structPPMArea.html#aa75050972c449f88ad26c434b63b0870',1,'PPMArea']]],
   ['ppmchannelsnumber_30',['PPMChannelsNumber',['../structPPMArea.html#a52e475cf8a0672360f670b56a26c387f',1,'PPMArea']]],
-  ['ppmdata_31',['PPMdata',['../StructsEtc_8h.html#aa1b99853b3bcc57b139282280f732b64',1,'StructsEtc.h']]],
+  ['ppmdata_31',['PPMdata',['../1Definitions_8h.html#aa1b99853b3bcc57b139282280f732b64',1,'1Definitions.h']]],
   ['ppminputbuddy_32',['PPMInputBuddy',['../structPPMArea.html#a7e5c2741bbea2b6e14dc6bd890b83c93',1,'PPMArea']]],
   ['ppmorderselection_33',['PPMOrderSelection',['../structPPMArea.html#a6ac130b16519ab38c553c4fb657ab4ea',1,'PPMArea']]],
   ['ppmoutput_34',['PPMOutput',['../common_8h.html#a41e85682a7a27ea99995f9eb979036fd',1,'common.h']]],

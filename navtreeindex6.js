@@ -1,5 +1,8 @@
 var NAVTREEINDEX6 =
 {
+"Quadcopter_2src_2main_8cpp.html#aeacba103f89151ec788c80870d3eeed0":[5,0,0,0,1,105],
+"Quadcopter_2src_2main_8cpp.html#aebcea49c55bc8c9a3beeadb75f099560":[5,0,0,0,1,51],
+"Quadcopter_2src_2main_8cpp.html#aef1650a66fba052880c3eb57ee630a99":[5,0,0,0,1,28],
 "Quadcopter_2src_2main_8cpp.html#aef8f1e55c1ac667d28d2c92175ff77d8":[5,0,0,0,1,231],
 "Quadcopter_2src_2main_8cpp.html#aefc06a3e989cc4bd0cc423ba0273de05":[5,0,0,0,1,147],
 "Quadcopter_2src_2main_8cpp.html#af105bad5629a32c2749010880cfdef39":[5,0,0,0,1,119],
@@ -116,11 +119,6 @@ var NAVTREEINDEX6 =
 "SensorHubT32_2src_2main_8cpp.html#af92d3280f8b2a0ff5023e4a7505491d9":[5,0,2,0,0,40],
 "SensorHubT32_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f":[5,0,2,0,0,9],
 "SensorHubT32_2src_2main_8cpp_source.html":[5,0,2,0,0],
-"StructsEtc_8h.html":[5,0,3,0,0,8],
-"StructsEtc_8h.html#a30a079d60b4731ce1531091ffe56a703":[5,0,3,0,0,8,2],
-"StructsEtc_8h.html#a81b9fbb62d8099a8e75c5d4720f41895":[5,0,3,0,0,8,3],
-"StructsEtc_8h.html#aa1b99853b3bcc57b139282280f732b64":[5,0,3,0,0,8,4],
-"StructsEtc_8h_source.html":[5,0,3,0,0,8],
 "TransmitterCode.html":[2],
 "TransmitterCode.html#LockDown":[2,0],
 "TransmitterCode.html#txPinout":[2,1],
@@ -249,5 +247,7 @@ var NAVTREEINDEX6 =
 "TransmitterCode_2src_2main_8cpp.html#a7b8f152779a09d867292d3a8e7f76d85":[5,0,3,0,1,9],
 "TransmitterCode_2src_2main_8cpp.html#a7bef1afdf8ed9f50caed67e53c144dfe":[5,0,3,0,1,198],
 "TransmitterCode_2src_2main_8cpp.html#a7d321cdde32c31b15ca1080fda6743c8":[5,0,3,0,1,249],
-"TransmitterCode_2src_2main_8cpp.html#a7d34cec6e8edc20c8b50424e15dcc7c7":[5,0,3,0,1,174]
+"TransmitterCode_2src_2main_8cpp.html#a7d34cec6e8edc20c8b50424e15dcc7c7":[5,0,3,0,1,174],
+"TransmitterCode_2src_2main_8cpp.html#a7d93a2500f52d72210903c46a85ce820":[5,0,3,0,1,127],
+"TransmitterCode_2src_2main_8cpp.html#a804fdbdd5eab4c596bbe8a23eecbe4d5":[5,0,3,0,1,15]
 };
