@@ -74,7 +74,7 @@
 #endif
 
     #define CHANNELSUSED           16                          // 16 Channels
-    #define UNCOMPRESSEDWORDS      (CHANNELSSENT + 4)          // DATA TO SEND WHEN COMPRESSED    *********** (BRACKETS ARE IMPORTANT !!) *********** 
+    #define UNCOMPRESSEDWORDS      (CHANNELSSENT)              // was + 4 .... DATA TO SEND WHEN COMPRESSED    *********** (BRACKETS ARE IMPORTANT !!) *********** 
     #define COMPRESSEDWORDS        (UNCOMPRESSEDWORDS * 3 / 4) // UNCOMPRESSED DATA MUST BE DIVISIBLE BY 4
     #define SENDBUFFERSIZE         (CHANNELSUSED + 4) 
 

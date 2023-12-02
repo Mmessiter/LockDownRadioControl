@@ -263,8 +263,7 @@ uint8_t EncodeTheChangedChannels(){
 /************************************************************************************************************/
 
 FASTRUN void SendData()
-{
-    uint8_t p = 0;  
+{ 
     if (SendNoData) return;
     if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { 
         LastPacketSentTime = millis();
@@ -273,9 +272,9 @@ FASTRUN void SendData()
         FlushFifos();                                            // This avoids a lockup that happens when the FIFO gets full.
         LoadPacketData();                                        // extra parameters appended to the data packet
 #ifdef USE_NEW_CHANNEL_MAPPING  
-        p = EncodeTheChangedChannels();                              
+        EncodeTheChangedChannels();                              
         
-     //   Look(p);
+      //  Look(SizeOfDatatosend);
 
         Compress(Datatosend.CompressedData, RawDataBuffer, UNCOMPRESSEDWORDS);                          // Compress 
         if (Radio1.write(&Datatosend, SizeOfDatatosend)) {SuccessfulPacket();} else {FailedPacket();}   // Send the data packet complete with DataFlags 
