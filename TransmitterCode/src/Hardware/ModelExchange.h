@@ -3,7 +3,7 @@
 #include <SD.h>
 #include <RF24.h>
 #include "Hardware/1Definitions.h"
-#include "Hardware/StructsEtc.h"
+
 #ifndef MODELEXCHANGE_H
     #define MODELEXCHANGE_H
 

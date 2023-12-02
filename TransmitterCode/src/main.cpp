@@ -135,7 +135,6 @@
 
 #include "Hardware/1Definitions.h" // must be here! (not higher or lower);
 
-#include "Hardware/StructsEtc.h"
 #include "Hardware/Utilities.h"
 #include "Hardware/transceiver.h"
 #include "Hardware/Pong.h"

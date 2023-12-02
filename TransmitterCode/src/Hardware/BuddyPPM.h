@@ -1,7 +1,7 @@
 // *************************************** BuddyPPM.h  *****************************************
 #include <Arduino.h>
 #include "Hardware/1Definitions.h"
-#include "Hardware/StructsEtc.h"
+
 #ifndef BUDDYPPM_H
     #define BUDDYPPM_H
 
