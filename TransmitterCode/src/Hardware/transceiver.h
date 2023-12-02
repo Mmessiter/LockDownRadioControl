@@ -258,6 +258,17 @@ uint8_t EncodeTheChangedChannels(){
     return p; // Return the number of channels that have changed 
 }
 #endif
+
+
+/************************************************************************************************************/
+void SendExtraParamemters(uint8_t p)
+{
+                RawDataBuffer[4]  = 1;
+                RawDataBuffer[5]  = 2;
+                RawDataBuffer[6]  = 3;
+                RawDataBuffer[7]  = 4;
+}
+
 /************************************************************************************************************/
 /********************************* Function to send data to receiver ****************************************/
 /************************************************************************************************************/
@@ -272,10 +283,9 @@ FASTRUN void SendData()
         FlushFifos();                                            // This avoids a lockup that happens when the FIFO gets full.
         LoadPacketData();                                        // extra parameters appended to the data packet
 #ifdef USE_NEW_CHANNEL_MAPPING  
-        EncodeTheChangedChannels();                              
-        
-      //  Look(SizeOfDatatosend);
-
+        uint8_t p = EncodeTheChangedChannels();
+         if (p < 4) SendExtraParamemters(p);                      // If less than 4 channels have changed, send extra parameters in last four bytes
+             
         Compress(Datatosend.CompressedData, RawDataBuffer, UNCOMPRESSEDWORDS);                          // Compress 
         if (Radio1.write(&Datatosend, SizeOfDatatosend)) {SuccessfulPacket();} else {FailedPacket();}   // Send the data packet complete with DataFlags 
 #else

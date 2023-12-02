@@ -42,10 +42,10 @@ void ReadExtraParameters()
 {
     uint16_t TwoBytes = 0;
     uint8_t  SwapWaveBand;
-    PacketNumber = RawDataIn[CHANNELSSENT];
+    PacketNumber = ReceivedData[CHANNELSSENT];
     switch (PacketNumber) {
         case 0:
-            FailSafeSave = bool(RawDataIn[CHANNELSSENT + 1]);
+            FailSafeSave = bool(ReceivedData[CHANNELSSENT + 1]);
             
    
             if (FailSafeSave) {
@@ -54,33 +54,33 @@ void ReadExtraParameters()
             }
             break;
         case 1:
-            FS_byte1  = RawDataIn[CHANNELSSENT + 1]; // These 2 bytes are 16 failsafe flags
-            FS_byte2  = RawDataIn[CHANNELSSENT + 2]; // These 2 bytes are 16 failsafe flags
+            FS_byte1  = ReceivedData[CHANNELSSENT + 1]; // These 2 bytes are 16 failsafe flags
+            FS_byte2  = ReceivedData[CHANNELSSENT + 2]; // These 2 bytes are 16 failsafe flags
             break;
         case 2:
-            Qnh = (RawDataIn[CHANNELSSENT + 1]) << 8; // 16 bits sent as two bytes for pressure here at sea level
-            Qnh += RawDataIn[CHANNELSSENT + 2];
+            Qnh = (ReceivedData[CHANNELSSENT + 1]) << 8; // 16 bits sent as two bytes for pressure here at sea level
+            Qnh += ReceivedData[CHANNELSSENT + 2];
             if (OldQnh != Qnh) SendQnhToSensorHub();
             OldQnh = Qnh; // Send new one once only
             break;
         case 3:
-        //  GuessWhat = RawDataIn[CHANNELSSENT + 1]; // not used yet
-            if ((RawDataIn[CHANNELSSENT + 2]) == 255) { // Mark this location
+        //  GuessWhat = ReceivedData[CHANNELSSENT + 1]; // not used yet
+            if ((ReceivedData[CHANNELSSENT + 2]) == 255) { // Mark this location
                 MarkHere();
-                RawDataIn[CHANNELSSENT + 2] = 0; // ... Once only
+                ReceivedData[CHANNELSSENT + 2] = 0; // ... Once only
             }
             break;
         case 4:
-            ModelMatched = RawDataIn[CHANNELSSENT + 1];
-            SwapWaveBand = RawDataIn[CHANNELSSENT + 2];
+            ModelMatched = ReceivedData[CHANNELSSENT + 1];
+            SwapWaveBand = ReceivedData[CHANNELSSENT + 2];
             if (SwapWaveBand > 0) {
                 if (SwapWaveBand == 1) SetUKFrequencies();
                 if (SwapWaveBand == 2) SetTestFrequencies();
             }
             break;
         case 5:
-            UseSBUS         = (bool)RawDataIn[CHANNELSSENT + 1]; // if false means PPM
-            PPMChannelCount = RawDataIn[CHANNELSSENT + 2];
+            UseSBUS         = (bool)ReceivedData[CHANNELSSENT + 1]; // if false means PPM
+            PPMChannelCount = ReceivedData[CHANNELSSENT + 2];
             break;
         
          default:
@@ -104,7 +104,7 @@ void MapToSBUS()
 
 /************************************************************************************************************/
 #ifdef USE_NEW_CHANNEL_MAPPING
-void RearrangeTheChannels(){
+uint8_t RearrangeTheChannels(){
  //  This function looks at the 16 BITS of DataToSend.DataFlags and rearranges the channels accordingly.
     static uint16_t PreviousRData[CHANNELSUSED];
     uint8_t p = 0;
@@ -117,8 +117,19 @@ void RearrangeTheChannels(){
             ReceivedData[i]  = PreviousRData[i];
         }
     }
+    return p;
 }
 #endif
+
+/************************************************************************************************************/
+void ReadMoreParameters(uint8_t p){
+    
+                //  Look(RawDataIn[4]);
+                //  Look(RawDataIn[5]);
+                //  Look(RawDataIn[6]);
+                //  Look(RawDataIn[7]);
+
+}
 
 
 /************************************************************************************************************/
@@ -126,11 +137,13 @@ void UseReceivedData()
 {
 #ifdef USE_NEW_CHANNEL_MAPPING
     Decompress(RawDataIn, DataToSend.CompressedData, UNCOMPRESSEDWORDS);    // Decompress only the most recent data
-    RearrangeTheChannels();                                                 // Rearrange the channels for actual control since only changed ones are sent
+    uint8_t p = RearrangeTheChannels();                                     // Rearrange the channels for actual control since only changed ones are sent
+    if (p < 4)  ReadMoreParameters(p);
+                                                                        
 #else
     Decompress(ReceivedData, DataToSend.CompressedData, UNCOMPRESSEDWORDS); // Decompress only the most recent data
 #endif
-    ReadExtraParameters();                                       // works on RawDataIn ... look at parameters sent with packet
+  // ReadExtraParameters();                                       
     MapToSBUS();                                                 // Get SBUS data ready
     LastPacketArrivalTime = millis();                            // Note the arrival time
     if (HopNow) {                                                // This flag gets set in LoadAckPayload();
@@ -151,7 +164,7 @@ bool ReadData()
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
         DelayMillis(2);       
 #ifdef USE_NEW_CHANNEL_MAPPING
-        CurrentRadio->read(&DataToSend, SizeOfDataToSend);   //  ** >> Read new data from master << **
+        CurrentRadio->read(&DataToSend, CurrentRadio->getDynamicPayloadSize());   //  ** >> Read new data from master << ** // Get the size of the new data (14)
 #else
         CurrentRadio->read(&DataToSend.CompressedData, SizeOfDataToSend-2);   //  ** >> Read new data from master << **
 #endif 
