@@ -775,6 +775,8 @@ struct CD{
 };
 CD DataTosend;
 
+bool AddExtraParameters = false;
+
 struct CD2{
     uint16_t        ID    = 12;          
     uint16_t        word1 = 123;
