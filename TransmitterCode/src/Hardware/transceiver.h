@@ -241,12 +241,12 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 uint8_t EncodeTheChangedChannels(){
     uint8_t NumberOfChangedChannels = 0;
     DataTosend.DataFlags = 0;                                                       // clear the dataflags 16 BIT WORD
-    static uint32_t LocalTimer = 0;
-
-    if ((millis() - LocalTimer) > 200) {                                            // every second/5
-            LocalTimer = millis();
-            for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = 0;           // force update on all channels
-    }
+   
+    // static uint32_t LocalTimer = 0;
+    // if ((millis() - LocalTimer) > 200) {                                            // every second/5
+    //         LocalTimer = millis();
+    //         for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = 0;           // force update on all channels
+    // }
     
     for (int i = 0; i < CHANNELSUSED; ++i){                                         // check for changed channels
                 if ((SendBuffer[i] != PreviousBuffer[i]) && (NumberOfChangedChannels < CHANNELSSENT)) {
