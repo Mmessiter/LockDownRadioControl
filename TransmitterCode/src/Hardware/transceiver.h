@@ -149,10 +149,10 @@ FASTRUN void FailedPacket()
         {
             if (((millis() - GapStart) > RED_LED_ON_TIME) && (!LedWasRed)) RedLedOn(); // Put on red led - receiver must be off
         }
-    for (int i = 0; i < CHANNELSUSED; ++i)   PreviousBuffer[i] = 0;  // force update
+    for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = 0;       // force update on all channels
     TryToReconnect();
     int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
-    if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF HERE!!
+    if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);       // INACTIVITY POWER OFF HERE!!
 }
 
 /************************************************************************************************************/
