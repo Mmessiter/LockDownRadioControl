@@ -7,7 +7,7 @@ var searchData=
   ['dataflags_4',['DataFlags',['../structCD.html#ac6e86b396c56fa8678e067a93759b714',1,'CD']]],
   ['datarate_5',['DATARATE',['../1Definitions_8h.html#a6e3511acbf8184c2b874c1175f86f7fd',1,'DATARATE():&#160;1Definitions.h'],['../common_8h.html#a6e3511acbf8184c2b874c1175f86f7fd',1,'DATARATE():&#160;common.h']]],
   ['datatosend_6',['DataToSend',['../common_8h.html#ae179c6f59e4de509ff9d25e72b0fb906',1,'common.h']]],
-  ['datatosend_7',['DataTosend',['../1Definitions_8h.html#a7bd6fa91081117ef3384b17a16092a77',1,'1Definitions.h']]],
+  ['datatosend_7',['Datatosend',['../1Definitions_8h.html#a6c240ce43864f8d35d002bfd4e3c37b6',1,'1Definitions.h']]],
   ['dataview_8',['DATAVIEW',['../1Definitions_8h.html#a5d4f7906962f2c612f1eeabd809f2f52',1,'1Definitions.h']]],
   ['datefix_9',['DateFix',['../1Definitions_8h.html#af963d49af3aeb834d322601d3c3e3d04',1,'1Definitions.h']]],
   ['daygps_10',['DayGPS',['../common_8h.html#a4c722ec4fa2ff675bd4a2d511e80cd6e',1,'common.h']]],
