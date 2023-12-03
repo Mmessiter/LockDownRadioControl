@@ -242,6 +242,7 @@ uint8_t EncodeTheChangedChannels(){
     uint8_t NumberOfChangedChannels = 0;
     DataTosend.DataFlags = 0;                                                       // clear the dataflags 16 BIT WORD
    
+    // This part was to force an update on all channels every 1/5 second ... but it's not needed.
     // static uint32_t LocalTimer = 0;
     // if ((millis() - LocalTimer) > 200) {                                            // every second/5
     //         LocalTimer = millis();
@@ -284,14 +285,13 @@ FASTRUN void SendData()
         if (BuddyPupilOnPPM) {SendViaPPM(); return;}                                                     // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         Connected = false;                                                                               // Assume the worst until ACK is received.
         FlushFifos();                                                                                    // This avoids a lockup that happens when the FIFO gets full.
-     // LoadPacketData();                                                                                // REDUNDANT!
 #ifdef USE_NEW_CHANNEL_MAPPING  
         uint8_t NumberOfChangedChannels = EncodeTheChangedChannels();                                    // returns the number of channels that have changed
         if (AddExtraParameters) NumberOfChangedChannels = SendExtraParamemters(NumberOfChangedChannels); // Add parameters if there are some to go ...   
         uint8_t ByteCountToTransmit =  ((float) NumberOfChangedChannels * 1.5f) + 4;                     // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 word because int rounds downwards!
         Compress(DataTosend.CompressedData, RawDataBuffer, UNCOMPRESSEDWORDS);                           // Compress the raw data buffer into the compressed data buffer
         
-        Look(ByteCountToTransmit);
+     //  Look(ByteCountToTransmit);
         
         if (Radio1.write(&DataTosend, ByteCountToTransmit)) {SuccessfulPacket();} else {FailedPacket();} // Send the data packet complete with DataFlags and compressed data 
 #else
