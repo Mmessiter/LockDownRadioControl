@@ -263,14 +263,13 @@ uint8_t EncodeTheChangedChannels(){
 
 /************************************************************************************************************/
 
-uint8_t SendExtraParamemters(uint8_t p)
+uint8_t SendExtraParamemters(uint8_t Pointer)             // parameters must be loaded before this function is called
 {                                                   // only the low 12 bits of each parameter are sent
-        RawDataBuffer[p]    = Parameters.ID;        // copy current parameter values into the rawdatabuffer right after the channels
-        RawDataBuffer[p+1]  = Parameters.word1;
-        RawDataBuffer[p+2]  = Parameters.word2;
-        p += 4;               
-
-return p;
+    RawDataBuffer[Pointer]    = Parameters.ID;        // copy current parameter values into the rawdatabuffer right after the channels
+    RawDataBuffer[Pointer+1]  = Parameters.word1;
+    RawDataBuffer[Pointer+2]  = Parameters.word2;
+    Pointer += 4;               
+return Pointer;
 }
 
 /************************************************************************************************************/
