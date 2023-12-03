@@ -283,13 +283,13 @@ FASTRUN void SendData()
     if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { 
         LastPacketSentTime = millis();
         if (BuddyPupilOnPPM) {SendViaPPM(); return;}                                                     // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
-        Connected = false;                                                                               // Assume the worst until ACK is received.
-        FlushFifos();                                                                                    // This avoids a lockup that happens when the FIFO gets full.
+        Connected = false;                                                                               // Assume failure until an ACK is received.
+        FlushFifos();                                                                                    // This flush avoids a lockup that happens when the FIFO gets full.
 #ifdef USE_NEW_CHANNEL_MAPPING  
-        uint8_t NumberOfChangedChannels = EncodeTheChangedChannels();                                    // returns the number of channels that have changed
-        if (AddExtraParameters) NumberOfChangedChannels = SendExtraParamemters(NumberOfChangedChannels); // Add parameters if there are some to go ...   
-        uint8_t ByteCountToTransmit =  ((float) NumberOfChangedChannels * 1.5f) + 4;                     // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 word because int rounds downwards!
-        Compress(DataTosend.CompressedData, RawDataBuffer, UNCOMPRESSEDWORDS);                           // Compress the raw data buffer into the compressed data buffer
+        uint8_t NumberOfChangedChannels = EncodeTheChangedChannels();                                    // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels
+        if (AddExtraParameters) NumberOfChangedChannels = SendExtraParamemters(NumberOfChangedChannels); // Add parameters here if there are some to go ...   
+        uint8_t ByteCountToTransmit =  ((float) NumberOfChangedChannels * 1.5f) + 4;                     // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 word because int rounds downwards.
+        Compress(DataTosend.CompressedData, RawDataBuffer, UNCOMPRESSEDWORDS);                           // Compress the raw data buffer into the compressed data buffer (reduces it to 75% of original size)
         
      //  Look(ByteCountToTransmit);
         
