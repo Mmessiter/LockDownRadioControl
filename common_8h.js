@@ -1,6 +1,7 @@
 var common_8h =
 [
     [ "CD", "structCD.html", "structCD" ],
+    [ "CD2", "structCD2.html", "structCD2" ],
     [ "BIND_EEPROM_OFFSET", "common_8h.html#a9711a7159ecb22d58fd6331700663ee7", null ],
     [ "BINDPLUG_PIN", "common_8h.html#a9986f66313bda8d791f5f4ec246d5709", null ],
     [ "BOUNDPIPENUMBER", "common_8h.html#a5f3f2939c5f5efcee13dc77b62dbaeb4", null ],
@@ -134,6 +135,7 @@ var common_8h =
     [ "NextChannelNumber", "common_8h.html#a372b457a109ccee3253b219df1a47412", null ],
     [ "OldQnh", "common_8h.html#a9457ea1945cb317c212c8cb98a829f39", null ],
     [ "PacketNumber", "common_8h.html#a09cb370d93005b5a43e932a3d6093ea2", null ],
+    [ "Parameters", "common_8h.html#adefe865b827a3f50e85ebee02d0347bb", null ],
     [ "pcount", "common_8h.html#ab8db1cb4ed83fda3eb629971dcf8a5c9", null ],
     [ "PipePointer", "common_8h.html#a9b742087149d776e2b9cbc77e1f3bab6", null ],
     [ "Pipnum", "common_8h.html#a63b5051d09e33414a0aba533e93a1fcd", null ],
@@ -168,6 +170,7 @@ var common_8h =
     [ "SensorTime", "common_8h.html#a1e9e8116136abd96cf87d7f0fd20a3d8", null ],
     [ "ServosAttached", "common_8h.html#a95b22fb572f7a91a89a431c7f1236575", null ],
     [ "SizeOfDataToSend", "common_8h.html#a5236e34ced53988a484d4f2169adedb9", null ],
+    [ "SizeOfParameters", "common_8h.html#a311fa84226f57f796ac3f05e6a8ed8f1", null ],
     [ "SpeedGPS", "common_8h.html#af02319a1e0d8c0c651f23e49acc228f8", null ],
     [ "TeensyWatchDog", "common_8h.html#ab1a4e0031c7577ce2c7a568affacb58e", null ],
     [ "TheCurrentPipe", "common_8h.html#a9d31bcb95b8f41dea58c2f384fedefb0", null ],

@@ -2,7 +2,7 @@ var searchData=
 [
   ['dataflags_0',['Dataflags',['../structCD.html#a5bf676100dd1fed6148a522d15fb7fc9',1,'CD']]],
   ['dataflags_1',['DataFlags',['../structCD.html#ac6e86b396c56fa8678e067a93759b714',1,'CD']]],
-  ['datatosend_2',['Datatosend',['../1Definitions_8h.html#a6c240ce43864f8d35d002bfd4e3c37b6',1,'1Definitions.h']]],
+  ['datatosend_2',['DataTosend',['../1Definitions_8h.html#a7bd6fa91081117ef3384b17a16092a77',1,'1Definitions.h']]],
   ['datatosend_3',['DataToSend',['../common_8h.html#ae179c6f59e4de509ff9d25e72b0fb906',1,'common.h']]],
   ['datefix_4',['DateFix',['../1Definitions_8h.html#af963d49af3aeb834d322601d3c3e3d04',1,'1Definitions.h']]],
   ['daygps_5',['DayGPS',['../common_8h.html#a4c722ec4fa2ff675bd4a2d511e80cd6e',1,'common.h']]],

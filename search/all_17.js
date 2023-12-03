@@ -24,7 +24,7 @@ var searchData=
   ['usemotorkill_21',['UseMotorKill',['../1Definitions_8h.html#ad76445c097f9d33a6935be5c2489bd34',1,'1Definitions.h']]],
   ['user_5fctrl_22',['USER_CTRL',['../classMPU9250.html#ac7a02a1a77fe8bf5a477cc37820d2f27',1,'MPU9250']]],
   ['userandomizedrecoverychannels_23',['UseRandomizedRecoveryChannels',['../common_8h.html#a03cd5e24f66a381a38effaa16922c0a8',1,'UseRandomizedRecoveryChannels():&#160;common.h'],['../1Definitions_8h.html#a03cd5e24f66a381a38effaa16922c0a8',1,'UseRandomizedRecoveryChannels():&#160;1Definitions.h']]],
-  ['usereceiveddata_24',['UseReceivedData',['../radio_8h.html#abb1997c589abc6432f612eaedf985e38',1,'radio.h']]],
+  ['usereceiveddata_24',['UseReceivedData',['../radio_8h.html#ae81f764427dc5f290cc6e16ab92e83b8',1,'radio.h']]],
   ['usesbus_25',['UseSBUS',['../common_8h.html#a80f5214ddc3b9618293f3b2694dff6f7',1,'common.h']]],
   ['usesbusfromrx_26',['UseSBUSFromRX',['../structPPMArea.html#a748d93840ef117d5c5cd62dc915f0891',1,'PPMArea']]],
   ['usetxmodule_27',['UseTXModule',['../structPPMArea.html#a6f623131e7bf583da7799c58fe3d9c08',1,'PPMArea']]],

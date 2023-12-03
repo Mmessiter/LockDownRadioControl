@@ -22,7 +22,7 @@ var transceiver_8h =
     [ "ScanAllChannels", "transceiver_8h.html#ae17dae8deffe2e33044f61fd3a8ebca2", null ],
     [ "SendBindingPipe", "transceiver_8h.html#ae5df0d6d4352a4039d996e773e8fc6bf", null ],
     [ "SendData", "transceiver_8h.html#a049bfb836e7aa4a3a48a1a4bd225fafc", null ],
-    [ "SendExtraParamemters", "transceiver_8h.html#aaf777de46e3587502e57991595e3ddd3", null ],
+    [ "SendExtraParamemters", "transceiver_8h.html#a712053e795ae406b9aa61a0a0899a753", null ],
     [ "SetThePipe", "transceiver_8h.html#a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce", null ],
     [ "SuccessfulPacket", "transceiver_8h.html#a1c11bb6771548de7d96723045b922620", null ],
     [ "TryOtherPipe", "transceiver_8h.html#ad0e30213b21808d00110752679788a8c", null ],

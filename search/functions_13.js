@@ -11,5 +11,5 @@ var searchData=
   ['usedefaultrecoverychannels_8',['UseDefaultRecoveryChannels',['../common_8h.html#a23be886d0f26b1bd0487babfb4d7ed7e',1,'UseDefaultRecoveryChannels():&#160;common.h'],['../1Definitions_8h.html#a23be886d0f26b1bd0487babfb4d7ed7e',1,'UseDefaultRecoveryChannels():&#160;1Definitions.h']]],
   ['usefullrate_9',['UseFullRate',['../TransmitterCode_2src_2main_8cpp.html#a8f53f86499d740b350f7b6d791c90497',1,'main.cpp']]],
   ['userandomizedrecoverychannels_10',['UseRandomizedRecoveryChannels',['../common_8h.html#a03cd5e24f66a381a38effaa16922c0a8',1,'UseRandomizedRecoveryChannels():&#160;common.h'],['../1Definitions_8h.html#a03cd5e24f66a381a38effaa16922c0a8',1,'UseRandomizedRecoveryChannels():&#160;1Definitions.h']]],
-  ['usereceiveddata_11',['UseReceivedData',['../radio_8h.html#abb1997c589abc6432f612eaedf985e38',1,'radio.h']]]
+  ['usereceiveddata_11',['UseReceivedData',['../radio_8h.html#ae81f764427dc5f290cc6e16ab92e83b8',1,'radio.h']]]
 ];
