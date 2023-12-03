@@ -283,8 +283,11 @@ FASTRUN void SendData()
 #ifdef USE_NEW_CHANNEL_MAPPING  
         uint8_t NumberOfChangedChannels = EncodeTheChangedChannels();                                    // returns the number of channels that have changed
         if (AddExtraParameters) NumberOfChangedChannels = SendExtraParamemters(NumberOfChangedChannels); // Add parameters if there are some to go ...   
-        uint8_t ByteCountToTransmit = (uint8_t) ((float) NumberOfChangedChannels * 1.5f) + 3;            // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 byte because int rounds downwards!
+        uint8_t ByteCountToTransmit =  ((float) NumberOfChangedChannels * 1.5f) + 4;                     // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 byte because int rounds downwards!
         Compress(DataTosend.CompressedData, RawDataBuffer, UNCOMPRESSEDWORDS);                           // Compress the raw data buffer into the compressed data buffer
+        
+        Look(ByteCountToTransmit);
+        
         if (Radio1.write(&DataTosend, ByteCountToTransmit)) {SuccessfulPacket();} else {FailedPacket();} // Send the data packet complete with DataFlags and compressed data 
 #else
         Compress(DataTosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 

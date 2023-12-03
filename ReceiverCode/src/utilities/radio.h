@@ -122,13 +122,13 @@ uint8_t RearrangeTheChannels(){
 #endif
 
 /************************************************************************************************************/
-void ReadMoreParameters(uint8_t p){                                       
-        Parameters.ID    =  RawDataIn[p] ;                                  // p is the end of the changed channels
-        Parameters.word1 =  RawDataIn[p+1];
-        Parameters.word2 =  RawDataIn[p+2];
-        Look(Parameters.ID);
-        Look(Parameters.word1);
-        Look(Parameters.word2);
+void ReadMoreParameters(uint8_t NumberOfChangedChannels){                                       
+        Parameters.ID    =  RawDataIn[NumberOfChangedChannels] ;                                  // p is the end of the changed channels
+        Parameters.word1 =  RawDataIn[NumberOfChangedChannels+1];
+        Parameters.word2 =  RawDataIn[NumberOfChangedChannels+2];
+        // Look(Parameters.ID);
+        // Look(Parameters.word1);
+        // Look(Parameters.word2);
 }
 /************************************************************************************************************/
 void UseReceivedData(uint8_t DynamicPayloadSize) // q is length of incomming data
@@ -137,12 +137,12 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // q is length of incomming dat
     Decompress(RawDataIn, DataToSend.CompressedData, UNCOMPRESSEDWORDS);    // Decompress only the most recent data
    
     uint8_t NumberOfChangedChannels = RearrangeTheChannels();                                     // Rearrange the channels for actual control since only changed ones are sent
-    if ((DynamicPayloadSize - NumberOfChangedChannels) >= 8)  ReadMoreParameters(NumberOfChangedChannels);                               // q is much bigger when parameters are added.
+    if ((DynamicPayloadSize - NumberOfChangedChannels) >= 9)  ReadMoreParameters(NumberOfChangedChannels);                               // q is much bigger when parameters are added.
                                                          
 #else
     Decompress(ReceivedData, DataToSend.CompressedData, UNCOMPRESSEDWORDS); // Decompress only the most recent data
 #endif
-  // ReadExtraParameters();                                       
+  // ReadExtraParameters();                                      // REDUNDANT                                  
     MapToSBUS();                                                 // Get SBUS data ready
     LastPacketArrivalTime = millis();                            // Note the arrival time
     if (HopNow) {                                                // This flag gets set in LoadAckPayload();
