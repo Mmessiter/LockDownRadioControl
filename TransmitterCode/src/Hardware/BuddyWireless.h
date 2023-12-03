@@ -181,7 +181,7 @@ void GetSpecialPacket()                                                         
     spd SpecialPacketData;
    
     if (Radio1.available()) {                                                           // if a packet has arrived
-        Radio1.writeAckPayload(1, &Datatosend.CompressedData, SizeOfCompressedData);              // Acknowledge the packet BY SENDING MY CHANNEL DATA!
+        Radio1.writeAckPayload(1, &DataTosend.CompressedData, SizeOfCompressedData);              // Acknowledge the packet BY SENDING MY CHANNEL DATA!
         DelayWithDog(DELAYAFTERACK);                                                    // <-  ** MUST ** allow the ACK time to get going, otherwise the sender sees a failed packet    
         if (Radio1.available()){ 
             Radio1.read(&SpecialPacketData, sizeof SpecialPacketData);                  // read the packet if its still there

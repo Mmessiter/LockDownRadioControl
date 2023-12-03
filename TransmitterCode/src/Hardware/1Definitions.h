@@ -770,10 +770,10 @@ bool            SaveFailSafeNow = false;
 uint32_t        FailSafeTimer;
 
 struct CD{
-    uint16_t        DataFlags = 42;                    //  =  1 word,   2 bytes
-    uint16_t        CompressedData[COMPRESSEDWORDS];   //  = 15 words, 30 bytes
+    uint16_t        DataFlags = 0;                    
+    uint16_t        CompressedData[COMPRESSEDWORDS];   // Bigger than needed 
 };
-CD Datatosend;
+CD DataTosend;
 
 struct CD2{
     uint16_t        ID    = 12;          
@@ -783,8 +783,8 @@ struct CD2{
 CD2 Parameters;
 
 
-uint16_t        SizeOfDatatosend = sizeof(Datatosend); 
-uint8_t         SizeOfCompressedData = sizeof(Datatosend.CompressedData);   
+uint16_t        SizeOfDataTosend = sizeof(DataTosend); 
+uint8_t         SizeOfCompressedData = sizeof(DataTosend.CompressedData);   
 uint8_t         SizeOfParameters = sizeof(Parameters);
 uint32_t        Inactivity_Timeout = INACTIVITYTIMEOUT;
 uint32_t        Inactivity_Start   = 0;

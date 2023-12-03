@@ -241,13 +241,13 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 uint8_t EncodeTheChangedChannels(){
    
     uint8_t p = 0;
-    Datatosend.DataFlags = 0; // clear the dataflags 16 BIT WORD
+    DataTosend.DataFlags = 0; // clear the dataflags 16 BIT WORD
     
     for (int i = 0; i < CHANNELSUSED; ++i){          // check for changed channels
                 if ((SendBuffer[i] != PreviousBuffer[i]) && (p < CHANNELSSENT)) {
                 RawDataBuffer[p]  = SendBuffer[i];          // load a changed channel into the rawdatabuffer 
                 PreviousBuffer[i] = SendBuffer[i];          // save it for next time
-                Datatosend.DataFlags |= (1 << i);           // set the bit in the dataflags byte
+                DataTosend.DataFlags |= (1 << i);           // set the bit in the dataflags byte
                 ++p;                                        // increment the rawdatabuffer index
         } 
     }
@@ -290,12 +290,12 @@ FASTRUN void SendData()
         
       // Look(p);
 
-        Compress(Datatosend.CompressedData, RawDataBuffer, 16);                                         // Compress max of 16 words (32 bytes) into 12 words (24 bytes)
-        if (Radio1.write(&Datatosend, p)) {SuccessfulPacket();} else {FailedPacket();}                  // Send the data packet complete with DataFlags 
+        Compress(DataTosend.CompressedData, RawDataBuffer, 16);                                         // Compress max of 16 words (32 bytes) into 12 words (24 bytes)
+        if (Radio1.write(&DataTosend, p)) {SuccessfulPacket();} else {FailedPacket();}                  // Send the data packet complete with DataFlags 
     
 #else
-        Compress(Datatosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 
-        if (Radio1.write(&Datatosend.CompressedData,SizeOfCompressedData)) {SuccessfulPacket();} else {FailedPacket();}  
+        Compress(DataTosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 
+        if (Radio1.write(&DataTosend.CompressedData,SizeOfCompressedData)) {SuccessfulPacket();} else {FailedPacket();}  
 #endif    
     }else{
         if (BuddyMasterOnWireless) SendSpecialPacket();          // takes about 4 - 5 ms. Gets buddy control data in ACK payload 
