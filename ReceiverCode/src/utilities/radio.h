@@ -135,10 +135,8 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // q is length of incomming dat
 {
 #ifdef USE_NEW_CHANNEL_MAPPING
     Decompress(RawDataIn, DataToSend.CompressedData, UNCOMPRESSEDWORDS);    // Decompress only the most recent data
-   
     uint8_t NumberOfChangedChannels = RearrangeTheChannels();                                     // Rearrange the channels for actual control since only changed ones are sent
-    if ((DynamicPayloadSize - NumberOfChangedChannels) >= 9)  ReadMoreParameters(NumberOfChangedChannels);                               // q is much bigger when parameters are added.
-                                                         
+    if ((DynamicPayloadSize - NumberOfChangedChannels) >= 9)  ReadMoreParameters(NumberOfChangedChannels);                               // q is much bigger when parameters are added.                                                        
 #else
     Decompress(ReceivedData, DataToSend.CompressedData, UNCOMPRESSEDWORDS); // Decompress only the most recent data
 #endif
