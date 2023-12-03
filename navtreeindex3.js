@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"BuddyWireless_8h.html#a41c327908c92572d0d3eebbb19160d86":[5,0,3,0,0,2,13],
 "BuddyWireless_8h.html#a6605e7b4cc71cfc4a06e0f2a019fca0a":[5,0,3,0,0,2,1],
 "BuddyWireless_8h.html#a790b14444d8cdb4c3ae4e9884e3550d7":[5,0,3,0,0,2,8],
 "BuddyWireless_8h.html#a81dae00008c15e7f28783822b32ba1d0":[5,0,3,0,0,2,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "MPU6050_8h.html#a9afa924d18b0aaeda7f95190318e09ae":[5,0,0,0,0,0,4,42],
 "MPU6050_8h.html#a9bc0458ce42b66e81a8831dd2c07dc0a":[5,0,0,0,0,0,4,215],
 "MPU6050_8h.html#a9bd7d20192f747289f80ea3c736751ac":[5,0,0,0,0,0,4,329],
-"MPU6050_8h.html#a9c1f00b82503b74a1729abb5efe478f8":[5,0,0,0,0,0,4,299],
-"MPU6050_8h.html#a9cdc87a769dcb9d175c7e32ff6315611":[5,0,0,0,0,0,4,16]
+"MPU6050_8h.html#a9c1f00b82503b74a1729abb5efe478f8":[5,0,0,0,0,0,4,299]
 };

@@ -623,6 +623,7 @@ var 1Definitions_8h =
     [ "PPMdata", "1Definitions_8h.html#aa1b99853b3bcc57b139282280f732b64", null ],
     [ "PreMixBuffer", "1Definitions_8h.html#ac24c1436596363f5c1d3c50f2c3d5266", null ],
     [ "PreviousBank", "1Definitions_8h.html#a0c549e2af543242cf4588249b72bde71", null ],
+    [ "PreviousBuffer", "1Definitions_8h.html#a0345a6d38075e040691fdc5dd5fccc6e", null ],
     [ "PreviousDualRateInUse", "1Definitions_8h.html#a2f9054e404fa489d72b23ddcae8ef707", null ],
     [ "PreviousMacroNumber", "1Definitions_8h.html#a2ab3e003635d9ed1751b3f4183762748", null ],
     [ "PreviousModelNumber", "1Definitions_8h.html#abbcab2d4e69dfdc506e906295155c78f", null ],
