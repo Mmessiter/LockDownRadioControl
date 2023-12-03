@@ -58,10 +58,10 @@
     #define RECEIVE_TIMEOUT    14   //  was 14  (should be about 4 ms more that TX's PACEMAKER)
 #endif
 
-#define CHANNELSUSED       16                            //
-#define UNCOMPRESSEDWORDS  (CHANNELSSENT + 4)            //   = 20 WORDS (40 bytes)
-#define COMPRESSEDWORDS    (UNCOMPRESSEDWORDS * 3 / 4)   //   = 30 bytes
-#define RECEIVEBUFFERSIZE  (CHANNELSUSED + 4)        
+#define CHANNELSUSED       16                        
+#define UNCOMPRESSEDWORDS  20        
+#define COMPRESSEDWORDS    20 
+#define RECEIVEBUFFERSIZE  20        
 
 struct  CD{
     uint16_t      Dataflags = 0;                   //  send 32 bytes !
@@ -70,6 +70,17 @@ struct  CD{
 CD DataToSend;
 
 uint16_t SizeOfDataToSend = sizeof(DataToSend);
+
+
+struct CD2{
+    uint16_t        ID    = 12;          
+    uint16_t        word1 = 123;
+    uint16_t        word2 = 12345;;   
+};  
+
+CD2 Parameters;
+uint8_t         SizeOfParameters = sizeof(Parameters);
+
 
 #define FREQUENCYSCOUNT  82                             // uses 82 different channels
 #define FREQUENCYSCOUNT1 41                             // uses 41 different test channels

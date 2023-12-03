@@ -242,8 +242,6 @@ uint8_t EncodeTheChangedChannels(){
    
     uint8_t p = 0;
     Datatosend.DataFlags = 0; // clear the dataflags 16 BIT WORD
-
-      
     
     for (int i = 0; i < CHANNELSUSED; ++i){          // check for changed channels
                 if ((SendBuffer[i] != PreviousBuffer[i]) && (p < CHANNELSSENT)) {
@@ -257,14 +255,16 @@ uint8_t EncodeTheChangedChannels(){
 }
 #endif
 
-
 /************************************************************************************************************/
-void SendExtraParamemters(uint8_t p)
-{
-                RawDataBuffer[4]  = 1;
-                RawDataBuffer[5]  = 2;
-                RawDataBuffer[6]  = 3;
-                RawDataBuffer[7]  = 4;
+
+uint8_t SendExtraParamemters(uint8_t p)
+{                                                   // only the low 12 bits of each parameter are sent
+        RawDataBuffer[p]    = Parameters.ID;        // copy current parameter values into the rawdatabuffer right after the channels
+        RawDataBuffer[p+1]  = Parameters.word1;
+        RawDataBuffer[p+2]  = Parameters.word2;
+        p += 4;               
+
+return p;
 }
 
 /************************************************************************************************************/
@@ -273,6 +273,9 @@ void SendExtraParamemters(uint8_t p)
 
 FASTRUN void SendData()
 { 
+
+    bool AddExtraParameters = true;
+    
     if (SendNoData) return;
     if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { 
         LastPacketSentTime = millis();
@@ -281,9 +284,13 @@ FASTRUN void SendData()
         FlushFifos();                                            // This avoids a lockup that happens when the FIFO gets full.
         LoadPacketData();                                        // extra parameters appended to the data packet
 #ifdef USE_NEW_CHANNEL_MAPPING  
-        uint8_t p = EncodeTheChangedChannels();
-        p = ((float) p * 1.5) + 3;                               // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 byte because half a word is no good.
-        Compress(Datatosend.CompressedData, RawDataBuffer, UNCOMPRESSEDWORDS);                          // Compress 
+        uint8_t p = EncodeTheChangedChannels();                  // returns the number of channels that have changed
+       if (AddExtraParameters) p = SendExtraParamemters(p);    
+        p = ((float) p * 1.5) + 3;                               // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 byte because int rounds downwards!
+        
+      // Look(p);
+
+        Compress(Datatosend.CompressedData, RawDataBuffer, 16);                                         // Compress max of 16 words (32 bytes) into 12 words (24 bytes)
         if (Radio1.write(&Datatosend, p)) {SuccessfulPacket();} else {FailedPacket();}                  // Send the data packet complete with DataFlags 
     
 #else

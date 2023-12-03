@@ -122,26 +122,23 @@ uint8_t RearrangeTheChannels(){
 #endif
 
 /************************************************************************************************************/
-void ReadMoreParameters(uint8_t p){
-    
-                //  Look(RawDataIn[4]);
-                //  Look(RawDataIn[5]);
-                //  Look(RawDataIn[6]);
-                //  Look(RawDataIn[7]);
-
+void ReadMoreParameters(uint8_t p){                                       
+        Parameters.ID    =  RawDataIn[p] ;                                  // p is the end of the changed channels
+        Parameters.word1 =  RawDataIn[p+1];
+        Parameters.word2 =  RawDataIn[p+2];
+        Look(Parameters.ID);
+        Look(Parameters.word1);
+        Look(Parameters.word2);
 }
-
-
 /************************************************************************************************************/
-void UseReceivedData()
+void UseReceivedData(uint8_t DynamicPayloadSize) // q is length of incomming data
 {
 #ifdef USE_NEW_CHANNEL_MAPPING
     Decompress(RawDataIn, DataToSend.CompressedData, UNCOMPRESSEDWORDS);    // Decompress only the most recent data
-    uint8_t p = RearrangeTheChannels();                                     // Rearrange the channels for actual control since only changed ones are sent
-   // if (p < 4)  ReadMoreParameters(p);
-
-  // Look(ReceivedData[15]);
-                                                                        
+   
+    uint8_t NumberOfChangedChannels = RearrangeTheChannels();                                     // Rearrange the channels for actual control since only changed ones are sent
+    if ((DynamicPayloadSize - NumberOfChangedChannels) >= 8)  ReadMoreParameters(NumberOfChangedChannels);                               // q is much bigger when parameters are added.
+                                                         
 #else
     Decompress(ReceivedData, DataToSend.CompressedData, UNCOMPRESSEDWORDS); // Decompress only the most recent data
 #endif
@@ -165,18 +162,18 @@ bool ReadData()
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
         DelayMillis(2);    
-        uint8_t p = CurrentRadio->getDynamicPayloadSize();             // Get the size of the new data (14)   
+        uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize();             // Get the size of the new data (14)   
      
       //  Look(p); // average p is about 8 to 9
 #ifdef USE_NEW_CHANNEL_MAPPING
-        CurrentRadio->read(&DataToSend, p);   //  ** >> Read new data from master << ** // Get the size of the new data (14)
+        CurrentRadio->read(&DataToSend, DynamicPayloadSize);   //  ** >> Read new data from master << ** // Get the size of the new data (14)
 #else
         CurrentRadio->read(&DataToSend.CompressedData, SizeOfDataToSend-2);   //  ** >> Read new data from master << **
 #endif 
         Connected = true;
         NewData   = true;
+       if (Connected) UseReceivedData(DynamicPayloadSize);
     }
-    if (Connected) UseReceivedData();
     return Connected;
 }
 

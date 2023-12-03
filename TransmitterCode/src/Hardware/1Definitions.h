@@ -64,8 +64,8 @@
 
 #ifdef USE_NEW_CHANNEL_MAPPING
     #define CHANNELSSENT           8                             // Up to 8 Channels can be sent  - from 16
-    #define PACEMAKER              6                             // was 10. 5 is probably the MIN.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-    #define TIMEFORTXMANAGMENT     2                             // was 3.   How many ms must remain spare between data packets before daring to undertake more trivial task
+    #define PACEMAKER              10                            // was 10. 5 is probably the MIN.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+    #define TIMEFORTXMANAGMENT     3                             // was 3.   How many ms must remain spare between data packets before daring to undertake more trivial task
                          
 #else
     #define CHANNELSSENT           16 
@@ -73,10 +73,10 @@
     #define TIMEFORTXMANAGMENT     3                            // was 3.   How many ms must remain spare between data packets before daring to undertake more trivial task
 #endif
 
-    #define CHANNELSUSED           16                          // 16 Channels
-    #define UNCOMPRESSEDWORDS      (CHANNELSSENT + 4)          //.... DATA TO SEND WHEN COMPRESSED    *********** (BRACKETS ARE IMPORTANT !!) *********** 
-    #define COMPRESSEDWORDS        (UNCOMPRESSEDWORDS * 3 / 4) // UNCOMPRESSED DATA MUST BE DIVISIBLE BY 4
-    #define SENDBUFFERSIZE         (CHANNELSUSED + 4) 
+    #define CHANNELSUSED           16                           
+    #define UNCOMPRESSEDWORDS      20          
+    #define COMPRESSEDWORDS        20
+    #define SENDBUFFERSIZE         20
 
     #define DEFAULTPIPEADDRESS     0xB7BE3E9423LL               // Pipe address for startup - any value but MUST match RX 
     #define MAXMIXES               32                           // 32 mixes
@@ -775,8 +775,17 @@ struct CD{
 };
 CD Datatosend;
 
+struct CD2{
+    uint16_t        ID    = 12;          
+    uint16_t        word1 = 123;
+    uint16_t        word2 = 321;;   
+};  
+CD2 Parameters;
+
+
 uint16_t        SizeOfDatatosend = sizeof(Datatosend); 
-uint8_t         SizeOfCompressedData = sizeof(Datatosend.CompressedData);          
+uint8_t         SizeOfCompressedData = sizeof(Datatosend.CompressedData);   
+uint8_t         SizeOfParameters = sizeof(Parameters);
 uint32_t        Inactivity_Timeout = INACTIVITYTIMEOUT;
 uint32_t        Inactivity_Start   = 0;
 tmElements_t    tm;
