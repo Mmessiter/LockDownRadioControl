@@ -276,22 +276,22 @@ FASTRUN void SendData()
     if (SendNoData) return;
     if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { 
         LastPacketSentTime = millis();
-        if (BuddyPupilOnPPM) {SendViaPPM(); return;}                                                    // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
-        Connected = false;                                                                              // Assume the worst until ACK is received.
-        FlushFifos();                                                                                   // This avoids a lockup that happens when the FIFO gets full.
-     // LoadPacketData();                                                                               // REDUNDANT!
+        if (BuddyPupilOnPPM) {SendViaPPM(); return;}                                                     // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
+        Connected = false;                                                                               // Assume the worst until ACK is received.
+        FlushFifos();                                                                                    // This avoids a lockup that happens when the FIFO gets full.
+     // LoadPacketData();                                                                                // REDUNDANT!
 #ifdef USE_NEW_CHANNEL_MAPPING  
-        uint8_t NumberOfChangedChannels = EncodeTheChangedChannels();                                   // returns the number of channels that have changed
+        uint8_t NumberOfChangedChannels = EncodeTheChangedChannels();                                    // returns the number of channels that have changed
         if (AddExtraParameters) NumberOfChangedChannels = SendExtraParamemters(NumberOfChangedChannels); // Add parameters if there are some to go ...   
-        uint8_t ByteCountToTransmit = (uint8_t) ((float) NumberOfChangedChannels * 1.5f) + 3;           // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 byte because int rounds downwards!
-        Compress(DataTosend.CompressedData, RawDataBuffer, UNCOMPRESSEDWORDS);                          // Compress the raw data buffer into the compressed data buffer
-        if (Radio1.write(&DataTosend, ByteCountToTransmit)) {SuccessfulPacket();} else {FailedPacket();}// Send the data packet complete with DataFlags and compressed data 
+        uint8_t ByteCountToTransmit = (uint8_t) ((float) NumberOfChangedChannels * 1.5f) + 3;            // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 byte because int rounds downwards!
+        Compress(DataTosend.CompressedData, RawDataBuffer, UNCOMPRESSEDWORDS);                           // Compress the raw data buffer into the compressed data buffer
+        if (Radio1.write(&DataTosend, ByteCountToTransmit)) {SuccessfulPacket();} else {FailedPacket();} // Send the data packet complete with DataFlags and compressed data 
 #else
         Compress(DataTosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 
         if (Radio1.write(&DataTosend.CompressedData,SizeOfCompressedData)) {SuccessfulPacket();} else {FailedPacket();}  
 #endif    
     }else{
-        if (BuddyMasterOnWireless) SendSpecialPacket();                                                 // takes about 4 - 5 ms. Gets buddy control data in ACK payload 
+        if (BuddyMasterOnWireless) SendSpecialPacket();                                                  // takes about 4 - 5 ms. Gets buddy control data in ACK payload 
     }
 }
 /***********************************************************************************************************/
