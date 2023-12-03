@@ -149,6 +149,7 @@ FASTRUN void FailedPacket()
         {
             if (((millis() - GapStart) > RED_LED_ON_TIME) && (!LedWasRed)) RedLedOn(); // Put on red led - receiver must be off
         }
+    for (int i = 0; i < CHANNELSUSED; ++i)   PreviousBuffer[i] = 0;  // force update
     TryToReconnect();
     int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH); // INACTIVITY POWER OFF HERE!!
@@ -238,15 +239,12 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 /************************************************************************************************************/
 #ifdef USE_NEW_CHANNEL_MAPPING
 uint8_t EncodeTheChangedChannels(){
-    static uint16_t PreviousBuffer[CHANNELSUSED];
-    static uint32_t Localtimer = 0;
+   
     uint8_t p = 0;
     Datatosend.DataFlags = 0; // clear the dataflags 16 BIT WORD
 
-    if ((millis() - Localtimer) > 500) { // every 1/2 second force update
-        Localtimer = millis();
-        for (int i = 0; i < CHANNELSUSED; ++i)   PreviousBuffer[i] = 0;  // force update
-    }
+      
+    
     for (int i = 0; i < CHANNELSUSED; ++i){          // check for changed channels
                 if ((SendBuffer[i] != PreviousBuffer[i]) && (p < CHANNELSSENT)) {
                 RawDataBuffer[p]  = SendBuffer[i];          // load a changed channel into the rawdatabuffer 

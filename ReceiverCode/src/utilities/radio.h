@@ -166,7 +166,8 @@ bool ReadData()
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
         DelayMillis(2);    
         uint8_t p = CurrentRadio->getDynamicPayloadSize();             // Get the size of the new data (14)   
-      //  Look(p);
+     
+      //  Look(p); // average p is about 8 to 9
 #ifdef USE_NEW_CHANNEL_MAPPING
         CurrentRadio->read(&DataToSend, p);   //  ** >> Read new data from master << ** // Get the size of the new data (14)
 #else
