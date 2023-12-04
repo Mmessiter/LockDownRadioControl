@@ -250,13 +250,14 @@ uint8_t EncodeTheChangedChannels(){
     // }
     
     for (int i = 0; i < CHANNELSUSED; ++i){                                         // check for changed channels
-                if ((SendBuffer[i] != PreviousBuffer[i]) && (NumberOfChangedChannels < 4)) {            // WOW!!!
+                if ((SendBuffer[i] != PreviousBuffer[i]) && (NumberOfChangedChannels < 8)) {           
                 RawDataBuffer[NumberOfChangedChannels]  = SendBuffer[i];            // load a changed channel into the rawdatabuffer 
                 PreviousBuffer[i] = SendBuffer[i];                                  // save it for next time
                 DataTosend.DataFlags |= (1 << i);                                   // set the bit in the dataflags byte
                 ++NumberOfChangedChannels;                                          // increment the rawdatabuffer index
         } 
     }
+  //  Look(NumberOfChangedChannels);
     return NumberOfChangedChannels;                                                   // Return the number of channels that have changed 
 }
 #endif
