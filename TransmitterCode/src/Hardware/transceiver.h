@@ -250,7 +250,7 @@ uint8_t EncodeTheChangedChannels(){
     // }
     
     for (int i = 0; i < CHANNELSUSED; ++i){                                         // check for changed channels
-                if ((SendBuffer[i] != PreviousBuffer[i]) && (NumberOfChangedChannels < CHANNELSSENT)) {
+                if ((SendBuffer[i] != PreviousBuffer[i]) && (NumberOfChangedChannels < 4)) {            // WOW!!!
                 RawDataBuffer[NumberOfChangedChannels]  = SendBuffer[i];            // load a changed channel into the rawdatabuffer 
                 PreviousBuffer[i] = SendBuffer[i];                                  // save it for next time
                 DataTosend.DataFlags |= (1 << i);                                   // set the bit in the dataflags byte
@@ -289,9 +289,7 @@ FASTRUN void SendData()
         if (AddExtraParameters) NumberOfChangedChannels = SendExtraParamemters(NumberOfChangedChannels); // Add parameters here if there are some to go ...   
         uint8_t ByteCountToTransmit =  ((float) NumberOfChangedChannels * 1.5f) + 4;                     // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 word because int rounds downwards.
         Compress(DataTosend.CompressedData, RawDataBuffer, UNCOMPRESSEDWORDS);                           // Compress the raw data buffer into the compressed data buffer (reduces it to 75% of original size)
-        
-     //  Look(ByteCountToTransmit);
-        
+       
         if (Radio1.write(&DataTosend, ByteCountToTransmit)) {SuccessfulPacket();} else {FailedPacket();} // Send the data packet complete with DataFlags and compressed data 
 #else
         Compress(DataTosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 
