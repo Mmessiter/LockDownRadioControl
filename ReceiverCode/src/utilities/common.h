@@ -11,7 +11,7 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   3
-#define RXVERSION_MINIMUS 5 // December 2023
+#define RXVERSION_MINIMUS 6 // December 2023
 
 // #define DB_FHSS
 // #define DB_SENSORS
@@ -20,8 +20,10 @@
 // #define DB_RXTIMERS
 
 #define SECOND_TRANSCEIVER    // >>>>>>>>>>>>>>>>   ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-#define DATARATE RF24_250KBPS // RF24_250KBPS, RF24_1MBPS, RF24_2MBPS
 
+
+
+#define DATARATE RF24_250KBPS // RF24_250KBPS, RF24_1MBPS, RF24_2MBPS
 
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
@@ -38,7 +40,6 @@
 
 #define LISTEN_PERIOD           14   //  14 (How many ms to listen for TX in Reconnect())
 
-
 // ********************* >>> FHSS params <<< *******************************************
 
 #define HOPTIME                   0    // was 80 ms between channel changes. 
@@ -47,12 +48,9 @@
 
 #define PIPENUMBER       1
 #define BOUNDPIPENUMBER  1
-
-//#define CHANNELSSENT       8       
+     
 #define RECEIVE_TIMEOUT    11   //  was 14  (should probobly be about 4 - 5 ms more that TX's PACEMAKER 
 #define CHANNELSUSED       16                        
-//#define UNCOMPRESSEDWORDS  20        
-//#define COMPRESSEDWORDS    20 
 #define RECEIVEBUFFERSIZE  20        
 
 struct  CD{
