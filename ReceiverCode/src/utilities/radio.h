@@ -100,10 +100,7 @@ void MapToSBUS()
         }
     }
 }
-
-
 /************************************************************************************************************/
-#ifdef USE_NEW_CHANNEL_MAPPING
 uint8_t RearrangeTheChannels(){
  //  This function looks at the 16 BITS of DataToSend.ChannelBitMask and rearranges the channels accordingly.
     static uint16_t PreviousRData[CHANNELSUSED];
@@ -119,8 +116,6 @@ uint8_t RearrangeTheChannels(){
     }
     return p;
 }
-#endif
-
 /************************************************************************************************************/
 void ReadMoreParameters(uint8_t NumberOfChangedChannels){                                       
         Parameters.ID    =  RawDataIn[NumberOfChangedChannels] ;                                  // p is the end of the changed channels
@@ -133,16 +128,17 @@ void ReadMoreParameters(uint8_t NumberOfChangedChannels){
 /************************************************************************************************************/
 void UseReceivedData(uint8_t DynamicPayloadSize) // q is length of incomming data
 {
-#ifdef USE_NEW_CHANNEL_MAPPING
+
     Decompress(RawDataIn, DataToSend.CompressedData, UNCOMPRESSEDWORDS);    // Decompress only the most recent data
-    uint8_t NumberOfChangedChannels = RearrangeTheChannels();                                     // Rearrange the channels for actual control since only changed ones are sent
-    if ((DynamicPayloadSize - NumberOfChangedChannels) >= 9)  ReadMoreParameters(NumberOfChangedChannels);                               // q is much bigger when parameters are added.                                                        
-#else
-    Decompress(ReceivedData, DataToSend.CompressedData, UNCOMPRESSEDWORDS); // Decompress only the most recent data
-#endif
+    uint8_t NumberOfChangedChannels = RearrangeTheChannels();               // Rearrange the channels for actual control since only changed ones are sent
+    
+   // Look (DynamicPayloadSize - int(NumberOfChangedChannels * 1.5));        // = 10 with params or only 4 without params
+  //  Look (DynamicPayloadSize);
+    if ((DynamicPayloadSize - int(NumberOfChangedChannels * 1.5) > 6))  ReadMoreParameters(NumberOfChangedChannels);    // NumberOfChangedChannels is much bigger when parameters are added.                                                        
+
   // ReadExtraParameters();                                      // REDUNDANT                                  
     MapToSBUS();                                                 // Get SBUS data ready
-    LastPacketArrivalTime = millis();                            // Note the arrival time
+    LastPacketArrivalTime = millis();                            // Note the arrival time  
     if (HopNow) {                                                // This flag gets set in LoadAckPayload();
         HopToNextChannel();                                      // Ack payload instructed us to Hop at next opportunity. So hop now ...
         HopNow   = false;                                        // ... and clear the flag,

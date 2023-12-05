@@ -48,16 +48,8 @@
 #define PIPENUMBER       1
 #define BOUNDPIPENUMBER  1
 
-#define USE_NEW_CHANNEL_MAPPING true 
-
-#ifdef USE_NEW_CHANNEL_MAPPING
-    #define CHANNELSSENT       8       
-    #define RECEIVE_TIMEOUT    11   //  was 14  (should probobly be about 4 - 5 ms more that TX's PACEMAKER 
-#else
-    #define CHANNELSSENT       16       
-    #define RECEIVE_TIMEOUT    14   //  was 14  (should be about 4 ms more that TX's PACEMAKER)
-#endif
-
+#define CHANNELSSENT       8       
+#define RECEIVE_TIMEOUT    11   //  was 14  (should probobly be about 4 - 5 ms more that TX's PACEMAKER 
 #define CHANNELSUSED       16                        
 #define UNCOMPRESSEDWORDS  20        
 #define COMPRESSEDWORDS    20 
