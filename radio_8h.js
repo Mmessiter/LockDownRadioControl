@@ -18,6 +18,7 @@ var radio_8h =
     [ "ReadData", "radio_8h.html#a07ca94db0e305e9c01ec51e417576308", null ],
     [ "ReadExtraParameters", "radio_8h.html#a6c490ef42e364f8bb1430c436e86c9c0", null ],
     [ "ReadMoreParameters", "radio_8h.html#aee4e6f3c4386a08efe5fd0aa3f9e0035", null ],
+    [ "RearrangeTheChannels", "radio_8h.html#a2ca88bded3d9a0d43b5aa2b48280b848", null ],
     [ "ReceiveData", "radio_8h.html#a06807a4f185694d37f774702ba74db0a", null ],
     [ "Reconnect", "radio_8h.html#aca314b55765a1c3af5397c0cb3ce47ff", null ],
     [ "SendDateToAckPayload", "radio_8h.html#affa2dcc4341b8daecac77e6e0a354b2d", null ],

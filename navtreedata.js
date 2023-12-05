@@ -86,7 +86,7 @@ var NAVTREEINDEX =
 "classMPU6050.html#a201dc0aa819f451584c575c5a7590e10",
 "classMPU9250.html#a07f8ccd1907f134d866105e3d5ec5a10",
 "classMPU9250FIFO.html",
-"common_8h.html#aeda79da3882f657a3eaefc5800122da5",
+"common_8h.html#aeea38114c49f6b6dbe375b7a64acdccb",
 "radio_8h.html#a2eabdb233653fa02f0b899e26b5e8ce7"
 ];
 
