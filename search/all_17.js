@@ -14,7 +14,7 @@ var searchData=
   ['updatetrimview_11',['UpdateTrimView',['../Trims_8h.html#ac78966debc2cdc13d8ca958ce3b20c78',1,'Trims.h']]],
   ['uplog_12',['UpLog',['../TransmitterCode_2src_2main_8cpp.html#a2206c19b4fc075f4c9f1bb957ca89e1d',1,'main.cpp']]],
   ['use_5fina219_13',['USE_INA219',['../1Definitions_8h.html#a87ae50e2ac4507568cbf98072f174a1b',1,'1Definitions.h']]],
-  ['use_5fnew_5fchannel_5fmapping_14',['USE_NEW_CHANNEL_MAPPING',['../common_8h.html#a1ed057da7a99de884193cde4e0f9fabf',1,'USE_NEW_CHANNEL_MAPPING():&#160;common.h'],['../1Definitions_8h.html#a1ed057da7a99de884193cde4e0f9fabf',1,'USE_NEW_CHANNEL_MAPPING():&#160;1Definitions.h']]],
+  ['use_5fnew_5fchannel_5fmapping_14',['USE_NEW_CHANNEL_MAPPING',['../common_8h.html#a1ed057da7a99de884193cde4e0f9fabf',1,'common.h']]],
   ['used_5frecovery_5fchannels_15',['Used_Recovery_Channels',['../namespaceFHSS__data.html#a8380a667acd9e0130553ce2ae0defcce',1,'FHSS_data']]],
   ['usedefaultrecoverychannels_16',['UseDefaultRecoveryChannels',['../common_8h.html#a23be886d0f26b1bd0487babfb4d7ed7e',1,'UseDefaultRecoveryChannels():&#160;common.h'],['../1Definitions_8h.html#a23be886d0f26b1bd0487babfb4d7ed7e',1,'UseDefaultRecoveryChannels():&#160;1Definitions.h']]],
   ['usedualrates_17',['UseDualRates',['../1Definitions_8h.html#a5f6ebf5df29e0ee922a462cbdd419ed8',1,'1Definitions.h']]],
