@@ -22,7 +22,7 @@ var searchData=
   ['readdrswitch_19',['ReadDRSwitch',['../TransmitterCode_2src_2main_8cpp.html#a0d5901e43a27733953343dd462178ada',1,'main.cpp']]],
   ['readdualratesvalues_20',['ReadDualRatesValues',['../TransmitterCode_2src_2main_8cpp.html#ac68cd3f907309c849f5cff2de41801d5',1,'main.cpp']]],
   ['readdualrateswitch_21',['ReadDualRateSwitch',['../TransmitterCode_2src_2main_8cpp.html#a0fe6abb9c2e7e3bbe06b5696b7338e2c',1,'main.cpp']]],
-  ['readextraparameters_22',['ReadExtraParameters',['../radio_8h.html#a6c490ef42e364f8bb1430c436e86c9c0',1,'ReadExtraParameters():&#160;radio.h'],['../common_8h.html#a6c490ef42e364f8bb1430c436e86c9c0',1,'ReadExtraParameters():&#160;radio.h']]],
+  ['readextraparameters_22',['ReadExtraParameters',['../common_8h.html#a6c490ef42e364f8bb1430c436e86c9c0',1,'common.h']]],
   ['readfifo_23',['readFifo',['../classMPU9250FIFO.html#a5645855f72f0eadeeb2b0c915243bfd4',1,'MPU9250FIFO']]],
   ['readflightmodeswitch_24',['ReadFlightModeSwitch',['../TransmitterCode_2src_2main_8cpp.html#afad56b70d82543022c84fd325e19d55c',1,'main.cpp']]],
   ['readfmswitch_25',['ReadFMSwitch',['../TransmitterCode_2src_2main_8cpp.html#ae0f54c30ea92041b69cdccb888cb86b8',1,'main.cpp']]],

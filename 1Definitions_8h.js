@@ -43,7 +43,6 @@ var 1Definitions_8h =
     [ "CE_ON", "1Definitions_8h.html#af59ccf587172ff1ab593f7a51276a720", null ],
     [ "CE_PIN", "1Definitions_8h.html#abb388c9dfbdca89b280a12c4af1a030f", null ],
     [ "CENTRESTICKS", "1Definitions_8h.html#a53bc52cfc1253f58c2f3835aa39205a3", null ],
-    [ "CHANNELSSENT", "1Definitions_8h.html#a9e185bacb18081b988ee0901a079cb85", null ],
     [ "CHANNELSUSED", "1Definitions_8h.html#ad143c01c2b36424b292b568f48cbe014", null ],
     [ "CHARSMAX", "1Definitions_8h.html#a2214b1aa5fbdf61eaa9061c051d3826d", null ],
     [ "CHECKSUMERROR", "1Definitions_8h.html#a3ea624f3ab1d95d1843e9c4024425a7a", null ],
