@@ -155,19 +155,13 @@ bool ReadData()
 {
     Connected = false;
     if (CurrentRadio->available(&Pipnum))
-    { // This is the only call that actually reads the radio
+    {
         LoadAckPayload();
         CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
         DelayMillis(2);    
         uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize();             // Get the size of the new data (14)   
-     
-      //  Look(p); // average p is about 8 to 9
-#ifdef USE_NEW_CHANNEL_MAPPING
         CurrentRadio->read(&DataToSend, DynamicPayloadSize);   //  ** >> Read new data from master << ** // Get the size of the new data (14)
-#else
-        CurrentRadio->read(&DataToSend.CompressedData, SizeOfDataToSend-2);   //  ** >> Read new data from master << **
-#endif 
         Connected = true;
         NewData   = true;
        if (Connected) UseReceivedData(DynamicPayloadSize);
