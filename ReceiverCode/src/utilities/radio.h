@@ -132,7 +132,7 @@ void UseReceivedData(uint8_t DynamicPayloadSize)                            // D
     Decompress(RawDataIn, DataToSend.CompressedData, UNCOMPRESSEDWORDS);    // Decompress only the most recent data
     uint8_t NumberOfChangedChannels = RearrangeTheChannels();               // Rearrange the channels for actual control since only changed ones are sent
     
-  //  Look (DynamicPayloadSize - (int(NumberOfChangedChannels * 1.5) + 2));   // = 8 with params or only 2 without params
+  //  Look (DynamicPayloadSize - (int(NumberOfChangedChannels * 1.5) + 2));  // = 8 with params or 2 without params
   //  Look (DynamicPayloadSize);
    
      if ((DynamicPayloadSize - int(NumberOfChangedChannels * 1.5) > 5))  ReadMoreParameters(NumberOfChangedChannels);    // 8 when parameters are added 2 when not                                                    
