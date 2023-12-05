@@ -59,19 +59,19 @@
         #define BUDDYPPMPORT 6  // Buddybox PPM pin
     #endif
     
-    #define USE_NEW_CHANNEL_MAPPING true 
+  //  #define USE_NEW_CHANNEL_MAPPING true 
 
 
-#ifdef USE_NEW_CHANNEL_MAPPING
+//#ifdef USE_NEW_CHANNEL_MAPPING
     #define CHANNELSSENT           8                             // Up to 8 Channels can be sent  - from 16
-    #define PACEMAKER              10                            // was 10. 5 is probably the MIN.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+    #define PACEMAKER              5                             // was 10. 5 is probably the MIN.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
     #define TIMEFORTXMANAGMENT     3                             // was 3.   How many ms must remain spare between data packets before daring to undertake more trivial task
                          
-#else
-    #define CHANNELSSENT           16 
-    #define PACEMAKER              10                           // was 10. 5 is probably MIN.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-    #define TIMEFORTXMANAGMENT     3                            // was 3.   How many ms must remain spare between data packets before daring to undertake more trivial task
-#endif
+//#else
+///    #define CHANNELSSENT           16 
+ //   #define PACEMAKER              10                           // was 10. 5 is probably MIN.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+ //   #define TIMEFORTXMANAGMENT     3                            // was 3.   How many ms must remain spare between data packets before daring to undertake more trivial task
+//#endif
 
     #define CHANNELSUSED           16                           
     #define UNCOMPRESSEDWORDS      20          
@@ -770,7 +770,7 @@ bool            SaveFailSafeNow = false;
 uint32_t        FailSafeTimer;
 
 struct CD{
-    uint16_t        DataFlags = 0;                    
+    uint16_t        ChannelBitMask = 0;                    
     uint16_t        CompressedData[COMPRESSEDWORDS];   // Bigger than needed 
 };
 CD DataTosend;

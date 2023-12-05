@@ -237,32 +237,6 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 }
 
 /************************************************************************************************************/
-#ifdef USE_NEW_CHANNEL_MAPPING
-uint8_t EncodeTheChangedChannels(){
-    uint8_t NumberOfChangedChannels = 0;
-    DataTosend.DataFlags = 0;                                                       // clear the dataflags 16 BIT WORD
-   
-    // This part was to force an update on all channels every 1/5 second ... but it's not needed.
-    // static uint32_t LocalTimer = 0;
-    // if ((millis() - LocalTimer) > 200) {                                            // every second/5
-    //         LocalTimer = millis();
-    //         for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = 0;           // force update on all channels
-    // }
-    
-    for (int i = 0; i < CHANNELSUSED; ++i){                                         // check for changed channels
-                if ((SendBuffer[i] != PreviousBuffer[i]) && (NumberOfChangedChannels <= 8)) {           
-                RawDataBuffer[NumberOfChangedChannels]  = SendBuffer[i];            // load a changed channel into the rawdatabuffer 
-                PreviousBuffer[i] = SendBuffer[i];                                  // save it for next time
-                DataTosend.DataFlags |= (1 << i);                                   // set the bit in the dataflags byte
-                ++NumberOfChangedChannels;                                          // increment the rawdatabuffer index
-        } 
-    }
-  //  Look(NumberOfChangedChannels);
-    return NumberOfChangedChannels;                                                   // Return the number of channels that have changed 
-}
-#endif
-
-/************************************************************************************************************/
 
 uint8_t SendExtraParamemters(uint8_t Pointer)             // parameters must be loaded before this function is called
 {                                                   // only the low 12 bits of each parameter are sent
@@ -274,28 +248,50 @@ return Pointer;
 }
 
 /************************************************************************************************************/
+
+uint8_t EncodeTheChangedChannels(){
+    uint8_t NumberOfChangedChannels = 0;
+    DataTosend.ChannelBitMask = 0;                                              // clear the ChannelBitMask 16 BIT WORD
+    for (int i = 0; i < CHANNELSUSED; ++i){                                     // check for changed channels
+        if ((SendBuffer[i] != PreviousBuffer[i]) && (NumberOfChangedChannels < 4)) {     //     !!!! 4 is the maximum number of channels that can be sent in one packet !!!!  <<< *****
+            RawDataBuffer[NumberOfChangedChannels]  = SendBuffer[i];            // load a changed channel into the rawdatabuffer 
+            PreviousBuffer[i] = SendBuffer[i];                                  // save it for next time
+            DataTosend.ChannelBitMask |= (1 << i);                              // set the bit in the ChannelBitMask word
+            ++NumberOfChangedChannels;                                          // increment the rawdatabuffer index
+        } 
+    }
+    return NumberOfChangedChannels;                                             // Return the number of channels that have changed 
+}
+/************************************************************************************************************/
 /********************************* Function to send data to receiver ****************************************/
 /************************************************************************************************************/
 
 FASTRUN void SendData()
 {   
+    // static uint32_t totalbytessent = 0;
+    // static uint32_t count = 0;
+
+
     if (SendNoData) return;
     if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { 
         LastPacketSentTime = millis();
         if (BuddyPupilOnPPM) {SendViaPPM(); return;}                                                     // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         Connected = false;                                                                               // Assume failure until an ACK is received.
         FlushFifos();                                                                                    // This flush avoids a lockup that happens when the FIFO gets full.
-#ifdef USE_NEW_CHANNEL_MAPPING  
         uint8_t NumberOfChangedChannels = EncodeTheChangedChannels();                                    // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels
-        if (AddExtraParameters) NumberOfChangedChannels = SendExtraParamemters(NumberOfChangedChannels); // Add parameters here if there are some to go ...   
-        uint8_t ByteCountToTransmit =  ((float) NumberOfChangedChannels * 1.5f) + 4;                     // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 word because int rounds downwards.
-        Compress(DataTosend.CompressedData, RawDataBuffer, UNCOMPRESSEDWORDS);                           // Compress the raw data buffer into the compressed data buffer (reduces it to 75% of original size)
-       
-        if (Radio1.write(&DataTosend, ByteCountToTransmit)) {SuccessfulPacket();} else {FailedPacket();} // Send the data packet complete with DataFlags and compressed data 
-#else
-        Compress(DataTosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 
-        if (Radio1.write(&DataTosend.CompressedData,SizeOfCompressedData)) {SuccessfulPacket();} else {FailedPacket();}  
-#endif    
+        if (AddExtraParameters) {
+                NumberOfChangedChannels = SendExtraParamemters(NumberOfChangedChannels);                 // Add parameters here if there are some to go ... 
+        }  
+        uint8_t ByteCountToTransmit     =  ((float) NumberOfChangedChannels * 1.5f) + 4;                 // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 word because int rounds downwards.
+        uint8_t SizeOfUnCompressedData  =   (ByteCountToTransmit / 1.5) + 1;                             // ?? too big??
+        Compress(DataTosend.CompressedData, RawDataBuffer, SizeOfUnCompressedData);                      // Compress the raw data buffer into the compressed data buffer (reduces it to 75% of original size)
+      
+        // totalbytessent += ByteCountToTransmit;
+        // ++count;
+        // Look(totalbytessent/count);
+      
+      
+        if (Radio1.write(&DataTosend, ByteCountToTransmit)) {SuccessfulPacket();} else {FailedPacket();} // Send the data packet complete with ChannelBitMask and compressed data 
     }else{
         if (BuddyMasterOnWireless) SendSpecialPacket();                                                  // takes about 4 - 5 ms. Gets buddy control data in ACK payload 
     }
