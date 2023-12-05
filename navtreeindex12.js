@@ -33,7 +33,6 @@ var NAVTREEINDEX12 =
 "radio_8h_source.html":[5,0,1,0,0,2],
 "structCD.html":[4,0,0],
 "structCD.html#a5130cfe326ee5a71809416978fc316d5":[4,0,0,1],
-"structCD.html#a5bf676100dd1fed6148a522d15fb7fc9":[4,0,0,2],
 "structCD.html#a63ffe2f179e77f9bc60acf38f509ea5a":[4,0,0,0],
 "structCD2.html":[4,0,1],
 "structCD2.html#a03a8786925e6a47a07d5ea5b7ef7499d":[4,0,1,0],
