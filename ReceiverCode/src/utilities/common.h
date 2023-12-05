@@ -64,8 +64,8 @@
 #define RECEIVEBUFFERSIZE  20        
 
 struct  CD{
-    uint16_t      Dataflags = 0;                   //  send 32 bytes !
-    uint16_t      CompressedData[COMPRESSEDWORDS]; // 
+    uint16_t      ChannelBitMask = 0;                   
+    uint16_t      CompressedData[COMPRESSEDWORDS]; // 40 bytes ... far too big
 };
 CD DataToSend;
 
@@ -73,9 +73,9 @@ uint16_t SizeOfDataToSend = sizeof(DataToSend);
 
 
 struct CD2{
-    uint16_t        ID    = 12;          
-    uint16_t        word1 = 123;
-    uint16_t        word2 = 12345;;   
+    uint16_t        ID    = 0;          
+    uint16_t        word1 = 0;
+    uint16_t        word2 = 0;  
 };  
 
 CD2 Parameters;
