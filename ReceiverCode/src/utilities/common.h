@@ -48,16 +48,16 @@
 #define PIPENUMBER       1
 #define BOUNDPIPENUMBER  1
 
-#define CHANNELSSENT       8       
+//#define CHANNELSSENT       8       
 #define RECEIVE_TIMEOUT    11   //  was 14  (should probobly be about 4 - 5 ms more that TX's PACEMAKER 
 #define CHANNELSUSED       16                        
-#define UNCOMPRESSEDWORDS  20        
-#define COMPRESSEDWORDS    20 
+//#define UNCOMPRESSEDWORDS  20        
+//#define COMPRESSEDWORDS    20 
 #define RECEIVEBUFFERSIZE  20        
 
 struct  CD{
     uint16_t      ChannelBitMask = 0;                   
-    uint16_t      CompressedData[COMPRESSEDWORDS]; // 40 bytes ... far too big
+    uint16_t      CompressedData[10]; // 40 bytes ... far too big
 };
 CD DataToSend;
 

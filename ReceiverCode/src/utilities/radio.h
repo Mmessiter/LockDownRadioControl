@@ -38,56 +38,56 @@ uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed
  * extra parameters are sent using the last few words bytes in every data packet.
  * the parameter sent is defined by the packet number & the packet number defined the transmitter.
  */
-void ReadExtraParameters()
-{
-    uint16_t TwoBytes = 0;
-    uint8_t  SwapWaveBand;
-    PacketNumber = ReceivedData[CHANNELSSENT];
-    switch (PacketNumber) {
-        case 0:
-            FailSafeSave = bool(ReceivedData[CHANNELSSENT + 1]);
+// void ReadExtraParameters()
+// {
+//     uint16_t TwoBytes = 0;
+//     uint8_t  SwapWaveBand;
+//     PacketNumber = ReceivedData[CHANNELSSENT];
+//     switch (PacketNumber) {
+//         case 0:
+//             FailSafeSave = bool(ReceivedData[CHANNELSSENT + 1]);
             
    
-            if (FailSafeSave) {
-                TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
-                RebuildFlags(FailSafeChannel, TwoBytes);
-            }
-            break;
-        case 1:
-            FS_byte1  = ReceivedData[CHANNELSSENT + 1]; // These 2 bytes are 16 failsafe flags
-            FS_byte2  = ReceivedData[CHANNELSSENT + 2]; // These 2 bytes are 16 failsafe flags
-            break;
-        case 2:
-            Qnh = (ReceivedData[CHANNELSSENT + 1]) << 8; // 16 bits sent as two bytes for pressure here at sea level
-            Qnh += ReceivedData[CHANNELSSENT + 2];
-            if (OldQnh != Qnh) SendQnhToSensorHub();
-            OldQnh = Qnh; // Send new one once only
-            break;
-        case 3:
-        //  GuessWhat = ReceivedData[CHANNELSSENT + 1]; // not used yet
-            if ((ReceivedData[CHANNELSSENT + 2]) == 255) { // Mark this location
-                MarkHere();
-                ReceivedData[CHANNELSSENT + 2] = 0; // ... Once only
-            }
-            break;
-        case 4:
-            ModelMatched = ReceivedData[CHANNELSSENT + 1];
-            SwapWaveBand = ReceivedData[CHANNELSSENT + 2];
-            if (SwapWaveBand > 0) {
-                if (SwapWaveBand == 1) SetUKFrequencies();
-                if (SwapWaveBand == 2) SetTestFrequencies();
-            }
-            break;
-        case 5:
-            UseSBUS         = (bool)ReceivedData[CHANNELSSENT + 1]; // if false means PPM
-            PPMChannelCount = ReceivedData[CHANNELSSENT + 2];
-            break;
+//             if (FailSafeSave) {
+//                 TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
+//                 RebuildFlags(FailSafeChannel, TwoBytes);
+//             }
+//             break;
+//         case 1:
+//             FS_byte1  = ReceivedData[CHANNELSSENT + 1]; // These 2 bytes are 16 failsafe flags
+//             FS_byte2  = ReceivedData[CHANNELSSENT + 2]; // These 2 bytes are 16 failsafe flags
+//             break;
+//         case 2:
+//             Qnh = (ReceivedData[CHANNELSSENT + 1]) << 8; // 16 bits sent as two bytes for pressure here at sea level
+//             Qnh += ReceivedData[CHANNELSSENT + 2];
+//             if (OldQnh != Qnh) SendQnhToSensorHub();
+//             OldQnh = Qnh; // Send new one once only
+//             break;
+//         case 3:
+//         //  GuessWhat = ReceivedData[CHANNELSSENT + 1]; // not used yet
+//             if ((ReceivedData[CHANNELSSENT + 2]) == 255) { // Mark this location
+//                 MarkHere();
+//                 ReceivedData[CHANNELSSENT + 2] = 0; // ... Once only
+//             }
+//             break;
+//         case 4:
+//             ModelMatched = ReceivedData[CHANNELSSENT + 1];
+//             SwapWaveBand = ReceivedData[CHANNELSSENT + 2];
+//             if (SwapWaveBand > 0) {
+//                 if (SwapWaveBand == 1) SetUKFrequencies();
+//                 if (SwapWaveBand == 2) SetTestFrequencies();
+//             }
+//             break;
+//         case 5:
+//             UseSBUS         = (bool)ReceivedData[CHANNELSSENT + 1]; // if false means PPM
+//             PPMChannelCount = ReceivedData[CHANNELSSENT + 2];
+//             break;
         
-         default:
-            break;
-    }
-    return;
-}
+//          default:
+//             break;
+//     }
+//     return;
+// }
 
 /************************************************************************************************************/
 
@@ -100,6 +100,29 @@ void MapToSBUS()
         }
     }
 }
+/************************************************************************************************************/
+/*
+ * Decompresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
+ * @param uncompressed_buf[in]
+ * @param compressed_buf[out] Must have allocated 3/4 the size of uncompressed_buf
+ * @param uncompressed_size Size is in units of uint16_t (aka word or unsigned short)
+ */
+void Decompress(uint16_t* uncompressed_buf, uint16_t* compressed_buf, uint8_t uncompressed_size)
+{
+    uint8_t p = 0;
+    for (uint8_t l = 0; l < (uncompressed_size * 3 / 4); l += 3) {
+        uncompressed_buf[p] = compressed_buf[l] >> 4;
+        ++p;
+        uncompressed_buf[p] = (compressed_buf[l] & 0xf) << 8 | compressed_buf[l + 1] >> 8;
+        ++p;
+        uncompressed_buf[p] = (compressed_buf[l + 1] & 0xff) << 4 | compressed_buf[l + 2] >> 12;
+        ++p;
+        uncompressed_buf[p] = compressed_buf[l + 2] & 0xfff;
+        ++p;
+    }
+}
+/************************************************************************************************************/
+
 /************************************************************************************************************/
 uint8_t RearrangeTheChannels(){
  //  This function looks at the 16 BITS of DataToSend.ChannelBitMask and rearranges the channels accordingly.
@@ -118,26 +141,21 @@ uint8_t RearrangeTheChannels(){
 }
 /************************************************************************************************************/
 void ReadMoreParameters(uint8_t NumberOfChangedChannels){                                       
-        Parameters.ID    =  RawDataIn[NumberOfChangedChannels] ;                                  // p is the end of the changed channels
+        Parameters.ID    =  RawDataIn[NumberOfChangedChannels] ;                                  // NumberOfChangedChannels points past the end of the changed channels
         Parameters.word1 =  RawDataIn[NumberOfChangedChannels+1];
         Parameters.word2 =  RawDataIn[NumberOfChangedChannels+2];
-        // Look(Parameters.ID);
-        // Look(Parameters.word1);
-        // Look(Parameters.word2);
+        //  Look(Parameters.ID);
+        //  Look(Parameters.word1);
+        //  Look(Parameters.word2);
 }
 /************************************************************************************************************/
 void UseReceivedData(uint8_t DynamicPayloadSize)                            // DynamicPayloadSize is length of incomming data
 {
-
-    Decompress(RawDataIn, DataToSend.CompressedData, UNCOMPRESSEDWORDS);    // Decompress only the most recent data
+    Decompress(RawDataIn, DataToSend.CompressedData, 8);                    // Decompress the most recent data 8 enough? Don't know yet how may channels will be sent
     uint8_t NumberOfChangedChannels = RearrangeTheChannels();               // Rearrange the channels for actual control since only changed ones are sent
-    
-  //  Look (DynamicPayloadSize - (int(NumberOfChangedChannels * 1.5) + 2));  // = 8 with params or 2 without params
-  //  Look (DynamicPayloadSize);
-   
-     if ((DynamicPayloadSize - int(NumberOfChangedChannels * 1.5) > 5))  ReadMoreParameters(NumberOfChangedChannels);    // 8 when parameters are added 2 when not                                                    
-
-  // ReadExtraParameters();                                                 // REDUNDANT                                  
+    if ((DynamicPayloadSize - int(NumberOfChangedChannels * 1.5) > 5)){     // 8 when parameters are added 2 when not        
+        ReadMoreParameters(NumberOfChangedChannels);                                                                            
+    }
     MapToSBUS();                                                            // Get SBUS data ready
     LastPacketArrivalTime = millis();                                       // Note the arrival time  
     if (HopNow) {                                                           // This flag gets set in LoadAckPayload();
@@ -766,26 +784,5 @@ void LoadAckPayload()
             break;
     }
 }
-/************************************************************************************************************/
-/*
- * Decompresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
- * @param uncompressed_buf[in]
- * @param compressed_buf[out] Must have allocated 3/4 the size of uncompressed_buf
- * @param uncompressed_size Size is in units of uint16_t (aka word or unsigned short)
- */
-void Decompress(uint16_t* uncompressed_buf, uint16_t* compressed_buf, uint8_t uncompressed_size)
-{
-    uint8_t p = 0;
-    for (uint8_t l = 0; l < (uncompressed_size * 3 / 4); l += 3) {
-        uncompressed_buf[p] = compressed_buf[l] >> 4;
-        ++p;
-        uncompressed_buf[p] = (compressed_buf[l] & 0xf) << 8 | compressed_buf[l + 1] >> 8;
-        ++p;
-        uncompressed_buf[p] = (compressed_buf[l + 1] & 0xff) << 4 | compressed_buf[l + 2] >> 12;
-        ++p;
-        uncompressed_buf[p] = compressed_buf[l + 2] & 0xfff;
-        ++p;
-    }
-}
-/************************************************************************************************************/
+
 #endif // defined (_SRC_UTILITIES_RADIO_H)

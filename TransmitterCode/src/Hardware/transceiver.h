@@ -66,65 +66,65 @@ FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint
 // Extra data can be send using the last 10 bytes of each data packet.
 // These are defined by the packet number. ONLY THE LOW 12 BITS ARE ACTUALLY SENT
 
-void LoadPacketData()
-{
-    uint16_t Twobytes = 0;
-    uint8_t  FS_Byte1;
-    uint8_t  FS_Byte2;
-    char     ProgressEnd[]       = "vis Progress,0";
+// void LoadPacketData()
+// {
+//     uint16_t Twobytes = 0;
+//     uint8_t  FS_Byte1;
+//     uint8_t  FS_Byte2;
+//     char     ProgressEnd[]       = "vis Progress,0";
  
-    Twobytes                     = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
-    FS_Byte1                     = uint8_t(Twobytes >> 8);        // sent as two bytes   
-    FS_Byte2                     = uint8_t(Twobytes & 0x00FF);
+//     Twobytes                     = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
+//     FS_Byte1                     = uint8_t(Twobytes >> 8);        // sent as two bytes   
+//     FS_Byte2                     = uint8_t(Twobytes & 0x00FF);
     
 
-    SendBuffer[CHANNELSSENT]     = PacketNumber;   // ALWYAS SENT!
-    SendBuffer[CHANNELSSENT + 1] = 0;
-    SendBuffer[CHANNELSSENT + 2] = 0;  // 2 uint16_t available, but not more. Can use the low 12 BITS only of each because of the compression.
+//     SendBuffer[CHANNELSSENT]     = PacketNumber;   // ALWYAS SENT!
+//     SendBuffer[CHANNELSSENT + 1] = 0;
+//     SendBuffer[CHANNELSSENT + 2] = 0;  // 2 uint16_t available, but not more. Can use the low 12 BITS only of each because of the compression.
    
-    if (PacketNumber >= PACKETNUMBERMAX) PacketNumber = 0; // PACKETNUMBERMAX can be changed in 1Definitions.h
+//     if (PacketNumber >= PACKETNUMBERMAX) PacketNumber = 0; // PACKETNUMBERMAX can be changed in 1Definitions.h
 
-    switch (PacketNumber) {
-        case 0:
-            //  SendBuffer[CHANNELSSENT + 2] = NOTUSEDYET;
-            if (((millis() - FailSafeTimer) > 1500) && SaveFailSafeNow) {
-                SendBuffer[CHANNELSSENT + 1] = SaveFailSafeNow; // FailSafeSaveMoment
-                SaveFailSafeNow              = false;           // once should do it.
-                SendCommand(ProgressEnd);
-            }
-            break;
-        case 1:
-            SendBuffer[CHANNELSSENT + 1] = FS_Byte2; // these are failsafe flags
-            SendBuffer[CHANNELSSENT + 2] = FS_Byte1; // these are failsafe flags
-            break;
-        case 2:
-            SendBuffer[CHANNELSSENT + 1] = Qnh >> 8;     // (HiByte)   Qnh is current atmospheric pressure at sea level here (an aviation term)
-            SendBuffer[CHANNELSSENT + 2] = Qnh & 0x00ff; // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
-            break;
-        case 3:
-            if (GPSMarkHere) {
-                SendBuffer[CHANNELSSENT + 1] = 0;
-                SendBuffer[CHANNELSSENT + 2] = GPSMarkHere;
-                GPSMarkHere                  = 0;
-            }
-            break;
-        case 4:
-            SendBuffer[CHANNELSSENT + 1] = ModelMatched; // let receiver know whether correct model is loaded.
-            SendBuffer[CHANNELSSENT + 2] = SwapWaveBand;
-            if (SwapWaveBand == 2) SetTestFrequencies();
-            if (SwapWaveBand == 1) SetUKFrequencies();
-            SwapWaveBand = 0;
-            break;
+//     switch (PacketNumber) {
+//         case 0:
+//             //  SendBuffer[CHANNELSSENT + 2] = NOTUSEDYET;
+//             if (((millis() - FailSafeTimer) > 1500) && SaveFailSafeNow) {
+//                 SendBuffer[CHANNELSSENT + 1] = SaveFailSafeNow; // FailSafeSaveMoment
+//                 SaveFailSafeNow              = false;           // once should do it.
+//                 SendCommand(ProgressEnd);
+//             }
+//             break;
+//         case 1:
+//             SendBuffer[CHANNELSSENT + 1] = FS_Byte2; // these are failsafe flags
+//             SendBuffer[CHANNELSSENT + 2] = FS_Byte1; // these are failsafe flags
+//             break;
+//         case 2:
+//             SendBuffer[CHANNELSSENT + 1] = Qnh >> 8;     // (HiByte)   Qnh is current atmospheric pressure at sea level here (an aviation term)
+//             SendBuffer[CHANNELSSENT + 2] = Qnh & 0x00ff; // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
+//             break;
+//         case 3:
+//             if (GPSMarkHere) {
+//                 SendBuffer[CHANNELSSENT + 1] = 0;
+//                 SendBuffer[CHANNELSSENT + 2] = GPSMarkHere;
+//                 GPSMarkHere                  = 0;
+//             }
+//             break;
+//         case 4:
+//             SendBuffer[CHANNELSSENT + 1] = ModelMatched; // let receiver know whether correct model is loaded.
+//             SendBuffer[CHANNELSSENT + 2] = SwapWaveBand;
+//             if (SwapWaveBand == 2) SetTestFrequencies();
+//             if (SwapWaveBand == 1) SetUKFrequencies();
+//             SwapWaveBand = 0;
+//             break;
 
-        case 5:
-            SendBuffer[CHANNELSSENT + 1] = PPMdata.UseSBUSFromRX;   // 1 - 0
-            SendBuffer[CHANNELSSENT + 2] = PPMdata.PPMChannelCount; 
-            break;
+//         case 5:
+//             SendBuffer[CHANNELSSENT + 1] = PPMdata.UseSBUSFromRX;   // 1 - 0
+//             SendBuffer[CHANNELSSENT + 2] = PPMdata.PPMChannelCount; 
+//             break;
 
-        default: 
-            break;
-    }
-}
+//         default: 
+//             break;
+//     }
+// }
 
 /************************************************************************************************************/
 void RecordsPacketSuccess(uint8_t s)
@@ -267,11 +267,7 @@ uint8_t EncodeTheChangedChannels(){
 /************************************************************************************************************/
 
 FASTRUN void SendData()
-{   
-    // static uint32_t totalbytessent = 0;
-    // static uint32_t count = 0;
-
-
+{  
     if (SendNoData) return;
     if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { 
         LastPacketSentTime = millis();
@@ -279,16 +275,12 @@ FASTRUN void SendData()
         Connected = false;                                                                               // Assume failure until an ACK is received.
         FlushFifos();                                                                                    // This flush avoids a lockup that happens when the FIFO gets full.
         uint8_t NumberOfChangedChannels = EncodeTheChangedChannels();                                    // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels
-        if (AddExtraParameters) {
+     //   if (AddExtraParameters) {
                 NumberOfChangedChannels = SendExtraParamemters(NumberOfChangedChannels);                 // Add parameters here if there are some to go ... 
-        }  
+     //   }  
         uint8_t ByteCountToTransmit     =  ((float) NumberOfChangedChannels * 1.5f) + 4;                 // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 word because int rounds downwards.
         uint8_t SizeOfUnCompressedData  =   (ByteCountToTransmit / 1.5) ;                                
         Compress(DataTosend.CompressedData, RawDataBuffer, SizeOfUnCompressedData);                      // Compress the raw data buffer into the compressed data buffer (reduces it to 75% of original size)
-      
-        // totalbytessent += ByteCountToTransmit;
-        // ++count;
-        // Look(totalbytessent/count);
       
       
         if (Radio1.write(&DataTosend, ByteCountToTransmit)) {SuccessfulPacket();} else {FailedPacket();} // Send the data packet complete with ChannelBitMask and compressed data 
