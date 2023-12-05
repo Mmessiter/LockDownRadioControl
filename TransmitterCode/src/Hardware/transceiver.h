@@ -281,9 +281,9 @@ FASTRUN void SendData()
         uint8_t NumberOfChangedChannels = EncodeTheChangedChannels();                                    // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels
         if (AddExtraParameters) {
                 NumberOfChangedChannels = SendExtraParamemters(NumberOfChangedChannels);                 // Add parameters here if there are some to go ... 
-      }  
+        }  
         uint8_t ByteCountToTransmit     =  ((float) NumberOfChangedChannels * 1.5f) + 4;                 // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 word because int rounds downwards.
-        uint8_t SizeOfUnCompressedData  =   (ByteCountToTransmit / 1.5) + 1;                             // ?? too big??
+        uint8_t SizeOfUnCompressedData  =   (ByteCountToTransmit / 1.5) ;                                
         Compress(DataTosend.CompressedData, RawDataBuffer, SizeOfUnCompressedData);                      // Compress the raw data buffer into the compressed data buffer (reduces it to 75% of original size)
       
         // totalbytessent += ByteCountToTransmit;

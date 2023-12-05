@@ -126,23 +126,24 @@ void ReadMoreParameters(uint8_t NumberOfChangedChannels){
         // Look(Parameters.word2);
 }
 /************************************************************************************************************/
-void UseReceivedData(uint8_t DynamicPayloadSize) // q is length of incomming data
+void UseReceivedData(uint8_t DynamicPayloadSize)                            // DynamicPayloadSize is length of incomming data
 {
 
     Decompress(RawDataIn, DataToSend.CompressedData, UNCOMPRESSEDWORDS);    // Decompress only the most recent data
     uint8_t NumberOfChangedChannels = RearrangeTheChannels();               // Rearrange the channels for actual control since only changed ones are sent
     
-   // Look (DynamicPayloadSize - int(NumberOfChangedChannels * 1.5));        // = 10 with params or only 4 without params
+  //  Look (DynamicPayloadSize - (int(NumberOfChangedChannels * 1.5) + 2));   // = 8 with params or only 2 without params
   //  Look (DynamicPayloadSize);
-    if ((DynamicPayloadSize - int(NumberOfChangedChannels * 1.5) > 6))  ReadMoreParameters(NumberOfChangedChannels);    // NumberOfChangedChannels is much bigger when parameters are added.                                                        
+   
+     if ((DynamicPayloadSize - int(NumberOfChangedChannels * 1.5) > 5))  ReadMoreParameters(NumberOfChangedChannels);    // 8 when parameters are added 2 when not                                                    
 
-  // ReadExtraParameters();                                      // REDUNDANT                                  
-    MapToSBUS();                                                 // Get SBUS data ready
-    LastPacketArrivalTime = millis();                            // Note the arrival time  
-    if (HopNow) {                                                // This flag gets set in LoadAckPayload();
-        HopToNextChannel();                                      // Ack payload instructed us to Hop at next opportunity. So hop now ...
-        HopNow   = false;                                        // ... and clear the flag,
-        HopStart = millis();                                     // ... and start the timer.
+  // ReadExtraParameters();                                                 // REDUNDANT                                  
+    MapToSBUS();                                                            // Get SBUS data ready
+    LastPacketArrivalTime = millis();                                       // Note the arrival time  
+    if (HopNow) {                                                           // This flag gets set in LoadAckPayload();
+        HopToNextChannel();                                                 // Ack payload instructed us to Hop at next opportunity. So hop now ...
+        HopNow   = false;                                                   // ... and clear the flag,
+        HopStart = millis();                                                // ... and start the timer.
     }
 }
 
@@ -153,11 +154,11 @@ bool ReadData()
     if (CurrentRadio->available(&Pipnum))
     {
         LoadAckPayload();
-        CurrentRadio->flush_tx();                                      // This avoids a lockup that happens when the FIFO gets full
-        CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // Send telemetry
+        CurrentRadio->flush_tx();                                               // This avoids a lockup that happens when the FIFO gets full
+        CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);          // Send telemetry
         DelayMillis(2);    
-        uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize();             // Get the size of the new data (14)   
-        CurrentRadio->read(&DataToSend, DynamicPayloadSize);   //  ** >> Read new data from master << ** // Get the size of the new data (14)
+        uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize();     // Get the size of the new data (14)   
+        CurrentRadio->read(&DataToSend, DynamicPayloadSize);                    //  ** >> Read new data from master << ** // Get the size of the new data (14)
         Connected = true;
         NewData   = true;
        if (Connected) UseReceivedData(DynamicPayloadSize);
