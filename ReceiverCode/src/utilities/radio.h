@@ -38,25 +38,22 @@ uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed
  * extra parameters are sent using the last few words bytes in every data packet.
  * the parameter sent is defined by the packet number & the packet number defined the transmitter.
  */
-// void ReadExtraParameters()
-// {
-//     uint16_t TwoBytes = 0;
-//     uint8_t  SwapWaveBand;
-//     PacketNumber = ReceivedData[CHANNELSSENT];
-//     switch (PacketNumber) {
-//         case 0:
-//             FailSafeSave = bool(ReceivedData[CHANNELSSENT + 1]);
-            
-   
-//             if (FailSafeSave) {
-//                 TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
-//                 RebuildFlags(FailSafeChannel, TwoBytes);
-//             }
-//             break;
-//         case 1:
-//             FS_byte1  = ReceivedData[CHANNELSSENT + 1]; // These 2 bytes are 16 failsafe flags
-//             FS_byte2  = ReceivedData[CHANNELSSENT + 2]; // These 2 bytes are 16 failsafe flags
-//             break;
+void UseExtraParameters()
+{
+    uint16_t TwoBytes = 0;
+//    uint8_t  SwapWaveBand;
+     
+    switch (Parameters.ID) {
+       //      case 0:
+       //      break;
+        case 1:   
+            FS_byte1  = Parameters.word1;                               // These 2 bytes are 16 failsafe flags
+            FS_byte2  = Parameters.word2;                               // These 2 bytes are 16 failsafe flags
+            TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
+            RebuildFlags(FailSafeChannel, TwoBytes);
+            SaveFailSafeData(); 
+            break;
+
 //         case 2:
 //             Qnh = (ReceivedData[CHANNELSSENT + 1]) << 8; // 16 bits sent as two bytes for pressure here at sea level
 //             Qnh += ReceivedData[CHANNELSSENT + 2];
@@ -82,12 +79,11 @@ uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed
 //             UseSBUS         = (bool)ReceivedData[CHANNELSSENT + 1]; // if false means PPM
 //             PPMChannelCount = ReceivedData[CHANNELSSENT + 2];
 //             break;
-        
-//          default:
-//             break;
-//     }
-//     return;
-// }
+          default:
+              break;
+        }
+   return;
+ }
 
 /************************************************************************************************************/
 
@@ -144,9 +140,13 @@ void ReadMoreParameters(uint8_t NumberOfChangedChannels){
         Parameters.ID    =  RawDataIn[NumberOfChangedChannels] ;                                  // NumberOfChangedChannels points past the end of the changed channels
         Parameters.word1 =  RawDataIn[NumberOfChangedChannels+1];
         Parameters.word2 =  RawDataIn[NumberOfChangedChannels+2];
-        //  Look(Parameters.ID);
-        //  Look(Parameters.word1);
-        //  Look(Parameters.word2);
+      
+        UseExtraParameters();
+      
+      
+        Look(Parameters.ID);
+      //  Look(Parameters.word1);
+      //  Look(Parameters.word2);
 }
 /************************************************************************************************************/
 void UseReceivedData(uint8_t DynamicPayloadSize)                            // DynamicPayloadSize is length of incomming data

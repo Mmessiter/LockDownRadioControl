@@ -550,7 +550,7 @@ FASTRUN void ShowComms()
             default:
                 break;
         }
-        if (BuddyPupilOnPPM || BuddyPupilOnWireless) SendText(FrontView_Connected, MsgBuddying); // heer
+        if (BuddyPupilOnPPM || BuddyPupilOnWireless) SendText(FrontView_Connected, MsgBuddying); 
         if (LedWasGreen) {
             if (BoundFlag) {
                 if (!Reconnected) {
@@ -5924,6 +5924,8 @@ FASTRUN void ButtonWasPressed()
         char StartBackGround[]   = "click Background,0";
         char GoModelsView[]      = "page ModelsView";
         char pCalibrateView[]    = "page CalibrateView";
+        char NotConnected[]      = "Model isn't connected!";
+        char NowTest[]           = "Remember to test failsafe!";
         // ************************* test many input words from Nextion *****************
 
         if (InStrng(StCH, TextIn)) { // select sub trim channel
@@ -6288,18 +6290,29 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(FailSAVE, TextIn) > 0) {
-            SendCommand(ProgressStart);
-            for (int i = 0; i < 16; ++i) {
-                FailSafeChannel[i] = GetValue(fs[i]);
-                SendValue(Progress, i * (100 / 16));
-            }
-            SendValue(Progress, 100);
-            FailSafeTimer   = millis();
-            SaveFailSafeNow = true;
-            ClearText();
-            return;
+            if (InStrng(FailSAVE, TextIn) > 0) {        // Heer the FAILSAFE setup is sent to receiver ************** FAILSAFE SETUP **************
+               
+                if (!BoundFlag ||!ModelMatched ){
+                    MsgBox(pFailSafe, NotConnected);
+                    ClearText();
+                    SendCommand(ProgressEnd);
+                    return;
+                }
+               
+                SendCommand(ProgressStart);
+                for (int i = 0; i < 16; ++i) {
+                    FailSafeChannel[i] = GetValue(fs[i]);
+                    SendValue(Progress, i * 100 / 16);
+                }
+                SendValue(Progress, 100);          
+                Parameters.ID = 1;                     
+                AddExtraParameters = true;
+                ClearText();
+                SendCommand(ProgressEnd);
+                MsgBox(pFailSafe, NowTest);
+                return;
         }
+        
         if (InStrng(FailSafe, TextIn) > 0) {
             SendCommand(pFailSafe);
             CurrentView = FAILSAFE_VIEW;

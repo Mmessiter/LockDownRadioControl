@@ -66,38 +66,37 @@ FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint
 // Extra data can be send using the last 10 bytes of each data packet.
 // These are defined by the packet number. ONLY THE LOW 12 BITS ARE ACTUALLY SENT
 
-// void LoadPacketData()
-// {
-//     uint16_t Twobytes = 0;
-//     uint8_t  FS_Byte1;
-//     uint8_t  FS_Byte2;
-//     char     ProgressEnd[]       = "vis Progress,0";
+void LoadParameters()
+{
+    uint16_t Twobytes = 0;
+    uint8_t  FS_Byte1;
+    uint8_t  FS_Byte2;
  
-//     Twobytes                     = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
-//     FS_Byte1                     = uint8_t(Twobytes >> 8);        // sent as two bytes   
-//     FS_Byte2                     = uint8_t(Twobytes & 0x00FF);
-    
 
-//     SendBuffer[CHANNELSSENT]     = PacketNumber;   // ALWYAS SENT!
-//     SendBuffer[CHANNELSSENT + 1] = 0;
-//     SendBuffer[CHANNELSSENT + 2] = 0;  // 2 uint16_t available, but not more. Can use the low 12 BITS only of each because of the compression.
+   // Parameters.ID;          
+   // RawDataBuffer[Pointer+1]  = Parameters.word1;
+   // RawDataBuffer[Pointer+2]  = Parameters.word2;
    
-//     if (PacketNumber >= PACKETNUMBERMAX) PacketNumber = 0; // PACKETNUMBERMAX can be changed in 1Definitions.h
 
-//     switch (PacketNumber) {
-//         case 0:
-//             //  SendBuffer[CHANNELSSENT + 2] = NOTUSEDYET;
-//             if (((millis() - FailSafeTimer) > 1500) && SaveFailSafeNow) {
-//                 SendBuffer[CHANNELSSENT + 1] = SaveFailSafeNow; // FailSafeSaveMoment
-//                 SaveFailSafeNow              = false;           // once should do it.
-//                 SendCommand(ProgressEnd);
-//             }
-//             break;
-//         case 1:
-//             SendBuffer[CHANNELSSENT + 1] = FS_Byte2; // these are failsafe flags
-//             SendBuffer[CHANNELSSENT + 2] = FS_Byte1; // these are failsafe flags
-//             break;
-//         case 2:
+    switch (Parameters.ID) {
+
+        // case 0:
+        //     if (((millis() - FailSafeTimer) > 1500) && SaveFailSafeNow) {
+        //         Parameters.word1 = SaveFailSafeNow;             // FailSafeSaveMoment
+        //         SaveFailSafeNow  = false;                       // Once should do it.
+        //         SendCommand(ProgressEnd);
+        //     }
+        //     break;
+        
+        case 1:
+            Twobytes          = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
+            FS_Byte1          = uint8_t(Twobytes >> 8);        // Send as two bytes   
+            FS_Byte2          = uint8_t(Twobytes & 0x00FF);
+            Parameters.word1  = FS_Byte2;                      // These are failsafe flags
+            Parameters.word2  = FS_Byte1;                      // These are failsafe flags
+            break;
+
+//       case 2:
 //             SendBuffer[CHANNELSSENT + 1] = Qnh >> 8;     // (HiByte)   Qnh is current atmospheric pressure at sea level here (an aviation term)
 //             SendBuffer[CHANNELSSENT + 2] = Qnh & 0x00ff; // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
 //             break;
@@ -115,16 +114,14 @@ FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint
 //             if (SwapWaveBand == 1) SetUKFrequencies();
 //             SwapWaveBand = 0;
 //             break;
-
 //         case 5:
 //             SendBuffer[CHANNELSSENT + 1] = PPMdata.UseSBUSFromRX;   // 1 - 0
 //             SendBuffer[CHANNELSSENT + 2] = PPMdata.PPMChannelCount; 
 //             break;
-
-//         default: 
-//             break;
-//     }
-// }
+        default: 
+            break;
+    }
+}
 
 /************************************************************************************************************/
 void RecordsPacketSuccess(uint8_t s)
@@ -204,6 +201,7 @@ void SuccessfulPacket()
     ++RangeTestGoodPackets;
     ++PacketNumber;
     RecordsPacketSuccess(1);
+    AddExtraParameters = false;
     TotalLostPackets += RecentPacketsLost;
     RecentPacketsLost = 0;
     Connected         = true;
@@ -239,11 +237,15 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 /************************************************************************************************************/
 
 uint8_t SendExtraParamemters(uint8_t Pointer)             // parameters must be loaded before this function is called
-{                                                   // only the low 12 bits of each parameter are sent
-    RawDataBuffer[Pointer]    = Parameters.ID;        // copy current parameter values into the rawdatabuffer right after the channels
+{                                                         // only the low 12 bits of each parameter are sent
+ 
+    LoadParameters();
+    RawDataBuffer[Pointer]    = Parameters.ID;           // copy current parameter values into the rawdatabuffer right after the channels
     RawDataBuffer[Pointer+1]  = Parameters.word1;
     RawDataBuffer[Pointer+2]  = Parameters.word2;
     Pointer += 4;               
+    Look1("  Parameter sent: ");
+    Look(Parameters.ID);
 return Pointer;
 }
 

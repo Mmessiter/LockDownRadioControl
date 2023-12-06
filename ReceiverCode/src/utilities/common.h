@@ -129,7 +129,6 @@ uint32_t RX1TotalTime          = 0;
 uint32_t RX2TotalTime          = 0;
 uint32_t RadioSwaps            = 0;
 uint32_t  LastPacketArrivalTime = 0;
-bool      FailSafeSave          = false;
 bool      INA219Connected       = false; //  Volts from INA219 ?
 bool      MPU6050Connected      = false; //  Accelerometer and Gyro from MPU6050 ?
 uint8_t   ReconnectChannel      = 0;
@@ -152,7 +151,7 @@ void DoStabilsation();
 void DelayMillis(uint16_t ms);
 void PIDEntryPoint();
 void DoStabilsation();
-void ReadExtraParameters();
+void UseExtraParameters();
 FASTRUN void ReadTheSensorHub();
 void SensorHubHasFailed();
 FASTRUN void Reconnect();
@@ -174,6 +173,7 @@ void BlinkLed();
 void FailSafe();
 void TurnLedOff();
 void TurnLedOn();
+void SaveFailSafeData();
 
 template<typename any>
 void Look(const any& value);

@@ -500,7 +500,6 @@ void SaveFailSafeData()
 #ifdef DB_FAILSAFE
     Serial.println("Fail safe settings are saved!");
 #endif
-    FailSafeSave = false;
 }
 
 /************************************************************************************************************/
@@ -635,7 +634,6 @@ void loop()
             SBUSTimer = millis();                 // timer starts before send starts....
             MoveServos();                         // Actually do something useful at last
         }
-        if (FailSafeSave) SaveFailSafeData();
     }
     else {
         if (!BoundFlag) GetNewPipe();
