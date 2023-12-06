@@ -5895,7 +5895,7 @@ $(document).ready(function(){initNavTree('TransmitterCode_2src_2main_8cpp_source
 <div class="line"><a id="l05925" name="l05925"></a><span class="lineno"> 5925</span>        <span class="keywordtype">char</span> GoModelsView[]      = <span class="stringliteral">&quot;page ModelsView&quot;</span>;</div>
 <div class="line"><a id="l05926" name="l05926"></a><span class="lineno"> 5926</span>        <span class="keywordtype">char</span> pCalibrateView[]    = <span class="stringliteral">&quot;page CalibrateView&quot;</span>;</div>
 <div class="line"><a id="l05927" name="l05927"></a><span class="lineno"> 5927</span>        <span class="keywordtype">char</span> NotConnected[]      = <span class="stringliteral">&quot;Model isn&#39;t connected!&quot;</span>;</div>
-<div class="line"><a id="l05928" name="l05928"></a><span class="lineno"> 5928</span>        <span class="keywordtype">char</span> NowTest[]           = <span class="stringliteral">&quot;Remember to test failsafe!&quot;</span>;</div>
+<div class="line"><a id="l05928" name="l05928"></a><span class="lineno"> 5928</span>       <span class="comment">// char NowTest[]           = &quot;Remember to test failsafe!&quot;;</span></div>
 <div class="line"><a id="l05929" name="l05929"></a><span class="lineno"> 5929</span>        <span class="comment">// ************************* test many input words from Nextion *****************</span></div>
 <div class="line"><a id="l05930" name="l05930"></a><span class="lineno"> 5930</span> </div>
 <div class="line"><a id="l05931" name="l05931"></a><span class="lineno"> 5931</span>        <span class="keywordflow">if</span> (<a class="code hl_function" href="TransmitterCode_2src_2main_8cpp.html#a5f109790a6fe0b972a502f3cac4ed1e7">InStrng</a>(StCH, <a class="code hl_variable" href="1Definitions_8h.html#a527f04236d0e03be6e0224a0e748f0c3">TextIn</a>)) { <span class="comment">// select sub trim channel</span></div>
@@ -6279,7 +6279,7 @@ $(document).ready(function(){initNavTree('TransmitterCode_2src_2main_8cpp_source
 <div class="line"><a id="l06309" name="l06309"></a><span class="lineno"> 6309</span>                <a class="code hl_variable" href="1Definitions_8h.html#a3869dffbbc229be588827b35729a6e76">AddExtraParameters</a> = <span class="keyword">true</span>;</div>
 <div class="line"><a id="l06310" name="l06310"></a><span class="lineno"> 6310</span>                <a class="code hl_function" href="1Definitions_8h.html#af0852678d8e89501acee8951f09d3b43">ClearText</a>();</div>
 <div class="line"><a id="l06311" name="l06311"></a><span class="lineno"> 6311</span>                <a class="code hl_function" href="1Definitions_8h.html#aecac2f0c289f02ef3c92b85be82eacac">SendCommand</a>(ProgressEnd);</div>
-<div class="line"><a id="l06312" name="l06312"></a><span class="lineno"> 6312</span>                <a class="code hl_function" href="TransmitterCode_2src_2main_8cpp.html#a6f5b0f1e4ca75768c16c4dd93f92a8de">MsgBox</a>(pFailSafe, NowTest);</div>
+<div class="line"><a id="l06312" name="l06312"></a><span class="lineno"> 6312</span>                <span class="comment">//MsgBox(pFailSafe, NowTest);</span></div>
 <div class="line"><a id="l06313" name="l06313"></a><span class="lineno"> 6313</span>                <span class="keywordflow">return</span>;</div>
 <div class="line"><a id="l06314" name="l06314"></a><span class="lineno"> 6314</span>        }</div>
 <div class="line"><a id="l06315" name="l06315"></a><span class="lineno"> 6315</span>        </div>
