@@ -5925,7 +5925,7 @@ FASTRUN void ButtonWasPressed()
         char GoModelsView[]      = "page ModelsView";
         char pCalibrateView[]    = "page CalibrateView";
         char NotConnected[]      = "Model isn't connected!";
-        char NowTest[]           = "Remember to test failsafe!";
+       // char NowTest[]           = "Remember to test failsafe!";
         // ************************* test many input words from Nextion *****************
 
         if (InStrng(StCH, TextIn)) { // select sub trim channel
@@ -6309,7 +6309,7 @@ FASTRUN void ButtonWasPressed()
                 AddExtraParameters = true;
                 ClearText();
                 SendCommand(ProgressEnd);
-                MsgBox(pFailSafe, NowTest);
+                //MsgBox(pFailSafe, NowTest);
                 return;
         }
         

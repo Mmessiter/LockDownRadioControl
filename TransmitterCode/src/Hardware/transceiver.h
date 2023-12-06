@@ -91,13 +91,13 @@ void LoadParameters()
                 GPSMarkHere       = 0;
             }
             break;
-//         case 4:
-//             SendBuffer[CHANNELSSENT + 1] = ModelMatched; // let receiver know whether correct model is loaded.
-//             SendBuffer[CHANNELSSENT + 2] = SwapWaveBand;
-//             if (SwapWaveBand == 2) SetTestFrequencies();
-//             if (SwapWaveBand == 1) SetUKFrequencies();
-//             SwapWaveBand = 0;
-//             break;
+        case 4:
+                Parameters.word1  = ModelMatched; // let receiver know whether correct model is loaded.
+                Parameters.word2  = SwapWaveBand;
+                if (SwapWaveBand == 2) SetTestFrequencies();
+                if (SwapWaveBand == 1) SetUKFrequencies();
+                SwapWaveBand = 0;
+            break;
         case 5:
               Parameters.word1 = PPMdata.UseSBUSFromRX;   // 1 - 0
               Parameters.word2 = PPMdata.PPMChannelCount; 
