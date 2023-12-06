@@ -61,10 +61,7 @@ FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint
 
 /************************************************************************************************************/
 
-// 20 x 16bit words are sent compressed to only 15 (30 bytes)
-// 4 16 bit words are vacant for other stuff (8 bytes)
-// Extra data can be send using the last 10 bytes of each data packet.
-// These are defined by the packet number. ONLY THE LOW 12 BITS ARE ACTUALLY SENT
+// NB ONLY THE LOW 12 BITS ARE ACTUALLY SENT! (Because of COMPRESSION)
 
 void LoadParameters()
 {
@@ -72,22 +69,8 @@ void LoadParameters()
     uint8_t  FS_Byte1;
     uint8_t  FS_Byte2;
  
-
-   // Parameters.ID;          
-   // RawDataBuffer[Pointer+1]  = Parameters.word1;
-   // RawDataBuffer[Pointer+2]  = Parameters.word2;
-   
-
     switch (Parameters.ID) {
 
-        // case 0:
-        //     if (((millis() - FailSafeTimer) > 1500) && SaveFailSafeNow) {
-        //         Parameters.word1 = SaveFailSafeNow;             // FailSafeSaveMoment
-        //         SaveFailSafeNow  = false;                       // Once should do it.
-        //         SendCommand(ProgressEnd);
-        //     }
-        //     break;
-        
         case 1:
             Twobytes          = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
             FS_Byte1          = uint8_t(Twobytes >> 8);        // Send as two bytes   
@@ -96,17 +79,18 @@ void LoadParameters()
             Parameters.word2  = FS_Byte2;                      // These are failsafe flags
             break;
 
-//       case 2:
-//             SendBuffer[CHANNELSSENT + 1] = Qnh >> 8;     // (HiByte)   Qnh is current atmospheric pressure at sea level here (an aviation term)
-//             SendBuffer[CHANNELSSENT + 2] = Qnh & 0x00ff; // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
-//             break;
-//         case 3:
-//             if (GPSMarkHere) {
-//                 SendBuffer[CHANNELSSENT + 1] = 0;
-//                 SendBuffer[CHANNELSSENT + 2] = GPSMarkHere;
-//                 GPSMarkHere                  = 0;
-//             }
-//             break;
+       case 2:
+            Parameters.word1  = Qnh >> 8;       // (HiByte)   Qnh is current atmospheric pressure at sea level here (an aviation term)
+            Parameters.word2  = Qnh & 0x00ff; // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
+            break;
+
+        case 3:
+            if (GPSMarkHere) {
+                Parameters.word1  = 0;
+                Parameters.word2  = GPSMarkHere;
+                GPSMarkHere       = 0;
+            }
+            break;
 //         case 4:
 //             SendBuffer[CHANNELSSENT + 1] = ModelMatched; // let receiver know whether correct model is loaded.
 //             SendBuffer[CHANNELSSENT + 2] = SwapWaveBand;
@@ -114,10 +98,10 @@ void LoadParameters()
 //             if (SwapWaveBand == 1) SetUKFrequencies();
 //             SwapWaveBand = 0;
 //             break;
-//         case 5:
-//             SendBuffer[CHANNELSSENT + 1] = PPMdata.UseSBUSFromRX;   // 1 - 0
-//             SendBuffer[CHANNELSSENT + 2] = PPMdata.PPMChannelCount; 
-//             break;
+        case 5:
+              Parameters.word1 = PPMdata.UseSBUSFromRX;   // 1 - 0
+              Parameters.word2 = PPMdata.PPMChannelCount; 
+            break;
         default: 
             break;
     }
