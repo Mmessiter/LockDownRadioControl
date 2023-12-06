@@ -30,6 +30,7 @@ var radio_8h =
     [ "SetTestFrequencies", "radio_8h.html#a31a35307bbac88ceda244272f25d399a", null ],
     [ "SetUKFrequencies", "radio_8h.html#a2eabdb233653fa02f0b899e26b5e8ce7", null ],
     [ "TryToConnectNow", "radio_8h.html#a1208ef26dd460e6f5f56582f4fbfcf94", null ],
+    [ "UseExtraParameters", "radio_8h.html#a3c0ffefc9101d9a52b4a210b4ed34552", null ],
     [ "UseReceivedData", "radio_8h.html#ae81f764427dc5f290cc6e16ab92e83b8", null ],
     [ "ValidateNewPipe", "radio_8h.html#a5f57423b51a89ce596c324bbf359a6cb", null ],
     [ "AckPayload", "radio_8h.html#a30a079d60b4731ce1531091ffe56a703", null ],

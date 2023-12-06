@@ -9,7 +9,8 @@ var searchData=
   ['updatetrimview_6',['UpdateTrimView',['../Trims_8h.html#ac78966debc2cdc13d8ca958ce3b20c78',1,'Trims.h']]],
   ['uplog_7',['UpLog',['../TransmitterCode_2src_2main_8cpp.html#a2206c19b4fc075f4c9f1bb957ca89e1d',1,'main.cpp']]],
   ['usedefaultrecoverychannels_8',['UseDefaultRecoveryChannels',['../common_8h.html#a23be886d0f26b1bd0487babfb4d7ed7e',1,'UseDefaultRecoveryChannels():&#160;common.h'],['../1Definitions_8h.html#a23be886d0f26b1bd0487babfb4d7ed7e',1,'UseDefaultRecoveryChannels():&#160;1Definitions.h']]],
-  ['usefullrate_9',['UseFullRate',['../TransmitterCode_2src_2main_8cpp.html#a8f53f86499d740b350f7b6d791c90497',1,'main.cpp']]],
-  ['userandomizedrecoverychannels_10',['UseRandomizedRecoveryChannels',['../common_8h.html#a03cd5e24f66a381a38effaa16922c0a8',1,'UseRandomizedRecoveryChannels():&#160;common.h'],['../1Definitions_8h.html#a03cd5e24f66a381a38effaa16922c0a8',1,'UseRandomizedRecoveryChannels():&#160;1Definitions.h']]],
-  ['usereceiveddata_11',['UseReceivedData',['../radio_8h.html#ae81f764427dc5f290cc6e16ab92e83b8',1,'radio.h']]]
+  ['useextraparameters_9',['UseExtraParameters',['../common_8h.html#a3c0ffefc9101d9a52b4a210b4ed34552',1,'UseExtraParameters():&#160;radio.h'],['../radio_8h.html#a3c0ffefc9101d9a52b4a210b4ed34552',1,'UseExtraParameters():&#160;radio.h']]],
+  ['usefullrate_10',['UseFullRate',['../TransmitterCode_2src_2main_8cpp.html#a8f53f86499d740b350f7b6d791c90497',1,'main.cpp']]],
+  ['userandomizedrecoverychannels_11',['UseRandomizedRecoveryChannels',['../common_8h.html#a03cd5e24f66a381a38effaa16922c0a8',1,'UseRandomizedRecoveryChannels():&#160;common.h'],['../1Definitions_8h.html#a03cd5e24f66a381a38effaa16922c0a8',1,'UseRandomizedRecoveryChannels():&#160;1Definitions.h']]],
+  ['usereceiveddata_12',['UseReceivedData',['../radio_8h.html#ae81f764427dc5f290cc6e16ab92e83b8',1,'radio.h']]]
 ];

@@ -328,7 +328,7 @@ var 1Definitions_8h =
     [ "KickTheDog", "1Definitions_8h.html#ada95a00a341e4a80176eda743a94ab2e", null ],
     [ "LoadFileSelector", "1Definitions_8h.html#a824f2e559561add2deadb0d3033c8510", null ],
     [ "LoadModelSelector", "1Definitions_8h.html#a6684199e9da3ca0bdb0e01260eec7e30", null ],
-    [ "LoadPacketData", "1Definitions_8h.html#ac4ffb9b555ce8d38f615610dc89b5499", null ],
+    [ "LoadParameters", "1Definitions_8h.html#adac102739147db6397bbcbb371aec4fd", null ],
     [ "LogConnection", "1Definitions_8h.html#a896d9c3f90c2a4c083748097a98bc96b", null ],
     [ "LogDisConnection", "1Definitions_8h.html#a01c8a29ed73a0c490282e23e119eca14", null ],
     [ "LogLongestGap", "1Definitions_8h.html#ae6cd75ddf528bbc1abec9a773f9e21b9", null ],
