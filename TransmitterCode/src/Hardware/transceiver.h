@@ -92,8 +92,8 @@ void LoadParameters()
             Twobytes          = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
             FS_Byte1          = uint8_t(Twobytes >> 8);        // Send as two bytes   
             FS_Byte2          = uint8_t(Twobytes & 0x00FF);
-            Parameters.word1  = FS_Byte2;                      // These are failsafe flags
-            Parameters.word2  = FS_Byte1;                      // These are failsafe flags
+            Parameters.word1  = FS_Byte1;                      // These are failsafe flags
+            Parameters.word2  = FS_Byte2;                      // These are failsafe flags
             break;
 
 //       case 2:
