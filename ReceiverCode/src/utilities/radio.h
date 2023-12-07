@@ -121,11 +121,11 @@ void Decompress(uint16_t* uncompressed_buf, uint16_t* compressed_buf, uint8_t un
 
 /************************************************************************************************************/
 uint8_t RearrangeTheChannels(){
- //  This function looks at the 16 BITS of DataToSend.ChannelBitMask and rearranges the channels accordingly.
+ //  This function looks at the 16 BITS of DataReceived.ChannelBitMask and rearranges the channels accordingly.
     static uint16_t PreviousRData[CHANNELSUSED];
     uint8_t p = 0;
     for (int i = 0; i < CHANNELSUSED; ++i) {  
-        if (DataToSend.ChannelBitMask & (1 << i)) { // if bit is set, set the channel, Otherwise leave it alone
+        if (DataReceived.ChannelBitMask & (1 << i)) { // if bit is set, set the channel, Otherwise leave it alone
             ReceivedData[i]  = RawDataIn[p];
             PreviousRData[i] = RawDataIn[p];
             ++p;
@@ -151,7 +151,7 @@ void ReadMoreParameters(uint8_t NumberOfChangedChannels){
 /************************************************************************************************************/
 void UseReceivedData(uint8_t DynamicPayloadSize)                            // DynamicPayloadSize is length of incomming data
 {
-    Decompress(RawDataIn, DataToSend.CompressedData, 8);                    // Decompress the most recent data 8 enough? Don't know yet how may channels will be sent
+    Decompress(RawDataIn, DataReceived.CompressedData, 8);                    // Decompress the most recent data 8 enough? Don't know yet how may channels will be sent
     uint8_t NumberOfChangedChannels = RearrangeTheChannels();               // Rearrange the channels for actual control since only changed ones are sent
     if ((DynamicPayloadSize - int(NumberOfChangedChannels * 1.5) > 5)){     // 8 when parameters are added 2 when not        
         ReadMoreParameters(NumberOfChangedChannels);                                                                            
@@ -178,7 +178,7 @@ bool ReadData()
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);          // Send telemetry
         DelayMillis(2);    
         uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize();     // Get the size of the new data (14)   
-        CurrentRadio->read(&DataToSend, DynamicPayloadSize);                    //  ** >> Read new data from master << ** // Get the size of the new data (14)
+        CurrentRadio->read(&DataReceived, DynamicPayloadSize);                    //  ** >> Read new data from master << ** // Get the size of the new data (14)
         Connected = true;
         NewData   = true;
        if (Connected) UseReceivedData(DynamicPayloadSize);

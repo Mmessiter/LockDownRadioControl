@@ -215,8 +215,8 @@ uint8_t SendExtraParamemters(uint8_t Pointer)             // parameters must be 
     RawDataBuffer[Pointer+1]  = Parameters.word1;
     RawDataBuffer[Pointer+2]  = Parameters.word2;
     Pointer += 4;               
-    Look1("  Parameter sent: ");
-    Look(Parameters.ID);
+   // Look1("  Parameter sent: ");
+   // Look(Parameters.ID);
 return Pointer;
 }
 /************************************************************************************************************/
@@ -227,7 +227,7 @@ uint8_t EncodeTheChangedChannels(){
         if ((SendBuffer[i] != PreviousBuffer[i]) && (NumberOfChangedChannels < 4)) { //  !!! 4 is the maximum number of channels that can be sent in one packet !!!!  <<< *****
             RawDataBuffer[NumberOfChangedChannels]  = SendBuffer[i];            // load a changed channel into the rawdatabuffer 
             PrePreviousBuffer[i] = PreviousBuffer[i];                           // save previous buffer incase we need to repeat it
-            PreviousBuffer[i] = SendBuffer[i];                                  // save it for next time
+            PreviousBuffer[i] = SendBuffer[i];                                  // save it for next time in case it succeeds this time
             DataTosend.ChannelBitMask |= (1 << i);                              // set the bit in the ChannelBitMask word
             ++NumberOfChangedChannels;                                          // increment the rawdatabuffer index
         } 

@@ -57,9 +57,9 @@ struct  CD{
     uint16_t      ChannelBitMask = 0;                   
     uint16_t      CompressedData[10]; // 40 bytes ... far too big
 };
-CD DataToSend;
+CD DataReceived;
 
-uint16_t SizeOfDataToSend = sizeof(DataToSend);
+uint16_t SizeOfDataReceived = sizeof(DataReceived);
 
 
 struct CD2{
