@@ -222,7 +222,7 @@ void StartBuddyListen()
     FlushFifos();                               // flush the fifos
     BlueLedOn();                                // turn on the blue led
     CurrentMode = LISTENMODE;                   // set the mode to listen
-    LostContactFlag = false;                    // reset the lost contact flag
+    //LostContactFlag = false;                    // reset the lost contact flag
     RestoreBrightness();                        // restore the brightness
 }
 //************************************************************************************************************************

@@ -58,9 +58,7 @@ FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint
         }
     }
 }
-
 /************************************************************************************************************/
-
 // NB ONLY THE LOW 12 BITS ARE ACTUALLY SENT! (Because of COMPRESSION)
 
 void LoadParameters()
@@ -81,7 +79,7 @@ void LoadParameters()
 
        case 2:
             Parameters.word1  = Qnh >> 8;       // (HiByte)   Qnh is current atmospheric pressure at sea level here (an aviation term)
-            Parameters.word2  = Qnh & 0x00ff; // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
+            Parameters.word2  = Qnh & 0x00ff;   // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
             break;
 
         case 3:
@@ -92,11 +90,11 @@ void LoadParameters()
             }
             break;
         case 4:
-                Parameters.word1  = ModelMatched; // let receiver know whether correct model is loaded.
-                Parameters.word2  = SwapWaveBand;
-                if (SwapWaveBand == 2) SetTestFrequencies();
-                if (SwapWaveBand == 1) SetUKFrequencies();
-                SwapWaveBand = 0;
+            Parameters.word1  = ModelMatched; // let receiver know whether correct model is loaded.
+            Parameters.word2  = SwapWaveBand;
+            if (SwapWaveBand == 2) SetTestFrequencies();
+            if (SwapWaveBand == 1) SetUKFrequencies();
+            SwapWaveBand = 0;
             break;
         case 5:
               Parameters.word1 = PPMdata.UseSBUSFromRX;   // 1 - 0
@@ -106,7 +104,6 @@ void LoadParameters()
             break;
     }
 }
-
 /************************************************************************************************************/
 void RecordsPacketSuccess(uint8_t s)
 { // or failure according to s
@@ -124,20 +121,18 @@ FASTRUN void FailedPacket()
     LostContactFlag =   true;
     Reconnected     =   false; 
     if (!GapStart) 
-        {
-            GapStart  = millis();  // To keep track of this gap's length
+    {
+        GapStart  = millis();  // To keep track of this gap's length
     } else 
-        {
-            if (((millis() - GapStart) > RED_LED_ON_TIME) && (!LedWasRed)) RedLedOn(); // Put on red led - receiver must be off
-        }
-    for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = 0;       // force update on all channels
+    {
+        if (((millis() - GapStart) > RED_LED_ON_TIME) && (!LedWasRed)) RedLedOn();          // Put on red led - receiver must be off
+    }
+    for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = PrePreviousBuffer[i];        // force last update repeat 
     TryToReconnect();
     int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
-    if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);       // INACTIVITY POWER OFF HERE!!
+    if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);                           // INACTIVITY POWER OFF HERE!!
 }
-
 /************************************************************************************************************/
-
 FASTRUN void TryOtherPipe()
 {
     if (BoundFlag == true) {
@@ -158,7 +153,6 @@ FASTRUN void TryOtherPipe()
     }
 }
 /************************************************************************************************************/
-
 void TryToReconnect()
 {
     if (BuddyPupilOnPPM) return;
@@ -168,7 +162,6 @@ void TryToReconnect()
     NextChannel = FHSS_data::Used_Recovery_Channels[ReconnectionIndex];
     HopToNextChannel();
 }
-
 /************************************************************************************************************/
 void FlushFifos()
 {
@@ -177,31 +170,28 @@ void FlushFifos()
     Radio1.flush_rx();
     delayMicroseconds(150);
 }
-
 /************************************************************************************************************/
-
 void SuccessfulPacket()
 {
+    CheckGapsLength();
+    RecordsPacketSuccess(1);
     ++RangeTestGoodPackets;
     ++PacketNumber;
-    RecordsPacketSuccess(1);
     AddExtraParameters = false;
     TotalLostPackets += RecentPacketsLost;
     RecentPacketsLost = 0;
     Connected         = true;
-    if (BoundFlag && !LedWasGreen) {
-        GreenLedOn();
-    }
-    CheckGapsLength();
     if (Radio1.available()){
         Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs,
         ParseAckPayload();
+    }
+    if (BoundFlag && !LedWasGreen) {
+        GreenLedOn();
     }
     StartInactvityTimeout();
     LostContactFlag = false;
 }
 /************************************************************************************************************/
-
 FLASHMEM void InitRadio(uint64_t Pipe)
 {
     Radio1.begin();
@@ -217,12 +207,9 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     Radio1.setCRCLength(RF24_CRC_16);
     GapSum = 0;
 }
-
 /************************************************************************************************************/
-
 uint8_t SendExtraParamemters(uint8_t Pointer)             // parameters must be loaded before this function is called
 {                                                         // only the low 12 bits of each parameter are sent
- 
     LoadParameters();
     RawDataBuffer[Pointer]    = Parameters.ID;           // copy current parameter values into the rawdatabuffer right after the channels
     RawDataBuffer[Pointer+1]  = Parameters.word1;
@@ -232,15 +219,14 @@ uint8_t SendExtraParamemters(uint8_t Pointer)             // parameters must be 
     Look(Parameters.ID);
 return Pointer;
 }
-
 /************************************************************************************************************/
-
 uint8_t EncodeTheChangedChannels(){
     uint8_t NumberOfChangedChannels = 0;
     DataTosend.ChannelBitMask = 0;                                              // clear the ChannelBitMask 16 BIT WORD
     for (int i = 0; i < CHANNELSUSED; ++i){                                     // check for changed channels
-        if ((SendBuffer[i] != PreviousBuffer[i]) && (NumberOfChangedChannels < 4)) {     //     !!!! 4 is the maximum number of channels that can be sent in one packet !!!!  <<< *****
+        if ((SendBuffer[i] != PreviousBuffer[i]) && (NumberOfChangedChannels < 4)) { //  !!! 4 is the maximum number of channels that can be sent in one packet !!!!  <<< *****
             RawDataBuffer[NumberOfChangedChannels]  = SendBuffer[i];            // load a changed channel into the rawdatabuffer 
+            PrePreviousBuffer[i] = PreviousBuffer[i];                           // save it for failed packet recovery
             PreviousBuffer[i] = SendBuffer[i];                                  // save it for next time
             DataTosend.ChannelBitMask |= (1 << i);                              // set the bit in the ChannelBitMask word
             ++NumberOfChangedChannels;                                          // increment the rawdatabuffer index
