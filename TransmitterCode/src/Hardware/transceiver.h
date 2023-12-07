@@ -182,7 +182,7 @@ void SuccessfulPacket()
     RecentPacketsLost = 0;
     Connected         = true;
     if (Radio1.available()){
-        Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs,
+        Radio1.read(&AckPayload, AckPayloadSize); 
         ParseAckPayload();
     }
     if (BoundFlag && !LedWasGreen) {
@@ -226,7 +226,7 @@ uint8_t EncodeTheChangedChannels(){
     for (int i = 0; i < CHANNELSUSED; ++i){                                     // check for changed channels
         if ((SendBuffer[i] != PreviousBuffer[i]) && (NumberOfChangedChannels < 4)) { //  !!! 4 is the maximum number of channels that can be sent in one packet !!!!  <<< *****
             RawDataBuffer[NumberOfChangedChannels]  = SendBuffer[i];            // load a changed channel into the rawdatabuffer 
-            PrePreviousBuffer[i] = PreviousBuffer[i];                           // save it for failed packet recovery
+            PrePreviousBuffer[i] = PreviousBuffer[i];                           // save previous buffer incase we need to repeat it
             PreviousBuffer[i] = SendBuffer[i];                                  // save it for next time
             DataTosend.ChannelBitMask |= (1 << i);                              // set the bit in the ChannelBitMask word
             ++NumberOfChangedChannels;                                          // increment the rawdatabuffer index
