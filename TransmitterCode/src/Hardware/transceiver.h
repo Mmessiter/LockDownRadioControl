@@ -253,12 +253,11 @@ FASTRUN void SendData()
         uint8_t ByteCountToTransmit     =  ((float) NumberOfChangedChannels * 1.5f) + 4;                 // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 word because int rounds downwards.
         uint8_t SizeOfUnCompressedData  =   (ByteCountToTransmit / 1.5) ;                                
         Compress(DataTosend.CompressedData, RawDataBuffer, SizeOfUnCompressedData);                      // Compress the raw data buffer into the compressed data buffer (reduces it to 75% of original size)
-      
-      
         if (Radio1.write(&DataTosend, ByteCountToTransmit)) {SuccessfulPacket();} else {FailedPacket();} // Send the data packet complete with ChannelBitMask and compressed data 
     }else{
         if (BuddyMasterOnWireless) SendSpecialPacket();                                                  // takes about 4 - 5 ms. Gets buddy control data in ACK payload 
     }
+    if ((!Connected) && (BuddyMasterOnWireless)) SendSpecialPacket();                                    // So Pupil knows we are still here
 }
 /***********************************************************************************************************/
 void DoScanEnd()
