@@ -7,47 +7,47 @@
 // If AMS (Auto Model Select) fails to find a match for the model ID, here it (optionally) asks the user to
 // select a model from the list and then bind to it.
 //
-void IDNotFound(uint8_t SavedModelNumber)
-{
-    char GoModelsView[] = "page ModelsView";
-    char GoFrontView[]  = "page FrontView";
-    char buf[]          = "ID not found! Select model?";
-    char buf1[]         = "Connecting to ";
-    char buf2[70];
+// void IDNotFound(uint8_t SavedModelNumber)
+// {
+//     char GoModelsView[] = "page ModelsView";
+//     char GoFrontView[]  = "page FrontView";
+//     char buf[]          = "ID not found! Select model?";
+//     char buf1[]         = "Connecting to ";
+//     char buf2[70];
     
-    if (WirelessBuddy) {                                // use current if wireless buddy
-        ModelNumber = PreviousModelNumber;
-        ReadOneModel(ModelNumber);
-        BindNow();
-        UpdateModelsNameEveryWhere();
-        AMSnotfound = false;
-        return;
-    }
+//     if (WirelessBuddy) {                                // use current if wireless buddy
+//         ModelNumber = PreviousModelNumber;
+//         ReadOneModel(ModelNumber);
+//         BindNow();
+//         UpdateModelsNameEveryWhere();
+//         AMSnotfound = false;
+//         return;
+//     }
     
-    GetConfirmation(GoFrontView, buf);
-    if (Confirmed[0] != 'Y') {
-        ModelNumber = PreviousModelNumber;
-        ReadOneModel(ModelNumber);
-        strcpy(buf2, buf1);
-        strcat(buf2, ModelName);
-        MsgBox(GoFrontView, buf2);
-        BindNow();
-        UpdateModelsNameEveryWhere();
-        AMSnotfound = false;
-        return;
-    }
-    SendCommand(GoModelsView);
-    CurrentView = MODELSVIEW;
-    CurrentMode = SENDNOTHING;
-    BlueLedOn();
-    UpdateModelsNameEveryWhere();
-    BuildDirectory();
-    LoadFileSelector();
-    ModelNumber = SavedModelNumber;
-    ShowFileNumber();
-    AMSnotfound=true;
-    LoadModelSelector();
-}
+//     GetConfirmation(GoFrontView, buf);
+//     if (Confirmed[0] != 'Y') {
+//         ModelNumber = PreviousModelNumber;
+//         ReadOneModel(ModelNumber);
+//         strcpy(buf2, buf1);
+//         strcat(buf2, ModelName);
+//         MsgBox(GoFrontView, buf2);
+//         BindNow();
+//         UpdateModelsNameEveryWhere();
+//         AMSnotfound = false;
+//         return;
+//     }
+//     SendCommand(GoModelsView);
+//     CurrentView = MODELSVIEW;
+//     CurrentMode = SENDNOTHING;
+//     BlueLedOn();
+//     UpdateModelsNameEveryWhere();
+//     BuildDirectory();
+//     LoadFileSelector();
+//     ModelNumber = SavedModelNumber;
+//     ShowFileNumber();
+//     AMSnotfound=true;
+//     LoadModelSelector();
+// }
 /************************************************************************************************************/
 
 void CompareModelsIDs()
@@ -89,7 +89,9 @@ void CompareModelsIDs()
                     GotoFrontView();
                 }
                 else {
-                    IDNotFound(SavedModelNumber); //  Not found, so ask user to select one
+                 //   IDNotFound(SavedModelNumber); //  Not found, so ask user to select one 
+                    ModelNumber = SavedModelNumber;  // on second thoughts, just use the saved one
+                    BindNow();
                 }
             }
             if (!AutoModelSelect) BindNow();
