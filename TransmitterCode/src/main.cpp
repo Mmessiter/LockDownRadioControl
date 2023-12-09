@@ -2305,7 +2305,7 @@ FLASHMEM void setup()
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
     delay(300); // <<********************* MUST ALLOW DOG TO INITIALISE
-    delay(WARMUPDELAY);
+    DelayWithDog(WARMUPDELAY);
     if (!SD.begin(BUILTIN_SDCARD)) { // MUST return true or all is lost!
         delay(WARMUPDELAY);
         SD.begin(BUILTIN_SDCARD); // a second attempt for iffy sd cards ?!
@@ -2362,7 +2362,7 @@ FLASHMEM void setup()
     SetAudioVolume(AudioVolume);
     if (PlayFanfare) {
         PlaySound(THEFANFARE);
-        delay(4000); // Fanfare takes about 4 seconds
+        DelayWithDog(4000); // Fanfare takes about 4 seconds
     }
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
