@@ -88,7 +88,7 @@
     #define MAXDUALRATE            200
     #define MAXBUFFERSIZE          1024 * 6
     #define MAXMODELNUMBER         91
-    #define RED_LED_ON_TIME        2000                         // How many ms of no connection before RED led comes on
+    #define RED_LED_ON_TIME        2500                         // How many ms of no connection before RED led comes on
     #define LOW_VOLTAGE_TIME       10000                        // How many ms to endure low voltage before announcing it. (10 seconds)
     #define MAXSHOWCOMMSSESCONDS   6                            // Assess average connection quality over most recent 6 seconds continously
     #define SHOWCOMMSDELAY         1000                         // ms pauses between updated info on NEXTION
