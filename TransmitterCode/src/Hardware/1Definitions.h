@@ -103,7 +103,7 @@
 
     #define DATARATE                 RF24_250KBPS   // RF24_250KBPS or RF24_1MBPS or RF24_2MBPS
     #define FASTDATARATE             RF24_2MBPS     // 2 MBPS = RF24_2MBPS; 1 MBPS = RF24_1MBPS <<
-    #define PERFECTPACKETSPERSECOND  100            // Flat out perfect packets per second
+    #define PERFECTPACKETSPERSECOND  200            // Flat out perfect packets per second
     #define RETRYCOUNT               2              // was 2. Auto retries inside nRF24L01. MAX is 15. Fails below 2.
     #define RETRYWAIT                1              // was 1. 250us = Wait between retries (RetryWait+1 * 250us))
     #define QUIETCHANNEL             5              // This was found to be the least busy channel in the 2.4GHz band in my house
@@ -591,7 +591,7 @@ uint64_t      TeensyMACAddPipe = DEFAULTPIPEADDRESS; //          New Radio pipe 
 uint64_t      BuddyMACAddPipe  = DEFAULTPIPEADDRESS; //          Buddy pipe address
 char          TextIn[CHARSMAX + 2];                  //          Spare space
 uint16_t      PacketsPerSecond = 0;
-uint8_t       PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS]; // Here we record some history
+uint8_t       PacketsHistoryBuffer[(5 + PERFECTPACKETSPERSECOND) * MAXSHOWCOMMSSESCONDS]; // Here we record some history
 uint32_t      TotalLostPackets = 0;
 uint32_t      TotalGoodPackets = 0;
 uint16_t      PacketNumber     = 0;
