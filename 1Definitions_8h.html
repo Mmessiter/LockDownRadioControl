@@ -162,7 +162,7 @@ Macros</h2></td></tr>
 <tr class="separator:aebd7ef5764d81d53646b187e0e337bd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a892ac703d752012a921e12fc7d632bf2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="1Definitions_8h.html#a892ac703d752012a921e12fc7d632bf2">TXVERSION_MINOR</a>&#160;&#160;&#160;3</td></tr>
 <tr class="separator:a892ac703d752012a921e12fc7d632bf2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b2773d8aa3a50ce71dfeb1568f8da26"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="1Definitions_8h.html#a7b2773d8aa3a50ce71dfeb1568f8da26">TXVERSION_MINIMUS</a>&#160;&#160;&#160;6</td></tr>
+<tr class="memitem:a7b2773d8aa3a50ce71dfeb1568f8da26"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="1Definitions_8h.html#a7b2773d8aa3a50ce71dfeb1568f8da26">TXVERSION_MINIMUS</a>&#160;&#160;&#160;7</td></tr>
 <tr class="separator:a7b2773d8aa3a50ce71dfeb1568f8da26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb388c9dfbdca89b280a12c4af1a030f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="1Definitions_8h.html#abb388c9dfbdca89b280a12c4af1a030f">CE_PIN</a>&#160;&#160;&#160;7</td></tr>
 <tr class="separator:abb388c9dfbdca89b280a12c4af1a030f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -242,7 +242,7 @@ Macros</h2></td></tr>
 <tr class="separator:a6e3511acbf8184c2b874c1175f86f7fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa09c1d127dd05034131c7e50f64d3a02"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="1Definitions_8h.html#aa09c1d127dd05034131c7e50f64d3a02">FASTDATARATE</a>&#160;&#160;&#160;RF24_2MBPS</td></tr>
 <tr class="separator:aa09c1d127dd05034131c7e50f64d3a02"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad19ebeeabe5c8ede82c5be3f8d3f7776"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="1Definitions_8h.html#ad19ebeeabe5c8ede82c5be3f8d3f7776">PERFECTPACKETSPERSECOND</a>&#160;&#160;&#160;100</td></tr>
+<tr class="memitem:ad19ebeeabe5c8ede82c5be3f8d3f7776"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="1Definitions_8h.html#ad19ebeeabe5c8ede82c5be3f8d3f7776">PERFECTPACKETSPERSECOND</a>&#160;&#160;&#160;200</td></tr>
 <tr class="separator:ad19ebeeabe5c8ede82c5be3f8d3f7776"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0cf4668725c06b3a6d64a2895c906379"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="1Definitions_8h.html#a0cf4668725c06b3a6d64a2895c906379">RETRYCOUNT</a>&#160;&#160;&#160;2</td></tr>
 <tr class="separator:a0cf4668725c06b3a6d64a2895c906379"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -999,8 +999,8 @@ Variables</h2></td></tr>
 <tr class="separator:a527f04236d0e03be6e0224a0e748f0c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7dff891c96c5574f3a8dfb38a1aad0d"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="1Definitions_8h.html#aa7dff891c96c5574f3a8dfb38a1aad0d">PacketsPerSecond</a> = 0</td></tr>
 <tr class="separator:aa7dff891c96c5574f3a8dfb38a1aad0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5fd9d2e94559949fda4aaeb906fa0029"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="1Definitions_8h.html#a5fd9d2e94559949fda4aaeb906fa0029">PacketsHistoryBuffer</a> [<a class="el" href="1Definitions_8h.html#ad19ebeeabe5c8ede82c5be3f8d3f7776">PERFECTPACKETSPERSECOND</a> *<a class="el" href="1Definitions_8h.html#a9238da810f8a31cafd344a46dc6825ac">MAXSHOWCOMMSSESCONDS</a>]</td></tr>
-<tr class="separator:a5fd9d2e94559949fda4aaeb906fa0029"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6418df611b6c36d20a2b81f834b2a94c"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="1Definitions_8h.html#a6418df611b6c36d20a2b81f834b2a94c">PacketsHistoryBuffer</a> [(5+<a class="el" href="1Definitions_8h.html#ad19ebeeabe5c8ede82c5be3f8d3f7776">PERFECTPACKETSPERSECOND</a>) *<a class="el" href="1Definitions_8h.html#a9238da810f8a31cafd344a46dc6825ac">MAXSHOWCOMMSSESCONDS</a>]</td></tr>
+<tr class="separator:a6418df611b6c36d20a2b81f834b2a94c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add763855be5b4be56770f98ca20d0ad4"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="1Definitions_8h.html#add763855be5b4be56770f98ca20d0ad4">TotalLostPackets</a> = 0</td></tr>
 <tr class="separator:add763855be5b4be56770f98ca20d0ad4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad84d73721a07bae1ea3f8f72d6bd207"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="1Definitions_8h.html#aad84d73721a07bae1ea3f8f72d6bd207">TotalGoodPackets</a> = 0</td></tr>
@@ -4172,7 +4172,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define PERFECTPACKETSPERSECOND&#160;&#160;&#160;100</td>
+          <td class="memname">#define PERFECTPACKETSPERSECOND&#160;&#160;&#160;200</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -5660,7 +5660,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define TXVERSION_MINIMUS&#160;&#160;&#160;6</td>
+          <td class="memname">#define TXVERSION_MINIMUS&#160;&#160;&#160;7</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -13234,14 +13234,14 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a5fd9d2e94559949fda4aaeb906fa0029" name="a5fd9d2e94559949fda4aaeb906fa0029"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5fd9d2e94559949fda4aaeb906fa0029">&#9670;&#160;</a></span>PacketsHistoryBuffer</h2>
+<a id="a6418df611b6c36d20a2b81f834b2a94c" name="a6418df611b6c36d20a2b81f834b2a94c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6418df611b6c36d20a2b81f834b2a94c">&#9670;&#160;</a></span>PacketsHistoryBuffer</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t PacketsHistoryBuffer[<a class="el" href="1Definitions_8h.html#ad19ebeeabe5c8ede82c5be3f8d3f7776">PERFECTPACKETSPERSECOND</a> *<a class="el" href="1Definitions_8h.html#a9238da810f8a31cafd344a46dc6825ac">MAXSHOWCOMMSSESCONDS</a>]</td>
+          <td class="memname">uint8_t PacketsHistoryBuffer[(5+<a class="el" href="1Definitions_8h.html#ad19ebeeabe5c8ede82c5be3f8d3f7776">PERFECTPACKETSPERSECOND</a>) *<a class="el" href="1Definitions_8h.html#a9238da810f8a31cafd344a46dc6825ac">MAXSHOWCOMMSSESCONDS</a>]</td>
         </tr>
       </table>
 </div><div class="memdoc">
