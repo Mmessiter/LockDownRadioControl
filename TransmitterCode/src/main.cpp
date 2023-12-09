@@ -146,18 +146,11 @@
 #include "Hardware/BuddyPPM.h"
 #include "Hardware/BuddyWireless.h"
 
+
 /*********************************************************************************************************************************/
 
-void RedLedOn()
-{
-    char InVisible[]           = "vis Quality,0";
-    char FrontView_Connected[] = "Connected";
-    char WarnOff[]             = "vis Warning,0";
-    if (LedWasGreen) {
-        if ((millis() - LedGreenMoment) > 3000) { // if green led has been on for more than 2 second
-                if (AnnounceConnected & !WirelessBuddy) PlaySound(DISCONNECTEDMSG);
-                if (UseLog) LogDisConnection();
-        }
+void ClearMostParameters(){
+
         RXVoltsDetected      = false;
         LedWasGreen          = false;
         RXVoltsDetected      = false;
@@ -184,6 +177,21 @@ void RedLedOn()
             LastBuffer[i]           = 0;                                         
             PreMixBuffer[i]         = 0;   
         }
+}
+
+/*********************************************************************************************************************************/
+
+void RedLedOn()
+{
+    char InVisible[]           = "vis Quality,0";
+    char FrontView_Connected[] = "Connected";
+    char WarnOff[]             = "vis Warning,0";
+    if (LedWasGreen) {
+        if ((millis() - LedGreenMoment) > 3000) { // if green led has been on for more than 2 second
+                if (AnnounceConnected & !WirelessBuddy) PlaySound(DISCONNECTEDMSG);
+                if (UseLog) LogDisConnection();
+        }
+        ClearMostParameters();
         SetUKFrequencies();
         if (CurrentView == FRONTVIEW) {
             SendText(FrontView_Connected, na);
