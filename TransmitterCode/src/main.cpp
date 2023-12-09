@@ -149,7 +149,7 @@
 
 /*********************************************************************************************************************************/
 
-void ClearMostParameters(){
+void ClearMostParameters(){ // called from RED LED ON
 
         RXVoltsDetected      = false;
         LedWasGreen          = false;
