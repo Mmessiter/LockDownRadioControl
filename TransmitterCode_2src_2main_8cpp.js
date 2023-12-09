@@ -38,6 +38,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "CheckStepSizes", "TransmitterCode_2src_2main_8cpp.html#af2028eceef03ca4c84aa7d71677c0647", null ],
     [ "CheckSwitch", "TransmitterCode_2src_2main_8cpp.html#afcd616e96ae28694a7fa2197ad74c6fe", null ],
     [ "CheckTXVolts", "TransmitterCode_2src_2main_8cpp.html#a28ff2460f96b023cdb62a5c2b8f593f5", null ],
+    [ "ClearMostParameters", "TransmitterCode_2src_2main_8cpp.html#afeaea883a32e6ebe461d419fab1b9f59", null ],
     [ "CloseLogFile", "TransmitterCode_2src_2main_8cpp.html#a6f003363493fc53b69f9efc1f447a6a1", null ],
     [ "CloseModelsFile", "TransmitterCode_2src_2main_8cpp.html#a6922974b734cfe3a511e074a2d6ac33c", null ],
     [ "CompareVersionNumbers", "TransmitterCode_2src_2main_8cpp.html#ad496cd10d726d7c5757d01a922c2aa25", null ],

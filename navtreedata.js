@@ -83,11 +83,11 @@ var NAVTREEINDEX =
 "ModelExchange_8h.html#a632cdd81885fffa95960e573cc6b42b3",
 "Quadcopter_2src_2main_8cpp.html#ae366cc2072db3fde7b163c534ea9b745",
 "TransmitterCode_2src_2main_8cpp.html#a7d34cec6e8edc20c8b50424e15dcc7c7",
-"classMPU6050.html#a201dc0aa819f451584c575c5a7590e10",
-"classMPU9250.html#a07f8ccd1907f134d866105e3d5ec5a10",
-"classMPU9250FIFO.html",
-"common_8h.html#af2b1ba43295661243b7bb78004d470d8",
-"radio_8h.html#a3bb52983d9a2108589830301007bdce1"
+"classMPU6050.html#a1d9fc7f1058c4ab9a8a586e3fc30d12d",
+"classMPU9250.html#a07accae4b4fe268fce2e26b007bb54c3",
+"classMPU9250.html#affbb71e6f18ec3c9fbc5efd8631bdd5e",
+"common_8h.html#af0885e7050f46e9be63fa1c9574ad9a0",
+"radio_8h.html#a31a35307bbac88ceda244272f25d399a"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
