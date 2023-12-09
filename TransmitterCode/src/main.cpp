@@ -154,9 +154,9 @@ void RedLedOn()
     char FrontView_Connected[] = "Connected";
     char WarnOff[]             = "vis Warning,0";
     if (LedWasGreen) {
-        if (UseLog) LogDisConnection();
-        if ((millis() - LedGreenMoment) > 2000) { // if green led has been on for more than 2 second
+        if ((millis() - LedGreenMoment) > 3000) { // if green led has been on for more than 2 second
                 if (AnnounceConnected & !WirelessBuddy) PlaySound(DISCONNECTEDMSG);
+                if (UseLog) LogDisConnection();
         }
         RXVoltsDetected      = false;
         LedWasGreen          = false;
@@ -167,9 +167,23 @@ void RedLedOn()
         PacketsPerSecond     = 0;
         LastShowTime         = 0;
         ModelsMacUnion.Val64 = 0;
+        TotalLostPackets     = 0;
+        TotalGoodPackets     = 0;
+        BindingTimer         = 0;
         RangeTestGoodPackets = 0;
         RecentPacketsLost    = 0;
-        VersionsCompared     = false;
+        AddExtraParameters   = false;
+        VersionsCompared    = false;
+        for (int i = 0; i < CHANNELSUSED; ++i) {
+            PrePreviousBuffer[i]    = 0;
+            PreviousBuffer[i]       = 0;                         
+            SendBuffer[i]           = 0;  
+            BuddyBuffer[i]          = 0;                                        
+            ShownBuffer[i]          = 0;                                       
+            RawDataBuffer[i]        = 0;                                     
+            LastBuffer[i]           = 0;                                         
+            PreMixBuffer[i]         = 0;   
+        }
         SetUKFrequencies();
         if (CurrentView == FRONTVIEW) {
             SendText(FrontView_Connected, na);

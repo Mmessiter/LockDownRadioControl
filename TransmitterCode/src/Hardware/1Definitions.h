@@ -570,7 +570,7 @@ void             GetSlaveChannelValuesWireless();
 void             RandomiseTheRecoveryChannels();
 void             UseRandomizedRecoveryChannels();
 void             UseDefaultRecoveryChannels();
-
+void             GetTeensyMacAddress();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************
@@ -937,7 +937,8 @@ uint8_t  CurrentChannel      = 0;
 uint8_t  PupilIsAlive        = 0;
 uint8_t  MasterIsAlive       = 0;
 bool     VersionsCompared    = false;
-uint32_t LedGreenMoment        = 0;
+uint32_t LedGreenMoment      = 0;
+uint32_t BindingTimer        = 0;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

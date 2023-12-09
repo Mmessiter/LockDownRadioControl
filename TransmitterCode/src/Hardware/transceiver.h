@@ -516,7 +516,7 @@ FASTRUN void BufferTeensyMACAddPipe() // heeer
 /************************************************************************************************************/
 void SendBindingPipe()
 {
-      static uint32_t BindingTimer = 0;
+    
     if (BuddyPupilOnWireless) return;
     if (PPMdata.UseTXModule) return;
     if (!BoundFlag || !ModelMatched) BindingTimer = millis();
