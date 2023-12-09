@@ -207,8 +207,11 @@ void BindModel()
     delayMicroseconds(250);
     BoundFlag    = true;
     ModelMatched = true;
+   
     if (Blinking) {
+        
         SetNewPipe(); // change to bound pipe <<< ***************************************
+       
 #ifdef DB_BIND
         Serial.println("SAVING RECEIVED PIPE:");
 #endif
@@ -234,6 +237,13 @@ void BindModel()
         FirstConnection = false;
     }
     SaveNewBind = false;
+
+
+#ifdef DB_BIND
+        Serial.println("");
+        Serial.println("DONE BINDING");
+#endif
+
 }
 
 /************************************************************************************************************/
@@ -625,6 +635,7 @@ void BlinkLed()
 
 void loop()
 {
+
     DoStabilsation();
     KickTheDog();
     ReceiveData();
@@ -636,6 +647,8 @@ void loop()
         }
     }
     else {
-        if (!BoundFlag) GetNewPipe();
+    if (!BoundFlag)  {
+            GetNewPipe();
+        }
     }
 }

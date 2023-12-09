@@ -299,7 +299,7 @@ bool ValidateNewPipe()
         if (NewPipeMaybe == PreviousNewPipes[i]) ++MatchedCounter;
     }
 
-    if (MatchedCounter >= PIPES_TO_COMPARE / 2) return true; // half or more is OK
+    if (MatchedCounter >= 2) return true; 
     return false;
 }
 
@@ -310,7 +310,7 @@ void GetNewPipe() // from TX
     if (!NewData) return;
     NewData = false;
     if (PipeSeen) return;
-    NewPipeMaybe = (uint64_t)ReceivedData[0] << 40;
+    NewPipeMaybe  = (uint64_t)ReceivedData[0] << 40;
     NewPipeMaybe += (uint64_t)ReceivedData[1] << 32;
     NewPipeMaybe += (uint64_t)ReceivedData[2] << 24;
     NewPipeMaybe += (uint64_t)ReceivedData[3] << 16;
@@ -337,6 +337,9 @@ void GetNewPipe() // from TX
         BindModel();
         PipeSeen = true;
     }
+#ifdef DB_BIND
+    Look(pcount);
+#endif
     ++pcount; // inc pipes received
 }
 

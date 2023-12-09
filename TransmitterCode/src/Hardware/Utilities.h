@@ -935,11 +935,15 @@ FASTRUN void DoReverseSense()
 
 /************************************************************************************************************/
 void DelayWithDog(uint32_t HowLong)
-{ // Implements delay() and also kicks the dog cruelly to keep it quiet.
+{ // Implements delay() and also kicks the dog (very cruelly) to keep it quiet.
     uint32_t ThisMoment = millis();
     while ((millis() - ThisMoment) < HowLong) {
         KickTheDog();
-       //  if (BoundFlag && Connected && ModelMatched && CurrentView != FRONTVIEW) SendData();
+        if (BoundFlag && Connected && ModelMatched && CurrentView != FRONTVIEW) 
+        {
+            for (int i = 0; i < CHANNELSUSED; ++i) SendBuffer[i] = PreviousBuffer[i];  // during a pause, keep sending the last values
+            SendData();
+        }
     }
 }
 /************************************************************************************************************/

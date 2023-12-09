@@ -153,8 +153,11 @@ void RedLedOn()
     char InVisible[]           = "vis Quality,0";
     char FrontView_Connected[] = "Connected";
     char WarnOff[]             = "vis Warning,0";
-
     if (LedWasGreen) {
+        if (UseLog) LogDisConnection();
+        if ((millis() - LedGreenMoment) > 2000) { // if green led has been on for more than 2 second
+                if (AnnounceConnected & !WirelessBuddy) PlaySound(DISCONNECTEDMSG);
+        }
         RXVoltsDetected      = false;
         LedWasGreen          = false;
         RXVoltsDetected      = false;
@@ -167,7 +170,6 @@ void RedLedOn()
         RangeTestGoodPackets = 0;
         RecentPacketsLost    = 0;
         VersionsCompared     = false;
-        Randomized_Recovery_Channels_Counter = 0;
         SetUKFrequencies();
         if (CurrentView == FRONTVIEW) {
             SendText(FrontView_Connected, na);
@@ -175,9 +177,7 @@ void RedLedOn()
             SendCommand(InVisible);
         }
         if (UseLog) LogDisConnection();
-        if (AnnounceConnected & !WirelessBuddy) PlaySound(DISCONNECTEDMSG);
     }
-
     LedWasRed = true;
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
@@ -204,12 +204,9 @@ void GreenLedOn()
     { // no need to repeat unless it is blinking
         if (!LedIsBlinking) {
             ShowComms();
-            if (AnnounceConnected) {
-                PlaySound(CONNECTEDMSG);
-                ModelMatched = true;
-                BoundFlag    = true;
-                DelayWithDog(750);
-            }
+            if (AnnounceConnected)   PlaySound(CONNECTEDMSG); // heer
+            ModelMatched = true;
+            BoundFlag    = true;
         }
         if (UseLog) {
             LogConnection();
@@ -2308,9 +2305,9 @@ FLASHMEM void setup()
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
     delay(300); // <<********************* MUST ALLOW DOG TO INITIALISE
-    DelayWithDog(WARMUPDELAY);
+    delay(WARMUPDELAY);
     if (!SD.begin(BUILTIN_SDCARD)) { // MUST return true or all is lost!
-        DelayWithDog(WARMUPDELAY);
+        delay(WARMUPDELAY);
         SD.begin(BUILTIN_SDCARD); // a second attempt for iffy sd cards ?!
     }
     ErrorState = NOERROR;
@@ -2354,7 +2351,7 @@ FLASHMEM void setup()
         }
     }
 
-    DelayWithDog(WARMUPDELAY);                         // Allow Nextion time to warm up
+    delay(WARMUPDELAY);                         // Allow Nextion time to warm up
     SendValue(FrontView_BackGround, BackGroundColour); // Get colours ready
     SendValue(FrontView_ForeGround, ForeGroundColour);
     SendValue(FrontView_Special, SpecialColour);
@@ -2365,7 +2362,7 @@ FLASHMEM void setup()
     SetAudioVolume(AudioVolume);
     if (PlayFanfare) {
         PlaySound(THEFANFARE);
-        DelayWithDog(4000); // Fanfare takes about 4 seconds
+        delay(4000); // Fanfare takes about 4 seconds
     }
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
@@ -2409,7 +2406,7 @@ FLASHMEM void setup()
             if (ErrorState == MOTORISON) {
                 SendText(Warning, err_MotorOn);
                 PlaySound(MOTORON);
-                DelayWithDog(1200);
+                delay(1200);
                 PlaySound(PLSTURNOFF);
             }
         }
@@ -5666,7 +5663,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     RXOptionsViewStart,       // 38
     RXSetup1End,              // 39
     ResetTransmitterSettings, // 40
-    BindNow,                  // 41
+    BindNow,                  // 41 Not CALLED FrOM Here now
     PointUp,                  // 42
     PointDown,                // 43
     PointSelect,              // 44
