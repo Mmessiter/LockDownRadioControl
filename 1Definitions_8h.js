@@ -634,7 +634,6 @@ var 1Definitions_8h =
     [ "Qnh", "1Definitions_8h.html#ae3495ca407a0a3ea570ce0af7a3447a3", null ],
     [ "RadioSwaps", "1Definitions_8h.html#a2f472b4c6d8312622d666f82bc1c78fb", null ],
     [ "Randomized_Recovery_Channels", "1Definitions_8h.html#a35a97bad66458445650bb921487518d8", null ],
-    [ "Randomized_Recovery_Channels_Counter", "1Definitions_8h.html#a2d439a8558cff2d7ad534d1496dd6307", null ],
     [ "RangeTestGoodPackets", "1Definitions_8h.html#a8a5b55d644bb404cd6cdf61c5a85f822", null ],
     [ "RangeTestStart", "1Definitions_8h.html#a8e7018af38f2b48314416c9559cb39e0", null ],
     [ "RawDataBuffer", "1Definitions_8h.html#a1efcff1c351f50bcfc9ecf6ef4e079bb", null ],

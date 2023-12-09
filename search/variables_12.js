@@ -2,7 +2,7 @@ var searchData=
 [
   ['radioswaps_0',['RadioSwaps',['../common_8h.html#aff48e1463bf663c156032302d0161c98',1,'RadioSwaps():&#160;common.h'],['../1Definitions_8h.html#a2f472b4c6d8312622d666f82bc1c78fb',1,'RadioSwaps():&#160;1Definitions.h']]],
   ['randomized_5frecovery_5fchannels_1',['Randomized_Recovery_Channels',['../namespaceFHSS__data.html#a35a97bad66458445650bb921487518d8',1,'FHSS_data']]],
-  ['randomized_5frecovery_5fchannels_5fcounter_2',['Randomized_Recovery_Channels_Counter',['../common_8h.html#a2d439a8558cff2d7ad534d1496dd6307',1,'Randomized_Recovery_Channels_Counter():&#160;common.h'],['../1Definitions_8h.html#a2d439a8558cff2d7ad534d1496dd6307',1,'Randomized_Recovery_Channels_Counter():&#160;1Definitions.h']]],
+  ['randomized_5frecovery_5fchannels_5fcounter_2',['Randomized_Recovery_Channels_Counter',['../common_8h.html#a2d439a8558cff2d7ad534d1496dd6307',1,'common.h']]],
   ['rangetestgoodpackets_3',['RangeTestGoodPackets',['../1Definitions_8h.html#a8a5b55d644bb404cd6cdf61c5a85f822',1,'1Definitions.h']]],
   ['rangeteststart_4',['RangeTestStart',['../1Definitions_8h.html#a8e7018af38f2b48314416c9559cb39e0',1,'1Definitions.h']]],
   ['rawdatabuffer_5',['RawDataBuffer',['../1Definitions_8h.html#a1efcff1c351f50bcfc9ecf6ef4e079bb',1,'1Definitions.h']]],
@@ -30,7 +30,7 @@ var searchData=
   ['roll_5fimu_5fprev_27',['roll_IMU_prev',['../Quadcopter_2src_2main_8cpp.html#a426e20ad1a58ced1ecbd2a64a90e55e5',1,'main.cpp']]],
   ['roll_5fpassthru_28',['roll_passthru',['../Quadcopter_2src_2main_8cpp.html#a04d9b90af56f5d557fc2a21739e3edd5',1,'main.cpp']]],
   ['roll_5fpid_29',['roll_PID',['../Quadcopter_2src_2main_8cpp.html#a5f9fe871bf862f4ea03cdb75c12d4093',1,'main.cpp']]],
-  ['rx1totaltime_30',['RX1TotalTime',['../common_8h.html#aa1850e21b7988ec8784a0a6a89077df0',1,'RX1TotalTime():&#160;common.h'],['../1Definitions_8h.html#a95dd54e021a56919600706636b80fb5a',1,'RX1TotalTime():&#160;1Definitions.h']]],
+  ['rx1totaltime_30',['RX1TotalTime',['../1Definitions_8h.html#a95dd54e021a56919600706636b80fb5a',1,'RX1TotalTime():&#160;1Definitions.h'],['../common_8h.html#aa1850e21b7988ec8784a0a6a89077df0',1,'RX1TotalTime():&#160;common.h']]],
   ['rx2totaltime_31',['RX2TotalTime',['../common_8h.html#aabc8c01b8e9f9b91a3575bf7052dc4de',1,'RX2TotalTime():&#160;common.h'],['../1Definitions_8h.html#a3e02a2c832634c8521a867cac4299c5c',1,'RX2TotalTime():&#160;1Definitions.h']]],
   ['rxcellcount_32',['RXCellCount',['../1Definitions_8h.html#aa09bc4e1398cb869ae79670683470ed5',1,'1Definitions.h']]],
   ['rxmaxmodelaltitude_33',['RXMAXModelAltitude',['../1Definitions_8h.html#aac60f398ee9f5f9f89459014e003f68d',1,'1Definitions.h']]],
