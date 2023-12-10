@@ -234,6 +234,36 @@ uint8_t EncodeTheChangedChannels(){
     }
     return NumberOfChangedChannels;                                             // Return the number of channels that have changed 
 }
+// ***********************************************************************************************************
+void ShowPacketData(uint32_t ThisPacketLength){
+
+static uint32_t TotalPacketLength = 0;
+static uint32_t PacketsCount      = 0;
+static uint32_t PacketsCount1     = 0;
+uint32_t AveragePacketLength      = 0;
+
+    TotalPacketLength   +=  ThisPacketLength;
+    ++ PacketsCount;
+    ++ PacketsCount1;
+    AveragePacketLength = TotalPacketLength / PacketsCount;
+    static uint32_t timer=0;
+
+    if ((millis() - timer) >= 1000) {
+        timer = millis();
+        Look1("Packet length (bytes): ");
+        Look1(ThisPacketLength);
+        Look1("\tAverage packet length (bytes): ");
+        Look1(AveragePacketLength);
+    Look1("\tPackets count: ");
+    Look1(PacketsCount);
+    Look1("\tTotal data sent so far (k): ");
+    Look1(TotalPacketLength/1024);
+    Look1("\tPackets per second: ");
+    Look(PacketsCount1);
+    PacketsCount1 = 0;
+    }
+}
+
 /************************************************************************************************************/
 /********************************* Function to send data to receiver ****************************************/
 /************************************************************************************************************/
@@ -252,6 +282,7 @@ FASTRUN void SendData()
         uint8_t SizeOfUnCompressedData  =   (ByteCountToTransmit / 1.5) ;                                
         Compress(DataTosend.CompressedData, RawDataBuffer, SizeOfUnCompressedData);                      // Compress the raw data buffer into the compressed data buffer (reduces it to 75% of original size)
         if (Radio1.write(&DataTosend, ByteCountToTransmit)) {SuccessfulPacket();} else {FailedPacket();} // Send the data packet complete with ChannelBitMask and compressed data 
+       // ShowPacketData(ByteCountToTransmit);
     }else{
         if (BuddyMasterOnWireless) SendSpecialPacket();                                                  // takes about 4 - 5 ms. Gets buddy control data in ACK payload 
     }
