@@ -173,15 +173,15 @@ bool ReadData()
     static uint32_t LocalTimer = 0;
     if (CurrentRadio->available(&Pipnum))
     {
-        if (millis() > 2500) 
+        if ((millis() - ReconnectedMoment) > 2500)                                  // send full payloads for 2.5 seconds after connection
         {
             ShortenedPayload = true;
             if (millis() - LocalTimer >= 500) 
             {
                 LocalTimer = millis();
                 ShortenedPayload = false;
-                // Look1 ("Full Payload: ");
-                // Look (AckPayload.Purpose & 0x0f);
+               // Look1 ("Full Payload: ");
+               //  Look (AckPayload.Purpose & 0x0f);
             }else{
                 //  Look("Shortened Payload");
             }
