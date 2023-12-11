@@ -222,19 +222,19 @@ return Pointer;
 }
 /************************************************************************************************************/
 uint8_t EncodeTheChangedChannels(){
-    #define MINCHANGE 3                                                                                 // Very tiny changes in channel values are ignored. That's most likely only noise. 
-                                                                                                        // This reduces the average packet size. 
-                                                                                                        // Values up to about 20 are imperceptible.
-    uint8_t NumberOfChangedChannels = 0;                                                                // Number of channels that have changed
-    DataTosend.ChannelBitMask = 0;                                                                      // Clear the ChannelBitMask 16 BIT WORD
-    for (int i = 0; i < CHANNELSUSED; ++i){                                                             // Check for changed channels  
-      if ((abs(SendBuffer[i] - PreviousBuffer[i]) > MINCHANGE)  && (NumberOfChangedChannels < 4))       // 4 is the maximum number of channel changes that can be sent in one packet 
-        {                                                                                       
-            RawDataBuffer[NumberOfChangedChannels]  = SendBuffer[i];                                    // Load a changed channel into the rawdatabuffer 
-            PrePreviousBuffer[i] = PreviousBuffer[i];                                                   // Save previous buffer in case we need to repeat it
-            PreviousBuffer[i] = SendBuffer[i];                                                          // Save it for next time in case it succeeds this time
-            DataTosend.ChannelBitMask |= (1 << i);                                                      // Set the current bit in the ChannelBitMask word
-            ++NumberOfChangedChannels;                                                                  // Increment the number of channel changes (rawdatabuffer index pointer)
+    #define MIN_CHANGE 3                                                                                // Very tiny changes in channel values are ignored. That's most likely only noise... 
+                                                                                                        // ... This reduces the average packet size... 
+                                                                                                        // ... Values up to about 20 are imperceptible.
+    uint8_t NumberOfChangedChannels = 0;                                                                // Number of channels that have changed since last packet
+    DataTosend.ChannelBitMask = 0;                                                                      // Clear the ChannelBitMask 16 BIT WORD (1 bit per channel)
+    for (int i = 0; i < CHANNELSUSED; ++i){                                                             // Check for changed channels and load them into the rawdatabuffer  
+      if ((abs(SendBuffer[i] - PreviousBuffer[i]) > MIN_CHANGE) && (NumberOfChangedChannels < 4))       // 4 is the maximum number of channel changes that will be sent in one packet ... 
+        {                                                                                               // ... any other changes will be sent in the next packet, only 5ms later.
+            RawDataBuffer[NumberOfChangedChannels]  = SendBuffer[i];                                    // Load a changed channel into the rawdatabuffer. 
+            PrePreviousBuffer[i] = PreviousBuffer[i];                                                   // Save previous buffer in case we need to repeat it.
+            PreviousBuffer[i] = SendBuffer[i];                                                          // Save it for next time in case it succeeds this time.
+            DataTosend.ChannelBitMask |= (1 << i);                                                      // Set the current bit in the ChannelBitMask word.
+            ++NumberOfChangedChannels;                                                                  // Increment the number of channel changes (rawdatabuffer index pointer).
         } 
     }
     return NumberOfChangedChannels;                                                                     // Return the number of channels that have changed 
