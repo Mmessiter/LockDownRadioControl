@@ -184,7 +184,7 @@ void SuccessfulPacket()
     if (Radio1.available()){
         uint8_t PayloadSize = Radio1.getDynamicPayloadSize();
         Radio1.read(&AckPayload, PayloadSize); 
-        ParseAckPayload();
+        ParseAckPayload(PayloadSize);
     }
     if (BoundFlag && !LedWasGreen) {
         GreenLedOn();
@@ -656,22 +656,24 @@ void GetModelsMacAddress()
 }
 
 /************************************************************************************************************/
-FASTRUN void ParseAckPayload()
+FASTRUN void ParseAckPayload(uint8_t PayloadSize)
 {
     if (BuddyPupilOnPPM) return; // buddy pupil need none of this
 
-    FHSS_data::NextChannelNumber = AckPayload.Byte5; // every packet tells of next hop destination
+    FHSS_data::NextChannelNumber = AckPayload.Byte5;                                // every packet tells of next hop destination
 
-    if (AckPayload.Purpose & 0x80) {                                              // Hi bit is now the **HOP NOW!!** flag
-        NextChannel = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber); // The actual channel number pointed to.
+    if (AckPayload.Purpose & 0x80) {                                                // Hi bit is now the **HOP NOW!!** flag
+        NextChannel = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber);   // The actual channel number pointed to.
         HopToNextChannel();
-        AckPayload.Purpose &= 0x7f; // Clear the high BIT, use the remainder ...
+        AckPayload.Purpose &= 0x7f;                                                 // Clear the high BIT, use the remainder ...
     }
 
     if (!ModelMatched && !LedWasGreen) {
         GetModelsMacAddress();
         return;
     }
+
+    if (PayloadSize < 6) return; // No point in going further if there is no data
 
     switch (AckPayload.Purpose) // Only look at the low 7 BITS
     {

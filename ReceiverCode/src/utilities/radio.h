@@ -714,7 +714,6 @@ void SendMacAddress()
 /************************************************************************************************************/
 void LoadAckPayload()
 {
-
     if (MacAddressSentCounter < 16) {
         SendMacAddress();
         return;

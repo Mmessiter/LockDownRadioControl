@@ -436,7 +436,7 @@ void          GetNewChannelValues();
 void          LoadParameters();
 void          GreenLedOn();
 void          CheckGapsLength();
-void          ParseAckPayload();
+FASTRUN  void ParseAckPayload(uint8_t PayloadSize);
 void          FailedPacket();
 void          StartInactvityTimeout();
 void          ShowServoPos();
