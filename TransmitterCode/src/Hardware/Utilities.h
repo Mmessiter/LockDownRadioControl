@@ -11,6 +11,7 @@ void CheckForNextionButtonPress()
 {
     if (GetButtonPress()) ButtonWasPressed();
 }
+
 // **********************************************************************************************************************************
 
 uint8_t Ascii(char c)
@@ -855,10 +856,10 @@ int GetSuccessRate()
     uint16_t SuccessRate;
     uint16_t Perfection = (PERFECTPACKETSPERSECOND * (uint16_t)ConnectionAssessSeconds);
 
-    for (uint16_t i = 0; i < Perfection; ++i) { // PERFECTPACKETSPERSECOND (126) packets per second are either good or bad
+    for (uint16_t i = 0; i < Perfection; ++i) { // PERFECTPACKETSPERSECOND packets per second are either good or bad
         Total += PacketsHistoryBuffer[i];
     }
-    Total += (Perfection - Total) / 2;        // about half made it but were simply unacknowledged
+    Total += ((Perfection - Total) / 2);        // about half made it but were simply unacknowledged
     SuccessRate = (Total * 100) / Perfection; // return a percentage of total good packets
     return SuccessRate;
 }
@@ -935,11 +936,15 @@ FASTRUN void DoReverseSense()
 
 /************************************************************************************************************/
 void DelayWithDog(uint32_t HowLong)
-{ // Implements delay() and also kicks the dog cruelly to keep it quiet.
+{ // Implements delay() and also kicks the dog (very cruelly) to keep it quiet.
     uint32_t ThisMoment = millis();
     while ((millis() - ThisMoment) < HowLong) {
         KickTheDog();
-       //  if (BoundFlag && Connected && ModelMatched && CurrentView != FRONTVIEW) SendData();
+        if (BoundFlag && Connected && ModelMatched && CurrentView != FRONTVIEW) 
+        {
+            for (int i = 0; i < CHANNELSUSED; ++i) SendBuffer[i] = PreviousBuffer[i];  // during a pause, keep sending the last values
+            SendData();
+        }
     }
 }
 /************************************************************************************************************/

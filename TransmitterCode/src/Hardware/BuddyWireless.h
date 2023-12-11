@@ -13,6 +13,7 @@
     #define DELAYAFTERACK          1                // ms
     #define ENCRYPT_KEY            0xFEADFEADBB     // The encryption key used for the Pipe address between the transmitters 
    
+   
  
 //*************************************************************************************************************************
 
@@ -181,7 +182,7 @@ void GetSpecialPacket()                                                         
     spd SpecialPacketData;
    
     if (Radio1.available()) {                                                           // if a packet has arrived
-        Radio1.writeAckPayload(1, &Datatosend.CompressedData, SizeOfCompressedData);              // Acknowledge the packet BY SENDING MY CHANNEL DATA!
+        Radio1.writeAckPayload(1, &DataTosend.CompressedData, SizeOfCompressedData);              // Acknowledge the packet BY SENDING MY CHANNEL DATA!
         DelayWithDog(DELAYAFTERACK);                                                    // <-  ** MUST ** allow the ACK time to get going, otherwise the sender sees a failed packet    
         if (Radio1.available()){ 
             Radio1.read(&SpecialPacketData, sizeof SpecialPacketData);                  // read the packet if its still there
@@ -222,7 +223,7 @@ void StartBuddyListen()
     FlushFifos();                               // flush the fifos
     BlueLedOn();                                // turn on the blue led
     CurrentMode = LISTENMODE;                   // set the mode to listen
-    LostContactFlag = false;                    // reset the lost contact flag
+    //LostContactFlag = false;                    // reset the lost contact flag
     RestoreBrightness();                        // restore the brightness
 }
 //************************************************************************************************************************

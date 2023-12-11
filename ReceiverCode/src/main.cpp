@@ -19,6 +19,7 @@
  * - Sensor Hub added with GPS and more sensors
  * - Supports one or two tranceivers (nRF24L01+)
  *
+ * 
  * @section rxpinout TEENSY 4.0 PINS
  * | pin number(s) | purpose |
  * |---------------|---------|
@@ -207,8 +208,11 @@ void BindModel()
     delayMicroseconds(250);
     BoundFlag    = true;
     ModelMatched = true;
+   
     if (Blinking) {
+        
         SetNewPipe(); // change to bound pipe <<< ***************************************
+       
 #ifdef DB_BIND
         Serial.println("SAVING RECEIVED PIPE:");
 #endif
@@ -234,6 +238,13 @@ void BindModel()
         FirstConnection = false;
     }
     SaveNewBind = false;
+
+
+#ifdef DB_BIND
+        Serial.println("");
+        Serial.println("DONE BINDING");
+#endif
+
 }
 
 /************************************************************************************************************/
@@ -500,7 +511,6 @@ void SaveFailSafeData()
 #ifdef DB_FAILSAFE
     Serial.println("Fail safe settings are saved!");
 #endif
-    FailSafeSave = false;
 }
 
 /************************************************************************************************************/
@@ -626,6 +636,7 @@ void BlinkLed()
 
 void loop()
 {
+
     DoStabilsation();
     KickTheDog();
     ReceiveData();
@@ -635,9 +646,10 @@ void loop()
             SBUSTimer = millis();                 // timer starts before send starts....
             MoveServos();                         // Actually do something useful at last
         }
-        if (FailSafeSave) SaveFailSafeData();
     }
     else {
-        if (!BoundFlag) GetNewPipe();
+    if (!BoundFlag)  {
+            GetNewPipe();
+        }
     }
 }

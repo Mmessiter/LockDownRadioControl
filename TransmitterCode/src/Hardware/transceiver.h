@@ -6,6 +6,8 @@
 #ifndef TRANSCEIVER_H
     #define TRANSCEIVER_H
 
+
+
 /************************************************************************************************************/
 //                                       Most Radio Functions
 /************************************************************************************************************/
@@ -58,74 +60,52 @@ FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint
         }
     }
 }
-
 /************************************************************************************************************/
+// NB ONLY THE LOW 12 BITS ARE ACTUALLY SENT! (Because of COMPRESSION)
 
-// 20 x 16bit words are sent compressed to only 15 (30 bytes)
-// 4 16 bit words are vacant for other stuff (8 bytes)
-// Extra data can be send using the last 10 bytes of each data packet.
-// These are defined by the packet number. ONLY THE LOW 12 BITS ARE ACTUALLY SENT
-
-void LoadPacketData()
+void LoadParameters()
 {
     uint16_t Twobytes = 0;
     uint8_t  FS_Byte1;
     uint8_t  FS_Byte2;
-    char     ProgressEnd[]       = "vis Progress,0";
  
-    Twobytes                     = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
-    FS_Byte1                     = uint8_t(Twobytes >> 8);        // sent as two bytes   
-    FS_Byte2                     = uint8_t(Twobytes & 0x00FF);
-    
+    switch (Parameters.ID) {
 
-    SendBuffer[CHANNELSSENT]     = PacketNumber;   // ALWYAS SENT!
-    SendBuffer[CHANNELSSENT + 1] = 0;
-    SendBuffer[CHANNELSSENT + 2] = 0;  // 2 uint16_t available, but not more. Can use the low 12 BITS only of each because of the compression.
-   
-    if (PacketNumber >= PACKETNUMBERMAX) PacketNumber = 0; // PACKETNUMBERMAX can be changed in 1Definitions.h
-
-    switch (PacketNumber) {
-        case 0:
-            //  SendBuffer[CHANNELSSENT + 2] = NOTUSEDYET;
-            if (((millis() - FailSafeTimer) > 1500) && SaveFailSafeNow) {
-                SendBuffer[CHANNELSSENT + 1] = SaveFailSafeNow; // FailSafeSaveMoment
-                SaveFailSafeNow              = false;           // once should do it.
-                SendCommand(ProgressEnd);
-            }
-            break;
         case 1:
-            SendBuffer[CHANNELSSENT + 1] = FS_Byte2; // these are failsafe flags
-            SendBuffer[CHANNELSSENT + 2] = FS_Byte1; // these are failsafe flags
+            Twobytes          = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
+            FS_Byte1          = uint8_t(Twobytes >> 8);        // Send as two bytes   
+            FS_Byte2          = uint8_t(Twobytes & 0x00FF);
+            Parameters.word1  = FS_Byte1;                      // These are failsafe flags
+            Parameters.word2  = FS_Byte2;                      // These are failsafe flags
             break;
-        case 2:
-            SendBuffer[CHANNELSSENT + 1] = Qnh >> 8;     // (HiByte)   Qnh is current atmospheric pressure at sea level here (an aviation term)
-            SendBuffer[CHANNELSSENT + 2] = Qnh & 0x00ff; // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
+
+       case 2:
+            Parameters.word1  = Qnh >> 8;       // (HiByte)   Qnh is current atmospheric pressure at sea level here (an aviation term)
+            Parameters.word2  = Qnh & 0x00ff;   // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
             break;
+
         case 3:
             if (GPSMarkHere) {
-                SendBuffer[CHANNELSSENT + 1] = 0;
-                SendBuffer[CHANNELSSENT + 2] = GPSMarkHere;
-                GPSMarkHere                  = 0;
+                Parameters.word1  = 0;
+                Parameters.word2  = GPSMarkHere;
+                GPSMarkHere       = 0;
             }
             break;
         case 4:
-            SendBuffer[CHANNELSSENT + 1] = ModelMatched; // let receiver know whether correct model is loaded.
-            SendBuffer[CHANNELSSENT + 2] = SwapWaveBand;
+            Parameters.word1  = ModelMatched; // let receiver know whether correct model is loaded.
+            Parameters.word2  = SwapWaveBand;
             if (SwapWaveBand == 2) SetTestFrequencies();
             if (SwapWaveBand == 1) SetUKFrequencies();
             SwapWaveBand = 0;
             break;
-
         case 5:
-            SendBuffer[CHANNELSSENT + 1] = PPMdata.UseSBUSFromRX;   // 1 - 0
-            SendBuffer[CHANNELSSENT + 2] = PPMdata.PPMChannelCount; 
+              Parameters.word1 = PPMdata.UseSBUSFromRX;   // 1 - 0
+              Parameters.word2 = PPMdata.PPMChannelCount; 
             break;
-
         default: 
             break;
     }
 }
-
 /************************************************************************************************************/
 void RecordsPacketSuccess(uint8_t s)
 { // or failure according to s
@@ -143,20 +123,18 @@ FASTRUN void FailedPacket()
     LostContactFlag =   true;
     Reconnected     =   false; 
     if (!GapStart) 
-        {
-            GapStart  = millis();  // To keep track of this gap's length
+    {
+        GapStart  = millis();  // To keep track of this gap's length
     } else 
-        {
-            if (((millis() - GapStart) > RED_LED_ON_TIME) && (!LedWasRed)) RedLedOn(); // Put on red led - receiver must be off
-        }
-    for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = 0;       // force update on all channels
+    {
+        if (((millis() - GapStart) > RED_LED_ON_TIME) && (!LedWasRed)) RedLedOn();          // Put on red led - receiver must be off
+    }
+    for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = PrePreviousBuffer[i];        // force last update repeat 
     TryToReconnect();
     int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
-    if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);       // INACTIVITY POWER OFF HERE!!
+    if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);                           // INACTIVITY POWER OFF HERE!!
 }
-
 /************************************************************************************************************/
-
 FASTRUN void TryOtherPipe()
 {
     if (BoundFlag == true) {
@@ -177,7 +155,6 @@ FASTRUN void TryOtherPipe()
     }
 }
 /************************************************************************************************************/
-
 void TryToReconnect()
 {
     if (BuddyPupilOnPPM) return;
@@ -187,7 +164,6 @@ void TryToReconnect()
     NextChannel = FHSS_data::Used_Recovery_Channels[ReconnectionIndex];
     HopToNextChannel();
 }
-
 /************************************************************************************************************/
 void FlushFifos()
 {
@@ -196,30 +172,29 @@ void FlushFifos()
     Radio1.flush_rx();
     delayMicroseconds(150);
 }
-
 /************************************************************************************************************/
-
 void SuccessfulPacket()
 {
+    CheckGapsLength();
+    RecordsPacketSuccess(1);
     ++RangeTestGoodPackets;
     ++PacketNumber;
-    RecordsPacketSuccess(1);
+    AddExtraParameters = false;
     TotalLostPackets += RecentPacketsLost;
     RecentPacketsLost = 0;
     Connected         = true;
+    if (Radio1.available()){
+        uint8_t PayloadSize = Radio1.getDynamicPayloadSize();
+        Radio1.read(&AckPayload, PayloadSize); 
+        ParseAckPayload();
+    }
     if (BoundFlag && !LedWasGreen) {
         GreenLedOn();
-    }
-    CheckGapsLength();
-    if (Radio1.available()){
-        Radio1.read(&AckPayload, AckPayloadSize); //  "sizeof" doesn't work with externs,
-        ParseAckPayload();
     }
     StartInactvityTimeout();
     LostContactFlag = false;
 }
 /************************************************************************************************************/
-
 FLASHMEM void InitRadio(uint64_t Pipe)
 {
     Radio1.begin();
@@ -235,36 +210,69 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     Radio1.setCRCLength(RF24_CRC_16);
     GapSum = 0;
 }
-
 /************************************************************************************************************/
-#ifdef USE_NEW_CHANNEL_MAPPING
+uint8_t SendExtraParamemters(uint8_t Pointer)             // parameters must be loaded before this function is called
+{                                                         // only the low 12 bits of each parameter are sent
+    LoadParameters();
+    RawDataBuffer[Pointer]    = Parameters.ID;           // copy current parameter values into the rawdatabuffer right after the channels
+    RawDataBuffer[Pointer+1]  = Parameters.word1;
+    RawDataBuffer[Pointer+2]  = Parameters.word2;
+    Pointer += 4;               
+   // Look1("  Parameter sent: ");
+   // Look(Parameters.ID);
+return Pointer;
+}
+/************************************************************************************************************/
 uint8_t EncodeTheChangedChannels(){
-   
-    uint8_t p = 0;
-    Datatosend.DataFlags = 0; // clear the dataflags 16 BIT WORD
-
-      
-    
-    for (int i = 0; i < CHANNELSUSED; ++i){          // check for changed channels
-                if ((SendBuffer[i] != PreviousBuffer[i]) && (p < CHANNELSSENT)) {
-                RawDataBuffer[p]  = SendBuffer[i];          // load a changed channel into the rawdatabuffer 
-                PreviousBuffer[i] = SendBuffer[i];          // save it for next time
-                Datatosend.DataFlags |= (1 << i);           // set the bit in the dataflags byte
-                ++p;                                        // increment the rawdatabuffer index
+    #define MIN_CHANGE 4                                                                                // Very tiny changes in channel values are ignored. That's most likely only noise... 
+                                                                                                        // ... This reduces the average packet size... 
+                                                                                                        // ... Values <= 20 are imperceptible. So 4 is just fine here.
+    uint8_t NumberOfChangedChannels = 0;                                                                // Number of channels that have changed since last packet
+    DataTosend.ChannelBitMask = 0;                                                                      // Clear the ChannelBitMask 16 BIT WORD (1 bit per channel)
+    for (int i = 0; i < CHANNELSUSED; ++i){                                                             // Check for changed channels and load them into the rawdatabuffer  
+      if ((abs(SendBuffer[i] - PreviousBuffer[i]) >= MIN_CHANGE) && (NumberOfChangedChannels < 4))      // 4 is the maximum number of channel changes that will be sent in one packet ... 
+        {                                                                                               // ... any other changes will be sent in the next packet, only 5ms later.
+            RawDataBuffer[NumberOfChangedChannels]  = SendBuffer[i];                                    // Load a changed channel into the rawdatabuffer. 
+            PrePreviousBuffer[i] = PreviousBuffer[i];                                                   // Save previous buffer in case we need to repeat it.
+            PreviousBuffer[i] = SendBuffer[i];                                                          // Save it for next time in case it succeeds this time.
+            DataTosend.ChannelBitMask |= (1 << i);                                                      // Set the current bit in the ChannelBitMask word.
+            ++NumberOfChangedChannels;                                                                  // Increment the number of channel changes (rawdatabuffer index pointer).
         } 
     }
-    return p; // Return the number of channels that have changed 
+    return NumberOfChangedChannels;                                                                     // Return the number of channels that have changed 
 }
-#endif
+// ***********************************************************************************************************
+void ShowPacketData(uint32_t ThisPacketLength, uint8_t NumberOfChangedChannels){  // Just for debugging
 
+static uint32_t TotalPacketLength = 0;
+static uint32_t PacketsCount      = 0;
+static uint32_t PacketsCount1     = 0;
+uint32_t AveragePacketLength      = 0;
 
-/************************************************************************************************************/
-void SendExtraParamemters(uint8_t p)
-{
-                RawDataBuffer[4]  = 1;
-                RawDataBuffer[5]  = 2;
-                RawDataBuffer[6]  = 3;
-                RawDataBuffer[7]  = 4;
+    TotalPacketLength   +=  ThisPacketLength;
+    ++ PacketsCount;
+    ++ PacketsCount1;
+   
+    static uint32_t timer=0;
+    if ((millis() - timer) >= 1000) {
+        timer = millis();
+        AveragePacketLength = TotalPacketLength / PacketsCount;
+        Look1("Packet length (bytes): ");
+        Look1(ThisPacketLength);
+        Look1("\tNumber of changed channels: ");
+        Look1(NumberOfChangedChannels);
+        Look1("\tAverage packet length (bytes): ");
+        Look1(AveragePacketLength);
+        Look1("\tPackets count: ");
+        Look1(PacketsCount);
+        Look1("\tTotal data sent so far (k): ");
+        Look1(TotalPacketLength/1024);
+        Look1("\tPackets per second: ");
+        Look1(PacketsCount1);
+        Look1("\tTotal lost packets: ");
+        Look(TotalLostPackets);
+    PacketsCount1 = 0;
+    }
 }
 
 /************************************************************************************************************/
@@ -272,27 +280,24 @@ void SendExtraParamemters(uint8_t p)
 /************************************************************************************************************/
 
 FASTRUN void SendData()
-{ 
+{  
     if (SendNoData) return;
     if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { 
         LastPacketSentTime = millis();
-        if (BuddyPupilOnPPM) {SendViaPPM(); return;}             // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
-        Connected = false;                                       // Assume the worst until ACK is received.
-        FlushFifos();                                            // This avoids a lockup that happens when the FIFO gets full.
-        LoadPacketData();                                        // extra parameters appended to the data packet
-#ifdef USE_NEW_CHANNEL_MAPPING  
-        uint8_t p = EncodeTheChangedChannels();
-        p = ((float) p * 1.5) + 3;                               // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 byte because half a word is no good.
-        Compress(Datatosend.CompressedData, RawDataBuffer, UNCOMPRESSEDWORDS);                          // Compress 
-        if (Radio1.write(&Datatosend, p)) {SuccessfulPacket();} else {FailedPacket();}                  // Send the data packet complete with DataFlags 
-    
-#else
-        Compress(Datatosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 
-        if (Radio1.write(&Datatosend.CompressedData,SizeOfCompressedData)) {SuccessfulPacket();} else {FailedPacket();}  
-#endif    
+        if (BuddyPupilOnPPM) {SendViaPPM(); return;}                                                     // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
+        Connected = false;                                                                               // Assume failure until an ACK is received.
+        FlushFifos();                                                                                    // This flush avoids a lockup that happens when the FIFO gets full.
+        uint8_t NumberOfChangedChannels = EncodeTheChangedChannels();                                    // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels
+        if (AddExtraParameters) NumberOfChangedChannels = SendExtraParamemters(NumberOfChangedChannels); // Add parameters here if there are some to go ...     
+        uint8_t ByteCountToTransmit     =  ((float) NumberOfChangedChannels * 1.5f) + 4;                 // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 word because int rounds downwards.
+        uint8_t SizeOfUnCompressedData  =   (ByteCountToTransmit / 1.5) ;                                
+        Compress(DataTosend.CompressedData, RawDataBuffer, SizeOfUnCompressedData);                      // Compress the raw data buffer into the compressed data buffer (reduces it to 75% of original size)
+        if (Radio1.write(&DataTosend, ByteCountToTransmit)) {SuccessfulPacket();} else {FailedPacket();} // Send the data packet complete with ChannelBitMask and compressed data 
+       // ShowPacketData(ByteCountToTransmit, NumberOfChangedChannels);                                  // Just for debugging
     }else{
-        if (BuddyMasterOnWireless) SendSpecialPacket();          // takes about 4 - 5 ms. Gets buddy control data in ACK payload 
+        if (BuddyMasterOnWireless) SendSpecialPacket();                                                  // takes about 4 - 5 ms. Gets buddy control data in ACK payload 
     }
+    if ((!Connected) && (BuddyMasterOnWireless)) SendSpecialPacket();                                    // So Pupil knows we are still here
 }
 /***********************************************************************************************************/
 void DoScanEnd()
@@ -553,7 +558,7 @@ FASTRUN void BufferTeensyMACAddPipe() // heeer
 /************************************************************************************************************/
 void SendBindingPipe()
 {
-      static uint32_t BindingTimer = 0;
+    
     if (BuddyPupilOnWireless) return;
     if (PPMdata.UseTXModule) return;
     if (!BoundFlag || !ModelMatched) BindingTimer = millis();
@@ -566,4 +571,212 @@ void NormaliseTheRadio()
     Radio1.setCRCLength(RF24_CRC_16);
     Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait);
 }
+
+
+
+/************************************************************************************************************/
+
+FASTRUN float GetFromAckPayload()
+{
+    union
+    {
+        float   Val32;
+        uint8_t Val8[4];
+    } ThisUnion;
+    ThisUnion.Val8[0] = AckPayload.Byte1;
+    ThisUnion.Val8[1] = AckPayload.Byte2;
+    ThisUnion.Val8[2] = AckPayload.Byte3;
+    ThisUnion.Val8[3] = AckPayload.Byte4;
+    return ThisUnion.Val32;
+}
+/************************************************************************************************************/
+void GetTimeFromAckPayload()
+{
+    GPSSecs  = AckPayload.Byte1;
+    GPSMins  = AckPayload.Byte2;
+    GPSHours = AckPayload.Byte3;
+}
+/************************************************************************************************************/
+void GetDateFromAckPayload()
+{
+    GPSDay   = AckPayload.Byte1;
+    GPSMonth = AckPayload.Byte2;
+    GPSYear  = AckPayload.Byte3;
+}
+/************************************************************************************************************/
+void GetAltitude()
+{
+    RXModelAltitude = int(GetFromAckPayload()) - GroundModelAltitude;
+    if (RXMAXModelAltitude < RXModelAltitude) RXMAXModelAltitude = RXModelAltitude;
+    snprintf(Maxaltitude, 5, "%d", RXMAXModelAltitude);
+    snprintf(ModelAltitude, 5, "%d", RXModelAltitude);
+}
+/************************************************************************************************************/
+void GetTemperature()
+{
+    RXTemperature = GetFromAckPayload();
+    snprintf(ModelTempRX, 5, "%1.2f", RXTemperature);
+}
+/************************************************************************************************************/
+FASTRUN uint32_t GetIntFromAckPayload() // This one uses a uint32_t int
+{
+    union
+    {
+        uint32_t Val32 = 0;
+        uint8_t  Val8[4];
+    } ThisUnion;
+    ThisUnion.Val8[0] = AckPayload.Byte1;
+    ThisUnion.Val8[1] = AckPayload.Byte2;
+    ThisUnion.Val8[2] = AckPayload.Byte3;
+    ThisUnion.Val8[3] = AckPayload.Byte4;
+    return ThisUnion.Val32;
+}
+
+
+/************************************************************************************************************/
+void GetModelsMacAddress()
+{ // Gets a 64 bit value in two hunks of 32 bits
+
+    if (BuddyPupilOnWireless) return; //  Don't do this if we are a pupil
+    switch (AckPayload.Purpose)
+    {
+        case 0:
+            ModelsMacUnion.Val32[0] = GetIntFromAckPayload();
+            break;
+        case 1:
+            ModelsMacUnion.Val32[1] = GetIntFromAckPayload();
+            break;
+        default:
+            break;
+    }
+    if (ModelMatched == false) {
+        if ((ModelsMacUnion.Val32[0] > 0) && (ModelsMacUnion.Val32[1] > 0)) { // got both bits yet?
+            ModelIdentified = true;
+            CompareModelsIDs();
+        }
+    }
+}
+
+/************************************************************************************************************/
+FASTRUN void ParseAckPayload()
+{
+    if (BuddyPupilOnPPM) return; // buddy pupil need none of this
+
+    FHSS_data::NextChannelNumber = AckPayload.Byte5; // every packet tells of next hop destination
+
+    if (AckPayload.Purpose & 0x80) {                                              // Hi bit is now the **HOP NOW!!** flag
+        NextChannel = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber); // The actual channel number pointed to.
+        HopToNextChannel();
+        AckPayload.Purpose &= 0x7f; // Clear the high BIT, use the remainder ...
+    }
+
+    if (!ModelMatched && !LedWasGreen) {
+        GetModelsMacAddress();
+        return;
+    }
+
+    switch (AckPayload.Purpose) // Only look at the low 7 BITS
+    {
+        case 0:
+            GetRXVersionNumber();
+            break;
+        case 1:
+            SbusRepeats = GetFromAckPayload();
+            break;
+        case 2:
+            RadioSwaps = GetFromAckPayload();
+            break;
+        case 3:
+            RX1TotalTime = GetFromAckPayload();
+            break;
+        case 4:
+            RX2TotalTime = GetFromAckPayload();
+            break;
+        case 5:
+            RXModelVolts    = GetFromAckPayload();
+            RXVoltsDetected = false;
+            if (RXModelVolts > 0) {
+                RXVoltsDetected = true;
+                if (RXCellCount == 12) RXModelVolts *= 2; // voltage divider needed !
+                snprintf(ModelVolts, 5, "%1.2f", RXModelVolts);
+            }
+            break;
+        case 6:
+            GetAltitude();
+            break;
+        case 7:
+            GetTemperature();
+            break;
+        case 8:
+            GPSLatitude = GetFromAckPayload();
+            break;
+        case 9:
+            GPSLongitude = GetFromAckPayload();
+            break;
+        case 10:
+            GPSAngle = GetFromAckPayload();
+            break;
+        case 11:
+            GPSSpeed = GetFromAckPayload();
+            if (GPSMaxSpeed < GPSSpeed) GPSMaxSpeed = GPSSpeed;
+            break;
+        case 12:
+            GpsFix = GetFromAckPayload();
+            break;
+        case 13:
+            GPSAltitude = GetFromAckPayload() - GPSGroundAltitude;
+            if (GPSAltitude < 0) GPSAltitude = 0;
+            if (GPSMaxaltitude < GPSAltitude) GPSMaxaltitude = GPSAltitude;
+            break;
+        case 14:
+            GPSDistanceTo = GetFromAckPayload();
+            if (GPSMaxDistance < GPSDistanceTo) GPSMaxDistance = GPSDistanceTo;
+            break;
+        case 15:
+            GPSCourseTo = GetFromAckPayload();
+            break;
+        case 16:
+            GPSSatellites = (uint8_t)GetFromAckPayload();
+            break;
+        case 17:
+            GetDateFromAckPayload();
+            break;
+        case 18:
+            GetTimeFromAckPayload();
+            ReadTheRTC();
+            if (GPSDay != GmonthDay) GPSTimeSynched = false;
+            if (GPSMonth != Gmonth) GPSTimeSynched = false;
+            if (GPSMins != Gminute) GPSTimeSynched = false;
+            if (GPSHours != Ghour) GPSTimeSynched = false;
+            if (GPSSecs != Gsecond) GPSTimeSynched = false;
+            if (GpsFix) SynchRTCwithGPSTime();
+            break;
+        default:
+            break;
+    }
+}
+/************************************************************************************************************/
+FASTRUN void CheckGapsLength()
+{
+    if (GapStart > 0) { // when reconnected, how long was connection lost?
+        ++GapCount;
+        ThisGap = (millis() - GapStart); // AND in fact RX sends no data for 20 ms after reconnection
+        if (ThisGap >= MinimumGap && UseLog) LogThisGap();
+        if (ThisGap > GapLongest) GapLongest = ThisGap;
+        GapSum += ThisGap;
+        GapStart   = 0;
+        GapAverage = GapSum / GapCount;
+#ifdef DB_GAPS
+        Serial.print("GapCount: ");
+        Serial.println(GapCount);
+        Serial.print("GapAverage: ");
+        Serial.println(GapAverage);
+        Serial.print("GapLongest: ");
+        Serial.println(GapLongest);
+        Serial.println(" ");
+#endif
+    }
+}
+
+
 #endif

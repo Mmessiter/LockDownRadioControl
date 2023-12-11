@@ -121,6 +121,7 @@
  */
 // ************************************************** TRANSMITTER CODE **************************************************
 
+
 #include <Arduino.h>
 #include <Watchdog_t4.h>
 #include <TeensyID.h>
@@ -146,15 +147,11 @@
 #include "Hardware/BuddyPPM.h"
 #include "Hardware/BuddyWireless.h"
 
+
 /*********************************************************************************************************************************/
 
-void RedLedOn()
-{
-    char InVisible[]           = "vis Quality,0";
-    char FrontView_Connected[] = "Connected";
-    char WarnOff[]             = "vis Warning,0";
+void ClearMostParameters(){ // called from RED LED ON
 
-    if (LedWasGreen) {
         RXVoltsDetected      = false;
         LedWasGreen          = false;
         RXVoltsDetected      = false;
@@ -164,10 +161,38 @@ void RedLedOn()
         PacketsPerSecond     = 0;
         LastShowTime         = 0;
         ModelsMacUnion.Val64 = 0;
+        TotalLostPackets     = 0;
+        TotalGoodPackets     = 0;
+        BindingTimer         = 0;
         RangeTestGoodPackets = 0;
         RecentPacketsLost    = 0;
-        VersionsCompared     = false;
-        Randomized_Recovery_Channels_Counter = 0;
+        AddExtraParameters   = false;
+        VersionsCompared    = false;
+        for (int i = 0; i < CHANNELSUSED; ++i) {
+            PrePreviousBuffer[i]    = 0;
+            PreviousBuffer[i]       = 0;                         
+            SendBuffer[i]           = 0;  
+            BuddyBuffer[i]          = 0;                                        
+            ShownBuffer[i]          = 0;                                       
+            RawDataBuffer[i]        = 0;                                     
+            LastBuffer[i]           = 0;                                         
+            PreMixBuffer[i]         = 0;   
+        }
+}
+
+/*********************************************************************************************************************************/
+
+void RedLedOn()
+{
+    char InVisible[]           = "vis Quality,0";
+    char FrontView_Connected[] = "Connected";
+    char WarnOff[]             = "vis Warning,0";
+    if (LedWasGreen) {
+        if ((millis() - LedGreenMoment) > 3000) { // if green led has been on for more than 2 second
+                if (AnnounceConnected & !WirelessBuddy) PlaySound(DISCONNECTEDMSG);
+                if (UseLog) LogDisConnection();
+        }
+        ClearMostParameters();
         SetUKFrequencies();
         if (CurrentView == FRONTVIEW) {
             SendText(FrontView_Connected, na);
@@ -175,9 +200,7 @@ void RedLedOn()
             SendCommand(InVisible);
         }
         if (UseLog) LogDisConnection();
-        if (AnnounceConnected & !WirelessBuddy) PlaySound(DISCONNECTEDMSG);
     }
-
     LedWasRed = true;
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
@@ -204,12 +227,9 @@ void GreenLedOn()
     { // no need to repeat unless it is blinking
         if (!LedIsBlinking) {
             ShowComms();
-            if (AnnounceConnected) {
-                PlaySound(CONNECTEDMSG);
-                ModelMatched = true;
-                BoundFlag    = true;
-                DelayWithDog(750);
-            }
+            if (AnnounceConnected)   PlaySound(CONNECTEDMSG); // heer
+            ModelMatched = true;
+            BoundFlag    = true;
         }
         if (UseLog) {
             LogConnection();
@@ -287,7 +307,7 @@ FASTRUN void ShowMotorTimer()
 
 FASTRUN void ShowServoPos()
 {
-    uint8_t  MinimumDistance = 10;             // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
+    uint8_t  MinimumDistance = 10;              // if the change is small, don't re-display anything - to reduce flashing. :=)!!
     uint32_t Hertz           = 25;             // Fast
     if (CurrentView == GRAPHVIEW) Hertz = 200; // Slower!
     if (millis() - ShowServoTimer < Hertz) return;
@@ -550,7 +570,7 @@ FASTRUN void ShowComms()
             default:
                 break;
         }
-        if (BuddyPupilOnPPM || BuddyPupilOnWireless) SendText(FrontView_Connected, MsgBuddying); // heer
+        if (BuddyPupilOnPPM || BuddyPupilOnWireless) SendText(FrontView_Connected, MsgBuddying); 
         if (LedWasGreen) {
             if (BoundFlag) {
                 if (!Reconnected) {
@@ -2310,7 +2330,7 @@ FLASHMEM void setup()
     delay(300); // <<********************* MUST ALLOW DOG TO INITIALISE
     DelayWithDog(WARMUPDELAY);
     if (!SD.begin(BUILTIN_SDCARD)) { // MUST return true or all is lost!
-        DelayWithDog(WARMUPDELAY);
+        delay(WARMUPDELAY);
         SD.begin(BUILTIN_SDCARD); // a second attempt for iffy sd cards ?!
     }
     ErrorState = NOERROR;
@@ -2354,7 +2374,7 @@ FLASHMEM void setup()
         }
     }
 
-    DelayWithDog(WARMUPDELAY);                         // Allow Nextion time to warm up
+    delay(WARMUPDELAY);                         // Allow Nextion time to warm up
     SendValue(FrontView_BackGround, BackGroundColour); // Get colours ready
     SendValue(FrontView_ForeGround, ForeGroundColour);
     SendValue(FrontView_Special, SpecialColour);
@@ -2409,7 +2429,7 @@ FLASHMEM void setup()
             if (ErrorState == MOTORISON) {
                 SendText(Warning, err_MotorOn);
                 PlaySound(MOTORON);
-                DelayWithDog(1200);
+                delay(1200);
                 PlaySound(PLSTURNOFF);
             }
         }
@@ -5666,7 +5686,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     RXOptionsViewStart,       // 38
     RXSetup1End,              // 39
     ResetTransmitterSettings, // 40
-    BindNow,                  // 41
+    BindNow,                  // 41 Not CALLED FrOM Here now
     PointUp,                  // 42
     PointDown,                // 43
     PointSelect,              // 44
@@ -5924,6 +5944,8 @@ FASTRUN void ButtonWasPressed()
         char StartBackGround[]   = "click Background,0";
         char GoModelsView[]      = "page ModelsView";
         char pCalibrateView[]    = "page CalibrateView";
+        char NotConnected[]      = "Model isn't connected!";
+       // char NowTest[]           = "Remember to test failsafe!";
         // ************************* test many input words from Nextion *****************
 
         if (InStrng(StCH, TextIn)) { // select sub trim channel
@@ -6288,18 +6310,29 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(FailSAVE, TextIn) > 0) {
-            SendCommand(ProgressStart);
-            for (int i = 0; i < 16; ++i) {
-                FailSafeChannel[i] = GetValue(fs[i]);
-                SendValue(Progress, i * (100 / 16));
-            }
-            SendValue(Progress, 100);
-            FailSafeTimer   = millis();
-            SaveFailSafeNow = true;
-            ClearText();
-            return;
+            if (InStrng(FailSAVE, TextIn) > 0) {        // Heer the FAILSAFE setup is sent to receiver ************** FAILSAFE SETUP **************
+               
+                if (!BoundFlag ||!ModelMatched ){
+                    MsgBox(pFailSafe, NotConnected);
+                    ClearText();
+                    SendCommand(ProgressEnd);
+                    return;
+                }
+               
+                SendCommand(ProgressStart);
+                for (int i = 0; i < 16; ++i) {
+                    FailSafeChannel[i] = GetValue(fs[i]);
+                    SendValue(Progress, i * 100 / 16);
+                }
+                SendValue(Progress, 100);          
+                Parameters.ID = 1;                     
+                AddExtraParameters = true;
+                ClearText();
+                SendCommand(ProgressEnd);
+                //MsgBox(pFailSafe, NowTest);
+                return;
         }
+        
         if (InStrng(FailSafe, TextIn) > 0) {
             SendCommand(pFailSafe);
             CurrentView = FAILSAFE_VIEW;
@@ -7371,64 +7404,6 @@ void GetRXVersionNumber()
 
 /************************************************************************************************************/
 
-FASTRUN float GetFromAckPayload()
-{
-    union
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } ThisUnion;
-    ThisUnion.Val8[0] = AckPayload.Byte1;
-    ThisUnion.Val8[1] = AckPayload.Byte2;
-    ThisUnion.Val8[2] = AckPayload.Byte3;
-    ThisUnion.Val8[3] = AckPayload.Byte4;
-    return ThisUnion.Val32;
-}
-/************************************************************************************************************/
-void GetTimeFromAckPayload()
-{
-    GPSSecs  = AckPayload.Byte1;
-    GPSMins  = AckPayload.Byte2;
-    GPSHours = AckPayload.Byte3;
-}
-/************************************************************************************************************/
-void GetDateFromAckPayload()
-{
-    GPSDay   = AckPayload.Byte1;
-    GPSMonth = AckPayload.Byte2;
-    GPSYear  = AckPayload.Byte3;
-}
-/************************************************************************************************************/
-void GetAltitude()
-{
-    RXModelAltitude = int(GetFromAckPayload()) - GroundModelAltitude;
-    if (RXMAXModelAltitude < RXModelAltitude) RXMAXModelAltitude = RXModelAltitude;
-    snprintf(Maxaltitude, 5, "%d", RXMAXModelAltitude);
-    snprintf(ModelAltitude, 5, "%d", RXModelAltitude);
-}
-/************************************************************************************************************/
-void GetTemperature()
-{
-    RXTemperature = GetFromAckPayload();
-    snprintf(ModelTempRX, 5, "%1.2f", RXTemperature);
-}
-/************************************************************************************************************/
-FASTRUN uint32_t GetIntFromAckPayload() // This one uses a uint32_t int
-{
-    union
-    {
-        uint32_t Val32 = 0;
-        uint8_t  Val8[4];
-    } ThisUnion;
-    ThisUnion.Val8[0] = AckPayload.Byte1;
-    ThisUnion.Val8[1] = AckPayload.Byte2;
-    ThisUnion.Val8[2] = AckPayload.Byte3;
-    ThisUnion.Val8[3] = AckPayload.Byte4;
-    return ThisUnion.Val32;
-}
-
-/************************************************************************************************************/
-
 void GotoFrontView()
 {
     char fms[4][4]             = {{"fm1"}, {"fm2"}, {"fm3"}, {"fm4"}};
@@ -7463,126 +7438,6 @@ void GotoFrontView()
 }
 /************************************************************************************************************/
 
-/************************************************************************************************************/
-FASTRUN void ParseAckPayload()
-{
-    if (BuddyPupilOnPPM) return; // buddy pupil need none of this
-
-    FHSS_data::NextChannelNumber = AckPayload.Byte5; // every packet tells of next hop destination
-
-    if (AckPayload.Purpose & 0x80) {                                              // Hi bit is now the **HOP NOW!!** flag
-        NextChannel = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber); // The actual channel number pointed to.
-        HopToNextChannel();
-        AckPayload.Purpose &= 0x7f; // Clear the high BIT, use the remainder ...
-    }
-
-    if (!ModelMatched && !LedWasGreen) {
-        GetModelsMacAddress();
-        return;
-    }
-
-    switch (AckPayload.Purpose) // Only look at the low 7 BITS
-    {
-        case 0:
-            GetRXVersionNumber();
-            break;
-        case 1:
-            SbusRepeats = GetFromAckPayload();
-            break;
-        case 2:
-            RadioSwaps = GetFromAckPayload();
-            break;
-        case 3:
-            RX1TotalTime = GetFromAckPayload();
-            break;
-        case 4:
-            RX2TotalTime = GetFromAckPayload();
-            break;
-        case 5:
-            RXModelVolts    = GetFromAckPayload();
-            RXVoltsDetected = false;
-            if (RXModelVolts > 0) {
-                RXVoltsDetected = true;
-                if (RXCellCount == 12) RXModelVolts *= 2; // voltage divider needed !
-                snprintf(ModelVolts, 5, "%1.2f", RXModelVolts);
-            }
-            break;
-        case 6:
-            GetAltitude();
-            break;
-        case 7:
-            GetTemperature();
-            break;
-        case 8:
-            GPSLatitude = GetFromAckPayload();
-            break;
-        case 9:
-            GPSLongitude = GetFromAckPayload();
-            break;
-        case 10:
-            GPSAngle = GetFromAckPayload();
-            break;
-        case 11:
-            GPSSpeed = GetFromAckPayload();
-            if (GPSMaxSpeed < GPSSpeed) GPSMaxSpeed = GPSSpeed;
-            break;
-        case 12:
-            GpsFix = GetFromAckPayload();
-            break;
-        case 13:
-            GPSAltitude = GetFromAckPayload() - GPSGroundAltitude;
-            if (GPSAltitude < 0) GPSAltitude = 0;
-            if (GPSMaxaltitude < GPSAltitude) GPSMaxaltitude = GPSAltitude;
-            break;
-        case 14:
-            GPSDistanceTo = GetFromAckPayload();
-            if (GPSMaxDistance < GPSDistanceTo) GPSMaxDistance = GPSDistanceTo;
-            break;
-        case 15:
-            GPSCourseTo = GetFromAckPayload();
-            break;
-        case 16:
-            GPSSatellites = (uint8_t)GetFromAckPayload();
-            break;
-        case 17:
-            GetDateFromAckPayload();
-            break;
-        case 18:
-            GetTimeFromAckPayload();
-            ReadTheRTC();
-            if (GPSDay != GmonthDay) GPSTimeSynched = false;
-            if (GPSMonth != Gmonth) GPSTimeSynched = false;
-            if (GPSMins != Gminute) GPSTimeSynched = false;
-            if (GPSHours != Ghour) GPSTimeSynched = false;
-            if (GPSSecs != Gsecond) GPSTimeSynched = false;
-            if (GpsFix) SynchRTCwithGPSTime();
-            break;
-        default:
-            break;
-    }
-}
-/************************************************************************************************************/
-FASTRUN void CheckGapsLength()
-{
-    if (GapStart > 0) { // when reconnected, how long was connection lost?
-        ++GapCount;
-        ThisGap = (millis() - GapStart); // AND in fact RX sends no data for 20 ms after reconnection
-        if (ThisGap >= MinimumGap && UseLog) LogThisGap();
-        if (ThisGap > GapLongest) GapLongest = ThisGap;
-        GapSum += ThisGap;
-        GapStart   = 0;
-        GapAverage = GapSum / GapCount;
-#ifdef DB_GAPS
-        Serial.print("GapCount: ");
-        Serial.println(GapCount);
-        Serial.print("GapAverage: ");
-        Serial.println(GapAverage);
-        Serial.print("GapLongest: ");
-        Serial.println(GapLongest);
-        Serial.println(" ");
-#endif
-    }
-}
 
 /************************************************************************************************************/
 bool CheckModelName()
@@ -7760,8 +7615,8 @@ void DoWirelessBuddyListen(){                                // For Slave only
     GetNewChannelValues();                                   // Read sticks and trims and switches etc
     FixMotorChannel(); 
     ShowServoPos();
-    LoadPacketData();                                        // extra parameters appended to the data packet
-    Compress(Datatosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30)
+   // LoadPacketData();                                        // extra parameters appended to the data packet
+    Compress(DataTosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30)
     GetSpecialPacket();                                      // Get the special packet and send our control data in the ask payload
 }
 /************************************************************************************************************/

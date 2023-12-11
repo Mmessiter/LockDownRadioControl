@@ -7,6 +7,7 @@
 
 //*************************************************************************************************************************
 
+
 // This function reads data from BUDDY (Slave) BUT uses it ONLY WHILE buddy switch is on
 
 void GetSlaveChannelValuesPPM() // MASTER code

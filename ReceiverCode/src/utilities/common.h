@@ -11,7 +11,7 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   3
-#define RXVERSION_MINIMUS 5 // December 2023
+#define RXVERSION_MINIMUS 7 // December 2023
 
 // #define DB_FHSS
 // #define DB_SENSORS
@@ -19,8 +19,12 @@
 // #define DB_FAILSAFE
 // #define DB_RXTIMERS
 
-#define SECOND_TRANSCEIVER    // >>>>>>>>>>>>>>>>   ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-#define DATARATE RF24_250KBPS // RF24_250KBPS, RF24_1MBPS, RF24_2MBPS
+
+
+
+ // >>>>>>>>>>>>>>>>                                  ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                       #define SECOND_TRANSCEIVER     // **** DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ // >>>>>>>>>>>>>>>>                                  ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
 // **************************************************************************
@@ -38,38 +42,38 @@
 
 #define LISTEN_PERIOD           14   //  14 (How many ms to listen for TX in Reconnect())
 
-
 // ********************* >>> FHSS params <<< *******************************************
 
 #define HOPTIME                   0    // was 80 ms between channel changes. 
 
 // *************************************************************************************
 
+#define DATARATE RF24_250KBPS // RF24_250KBPS, RF24_1MBPS, RF24_2MBPS
 #define PIPENUMBER       1
 #define BOUNDPIPENUMBER  1
-
-#define USE_NEW_CHANNEL_MAPPING true 
-
-#ifdef USE_NEW_CHANNEL_MAPPING
-    #define CHANNELSSENT       8       
-    #define RECEIVE_TIMEOUT    14   //  was 14  (should be about 4 ms more that TX's PACEMAKER)
-#else
-    #define CHANNELSSENT       16       
-    #define RECEIVE_TIMEOUT    14   //  was 14  (should be about 4 ms more that TX's PACEMAKER)
-#endif
-
-#define CHANNELSUSED       16                            //
-#define UNCOMPRESSEDWORDS  (CHANNELSSENT + 4)            //   = 20 WORDS (40 bytes)
-#define COMPRESSEDWORDS    (UNCOMPRESSEDWORDS * 3 / 4)   //   = 30 bytes
-#define RECEIVEBUFFERSIZE  (CHANNELSUSED + 4)        
+     
+#define RECEIVE_TIMEOUT    11   //  was 14  (should probobly be about 4 - 5 ms more that TX's PACEMAKER 
+#define CHANNELSUSED       16                        
+#define RECEIVEBUFFERSIZE  20        
 
 struct  CD{
-    uint16_t      Dataflags = 0;                   //  send 32 bytes !
-    uint16_t      CompressedData[COMPRESSEDWORDS]; // 
+    uint16_t      ChannelBitMask = 0;                   
+    uint16_t      CompressedData[10]; // 40 bytes ... far too big
 };
-CD DataToSend;
+CD DataReceived;
 
-uint16_t SizeOfDataToSend = sizeof(DataToSend);
+uint16_t SizeOfDataReceived = sizeof(DataReceived);
+
+
+struct CD2{
+    uint16_t        ID    = 0;          
+    uint16_t        word1 = 0;
+    uint16_t        word2 = 0;  
+};  
+
+CD2 Parameters;
+uint8_t         SizeOfParameters = sizeof(Parameters);
+
 
 #define FREQUENCYSCOUNT  82                             // uses 82 different channels
 #define FREQUENCYSCOUNT1 41                             // uses 41 different test channels
@@ -128,7 +132,6 @@ uint32_t RX1TotalTime          = 0;
 uint32_t RX2TotalTime          = 0;
 uint32_t RadioSwaps            = 0;
 uint32_t  LastPacketArrivalTime = 0;
-bool      FailSafeSave          = false;
 bool      INA219Connected       = false; //  Volts from INA219 ?
 bool      MPU6050Connected      = false; //  Accelerometer and Gyro from MPU6050 ?
 uint8_t   ReconnectChannel      = 0;
@@ -151,7 +154,7 @@ void DoStabilsation();
 void DelayMillis(uint16_t ms);
 void PIDEntryPoint();
 void DoStabilsation();
-void ReadExtraParameters();
+void UseExtraParameters();
 FASTRUN void ReadTheSensorHub();
 void SensorHubHasFailed();
 FASTRUN void Reconnect();
@@ -173,6 +176,7 @@ void BlinkLed();
 void FailSafe();
 void TurnLedOff();
 void TurnLedOn();
+void SaveFailSafeData();
 
 template<typename any>
 void Look(const any& value);

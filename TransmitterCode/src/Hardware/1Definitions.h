@@ -15,6 +15,7 @@
 #include <DS1307RTC.h>
 #include <InterpolationLib.h>
 
+
 // **************************************************************************
 //     SUPPORT FOR TX MODULE AND NEW PCB Version                            *
 // **************************************************************************
@@ -28,7 +29,7 @@
 
     #define TXVERSION_MAJOR   2
     #define TXVERSION_MINOR   3
-    #define TXVERSION_MINIMUS 5 //   December 2023
+    #define TXVERSION_MINIMUS 7 //   December 2023
 
 // **************************************************************************
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
@@ -59,24 +60,13 @@
         #define BUDDYPPMPORT 6  // Buddybox PPM pin
     #endif
     
-    #define USE_NEW_CHANNEL_MAPPING true 
-
-
-#ifdef USE_NEW_CHANNEL_MAPPING
-    #define CHANNELSSENT           8                             // Up to 8 Channels can be sent  - from 16
-    #define PACEMAKER              6                             // was 10. 5 is probably the MIN.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-    #define TIMEFORTXMANAGMENT     2                             // was 3.   How many ms must remain spare between data packets before daring to undertake more trivial task
-                         
-#else
-    #define CHANNELSSENT           16 
-    #define PACEMAKER              10                           // was 10. 5 is probably MIN.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-    #define TIMEFORTXMANAGMENT     3                            // was 3.   How many ms must remain spare between data packets before daring to undertake more trivial task
-#endif
-
-    #define CHANNELSUSED           16                          // 16 Channels
-    #define UNCOMPRESSEDWORDS      (CHANNELSSENT + 4)          //.... DATA TO SEND WHEN COMPRESSED    *********** (BRACKETS ARE IMPORTANT !!) *********** 
-    #define COMPRESSEDWORDS        (UNCOMPRESSEDWORDS * 3 / 4) // UNCOMPRESSED DATA MUST BE DIVISIBLE BY 4
-    #define SENDBUFFERSIZE         (CHANNELSUSED + 4) 
+    #define PACEMAKER              5                             // was 10. 4 is probably the MIN.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+    #define TIMEFORTXMANAGMENT     2                             // was 3 ...  How many ms must remain spare between data packets before daring to undertake more trivial tasks
+      
+    #define CHANNELSUSED           16                           
+    #define UNCOMPRESSEDWORDS      20                           // these are all bigger than needed  
+    #define COMPRESSEDWORDS        20                           // these are all bigger than needed 
+    #define SENDBUFFERSIZE         20                           // these are all bigger than needed 
 
     #define DEFAULTPIPEADDRESS     0xB7BE3E9423LL               // Pipe address for startup - any value but MUST match RX 
     #define MAXMIXES               32                           // 32 mixes
@@ -99,7 +89,7 @@
     #define MAXDUALRATE            200
     #define MAXBUFFERSIZE          1024 * 6
     #define MAXMODELNUMBER         91
-    #define RED_LED_ON_TIME        3500                         // How many ms of no connection before RED led comes on
+    #define RED_LED_ON_TIME        2500                         // How many ms of no connection before RED led comes on
     #define LOW_VOLTAGE_TIME       10000                        // How many ms to endure low voltage before announcing it. (10 seconds)
     #define MAXSHOWCOMMSSESCONDS   6                            // Assess average connection quality over most recent 6 seconds continously
     #define SHOWCOMMSDELAY         1000                         // ms pauses between updated info on NEXTION
@@ -114,7 +104,7 @@
 
     #define DATARATE                 RF24_250KBPS   // RF24_250KBPS or RF24_1MBPS or RF24_2MBPS
     #define FASTDATARATE             RF24_2MBPS     // 2 MBPS = RF24_2MBPS; 1 MBPS = RF24_1MBPS <<
-    #define PERFECTPACKETSPERSECOND  100            // Flat out perfect packets per second
+    #define PERFECTPACKETSPERSECOND  200            // Flat out perfect packets per second
     #define RETRYCOUNT               2              // was 2. Auto retries inside nRF24L01. MAX is 15. Fails below 2.
     #define RETRYWAIT                1              // was 1. 250us = Wait between retries (RetryWait+1 * 250us))
     #define QUIETCHANNEL             5              // This was found to be the least busy channel in the 2.4GHz band in my house
@@ -444,7 +434,7 @@ void          CheckTimer();
 void          SendCharArray(char* ch0, char* ch1, char* ch2, char* ch3, char* ch4, char* ch5, char* ch6, char* ch7, char* ch8, char* ch9, char* ch10, char* ch11, char* ch12);
 char*         Str(char* s, int n, int comma);
 void          GetNewChannelValues();
-void          LoadPacketData();
+void          LoadParameters();
 void          GreenLedOn();
 void          CheckGapsLength();
 void          ParseAckPayload();
@@ -581,7 +571,11 @@ void             GetSlaveChannelValuesWireless();
 void             RandomiseTheRecoveryChannels();
 void             UseRandomizedRecoveryChannels();
 void             UseDefaultRecoveryChannels();
-
+void             GetTeensyMacAddress();
+FASTRUN void     LogThisGap();
+void             GetRXVersionNumber();
+void             GetRXVersionNumber();
+void             CompareModelsIDs();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************
@@ -602,7 +596,7 @@ uint64_t      TeensyMACAddPipe = DEFAULTPIPEADDRESS; //          New Radio pipe 
 uint64_t      BuddyMACAddPipe  = DEFAULTPIPEADDRESS; //          Buddy pipe address
 char          TextIn[CHARSMAX + 2];                  //          Spare space
 uint16_t      PacketsPerSecond = 0;
-uint8_t       PacketsHistoryBuffer[PERFECTPACKETSPERSECOND * MAXSHOWCOMMSSESCONDS]; // Here we record some history
+uint8_t       PacketsHistoryBuffer[(5 + PERFECTPACKETSPERSECOND) * MAXSHOWCOMMSSESCONDS]; // Here we record some history
 uint32_t      TotalLostPackets = 0;
 uint32_t      TotalGoodPackets = 0;
 uint16_t      PacketNumber     = 0;
@@ -638,6 +632,7 @@ char            ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"T
 uint8_t         DualRateInUse                  = 1;
 uint8_t         PreviousDualRateInUse          = 1;
 uint16_t        PreviousBuffer[CHANNELSUSED+1]; //     Used to spot any change
+uint16_t        PrePreviousBuffer[CHANNELSUSED+1]; //     Used to spot any change
 uint16_t        ChannelMax[CHANNELSUSED + 1];    //    output of pots at max
 uint16_t        ChannelMidHi[CHANNELSUSED + 1];  //    output of pots at MidHi
 uint16_t        ChannelCentre[CHANNELSUSED + 1]; //    output of pots at Centre
@@ -770,13 +765,24 @@ bool            SaveFailSafeNow = false;
 uint32_t        FailSafeTimer;
 
 struct CD{
-    uint16_t        DataFlags = 42;                    //  =  1 word,   2 bytes
-    uint16_t        CompressedData[COMPRESSEDWORDS];   //  = 15 words, 30 bytes
+    uint16_t        ChannelBitMask = 0;                    
+    uint16_t        CompressedData[COMPRESSEDWORDS];   // Bigger than needed 
 };
-CD Datatosend;
+CD DataTosend;
 
-uint16_t        SizeOfDatatosend = sizeof(Datatosend); 
-uint8_t         SizeOfCompressedData = sizeof(Datatosend.CompressedData);          
+bool AddExtraParameters = false;
+
+struct CD2{
+    uint16_t        ID    = 12;          
+    uint16_t        word1 = 123;
+    uint16_t        word2 = 321;;   
+};  
+CD2 Parameters;
+
+
+uint16_t        SizeOfDataTosend = sizeof(DataTosend); 
+uint8_t         SizeOfCompressedData = sizeof(DataTosend.CompressedData);   
+uint8_t         SizeOfParameters = sizeof(Parameters);
 uint32_t        Inactivity_Timeout = INACTIVITYTIMEOUT;
 uint32_t        Inactivity_Start   = 0;
 tmElements_t    tm;
@@ -936,8 +942,8 @@ uint8_t  CurrentChannel      = 0;
 uint8_t  PupilIsAlive        = 0;
 uint8_t  MasterIsAlive       = 0;
 bool     VersionsCompared    = false;
-uint8_t  Randomized_Recovery_Channels_Counter = 0;
-uint32_t LedGreenMoment        = 0;
+uint32_t LedGreenMoment      = 0;
+uint32_t BindingTimer        = 0;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
