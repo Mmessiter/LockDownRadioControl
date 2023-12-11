@@ -1,7 +1,7 @@
 var transceiver_8h =
 [
     [ "BADNIBBLECOUNT", "transceiver_8h.html#a6a0dc2e4d5be33970d9a245234202655", null ],
-    [ "MINCHANGE", "transceiver_8h.html#ab58cb4acf08b6948194a8a8730a79877", null ],
+    [ "MIN_CHANGE", "transceiver_8h.html#ab0f10204b4b2238cd208ef91e2a2e151", null ],
     [ "xx1", "transceiver_8h.html#af12cb4fe3d6d02738ca7a75e1e1fd722", null ],
     [ "yy1", "transceiver_8h.html#a10274b74b5b9f35476ae844506775afe", null ],
     [ "YY1EXTRA", "transceiver_8h.html#ad7ab066fbe7d750f032f5761dbaa2487", null ],

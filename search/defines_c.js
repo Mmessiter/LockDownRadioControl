@@ -32,7 +32,7 @@ var searchData=
   ['maxtriespertransceiver_29',['MAXTRIESPERTRANSCEIVER',['../radio_8h.html#a4a03f701a3917500a6060344738e5fd4',1,'radio.h']]],
   ['maxwidth_30',['MAXWIDTH',['../TransmitterCode_2src_2main_8cpp.html#ac101c663138f79260b6d5ea00140fa22',1,'main.cpp']]],
   ['midmicros_31',['MIDMICROS',['../1Definitions_8h.html#aa4dd4979e290d977d813a5a4af263b0d',1,'1Definitions.h']]],
-  ['minchange_32',['MINCHANGE',['../transceiver_8h.html#ab58cb4acf08b6948194a8a8730a79877',1,'transceiver.h']]],
+  ['min_5fchange_32',['MIN_CHANGE',['../transceiver_8h.html#ab0f10204b4b2238cd208ef91e2a2e151',1,'transceiver.h']]],
   ['minmicros_33',['MINMICROS',['../common_8h.html#ac67e087c11a86a3790c656a29f8c7195',1,'MINMICROS():&#160;common.h'],['../1Definitions_8h.html#ac67e087c11a86a3790c656a29f8c7195',1,'MINMICROS():&#160;1Definitions.h']]],
   ['mixesview_34',['MIXESVIEW',['../1Definitions_8h.html#aaa7f851829299cf35b8f281e6d76e27c',1,'1Definitions.h']]],
   ['mmfound_35',['MMFOUND',['../1Definitions_8h.html#a0b03ce36ca9e2bb94b7cb4ea493e4925',1,'1Definitions.h']]],

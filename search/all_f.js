@@ -82,7 +82,7 @@ var searchData=
   ['midhidegrees_79',['MidHiDegrees',['../1Definitions_8h.html#a7b76a0c3310e4ddc51665aee884428c7',1,'1Definitions.h']]],
   ['midlowdegrees_80',['MidLowDegrees',['../1Definitions_8h.html#aba89c8f655a263fb5e7d9c5da06aaecb',1,'1Definitions.h']]],
   ['midmicros_81',['MIDMICROS',['../1Definitions_8h.html#aa4dd4979e290d977d813a5a4af263b0d',1,'1Definitions.h']]],
-  ['minchange_82',['MINCHANGE',['../transceiver_8h.html#ab58cb4acf08b6948194a8a8730a79877',1,'transceiver.h']]],
+  ['min_5fchange_82',['MIN_CHANGE',['../transceiver_8h.html#ab0f10204b4b2238cd208ef91e2a2e151',1,'transceiver.h']]],
   ['mindegrees_83',['MinDegrees',['../1Definitions_8h.html#af1bf2b425dd63c9fb9458a020f663061',1,'1Definitions.h']]],
   ['minimumgap_84',['MinimumGap',['../1Definitions_8h.html#a41e1e170f56cfce141e4892541ab9b5f',1,'1Definitions.h']]],
   ['minmicros_85',['MINMICROS',['../common_8h.html#ac67e087c11a86a3790c656a29f8c7195',1,'MINMICROS():&#160;common.h'],['../1Definitions_8h.html#ac67e087c11a86a3790c656a29f8c7195',1,'MINMICROS():&#160;1Definitions.h']]],
