@@ -23,7 +23,7 @@ var searchData=
   ['logpoweron_20',['LogPowerOn',['../TransmitterCode_2src_2main_8cpp.html#a7d93a2500f52d72210903c46a85ce820',1,'main.cpp']]],
   ['logsafety_21',['LogSafety',['../TransmitterCode_2src_2main_8cpp.html#a0ed2fd04eebb4fd11b61b6fddd5d2590',1,'LogSafety(bool On):&#160;main.cpp'],['../1Definitions_8h.html#a0ed2fd04eebb4fd11b61b6fddd5d2590',1,'LogSafety(bool On):&#160;main.cpp']]],
   ['logtext_22',['LogText',['../TransmitterCode_2src_2main_8cpp.html#add8d8f400f1c1c4a5add52736cdf94ca',1,'main.cpp']]],
-  ['logthisgap_23',['LogThisGap',['../TransmitterCode_2src_2main_8cpp.html#a1fadc7cdd854f8b3628b622da5417d8b',1,'main.cpp']]],
+  ['logthisgap_23',['LogThisGap',['../1Definitions_8h.html#a1fadc7cdd854f8b3628b622da5417d8b',1,'LogThisGap():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a1fadc7cdd854f8b3628b622da5417d8b',1,'LogThisGap():&#160;main.cpp']]],
   ['logthismodel_24',['LogThisModel',['../1Definitions_8h.html#af1548fa3d0c6b8a1e3057b962b77c5eb',1,'LogThisModel():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a83944fc0ecaab86d0bbb0802e99e5084',1,'LogThisModel():&#160;main.cpp']]],
   ['logthisrx_25',['LogThisRX',['../TransmitterCode_2src_2main_8cpp.html#a900aa27c1353238593c276186d960912',1,'main.cpp']]],
   ['logtotalgoodpackets_26',['LogTotalGoodPackets',['../1Definitions_8h.html#a8f37e3c97602121326a883fafbe8f3ff',1,'LogTotalGoodPackets():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a8f37e3c97602121326a883fafbe8f3ff',1,'LogTotalGoodPackets():&#160;main.cpp']]],
