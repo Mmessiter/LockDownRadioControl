@@ -673,8 +673,13 @@ FASTRUN void ParseAckPayload(uint8_t PayloadSize)
         return;
     }
 
-    if (PayloadSize < 6) return; // No point in going further if there is no data
-
+    if (PayloadSize < 6) {
+        FHSS_data::NextChannelNumber = AckPayload.Byte1;                                // every packet tells of next hop destination
+        NextChannel = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber);       // The actual channel number pointed to.
+        HopToNextChannel();
+        return;                                                                         // No point in going further if there is no data
+    }
+    
     switch (AckPayload.Purpose) // Only look at the low 7 BITS
     {
         case 0:
