@@ -61,7 +61,6 @@ void UseExtraParameters()
 //             OldQnh = Qnh; // Send new one once only
 //             break;
 //         case 3:
-//         //  GuessWhat = ReceivedData[CHANNELSSENT + 1]; // not used yet
 //             if ((ReceivedData[CHANNELSSENT + 2]) == 255) { // Mark this location
 //                 MarkHere();
 //                 ReceivedData[CHANNELSSENT + 2] = 0; // ... Once only
