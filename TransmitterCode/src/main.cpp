@@ -306,7 +306,7 @@ FASTRUN void ShowMotorTimer()
 
 FASTRUN void ShowServoPos()
 {
-    uint8_t  MinimumDistance = 10;             // if the change is very small, don't re-display anything - to reduce flashing. :=)!!
+    uint8_t  MinimumDistance = 10;              // if the change is small, don't re-display anything - to reduce flashing. :=)!!
     uint32_t Hertz           = 25;             // Fast
     if (CurrentView == GRAPHVIEW) Hertz = 200; // Slower!
     if (millis() - ShowServoTimer < Hertz) return;
