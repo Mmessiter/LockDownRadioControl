@@ -76,7 +76,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "1Definitions_8h.html",
-"1Definitions_8h.html#a59c3d8b001e63150ebf11e3d9d6dca5b",
+"1Definitions_8h.html#a5aa4888b924a4f1d95e9cedc3004f2b6",
 "1Definitions_8h.html#aa6e0bf2f41a5920241f2618bb0e0bce0",
 "BuddyPPM_8h.html",
 "MPU6050_8h.html#a985445c35a0fe1be18020ad3a635beb7",
