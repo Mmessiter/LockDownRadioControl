@@ -222,13 +222,13 @@ return Pointer;
 }
 /************************************************************************************************************/
 uint8_t EncodeTheChangedChannels(){
-    #define MIN_CHANGE 3                                                                                // Very tiny changes in channel values are ignored. That's most likely only noise... 
+    #define MIN_CHANGE 4                                                                                // Very tiny changes in channel values are ignored. That's most likely only noise... 
                                                                                                         // ... This reduces the average packet size... 
-                                                                                                        // ... Values up to about 20 are imperceptible.
+                                                                                                        // ... Values <= 20 are imperceptible. So 4 is just fine here.
     uint8_t NumberOfChangedChannels = 0;                                                                // Number of channels that have changed since last packet
     DataTosend.ChannelBitMask = 0;                                                                      // Clear the ChannelBitMask 16 BIT WORD (1 bit per channel)
     for (int i = 0; i < CHANNELSUSED; ++i){                                                             // Check for changed channels and load them into the rawdatabuffer  
-      if ((abs(SendBuffer[i] - PreviousBuffer[i]) > MIN_CHANGE) && (NumberOfChangedChannels < 4))       // 4 is the maximum number of channel changes that will be sent in one packet ... 
+      if ((abs(SendBuffer[i] - PreviousBuffer[i]) >= MIN_CHANGE) && (NumberOfChangedChannels < 4))      // 4 is the maximum number of channel changes that will be sent in one packet ... 
         {                                                                                               // ... any other changes will be sent in the next packet, only 5ms later.
             RawDataBuffer[NumberOfChangedChannels]  = SendBuffer[i];                                    // Load a changed channel into the rawdatabuffer. 
             PrePreviousBuffer[i] = PreviousBuffer[i];                                                   // Save previous buffer in case we need to repeat it.
