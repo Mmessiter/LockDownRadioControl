@@ -255,15 +255,15 @@ $(document).ready(function(){initNavTree('radio_8h_source.html',''); initResizab
 <div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>    <span class="keyword">static</span> uint32_t LocalTimer = 0;</div>
 <div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="common_8h.html#a7bca81159d93f215060f40f45f19b0de">CurrentRadio</a>-&gt;available(&amp;<a class="code hl_variable" href="common_8h.html#a63b5051d09e33414a0aba533e93a1fcd">Pipnum</a>))</div>
 <div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>    {</div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>        <span class="keywordflow">if</span> (millis() &gt; 2500) </div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>        <span class="keywordflow">if</span> ((millis() - <a class="code hl_variable" href="common_8h.html#ae6657a547a79d8e304b8ddeb3f6a38e0">ReconnectedMoment</a>) &gt; 2500)                                  <span class="comment">// send full payloads for 2.5 seconds after connection</span></div>
 <div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>        {</div>
 <div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>            <a class="code hl_variable" href="common_8h.html#a292d1db41bb1dd559ff8d80dc541606b">ShortenedPayload</a> = <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>            <span class="keywordflow">if</span> (millis() - LocalTimer &gt;= 500) </div>
 <div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>            {</div>
 <div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>                LocalTimer = millis();</div>
 <div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>                <a class="code hl_variable" href="common_8h.html#a292d1db41bb1dd559ff8d80dc541606b">ShortenedPayload</a> = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>                <span class="comment">// Look1 (&quot;Full Payload: &quot;);</span></div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>                <span class="comment">// Look (AckPayload.Purpose &amp; 0x0f);</span></div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>               <span class="comment">// Look1 (&quot;Full Payload: &quot;);</span></div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>               <span class="comment">//  Look (AckPayload.Purpose &amp; 0x0f);</span></div>
 <div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>            }<span class="keywordflow">else</span>{</div>
 <div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>                <span class="comment">//  Look(&quot;Shortened Payload&quot;);</span></div>
 <div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>            }</div>
