@@ -565,4 +565,212 @@ void NormaliseTheRadio()
     Radio1.setCRCLength(RF24_CRC_16);
     Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait);
 }
+
+
+
+/************************************************************************************************************/
+
+FASTRUN float GetFromAckPayload()
+{
+    union
+    {
+        float   Val32;
+        uint8_t Val8[4];
+    } ThisUnion;
+    ThisUnion.Val8[0] = AckPayload.Byte1;
+    ThisUnion.Val8[1] = AckPayload.Byte2;
+    ThisUnion.Val8[2] = AckPayload.Byte3;
+    ThisUnion.Val8[3] = AckPayload.Byte4;
+    return ThisUnion.Val32;
+}
+/************************************************************************************************************/
+void GetTimeFromAckPayload()
+{
+    GPSSecs  = AckPayload.Byte1;
+    GPSMins  = AckPayload.Byte2;
+    GPSHours = AckPayload.Byte3;
+}
+/************************************************************************************************************/
+void GetDateFromAckPayload()
+{
+    GPSDay   = AckPayload.Byte1;
+    GPSMonth = AckPayload.Byte2;
+    GPSYear  = AckPayload.Byte3;
+}
+/************************************************************************************************************/
+void GetAltitude()
+{
+    RXModelAltitude = int(GetFromAckPayload()) - GroundModelAltitude;
+    if (RXMAXModelAltitude < RXModelAltitude) RXMAXModelAltitude = RXModelAltitude;
+    snprintf(Maxaltitude, 5, "%d", RXMAXModelAltitude);
+    snprintf(ModelAltitude, 5, "%d", RXModelAltitude);
+}
+/************************************************************************************************************/
+void GetTemperature()
+{
+    RXTemperature = GetFromAckPayload();
+    snprintf(ModelTempRX, 5, "%1.2f", RXTemperature);
+}
+/************************************************************************************************************/
+FASTRUN uint32_t GetIntFromAckPayload() // This one uses a uint32_t int
+{
+    union
+    {
+        uint32_t Val32 = 0;
+        uint8_t  Val8[4];
+    } ThisUnion;
+    ThisUnion.Val8[0] = AckPayload.Byte1;
+    ThisUnion.Val8[1] = AckPayload.Byte2;
+    ThisUnion.Val8[2] = AckPayload.Byte3;
+    ThisUnion.Val8[3] = AckPayload.Byte4;
+    return ThisUnion.Val32;
+}
+
+
+/************************************************************************************************************/
+void GetModelsMacAddress()
+{ // Gets a 64 bit value in two hunks of 32 bits
+
+    if (BuddyPupilOnWireless) return; //  Don't do this if we are a pupil
+    switch (AckPayload.Purpose)
+    {
+        case 0:
+            ModelsMacUnion.Val32[0] = GetIntFromAckPayload();
+            break;
+        case 1:
+            ModelsMacUnion.Val32[1] = GetIntFromAckPayload();
+            break;
+        default:
+            break;
+    }
+    if (ModelMatched == false) {
+        if ((ModelsMacUnion.Val32[0] > 0) && (ModelsMacUnion.Val32[1] > 0)) { // got both bits yet?
+            ModelIdentified = true;
+            CompareModelsIDs();
+        }
+    }
+}
+
+/************************************************************************************************************/
+FASTRUN void ParseAckPayload()
+{
+    if (BuddyPupilOnPPM) return; // buddy pupil need none of this
+
+    FHSS_data::NextChannelNumber = AckPayload.Byte5; // every packet tells of next hop destination
+
+    if (AckPayload.Purpose & 0x80) {                                              // Hi bit is now the **HOP NOW!!** flag
+        NextChannel = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber); // The actual channel number pointed to.
+        HopToNextChannel();
+        AckPayload.Purpose &= 0x7f; // Clear the high BIT, use the remainder ...
+    }
+
+    if (!ModelMatched && !LedWasGreen) {
+        GetModelsMacAddress();
+        return;
+    }
+
+    switch (AckPayload.Purpose) // Only look at the low 7 BITS
+    {
+        case 0:
+            GetRXVersionNumber();
+            break;
+        case 1:
+            SbusRepeats = GetFromAckPayload();
+            break;
+        case 2:
+            RadioSwaps = GetFromAckPayload();
+            break;
+        case 3:
+            RX1TotalTime = GetFromAckPayload();
+            break;
+        case 4:
+            RX2TotalTime = GetFromAckPayload();
+            break;
+        case 5:
+            RXModelVolts    = GetFromAckPayload();
+            RXVoltsDetected = false;
+            if (RXModelVolts > 0) {
+                RXVoltsDetected = true;
+                if (RXCellCount == 12) RXModelVolts *= 2; // voltage divider needed !
+                snprintf(ModelVolts, 5, "%1.2f", RXModelVolts);
+            }
+            break;
+        case 6:
+            GetAltitude();
+            break;
+        case 7:
+            GetTemperature();
+            break;
+        case 8:
+            GPSLatitude = GetFromAckPayload();
+            break;
+        case 9:
+            GPSLongitude = GetFromAckPayload();
+            break;
+        case 10:
+            GPSAngle = GetFromAckPayload();
+            break;
+        case 11:
+            GPSSpeed = GetFromAckPayload();
+            if (GPSMaxSpeed < GPSSpeed) GPSMaxSpeed = GPSSpeed;
+            break;
+        case 12:
+            GpsFix = GetFromAckPayload();
+            break;
+        case 13:
+            GPSAltitude = GetFromAckPayload() - GPSGroundAltitude;
+            if (GPSAltitude < 0) GPSAltitude = 0;
+            if (GPSMaxaltitude < GPSAltitude) GPSMaxaltitude = GPSAltitude;
+            break;
+        case 14:
+            GPSDistanceTo = GetFromAckPayload();
+            if (GPSMaxDistance < GPSDistanceTo) GPSMaxDistance = GPSDistanceTo;
+            break;
+        case 15:
+            GPSCourseTo = GetFromAckPayload();
+            break;
+        case 16:
+            GPSSatellites = (uint8_t)GetFromAckPayload();
+            break;
+        case 17:
+            GetDateFromAckPayload();
+            break;
+        case 18:
+            GetTimeFromAckPayload();
+            ReadTheRTC();
+            if (GPSDay != GmonthDay) GPSTimeSynched = false;
+            if (GPSMonth != Gmonth) GPSTimeSynched = false;
+            if (GPSMins != Gminute) GPSTimeSynched = false;
+            if (GPSHours != Ghour) GPSTimeSynched = false;
+            if (GPSSecs != Gsecond) GPSTimeSynched = false;
+            if (GpsFix) SynchRTCwithGPSTime();
+            break;
+        default:
+            break;
+    }
+}
+/************************************************************************************************************/
+FASTRUN void CheckGapsLength()
+{
+    if (GapStart > 0) { // when reconnected, how long was connection lost?
+        ++GapCount;
+        ThisGap = (millis() - GapStart); // AND in fact RX sends no data for 20 ms after reconnection
+        if (ThisGap >= MinimumGap && UseLog) LogThisGap();
+        if (ThisGap > GapLongest) GapLongest = ThisGap;
+        GapSum += ThisGap;
+        GapStart   = 0;
+        GapAverage = GapSum / GapCount;
+#ifdef DB_GAPS
+        Serial.print("GapCount: ");
+        Serial.println(GapCount);
+        Serial.print("GapAverage: ");
+        Serial.println(GapAverage);
+        Serial.print("GapLongest: ");
+        Serial.println(GapLongest);
+        Serial.println(" ");
+#endif
+    }
+}
+
+
 #endif

@@ -571,6 +571,10 @@ void             RandomiseTheRecoveryChannels();
 void             UseRandomizedRecoveryChannels();
 void             UseDefaultRecoveryChannels();
 void             GetTeensyMacAddress();
+FASTRUN void     LogThisGap();
+void             GetRXVersionNumber();
+void             GetRXVersionNumber();
+void             CompareModelsIDs();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************

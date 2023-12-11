@@ -53,29 +53,6 @@ void CompareModelsIDs()
         }
     }
 }
-/************************************************************************************************************/
-void GetModelsMacAddress()
-{ // Gets a 64 bit value in two hunks of 32 bits
-
-    if (BuddyPupilOnWireless) return; //  Don't do this if we are a pupil
-    switch (AckPayload.Purpose)
-    {
-        case 0:
-            ModelsMacUnion.Val32[0] = GetIntFromAckPayload();
-            break;
-        case 1:
-            ModelsMacUnion.Val32[1] = GetIntFromAckPayload();
-            break;
-        default:
-            break;
-    }
-    if (ModelMatched == false) {
-        if ((ModelsMacUnion.Val32[0] > 0) && (ModelsMacUnion.Val32[1] > 0)) { // got both bits yet?
-            ModelIdentified = true;
-            CompareModelsIDs();
-        }
-    }
-}
 
 /************************************************************************************************************/
 #endif
