@@ -150,20 +150,21 @@ void ReadMoreParameters(uint8_t NumberOfChangedChannels){
 /************************************************************************************************************/
 void UseReceivedData(uint8_t DynamicPayloadSize)                            // DynamicPayloadSize is length of incomming data
 {
-    Decompress(RawDataIn, DataReceived.CompressedData, 8);                    // Decompress the most recent data 8 enough? Don't know yet how may channels will be sent
-    uint8_t NumberOfChangedChannels = RearrangeTheChannels();               // Rearrange the channels for actual control since only changed ones are sent
-    if ((DynamicPayloadSize - int(NumberOfChangedChannels * 1.5) > 5)){     // 8 when parameters are added 2 when not        
-        ReadMoreParameters(NumberOfChangedChannels);                                                                            
+    if (DataReceived.ChannelBitMask){                                           // Any changed channels?
+        Decompress(RawDataIn, DataReceived.CompressedData, 8);                  // Decompress the most recent data 8 enough? Don't know yet how may channels will be sent
+        uint8_t NumberOfChangedChannels = RearrangeTheChannels();               // Rearrange the channels for actual control since only changed ones are sent
+        if ((DynamicPayloadSize - int(NumberOfChangedChannels * 1.5) > 5)){     // 8 when parameters are added 2 when not        
+            ReadMoreParameters(NumberOfChangedChannels);                                                                            
+        }   
     }
     MapToSBUS();                                                            // Get SBUS data ready
     LastPacketArrivalTime = millis();                                       // Note the arrival time  
+    
     if (HopNow) {                                                           // This flag gets set in LoadAckPayload();
         HopToNextChannel();                                                 // Ack payload instructed us to Hop at next opportunity. So hop now ...
         HopNow   = false;                                                   // ... and clear the flag,
         HopStart = millis();                                                // ... and start the timer.
     }
-  //  Look(ReceivedData[15]);
-
 }
 
 /************************************************************************************************************/
