@@ -291,7 +291,7 @@ FASTRUN void SendData()
         uint8_t SizeOfUnCompressedData  =   (ByteCountToTransmit / 1.5) ;                                
         Compress(DataTosend.CompressedData, RawDataBuffer, SizeOfUnCompressedData);                      // Compress the raw data buffer into the compressed data buffer (reduces it to 75% of original size)
         if (Radio1.write(&DataTosend, ByteCountToTransmit)) {SuccessfulPacket();} else {FailedPacket();} // Send the data packet complete with ChannelBitMask and compressed data 
-        ShowPacketData(ByteCountToTransmit, NumberOfChangedChannels);                                  // Just for debugging
+       // ShowPacketData(ByteCountToTransmit, NumberOfChangedChannels);                                  // Just for debugging
     }else{
         if (BuddyMasterOnWireless) SendSpecialPacket();                                                  // takes about 4 - 5 ms. Gets buddy control data in ACK payload 
     }
