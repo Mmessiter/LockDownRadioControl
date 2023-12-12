@@ -129,14 +129,14 @@ void RearrangeTheChannels(){
             PreviousRData[i] = RawDataIn[p];
             ++p;
         }else{
-            ReceivedData[i]  = PreviousRData[i];
+            ReceivedData[i]  = PreviousRData[i];     // if bit is not set, leave the channel as last time
         }
     }
     return;
 }
 /************************************************************************************************************/
 void ReadMoreParameters(uint8_t NumberOfChangedChannels){                                       
-        Parameters.ID    =  RawDataIn[NumberOfChangedChannels] ;                                  // NumberOfChangedChannels points past the end of the changed channels
+        Parameters.ID    =  RawDataIn[NumberOfChangedChannels] ;              // NumberOfChangedChannels points past the end of the changed channels
         Parameters.word1 =  RawDataIn[NumberOfChangedChannels+1];
         Parameters.word2 =  RawDataIn[NumberOfChangedChannels+2];
         UseExtraParameters();    
@@ -147,13 +147,13 @@ void ReadMoreParameters(uint8_t NumberOfChangedChannels){
 /************************************************************************************************************/
 void UseReceivedData(uint8_t DynamicPayloadSize)                            // DynamicPayloadSize is length of incomming data
 {
-    if (DataReceived.ChannelBitMask){                                           // Any changed channels?
-        Decompress(RawDataIn, DataReceived.CompressedData, 8);                  // Decompress the most recent data 8 enough? Don't know yet how may channels will be sent
-        RearrangeTheChannels();               // Rearrange the channels for actual control since only changed ones are sent 
+    if (DataReceived.ChannelBitMask){                                       // Any changed channels?
+        Decompress(RawDataIn, DataReceived.CompressedData, 8);              // Decompress the most recent data 8 enough? Don't know yet how may channels will be sent
+        RearrangeTheChannels();                                             // Rearrange the channels for actual control since only changed ones are sent 
     } else {                                                                
-        if (DynamicPayloadSize > 2) {                                           // No changed channels BUT MAYBE PARAMS!
-            Decompress(RawDataIn, DataReceived.CompressedData, 8);              //
-            ReadMoreParameters(0);                                              // 0 means no changed channels 
+        if (DynamicPayloadSize > 2) {                                       // No changed channels BUT MAYBE parameters!
+            Decompress(RawDataIn, DataReceived.CompressedData, 8);             
+            ReadMoreParameters(0);                                               
         }
     }
     MapToSBUS();                                                            // Get SBUS data ready
@@ -176,7 +176,7 @@ bool ReadData()
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);          // Send telemetry
         DelayMillis(2);    
         uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize();     // Get the size of the new data (14)   
-        CurrentRadio->read(&DataReceived, DynamicPayloadSize);                    //  ** >> Read new data from master << ** // Get the size of the new data (14)
+        CurrentRadio->read(&DataReceived, DynamicPayloadSize);                  //  ** >> Read new data from master << ** // Get the size of the new data (14)
         Connected = true;
         NewData   = true;
        if (Connected) UseReceivedData(DynamicPayloadSize);
