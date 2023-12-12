@@ -119,7 +119,7 @@ void Decompress(uint16_t* uncompressed_buf, uint16_t* compressed_buf, uint8_t un
 /************************************************************************************************************/
 
 /************************************************************************************************************/
-uint8_t RearrangeTheChannels(){
+void RearrangeTheChannels(){
  //  This function looks at the 16 BITS of DataReceived.ChannelBitMask and rearranges the channels accordingly.
     static uint16_t PreviousRData[CHANNELSUSED];
     uint8_t p = 0;
@@ -132,7 +132,7 @@ uint8_t RearrangeTheChannels(){
             ReceivedData[i]  = PreviousRData[i];
         }
     }
-    return p;
+    return;
 }
 /************************************************************************************************************/
 void ReadMoreParameters(uint8_t NumberOfChangedChannels){                                       
@@ -149,20 +149,15 @@ void UseReceivedData(uint8_t DynamicPayloadSize)                            // D
 {
     if (DataReceived.ChannelBitMask){                                           // Any changed channels?
         Decompress(RawDataIn, DataReceived.CompressedData, 8);                  // Decompress the most recent data 8 enough? Don't know yet how may channels will be sent
-        uint8_t NumberOfChangedChannels = RearrangeTheChannels();               // Rearrange the channels for actual control since only changed ones are sent
-        if ((DynamicPayloadSize - int(NumberOfChangedChannels * 1.5) > 5)){     // 8 when parameters are added 2 when not        
-            ReadMoreParameters(NumberOfChangedChannels);                                                                            
-        }   
+        RearrangeTheChannels();               // Rearrange the channels for actual control since only changed ones are sent 
     } else {                                                                
         if (DynamicPayloadSize > 2) {                                           // No changed channels BUT MAYBE PARAMS!
             Decompress(RawDataIn, DataReceived.CompressedData, 8);              //
             ReadMoreParameters(0);                                              // 0 means no changed channels 
         }
     }
-
     MapToSBUS();                                                            // Get SBUS data ready
     LastPacketArrivalTime = millis();                                       // Note the arrival time  
-    
     if (HopNow) {                                                           // This flag gets set in LoadAckPayload();
         HopToNextChannel();                                                 // Ack payload instructed us to Hop at next opportunity. So hop now ...
         HopNow   = false;                                                   // ... and clear the flag,
@@ -170,7 +165,6 @@ void UseReceivedData(uint8_t DynamicPayloadSize)                            // D
     }
    // Look(ReceivedData[15]);
 }
-
 /************************************************************************************************************/
 bool ReadData()
 {
