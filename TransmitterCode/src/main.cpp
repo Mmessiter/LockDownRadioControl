@@ -4256,13 +4256,14 @@ void EndBuddyView()
     bool Master          = false;
     char BuddyWireless[] = "wireless";
     char pRXSetupView[]  = "page RXSetupView";
-    bool OldPupilOnPPM;
-    bool OldMasterOnPPM;
-    char prompt[] = "Power off transmitter?";
-    char GoBack[] = "page BuddyView";
+   //  bool OldPupilOnPPM;
+    // bool OldMasterOnPPM;
+    //char prompt[]  = "Power off transmitter?";
+    char prompt1[] = "Remember to reboot transmitter!";
+    //char GoBack[]  = "page BuddyView";
 
-    OldPupilOnPPM  = BuddyPupilOnPPM; // save old version to detect a change
-    OldMasterOnPPM = BuddyMasterOnPPM;
+    // OldPupilOnPPM  = BuddyPupilOnPPM; // save old version to detect a change
+    // OldMasterOnPPM = BuddyMasterOnPPM;
     Pupil          = GetValue(BuddyP);        // Pupil ?
     Master         = GetValue(BuddyM);        // Master ?
     WirelessBuddy  = GetValue(BuddyWireless); // wireless ?
@@ -4299,23 +4300,24 @@ void EndBuddyView()
         BuddyMasterOnPPM      = false;
     }
 
-    if (((OldPupilOnPPM != BuddyPupilOnPPM) || (OldMasterOnPPM != BuddyMasterOnPPM)) && (!WirelessBuddy)) {
-        if (!GetConfirmation(GoBack, prompt)) {
-            SendValue(BuddyM, OldMasterOnPPM);
-            SendValue(BuddyP, OldPupilOnPPM);
-            BuddyPupilOnPPM  = OldPupilOnPPM;
-            BuddyMasterOnPPM = OldMasterOnPPM;
-        }
-    }
+    // if (((OldPupilOnPPM != BuddyPupilOnPPM) || (OldMasterOnPPM != BuddyMasterOnPPM)) && (!WirelessBuddy)) {
+    //     if (!GetConfirmation(GoBack, prompt)) {
+    //         SendValue(BuddyM, OldMasterOnPPM);
+    //         SendValue(BuddyP, OldPupilOnPPM);
+    //         BuddyPupilOnPPM  = OldPupilOnPPM;
+    //         BuddyMasterOnPPM = OldMasterOnPPM;
+    //     }
+    // }
     SaveAllParameters();
     SendCommand(pRXSetupView);
     CurrentView = RXSETUPVIEW;
     UpdateModelsNameEveryWhere();
-    if (((OldPupilOnPPM != BuddyPupilOnPPM) || (OldMasterOnPPM != BuddyMasterOnPPM)) && !WirelessBuddy) digitalWrite(POWER_OFF_PIN, HIGH);
+  //  if (((OldPupilOnPPM != BuddyPupilOnPPM) || (OldMasterOnPPM != BuddyMasterOnPPM)) && !WirelessBuddy) digitalWrite(POWER_OFF_PIN, HIGH);
     RationaliseBuddy();
     if (BuddyPupilOnWireless) {
         GotoFrontView();
     }
+   MsgBox(pRXSetupView,prompt1);
 }
 
 /*********************************************************************************************************************************/
