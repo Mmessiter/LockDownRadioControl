@@ -139,13 +139,10 @@ void ReadMoreParameters(uint8_t NumberOfChangedChannels){
         Parameters.ID    =  RawDataIn[NumberOfChangedChannels] ;                                  // NumberOfChangedChannels points past the end of the changed channels
         Parameters.word1 =  RawDataIn[NumberOfChangedChannels+1];
         Parameters.word2 =  RawDataIn[NumberOfChangedChannels+2];
-      
-        UseExtraParameters();
-      
-      
-        Look(Parameters.ID);
-      //  Look(Parameters.word1);
-      //  Look(Parameters.word2);
+        UseExtraParameters();    
+        // Look(Parameters.ID);
+        // Look(Parameters.word1);
+        // Look(Parameters.word2);
 }
 /************************************************************************************************************/
 void UseReceivedData(uint8_t DynamicPayloadSize)                            // DynamicPayloadSize is length of incomming data
@@ -156,7 +153,13 @@ void UseReceivedData(uint8_t DynamicPayloadSize)                            // D
         if ((DynamicPayloadSize - int(NumberOfChangedChannels * 1.5) > 5)){     // 8 when parameters are added 2 when not        
             ReadMoreParameters(NumberOfChangedChannels);                                                                            
         }   
+    } else {                                                                
+        if (DynamicPayloadSize > 2) {                                           // No changed channels BUT MAYBE PARAMS!
+            Decompress(RawDataIn, DataReceived.CompressedData, 8);              //
+            ReadMoreParameters(0);                                              // 0 means no changed channels 
+        }
     }
+
     MapToSBUS();                                                            // Get SBUS data ready
     LastPacketArrivalTime = millis();                                       // Note the arrival time  
     
@@ -165,6 +168,7 @@ void UseReceivedData(uint8_t DynamicPayloadSize)                            // D
         HopNow   = false;                                                   // ... and clear the flag,
         HopStart = millis();                                                // ... and start the timer.
     }
+   // Look(ReceivedData[15]);
 }
 
 /************************************************************************************************************/
