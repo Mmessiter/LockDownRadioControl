@@ -58,7 +58,7 @@ var searchData=
   ['readtimeout_55',['readTimeout',['../classI2Cdev.html#ae2125796e0948127fc15031650111e82',1,'I2Cdev']]],
   ['readword_56',['readWord',['../classI2Cdev.html#a545cd48b1e806e7e467b542c9e38e8c8',1,'I2Cdev']]],
   ['readwords_57',['readWords',['../classI2Cdev.html#a1b3d895dc6a00cbb5fb3b0441b2e35de',1,'I2Cdev']]],
-  ['rearrangethechannels_58',['RearrangeTheChannels',['../radio_8h.html#a2ca88bded3d9a0d43b5aa2b48280b848',1,'radio.h']]],
+  ['rearrangethechannels_58',['RearrangeTheChannels',['../radio_8h.html#a324d644a6306bb8be3b7f46b4bb32421',1,'radio.h']]],
   ['reboot_59',['Reboot',['../Utilities_8h.html#a374524dc113357d2ed6b8622f6ea85a8',1,'Utilities.h']]],
   ['rebuildflags_60',['RebuildFlags',['../common_8h.html#ad86a39e4cba19592c760833870f6f69c',1,'RebuildFlags(bool *f, uint16_t tb):&#160;main.cpp'],['../ReceiverCode_2src_2main_8cpp.html#ad86a39e4cba19592c760833870f6f69c',1,'RebuildFlags(bool *f, uint16_t tb):&#160;main.cpp']]],
   ['receive_5ftimeout_61',['RECEIVE_TIMEOUT',['../common_8h.html#a4c69942f01447fa7563c5726c7d8abf2',1,'common.h']]],

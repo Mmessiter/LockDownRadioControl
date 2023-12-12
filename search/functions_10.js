@@ -43,7 +43,7 @@ var searchData=
   ['readtime_40',['ReadTime',['../Utilities_8h.html#a483cced19b61975f76957f5696425fe9',1,'Utilities.h']]],
   ['readword_41',['readWord',['../classI2Cdev.html#a545cd48b1e806e7e467b542c9e38e8c8',1,'I2Cdev']]],
   ['readwords_42',['readWords',['../classI2Cdev.html#a1b3d895dc6a00cbb5fb3b0441b2e35de',1,'I2Cdev']]],
-  ['rearrangethechannels_43',['RearrangeTheChannels',['../radio_8h.html#a2ca88bded3d9a0d43b5aa2b48280b848',1,'radio.h']]],
+  ['rearrangethechannels_43',['RearrangeTheChannels',['../radio_8h.html#a324d644a6306bb8be3b7f46b4bb32421',1,'radio.h']]],
   ['reboot_44',['Reboot',['../Utilities_8h.html#a374524dc113357d2ed6b8622f6ea85a8',1,'Utilities.h']]],
   ['rebuildflags_45',['RebuildFlags',['../ReceiverCode_2src_2main_8cpp.html#ad86a39e4cba19592c760833870f6f69c',1,'RebuildFlags(bool *f, uint16_t tb):&#160;main.cpp'],['../common_8h.html#ad86a39e4cba19592c760833870f6f69c',1,'RebuildFlags(bool *f, uint16_t tb):&#160;main.cpp']]],
   ['receivedata_46',['ReceiveData',['../radio_8h.html#a06807a4f185694d37f774702ba74db0a',1,'radio.h']]],
