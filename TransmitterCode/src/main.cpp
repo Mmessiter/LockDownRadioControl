@@ -4256,7 +4256,8 @@ void EndBuddyView()
     bool Master          = false;
     char BuddyWireless[] = "wireless";
     char pRXSetupView[]  = "page RXSetupView";
-    char prompt1[] = "Remember to reboot transmitter!";
+    char prompt1[]       = "If you changed anything, REBOOT!";
+                     
     Pupil          = GetValue(BuddyP);        // Pupil ?
     Master         = GetValue(BuddyM);        // Master ?
     WirelessBuddy  = GetValue(BuddyWireless); // wireless ?
@@ -5323,6 +5324,10 @@ void MsgBox(char* goback, char* Prompt)
     while (Confirmed[0] == '?') { // await user response
         CheckForNextionButtonPress();
         KickTheDog();
+        if (BoundFlag && ModelMatched) {
+            for (int i = 0; i < CHANNELSUSED; ++i) SendBuffer[i] = PreviousBuffer[i];  // during a pause, keep sending the last values
+            SendData();
+        }
     }
     SendCommand(goback);
     LastFileInView = 120;
