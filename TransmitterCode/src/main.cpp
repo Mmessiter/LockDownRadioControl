@@ -154,7 +154,6 @@ void ClearMostParameters(){ // called from RED LED ON
 
         RXVoltsDetected      = false;
         LedWasGreen          = false;
-        RXVoltsDetected      = false;
         ModelIdentified      = false;
         ModelMatched         = false;
         BoundFlag            = false;
@@ -468,7 +467,6 @@ FASTRUN bool CheckRXVolts()
             SendText(RXPC, spaces);
         }
     }
-    RXVoltsDetected = false; // in case it was a glitch
     return RXWarningFlag;
 }
 
