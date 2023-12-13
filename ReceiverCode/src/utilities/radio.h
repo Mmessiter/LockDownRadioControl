@@ -169,14 +169,27 @@ void UseReceivedData(uint8_t DynamicPayloadSize)                            // D
 bool ReadData()
 {
     Connected = false;
+    static uint16_t AckCounter = 0;
     if (CurrentRadio->available(&Pipnum))
     {
-        LoadAckPayload();
-        CurrentRadio->flush_tx();                                               // This avoids a lockup that happens when the FIFO gets full
-        CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);          // Send telemetry
+        CurrentRadio->flush_tx();                                                        // This avoids a lockup that happens when the FIFO gets full   
+        if ((millis() - ReconnectedMoment) < 100) {
+             LoadAckPayload();
+             CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);              // Send FULL telemetry when first connected 
+        } else {
+             if (AckCounter > 100) {
+                 AckCounter = 0;
+                 LoadAckPayload();
+                 CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);          // send big PAYLOAD OCCASIONALLY
+             }else{
+                 LoadShortAckPayload();  
+                 CurrentRadio->writeAckPayload(1, &AckPayload, 2);                       // send VERY little 99% of the time
+                 ++AckCounter;
+             }
+        }
         DelayMillis(2);    
-        uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize();     // Get the size of the new data (14)   
-        CurrentRadio->read(&DataReceived, DynamicPayloadSize);                  //  ** >> Read new data from master << ** // Get the size of the new data (14)
+        uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize();           // Get the size of the new data (14)   
+        CurrentRadio->read(&DataReceived, DynamicPayloadSize);                        //  ** >> Read new data from master << ** // Get the size of the new data (14)
         Connected = true;
         NewData   = true;
        if (Connected) UseReceivedData(DynamicPayloadSize);
@@ -207,6 +220,7 @@ FASTRUN void ReceiveData()
         }
     }
     if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {
+        
         Reconnect(); // Try to reconnect.
     }
 
@@ -581,6 +595,8 @@ FASTRUN void Reconnect()
     FailSafeSent = false;
     if (PreviousRadio != ThisRadio) ++RadioSwaps; // Count the radio swaps
     ReconnectedMoment = millis();                 // Save this moment
+    
+
     if (ModelMatched) {
         Blinking = false;
     }
@@ -712,16 +728,23 @@ void SendMacAddress()
 }
 
 /************************************************************************************************************/
+void LoadShortAckPayload()
+{
+    AckPayload.Purpose |= 0x80; // 0x80 means "HOP NOW"
+    AckPayload.Byte1    = NextChannelNumber;
+}
+/************************************************************************************************************/
 void LoadAckPayload()
 {
-
     if (MacAddressSentCounter < 16) {
         SendMacAddress();
         return;
     }
-
     uint8_t MaxAckP = 4;        // 4 if only RX
     AckPayload.Purpose &= 0x7F; // NOTE: The HIGH BIT of "purpose" bit is the HOPNOW flag. It gets set only when it's time to hop.
+   
+  // Look(AckPayload.Purpose);
+   
     ++AckPayload.Purpose;
     if (INA219Connected) MaxAckP = 5;
     if (SensorHubConnected) MaxAckP = 18;                     // its 14 + GPS

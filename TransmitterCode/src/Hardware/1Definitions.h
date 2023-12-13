@@ -15,7 +15,6 @@
 #include <DS1307RTC.h>
 #include <InterpolationLib.h>
 
-
 // **************************************************************************
 //     SUPPORT FOR TX MODULE AND NEW PCB Version                            *
 // **************************************************************************
@@ -28,8 +27,8 @@
 //***************************************************************************
 
     #define TXVERSION_MAJOR   2
-    #define TXVERSION_MINOR   3
-    #define TXVERSION_MINIMUS 9 //   December 2023
+    #define TXVERSION_MINOR   4
+    #define TXVERSION_MINIMUS 0 //   December 2023
 
 // **************************************************************************
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
@@ -576,6 +575,7 @@ FASTRUN void     LogThisGap();
 void             GetRXVersionNumber();
 void             GetRXVersionNumber();
 void             CompareModelsIDs();
+FASTRUN void     ParseShortAckPayload();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************

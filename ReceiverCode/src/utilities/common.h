@@ -10,8 +10,8 @@
 #include <Servo.h>
 
 #define RXVERSION_MAJOR   2
-#define RXVERSION_MINOR   3
-#define RXVERSION_MINIMUS 9 // December 2023
+#define RXVERSION_MINOR   4
+#define RXVERSION_MINIMUS 0 // December 2023
 
 // #define DB_FHSS
 // #define DB_SENSORS
@@ -177,6 +177,7 @@ void FailSafe();
 void TurnLedOff();
 void TurnLedOn();
 void SaveFailSafeData();
+void LoadShortAckPayload();
 
 template<typename any>
 void Look(const any& value);
@@ -251,8 +252,6 @@ uint8_t       Pipnum         = PIPENUMBER;
 uint8_t       DefaultPipe[6] = {0x23, 0x94, 0x3e, 0xbe, 0xb7, 0x00};
 uint8_t       CurrentPipe[6];
 uint8_t       Randomized_Recovery_Channels_Counter = 0;
-
-
 
 
 #endif // defined (_SRC_UTILITIES_COMMON_H)

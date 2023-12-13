@@ -186,7 +186,11 @@ void SuccessfulPacket()
     if (Radio1.available()){
         uint8_t PayloadSize = Radio1.getDynamicPayloadSize();
         Radio1.read(&AckPayload, PayloadSize); 
-        ParseAckPayload();
+        if (PayloadSize == 6){                  // full length ack payload?
+            ParseAckPayload();
+        } else {
+             ParseShortAckPayload();             // no, it's a short one
+        }
     }
     if (BoundFlag && !LedWasGreen) {
         GreenLedOn();
@@ -664,17 +668,31 @@ void GetModelsMacAddress()
     }
 }
 
+
+
 /************************************************************************************************************/
-FASTRUN void ParseAckPayload()
-{
-    if (BuddyPupilOnPPM) return; // buddy pupil need none of this
+FASTRUN void ParseShortAckPayload(){
 
-    FHSS_data::NextChannelNumber = AckPayload.Byte5; // every packet tells of next hop destination
-
+if (BuddyPupilOnPPM) return;                                                      // buddy pupil need none of this
+    FHSS_data::NextChannelNumber = AckPayload.Byte1;                              // every packet tells of next hop destination
     if (AckPayload.Purpose & 0x80) {                                              // Hi bit is now the **HOP NOW!!** flag
         NextChannel = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber); // The actual channel number pointed to.
         HopToNextChannel();
-        AckPayload.Purpose &= 0x7f; // Clear the high BIT, use the remainder ...
+        AckPayload.Purpose &= 0x7f;                                               // Probably not needed now
+    }
+}
+
+/************************************************************************************************************/
+FASTRUN void ParseAckPayload()
+{
+    if (BuddyPupilOnPPM) return;                                                    // buddy pupil need none of this
+
+    FHSS_data::NextChannelNumber = AckPayload.Byte5;                                // every packet tells of next hop destination
+
+    if (AckPayload.Purpose & 0x80) {                                                // Hi bit is now the **HOP NOW!!** flag
+        NextChannel = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber);   // The actual channel number pointed to.
+        HopToNextChannel();
+        AckPayload.Purpose &= 0x7f;                                                 // Clear the high BIT, use the remainder ...
     }
 
     if (!ModelMatched && !LedWasGreen) {
