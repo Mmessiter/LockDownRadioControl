@@ -29,6 +29,7 @@ var transceiver_8h =
     [ "LoadParameters", "transceiver_8h.html#adac102739147db6397bbcbb371aec4fd", null ],
     [ "NormaliseTheRadio", "transceiver_8h.html#a0708fa5166a126be25283b6cfaff6227", null ],
     [ "ParseAckPayload", "transceiver_8h.html#a694f4f5a0147f4dc29b0bc1a8951547d", null ],
+    [ "ParseShortAckPayload", "transceiver_8h.html#a04937e814dba3f5e07cb34bb13130ff3", null ],
     [ "RecordsPacketSuccess", "transceiver_8h.html#afc091b5942e21a03f6dc8635d5e519ba", null ],
     [ "ScanAllChannels", "transceiver_8h.html#ae17dae8deffe2e33044f61fd3a8ebca2", null ],
     [ "SendBindingPipe", "transceiver_8h.html#ae5df0d6d4352a4039d996e773e8fc6bf", null ],

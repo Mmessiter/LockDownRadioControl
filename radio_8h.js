@@ -13,6 +13,7 @@ var radio_8h =
     [ "InitCurrentRadio", "radio_8h.html#ab652df130d9feb78c0accd5beedf7d80", null ],
     [ "KeepSbusHappy", "radio_8h.html#a6f74cdb7b32a3aa9e9342661bd44ad1a", null ],
     [ "LoadAckPayload", "radio_8h.html#a664f409561bfcf119e0379dd991217e5", null ],
+    [ "LoadShortAckPayload", "radio_8h.html#a94427ff4164f26ea3d22d8478d364eb1", null ],
     [ "MapToSBUS", "radio_8h.html#a6a495c5560f12cc3fd3df9454927d681", null ],
     [ "ProdRadio", "radio_8h.html#a62f1498f67d7e438905ae486bc27044f", null ],
     [ "ReadData", "radio_8h.html#a07ca94db0e305e9c01ec51e417576308", null ],

@@ -54,6 +54,7 @@ var common_8h =
     [ "KeepSbusHappy", "common_8h.html#a6f74cdb7b32a3aa9e9342661bd44ad1a", null ],
     [ "KickTheDog", "common_8h.html#ada95a00a341e4a80176eda743a94ab2e", null ],
     [ "LoadAckPayload", "common_8h.html#a664f409561bfcf119e0379dd991217e5", null ],
+    [ "LoadShortAckPayload", "common_8h.html#a94427ff4164f26ea3d22d8478d364eb1", null ],
     [ "Look", "common_8h.html#a6d87eba17154f7f4f2f3802ef8ee261f", null ],
     [ "Look1", "common_8h.html#aea423a497d09a142f394356bc8438c41", null ],
     [ "MarkHere", "common_8h.html#a5ae8a2aa29e834880ccf370c7547961b", null ],
