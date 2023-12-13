@@ -304,11 +304,9 @@ FASTRUN void SendData()
             NewCompressNeeded = false;                                                                   // No channels changed, so just send the flag
         }
         if (Radio1.write(&DataTosend, ByteCountToTransmit)) {SuccessfulPacket();} else {FailedPacket();}  // Send the data packet complete with ChannelBitMask and compressed data 
-        // ShowPacketData(ByteCountToTransmit, NumberOfChangedChannels);                                  // Just for debugging
-    }else{
-        if (BuddyMasterOnWireless) SendSpecialPacket();                                                  // takes about 4 - 5 ms. Gets buddy control data in ACK payload 
+        // ShowPacketData(ByteCountToTransmit, NumberOfChangedChannels);                                  // Just for debugging                          
     }
-    if ((!Connected) && (BuddyMasterOnWireless)) SendSpecialPacket();                                    // So Pupil knows we are still here
+    if (BuddyMasterOnWireless) SendSpecialPacket();                                    
 }
 /***********************************************************************************************************/
 void DoScanEnd()
