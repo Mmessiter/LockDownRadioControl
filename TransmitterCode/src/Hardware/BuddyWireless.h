@@ -223,7 +223,7 @@ void StartBuddyListen()
     Radio1.setAutoAck(true);                    // we want acks
     Radio1.maskIRQ(1, 1, 1);                    // no interrupts - seems NEEDED at the moment
     Radio1.openReadingPipe(1, BuddyMACAddPipe ^  ENCRYPT_KEY);
-    delayMicroseconds(STOPLISTENINGDELAY);             // to allow the pipe to open
+    delayMicroseconds(STOPLISTENINGDELAY);      // to allow the pipe to open
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);  // set the channel to the special packet channel
     Radio1.startListening();                    // start listening
     FlushFifos();                               // flush the fifos
