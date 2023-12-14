@@ -214,6 +214,7 @@ var 1Definitions_8h =
     [ "STARTX", "1Definitions_8h.html#a6ffc62811b3e92f8acbedcec612c8030", null ],
     [ "STARTY", "1Definitions_8h.html#afa7f69258876ee4ca4c4f9ee3cafffd4", null ],
     [ "STICKSVIEW", "1Definitions_8h.html#abfc5f0d31f80fc812b9c44a55fe3134e", null ],
+    [ "STOPLISTENINGDELAY", "1Definitions_8h.html#a565d61935c13b35fc13071614aa5b378", null ],
     [ "STORAGECHARGE", "1Definitions_8h.html#a0d7f6ce749c2aceb4ecef39efa939fa6", null ],
     [ "STRAIGHTLINES", "1Definitions_8h.html#a00adadb4876f6c86728e50a79fbc8fcc", null ],
     [ "STUNT1", "1Definitions_8h.html#a80c9e9ddb7c76b17439adab7175427c4", null ],
