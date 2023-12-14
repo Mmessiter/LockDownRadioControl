@@ -585,7 +585,7 @@ FASTRUN void ShowComms()
         }
     }
     if (CurrentView == DATAVIEW && Connected) {
-        if (BuddyMasterOnWireless && BuddyON) return;
+
         SendValue(DataView_pps, PacketsPerSecond);
         SendValue(DataView_lps, TotalLostPackets / 2); // about half probably made it but went unacknowledged
         SendText(DataView_Alt, ModelAltitude);

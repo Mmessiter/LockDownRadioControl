@@ -13,7 +13,7 @@
 #define RXVERSION_MINOR   4
 #define RXVERSION_MINIMUS 0 // December 2023
 
-// #define DB_FHSS
+ //#define DB_FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE
@@ -52,7 +52,7 @@
 #define PIPENUMBER       1
 #define BOUNDPIPENUMBER  1
      
-#define RECEIVE_TIMEOUT    11   //  was 14  (should probobly be about 4 - 5 ms more that TX's PACEMAKER 
+#define RECEIVE_TIMEOUT    14   //  was 14  (should probobly be about 4 - 5 ms more that TX's PACEMAKER 
 #define CHANNELSUSED       16                        
 #define RECEIVEBUFFERSIZE  20        
 
