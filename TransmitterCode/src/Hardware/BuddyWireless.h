@@ -148,9 +148,7 @@ void SendSpecialPacket()                                        // Here the MAST
     SpecialPacketData.Command[0]                    = 'M';      // Send M to indicate Master is ON
     if (BuddyON)       SpecialPacketData.Command[0] = 'B';      // Send B to indicate Buddy is ON
     Radio1.openWritingPipe(TeensyMACAddPipe ^ ENCRYPT_KEY);     // send to encrypted pipe address
-    delayMicroseconds(SHORT_DELAY);                             // to allow the pipe to open
     Radio1.setDataRate(FASTDATARATE);                           // 2MBPS
-    delayMicroseconds(SHORT_DELAY);
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
     delayMicroseconds(SHORT_DELAY);
     Radio1.stopListening();         
@@ -162,9 +160,7 @@ void SendSpecialPacket()                                        // Here the MAST
         PupilDetected(false);                                   // pupil is dead
     }
     Radio1.setDataRate(DATARATE);                               // restore the proper data rate
-    delayMicroseconds(SHORT_DELAY);
     Radio1.openWritingPipe(TeensyMACAddPipe);                   // restore the proper pipe address
-    delayMicroseconds(SHORT_DELAY);
     Radio1.setChannel(CurrentChannel);                          // restore the proper frequency channel
     delayMicroseconds(SHORT_DELAY);
     Radio1.stopListening();                                     // Transmit only

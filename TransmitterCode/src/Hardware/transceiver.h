@@ -305,7 +305,6 @@ FASTRUN void SendData()
         }
         if (Radio1.write(&DataTosend, ByteCountToTransmit)) {SuccessfulPacket();} else {FailedPacket();}  // Send the data packet complete with ChannelBitMask and compressed data 
         // ShowPacketData(ByteCountToTransmit, NumberOfChangedChannels);                                  // Just for debugging                          
-       // return;
     }
     if (BuddyMasterOnWireless) SendSpecialPacket();                                    
 }

@@ -11,15 +11,13 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   4
-#define RXVERSION_MINIMUS 0 // December 2023
+#define RXVERSION_MINIMUS 1 // December 2023
 
  //#define DB_FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE
 // #define DB_RXTIMERS
-
-
 
 
  // >>>>>>>>>>>>>>>>                                  ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
