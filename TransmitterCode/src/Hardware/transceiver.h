@@ -208,7 +208,7 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     Radio1.openWritingPipe(Pipe);
     Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait);
     Radio1.stopListening();
-    delayMicroseconds(500);
+    delayMicroseconds(STOPLISTENINGDELAY);
     Radio1.enableDynamicPayloads();
     Radio1.setAddressWidth(5);
     Radio1.setCRCLength(RF24_CRC_16);
@@ -468,9 +468,9 @@ FASTRUN void HopToNextChannel()
     static uint16_t hopcount   = 0;
     Radio1.setChannel(NextChannel); // Hop !
     CurrentChannel = NextChannel;   // save it for later
-    delayMicroseconds(150);
+    delayMicroseconds(STOPLISTENINGDELAY);
     Radio1.stopListening(); // Transmit only
-    delayMicroseconds(150);
+    delayMicroseconds(STOPLISTENINGDELAY);
      ++hopcount;
 
     #ifdef DB_FHSS
@@ -524,9 +524,9 @@ void DisplayPipe(uint64_t WhichPipe) // for debugging
 void SetThePipe(uint64_t WhichPipe)
 {
     Radio1.openWritingPipe(WhichPipe);
-    delayMicroseconds(200);
+    delayMicroseconds(STOPLISTENINGDELAY);
     Radio1.stopListening();
-    delayMicroseconds(200); // allow things to happen
+    delayMicroseconds(STOPLISTENINGDELAY); // allow things to happen
                             // DisplayPipe(WhichPipe);
 }
     /************************************************************************************************************/

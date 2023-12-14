@@ -7,7 +7,6 @@
 #ifndef BUDDYWIRELESS_H
     #define BUDDYWIRELESS_H
     #define SPECIAL_PACKET_CHANNEL QUIETCHANNEL     // Which channel for the special packets
-    #define SHORT_DELAY            260              // ... microseconds
     #define LONGER_DELAY           1                // ... milliseconds
     #define LOSTCONTACTTHRESHOLD   6                // 6 fails in a row and we declare the buddy or master dead
     #define DELAYAFTERACK          1                // ms
@@ -150,9 +149,9 @@ void SendSpecialPacket()                                        // Here the MAST
     Radio1.openWritingPipe(TeensyMACAddPipe ^ ENCRYPT_KEY);     // send to encrypted pipe address
     Radio1.setDataRate(FASTDATARATE);                           // 2MBPS
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
-    delayMicroseconds(SHORT_DELAY);
+    delayMicroseconds(STOPLISTENINGDELAY);
     Radio1.stopListening();         
-    delayMicroseconds(SHORT_DELAY);                            // Transmit only
+    delayMicroseconds(STOPLISTENINGDELAY);                            // Transmit only
     if (Radio1.write(&SpecialPacketData, sizeof SpecialPacketData)) {
         GetPupilAck();                                          // get ack from pupil WITH HIS CONTROL DATA!!
         PupilDetected(true);                                    // pupil is alive
@@ -162,9 +161,9 @@ void SendSpecialPacket()                                        // Here the MAST
     Radio1.setDataRate(DATARATE);                               // restore the proper data rate
     Radio1.openWritingPipe(TeensyMACAddPipe);                   // restore the proper pipe address
     Radio1.setChannel(CurrentChannel);                          // restore the proper frequency channel
-    delayMicroseconds(SHORT_DELAY);
+    delayMicroseconds(STOPLISTENINGDELAY);
     Radio1.stopListening();                                     // Transmit only
-    delayMicroseconds(SHORT_DELAY);
+    delayMicroseconds(STOPLISTENINGDELAY);
 }
 
 //*************************************************************************************************************************
@@ -224,7 +223,7 @@ void StartBuddyListen()
     Radio1.setAutoAck(true);                    // we want acks
     Radio1.maskIRQ(1, 1, 1);                    // no interrupts - seems NEEDED at the moment
     Radio1.openReadingPipe(1, BuddyMACAddPipe ^  ENCRYPT_KEY);
-    delayMicroseconds(SHORT_DELAY);             // to allow the pipe to open
+    delayMicroseconds(STOPLISTENINGDELAY);             // to allow the pipe to open
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);  // set the channel to the special packet channel
     Radio1.startListening();                    // start listening
     FlushFifos();                               // flush the fifos
