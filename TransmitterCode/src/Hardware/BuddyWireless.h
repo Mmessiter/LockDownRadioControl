@@ -150,8 +150,8 @@ void SendSpecialPacket()                                        // Here the MAST
     Radio1.setDataRate(FASTDATARATE);                           // 2MBPS
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
     delayMicroseconds(STOPLISTENINGDELAY);
-    Radio1.stopListening();         
-    delayMicroseconds(STOPLISTENINGDELAY);                            // Transmit only
+    Radio1.stopListening();                                     // Transmit only
+    delayMicroseconds(STOPLISTENINGDELAY);                      
     if (Radio1.write(&SpecialPacketData, sizeof SpecialPacketData)) {
         GetPupilAck();                                          // get ack from pupil WITH HIS CONTROL DATA!!
         PupilDetected(true);                                    // pupil is alive
@@ -188,7 +188,7 @@ void GetSpecialPacket()                                                         
     spd SpecialPacketData;
    
     if (Radio1.available()) {                                                           // if a packet has arrived
-        Radio1.writeAckPayload(1, &DataTosend.CompressedData, SizeOfCompressedData);              // Acknowledge the packet BY SENDING MY CHANNEL DATA!
+        Radio1.writeAckPayload(1, &DataTosend.CompressedData, SizeOfCompressedData);    // Acknowledge the packet BY SENDING MY CHANNEL DATA!
         DelayWithDog(DELAYAFTERACK);                                                    // <-  ** MUST ** allow the ACK time to get going, otherwise the sender sees a failed packet    
         if (Radio1.available()){ 
             Radio1.read(&SpecialPacketData, sizeof SpecialPacketData);                  // read the packet if its still there
@@ -229,7 +229,6 @@ void StartBuddyListen()
     FlushFifos();                               // flush the fifos
     BlueLedOn();                                // turn on the blue led
     CurrentMode = LISTENMODE;                   // set the mode to listen
-    //LostContactFlag = false;                    // reset the lost contact flag
     RestoreBrightness();                        // restore the brightness
 }
 //************************************************************************************************************************
