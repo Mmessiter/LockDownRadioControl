@@ -148,7 +148,7 @@ void SendSpecialPacket()                                        // Here the MAST
     SpecialPacketData.Command[0]                    = 'M';      // Send M to indicate Master is ON
     if (BuddyON)       SpecialPacketData.Command[0] = 'B';      // Send B to indicate Buddy is ON
     Radio1.openWritingPipe(TeensyMACAddPipe ^ ENCRYPT_KEY);     // send to encrypted pipe address
-    delayMicroseconds(SHORT_DELAY);                              // to allow the pipe to open
+    delayMicroseconds(SHORT_DELAY);                             // to allow the pipe to open
     Radio1.setDataRate(FASTDATARATE);                           // 2MBPS
     delayMicroseconds(SHORT_DELAY);
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
