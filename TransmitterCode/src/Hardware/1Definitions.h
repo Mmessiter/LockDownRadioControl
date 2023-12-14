@@ -94,7 +94,7 @@
     #define SHOWCOMMSDELAY         1000                         // ms pauses between updated info on NEXTION
     #define WARMUPDELAY            300                          // fails at 200 so must be >200 ...
     #define SCREENCHANGEWAIT       100                          // allow time for screen to appear
-    #define PACKETNUMBERMAX        10                          // only 7 are so far in use but by making this larger we make updates infrequent
+    #define PACKETNUMBERMAX        10                           // only 7 are so far in use but by making this larger we make updates infrequent
 
 // **************************************************************************
 //                            FHSS PARAMETERS                               *

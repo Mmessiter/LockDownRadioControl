@@ -7,7 +7,7 @@
 #ifndef BUDDYWIRELESS_H
     #define BUDDYWIRELESS_H
     #define SPECIAL_PACKET_CHANNEL QUIETCHANNEL     // Which channel for the special packets
-    #define SHORT_DELAY            130              // ... microseconds
+    #define SHORT_DELAY            100              // ... microseconds
     #define LONGER_DELAY           1                // ... milliseconds
     #define LOSTCONTACTTHRESHOLD   6                // 6 fails in a row and we declare the buddy or master dead
     #define DELAYAFTERACK          1                // ms
@@ -143,13 +143,14 @@ void SendSpecialPacket()                                        // Here the MAST
         uint64_t    ModelID;
     };
     spd SpecialPacketData;
-   
+
     SpecialPacketData.ModelID =  ModelsMacUnionSaved.Val64;     // send the model ID so that pupil can check it
     SpecialPacketData.Command[0]                    = 'M';      // Send M to indicate Master is ON
     if (BuddyON)       SpecialPacketData.Command[0] = 'B';      // Send B to indicate Buddy is ON
     Radio1.openWritingPipe(TeensyMACAddPipe ^ ENCRYPT_KEY);     // send to encrypted pipe address
     Radio1.setDataRate(FASTDATARATE);                           // 2MBPS
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
+    Radio1.stopListening();                                     // Transmit only
     if (Radio1.write(&SpecialPacketData, sizeof SpecialPacketData)) {
         GetPupilAck();                                          // get ack from pupil WITH HIS CONTROL DATA!!
         PupilDetected(true);                                    // pupil is alive
@@ -159,6 +160,7 @@ void SendSpecialPacket()                                        // Here the MAST
     Radio1.setDataRate(DATARATE);                               // restore the proper data rate
     Radio1.openWritingPipe(TeensyMACAddPipe);                   // restore the proper pipe address
     Radio1.setChannel(CurrentChannel);                          // restore the proper frequency channel
+    Radio1.stopListening();                                     // Transmit only
 }
 //*************************************************************************************************************************
 
