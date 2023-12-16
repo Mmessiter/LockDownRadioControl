@@ -11,7 +11,7 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   4
-#define RXVERSION_MINIMUS 1 // December 2023
+#define RXVERSION_MINIMUS 2 // December 2023
 
  //#define DB_FHSS
 // #define DB_SENSORS

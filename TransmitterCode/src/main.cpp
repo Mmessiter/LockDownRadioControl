@@ -1235,7 +1235,8 @@ void ShowSafetyIsOn()
         SendColour(bco2, SpecialColour);
         SendColour(pco, HighlightColour);
         SendColour(pco2, HighlightColour);
-        if (AnnounceBanks) PlaySound(SAFEON);
+        if (AnnounceBanks && !BeQuiet) PlaySound(SAFEON);
+        BeQuiet = false;
     }
     if (UseLog) LogSafety(1);
 }
@@ -1251,7 +1252,8 @@ void ShowSafetyIsOff()
         SendColour(bco2, BackGroundColour);
         SendColour(pco, HighlightColour);
         SendColour(pco2, HighlightColour);
-        if (AnnounceBanks) PlaySound(SAFEOFF);
+        if (AnnounceBanks && !BeQuiet) PlaySound(SAFEOFF);
+        BeQuiet = false;
     }
     if (UseLog) LogSafety(0);
 }
@@ -6362,6 +6364,7 @@ void GetRXVersionNumber()
 
 /************************************************************************************************************/
 
+
 void GotoFrontView()
 {
     char fms[4][4]             = {{"fm1"}, {"fm2"}, {"fm3"}, {"fm4"}};
@@ -6377,11 +6380,12 @@ void GotoFrontView()
         CurrentView = FRONTVIEW;
         CurrentMode = NORMAL;
         UpdateModelsNameEveryWhere();
-        SafetyWasOn ^= 1; // this forces a re-display of safety state
+        SafetyWasOn ^= 1;           // this forces a re-display of safety state
+        BeQuiet = true;             // this means no announcement of safety this time
         ShowBank();
         LastTimeRead = 0;
-        Reconnected  = false; // this is to make '** Connected! **' redisplay (in ShowComms())
-        LastSeconds  = 0;     // This forces redisplay of timer...
+        Reconnected  = false;       // this is to make '** Connected! **' redisplay (in ShowComms())
+        LastSeconds  = 0;           // This forces redisplay of timer...
         Force_ReDisplay();
         ShowMotorTimer();
         ClearText();

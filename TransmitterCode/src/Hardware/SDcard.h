@@ -216,7 +216,7 @@ bool ReadOneModel(uint32_t Mnum)
         ++SDCardAddress;
     }
 
-    // ************************** WAS  READ MOST OF THE SWITCHES NOW SPARE ********************************* TREX! 4  READ
+    // TREX
 
 //    FMSwitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
@@ -238,8 +238,6 @@ bool ReadOneModel(uint32_t Mnum)
     ++SDCardAddress;
 //    SWITCH4Reversed = bool(SDRead8BITS(SDCardAddress));
     ++SDCardAddress;
-
-// *********************************************************************************
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         FailSafeChannel[i] = bool(SDRead8BITS(SDCardAddress));
@@ -288,7 +286,7 @@ bool ReadOneModel(uint32_t Mnum)
     MotorChannel = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
   
-   // SafetySwitch = SDRead8BITS(SDCardAddress); // safety switch! trex WRONG!
+   // TREX
     ++SDCardAddress;
   
     SFV = SDRead16BITS(SDCardAddress);
@@ -310,12 +308,12 @@ bool ReadOneModel(uint32_t Mnum)
         ++SDCardAddress;
     }
     CheckDualRatesValues();
-//  WAS READ OTHER SWITCHES NOW SPARE ****************************************************** TREX! 1 READ
+// TREX
 //    BuddySwitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
 //    DualRatesSwitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-// ***************************************************************************
+
     for (i = 0; i < 4; ++i) {
         BanksInUse[i] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
@@ -671,10 +669,7 @@ bool LoadAllParameters()
     }
     BuddyMasterOnWireless = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-
-
-// ************************** READ MOST OF THE SWITCHES NOW PER TX !********************************* TREX! 4a  READ
-
+// ************************** READ THE SWITCHES NOW PER TX !*********************************
     FMSwitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     Autoswitch = SDRead8BITS(SDCardAddress);
@@ -695,16 +690,11 @@ bool LoadAllParameters()
     ++SDCardAddress;
     SWITCH4Reversed = bool(SDRead8BITS(SDCardAddress));
     ++SDCardAddress;
-
-//  READ OTHER SWITCHES NOW PER TX ****************************************************** TREX! 1a READ
     BuddySwitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     DualRatesSwitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-// ***************************************************************************
-
-
-    SafetySwitch = SDRead8BITS(SDCardAddress); // safety switch! trex
+    SafetySwitch = SDRead8BITS(SDCardAddress); 
     ++SDCardAddress;
   
 
@@ -846,8 +836,7 @@ void SaveTransmitterParameters()
     SDUpdate8BITS(SDCardAddress, BuddyMasterOnWireless);
     ++SDCardAddress;
 
-
-// WRITE MOST OF THE SWITCHES NOW PER TX ********************************* TREX! 2a WRITE FOR TX !!
+// WRITE THE SWITCHES NOW PER TX ***
 
     SDUpdate8BITS(SDCardAddress, FMSwitch);
     ++SDCardAddress;
@@ -869,16 +858,11 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, SWITCH4Reversed);
     ++SDCardAddress;
-    
-
-// ************************** WRITE OTHER SWITCHES ********************************* TREX! 3a WRITE
     SDUpdate8BITS(SDCardAddress, BuddySwitch);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, DualRatesSwitch);
     ++SDCardAddress;
- // ********************************************************************************
-
-    SDUpdate8BITS(SDCardAddress, SafetySwitch); /// safety switch! trex
+    SDUpdate8BITS(SDCardAddress, SafetySwitch); 
     ++SDCardAddress;
 
     SaveCheckSum32(); // Save the Transmitter parametres checksm
@@ -977,7 +961,7 @@ void SaveOneModel(uint32_t mnum)
     }
     for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            //  Nothing written!  - This space is spare for future use (5 * 17)
+            //  Nothing written!  - This space is spare for future use (5 * 17 = 85 bytes)
             ++SDCardAddress;
         }
     }
@@ -1017,7 +1001,7 @@ void SaveOneModel(uint32_t mnum)
         SDUpdate8BITS(SDCardAddress, InPutStick[i]);
         ++SDCardAddress;
     }
-    // WRITE MOST OF THE SWITCHES ********************************* TREX! 2 WRITE
+    //  TREX
 
   //  SDUpdate8BITS(SDCardAddress, FMSwitch);
     ++SDCardAddress;
@@ -1085,7 +1069,7 @@ void SaveOneModel(uint32_t mnum)
     if (MotorChannel > 15) MotorChannel = 15;
     ++SDCardAddress;
    
-   // SDUpdate8BITS(SDCardAddress, SafetySwitch); /// safety switch! trex WRONG!
+   //TREX
     ++SDCardAddress;
    
     SDUpdate16BITS(SDCardAddress, SFV);
@@ -1102,12 +1086,11 @@ void SaveOneModel(uint32_t mnum)
         SDUpdate8BITS(SDCardAddress, DualRateChannels[i]);
         ++SDCardAddress;
     }
-    // ************************** WRITE OTHER SWITCHES ********************************* TREX! 3 WRITE
+    //  TREX
  //   SDUpdate8BITS(SDCardAddress, BuddySwitch);
     ++SDCardAddress;
  //   SDUpdate8BITS(SDCardAddress, DualRatesSwitch);
     ++SDCardAddress;
-    // *********************************************************************************
 
     for (i = 0; i < 4; ++i) {
         SDUpdate8BITS(SDCardAddress, BanksInUse[i]);

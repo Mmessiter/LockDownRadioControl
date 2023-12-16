@@ -28,7 +28,7 @@
 
     #define TXVERSION_MAJOR   2
     #define TXVERSION_MINOR   4
-    #define TXVERSION_MINIMUS 1 //   December 2023
+    #define TXVERSION_MINIMUS 2 //   December 2023
 
 // **************************************************************************
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
@@ -588,6 +588,7 @@ void             SDUpdate8BITS(int p_address, uint8_t p_value);
 uint32_t         SDRead32BITS(int p_address);
 void             CheckSavedTrimValues();
 void             CheckMacrosBuffer();
+void             FixMotorChannel();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
@@ -958,6 +959,7 @@ bool     VersionsCompared    = false;
 uint32_t LedGreenMoment      = 0;
 uint32_t BindingTimer        = 0;
 bool     ModelExistsAtBuddy  = true;                                     //  Flag to indicate that the model memory is on Buddy TX
+bool     BeQuiet             = false;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
