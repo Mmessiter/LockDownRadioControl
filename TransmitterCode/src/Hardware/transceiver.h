@@ -232,9 +232,6 @@ FLASHMEM void ReInitRadio(uint64_t Pipe) // just link init but no begin
     GapSum = 0;
 }
 
-
-
-
 /************************************************************************************************************/
 uint8_t SendExtraParamemters(uint8_t Pointer)             // parameters must be loaded before this function is called
 {                                                         // only the low 12 bits of each parameter are sent

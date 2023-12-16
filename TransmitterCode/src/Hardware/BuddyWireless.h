@@ -174,7 +174,6 @@ void SendSpecialPacket()                                        // Here the MAST
 
 void CheckModelMatchesMaster(uint64_t ModelID){
     static uint32_t LastModelIDCheckTime = 0;                                           // The pupil checks the model ID once every second and loads the correct model if it !matches
-   // return; // TODO fix later!!                                                         // if the model doesn't exist at the buddy, then return
     if (millis()-LastModelIDCheckTime > 1000) {                                         // check the model ID once every second
         LastModelIDCheckTime = millis();
         if (ModelID!= ModelsMacUnionSaved.Val64) LoadCorrectModel(ModelID);             // if the model ID !matches, then load the correct model    
