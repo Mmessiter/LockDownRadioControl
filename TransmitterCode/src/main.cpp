@@ -1856,8 +1856,14 @@ void RationaliseBuddy()
     }
     if (!BuddyPupilOnWireless && !BuddyMasterOnWireless) {
         WirelessBuddy = false;
+        ReInitRadio(DefaultPipe); // like InitRadio but without Radio1.begin() !
     }
-    if (BuddyPupilOnWireless) StartBuddyListen();
+    if (BuddyPupilOnWireless) {
+        ModelMatched = false;
+        BoundFlag   = false;
+        Connected = false;
+        StartBuddyListen();
+    }
 }
 /*********************************************************************************************************************************/
 void GetStatistics()
@@ -3205,6 +3211,7 @@ void StartBuddyView()
     char pBuddyView[]    = "page BuddyView";
     SendCommand(pBuddyView);
     CurrentView = BUDDYVIEW;
+    WirelessBuddy = true;                   // default to wireless
     SendValue(BuddyM, BuddyMasterOnPPM || BuddyMasterOnWireless);
     SendValue(BuddyP, BuddyPupilOnPPM || BuddyPupilOnWireless);
     SendValue(BuddyWireless, WirelessBuddy);
@@ -3220,7 +3227,6 @@ void EndBuddyView()
     bool Master          = false;
     char BuddyWireless[] = "wireless";
     char pRXSetupView[]  = "page RXSetupView";
-    char prompt1[]       = "If you changed anything, REBOOT!";
                      
     Pupil          = GetValue(BuddyP);        // Pupil ?
     Master         = GetValue(BuddyM);        // Master ?
@@ -3264,7 +3270,6 @@ void EndBuddyView()
     if (BuddyPupilOnWireless) {
         GotoFrontView();
     }
-   MsgBox(pRXSetupView,prompt1);
 }
 
 /*********************************************************************************************************************************/

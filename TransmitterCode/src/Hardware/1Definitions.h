@@ -589,6 +589,7 @@ uint32_t         SDRead32BITS(int p_address);
 void             CheckSavedTrimValues();
 void             CheckMacrosBuffer();
 void             FixMotorChannel();
+FLASHMEM void ReInitRadio(uint64_t Pipe);
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
