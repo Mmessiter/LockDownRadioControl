@@ -170,6 +170,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "RudderRightTrim", "TransmitterCode_2src_2main_8cpp.html#a77a49849e3aa20dc1aadce0fe00de798", null ],
     [ "RXOptionsViewStart", "TransmitterCode_2src_2main_8cpp.html#af9735ed306706d15b52bef04ac954bd9", null ],
     [ "RXSetup1End", "TransmitterCode_2src_2main_8cpp.html#a2e0aa19fa93c1bacd9b4600025f33594", null ],
+    [ "SaveAllParameters", "TransmitterCode_2src_2main_8cpp.html#a92c5dada5e5ef70261391557464f2d19", null ],
     [ "SaveCurrentModel", "TransmitterCode_2src_2main_8cpp.html#af5e8d51b8f0fb2cfc985ca3de187cc8a", null ],
     [ "ScanI2c", "TransmitterCode_2src_2main_8cpp.html#a887240a00b11c00c971e633ed47319f9", null ],
     [ "ScrollHelpFile", "TransmitterCode_2src_2main_8cpp.html#ab0a84052e41734eb43651d054ee2b4c5", null ],
