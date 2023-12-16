@@ -2,7 +2,7 @@ var searchData=
 [
   ['listentobanks_0',['ListenToBanks',['../TransmitterCode_2src_2main_8cpp.html#a8ac4e6b41e9a80988a21774ad9f3b3ee',1,'main.cpp']]],
   ['loadackpayload_1',['LoadAckPayload',['../common_8h.html#a664f409561bfcf119e0379dd991217e5',1,'LoadAckPayload():&#160;radio.h'],['../radio_8h.html#a664f409561bfcf119e0379dd991217e5',1,'LoadAckPayload():&#160;radio.h']]],
-  ['loadallparameters_2',['LoadAllParameters',['../TransmitterCode_2src_2main_8cpp.html#a909acb7ed667a5cc9c4ec6191fc33e75',1,'main.cpp']]],
+  ['loadallparameters_2',['LoadAllParameters',['../SDcard_8h.html#a909acb7ed667a5cc9c4ec6191fc33e75',1,'SDcard.h']]],
   ['loadcorrectmodel_3',['LoadCorrectModel',['../BuddyWireless_8h.html#ab0ba1642fb6c43525579b989c7b60dad',1,'BuddyWireless.h']]],
   ['loadfailsafedata_4',['LoadFailSafeData',['../ReceiverCode_2src_2main_8cpp.html#a7b232e8049c83655363495df07fc96d9',1,'main.cpp']]],
   ['loadfileselector_5',['LoadFileSelector',['../1Definitions_8h.html#a824f2e559561add2deadb0d3033c8510',1,'LoadFileSelector():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a824f2e559561add2deadb0d3033c8510',1,'LoadFileSelector():&#160;main.cpp']]],

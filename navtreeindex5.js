@@ -1,5 +1,14 @@
 var NAVTREEINDEX5 =
 {
+"MPU6050__9Axis__MotionApps41_8h.html#ae2aefb42a042fa5cb20e06f7fcfa327e":[5,0,0,0,0,0,7,32],
+"MPU6050__9Axis__MotionApps41_8h.html#ae74941b597bdd8ffb5c35f45b636946b":[5,0,0,0,0,0,7,28],
+"MPU6050__9Axis__MotionApps41_8h.html#aef1d5979e111bf2da69c882ac9d5c704":[5,0,0,0,0,0,7,9],
+"MPU6050__9Axis__MotionApps41_8h.html#af6551f0b4c3964c3128f808e7bf987c7":[5,0,0,0,0,0,7,1],
+"MPU6050__9Axis__MotionApps41_8h.html#afa62d211d77172f56da13321845e8410":[5,0,0,0,0,0,7,7],
+"MPU6050__9Axis__MotionApps41_8h_source.html":[5,0,0,0,0,0,7],
+"MPU9250_8cpp.html":[5,0,0,0,0,1,0],
+"MPU9250_8cpp_source.html":[5,0,0,0,0,1,0],
+"MPU9250_8h.html":[5,0,0,0,0,1,1],
 "MPU9250_8h_source.html":[5,0,0,0,0,1,1],
 "ModelExchange_8h.html":[5,0,3,0,0,4],
 "ModelExchange_8h.html#a25a02fd19ba6092af59f73a9de071bd2":[5,0,3,0,0,4,1],
@@ -240,14 +249,5 @@ var NAVTREEINDEX5 =
 "Quadcopter_2src_2main_8cpp.html#ad4d74e2fa2fccc0bfccc9052c9714af1":[5,0,0,0,1,114],
 "Quadcopter_2src_2main_8cpp.html#ad5ada50f58a4f54f37b312616ad658ad":[5,0,0,0,1,79],
 "Quadcopter_2src_2main_8cpp.html#ad670b3b6cad373b20b41ea485669c51d":[5,0,0,0,1,57],
-"Quadcopter_2src_2main_8cpp.html#ad7706081397e3e9305a98b66ddb04d9e":[5,0,0,0,1,159],
-"Quadcopter_2src_2main_8cpp.html#ada046b15782fee829013693d347dceb9":[5,0,0,0,1,14],
-"Quadcopter_2src_2main_8cpp.html#adb9d4399f1a2888663b5ab08f4d09cba":[5,0,0,0,1,224],
-"Quadcopter_2src_2main_8cpp.html#adbf254c377f0aa7a03dc3c41d502068d":[5,0,0,0,1,65],
-"Quadcopter_2src_2main_8cpp.html#adbf3948b425a805510e6c6f9bf17ec3c":[5,0,0,0,1,113],
-"Quadcopter_2src_2main_8cpp.html#adc2b32a5c909d4fb237d80e43b0fe30d":[5,0,0,0,1,130],
-"Quadcopter_2src_2main_8cpp.html#adcb25ddb851192401bc771fd13c28261":[5,0,0,0,1,94],
-"Quadcopter_2src_2main_8cpp.html#adce3bf2dea7bd001b53e2ca18575f1c0":[5,0,0,0,1,0],
-"Quadcopter_2src_2main_8cpp.html#add3364642e560613095600203b403afa":[5,0,0,0,1,142],
-"Quadcopter_2src_2main_8cpp.html#adfb6f63768019fc83e1fc2b84a991185":[5,0,0,0,1,1]
+"Quadcopter_2src_2main_8cpp.html#ad7706081397e3e9305a98b66ddb04d9e":[5,0,0,0,1,159]
 };

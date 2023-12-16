@@ -1,5 +1,14 @@
 var NAVTREEINDEX4 =
 {
+"MPU6050_8h.html#a917ac5ff97cc7e9ecee733d20a95825e":[5,0,0,0,0,0,4,187],
+"MPU6050_8h.html#a93f16a19ecbbe05449c9183eb450204e":[5,0,0,0,0,0,4,270],
+"MPU6050_8h.html#a94e69b1bac91c18489c5f1d59d9dcc54":[5,0,0,0,0,0,4,170],
+"MPU6050_8h.html#a94f89bee3550147c66aaa3610f96fe8f":[5,0,0,0,0,0,4,75],
+"MPU6050_8h.html#a95960b2c82d00341b6174272e2fb3e07":[5,0,0,0,0,0,4,226],
+"MPU6050_8h.html#a95b5ee3f5f796515c31f0b59f9ce0019":[5,0,0,0,0,0,4,133],
+"MPU6050_8h.html#a95c845eb6e9149bc273fee5892e642f8":[5,0,0,0,0,0,4,168],
+"MPU6050_8h.html#a9640cbeb0cb15ccac6f62721ccde7e6c":[5,0,0,0,0,0,4,314],
+"MPU6050_8h.html#a977201784ee22da88101e2cd60ca83ed":[5,0,0,0,0,0,4,27],
 "MPU6050_8h.html#a97729ffd27bd81b9af5b42a598f91736":[5,0,0,0,0,0,4,221],
 "MPU6050_8h.html#a9826becbd0002bfa200d25690e92e126":[5,0,0,0,0,0,4,118],
 "MPU6050_8h.html#a985445c35a0fe1be18020ad3a635beb7":[5,0,0,0,0,0,4,87],
@@ -240,14 +249,5 @@ var NAVTREEINDEX4 =
 "MPU6050__9Axis__MotionApps41_8h.html#abbb2cd396dde2d1575948bb16ce2853a":[5,0,0,0,0,0,7,27],
 "MPU6050__9Axis__MotionApps41_8h.html#ac9201560d03a0cfa240d0421a22c74d1":[5,0,0,0,0,0,7,19],
 "MPU6050__9Axis__MotionApps41_8h.html#ad1937eefa9a7b6d3c9034dd9e62ab114":[5,0,0,0,0,0,7,4],
-"MPU6050__9Axis__MotionApps41_8h.html#ad2b71a6faa0583b51569b531a443cb0a":[5,0,0,0,0,0,7,14],
-"MPU6050__9Axis__MotionApps41_8h.html#ae2aefb42a042fa5cb20e06f7fcfa327e":[5,0,0,0,0,0,7,32],
-"MPU6050__9Axis__MotionApps41_8h.html#ae74941b597bdd8ffb5c35f45b636946b":[5,0,0,0,0,0,7,28],
-"MPU6050__9Axis__MotionApps41_8h.html#aef1d5979e111bf2da69c882ac9d5c704":[5,0,0,0,0,0,7,9],
-"MPU6050__9Axis__MotionApps41_8h.html#af6551f0b4c3964c3128f808e7bf987c7":[5,0,0,0,0,0,7,1],
-"MPU6050__9Axis__MotionApps41_8h.html#afa62d211d77172f56da13321845e8410":[5,0,0,0,0,0,7,7],
-"MPU6050__9Axis__MotionApps41_8h_source.html":[5,0,0,0,0,0,7],
-"MPU9250_8cpp.html":[5,0,0,0,0,1,0],
-"MPU9250_8cpp_source.html":[5,0,0,0,0,1,0],
-"MPU9250_8h.html":[5,0,0,0,0,1,1]
+"MPU6050__9Axis__MotionApps41_8h.html#ad2b71a6faa0583b51569b531a443cb0a":[5,0,0,0,0,0,7,14]
 };

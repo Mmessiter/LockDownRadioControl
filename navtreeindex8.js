@@ -1,5 +1,16 @@
 var NAVTREEINDEX8 =
 {
+"classMPU6050.html#a16eb12bbf07bc17a9d852941d834175e":[4,0,5,254],
+"classMPU6050.html#a17147a6f477be79f58889e9e6329392f":[4,0,5,222],
+"classMPU6050.html#a1874f796bd3ad97c5a72ab559b33e4a7":[4,0,5,138],
+"classMPU6050.html#a18dd79b7c53600e9ce97eed4bfe6cf15":[4,0,5,183],
+"classMPU6050.html#a18e8f3d053a68f0e5ecf497c87ecac8a":[4,0,5,112],
+"classMPU6050.html#a196404ef04b959083d4bf5e6f1cd8b98":[4,0,5,115],
+"classMPU6050.html#a1ac1a70c4d207c93359b43e743d34839":[4,0,5,27],
+"classMPU6050.html#a1d9fc7f1058c4ab9a8a586e3fc30d12d":[4,0,5,263],
+"classMPU6050.html#a201dc0aa819f451584c575c5a7590e10":[4,0,5,270],
+"classMPU6050.html#a20dc4bdedbe1550580c28a6d090291be":[4,0,5,244],
+"classMPU6050.html#a20de45af9109402f0cfe785f8fdbf439":[4,0,5,268],
 "classMPU6050.html#a20f7804db1a980a3c425ae44c33d420b":[4,0,5,121],
 "classMPU6050.html#a249a905ae4572a462414f2d94236258a":[4,0,5,127],
 "classMPU6050.html#a2523e798db3baf9cb9dbf347af16639b":[4,0,5,11],
@@ -238,16 +249,5 @@ var NAVTREEINDEX8 =
 "classMPU6050.html#afb9254a04feb7909cb808e94fa4fc44c":[4,0,5,149],
 "classMPU6050.html#afccbee85f5cdc95098f6d62d8d417c3f":[4,0,5,166],
 "classMPU6050.html#afd6a9b55a589c83c9a0fb0b5b2a88234":[4,0,5,92],
-"classMPU6050.html#afd8983f0911e37015434bebc85185fb2":[4,0,5,32],
-"classMPU6050.html#afdfe715ced419d117c2c47007d631f9e":[4,0,5,128],
-"classMPU9250.html":[4,0,6],
-"classMPU9250.html#a0168a9af5761328454e5fca3c725044a":[4,0,6,229],
-"classMPU9250.html#a025bef32e50b09afcbaa02397a9749ca":[4,0,6,171],
-"classMPU9250.html#a046579c4492296dce3d3a0cf2e409e96":[4,0,6,18],
-"classMPU9250.html#a063be654730f719544be8a7ce39a433c":[4,0,6,52],
-"classMPU9250.html#a06a7c665a4f85acbc48d6339b7267e84":[4,0,6,113],
-"classMPU9250.html#a07accae4b4fe268fce2e26b007bb54c3":[4,0,6,63],
-"classMPU9250.html#a07f8ccd1907f134d866105e3d5ec5a10":[4,0,6,27],
-"classMPU9250.html#a0b3804d17270a7bfe40f2e31e2e4bdc8":[4,0,6,47],
-"classMPU9250.html#a0f8f1f024f8d3b0461385b53022472ac":[4,0,6,108]
+"classMPU6050.html#afd8983f0911e37015434bebc85185fb2":[4,0,5,32]
 };
