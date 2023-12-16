@@ -2177,29 +2177,6 @@ void ShowFileErrorMsg()
     FileError = false;
 }
 
-/*********************************************************************************************************************************/
-
-void SaveAllParameters()
-{
-    if (!ModelsFileOpen) OpenModelsFile();
-    SaveTransmitterParameters();
-    MemoryForTransmtter = SDCardAddress - 2;
-    SaveOneModel(ModelNumber);
-#ifdef DB_SD
-    Serial.println(" ");
-    Serial.print(MemoryForTransmtter);
-    Serial.println(" bytes written to SD CARD FOR TX.");
-    Serial.print(TXSIZE);
-    Serial.println(" bytes reserved for TX.");
-    Serial.print(TXSIZE - MemoryForTransmtter);
-    Serial.println(" Spare bytes still for any new TX params.");
-    Serial.print("Saved model: ");
-    Serial.print(ModelNumber);
-    Serial.print(" (");
-    Serial.print(ModelName);
-    Serial.println(")");
-#endif // defined DB_SD
-}
 
 /*********************************************************************************************************************************/
 
