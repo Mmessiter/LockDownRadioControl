@@ -4072,7 +4072,6 @@ void StartModelSetup()
 /******************************************************************************************************************************/
 void EndModelSetup()
 {
-
     GotoFrontView();
 }
 
@@ -4590,8 +4589,16 @@ void TXModuleViewEnd()
 
 /******************************************************************************************************************************/
 
+void SaveSwitches(){
+    char page_SetupView[] = "page TXSetupView";
+    SendCommand(page_SetupView);
+    SaveTransmitterParameters();
+}
+
+/******************************************************************************************************************************/
+
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 72 // One more than final one, because first is number zero
+#define LASTFUNCTION 73 // One more than final one, because first is number zero
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                    // 0
@@ -4644,7 +4651,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     DualRatesRefresh,         // 47
     GotoFrontView,            // 48
     GotoGPSView,              // 49
-    StartModelSetup,          // 50
+    StartModelSetup,          // 50 
     EndModelSetup,            // 51
     StartBankNames,           // 52
     EndBankNames,             // 53
@@ -4665,8 +4672,8 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     DeleteModelID,            // 68
     StartPong,                // 69
     StoreModelID,             // 70
-    ResetClock                // 71
-
+    ResetClock,               // 71
+    SaveSwitches              // 72 ( NOW SAVED FROM TX SETUP MENU GLOBALLY FOR ALL MODELS)
 
 }; // list will become longer ...
 
