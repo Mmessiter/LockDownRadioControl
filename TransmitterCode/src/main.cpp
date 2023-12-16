@@ -1837,7 +1837,6 @@ FLASHMEM void setup()
         }
     }
     RationaliseBuddy();
-   // RandomiseTheRecoveryChannels();
 }
 /*********************************************************************************************************************************/
 void RationaliseBuddy()
