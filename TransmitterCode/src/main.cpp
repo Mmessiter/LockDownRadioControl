@@ -1235,6 +1235,7 @@ void ShowSafetyIsOn()
         SendColour(bco2, SpecialColour);
         SendColour(pco, HighlightColour);
         SendColour(pco2, HighlightColour);
+        if (AnnounceBanks) PlaySound(SAFEON);
     }
     if (UseLog) LogSafety(1);
 }
@@ -1250,6 +1251,7 @@ void ShowSafetyIsOff()
         SendColour(bco2, BackGroundColour);
         SendColour(pco, HighlightColour);
         SendColour(pco2, HighlightColour);
+        if (AnnounceBanks) PlaySound(SAFEOFF);
     }
     if (UseLog) LogSafety(0);
 }

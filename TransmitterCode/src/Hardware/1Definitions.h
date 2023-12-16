@@ -315,6 +315,8 @@
     #define TWO             70
     #define ONE             71
     #define MMSAVED         72
+    #define SAFEON          73
+    #define SAFEOFF         74
 
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
