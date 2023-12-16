@@ -197,6 +197,8 @@ var 1Definitions_8h =
     [ "RIGHTPADDLEX", "1Definitions_8h.html#ac486479fd9b023454968dd48a4ebefa4", null ],
     [ "RXSETUPVIEW", "1Definitions_8h.html#a780837bb310f271084ffc0720d6be13b", null ],
     [ "RXSETUPVIEW1", "1Definitions_8h.html#aaf6268b3ed41c0e18d11de29157837b8", null ],
+    [ "SAFEOFF", "1Definitions_8h.html#ab491837c51b3849e883e8b29018684cd", null ],
+    [ "SAFEON", "1Definitions_8h.html#a7f93e9274c4dac1802c3ccb8094dfb05", null ],
     [ "SCANVIEW", "1Definitions_8h.html#a6f1464e66db944aef96d5617811acb8b", null ],
     [ "SCANWAVEBAND", "1Definitions_8h.html#af8400c0c2d5c4779f32223055a12336d", null ],
     [ "SCREENCHANGEWAIT", "1Definitions_8h.html#a5fa58304135bf4162814d78de050f1c0", null ],
