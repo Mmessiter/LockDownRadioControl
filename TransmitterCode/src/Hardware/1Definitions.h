@@ -577,6 +577,16 @@ void             GetRXVersionNumber();
 void             GetRXVersionNumber();
 void             CompareModelsIDs();
 FASTRUN void     ParseShortAckPayload();
+void             OpenModelsFile();
+uint8_t          SDRead8BITS(int p_address);
+short int        SDRead16BITS(int p_address);
+void             UpdateButtonLabels();
+void             SDUpdate32BITS(int p_address, uint32_t p_value);
+void             SDUpdate8BITS(int p_address, uint8_t p_value);
+uint32_t         SDRead32BITS(int p_address);
+void             CheckSavedTrimValues();
+void             CheckMacrosBuffer();
+
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************

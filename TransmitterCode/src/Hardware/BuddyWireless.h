@@ -16,25 +16,26 @@
  
 //*************************************************************************************************************************
 
-void LoadCorrectModel(uint64_t ModelID){                                     //  Gets Buddy onto same model as master, quietly.                                            
-    uint32_t SavedModelNumber = ModelNumber;                                 //  Save the current model number
-     
+void LoadCorrectModel(uint64_t ModelID){                                        //  Gets Buddy onto same model as master, quietly.                                            
+    uint32_t SavedModelNumber = ModelNumber;                                    //  Save the current model number
+    if (!ModelExistsAtBuddy) return;
     ModelMatched = false;
     ModelNumber = 0;
-    while (!ModelMatched && (ModelNumber < MAXMODELNUMBER - 1)) {           //  Try to match the ID with a saved one
+    while (!ModelMatched && (ModelNumber < MAXMODELNUMBER - 1)) {               //  Try to match the ID with a saved one
         ++ModelNumber;
         ReadOneModel(ModelNumber);
-        if ((ModelID == ModelsMacUnionSaved.Val64)) ModelMatched = true;    //  Found it!
+        if ((ModelID == ModelsMacUnionSaved.Val64)) ModelMatched = true;        //  Found it!
     }
-    if (ModelMatched) {                                                     //  Found it!
-        UpdateModelsNameEveryWhere();                                       //  Show it everywhere.
-        ModelExistsAtBuddy = true;                                          //  Flag to indicate that the model is here
-        SaveAllParameters();                                                //  Save it
+    if (ModelMatched) {                                                         //  Found it!
+        UpdateModelsNameEveryWhere();                                           //  Show it everywhere.
+        ModelExistsAtBuddy = true;                                              //  Flag to indicate that the model is here
+        SaveAllParameters();                                                    //  Save it
         GotoFrontView();
     }else{
-        ModelNumber = SavedModelNumber;                                     //  Restore the current model number
-        ReadOneModel(ModelNumber);                                          //  Restore the current model 
-        ModelExistsAtBuddy = false;                                         //  Flag to indicate that the model isn't here
+        ModelNumber = SavedModelNumber;                                         //  Restore the current model number
+        ReadOneModel(ModelNumber);                                              //  Restore the current model 
+        ModelExistsAtBuddy = false;                                             //  Flag to indicate that the model isn't here so don't look again
+        Look("Model not found");                                                //  Tell the user
         GotoFrontView();
     }
 }
@@ -173,7 +174,7 @@ void SendSpecialPacket()                                        // Here the MAST
 
 void CheckModelMatchesMaster(uint64_t ModelID){
     static uint32_t LastModelIDCheckTime = 0;                                           // The pupil checks the model ID once every second and loads the correct model if it !matches
-    return; // TODO fix later!!                                                         // if the model doesn't exist at the buddy, then return
+   // return; // TODO fix later!!                                                         // if the model doesn't exist at the buddy, then return
     if (millis()-LastModelIDCheckTime > 1000) {                                         // check the model ID once every second
         LastModelIDCheckTime = millis();
         if (ModelID!= ModelsMacUnionSaved.Val64) LoadCorrectModel(ModelID);             // if the model ID !matches, then load the correct model    
