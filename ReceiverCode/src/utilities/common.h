@@ -13,7 +13,7 @@
 #define RXVERSION_MINOR   4
 #define RXVERSION_MINIMUS 2 // December 2023
 
-  #define HOPTIME                   0    // milliseconds between hops
+  #define HOPTIME                   0    // milliseconds between hops ;-) 0 = hop every packet
 
 //  #define DB_FHSS
 // #define DB_SENSORS
