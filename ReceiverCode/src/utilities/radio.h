@@ -729,8 +729,8 @@ void SendMacAddress()
 /************************************************************************************************************/
 void LoadShortAckPayload()
 {
-    AckPayload.Purpose |= 0x80; // 0x80 means "HOP NOW"
-    AckPayload.Byte1    = NextChannelNumber;
+    CheckWhetherItsTimeToHop();
+    AckPayload.Byte1 = NextChannelNumber;
 }
 /************************************************************************************************************/
 void LoadAckPayload()

@@ -13,7 +13,9 @@
 #define RXVERSION_MINOR   4
 #define RXVERSION_MINIMUS 2 // December 2023
 
- // #define DB_FHSS
+  #define HOPTIME                   0    // milliseconds between hops
+
+//  #define DB_FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE
@@ -40,9 +42,6 @@
 
 #define LISTEN_PERIOD           14   //  14 (How many ms to listen for TX in Reconnect())
 
-// ********************* >>> FHSS params <<< *******************************************
-
-#define HOPTIME                   80    // was 80 ms between channel changes. 
 
 // *************************************************************************************
 
