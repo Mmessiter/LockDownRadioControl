@@ -422,7 +422,6 @@ void ReadTime()
     char TimeString[80];
     char Space[]    = " ";
     char colon[]    = ":";
-    char colon1[]   = ".";
     char zero[]     = "0";
     char DateTime[] = "DateTime";
 
@@ -462,12 +461,10 @@ void ReadTime()
             }
             if (MayBeAddZero(DisplayedHour)) strcat(TimeString, zero);
             strcat(TimeString, Str(NB, DisplayedHour, 0));
-            if (FHSS_data::UkRules) strcat(TimeString, colon);
-            if (!FHSS_data::UkRules) strcat(TimeString, colon1);
+            strcat(TimeString, colon);
             if (MayBeAddZero(tm.Minute)) strcat(TimeString, zero);
             strcat(TimeString, Str(NB, tm.Minute, 0));
-            if (FHSS_data::UkRules) strcat(TimeString, colon);
-            if (!FHSS_data::UkRules) strcat(TimeString, colon1);
+            strcat(TimeString, colon);
             if (MayBeAddZero(tm.Second)) strcat(TimeString, zero);
             strcat(TimeString, Str(NB, tm.Second, 0));
             SendText(DateTime, TimeString);

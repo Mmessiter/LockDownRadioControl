@@ -41,12 +41,12 @@ uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed
 void UseExtraParameters()
 {
     uint16_t TwoBytes = 0;
-//    uint8_t  SwapWaveBand;
+
      
     switch (Parameters.ID) {
        //      case 0:
        //      break;
-        case 1:   
+        case 1:   // working!
             FS_byte1  = Parameters.word1;                               // These 2 bytes are 16 failsafe flags
             FS_byte2  = Parameters.word2;                               // These 2 bytes are 16 failsafe flags
             TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
@@ -54,30 +54,26 @@ void UseExtraParameters()
             SaveFailSafeData(); 
             break;
 
-//         case 2:
-//             Qnh = (ReceivedData[CHANNELSSENT + 1]) << 8; // 16 bits sent as two bytes for pressure here at sea level
-//             Qnh += ReceivedData[CHANNELSSENT + 2];
-//             if (OldQnh != Qnh) SendQnhToSensorHub();
-//             OldQnh = Qnh; // Send new one once only
-//             break;
-//         case 3:
-//             if ((ReceivedData[CHANNELSSENT + 2]) == 255) { // Mark this location
-//                 MarkHere();
-//                 ReceivedData[CHANNELSSENT + 2] = 0; // ... Once only
-//             }
-//             break;
-//         case 4:
-//             ModelMatched = ReceivedData[CHANNELSSENT + 1];
-//             SwapWaveBand = ReceivedData[CHANNELSSENT + 2];
-//             if (SwapWaveBand > 0) {
-//                 if (SwapWaveBand == 1) SetUKFrequencies();
-//                 if (SwapWaveBand == 2) SetTestFrequencies();
-//             }
-//             break;
-//         case 5:
-//             UseSBUS         = (bool)ReceivedData[CHANNELSSENT + 1]; // if false means PPM
-//             PPMChannelCount = ReceivedData[CHANNELSSENT + 2];
-//             break;
+        case 2:
+            Qnh = Parameters.word1;// << 8; // 16 bits sent as two bytes for pressure here at sea level
+           // Qnh += Parameters.word2;
+            if (OldQnh != Qnh) SendQnhToSensorHub();
+            OldQnh = Qnh; // Send new one once only
+           
+            Look1("QNH! ");
+            Look(Qnh);
+            break;
+        case 3:
+            if (Parameters.word2 == 255) { // Mark this location
+                MarkHere();
+                Parameters.word2 = 0; // ... Once only
+            }
+            break;
+        
+        case 5:
+            UseSBUS         = (bool)Parameters.word1; // if false means PPM
+            PPMChannelCount = Parameters.word2;
+            break;
           default:
               break;
         }
@@ -139,10 +135,11 @@ void ReadMoreParameters(uint8_t NumberOfChangedChannels){
         Parameters.ID    =  RawDataIn[NumberOfChangedChannels] ;              // NumberOfChangedChannels points past the end of the changed channels
         Parameters.word1 =  RawDataIn[NumberOfChangedChannels+1];
         Parameters.word2 =  RawDataIn[NumberOfChangedChannels+2];
-        UseExtraParameters();    
-        // Look(Parameters.ID);
-        // Look(Parameters.word1);
-        // Look(Parameters.word2);
+       
+        //   Look(Parameters.ID);
+        //   Look(Parameters.word1);
+        //   Look(Parameters.word2);
+          UseExtraParameters();    
 }
 /************************************************************************************************************/
 void UseReceivedData(uint8_t DynamicPayloadSize)                            // DynamicPayloadSize is length of incomming data
@@ -237,27 +234,12 @@ FASTRUN void ReceiveData()
 }
 /************************************************************************************************************/
 
-
-
-/************************************************************************************************************/
-
-// This allows a new array of pseudo-random channel numbers to be used.
-// "FHSSChPointer" and "FrequencyCount" simply need to be set appropriately.
-
-void SetTestFrequencies()
-{
-     FHSSChPointer       = FHSS_Channels1;
-    FrequencyCount      = FREQUENCYSCOUNT1;
-}
-/************************************************************************************************************/
-
 // This allows a new array of pseudo-random channel numbers to be used.
 // "FHSSChPointer" and "FrequencyCount" simply need to be set appropriately.
 
 void SetUKFrequencies()
 {
     FHSSChPointer       = FHSS_Channels;
-    FrequencyCount      = FREQUENCYSCOUNT;
 }
 
 /************************************************************************************************************/
@@ -622,7 +604,7 @@ FASTRUN void Reconnect()
 void IncChannelNumber()
 {
     ++NextChannelNumber; // Move up the channels' array
-    if (NextChannelNumber >= FrequencyCount) {
+    if (NextChannelNumber > FREQUENCYSCOUNT) {
         NextChannelNumber = 0;
     }                                                        // If needed, wrap the channels' array pointer
     AckPayload.Byte5 = NextChannelNumber;                    // Tell the transmitter which element of the array to use next.

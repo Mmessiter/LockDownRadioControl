@@ -13,9 +13,9 @@
 #define RXVERSION_MINOR   4
 #define RXVERSION_MINIMUS 2 // December 2023
 
-  #define HOPTIME                   0    // milliseconds between hops ;-) 0 = hop every packet
+#define HOPTIME                   0    // milliseconds between hops ;-) 0 = hop every packet
 
-//  #define DB_FHSS
+ // #define DB_FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE
@@ -42,7 +42,6 @@
 
 #define LISTEN_PERIOD           14   //  14 (How many ms to listen for TX in Reconnect())
 
-
 // *************************************************************************************
 
 #define DATARATE RF24_250KBPS // RF24_250KBPS, RF24_1MBPS, RF24_2MBPS
@@ -61,7 +60,6 @@ CD DataReceived;
 
 uint16_t SizeOfDataReceived = sizeof(DataReceived);
 
-
 struct CD2{
     uint16_t        ID    = 0;          
     uint16_t        word1 = 0;
@@ -72,9 +70,7 @@ CD2 Parameters;
 uint8_t         SizeOfParameters = sizeof(Parameters);
 
 
-#define FREQUENCYSCOUNT  82                             // uses 82 different channels
-#define FREQUENCYSCOUNT1 41                             // uses 41 different test channels
-
+#define FREQUENCYSCOUNT  83                             // uses 83 different channels
 #define SERVOSUSED       9                              // But all 16 are available via SBUS
 #define SBUSRATE         10                             // SBUS frame every 10 milliseconds
 #define SBUSPORT         Serial3                        // = 14
@@ -99,9 +95,6 @@ uint8_t         SizeOfParameters = sizeof(Parameters);
 #define BIND_EEPROM_OFFSET 0                      // use 8 bytes from here
 #define FS_EEPROM_OFFSET   BIND_EEPROM_OFFSET + 8 // use 16 bytes from here
 #define PIPES_TO_COMPARE   8
-
-
-
 
 RF24     Radio1(pinCE1, pinCSN1);
 RF24     Radio2(pinCE2, pinCSN2);
@@ -134,15 +127,11 @@ bool      MPU6050Connected      = false; //  Accelerometer and Gyro from MPU6050
 uint8_t   ReconnectChannel      = 0;
 uint8_t   FHSS_Recovery_Channels[3]           = {15, 71, 82};                       // three possible channels used for Recovery
 uint8_t*  FHSSChPointer; // Pointer for FHSS channels' array
-uint8_t   FrequencyCount    = FREQUENCYSCOUNT;
 uint8_t   FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 16, 72, // These are good for UK
                              35, 57, 45, 29, 75, 3, 41, 62, 11, 9, 77, 37, 8, 31, 36, 18, 17, 50, 78, 73, 30, 79, 6, 23, 40,
                              54, 12, 80, 53, 22, 1, 74, 39, 58, 63, 70, 52, 42, 25, 43, 26, 14, 38, 48, 68, 33, 27, 60, 44, 46,
                              56, 7, 81, 5, 65, 4, 10};
 
-uint8_t FHSS_Channels1[42] = {93, 111, 107, 103, 106, 97, 108, 102, 118, 104, 101, 109, 98, // These are good for tests where WiFi is too overpowering
-                              113, 124, 115, 91, 96, 85, 117, 89, 99, 114, 87, 112,
-                              86, 94, 92, 119, 120, 100, 121, 123, 95, 122, 105, 84, 116, 90, 110, 88};
 
 /************************************************************************************************************/
 
@@ -161,7 +150,6 @@ void KeepSbusHappy();
 void RebuildFlags(bool* f, uint16_t tb);
 void SendQnhToSensorHub();
 void MarkHere();
-void SetTestFrequencies();
 void UseDefaultRecoveryChannels();
 void UseRandomizedRecoveryChannels();
 void KickTheDog();

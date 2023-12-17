@@ -80,8 +80,8 @@ void LoadParameters()
             break;
 
        case 2:
-            Parameters.word1  = Qnh >> 8;       // (HiByte)   Qnh is current atmospheric pressure at sea level here (an aviation term)
-            Parameters.word2  = Qnh & 0x00ff;   // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
+            Parameters.word1  =  Qnh  ;       // (HiByte)   Qnh is current atmospheric pressure at sea level here (an aviation term)
+            Parameters.word2  =  5555 ;       // Qnh & 0x00ff;   // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
             break;
 
         case 3:
@@ -91,13 +91,7 @@ void LoadParameters()
                 GPSMarkHere       = 0;
             }
             break;
-        case 4:
-            Parameters.word1  = ModelMatched; // let receiver know whether correct model is loaded.
-            Parameters.word2  = SwapWaveBand;
-            if (SwapWaveBand == 2) SetTestFrequencies();
-            if (SwapWaveBand == 1) SetUKFrequencies();
-            SwapWaveBand = 0;
-            break;
+        
         case 5:
               Parameters.word1 = PPMdata.UseSBUSFromRX;   // 1 - 0
               Parameters.word2 = PPMdata.PPMChannelCount; 
@@ -175,11 +169,21 @@ void FlushFifos()
 /************************************************************************************************************/
 void SuccessfulPacket()
 {
+
+    static uint8_t ParamsSend = 0;
     CheckGapsLength();
     RecordsPacketSuccess(1);
     ++RangeTestGoodPackets;
     ++PacketNumber;
-    AddExtraParameters = false;
+   
+    if (AddExtraParameters && (ParamsSend < 5)) {  // Send parameters 5 times in case of a packet loss or two
+        ++ParamsSend;
+        if (ParamsSend >= 5) {
+            ParamsSend = 0;
+            AddExtraParameters = false;
+        }   
+    }
+
     TotalLostPackets += RecentPacketsLost;
     RecentPacketsLost = 0;
     Connected         = true;
@@ -189,7 +193,7 @@ void SuccessfulPacket()
         if (PayloadSize == 6){                  // full length ack payload?
             ParseAckPayload();
         } else {
-             ParseShortAckPayload();             // no, it's a short one
+            ParseShortAckPayload();             // no, it's a short one
         }
     }
     if (BoundFlag && !LedWasGreen) {
@@ -225,13 +229,23 @@ FLASHMEM void InitRadio(uint64_t Pipe)
 /************************************************************************************************************/
 uint8_t SendExtraParamemters(uint8_t Pointer)             // parameters must be loaded before this function is called
 {                                                         // only the low 12 bits of each parameter are sent
-    LoadParameters();
+   
     RawDataBuffer[Pointer]    = Parameters.ID;           // copy current parameter values into the rawdatabuffer right after the channels
     RawDataBuffer[Pointer+1]  = Parameters.word1;
     RawDataBuffer[Pointer+2]  = Parameters.word2;
     Pointer += 4;               
-  //  Look1("  Parameter sent: ");
-  //  Look(Parameters.ID);
+    
+    Look1("  Parameter sent: ");
+    Look(Parameters.ID);
+    Look1("  Word1: ");
+    Look(Parameters.word1);
+    Look1("  Word2: ");
+    Look(Parameters.word2);
+    Look1("  Pointer: ");
+    Look(Pointer);
+    
+    LoadParameters();
+
 return Pointer;
 }
 /************************************************************************************************************/

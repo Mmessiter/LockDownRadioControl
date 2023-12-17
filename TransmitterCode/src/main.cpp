@@ -1292,15 +1292,9 @@ FASTRUN void SetUKFrequencies()
 {
     FHSS_data::FHSSChPointer       = FHSS_data::FHSS_Channels;
     FHSS_data::FHSSRecoveryPointer = FHSS_data::FHSS_Channels;
-    FHSS_data::UkRules             = true;
+
 }
-/************************************************************************************************************/
-FASTRUN void SetTestFrequencies()
-{
-    FHSS_data::FHSSChPointer       = FHSS_data::FHSS_Channels1;
-    FHSS_data::FHSSRecoveryPointer = FHSS_data::FHSS_Channels1;
-    FHSS_data::UkRules             = false;
-}
+
 /************************************************************************************************************/
 FASTRUN void CreateTimeStamp(char* DateAndTime)
 {
@@ -3673,6 +3667,8 @@ void OptionView3End() //
     ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
     ScanSensitivity         = GetValue(n4);
     ScanSensitivity         = CheckRange(ScanSensitivity, 1, 255);
+    Parameters.ID = 2;
+    AddExtraParameters = true;    
     SaveTransmitterParameters();
     CloseModelsFile();
     CurrentView = TXSETUPVIEW;
@@ -4811,7 +4807,7 @@ FASTRUN void ButtonWasPressed()
         char fs[16][5]                 = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
         char CH1NAME[]                 = "CH1NAME=";
         char CH2NAME[]                 = "CH2NAME=";
-        char b17[]                     = "b17";
+       // char b17[]                     = "b17";
         char CH3NAME[]                 = "CH3NAME=";
         char CH4NAME[]                 = "CH4NAME=";
         char CH5NAME[]                 = "CH5NAME=";
@@ -4858,9 +4854,6 @@ FASTRUN void ButtonWasPressed()
         char DataView_AltZero[]        = "AltZero";
         char OptionsEnd[]              = "OptionsEnd";
         char Mark[]                    = "Mark";
-        char UKRULES[]                 = "UKRULES";
-        char Htext0[]                  = "HELP";
-        char Htext1[]                  = "Help";
         char Bwn[]                     = "Bwn";
         char SetupCol[]                = "SetupCol";
         char b0_bco[]                  = "b0.bco";
@@ -4998,29 +4991,8 @@ FASTRUN void ButtonWasPressed()
             GPSMaxDistance = 0;
             ClearText();
             return;
-        }
-        if (InStrng(UKRULES, TextIn) > 0) { // UK Offcom regulations?
-            ++FHSS_data::UkRulesCounter;
-            if (FHSS_data::UkRulesCounter == 1) SwapWaveBandTimer = millis();
-            if (FHSS_data::UkRulesCounter == 5) {
-
-                if ((millis() - SwapWaveBandTimer) < 5000) { // pressed 5 times in under 5 seconds?!
-                    if (!FHSS_data::UkRules) {
-                        SwapWaveBand       = 1;
-                        FHSS_data::UkRules = true;
-                        SendText(b17, Htext1);
-                    }
-                    else {
-                        SwapWaveBand       = 2;
-                        FHSS_data::UkRules = false;
-                        SendText(b17, Htext0);
-                    }
-                }
-                FHSS_data::UkRulesCounter = 0;
-            }
-            ClearText();
-            return;
-        }
+         }
+       
 
         if (InStrng(OptionsEnd, TextIn) > 0) { // Exit from TX Options screen1
             SendCommand(ProgressStart);
