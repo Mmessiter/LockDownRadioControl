@@ -42,7 +42,7 @@ var searchData=
   ['inactivitymaximum_39',['INACTIVITYMAXIMUM',['../1Definitions_8h.html#a6f6e4e8e296f81b3dd22980c49168662',1,'1Definitions.h']]],
   ['inactivityminimum_40',['INACTIVITYMINIMUM',['../1Definitions_8h.html#a0da025fab2b31f5ffb073d6e12fe7fde',1,'1Definitions.h']]],
   ['inactivitytimeout_41',['INACTIVITYTIMEOUT',['../1Definitions_8h.html#afc6ed518e5867e4d7095ec597eae9443',1,'1Definitions.h']]],
-  ['incchannelnumber_42',['IncChannelNumber',['../radio_8h.html#ae913e02ff1fdfed85e4248ec648c1c6e',1,'radio.h']]],
+  ['incchannelnumber_42',['IncChannelNumber',['../radio_8h.html#ae913e02ff1fdfed85e4248ec648c1c6e',1,'IncChannelNumber():&#160;radio.h'],['../common_8h.html#ae913e02ff1fdfed85e4248ec648c1c6e',1,'IncChannelNumber():&#160;radio.h']]],
   ['incdate_43',['IncDate',['../Utilities_8h.html#ac3f1d629a53f2b8bb9aa5bdc2b0a730d',1,'Utilities.h']]],
   ['inchour_44',['IncHour',['../Utilities_8h.html#aee918002ab8f85e66499b048b6ce722b',1,'Utilities.h']]],
   ['incminute_45',['IncMinute',['../Utilities_8h.html#a7db4bbbc2d6fc9114c7758525fa4c088',1,'Utilities.h']]],

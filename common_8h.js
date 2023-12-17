@@ -51,6 +51,7 @@ var common_8h =
     [ "DoStabilsation", "common_8h.html#a48050e81ef4521304a2dbeaf99e1a331", null ],
     [ "FailSafe", "common_8h.html#a42318598726782ebb2e1857f167c8cda", null ],
     [ "HopToNextChannel", "common_8h.html#a62ec0168b1eea5f5c14f663d9217574d", null ],
+    [ "IncChannelNumber", "common_8h.html#ae913e02ff1fdfed85e4248ec648c1c6e", null ],
     [ "KeepSbusHappy", "common_8h.html#a6f74cdb7b32a3aa9e9342661bd44ad1a", null ],
     [ "KickTheDog", "common_8h.html#ada95a00a341e4a80176eda743a94ab2e", null ],
     [ "LoadAckPayload", "common_8h.html#a664f409561bfcf119e0379dd991217e5", null ],

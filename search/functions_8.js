@@ -2,7 +2,7 @@ var searchData=
 [
   ['i2cdev_0',['I2Cdev',['../classI2Cdev.html#a0a466e2323d9f719a1ecc9fa11ac5c84',1,'I2Cdev']]],
   ['imuinit_1',['IMUinit',['../Quadcopter_2src_2main_8cpp.html#a2b033451ecabbb1e6e0aec20d547bc25',1,'main.cpp']]],
-  ['incchannelnumber_2',['IncChannelNumber',['../radio_8h.html#ae913e02ff1fdfed85e4248ec648c1c6e',1,'radio.h']]],
+  ['incchannelnumber_2',['IncChannelNumber',['../common_8h.html#ae913e02ff1fdfed85e4248ec648c1c6e',1,'IncChannelNumber():&#160;radio.h'],['../radio_8h.html#ae913e02ff1fdfed85e4248ec648c1c6e',1,'IncChannelNumber():&#160;radio.h']]],
   ['incdate_3',['IncDate',['../Utilities_8h.html#ac3f1d629a53f2b8bb9aa5bdc2b0a730d',1,'Utilities.h']]],
   ['inchour_4',['IncHour',['../Utilities_8h.html#aee918002ab8f85e66499b048b6ce722b',1,'Utilities.h']]],
   ['incminute_5',['IncMinute',['../Utilities_8h.html#a7db4bbbc2d6fc9114c7758525fa4c088',1,'Utilities.h']]],
