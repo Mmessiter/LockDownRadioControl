@@ -18,7 +18,6 @@ var searchData=
   ['four_15',['FOUR',['../1Definitions_8h.html#a64a9b58c6a5bcd3724f3b56ad6d006a7',1,'1Definitions.h']]],
   ['fourminutes_16',['FOURMINUTES',['../1Definitions_8h.html#aad932f138e888f84b6cd1c268fdabb84',1,'1Definitions.h']]],
   ['frequencyscount_17',['FREQUENCYSCOUNT',['../common_8h.html#afe5bce36baf737bd284d43cd0e805fdb',1,'common.h']]],
-  ['frequencyscount1_18',['FREQUENCYSCOUNT1',['../common_8h.html#a71a3cc3c3b499cb9329172835e5a1df8',1,'common.h']]],
-  ['frontview_19',['FRONTVIEW',['../1Definitions_8h.html#a8204cbed1c612a522a43c80f071eee2a',1,'1Definitions.h']]],
-  ['fs_5feeprom_5foffset_20',['FS_EEPROM_OFFSET',['../common_8h.html#ad529f0c2447693d8418608e122012388',1,'common.h']]]
+  ['frontview_18',['FRONTVIEW',['../1Definitions_8h.html#a8204cbed1c612a522a43c80f071eee2a',1,'1Definitions.h']]],
+  ['fs_5feeprom_5foffset_19',['FS_EEPROM_OFFSET',['../common_8h.html#ad529f0c2447693d8418608e122012388',1,'common.h']]]
 ];

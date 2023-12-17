@@ -180,7 +180,6 @@ var TransmitterCode_2src_2main_8cpp =
     [ "SendPPM", "TransmitterCode_2src_2main_8cpp.html#aa13f35720398e2d1a7467e37b634b364", null ],
     [ "SetDefaultValues", "TransmitterCode_2src_2main_8cpp.html#acbd0460ea44a7d07e4d77878411febb4", null ],
     [ "SetDS1307ToCompilerTime", "TransmitterCode_2src_2main_8cpp.html#ac4d5d9012481283090fff8d410116eb2", null ],
-    [ "SetTestFrequencies", "TransmitterCode_2src_2main_8cpp.html#a60a8ba3819508aedbe1d59640b0a79b0", null ],
     [ "SetUKFrequencies", "TransmitterCode_2src_2main_8cpp.html#a083c423be6ce1635de5961d0fc72ff06", null ],
     [ "setup", "TransmitterCode_2src_2main_8cpp.html#a17699f358cf9f7c3155a9c5daf8ff13c", null ],
     [ "SetupViewFM", "TransmitterCode_2src_2main_8cpp.html#a35f886d783cd5aa95171f1ecba39ef0b", null ],

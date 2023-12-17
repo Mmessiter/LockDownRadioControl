@@ -28,7 +28,6 @@ var radio_8h =
     [ "SendToAckPayload", "radio_8h.html#a632401c7e72610ff0a0678358b6877ad", null ],
     [ "SendVersionNumberToAckPayload", "radio_8h.html#af56956a6b17dbdfc9fceedeb5a13cb71", null ],
     [ "SetNewPipe", "radio_8h.html#a6f54969e66375decc44723b141b78766", null ],
-    [ "SetTestFrequencies", "radio_8h.html#a31a35307bbac88ceda244272f25d399a", null ],
     [ "SetUKFrequencies", "radio_8h.html#a2eabdb233653fa02f0b899e26b5e8ce7", null ],
     [ "TryToConnectNow", "radio_8h.html#a1208ef26dd460e6f5f56582f4fbfcf94", null ],
     [ "UseExtraParameters", "radio_8h.html#a3c0ffefc9101d9a52b4a210b4ed34552", null ],

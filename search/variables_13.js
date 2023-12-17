@@ -87,13 +87,12 @@ var searchData=
   ['stopflyingvoltspercell_84',['StopFlyingVoltsPerCell',['../1Definitions_8h.html#a3a4778b8dc2cbf63ddcc0adc893ad96b',1,'1Definitions.h']]],
   ['subtrims_85',['SubTrims',['../1Definitions_8h.html#a8c98d83f822e5c1a5e605844bb8a75cd',1,'1Definitions.h']]],
   ['subtrimtoedit_86',['SubTrimToEdit',['../1Definitions_8h.html#a66b4a2fa113bac114f91593f34ad274a',1,'1Definitions.h']]],
-  ['swapwaveband_87',['SwapWaveBand',['../1Definitions_8h.html#aaa4402c66bda6731ffa04b970e1eaeea',1,'1Definitions.h']]],
-  ['swapwavebandtimer_88',['SwapWaveBandTimer',['../1Definitions_8h.html#a8dbdaf66b1bf538b3c1aea4b6ce6c8c2',1,'1Definitions.h']]],
-  ['switch_89',['Switch',['../1Definitions_8h.html#a93ac0e6bbb965111abd01e393a21fcfe',1,'1Definitions.h']]],
-  ['switch1reversed_90',['SWITCH1Reversed',['../1Definitions_8h.html#a4fed4d0e78c591b5b833523e7a5446cc',1,'1Definitions.h']]],
-  ['switch2reversed_91',['SWITCH2Reversed',['../1Definitions_8h.html#ae72c3f4af9982867946efecba70e5269',1,'1Definitions.h']]],
-  ['switch3reversed_92',['SWITCH3Reversed',['../1Definitions_8h.html#a69b7a73aa29db9ddf810c9a0b56ef8e7',1,'1Definitions.h']]],
-  ['switch4reversed_93',['SWITCH4Reversed',['../1Definitions_8h.html#a792e2df85286cbba76e2f1f2f5db9768',1,'1Definitions.h']]],
-  ['switcheditnumber_94',['SwitchEditNumber',['../1Definitions_8h.html#aa55e9d8bf10b47c2b9139b197b7ee842',1,'1Definitions.h']]],
-  ['switchnumber_95',['SwitchNumber',['../1Definitions_8h.html#a2bd909f3b6a6e46bd5fcecb296800e9e',1,'1Definitions.h']]]
+  ['swapwavebandtimer_87',['SwapWaveBandTimer',['../1Definitions_8h.html#a8dbdaf66b1bf538b3c1aea4b6ce6c8c2',1,'1Definitions.h']]],
+  ['switch_88',['Switch',['../1Definitions_8h.html#a93ac0e6bbb965111abd01e393a21fcfe',1,'1Definitions.h']]],
+  ['switch1reversed_89',['SWITCH1Reversed',['../1Definitions_8h.html#a4fed4d0e78c591b5b833523e7a5446cc',1,'1Definitions.h']]],
+  ['switch2reversed_90',['SWITCH2Reversed',['../1Definitions_8h.html#ae72c3f4af9982867946efecba70e5269',1,'1Definitions.h']]],
+  ['switch3reversed_91',['SWITCH3Reversed',['../1Definitions_8h.html#a69b7a73aa29db9ddf810c9a0b56ef8e7',1,'1Definitions.h']]],
+  ['switch4reversed_92',['SWITCH4Reversed',['../1Definitions_8h.html#a792e2df85286cbba76e2f1f2f5db9768',1,'1Definitions.h']]],
+  ['switcheditnumber_93',['SwitchEditNumber',['../1Definitions_8h.html#aa55e9d8bf10b47c2b9139b197b7ee842',1,'1Definitions.h']]],
+  ['switchnumber_94',['SwitchNumber',['../1Definitions_8h.html#a2bd909f3b6a6e46bd5fcecb296800e9e',1,'1Definitions.h']]]
 ];
