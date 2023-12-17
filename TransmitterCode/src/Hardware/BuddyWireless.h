@@ -140,6 +140,8 @@ void GetPupilAck()
 
 void SendSpecialPacket()                                        // Here the MASTER sends to PUPIL tx. This is called about 100 times a second.
 {                                                               // Master Sends M or B to indicate whether Buddy is on or off, and the ID of the model which should be loaded.
+    
+    static uint32_t LocalTimer = 0;
     struct spd
     {
         char        Command[2];
@@ -147,24 +149,29 @@ void SendSpecialPacket()                                        // Here the MAST
     };
     spd SpecialPacketData;
 
-    SpecialPacketData.ModelID =  ModelsMacUnionSaved.Val64;     // send the model ID so that pupil can check it
+
+    if (!BoundFlag || !ModelMatched){
+        if ((millis() - LocalTimer) < 500) return;              // Don't send too often if not bound or model not matched yet otherwise can't bind
+            LocalTimer = millis();
+    }
+    SpecialPacketData.ModelID =  ModelsMacUnionSaved.Val64;     // Send the model ID so that pupil can check it
     SpecialPacketData.Command[0]                    = 'M';      // Send M to indicate Master is ON
     if (BuddyON)       SpecialPacketData.Command[0] = 'B';      // Send B to indicate Buddy is ON
-    Radio1.openWritingPipe(TeensyMACAddPipe ^ ENCRYPT_KEY);     // send to encrypted pipe address
+    Radio1.openWritingPipe(TeensyMACAddPipe ^ ENCRYPT_KEY);     // Send to encrypted pipe address
     Radio1.setDataRate(FASTDATARATE);                           // 2MBPS
     Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
     delayMicroseconds(STOPLISTENINGDELAY);
     Radio1.stopListening();                                     // Transmit only
     delayMicroseconds(STOPLISTENINGDELAY);                      
     if (Radio1.write(&SpecialPacketData, sizeof SpecialPacketData)) {
-        GetPupilAck();                                          // get ack from pupil WITH HIS CONTROL DATA!!
-        PupilDetected(true);                                    // pupil is alive
+        GetPupilAck();                                          // Get ack from pupil WITH HIS CONTROL DATA!!
+        PupilDetected(true);                                    // Pupil is alive
     } else {
-        PupilDetected(false);                                   // pupil is dead
+        PupilDetected(false);                                   // Pupil is dead
     }
-    Radio1.setDataRate(DATARATE);                               // restore the proper data rate
-    Radio1.openWritingPipe(TeensyMACAddPipe);                   // restore the proper pipe address
-    Radio1.setChannel(CurrentChannel);                          // restore the proper frequency channel
+    Radio1.setDataRate(DATARATE);                               // Restore the proper data rate
+    Radio1.openWritingPipe(TeensyMACAddPipe);                   // Restore the proper pipe address
+    Radio1.setChannel(CurrentChannel);                          // Restore the proper frequency channel
     delayMicroseconds(STOPLISTENINGDELAY);
     Radio1.stopListening();                                     // Transmit only
     delayMicroseconds(STOPLISTENINGDELAY);

@@ -198,40 +198,30 @@ void SuccessfulPacket()
     StartInactvityTimeout();
     LostContactFlag = false;
 }
+
+/************************************************************************************************************/
+
+FLASHMEM void ConfigureRadio()
+{
+    Radio1.setPALevel(RF24_PA_MAX, true);
+    Radio1.setDataRate(DATARATE);
+    Radio1.enableAckPayload();
+    Radio1.openWritingPipe(DefaultPipe);
+    Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait);
+    Radio1.stopListening();
+    delayMicroseconds(STOPLISTENINGDELAY);
+    Radio1.enableDynamicPayloads();
+    Radio1.setAddressWidth(5);
+    Radio1.setCRCLength(RF24_CRC_16);
+    GapSum = 0;
+}
+
 /************************************************************************************************************/
 FLASHMEM void InitRadio(uint64_t Pipe)
 {
     Radio1.begin();
-    Radio1.setPALevel(RF24_PA_MAX, true);
-    Radio1.setDataRate(DATARATE);   
-    Radio1.enableAckPayload();
-    Radio1.openWritingPipe(Pipe);
-    Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait);
-    Radio1.stopListening();
-    delayMicroseconds(STOPLISTENINGDELAY);
-    Radio1.enableDynamicPayloads();
-    Radio1.setAddressWidth(5);
-    Radio1.setCRCLength(RF24_CRC_16);
-    GapSum = 0;
+    ConfigureRadio();   
 }
-
-
-/************************************************************************************************************/
-FLASHMEM void ReInitRadio(uint64_t Pipe) // just link init but no begin
-{
-    Radio1.setPALevel(RF24_PA_MAX, true);
-    Radio1.setDataRate(DATARATE);   
-    Radio1.enableAckPayload();
-    Radio1.openWritingPipe(Pipe);
-    Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait);
-    Radio1.stopListening();
-    delayMicroseconds(STOPLISTENINGDELAY);
-    Radio1.enableDynamicPayloads();
-    Radio1.setAddressWidth(5);
-    Radio1.setCRCLength(RF24_CRC_16);
-    GapSum = 0;
-}
-
 /************************************************************************************************************/
 uint8_t SendExtraParamemters(uint8_t Pointer)             // parameters must be loaded before this function is called
 {                                                         // only the low 12 bits of each parameter are sent
@@ -325,6 +315,7 @@ FASTRUN void SendData()
         // ShowPacketData(ByteCountToTransmit, NumberOfChangedChannels);                                  // Just for debugging                          
     }
     if (BuddyMasterOnWireless) SendSpecialPacket();                                    
+
 }
 /***********************************************************************************************************/
 void DoScanEnd()

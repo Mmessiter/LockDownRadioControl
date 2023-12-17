@@ -123,6 +123,7 @@ void SendModelFile()
     if (PPMdata.UseTXModule) {
         InitRadio(DefaultPipe);
     }
+    ConfigureRadio(); //  Start from known state
     Radio1.setChannel(FILECHANNEL);
     Radio1.setPALevel(FILEPALEVEL, true);
     Radio1.setRetries(2, 15);
@@ -196,6 +197,7 @@ void SendModelFile()
     SendCommand(GoModelsView);
     CurrentView = MODELSVIEW;
     CloseModelsFile();
+    ConfigureRadio();
 }
 
 /***************************************************************************************************************************************************/
@@ -248,6 +250,9 @@ void ReceiveModelFile()
     if (PPMdata.UseTXModule) {
         InitRadio(DefaultPipe);
     }
+    ConfigureRadio(); //  Start from known state
+
+
     RXPipe = FILEPIPEADDRESS;
     Radio1.setRetries(2, 15);
     Radio1.setChannel(FILECHANNEL);
@@ -395,6 +400,7 @@ void ReceiveModelFile()
     ClearText();
     RedLedOn();
     BoundFlag = true; // This just prevents jump to front screen (Cleared on leaving models area)
+    ConfigureRadio();
 }
 // ***********************************************************************************************************
 

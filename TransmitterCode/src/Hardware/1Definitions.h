@@ -557,7 +557,7 @@ void             NormaliseTheRadio();
 void             Setup_Solo();
 void             Setup_Master();
 void             Setup_Pupil();
-void             ReConfigureRadio();
+void             ConfigureRadio();
 void             SetTestFrequencies();
 void             SetUKFrequencies();
 uint16_t         MakeTwobytes(bool* f);

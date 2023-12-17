@@ -1843,6 +1843,9 @@ void RationaliseBuddy()
 {
     PupilIsAlive  = 0;
     MasterIsAlive = 0;
+
+    ConfigureRadio();                                           // Very like InitRadio but without Radio1.begin() !
+
     if (BuddyPupilOnWireless && BuddyMasterOnWireless)
     {
         BuddyPupilOnWireless  = false;
@@ -1855,12 +1858,11 @@ void RationaliseBuddy()
     }
     if (!BuddyPupilOnWireless && !BuddyMasterOnWireless) {
         WirelessBuddy = false;
-        ReInitRadio(DefaultPipe); // like InitRadio but without Radio1.begin() !
     }
     if (BuddyPupilOnWireless) {
-        ModelMatched = false;
-        BoundFlag   = false;
-        Connected = false;
+        ModelMatched        = false;
+        BoundFlag           = false;
+        Connected           = false;
         StartBuddyListen();
     }
 }
