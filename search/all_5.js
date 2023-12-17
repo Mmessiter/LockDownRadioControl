@@ -115,7 +115,7 @@ var searchData=
   ['compresseddata_112',['CompressedData',['../structCD.html#a5b881ba5098e3896258185c0932d7db7',1,'CD']]],
   ['compressedwords_113',['COMPRESSEDWORDS',['../1Definitions_8h.html#a461caf7198eaa60ce589088ff38b97cb',1,'1Definitions.h']]],
   ['config_114',['CONFIG',['../classMPU9250.html#aab05dcc81b5628ed687e152263c52966',1,'MPU9250']]],
-  ['configureradio_115',['ConfigureRadio',['../radio_8h.html#a3bb52983d9a2108589830301007bdce1',1,'radio.h']]],
+  ['configureradio_115',['ConfigureRadio',['../1Definitions_8h.html#a3bb52983d9a2108589830301007bdce1',1,'ConfigureRadio():&#160;radio.h'],['../transceiver_8h.html#aee3ca81ae2f60bb0b65e05a4289e5e74',1,'ConfigureRadio():&#160;transceiver.h'],['../radio_8h.html#a3bb52983d9a2108589830301007bdce1',1,'ConfigureRadio():&#160;radio.h']]],
   ['configurestickmode_116',['ConfigureStickMode',['../Utilities_8h.html#a9c0d58f91488496f6946d25b4ad2cbd8',1,'Utilities.h']]],
   ['confirmed_117',['Confirmed',['../1Definitions_8h.html#a5034d37305ec158f8bc486558dcd8f53',1,'1Definitions.h']]],
   ['connected_118',['Connected',['../common_8h.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;common.h'],['../1Definitions_8h.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;1Definitions.h']]],
