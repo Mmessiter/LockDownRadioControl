@@ -13,7 +13,7 @@
 #define RXVERSION_MINOR   4
 #define RXVERSION_MINIMUS 2 // December 2023
 
- //#define DB_FHSS
+ // #define DB_FHSS
 // #define DB_SENSORS
 // #define DB_BIND
 // #define DB_FAILSAFE
@@ -42,7 +42,7 @@
 
 // ********************* >>> FHSS params <<< *******************************************
 
-#define HOPTIME                   0    // was 80 ms between channel changes. 
+#define HOPTIME                   80    // was 80 ms between channel changes. 
 
 // *************************************************************************************
 
@@ -176,6 +176,7 @@ void TurnLedOff();
 void TurnLedOn();
 void SaveFailSafeData();
 void LoadShortAckPayload();
+void  IncChannelNumber();
 
 template<typename any>
 void Look(const any& value);

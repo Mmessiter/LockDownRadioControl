@@ -312,7 +312,7 @@ FASTRUN void SendData()
             NewCompressNeeded = false;                                                                   // No channels changed, so just send the flag
         }
         if (Radio1.write(&DataTosend, ByteCountToTransmit)) {SuccessfulPacket();} else {FailedPacket();}  // Send the data packet complete with ChannelBitMask and compressed data 
-        // ShowPacketData(ByteCountToTransmit, NumberOfChangedChannels);                                  // Just for debugging                          
+       //  ShowPacketData(ByteCountToTransmit, NumberOfChangedChannels);                                  // Just for debugging                          
     }
     if (BuddyMasterOnWireless) SendSpecialPacket();                                    
 
@@ -484,7 +484,6 @@ FASTRUN void HopToNextChannel()
 
     #ifdef DB_FHSS
     if (BoundFlag && Connected && ModelMatched) {
-        float           ch         = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber);
         float           Freq       = 2.4;
         static uint32_t hoptime    = 0;
         static uint16_t HopsPerSec = 0;
@@ -497,7 +496,7 @@ FASTRUN void HopToNextChannel()
             hopcount   = 0;
         }
         Look1("  Next frequency: ");
-        Freq += ch / 1000;
+        Freq += float(NextChannel) / 1000;
         Serial.print(Freq, 3);
         Look1(" Ghz");
         Look1("  RX transceiver number: ");

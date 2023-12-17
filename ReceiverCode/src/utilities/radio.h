@@ -425,7 +425,6 @@ void HopToNextChannel()
     CurrentRadio->startListening();
 #ifdef DB_FHSS
     ShowHopDurationEtc();
-   
 #endif
 }
 
