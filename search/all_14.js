@@ -41,7 +41,7 @@ var searchData=
   ['readme_2emd_38',['README.md',['../README_8md.html',1,'']]],
   ['readmemoryblock_39',['readMemoryBlock',['../classMPU6050.html#a04d8d5e7b62605aed15f07f52afa74ca',1,'MPU6050']]],
   ['readmemorybyte_40',['readMemoryByte',['../classMPU6050.html#a4fb50ebcff2f4e686e3fbbafb70a1f75',1,'MPU6050']]],
-  ['readmoreparameters_41',['ReadMoreParameters',['../radio_8h.html#aee4e6f3c4386a08efe5fd0aa3f9e0035',1,'radio.h']]],
+  ['readmoreparameters_41',['ReadMoreParameters',['../radio_8h.html#a01a488607ffdec6464a9d9fa1ce90b51',1,'radio.h']]],
   ['readnewswitchfunction_42',['ReadNewSwitchFunction',['../TransmitterCode_2src_2main_8cpp.html#a2521ceba7d91302765db4720e3367127',1,'main.cpp']]],
   ['readonemodel_43',['ReadOneModel',['../SDcard_8h.html#ac7a5ec6cf2ed7b50bd291f821e886302',1,'ReadOneModel(uint32_t Mnum):&#160;SDcard.h'],['../1Definitions_8h.html#ac7a5ec6cf2ed7b50bd291f821e886302',1,'ReadOneModel(uint32_t Mnum):&#160;SDcard.h']]],
   ['readothersensors_44',['ReadOtherSensors',['../SensorHubT32_2src_2main_8cpp.html#a8ace27b0e3d8efecd55ad071506aa86d',1,'main.cpp']]],
