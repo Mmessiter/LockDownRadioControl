@@ -961,6 +961,7 @@ uint32_t LedGreenMoment      = 0;
 uint32_t BindingTimer        = 0;
 bool     ModelExistsAtBuddy  = true;                                     //  Flag to indicate that the model memory is on Buddy TX
 bool     BeQuiet             = false;
+bool     ReconnectingNow     = true;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

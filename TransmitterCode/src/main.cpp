@@ -587,7 +587,7 @@ FASTRUN void ShowComms()
     if (CurrentView == DATAVIEW && Connected) {
 
         SendValue(DataView_pps, PacketsPerSecond);
-        SendValue(DataView_lps, TotalLostPackets / 2); // about half probably made it but went unacknowledged
+        SendValue(DataView_lps, TotalLostPackets);           
         SendText(DataView_Alt, ModelAltitude);
         SendText(DataView_MaxAlt, Maxaltitude);
         SendText(DataView_Temp, ModelTempRX);
@@ -600,7 +600,6 @@ FASTRUN void ShowComms()
         SendValue(DataView_Gc, RX2TotalTime );
         snprintf(Vbuf, 7, "%d", (int)SbusRepeats);
         SendText(Sbs, Vbuf);
-        SendValue(DataView_lps, TotalLostPackets / 2);
         TempModelId = ModelsMacUnionSaved.Val32[0];
         snprintf(Vbuf, 9, "%X", TempModelId);
         if (TempModelId) SendText(IdStored, Vbuf);

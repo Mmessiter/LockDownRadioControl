@@ -120,7 +120,7 @@ FASTRUN void Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uint
     }
 }
 /************************************************************************************************************/
-// NB ONLY THE LOW 12 BITS ARE ACTUALLY SENT! (Because of COMPRESSION)
+// NB ONLY THE LOW 12 BITS ARE ACTUALLY SENT! (Because of the compression)
 
 void LoadParameters()
 {
@@ -149,11 +149,10 @@ void LoadParameters()
                 GPSMarkHere       = 0;
             }
             break;
+     
         case 4:         // spare
          
-        break;
-
-
+            break;
         case 5:
               Parameters.word1 = PPMdata.UseSBUSFromRX;   // 1 - 0
               Parameters.word2 = PPMdata.PPMChannelCount; 
@@ -166,6 +165,7 @@ void LoadParameters()
 void RecordsPacketSuccess(uint8_t s)
 { // or failure according to s
     static uint16_t PacketsHistoryIndex       = 0;
+    ReconnectingNow                           = false;
     PacketsHistoryBuffer[PacketsHistoryIndex] = s;
     ++PacketsHistoryIndex;
     ++TotalGoodPackets;
@@ -175,9 +175,10 @@ void RecordsPacketSuccess(uint8_t s)
 FASTRUN void FailedPacket()
 {
     RecordsPacketSuccess(0); // Record a failure
-    ++RecentPacketsLost;     // this is to keep track of events when receiver is off  
+    if (!ReconnectingNow) ++RecentPacketsLost;     // this is to keep track of events when receiver is off  
     LostContactFlag =   true;
     Reconnected     =   false; 
+    ReconnectingNow = true;
     if (!GapStart) 
     {
         GapStart  = millis();  // To keep track of this gap's length
@@ -210,6 +211,8 @@ FASTRUN void TryOtherPipe()
         CurrentPipe = 1; // 1 = bound pipe
     }
 }
+
+
 /************************************************************************************************************/
 void TryToReconnect()
 {
@@ -248,7 +251,7 @@ void SuccessfulPacket()
         }   
     }
 
-    TotalLostPackets += RecentPacketsLost;
+    TotalLostPackets += (RecentPacketsLost / 2); // divide by 2 because some acks are lost too
     RecentPacketsLost = 0;
     Connected         = true;
     if (Radio1.available()){
@@ -323,7 +326,7 @@ FASTRUN void SendData()
             SendExtraParamemters(); 
             NumberOfChangedChannels = 4;
         }else {
-            NumberOfChangedChannels = EncodeTheChangedChannels();                                            // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels.
+            NumberOfChangedChannels = EncodeTheChangedChannels();                                        // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels.
         }
         
         if (NumberOfChangedChannels || AddExtraParameters ){                                             // Any channels changed? Or parameters to send?
@@ -335,7 +338,7 @@ FASTRUN void SendData()
             NewCompressNeeded = false;                                                                   // No channels changed, so just send the flag
         }
         if (Radio1.write(&DataTosend, ByteCountToTransmit)) {SuccessfulPacket();} else {FailedPacket();}  // Send the data packet complete with ChannelBitMask and compressed data 
-       //  ShowPacketData(ByteCountToTransmit, NumberOfChangedChannels);                                  // Just for debugging                          
+         ShowPacketData(ByteCountToTransmit, NumberOfChangedChannels);                                  // Just for debugging                          
     }
     if (BuddyMasterOnWireless) SendSpecialPacket();                                    
 
