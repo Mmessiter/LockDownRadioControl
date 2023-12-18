@@ -154,7 +154,6 @@ void FailSafe()
         MoveServos();
         Connected = false; // I lied earlier - we're not really connected.
     }
-    SetUKFrequencies();  // default startup conditions
     FailSafeSent = true; // Once is enough
     FailedSafe   = true;
     TurnLedOff();
@@ -532,7 +531,6 @@ void teensyMAC(uint8_t* mac)
 void ReadBindPlug()
 {
     uint32_t tt = millis();
-    SetUKFrequencies();
     PipePointer = DefaultPipe;
     CopyCurrentPipe(DefaultPipe, PIPENUMBER);
     if (!digitalRead(BINDPLUG_PIN)) { // Bind Plug needed to bind!

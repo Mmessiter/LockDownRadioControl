@@ -55,13 +55,9 @@ void UseExtraParameters()
             break;
 
         case 2:
-            Qnh = Parameters.word1;// << 8; // 16 bits sent as two bytes for pressure here at sea level
-           // Qnh += Parameters.word2;
+            Qnh = Parameters.word1;   //  for pressure here at sea level
             if (OldQnh != Qnh) SendQnhToSensorHub();
-            OldQnh = Qnh; // Send new one once only
-           
-            Look1("QNH! ");
-            Look(Qnh);
+            OldQnh = Qnh;      // Send new one once only
             break;
         case 3:
             if (Parameters.word2 == 255) { // Mark this location
@@ -131,15 +127,17 @@ void RearrangeTheChannels(){
     return;
 }
 /************************************************************************************************************/
-void ReadMoreParameters(uint8_t NumberOfChangedChannels){                                       
-        Parameters.ID    =  RawDataIn[NumberOfChangedChannels] ;              // NumberOfChangedChannels points past the end of the changed channels
-        Parameters.word1 =  RawDataIn[NumberOfChangedChannels+1];
-        Parameters.word2 =  RawDataIn[NumberOfChangedChannels+2];
-       
-        //   Look(Parameters.ID);
-        //   Look(Parameters.word1);
-        //   Look(Parameters.word2);
-          UseExtraParameters();    
+void ReadMoreParameters(){                                       
+        Parameters.ID    =  RawDataIn[0] ;              // NumberOfChangedChannels points past the end of the changed channels
+        Parameters.word1 =  RawDataIn[1];
+        Parameters.word2 =  RawDataIn[2];
+        // Look1("Parameters.ID:\t\t");
+        // Look(Parameters.ID);
+        // Look1("Parameters.word1:\t");
+        // Look(Parameters.word1);
+        // Look1("Parameters.word2:\t");
+        // Look(Parameters.word2);
+        UseExtraParameters();    
 }
 /************************************************************************************************************/
 void UseReceivedData(uint8_t DynamicPayloadSize)                            // DynamicPayloadSize is length of incomming data
@@ -150,7 +148,7 @@ void UseReceivedData(uint8_t DynamicPayloadSize)                            // D
     } else {                                                                
         if (DynamicPayloadSize > 2) {                                       // No changed channels BUT MAYBE parameters!
             Decompress(RawDataIn, DataReceived.CompressedData, 8);             
-            ReadMoreParameters(0);                                               
+            ReadMoreParameters();                                               
         }
     }
     MapToSBUS();                                                            // Get SBUS data ready
@@ -231,15 +229,6 @@ FASTRUN void ReceiveData()
             }
         }
     }
-}
-/************************************************************************************************************/
-
-// This allows a new array of pseudo-random channel numbers to be used.
-// "FHSSChPointer" and "FrequencyCount" simply need to be set appropriately.
-
-void SetUKFrequencies()
-{
-    FHSSChPointer       = FHSS_Channels;
 }
 
 /************************************************************************************************************/
