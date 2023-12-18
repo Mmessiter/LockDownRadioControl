@@ -781,16 +781,16 @@ uint32_t        FailSafeTimer;
 
 struct CD{
     uint16_t        ChannelBitMask = 0;                    
-    uint16_t        CompressedData[COMPRESSEDWORDS];   // Bigger than needed 
+    uint16_t        CompressedData[COMPRESSEDWORDS+12];   // Much Bigger than needed for safety 
 };
 CD DataTosend;
 
 bool AddExtraParameters = false;
 
 struct CD2{
-    uint16_t        ID    = 12;          
-    uint16_t        word1 = 123;
-    uint16_t        word2 = 321;;   
+    uint16_t        ID    = 0;          
+    uint16_t        word1 = 0;
+    uint16_t        word2 = 0;   
 };  
 CD2 Parameters;
 
@@ -968,9 +968,7 @@ bool     BeQuiet             = false;
 
 namespace FHSS_data {
     
-uint8_t Default_Recovery_Channels[3]    = {15, 71, 82};                       // three default channels used for Recovery. THESE DON'T CHANGE
-uint8_t Randomized_Recovery_Channels[3] = {15, 71, 82};                       // three randomised channels used for Recovery
-uint8_t Used_Recovery_Channels[3]       = {15, 71, 82};                       // the ones to use
+uint8_t Used_Recovery_Channels[3]       = {15, 71, 82};        // chanels 15, 71, 82 are used for recovery               
 
 // offsets:                    0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18 19  20  21  22  23  24 ...
 uint8_t  FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 16, 72, // UK array
@@ -979,7 +977,7 @@ uint8_t  FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15
                               56, 7, 81, 5, 65, 4, 10};
 
 uint8_t* FHSSRecoveryPointer;
-uint8_t* FHSSChPointer; // pointer for channels array (three only used for Recovery)
+uint8_t* FHSSChPointer          = FHSS_Channels;            // pointer for channels array
 uint8_t  NextChannelNumber      = 0;
 uint8_t  PaceMaker              = PACEMAKER;                // now variables are used
 uint8_t  RetryCount             = RETRYCOUNT;               // now variables are used
