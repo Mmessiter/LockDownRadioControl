@@ -662,6 +662,7 @@ var 1Definitions_8h =
     [ "RecentTextFile", "1Definitions_8h.html#a850ebf7e5e2cefc8e47c06ad7523e9b8", null ],
     [ "ReConnectChannel", "1Definitions_8h.html#a00c739eb670d33ce9b84f4576a4eb8ff", null ],
     [ "Reconnected", "1Definitions_8h.html#a0f8aa0f6f0fca3b57e848eec8d23724e", null ],
+    [ "ReconnectingNow", "1Definitions_8h.html#a36550afe5a712be4bd4e348d748fe928", null ],
     [ "ReconnectionIndex", "1Definitions_8h.html#aa3d3407bef9f6718dba572936ef3c055", null ],
     [ "RecursedAlready", "1Definitions_8h.html#aa4e775cc458a824cb4bef031518b19a2", null ],
     [ "RetryCount", "1Definitions_8h.html#ae8ce3cb8a245c0b0bd6a401c3a39e708", null ],
