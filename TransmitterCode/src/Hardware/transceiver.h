@@ -250,9 +250,10 @@ void SuccessfulPacket()
             Parameters.ID = 0;
         }   
     }
-
-    TotalLostPackets += (RecentPacketsLost / 2); // divide by 2 because some acks are lost too
-    RecentPacketsLost = 0;
+    if (RecentPacketsLost){
+        TotalLostPackets += (RecentPacketsLost / 2); // divide by 2 because some acks are lost too
+        RecentPacketsLost = 0;
+    }
     Connected         = true;
     if (Radio1.available()){
         uint8_t PayloadSize = Radio1.getDynamicPayloadSize();
