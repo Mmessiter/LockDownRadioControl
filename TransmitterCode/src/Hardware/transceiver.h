@@ -305,8 +305,6 @@ uint8_t EncodeTheChangedChannels(){
     }
     return NumberOfChangedChannels;                                                                         // Return the number of channels that have changed 
 }
-
-
 /************************************************************************************************************/
 /********************************* Function to send data to receiver ****************************************/
 /************************************************************************************************************/
@@ -338,7 +336,7 @@ FASTRUN void SendData()
             NewCompressNeeded = false;                                                                   // No channels changed, so just send the flag
         }
         if (Radio1.write(&DataTosend, ByteCountToTransmit)) {SuccessfulPacket();} else {FailedPacket();}  // Send the data packet complete with ChannelBitMask and compressed data 
-         ShowPacketData(ByteCountToTransmit, NumberOfChangedChannels);                                  // Just for debugging                          
+        // ShowPacketData(ByteCountToTransmit, NumberOfChangedChannels);                                  // Just for debugging                          
     }
     if (BuddyMasterOnWireless) SendSpecialPacket();                                    
 
