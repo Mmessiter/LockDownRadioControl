@@ -1,10 +1,5 @@
 var NAVTREEINDEX12 =
 {
-"radio_8h.html#a2eabdb233653fa02f0b899e26b5e8ce7":[5,0,1,0,0,2,28],
-"radio_8h.html#a30a079d60b4731ce1531091ffe56a703":[5,0,1,0,0,2,33],
-"radio_8h.html#a324d644a6306bb8be3b7f46b4bb32421":[5,0,1,0,0,2,18],
-"radio_8h.html#a3bb52983d9a2108589830301007bdce1":[5,0,1,0,0,2,3],
-"radio_8h.html#a3c0ffefc9101d9a52b4a210b4ed34552":[5,0,1,0,0,2,30],
 "radio_8h.html#a4a03f701a3917500a6060344738e5fd4":[5,0,1,0,0,2,1],
 "radio_8h.html#a5b9bcce29081b0c53837ecb90e0a6b33":[5,0,1,0,0,2,22],
 "radio_8h.html#a5f57423b51a89ce596c324bbf359a6cb":[5,0,1,0,0,2,32],
@@ -67,6 +62,7 @@ var NAVTREEINDEX12 =
 "transceiver_8h.html#a07c27b4e208198453c70876517926052":[5,0,3,0,0,9,17],
 "transceiver_8h.html#a10274b74b5b9f35476ae844506775afe":[5,0,3,0,0,9,3],
 "transceiver_8h.html#a160b9119423c34869b16a4ebdc421d35":[5,0,3,0,0,9,19],
+"transceiver_8h.html#a188ad446d11b2db284476c093de58b2f":[5,0,3,0,0,9,35],
 "transceiver_8h.html#a19f6fc09d690832e74fd3c679207f07f":[5,0,3,0,0,9,23],
 "transceiver_8h.html#a1c11bb6771548de7d96723045b922620":[5,0,3,0,0,9,38],
 "transceiver_8h.html#a1ddd5e8d5bd649dd98ce3710fbff651b":[5,0,3,0,0,9,8],
@@ -75,7 +71,6 @@ var NAVTREEINDEX12 =
 "transceiver_8h.html#a494cb4acb30856d1f53f08df1b80c41b":[5,0,3,0,0,9,22],
 "transceiver_8h.html#a52aa3e80bccf5e75346c93fdae63122d":[5,0,3,0,0,9,25],
 "transceiver_8h.html#a5fbd3c8613a4163425c94965704ce5f8":[5,0,3,0,0,9,16],
-"transceiver_8h.html#a65249d0ac8676541d13ced58b1ce7624":[5,0,3,0,0,9,35],
 "transceiver_8h.html#a694f4f5a0147f4dc29b0bc1a8951547d":[5,0,3,0,0,9,29],
 "transceiver_8h.html#a6a0dc2e4d5be33970d9a245234202655":[5,0,3,0,0,9,0],
 "transceiver_8h.html#a6bdc6419b47dda71d0d2c8faf652adc2":[5,0,3,0,0,9,14],

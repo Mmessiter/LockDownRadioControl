@@ -105,17 +105,13 @@ $(document).ready(function(){initNavTree('namespaceFHSS__data.html',''); initRes
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:ab1f338051472df8c12ff83e018831321"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFHSS__data.html#ab1f338051472df8c12ff83e018831321">Default_Recovery_Channels</a> [3] = {15, 71, 82}</td></tr>
-<tr class="separator:ab1f338051472df8c12ff83e018831321"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35a97bad66458445650bb921487518d8"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFHSS__data.html#a35a97bad66458445650bb921487518d8">Randomized_Recovery_Channels</a> [3] = {15, 71, 82}</td></tr>
-<tr class="separator:a35a97bad66458445650bb921487518d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8380a667acd9e0130553ce2ae0defcce"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFHSS__data.html#a8380a667acd9e0130553ce2ae0defcce">Used_Recovery_Channels</a> [3] = {15, 71, 82}</td></tr>
 <tr class="separator:a8380a667acd9e0130553ce2ae0defcce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a181cb451e5e95fa7cfcb19fff25b9318"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFHSS__data.html#a181cb451e5e95fa7cfcb19fff25b9318">FHSS_Channels</a> [83]</td></tr>
 <tr class="separator:a181cb451e5e95fa7cfcb19fff25b9318"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3bc5776f7d9f04adaf25d4659c02f92e"><td class="memItemLeft" align="right" valign="top">uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFHSS__data.html#a3bc5776f7d9f04adaf25d4659c02f92e">FHSSRecoveryPointer</a></td></tr>
 <tr class="separator:a3bc5776f7d9f04adaf25d4659c02f92e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d000f86fb280637a15ae47d0a339023"><td class="memItemLeft" align="right" valign="top">uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFHSS__data.html#a9d000f86fb280637a15ae47d0a339023">FHSSChPointer</a></td></tr>
+<tr class="memitem:a9d000f86fb280637a15ae47d0a339023"><td class="memItemLeft" align="right" valign="top">uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFHSS__data.html#a9d000f86fb280637a15ae47d0a339023">FHSSChPointer</a> = <a class="el" href="namespaceFHSS__data.html#a181cb451e5e95fa7cfcb19fff25b9318">FHSS_Channels</a></td></tr>
 <tr class="separator:a9d000f86fb280637a15ae47d0a339023"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a052746df02560319bc39fa4c7d87408e"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFHSS__data.html#a052746df02560319bc39fa4c7d87408e">NextChannelNumber</a> = 0</td></tr>
 <tr class="separator:a052746df02560319bc39fa4c7d87408e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -127,22 +123,6 @@ Variables</h2></td></tr>
 <tr class="separator:a44efaec885381f16becf823f63b385d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Variable Documentation</h2>
-<a id="ab1f338051472df8c12ff83e018831321" name="ab1f338051472df8c12ff83e018831321"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab1f338051472df8c12ff83e018831321">&#9670;&#160;</a></span>Default_Recovery_Channels</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint8_t FHSS_data::Default_Recovery_Channels[3] = {15, 71, 82}</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l00971">971</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
-
-</div>
-</div>
 <a id="a181cb451e5e95fa7cfcb19fff25b9318" name="a181cb451e5e95fa7cfcb19fff25b9318"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a181cb451e5e95fa7cfcb19fff25b9318">&#9670;&#160;</a></span>FHSS_Channels</h2>
 
@@ -159,7 +139,7 @@ Variables</h2></td></tr>
 <div class="line">                              54, 12, 80, 53, 22, 1, 74, 39, 58, 63, 70, 52, 42, 25, 43, 26, 14, 38, 48, 68, 33, 27, 60, 44, 46,</div>
 <div class="line">                              56, 7, 81, 5, 65, 4, 10}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l00976">976</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l00974">974</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -170,12 +150,12 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint8_t* FHSS_data::FHSSChPointer</td>
+          <td class="memname">uint8_t* FHSS_data::FHSSChPointer = <a class="el" href="namespaceFHSS__data.html#a181cb451e5e95fa7cfcb19fff25b9318">FHSS_Channels</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l00982">982</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l00980">980</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -191,7 +171,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l00981">981</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l00979">979</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -207,7 +187,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l00983">983</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l00981">981</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -223,23 +203,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l00984">984</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
-
-</div>
-</div>
-<a id="a35a97bad66458445650bb921487518d8" name="a35a97bad66458445650bb921487518d8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a35a97bad66458445650bb921487518d8">&#9670;&#160;</a></span>Randomized_Recovery_Channels</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint8_t FHSS_data::Randomized_Recovery_Channels[3] = {15, 71, 82}</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l00972">972</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l00982">982</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -255,7 +219,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l00985">985</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l00983">983</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -271,7 +235,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l00986">986</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l00984">984</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -287,7 +251,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l00973">973</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l00971">971</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
