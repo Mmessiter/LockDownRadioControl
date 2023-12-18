@@ -273,7 +273,7 @@ void SuccessfulPacket()
 void SendExtraParamemters()                       // parameters must be loaded before this function is called
 {                                                 // only the ***low 12 bits*** of each parameter are actually sent
     LoadParameters();
-    RawDataBuffer[0]  = Parameters.ID;            // copy current parameter values into the rawdatabuffer right after the channels
+    RawDataBuffer[0]  = Parameters.ID;            // copy current parameter values into the rawdatabuffer instead of the channels for 3 packets
     RawDataBuffer[1]  = Parameters.word1;
     RawDataBuffer[2]  = Parameters.word2;
                 
