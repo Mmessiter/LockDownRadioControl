@@ -316,24 +316,22 @@ FASTRUN void SendData()
     if (SendNoData) return;
     if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { 
         LastPacketSentTime = millis();
-        if (BuddyPupilOnPPM) {SendViaPPM(); return;}                                                     // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
-        Connected = false;                                                                               // Assume failure until an ACK is received.
-        FlushFifos();                                                                                    // This flush avoids a lockup that happens when the FIFO gets full.
-      
+        if (BuddyPupilOnPPM) {SendViaPPM(); return;}                                                      // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
+        Connected = false;                                                                                // Assume failure until an ACK is received.
+        FlushFifos();                                                                                     // This flush avoids a lockup that happens when the FIFO gets full.
         if (AddExtraParameters) {  // Send parameters here if there are some to go
             SendExtraParamemters(); 
-            NumberOfChangedChannels = 4;
+            NumberOfChangedChannels = 4;                                                                  // This is for calculating the packet size. It's not really the number of changed channels.
         }else {
-            NumberOfChangedChannels = EncodeTheChangedChannels();                                        // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels.
+            NumberOfChangedChannels = EncodeTheChangedChannels();                                         // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels.
         }
-        
-        if (NumberOfChangedChannels || AddExtraParameters ){                                             // Any channels changed? Or parameters to send?
-            ByteCountToTransmit     =  ((float) NumberOfChangedChannels * 1.5f) + 4;                     // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 word because int rounds downwards.
+        if (NumberOfChangedChannels || AddExtraParameters){                                               // Any channels changed? Or parameters to send?
+            ByteCountToTransmit     =  ((float) NumberOfChangedChannels * 1.5f) + 4;                      // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 word because int rounds downwards.
             uint8_t SizeOfUnCompressedData  =   (ByteCountToTransmit / 1.5) ;                                
-            Compress(DataTosend.CompressedData, RawDataBuffer, SizeOfUnCompressedData);                  // Compress the raw data buffer into the compressed data buffer (reduces it to 75% of original size)
+            Compress(DataTosend.CompressedData, RawDataBuffer, SizeOfUnCompressedData);                   // Compress the raw data buffer into the compressed data buffer (reduces it to 75% of original size)
         }else{
             ByteCountToTransmit = 2;    
-            NewCompressNeeded = false;                                                                   // No channels changed, so just send the flag
+            NewCompressNeeded = false;                                                                    // No channels changed nor any params to send, so just send the flag
         }
         if (Radio1.write(&DataTosend, ByteCountToTransmit)) {SuccessfulPacket();} else {FailedPacket();}  // Send the data packet complete with ChannelBitMask and compressed data 
         // ShowPacketData(ByteCountToTransmit, NumberOfChangedChannels);                                  // Just for debugging                          
