@@ -79,15 +79,15 @@ var NAVTREEINDEX =
 "1Definitions_8h.html#a582e13b912bcd3ca62f855f79eea6a64",
 "1Definitions_8h.html#aa490b4664b0a4498d53b30b82287d5df",
 "1Definitions_8h.html#afe31e2cddc17dd03549ad02cc613f743",
-"MPU6050_8h.html#a917ac5ff97cc7e9ecee733d20a95825e",
-"MPU6050__9Axis__MotionApps41_8h.html#ae2aefb42a042fa5cb20e06f7fcfa327e",
-"Quadcopter_2src_2main_8cpp.html#ada046b15782fee829013693d347dceb9",
-"TransmitterCode_2src_2main_8cpp.html#a6a25e5ab5c13c780c12cdd6fe0a85049",
-"classMPU6050.html#a17147a6f477be79f58889e9e6329392f",
-"classMPU9250.html",
-"classMPU9250.html#afef8319c985d9930cd31797263b37585",
-"common_8h.html#aea423a497d09a142f394356bc8438c41",
-"radio_8h.html#a3c0ffefc9101d9a52b4a210b4ed34552"
+"MPU6050_8h.html#a913262cf8ad43c4dcb28aa31521fac23",
+"MPU6050__9Axis__MotionApps41_8h.html#ad2b71a6faa0583b51569b531a443cb0a",
+"Quadcopter_2src_2main_8cpp.html#ad7706081397e3e9305a98b66ddb04d9e",
+"TransmitterCode_2src_2main_8cpp.html#a6684199e9da3ca0bdb0e01260eec7e30",
+"classMPU6050.html#a16eb12bbf07bc17a9d852941d834175e",
+"classMPU6050.html#afdfe715ced419d117c2c47007d631f9e",
+"classMPU9250.html#afc7e974cfcdc039191527d56f243cdbe",
+"common_8h.html#ae913e02ff1fdfed85e4248ec648c1c6e",
+"radio_8h.html#a3bb52983d9a2108589830301007bdce1"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
