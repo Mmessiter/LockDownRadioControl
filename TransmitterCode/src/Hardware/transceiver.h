@@ -9,6 +9,65 @@
 
 
 /************************************************************************************************************/
+
+FLASHMEM void ConfigureRadio()
+{
+    Radio1.setPALevel(RF24_PA_MAX, true);
+    Radio1.setDataRate(DATARATE);
+    Radio1.enableAckPayload();
+    Radio1.openWritingPipe(DefaultPipe);
+    Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait);
+    Radio1.stopListening();
+    delayMicroseconds(STOPLISTENINGDELAY);
+    Radio1.enableDynamicPayloads();
+    Radio1.setAddressWidth(5);
+    Radio1.setCRCLength(RF24_CRC_16);
+    GapSum = 0;
+}
+
+/************************************************************************************************************/
+FLASHMEM void InitRadio(uint64_t Pipe)
+{
+    Radio1.begin();
+    ConfigureRadio();   
+}
+/************************************************************************************************************/
+
+
+// ***********************************************************************************************************
+void ShowPacketData(uint32_t ThisPacketLength, uint8_t NumberOfChangedChannels){  // Just for debugging
+
+static uint32_t TotalPacketLength = 0;
+static uint32_t PacketsCount      = 0;
+static uint32_t PacketsCount1     = 0;
+uint32_t AveragePacketLength      = 0;
+
+    TotalPacketLength   +=  ThisPacketLength;
+    ++ PacketsCount;
+    ++ PacketsCount1;
+   
+    static uint32_t timer=0;
+    if ((millis() - timer) >= 1000) {
+        timer = millis();
+        AveragePacketLength = TotalPacketLength / PacketsCount;
+        Look1("Packet length (bytes): ");
+        Look1(ThisPacketLength);
+        Look1("\tNumber of changed channels: ");
+        Look1(NumberOfChangedChannels);
+        Look1("\tAverage packet length (bytes): ");
+        Look1(AveragePacketLength);
+        Look1("\tPackets count: ");
+        Look1(PacketsCount);
+        Look1("\tTotal data sent so far (k): ");
+        Look1(TotalPacketLength/1024);
+        Look1("\tPackets per second: ");
+        Look1(PacketsCount1);
+        Look1("\tTotal lost packets: ");
+        Look(TotalLostPackets);
+    PacketsCount1 = 0;
+    }
+}
+/************************************************************************************************************/
 //                                       Most Radio Functions
 /************************************************************************************************************/
 
@@ -70,7 +129,6 @@ void LoadParameters()
     uint8_t  FS_Byte2;
  
     switch (Parameters.ID) {
-
         case 1:
             Twobytes          = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
             FS_Byte1          = uint8_t(Twobytes >> 8);        // Send as two bytes   
@@ -80,8 +138,8 @@ void LoadParameters()
             break;
 
        case 2:
-            Parameters.word1  =  Qnh  ;       // (HiByte)   Qnh is current atmospheric pressure at sea level here (an aviation term)
-            Parameters.word2  =  5555 ;       // Qnh & 0x00ff;   // (LowByte)  Qnh is current atmospheric pressure at sea level here (an aviation term)
+            Parameters.word1  =  Qnh;      
+            Parameters.word2  =  2000;    
             break;
 
         case 3:
@@ -181,6 +239,7 @@ void SuccessfulPacket()
         if (ParamsSend >= 5) {
             ParamsSend = 0;
             AddExtraParameters = false;
+            Parameters.ID = 0;
         }   
     }
 
@@ -202,51 +261,28 @@ void SuccessfulPacket()
     StartInactvityTimeout();
     LostContactFlag = false;
 }
-
 /************************************************************************************************************/
-
-FLASHMEM void ConfigureRadio()
-{
-    Radio1.setPALevel(RF24_PA_MAX, true);
-    Radio1.setDataRate(DATARATE);
-    Radio1.enableAckPayload();
-    Radio1.openWritingPipe(DefaultPipe);
-    Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait);
-    Radio1.stopListening();
-    delayMicroseconds(STOPLISTENINGDELAY);
-    Radio1.enableDynamicPayloads();
-    Radio1.setAddressWidth(5);
-    Radio1.setCRCLength(RF24_CRC_16);
-    GapSum = 0;
-}
-
-/************************************************************************************************************/
-FLASHMEM void InitRadio(uint64_t Pipe)
-{
-    Radio1.begin();
-    ConfigureRadio();   
-}
-/************************************************************************************************************/
-uint8_t SendExtraParamemters(uint8_t Pointer)             // parameters must be loaded before this function is called
-{                                                         // only the low 12 bits of each parameter are sent
-   
-    RawDataBuffer[Pointer]    = Parameters.ID;           // copy current parameter values into the rawdatabuffer right after the channels
-    RawDataBuffer[Pointer+1]  = Parameters.word1;
-    RawDataBuffer[Pointer+2]  = Parameters.word2;
-    Pointer += 4;               
-    
-    Look1("  Parameter sent: ");
-    Look(Parameters.ID);
-    Look1("  Word1: ");
-    Look(Parameters.word1);
-    Look1("  Word2: ");
-    Look(Parameters.word2);
-    Look1("  Pointer: ");
-    Look(Pointer);
-    
+void SendExtraParamemters()             // parameters must be loaded before this function is called
+{                                       // only the ***low 12 bits*** of each parameter are actually sent
     LoadParameters();
 
-return Pointer;
+    // Parameters.ID = 2;                            
+    // Parameters.word1 = 111;
+    // Parameters.word2 = 222;
+
+
+    RawDataBuffer[0]    = Parameters.ID;            // copy current parameter values into the rawdatabuffer right after the channels
+    RawDataBuffer[1]  = Parameters.word1;
+    RawDataBuffer[2]  = Parameters.word2;
+                
+    
+    // Look1("Parameter ID: ");
+    // Look(Parameters.ID);
+    // Look1("Word1: ");
+    // Look(Parameters.word1);
+    // Look1("Word2: ");
+    // Look(Parameters.word2);
+    
 }
 /************************************************************************************************************/
 uint8_t EncodeTheChangedChannels(){
@@ -265,41 +301,9 @@ uint8_t EncodeTheChangedChannels(){
             } 
         }
     }
-    return NumberOfChangedChannels;                                                                     // Return the number of channels that have changed 
+    return NumberOfChangedChannels;                                                                         // Return the number of channels that have changed 
 }
-// ***********************************************************************************************************
-void ShowPacketData(uint32_t ThisPacketLength, uint8_t NumberOfChangedChannels){  // Just for debugging
 
-static uint32_t TotalPacketLength = 0;
-static uint32_t PacketsCount      = 0;
-static uint32_t PacketsCount1     = 0;
-uint32_t AveragePacketLength      = 0;
-
-    TotalPacketLength   +=  ThisPacketLength;
-    ++ PacketsCount;
-    ++ PacketsCount1;
-   
-    static uint32_t timer=0;
-    if ((millis() - timer) >= 1000) {
-        timer = millis();
-        AveragePacketLength = TotalPacketLength / PacketsCount;
-        Look1("Packet length (bytes): ");
-        Look1(ThisPacketLength);
-        Look1("\tNumber of changed channels: ");
-        Look1(NumberOfChangedChannels);
-        Look1("\tAverage packet length (bytes): ");
-        Look1(AveragePacketLength);
-        Look1("\tPackets count: ");
-        Look1(PacketsCount);
-        Look1("\tTotal data sent so far (k): ");
-        Look1(TotalPacketLength/1024);
-        Look1("\tPackets per second: ");
-        Look1(PacketsCount1);
-        Look1("\tTotal lost packets: ");
-        Look(TotalLostPackets);
-    PacketsCount1 = 0;
-    }
-}
 
 /************************************************************************************************************/
 /********************************* Function to send data to receiver ****************************************/
@@ -307,7 +311,7 @@ uint32_t AveragePacketLength      = 0;
 
 FASTRUN void SendData()
 {  
-    uint8_t NumberOfChangedChannels;
+    uint8_t NumberOfChangedChannels = 0;
     uint8_t ByteCountToTransmit ;
     if (SendNoData) return;
     if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { 
@@ -315,8 +319,14 @@ FASTRUN void SendData()
         if (BuddyPupilOnPPM) {SendViaPPM(); return;}                                                     // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         Connected = false;                                                                               // Assume failure until an ACK is received.
         FlushFifos();                                                                                    // This flush avoids a lockup that happens when the FIFO gets full.
-        NumberOfChangedChannels = EncodeTheChangedChannels();                                            // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels.
-        if (AddExtraParameters) NumberOfChangedChannels = SendExtraParamemters(NumberOfChangedChannels); // Add parameters here if there are some to go ...     
+      
+        if (AddExtraParameters) {  // Send parameters here if there are some to go
+            SendExtraParamemters(); 
+            NumberOfChangedChannels = 4;
+        }else {
+            NumberOfChangedChannels = EncodeTheChangedChannels();                                            // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels.
+        }
+        
         if (NumberOfChangedChannels || AddExtraParameters ){                                             // Any channels changed? Or parameters to send?
             ByteCountToTransmit     =  ((float) NumberOfChangedChannels * 1.5f) + 4;                     // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 word because int rounds downwards.
             uint8_t SizeOfUnCompressedData  =   (ByteCountToTransmit / 1.5) ;                                

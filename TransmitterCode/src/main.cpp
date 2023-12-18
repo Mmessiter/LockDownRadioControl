@@ -193,7 +193,6 @@ void RedLedOn()
                 if (UseLog) LogDisConnection();
         }
         ClearMostParameters();
-        SetUKFrequencies();
         if (CurrentView == FRONTVIEW) {
             SendText(FrontView_Connected, na);
             SendCommand(WarnOff);
@@ -1288,14 +1287,6 @@ FLASHMEM void GetTXVersionNumber()
     strcat(TransmitterVersionNumber, nbuf);
 }
 /************************************************************************************************************/
-FASTRUN void SetUKFrequencies()
-{
-    FHSS_data::FHSSChPointer       = FHSS_data::FHSS_Channels;
-    FHSS_data::FHSSRecoveryPointer = FHSS_data::FHSS_Channels;
-
-}
-
-/************************************************************************************************************/
 FASTRUN void CreateTimeStamp(char* DateAndTime)
 {
     char NB[10];
@@ -1793,7 +1784,6 @@ FLASHMEM void setup()
     BoundFlag = false;
     StartInactvityTimeout();
     GetTXVersionNumber();
-    SetUKFrequencies();
     ScreenTimeTimer = millis();
     RestoreBrightness();
     if (UseLog) {
@@ -3666,14 +3656,15 @@ void OptionView3End() //
     ConnectionAssessSeconds = GetValue(n3);
     ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
     ScanSensitivity         = GetValue(n4);
-    ScanSensitivity         = CheckRange(ScanSensitivity, 1, 255);
-    Parameters.ID = 2;
-    AddExtraParameters = true;    
+    ScanSensitivity         = CheckRange(ScanSensitivity, 1, 255); 
     SaveTransmitterParameters();
     CloseModelsFile();
-    CurrentView = TXSETUPVIEW;
+    Parameters.ID = 2;
+    AddExtraParameters      = true;  
+    CurrentView             = TXSETUPVIEW;
     SendCommand(page_SetupView);
     UpdateModelsNameEveryWhere();
+  
 }
 
 /******************************************************************************************************************************/
