@@ -136,45 +136,46 @@ void GetPupilAck()
         Decompress(BuddyBuffer, AckSpecial, UNCOMPRESSEDWORDS); // decompress the data into buddybuffer array
     }
 }
+
+//*************************************************************************************************************************
+void ChangeTXTarget(uint8_t ch,uint64_t p,  rf24_datarate_e speed)      // Swap between Buddy and Master
+{                                                                       // ch is the channel, p is the pipe address, speed is the data rate
+     Radio1.setDataRate(speed);                                         // Set the data rate
+     Radio1.openWritingPipe(p);                                         // Set the pipe address
+     Radio1.stopListening();
+     delayMicroseconds(STOPLISTENINGDELAY);
+     Radio1.setChannel(ch);                                             // Restore the proper frequency channel
+     delayMicroseconds(STOPLISTENINGDELAY);
+}
+
 //*************************************************************************************************************************
 
-void SendSpecialPacket()                                        // Here the MASTER sends to PUPIL tx. This is called about 100 times a second.
-{                                                               // Master Sends M or B to indicate whether Buddy is on or off, and the ID of the model which should be loaded.
-    
+void SendSpecialPacket()                                                    // Here the MASTER sends to PUPIL tx. This is called about 100 times a second.
+{                                                                           // Master Sends M or B to indicate whether Buddy is on or off, and the ID of the model which should be loaded.
     static uint32_t LocalTimer = 0;
     struct spd
+
     {
         char        Command[2];
         uint64_t    ModelID;
     };
     spd SpecialPacketData;
-
-
+    rf24_datarate_e faster = FASTDATARATE, slower = DATARATE;                         // Save the data rates
     if (!BoundFlag || !ModelMatched){
-        if ((millis() - LocalTimer) < 500) return;              // Don't send too often if not bound or model not matched yet otherwise can't bind
+        if ((millis() - LocalTimer) < 500) return;                          // Don't send too often if not bound or model not matched yet otherwise can't bind
             LocalTimer = millis();
     }
-    SpecialPacketData.ModelID =  ModelsMacUnionSaved.Val64;     // Send the model ID so that pupil can check it
-    SpecialPacketData.Command[0]                    = 'M';      // Send M to indicate Master is ON
-    if (BuddyON)       SpecialPacketData.Command[0] = 'B';      // Send B to indicate Buddy is ON
-    Radio1.openWritingPipe(TeensyMACAddPipe ^ ENCRYPT_KEY);     // Send to encrypted pipe address
-    Radio1.setDataRate(FASTDATARATE);                           // 2MBPS
-    Radio1.setChannel(SPECIAL_PACKET_CHANNEL);
-    delayMicroseconds(STOPLISTENINGDELAY);
-    Radio1.stopListening();                                     // Transmit only
-    delayMicroseconds(STOPLISTENINGDELAY);                      
+    SpecialPacketData.ModelID =  ModelsMacUnionSaved.Val64;                 // Send the model ID so that pupil can check it
+    SpecialPacketData.Command[0]                    = 'M';                  // Send M to indicate Master is ON
+    if (BuddyON)       SpecialPacketData.Command[0] = 'B';                  // Send B to indicate Buddy is ON
+    ChangeTXTarget(SPECIAL_PACKET_CHANNEL,TeensyMACAddPipe ^ ENCRYPT_KEY,faster);  // Set the TX target to the Buddy
     if (Radio1.write(&SpecialPacketData, sizeof SpecialPacketData)) {
-        GetPupilAck();                                          // Get ack from pupil WITH HIS CONTROL DATA!!
-        PupilDetected(true);                                    // Pupil is alive
+        GetPupilAck();                                                      // Get ack from pupil WITH HIS CONTROL DATA!!
+        PupilDetected(true);                                                // Pupil is alive
     } else {
-        PupilDetected(false);                                   // Pupil is dead
+        PupilDetected(false);                                               // Pupil is dead
     }
-    Radio1.setDataRate(DATARATE);                               // Restore the proper data rate
-    Radio1.openWritingPipe(TeensyMACAddPipe);                   // Restore the proper pipe address
-    Radio1.setChannel(CurrentChannel);                          // Restore the proper frequency channel
-    delayMicroseconds(STOPLISTENINGDELAY);
-    Radio1.stopListening();                                     // Transmit only
-    delayMicroseconds(STOPLISTENINGDELAY);
+    ChangeTXTarget(CurrentChannel,TeensyMACAddPipe,slower);
 }
 
 //*************************************************************************************************************************
