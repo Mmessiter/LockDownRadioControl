@@ -3624,6 +3624,8 @@ void RXSetup1End()
     SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
     SendCommand(page_RXSetupView);
+    Parameters.ID = 5;
+    AddExtraParameters = true;
 }
 
 /******************************************************************************************************************************/
@@ -4980,6 +4982,8 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(Mark, TextIn) > 0) {
             GPSMarkHere    = 255; // Mark this location
             GPSMaxDistance = 0;
+            Parameters.ID = 3;
+            AddExtraParameters = true;
             ClearText();
             return;
          }

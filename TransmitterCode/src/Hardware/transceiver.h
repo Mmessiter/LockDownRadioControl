@@ -149,7 +149,11 @@ void LoadParameters()
                 GPSMarkHere       = 0;
             }
             break;
-        
+        case 4:         // spare
+         
+        break;
+
+
         case 5:
               Parameters.word1 = PPMdata.UseSBUSFromRX;   // 1 - 0
               Parameters.word2 = PPMdata.PPMChannelCount; 
@@ -227,6 +231,7 @@ void FlushFifos()
 /************************************************************************************************************/
 void SuccessfulPacket()
 {
+#define PARAMREPEATS 3                          // Send parameters PARAMREPEATS times in case of a packet loss or two
 
     static uint8_t ParamsSend = 0;
     CheckGapsLength();
@@ -234,9 +239,9 @@ void SuccessfulPacket()
     ++RangeTestGoodPackets;
     ++PacketNumber;
    
-    if (AddExtraParameters && (ParamsSend < 5)) {  // Send parameters 5 times in case of a packet loss or two
+    if (AddExtraParameters && (ParamsSend < PARAMREPEATS)) {  // Send parameters PARAMREPEATS times in case of a packet loss or two
         ++ParamsSend;
-        if (ParamsSend >= 5) {
+        if (ParamsSend >= PARAMREPEATS) {
             ParamsSend = 0;
             AddExtraParameters = false;
             Parameters.ID = 0;
@@ -265,12 +270,6 @@ void SuccessfulPacket()
 void SendExtraParamemters()             // parameters must be loaded before this function is called
 {                                       // only the ***low 12 bits*** of each parameter are actually sent
     LoadParameters();
-
-    // Parameters.ID = 2;                            
-    // Parameters.word1 = 111;
-    // Parameters.word2 = 222;
-
-
     RawDataBuffer[0]    = Parameters.ID;            // copy current parameter values into the rawdatabuffer right after the channels
     RawDataBuffer[1]  = Parameters.word1;
     RawDataBuffer[2]  = Parameters.word2;
