@@ -66,12 +66,12 @@
 #ifdef FHSSAT200HZ
     #define LOSTCONTACTCUTOFF      0                             // packets to lose before declaring lost contact 
 #else
-    #define LOSTCONTACTCUTOFF      10
+    #define LOSTCONTACTCUTOFF      10                             // packets to lose before declaring lost contact 
 #endif
 
   
   
-    #define PACEMAKER              5                             // was 10. 4 is probably the MIN.  MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+    #define PACEMAKER              5                             // 5ms means about 200 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
     #define TIMEFORTXMANAGMENT     2                             // was 3 ...  How many ms must remain spare between data packets before daring to undertake more trivial tasks
       
     #define CHANNELSUSED           16                           
