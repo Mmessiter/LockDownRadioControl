@@ -13,7 +13,7 @@
 #define RXVERSION_MINOR   4
 #define RXVERSION_MINIMUS 2 // December 2023
 
-#define HOPTIME                   0    // milliseconds between hops ;-) 0 = hop every packet
+#define HOPTIME                   0    // milliseconds between hops ;-) 0 = hop *EVERY* packet
 
 // #define DB_FHSS
 // #define DB_SENSORS
@@ -41,6 +41,7 @@
 // ********************* >>> Reconnect params <<< ***************************************
 
 #define LISTEN_PERIOD           14   //  14 (How many ms to listen for TX in Reconnect())
+#define STOPLISTENINGDELAY      30   //  
 
 // *************************************************************************************
 
