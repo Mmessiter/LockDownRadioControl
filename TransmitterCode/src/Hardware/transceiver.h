@@ -233,9 +233,9 @@ void TryToReconnect()
 void FlushFifos()
 {
     Radio1.flush_tx(); // This avoids a lockup that happens when the FIFO gets full.
-    delayMicroseconds(150);
+    delayMicroseconds(STOPLISTENINGDELAY);
     Radio1.flush_rx();
-    delayMicroseconds(150);
+    delayMicroseconds(STOPLISTENINGDELAY);
 }
 /************************************************************************************************************/
 void SuccessfulPacket()
