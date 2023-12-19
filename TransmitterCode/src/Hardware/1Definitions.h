@@ -974,7 +974,7 @@ uint32_t BindingTimer        = 0;
 bool     ModelExistsAtBuddy  = true;                                     //  Flag to indicate that the model memory is on Buddy TX
 bool     BeQuiet             = false;
 bool     ReconnectingNow     = true;
-uint32_t LastHopTime   =0;
+uint32_t LastHopTime         = 0;                                       //  Time of last hop
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
@@ -984,7 +984,6 @@ namespace FHSS_data {
     
 uint8_t Used_Recovery_Channels[3]       = {15, 71, 82};        // chanels 15, 71, 82 are used for recovery               
 
-// offsets:                    0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18 19  20  21  22  23  24 ...
 uint8_t  FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 16, 72, // UK array
                               35, 57, 45, 29, 75, 3, 41, 62, 11, 9, 77, 37, 8, 31, 36, 18, 17, 50, 78, 73, 30, 79, 6, 23, 40,
                               54, 12, 80, 53, 22, 1, 74, 39, 58, 63, 70, 52, 42, 25, 43, 26, 14, 38, 48, 68, 33, 27, 60, 44, 46,
