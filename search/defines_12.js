@@ -25,7 +25,7 @@ var searchData=
   ['startx_22',['STARTX',['../1Definitions_8h.html#a6ffc62811b3e92f8acbedcec612c8030',1,'1Definitions.h']]],
   ['starty_23',['STARTY',['../1Definitions_8h.html#afa7f69258876ee4ca4c4f9ee3cafffd4',1,'1Definitions.h']]],
   ['sticksview_24',['STICKSVIEW',['../1Definitions_8h.html#abfc5f0d31f80fc812b9c44a55fe3134e',1,'1Definitions.h']]],
-  ['stoplisteningdelay_25',['STOPLISTENINGDELAY',['../1Definitions_8h.html#a565d61935c13b35fc13071614aa5b378',1,'1Definitions.h']]],
+  ['stoplisteningdelay_25',['STOPLISTENINGDELAY',['../common_8h.html#a565d61935c13b35fc13071614aa5b378',1,'STOPLISTENINGDELAY():&#160;common.h'],['../1Definitions_8h.html#a565d61935c13b35fc13071614aa5b378',1,'STOPLISTENINGDELAY():&#160;1Definitions.h']]],
   ['storagecharge_26',['STORAGECHARGE',['../1Definitions_8h.html#a0d7f6ce749c2aceb4ecef39efa939fa6',1,'1Definitions.h']]],
   ['straightlines_27',['STRAIGHTLINES',['../1Definitions_8h.html#a00adadb4876f6c86728e50a79fbc8fcc',1,'1Definitions.h']]],
   ['strcat_5fp_28',['strcat_P',['../MPU6050__6Axis__MotionApps20_8h.html#a2ca9304dda7dc2472812baa9e9ede965',1,'strcat_P():&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#a2ca9304dda7dc2472812baa9e9ede965',1,'strcat_P():&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#a2ca9304dda7dc2472812baa9e9ede965',1,'strcat_P():&#160;MPU6050_9Axis_MotionApps41.h']]],
