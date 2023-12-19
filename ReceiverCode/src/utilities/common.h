@@ -17,7 +17,7 @@
 // #define FHSS200MHZ       
 
 #ifdef FHSS200MHZ
-    #define HOPTIME           0     //  milliseconds between hops
+    #define HOPTIME           0     // (about 200 hops per second)
     #define RECEIVE_TIMEOUT   14     //  was 14 
 #else
     #define HOPTIME           96     //  milliseconds between hops (about 10 hops per second)
