@@ -66,7 +66,7 @@
 #ifdef FHSSAT200HZ
     #define LOSTCONTACTCUTOFF      0                             // packets to lose before declaring lost contact 
 #else
-    #define LOSTCONTACTCUTOFF      10                             // packets to lose before declaring lost contact 
+    #define LOSTCONTACTCUTOFF      5                             // packets to lose before declaring lost contact 
 #endif
 
   
@@ -974,6 +974,7 @@ uint32_t BindingTimer        = 0;
 bool     ModelExistsAtBuddy  = true;                                     //  Flag to indicate that the model memory is on Buddy TX
 bool     BeQuiet             = false;
 bool     ReconnectingNow     = true;
+uint32_t LastHopTime   =0;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

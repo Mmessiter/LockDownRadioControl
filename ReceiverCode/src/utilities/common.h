@@ -21,7 +21,7 @@
     #define RECEIVE_TIMEOUT   14     //  was 14 
 #else
     #define HOPTIME           96     //  milliseconds between hops (about 10 hops per second)
-    #define RECEIVE_TIMEOUT   16     //  was 14 
+    #define RECEIVE_TIMEOUT   14 //16     //  was 14 
 #endif
 
 // **************************************************************************
@@ -250,6 +250,7 @@ uint8_t       Pipnum         = PIPENUMBER;
 uint8_t       DefaultPipe[6] = {0x23, 0x94, 0x3e, 0xbe, 0xb7, 0x00};
 uint8_t       CurrentPipe[6];
 uint8_t       Randomized_Recovery_Channels_Counter = 0;
+uint32_t      HopMoment                           = 0;
 
 
 #endif // defined (_SRC_UTILITIES_COMMON_H)

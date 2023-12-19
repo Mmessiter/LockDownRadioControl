@@ -509,6 +509,7 @@ FASTRUN void HopToNextChannel()
     delayMicroseconds(STOPLISTENINGDELAY);      // very very short delay!
     CurrentChannel = NextChannel;               // save it for later
     ++hopcount;
+    LastHopTime = millis();
 
     #ifdef DB_FHSS
     if (BoundFlag && Connected && ModelMatched) {
