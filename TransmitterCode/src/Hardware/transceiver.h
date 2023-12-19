@@ -497,13 +497,13 @@ float HopsPerSec = 0;
 
 FASTRUN void HopToNextChannel()
 {
-    static uint16_t hopcount   = 0;
-    Radio1.setChannel(NextChannel); // Hop !
-    CurrentChannel = NextChannel;   // save it for later
-    delayMicroseconds(STOPLISTENINGDELAY);
-    Radio1.stopListening(); // Transmit only
-    delayMicroseconds(STOPLISTENINGDELAY);
-     ++hopcount;
+    static uint16_t hopcount = 0;
+    Radio1.stopListening();                     // Transmit only
+    delayMicroseconds(STOPLISTENINGDELAY);      // very very short delay!
+    Radio1.setChannel(NextChannel);             // Hop !
+    delayMicroseconds(STOPLISTENINGDELAY);      // very very short delay!
+    CurrentChannel = NextChannel;               // save it for later
+    ++hopcount;
 
     #ifdef DB_FHSS
     if (BoundFlag && Connected && ModelMatched) {
@@ -557,8 +557,8 @@ void SetThePipe(uint64_t WhichPipe)
     Radio1.openWritingPipe(WhichPipe);
     delayMicroseconds(STOPLISTENINGDELAY);
     Radio1.stopListening();
-    delayMicroseconds(STOPLISTENINGDELAY); // allow things to happen
-                            // DisplayPipe(WhichPipe);
+    delayMicroseconds(STOPLISTENINGDELAY);      // allow things to happen
+                                                // DisplayPipe(WhichPipe);
 }
     /************************************************************************************************************/
     #define BADNIBBLECOUNT 6

@@ -138,7 +138,7 @@ void GetPupilAck()
 }
 
 //*************************************************************************************************************************
-void ChangeTXTarget(uint8_t ch,uint64_t p,  rf24_datarate_e speed)      // Swap between Buddy and Master
+void ChangeTXTarget(uint8_t ch,uint64_t p, rf24_datarate_e speed)       // Swap between Buddy and Master
 {                                                                       // ch is the channel, p is the pipe address, speed is the data rate
      Radio1.setDataRate(speed);                                         // Set the data rate
      Radio1.openWritingPipe(p);                                         // Set the pipe address
