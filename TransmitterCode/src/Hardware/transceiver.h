@@ -161,33 +161,38 @@ void LoadParameters()
             break;
     }
 }
+
 /************************************************************************************************************/
 void RecordsPacketSuccess(uint8_t s)
 { // or failure according to s
-    static uint16_t PacketsHistoryIndex       = 0;
+    static uint16_t PacketsHistoryIndex       = 0; 
     ReconnectingNow                           = false;
     PacketsHistoryBuffer[PacketsHistoryIndex] = s;
     ++PacketsHistoryIndex;
     ++TotalGoodPackets;
     if (PacketsHistoryIndex >= (PERFECTPACKETSPERSECOND * ConnectionAssessSeconds)) PacketsHistoryIndex = 0; //
 }
+
 /************************************************************************************************************/
 FASTRUN void FailedPacket()
 {
-    RecordsPacketSuccess(0); // Record a failure
-    if (!ReconnectingNow) ++RecentPacketsLost;     // this is to keep track of events when receiver is off  
-    LostContactFlag =   true;
+    RecordsPacketSuccess(0);                                                                // Record a failure
+    if (!ReconnectingNow) ++RecentPacketsLost;                                              // this is to keep track of events when receiver is off  
     Reconnected     =   false; 
-    ReconnectingNow = true;
+    ReconnectingNow =   true;
     if (!GapStart) 
     {
-        GapStart  = millis();  // To keep track of this gap's length
+        GapStart  = millis();                                                               // To keep track of this gap's length
     } else 
     {
         if (((millis() - GapStart) > RED_LED_ON_TIME) && (!LedWasRed)) RedLedOn();          // Put on red led - receiver must be off
     }
-    for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = PrePreviousBuffer[i];        // force last update repeat 
-    TryToReconnect();
+   for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = PrePreviousBuffer[i];         // force last update repeat 
+
+    if (RecentPacketsLost >= LOSTCONTACTCUTOFF) {                                           // Don't immeditately change channel
+            LostContactFlag =   true;
+            TryToReconnect();  
+    }
     int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
     if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);                           // INACTIVITY POWER OFF HERE!!
 }
@@ -241,7 +246,6 @@ void SuccessfulPacket()
     RecordsPacketSuccess(1);
     ++RangeTestGoodPackets;
     ++PacketNumber;
-   
     if (AddExtraParameters && (ParamsSend < PARAMREPEATS)) {  // Send parameters PARAMREPEATS times in case of a packet loss or two
         ++ParamsSend;
         if (ParamsSend >= PARAMREPEATS) {
@@ -523,8 +527,11 @@ FASTRUN void HopToNextChannel()
         Serial.print(Freq, 3);
         Look1(" Ghz");
         Look1("  RX transceiver number: ");
-        Look(ThisRadio);
+        Look1(ThisRadio);
+        Look1(" Packets per hop: ");
+        Look(PacketNumber);
         PStartTime = millis();
+        PacketNumber = 0;
     }
     #endif
    

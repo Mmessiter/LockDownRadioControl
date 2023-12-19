@@ -13,7 +13,19 @@
 #define RXVERSION_MINOR   4
 #define RXVERSION_MINIMUS 2 // December 2023
 
-#define HOPTIME                   0    // milliseconds between hops ;-) 0 = hop *EVERY* packet
+// **************************************************************************
+// #define FHSS200MHZ       
+
+#ifdef FHSS200MHZ
+    #define HOPTIME           0     //  milliseconds between hops
+    #define RECEIVE_TIMEOUT   14     //  was 14 
+#else
+    #define HOPTIME           96     //  milliseconds between hops
+    #define RECEIVE_TIMEOUT   16     //  was 14 
+#endif
+
+// **************************************************************************
+
 
 // #define DB_FHSS
 // #define DB_SENSORS
@@ -41,7 +53,7 @@
 // ********************* >>> Reconnect params <<< ***************************************
 
 #define LISTEN_PERIOD           14   //  14 (How many ms to listen for TX in Reconnect())
-#define STOPLISTENINGDELAY      30   //  
+#define STOPLISTENINGDELAY      30   //  microseconds to wait after stopListening() in Reconnect()
 
 // *************************************************************************************
 
@@ -49,7 +61,6 @@
 #define PIPENUMBER       1
 #define BOUNDPIPENUMBER  1
      
-#define RECEIVE_TIMEOUT    14   //  was 14  (should probobly be about 4 - 5 ms more that TX's PACEMAKER 
 #define CHANNELSUSED       16                        
 #define RECEIVEBUFFERSIZE  20        
 
