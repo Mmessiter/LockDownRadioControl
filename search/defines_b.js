@@ -10,7 +10,8 @@ var searchData=
   ['listenmode_7',['LISTENMODE',['../1Definitions_8h.html#a6b3a7f1928010be5296e311e273cee05',1,'1Definitions.h']]],
   ['logview_8',['LOGVIEW',['../1Definitions_8h.html#ab5b352492259f7b453a051455d5dca50',1,'1Definitions.h']]],
   ['longer_5fdelay_9',['LONGER_DELAY',['../BuddyWireless_8h.html#ae7ccabc87d888235fa119a3f20d29d15',1,'BuddyWireless.h']]],
-  ['lostcontactthreshold_10',['LOSTCONTACTTHRESHOLD',['../BuddyWireless_8h.html#adc8ab6e023609f6548762eea2746eea1',1,'BuddyWireless.h']]],
-  ['low_5fvoltage_5ftime_11',['LOW_VOLTAGE_TIME',['../1Definitions_8h.html#a26bf5116f8cb804123206e63f1432746',1,'1Definitions.h']]],
-  ['lowbattery_12',['LOWBATTERY',['../1Definitions_8h.html#adca16f7a43b448d4584dcb62897068a5',1,'1Definitions.h']]]
+  ['lostcontactcutoff_10',['LOSTCONTACTCUTOFF',['../1Definitions_8h.html#ac5b4f54697bc5a8d58ef0c92c094c6b6',1,'1Definitions.h']]],
+  ['lostcontactthreshold_11',['LOSTCONTACTTHRESHOLD',['../BuddyWireless_8h.html#adc8ab6e023609f6548762eea2746eea1',1,'BuddyWireless.h']]],
+  ['low_5fvoltage_5ftime_12',['LOW_VOLTAGE_TIME',['../1Definitions_8h.html#a26bf5116f8cb804123206e63f1432746',1,'1Definitions.h']]],
+  ['lowbattery_13',['LOWBATTERY',['../1Definitions_8h.html#adca16f7a43b448d4584dcb62897068a5',1,'1Definitions.h']]]
 ];

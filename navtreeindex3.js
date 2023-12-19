@@ -1,16 +1,17 @@
 var NAVTREEINDEX3 =
 {
-"1Definitions_8h.html#afe31e2cddc17dd03549ad02cc613f743":[5,0,3,0,0,0,479],
-"1Definitions_8h.html#afe41d3be378c52d1dc2c6e8310ac9a0e":[5,0,3,0,0,0,633],
-"1Definitions_8h.html#afe513398f72d5e48f691830a1ef6eb42":[5,0,3,0,0,0,392],
+"1Definitions_8h.html#afd042feb8b8e181cbff0d5f27fde063e":[5,0,3,0,0,0,705],
+"1Definitions_8h.html#afe31e2cddc17dd03549ad02cc613f743":[5,0,3,0,0,0,480],
+"1Definitions_8h.html#afe41d3be378c52d1dc2c6e8310ac9a0e":[5,0,3,0,0,0,634],
+"1Definitions_8h.html#afe513398f72d5e48f691830a1ef6eb42":[5,0,3,0,0,0,393],
 "1Definitions_8h.html#afe63280e8006a836668a21fa62ed7630":[5,0,3,0,0,0,51],
-"1Definitions_8h.html#afe812fd316c28837dfd25f413e7d00d4":[5,0,3,0,0,0,702],
-"1Definitions_8h.html#aff20e4985ae632d4c59eeb3d772874c9":[5,0,3,0,0,0,764],
-"1Definitions_8h.html#aff4581f5a99a6d8eb37ef22e94d858d3":[5,0,3,0,0,0,688],
-"1Definitions_8h.html#aff628072047986ff5293dbb907c3f676":[5,0,3,0,0,0,431],
-"1Definitions_8h.html#aff6fa8906188d3249b01bf59de47df2f":[5,0,3,0,0,0,327],
-"1Definitions_8h.html#aff9eea2f8a1a10bc94b26b1f84b7b27b":[5,0,3,0,0,0,590],
-"1Definitions_8h.html#affc6c0de18db71aa5ad8b4d241339731":[5,0,3,0,0,0,275],
+"1Definitions_8h.html#afe812fd316c28837dfd25f413e7d00d4":[5,0,3,0,0,0,703],
+"1Definitions_8h.html#aff20e4985ae632d4c59eeb3d772874c9":[5,0,3,0,0,0,765],
+"1Definitions_8h.html#aff4581f5a99a6d8eb37ef22e94d858d3":[5,0,3,0,0,0,689],
+"1Definitions_8h.html#aff628072047986ff5293dbb907c3f676":[5,0,3,0,0,0,432],
+"1Definitions_8h.html#aff6fa8906188d3249b01bf59de47df2f":[5,0,3,0,0,0,328],
+"1Definitions_8h.html#aff9eea2f8a1a10bc94b26b1f84b7b27b":[5,0,3,0,0,0,591],
+"1Definitions_8h.html#affc6c0de18db71aa5ad8b4d241339731":[5,0,3,0,0,0,276],
 "1Definitions_8h_source.html":[5,0,3,0,0,0],
 "BuddyPPM_8h.html":[5,0,3,0,0,1],
 "BuddyPPM_8h.html#a784a1eca0361b3991bca899167cc1cdb":[5,0,3,0,0,1,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "MPU6050_8h.html#a8b5ca8697862a741632275a717631358":[5,0,0,0,0,0,4,150],
 "MPU6050_8h.html#a8c286ade28b68d117859dc73fd73e646":[5,0,0,0,0,0,4,325],
 "MPU6050_8h.html#a8de682c780c80df4a48e186128bc2930":[5,0,0,0,0,0,4,298],
-"MPU6050_8h.html#a8f1a20f878989254d09f019bdbc6e6b7":[5,0,0,0,0,0,4,31],
-"MPU6050_8h.html#a90d82ed64d6fd2b4b96db163f5dd45d2":[5,0,0,0,0,0,4,137]
+"MPU6050_8h.html#a8f1a20f878989254d09f019bdbc6e6b7":[5,0,0,0,0,0,4,31]
 };
