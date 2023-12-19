@@ -571,6 +571,7 @@ var 1Definitions_8h =
     [ "LastBuffer", "1Definitions_8h.html#ae002bd879607e8a3f7722ad78a9aae73", null ],
     [ "LastFileInView", "1Definitions_8h.html#a77a004fce053dac15e7c389907d142b4", null ],
     [ "LastFourOnly", "1Definitions_8h.html#a97701cb4182125a490f24c210f4d3e24", null ],
+    [ "LastHopTime", "1Definitions_8h.html#a36cf31fb377dc4917b35197e9a9f864f", null ],
     [ "LastLinePosition", "1Definitions_8h.html#af4c308fd737536a055254fb9858ced91", null ],
     [ "LastMixNumber", "1Definitions_8h.html#a4e93c6d21a52ae42832359ee0e4c8b2d", null ],
     [ "LastModelLoaded", "1Definitions_8h.html#a23f3d76e747ca641d7cb1549fb775e40", null ],

@@ -104,6 +104,7 @@ var common_8h =
     [ "FS_byte1", "common_8h.html#a3be9019b72265fa9443e1f1132fd9bc7", null ],
     [ "FS_byte2", "common_8h.html#a9949c81d8f6abc28616445945c5d24ba", null ],
     [ "GpsFix", "common_8h.html#a86c2722f6c671747562cc504a440e243", null ],
+    [ "HopMoment", "common_8h.html#ab3b6846ad8bf99c7fd148049995dfd91", null ],
     [ "HopNow", "common_8h.html#a8f6625d513c0e3887659968a39ddc325", null ],
     [ "HopStart", "common_8h.html#a937fc53e966c6b5c66b9d66c01cec13f", null ],
     [ "HoursGPS", "common_8h.html#acbe14cc301f6ba68e2431684bf688916", null ],
