@@ -214,11 +214,7 @@ FASTRUN void ReceiveData()
             }
         }
     }
-    if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) {
-        
-        Reconnect(); // Try to reconnect.
-    }
-
+    if (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT) Reconnect(); // Try to reconnect. //  RECEIVE_TIMEOUT???
     if (!ReadData()) {
         if (millis() - SBUSTimer >= SBUSRATE) { // No new packet yet - but maybe it's time to dispatch the last?
             if (BoundFlag && (millis() > 10000)) {
