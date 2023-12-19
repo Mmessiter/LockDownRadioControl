@@ -1224,6 +1224,8 @@ void SendColour(char* but, int Colour)
 /*********************************************************************************************************************************/
 void ShowSafetyIsOn()
 {
+
+    if (AnnounceBanks && !BeQuiet) PlaySound(SAFEON);
     if (CurrentView == FRONTVIEW) {
         char bco[]  = "bt0.bco=";
         char bco2[] = "bt0.bco2=";
@@ -1233,7 +1235,6 @@ void ShowSafetyIsOn()
         SendColour(bco2, SpecialColour);
         SendColour(pco, HighlightColour);
         SendColour(pco2, HighlightColour);
-        if (AnnounceBanks && !BeQuiet) PlaySound(SAFEON);
         BeQuiet = false;
     }
     if (UseLog) LogSafety(1);
@@ -1241,7 +1242,9 @@ void ShowSafetyIsOn()
 /*********************************************************************************************************************************/
 void ShowSafetyIsOff()
 {
-    if (CurrentView == FRONTVIEW) {
+
+     if (AnnounceBanks && !BeQuiet) PlaySound(SAFEOFF);
+     if (CurrentView == FRONTVIEW) {
         char bco[]  = "bt0.bco=";
         char bco2[] = "bt0.bco2=";
         char pco[]  = "bt0.pco=";
@@ -1250,7 +1253,6 @@ void ShowSafetyIsOff()
         SendColour(bco2, BackGroundColour);
         SendColour(pco, HighlightColour);
         SendColour(pco2, HighlightColour);
-        if (AnnounceBanks && !BeQuiet) PlaySound(SAFEOFF);
         BeQuiet = false;
     }
     if (UseLog) LogSafety(0);
