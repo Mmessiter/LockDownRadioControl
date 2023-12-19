@@ -178,12 +178,12 @@ FASTRUN void FailedPacket()
 {
     RecordsPacketSuccess(0);                                                                // Record a failure
     if (!ReconnectingNow) ++RecentPacketsLost;                                              // this is to keep track of events when receiver is off  
-    Reconnected     =   false; 
-    ReconnectingNow =   true;
-    LastPacketSentTime = 0;                                                                // Force a new packet to be sent immediately
+    Reconnected         =   false; 
+    ReconnectingNow     =   true;
+    LastPacketSentTime  =   0;                                                                 // Force a new packet to be sent immediately
     if (!GapStart) 
     {
-        GapStart  = millis();                                                               // To keep track of this gap's length
+        GapStart        =   millis();                                                               // To keep track of this gap's length
     } else 
     {
         if (((millis() - GapStart) > RED_LED_ON_TIME) && (!LedWasRed)) RedLedOn();          // Put on red led - receiver must be off

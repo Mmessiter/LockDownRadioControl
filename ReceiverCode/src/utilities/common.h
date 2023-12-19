@@ -11,7 +11,7 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   4
-#define RXVERSION_MINIMUS 2 // December 2023
+#define RXVERSION_MINIMUS 3 // December 2023
 
 // **************************************************************************
 // #define FHSS200MHZ       
@@ -20,7 +20,7 @@
     #define HOPTIME           0     //  milliseconds between hops
     #define RECEIVE_TIMEOUT   14     //  was 14 
 #else
-    #define HOPTIME           96     //  milliseconds between hops
+    #define HOPTIME           96     //  milliseconds between hops (about 10 hops per second)
     #define RECEIVE_TIMEOUT   16     //  was 14 
 #endif
 
