@@ -101,7 +101,7 @@ void PIDEntryPoint(){
         Serial.print("Loop speed: ");
         Serial.print(lcount);
         Serial.print(" Hz  - ");
-        Serial.println(millis());
+        Serial.println(" ");
         lcount = 0;
    }
    ++lcount;
