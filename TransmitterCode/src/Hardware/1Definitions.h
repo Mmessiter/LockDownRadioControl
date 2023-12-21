@@ -601,7 +601,9 @@ uint32_t         SDRead32BITS(int p_address);
 void             CheckSavedTrimValues();
 void             CheckMacrosBuffer();
 void             FixMotorChannel();
-FLASHMEM void ReInitRadio(uint64_t Pipe);
+FLASHMEM void    ReInitRadio(uint64_t Pipe);
+void             SendInitialSetupParams();
+
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *

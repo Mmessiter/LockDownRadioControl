@@ -241,6 +241,7 @@ void GreenLedOn()
         analogWrite(GREENLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
         if (GetLEDBrightness()) LedWasGreen = true;
         Reconnected = false;
+        SendInitialSetupParams();
     }
 }
 
@@ -1823,6 +1824,23 @@ FLASHMEM void setup()
     }
     RationaliseBuddy();
 }
+
+/*********************************************************************************************************************************/
+
+void SendInitialSetupParams(){ /// not working yet
+
+// Sbus / PPM at rx
+    Parameters.ID = 5;
+    AddExtraParameters = true;
+    while (AddExtraParameters) SendData();
+
+// QNH
+    Parameters.ID = 2;
+    AddExtraParameters = true;
+    while (AddExtraParameters) SendData();
+
+}
+
 /*********************************************************************************************************************************/
 void RationaliseBuddy()
 {
