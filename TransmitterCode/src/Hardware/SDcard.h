@@ -92,11 +92,9 @@ void CheckStepSizes()
     for (int i = 0; i < 16; ++i)
         if (StepSize[i] > 100) StepSize[i] = 100;
 }
-
 /*********************************************************************************************************************************/
 void CheckBanksInUse()
 {
-
     for (int i = 0; i < 4; ++i) {
         if (BanksInUse[i] > 23) BanksInUse[i] = i;
     }
@@ -119,9 +117,7 @@ bool ReadOneModel(uint32_t Mnum)
         DelayWithDog(300);
         OpenModelsFile();
     }
-
     strcpy(ModelName, NoModelYet); // indicator of error
-
     if (!ModelsFileOpen) {
         Serial.println("Cannot open file");
         return false;
