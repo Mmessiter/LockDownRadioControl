@@ -66,7 +66,7 @@
 #ifdef FHSSAT200HZ
     #define LOSTCONTACTCUTOFF      0                             // packets to lose before declaring lost contact 
 #else
-    #define LOSTCONTACTCUTOFF      5                             // packets to lose before declaring lost contact 
+    #define LOSTCONTACTCUTOFF      3                             // packets to lose before declaring lost contact 
 #endif
 
   
@@ -509,6 +509,7 @@ FASTRUN void  Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uin
 FASTRUN void  Decompress(uint16_t* uncompressed_buf, uint16_t* compressed_buf, uint8_t uncompressed_size);
 FASTRUN void  BufferTeensyMACAddPipe();
 void          ExecuteMacro();
+
 template<typename any>
 void Look(const any& value);
 
@@ -603,6 +604,9 @@ void             CheckMacrosBuffer();
 void             FixMotorChannel();
 FLASHMEM void    ReInitRadio(uint64_t Pipe);
 void             SendInitialSetupParams();
+void             SendOutstandingParameters();
+void             AddParameterstoQueue(uint8_t ID);
+
 
 
 // **************************************************************************
@@ -977,6 +981,8 @@ bool     ModelExistsAtBuddy  = true;                                     //  Fla
 bool     BeQuiet             = false;
 bool     ReconnectingNow     = true;
 uint32_t LastHopTime         = 0;                                       //  Time of last hop
+uint8_t  ParametersToBeSent[40];
+uint8_t  ParametersToBeSentPointer = 0;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

@@ -1824,24 +1824,7 @@ FLASHMEM void setup()
     }
     RationaliseBuddy();
 }
-
-/*********************************************************************************************************************************/
-
-void SendInitialSetupParams(){ /// not working yet
-
-// Sbus / PPM at rx
-    Parameters.ID = 5;
-    AddExtraParameters = true;
-    while (AddExtraParameters) SendData();
-
-// QNH
-    Parameters.ID = 2;
-    AddExtraParameters = true;
-    while (AddExtraParameters) SendData();
-
-}
-
-/*********************************************************************************************************************************/
+// **************************************************************************************************************************************************************
 void RationaliseBuddy()
 {
     PupilIsAlive  = 0;
@@ -3643,8 +3626,8 @@ void RXSetup1End()
     SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
     SendCommand(page_RXSetupView);
-    Parameters.ID = 5;
-    AddExtraParameters = true;
+    AddParameterstoQueue(5);                // 5 is the ID for SBUS/PPM at RX selection and PPM channel count
+  
 }
 
 /******************************************************************************************************************************/
@@ -3680,8 +3663,7 @@ void OptionView3End() //
     ScanSensitivity         = CheckRange(ScanSensitivity, 1, 255); 
     SaveTransmitterParameters();
     CloseModelsFile();
-    Parameters.ID = 2;
-    AddExtraParameters      = true;  
+    AddParameterstoQueue(2);  // 2 is the ID for sending QNH value to RX
     CurrentView             = TXSETUPVIEW;
     SendCommand(page_SetupView);
     UpdateModelsNameEveryWhere();
@@ -5001,8 +4983,7 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(Mark, TextIn) > 0) {
             GPSMarkHere    = 255; // Mark this location
             GPSMaxDistance = 0;
-            Parameters.ID = 3;
-            AddExtraParameters = true;
+            AddParameterstoQueue(3);   // 3 is the ID of the MARK HERE parameter
             ClearText();
             return;
          }
@@ -5013,8 +4994,6 @@ FASTRUN void ButtonWasPressed()
             SendValue(Progress, 10);
             SticksMode = CheckRange(GetValue(n0), 1, 2);
             GetText(TxNme, TxName);
-            SendValue(Progress, 30);
-
             SendValue(Progress, 40);
             AutoModelSelect = GetValue(lpm);
             SendValue(Progress, 50);
@@ -5277,11 +5256,9 @@ FASTRUN void ButtonWasPressed()
                     SendValue(Progress, i * 100 / 16);
                 }
                 SendValue(Progress, 100);          
-                Parameters.ID = 1;                     
-                AddExtraParameters = true;
+                AddParameterstoQueue(1);   // 1 is the ID for the FAILSAFE parameters // heer
                 ClearText();
                 SendCommand(ProgressEnd);
-                //MsgBox(pFailSafe, NowTest);
                 return;
         }
         
@@ -6505,6 +6482,39 @@ void CheckPowerOffButton()
         }
     }
 }
+/*********************************************************************************************************************************/
+
+void AddParameterstoQueue(uint8_t ID)
+{
+    if (ParametersToBeSentPointer < 40){
+         ++ParametersToBeSentPointer;
+        ParametersToBeSent[ParametersToBeSentPointer] = ID;
+    }
+}
+/*********************************************************************************************************************************/
+
+void SendInitialSetupParams(){ // not working yet
+// Sbus / PPM at rx
+   AddParameterstoQueue (5);
+// QNH
+   AddParameterstoQueue (2);
+}
+
+/************************************************************************************************************/
+void SendOutstandingParameters(){  // Send any QUEUED parameters that have not been sent yet at the rate of one per second max 
+
+static uint32_t Localtimer = 0;
+if (millis() - Localtimer < 1000) return;
+    Localtimer = millis();
+    if (BoundFlag && ModelMatched && LedWasGreen){
+    if (ParametersToBeSentPointer > 0) {
+        Parameters.ID = ParametersToBeSent[ParametersToBeSentPointer];
+        --ParametersToBeSentPointer;
+        AddExtraParameters = true;
+    }   
+  }
+}
+
 
 /************************************************************************************************************/
 void FASTRUN ManageTransmitter()
@@ -6523,9 +6533,12 @@ void FASTRUN ManageTransmitter()
 
     if (RightNow - TransmitterLastManaged > 50) { // 20 times a second is plenty
         if (RightNow - LastTimeRead >= 1000) {    // once a second for these...
+            LastTimeRead = millis();
             ReadTime();                           // Do the clock
             GetStatistics();                      // Do stats
-            LastTimeRead = millis();
+           
+            SendOutstandingParameters();          // Send any parameters that have not been sent yet
+
             CheckForNextionButtonPress();
             ShowComms(); // Screen Telemetry Data
             if (CurrentView == MODELSVIEW) CheckModelName();
