@@ -392,6 +392,7 @@ var 1Definitions_8h =
     [ "SendCharArray", "1Definitions_8h.html#acd617ff93ca893aa7d65aaf2898dfc3d", null ],
     [ "SendCommand", "1Definitions_8h.html#aecac2f0c289f02ef3c92b85be82eacac", null ],
     [ "SendData", "1Definitions_8h.html#a3d7322e78f097d02d476f17a6306997c", null ],
+    [ "SendInitialSetupParams", "1Definitions_8h.html#a0689e46060ebded46afaba01b54fab8b", null ],
     [ "SendSpecialPacket", "1Definitions_8h.html#a41c327908c92572d0d3eebbb19160d86", null ],
     [ "SendText", "1Definitions_8h.html#afe513398f72d5e48f691830a1ef6eb42", null ],
     [ "SendValue", "1Definitions_8h.html#a1e20efc1e419b252b50d36f9924503fc", null ],

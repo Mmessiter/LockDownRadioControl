@@ -177,6 +177,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "SelectChannelOrder", "TransmitterCode_2src_2main_8cpp.html#a8ecf24a84e20841dab0219efd6b9797b", null ],
     [ "SendColour", "TransmitterCode_2src_2main_8cpp.html#ad07be8f27ea372f210918b3e38139fc9", null ],
     [ "SendHelp", "TransmitterCode_2src_2main_8cpp.html#a038111bf598c53ad7b9a62ca45259356", null ],
+    [ "SendInitialSetupParams", "TransmitterCode_2src_2main_8cpp.html#a0689e46060ebded46afaba01b54fab8b", null ],
     [ "SendPPM", "TransmitterCode_2src_2main_8cpp.html#aa13f35720398e2d1a7467e37b634b364", null ],
     [ "SetDefaultValues", "TransmitterCode_2src_2main_8cpp.html#acbd0460ea44a7d07e4d77878411febb4", null ],
     [ "SetDS1307ToCompilerTime", "TransmitterCode_2src_2main_8cpp.html#ac4d5d9012481283090fff8d410116eb2", null ],

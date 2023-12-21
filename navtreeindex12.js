@@ -1,5 +1,7 @@
 var NAVTREEINDEX12 =
 {
+"radio_8h.html#a06807a4f185694d37f774702ba74db0a":[5,0,1,0,0,2,19],
+"radio_8h.html#a07ca94db0e305e9c01ec51e417576308":[5,0,1,0,0,2,16],
 "radio_8h.html#a1208ef26dd460e6f5f56582f4fbfcf94":[5,0,1,0,0,2,28],
 "radio_8h.html#a198affe6f9f64da7272c5fcfe16c1621":[5,0,1,0,0,2,7],
 "radio_8h.html#a30a079d60b4731ce1531091ffe56a703":[5,0,1,0,0,2,32],
