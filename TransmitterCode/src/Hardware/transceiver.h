@@ -239,7 +239,7 @@ void FlushFifos()
 /************************************************************************************************************/
 void SuccessfulPacket()
 {
-#define PARAMREPEATS 3                          // Send parameters PARAMREPEATS times in case of a packet loss or two
+#define PARAMREPEATS 4                                      // Send parameters PARAMREPEATS times in case of a packet loss or two
 
     static uint8_t ParamsSend = 0;
     CheckGapsLength();
@@ -248,6 +248,7 @@ void SuccessfulPacket()
     ++PacketNumber;
     if (AddExtraParameters && (ParamsSend < PARAMREPEATS)) {  // Send parameters PARAMREPEATS times in case of a packet loss or two
         ++ParamsSend;
+       // Look(ParamsSend);
         if (ParamsSend >= PARAMREPEATS) {
             ParamsSend = 0;
             AddExtraParameters = false;
@@ -255,17 +256,17 @@ void SuccessfulPacket()
         }   
     }
     if (RecentPacketsLost){
-        TotalLostPackets += (RecentPacketsLost / 2); // divide by 2 because some acks are lost too
+        TotalLostPackets += (RecentPacketsLost / 2);        // divide by 2 because some acks are lost too
         RecentPacketsLost = 0;
     }
     Connected         = true;
     if (Radio1.available()){
         uint8_t PayloadSize = Radio1.getDynamicPayloadSize();
         Radio1.read(&AckPayload, PayloadSize); 
-        if (PayloadSize == 6){                  // full length ack payload?
+        if (PayloadSize == 6){                              // full length ack payload?
             ParseAckPayload();
         } else {
-            ParseShortAckPayload();             // no, it's a short one
+            ParseShortAckPayload();                         // no, it's a short one
         }
     }
     if (BoundFlag && !LedWasGreen) {
