@@ -163,8 +163,12 @@ void UseReceivedData(uint8_t DynamicPayloadSize)                            // D
 /************************************************************************************************************/
 bool ReadData()
 {
+    
+    uint8_t MaxAckCounter = 100;
+    static uint8_t AckCounter = 0;
+
     Connected = false;
-    static uint16_t AckCounter = 0;
+    if (SensorHubConnected) MaxAckCounter = 25;
     if (CurrentRadio->available(&Pipnum))
     {
         CurrentRadio->flush_tx();                                                        // This avoids a lockup that happens when the FIFO gets full   
@@ -172,9 +176,10 @@ bool ReadData()
              LoadAckPayload();
              CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);              // Send FULL telemetry when first connected 
         } else {
-             if (AckCounter > 100) {
+             if (AckCounter > MaxAckCounter) { // heer
                  AckCounter = 0;
                  LoadAckPayload();
+                // Look(millis());
                  CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);          // send big PAYLOAD OCCASIONALLY
              }else{
                  LoadShortAckPayload();  
@@ -514,7 +519,7 @@ void KeepSbusHappy()
 
 FASTRUN void Reconnect()
 { // This is called when contact is lost, to reconnect ASAP
-    #define MAXTRIESPERTRANSCEIVER 6
+    #define MAXTRIESPERTRANSCEIVER 4
    
     uint32_t SearchStartTime  = millis(); 
     uint8_t  PreviousRadio    = ThisRadio;
