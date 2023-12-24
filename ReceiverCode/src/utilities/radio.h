@@ -262,7 +262,7 @@ void SendVersionNumberToAckPayload() // AND which radio transceiver is currently
     AckPayload.Byte4 = RXVERSION_MINIMUS;
 }
 
-bool PipeSeen = false;
+
 
 /************************************************************************************************************/
 // This function compares the just-received pipe with several of the previous ones
