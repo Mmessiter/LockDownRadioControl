@@ -134,6 +134,7 @@ var common_8h =
     [ "Parameters", "common_8h.html#adefe865b827a3f50e85ebee02d0347bb", null ],
     [ "pcount", "common_8h.html#ab8db1cb4ed83fda3eb629971dcf8a5c9", null ],
     [ "PipePointer", "common_8h.html#a9b742087149d776e2b9cbc77e1f3bab6", null ],
+    [ "PipeSeen", "common_8h.html#a7bc4d56a6fec99b2cdd9f7aafa16b5ac", null ],
     [ "Pipnum", "common_8h.html#a63b5051d09e33414a0aba533e93a1fcd", null ],
     [ "PPMChannelCount", "common_8h.html#ab566a72e193521242910acc9f1501dc8", null ],
     [ "PPMChannelOrder", "common_8h.html#ad69e62c190fbcc678474e091630ea363", null ],

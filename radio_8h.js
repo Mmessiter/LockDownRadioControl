@@ -33,6 +33,5 @@ var radio_8h =
     [ "UseReceivedData", "radio_8h.html#ae81f764427dc5f290cc6e16ab92e83b8", null ],
     [ "ValidateNewPipe", "radio_8h.html#a5f57423b51a89ce596c324bbf359a6cb", null ],
     [ "AckPayload", "radio_8h.html#a30a079d60b4731ce1531091ffe56a703", null ],
-    [ "AckPayloadSize", "radio_8h.html#a6dc99d00582ef356ea3d57700dca6dab", null ],
-    [ "PipeSeen", "radio_8h.html#a7bc4d56a6fec99b2cdd9f7aafa16b5ac", null ]
+    [ "AckPayloadSize", "radio_8h.html#a6dc99d00582ef356ea3d57700dca6dab", null ]
 ];
