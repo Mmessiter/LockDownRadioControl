@@ -113,16 +113,9 @@ void Decompress(uint16_t* uncompressed_buf, uint16_t* compressed_buf, uint8_t un
 /************************************************************************************************************/
 void RearrangeTheChannels(){
  //  This function looks at the 16 BITS of DataReceived.ChannelBitMask and rearranges the channels accordingly.
- //   static uint16_t PreviousRData[CHANNELSUSED];
     uint8_t p = 0;
     for (int i = 0; i < CHANNELSUSED; ++i) {  
-        if (DataReceived.ChannelBitMask & (1 << i)) { // if bit is set, set the channel, Otherwise leave it alone
-            ReceivedData[i]  = RawDataIn[p];
-         //   PreviousRData[i] = RawDataIn[p];
-            ++p;
-      //  }else{
-           // ReceivedData[i]  = PreviousRData[i];     // if bit is not set, leave the channel as last time
-        }
+        if (DataReceived.ChannelBitMask & (1 << i)) {ReceivedData[i] = RawDataIn[p]; ++p;}       // if bit is set, set the channel
     }
     return;
 }
