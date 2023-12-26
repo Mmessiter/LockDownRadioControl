@@ -115,7 +115,7 @@ void RearrangeTheChannels(){
  //  This function looks at the 16 BITS of DataReceived.ChannelBitMask and rearranges the channels accordingly.
     uint8_t p = 0;
     for (int i = 0; i < CHANNELSUSED; ++i) {  
-        if (DataReceived.ChannelBitMask & (1 << i)) {ReceivedData[i] = RawDataIn[p]; ++p;}       // if bit is set, set the channel
+        if (DataReceived.ChannelBitMask & (1 << i)) {ReceivedData[i] = RawDataIn[p]; ++p;}  // if bit is set, set the channel
     }
     return;
 }
