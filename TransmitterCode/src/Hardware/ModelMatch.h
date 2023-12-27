@@ -44,13 +44,17 @@ void CompareModelsIDs()
                     SaveAllParameters(); //  Save it
                     GotoFrontView();
                 }
-                else {
-                    ModelNumber = SavedModelNumber;  // on second thoughts, just use the saved one
-                    ReadOneModel(ModelNumber);
-                    BindNow();
+                else 
+                {
+                ModelNumber = SavedModelNumber;  // on second thoughts, just use the saved one
+                ReadOneModel(ModelNumber);
+                BindNow();
                 }
             }
-            if (!AutoModelSelect) BindNow();
+            if (!AutoModelSelect) 
+                {
+                BindNow();
+                }
         }
     }
 }

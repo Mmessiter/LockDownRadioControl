@@ -634,7 +634,6 @@ void BlinkLed()
 
 void loop()
 {
-
     DoStabilsation();
     KickTheDog();
     ReceiveData();

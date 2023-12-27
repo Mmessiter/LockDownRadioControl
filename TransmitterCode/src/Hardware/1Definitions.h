@@ -37,7 +37,7 @@
 // #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
-// #define DB_FHSS           // Debug real time FHSS data
+ // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches
@@ -966,7 +966,7 @@ uint32_t MacroStartTime[MAXMACROS];
 uint32_t MacroStopTime[MAXMACROS];
 uint8_t  PreviousMacroNumber = 1;
 bool     UseMacros           = false;
-bool     CurrentPipe         = 0;
+
 bool     AMSnotfound         = false;
 uint8_t  ScanSensitivity     = 42;
 uint8_t  CurrentChannel      = 0;

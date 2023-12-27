@@ -180,10 +180,10 @@ FASTRUN void FailedPacket()
     if (!ReconnectingNow) ++RecentPacketsLost;                                              // this is to keep track of events when receiver is off  
     Reconnected         =   false; 
     ReconnectingNow     =   true;
-    LastPacketSentTime  =   0;                                                                 // Force a new packet to be sent immediately
+    LastPacketSentTime  =   0;                                                              // Force a new packet to be sent immediately
     if (!GapStart) 
     {
-        GapStart        =   millis();                                                               // To keep track of this gap's length
+        GapStart     =   millis();                                                       // To keep track of this gap's length
     } else 
     {
         if (((millis() - GapStart) > RED_LED_ON_TIME) && (!LedWasRed)) RedLedOn();          // Put on red led - receiver must be off
@@ -203,18 +203,16 @@ FASTRUN void TryOtherPipe()
     if (BoundFlag == true) {
         BoundFlag = false;
         SetThePipe(DefaultPipe);
-        CurrentPipe = 0; // 0 = default pipe
-    }
-    else
-    {
+    }  
+
+    else {  
         BoundFlag = true; //  ... but not modelmatched yet
         if (!BuddyPupilOnWireless) {
             SetThePipe(TeensyMACAddPipe);
         }
         else {
-            SetThePipe(BuddyMACAddPipe);
+            SetThePipe(BuddyMACAddPipe);   
         }
-        CurrentPipe = 1; // 1 = bound pipe
     }
 }
 
@@ -222,7 +220,9 @@ FASTRUN void TryOtherPipe()
 void TryToReconnect()
 {
     if (BuddyPupilOnPPM) return;
-    if (!LedWasGreen) TryOtherPipe(); // BUT NOT while connected to model!
+    if (((millis() - LedGreenMoment) < 5000) || LedWasRed){ // BUT NOT while connected to model > 5 seconds!
+        TryOtherPipe(); 
+    }
     ++ReconnectionIndex;
     if (ReconnectionIndex >= 3) ReconnectionIndex = 0;
     NextChannel = FHSS_data::Used_Recovery_Channels[ReconnectionIndex];
@@ -320,6 +320,7 @@ FASTRUN void SendData()
     uint8_t ByteCountToTransmit ;
     if (SendNoData) return;
     if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { 
+
         LastPacketSentTime = millis();
         if (BuddyPupilOnPPM) {SendViaPPM(); return;}                                                      // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         Connected = false;                                                                                // Assume failure until an ACK is received.
@@ -330,7 +331,7 @@ FASTRUN void SendData()
         }else {
             NumberOfChangedChannels = EncodeTheChangedChannels();                                         // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels.
         }
-        if (NumberOfChangedChannels || AddExtraParameters){                                               // Any channels changed? Or parameters to send?
+        if (NumberOfChangedChannels){                                                                     // Any channels changed? Or parameters to send?
             ByteCountToTransmit     =  ((float) NumberOfChangedChannels * 1.5f) + 4;                      // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 word because int rounds downwards.
             uint8_t SizeOfUnCompressedData  =   (ByteCountToTransmit / 1.5) ;                                
             Compress(DataTosend.CompressedData, RawDataBuffer, SizeOfUnCompressedData);                   // Compress the raw data buffer into the compressed data buffer (reduces it to 75% of original size)
@@ -697,8 +698,9 @@ void GetModelsMacAddress()
         default:
             break;
     }
-    if (ModelMatched == false) {
-        if ((ModelsMacUnion.Val32[0] > 0) && (ModelsMacUnion.Val32[1] > 0)) { // got both bits yet?
+
+    if (!ModelMatched) {
+        if (ModelsMacUnion.Val32[0] && ModelsMacUnion.Val32[1]) { // got both bits yet?
             ModelIdentified = true;
             CompareModelsIDs();
         }

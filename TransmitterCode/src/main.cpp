@@ -188,7 +188,7 @@ void RedLedOn()
     char FrontView_Connected[] = "Connected";
     char WarnOff[]             = "vis Warning,0";
     if (LedWasGreen) {
-        if ((millis() - LedGreenMoment) > 3000) { // if green led has been on for more than 2 second
+        if ((millis() - LedGreenMoment) > 3000) { // if green led has been on for more than 3 second
                 if (AnnounceConnected & !WirelessBuddy) PlaySound(DISCONNECTEDMSG);
                 if (UseLog) LogDisConnection();
         }
