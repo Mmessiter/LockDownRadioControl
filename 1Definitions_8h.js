@@ -25,6 +25,7 @@ var 1Definitions_8h =
     [ "BFM2", "1Definitions_8h.html#a5cb76cdf4be2bfcdfc0c3f2bb35c9c7c", null ],
     [ "BFM3", "1Definitions_8h.html#ad55c48cff66bf4b6711586548a92c5df", null ],
     [ "BFM4", "1Definitions_8h.html#aafce644cfc7438d3a19fcc43fa07d450", null ],
+    [ "BINDINGTIME", "1Definitions_8h.html#aa85d4550b5046076e6f20d478db30f46", null ],
     [ "BINDNEEDED", "1Definitions_8h.html#afc19e20d792629177ad1adde09b5982c", null ],
     [ "BINDSUCCEEDED", "1Definitions_8h.html#a5c1d7fe0f5bc9c8674023766ad474e86", null ],
     [ "Black", "1Definitions_8h.html#a68eb1f80b4df2818e5a0774106748141", null ],
