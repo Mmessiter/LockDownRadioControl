@@ -220,7 +220,7 @@ FASTRUN void TryOtherPipe()
 void TryToReconnect()
 {
     if (BuddyPupilOnPPM) return;
-    if (((millis() - LedGreenMoment) < 5000) || LedWasRed){ // BUT NOT while connected to model > 5 seconds!
+    if (((millis() - LedGreenMoment) < BINDINGTIME) || LedWasRed){ // BUT NOT while connected to model > 5 seconds!
         TryOtherPipe(); 
     }
     ++ReconnectionIndex;

@@ -869,6 +869,7 @@ void ShowConnectionQuality()
 {
     char Quality[] = "Quality";
     char Msgbuf[80];
+    char Msg_Connecting[]         = "Finalising connection..."; 
     char Msg_Connected[]          = "Connection: ";
     char Msg_ConnectedPerfect[]   = "Perfect";
     char Msg_ConnectedExcellent[] = "Excellent";
@@ -877,22 +878,28 @@ void ShowConnectionQuality()
     char Msg_ConnectedMarginal[]  = "Marginal";
     char Msg_ConnectedWeak[]      = "Weak";
     char Msg_ConnectedVWeak[]     = "Very weak";
-    int  ConnectionQuality        = GetSuccessRate();
     char FrontView_Connected[]    = "Connected";
     char Visible[]                = "vis Quality,1";
     char TXModuleMSG[]            = "** Using TX module **";
+
+    int  ConnectionQuality        = GetSuccessRate();
 
     if (PPMdata.UseTXModule) SendText(FrontView_Connected, TXModuleMSG);
     if (!LedWasGreen) return;
     SendValue(Quality, ConnectionQuality); // show quality of connection in progress bar
     strcpy(Msgbuf, Msg_Connected);
-    if (ConnectionQuality >= 100) strcat(Msgbuf, Msg_ConnectedPerfect); // show quality as a comment
-    if ((ConnectionQuality >= 95) && (ConnectionQuality < 100)) strcat(Msgbuf, Msg_ConnectedExcellent);
-    if ((ConnectionQuality >= 90) && (ConnectionQuality < 95)) strcat(Msgbuf, Msg_ConnectedVGood);
-    if ((ConnectionQuality >= 75) && (ConnectionQuality < 90)) strcat(Msgbuf, Msg_ConnectedGood);
-    if ((ConnectionQuality >= 50) && (ConnectionQuality < 75)) strcat(Msgbuf, Msg_ConnectedMarginal);
-    if ((ConnectionQuality >= 25) && (ConnectionQuality < 50)) strcat(Msgbuf, Msg_ConnectedWeak);
-    if ((ConnectionQuality >= 1) && (ConnectionQuality < 25)) strcat(Msgbuf, Msg_ConnectedVWeak);
+    
+    if  ((millis() - LedGreenMoment) > BINDINGTIME) {    // Takes 8 seconds to get a good reading
+        if (ConnectionQuality >= 100) strcat(Msgbuf, Msg_ConnectedPerfect); // show quality as a comment
+        if ((ConnectionQuality >= 95) && (ConnectionQuality < 100)) strcat(Msgbuf, Msg_ConnectedExcellent);
+        if ((ConnectionQuality >= 90) && (ConnectionQuality < 95))  strcat(Msgbuf, Msg_ConnectedVGood);
+        if ((ConnectionQuality >= 75) && (ConnectionQuality < 90))  strcat(Msgbuf, Msg_ConnectedGood);
+        if ((ConnectionQuality >= 50) && (ConnectionQuality < 75))  strcat(Msgbuf, Msg_ConnectedMarginal);
+        if ((ConnectionQuality >= 25) && (ConnectionQuality < 50))  strcat(Msgbuf, Msg_ConnectedWeak);
+        if ((ConnectionQuality >= 1)  && (ConnectionQuality < 25))  strcat(Msgbuf, Msg_ConnectedVWeak);
+    }else{
+        strcpy(Msgbuf, Msg_Connecting);
+    }
     SendText(FrontView_Connected, Msgbuf);
     SendCommand(Visible);
 }

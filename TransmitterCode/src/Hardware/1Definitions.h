@@ -71,12 +71,11 @@
 
     #define PACEMAKER              5                             // 5ms means about 200 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
     #define TIMEFORTXMANAGMENT     2                             // was 3 ...  How many ms must remain spare between data packets before daring to undertake more trivial tasks
-      
+    #define BINDINGTIME            10000                        // 10 seconds to bind (>6000 needed)
     #define CHANNELSUSED           16                           
     #define UNCOMPRESSEDWORDS      20                           // these are all bigger than needed  
     #define COMPRESSEDWORDS        20                           // these are all bigger than needed 
     #define SENDBUFFERSIZE         20                           // these are all bigger than needed 
-
     #define DEFAULTPIPEADDRESS     0xB7BE3E9423LL               // Pipe address for startup - any value but MUST match RX 
     #define MAXMIXES               32                           // 32 mixes
     #define TICKSPERMINUTE         60000                        // millis() = 60000 per minute

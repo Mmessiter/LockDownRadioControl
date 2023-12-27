@@ -226,7 +226,7 @@ void GreenLedOn()
     { // no need to repeat unless it is blinking
         if (!LedIsBlinking) {
             ShowComms();
-            if (AnnounceConnected)   PlaySound(CONNECTEDMSG); // heer
+            if (AnnounceConnected) PlaySound(CONNECTEDMSG); // heer
             ModelMatched = true;
             BoundFlag    = true;
         }
