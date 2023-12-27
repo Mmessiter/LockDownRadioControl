@@ -56,7 +56,7 @@ var searchData=
   ['current_5ftime_53',['current_time',['../Quadcopter_2src_2main_8cpp.html#a42cc85bc12e25d1c6206a5044d8174e4',1,'main.cpp']]],
   ['currentchannel_54',['CurrentChannel',['../1Definitions_8h.html#aeb0e129885651a4398539e6a4f6545c4',1,'1Definitions.h']]],
   ['currentmode_55',['CurrentMode',['../1Definitions_8h.html#aacabee92eb3ddd2e3cf31695c00a912e',1,'1Definitions.h']]],
-  ['currentpipe_56',['CurrentPipe',['../common_8h.html#a8accdcf1df9fea74266e2f169346cc81',1,'CurrentPipe():&#160;common.h'],['../1Definitions_8h.html#ad822a6e47865e57ae25f51c6c0eea7de',1,'CurrentPipe():&#160;1Definitions.h']]],
+  ['currentpipe_56',['CurrentPipe',['../common_8h.html#a8accdcf1df9fea74266e2f169346cc81',1,'common.h']]],
   ['currentpoint_57',['CurrentPoint',['../1Definitions_8h.html#af10ffe07503b33fd55065fd9021e17e7',1,'1Definitions.h']]],
   ['currentposition_58',['CurrentPosition',['../1Definitions_8h.html#ad46bd090bda2877738cc95246e6ba503',1,'1Definitions.h']]],
   ['currentradio_59',['CurrentRadio',['../common_8h.html#a7bca81159d93f215060f40f45f19b0de',1,'common.h']]],

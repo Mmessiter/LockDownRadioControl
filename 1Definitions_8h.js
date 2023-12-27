@@ -495,7 +495,6 @@ var 1Definitions_8h =
     [ "CountDownIndex", "1Definitions_8h.html#adfcd3241fc01c3231bd87d8711016b15", null ],
     [ "CurrentChannel", "1Definitions_8h.html#aeb0e129885651a4398539e6a4f6545c4", null ],
     [ "CurrentMode", "1Definitions_8h.html#aacabee92eb3ddd2e3cf31695c00a912e", null ],
-    [ "CurrentPipe", "1Definitions_8h.html#ad822a6e47865e57ae25f51c6c0eea7de", null ],
     [ "CurrentPoint", "1Definitions_8h.html#af10ffe07503b33fd55065fd9021e17e7", null ],
     [ "CurrentPosition", "1Definitions_8h.html#ad46bd090bda2877738cc95246e6ba503", null ],
     [ "CurrentView", "1Definitions_8h.html#a2c76c41cd62573eb7227882fc9b9e557", null ],
