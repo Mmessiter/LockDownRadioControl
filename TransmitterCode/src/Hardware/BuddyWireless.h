@@ -154,16 +154,17 @@ void SendSpecialPacket()                                                    // H
 {                                                                           // Master Sends M or B to indicate whether Buddy is on or off, and the ID of the model which should be loaded.
     static uint32_t LocalTimer = 0;
     struct spd
-
     {
         char        Command[2];
         uint64_t    ModelID;
     };
     spd SpecialPacketData;
-    rf24_datarate_e faster = FASTDATARATE, slower = DATARATE;                         // Save the data rates
-    if (!BoundFlag || !ModelMatched){
-        if ((millis() - LocalTimer) < 500) return;                          // Don't send too often if not bound or model not matched yet otherwise can't bind
+    rf24_datarate_e faster = FASTDATARATE, slower = DATARATE;               // Save the data rates
+ 
+    if ((!BoundFlag || !ModelMatched  || (PupilIsAlive != 1))){             // Don't send too often if not connected, nor if buddy was not found
+        if (((millis() - LocalTimer) < 500)) return;    
             LocalTimer = millis();
+
     }
     SpecialPacketData.ModelID =  ModelsMacUnionSaved.Val64;                 // Send the model ID so that pupil can check it
     SpecialPacketData.Command[0]                    = 'M';                  // Send M to indicate Master is ON
