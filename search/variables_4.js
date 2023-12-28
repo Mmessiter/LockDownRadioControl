@@ -17,12 +17,13 @@ var searchData=
   ['dis_5fgyro_14',['DIS_GYRO',['../classMPU9250.html#abb9b02dd2f4b7d031c22bfb1422d5367',1,'MPU9250']]],
   ['distancegps_15',['DistanceGPS',['../common_8h.html#a6f76c248ca5e727e482873f5328587e1',1,'common.h']]],
   ['doingchecksm_16',['DoingCheckSm',['../1Definitions_8h.html#ad29c29032645ef06ffdf1cd62974c96f',1,'1Definitions.h']]],
-  ['drate1_17',['Drate1',['../1Definitions_8h.html#a53914b50c8322a320269b7635587fc05',1,'1Definitions.h']]],
-  ['drate2_18',['Drate2',['../1Definitions_8h.html#a83c12aaa15d3f764a2f1f84f0f55187d',1,'1Definitions.h']]],
-  ['drate3_19',['Drate3',['../1Definitions_8h.html#a7fe9d67b9708d831195c2acd3677118d',1,'1Definitions.h']]],
-  ['dt_20',['dt',['../Quadcopter_2src_2main_8cpp.html#a778e38aa889751afffa2dea6b803e67a',1,'main.cpp']]],
-  ['dualratechannels_21',['DualRateChannels',['../1Definitions_8h.html#ade150617ac0f31361fa0ac903acf3160',1,'1Definitions.h']]],
-  ['dualrateinuse_22',['DualRateInUse',['../1Definitions_8h.html#a3effe8f46dcf634627a86397621f0cbc',1,'1Definitions.h']]],
-  ['dualratesswitch_23',['DualRatesSwitch',['../1Definitions_8h.html#a4df69e16a4039792dea25b6def556141',1,'1Definitions.h']]],
-  ['dualratevalue_24',['DualRateValue',['../1Definitions_8h.html#ade79cdae89d2e1ff6ca095d901e7371a',1,'1Definitions.h']]]
+  ['dontchangepipeaddress_17',['DontChangePipeAddress',['../1Definitions_8h.html#a8c60845bc8ae0702ece3f50dacede463',1,'1Definitions.h']]],
+  ['drate1_18',['Drate1',['../1Definitions_8h.html#a53914b50c8322a320269b7635587fc05',1,'1Definitions.h']]],
+  ['drate2_19',['Drate2',['../1Definitions_8h.html#a83c12aaa15d3f764a2f1f84f0f55187d',1,'1Definitions.h']]],
+  ['drate3_20',['Drate3',['../1Definitions_8h.html#a7fe9d67b9708d831195c2acd3677118d',1,'1Definitions.h']]],
+  ['dt_21',['dt',['../Quadcopter_2src_2main_8cpp.html#a778e38aa889751afffa2dea6b803e67a',1,'main.cpp']]],
+  ['dualratechannels_22',['DualRateChannels',['../1Definitions_8h.html#ade150617ac0f31361fa0ac903acf3160',1,'1Definitions.h']]],
+  ['dualrateinuse_23',['DualRateInUse',['../1Definitions_8h.html#a3effe8f46dcf634627a86397621f0cbc',1,'1Definitions.h']]],
+  ['dualratesswitch_24',['DualRatesSwitch',['../1Definitions_8h.html#a4df69e16a4039792dea25b6def556141',1,'1Definitions.h']]],
+  ['dualratevalue_25',['DualRateValue',['../1Definitions_8h.html#ade79cdae89d2e1ff6ca095d901e7371a',1,'1Definitions.h']]]
 ];

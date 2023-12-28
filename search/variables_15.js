@@ -9,5 +9,6 @@ var searchData=
   ['user_5fctrl_6',['USER_CTRL',['../classMPU9250.html#ac7a02a1a77fe8bf5a477cc37820d2f27',1,'MPU9250']]],
   ['usesbus_7',['UseSBUS',['../common_8h.html#a80f5214ddc3b9618293f3b2694dff6f7',1,'common.h']]],
   ['usesbusfromrx_8',['UseSBUSFromRX',['../structPPMArea.html#a748d93840ef117d5c5cd62dc915f0891',1,'PPMArea']]],
-  ['usetxmodule_9',['UseTXModule',['../structPPMArea.html#a6f623131e7bf583da7799c58fe3d9c08',1,'PPMArea']]]
+  ['usetxmodule_9',['UseTXModule',['../structPPMArea.html#a6f623131e7bf583da7799c58fe3d9c08',1,'PPMArea']]],
+  ['usingdefaultpipeaddress_10',['UsingDefaultPipeAddress',['../1Definitions_8h.html#aff7cb562fa4cf3e5048872d9be602c01',1,'1Definitions.h']]]
 ];

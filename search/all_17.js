@@ -6,7 +6,7 @@ var searchData=
   ['updatebuttonlabels_3',['UpdateButtonLabels',['../1Definitions_8h.html#abf59862cf6c4e3df5a76f0bfea8919ef',1,'UpdateButtonLabels():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#abf59862cf6c4e3df5a76f0bfea8919ef',1,'UpdateButtonLabels():&#160;main.cpp']]],
   ['updateinterpolationtypes_4',['updateInterpolationTypes',['../TransmitterCode_2src_2main_8cpp.html#a3d20af2f1fee81198a0cef2d4500083a',1,'main.cpp']]],
   ['updateled_5',['UpdateLED',['../1Definitions_8h.html#a8c8edf1ff8b98d9cd27b45c4e20f22d9',1,'UpdateLED():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a8c8edf1ff8b98d9cd27b45c4e20f22d9',1,'UpdateLED():&#160;main.cpp']]],
-  ['updatemodelsnameeverywhere_6',['UpdateModelsNameEveryWhere',['../TransmitterCode_2src_2main_8cpp.html#a9e1de754e1d2d483fb15957f70cf0488',1,'UpdateModelsNameEveryWhere():&#160;main.cpp'],['../1Definitions_8h.html#a9e1de754e1d2d483fb15957f70cf0488',1,'UpdateModelsNameEveryWhere():&#160;main.cpp']]],
+  ['updatemodelsnameeverywhere_6',['UpdateModelsNameEveryWhere',['../1Definitions_8h.html#a9e1de754e1d2d483fb15957f70cf0488',1,'UpdateModelsNameEveryWhere():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a9e1de754e1d2d483fb15957f70cf0488',1,'UpdateModelsNameEveryWhere():&#160;main.cpp']]],
   ['updateoneswitchview_7',['UpdateOneSwitchView',['../TransmitterCode_2src_2main_8cpp.html#a5ffb33241b2b7a4dd07d631025aa813f',1,'main.cpp']]],
   ['updateswitchesview_8',['UpdateSwitchesView',['../TransmitterCode_2src_2main_8cpp.html#ad2376976bcbc43d81e55e5b58ce2818d',1,'main.cpp']]],
   ['updatetrimview_9',['UpdateTrimView',['../Trims_8h.html#ac78966debc2cdc13d8ca958ce3b20c78',1,'Trims.h']]],
@@ -21,10 +21,11 @@ var searchData=
   ['usemacros_18',['UseMacros',['../1Definitions_8h.html#a42a6363bff83773c1b99caa06aebb1f5',1,'1Definitions.h']]],
   ['usemotorkill_19',['UseMotorKill',['../1Definitions_8h.html#ad76445c097f9d33a6935be5c2489bd34',1,'1Definitions.h']]],
   ['user_5fctrl_20',['USER_CTRL',['../classMPU9250.html#ac7a02a1a77fe8bf5a477cc37820d2f27',1,'MPU9250']]],
-  ['userandomizedrecoverychannels_21',['UseRandomizedRecoveryChannels',['../common_8h.html#a03cd5e24f66a381a38effaa16922c0a8',1,'UseRandomizedRecoveryChannels():&#160;common.h'],['../1Definitions_8h.html#a03cd5e24f66a381a38effaa16922c0a8',1,'UseRandomizedRecoveryChannels():&#160;1Definitions.h']]],
+  ['userandomizedrecoverychannels_21',['UseRandomizedRecoveryChannels',['../1Definitions_8h.html#a03cd5e24f66a381a38effaa16922c0a8',1,'UseRandomizedRecoveryChannels():&#160;1Definitions.h'],['../common_8h.html#a03cd5e24f66a381a38effaa16922c0a8',1,'UseRandomizedRecoveryChannels():&#160;common.h']]],
   ['usereceiveddata_22',['UseReceivedData',['../radio_8h.html#ae81f764427dc5f290cc6e16ab92e83b8',1,'radio.h']]],
   ['usesbus_23',['UseSBUS',['../common_8h.html#a80f5214ddc3b9618293f3b2694dff6f7',1,'common.h']]],
   ['usesbusfromrx_24',['UseSBUSFromRX',['../structPPMArea.html#a748d93840ef117d5c5cd62dc915f0891',1,'PPMArea']]],
   ['usetxmodule_25',['UseTXModule',['../structPPMArea.html#a6f623131e7bf583da7799c58fe3d9c08',1,'PPMArea']]],
-  ['utilities_2eh_26',['Utilities.h',['../Utilities_8h.html',1,'']]]
+  ['usingdefaultpipeaddress_26',['UsingDefaultPipeAddress',['../1Definitions_8h.html#aff7cb562fa4cf3e5048872d9be602c01',1,'1Definitions.h']]],
+  ['utilities_2eh_27',['Utilities.h',['../Utilities_8h.html',1,'']]]
 ];
