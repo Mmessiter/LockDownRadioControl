@@ -164,7 +164,6 @@ void SendSpecialPacket()                                                    // H
     if ((!BoundFlag || !ModelMatched  || (PupilIsAlive != 1))){             // Don't send too often if not connected, nor if buddy was not found
         if (((millis() - LocalTimer) < 500)) return;    
             LocalTimer = millis();
-
     }
     SpecialPacketData.ModelID =  ModelsMacUnionSaved.Val64;                 // Send the model ID so that pupil can check it
     SpecialPacketData.Command[0]                    = 'M';                  // Send M to indicate Master is ON
