@@ -203,12 +203,15 @@ FASTRUN void TryOtherPipe()
     if (BoundFlag == true) {
         BoundFlag = false;
         SetThePipe(DefaultPipe);
+        UsingDefaultPipeAddress   = true;
+
     }  
 
     else {  
         BoundFlag = true; //  ... but not modelmatched yet
         if (!BuddyPupilOnWireless) {
             SetThePipe(TeensyMACAddPipe);
+            UsingDefaultPipeAddress   = false;
         }
         else {
             SetThePipe(BuddyMACAddPipe);   
@@ -221,7 +224,7 @@ void TryToReconnect()
 {
     if (BuddyPupilOnPPM) return;
     if (((millis() - LedGreenMoment) < BINDINGTIME) || LedWasRed){ // BUT NOT while connected to model > 5 seconds!
-        TryOtherPipe(); 
+       if (!DontChangePipeAddress) TryOtherPipe(); 
     }
     ++ReconnectionIndex;
     if (ReconnectionIndex >= 3) ReconnectionIndex = 0;
@@ -268,8 +271,9 @@ void SuccessfulPacket()
             ParseShortAckPayload();                         // no, it's a short one
         }
     }
-    if (BoundFlag && !LedWasGreen) {
+    if (BoundFlag && !LedWasGreen && !UsingDefaultPipeAddress) {
         GreenLedOn();
+        DontChangePipeAddress = true;
     }
     StartInactvityTimeout();
     LostContactFlag = false;

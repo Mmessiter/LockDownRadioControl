@@ -166,6 +166,8 @@ void ClearMostParameters(){ // called from RED LED ON
         BindingTimer         = 0;
         RangeTestGoodPackets = 0;
         RecentPacketsLost    = 0;
+        DontChangePipeAddress= false;
+        UsingDefaultPipeAddress = true;
         AddExtraParameters   = false;
         VersionsCompared    = false;
         for (int i = 0; i < CHANNELSUSED; ++i) {

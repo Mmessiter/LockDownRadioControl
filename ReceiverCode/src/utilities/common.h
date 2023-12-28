@@ -11,7 +11,7 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   4
-#define RXVERSION_MINIMUS 3 // December 2023
+#define RXVERSION_MINIMUS 4 // December 2023
 
 // **************************************************************************
 // #define FHSS200MHZ       

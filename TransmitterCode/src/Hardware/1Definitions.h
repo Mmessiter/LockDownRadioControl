@@ -28,7 +28,7 @@
 
     #define TXVERSION_MAJOR   2
     #define TXVERSION_MINOR   4
-    #define TXVERSION_MINIMUS 3 //   December 2023
+    #define TXVERSION_MINIMUS 4 //   December 2023
 
 // **************************************************************************
 //    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
@@ -71,7 +71,7 @@
 
     #define PACEMAKER              5                             // 5ms means about 200 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
     #define TIMEFORTXMANAGMENT     2                             // was 3 ...  How many ms must remain spare between data packets before daring to undertake more trivial tasks
-    #define BINDINGTIME            10000                        // 10 seconds to bind (>6000 needed)
+    #define BINDINGTIME            2000                          // 2 seconds to bind ?
     #define CHANNELSUSED           16                           
     #define UNCOMPRESSEDWORDS      20                           // these are all bigger than needed  
     #define COMPRESSEDWORDS        20                           // these are all bigger than needed 
@@ -980,6 +980,8 @@ bool     ReconnectingNow     = true;
 uint32_t LastHopTime         = 0;                                       //  Time of last hop
 uint8_t  ParametersToBeSent[40];
 uint8_t  ParametersToBeSentPointer = 0;
+bool     UsingDefaultPipeAddress   = true;
+bool     DontChangePipeAddress     = false;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
