@@ -204,9 +204,7 @@ FASTRUN void TryOtherPipe()
         BoundFlag = false;
         SetThePipe(DefaultPipe);
         UsingDefaultPipeAddress   = true;
-
     }  
-
     else {  
         BoundFlag = true; //  ... but not modelmatched yet
         if (!BuddyPupilOnWireless) {
@@ -342,10 +340,9 @@ FASTRUN void SendData()
             NewCompressNeeded = false;                                                                    // No channels changed nor any params to send, so just send the flag
         }
         if (Radio1.write(&DataTosend, ByteCountToTransmit)) {SuccessfulPacket();} else {FailedPacket();}  // Send the data packet complete with ChannelBitMask and compressed data 
+        if (BuddyMasterOnWireless) SendSpecialPacket();                                                   // Talk to the buddy pupil if we are a master also 200 x per second
         // ShowPacketData(ByteCountToTransmit, NumberOfChangedChannels);                                  // Just for debugging                          
-    }
-    if (BuddyMasterOnWireless) SendSpecialPacket();                                    
-
+    }                                
 }
 /***********************************************************************************************************/
 void DoScanEnd()
