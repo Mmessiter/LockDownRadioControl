@@ -223,9 +223,7 @@ FASTRUN void TryOtherPipe()
 void TryToReconnect()
 {
     if (BuddyPupilOnPPM) return;
-    if (((millis() - LedGreenMoment) < BINDINGTIME) || LedWasRed){ // BUT NOT while connected to model > 5 seconds!
-       if (!DontChangePipeAddress) TryOtherPipe(); 
-    }
+    if (!DontChangePipeAddress) TryOtherPipe(); 
     ++ReconnectionIndex;
     if (ReconnectionIndex >= 3) ReconnectionIndex = 0;
     NextChannel = FHSS_data::Used_Recovery_Channels[ReconnectionIndex];
