@@ -965,8 +965,6 @@ uint32_t MacroStartTime[MAXMACROS];
 uint32_t MacroStopTime[MAXMACROS];
 uint8_t  PreviousMacroNumber = 1;
 bool     UseMacros           = false;
-
-bool     AMSnotfound         = false;
 uint8_t  ScanSensitivity     = 42;
 uint8_t  CurrentChannel      = 0;
 uint8_t  PupilIsAlive        = 0;

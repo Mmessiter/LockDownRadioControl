@@ -188,8 +188,7 @@ FASTRUN void FailedPacket()
     {
         if (((millis() - GapStart) > RED_LED_ON_TIME) && (!LedWasRed)) RedLedOn();          // Put on red led - receiver must be off
     }
-   for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = PrePreviousBuffer[i];         // force last update repeat 
-
+    for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = PrePreviousBuffer[i];         // force last update repeat 
     if (RecentPacketsLost >= LOSTCONTACTCUTOFF) {                                           // Don't immeditately change channel
             LostContactFlag =   true;
             TryToReconnect();  
@@ -246,7 +245,6 @@ void SuccessfulPacket()
     ++PacketNumber;
     if (AddExtraParameters && (ParamsSend < PARAMREPEATS)) {  // Send parameters PARAMREPEATS times in case of a packet loss or two
         ++ParamsSend;
-       // Look(ParamsSend);
         if (ParamsSend >= PARAMREPEATS) {
             ParamsSend = 0;
             AddExtraParameters = false;
@@ -281,7 +279,6 @@ void SendExtraParamemters()                       // parameters must be loaded b
     RawDataBuffer[0]  = Parameters.ID;            // copy current parameter values into the rawdatabuffer instead of the channels for 3 packets
     RawDataBuffer[1]  = Parameters.word1;
     RawDataBuffer[2]  = Parameters.word2;
-                
     
     // Look1("Parameter ID: ");
     // Look(Parameters.ID);
