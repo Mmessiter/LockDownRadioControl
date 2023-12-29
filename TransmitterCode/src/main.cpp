@@ -1212,11 +1212,7 @@ void UpdateButtonLabels()
             SendValue(Subtrim_Labels[i], SubTrims[i]-127);
         }
     }
-
-
 }
-
-
 
 /*********************************************************************************************************************************/
 void Force_ReDisplay()
@@ -4808,7 +4804,6 @@ FASTRUN void ButtonWasPressed()
         char fs[16][5]                 = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
         char CH1NAME[]                 = "CH1NAME=";
         char CH2NAME[]                 = "CH2NAME=";
-       // char b17[]                     = "b17";
         char CH3NAME[]                 = "CH3NAME=";
         char CH4NAME[]                 = "CH4NAME=";
         char CH5NAME[]                 = "CH5NAME=";
@@ -4904,24 +4899,20 @@ FASTRUN void ButtonWasPressed()
         char GoModelsView[]      = "page ModelsView";
         char pCalibrateView[]    = "page CalibrateView";
         char NotConnected[]      = "Model isn't connected!";
-       // char NowTest[]           = "Remember to test failsafe!";
+
         // ************************* test many input words from Nextion *****************
 
         if (InStrng(StCH, TextIn)) { // select sub trim channel
             SubTrimToEdit = GetValue(s0)-1;
-          //  SendText(t2, ChannelNames[SubTrimToEdit]);
             SendValue(n0, SubTrims[SubTrimToEdit] - 127);
             SendValue(h0, SubTrims[SubTrimToEdit]);
             ClearText();
-          
             return;
         }
 
         if (InStrng(StEDIT, TextIn)) {                    // edit sub trim value
             SubTrims[SubTrimToEdit] = GetValue(n0) + 127; // 127 is mid point in 8 bit value 0 - 254
             ClearText();
-            Look1(ChannelNames[SubTrimToEdit]);
-            Look(SubTrims[SubTrimToEdit]-127);
             return;
         }
 

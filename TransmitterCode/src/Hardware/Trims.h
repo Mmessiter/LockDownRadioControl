@@ -302,7 +302,6 @@ void EndSubTrimView()
 { // Subtrim view exit
     char page_RXSetupView[] = "page RXSetupView";
     SaveOneModel(ModelNumber);
-    Look("saved");  
     CurrentView = RXSETUPVIEW;
     SendCommand(page_RXSetupView);
     LastTimeRead = 0;
