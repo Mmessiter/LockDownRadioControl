@@ -205,6 +205,7 @@
     #define TXMODULEVIEW     36
     #define PONGVIEW         37
     #define IDCHECKVIEW      38
+    
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -648,7 +649,7 @@ uint8_t       CentreDegrees[5][CHANNELSUSED + 1];                               
 uint8_t       MidLowDegrees[5][CHANNELSUSED + 1];                                   //    MidLow Degrees (45)
 uint8_t       MinDegrees[5][CHANNELSUSED + 1];                                      //    Min Degrees (0)
 uint8_t       SubTrims[CHANNELSUSED + 1];                                           //    Subtrims
-uint8_t       SubTrimToEdit      = 0;
+uint8_t       SubTrimToEdit      = 1;
 uint32_t      LastPacketSentTime = 0;
 uint8_t       Bank               = 1;
 // User defined bank names zone

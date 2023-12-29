@@ -286,13 +286,12 @@ void CheckTrimValues()
 void StartSubTrimView()
 { // Subtrim view start
     char pSubTrimView[] = "page SubTrimView";
-    char t2[]           = "t2";
     char n0[]           = "n0";
     char h0[]           = "h0";
     SendCommand(pSubTrimView);
     SubTrimToEdit = 0;
     CurrentView   = SUBTRIMVIEW;
-    SendText(t2, ChannelNames[SubTrimToEdit]);
+    UpdateButtonLabels();
     SendValue(n0, SubTrims[SubTrimToEdit] - 127);
     SendValue(h0, SubTrims[SubTrimToEdit]);
     UpdateModelsNameEveryWhere();
@@ -302,8 +301,8 @@ void StartSubTrimView()
 void EndSubTrimView()
 { // Subtrim view exit
     char page_RXSetupView[] = "page RXSetupView";
-
     SaveOneModel(ModelNumber);
+    Look("saved");  
     CurrentView = RXSETUPVIEW;
     SendCommand(page_RXSetupView);
     LastTimeRead = 0;

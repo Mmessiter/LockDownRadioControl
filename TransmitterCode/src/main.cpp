@@ -1165,6 +1165,7 @@ void UpdateButtonLabels()
 {
     char InputStick_Labels[16][4]  = {"c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10", "c11", "c12", "c13", "c14", "c15", "c16"};
     char OutputStick_Labels[16][4] = {"n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11", "n12", "n13", "n14", "n15", "n16", "n17", "n18", "n19"};
+    char Subtrim_Labels[16][4]     = {"n00", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11", "n12", "n13", "n14", "n15"};
     char fsch_labels[16][5]        = {"ch1", "ch2", "ch3", "ch4", "ch5", "ch6", "ch7", "ch8", "ch9", "ch10", "ch11", "ch12", "ch13", "ch14", "ch15", "ch16"};
     char fs[16][5]                 = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
     char ChannelLabels[16][6]      = {"Sch1", "Sch2", "Sch3", "Sch4", "Sch5", "Sch6", "Sch7", "Sch8", "Sch9", "Sch10", "Sch11", "Sch12", "Sch13", "Sch14", "Sch15", "Sch16"};
@@ -1194,7 +1195,7 @@ void UpdateButtonLabels()
             SendValue(fs[i], FailSafeChannel[i]);
         }
     }
-    if (CurrentView == INPUTS_VIEW || CurrentView == FAILSAFE_VIEW || CurrentView == REVERSEVIEW || CurrentView == BUDDYCHVIEW || CurrentView == SLOWSERVOVIEW) {
+    if (CurrentView == INPUTS_VIEW || CurrentView == FAILSAFE_VIEW || CurrentView == REVERSEVIEW || CurrentView == BUDDYCHVIEW || CurrentView == SLOWSERVOVIEW ) {
         for (int i = 0; i < 16; ++i) {
             SendText(fsch_labels[i], ChannelNames[i]);
             SendValue(InputStick_Labels[i], InPutStick[i] + 1);
@@ -1205,6 +1206,14 @@ void UpdateButtonLabels()
             }
         }
     }
+    if (CurrentView == SUBTRIMVIEW) {
+        for (int i = 0; i < 16; ++i) {
+            SendText(fsch_labels[i], ChannelNames[i]);
+            SendValue(Subtrim_Labels[i], SubTrims[i]-127);
+        }
+    }
+
+
 }
 
 
@@ -4871,7 +4880,6 @@ FASTRUN void ButtonWasPressed()
         char c5[]                      = "c5";
         char StCH[]                    = "StCH";
         char s0[]                      = "s0";
-        char t2[]                      = "t2";
         char StEDIT[]                  = "StEDIT";
         char pLogView[]                = "page LogView";
         char dGMT[]                    = "dGMT";
@@ -4900,17 +4908,20 @@ FASTRUN void ButtonWasPressed()
         // ************************* test many input words from Nextion *****************
 
         if (InStrng(StCH, TextIn)) { // select sub trim channel
-            SubTrimToEdit = GetValue(s0);
-            SendText(t2, ChannelNames[SubTrimToEdit]);
+            SubTrimToEdit = GetValue(s0)-1;
+          //  SendText(t2, ChannelNames[SubTrimToEdit]);
             SendValue(n0, SubTrims[SubTrimToEdit] - 127);
             SendValue(h0, SubTrims[SubTrimToEdit]);
             ClearText();
+          
             return;
         }
 
         if (InStrng(StEDIT, TextIn)) {                    // edit sub trim value
             SubTrims[SubTrimToEdit] = GetValue(n0) + 127; // 127 is mid point in 8 bit value 0 - 254
             ClearText();
+            Look1(ChannelNames[SubTrimToEdit]);
+            Look(SubTrims[SubTrimToEdit]-127);
             return;
         }
 
