@@ -2333,7 +2333,7 @@ void CheckDualRatesValues()
     if (KO) {
         //  UseDualRates = false;
         Drate1 = 100;
-        Drate2 = 75; // 1 is always 100%
+        Drate2 = 75; // 1 is nearly always 100%
         Drate3 = 50;
 
         DualRateChannels[0] = 1;
