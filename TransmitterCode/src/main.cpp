@@ -228,7 +228,7 @@ void GreenLedOn()
     { // no need to repeat unless it is blinking
         if (!LedIsBlinking) {
             ShowComms();
-            if (AnnounceConnected) PlaySound(CONNECTEDMSG); // heer
+            if (AnnounceConnected) PlaySound(CONNECTEDMSG); 
             ModelMatched = true;
             BoundFlag    = true;
         }
@@ -2201,7 +2201,7 @@ int AnalogueReed(uint8_t InputChannel)
 
 /*********************************************************************************************************************************/
 
-void SetDefaultValues()
+void SetDefaultValues() // heer 
 {
     uint16_t j         = 0;
     uint16_t i         = 0;
@@ -2311,6 +2311,7 @@ void SetDefaultValues()
     for (int i = 0; i < 16; ++i) {
         StepSize[i] = 100;
     }
+    TrimMultiplier = 5;
     ModelDefined = 42;
     SaveOneModel(ModelNumber);
     CloseModelsFile();
@@ -4387,11 +4388,6 @@ void ModelViewEnd()
         }
     }
     SaveAllParameters();
-    BoundFlag = false;
-    if (AMSnotfound) {
-        BindNow();
-        AMSnotfound = false;
-    }
     GotoFrontView();
 }
 
@@ -5243,7 +5239,7 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-            if (InStrng(FailSAVE, TextIn) > 0) {        // Heer the FAILSAFE setup is sent to receiver ************** FAILSAFE SETUP **************
+            if (InStrng(FailSAVE, TextIn) > 0) {        //  the FAILSAFE setup is sent to receiver ************** FAILSAFE SETUP **************
                
                 if (!BoundFlag ||!ModelMatched ){
                     MsgBox(pFailSafe, NotConnected);
@@ -5258,7 +5254,7 @@ FASTRUN void ButtonWasPressed()
                     SendValue(Progress, i * 100 / 16);
                 }
                 SendValue(Progress, 100);          
-                AddParameterstoQueue(1);   // 1 is the ID for the FAILSAFE parameters // heer
+                AddParameterstoQueue(1);   // 1 is the ID for the FAILSAFE parameters 
                 ClearText();
                 SendCommand(ProgressEnd);
                 return;

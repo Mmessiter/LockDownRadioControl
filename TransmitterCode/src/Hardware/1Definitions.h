@@ -37,7 +37,7 @@
 // #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
- // #define DB_FHSS           // Debug real time FHSS data
+// #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
 // #define DB_SWITCHES       // Debug Switches
@@ -868,7 +868,7 @@ bool      GPSTimeSynched      = false;
 short int DeltaGMT            = 0;
 uint32_t  SwapWaveBandTimer   = 0;
 
-uint16_t  TrimMultiplier      = 2; // How much to multiply trim by
+uint16_t  TrimMultiplier      = 5; // By how much to multiply trim
 uint8_t   DateFix             = 0;
 uint16_t  BackGroundColour    = 214;
 uint16_t  ForeGroundColour    = White;
