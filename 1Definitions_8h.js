@@ -435,7 +435,6 @@ var 1Definitions_8h =
     [ "AckPayload", "1Definitions_8h.html#a30a079d60b4731ce1531091ffe56a703", null ],
     [ "AckPayloadSize", "1Definitions_8h.html#a81b9fbb62d8099a8e75c5d4720f41895", null ],
     [ "AddExtraParameters", "1Definitions_8h.html#a3869dffbbc229be588827b35729a6e76", null ],
-    [ "AMSnotfound", "1Definitions_8h.html#ad3b850489c3abae3072e32438f61aa9d", null ],
     [ "AnalogueInput", "1Definitions_8h.html#aff628072047986ff5293dbb907c3f676", null ],
     [ "AnnounceBanks", "1Definitions_8h.html#ae9add7064c6a555558088c4f67560535", null ],
     [ "AnnounceConnected", "1Definitions_8h.html#a7f979f6e267f37833beb30c91b796cae", null ],
