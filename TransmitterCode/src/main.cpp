@@ -6491,7 +6491,7 @@ void AddParameterstoQueue(uint8_t ID)
 }
 /*********************************************************************************************************************************/
 
-void SendInitialSetupParams(){ // not working yet
+void SendInitialSetupParams(){ 
 // Sbus / PPM at rx
    AddParameterstoQueue (5);
 // QNH
