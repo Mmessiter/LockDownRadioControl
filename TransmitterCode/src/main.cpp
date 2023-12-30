@@ -985,7 +985,7 @@ GetNewChannelValues()
             OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputValue, InputChannel, OutputChannel); // Use function pointer array to invoke selected interpolation.
         }
         OutputValue += GetTrimAmount(InputChannel);                             // Add trim AFTER doing rates
-        OutputValue += (SubTrims[OutputChannel] - 127) * (TrimMultiplier);      // ADD SUBTRIM to output channel, not mapped input channel (Range 0 - 127 - 254)
+        OutputValue += (SubTrims[OutputChannel] - 127) * 5;                     // ADD SUBTRIM to output channel, (Range 0 - 127 - 254) multiplier is always 5 otherwise subtrim might keep changing
         PreMixBuffer[OutputChannel] = constrain(OutputValue, MINMICROS, MAXMICROS);
         SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel];
     }
