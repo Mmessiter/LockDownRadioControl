@@ -35,7 +35,7 @@ void LoadCorrectModel(uint64_t ModelID){                                        
         ModelNumber = SavedModelNumber;                                         //  Restore the current model number
         ReadOneModel(ModelNumber);                                              //  Restore the current model 
         ModelExistsAtBuddy = false;                                             //  Flag to indicate that the model isn't here so don't look again
-        Look("Model not found");                                                //  Tell the user
+      //  Look("Model not found");                                                //  Tell the user
         GotoFrontView();
     }
 }
@@ -83,8 +83,8 @@ void MasterDetected(bool Detected)
 
     if (Detected) {
         LostMasterCount = 0;
-        LastPassivePacketTime = millis(); // reset the timer
-        if (MasterIsAlive != 1) { // MasterIsAlive = 1 means Master was already alive
+        LastPassivePacketTime = millis();                   // reset the timer
+        if (MasterIsAlive != 1) {                           // MasterIsAlive = 1 means Master was already alive
             SendText(wb, Mfound);
             SendCommand(YesVisible);
             MasterIsAlive = 1;
@@ -93,7 +93,7 @@ void MasterDetected(bool Detected)
     else {
         ++LostMasterCount;
         if (LostMasterCount > LOSTCONTACTTHRESHOLD) {
-            if (MasterIsAlive != 2) { // MasterIsAlive = 2 means Master was already dead
+            if (MasterIsAlive != 2) {                       // MasterIsAlive = 2 means Master was already dead
                 SendText(wb, Mlost);
                 SendCommand(YesVisible); 
                 MasterIsAlive = 2;
@@ -102,9 +102,12 @@ void MasterDetected(bool Detected)
     }
 }
 
+
 //*************************************************************************************************************************
 // This function is called by Master when the Pupil was Detected - or not Detected.
 // After 6 failed detections, the Pupil is declared dead, and a message is changed on front view.
+
+
 void PupilDetected(bool Detected)
 {
     static uint16_t LostPupilCount = 0;
@@ -154,35 +157,47 @@ void ChangeTXTarget(uint8_t ch,uint64_t p, rf24_datarate_e speed)       // Swap 
      Radio1.openWritingPipe(p);                                         // Set the pipe address
      Radio1.stopListening();
      delayMicroseconds(STOPLISTENINGDELAY);
-     Radio1.setChannel(ch);                                             // Restore the proper frequency channel
+     Radio1.setChannel(ch);                                             // Set the frequency channel
      delayMicroseconds(STOPLISTENINGDELAY);
 }
 
 //*************************************************************************************************************************
 void SendSpecialPacket()                                                    // Here the MASTER sends to PUPIL tx. This is called about 100 times a second.
 {                                                                           // Master Sends M or B to indicate whether Buddy is on or off, and the ID of the model which should be loaded.
-    static uint32_t LocalTimer = 0;
-    struct spd
+    static uint32_t LocalTimer  = 0;
+    static bool     NeedToReset = false;
+    static uint8_t  NpOld       = 0;                                        // The old channel number
+  
+     struct spd
     {
         char        Command[2];
         uint64_t    ModelID;
+        uint8_t     Np = SPECIAL_PACKET_CHANNEL;
     };
-    spd SpecialPacketData;
+
+    static spd SpecialPacketData;
+
     rf24_datarate_e faster = FASTDATARATE, slower = DATARATE;               // Save the data rates
- 
     if ((!BoundFlag || !ModelMatched  || (PupilIsAlive != 1))){             // Don't send too often if not connected, nor if buddy was not found
-        if (((millis() - LocalTimer) < 500)) return;    
+        if (((millis() - LocalTimer) < 20)) return;    
             LocalTimer = millis();
     }
     SpecialPacketData.ModelID =  ModelsMacUnionSaved.Val64;                 // Send the model ID so that pupil can check it
     SpecialPacketData.Command[0]                    = 'M';                  // Send M to indicate Master is ON
     if (BuddyON)       SpecialPacketData.Command[0] = 'B';                  // Send B to indicate Buddy is ON
-    ChangeTXTarget(SPECIAL_PACKET_CHANNEL,TeensyMACAddPipe ^ ENCRYPT_KEY,faster);  // Set the TX target to the Buddy
+    NpOld = SpecialPacketData.Np;                                           // Use the old channel number because Buddy hasnt yet hopped
+    ++SpecialPacketData.Np;                                                 // Hop to the next channel               
+    if (SpecialPacketData.Np > 82) SpecialPacketData.Np = 1;                // Wrap around if needed
+    if (NeedToReset) SpecialPacketData.Np = QUIETCHANNEL;      
+   // Look (SpecialPacketData.Np);
+    ChangeTXTarget(NpOld,TeensyMACAddPipe ^ ENCRYPT_KEY,faster);            // Set the TX target to the Buddy
     if (Radio1.write(&SpecialPacketData, sizeof SpecialPacketData)) {
         GetPupilAck();                                                      // Get ack from pupil WITH HIS CONTROL DATA!!
         PupilDetected(true);                                                // Pupil is alive
+        NeedToReset = false;
     } else {
         PupilDetected(false);                                               // Pupil is dead
+        NeedToReset = true;
     }
     ChangeTXTarget(CurrentChannel,TeensyMACAddPipe,slower);
 }
@@ -190,37 +205,39 @@ void SendSpecialPacket()                                                    // H
 void GetSpecialPacket()                                                                 // here the PUPIL tx gets from MASTER tx. This function is called from main loop about 100 times a second.
 {                                                                                       // Master tells Pupil whether buddy is on or off, and the ID of the model which should be loaded.
     static bool MasterIsInControl = true; 
-   
     struct spd {
         char        Command[2];
         uint64_t    ModelID = 0;
+        uint8_t     Np = SPECIAL_PACKET_CHANNEL;
+
     };
     spd SpecialPacketData;
-   
     if (Radio1.available()) {                                                           // if a packet has arrived
         Radio1.writeAckPayload(1, &DataTosend.CompressedData, SizeOfCompressedData);    // Acknowledge the packet BY SENDING MY CHANNEL DATA!
-        DelayWithDog(DELAYAFTERACK);                                                    // <-  ** MUST ** allow the ACK time to get going, otherwise the sender sees a failed packet    
-        if (Radio1.available()){ 
-            Radio1.read(&SpecialPacketData, sizeof SpecialPacketData);                  // read the packet if its still there
-            if ((SpecialPacketData.Command[0] == 'B') && (MasterIsInControl)) {         // Buddy is now in control
-                MasterIsInControl = false;                                              // Buddy is now in control
-                PlaySound(BUDDYMSG);                                                    // Announce the Buddy is now in control
-            }
-            if ((SpecialPacketData.Command[0] == 'M') && (!MasterIsInControl)) {         // Master is now in control
-                MasterIsInControl = true;                                                // Master is now in control
-                PlaySound(MASTERMSG);                                                    // Announce the Master is now in control
-            }
-            CheckModelMatchesMaster(SpecialPacketData.ModelID);                          // check the model ID (once every second) and load the correct model if it !matches
-            MasterDetected(true);                                                        // Master is alive
-            LastPassivePacketTime = millis();                                            // reset the timer
-            FlushFifos();                                                                // flush the fifos
+        delay(DELAYAFTERACK);                                                    // <-  ** MUST ** allow the ACK time to get going, otherwise the sender sees a failed packet    
+        Radio1.read(&SpecialPacketData, sizeof SpecialPacketData);                  // read the packet if its still there
+        if ((SpecialPacketData.Command[0] == 'B') && (MasterIsInControl)) {         // Buddy is now in control
+            MasterIsInControl = false;                                              // Buddy is now in control
+            PlaySound(BUDDYMSG);                                                    // Announce the Buddy is now in control
         }
-    }else{ // no packet arrived so maybe master's dead
-        
-        if (millis() - LastPassivePacketTime > 700) {
-            MasterDetected(false);
-            LastPassivePacketTime = millis();
+        if ((SpecialPacketData.Command[0] == 'M') && (!MasterIsInControl)) {         // Master is now in control
+            MasterIsInControl = true;                                                // Master is now in control
+            PlaySound(MASTERMSG);                                                    // Announce the Master is now in control
         }
+        CheckModelMatchesMaster(SpecialPacketData.ModelID);                          // check the model ID (once every second) and load the correct model if it !matches
+        MasterDetected(true);                                                        // Master is alive
+        LastPassivePacketTime = millis();                                            // reset the timer
+        Radio1.stopListening(); 
+        Radio1.setChannel(SpecialPacketData.Np);                                     // Set the frequency channel
+        Radio1.startListening();                                                     // start listening
+    }else{ // no packet arrived so maybe master's dead? 
+        if (millis() - LastPassivePacketTime > 10) {                                    // We expect a packet every 5 milliseconds
+           Radio1.stopListening(); 
+           Radio1.setChannel(QUIETCHANNEL); 
+           Radio1.startListening();
+           LastPassivePacketTime = millis();                                             // reset the timer  BUT THIS CLOBBERS THE MSG!   
+           MasterDetected(false);
+         }
     }
 }
 
