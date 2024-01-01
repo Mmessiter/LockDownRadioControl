@@ -168,6 +168,7 @@ void SendSpecialPacket()                                                    // H
     static uint32_t LocalTimer      = 0;
     static bool     NeedToRecover   = false;
     static uint8_t  NpOld           = 0;                                    // The old channel number
+    static uint8_t  Index           = 82;                                   // The current channel number
   
      struct spd
     {
@@ -187,11 +188,11 @@ void SendSpecialPacket()                                                    // H
     SpecialPacketData.Command[0]                    = 'M';                  // Send M to indicate Master is ON
     if (BuddyON)       SpecialPacketData.Command[0] = 'B';                  // Send B to indicate Buddy is ON
     NpOld = SpecialPacketData.Np;                                           // Use the old channel number because Buddy hasnt yet hopped
-    ++SpecialPacketData.Np;                                                 // Hop to the next channel               
-    if (SpecialPacketData.Np > 82) SpecialPacketData.Np = 1;                // Wrap around if needed
+    --Index; if (Index < 1) Index = 82;                                     // use the same array but in reverse order
+    SpecialPacketData.Np = FHSS_data::FHSS_Channels[Index];                 // Set the channel number
     if (NeedToRecover) SpecialPacketData.Np = QUIETCHANNEL;                 // If contact lost, then use the recovery channel to recover
     ChangeTXTarget(NpOld,TeensyMACAddPipe ^ ENCRYPT_KEY,faster);            // Set the TX target to the Buddy
-    if (Radio1.write(&SpecialPacketData, sizeof SpecialPacketData)) {
+    if (Radio1.write(&SpecialPacketData, sizeof SpecialPacketData)) {       // Send the packet
         GetPupilAck();                                                      // Get ack from pupil WITH HIS CONTROL DATA!!
         PupilDetected(true);                                                // Pupil is alive
         NeedToRecover = false;
