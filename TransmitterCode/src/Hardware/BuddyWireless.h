@@ -7,7 +7,7 @@
 #ifndef BUDDYWIRELESS_H
     #define BUDDYWIRELESS_H
 
-    
+
     #define LONGER_DELAY           1                // ... milliseconds
     #define LOSTCONTACTTHRESHOLD   6                // 6 fails in a row and we declare the buddy or master dead
     #define DELAYAFTERACK          1                // ms
@@ -230,7 +230,7 @@ void GetSpecialPacket()                                                         
         Radio1.stopListening(); 
         Radio1.setChannel(SpecialPacketData.Np);                                        // Set the frequency channel
         Radio1.startListening();                                                        // start listening
-    }else{ // no packet arrived so maybe master's dead? 
+    }else{                                                                              // no packet arrived so maybe master's dead? 
         if (millis() - LastPassivePacketTime > 10) {                                    // We expect a packet every 5 milliseconds
            Radio1.stopListening(); 
            Radio1.setChannel(QUIETCHANNEL);                                             // Set the recovery channel         
