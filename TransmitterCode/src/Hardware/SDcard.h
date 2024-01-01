@@ -111,6 +111,7 @@ bool ReadOneModel(uint32_t Mnum)
     char     NoModelYet[] = "Error! ";
 
     FileCheckSum = 0;
+    MixNumber = 0;
     if ((ModelNumber > 90) || (ModelNumber <= 0)) ModelNumber = 1;
     OpenModelsFile();
     if (!ModelsFileOpen) {

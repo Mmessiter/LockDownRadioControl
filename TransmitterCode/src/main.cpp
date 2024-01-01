@@ -4899,6 +4899,10 @@ FASTRUN void ButtonWasPressed()
         char GoModelsView[]      = "page ModelsView";
         char pCalibrateView[]    = "page CalibrateView";
         char NotConnected[]      = "Model isn't connected!";
+        char Nb1[]               = "vis b1,0";
+        char Nb0[]               = "vis b0,0";
+        char Yb1[]               = "vis b1,1";
+        char Yb0[]               = "vis b0,1";
 
         // ************************* test many input words from Nextion *****************
 
@@ -5704,13 +5708,17 @@ FASTRUN void ButtonWasPressed()
             MixNumber             = GetValue(MixesView_MixNumber);
             if (LastMixNumber != MixNumber) // Did number change?
             {
+                SendCommand(Nb1);              // hide mix change button
+                SendCommand(Nb0);              // hide mix change button
                 LastMixNumber = MixNumber;     // save new mix number
                 MixNumber     = ThisMixNumber; // force back to old number to grab last lot before doing new one
                 SaveMixValues();               // save them
                 SaveOneModel(ModelNumber);
                 SendCommand(ProgressEnd);
-                MixNumber = LastMixNumber; // back to new one
-                ShowMixValues();           // show new lot
+                MixNumber = LastMixNumber;      // back to new one
+                ShowMixValues();                // show new lot
+                SendCommand(Yb1);               // show mix change button
+                SendCommand(Yb0);               // show mix change button
             }
             else
             {

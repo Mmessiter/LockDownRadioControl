@@ -215,17 +215,27 @@ void CheckHardwareTrims()
 
 /*********************************************************************************************************************************/
 
+/**
+ * Retrieves the trim amount for the specified input channel.
+ *
+ * @param InputChannel The input channel for which to retrieve the trim amount.
+ * @return The trim amount for the specified input channel.
+ */
 int GetTrimAmount(uint8_t InputChannel)
 {
     int tt = InputChannel;
     if (SticksMode == 2) {
         if (InputChannel == 1) tt = 2;
         if (InputChannel == 2) tt = 1;
+
     }
   return (Trims[Bank][tt] - 80) * TrimMultiplier;
 }
 
 /*********************************************************************************************************************************/
+/**
+ * Updates the trim view based on the current trim values.
+ */
 void UpdateTrimView()
 {
 
@@ -283,6 +293,8 @@ void CheckTrimValues()
 }
 
 /******************************************************************************************************************************/
+
+/// @brief 
 void StartSubTrimView()
 { // Subtrim view start
     char pSubTrimView[] = "page SubTrimView";
