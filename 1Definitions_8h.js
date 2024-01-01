@@ -147,6 +147,7 @@ var 1Definitions_8h =
     [ "MOTORISON", "1Definitions_8h.html#ae977e31565286558f4a893b839415655", null ],
     [ "MOTOROFF", "1Definitions_8h.html#a493cf7b1e8a890871f1b208b72646155", null ],
     [ "MOTORON", "1Definitions_8h.html#a5010dfa85f7d8051f0f514fe32fbc502", null ],
+    [ "NEWPCB", "1Definitions_8h.html#a7494653ff9b81d7068c2f8095e97648b", null ],
     [ "NEXTION", "1Definitions_8h.html#a8faf90f81afc68086a4b47c2e94cd519", null ],
     [ "NINE", "1Definitions_8h.html#aef08329d0c1db97d7b269330ae9a70af", null ],
     [ "NINEMINUTES", "1Definitions_8h.html#afa357420dae8e3c614be8ef42e626ee3", null ],
