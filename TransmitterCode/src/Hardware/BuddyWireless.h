@@ -187,7 +187,7 @@ void SendSpecialPacket()                                                    // H
     SpecialPacketData.ModelID =  ModelsMacUnionSaved.Val64;                 // Send the model ID so that pupil can check it
     SpecialPacketData.Command[0]                    = 'M';                  // Send M to indicate Master is ON
     if (BuddyON)       SpecialPacketData.Command[0] = 'B';                  // Send B to indicate Buddy is ON
-    NpOld = SpecialPacketData.Np;                                           // Use the old channel number because Buddy hasnt yet hopped
+    NpOld = SpecialPacketData.Np;                                           // Use the old channel number because Buddy hasn't yet hopped
     --Index; if (Index < 1) Index = 82;                                     // use the same array but in reverse order
     SpecialPacketData.Np = FHSS_data::FHSS_Channels[Index];                 // Set the channel number
     if (NeedToRecover) SpecialPacketData.Np = QUIETCHANNEL;                 // If contact lost, then use the recovery channel to recover
