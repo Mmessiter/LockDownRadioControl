@@ -40,6 +40,16 @@ void LoadCorrectModel(uint64_t ModelID){                                        
     }
 }
 
+
+//*************************************************************************************************************************
+
+void CheckModelMatchesMaster(uint64_t ModelID){
+    static uint32_t LastModelIDCheckTime = 0;                                           // The pupil checks the model ID once every second and loads the correct model if it !matches
+    if (millis()-LastModelIDCheckTime > 1000) {                                         // check the model ID once every second
+        LastModelIDCheckTime = millis();
+        if (ModelID!= ModelsMacUnionSaved.Val64) LoadCorrectModel(ModelID);             // if the model ID !matches, then load the correct model    
+    }
+}
 //*************************************************************************************************************************
 void GetSlaveChannelValuesWireless(){                                           // Very Like the PPM function only a bit simpler
 
@@ -149,7 +159,6 @@ void ChangeTXTarget(uint8_t ch,uint64_t p, rf24_datarate_e speed)       // Swap 
 }
 
 //*************************************************************************************************************************
-
 void SendSpecialPacket()                                                    // Here the MASTER sends to PUPIL tx. This is called about 100 times a second.
 {                                                                           // Master Sends M or B to indicate whether Buddy is on or off, and the ID of the model which should be loaded.
     static uint32_t LocalTimer = 0;
@@ -177,18 +186,7 @@ void SendSpecialPacket()                                                    // H
     }
     ChangeTXTarget(CurrentChannel,TeensyMACAddPipe,slower);
 }
-
 //*************************************************************************************************************************
-
-void CheckModelMatchesMaster(uint64_t ModelID){
-    static uint32_t LastModelIDCheckTime = 0;                                           // The pupil checks the model ID once every second and loads the correct model if it !matches
-    if (millis()-LastModelIDCheckTime > 1000) {                                         // check the model ID once every second
-        LastModelIDCheckTime = millis();
-        if (ModelID!= ModelsMacUnionSaved.Val64) LoadCorrectModel(ModelID);             // if the model ID !matches, then load the correct model    
-    }
-}
-//*************************************************************************************************************************
-
 void GetSpecialPacket()                                                                 // here the PUPIL tx gets from MASTER tx. This function is called from main loop about 100 times a second.
 {                                                                                       // Master tells Pupil whether buddy is on or off, and the ID of the model which should be loaded.
     static bool MasterIsInControl = true; 

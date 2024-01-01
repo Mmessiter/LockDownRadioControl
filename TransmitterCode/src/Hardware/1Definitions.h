@@ -1,8 +1,10 @@
 #ifndef Definitions_H
     #define Definitions_H
-// ******************** 1Definitions.h  (+1 to put at top of list!) ************
-//     This header file has many prototypes, definitions                      *
-// ****************************************************************************
+
+// ******************** 1Definitions.h  (+1 to put at top of list!) ******************
+//                This header file has many prototypes, definitions                  *
+// ***********************************************************************************
+
 #include <Arduino.h>
 #include <Watchdog_t4.h>
 #include <TeensyID.h>
@@ -15,24 +17,24 @@
 #include <DS1307RTC.h>
 #include <InterpolationLib.h>
 
-// **************************************************************************
-//     SUPPORT FOR TX MODULE AND NEW PCB Version                            *
-// **************************************************************************
+// *************************************************************************************
+//                      SUPPORT FOR TX MODULE AND NEW PCB Version                      *
+// *************************************************************************************
 
     #define TXMODULESUPPORT // ONLY FOR NEW VERSION  <<< *** <<<
- //   #define NEWPCB
+    #define NEWPCB
 
-// **************************************************************************
-//     TX VERSION NUMBER   (May 2020 - December 2023 Malcolm Messiter)      *
-//***************************************************************************
+// *************************************************************************************
+//               TX VERSION NUMBER   (May 2020 - December 2023 Malcolm Messiter)       *
+//**************************************************************************************
 
     #define TXVERSION_MAJOR   2
     #define TXVERSION_MINOR   4
-    #define TXVERSION_MINIMUS 4 //   December 2023
+    #define TXVERSION_MINIMUS 5 //   January 2024
 
-// **************************************************************************
-//    DEBUG OPTIONS (Uncomment any of these for that bit of debug info)     *
-//***************************************************************************
+// *************************************************************************************
+//          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
+//**************************************************************************************
 
 // #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
@@ -45,9 +47,10 @@
 // #define DB_GAPS           // Debug Connection Gap assessment
 // #define DB_IDS            // Debug Model IDs (Hitting the 'BACK' button on models' screen will Serial.print these to the terminal)
 
-// **************************************************************************
-//                               General                                    *
-// **************************************************************************
+// ************************************************************************************
+//                                       General                                      *
+// ************************************************************************************
+
 
     #ifdef NEWPCB               // ***>>> red or green PCBs ... not old black <<<***
         #define CE_PIN       7  // for SPI to nRF24L01
