@@ -6,7 +6,8 @@
 #include "Hardware/1Definitions.h"
 #ifndef BUDDYWIRELESS_H
     #define BUDDYWIRELESS_H
-    #define SPECIAL_PACKET_CHANNEL QUIETCHANNEL     // Which channel for the special packets
+
+    
     #define LONGER_DELAY           1                // ... milliseconds
     #define LOSTCONTACTTHRESHOLD   6                // 6 fails in a row and we declare the buddy or master dead
     #define DELAYAFTERACK          1                // ms
@@ -172,7 +173,7 @@ void SendSpecialPacket()                                                    // H
     {
         char        Command[2];
         uint64_t    ModelID;
-        uint8_t     Np = SPECIAL_PACKET_CHANNEL;
+        uint8_t     Np = QUIETCHANNEL;
     };
 
     static spd SpecialPacketData;
@@ -207,7 +208,7 @@ void GetSpecialPacket()                                                         
     struct spd {
         char        Command[2];
         uint64_t    ModelID = 0;
-        uint8_t     Np = SPECIAL_PACKET_CHANNEL;
+        uint8_t     Np = QUIETCHANNEL;
 
     };
     spd SpecialPacketData;
@@ -250,7 +251,7 @@ void StartBuddyListen()
     Radio1.maskIRQ(1, 1, 1);                    // no interrupts - seems NEEDED at the moment
     Radio1.openReadingPipe(1, BuddyMACAddPipe ^  ENCRYPT_KEY);
     delayMicroseconds(STOPLISTENINGDELAY);      // to allow the pipe to open
-    Radio1.setChannel(SPECIAL_PACKET_CHANNEL);  // set the channel to the special packet channel
+    Radio1.setChannel(QUIETCHANNEL);  // set the channel to the special packet channel
     Radio1.startListening();                    // start listening
     FlushFifos();                               // flush the fifos
     BlueLedOn();                                // turn on the blue led
