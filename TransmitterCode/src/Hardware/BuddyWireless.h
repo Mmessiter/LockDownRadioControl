@@ -174,7 +174,7 @@ void SendSpecialPacket()                                                    // H
     {
         char        Command[2];
         uint64_t    ModelID;
-        uint8_t     Np = QUIETCHANNEL;
+        uint8_t     Channel = QUIETCHANNEL;
     };
 
     static spd SpecialPacketData;
@@ -187,10 +187,10 @@ void SendSpecialPacket()                                                    // H
     SpecialPacketData.ModelID =  ModelsMacUnionSaved.Val64;                 // Send the model ID so that pupil can check it
     SpecialPacketData.Command[0]                    = 'M';                  // Send M to indicate Master is ON
     if (BuddyON)       SpecialPacketData.Command[0] = 'B';                  // Send B to indicate Buddy is ON
-    NpOld = SpecialPacketData.Np;                                           // Use the old channel number because Buddy hasn't yet hopped
+    NpOld = SpecialPacketData.Channel;                                           // Use the old channel number because Buddy hasn't yet hopped
     --Index; if (Index < 1) Index = 82;                                     // use the same array but in reverse order
-    SpecialPacketData.Np = FHSS_data::FHSS_Channels[Index];                 // Set the channel number
-    if (NeedToRecover) SpecialPacketData.Np = QUIETCHANNEL;                 // If contact lost, then use the recovery channel to recover
+    SpecialPacketData.Channel = FHSS_data::FHSS_Channels[Index];            // Set the channel number
+    if (NeedToRecover) SpecialPacketData.Channel = QUIETCHANNEL;            // If contact lost, then use the recovery channel to recover
     ChangeTXTarget(NpOld,TeensyMACAddPipe ^ ENCRYPT_KEY,faster);            // Set the TX target to the Buddy
     if (Radio1.write(&SpecialPacketData, sizeof SpecialPacketData)) {       // Send the packet
         GetPupilAck();                                                      // Get ack from pupil WITH HIS CONTROL DATA!!
@@ -209,7 +209,7 @@ void GetSpecialPacket()                                                         
     struct spd {
         char        Command[2];
         uint64_t    ModelID = 0;
-        uint8_t     Np = QUIETCHANNEL;
+        uint8_t     Channel = QUIETCHANNEL;
 
     };
     spd SpecialPacketData;
@@ -229,7 +229,7 @@ void GetSpecialPacket()                                                         
         MasterDetected(true);                                                           // Master is alive
         LastPassivePacketTime = millis();                                               // reset the timer
         Radio1.stopListening(); 
-        Radio1.setChannel(SpecialPacketData.Np);                                        // Set the frequency channel
+        Radio1.setChannel(SpecialPacketData.Channel);                                   // Set the frequency channel
         Radio1.startListening();                                                        // start listening
     }else{                                                                              // no packet arrived so maybe master's dead? 
         if (millis() - LastPassivePacketTime > 10) {                                    // We expect a packet every 5 milliseconds
