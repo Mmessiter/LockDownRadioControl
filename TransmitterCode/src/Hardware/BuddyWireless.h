@@ -7,9 +7,7 @@
 #ifndef BUDDYWIRELESS_H
     #define BUDDYWIRELESS_H
 
-    #define LONGER_DELAY           1                // ... milliseconds
     #define LOSTCONTACTTHRESHOLD   6                // 6 fails in a row and we declare the buddy or master dead
-    #define DELAYAFTERACK          1                // ms
     #define ENCRYPT_KEY            0xFEADFEADBB     // The encryption key used for the Pipe address between the transmitters 
    
 //*************************************************************************************************************************
@@ -213,7 +211,7 @@ void GetSpecialPacket()                                                         
     Compress(DataTosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30)
     if (Radio1.available()) {                                                           // if a packet has arrived
         Radio1.writeAckPayload(1, &DataTosend.CompressedData, SizeOfCompressedData);    // Acknowledge the packet BY SENDING MY CHANNEL DATA!
-        delay(DELAYAFTERACK);                                                           // <-  *MUST* allow the ACK time to get going, otherwise the sender sees a failed packet    
+        delay(1);                                                           // <-  *MUST* allow the ACK time to get going, otherwise the sender sees a failed packet    
         Radio1.read(&SpecialPacketData, sizeof SpecialPacketData);                      // read the packet if its still there
         if ((SpecialPacketData.Command[0] == 'B') && (MasterIsInControl)) {             // Buddy is now in control
             MasterIsInControl = false;                                                  // Buddy is now in control
