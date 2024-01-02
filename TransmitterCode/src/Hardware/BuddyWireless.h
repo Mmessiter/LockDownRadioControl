@@ -7,14 +7,11 @@
 #ifndef BUDDYWIRELESS_H
     #define BUDDYWIRELESS_H
 
-
     #define LONGER_DELAY           1                // ... milliseconds
     #define LOSTCONTACTTHRESHOLD   6                // 6 fails in a row and we declare the buddy or master dead
     #define DELAYAFTERACK          1                // ms
     #define ENCRYPT_KEY            0xFEADFEADBB     // The encryption key used for the Pipe address between the transmitters 
    
-   
- 
 //*************************************************************************************************************************
 
 void LoadCorrectModel(uint64_t ModelID){                                        //  Gets Buddy onto same model as master, quietly.                                            
