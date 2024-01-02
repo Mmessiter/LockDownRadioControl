@@ -213,6 +213,7 @@ void GetSpecialPacket()                                                         
 
     };
     spd SpecialPacketData;
+    Compress(DataTosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30)
     if (Radio1.available()) {                                                           // if a packet has arrived
         Radio1.writeAckPayload(1, &DataTosend.CompressedData, SizeOfCompressedData);    // Acknowledge the packet BY SENDING MY CHANNEL DATA!
         delay(DELAYAFTERACK);                                                           // <-  *MUST* allow the ACK time to get going, otherwise the sender sees a failed packet    

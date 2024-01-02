@@ -6590,7 +6590,6 @@ void DoWirelessBuddyListen(){                                // For Slave only
     GetNewChannelValues();                                   // Read sticks and trims and switches etc
     FixMotorChannel(); 
     ShowServoPos();
-    Compress(DataTosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30)
     GetSpecialPacket();                                      // Get the special packet and send our control data in the ask payload
 }
 /************************************************************************************************************/
