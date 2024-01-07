@@ -764,6 +764,7 @@ var 1Definitions_8h =
     [ "VersionsCompared", "1Definitions_8h.html#a2789db08c072ee75b4349d64a8386c52", null ],
     [ "WarningSound", "1Definitions_8h.html#a31b92b91cb0e2c3cb18a38c4f9095616", null ],
     [ "WarningTimer", "1Definitions_8h.html#a762d0bd8b884aee82ec41f594c470b87", null ],
+    [ "WasBuddyPupilOnWireless", "1Definitions_8h.html#ae72fa2a57e5372ceaee076697f01eb04", null ],
     [ "WatchDogConfig", "1Definitions_8h.html#abf278d2a0f4b093a96fd83a6f635d8c8", null ],
     [ "WirelessBuddy", "1Definitions_8h.html#aedb5a522377c840c0e0cecc87bb77565", null ],
     [ "xPoint", "1Definitions_8h.html#a36b7f1f7174274a965e69e8853a3c90c", null ],
