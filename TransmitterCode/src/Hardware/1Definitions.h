@@ -1,9 +1,9 @@
 #ifndef Definitions_H
     #define Definitions_H
 
-// ******************** 1Definitions.h  (+1 to put at top of list!) ******************
-//                This header file has many prototypes, definitions                  *
-// ***********************************************************************************
+// ***************************************** 1Definitions.h *************************************
+//            This header file has prototypes, definitions and global variables                 *
+// **********************************************************************************************
 
 #include <Arduino.h>
 #include <Watchdog_t4.h>
@@ -16,16 +16,9 @@
 #include <Adafruit_INA219.h>
 #include <DS1307RTC.h>
 #include <InterpolationLib.h>
-
+ 
 // *************************************************************************************
-//                      SUPPORT FOR TX MODULE AND NEW PCB Version                      *
-// *************************************************************************************
-
-    #define TXMODULESUPPORT // ONLY FOR NEW VERSION  <<< *** <<<
-    #define NEWPCB
-
-// *************************************************************************************
-//               TX VERSION NUMBER   (May 2020 - December 2023 Malcolm Messiter)       *
+//               TX VERSION NUMBER   (May 2020 - January 2024 Malcolm Messiter)       *
 //**************************************************************************************
 
     #define TXVERSION_MAJOR   2
@@ -51,27 +44,10 @@
 //                                       General                                      *
 // ************************************************************************************
 
-
-    #ifdef NEWPCB               // ***>>> red or green PCBs ... not old black <<<***
-        #define CE_PIN       7  // for SPI to nRF24L01
-        #define CSN_PIN      8  // for SPI to nRF24L01
-        #define BUDDYPPMPORT 10 // Buddybox PPM pin
-    #else
-        #define CE_PIN       9  // for SPI to nRF24L01
-        #define CSN_PIN      10 // for SPI to nRF24L01
-        #define BUDDYPPMPORT 6  // Buddybox PPM pin
-    #endif
-    
-
- //   #define FHSSAT200HZ           // 200 Hz is the fastest we can go
-
-
-#ifdef FHSSAT200HZ
-    #define LOSTCONTACTCUTOFF      0                             // packets to lose before declaring lost contact 
-#else
+    #define CE_PIN                 7                             // for SPI to nRF24L01
+    #define CSN_PIN                8                             // for SPI to nRF24L01
+    #define BUDDYPPMPORT           10                            // wired Buddybox PPM pi
     #define LOSTCONTACTCUTOFF      3                             // packets to lose before declaring lost contact 
-#endif
-
     #define PACEMAKER              5                             // 5ms means about 200 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
     #define TIMEFORTXMANAGMENT     2                             // was 3 ...  How many ms must remain spare between data packets before daring to undertake more trivial tasks
     #define BINDINGTIME            2000                          // 2 seconds to bind ?
@@ -112,7 +88,6 @@
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
 
-
     #define DATARATE                 RF24_250KBPS   // RF24_250KBPS or RF24_1MBPS or RF24_2MBPS
     #define FASTDATARATE             RF24_2MBPS     // 2 MBPS = RF24_2MBPS; 1 MBPS = RF24_1MBPS <<
     #define PERFECTPACKETSPERSECOND  200            // Flat out perfect packets per second
@@ -121,7 +96,6 @@
     #define QUIETCHANNEL             5              // This was found to be the least busy channel in the 2.4GHz band in my house
     #define STOPLISTENINGDELAY       30             // was 260! But 30 seems close to ideal <<<<< *********
   
-
 // **************************************************************************
 //                            SEND MODE PARAMETERS                          *
 //***************************************************************************
@@ -209,7 +183,6 @@
     #define PONGVIEW         37
     #define IDCHECKVIEW      38
     
-
 // **************************************************************************
 //                          Switches' GPIOs                                 *
 // **************************************************************************
@@ -244,13 +217,9 @@
     #define GREENLED      3
     #define BLUELED       4
     #define POWER_OFF_PIN 5
-
-    #ifdef TXMODULESUPPORT
-        #define BUTTON_SENSE_PIN 33
-        #define PPMPORT          6
-    #else
-        #define BUTTON_SENSE_PIN 6
-    #endif
+    #define BUTTON_SENSE_PIN 33
+    #define PPMPORT          6
+   
 // **************************************************************************
 //               Sounds                             *
 //***************************************************************************
