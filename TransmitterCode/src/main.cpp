@@ -1829,6 +1829,7 @@ FLASHMEM void setup()
             }
         }
     }
+    ConfigureRadio();  
     RationaliseBuddy();
 }
 // **************************************************************************************************************************************************************
@@ -1837,18 +1838,24 @@ void RationaliseBuddy()
     PupilIsAlive  = 0;
     MasterIsAlive = 0;
 
-    ConfigureRadio();                                           // Very like InitRadio but without Radio1.begin() !
-
+    if (WasBuddyPupilOnWireless && !BuddyPupilOnWireless) {         // Pupil has just gone off buddy mode
+        ConfigureRadio();                                           // Very like InitRadio but without Radio1.begin() !
+        WasBuddyPupilOnWireless = false;
+        DontChangePipeAddress   = false;
+    }
+    
     if (BuddyPupilOnWireless && BuddyMasterOnWireless)
     {
         BuddyPupilOnWireless  = false;
         BuddyMasterOnWireless = false;
         WirelessBuddy         = false;
     }
+    
     if (!WirelessBuddy) {
         BuddyPupilOnWireless  = false;
         BuddyMasterOnWireless = false;
     }
+
     if (!BuddyPupilOnWireless && !BuddyMasterOnWireless) {
         WirelessBuddy = false;
     }

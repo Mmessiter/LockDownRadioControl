@@ -815,6 +815,7 @@ uint8_t  NextChannel   = 0;
 bool WirelessBuddy = false; // use RF for buddy?!?!
 
 bool BuddyPupilOnWireless = false;
+bool WasBuddyPupilOnWireless = false;
 bool BuddyPupilOnPPM      = false;
 
 bool BuddyMasterOnWireless = false;
