@@ -1294,6 +1294,7 @@ FLASHMEM void GetTXVersionNumber()
     strcat(TransmitterVersionNumber, nbuf);
     Str(nbuf, Txv3, 0);
     strcat(TransmitterVersionNumber, nbuf);
+    strcat(TransmitterVersionNumber, TXVERSION_LETTER);
 }
 /************************************************************************************************************/
 FASTRUN void CreateTimeStamp(char* DateAndTime)
@@ -6277,34 +6278,35 @@ FASTRUN void ReadSwitches() // and indeed read digital trims if these are fitted
     byte           flag         = 0;
     static uint8_t PreviousTrim = 255;
     for (int i = 0; i < 8; ++i) {
-        Switch[i]     = !digitalRead(SwitchNumber[i]); // These are reversed because they are active low
-        TrimSwitch[i] = !digitalRead(TrimNumber[i]);   // These are reversed because they are active low
-        if (TrimSwitch[i]) ++flag;                     // a finger is on a trim lever...
-        if ((TrimSwitch[i]) && (PreviousTrim != i)) {  // is it a new one?
-            TrimTimer    = 0;                          // it IS a new one, so no delay please.
-            PreviousTrim = i;                          // remember which trim it was
+        Switch[i]     = !digitalRead(SwitchNumber[i]);  // These are reversed because they are active low
+        TrimSwitch[i] = !digitalRead(TrimNumber[i]);    // These are reversed because they are active low
+        if (TrimSwitch[i]) ++flag;                      // A finger is on a trim lever...
+        if ((TrimSwitch[i]) && (PreviousTrim != i)) {   // is it a new one?
+            TrimTimer    = 0;                           // it IS a new one, so no delay please.
+            PreviousTrim = i;                           // remember which trim it was
         }
     }
-    if (flag > 1) {                               // one at a time please!!
-        TrimRepeatSpeed = DEFAULTTRIMREPEATSPEED; // Restore default trim repeat speed
+    if (flag > 1) {                                     // One at a time please!!
+        TrimRepeatSpeed = DEFAULTTRIMREPEATSPEED;       // Restore default trim repeat speed
         for (int i = 0; i < 8; ++i) {
             (TrimSwitch[i]) = 0;
             flag            = 0;
         }
     }
     if (!flag) {
-        PreviousTrim    = 254;                    // Previous trim must now match none
-        TrimRepeatSpeed = DEFAULTTRIMREPEATSPEED; // Restore default trim repeat speed
+        PreviousTrim    = 254;                          // Previous trim must now match none
+        TrimRepeatSpeed = DEFAULTTRIMREPEATSPEED;       // Restore default trim repeat speed
     }
 }
 
 /************************************************************************************************************/
 
 void WarnUserOfVersionsMismatch(){
- char TXVersionNumber[] = "Mismatch! TX=";
+        char TXVersionNumber[] = "Mismatch! TX=";
         char RXVersionNumber[] = " but RX=";
         char Prompt[50];
         char FrontView[]       = "page FrontView";
+        
         strcpy(Prompt, TXVersionNumber);
         strcat(Prompt, TransmitterVersionNumber);
         strcat(Prompt, RXVersionNumber);
@@ -6314,15 +6316,15 @@ void WarnUserOfVersionsMismatch(){
 
 /************************************************************************************************************/
 
-void CompareVersionNumbers(){                       // Warn  user if TX and RX versions don't match
-
+void CompareVersionNumbers(){                                           // Warn  user if TX and RX versions don't match - but ignore final letter
     if (VersionsCompared) return;
-    if (strlen(ReceiverVersionNumber) > 5) return; // too long for a version number. Probably binding data !
+    if (strlen(ReceiverVersionNumber) > 6) return;                      // Too long for a version number. Probably binding data !
     VersionsCompared = true;
-    if (!strcmp(ReceiverVersionNumber, TransmitterVersionNumber)) {
-        return;
-    }else{
-        WarnUserOfVersionsMismatch();
+    for (int i = 0; i < 5; ++i) {
+        if (ReceiverVersionNumber[i] != TransmitterVersionNumber[i]){   // Compare the two version numbers, but not the letter 
+            WarnUserOfVersionsMismatch();
+            return;
+        }  
     }
 }
 
@@ -6424,7 +6426,7 @@ void SimulateCloseDown()
     analogWrite(REDLED, 0);
     SendCommand(ScreenOff);
     SaveAllParameters();
-    DelayWithDog(500);
+    DelayWithDog(250);
     digitalWrite(POWER_OFF_PIN, HIGH);
 }
 
