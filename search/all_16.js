@@ -71,10 +71,11 @@ var searchData=
   ['txname_68',['TxName',['../1Definitions_8h.html#a2706b92e2f31363ec86e745e2014afef',1,'1Definitions.h']]],
   ['txsetupview_69',['TXSETUPVIEW',['../1Definitions_8h.html#a59446de1638c86e10c4ac9e5e2871511',1,'1Definitions.h']]],
   ['txsize_70',['TXSIZE',['../1Definitions_8h.html#a4b19180ba242a70607d90a3d37985df2',1,'1Definitions.h']]],
-  ['txversion_5fmajor_71',['TXVERSION_MAJOR',['../1Definitions_8h.html#aebd7ef5764d81d53646b187e0e337bd3',1,'1Definitions.h']]],
-  ['txversion_5fminimus_72',['TXVERSION_MINIMUS',['../1Definitions_8h.html#a7b2773d8aa3a50ce71dfeb1568f8da26',1,'1Definitions.h']]],
-  ['txversion_5fminor_73',['TXVERSION_MINOR',['../1Definitions_8h.html#a892ac703d752012a921e12fc7d632bf2',1,'1Definitions.h']]],
-  ['txvoltagecorrection_74',['TxVoltageCorrection',['../1Definitions_8h.html#a985d38323fbadec8df22d3e17ca18eb2',1,'1Definitions.h']]],
-  ['ty_75',['tY',['../classMPU9250.html#ae100c82474b1e78337ecfdc8d18518d5',1,'MPU9250']]],
-  ['tz_76',['tZ',['../classMPU9250.html#a595f111a497c7727ac70a544b98162e1',1,'MPU9250']]]
+  ['txversion_5fletter_71',['TXVERSION_LETTER',['../1Definitions_8h.html#a8ac9b0d4291fadf2267546dac746c946',1,'1Definitions.h']]],
+  ['txversion_5fmajor_72',['TXVERSION_MAJOR',['../1Definitions_8h.html#aebd7ef5764d81d53646b187e0e337bd3',1,'1Definitions.h']]],
+  ['txversion_5fminimus_73',['TXVERSION_MINIMUS',['../1Definitions_8h.html#a7b2773d8aa3a50ce71dfeb1568f8da26',1,'1Definitions.h']]],
+  ['txversion_5fminor_74',['TXVERSION_MINOR',['../1Definitions_8h.html#a892ac703d752012a921e12fc7d632bf2',1,'1Definitions.h']]],
+  ['txvoltagecorrection_75',['TxVoltageCorrection',['../1Definitions_8h.html#a985d38323fbadec8df22d3e17ca18eb2',1,'1Definitions.h']]],
+  ['ty_76',['tY',['../classMPU9250.html#ae100c82474b1e78337ecfdc8d18518d5',1,'MPU9250']]],
+  ['tz_77',['tZ',['../classMPU9250.html#a595f111a497c7727ac70a544b98162e1',1,'MPU9250']]]
 ];
