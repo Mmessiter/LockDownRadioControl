@@ -1,9 +1,6 @@
 var TransmitterCode_2src_2main_8cpp =
 [
     [ "APPROXIMATION", "TransmitterCode_2src_2main_8cpp.html#aee8c3c363eab49d6a90d3f74587694d5", null ],
-    [ "BOXLEFT", "TransmitterCode_2src_2main_8cpp.html#a311676c322643cddb6f37b0ed605053c", null ],
-    [ "BOXSIZE", "TransmitterCode_2src_2main_8cpp.html#a4f84c7cd953e90b218a9baa12f6e5e35", null ],
-    [ "BOXTOP", "TransmitterCode_2src_2main_8cpp.html#a77283adcfca9bc9bcf9fa2e476f220ab", null ],
     [ "LASTFUNCTION", "TransmitterCode_2src_2main_8cpp.html#a7b562fa140e3020f492686ce35e4ac52", null ],
     [ "MAXWIDTH", "TransmitterCode_2src_2main_8cpp.html#ac101c663138f79260b6d5ea00140fa22", null ],
     [ "AddParameterstoQueue", "TransmitterCode_2src_2main_8cpp.html#a281e0b7f5a10148c72a3c00cadd1be11", null ],
@@ -12,6 +9,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "AnalogueReed", "TransmitterCode_2src_2main_8cpp.html#ac5728db610c441820a6f47295967cbab", null ],
     [ "BindNow", "TransmitterCode_2src_2main_8cpp.html#a7b8f152779a09d867292d3a8e7f76d85", null ],
     [ "Blank", "TransmitterCode_2src_2main_8cpp.html#a0bd2123bbb9dfc3a3af87642de04b591", null ],
+    [ "BlueLedOn", "TransmitterCode_2src_2main_8cpp.html#aa1f9aec467eb00917ad9ffdc0bd5b20d", null ],
     [ "BuddyChViewEnd", "TransmitterCode_2src_2main_8cpp.html#ad332e97e29352b9b7bf0ada90b4dcf06", null ],
     [ "BuddyChViewStart", "TransmitterCode_2src_2main_8cpp.html#ab1bdf189a2e5d2c6252095abeb660e79", null ],
     [ "BuildDirectory", "TransmitterCode_2src_2main_8cpp.html#affc6c0de18db71aa5ad8b4d241339731", null ],

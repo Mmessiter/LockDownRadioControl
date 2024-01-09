@@ -4,7 +4,6 @@ var Utilities_8h =
     [ "AnyMatches", "Utilities_8h.html#a17ff9f21040f9f831b6b01065f9285d8", null ],
     [ "Ascii", "Utilities_8h.html#a3a793f5d71f6db34ad82272d211f8954", null ],
     [ "bcdToDec", "Utilities_8h.html#a5e5cbc12559842867d90e19b7ecf4a8c", null ],
-    [ "BlueLedOn", "Utilities_8h.html#aa1f9aec467eb00917ad9ffdc0bd5b20d", null ],
     [ "CheckForNextionButtonPress", "Utilities_8h.html#afb7c85cac4aa89fd998ed81c330374d2", null ],
     [ "CheckMacrosBuffer", "Utilities_8h.html#a6bb930920ba3a8d45a737dde782ef65c", null ],
     [ "CheckScreenTime", "Utilities_8h.html#adce05a2e4f5763c3b90c7126234d2cc8", null ],
