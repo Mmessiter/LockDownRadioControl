@@ -186,7 +186,7 @@ FASTRUN void FailedPacket()
         GapStart     =   millis();                                                       // To keep track of this gap's length
     } else 
     {
-        if (((millis() - GapStart) > RED_LED_ON_TIME) && (!LedWasRed)) RedLedOn();          // Put on red led - receiver must be off
+        if (((millis() - GapStart) > RED_LED_ON_TIME) && (!LedWasRed) || LedIsBlinking) RedLedOn();          // Put on red led - receiver must be off
     }
     for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = PrePreviousBuffer[i];         // force last update repeat 
     if (RecentPacketsLost >= LOSTCONTACTCUTOFF) {                                           // Don't immeditately change channel
@@ -265,7 +265,7 @@ void SuccessfulPacket()
             ParseShortAckPayload();                         // no, it's a short one
         }
     }
-    if (BoundFlag && !LedWasGreen && !UsingDefaultPipeAddress) {
+    if (BoundFlag && (!LedWasGreen || LedIsBlinking) && !UsingDefaultPipeAddress) {
         GreenLedOn();
         DontChangePipeAddress = true;
     }
@@ -316,6 +316,7 @@ FASTRUN void SendData()
     uint8_t NumberOfChangedChannels = 0;
     uint8_t ByteCountToTransmit ;
     if (SendNoData) return;
+
     if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { 
 
         LastPacketSentTime = millis();

@@ -7,7 +7,7 @@
 /************************************************************************************************************/
 
 void CompareModelsIDs()
-{                             // The saved MacAddress is compared with the one just received from the model ... etc ...
+{                                       // The saved MacAddress is compared with the one just received from the model ... etc ...
     uint8_t SavedModelNumber = ModelNumber;
     if (BuddyPupilOnWireless) return;   //  Don't do this if we are a pupil
     if (BuddyON) return;                //  Don't do this if buddy is on

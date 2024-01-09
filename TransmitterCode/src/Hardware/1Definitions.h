@@ -44,6 +44,10 @@
 // ************************************************************************************
 //                                       General                                      *
 // ************************************************************************************
+/*********************************************************************************************************************************/
+
+
+
 
     #define CE_PIN                 7                             // for SPI to nRF24L01
     #define CSN_PIN                8                             // for SPI to nRF24L01
@@ -96,18 +100,29 @@
     #define RETRYWAIT                1              // was 1. 250us = Wait between retries (RetryWait+1 * 250us))
     #define QUIETCHANNEL             5              // This was found to be the least busy channel in the 2.4GHz band in my house
     #define STOPLISTENINGDELAY       30             // was 260! But 30 seems close to ideal <<<<< *********
-  
+
 // **************************************************************************
-//                            SEND MODE PARAMETERS                          *
+//           Channel curves box position and dimentions                     *
 //***************************************************************************
 
-    #define NORMAL          0 // Normal = transmit as usual
-    #define CALIBRATELIMITS 1 // Calibrate limits (SEND NO DATA)
-    #define CENTRESTICKS    2 // Calibrate Centres (SEND NO DATA)
-    #define SCANWAVEBAND    3 // Scan waveband (SEND NO DATA)
-    #define SENDNOTHING     4 // Transmission off (SEND NO DATA)
-    #define PONGMODE        5 // Play Pong (SEND NO DATA)
-    #define LISTENMODE      6 // Listen only - for wireless buddy boxing (SEND NO DATA)
+    #define BOXLEFT     35
+    #define BOXTOP      35 
+    #define BOXWIDTH    395
+    #define BOXHEIGHT   395
+    #define BOXBOTTOM   BOXTOP  + BOXHEIGHT
+    #define BOXRIGHT    BOXLEFT + BOXWIDTH
+
+// **************************************************************************
+//                            CURRENTMODE VALUES                            *
+//***************************************************************************
+
+    #define NORMAL          0 // Normal = transmit as usual                 (SEND DATA!)
+    #define CALIBRATELIMITS 1 // Calibrate limits                           (SEND NO DATA)
+    #define CENTRESTICKS    2 // Calibrate Centres                          (SEND NO DATA)
+    #define SCANWAVEBAND    3 // Scan waveband                              (SEND NO DATA)
+    #define SENDNOTHING     4 // Transmission off                           (SEND NO DATA)
+    #define PONGMODE        5 // Play Pong                                  (SEND NO DATA)
+    #define LISTENMODE      6 // Listen only - for wireless buddy boxing    (SEND NO DATA)
 
 // **************************************************************************
 //                               Colours                                    *
@@ -650,10 +665,6 @@ double          xPoints[5];
 double          yPoints[5];
 double          xPoint = 0;
 double          yPoint = 0;
-uint16_t        BoxBottom;
-uint16_t        BoxTop;
-uint16_t        BoxLeft;
-uint16_t        BoxRight;
 uint16_t        ClickX;
 uint16_t        ClickY;
 uint8_t         SticksMode                   = 2;

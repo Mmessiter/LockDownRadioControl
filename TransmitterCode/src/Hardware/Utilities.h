@@ -517,7 +517,7 @@ uint8_t GetLEDBrightness()
     }
 
     if (LedIsBlinking) {
-        if ((millis() - BlinkTimer) > (750 / BlinkHertz)) {
+        if ((millis() - BlinkTimer) > (1000 / BlinkHertz)) {
             BlinkOnPhase ^= 1;
             BlinkTimer = millis();
         }
@@ -633,16 +633,6 @@ void FixCHNames()
 
 /*********************************************************************************************************************************/
 
-void BlueLedOn()
-{
-    LedWasGreen = false;
-    LedWasRed   = false;
-    analogWrite(REDLED, 0);
-    analogWrite(GREENLED, 0);
-    analogWrite(BLUELED, GetLEDBrightness()); // Brightness is a function of maybe blinking
-}
-
-/*********************************************************************************************************************************/
 void ClearSuccessRate()
 {
     for (int i = 0; i < (PERFECTPACKETSPERSECOND * (uint16_t)ConnectionAssessSeconds); ++i) { // 126 packets per second start off good
@@ -889,7 +879,7 @@ void ShowConnectionQuality()
     SendValue(Quality, ConnectionQuality); // show quality of connection in progress bar
     strcpy(Msgbuf, Msg_Connected);
     
-    if  ((millis() - LedGreenMoment) > BINDINGTIME) {    // Takes 8 seconds to get a good reading
+    if  ((millis() - LedGreenMoment) > BINDINGTIME) {    // Takes 2 seconds to get a good reading
         if (ConnectionQuality >= 100) strcat(Msgbuf, Msg_ConnectedPerfect); // show quality as a comment
         if ((ConnectionQuality >= 95) && (ConnectionQuality < 100)) strcat(Msgbuf, Msg_ConnectedExcellent);
         if ((ConnectionQuality >= 90) && (ConnectionQuality < 95))  strcat(Msgbuf, Msg_ConnectedVGood);

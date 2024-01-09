@@ -153,23 +153,20 @@
 
 void ClearMostParameters(){ // called from RED LED ON
 
-        RXVoltsDetected      = false;
-        LedWasGreen          = false;
-        ModelIdentified      = false;
-        ModelMatched         = false;
-        BoundFlag            = false;
-        PacketsPerSecond     = 0;
-        LastShowTime         = 0;
-        ModelsMacUnion.Val64 = 0;
-        TotalLostPackets     = 0;
-        TotalGoodPackets     = 0;
-        BindingTimer         = 0;
-        RangeTestGoodPackets = 0;
-        RecentPacketsLost    = 0;
-        DontChangePipeAddress= false;
+        RXVoltsDetected         = false;
+        LedWasGreen             = false;
+        ModelIdentified         = false;
+        ModelMatched            = false;
+        BoundFlag               = false;
+        LastShowTime            = 0;
+        TotalGoodPackets        = 0;
+        BindingTimer            = 0;
+        RangeTestGoodPackets    = 0;
+        RecentPacketsLost       = 0;
+        DontChangePipeAddress   = false;
         UsingDefaultPipeAddress = true;
-        AddExtraParameters   = false;
-        VersionsCompared    = false;
+        AddExtraParameters      = false;
+        VersionsCompared        = false;
         for (int i = 0; i < CHANNELSUSED; ++i) {
             PrePreviousBuffer[i]    = 0;
             PreviousBuffer[i]       = 0;                         
@@ -189,61 +186,62 @@ void RedLedOn()
     char InVisible[]           = "vis Quality,0";
     char FrontView_Connected[] = "Connected";
     char WarnOff[]             = "vis Warning,0";
+
+    analogWrite(GREENLED, 0);
+    analogWrite(BLUELED, 0);
+    analogWrite(REDLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
+    
     if (LedWasGreen) {
-        if ((millis() - LedGreenMoment) > 3000) { // if green led has been on for more than 3 second
-                if (AnnounceConnected & !WirelessBuddy) PlaySound(DISCONNECTEDMSG);
-                if (UseLog) LogDisConnection();
-        }
+        if (AnnounceConnected & !WirelessBuddy) PlaySound(DISCONNECTEDMSG);
+        if (UseLog) LogDisConnection(); 
         ClearMostParameters();
         if (CurrentView == FRONTVIEW) {
             SendText(FrontView_Connected, na);
             SendCommand(WarnOff);
             SendCommand(InVisible);
         }
-        if (UseLog) LogDisConnection();
     }
-    LedWasRed = true;
-    analogWrite(GREENLED, 0);
-    analogWrite(BLUELED, 0);
-    analogWrite(REDLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
+     LedWasRed = true;
 }
 
+
+/*********************************************************************************************************************************/
+
+void BlueLedOn()
+{
+    LedWasGreen = false;
+    LedWasRed   = false;
+    analogWrite(REDLED, 0);
+    analogWrite(GREENLED, 0);
+    analogWrite(BLUELED, GetLEDBrightness()); // Brightness is a function of maybe blinking
+}
 /*********************************************************************************************************************************/
 
 void GreenLedOn()
 {
- 
-  
     if (!ModelMatched) return; // no green led for wrong model
-    if (!LedWasGreen) {
-        ClearSuccessRate();
+    if (!LedWasGreen)
+    { 
+        LedGreenMoment = millis();
         LastShowTime = 0;
-    }
-    LedGreenMoment = millis();
-    TotalLostPackets  = 0;
-    TotalGoodPackets  = 0;
-    RecentPacketsLost = 0;
-    GapLongest        = 0;
-    if (!LedWasGreen || LedIsBlinking)
-    { // no need to repeat unless it is blinking
-        if (!LedIsBlinking) {
-            ShowComms();
-            if (AnnounceConnected) PlaySound(CONNECTEDMSG); 
-            ModelMatched = true;
-            BoundFlag    = true;
-        }
+        ShowComms();
+        if (AnnounceConnected) PlaySound(CONNECTEDMSG); 
         if (UseLog) {
             LogConnection();
         }
+        ModelMatched = true;
+        BoundFlag    = true;
         ZeroDataScreen();   // new connection = new data
-        LedWasRed   = false;
-        LedWasGreen = true;
+        ClearSuccessRate();
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0);
         analogWrite(GREENLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
-        if (GetLEDBrightness()) LedWasGreen = true;
+        LedWasGreen = true;
+        LedWasRed   = false;
         Reconnected = false;
         SendInitialSetupParams();
+    }else{
+        if (LedIsBlinking) analogWrite(GREENLED, GetLEDBrightness());               //Blink Led!
     }
 }
 
@@ -357,11 +355,11 @@ FASTRUN void ShowServoPos()
         OutputAmount = map(SendBuffer[InputDevice], MINMICROS, MAXMICROS, -100, 100);                             // output servo position
         SendValue(ChannelInput, InputAmount);                                                                     // input stick position
         SendValue(ChannelOutput, OutputAmount);                                                                   // output servo position
-        StickPosition = map(constrain((InputAmount + 100) / 2, 0, 100), 0, 100, BoxLeft + 2, BoxRight - BoxLeft); // map to box size
-        StickPosition = constrain(StickPosition, BoxLeft + 2, (BoxRight - BoxLeft) - 1);                          // not outside box!
+        StickPosition = map(constrain((InputAmount + 100) / 2, 0, 100), 0, 100, BOXLEFT + 2, BOXRIGHT - BOXLEFT); // map to box size
+        StickPosition = constrain(StickPosition, BOXLEFT + 2, (BOXRIGHT - BOXLEFT) - 1);                          // not outside box!
         if ((abs(StickPosition - SavedLineX) > MinimumDistance)) {                                                // no need to show tiny movements
             DisplayCurve();                                                                                       // needed to clear last line
-            DrawLine(StickPosition, BoxTop + 3, StickPosition, (BoxBottom - 3) - BoxTop, HighlightColour);        // draws line for stick position
+            DrawLine(StickPosition, BOXTOP + 3, StickPosition, (BOXBOTTOM - 3) - BOXTOP, HighlightColour);        // draws line for stick position
             SavedLineX = StickPosition;                                                                           // Save for next time
         }
     }
@@ -587,8 +585,7 @@ FASTRUN void ShowComms()
             }
         }
     }
-    if (CurrentView == DATAVIEW && Connected) {
-
+    if (CurrentView == DATAVIEW) {                          // even if not connected show last data
         SendValue(DataView_pps, PacketsPerSecond);
         SendValue(DataView_lps, TotalLostPackets);           
         SendText(DataView_Alt, ModelAltitude);
@@ -673,11 +670,13 @@ FASTRUN void ShowComms()
         if ((millis() - WarningTimer) > 10000) {
             WarningTimer = millis();
             PlaySound(WarningSound); // Issue audible warning every 10 seconds
+          //  LedIsBlinking = true;
         }
         if (CurrentView == FRONTVIEW) SendCommand(WarnNow);
     }
     else {
         if (LedIsBlinking && (CurrentView == FRONTVIEW)) SendCommand(WarnOff);
+        LedIsBlinking = false;
     }
 } // end ShowComms()
 
@@ -2360,36 +2359,28 @@ void CheckDualRatesValues()
     }
 }
 
-/*********************************************************************************************************************************/
 
-#define BOXLEFT 35
-#define BOXTOP  35 // NOT YET FULLY INTEGRATED
-#define BOXSIZE 395
 
 /*********************************************************************************************************************************/
 
 /** @brief Uses servo degrees to position dots */
 FASTRUN void GetDotPositions()
 {
-    int p      = 0;
-    BoxLeft    = BOXLEFT;
-    BoxTop     = BOXTOP;
-    BoxRight   = BOXLEFT + BOXSIZE;
-    BoxBottom  = BOXTOP + BOXSIZE;
-    xPoints[0] = BoxLeft;
-    xPoints[4] = BoxRight - BOXLEFT;
-    p          = map(MinDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXLEFT);
+    int p      = 0;   
+    xPoints[0] = BOXLEFT;
+    xPoints[4] = BOXRIGHT - BOXLEFT;
+    p          = map(MinDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXWIDTH, BOXLEFT);
     yPoints[0] = constrain(p, 39, 391);
-    p          = map(MidLowDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXLEFT);
+    p          = map(MidLowDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXWIDTH, BOXLEFT);
     yPoints[1] = constrain(p, 39, 391);
     xPoints[1] = BOXLEFT + 90;
     xPoints[2] = BOXLEFT + 180;
-    p          = map(CentreDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXLEFT);
+    p          = map(CentreDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXWIDTH, BOXLEFT);
     yPoints[2] = constrain(p, 39, 391);
     xPoints[3] = BOXLEFT + 270;
-    p          = map(MidHiDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXLEFT);
+    p          = map(MidHiDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXWIDTH, BOXLEFT);
     yPoints[3] = constrain(p, 39, 391);
-    p          = map(MaxDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXSIZE, BOXLEFT);
+    p          = map(MaxDegrees[Bank][ChanneltoSet - 1], 0, 180, BOXWIDTH, BOXLEFT);
     yPoints[4] = constrain(p, 39, 391);
 }
 
@@ -2503,17 +2494,17 @@ FASTRUN void DisplayCurve()
     SendValue(Gn4, DegsToPercent(MidHiDegrees[Bank][ChanneltoSet - 1]));
     SendValue(Gn5, DegsToPercent(MaxDegrees[Bank][ChanneltoSet - 1]));
 
-    DrawBox(BoxLeft, BoxTop, BoxRight - BoxLeft, BoxBottom - BoxTop, HighlightColour);
+    DrawBox(BOXLEFT, BOXTOP, BOXWIDTH, BOXHEIGHT, HighlightColour);
     xDot1 = xPoints[0];
-    yDot1 = ((BoxBottom - BoxTop) / 2) + 20; // ?
-    xDot2 = BoxRight - BOXLEFT;
+    yDot1 = (BOXHEIGHT / 2) + 20; // ?
+    xDot2 = BOXWIDTH;
     yDot2 = yDot1;
     DrawLine(xDot1, yDot1, xDot2, yDot1, SpecialColour);
 
     xDot1 = xPoints[2];
-    yDot1 = BoxTop;
+    yDot1 = BOXTOP;
     xDot2 = xDot1;
-    yDot2 = BoxBottom - BOXTOP; //(BOXLEFT)
+    yDot2 = BOXHEIGHT;
     DrawLine(xDot1, yDot1, xDot2, yDot2, SpecialColour);
 
     if (InterpolationTypes[Bank][ChanneltoSet - 1] == STRAIGHTLINES) { // Linear
@@ -2776,11 +2767,11 @@ void MoveCurrentPointDown()
 void MovePoint()
 {
     int rjump = 0;
-    GetDotPositions();                             // current
-    if (XtouchPlace > BoxRight - BOXLEFT) return;  // out of range
-    if (XtouchPlace < BOXLEFT) return;             // out of range
-    if (YtouchPlace < BoxTop) return;              // out of range
-    if (YtouchPlace > BoxBottom - BOXLEFT) return; // out of range
+    GetDotPositions();                              // current
+    if (XtouchPlace > BOXWIDTH)     return;         // out of range
+    if (XtouchPlace < BOXLEFT)      return;         // out of range
+    if (YtouchPlace < BOXTOP)       return;         // out of range
+    if (YtouchPlace > BOXHEIGHT)    return;         // out of range
 
     if (XtouchPlace < BOXLEFT + xPoints[0]) { // do leftmost point  ?
         CurrentPoint = 1;
@@ -2950,18 +2941,21 @@ void RestoreDimness(){
 
 void ZeroDataScreen()
 { // ZERO Those parameters that are zeroable
-    TotalLostPackets   = 0;
-    GapLongest         = 0;
-    GapSum             = 0;
-    GapAverage         = 0;
-    GapCount           = 0;
-    GapStart           = 0;
-    RXMAXModelAltitude = 0;
-    GPSMaxaltitude     = 0;
-    ThisGap            = 0;
-    GPSMaxDistance     = 0;
-    GPSMaxSpeed        = 0;
-    LastShowTime       = 0; // for instant redisplay
+    
+    TotalGoodPackets    = 0;
+    RecentPacketsLost   = 0;
+    TotalLostPackets    = 0;
+    GapLongest          = 0;
+    GapSum              = 0;
+    GapAverage          = 0;
+    GapCount            = 0;
+    GapStart            = 0;
+    RXMAXModelAltitude  = 0;
+    GPSMaxaltitude      = 0;
+    ThisGap             = 0;
+    GPSMaxDistance      = 0;
+    GPSMaxSpeed         = 0;
+    LastShowTime        = 0; // for instant redisplay
 }
 /***************************************************** ReadNewSwitchFunction ****************************************************************************/
 
