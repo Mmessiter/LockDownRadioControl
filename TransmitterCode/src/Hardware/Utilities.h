@@ -526,6 +526,7 @@ uint8_t GetLEDBrightness()
         BlinkOnPhase = 1;
     }
     if (BlinkOnPhase) {
+        if (LedIsBlinking) return 255;
         return LEDBrightness; // 0 - 254 (= brightness)
     }
     else {

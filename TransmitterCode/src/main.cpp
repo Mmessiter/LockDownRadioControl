@@ -186,11 +186,9 @@ void RedLedOn()
     char InVisible[]           = "vis Quality,0";
     char FrontView_Connected[] = "Connected";
     char WarnOff[]             = "vis Warning,0";
-
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
-    
     if (LedWasGreen) {
         if (AnnounceConnected & !WirelessBuddy) PlaySound(DISCONNECTEDMSG);
         if (UseLog) LogDisConnection(); 
@@ -203,7 +201,6 @@ void RedLedOn()
     }
      LedWasRed = true;
 }
-
 
 /*********************************************************************************************************************************/
 
@@ -670,7 +667,7 @@ FASTRUN void ShowComms()
         if ((millis() - WarningTimer) > 10000) {
             WarningTimer = millis();
             PlaySound(WarningSound); // Issue audible warning every 10 seconds
-          //  LedIsBlinking = true;
+            LedIsBlinking = true;
         }
         if (CurrentView == FRONTVIEW) SendCommand(WarnNow);
     }
