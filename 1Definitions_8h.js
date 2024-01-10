@@ -616,7 +616,6 @@ var 1Definitions_8h =
     [ "MixNumber", "1Definitions_8h.html#a0d282903963a177c43890298809943aa", null ],
     [ "ModelAltitude", "1Definitions_8h.html#a13ca7ffb9477517e54e3159d72426ec0", null ],
     [ "ModelDefined", "1Definitions_8h.html#a7de8ce7890864d7765fca744338c4759", null ],
-    [ "ModelExistsAtBuddy", "1Definitions_8h.html#aad185bcd04275be9d6acc5420b9b976f", null ],
     [ "ModelIdentified", "1Definitions_8h.html#adf67cd7c0b0e663e2498f870ca6405b6", null ],
     [ "ModelMatched", "1Definitions_8h.html#abafce2220b6ad57b4be99289a7953a0c", null ],
     [ "ModelName", "1Definitions_8h.html#a70d32371e38c7c5862fdc7e149609f7c", null ],
