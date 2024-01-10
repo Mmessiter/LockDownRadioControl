@@ -238,7 +238,6 @@ int GetTrimAmount(uint8_t InputChannel)
  */
 void UpdateTrimView()
 {
-
     uint8_t p;
     char    TrimViewChannels[4][4] = {"ch1", "ch4", "ch2", "ch3"};
     char    TrimViewNumbers[4][3]  = {"n1", "n4", "n2", "n3"};

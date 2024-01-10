@@ -67,12 +67,12 @@
  * | 2  LED     | RED |
  * | 3  LED     | GREEN |
  * | 4  LED     | BLUE |
- * | 5  (POLOLU)| 2808 ALL POWER OFF SIGNAL (When high)  |
- **| 6  (PPM)   | PPM IN or OUT NEW PCB TX MODULE (was Sensor for power button)
- * | 7  (CE)    | nRF24l01 (CE)  | on new PCB
- * | 8  (CSN)   | nRF24l01 (CSN) | on new PCB
- **| 9  .....   | was nRF24l01 (CSN) now SPARE on new PCB <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< SPARE
- **| 10 (PPM)   | was nRF24l01 (CSN) now BUDDY PPM on new PCB)
+ * | 5  (POLOLU)| 2808 ALL POWER OFF SIGNAL (When high)|
+ **| 6  (PPM)   | PPM IN or OUT NEW PCB TX MODULE 
+ * | 7  (CE)    | nRF24l01 (CE)  
+ * | 8  (CSN)   | nRF24l01 (CSN)
+ **| 9  SPARE   | <<<< *SPARE* !
+ **| 10 (PPM)   | Wired Buddy PPM IN or OUT (Could become a SPARE if PPM Buddy is not used)
  **| 11 (MOSI)  | nRF24l01 (MOSI) |
  **| 12 (MISO)  | nRF24l01 (MISO) |
  **| 13 (SCK)   | nRF24l01 (SCK) |
@@ -94,7 +94,7 @@
  * | 30         | Switch 3 |
  * | 31         | Switch 4 |
  * | 32         | Switch 4 |
- * | 33         | Sensor for power button press while on | (formally a SPARE)
+ * | 33         | Sensor for power button press while on 
  * | 34         |TRIM (CH1a)|
  * | 35         |TRIM (CH1b)|
  * | 36         |TRIM (CH2a)|
@@ -161,7 +161,7 @@ void ClearMostParameters(){ // called from RED LED ON
         LastShowTime            = 0;
         TotalGoodPackets        = 0;
         BindingTimer            = 0;
-        RangeTestGoodPackets    = 0;
+        RecentGoodPacketsCount    = 0;
         RecentPacketsLost       = 0;
         DontChangePipeAddress   = false;
         UsingDefaultPipeAddress = true;
@@ -251,6 +251,8 @@ FASTRUN void ShowMotorTimer()
     char FrontView_Secs[]  = "Secs";
 
     if (TimesUp) return;
+
+    if (CurrentView != FRONTVIEW) return;
 
     uint8_t Recording[10] = {ONEMINUTE, TWOMINUTES, THREEMINUTES, FOURMINUTES, FIVEMINUTES, SIXMINUTES, SEVENMINUTES, EIGHTMINUTES, NINEMINUTES, TENMINUTES};
 
@@ -1864,10 +1866,10 @@ void RationaliseBuddy()
     }
 }
 /*********************************************************************************************************************************/
-void GetStatistics()
+void GetGoodPacketsPerSecond()
 {
-    if (RangeTestGoodPackets) PacketsPerSecond = RangeTestGoodPackets;
-    RangeTestGoodPackets = 0;
+    if (RecentGoodPacketsCount) PacketsPerSecond = RecentGoodPacketsCount;
+    RecentGoodPacketsCount = 0;
 }
 
 /*********************************************************************************************************************************/
@@ -5015,7 +5017,7 @@ FASTRUN void ButtonWasPressed()
                 Connected            = false;
                 LostContactFlag      = true;
                 PacketsPerSecond     = 0;
-                RangeTestGoodPackets = 0;
+                RecentGoodPacketsCount = 0;
                 BlueLedOn();
             }
             SaveAllParameters();
@@ -6387,6 +6389,7 @@ bool CheckModelName()
 
     ModelNumber      = GetValue(MMems) + 1;
     FileNumberInView = GetValue(Mfiles);
+    CheckForNextionButtonPress();                 
     if (FileNumberInView != LastFileInView) {
         ShowFileNumber();
         LastFileInView = FileNumberInView;
@@ -6533,29 +6536,31 @@ void FASTRUN ManageTransmitter()
     KickTheDog(); // Watchdog ... ALWAYS!
 
     if ((PACEMAKER - TXPacketElapsed <= TIMEFORTXMANAGMENT) && ModelMatched) {
-        return; // If it's almost time to send data, then do not start some other task which might easily take longer.
+        return;                                     // If it's almost time to send data, then do not start some other task which might easily take longer.
     }
-    CheckPowerOffButton();        // Pretty obvious really ...
-    CheckForNextionButtonPress(); // Pretty obvious really ...
+    CheckPowerOffButton();                          // Pretty obvious really ...
+    CheckForNextionButtonPress();                   // Pretty obvious really ...
 
-    if (RightNow - TransmitterLastManaged > 50) { // 20 times a second is plenty
-        if (RightNow - LastTimeRead >= 1000) {    // once a second for these...
-            LastTimeRead = millis();
-            ReadTime();                           // Do the clock
-            GetStatistics();                      // Do stats
-           
-            SendOutstandingParameters();          // Send any parameters that have not been sent yet
-
-            CheckForNextionButtonPress();
-            ShowComms(); // Screen Telemetry Data
-            if (CurrentView == MODELSVIEW) CheckModelName();
-            if (CurrentView == FRONTVIEW) ShowMotorTimer(); // Screen Timer
-            return;                                         // That's enough housekeeping this time around
-        }
-        ReadSwitches();       // Check switch positions 20 times a second
-        CheckHardwareTrims(); // Trims 20 times a second
-        GetBank();            // Must not call too often
+    if (RightNow - TransmitterLastManaged > 50) {   // 20 times a second is plenty
         TransmitterLastManaged = millis();
+        
+        if ((RightNow - LastTimeRead >= 500) && (CurrentView == MODELSVIEW)) { 
+             if (CheckModelName()) return;          // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
+        }
+
+        if (RightNow - LastTimeRead >= 1000) {      // Only once a second for these...
+            LastTimeRead = millis();
+            ReadTime();                             // Do the clock
+            GetGoodPacketsPerSecond();              // Do stats
+            UpdateTrimView();
+            SendOutstandingParameters();            // Send any parameters that have not been sent yet
+            ShowComms();                            // Screen Telemetry Data
+            ShowMotorTimer();                       // Screen Timer
+            return;                                 // That's enough housekeeping this time around
+        }
+        ReadSwitches();                             // Check switch positions 20 times a second
+        CheckHardwareTrims();                       // Trims 20 times a second
+        GetBank();                                  // Must not call too often
     }
 }
 /**********************************************************************************************************/

@@ -88,6 +88,7 @@
     #define WARMUPDELAY            300                          // fails at 200 so must be >200 ...
     #define SCREENCHANGEWAIT       100                          // allow time for screen to appear
     #define PACKETNUMBERMAX        10                           // only 7 are so far in use but by making this larger we make updates infrequent
+    #define TXMODULESUPPORT        1                            // 1 = TX module support enabled
 
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
@@ -773,7 +774,7 @@ char            TheFilesList[100][14];
 uint16_t        FileNumberInView     = 0;
 bool            FileError            = false;
 uint32_t        RangeTestStart       = 0;
-uint16_t        RangeTestGoodPackets = 0;
+uint16_t        RecentGoodPacketsCount = 0;
 uint8_t         SaveBank             = 0;
 bool            FailSafeChannel[CHANNELSUSED + 1];
 bool            SaveFailSafeNow = false;

@@ -241,7 +241,7 @@ void SuccessfulPacket()
     static uint8_t ParamsSend = 0;
     CheckGapsLength();
     RecordsPacketSuccess(1);
-    ++RangeTestGoodPackets;
+    ++RecentGoodPacketsCount;
     ++PacketNumber;
     if (AddExtraParameters && (ParamsSend < PARAMREPEATS)) {  // Send parameters PARAMREPEATS times in case of a packet loss or two
         ++ParamsSend;
