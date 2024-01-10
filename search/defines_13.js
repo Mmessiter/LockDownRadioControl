@@ -23,11 +23,12 @@ var searchData=
   ['trimdefview_20',['TRIMDEFVIEW',['../1Definitions_8h.html#a9d1ed55f9bcd66d3b1137bca25978f0f',1,'1Definitions.h']]],
   ['two_21',['TWO',['../1Definitions_8h.html#a888e15353eb3d330c743dbdeb47117e2',1,'1Definitions.h']]],
   ['twominutes_22',['TWOMINUTES',['../1Definitions_8h.html#adc071342f0d02db71ceac915c16d7f85',1,'1Definitions.h']]],
-  ['txmoduleview_23',['TXMODULEVIEW',['../1Definitions_8h.html#a70a0f4317ce7de6e2ef8b8725d23b945',1,'1Definitions.h']]],
-  ['txsetupview_24',['TXSETUPVIEW',['../1Definitions_8h.html#a59446de1638c86e10c4ac9e5e2871511',1,'1Definitions.h']]],
-  ['txsize_25',['TXSIZE',['../1Definitions_8h.html#a4b19180ba242a70607d90a3d37985df2',1,'1Definitions.h']]],
-  ['txversion_5fextra_26',['TXVERSION_EXTRA',['../1Definitions_8h.html#ae518ba951108553e7ddf6554eb75c658',1,'1Definitions.h']]],
-  ['txversion_5fmajor_27',['TXVERSION_MAJOR',['../1Definitions_8h.html#aebd7ef5764d81d53646b187e0e337bd3',1,'1Definitions.h']]],
-  ['txversion_5fminimus_28',['TXVERSION_MINIMUS',['../1Definitions_8h.html#a7b2773d8aa3a50ce71dfeb1568f8da26',1,'1Definitions.h']]],
-  ['txversion_5fminor_29',['TXVERSION_MINOR',['../1Definitions_8h.html#a892ac703d752012a921e12fc7d632bf2',1,'1Definitions.h']]]
+  ['txmodulesupport_23',['TXMODULESUPPORT',['../1Definitions_8h.html#a0224fe60e9befad7b62531ab850fed98',1,'1Definitions.h']]],
+  ['txmoduleview_24',['TXMODULEVIEW',['../1Definitions_8h.html#a70a0f4317ce7de6e2ef8b8725d23b945',1,'1Definitions.h']]],
+  ['txsetupview_25',['TXSETUPVIEW',['../1Definitions_8h.html#a59446de1638c86e10c4ac9e5e2871511',1,'1Definitions.h']]],
+  ['txsize_26',['TXSIZE',['../1Definitions_8h.html#a4b19180ba242a70607d90a3d37985df2',1,'1Definitions.h']]],
+  ['txversion_5fextra_27',['TXVERSION_EXTRA',['../1Definitions_8h.html#ae518ba951108553e7ddf6554eb75c658',1,'1Definitions.h']]],
+  ['txversion_5fmajor_28',['TXVERSION_MAJOR',['../1Definitions_8h.html#aebd7ef5764d81d53646b187e0e337bd3',1,'1Definitions.h']]],
+  ['txversion_5fminimus_29',['TXVERSION_MINIMUS',['../1Definitions_8h.html#a7b2773d8aa3a50ce71dfeb1568f8da26',1,'1Definitions.h']]],
+  ['txversion_5fminor_30',['TXVERSION_MINOR',['../1Definitions_8h.html#a892ac703d752012a921e12fc7d632bf2',1,'1Definitions.h']]]
 ];
