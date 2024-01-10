@@ -23,8 +23,8 @@
 
     #define TXVERSION_MAJOR   2
     #define TXVERSION_MINOR   4
-    #define TXVERSION_MINIMUS 4 //   January 2024
-    #define TXVERSION_MICRO   " B"  
+    #define TXVERSION_MINIMUS 4 
+    #define TXVERSION_MICRO   "b 10/01/24"  //   January 10th 2024
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -731,8 +731,8 @@ float           MaxAlt                       = 0;
 char            ModelTempRX[11]               = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0};
 char            ModelAltitude[11]             = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0};
 char            Maxaltitude[11]               = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0};
-char            ReceiverVersionNumber[11]; 
-char            TransmitterVersionNumber[11];
+char            ReceiverVersionNumber[20]; 
+char            TransmitterVersionNumber[20];
 char            ModelVolts[11]                = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0};
 File            ModelsFileNumber;
 Adafruit_INA219 ina219;
