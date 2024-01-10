@@ -958,7 +958,6 @@ uint8_t  MasterIsAlive       = 0;
 bool     VersionsCompared    = false;
 uint32_t LedGreenMoment      = 0;
 uint32_t BindingTimer        = 0;
-bool     ModelExistsAtBuddy  = true;                                     //  Flag to indicate that the model memory is on Buddy TX
 bool     BeQuiet             = false;
 bool     ReconnectingNow     = true;
 uint32_t LastHopTime         = 0;                                       //  Time of last hop

@@ -7,14 +7,13 @@
 #ifndef BUDDYWIRELESS_H
     #define BUDDYWIRELESS_H
 
-    #define LOSTCONTACTTHRESHOLD   6                // 6 fails in a row and we declare the buddy or master dead
-    #define ENCRYPT_KEY            0xFEADFEADBB     // The encryption key used for the Pipe address between the transmitters 
+    #define LOSTCONTACTTHRESHOLD   6                                            // 6 fails in a row and we declare the buddy or master dead
+    #define ENCRYPT_KEY            0xFEADFEADBB                                 // The encryption key is used for the Pipe address between the transmitters 
    
 //*************************************************************************************************************************
 
 void LoadCorrectModel(uint64_t ModelID){                                        //  Gets Buddy onto same model as master, quietly.                                            
     uint32_t SavedModelNumber = ModelNumber;                                    //  Save the current model number
-    if (!ModelExistsAtBuddy) return;
     ModelMatched = false;
     ModelNumber = 0;
     while (!ModelMatched && (ModelNumber < MAXMODELNUMBER - 1)) {               //  Try to match the ID with a saved one
@@ -24,28 +23,15 @@ void LoadCorrectModel(uint64_t ModelID){                                        
     }
     if (ModelMatched) {                                                         //  Found it!
         UpdateModelsNameEveryWhere();                                           //  Show it everywhere.
-        ModelExistsAtBuddy = true;                                              //  Flag to indicate that the model is here
         SaveAllParameters();                                                    //  Save it
         GotoFrontView();
     }else{
         ModelNumber = SavedModelNumber;                                         //  Restore the current model number
         ReadOneModel(ModelNumber);                                              //  Restore the current model 
-        ModelExistsAtBuddy = false;                                             //  Flag to indicate that the model isn't here so don't look again
-    //  Look("Model not found");                                                //  Tell the user
         GotoFrontView();
     }
 }
 
-
-//*************************************************************************************************************************
-
-void CheckModelMatchesMaster(uint64_t ModelID){
-    static uint32_t LastModelIDCheckTime = 0;                                    // The pupil checks the model ID once every second and loads the correct model if it !matches
-    if (millis()-LastModelIDCheckTime > 1000) {                                  // check the model ID once every second
-        LastModelIDCheckTime = millis();
-        if (ModelID!= ModelsMacUnionSaved.Val64) LoadCorrectModel(ModelID);      // if the model ID !matches, then load the correct model    
-    }
-}
 //*************************************************************************************************************************
 void GetSlaveChannelValuesWireless(){                                           // Very Like the PPM function only a bit simpler
 
@@ -202,12 +188,14 @@ void SendSpecialPacket()                                                    // H
     ChangeTXTarget(CurrentChannel,TeensyMACAddPipe,slower);                 // Set the TX target back to the receiver in model.
 }
 //*************************************************************************************************************************
-void GetSpecialPacket()                                                     // Here the PUPIL tx gets a packet from MASTER tx. This function is called from main loop very fast.
-{                                                                           // Master tells Pupil whether buddy is on or off, and the ID of the model which should be loaded.
-                                                                            // The Pupil's Ack Payload contains the pupil's control data (in BuddyBuffer[]) which is compressed and must be decompressed before use.
-                                                                            // GetSlaveChannelValuesWireless() in Master then uses the BuddyBuffer data to replace some or all of the Master's control data. 
-                                                                            // Because the datarate is 2 meg the exchange is very fast. 
+void GetSpecialPacket()                                                                 // Here the PUPIL tx gets a packet from MASTER tx. This function is called from main loop very fast.
+{                                                                                       // Master tells Pupil whether buddy is on or off, and the ID of the model which should be loaded.
+                                                                                        // The Pupil's Ack Payload contains the pupil's control data (in BuddyBuffer[]) which is compressed and must be decompressed before use.
+                                                                                        // GetSlaveChannelValuesWireless() in Master then uses the BuddyBuffer data to replace some or all of the Master's control data. 
+                                                                                        // Because the datarate is 2 meg the exchange is very fast. 
     static bool MasterIsInControl = true; 
+    static uint32_t LastModelID = 0;
+    
     struct spd {
         char        Command[2];
         uint64_t    ModelID = 0;
@@ -215,10 +203,10 @@ void GetSpecialPacket()                                                     // H
 
     };
     spd SpecialPacketData;
-    Compress(DataTosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS); // Compress 32 bytes down to 24 (40 -> 30)
+    Compress(DataTosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS);                 // Compress 
     if (Radio1.available()) {                                                           // if a packet has arrived
         Radio1.writeAckPayload(1, &DataTosend.CompressedData, SizeOfCompressedData);    // Acknowledge the packet BY SENDING MY CHANNEL DATA!
-        delay(1);                                                           // <-  *MUST* allow the ACK time to get going, otherwise the sender sees a failed packet    
+        delay(1);                                                                       // <-  *MUST* allow the ACK time to get going, otherwise the sender sees a failed packet    
         Radio1.read(&SpecialPacketData, sizeof SpecialPacketData);                      // read the packet if its still there
         if ((SpecialPacketData.Command[0] == 'B') && (MasterIsInControl)) {             // Buddy is now in control
             MasterIsInControl = false;                                                  // Buddy is now in control
@@ -228,18 +216,23 @@ void GetSpecialPacket()                                                     // H
             MasterIsInControl = true;                                                   // Master is now in control
             PlaySound(MASTERMSG);                                                       // Announce the Master is now in control
         }
-        CheckModelMatchesMaster(SpecialPacketData.ModelID);                             // check the model ID (once every second) and load the correct model if it !matches
+        if (SpecialPacketData.ModelID != LastModelID) {                                 // if the model ID has changed, match it if we can
+            LastModelID = SpecialPacketData.ModelID;                                    // Save the model ID so we can know if it changed
+            if (SpecialPacketData.ModelID != ModelsMacUnionSaved.Val64){                // is it the currently loaded model?
+                LoadCorrectModel(SpecialPacketData.ModelID);                            // if not then try only once to load the correct model 
+            }   
+        }
         MasterDetected(true);                                                           // Master is alive
         LastPassivePacketTime = millis();                                               // reset the timer
         Radio1.stopListening(); 
         Radio1.setChannel(SpecialPacketData.Channel);                                   // Set the frequency channel
-        Radio1.startListening();                                                        // start listening
-    }else{                                                                              // no packet arrived so maybe master's dead? 
+        Radio1.startListening();                                                        // Start listening
+    }else{                                                                              // No packet arrived so maybe master's dead? 
         if (millis() - LastPassivePacketTime > 10) {                                    // We expect a packet every 5 milliseconds
            Radio1.stopListening(); 
            Radio1.setChannel(QUIETCHANNEL);                                             // Set the recovery channel         
            Radio1.startListening();
-           LastPassivePacketTime = millis();                                            // reset the timer
+           LastPassivePacketTime = millis();                                            // Reset the timer
            MasterDetected(false);
         }
     }
