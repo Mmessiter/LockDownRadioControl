@@ -1290,7 +1290,7 @@ FLASHMEM void GetTXVersionNumber()
     strcat(TransmitterVersionNumber, nbuf);
     Str(nbuf, Txv3, 0);
     strcat(TransmitterVersionNumber, nbuf);
-    strcat(TransmitterVersionNumber, TXVERSION_LETTER);
+    strcat(TransmitterVersionNumber, TXVERSION_MICRO);
 }
 /************************************************************************************************************/
 FASTRUN void CreateTimeStamp(char* DateAndTime)

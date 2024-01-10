@@ -24,7 +24,7 @@
     #define TXVERSION_MAJOR   2
     #define TXVERSION_MINOR   4
     #define TXVERSION_MINIMUS 4 //   January 2024
-    #define TXVERSION_LETTER  "a"  
+    #define TXVERSION_MICRO   " B"  
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
