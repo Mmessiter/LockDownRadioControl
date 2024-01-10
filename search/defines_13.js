@@ -26,8 +26,8 @@ var searchData=
   ['txmoduleview_23',['TXMODULEVIEW',['../1Definitions_8h.html#a70a0f4317ce7de6e2ef8b8725d23b945',1,'1Definitions.h']]],
   ['txsetupview_24',['TXSETUPVIEW',['../1Definitions_8h.html#a59446de1638c86e10c4ac9e5e2871511',1,'1Definitions.h']]],
   ['txsize_25',['TXSIZE',['../1Definitions_8h.html#a4b19180ba242a70607d90a3d37985df2',1,'1Definitions.h']]],
-  ['txversion_5fletter_26',['TXVERSION_LETTER',['../1Definitions_8h.html#a8ac9b0d4291fadf2267546dac746c946',1,'1Definitions.h']]],
-  ['txversion_5fmajor_27',['TXVERSION_MAJOR',['../1Definitions_8h.html#aebd7ef5764d81d53646b187e0e337bd3',1,'1Definitions.h']]],
+  ['txversion_5fmajor_26',['TXVERSION_MAJOR',['../1Definitions_8h.html#aebd7ef5764d81d53646b187e0e337bd3',1,'1Definitions.h']]],
+  ['txversion_5fmicro_27',['TXVERSION_MICRO',['../1Definitions_8h.html#af16492af8f9bbc87dfca4bcacb3bf684',1,'1Definitions.h']]],
   ['txversion_5fminimus_28',['TXVERSION_MINIMUS',['../1Definitions_8h.html#a7b2773d8aa3a50ce71dfeb1568f8da26',1,'1Definitions.h']]],
   ['txversion_5fminor_29',['TXVERSION_MINOR',['../1Definitions_8h.html#a892ac703d752012a921e12fc7d632bf2',1,'1Definitions.h']]]
 ];

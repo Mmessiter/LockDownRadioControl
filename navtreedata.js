@@ -77,7 +77,7 @@ var NAVTREEINDEX =
 [
 "1Definitions_8h.html",
 "1Definitions_8h.html#a54a01db3255a3557b936ef1b8907adce",
-"1Definitions_8h.html#aa319e9ef2fe452af829a9f554e3e1909",
+"1Definitions_8h.html#aa337d6e5cf496fbca7cdc61818f8239a",
 "1Definitions_8h.html#afad3d8b3d66fceadb1732af784734c75",
 "MPU6050_8h.html#a8b5ca8697862a741632275a717631358",
 "MPU6050__9Axis__MotionApps41_8h.html#a9d67538d7ddfd038ce8b0068d03dd679",
