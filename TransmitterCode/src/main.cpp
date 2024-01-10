@@ -6544,7 +6544,7 @@ void FASTRUN ManageTransmitter()
     if (RightNow - TransmitterLastManaged > 50) {   // 20 times a second is plenty
         TransmitterLastManaged = millis();
         
-        if ((RightNow - LastTimeRead >= 500) && (CurrentView == MODELSVIEW)) { 
+        if ((RightNow - LastTimeRead >= 500) && (CurrentView == MODELSVIEW)) { // Only twice a second 
              if (CheckModelName()) return;          // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
         }
 
