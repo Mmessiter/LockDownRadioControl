@@ -33,6 +33,7 @@ var common_8h =
     [ "RECEIVE_TIMEOUT", "common_8h.html#a4c69942f01447fa7563c5726c7d8abf2", null ],
     [ "RECEIVEBUFFERSIZE", "common_8h.html#a334e228f37e18af9d262347f62f92d07", null ],
     [ "RECONNECTGAP", "common_8h.html#a00a419fbe253e6e9cb4d716d02d0b2b7", null ],
+    [ "RXVERSION_EXTRA", "common_8h.html#a5a3e52f9ed278bdb28e321cd8997742d", null ],
     [ "RXVERSION_MAJOR", "common_8h.html#a2b147d5155fcf962e9f1c4885b32c67d", null ],
     [ "RXVERSION_MINIMUS", "common_8h.html#a46d5105ccf92f7e44b10af6fd51772a8", null ],
     [ "RXVERSION_MINOR", "common_8h.html#adeb76229aa4087c3bc1e1fd17bd865b2", null ],
