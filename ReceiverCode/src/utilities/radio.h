@@ -8,20 +8,11 @@
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
 {
-    /**
+    /** Purpose of the payload. 
      * This first byte "Purpose" defines what all the other bytes mean, AND ...
      * the highest BIT of Purpose means ** HOP TO NEXT CHANNEL A.S.A.P. (IF ON) **
      * the lower 7 BITs then define the meaning of the remainder of the ackpayload bytes
-     * If Purpose = 1 then ...
-     *
-     * AckPayload.Byte2           =  ThisRadio;            // Radio in current use  Byte1 and Byte2 are free
-     * AckPayload.Byte3           =  RXVERSION_MAJOR;
-     * AckPayload.Byte4           =  RXVERSION_MINOR;
-     * AckPayload.Byte5           =  RXVERSION_MINIMUS;
-     *
-     *  If Purpose = 2 then ...
-     **/
-
+  */
     uint8_t Purpose = 0; // 0  Purpose
     uint8_t Byte1   = 0; // 1
     uint8_t Byte2   = 0; // 2
@@ -253,6 +244,7 @@ void SendVersionNumberToAckPayload() // AND which radio transceiver is currently
     AckPayload.Byte2 = RXVERSION_MAJOR;
     AckPayload.Byte3 = RXVERSION_MINOR;
     AckPayload.Byte4 = RXVERSION_MINIMUS;
+    AckPayload.Byte5 = RXVERSION_EXTRA;
 }
 
 

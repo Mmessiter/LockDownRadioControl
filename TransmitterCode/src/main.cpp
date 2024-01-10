@@ -6336,6 +6336,9 @@ void GetRXVersionNumber()
     strcat(ReceiverVersionNumber, nbuf);
     Str(nbuf, AckPayload.Byte4, 0);
     strcat(ReceiverVersionNumber, nbuf);
+    nbuf[0] = AckPayload.Byte5;                 // this appends the letter
+    nbuf[1] = 0;
+    strcat(ReceiverVersionNumber, nbuf);
     CompareVersionNumbers();
 }
 
