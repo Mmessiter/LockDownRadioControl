@@ -21,10 +21,10 @@
 //               TX VERSION NUMBER   (May 2020 - January 2024 Malcolm Messiter)       *
 //**************************************************************************************
 
-    #define TXVERSION_MAJOR   2
+    #define TXVERSION_MAJOR   2 // first three must match RX
     #define TXVERSION_MINOR   4
     #define TXVERSION_MINIMUS 4 
-    #define TXVERSION_MICRO   "b 10/01/24"  //   January 10th 2024
+    #define TXVERSION_EXTRA   "b 10/01/24" 
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
