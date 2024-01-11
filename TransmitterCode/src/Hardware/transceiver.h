@@ -345,12 +345,9 @@ FASTRUN void SendData()
 /***********************************************************************************************************/
 void DoScanEnd()
 {
-    
     ConfigureRadio();
-    DontChangePipeAddress = false;
-  //  Radio1.setDataRate(RF24_250KBPS);
-  //  Radio1.openWritingPipe(DefaultPipe);
-    CurrentMode = NORMAL;
+    DontChangePipeAddress    = false;
+    CurrentMode             = NORMAL;
 }
 /*********************************************************************************************************************************/
 
@@ -361,7 +358,8 @@ void DoScanInit()
     BoundFlag   = false;
     ScanAllChannels(true);
 }
-    /************************************************************************************************************/
+
+/************************************************************************************************************/
     // This function draws or re-draws and clears the box that display wave band scanning information
     #define xx1      90 // Needed below... Edit xx1,yy1 to move box ....
     #define yy1      70 // Needed below... Edit xx1,yy1 to move box ....

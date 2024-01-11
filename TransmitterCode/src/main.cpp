@@ -5471,10 +5471,11 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(CalibrateView, TextIn)) {
+        if (InStrng(CalibrateView, TextIn)) { // heer!
             SendCommand(pCalibrateView);
             Force_ReDisplay();
             CurrentView = CALIBRATEVIEW;
+           // SetDefaultValues();
             ClearText();
             return;
         }
@@ -5802,7 +5803,7 @@ FASTRUN void ButtonWasPressed()
             DisplayCurveAndServoPos();
             return;
         }
-        if (CurrentMode == NORMAL) {
+        if (CurrentMode == NORMAL) { // heer
             if (strcmp(TextIn, "Calibrate1") == 0) {
                 ResetSwitchNumbers();
                 SaveTransmitterParameters();
@@ -5817,7 +5818,7 @@ FASTRUN void ButtonWasPressed()
             }
         }
 
-        if (CurrentMode == CALIBRATELIMITS) {
+        if (CurrentMode == CALIBRATELIMITS) { // heer
             if (strcmp(TextIn, "Calibrate1") == 0) {
                 CurrentMode = CENTRESTICKS;
                 CurrentView = CALIBRATEVIEW;
@@ -5827,10 +5828,11 @@ FASTRUN void ButtonWasPressed()
                 return;
             }
         }
-        if (CurrentMode == CENTRESTICKS) {
+        if (CurrentMode == CENTRESTICKS) { // heer!!
             if (strcmp(TextIn, "Calibrate1") == 0) {
                 CurrentMode = NORMAL;
                 RedLedOn();
+                ReadOneModel(ModelNumber);
                 SaveTransmitterParameters(); // Save calibrations
                 LoadAllParameters();         // Restore all current model settings
                 SendText(SvB0, Cmsg5);
