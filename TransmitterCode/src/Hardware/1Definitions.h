@@ -916,8 +916,8 @@ union uMacStored
 bool     MotorEnabled           = false;
 bool     SendNoData             = false;
 bool     MotorWasEnabled        = false;
-uint8_t  MotorChannel           = 15;
-uint8_t  MotorChannelZero       = 0;
+uint8_t  MotorChannel           = 2;
+uint8_t  MotorChannelZero       = 30;
 bool     UseMotorKill           = true;
 bool     SafetyON               = false;
 bool     BuddyON                = false;

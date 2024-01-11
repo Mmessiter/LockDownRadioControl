@@ -2298,8 +2298,8 @@ void SetDefaultValues() // heer
         InputTrim[i] = i;
     }
     UseMotorKill              = true;
-    MotorChannelZero          = 0;
-    MotorChannel              = 15;
+    MotorChannelZero          = 30;
+    MotorChannel              = 2;
     ReversedChannelBITS       = 0; //  No channel reversed
     RxVoltageCorrection       = 0;
     ModelsMacUnionSaved.Val64 = 0;
@@ -3573,7 +3573,7 @@ void RXOptionsViewStart() // model options screen
     SendValue(n3, TrimMultiplier);
     snprintf(Vbuf, 5, "%1.2f", StopFlyingVoltsPerCell);
     SendText(t10, Vbuf);
-    SendValue(Mvalue, MotorChannelZero);
+    SendValue(Mvalue, map(MotorChannelZero, 0, 180, -100, 100));  // map to -100 to 100
     SendValue(Mchannel, MotorChannel + 1);
     SendValue(UseKill, UseMotorKill);
     SendValue(RxVCorrextion, RxVoltageCorrection);
@@ -3615,7 +3615,7 @@ void RXSetup1End()
     SendValue(Progress, 10);
     SFV = StopFlyingVoltsPerCell * 100; // this makes it a 16 bit value I can save easily
     SendValue(Progress, 20);
-    MotorChannelZero = GetValue(Mvalue);
+    MotorChannelZero = map (GetValue(Mvalue), -100, 100, 0, 180); // map to 0 to 180
     SendValue(Progress, 30);
     RxVoltageCorrection = GetValue(RxVCorrextion);
     SendValue(Progress, 40);
@@ -3801,7 +3801,7 @@ void ResetTransmitterSettings()
     LEDBrightness           = DEFAULTLEDBRIGHTNESS;
     ConnectionAssessSeconds = 1;
     AutoModelSelect         = false;
-    MotorChannel            = 15;
+    MotorChannel            = 2;  // = 3 really
     MotorChannelZero        = 0;
     TimerDownwards          = false;
     PPMdata.UseTXModule     = false;
@@ -6544,7 +6544,7 @@ void FASTRUN ManageTransmitter()
     if (RightNow - TransmitterLastManaged > 50) {   // 20 times a second is plenty
         TransmitterLastManaged = millis();
         
-        if ((RightNow - LastTimeRead >= 500) && (CurrentView == MODELSVIEW)) { // Only twice a second 
+        if ((RightNow - LastTimeRead >= 1000) && (CurrentView == MODELSVIEW)) { // Only twice a second 
              if (CheckModelName()) return;          // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
         }
 
