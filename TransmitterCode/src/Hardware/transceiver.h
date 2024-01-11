@@ -345,8 +345,11 @@ FASTRUN void SendData()
 /***********************************************************************************************************/
 void DoScanEnd()
 {
-    Radio1.setDataRate(RF24_250KBPS);
-    Radio1.openWritingPipe(DefaultPipe);
+    
+    ConfigureRadio();
+    DontChangePipeAddress = false;
+  //  Radio1.setDataRate(RF24_250KBPS);
+  //  Radio1.openWritingPipe(DefaultPipe);
     CurrentMode = NORMAL;
 }
 /*********************************************************************************************************************************/
