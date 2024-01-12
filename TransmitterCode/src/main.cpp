@@ -4983,6 +4983,7 @@ FASTRUN void ButtonWasPressed()
         }
         if (InStrng(SetupView, TextIn) > 0) { //  goto main setup screen
             ClearText();
+            if (CurrentView == CALIBRATEVIEW) ReadOneModel(ModelNumber);  // because it was cleared for calibration
             SaveAllParameters();
             CurrentView = TXSETUPVIEW;
             SendCommand(page_SetupView);
@@ -5479,11 +5480,10 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(CalibrateView, TextIn)) { // heer!
+        if (InStrng(CalibrateView, TextIn)) { // heer start calibrate view!
             SendCommand(pCalibrateView);
             Force_ReDisplay();
             CurrentView = CALIBRATEVIEW;
-            SetDefaultValues();
             ClearText();
             return;
         }
@@ -5813,6 +5813,8 @@ FASTRUN void ButtonWasPressed()
         }
         if (CurrentMode == NORMAL) { // heer
             if (strcmp(TextIn, "Calibrate1") == 0) {
+                BlueLedOn();
+                SetDefaultValues();
                 ResetSwitchNumbers();
                 SaveTransmitterParameters();
                 ReduceLimits(); // Get setup for sticks calibration
@@ -5840,7 +5842,6 @@ FASTRUN void ButtonWasPressed()
             if (strcmp(TextIn, "Calibrate1") == 0) {
                 CurrentMode = NORMAL;
                 RedLedOn();
-                ReadOneModel(ModelNumber);
                 SaveTransmitterParameters(); // Save calibrations
                 LoadAllParameters();         // Restore all current model settings
                 SendText(SvB0, Cmsg5);
@@ -6466,7 +6467,7 @@ void CheckPowerOffButton()
         TurnOffSecondToGo = PowerOffWarningSeconds;
     }
 
-    if (PowerOffTimer) { // count down started?
+    if (PowerOffTimer) { // count down started? // heer
         if (!PowerWarningVisible) {
             SendCommand(StillConnected);
             SaveOneModel(ModelNumber); // in case any trim change etc wasn't saved
