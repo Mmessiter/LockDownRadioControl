@@ -2297,9 +2297,17 @@ void SetDefaultValues() // heer
     for (int i = 0; i < 4; ++i) {
         InputTrim[i] = i;
     }
-    UseMotorKill              = true;
-    MotorChannelZero          = 30;
-    MotorChannel              = 2;
+   
+    if (CurrentView == CALIBRATEVIEW) {   
+        UseMotorKill              = false;
+        MotorChannelZero          = 50;
+        MotorChannel              = 15;
+    } else {
+        UseMotorKill              = true;
+        MotorChannelZero          = 30;
+        MotorChannel              = 2;
+    }
+   
     ReversedChannelBITS       = 0; //  No channel reversed
     RxVoltageCorrection       = 0;
     ModelsMacUnionSaved.Val64 = 0;
@@ -2324,7 +2332,7 @@ void SetDefaultValues() // heer
     }
     TrimMultiplier = 5;
     ModelDefined = 42;
-    SaveOneModel(ModelNumber);
+    if (CurrentView != CALIBRATEVIEW) SaveOneModel(ModelNumber); // if only calibrating, don't save
     CloseModelsFile();
 }
 
@@ -5475,7 +5483,7 @@ FASTRUN void ButtonWasPressed()
             SendCommand(pCalibrateView);
             Force_ReDisplay();
             CurrentView = CALIBRATEVIEW;
-           // SetDefaultValues();
+            SetDefaultValues();
             ClearText();
             return;
         }
