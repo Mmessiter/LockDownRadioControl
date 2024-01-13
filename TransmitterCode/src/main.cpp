@@ -2332,8 +2332,6 @@ void SetDefaultValues() // heer
     }
     TrimMultiplier = 5;
     ModelDefined = 42;
-    if (CurrentView != CALIBRATEVIEW) SaveOneModel(ModelNumber); // if only calibrating, don't save
-    CloseModelsFile();
 }
 
 /*********************************************************************************************************************************/
@@ -3820,9 +3818,11 @@ void ResetTransmitterSettings()
         for (ModelNumber = 1; ModelNumber <= MAXMODELNUMBER; ++ModelNumber) {
             ++sofar;
             SetDefaultValues();
+            SaveOneModel(ModelNumber);
             SendValue(Progress, (sofar * (100 / MAXMODELNUMBER)) / 4);
             KickTheDog();
         }
+        CloseModelsFile();
     }
     SendValue(Progress, 100);
     ModelNumber = 1;
@@ -4936,6 +4936,7 @@ FASTRUN void ButtonWasPressed()
             if (GetConfirmation(GoModelsView, Prompt)) {
                 ModelNumber = GetValue(MMems) + 1;
                 SetDefaultValues();
+                SaveOneModel(ModelNumber);
                 LoadModelSelector();
             }
             ClearText();

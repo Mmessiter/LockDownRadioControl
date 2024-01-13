@@ -108,19 +108,21 @@ bool ReadOneModel(uint32_t Mnum)
 {
     uint16_t j;
     uint16_t i;
-    char     NoModelYet[] = "Error! ";
+    char     NoModelYet[] = "File error?";
 
-    FileCheckSum = 0;
-    MixNumber = 0;
+    FileCheckSum    = 0;
+    MixNumber       = 0;
     if ((ModelNumber > 90) || (ModelNumber <= 0)) ModelNumber = 1;
+    
     OpenModelsFile();
+    
     if (!ModelsFileOpen) {
         DelayWithDog(300);
         OpenModelsFile();
     }
-    strcpy(ModelName, NoModelYet); // indicator of error
+    
     if (!ModelsFileOpen) {
-        Serial.println("Cannot open file");
+        strcpy(ModelName, NoModelYet); // indicator of error or no model
         return false;
     }
 
