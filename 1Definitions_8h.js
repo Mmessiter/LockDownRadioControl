@@ -595,6 +595,7 @@ var 1Definitions_8h =
     [ "LastRadioSwaps", "1Definitions_8h.html#a5ca93cad111e1e82a10dade880ff438d", null ],
     [ "LastRX1TotalTime", "1Definitions_8h.html#a9d5b32b586d67e7d992e673f578cd530", null ],
     [ "LastRX2TotalTime", "1Definitions_8h.html#a0163b2501e6b0b9ca85e670444d3a278", null ],
+    [ "LastSbusRepeats", "1Definitions_8h.html#a0907bb9eb5bb1f2bef044edc27d39ca8", null ],
     [ "LastScanButtonCheck", "1Definitions_8h.html#a72c5ccd104215418611a4e833f11765b", null ],
     [ "LastSeconds", "1Definitions_8h.html#a461bdfbe0df771f541b8872ac04bb717", null ],
     [ "LastShowTime", "1Definitions_8h.html#ae818c99aa6e4a19030a586da53a9dcc4", null ],
