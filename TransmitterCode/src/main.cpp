@@ -366,7 +366,6 @@ FASTRUN void ShowServoPos()
 /*********************************************************************************************************************************/
 FASTRUN bool CheckTXVolts()
 {
-    char  DataView_txv[]   = "txv";  // Labels on Nextion
     char  JTX[]            = "JTX";  // Labels on Nextion
     char  FrontView_TXBV[] = "TXBV"; // Labels on Nextion
     bool  TXWarningFlag    = false;
@@ -398,7 +397,6 @@ FASTRUN bool CheckTXVolts()
             SendText(FrontView_TXBV, nbuf);
         }
         if (CurrentView == DATAVIEW) {
-            SendText(DataView_txv, TransmitterVersionNumber);
             SendText(t17, nbuf);
         }
     }
@@ -469,22 +467,65 @@ FASTRUN bool CheckRXVolts()
     }
     return RXWarningFlag;
 }
+/*********************************************************************************************************************************/
+void ShowCurrentRate(){ // if it has changed
+    char         rate[]                = "rate";
+    char         rate1[]               = "Rate 1";
+    char         rate2[]               = "Rate 2";
+    char         rate3[]               = "Rate 3";
+    char         rate4[]               = "      ";
+ 
+ switch (DualRateInUse)
+            {
+                case 1:
+                    SendText(rate, rate1);
+                    break;
+                case 2:
+                    SendText(rate, rate2);
+                    break;
+                case 3:
+                    SendText(rate, rate3);
+                    break;
+                case 4:
+                    SendText(rate, rate4); // rates not in use = 4
+                    break;
+                default:
+                    break;
+            }
+}
 
 /*********************************************************************************************************************************/
 
-/** @brief SHOW COMMS */
+void ShowAMS(){
+    char         ams[]                 = "ams";
+    char         AmsOnMsg[]            = "AMS";
+    char         AmsOffMsg[]           = "   ";
+    if (AutoModelSelect) {
+                SendText(ams, AmsOnMsg);
+            }
+            else {
+                SendText(ams, AmsOffMsg);
+            }
+}
 
-// This displays many telemetry data onto the current screen
+/*********************************************************************************************************************************/
+void ShowTrimToAll(){
+    char         trall[]               = "trall";
+    char         CopyTrimsToAllMSG[]   = "TrimAll";
+    char         CopyTrimsToNoneMSG[]  = "       ";
 
-FASTRUN void ShowComms()
-{
-    if (millis() - LastShowTime < SHOWCOMMSDELAY) return;
+        if (CopyTrimsToAll) {
+            SendText(trall, CopyTrimsToAllMSG);
+        }
+        else {
+            SendText(trall, CopyTrimsToNoneMSG);
+        }
 
-    LastShowTime = millis();
+}
 
-    char         FrontView_AckPayload[] = "AckPayload";
-    char         FrontView_RXBV[]       = "RXBV";
-    char         MsgBuddying[]          = "* Buddy *";
+/*********************************************************************************************************************************/
+void PopulateDataView(){
+
     char         DataView_pps[]         = "pps"; // These are label names in the NEXTION data screen. They are best kept short.
     char         DataView_lps[]         = "lps";
     char         DataView_Alt[]         = "alt";
@@ -497,94 +538,18 @@ FASTRUN void ShowComms()
     char         DataView_Sg[]          = "Sg";
     char         DataView_Ag[]          = "Ag";
     char         DataView_Gc[]          = "Gc";
-    char         Vbuf[50];
-    char         Fix[]                 = "Fix"; // These are label names in the NEXTION data screen. They are best kept short.
-    char         Lon[]                 = "Lon";
-    char         Lat[]                 = "Lat";
-    char         Bear[]                = "Bear";
-    char         Dist[]                = "Dist";
-    char         Sped[]                = "Sped";
-    char         yes[]                 = "Yes";
-    char         no[]                  = "No";
-    char         ALT[]                 = "ALT";
-    char         MALT[]                = "MALT";
-    char         MxS[]                 = "MxS";
-    char         Mxd[]                 = "Mxd";
-    char         BTo[]                 = "BTo";
-    char         Sat[]                 = "Sat";
     char         Sbs[]                 = "Sbus";
-    char         rate[]                = "rate";
-    char         rate1[]               = "Rate 1";
-    char         rate2[]               = "Rate 2";
-    char         rate3[]               = "Rate 3";
-    char         rate4[]               = "      ";
-    char         FrontView_Connected[] = "Connected";
-    char         WarnNow[]             = "vis Warning,1";
-    char         WarnOff[]             = "vis Warning,0";
-    char         InVisible[]           = "vis Quality,0";
     char         IdReceived[]          = "t22";
     char         IdStored[]            = "t19";
     char         IdReceived1[]         = "t23";
     char         IdStored1[]           = "t24";
     char         LocalMacID[]          = "t26";
     char         MasterID[]            = "t28";
-    char         ams[]                 = "ams";
-    char         trall[]               = "trall";
-    char         AmsOnMsg[]            = "AMS";
-    char         AmsOffMsg[]           = "   ";
-    char         CopyTrimsToAllMSG[]   = "TrimAll";
-    char         CopyTrimsToNoneMSG[]  = "       ";
+    char         Vbuf[50];
     char         nb2[5];
+    char         DataView_txv[]         = "txv";  // Labels on Nextion // heer
     unsigned int TempModelId = 0;
 
-    if (CurrentView == FRONTVIEW) {
-        ShowConnectionQuality();
-        if (AutoModelSelect) {
-            SendText(ams, AmsOnMsg);
-        }
-        else {
-            SendText(ams, AmsOffMsg);
-        }
-        if (CopyTrimsToAll) {
-            SendText(trall, CopyTrimsToAllMSG);
-        }
-        else {
-            SendText(trall, CopyTrimsToNoneMSG);
-        }
-        switch (DualRateInUse)
-        {
-            case 1:
-                SendText(rate, rate1);
-                break;
-            case 2:
-                SendText(rate, rate2);
-                break;
-            case 3:
-                SendText(rate, rate3);
-                break;
-            case 4:
-                SendText(rate, rate4); // rates not in use = 4
-                break;
-            default:
-                break;
-        }
-        if (BuddyPupilOnPPM || BuddyPupilOnWireless) SendText(FrontView_Connected, MsgBuddying); 
-        if (LedWasGreen) {
-            if (BoundFlag) {
-                if (!Reconnected) {
-                    ShowConnectionQuality();
-                    Reconnected = true;        
-                }
-                StartInactvityTimeout();
-            }
-            else {
-                SendText(FrontView_RXBV, na); // data not available
-                SendText(FrontView_AckPayload, na);
-                SendCommand(InVisible);
-            }
-        }
-    }
-    if (CurrentView == DATAVIEW) {                          // even if not connected show last data
         SendValue(DataView_pps, PacketsPerSecond);
         SendValue(DataView_lps, TotalLostPackets);           
         SendText(DataView_Alt, ModelAltitude);
@@ -611,8 +576,7 @@ FASTRUN void ShowComms()
         TempModelId = ModelsMacUnion.Val32[1];
         snprintf(Vbuf, 9, "%X", TempModelId);
         if (TempModelId) SendText(IdReceived1, Vbuf);
-    }
-    if (CurrentView == DATAVIEW) { // even if not connected
+
         for (int i = 0; i < 5; ++i) {
             Vbuf[i] = 0;
         }
@@ -632,9 +596,67 @@ FASTRUN void ShowComms()
             strcat(Vbuf, " ");
         }
         SendText(LocalMacID, Vbuf);
+        SendText(DataView_txv, TransmitterVersionNumber);
     }
 
-    if (CurrentView == GPSVIEW) {
+/*********************************************************************************************************************************/
+
+void  PopulateFrontView(){
+    
+    char         FrontView_AckPayload[] = "AckPayload";
+    char         FrontView_RXBV[]       = "RXBV";
+    char         MsgBuddying[]          = "* Buddy *";
+    char         FrontView_Connected[] = "Connected";
+    char         InVisible[]           = "vis Quality,0";
+        
+        ShowConnectionQuality();
+        if (LastAutoModelSelect != AutoModelSelect) {
+            LastAutoModelSelect = AutoModelSelect;
+            ShowAMS();
+        }
+       if (LastCopyTrimsToAll != CopyTrimsToAll) {
+            LastCopyTrimsToAll = CopyTrimsToAll;
+            ShowTrimToAll();
+       }
+        if (OldRate != DualRateInUse) {
+            OldRate = DualRateInUse;
+            ShowCurrentRate();
+        }
+        if (BuddyPupilOnPPM || BuddyPupilOnWireless) SendText(FrontView_Connected, MsgBuddying); 
+        if (LedWasGreen) {
+          
+            if (BoundFlag) {
+                if (!Reconnected) Reconnected = true;        
+                StartInactvityTimeout();
+            }
+            else {
+                SendText(FrontView_RXBV, na); // data not available
+                SendText(FrontView_AckPayload, na);
+                SendCommand(InVisible);
+            }
+        }
+}
+
+/*********************************************************************************************************************************/
+
+void PopulateGPSView(){
+
+    char         Vbuf[50];
+    char         Fix[]                 = "Fix"; // These are label names in the NEXTION data screen. They are best kept short.
+    char         Lon[]                 = "Lon";
+    char         Lat[]                 = "Lat";
+    char         Bear[]                = "Bear";
+    char         Dist[]                = "Dist";
+    char         Sped[]                = "Sped";
+    char         yes[]                 = "Yes";
+    char         no[]                  = "No";
+    char         ALT[]                 = "ALT";
+    char         MALT[]                = "MALT";
+    char         MxS[]                 = "MxS";
+    char         Mxd[]                 = "Mxd";
+    char         BTo[]                 = "BTo";
+    char         Sat[]                 = "Sat";
+     
         if (GpsFix) { // if no fix, then leave display as before
             SendText(Fix, yes);
         }
@@ -663,20 +685,58 @@ FASTRUN void ShowComms()
         SendText(BTo, Vbuf);
         snprintf(Vbuf, 6, "%d", (int)GPSMaxDistance);
         SendText(Mxd, Vbuf);
-    }
-    CheckScreenTime();
-    if (CheckTXVolts() || CheckRXVolts()) { // Note: If TX Battery is low, then CheckRXVolts() is not even called.
-        if ((millis() - WarningTimer) > 10000) {
-            WarningTimer = millis();
-            PlaySound(WarningSound); // Issue audible warning every 10 seconds
+
+
+}
+/*********************************************************************************************************************************/
+
+void CheckBatteryStates(){
+    
+    char         WarnNow[]             = "vis Warning,1";
+    char         WarnOff[]             = "vis Warning,0";
+    static uint32_t LocalTimer = 0;
+    uint32_t    Now = millis();
+   
+    if (Now < BATTERY_CHECK_INTERVAL ) Now = BATTERY_CHECK_INTERVAL+100;    // Display battery status immediately
+    if (Now - LocalTimer < BATTERY_CHECK_INTERVAL) return;                  // Only check every 15 seconds
+    LocalTimer = millis();
+    if (CheckTXVolts() || CheckRXVolts()) {                                 // Note: If TX Battery is low, then CheckRXVolts() is not even called.
+            PlaySound(WarningSound);                                        // Issue audible warning 
             LedIsBlinking = true;
-        }
-        if (CurrentView == FRONTVIEW) SendCommand(WarnNow);
+           if (CurrentView == FRONTVIEW) SendCommand(WarnNow);
     }
     else {
         if (LedIsBlinking && (CurrentView == FRONTVIEW)) SendCommand(WarnOff);
         LedIsBlinking = false;
     }
+}
+
+/*********************************************************************************************************************************/
+
+/** @brief SHOW COMMS */
+
+// This displays many telemetry data onto the current screen
+
+FASTRUN void ShowComms() // heer 
+{
+    if (millis() - LastShowTime < SHOWCOMMSDELAY) return;
+    LastShowTime = millis();
+    switch(CurrentView){
+            case FRONTVIEW:
+                PopulateFrontView();
+                break;
+            case DATAVIEW:
+                PopulateDataView();
+                break;
+            case GPSVIEW:
+                PopulateGPSView();
+                break;  
+            default:    
+                break;
+    }
+    CheckScreenTime();
+    CheckBatteryStates();
+  //  Look(millis() - LastShowTime);
 } // end ShowComms()
 
 /*********************************************************************************************************************************/
@@ -6351,6 +6411,9 @@ void GotoFrontView()
 
     PupilIsAlive  = 0;
     MasterIsAlive = 0;
+    LastAutoModelSelect = true; 
+    LastCopyTrimsToAll  = true; 
+    OldRate             = 235;  // forced different
 
     if (CurrentView != FRONTVIEW) {
         if (CurrentView == SCANVIEW) DoScanEnd();                       // Put transceiver back to normal mode
@@ -6616,11 +6679,9 @@ FASTRUN void loop()
             SendBindingPipe(); // Only if not bound yet - overwrite low throttle setting
         }
     }
- // Look(CurrentMode);
+
     switch (CurrentMode) {
 
-
-       
         case NORMAL: // 0
 #ifdef TXMODULESUPPORT
             if (!PPMdata.UseTXModule) {

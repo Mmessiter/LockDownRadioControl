@@ -838,7 +838,7 @@ void ClearBox()
 }
 
 /*********************************************************************************************************************************/
-int GetSuccessRate()
+uint16_t GetSuccessRate()
 {
     uint16_t Total = 0;
     uint16_t SuccessRate;
@@ -847,8 +847,9 @@ int GetSuccessRate()
     for (uint16_t i = 0; i < Perfection; ++i) { // PERFECTPACKETSPERSECOND packets per second are either good or bad
         Total += PacketsHistoryBuffer[i];
     }
+    
     Total += ((Perfection - Total) / 2);        // about half made it but were simply unacknowledged
-    SuccessRate = (Total * 100) / Perfection; // return a percentage of total good packets
+    SuccessRate = (Total * 100) / Perfection;   // return a percentage of total good packets
     return SuccessRate;
 }
 
@@ -860,7 +861,6 @@ void ShowConnectionQuality()
 {
     char Quality[] = "Quality";
     char Msgbuf[80];
-    char Msg_Connecting[]         = "Finalising connection..."; 
     char Msg_Connected[]          = "Connection: ";
     char Msg_ConnectedPerfect[]   = "Perfect";
     char Msg_ConnectedExcellent[] = "Excellent";
@@ -872,15 +872,14 @@ void ShowConnectionQuality()
     char FrontView_Connected[]    = "Connected";
     char Visible[]                = "vis Quality,1";
     char TXModuleMSG[]            = "** Using TX module **";
-
-    int  ConnectionQuality        = GetSuccessRate();
+    static uint16_t                 LastConnectionQuality   = 0;
+    uint16_t  ConnectionQuality        = GetSuccessRate();
 
     if (PPMdata.UseTXModule) SendText(FrontView_Connected, TXModuleMSG);
     if (!LedWasGreen) return;
-    SendValue(Quality, ConnectionQuality); // show quality of connection in progress bar
-    strcpy(Msgbuf, Msg_Connected);
-    
-    if  ((millis() - LedGreenMoment) > BINDINGTIME) {    // Takes 2 seconds to get a good reading
+    if (ConnectionQuality != LastConnectionQuality) {
+        SendValue(Quality, ConnectionQuality); // show quality of connection in progress bar
+        strcpy(Msgbuf, Msg_Connected);
         if (ConnectionQuality >= 100) strcat(Msgbuf, Msg_ConnectedPerfect); // show quality as a comment
         if ((ConnectionQuality >= 95) && (ConnectionQuality < 100)) strcat(Msgbuf, Msg_ConnectedExcellent);
         if ((ConnectionQuality >= 90) && (ConnectionQuality < 95))  strcat(Msgbuf, Msg_ConnectedVGood);
@@ -888,13 +887,11 @@ void ShowConnectionQuality()
         if ((ConnectionQuality >= 50) && (ConnectionQuality < 75))  strcat(Msgbuf, Msg_ConnectedMarginal);
         if ((ConnectionQuality >= 25) && (ConnectionQuality < 50))  strcat(Msgbuf, Msg_ConnectedWeak);
         if ((ConnectionQuality >= 1)  && (ConnectionQuality < 25))  strcat(Msgbuf, Msg_ConnectedVWeak);
-    }else{
-        strcpy(Msgbuf, Msg_Connecting);
-    }
-    SendText(FrontView_Connected, Msgbuf);
-    SendCommand(Visible);
+        SendText(FrontView_Connected, Msgbuf);
+        SendCommand(Visible);
+        LastConnectionQuality = ConnectionQuality;
+   }
 }
-
 /*********************************************************************************************************************************/
 //                  My new version of the the traditional "map()" function -- but here with exponential added.
 /*********************************************************************************************************************************/

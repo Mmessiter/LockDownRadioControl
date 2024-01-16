@@ -89,6 +89,7 @@
     #define SCREENCHANGEWAIT       100                          // allow time for screen to appear
     #define PACKETNUMBERMAX        10                           // only 7 are so far in use but by making this larger we make updates infrequent
     #define TXMODULESUPPORT        1                            // 1 = TX module support enabled
+    #define BATTERY_CHECK_INTERVAL 15000                        // 15 seconds between battery checks
 
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
@@ -963,9 +964,12 @@ bool     BeQuiet             = false;
 bool     ReconnectingNow     = true;
 uint32_t LastHopTime         = 0;                                       //  Time of last hop
 uint8_t  ParametersToBeSent[40];
-uint8_t  ParametersToBeSentPointer = 0;
-bool     UsingDefaultPipeAddress   = true;
-bool     DontChangePipeAddress     = false;
+uint8_t  ParametersToBeSentPointer  = 0;
+bool     UsingDefaultPipeAddress    = true;
+bool     DontChangePipeAddress      = false;
+bool     LastAutoModelSelect        = false;
+bool     LastCopyTrimsToAll         = false;
+uint8_t  OldRate                    = 0;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
