@@ -1834,8 +1834,9 @@ FLASHMEM void setup()
 // **************************************************************************************************************************************************************
 void RationaliseBuddy()
 {
-    PupilIsAlive  = 0;
-    MasterIsAlive = 0;
+    PupilIsAlive    = 0;
+    MasterIsAlive   = 0;
+    CurrentMode     = NORMAL;
 
     if (WasBuddyPupilOnWireless && !BuddyPupilOnWireless) {         // Pupil has just gone off buddy mode
         ConfigureRadio();                                           // Very like InitRadio but without Radio1.begin() !
@@ -1859,6 +1860,7 @@ void RationaliseBuddy()
         WirelessBuddy = false;
     }
     if (BuddyPupilOnWireless) {
+        CurrentMode         = LISTENMODE;                   // set the mode to listen only
         ModelMatched        = false;
         BoundFlag           = false;
         Connected           = false;
