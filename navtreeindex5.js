@@ -1,5 +1,12 @@
 var NAVTREEINDEX5 =
 {
+"MPU6050__9Axis__MotionApps41_8h.html#a46b28dbcdbf39e66ec0ecc073a7345d4":[5,0,0,0,0,0,7,6],
+"MPU6050__9Axis__MotionApps41_8h.html#a48c60b057902adf805797f183286728d":[5,0,0,0,0,0,7,12],
+"MPU6050__9Axis__MotionApps41_8h.html#a515a845ea5139d8cf1c7f09ad6dad243":[5,0,0,0,0,0,7,23],
+"MPU6050__9Axis__MotionApps41_8h.html#a73809107539df84eaf01f6a4dea4fbff":[5,0,0,0,0,0,7,25],
+"MPU6050__9Axis__MotionApps41_8h.html#a73cf3e57e32321cb193b3cc4b041cc6c":[5,0,0,0,0,0,7,15],
+"MPU6050__9Axis__MotionApps41_8h.html#a75acaba9e781937468d0911423bc0c35":[5,0,0,0,0,0,7,24],
+"MPU6050__9Axis__MotionApps41_8h.html#a8a3c5c6e2c14ced6f6bb5c68ffc70082":[5,0,0,0,0,0,7,30],
 "MPU6050__9Axis__MotionApps41_8h.html#a8c58c1a4bc98cdbf19a2a070cf889524":[5,0,0,0,0,0,7,29],
 "MPU6050__9Axis__MotionApps41_8h.html#a8e30ff0704664fcb13dabf0c4dc5c8f5":[5,0,0,0,0,0,7,3],
 "MPU6050__9Axis__MotionApps41_8h.html#a910fb5f01313d339d3b835d45e1e5ad0":[5,0,0,0,0,0,7,21],
@@ -242,12 +249,5 @@ var NAVTREEINDEX5 =
 "Quadcopter_2src_2main_8cpp.html#abd1309f81323033281dddc310cbfb1eb":[5,0,0,0,1,184],
 "Quadcopter_2src_2main_8cpp.html#abd4e7dcf75a0b2783389b8b3f8d03911":[5,0,0,0,1,20],
 "Quadcopter_2src_2main_8cpp.html#abd8ade0bc330fe3504214184429e1d02":[5,0,0,0,1,81],
-"Quadcopter_2src_2main_8cpp.html#abdeac7f9288bf09fd6e1739d22ff8bea":[5,0,0,0,1,15],
-"Quadcopter_2src_2main_8cpp.html#abea7ea19fdc8cf35d1c9ec5b8726808c":[5,0,0,0,1,201],
-"Quadcopter_2src_2main_8cpp.html#ac119332644a91fcd9a93df0d7f27db09":[5,0,0,0,1,112],
-"Quadcopter_2src_2main_8cpp.html#ac15aa9622766ddd0b67c720c4e2a7c96":[5,0,0,0,1,31],
-"Quadcopter_2src_2main_8cpp.html#ac3911351a5c7f3c279a0043ee8d82aca":[5,0,0,0,1,179],
-"Quadcopter_2src_2main_8cpp.html#ac3fef4926a251b91d04b92a74a70cf98":[5,0,0,0,1,233],
-"Quadcopter_2src_2main_8cpp.html#ac4b36cc4c9335e33316312f3428ec8ad":[5,0,0,0,1,84],
-"Quadcopter_2src_2main_8cpp.html#ac6ac8f7dadfc13730ef787e4a1067aef":[5,0,0,0,1,175]
+"Quadcopter_2src_2main_8cpp.html#abdeac7f9288bf09fd6e1739d22ff8bea":[5,0,0,0,1,15]
 };
