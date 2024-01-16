@@ -550,20 +550,14 @@ void PopulateDataView(){
     char         DataView_txv[]         = "txv";  
     unsigned int TempModelId = 0;
 
-    
-  
-
-        
         if (LastPacketsPerSecond != PacketsPerSecond) {
             LastPacketsPerSecond = PacketsPerSecond;
             SendValue(DataView_pps, PacketsPerSecond);
         }
-        
         if (LastLostPackets != TotalLostPackets) {
             LastLostPackets = TotalLostPackets;
             SendValue(DataView_lps, TotalLostPackets);   
         }
-
         if (LastGapLongest != GapLongest) {
             LastGapLongest = GapLongest;
             SendValue(DataView_Ls, GapLongest);
@@ -576,18 +570,14 @@ void PopulateDataView(){
             LastRX1TotalTime = RX1TotalTime;
             SendValue(DataView_Sg, RX1TotalTime);
         }
-      
         if (LastGapAverage != GapAverage) {
             LastGapAverage = GapAverage;
             SendValue(DataView_Ag, GapAverage);
         }
-
-
         if (LastRX2TotalTime != RX2TotalTime) {
             LastRX2TotalTime = RX2TotalTime;
             SendValue(DataView_Gc, RX2TotalTime);
         }
-        
         
         SendText(DataView_Alt, ModelAltitude);
         SendText(DataView_MaxAlt, Maxaltitude);
@@ -772,7 +762,7 @@ FASTRUN void ShowComms() // heer
     }
     CheckScreenTime();                  // Check if screen needs to be turned off
     CheckBatteryStates();               // Only every 15 seconds now
-     Look(millis() - LastShowTime);
+    // Look(millis() - LastShowTime);
 } // end ShowComms()
 
 /*********************************************************************************************************************************/
