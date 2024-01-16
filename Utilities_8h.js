@@ -29,7 +29,7 @@ var Utilities_8h =
     [ "getDate", "Utilities_8h.html#a100af87d91fcaa6f23f2ca6a2fe146cc", null ],
     [ "GetLEDBrightness", "Utilities_8h.html#a549a702bb9b539c6b3a4f20cce65adcc", null ],
     [ "GetNextNumber", "Utilities_8h.html#a3a1bb848113ddbbc27294921fa92f92a", null ],
-    [ "GetSuccessRate", "Utilities_8h.html#a9f5745d51ac7a3efbee333bcacd06c50", null ],
+    [ "GetSuccessRate", "Utilities_8h.html#a066dc26c890b68ae8f6652b29bb461cd", null ],
     [ "getTime", "Utilities_8h.html#ae96ca3df2e8b9eef75d400de6ef06db3", null ],
     [ "IncDate", "Utilities_8h.html#ac3f1d629a53f2b8bb9aa5bdc2b0a730d", null ],
     [ "IncHour", "Utilities_8h.html#aee918002ab8f85e66499b048b6ce722b", null ],
