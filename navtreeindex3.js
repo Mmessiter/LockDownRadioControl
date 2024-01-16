@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"1Definitions_8h.html#af92d3280f8b2a0ff5023e4a7505491d9":[5,0,3,0,0,0,559],
 "1Definitions_8h.html#af941d3a33327b2cee79e058ba9cd65f6":[5,0,3,0,0,0,310],
 "1Definitions_8h.html#af963d49af3aeb834d322601d3c3e3d04":[5,0,3,0,0,0,504],
 "1Definitions_8h.html#af997672faeb296b0286c167d43425c7b":[5,0,3,0,0,0,234],
@@ -13,18 +14,18 @@ var NAVTREEINDEX3 =
 "1Definitions_8h.html#afc6ed518e5867e4d7095ec597eae9443":[5,0,3,0,0,0,102],
 "1Definitions_8h.html#afc89d706ecd6b404393785f7b755303d":[5,0,3,0,0,0,124],
 "1Definitions_8h.html#afcc84f58e148f2124a4a2cc47f9bfa00":[5,0,3,0,0,0,79],
-"1Definitions_8h.html#afd042feb8b8e181cbff0d5f27fde063e":[5,0,3,0,0,0,717],
+"1Definitions_8h.html#afd042feb8b8e181cbff0d5f27fde063e":[5,0,3,0,0,0,718],
 "1Definitions_8h.html#afe31e2cddc17dd03549ad02cc613f743":[5,0,3,0,0,0,487],
-"1Definitions_8h.html#afe41d3be378c52d1dc2c6e8310ac9a0e":[5,0,3,0,0,0,644],
+"1Definitions_8h.html#afe41d3be378c52d1dc2c6e8310ac9a0e":[5,0,3,0,0,0,645],
 "1Definitions_8h.html#afe513398f72d5e48f691830a1ef6eb42":[5,0,3,0,0,0,404],
 "1Definitions_8h.html#afe63280e8006a836668a21fa62ed7630":[5,0,3,0,0,0,59],
-"1Definitions_8h.html#afe812fd316c28837dfd25f413e7d00d4":[5,0,3,0,0,0,715],
-"1Definitions_8h.html#aff20e4985ae632d4c59eeb3d772874c9":[5,0,3,0,0,0,779],
-"1Definitions_8h.html#aff4581f5a99a6d8eb37ef22e94d858d3":[5,0,3,0,0,0,701],
+"1Definitions_8h.html#afe812fd316c28837dfd25f413e7d00d4":[5,0,3,0,0,0,716],
+"1Definitions_8h.html#aff20e4985ae632d4c59eeb3d772874c9":[5,0,3,0,0,0,780],
+"1Definitions_8h.html#aff4581f5a99a6d8eb37ef22e94d858d3":[5,0,3,0,0,0,702],
 "1Definitions_8h.html#aff628072047986ff5293dbb907c3f676":[5,0,3,0,0,0,443],
 "1Definitions_8h.html#aff6fa8906188d3249b01bf59de47df2f":[5,0,3,0,0,0,337],
-"1Definitions_8h.html#aff7cb562fa4cf3e5048872d9be602c01":[5,0,3,0,0,0,767],
-"1Definitions_8h.html#aff9eea2f8a1a10bc94b26b1f84b7b27b":[5,0,3,0,0,0,601],
+"1Definitions_8h.html#aff7cb562fa4cf3e5048872d9be602c01":[5,0,3,0,0,0,768],
+"1Definitions_8h.html#aff9eea2f8a1a10bc94b26b1f84b7b27b":[5,0,3,0,0,0,602],
 "1Definitions_8h.html#affc6c0de18db71aa5ad8b4d241339731":[5,0,3,0,0,0,285],
 "1Definitions_8h_source.html":[5,0,3,0,0,0],
 "BuddyPPM_8h.html":[5,0,3,0,0,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "MPU6050_8h.html#a851e3f5ae43d03ef3d59916a731a8c6a":[5,0,0,0,0,0,4,149],
 "MPU6050_8h.html#a8588292fe63c60797fa35d2fa45304ff":[5,0,0,0,0,0,4,189],
 "MPU6050_8h.html#a866eb43544165dc8c777d82bab9860e6":[5,0,0,0,0,0,4,289],
-"MPU6050_8h.html#a86a744acedbe8a5ec7c82792e050d911":[5,0,0,0,0,0,4,8],
-"MPU6050_8h.html#a87df5ed3b1736da250e8127810adf44d":[5,0,0,0,0,0,4,263]
+"MPU6050_8h.html#a86a744acedbe8a5ec7c82792e050d911":[5,0,0,0,0,0,4,8]
 };
