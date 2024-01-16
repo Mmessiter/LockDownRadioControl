@@ -970,6 +970,7 @@ bool     DontChangePipeAddress      = false;
 bool     LastAutoModelSelect        = false;
 bool     LastCopyTrimsToAll         = false;
 uint8_t  OldRate                    = 0;
+bool     ForceVoltDisplay           = false;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

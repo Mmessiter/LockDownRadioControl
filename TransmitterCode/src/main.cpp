@@ -606,8 +606,8 @@ void  PopulateFrontView(){
     char         FrontView_AckPayload[] = "AckPayload";
     char         FrontView_RXBV[]       = "RXBV";
     char         MsgBuddying[]          = "* Buddy *";
-    char         FrontView_Connected[] = "Connected";
-    char         InVisible[]           = "vis Quality,0";
+    char         FrontView_Connected[]  = "Connected";
+    char         InVisible[]            = "vis Quality,0";
         
         ShowConnectionQuality();
         if (LastAutoModelSelect != AutoModelSelect) {
@@ -624,7 +624,6 @@ void  PopulateFrontView(){
         }
         if (BuddyPupilOnPPM || BuddyPupilOnWireless) SendText(FrontView_Connected, MsgBuddying); 
         if (LedWasGreen) {
-          
             if (BoundFlag) {
                 if (!Reconnected) Reconnected = true;        
                 StartInactvityTimeout();
@@ -695,11 +694,11 @@ void CheckBatteryStates(){
     char         WarnNow[]             = "vis Warning,1";
     char         WarnOff[]             = "vis Warning,0";
     static uint32_t LocalTimer = 0;
-    uint32_t    Now = millis();
+
+    if ((millis() - LocalTimer < BATTERY_CHECK_INTERVAL) && (!ForceVoltDisplay)) return;                  // Only check every 15 seconds
    
-    if (Now < BATTERY_CHECK_INTERVAL ) Now = BATTERY_CHECK_INTERVAL+100;    // Display battery status immediately
-    if (Now - LocalTimer < BATTERY_CHECK_INTERVAL) return;                  // Only check every 15 seconds
     LocalTimer = millis();
+    ForceVoltDisplay = false;
     if (CheckTXVolts() || CheckRXVolts()) {                                 // Note: If TX Battery is low, then CheckRXVolts() is not even called.
             PlaySound(WarningSound);                                        // Issue audible warning 
             LedIsBlinking = true;
@@ -738,7 +737,7 @@ FASTRUN void ShowComms() // heer
     }
     CheckScreenTime();                  // Check if screen needs to be turned off
     CheckBatteryStates();               // Only every 15 seconds now
-  //  Look(millis() - LastShowTime);
+    // Look(millis() - LastShowTime);
 } // end ShowComms()
 
 /*********************************************************************************************************************************/
@@ -6416,6 +6415,7 @@ void GotoFrontView()
     LastAutoModelSelect = true; 
     LastCopyTrimsToAll  = true; 
     OldRate             = 235;  // forced different
+    ForceVoltDisplay    = true; // force redisplay of voltage
 
     if (CurrentView != FRONTVIEW) {
         if (CurrentView == SCANVIEW) DoScanEnd();                       // Put transceiver back to normal mode
