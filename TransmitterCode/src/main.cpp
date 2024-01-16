@@ -547,22 +547,57 @@ void PopulateDataView(){
     char         MasterID[]            = "t28";
     char         Vbuf[50];
     char         nb2[5];
-    char         DataView_txv[]         = "txv";  // Labels on Nextion // heer
+    char         DataView_txv[]         = "txv";  
     unsigned int TempModelId = 0;
 
-        SendValue(DataView_pps, PacketsPerSecond);
-        SendValue(DataView_lps, TotalLostPackets);           
+    
+  
+
+        
+        if (LastPacketsPerSecond != PacketsPerSecond) {
+            LastPacketsPerSecond = PacketsPerSecond;
+            SendValue(DataView_pps, PacketsPerSecond);
+        }
+        
+        if (LastLostPackets != TotalLostPackets) {
+            LastLostPackets = TotalLostPackets;
+            SendValue(DataView_lps, TotalLostPackets);   
+        }
+
+        if (LastGapLongest != GapLongest) {
+            LastGapLongest = GapLongest;
+            SendValue(DataView_Ls, GapLongest);
+        }
+        if (LastRadioSwaps != RadioSwaps) {
+            LastRadioSwaps = RadioSwaps;
+            SendValue(DataView_Ts, RadioSwaps);
+        }
+        if (LastRX1TotalTime != RX1TotalTime) {
+            LastRX1TotalTime = RX1TotalTime;
+            SendValue(DataView_Sg, RX1TotalTime);
+        }
+      
+        if (LastGapAverage != GapAverage) {
+            LastGapAverage = GapAverage;
+            SendValue(DataView_Ag, GapAverage);
+        }
+
+
+        if (LastRX2TotalTime != RX2TotalTime) {
+            LastRX2TotalTime = RX2TotalTime;
+            SendValue(DataView_Gc, RX2TotalTime);
+        }
+        
+        
         SendText(DataView_Alt, ModelAltitude);
         SendText(DataView_MaxAlt, Maxaltitude);
         SendText(DataView_Temp, ModelTempRX);
         SendText(DataView_Rx, ThisRadio);
         SendText(DataView_rxv, ReceiverVersionNumber);
-        SendValue(DataView_Ls, GapLongest);
-        SendValue(DataView_Ts, RadioSwaps);
-        SendValue(DataView_Sg, RX1TotalTime);
-        SendValue(DataView_Ag, GapAverage);
-        SendValue(DataView_Gc, RX2TotalTime );
-        snprintf(Vbuf, 7, "%d", (int)SbusRepeats);
+       
+       
+       
+       snprintf(Vbuf, 7, "%d", (int)SbusRepeats);
         SendText(Sbs, Vbuf);
         TempModelId = ModelsMacUnionSaved.Val32[0];
         snprintf(Vbuf, 9, "%X", TempModelId);
@@ -695,12 +730,12 @@ void CheckBatteryStates(){
     char         WarnOff[]             = "vis Warning,0";
     static uint32_t LocalTimer = 0;
 
-    if ((millis() - LocalTimer < BATTERY_CHECK_INTERVAL) && (!ForceVoltDisplay)) return;                  // Only check every 15 seconds
+    if ((millis() - LocalTimer < BATTERY_CHECK_INTERVAL) && (!ForceVoltDisplay)) return;    // Only check every 15 seconds unless forced
    
     LocalTimer = millis();
     ForceVoltDisplay = false;
-    if (CheckTXVolts() || CheckRXVolts()) {                                 // Note: If TX Battery is low, then CheckRXVolts() is not even called.
-            PlaySound(WarningSound);                                        // Issue audible warning 
+    if (CheckTXVolts() || CheckRXVolts()) {                                                 // Note: If TX Battery is low, then CheckRXVolts() is not even called.
+            PlaySound(WarningSound);                                                        // Issue audible warning 
             LedIsBlinking = true;
            if (CurrentView == FRONTVIEW) SendCommand(WarnNow);
     }
@@ -737,7 +772,7 @@ FASTRUN void ShowComms() // heer
     }
     CheckScreenTime();                  // Check if screen needs to be turned off
     CheckBatteryStates();               // Only every 15 seconds now
-    // Look(millis() - LastShowTime);
+     Look(millis() - LastShowTime);
 } // end ShowComms()
 
 /*********************************************************************************************************************************/
@@ -5798,6 +5833,13 @@ FASTRUN void ButtonWasPressed()
         {
             CurrentView  = DATAVIEW;
             LastShowTime = 0;
+            LastPacketsPerSecond = 0;
+            LastLostPackets      = 0;
+            LastGapLongest       = 0;
+            LastRadioSwaps       = 0;
+            LastRX1TotalTime     = 0;
+            LastRX2TotalTime     = 0;
+            LastGapAverage       = 0;
             SendCommand(pDataView);
             ClearText();
             return;

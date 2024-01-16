@@ -971,6 +971,13 @@ bool     LastAutoModelSelect        = false;
 bool     LastCopyTrimsToAll         = false;
 uint8_t  OldRate                    = 0;
 bool     ForceVoltDisplay           = false;
+uint16_t LastPacketsPerSecond = 0;
+uint16_t LastLostPackets      = 0;
+uint32_t LastGapLongest       = 0;
+uint16_t LastRadioSwaps       = 0;
+uint16_t LastRX1TotalTime     = 0;
+uint16_t LastRX2TotalTime     = 0;
+uint32_t LastGapAverage       = 0;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
