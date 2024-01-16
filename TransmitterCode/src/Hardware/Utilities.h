@@ -559,7 +559,7 @@ void ClearText()
 }
 
 /*********************************************************************************************************************************/
-void CheckScreenTime()
+void CheckScreenTime() // turn off screen after a timeout
 {
     char ScreenOff[] = "dim=10";
     if ((millis() - ScreenTimeTimer) > ScreenTimeout * 1000) {

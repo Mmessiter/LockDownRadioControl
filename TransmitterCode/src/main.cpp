@@ -716,26 +716,28 @@ void CheckBatteryStates(){
 /** @brief SHOW COMMS */
 
 // This displays many telemetry data onto the current screen
+// It is called once a second
+// it's re-optimised now to run in about 0.5ms usually 
 
 FASTRUN void ShowComms() // heer 
 {
     if (millis() - LastShowTime < SHOWCOMMSDELAY) return;
     LastShowTime = millis();
-    switch(CurrentView){
+    switch (CurrentView) {
             case FRONTVIEW:
-                PopulateFrontView();
+                PopulateFrontView();    // This is the main screen
                 break;
             case DATAVIEW:
-                PopulateDataView();
+                PopulateDataView();     // This is the telemetry data screen
                 break;
             case GPSVIEW:
-                PopulateGPSView();
+                PopulateGPSView();      // This is the GPS screen
                 break;  
             default:    
                 break;
     }
-    CheckScreenTime();
-    CheckBatteryStates();
+    CheckScreenTime();                  // Check if screen needs to be turned off
+    CheckBatteryStates();               // Only every 15 seconds now
   //  Look(millis() - LastShowTime);
 } // end ShowComms()
 
