@@ -406,6 +406,7 @@ var 1Definitions_8h =
     [ "SendText", "1Definitions_8h.html#afe513398f72d5e48f691830a1ef6eb42", null ],
     [ "SendValue", "1Definitions_8h.html#a1e20efc1e419b252b50d36f9924503fc", null ],
     [ "SendViaPPM", "1Definitions_8h.html#aa82141294380cd110619991bfb578297", null ],
+    [ "SetDefaultValues", "1Definitions_8h.html#acbd0460ea44a7d07e4d77878411febb4", null ],
     [ "SetDS1307ToCompilerTime", "1Definitions_8h.html#ac4d5d9012481283090fff8d410116eb2", null ],
     [ "SetTestFrequencies", "1Definitions_8h.html#a31a35307bbac88ceda244272f25d399a", null ],
     [ "SetThePipe", "1Definitions_8h.html#a70dc6f8d2e5ccef6b8e4a2b9b0afb2ce", null ],

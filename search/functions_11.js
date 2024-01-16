@@ -64,7 +64,7 @@ var searchData=
   ['setauxvddiolevel_61',['setAuxVDDIOLevel',['../classMPU6050.html#a7c666c20e26869bc80646f1b2c3d69bc',1,'MPU6050']]],
   ['setclockoutputenabled_62',['setClockOutputEnabled',['../classMPU6050.html#a71ec4642b6f6c937bbf6a24fea4179e5',1,'MPU6050']]],
   ['setclocksource_63',['setClockSource',['../classMPU6050.html#a4c1cd147d038e024bdeaa053c4d77734',1,'MPU6050']]],
-  ['setdefaultvalues_64',['SetDefaultValues',['../TransmitterCode_2src_2main_8cpp.html#acbd0460ea44a7d07e4d77878411febb4',1,'main.cpp']]],
+  ['setdefaultvalues_64',['SetDefaultValues',['../1Definitions_8h.html#acbd0460ea44a7d07e4d77878411febb4',1,'SetDefaultValues():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#acbd0460ea44a7d07e4d77878411febb4',1,'SetDefaultValues():&#160;main.cpp']]],
   ['setdeviceid_65',['setDeviceID',['../classMPU6050.html#aaefb4b3d93cf4b78d56cd63b10ea0e97',1,'MPU6050']]],
   ['setdhpfmode_66',['setDHPFMode',['../classMPU6050.html#a44cc43aaad1e52c1ba3142d4490af611',1,'MPU6050']]],
   ['setdlpfbandwidth_67',['setDlpfBandwidth',['../classMPU9250.html#a0b3804d17270a7bfe40f2e31e2e4bdc8',1,'MPU9250']]],
