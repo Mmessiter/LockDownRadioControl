@@ -2212,7 +2212,7 @@ int AnalogueReed(uint8_t InputChannel)
 
 /*********************************************************************************************************************************/
 
-void SetDefaultValues() // heer 
+void SetDefaultValues() 
 {
     uint16_t j         = 0;
     uint16_t i         = 0;
@@ -3369,8 +3369,6 @@ void GotoModelsView()
     SaveCurrentModel();
     SendCommand(GoModelsView);
     CurrentView = MODELSVIEW;
-    CurrentMode = SENDNOTHING;
-    BlueLedOn();
     UpdateModelsNameEveryWhere();
     BuildDirectory();
     LoadFileSelector();
@@ -3432,7 +3430,6 @@ void LogEND()
     char c0[]        = "c0";
     char sw0[]       = "sw0";
     char pDataView[] = "page DataView";
-    CurrentMode      = NORMAL;
     CurrentView      = DATAVIEW;
     LastShowTime     = 0;
     MinimumGap       = GetValue(n0);
@@ -3478,7 +3475,6 @@ void SetupViewFM()
     SaveAllParameters();
     CurrentView = RXSETUPVIEW;
     SendCommand(page_RXSetupView);
-    CurrentMode = NORMAL; // Send data again
     UpdateModelsNameEveryWhere();
 }
 
@@ -4082,7 +4078,6 @@ void StartModelSetup()
     CurrentView = RXSETUPVIEW;
     SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
-    CurrentMode  = NORMAL;
     LastTimeRead = 0;
 }
 
@@ -4436,8 +4431,6 @@ void CheckAllModelIds()
 
     SendCommand(GoIDview);
     CurrentView = IDCHECKVIEW;
-    CurrentMode = SENDNOTHING;
-
     for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER - 1; ++ModelNumber) {
         ReadOneModel(ModelNumber);
         ModelIDs[ModelNumber] = ModelsMacUnionSaved.Val64;
@@ -4944,7 +4937,6 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(AudioView, TextIn) > 0) { // Display screen with audio options
-            CurrentMode = NORMAL;
             CurrentView = AUDIOVIEW;
             SendCommand(page_AudioView);
             SendValue(n0, AudioVolume);
@@ -4963,7 +4955,6 @@ FASTRUN void ButtonWasPressed()
             return;
         }
         if (InStrng(SetupAud, TextIn) > 0) { // Exit from screen with audio options
-            CurrentMode       = NORMAL;
             AudioVolume       = GetValue(n0);
             Brightness        = GetValue(n1);
             PlayFanfare       = GetValue(c0);
@@ -4989,7 +4980,6 @@ FASTRUN void ButtonWasPressed()
             CurrentView = TXSETUPVIEW;
             SendCommand(page_SetupView);
             LastTimeRead = 0;
-            CurrentMode  = NORMAL;
             CurrentView  = TXSETUPVIEW;
             ClearText();
             UpdateModelsNameEveryWhere();
@@ -5036,7 +5026,6 @@ FASTRUN void ButtonWasPressed()
             CurrentView = TXSETUPVIEW;
             SendCommand(page_SetupView);
             LastTimeRead = 0;
-            CurrentMode  = NORMAL;
             SendCommand(ProgressEnd);
             UpdateModelsNameEveryWhere();
             ClearText();
@@ -5047,7 +5036,6 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(DataEnd, TextIn) > 0) { //  Exit from Data screen
             SendCommand(page_RXSetupView);
             CurrentView = RXSETUPVIEW;
-            CurrentMode = NORMAL;
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
@@ -5159,7 +5147,6 @@ FASTRUN void ButtonWasPressed()
             SendValue(lpm, AutoModelSelect);
             SendValue(Bwn, LowBattery);
             CurrentView = OPTIONS_VIEW;
-            CurrentMode = NORMAL;
             ClearText();
             return;
         }
@@ -5325,7 +5312,6 @@ FASTRUN void ButtonWasPressed()
             SendValue(Progress, 95);
             SaveOneModel(ModelNumber);
             SendValue(Progress, 100);
-            CurrentMode = NORMAL;
             UpdateButtonLabels();
             CurrentView = RXSETUPVIEW;
             SendCommand(page_RXSetupView);
@@ -5481,7 +5467,7 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(CalibrateView, TextIn)) { // heer start calibrate view!
+        if (InStrng(CalibrateView, TextIn)) { 
             SendCommand(pCalibrateView);
             Force_ReDisplay();
             CurrentView = CALIBRATEVIEW;
@@ -5664,7 +5650,6 @@ FASTRUN void ButtonWasPressed()
             CurrentView = FRONTVIEW;
             ClearText();
             PreviousBank = 250; // sure to be different
-            CurrentMode  = NORMAL;
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
@@ -5748,7 +5733,6 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(Data_View, TextIn))
         {
-            CurrentMode  = NORMAL;
             CurrentView  = DATAVIEW;
             LastShowTime = 0;
             SendCommand(pDataView);
@@ -5812,7 +5796,7 @@ FASTRUN void ButtonWasPressed()
             DisplayCurveAndServoPos();
             return;
         }
-        if (CurrentMode == NORMAL) { // heer
+        if (CurrentMode == NORMAL) { 
             if (strcmp(TextIn, "Calibrate1") == 0) {
                 BlueLedOn();
                 SetDefaultValues();
@@ -5829,7 +5813,7 @@ FASTRUN void ButtonWasPressed()
             }
         }
 
-        if (CurrentMode == CALIBRATELIMITS) { // heer
+        if (CurrentMode == CALIBRATELIMITS) {
             if (strcmp(TextIn, "Calibrate1") == 0) {
                 CurrentMode = CENTRESTICKS;
                 CurrentView = CALIBRATEVIEW;
@@ -5839,7 +5823,7 @@ FASTRUN void ButtonWasPressed()
                 return;
             }
         }
-        if (CurrentMode == CENTRESTICKS) { // heer!!
+        if (CurrentMode == CENTRESTICKS) { 
             if (strcmp(TextIn, "Calibrate1") == 0) {
                 CurrentMode = NORMAL;
                 RedLedOn();
@@ -6367,21 +6351,22 @@ void GotoFrontView()
     MasterIsAlive = 0;
 
     if (CurrentView != FRONTVIEW) {
-        if (CurrentView == SCANVIEW) DoScanEnd();
-        SendCommand(page_FrontView);
-        CurrentView = FRONTVIEW;
-        CurrentMode = NORMAL;
-        UpdateModelsNameEveryWhere();
-        SafetyWasOn ^= 1;           // this forces a re-display of safety state
-        BeQuiet = true;             // this means no announcement of safety this time
+        if (CurrentView == SCANVIEW) DoScanEnd();                       // Put transceiver back to normal mode
+        if (CurrentView == PONGVIEW) ReadOneModel(ModelNumber);         // Return to current model
+        if (CurrentMode != LISTENMODE) CurrentMode = NORMAL;            // Return to normal mode unless in BUDDY listen mode
+        SendCommand(page_FrontView);                                    // Set to FrontView
+        CurrentView = FRONTVIEW;                                        // Set to FrontView
+        UpdateModelsNameEveryWhere();                                   // Update model name
+        SafetyWasOn ^= 1;                                               // this forces a re-display of safety state
+        BeQuiet = true;                                                 // this means no announcement of safety this time
         ShowBank();
         LastTimeRead = 0;
-        Reconnected  = false;       // this is to make '** Connected! **' redisplay (in ShowComms())
-        LastSeconds  = 0;           // This forces redisplay of timer...
+        Reconnected  = false;                                           // this is to make '** Connected! **' redisplay (in ShowComms())
+        LastSeconds  = 0;                                               // This forces redisplay of timer...
         Force_ReDisplay();
         ShowMotorTimer();
         ClearText();
-        LastShowTime = 0; // this is to make redisplay sooner (in ShowComms())
+        LastShowTime = 0;                                              // this is to make redisplay sooner (in ShowComms())
         SendText(FrontView_Connected, na);
     }
     for (int i = 0; i < 4; ++i) {
@@ -6468,7 +6453,7 @@ void CheckPowerOffButton()
         TurnOffSecondToGo = PowerOffWarningSeconds;
     }
 
-    if (PowerOffTimer) { // count down started? // heer
+    if (PowerOffTimer) { // count down started
         if (!PowerWarningVisible) {
             SendCommand(StillConnected);
             SaveOneModel(ModelNumber); // in case any trim change etc wasn't saved
@@ -6629,8 +6614,11 @@ FASTRUN void loop()
             SendBindingPipe(); // Only if not bound yet - overwrite low throttle setting
         }
     }
-
+ // Look(CurrentMode);
     switch (CurrentMode) {
+
+
+       
         case NORMAL: // 0
 #ifdef TXMODULESUPPORT
             if (!PPMdata.UseTXModule) {
@@ -6660,6 +6648,7 @@ FASTRUN void loop()
             break;
         case LISTENMODE:                                             // 6  ... listen only ... for wireless buddy
             DoWirelessBuddyListen();
+           
             break;
         default:
             break;

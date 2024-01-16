@@ -12,6 +12,7 @@ void StartPong()
 {
     char page_PongView[] = "page PongView";
     SendCommand(page_PongView);
+    SetDefaultValues();
     CurrentView = PONGVIEW;
     CurrentMode = PONGMODE;
     BlueLedOn();

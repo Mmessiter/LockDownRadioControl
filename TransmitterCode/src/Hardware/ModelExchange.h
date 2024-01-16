@@ -401,6 +401,10 @@ void ReceiveModelFile()
     RedLedOn();
     BoundFlag = true; // This just prevents jump to front screen (Cleared on leaving models area)
     ConfigureRadio();
+    if (BuddyPupilOnWireless) {
+        StartBuddyListen();
+         BoundFlag = false;
+    }
 }
 // ***********************************************************************************************************
 

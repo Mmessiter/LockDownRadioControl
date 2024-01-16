@@ -195,7 +195,6 @@ void GetSpecialPacket()                                                         
                                                                                         // Because the datarate is 2 meg the exchange is very fast. 
     static bool MasterIsInControl = true; 
     static uint32_t LastModelID = 0;
-    
     struct spd {
         char        Command[2];
         uint64_t    ModelID = 0;
@@ -206,7 +205,7 @@ void GetSpecialPacket()                                                         
     Compress(DataTosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS);                 // Compress 
     if (Radio1.available()) {                                                           // if a packet has arrived
         Radio1.writeAckPayload(1, &DataTosend.CompressedData, SizeOfCompressedData);    // Acknowledge the packet BY SENDING MY CHANNEL DATA!
-        delay(1);                                                                       // <-  *MUST* allow the ACK time to get going, otherwise the sender sees a failed packet    
+        delay(1);                                                                       // <-  *MUST* allow the ACK time to get going, otherwise the sender sees a failed packet          
         Radio1.read(&SpecialPacketData, sizeof SpecialPacketData);                      // read the packet if its still there
         if ((SpecialPacketData.Command[0] == 'B') && (MasterIsInControl)) {             // Buddy is now in control
             MasterIsInControl = false;                                                  // Buddy is now in control
@@ -229,11 +228,11 @@ void GetSpecialPacket()                                                         
         Radio1.startListening();                                                        // Start listening
     }else{                                                                              // No packet arrived so maybe master's dead? 
         if (millis() - LastPassivePacketTime > 10) {                                    // We expect a packet every 5 milliseconds
-           Radio1.stopListening(); 
-           Radio1.setChannel(QUIETCHANNEL);                                             // Set the recovery channel         
-           Radio1.startListening();
-           LastPassivePacketTime = millis();                                            // Reset the timer
-           MasterDetected(false);
+            Radio1.stopListening(); 
+            Radio1.setChannel(QUIETCHANNEL);                                            // Set the recovery channel         
+            Radio1.startListening();
+            MasterDetected(false);                                
+            LastPassivePacketTime = millis();                                           // Reset the timer
         }
     }
 }

@@ -21,10 +21,10 @@
 //               TX VERSION NUMBER   (May 2020 - January 2024 Malcolm Messiter)       *
 //**************************************************************************************
 
-    #define TXVERSION_MAJOR   2 // first three must match RX
+    #define TXVERSION_MAJOR   2 // first three must match RX but _EXTRA_ can be different
     #define TXVERSION_MINOR   4
     #define TXVERSION_MINIMUS 4 
-    #define TXVERSION_EXTRA   "c 13/01/24" 
+    #define TXVERSION_EXTRA   "d 16/01/24" 
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -593,7 +593,7 @@ FLASHMEM void    ReInitRadio(uint64_t Pipe);
 void             SendInitialSetupParams();
 void             SendOutstandingParameters();
 void             AddParameterstoQueue(uint8_t ID);
-
+void             SetDefaultValues();
 
 
 // **************************************************************************
