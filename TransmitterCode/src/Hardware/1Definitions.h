@@ -53,7 +53,7 @@
     #define CSN_PIN                8                             // for SPI to nRF24L01
     #define BUDDYPPMPORT           10                            // wired Buddybox PPM pi
     #define LOSTCONTACTCUTOFF      3                             // packets to lose before declaring lost contact 
-    #define PACEMAKER              5                             // 5ms means about 200 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+    #define PACEMAKER              5                             // 5ms means about 210 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
     #define TIMEFORTXMANAGMENT     2                             // was 3 ...  How many ms must remain spare between data packets before daring to undertake more trivial tasks
     #define BINDINGTIME            2000                          // 2 seconds to bind ?
     #define CHANNELSUSED           16                           
@@ -978,6 +978,9 @@ uint16_t LastRadioSwaps       = 0;
 uint16_t LastRX1TotalTime     = 0;
 uint16_t LastRX2TotalTime     = 0;
 uint32_t LastGapAverage       = 0;
+uint16_t LastSbusRepeats      = 0;  
+
+
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

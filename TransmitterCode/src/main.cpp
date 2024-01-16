@@ -586,12 +586,18 @@ void PopulateDataView(){
         SendText(DataView_rxv, ReceiverVersionNumber);
        
        
+       if (LastSbusRepeats != SbusRepeats) { // to be continued ...
+            LastSbusRepeats = SbusRepeats;
+            snprintf(Vbuf, 7, "%d", (int)SbusRepeats);
+            SendText(Sbs, Vbuf);
+        }
        
-       snprintf(Vbuf, 7, "%d", (int)SbusRepeats);
-        SendText(Sbs, Vbuf);
+      
+      
         TempModelId = ModelsMacUnionSaved.Val32[0];
         snprintf(Vbuf, 9, "%X", TempModelId);
         if (TempModelId) SendText(IdStored, Vbuf);
+        
         TempModelId = ModelsMacUnionSaved.Val32[1];
         snprintf(Vbuf, 9, "%X", TempModelId);
         if (TempModelId) SendText(IdStored1, Vbuf);
@@ -762,7 +768,7 @@ FASTRUN void ShowComms() // heer
     }
     CheckScreenTime();                  // Check if screen needs to be turned off
     CheckBatteryStates();               // Only every 15 seconds now
-    // Look(millis() - LastShowTime);
+//Look(millis() - LastShowTime);
 } // end ShowComms()
 
 /*********************************************************************************************************************************/
@@ -5830,6 +5836,7 @@ FASTRUN void ButtonWasPressed()
             LastRX1TotalTime     = 0;
             LastRX2TotalTime     = 0;
             LastGapAverage       = 0;
+            LastSbusRepeats      = 0;
             SendCommand(pDataView);
             ClearText();
             return;
