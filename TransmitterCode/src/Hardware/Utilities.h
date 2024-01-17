@@ -872,7 +872,7 @@ void ShowConnectionQuality()
     char FrontView_Connected[]    = "Connected";
     char Visible[]                = "vis Quality,1";
     char TXModuleMSG[]            = "** Using TX module **";
-    static uint16_t                 LastConnectionQuality   = 0;
+   
     uint16_t  ConnectionQuality        = GetSuccessRate();
 
     if (PPMdata.UseTXModule) SendText(FrontView_Connected, TXModuleMSG);

@@ -977,6 +977,7 @@ uint16_t LastRX1TotalTime     = 0;
 uint16_t LastRX2TotalTime     = 0;
 uint32_t LastGapAverage       = 0;
 uint16_t LastSbusRepeats      = 0;  
+uint16_t LastConnectionQuality = 0;
 
 
 

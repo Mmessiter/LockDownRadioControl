@@ -5832,7 +5832,7 @@ FASTRUN void ButtonWasPressed()
             LastRX2TotalTime     = 0;
             LastGapAverage       = 0;
             LastSbusRepeats      = 0;
-             ForceVoltDisplay    = true; 
+            ForceVoltDisplay    = true; 
             SendCommand(pDataView);
             ClearText();
             return;
@@ -6451,6 +6451,7 @@ void GotoFrontView()
     LastCopyTrimsToAll  = true; 
     OldRate             = 235;  // forced different
     ForceVoltDisplay    = true; // force redisplay of voltage
+    LastConnectionQuality = 0;  // force redisplay of connection quality
 
     if (CurrentView != FRONTVIEW) {
         if (CurrentView == SCANVIEW) DoScanEnd();                       // Put transceiver back to normal mode
