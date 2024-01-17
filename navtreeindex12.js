@@ -1,7 +1,5 @@
 var NAVTREEINDEX12 =
 {
-"macros_8h.html#ae1e0755ae9441b2835ac027a98707caa":[5,0,3,0,0,3,3],
-"macros_8h.html#aff7f985af10a021196ae5c9bf188c445":[5,0,3,0,0,3,2],
 "macros_8h_source.html":[5,0,3,0,0,3],
 "namespaceFHSS__data.html":[3,0,0],
 "namespaceFHSS__data.html#a052746df02560319bc39fa4c7d87408e":[3,0,0,3],

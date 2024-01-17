@@ -1,7 +1,5 @@
 var NAVTREEINDEX7 =
 {
-"TransmitterCode_2src_2main_8cpp.html#a515ad50eda3c39eddfdca4700eae9b5f":[5,0,3,0,1,94],
-"TransmitterCode_2src_2main_8cpp.html#a53d438145d004c3b053f245f494f4284":[5,0,3,0,1,41],
 "TransmitterCode_2src_2main_8cpp.html#a5467d21eeae42d1bfdb79914ef52d0ed":[5,0,3,0,1,21],
 "TransmitterCode_2src_2main_8cpp.html#a558ea014e230b7caa54ce5a37ad29b22":[5,0,3,0,1,125],
 "TransmitterCode_2src_2main_8cpp.html#a5774631aa02a8875cb823d0146e0c550":[5,0,3,0,1,50],
@@ -249,5 +247,7 @@ var NAVTREEINDEX7 =
 "Utilities_8h_source.html":[5,0,3,0,0,11],
 "annotated.html":[4,0],
 "classI2Cdev.html":[4,0,2],
-"classI2Cdev.html#a0a466e2323d9f719a1ecc9fa11ac5c84":[4,0,2,0]
+"classI2Cdev.html#a0a466e2323d9f719a1ecc9fa11ac5c84":[4,0,2,0],
+"classKalmanFilter.html":[4,0,3],
+"classKalmanFilter.html#a8926f502bfe4a426d891b8aeb8c3905c":[4,0,3,1]
 };
