@@ -7,7 +7,7 @@
 #ifndef BUDDYWIRELESS_H
     #define BUDDYWIRELESS_H
 
-    #define LOSTCONTACTTHRESHOLD   6                                            // 6 fails in a row and we declare the buddy or master dead
+    #define LOSTCONTACTTHRESHOLD   12                                           // 12 fails in a row and we declare the buddy or master dead
     #define ENCRYPT_KEY            0xFEADFEADBB                                 // The encryption key is used for the Pipe address between the transmitters 
    
 //*************************************************************************************************************************
@@ -236,13 +236,13 @@ void GetSpecialPacket()                                                         
         Radio1.setChannel(SpecialPacketData.Channel);                                   // Set the frequency channel
         Radio1.startListening();                                                        // Start listening
     }else{                                                                              // No packet arrived so maybe master's dead? 
-        if (millis() - LastPassivePacketTime > 5) {                                     // We expect a packet every 5 milliseconds
+        if (millis() - LastPassivePacketTime > PACEMAKER) {                             // We expect a packet every PACEMAKER ( = 5 ) milliseconds. If none, a packet was lost.
             Radio1.stopListening(); 
             Radio1.setChannel(QUIETCHANNEL);                                            // Set the recovery channel         
             Radio1.startListening();
             MasterDetected(false);                                
             LastPassivePacketTime = millis();                                           // Reset the timer
-            ++TotalLostPackets;
+            ++TotalLostPackets;                                                         // Count the lost packets
         }
     }
 }
