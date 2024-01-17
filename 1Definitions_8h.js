@@ -576,6 +576,7 @@ var 1Definitions_8h =
     [ "JustHoppedFlag", "1Definitions_8h.html#ae768cbeda38b92908ae481b943893e3b", null ],
     [ "LastAutoModelSelect", "1Definitions_8h.html#a2e6b4259641dbb60952d584b23280898", null ],
     [ "LastBuffer", "1Definitions_8h.html#ae002bd879607e8a3f7722ad78a9aae73", null ],
+    [ "LastConnectionQuality", "1Definitions_8h.html#aa81d18ac8819717d7202ef0ebae1d6e2", null ],
     [ "LastCopyTrimsToAll", "1Definitions_8h.html#ad3a290fa538c88be176c1f70c0cedea0", null ],
     [ "LastFileInView", "1Definitions_8h.html#a77a004fce053dac15e7c389907d142b4", null ],
     [ "LastFourOnly", "1Definitions_8h.html#a97701cb4182125a490f24c210f4d3e24", null ],
