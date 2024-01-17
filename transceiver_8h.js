@@ -24,6 +24,7 @@ var transceiver_8h =
     [ "GetFromAckPayload", "transceiver_8h.html#ab5736b017daadeb2c1d7dc73489d31a6", null ],
     [ "GetIntFromAckPayload", "transceiver_8h.html#a74e337818041d26084558b2d3b2a62d2", null ],
     [ "GetModelsMacAddress", "transceiver_8h.html#a494cb4acb30856d1f53f08df1b80c41b", null ],
+    [ "GetRXVersionNumber", "transceiver_8h.html#a4f813935d8fe58355228cbbf25e12f96", null ],
     [ "GetTemperature", "transceiver_8h.html#a19f6fc09d690832e74fd3c679207f07f", null ],
     [ "GetTimeFromAckPayload", "transceiver_8h.html#a86523345ecdd52f3d93dccd6fcf4370a", null ],
     [ "HopToNextChannel", "transceiver_8h.html#a52aa3e80bccf5e75346c93fdae63122d", null ],

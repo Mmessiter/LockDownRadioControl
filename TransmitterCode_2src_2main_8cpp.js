@@ -83,7 +83,6 @@ var TransmitterCode_2src_2main_8cpp =
     [ "GetGoodPacketsPerSecond", "TransmitterCode_2src_2main_8cpp.html#a1dceeb0a05b1ebc2c7016b5e0272db82", null ],
     [ "GetNewChannelValues", "TransmitterCode_2src_2main_8cpp.html#a26ae4f6ca14f760bd5eb6e7588fe7c81", null ],
     [ "GetOverallSuccessRate", "TransmitterCode_2src_2main_8cpp.html#aed2ffdf0e904c6c985ac806ab6f294c1", null ],
-    [ "GetRXVersionNumber", "TransmitterCode_2src_2main_8cpp.html#a4f813935d8fe58355228cbbf25e12f96", null ],
     [ "GetStickInput", "TransmitterCode_2src_2main_8cpp.html#a248db02e07497e7a4149db17b4e5c2f3", null ],
     [ "GetStickInputInputOnly", "TransmitterCode_2src_2main_8cpp.html#af1030157034999448f5ca611d6209385", null ],
     [ "GetTeensyMacAddress", "TransmitterCode_2src_2main_8cpp.html#a079eed93efcfacfd2a78c69e8a6f3085", null ],

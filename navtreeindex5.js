@@ -1,5 +1,12 @@
 var NAVTREEINDEX5 =
 {
+"MPU6050__9Axis__MotionApps41_8h.html#a27619bf0e01033f6049a11a6d5d754f3":[5,0,0,0,0,0,7,17],
+"MPU6050__9Axis__MotionApps41_8h.html#a2829b030e67c660d451045dd1ee6b1e9":[5,0,0,0,0,0,7,16],
+"MPU6050__9Axis__MotionApps41_8h.html#a2ca9304dda7dc2472812baa9e9ede965":[5,0,0,0,0,0,7,26],
+"MPU6050__9Axis__MotionApps41_8h.html#a334426a3824fc08cee3a557ded696128":[5,0,0,0,0,0,7,18],
+"MPU6050__9Axis__MotionApps41_8h.html#a3aaf70e2e58f5749ccbcd36032b1d1b3":[5,0,0,0,0,0,7,22],
+"MPU6050__9Axis__MotionApps41_8h.html#a3e19ec020621f8b99268a81a85d29f57":[5,0,0,0,0,0,7,0],
+"MPU6050__9Axis__MotionApps41_8h.html#a40c71ee610c953dd0e914ece23dde8a5":[5,0,0,0,0,0,7,2],
 "MPU6050__9Axis__MotionApps41_8h.html#a46b28dbcdbf39e66ec0ecc073a7345d4":[5,0,0,0,0,0,7,6],
 "MPU6050__9Axis__MotionApps41_8h.html#a48c60b057902adf805797f183286728d":[5,0,0,0,0,0,7,12],
 "MPU6050__9Axis__MotionApps41_8h.html#a515a845ea5139d8cf1c7f09ad6dad243":[5,0,0,0,0,0,7,23],
@@ -242,12 +249,5 @@ var NAVTREEINDEX5 =
 "Quadcopter_2src_2main_8cpp.html#ab49f64edf6e58c8520f18a1d88eba712":[5,0,0,0,1,108],
 "Quadcopter_2src_2main_8cpp.html#ab7ac701f1e770c4e868205e8b5ce67f3":[5,0,0,0,1,225],
 "Quadcopter_2src_2main_8cpp.html#ab829dfc83a4be765bcbee507516732fe":[5,0,0,0,1,42],
-"Quadcopter_2src_2main_8cpp.html#aba668cad36498485e518f89d02869bad":[5,0,0,0,1,194],
-"Quadcopter_2src_2main_8cpp.html#aba700621707e686873c98dbbeba0ab78":[5,0,0,0,1,71],
-"Quadcopter_2src_2main_8cpp.html#abc0febf8614baceac008c1574695f727":[5,0,0,0,1,141],
-"Quadcopter_2src_2main_8cpp.html#abc2b262fbe63541656a59f0e6209683a":[5,0,0,0,1,78],
-"Quadcopter_2src_2main_8cpp.html#abd1309f81323033281dddc310cbfb1eb":[5,0,0,0,1,184],
-"Quadcopter_2src_2main_8cpp.html#abd4e7dcf75a0b2783389b8b3f8d03911":[5,0,0,0,1,20],
-"Quadcopter_2src_2main_8cpp.html#abd8ade0bc330fe3504214184429e1d02":[5,0,0,0,1,81],
-"Quadcopter_2src_2main_8cpp.html#abdeac7f9288bf09fd6e1739d22ff8bea":[5,0,0,0,1,15]
+"Quadcopter_2src_2main_8cpp.html#aba668cad36498485e518f89d02869bad":[5,0,0,0,1,194]
 };
