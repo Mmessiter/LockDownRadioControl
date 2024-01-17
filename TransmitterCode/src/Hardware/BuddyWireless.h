@@ -194,6 +194,8 @@ void GetSpecialPacket()                                                         
                                                                                         // GetSlaveChannelValuesWireless() in Master then uses the BuddyBuffer data to replace some or all of the Master's control data. 
                                                                                         // Because the datarate is 2 meg the exchange is very fast. 
     static bool MasterIsInControl = true; 
+    static uint16_t PacketCounter = 0;
+    static uint32_t LocalTimer = 0;
     static uint32_t LastModelID = 0;
     struct spd {
         char        Command[2];
@@ -222,17 +224,25 @@ void GetSpecialPacket()                                                         
             }   
         }
         MasterDetected(true);                                                           // Master is alive
+        ++PacketCounter;                                                                // Count the packets
+       
+        if (millis() - LocalTimer > 1000) {                                             // Every second
+            LocalTimer = millis();                                                      // reset the timer
+            PacketsPerSecond = PacketCounter;                                           // save the packets per second for use on the data diplay
+            PacketCounter = 0;                                                          // reset the counter
+        }
         LastPassivePacketTime = millis();                                               // reset the timer
         Radio1.stopListening(); 
         Radio1.setChannel(SpecialPacketData.Channel);                                   // Set the frequency channel
         Radio1.startListening();                                                        // Start listening
     }else{                                                                              // No packet arrived so maybe master's dead? 
-        if (millis() - LastPassivePacketTime > 10) {                                    // We expect a packet every 5 milliseconds
+        if (millis() - LastPassivePacketTime > 5) {                                     // We expect a packet every 5 milliseconds
             Radio1.stopListening(); 
             Radio1.setChannel(QUIETCHANNEL);                                            // Set the recovery channel         
             Radio1.startListening();
             MasterDetected(false);                                
             LastPassivePacketTime = millis();                                           // Reset the timer
+            ++TotalLostPackets;
         }
     }
 }
