@@ -236,7 +236,7 @@ void GreenLedOn()
         LedWasGreen = true;
         LedWasRed   = false;
         Reconnected = false;
-        ForceVoltDisplay = true;
+        ForceVoltDisplay = true; // Force a battery check of the models battery
         SendInitialSetupParams();
     }else{
         if (LedIsBlinking) analogWrite(GREENLED, GetLEDBrightness());               //Blink Led!
