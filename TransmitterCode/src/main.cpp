@@ -6635,10 +6635,8 @@ void FASTRUN ManageTransmitter()
 
     uint32_t RightNow        = millis();
     uint32_t TXPacketElapsed = RightNow - LastPacketSentTime;
-
     KickTheDog(); // Watchdog ... ALWAYS!
-
-    if ((PACEMAKER - TXPacketElapsed <= TIMEFORTXMANAGMENT) && ModelMatched) {
+    if ((PACEMAKER - TXPacketElapsed < TIMEFORTXMANAGMENT) && ModelMatched) {
         return;                                     // If it's almost time to send data, then do not start some other task which might easily take longer.
     }
     CheckPowerOffButton();                          // Pretty obvious really ...
@@ -6659,7 +6657,6 @@ void FASTRUN ManageTransmitter()
             SendOutstandingParameters();            // Send any parameters that have not been sent yet
             ShowComms();                            // Screen Telemetry Data
             ShowMotorTimer();                       // Screen Timer
-           //  Look(millis()-LastTimeRead);
             return;                                 // That's enough housekeeping this time around
         }
         ReadSwitches();                             // Check switch positions 20 times a second
