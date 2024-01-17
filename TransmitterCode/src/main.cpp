@@ -1837,7 +1837,6 @@ FLASHMEM void setup()
     if (USE_INA219) ina219.begin();
     InitSwitchesAndTrims();
 
-#ifdef TXMODULESUPPORT
     if (PPMdata.UseTXModule)
     {
         PPMdata.PPMOutputModule.begin(PPMPORT);
@@ -1847,10 +1846,6 @@ FLASHMEM void setup()
     {
         InitRadio(DefaultPipe);
     }
-
-#else
-    InitRadio(DefaultPipe);
-#endif
 
     if (BuddyMasterOnPPM) {
         PPMdata.PPMInputBuddy.begin(BUDDYPPMPORT);
@@ -6665,7 +6660,7 @@ void FASTRUN ManageTransmitter()
     }
 }
 /**********************************************************************************************************/
-#ifdef TXMODULESUPPORT
+
 
 void SendPPM()
 { // Send a frame of PPM to Third party TX module
@@ -6675,7 +6670,7 @@ void SendPPM()
         PPMdata.PPMOutputModule.write(*(PPMdata.PPMChannelOrder + j), SendBuffer[j]);
     }
 }
-#endif
+
 
 /************************************************************************************************************/
 void FixMotorChannel()
@@ -6720,9 +6715,7 @@ FASTRUN void loop()
     }
 
     switch (CurrentMode) {
-
         case NORMAL: // 0
-#ifdef TXMODULESUPPORT
             if (!PPMdata.UseTXModule) {
                 SendData(); // local TX
             }
@@ -6730,9 +6723,6 @@ FASTRUN void loop()
                 SendPPM(); // for TX module
                 NewCompressNeeded = false;
             }
-#else
-            SendData();
-#endif
             break;
         case CALIBRATELIMITS: // 1
             CalibrateSticks();

@@ -86,9 +86,7 @@
     #define MAXSHOWCOMMSSESCONDS   6                            // Assess average connection quality over most recent 6 seconds continously
     #define SHOWCOMMSDELAY         1000                         // ms pauses between updated info on NEXTION
     #define WARMUPDELAY            300                          // fails at 200 so must be >200 ...
-    #define SCREENCHANGEWAIT       100                          // allow time for screen to appear
-    #define PACKETNUMBERMAX        10                           // only 7 are so far in use but by making this larger we make updates infrequent
-    #define TXMODULESUPPORT        1                            // 1 = TX module support enabled
+    #define SCREENCHANGEWAIT       100                          // allow 100ms for screen to appear
     #define BATTERY_CHECK_INTERVAL 15000                        // 15 seconds between battery checks
 
 // **************************************************************************
