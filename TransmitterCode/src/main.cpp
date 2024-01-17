@@ -5832,6 +5832,7 @@ FASTRUN void ButtonWasPressed()
             LastRX2TotalTime     = 0;
             LastGapAverage       = 0;
             LastSbusRepeats      = 0;
+             ForceVoltDisplay    = true; 
             SendCommand(pDataView);
             ClearText();
             return;
