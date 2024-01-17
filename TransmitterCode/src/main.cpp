@@ -6659,6 +6659,7 @@ void FASTRUN ManageTransmitter()
             SendOutstandingParameters();            // Send any parameters that have not been sent yet
             ShowComms();                            // Screen Telemetry Data
             ShowMotorTimer();                       // Screen Timer
+           //  Look(millis()-LastTimeRead);
             return;                                 // That's enough housekeeping this time around
         }
         ReadSwitches();                             // Check switch positions 20 times a second
