@@ -682,6 +682,28 @@ FASTRUN uint32_t GetIntFromAckPayload() // This one uses a uint32_t int
 
 
 /************************************************************************************************************/
+
+void GetRXVersionNumber()
+{
+    char nbuf[5];
+    RadioNumber = AckPayload.Byte1;
+    Str(nbuf, RadioNumber, 0);
+    strcpy(ThisRadio, nbuf);
+    if (LastRadio != AckPayload.Byte1) {
+        LastRadio = AckPayload.Byte1;
+        if (LogRXSwaps && UseLog && LastRadio <= 2 && (LastRadio)) LogThisRX();
+    }
+    Str(ReceiverVersionNumber, AckPayload.Byte2, 2);
+    Str(nbuf, AckPayload.Byte3, 2);
+    strcat(ReceiverVersionNumber, nbuf);
+    Str(nbuf, AckPayload.Byte4, 0);
+    strcat(ReceiverVersionNumber, nbuf);
+    nbuf[0] = AckPayload.Byte5;                 // this appends the letter
+    nbuf[1] = 0;
+    strcat(ReceiverVersionNumber, nbuf);
+    CompareVersionNumbers();
+}
+/************************************************************************************************************/
 void GetModelsMacAddress()
 { // Gets a 64 bit value in two hunks of 32 bits
 

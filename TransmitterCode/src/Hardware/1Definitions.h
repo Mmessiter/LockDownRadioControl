@@ -593,6 +593,8 @@ void             SendInitialSetupParams();
 void             SendOutstandingParameters();
 void             AddParameterstoQueue(uint8_t ID);
 void             SetDefaultValues();
+FASTRUN void     LogThisRX();
+void             CompareVersionNumbers();
 
 
 // **************************************************************************
@@ -978,7 +980,11 @@ uint16_t LastRX2TotalTime     = 0;
 uint32_t LastGapAverage       = 0;
 uint16_t LastSbusRepeats      = 0;  
 uint16_t LastConnectionQuality = 0;
-
+int     LastRXModelAltitude    = 0;
+int     LastRXModelMaxAltitude = 0;
+float   LastRXTemperature      = 0;
+uint8_t RadioNumber            = 0;
+uint8_t LastRadioNumber        = 0;
 
 
 // **********************************************************************************************************************************

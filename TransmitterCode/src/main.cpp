@@ -580,12 +580,27 @@ void PopulateDataView(){
             SendValue(DataView_Gc, RX2TotalTime);
         }
         
-        if (ModelAltitude)  SendText(DataView_Alt, ModelAltitude);
-        if (Maxaltitude)    SendText(DataView_MaxAlt, Maxaltitude);
-        if (ModelTempRX)    SendText(DataView_Temp, ModelTempRX);
-        SendText(DataView_Rx, ThisRadio);
-        SendText(DataView_rxv, ReceiverVersionNumber);
-       
+        if (RXModelAltitude != LastRXModelAltitude) {
+            LastRXModelAltitude = RXModelAltitude;
+            SendText(DataView_Alt,   ModelAltitude);
+        }
+        
+        if (RXMAXModelAltitude != LastRXModelMaxAltitude) {
+            LastRXModelMaxAltitude = RXMAXModelAltitude;
+            SendText(DataView_MaxAlt, Maxaltitude);
+        }
+        
+        if (RXTemperature != LastRXTemperature) {
+            LastRXTemperature = RXTemperature;
+            SendText(DataView_Temp,   ModelTempRX);
+        }
+
+        if (RadioNumber != LastRadioNumber) {
+            LastRadioNumber = RadioNumber;
+            SendText(DataView_Rx, ThisRadio);
+        }
+
+        SendText(DataView_rxv,    ReceiverVersionNumber);
        
        if (LastSbusRepeats != SbusRepeats) { // to be continued ...
             LastSbusRepeats = SbusRepeats;
@@ -593,7 +608,6 @@ void PopulateDataView(){
             SendText(Sbs, Vbuf);
         }
        
-      
         TempModelId = ModelsMacUnionSaved.Val32[0];
         snprintf(Vbuf, 9, "%X", TempModelId);
         if (TempModelId) SendText(IdStored, Vbuf);
@@ -653,16 +667,20 @@ void  PopulateFrontView(){
             OldRate = DualRateInUse;
             ShowCurrentRate();
         }
-        if (BuddyPupilOnPPM || BuddyPupilOnWireless) SendText(FrontView_Connected, MsgBuddying); 
+        
+        if (BuddyPupilOnPPM || BuddyPupilOnWireless) {
+            SendText(FrontView_Connected, MsgBuddying); 
+        }
+
         if (LedWasGreen) {
             if (BoundFlag) {
                 if (!Reconnected) Reconnected = true;        
                 StartInactvityTimeout();
             }
             else {
-                SendText(FrontView_RXBV, na); // data not available
-                SendText(FrontView_AckPayload, na);
-                SendCommand(InVisible);
+                SendText(FrontView_RXBV, na);               // data not available
+                SendText(FrontView_AckPayload, na);         // no need to optimise as not connected
+                SendCommand(InVisible);                     // no need to optimise as not connected
             }
         }
 }
@@ -5832,6 +5850,10 @@ FASTRUN void ButtonWasPressed()
             LastRX2TotalTime     = 0;
             LastGapAverage       = 0;
             LastSbusRepeats      = 0;
+            LastRXModelAltitude  = 0;
+            LastRXModelMaxAltitude = 0;
+            LastRXTemperature    = 0;
+            LastRadioNumber      = 0;
             ForceVoltDisplay    = true; 
             SendCommand(pDataView);
             ClearText();
@@ -6415,27 +6437,6 @@ void CompareVersionNumbers(){                                           // Warn 
     }
 }
 
-/************************************************************************************************************/
-
-void GetRXVersionNumber()
-{
-    char nbuf[5];
-    Str(nbuf, AckPayload.Byte1, 0);
-    strcpy(ThisRadio, nbuf);
-    if (LastRadio != AckPayload.Byte1) {
-        LastRadio = AckPayload.Byte1;
-        if (LogRXSwaps && UseLog && LastRadio <= 2 && (LastRadio)) LogThisRX();
-    }
-    Str(ReceiverVersionNumber, AckPayload.Byte2, 2);
-    Str(nbuf, AckPayload.Byte3, 2);
-    strcat(ReceiverVersionNumber, nbuf);
-    Str(nbuf, AckPayload.Byte4, 0);
-    strcat(ReceiverVersionNumber, nbuf);
-    nbuf[0] = AckPayload.Byte5;                 // this appends the letter
-    nbuf[1] = 0;
-    strcat(ReceiverVersionNumber, nbuf);
-    CompareVersionNumbers();
-}
 
 /************************************************************************************************************/
 
