@@ -236,6 +236,7 @@ void GreenLedOn()
         LedWasGreen = true;
         LedWasRed   = false;
         Reconnected = false;
+        ForceVoltDisplay = true;
         SendInitialSetupParams();
     }else{
         if (LedIsBlinking) analogWrite(GREENLED, GetLEDBrightness());               //Blink Led!
@@ -579,9 +580,9 @@ void PopulateDataView(){
             SendValue(DataView_Gc, RX2TotalTime);
         }
         
-        SendText(DataView_Alt, ModelAltitude);
-        SendText(DataView_MaxAlt, Maxaltitude);
-        SendText(DataView_Temp, ModelTempRX);
+        if (ModelAltitude)  SendText(DataView_Alt, ModelAltitude);
+        if (Maxaltitude)    SendText(DataView_MaxAlt, Maxaltitude);
+        if (ModelTempRX)    SendText(DataView_Temp, ModelTempRX);
         SendText(DataView_Rx, ThisRadio);
         SendText(DataView_rxv, ReceiverVersionNumber);
        
@@ -592,7 +593,6 @@ void PopulateDataView(){
             SendText(Sbs, Vbuf);
         }
        
-      
       
         TempModelId = ModelsMacUnionSaved.Val32[0];
         snprintf(Vbuf, 9, "%X", TempModelId);
