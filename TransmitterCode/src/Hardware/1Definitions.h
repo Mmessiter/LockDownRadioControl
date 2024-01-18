@@ -24,7 +24,7 @@
     #define TXVERSION_MAJOR   2 // first three must match RX but _EXTRA_ can be different
     #define TXVERSION_MINOR   4
     #define TXVERSION_MINIMUS 4 
-    #define TXVERSION_EXTRA   "d 16/01/24" 
+    #define TXVERSION_EXTRA   "e 18/01/24" 
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -198,6 +198,7 @@
     #define TXMODULEVIEW     36
     #define PONGVIEW         37
     #define IDCHECKVIEW      38
+    #define BLANKVIEW        39
     
 // **************************************************************************
 //                          Switches' GPIOs                                 *

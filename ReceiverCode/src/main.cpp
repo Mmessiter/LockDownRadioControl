@@ -54,7 +54,6 @@
 #include <SBUS.h>
 #include <PulsePosition.h>
 #include <Watchdog_t4.h>
-
 #include "utilities/common.h"
 #include "utilities/radio.h"
 #include "utilities/pid.h"

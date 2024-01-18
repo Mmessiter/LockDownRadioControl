@@ -561,11 +561,11 @@ void ClearText()
 /*********************************************************************************************************************************/
 void CheckScreenTime() // turn off screen after a timeout
 {
-    char ScreenOff[] = "dim=10";
-    if ((millis() - ScreenTimeTimer) > ScreenTimeout * 1000) {
+    char ScreenOff[] = "page BlankView";
+    if (((millis() - ScreenTimeTimer) > ScreenTimeout * 1000) && (ScreenIsOff == false)) {
         SendCommand(ScreenOff);
-        ScreenTimeTimer = millis();
         ScreenIsOff     = true;
+        CurrentView     = BLANKVIEW;
     }
 }
 

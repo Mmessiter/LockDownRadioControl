@@ -552,48 +552,41 @@ void PopulateDataView(){
     unsigned int TempModelId = 0;
 
 
-if (!LastPacketsPerSecond) {
-
-
-        TempModelId = ModelsMacUnionSaved.Val32[0];
-        snprintf(Vbuf, 9, "%X", TempModelId);
-        if (TempModelId) SendText(IdStored, Vbuf);
-        TempModelId = ModelsMacUnionSaved.Val32[1];
-        snprintf(Vbuf, 9, "%X", TempModelId);
-        if (TempModelId) SendText(IdStored1, Vbuf);
-        TempModelId = ModelsMacUnion.Val32[0];
-        snprintf(Vbuf, 9, "%X", TempModelId);
-        if (TempModelId) SendText(IdReceived, Vbuf);
-        TempModelId = ModelsMacUnion.Val32[1];
-        snprintf(Vbuf, 9, "%X", TempModelId);
-        if (TempModelId) SendText(IdReceived1, Vbuf);
-        for (int i = 0; i < 5; ++i) {
-            Vbuf[i] = 0;
+if (!LastPacketsPerSecond) 
+        {                                                    // these only need displaying once - they will not change
+            TempModelId = ModelsMacUnionSaved.Val32[0];
+            snprintf(Vbuf, 9, "%X", TempModelId);
+            if (TempModelId) SendText(IdStored, Vbuf);
+            TempModelId = ModelsMacUnionSaved.Val32[1];
+            snprintf(Vbuf, 9, "%X", TempModelId);
+            if (TempModelId) SendText(IdStored1, Vbuf);
+            TempModelId = ModelsMacUnion.Val32[0];
+            snprintf(Vbuf, 9, "%X", TempModelId);
+            if (TempModelId) SendText(IdReceived, Vbuf);
+            TempModelId = ModelsMacUnion.Val32[1];
+            snprintf(Vbuf, 9, "%X", TempModelId);
+            if (TempModelId) SendText(IdReceived1, Vbuf);
+            for (int i = 0; i < 5; ++i) {
+                Vbuf[i] = 0;
+            }
+            for (int i = 4; i >= 0; --i) { //**
+                snprintf(nb2, 4, "%X", BuddyMacAddress[i]);
+                strcat(Vbuf, nb2);
+                strcat(Vbuf, " ");
+            }
+            SendText(MasterID, Vbuf);
+            for (int i = 0; i < 5; ++i) {
+                Vbuf[i] = 0;
+            }
+            for (int i = 5; i > 0; --i) {            
+                snprintf(nb2, 4, "%X", MacAddress[i]);
+                strcat(Vbuf, nb2);
+                strcat(Vbuf, " ");
+            }
+            SendText(LocalMacID, Vbuf);
+            SendText(DataView_txv, TransmitterVersionNumber);
+            SendText(DataView_rxv, ReceiverVersionNumber);
         }
-        for (int i = 4; i >= 0; --i) { //**
-            snprintf(nb2, 4, "%X", BuddyMacAddress[i]);
-            strcat(Vbuf, nb2);
-            strcat(Vbuf, " ");
-        }
-        SendText(MasterID, Vbuf);
-
-        for (int i = 0; i < 5; ++i) {
-            Vbuf[i] = 0;
-        }
-        for (int i = 5; i > 0; --i) {            
-            snprintf(nb2, 4, "%X", MacAddress[i]);
-            strcat(Vbuf, nb2);
-            strcat(Vbuf, " ");
-        }
-        SendText(LocalMacID, Vbuf);
-        SendText(DataView_txv, TransmitterVersionNumber);
-
-        SendText(DataView_rxv,    ReceiverVersionNumber);
-       
-}
-
-
-
 
         if (LastPacketsPerSecond != PacketsPerSecond) {
             LastPacketsPerSecond = PacketsPerSecond;
@@ -644,14 +637,11 @@ if (!LastPacketsPerSecond) {
             SendText(DataView_Rx, ThisRadio);
         }
 
-     
-       if (LastSbusRepeats != SbusRepeats) { // to be continued ...
+        if (LastSbusRepeats != SbusRepeats) {
             LastSbusRepeats = SbusRepeats;
             snprintf(Vbuf, 7, "%d", (int)SbusRepeats);
             SendText(Sbs, Vbuf);
         }
-       
-
     }
 
 /*********************************************************************************************************************************/
@@ -779,7 +769,7 @@ void CheckBatteryStates(){
 
 FASTRUN void ShowComms() // heer 
 {
- // if (millis() - LastShowTime < SHOWCOMMSDELAY) return;  // No longer needed  but may be needed one day
+   if (millis() - LastShowTime < SHOWCOMMSDELAY) return;  
     LastShowTime = millis();
     switch (CurrentView) {
             case FRONTVIEW:
@@ -796,7 +786,7 @@ FASTRUN void ShowComms() // heer
     }
     CheckScreenTime();                  // Check if screen needs to be turned off
     CheckBatteryStates();               // Only every 15 seconds now
-   Look(millis() - LastShowTime);   // This is to see how long it takes to run for optimisation purposes
+   // Look(millis() - LastShowTime);   // This is to see how long it takes to run for optimisation purposes
 } // end ShowComms()
 
 /*********************************************************************************************************************************/
@@ -3054,13 +3044,6 @@ void RestoreBrightness()
 
 /*********************************************************************************************************************************/
 
-void RestoreDimness(){
-    char dim[] = "dim=10";
-    SendCommand(dim);
-}
-
-/*********************************************************************************************************************************/
-
 void ZeroDataScreen()
 { // ZERO Those parameters that are zeroable
     
@@ -4718,9 +4701,21 @@ void SaveSwitches(){
 }
 
 /******************************************************************************************************************************/
+void ShowScreenAgain(){
+    GotoFrontView();
+    ScreenIsOff = false;
+}
+
+/******************************************************************************************************************************/
+void HideScreenAgain(){
+    char ScreenOff[] = "page BlankView";
+    SendCommand(ScreenOff);
+    ScreenIsOff     = true;
+    CurrentView     = BLANKVIEW;
+}
 
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 73 // One more than final one, because first is number zero
+#define LASTFUNCTION 75 // One more than final one, because first is number zero
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                    // 0
@@ -4795,7 +4790,9 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     StartPong,                // 69
     StoreModelID,             // 70
     ResetClock,               // 71
-    SaveSwitches              // 72 ( NOW SAVED FROM TX SETUP MENU GLOBALLY FOR ALL MODELS)
+    SaveSwitches,             // 72 ( NOW SAVED FROM TX SETUP MENU GLOBALLY FOR ALL MODELS)
+    ShowScreenAgain,          // 73 End of screen timeout when someone touched screen
+    HideScreenAgain           // 74 Force screen timeout 
 
 }; // list will become longer ...
 
@@ -4806,15 +4803,7 @@ FASTRUN void ButtonWasPressed()
 {
     if (strlen(TextIn) > 0) {
         StartInactvityTimeout();
-
         ScreenTimeTimer = millis(); // reset screen timeout counter
-        if (ScreenIsOff) {
-            RestoreBrightness();
-            ScreenIsOff = false;
-            ClearText();
-            return;
-        }
-
         union
         {
             uint8_t  First4Bytes[4];

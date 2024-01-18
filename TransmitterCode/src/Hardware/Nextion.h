@@ -101,13 +101,16 @@ void GetTextIn()
 void SendCommand(char* tbox)
 {
     char page[] = "page ";
+    char blankview[] = "BlankView";
+
     NEXTION.print(tbox);
     for (int i = 0; i < 3; ++i) {
         NEXTION.write(0xff);
         delayMicroseconds(70);
     }
     GetReturnCode();
-    if (InStrng(page, tbox)) DelayWithDog(SCREENCHANGEWAIT); // Allow time for new page to appear
+    if (InStrng(blankview, tbox)) return;                      // Don't wait for blankview
+    if (InStrng(page, tbox)) DelayWithDog(SCREENCHANGEWAIT);    // Allow time for new page to appear
 }
 /*********************************************************************************************************************************/
 void EndSend()
