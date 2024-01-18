@@ -262,7 +262,6 @@ void StartBuddyListen()
     FlushFifos();                               // flush the fifos
     BlueLedOn();                                // turn on the blue led
     CurrentMode = LISTENMODE;                   // set the mode to listen
-    RestoreBrightness();                        // restore the brightness
     WasBuddyPupilOnWireless = true;             // flag to indicate that the buddy was on wireless
 }
 //************************************************************************************************************************

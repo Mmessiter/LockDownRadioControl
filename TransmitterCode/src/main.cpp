@@ -2953,10 +2953,6 @@ void SoundBank()
     if (millis() < 2500) return; // don't announce bank if just booted
     PlaySound(BankSounds[BanksInUse[Bank - 1]]);
     ScreenTimeTimer = millis(); // reset screen counter
-    if (ScreenIsOff) {
-        RestoreBrightness();
-        ScreenIsOff = false;
-    }
 }
 /*********************************************************************************************************************************/
 void ShowBank()
@@ -4702,14 +4698,17 @@ void SaveSwitches(){
 
 /******************************************************************************************************************************/
 void ShowScreenAgain(){
+    RestoreBrightness();
     GotoFrontView();
     ScreenIsOff = false;
 }
 
 /******************************************************************************************************************************/
 void HideScreenAgain(){
-    char ScreenOff[] = "page BlankView";
+    char ScreenOff[]    = "page BlankView";
+    char NoBrightness[] = "dim=0";
     SendCommand(ScreenOff);
+    SendCommand(NoBrightness);
     ScreenIsOff     = true;
     CurrentView     = BLANKVIEW;
 }
@@ -5056,7 +5055,6 @@ FASTRUN void ButtonWasPressed()
             SendValue(c4, AnnounceBanks);
             SendValue(c5, AnnounceConnected);
             SetAudioVolume(AudioVolume);
-            RestoreBrightness();
             ClearText();
             return;
         }
@@ -5069,7 +5067,6 @@ FASTRUN void ButtonWasPressed()
             SpeakingClock     = GetValue(c3);
             AnnounceBanks     = GetValue(c4);
             AnnounceConnected = GetValue(c5);
-            RestoreBrightness();
             SetAudioVolume(AudioVolume);
             CurrentView = TXSETUPVIEW;
             SendCommand(page_SetupView);
@@ -6049,14 +6046,14 @@ void CheckMotorOff()
     if (!UseMotorKill) return;
     ReadSwitches();
     MotorEnabled = false;
-    if (Autoswitch == 1 && Switch[7] == SWITCH1Reversed) MotorEnabled = true;
-    if (Autoswitch == 2 && Switch[5] == SWITCH2Reversed) MotorEnabled = true;
-    if (Autoswitch == 3 && Switch[0] == SWITCH3Reversed) MotorEnabled = true;
-    if (Autoswitch == 4 && Switch[2] == SWITCH4Reversed) MotorEnabled = true;
-    if (SafetySwitch == 1 && Switch[7] == SWITCH1Reversed) SafetyON = true;
-    if (SafetySwitch == 2 && Switch[5] == SWITCH2Reversed) SafetyON = true;
-    if (SafetySwitch == 3 && Switch[0] == SWITCH3Reversed) SafetyON = true;
-    if (SafetySwitch == 4 && Switch[2] == SWITCH4Reversed) SafetyON = true;
+    if (Autoswitch == 1 && Switch[7]    == SWITCH1Reversed) MotorEnabled = true;
+    if (Autoswitch == 2 && Switch[5]    == SWITCH2Reversed) MotorEnabled = true;
+    if (Autoswitch == 3 && Switch[0]    == SWITCH3Reversed) MotorEnabled = true;
+    if (Autoswitch == 4 && Switch[2]    == SWITCH4Reversed) MotorEnabled = true;
+    if (SafetySwitch == 1 && Switch[7]  == SWITCH1Reversed) SafetyON = true;
+    if (SafetySwitch == 2 && Switch[5]  == SWITCH2Reversed) SafetyON = true;
+    if (SafetySwitch == 3 && Switch[0]  == SWITCH3Reversed) SafetyON = true;
+    if (SafetySwitch == 4 && Switch[2]  == SWITCH4Reversed) SafetyON = true;
     if (SafetyON) MotorEnabled = false;
     MotorWasEnabled = MotorEnabled;
 }
@@ -6102,7 +6099,6 @@ void ReadBuddySwitch(){
         PreviousDualRateInUse = DualRateInUse;
         LastShowTime          = 0;
         LastTimeRead          = 0;
-        RestoreBrightness();
         if (AnnounceBanks) {
             switch (DualRateInUse)
             {
@@ -6240,7 +6236,6 @@ void GetBank()   // ... and the other three switches
     Channel11SwitchValue = CheckSwitch(Channel11Switch);
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
     if (Bank != PreviousBank) {
-        RestoreBrightness();
         LastTimeRead = 0;
         if (UseLog) LogNewBank();
         if (MotorEnabled == MotorWasEnabled) { // When turning off motor, don't sound bank too.
@@ -6349,7 +6344,6 @@ void MoveaTrim(uint8_t i)
         default:
             break;
     }
-    if (ScreenIsOff) RestoreBrightness();
     if (CopyTrimsToAll) {
         for (i = 0; i < 4; ++i) {
             for (int fm = 1; fm < 5; ++fm) {
@@ -6537,7 +6531,9 @@ void CheckPowerOffButton()
     char            StillConnectedBox[] = "StillConnected";
 
     if (!digitalRead(BUTTON_SENSE_PIN)) {
-        GotoFrontView();
+        
+        if (BoundFlag && ModelMatched)  GotoFrontView();
+        
         if (!LedWasGreen && !PPMdata.UseTXModule)
         {
             SimulateCloseDown(); // if not connected power off immediately
@@ -6545,7 +6541,6 @@ void CheckPowerOffButton()
         if (LedWasGreen || PPMdata.UseTXModule)
         {
             if (!PowerOffTimer) {
-                RestoreBrightness();
                 PowerOffTimer     = millis(); // Start a timer for power off button down
                 TurnOffSecondToGo = PowerOffWarningSeconds;
             }

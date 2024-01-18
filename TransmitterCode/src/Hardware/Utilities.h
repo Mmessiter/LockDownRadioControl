@@ -562,7 +562,9 @@ void ClearText()
 void CheckScreenTime() // turn off screen after a timeout
 {
     char ScreenOff[] = "page BlankView";
+    char NoBrightness[] = "dim=0";
     if (((millis() - ScreenTimeTimer) > ScreenTimeout * 1000) && (ScreenIsOff == false)) {
+        SendCommand(NoBrightness);
         SendCommand(ScreenOff);
         ScreenIsOff     = true;
         CurrentView     = BLANKVIEW;

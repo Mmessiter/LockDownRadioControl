@@ -183,14 +183,14 @@ FASTRUN void FailedPacket()
     LastPacketSentTime  =   0;                                                              // Force a new packet to be sent immediately
     if (!GapStart) 
     {
-        GapStart     =   millis();                                                       // To keep track of this gap's length
+        GapStart     =   millis();                                                          // To keep track of this gap's length
     } else 
     {
-        if (((millis() - GapStart) > RED_LED_ON_TIME) && !LedWasRed) RedLedOn();          // Put on red led - receiver must be off
+        if (((millis() - GapStart) > RED_LED_ON_TIME) && !LedWasRed) RedLedOn();            // Put on red led - receiver must be off
     }
-    for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = PrePreviousBuffer[i];         // force last update repeat 
-    if (RecentPacketsLost >= LOSTCONTACTCUTOFF) {                                           // Don't immeditately change channel
-            LostContactFlag =   true;
+    for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = PrePreviousBuffer[i];        // force last update repeat 
+    if (RecentPacketsLost   >= LOSTCONTACTCUTOFF) {                                         // Don't immeditately change channel
+            LostContactFlag  =   true;
             TryToReconnect();  
     }
     int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
