@@ -551,6 +551,50 @@ void PopulateDataView(){
     char         DataView_txv[]         = "txv";  
     unsigned int TempModelId = 0;
 
+
+if (!LastPacketsPerSecond) {
+
+
+        TempModelId = ModelsMacUnionSaved.Val32[0];
+        snprintf(Vbuf, 9, "%X", TempModelId);
+        if (TempModelId) SendText(IdStored, Vbuf);
+        TempModelId = ModelsMacUnionSaved.Val32[1];
+        snprintf(Vbuf, 9, "%X", TempModelId);
+        if (TempModelId) SendText(IdStored1, Vbuf);
+        TempModelId = ModelsMacUnion.Val32[0];
+        snprintf(Vbuf, 9, "%X", TempModelId);
+        if (TempModelId) SendText(IdReceived, Vbuf);
+        TempModelId = ModelsMacUnion.Val32[1];
+        snprintf(Vbuf, 9, "%X", TempModelId);
+        if (TempModelId) SendText(IdReceived1, Vbuf);
+        for (int i = 0; i < 5; ++i) {
+            Vbuf[i] = 0;
+        }
+        for (int i = 4; i >= 0; --i) { //**
+            snprintf(nb2, 4, "%X", BuddyMacAddress[i]);
+            strcat(Vbuf, nb2);
+            strcat(Vbuf, " ");
+        }
+        SendText(MasterID, Vbuf);
+
+        for (int i = 0; i < 5; ++i) {
+            Vbuf[i] = 0;
+        }
+        for (int i = 5; i > 0; --i) {            
+            snprintf(nb2, 4, "%X", MacAddress[i]);
+            strcat(Vbuf, nb2);
+            strcat(Vbuf, " ");
+        }
+        SendText(LocalMacID, Vbuf);
+        SendText(DataView_txv, TransmitterVersionNumber);
+
+        SendText(DataView_rxv,    ReceiverVersionNumber);
+       
+}
+
+
+
+
         if (LastPacketsPerSecond != PacketsPerSecond) {
             LastPacketsPerSecond = PacketsPerSecond;
             SendValue(DataView_pps, PacketsPerSecond);
@@ -600,48 +644,14 @@ void PopulateDataView(){
             SendText(DataView_Rx, ThisRadio);
         }
 
-        SendText(DataView_rxv,    ReceiverVersionNumber);
-       
+     
        if (LastSbusRepeats != SbusRepeats) { // to be continued ...
             LastSbusRepeats = SbusRepeats;
             snprintf(Vbuf, 7, "%d", (int)SbusRepeats);
             SendText(Sbs, Vbuf);
         }
        
-        TempModelId = ModelsMacUnionSaved.Val32[0];
-        snprintf(Vbuf, 9, "%X", TempModelId);
-        if (TempModelId) SendText(IdStored, Vbuf);
-        
-        TempModelId = ModelsMacUnionSaved.Val32[1];
-        snprintf(Vbuf, 9, "%X", TempModelId);
-        if (TempModelId) SendText(IdStored1, Vbuf);
-        TempModelId = ModelsMacUnion.Val32[0];
-        snprintf(Vbuf, 9, "%X", TempModelId);
-        if (TempModelId) SendText(IdReceived, Vbuf);
-        TempModelId = ModelsMacUnion.Val32[1];
-        snprintf(Vbuf, 9, "%X", TempModelId);
-        if (TempModelId) SendText(IdReceived1, Vbuf);
 
-        for (int i = 0; i < 5; ++i) {
-            Vbuf[i] = 0;
-        }
-        for (int i = 4; i >= 0; --i) { //**
-            snprintf(nb2, 4, "%X", BuddyMacAddress[i]);
-            strcat(Vbuf, nb2);
-            strcat(Vbuf, " ");
-        }
-        SendText(MasterID, Vbuf);
-
-        for (int i = 0; i < 5; ++i) {
-            Vbuf[i] = 0;
-        }
-        for (int i = 5; i > 0; --i) {            
-            snprintf(nb2, 4, "%X", MacAddress[i]);
-            strcat(Vbuf, nb2);
-            strcat(Vbuf, " ");
-        }
-        SendText(LocalMacID, Vbuf);
-        SendText(DataView_txv, TransmitterVersionNumber);
     }
 
 /*********************************************************************************************************************************/
@@ -769,7 +779,7 @@ void CheckBatteryStates(){
 
 FASTRUN void ShowComms() // heer 
 {
-    if (millis() - LastShowTime < SHOWCOMMSDELAY) return;
+ // if (millis() - LastShowTime < SHOWCOMMSDELAY) return;  // No longer needed  but may be needed one day
     LastShowTime = millis();
     switch (CurrentView) {
             case FRONTVIEW:
@@ -786,7 +796,7 @@ FASTRUN void ShowComms() // heer
     }
     CheckScreenTime();                  // Check if screen needs to be turned off
     CheckBatteryStates();               // Only every 15 seconds now
-//Look(millis() - LastShowTime);
+   Look(millis() - LastShowTime);   // This is to see how long it takes to run for optimisation purposes
 } // end ShowComms()
 
 /*********************************************************************************************************************************/
@@ -6653,13 +6663,13 @@ void FASTRUN ManageTransmitter()
             GetGoodPacketsPerSecond();              // Do stats
             UpdateTrimView();
             SendOutstandingParameters();            // Send any parameters that have not been sent yet
-            ShowComms();                            // Screen Telemetry Data
             ShowMotorTimer();                       // Screen Timer
             return;                                 // That's enough housekeeping this time around
         }
         ReadSwitches();                             // Check switch positions 20 times a second
         CheckHardwareTrims();                       // Trims 20 times a second
         GetBank();                                  // Must not call too often
+        ShowComms();                                // Screen Telemetry Data
     }
 }
 /**********************************************************************************************************/
