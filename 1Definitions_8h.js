@@ -30,6 +30,7 @@ var 1Definitions_8h =
     [ "BINDNEEDED", "1Definitions_8h.html#afc19e20d792629177ad1adde09b5982c", null ],
     [ "BINDSUCCEEDED", "1Definitions_8h.html#a5c1d7fe0f5bc9c8674023766ad474e86", null ],
     [ "Black", "1Definitions_8h.html#a68eb1f80b4df2818e5a0774106748141", null ],
+    [ "BLANKVIEW", "1Definitions_8h.html#a5c9a6f20d768f923675f8813ce6e0b21", null ],
     [ "Blue", "1Definitions_8h.html#a6208a194d702872fdbe1d3c7d7a7c879", null ],
     [ "BLUELED", "1Definitions_8h.html#a0cc50e8ab2356e8108bbb4376c02119e", null ],
     [ "BOXBOTTOM", "1Definitions_8h.html#a43f0a42e7b452ff828419c1ea54b064e", null ],
