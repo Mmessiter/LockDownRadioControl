@@ -6636,11 +6636,8 @@ void FASTRUN ManageTransmitter()
 
     if (RightNow - TransmitterLastManaged > 50) {   // 20 times a second is plenty
         TransmitterLastManaged = millis();
+        if ((RightNow - LastTimeRead >= 333) && (CurrentView == MODELSVIEW)) CheckModelName();                    // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
         
-        if ((RightNow - LastTimeRead >= 1000) && (CurrentView == MODELSVIEW)) { // Only twice a second 
-             if (CheckModelName()) return;          // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
-        }
-
         if (RightNow - LastTimeRead >= 1000) {      // Only once a second for these...
             LastTimeRead = millis();
             ReadTime();                             // Do the clock
@@ -6653,7 +6650,7 @@ void FASTRUN ManageTransmitter()
         ReadSwitches();                             // Check switch positions 20 times a second
         CheckHardwareTrims();                       // Trims 20 times a second
         GetBank();                                  // Must not call too often
-        ShowComms();                                // Screen Telemetry Data
+        ShowComms();                                // Screen Telemetry Data (only every .333 seconds)
     }
 }
 /**********************************************************************************************************/
