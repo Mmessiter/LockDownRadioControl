@@ -596,7 +596,16 @@ void             AddParameterstoQueue(uint8_t ID);
 void             SetDefaultValues();
 FASTRUN void     LogThisRX();
 void             CompareVersionNumbers();
-
+void             PopulateFrontView();
+void             PopulateDataView();
+void             PopulateGPSView();
+void             CheckScreenTime();
+void             CheckBatteryStates();
+void             ShowCurrentRate();
+void             ShowAMS();
+void             ShowTrimToAll();
+FASTRUN bool     CheckTXVolts();
+FASTRUN bool     CheckRXVolts(); 
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
