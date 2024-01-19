@@ -4882,6 +4882,8 @@ FASTRUN void ButtonWasPressed()
                     SendValue(FrontView_Secs, Secs);
                     SendValue(FrontView_Mins, Mins);
                     SendValue(FrontView_Hours, Hours);
+                    ForceVoltDisplay = true; // heer
+                    LastConnectionQuality = 0;
                 }
             }
             if (CurrentView == LOGVIEW) {
