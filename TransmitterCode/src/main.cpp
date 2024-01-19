@@ -4708,6 +4708,7 @@ void HideScreenAgain(){
     char ScreenOff[]    = "page BlankView";
     char NoBrightness[] = "dim=0";
     SendCommand(ScreenOff);
+    DelayWithDog(10);           // wait a moment for screen to change
     SendCommand(NoBrightness);
     ScreenIsOff     = true;
     CurrentView     = BLANKVIEW;

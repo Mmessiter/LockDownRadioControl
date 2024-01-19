@@ -564,8 +564,11 @@ void CheckScreenTime() // turn off screen after a timeout
     char ScreenOff[] = "page BlankView";
     char NoBrightness[] = "dim=0";
     if (((millis() - ScreenTimeTimer) > ScreenTimeout * 1000) && (ScreenIsOff == false)) {
-        SendCommand(NoBrightness);
-        SendCommand(ScreenOff);
+        
+        SendCommand(ScreenOff);     // goto screen that is blank
+        DelayWithDog(10);           // wait a moment for screen to change
+        SendCommand(NoBrightness);  // turn off screen brightness
+       
         ScreenIsOff     = true;
         CurrentView     = BLANKVIEW;
     }
