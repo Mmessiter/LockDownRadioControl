@@ -24,7 +24,7 @@
     #define TXVERSION_MAJOR   2 // first three must match RX but _EXTRA_ can be different
     #define TXVERSION_MINOR   4
     #define TXVERSION_MINIMUS 4 
-    #define TXVERSION_EXTRA   "e 18/01/24" 
+    #define TXVERSION_EXTRA   "f 18/01/24" 
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -52,7 +52,7 @@
     #define CE_PIN                 7                             // for SPI to nRF24L01
     #define CSN_PIN                8                             // for SPI to nRF24L01
     #define BUDDYPPMPORT           10                            // wired Buddybox PPM pi
-    #define LOSTCONTACTCUTOFF      3                             // packets to lose before declaring lost contact 
+    #define LOSTCONTACTCUTOFF      1                             // packets to lose before declaring lost contact 
    
     #define TIMEFORTXMANAGMENT     3                             // was 3 ...  How many ms must remain spare between data packets before daring to undertake more trivial tasks
     #define BINDINGTIME            2000                          // 2 seconds to bind ?
