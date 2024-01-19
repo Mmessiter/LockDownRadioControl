@@ -14,16 +14,8 @@
 #define RXVERSION_MINIMUS 4 // January 2024
 #define RXVERSION_EXTRA   'd' 
 
-// **************************************************************************
-// #define FHSS200MHZ       
-
-#ifdef FHSS200MHZ
-    #define HOPTIME           0     // (about 200 hops per second)
-    #define RECEIVE_TIMEOUT   14    //  was 14 
-#else
-    #define HOPTIME           46     //  milliseconds between hops (about 10 hops per second)
-    #define RECEIVE_TIMEOUT   9      //  was 14   
-#endif
+#define HOPTIME           16     //  14-16 gives 50Hz FHSS, 46-48 gives 20Hz FHSS
+#define RECEIVE_TIMEOUT   5      //  was 14   
 
 // **************************************************************************
 
