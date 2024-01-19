@@ -2215,15 +2215,15 @@ void DoOneSwitch(char* Sw, uint8_t n)
     strcat(c12, cc12);
 
     SendText(Sw, NotUsed);
-    if (Autoswitch == n) SendText(Sw, Auto);
-    if (FMSwitch == n) SendText(Sw, Banks123);
-    if (Channel9Switch == n) SendText(Sw, c9);
-    if (Channel10Switch == n) SendText(Sw, c10);
-    if (Channel11Switch == n) SendText(Sw, c11);
-    if (Channel12Switch == n) SendText(Sw, c12);
-    if (SafetySwitch == n) SendText(Sw, Safety_Switch);
-    if (DualRatesSwitch == n) SendText(Sw, DualRates_Switch);
-    if (BuddySwitch == n) SendText(Sw, Buddy_Switch);
+    if (Autoswitch == n)        SendText(Sw, Auto);
+    if (FMSwitch == n)          SendText(Sw, Banks123);
+    if (Channel9Switch == n)    SendText(Sw, c9);
+    if (Channel10Switch == n)   SendText(Sw, c10);
+    if (Channel11Switch == n)   SendText(Sw, c11);
+    if (Channel12Switch == n)   SendText(Sw, c12);
+    if (SafetySwitch == n)      SendText(Sw, Safety_Switch);
+    if (DualRatesSwitch == n)   SendText(Sw, DualRates_Switch);
+    if (BuddySwitch == n)       SendText(Sw, Buddy_Switch);
 }
 
 /*********************************************************************************************************************************/
@@ -2978,20 +2978,19 @@ void DoOneSwitchView(uint8_t n) // n is 1-4  = number for switch to edit
     char Rlabels[10][3]        = {"r0", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "r9"};
     char OneSwitchViewc_revd[] = "c_revd"; // Reversed
 
-    for (int i = 0; i < 10; ++i) {
-        SendValue(Rlabels[i], 0); // clear all
-    }
+    for (int i = 0; i < 10; ++i) SendValue(Rlabels[i], 0); // clear all
+
     ValueSent = false; // If no setting, = 'Not Used'
 
-    if (FMSwitch == n) SendValue(Rlabels[1], 1);
-    if (Autoswitch == n) SendValue(Rlabels[2], 1);
-    if (Channel9Switch == n) SendValue(Rlabels[3], 1);
-    if (Channel10Switch == n) SendValue(Rlabels[4], 1);
-    if (Channel11Switch == n) SendValue(Rlabels[5], 1);
-    if (Channel12Switch == n) SendValue(Rlabels[6], 1);
-    if (SafetySwitch == n) SendValue(Rlabels[7], 1);
-    if (DualRatesSwitch == n) SendValue(Rlabels[8], 1);
-    if (BuddySwitch == n) SendValue(Rlabels[9], 1);
+    if ((FMSwitch == n) && (!ValueSent))          SendValue(Rlabels[1], 1); // No duplicates allowed!
+    if ((Autoswitch == n) && (!ValueSent))        SendValue(Rlabels[2], 1); // No duplicates allowed!
+    if ((Channel9Switch == n) && (!ValueSent))    SendValue(Rlabels[3], 1); // No duplicates allowed!
+    if ((Channel10Switch == n) && (!ValueSent))   SendValue(Rlabels[4], 1); // No duplicates allowed!
+    if ((Channel11Switch == n) && (!ValueSent))   SendValue(Rlabels[5], 1); // No duplicates allowed!
+    if ((Channel12Switch == n) && (!ValueSent))   SendValue(Rlabels[6], 1); // No duplicates allowed!
+    if ((SafetySwitch == n) && (!ValueSent))      SendValue(Rlabels[7], 1); // No duplicates allowed!
+    if ((DualRatesSwitch == n) && (!ValueSent))   SendValue(Rlabels[8], 1); // No duplicates allowed!
+    if ((BuddySwitch == n) && (!ValueSent))       SendValue(Rlabels[9], 1); // No duplicates allowed!
 
     if (!ValueSent) SendValue(Rlabels[0], 1); // nothing yet, so 'not used' is selected
 
@@ -3017,6 +3016,7 @@ void DoOneSwitchView(uint8_t n) // n is 1-4  = number for switch to edit
         if (strlen(ChannelNames[i + 8]) >= 2) SendText(chLabels[i], ChannelNames[i + 8]); // Show EDITED channel names if they exist
     }
 }
+
 /*********************************************************************************************************************************/
 void UpdateOneSwitchView()
 {
@@ -4790,9 +4790,9 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     StartPong,                // 69
     StoreModelID,             // 70
     ResetClock,               // 71
-    SaveSwitches,             // 72 ( NOW SAVED FROM TX SETUP MENU GLOBALLY FOR ALL MODELS)
+    SaveSwitches,             // 72 (NOW SAVED FROM TX SETUP MENU GLOBALLY FOR ALL MODELS)
     ShowScreenAgain,          // 73 End of screen timeout when someone touched screen
-    HideScreenAgain           // 74 Force screen timeout 
+    HideScreenAgain           // 74 Force immediate 'screen timeout' 
 
 }; // list will become longer ...
 
