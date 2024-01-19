@@ -1,5 +1,15 @@
 var NAVTREEINDEX4 =
 {
+"MPU6050_8h.html#a77b25de3f3dbdb1aec3201cab7d88980":[5,0,0,0,0,0,4,47],
+"MPU6050_8h.html#a77e346aef05647d9d492077e0297d67b":[5,0,0,0,0,0,4,59],
+"MPU6050_8h.html#a78ae6e61ebfd0704101e073b268151d4":[5,0,0,0,0,0,4,164],
+"MPU6050_8h.html#a795c81a32a12a232e00f401ef4c57ea2":[5,0,0,0,0,0,4,40],
+"MPU6050_8h.html#a7a077cc96fed2f0502592983d9d9115e":[5,0,0,0,0,0,4,178],
+"MPU6050_8h.html#a7b0ecc568c76cb52b57dd31487c2379e":[5,0,0,0,0,0,4,165],
+"MPU6050_8h.html#a7c73c70ce194ea3b49d2c28cf3db05b8":[5,0,0,0,0,0,4,63],
+"MPU6050_8h.html#a7df0fb518f20ee9119db5807263fb61f":[5,0,0,0,0,0,4,4],
+"MPU6050_8h.html#a7ec394e32416951b6882ebe6ae924965":[5,0,0,0,0,0,4,261],
+"MPU6050_8h.html#a805428e54c987a4c759bcafaa2b56018":[5,0,0,0,0,0,4,308],
 "MPU6050_8h.html#a8074ca6de4dc700d90c85e8362886ee5":[5,0,0,0,0,0,4,51],
 "MPU6050_8h.html#a80d3591c47d0482c0adcf176e1994a65":[5,0,0,0,0,0,4,246],
 "MPU6050_8h.html#a817c7994c3bea93494cc1d53323716f8":[5,0,0,0,0,0,4,111],
@@ -239,15 +249,5 @@ var NAVTREEINDEX4 =
 "MPU6050__6Axis__MotionApps__V6__12_8h.html#ac511f931ef6563ffe04d50234287ecb6":[5,0,0,0,0,0,6,36],
 "MPU6050__6Axis__MotionApps__V6__12_8h.html#ac9201560d03a0cfa240d0421a22c74d1":[5,0,0,0,0,0,6,17],
 "MPU6050__6Axis__MotionApps__V6__12_8h.html#ad1937eefa9a7b6d3c9034dd9e62ab114":[5,0,0,0,0,0,6,4],
-"MPU6050__6Axis__MotionApps__V6__12_8h.html#ad2b71a6faa0583b51569b531a443cb0a":[5,0,0,0,0,0,6,12],
-"MPU6050__6Axis__MotionApps__V6__12_8h.html#ae2aefb42a042fa5cb20e06f7fcfa327e":[5,0,0,0,0,0,6,30],
-"MPU6050__6Axis__MotionApps__V6__12_8h.html#ae74941b597bdd8ffb5c35f45b636946b":[5,0,0,0,0,0,6,26],
-"MPU6050__6Axis__MotionApps__V6__12_8h.html#af6551f0b4c3964c3128f808e7bf987c7":[5,0,0,0,0,0,6,1],
-"MPU6050__6Axis__MotionApps__V6__12_8h_source.html":[5,0,0,0,0,0,6],
-"MPU6050__9Axis__MotionApps41_8h.html":[5,0,0,0,0,0,7],
-"MPU6050__9Axis__MotionApps41_8h.html#a05ca2f20b55933ad782917161d54287d":[5,0,0,0,0,0,7,33],
-"MPU6050__9Axis__MotionApps41_8h.html#a062cff1c7c2cfbdd2285d9959113175c":[5,0,0,0,0,0,7,8],
-"MPU6050__9Axis__MotionApps41_8h.html#a0756e93e3e7d572f24952cbd8e35b158":[5,0,0,0,0,0,7,34],
-"MPU6050__9Axis__MotionApps41_8h.html#a1292f2f164a1997206e9cf714f2372fe":[5,0,0,0,0,0,7,35],
-"MPU6050__9Axis__MotionApps41_8h.html#a132cade895232da163e344f296267817":[5,0,0,0,0,0,7,36]
+"MPU6050__6Axis__MotionApps__V6__12_8h.html#ad2b71a6faa0583b51569b531a443cb0a":[5,0,0,0,0,0,6,12]
 };
