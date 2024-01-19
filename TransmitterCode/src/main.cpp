@@ -4882,7 +4882,7 @@ FASTRUN void ButtonWasPressed()
                     SendValue(FrontView_Secs, Secs);
                     SendValue(FrontView_Mins, Mins);
                     SendValue(FrontView_Hours, Hours);
-                    ForceVoltDisplay = true; // heer
+                    ForceVoltDisplay = true; 
                     LastConnectionQuality = 0;
                 }
             }
