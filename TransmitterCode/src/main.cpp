@@ -3034,6 +3034,7 @@ void RestoreBrightness()
     strcpy(cmd, dim);
     Str(nb, Brightness, 0);
     strcat(cmd, nb);
+    ScreenIsOff     = false;
     SendCommand(cmd);
     ScreenTimeTimer = millis(); // reset screen counter
 }
@@ -4707,9 +4708,9 @@ void ShowScreenAgain(){
 void HideScreenAgain(){
     char ScreenOff[]    = "page BlankView";
     char NoBrightness[] = "dim=0";
-    SendCommand(ScreenOff);
+    SendCommand(ScreenOff);     // move to blank screen
     DelayWithDog(10);           // wait a moment for screen to change
-    SendCommand(NoBrightness);
+    SendCommand(NoBrightness);  // turn off backlight
     ScreenIsOff     = true;
     CurrentView     = BLANKVIEW;
 }

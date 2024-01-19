@@ -84,7 +84,7 @@
     #define RED_LED_ON_TIME        2500                         // How many ms of no connection before RED led comes on
     #define LOW_VOLTAGE_TIME       10000                        // How many ms to endure low voltage before announcing it. (10 seconds)
     #define MAXSHOWCOMMSSESCONDS   6                            // Assess average connection quality over most recent 6 seconds continously
-    #define SHOWCOMMSDELAY         333                          // ms pauses between updated info on NEXTION
+    #define SHOWCOMMSDELAY         100                          // ms pauses between updated info on NEXTION
     #define WARMUPDELAY            300                          // fails at 200 so must be >200 ...
     #define SCREENCHANGEWAIT       100                          // allow 100ms for screen to appear
     #define BATTERY_CHECK_INTERVAL 15000                        // 15 seconds between battery checks

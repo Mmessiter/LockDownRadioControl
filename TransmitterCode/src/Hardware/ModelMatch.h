@@ -13,6 +13,7 @@ void CompareModelsIDs()
     if (BuddyON) return;                //  Don't do this if buddy is on
     if (ModelMatched) return;           // must not change when model connected
     GotoFrontView();
+    RestoreBrightness();
     if (ModelIdentified) { //  We have both bits of Model ID?
         if ((ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64)) { //  Is it a match for current model?
             if (AnnounceConnected) {
