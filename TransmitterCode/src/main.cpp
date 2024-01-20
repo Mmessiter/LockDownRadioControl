@@ -1941,16 +1941,7 @@ void SetDefaultValues()
         InPutStick[i]    = i;
         ChannelOutPut[i] = i;
     }
-    BankSwitch        = 4;
-    Autoswitch      = 1;
-    Channel9Switch  = 2;
-    Channel10Switch = 3;
-    Channel11Switch = 0;
-    Channel12Switch = 0;
-    SWITCH1Reversed = false;
-    SWITCH2Reversed = false;
-    SWITCH3Reversed = false;
-    SWITCH4Reversed = false;
+   
 
     for (i = 0; i < CHANNELSUSED; ++i) {
         FailSafeChannel[i] = false;
@@ -3495,6 +3486,21 @@ void ResetTransmitterSettings()
         }
         CloseModelsFile();
     }
+    
+    Autoswitch      = 1;
+    SafetySwitch    = 2;
+    BuddySwitch     = 3;
+    BankSwitch      = 4;
+    Channel9Switch  = 0;
+    Channel10Switch = 0;
+    Channel11Switch = 0;
+    Channel12Switch = 0;
+    SWITCH1Reversed = false;
+    SWITCH2Reversed = false;
+    SWITCH3Reversed = true;
+    SWITCH4Reversed = true;
+
+    
     SendValue(Progress, 100);
     ModelNumber = 1;
     SaveTransmitterParameters();
