@@ -5,12 +5,7 @@
 #include <Arduino.h>
 #include "Hardware/1Definitions.h"
 #ifndef LOGFILES_H
-    #define BUDDYLOGFILES_HWIRELESS_H
-
-
-
-
-
+    #define LOGFILES_H
 
 /************************************************************************************************************/
 FASTRUN void CreateTimeStamp(char* DateAndTime)
