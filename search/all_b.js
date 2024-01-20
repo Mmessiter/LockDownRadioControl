@@ -47,7 +47,7 @@ var searchData=
   ['inchour_44',['IncHour',['../Utilities_8h.html#aee918002ab8f85e66499b048b6ce722b',1,'Utilities.h']]],
   ['incminute_45',['IncMinute',['../Utilities_8h.html#a7db4bbbc2d6fc9114c7758525fa4c088',1,'Utilities.h']]],
   ['incmonth_46',['IncMonth',['../Utilities_8h.html#ac6e0db167f018387da880dd95ab198e7',1,'Utilities.h']]],
-  ['inctrim_47',['IncTrim',['../TransmitterCode_2src_2main_8cpp.html#a6e96b79e1edc864e742216a05c7c3622',1,'main.cpp']]],
+  ['inctrim_47',['IncTrim',['../Trims_8h.html#a6e96b79e1edc864e742216a05c7c3622',1,'Trims.h']]],
   ['incyear_48',['IncYear',['../Utilities_8h.html#a30a6637e60923c45a28bdfb938903207',1,'Utilities.h']]],
   ['initbmp280_49',['InitBMP280',['../SensorHubT32_2src_2main_8cpp.html#aa2c448c0ec510ffaaecbc5991e726b53',1,'main.cpp']]],
   ['initcentredegrees_50',['InitCentreDegrees',['../TransmitterCode_2src_2main_8cpp.html#a515ad50eda3c39eddfdca4700eae9b5f',1,'main.cpp']]],

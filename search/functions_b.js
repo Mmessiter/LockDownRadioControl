@@ -11,7 +11,7 @@ var searchData=
   ['masterdetected_8',['MasterDetected',['../BuddyWireless_8h.html#a9028cb650cb079d28bc5dfc307242bb3',1,'BuddyWireless.h']]],
   ['maybeaddzero_9',['MayBeAddZero',['../Utilities_8h.html#ae310e7fc6397929ae886869c05cbc334',1,'MayBeAddZero(uint8_t nn):&#160;Utilities.h'],['../1Definitions_8h.html#ae310e7fc6397929ae886869c05cbc334',1,'MayBeAddZero(uint8_t nn):&#160;Utilities.h']]],
   ['modelviewend_10',['ModelViewEnd',['../TransmitterCode_2src_2main_8cpp.html#ae9f91b9da28f2e1e2fb126961f03c31c',1,'main.cpp']]],
-  ['moveatrim_11',['MoveaTrim',['../1Definitions_8h.html#a17123a117a96a9416dec48d9345f8a5b',1,'MoveaTrim(uint8_t i):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a17123a117a96a9416dec48d9345f8a5b',1,'MoveaTrim(uint8_t i):&#160;main.cpp']]],
+  ['moveatrim_11',['MoveaTrim',['../1Definitions_8h.html#a17123a117a96a9416dec48d9345f8a5b',1,'MoveaTrim(uint8_t i):&#160;Trims.h'],['../Trims_8h.html#a17123a117a96a9416dec48d9345f8a5b',1,'MoveaTrim(uint8_t i):&#160;Trims.h']]],
   ['moveball_12',['MoveBall',['../Pong_8h.html#abead2677dc553c693bcf9bf0c54c0c81',1,'Pong.h']]],
   ['movecurrentpointdown_13',['MoveCurrentPointDown',['../TransmitterCode_2src_2main_8cpp.html#ac7a913ec35d5e97835e753fd1ee77dd7',1,'main.cpp']]],
   ['movecurrentpointup_14',['MoveCurrentPointUp',['../TransmitterCode_2src_2main_8cpp.html#adff425c4aac140ddca211d4ef4d98a7e',1,'main.cpp']]],

@@ -6,7 +6,7 @@ var searchData=
   ['decmonth_3',['DecMonth',['../Utilities_8h.html#a8a749ad1678f2de577b502dfb95400dd',1,'Utilities.h']]],
   ['decompress_4',['Decompress',['../common_8h.html#a6feccc8c0583de3235616d42076f1371',1,'Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, uint8_t uncompressed_size):&#160;radio.h'],['../radio_8h.html#a6feccc8c0583de3235616d42076f1371',1,'Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, uint8_t uncompressed_size):&#160;radio.h'],['../1Definitions_8h.html#aef9ea6bfb42f0579a40e017eb22f692e',1,'Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, uint8_t uncompressed_size):&#160;radio.h'],['../transceiver_8h.html#a6feccc8c0583de3235616d42076f1371',1,'Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, uint8_t uncompressed_size):&#160;transceiver.h']]],
   ['dectobcd_5',['decToBcd',['../Utilities_8h.html#aa55ce3dfb919da5cebf61d1f2d2a96b7',1,'Utilities.h']]],
-  ['dectrim_6',['DecTrim',['../TransmitterCode_2src_2main_8cpp.html#ae4be4bb0e33569d140264079d28227fd',1,'main.cpp']]],
+  ['dectrim_6',['DecTrim',['../Trims_8h.html#ae4be4bb0e33569d140264079d28227fd',1,'Trims.h']]],
   ['decyear_7',['DecYear',['../Utilities_8h.html#ad712237b8d367326a7f460181dade102',1,'Utilities.h']]],
   ['definetrimsend_8',['DefineTrimsEnd',['../Trims_8h.html#a175b6111f05e020becf6f4fc8c3e474d',1,'Trims.h']]],
   ['definetrimsstart_9',['DefineTrimsStart',['../1Definitions_8h.html#aa36a3594acf30c4314af50c16b9f3c58',1,'1Definitions.h']]],

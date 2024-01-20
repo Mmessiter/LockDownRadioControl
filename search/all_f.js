@@ -122,7 +122,7 @@ var searchData=
   ['motoroff_119',['MOTOROFF',['../1Definitions_8h.html#a493cf7b1e8a890871f1b208b72646155',1,'1Definitions.h']]],
   ['motoron_120',['MOTORON',['../1Definitions_8h.html#a5010dfa85f7d8051f0f514fe32fbc502',1,'1Definitions.h']]],
   ['motorwasenabled_121',['MotorWasEnabled',['../1Definitions_8h.html#a6d81569424db81b979ace459d8482d95',1,'1Definitions.h']]],
-  ['moveatrim_122',['MoveaTrim',['../1Definitions_8h.html#a17123a117a96a9416dec48d9345f8a5b',1,'MoveaTrim(uint8_t i):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a17123a117a96a9416dec48d9345f8a5b',1,'MoveaTrim(uint8_t i):&#160;main.cpp']]],
+  ['moveatrim_122',['MoveaTrim',['../1Definitions_8h.html#a17123a117a96a9416dec48d9345f8a5b',1,'MoveaTrim(uint8_t i):&#160;Trims.h'],['../Trims_8h.html#a17123a117a96a9416dec48d9345f8a5b',1,'MoveaTrim(uint8_t i):&#160;Trims.h']]],
   ['moveball_123',['MoveBall',['../Pong_8h.html#abead2677dc553c693bcf9bf0c54c0c81',1,'Pong.h']]],
   ['movecurrentpointdown_124',['MoveCurrentPointDown',['../TransmitterCode_2src_2main_8cpp.html#ac7a913ec35d5e97835e753fd1ee77dd7',1,'main.cpp']]],
   ['movecurrentpointup_125',['MoveCurrentPointUp',['../TransmitterCode_2src_2main_8cpp.html#adff425c4aac140ddca211d4ef4d98a7e',1,'main.cpp']]],
