@@ -753,9 +753,11 @@ bool            SingleModelFlag = false;
 bool            ModelsFileOpen  = false;
 bool            USE_INA219      = false;
 bool            BoundFlag       = false;
+
 bool            Switch[8];
 bool            TrimSwitch[8];
-uint8_t         FMSwitch             = BANKSWITCH;
+
+uint8_t         BankSwitch           = BANKSWITCH;
 uint8_t         Autoswitch           = Autoswitch;
 uint8_t         SafetySwitch         = 0;
 uint8_t         BuddySwitch          = 0;
@@ -772,6 +774,7 @@ bool            SWITCH1Reversed      = false;
 bool            SWITCH2Reversed      = false;
 bool            SWITCH3Reversed      = false;
 bool            SWITCH4Reversed      = false;
+
 uint16_t        StartLocation        = 0;
 bool            ValueSent            = false;
 uint8_t         SwitchEditNumber     = 0; // number of switch being edited

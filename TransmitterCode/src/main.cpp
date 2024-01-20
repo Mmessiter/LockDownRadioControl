@@ -1782,25 +1782,26 @@ void DoOneSwitch(char* Sw, uint8_t n)
     char cc11[] = " (Ch 11)";
     char cc12[] = " (Ch 12)";
 
-    strcpy(c9, ChannelNames[8]);
+    strcpy(c9,  ChannelNames[8]);
     strcpy(c10, ChannelNames[9]);
     strcpy(c11, ChannelNames[10]);
     strcpy(c12, ChannelNames[11]);
-    strcat(c9, cc9);
+    strcat(c9,  cc9);
     strcat(c10, cc10);
     strcat(c11, cc11);
     strcat(c12, cc12);
 
     SendText(Sw, NotUsed);
-    if (Autoswitch == n)        SendText(Sw, Auto);
-    if (FMSwitch == n)          SendText(Sw, Banks123);
-    if (Channel9Switch == n)    SendText(Sw, c9);
-    if (Channel10Switch == n)   SendText(Sw, c10);
-    if (Channel11Switch == n)   SendText(Sw, c11);
-    if (Channel12Switch == n)   SendText(Sw, c12);
-    if (SafetySwitch == n)      SendText(Sw, Safety_Switch);
-    if (DualRatesSwitch == n)   SendText(Sw, DualRates_Switch);
-    if (BuddySwitch == n)       SendText(Sw, Buddy_Switch);
+
+    if (Autoswitch == n)        {SendText(Sw, Auto);                return;}
+    if (BankSwitch == n)        {SendText(Sw, Banks123);            return;}
+    if (Channel9Switch == n)    {SendText(Sw, c9);                  return;}
+    if (Channel10Switch == n)   {SendText(Sw, c10);                 return;}
+    if (Channel11Switch == n)   {SendText(Sw, c11);                 return;}
+    if (Channel12Switch == n)   {SendText(Sw, c12);                 return;}
+    if (SafetySwitch == n)      {SendText(Sw, Safety_Switch);       return;}
+    if (DualRatesSwitch == n)   {SendText(Sw, DualRates_Switch);    return;}
+    if (BuddySwitch == n)       {SendText(Sw, Buddy_Switch);        return;}
 }
 
 /*********************************************************************************************************************************/
@@ -1940,7 +1941,7 @@ void SetDefaultValues()
         InPutStick[i]    = i;
         ChannelOutPut[i] = i;
     }
-    FMSwitch        = 4;
+    BankSwitch        = 4;
     Autoswitch      = 1;
     Channel9Switch  = 2;
     Channel10Switch = 3;
@@ -2559,7 +2560,7 @@ void DoOneSwitchView(uint8_t n) // n is 1-4  = number for switch to edit
 
     ValueSent = false; // If no setting, = 'Not Used'
 
-    if ((FMSwitch == n) && (!ValueSent))          SendValue(Rlabels[1], 1); // No duplicates allowed!
+    if ((BankSwitch == n) && (!ValueSent))          SendValue(Rlabels[1], 1); // No duplicates allowed!
     if ((Autoswitch == n) && (!ValueSent))        SendValue(Rlabels[2], 1); // No duplicates allowed!
     if ((Channel9Switch == n) && (!ValueSent))    SendValue(Rlabels[3], 1); // No duplicates allowed!
     if ((Channel10Switch == n) && (!ValueSent))   SendValue(Rlabels[4], 1); // No duplicates allowed!
@@ -2659,10 +2660,10 @@ void ReadNewSwitchFunction()
     SendValue(Progress, 10);
 
     if (GetValue(OneSwitchView_r1)) {
-        FMSwitch = SwitchEditNumber;
+        BankSwitch = SwitchEditNumber;
     }
     else {
-        if (FMSwitch == SwitchEditNumber) FMSwitch = 0;
+        if (BankSwitch == SwitchEditNumber) BankSwitch = 0;
     }
 
     SendValue(Progress, 15);
@@ -4269,9 +4270,10 @@ void TXModuleViewEnd()
 /******************************************************************************************************************************/
 
 void SaveSwitches(){
+    SaveTransmitterParameters();
+    DelayWithDog(100);
     char page_SetupView[] = "page TXSetupView";
     SendCommand(page_SetupView);
-    SaveTransmitterParameters();
 }
 
 /******************************************************************************************************************************/
@@ -5142,9 +5144,9 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(SwitchesView, TextIn)) {
+        if (InStrng(SwitchesView, TextIn)) { // heer
             SendCommand(pSwitchesView);
-            UpdateSwitchesView(); // display saved values
+            UpdateSwitchesView();               // display saved values
             CurrentView = SWITCHES_VIEW;
             UpdateModelsNameEveryWhere();
             ClearText();
@@ -5572,7 +5574,7 @@ void ReadDRSwitch(bool sw1, bool sw2, bool rev) // Dual Rate Switch
 
 /************************************************************************************************************/
 
-void ReadFMSwitch(bool sw1, bool sw2, bool rev) // Bank Switch
+void ReadBankSwitch(bool sw1, bool sw2, bool rev) // Bank Switch
 {
     if ((sw1 == false) && (sw2 == false))
     {
@@ -5701,10 +5703,10 @@ void ReadBuddySwitch(){
 
 /************************************************************************************************************/
  void  ReadFlightModeSwitch(){
-    if (FMSwitch == 4) ReadFMSwitch(Switch[2], Switch[3], SWITCH4Reversed);
-    if (FMSwitch == 3) ReadFMSwitch(Switch[0], Switch[1], SWITCH3Reversed);
-    if (FMSwitch == 2) ReadFMSwitch(Switch[4], Switch[5], SWITCH2Reversed);
-    if (FMSwitch == 1) ReadFMSwitch(Switch[6], Switch[7], SWITCH1Reversed);
+    if (BankSwitch == 4) ReadBankSwitch(Switch[2], Switch[3], SWITCH4Reversed);
+    if (BankSwitch == 3) ReadBankSwitch(Switch[0], Switch[1], SWITCH3Reversed);
+    if (BankSwitch == 2) ReadBankSwitch(Switch[4], Switch[5], SWITCH2Reversed);
+    if (BankSwitch == 1) ReadBankSwitch(Switch[6], Switch[7], SWITCH1Reversed);
  }
 
 /************************************************************************************************************/

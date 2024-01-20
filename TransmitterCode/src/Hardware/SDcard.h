@@ -217,7 +217,7 @@ bool ReadOneModel(uint32_t Mnum)
 
     // TREX
 
-//    FMSwitch = SDRead8BITS(SDCardAddress);
+//    BankSwitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
 //    Autoswitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
@@ -669,7 +669,7 @@ bool LoadAllParameters()
     BuddyMasterOnWireless = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
 // ************************** READ THE SWITCHES NOW PER TX !*********************************
-    FMSwitch = SDRead8BITS(SDCardAddress);
+    BankSwitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     Autoswitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
@@ -837,7 +837,7 @@ void SaveTransmitterParameters()
 
 // WRITE THE SWITCHES NOW PER TX ***
 
-    SDUpdate8BITS(SDCardAddress, FMSwitch);
+    SDUpdate8BITS(SDCardAddress, BankSwitch);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, Autoswitch);
     ++SDCardAddress;
@@ -1002,7 +1002,7 @@ void SaveOneModel(uint32_t mnum)
     }
     //  TREX
 
-  //  SDUpdate8BITS(SDCardAddress, FMSwitch);
+  //  SDUpdate8BITS(SDCardAddress, BankSwitch);
     ++SDCardAddress;
   //  SDUpdate8BITS(SDCardAddress, Autoswitch);
     ++SDCardAddress;
