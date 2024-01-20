@@ -1762,46 +1762,71 @@ int GetChannel()
     return atoi(&TextIn[i]);
 }
 
+
+/*********************************************************************************************************************************/
+
+void Swr(char* Sw, uint8_t n, char* text){  // this removes the R if it's not reversed
+
+    char NotReversed[30] = " ";
+
+    if (SWITCH1Reversed && n == 1) SendText(Sw, text);
+    if (SWITCH2Reversed && n == 2) SendText(Sw, text);
+    if (SWITCH3Reversed && n == 3) SendText(Sw, text);
+    if (SWITCH4Reversed && n == 4) SendText(Sw, text);
+    for (uint8_t i = 0; i < strlen(text)-1; ++i) NotReversed[i] = text[i];
+    if (!SWITCH1Reversed && n == 1) SendText(Sw, NotReversed);
+    if (!SWITCH2Reversed && n == 2) SendText(Sw, NotReversed);
+    if (!SWITCH3Reversed && n == 3) SendText(Sw, NotReversed);
+    if (!SWITCH4Reversed && n == 4) SendText(Sw, NotReversed);
+}
+
+
 /*********************************************************************************************************************************/
 
 void DoOneSwitch(char* Sw, uint8_t n)
 {
 
-    char NotUsed[]          = "Not used";
-    char Banks123[]         = "Banks 1 2 3";
-    char Auto[]             = "Bank 4 & Motor";
-    char Safety_Switch[]    = "Safety    ";
-    char Buddy_Switch[]     = "Buddy     ";
-    char DualRates_Switch[] = "Rates     ";
+    char NotUsed[]          = "Not used         ";
+    char Banks123[]         = "Banks 1 2 3     R";
+    char Auto[]             = "Bank 4 & Motor  R";
+    char Safety_Switch[]    = "Safety          R";
+    char Buddy_Switch[]     = "Buddy           R";
+    char DualRates_Switch[] = "Rates           R";
+    char cc9[]              = " (Ch 9) ";
+    char cc10[]             = " (Ch 10) ";
+    char cc11[]             = " (Ch 11) ";
+    char cc12[]             = " (Ch 12) ";
     char c9[40];
     char c10[40];
     char c11[40];
     char c12[40];
-    char cc9[]  = " (Ch 9)";
-    char cc10[] = " (Ch 10)";
-    char cc11[] = " (Ch 11)";
-    char cc12[] = " (Ch 12)";
-
+    char R[] = " R";
+   
     strcpy(c9,  ChannelNames[8]);
     strcpy(c10, ChannelNames[9]);
     strcpy(c11, ChannelNames[10]);
     strcpy(c12, ChannelNames[11]);
+  
     strcat(c9,  cc9);
+    strcat(c9, R);
     strcat(c10, cc10);
+    strcat(c10, R);
     strcat(c11, cc11);
+    strcat(c11, R);
     strcat(c12, cc12);
+    strcat(c12, R);
 
     SendText(Sw, NotUsed);
 
-    if (Autoswitch == n)        {SendText(Sw, Auto);                return;}
-    if (BankSwitch == n)        {SendText(Sw, Banks123);            return;}
-    if (Channel9Switch == n)    {SendText(Sw, c9);                  return;}
-    if (Channel10Switch == n)   {SendText(Sw, c10);                 return;}
-    if (Channel11Switch == n)   {SendText(Sw, c11);                 return;}
-    if (Channel12Switch == n)   {SendText(Sw, c12);                 return;}
-    if (SafetySwitch == n)      {SendText(Sw, Safety_Switch);       return;}
-    if (DualRatesSwitch == n)   {SendText(Sw, DualRates_Switch);    return;}
-    if (BuddySwitch == n)       {SendText(Sw, Buddy_Switch);        return;}
+    if (Autoswitch == n)        {Swr(Sw,n,Auto );                   return;}
+    if (BankSwitch == n)        {Swr(Sw,n,Banks123 );               return;}
+    if (Channel9Switch == n)    {Swr(Sw,n,c9 );                     return;}
+    if (Channel10Switch == n)   {Swr(Sw,n,c10 );                    return;}
+    if (Channel11Switch == n)   {Swr(Sw,n,c11 );                    return;}
+    if (Channel12Switch == n)   {Swr(Sw,n,c12);                     return;}
+    if (SafetySwitch == n)      {Swr(Sw,n,Safety_Switch);           return;}
+    if (DualRatesSwitch == n)   {Swr(Sw,n,DualRates_Switch);        return;}
+    if (BuddySwitch == n)       {Swr(Sw,n,Buddy_Switch);            return;}
 }
 
 /*********************************************************************************************************************************/
@@ -3500,7 +3525,6 @@ void ResetTransmitterSettings()
     SWITCH3Reversed = true;
     SWITCH4Reversed = true;
 
-    
     SendValue(Progress, 100);
     ModelNumber = 1;
     SaveTransmitterParameters();
