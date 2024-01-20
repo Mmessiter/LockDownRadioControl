@@ -79,7 +79,7 @@ var searchData=
   ['sendchararray_76',['SendCharArray',['../Utilities_8h.html#acd617ff93ca893aa7d65aaf2898dfc3d',1,'SendCharArray(char *ch0, char *ch1, char *ch2, char *ch3, char *ch4, char *ch5, char *ch6, char *ch7, char *ch8, char *ch9, char *ch10, char *ch11, char *ch12):&#160;Utilities.h'],['../1Definitions_8h.html#acd617ff93ca893aa7d65aaf2898dfc3d',1,'SendCharArray(char *ch0, char *ch1, char *ch2, char *ch3, char *ch4, char *ch5, char *ch6, char *ch7, char *ch8, char *ch9, char *ch10, char *ch11, char *ch12):&#160;Utilities.h']]],
   ['sendcolour_77',['SendColour',['../TransmitterCode_2src_2main_8cpp.html#ad07be8f27ea372f210918b3e38139fc9',1,'main.cpp']]],
   ['sendcommand_78',['SendCommand',['../1Definitions_8h.html#aecac2f0c289f02ef3c92b85be82eacac',1,'SendCommand(char *tbox):&#160;Nextion.h'],['../Nextion_8h.html#aecac2f0c289f02ef3c92b85be82eacac',1,'SendCommand(char *tbox):&#160;Nextion.h']]],
-  ['senddata_79',['SendData',['../transceiver_8h.html#a049bfb836e7aa4a3a48a1a4bd225fafc',1,'SendData():&#160;transceiver.h'],['../1Definitions_8h.html#a3d7322e78f097d02d476f17a6306997c',1,'SendData():&#160;transceiver.h']]],
+  ['senddata_79',['SendData',['../1Definitions_8h.html#a3d7322e78f097d02d476f17a6306997c',1,'SendData():&#160;transceiver.h'],['../transceiver_8h.html#a049bfb836e7aa4a3a48a1a4bd225fafc',1,'SendData():&#160;transceiver.h']]],
   ['senddatatoreceiver_80',['SendDataToReceiver',['../SensorHubT32_2src_2main_8cpp.html#aac529433269b7b52ef0a627716a70aea',1,'main.cpp']]],
   ['senddatetoackpayload_81',['SendDateToAckPayload',['../radio_8h.html#affa2dcc4341b8daecac77e6e0a354b2d',1,'radio.h']]],
   ['sendextraparamemters_82',['SendExtraParamemters',['../transceiver_8h.html#a188ad446d11b2db284476c093de58b2f',1,'transceiver.h']]],
@@ -337,7 +337,7 @@ var searchData=
   ['sticksview_334',['STICKSVIEW',['../1Definitions_8h.html#abfc5f0d31f80fc812b9c44a55fe3134e',1,'1Definitions.h']]],
   ['stopbuddylisten_335',['StopBuddyListen',['../1Definitions_8h.html#ae77cabeca1f2af2de00334db1dae23a0',1,'1Definitions.h']]],
   ['stopflyingvoltspercell_336',['StopFlyingVoltsPerCell',['../1Definitions_8h.html#a3a4778b8dc2cbf63ddcc0adc893ad96b',1,'1Definitions.h']]],
-  ['stoplisteningdelay_337',['STOPLISTENINGDELAY',['../common_8h.html#a565d61935c13b35fc13071614aa5b378',1,'STOPLISTENINGDELAY():&#160;common.h'],['../1Definitions_8h.html#a565d61935c13b35fc13071614aa5b378',1,'STOPLISTENINGDELAY():&#160;1Definitions.h']]],
+  ['stoplisteningdelay_337',['STOPLISTENINGDELAY',['../1Definitions_8h.html#a565d61935c13b35fc13071614aa5b378',1,'STOPLISTENINGDELAY():&#160;1Definitions.h'],['../common_8h.html#a565d61935c13b35fc13071614aa5b378',1,'STOPLISTENINGDELAY():&#160;common.h']]],
   ['stopmacro_338',['StopMacro',['../macros_8h.html#ae1e0755ae9441b2835ac027a98707caa',1,'macros.h']]],
   ['storagecharge_339',['STORAGECHARGE',['../1Definitions_8h.html#a0d7f6ce749c2aceb4ecef39efa939fa6',1,'1Definitions.h']]],
   ['storebuffer_340',['StoreBuffer',['../ModelExchange_8h.html#a4ba723ef2554d270e96431d281d7dadf',1,'ModelExchange.h']]],
@@ -345,9 +345,9 @@ var searchData=
   ['str_342',['Str',['../1Definitions_8h.html#a6bac145d5df31efb9c90e2a60a4cbca5',1,'Str(char *s, int n, int comma):&#160;Utilities.h'],['../Utilities_8h.html#a590a9174319918d7e3d7baca323fcf26',1,'Str(char *s, int n, int comma):&#160;Utilities.h']]],
   ['straightlineinterpolation_343',['StraightLineInterpolation',['../TransmitterCode_2src_2main_8cpp.html#a88983dee7d62d5f01e7152c6c62b3a98',1,'main.cpp']]],
   ['straightlines_344',['STRAIGHTLINES',['../1Definitions_8h.html#a00adadb4876f6c86728e50a79fbc8fcc',1,'1Definitions.h']]],
-  ['strcat_5fp_345',['strcat_P',['../MPU6050__6Axis__MotionApps20_8h.html#a2ca9304dda7dc2472812baa9e9ede965',1,'strcat_P():&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#a2ca9304dda7dc2472812baa9e9ede965',1,'strcat_P():&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#a2ca9304dda7dc2472812baa9e9ede965',1,'strcat_P():&#160;MPU6050_9Axis_MotionApps41.h']]],
+  ['strcat_5fp_345',['strcat_P',['../MPU6050__6Axis__MotionApps20_8h.html#a2ca9304dda7dc2472812baa9e9ede965',1,'strcat_P():&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__9Axis__MotionApps41_8h.html#a2ca9304dda7dc2472812baa9e9ede965',1,'strcat_P():&#160;MPU6050_9Axis_MotionApps41.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#a2ca9304dda7dc2472812baa9e9ede965',1,'strcat_P():&#160;MPU6050_6Axis_MotionApps_V6_12.h']]],
   ['strcmp_5fp_346',['strcmp_P',['../MPU6050__6Axis__MotionApps20_8h.html#abbb2cd396dde2d1575948bb16ce2853a',1,'strcmp_P():&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#abbb2cd396dde2d1575948bb16ce2853a',1,'strcmp_P():&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#abbb2cd396dde2d1575948bb16ce2853a',1,'strcmp_P():&#160;MPU6050_9Axis_MotionApps41.h']]],
-  ['strcpy_5fp_347',['strcpy_P',['../MPU6050__9Axis__MotionApps41_8h.html#ae74941b597bdd8ffb5c35f45b636946b',1,'strcpy_P():&#160;MPU6050_9Axis_MotionApps41.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#ae74941b597bdd8ffb5c35f45b636946b',1,'strcpy_P():&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__6Axis__MotionApps20_8h.html#ae74941b597bdd8ffb5c35f45b636946b',1,'strcpy_P():&#160;MPU6050_6Axis_MotionApps20.h']]],
+  ['strcpy_5fp_347',['strcpy_P',['../MPU6050__6Axis__MotionApps20_8h.html#ae74941b597bdd8ffb5c35f45b636946b',1,'strcpy_P():&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#ae74941b597bdd8ffb5c35f45b636946b',1,'strcpy_P():&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#ae74941b597bdd8ffb5c35f45b636946b',1,'strcpy_P():&#160;MPU6050_9Axis_MotionApps41.h']]],
   ['stunt1_348',['STUNT1',['../1Definitions_8h.html#a80c9e9ddb7c76b17439adab7175427c4',1,'1Definitions.h']]],
   ['stunt2_349',['STUNT2',['../1Definitions_8h.html#a85bfc79a4f7b1b55e87c9ee89069c456',1,'1Definitions.h']]],
   ['subtrims_350',['SubTrims',['../1Definitions_8h.html#a8c98d83f822e5c1a5e605844bb8a75cd',1,'1Definitions.h']]],
@@ -374,5 +374,6 @@ var searchData=
   ['switchnumber_371',['SwitchNumber',['../1Definitions_8h.html#a2bd909f3b6a6e46bd5fcecb296800e9e',1,'1Definitions.h']]],
   ['switchrollyaw_372',['switchRollYaw',['../Quadcopter_2src_2main_8cpp.html#a575c5d2a29402a56610d376470b73848',1,'main.cpp']]],
   ['switchspienabled_373',['switchSPIEnabled',['../classMPU6050.html#a269710b7bca814bbf67e7bb38c381650',1,'MPU6050']]],
-  ['synchrtcwithgpstime_374',['SynchRTCwithGPSTime',['../Utilities_8h.html#abb1ea95b6b3f033883aa87682d3240ab',1,'Utilities.h']]]
+  ['swr_374',['Swr',['../TransmitterCode_2src_2main_8cpp.html#a76e17dda42d0c6f01a90e3a1a78a0d16',1,'main.cpp']]],
+  ['synchrtcwithgpstime_375',['SynchRTCwithGPSTime',['../Utilities_8h.html#abb1ea95b6b3f033883aa87682d3240ab',1,'Utilities.h']]]
 ];

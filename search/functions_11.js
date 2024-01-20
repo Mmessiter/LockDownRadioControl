@@ -195,7 +195,7 @@ var searchData=
   ['showfileprogress_192',['ShowFileProgress',['../ModelExchange_8h.html#abdbaa9b790382ce7f04feb681df5144a',1,'ModelExchange.h']]],
   ['showfiletransferwindow_193',['ShowFileTransferWindow',['../ModelExchange_8h.html#a76c4e62912d1c13f6d13e049f507fd55',1,'ModelExchange.h']]],
   ['showgps_194',['ShowGPS',['../SensorHubT32_2src_2main_8cpp.html#a6dfb0fe1b733dfc8e9d989a321596850',1,'main.cpp']]],
-  ['showlogfile_195',['ShowLogFile',['../TransmitterCode_2src_2main_8cpp.html#af5df157d4ece6b40a9ce7a60faeca569',1,'ShowLogFile(uint8_t StartLine):&#160;main.cpp'],['../1Definitions_8h.html#af5df157d4ece6b40a9ce7a60faeca569',1,'ShowLogFile(uint8_t StartLine):&#160;main.cpp']]],
+  ['showlogfile_195',['ShowLogFile',['../1Definitions_8h.html#af5df157d4ece6b40a9ce7a60faeca569',1,'ShowLogFile(uint8_t StartLine):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#af5df157d4ece6b40a9ce7a60faeca569',1,'ShowLogFile(uint8_t StartLine):&#160;main.cpp']]],
   ['showmixvalues_196',['ShowMixValues',['../Utilities_8h.html#a9cf57d14f56372d539472d6e1cc79a77',1,'Utilities.h']]],
   ['showmotor_197',['ShowMotor',['../1Definitions_8h.html#a6b3c522a9d43d58a184d9866ca9d21f3',1,'ShowMotor(int on):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a6b3c522a9d43d58a184d9866ca9d21f3',1,'ShowMotor(int on):&#160;main.cpp']]],
   ['showmotortimer_198',['ShowMotorTimer',['../TransmitterCode_2src_2main_8cpp.html#ae87d527c1f50ca7eaffba270f9a6524a',1,'main.cpp']]],
@@ -233,5 +233,6 @@ var searchData=
   ['swap_230',['swap',['../1Definitions_8h.html#a31322f63ce3e02c4ef9a0c1e0c7f1ff5',1,'swap(uint8_t *a, uint8_t *b):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a31322f63ce3e02c4ef9a0c1e0c7f1ff5',1,'swap(uint8_t *a, uint8_t *b):&#160;main.cpp']]],
   ['switchrollyaw_231',['switchRollYaw',['../Quadcopter_2src_2main_8cpp.html#a575c5d2a29402a56610d376470b73848',1,'main.cpp']]],
   ['switchspienabled_232',['switchSPIEnabled',['../classMPU6050.html#a269710b7bca814bbf67e7bb38c381650',1,'MPU6050']]],
-  ['synchrtcwithgpstime_233',['SynchRTCwithGPSTime',['../Utilities_8h.html#abb1ea95b6b3f033883aa87682d3240ab',1,'Utilities.h']]]
+  ['swr_233',['Swr',['../TransmitterCode_2src_2main_8cpp.html#a76e17dda42d0c6f01a90e3a1a78a0d16',1,'main.cpp']]],
+  ['synchrtcwithgpstime_234',['SynchRTCwithGPSTime',['../Utilities_8h.html#abb1ea95b6b3f033883aa87682d3240ab',1,'Utilities.h']]]
 ];

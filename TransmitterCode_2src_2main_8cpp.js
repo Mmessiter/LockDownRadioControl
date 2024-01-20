@@ -204,6 +204,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "StoreModelID", "TransmitterCode_2src_2main_8cpp.html#a3838aa0b33bb22d3b9934da05d2716d8", null ],
     [ "StraightLineInterpolation", "TransmitterCode_2src_2main_8cpp.html#a88983dee7d62d5f01e7152c6c62b3a98", null ],
     [ "swap", "TransmitterCode_2src_2main_8cpp.html#a31322f63ce3e02c4ef9a0c1e0c7f1ff5", null ],
+    [ "Swr", "TransmitterCode_2src_2main_8cpp.html#a76e17dda42d0c6f01a90e3a1a78a0d16", null ],
     [ "ThrottleDownTrim", "TransmitterCode_2src_2main_8cpp.html#a4f13231fd2e430935dbee50a83078018", null ],
     [ "ThrottleUpTrim", "TransmitterCode_2src_2main_8cpp.html#abe827a1e4c23eb79d1771da1e9393178", null ],
     [ "TXModuleViewEnd", "TransmitterCode_2src_2main_8cpp.html#a3c55ef7c23759a89a86f6519569c4f7a", null ],
