@@ -606,6 +606,9 @@ void             ShowAMS();
 void             ShowTrimToAll();
 FASTRUN bool     CheckTXVolts();
 FASTRUN bool     CheckRXVolts(); 
+bool             MayBeAddZero(uint8_t nn);
+void             SendText1(char* tbox, char* NewWord);
+void             ScrollHelpFile();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
