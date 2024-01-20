@@ -322,4 +322,110 @@ void EndSubTrimView()
     LastTimeRead = 0;
     UpdateModelsNameEveryWhere();
 }
+
+
+
+// *************************************************************************************************************
+
+void IncTrim(uint8_t t)
+{
+    bool Sounded = false;
+    Trims[Bank][t] += 1;
+    if (Trims[Bank][t] >= 120) {
+        Trims[Bank][t] = 120;
+        if (TrimClicks) {
+
+            PlaySound(BEEPCOMPLETE);
+            Sounded         = true;
+            TrimRepeatSpeed = DEFAULTTRIMREPEATSPEED;
+        }
+    }
+    if (Trims[Bank][t] == 80) {
+        TrimRepeatSpeed = DEFAULTTRIMREPEATSPEED; // Restore default trim repeat speed at centre
+        if (TrimClicks) {
+            PlaySound(BEEPMIDDLE);
+            Sounded = true;
+        }
+    }
+    if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimView();
+    if ((TrimClicks) && (!Sounded)) PlaySound(CLICKZERO);
+}
+// *************************************************************************************************************
+
+void DecTrim(uint8_t t)
+{
+
+    bool Sounded = false;
+    Trims[Bank][t] -= 1;
+    if (Trims[Bank][t] <= 40) {
+        Trims[Bank][t] = 40;
+        if (TrimClicks) {
+            PlaySound(BEEPCOMPLETE);
+            Sounded         = true;
+            TrimRepeatSpeed = DEFAULTTRIMREPEATSPEED;
+        }
+    }
+    if (Trims[Bank][t] == 80) {
+        TrimRepeatSpeed = DEFAULTTRIMREPEATSPEED; // Restore default trim repeat speed at centre
+        if (TrimClicks) {
+            PlaySound(BEEPMIDDLE);
+            Sounded = true;
+        }
+    }
+    if ((CurrentView == TRIM_VIEW) || (CurrentView == FRONTVIEW)) UpdateTrimView();
+    if ((TrimClicks) && (!Sounded)) PlaySound(CLICKZERO);
+}
+
+// *************************************************************************************************************
+
+void MoveaTrim(uint8_t i)
+{
+    uint8_t Elevator = 1;
+    uint8_t Throttle = 2;
+
+    if (SticksMode == 2) {
+        Elevator = 2;
+        Throttle = 1;
+    }
+
+    switch (i) {
+        case 0:
+            IncTrim(InputTrim[0]); // Aileron
+            break;
+        case 1:
+            DecTrim(InputTrim[0]); // Aileron
+            break;
+        case 2:
+            IncTrim(InputTrim[Elevator]);
+            break;
+        case 3:
+            DecTrim(InputTrim[Elevator]);
+            break;
+        case 4:
+            DecTrim(InputTrim[Throttle]);
+            break;
+        case 5:
+            IncTrim(InputTrim[Throttle]);
+            break;
+        case 6:
+            IncTrim(InputTrim[3]); // Rudder
+            break;
+        case 7:
+            DecTrim(InputTrim[3]); // Rudder
+            break;
+        default:
+            break;
+    }
+    if (CopyTrimsToAll) {
+        for (i = 0; i < 4; ++i) {
+            for (int fm = 1; fm < 5; ++fm) {
+                Trims[fm][i] = Trims[Bank][i];
+            }
+        }
+    }
+}
+
+
+
+
 #endif
