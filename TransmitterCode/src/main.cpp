@@ -3881,9 +3881,11 @@ void SaveSwitches(){
 
 /******************************************************************************************************************************/
 void ShowScreenAgain(){
-    RestoreBrightness();
-    GotoFrontView();
-    ScreenIsOff = false;
+    if (ScreenIsOff) {
+        RestoreBrightness();
+        GotoFrontView();
+        ScreenIsOff = false;
+    }
 }
 
 /******************************************************************************************************************************/
