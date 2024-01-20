@@ -54,7 +54,7 @@ var searchData=
   ['redledon_51',['RedLedOn',['../1Definitions_8h.html#a7d34cec6e8edc20c8b50424e15dcc7c7',1,'RedLedOn():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a7d34cec6e8edc20c8b50424e15dcc7c7',1,'RedLedOn():&#160;main.cpp']]],
   ['reducelimits_52',['ReduceLimits',['../TransmitterCode_2src_2main_8cpp.html#ad875fe28566f35ffc5f90e73d0089fc6',1,'main.cpp']]],
   ['reenablescanbutton_53',['ReEnableScanButton',['../1Definitions_8h.html#a0a3d89dfcfab70c6cbc50401fff1afeb',1,'1Definitions.h']]],
-  ['refreshlog_54',['RefreshLog',['../TransmitterCode_2src_2main_8cpp.html#a816b0ec602ed068bb08647d951681993',1,'main.cpp']]],
+  ['refreshlog_54',['RefreshLog',['../LogFiles_8h.html#a816b0ec602ed068bb08647d951681993',1,'LogFiles.h']]],
   ['reinitradio_55',['ReInitRadio',['../1Definitions_8h.html#ac148524792a820f47637fe5d848c5e2c',1,'1Definitions.h']]],
   ['renamefile_56',['RenameFile',['../TransmitterCode_2src_2main_8cpp.html#a9d94366336f1e5fd43edb9c24bec5821',1,'main.cpp']]],
   ['reset_57',['reset',['../classMPU6050.html#a7100b6d276c3c8664cf00d768b7b0dee',1,'MPU6050']]],

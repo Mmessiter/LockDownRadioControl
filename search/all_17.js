@@ -10,7 +10,7 @@ var searchData=
   ['updateoneswitchview_7',['UpdateOneSwitchView',['../TransmitterCode_2src_2main_8cpp.html#a5ffb33241b2b7a4dd07d631025aa813f',1,'main.cpp']]],
   ['updateswitchesview_8',['UpdateSwitchesView',['../TransmitterCode_2src_2main_8cpp.html#ad2376976bcbc43d81e55e5b58ce2818d',1,'main.cpp']]],
   ['updatetrimview_9',['UpdateTrimView',['../Trims_8h.html#ac78966debc2cdc13d8ca958ce3b20c78',1,'Trims.h']]],
-  ['uplog_10',['UpLog',['../TransmitterCode_2src_2main_8cpp.html#a2206c19b4fc075f4c9f1bb957ca89e1d',1,'main.cpp']]],
+  ['uplog_10',['UpLog',['../LogFiles_8h.html#a2206c19b4fc075f4c9f1bb957ca89e1d',1,'LogFiles.h']]],
   ['use_5fina219_11',['USE_INA219',['../1Definitions_8h.html#a87ae50e2ac4507568cbf98072f174a1b',1,'1Definitions.h']]],
   ['used_5frecovery_5fchannels_12',['Used_Recovery_Channels',['../namespaceFHSS__data.html#a8380a667acd9e0130553ce2ae0defcce',1,'FHSS_data']]],
   ['usedefaultrecoverychannels_13',['UseDefaultRecoveryChannels',['../common_8h.html#a23be886d0f26b1bd0487babfb4d7ed7e',1,'UseDefaultRecoveryChannels():&#160;common.h'],['../1Definitions_8h.html#a23be886d0f26b1bd0487babfb4d7ed7e',1,'UseDefaultRecoveryChannels():&#160;1Definitions.h']]],

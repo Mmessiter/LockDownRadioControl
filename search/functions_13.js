@@ -7,7 +7,7 @@ var searchData=
   ['updateoneswitchview_4',['UpdateOneSwitchView',['../TransmitterCode_2src_2main_8cpp.html#a5ffb33241b2b7a4dd07d631025aa813f',1,'main.cpp']]],
   ['updateswitchesview_5',['UpdateSwitchesView',['../TransmitterCode_2src_2main_8cpp.html#ad2376976bcbc43d81e55e5b58ce2818d',1,'main.cpp']]],
   ['updatetrimview_6',['UpdateTrimView',['../Trims_8h.html#ac78966debc2cdc13d8ca958ce3b20c78',1,'Trims.h']]],
-  ['uplog_7',['UpLog',['../TransmitterCode_2src_2main_8cpp.html#a2206c19b4fc075f4c9f1bb957ca89e1d',1,'main.cpp']]],
+  ['uplog_7',['UpLog',['../LogFiles_8h.html#a2206c19b4fc075f4c9f1bb957ca89e1d',1,'LogFiles.h']]],
   ['usedefaultrecoverychannels_8',['UseDefaultRecoveryChannels',['../common_8h.html#a23be886d0f26b1bd0487babfb4d7ed7e',1,'UseDefaultRecoveryChannels():&#160;common.h'],['../1Definitions_8h.html#a23be886d0f26b1bd0487babfb4d7ed7e',1,'UseDefaultRecoveryChannels():&#160;1Definitions.h']]],
   ['useextraparameters_9',['UseExtraParameters',['../common_8h.html#a3c0ffefc9101d9a52b4a210b4ed34552',1,'UseExtraParameters():&#160;radio.h'],['../radio_8h.html#a3c0ffefc9101d9a52b4a210b4ed34552',1,'UseExtraParameters():&#160;radio.h']]],
   ['usefullrate_10',['UseFullRate',['../TransmitterCode_2src_2main_8cpp.html#a8f53f86499d740b350f7b6d791c90497',1,'main.cpp']]],

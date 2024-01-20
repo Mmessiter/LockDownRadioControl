@@ -26,7 +26,7 @@ var searchData=
   ['checkgapslength_23',['CheckGapsLength',['../1Definitions_8h.html#aa60c9cac090f6965b4223d5caf84e2f1',1,'CheckGapsLength():&#160;transceiver.h'],['../transceiver_8h.html#a953f1d5046e183549ed95b08f6d675e3',1,'CheckGapsLength():&#160;transceiver.h']]],
   ['checkhardwaretrims_24',['CheckHardwareTrims',['../Trims_8h.html#add643409678258cabdb0aa1ae76d802a',1,'Trims.h']]],
   ['checkinvisiblepoint_25',['CheckInvisiblePoint',['../1Definitions_8h.html#a1870ad872e2424cbf8222747d3a43617',1,'CheckInvisiblePoint():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a1870ad872e2424cbf8222747d3a43617',1,'CheckInvisiblePoint():&#160;main.cpp']]],
-  ['checklogfileisopen_26',['CheckLogFileIsOpen',['../TransmitterCode_2src_2main_8cpp.html#ac45f2f949ccfa372a8cbab3ef0b8caa8',1,'main.cpp']]],
+  ['checklogfileisopen_26',['CheckLogFileIsOpen',['../LogFiles_8h.html#ac45f2f949ccfa372a8cbab3ef0b8caa8',1,'LogFiles.h']]],
   ['checkmacrosbuffer_27',['CheckMacrosBuffer',['../1Definitions_8h.html#a6bb930920ba3a8d45a737dde782ef65c',1,'CheckMacrosBuffer():&#160;Utilities.h'],['../Utilities_8h.html#a6bb930920ba3a8d45a737dde782ef65c',1,'CheckMacrosBuffer():&#160;Utilities.h']]],
   ['checkmodelname_28',['CheckModelName',['../1Definitions_8h.html#a5c0f1fd26cdd6ecde365f521060158ba',1,'CheckModelName():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a5c0f1fd26cdd6ecde365f521060158ba',1,'CheckModelName():&#160;main.cpp']]],
   ['checkmotoroff_29',['CheckMotorOff',['../1Definitions_8h.html#a2f7d73b3096c884b2ace4b3399268325',1,'CheckMotorOff():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a2f7d73b3096c884b2ace4b3399268325',1,'CheckMotorOff():&#160;main.cpp']]],
@@ -47,7 +47,7 @@ var searchData=
   ['clearmostparameters_44',['ClearMostParameters',['../TransmitterCode_2src_2main_8cpp.html#afeaea883a32e6ebe461d419fab1b9f59',1,'main.cpp']]],
   ['clearsuccessrate_45',['ClearSuccessRate',['../1Definitions_8h.html#a82b1900a80d1622896601c57d6edaeda',1,'ClearSuccessRate():&#160;Utilities.h'],['../Utilities_8h.html#a82b1900a80d1622896601c57d6edaeda',1,'ClearSuccessRate():&#160;Utilities.h']]],
   ['cleartext_46',['ClearText',['../1Definitions_8h.html#af0852678d8e89501acee8951f09d3b43',1,'ClearText():&#160;Utilities.h'],['../Utilities_8h.html#af0852678d8e89501acee8951f09d3b43',1,'ClearText():&#160;Utilities.h']]],
-  ['closelogfile_47',['CloseLogFile',['../TransmitterCode_2src_2main_8cpp.html#a6f003363493fc53b69f9efc1f447a6a1',1,'CloseLogFile():&#160;main.cpp'],['../1Definitions_8h.html#abc72fe68abd024cb263115e0afd3160a',1,'CloseLogFile():&#160;main.cpp']]],
+  ['closelogfile_47',['CloseLogFile',['../LogFiles_8h.html#a6f003363493fc53b69f9efc1f447a6a1',1,'CloseLogFile():&#160;LogFiles.h'],['../1Definitions_8h.html#abc72fe68abd024cb263115e0afd3160a',1,'CloseLogFile():&#160;LogFiles.h']]],
   ['closemodelsfile_48',['CloseModelsFile',['../1Definitions_8h.html#a6922974b734cfe3a511e074a2d6ac33c',1,'CloseModelsFile():&#160;SDcard.h'],['../SDcard_8h.html#a6922974b734cfe3a511e074a2d6ac33c',1,'CloseModelsFile():&#160;SDcard.h']]],
   ['commandmotors_49',['commandMotors',['../Quadcopter_2src_2main_8cpp.html#a9acf6c6b8012c342b50fc7b0656ccc31',1,'main.cpp']]],
   ['comparemodelsids_50',['CompareModelsIDs',['../1Definitions_8h.html#af8fe429ceb65bf9d257a2a0f1c63eccb',1,'CompareModelsIDs():&#160;ModelMatch.h'],['../ModelMatch_8h.html#af8fe429ceb65bf9d257a2a0f1c63eccb',1,'CompareModelsIDs():&#160;ModelMatch.h']]],
@@ -61,6 +61,6 @@ var searchData=
   ['controlrate_58',['controlRATE',['../Quadcopter_2src_2main_8cpp.html#ae7f9ccabb7ac4a5c80d7189d9ba54e13',1,'main.cpp']]],
   ['convertbuddypipeto64bits_59',['ConvertBuddyPipeTo64BITS',['../TransmitterCode_2src_2main_8cpp.html#a9938fb6967cdd208ca6d6e54531a5610',1,'main.cpp']]],
   ['copycurrentpipe_60',['CopyCurrentPipe',['../radio_8h.html#aa55e98a44b0bcb87b4e318381fece092',1,'radio.h']]],
-  ['createtimedatestamp_61',['CreateTimeDateStamp',['../TransmitterCode_2src_2main_8cpp.html#a1a0a5d73007aba01755e5274d12e6e9b',1,'main.cpp']]],
-  ['createtimestamp_62',['CreateTimeStamp',['../TransmitterCode_2src_2main_8cpp.html#a5d42b1fba153cc76dc96778cfb6f1a40',1,'main.cpp']]]
+  ['createtimedatestamp_61',['CreateTimeDateStamp',['../LogFiles_8h.html#a1a0a5d73007aba01755e5274d12e6e9b',1,'LogFiles.h']]],
+  ['createtimestamp_62',['CreateTimeStamp',['../LogFiles_8h.html#a5d42b1fba153cc76dc96778cfb6f1a40',1,'LogFiles.h']]]
 ];

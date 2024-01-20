@@ -23,7 +23,7 @@ var searchData=
   ['writeprogdmpconfigurationset_20',['writeProgDMPConfigurationSet',['../classMPU6050.html#a160a3d018a81eb85a33874a43f44b3ea',1,'MPU6050']]],
   ['writeprogmemoryblock_21',['writeProgMemoryBlock',['../classMPU6050.html#a201dc0aa819f451584c575c5a7590e10',1,'MPU6050']]],
   ['writeregister_22',['writeRegister',['../classMPU9250.html#a5712e6a1fa4a34cf44234c1e44f1ca52',1,'MPU9250']]],
-  ['writetologfile_23',['WriteToLogFile',['../TransmitterCode_2src_2main_8cpp.html#a99154e537ca6e0ce5d538fddf0c2aab3',1,'main.cpp']]],
+  ['writetologfile_23',['WriteToLogFile',['../LogFiles_8h.html#a99154e537ca6e0ce5d538fddf0c2aab3',1,'LogFiles.h']]],
   ['writeword_24',['writeWord',['../classI2Cdev.html#acbe68a802d6a177301736e60bedd1def',1,'I2Cdev']]],
   ['writewords_25',['writeWords',['../classI2Cdev.html#aae37c0526e4b4730a5b2ffd752fd8b21',1,'I2Cdev']]]
 ];
