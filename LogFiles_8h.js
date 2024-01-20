@@ -1,6 +1,5 @@
 var LogFiles_8h =
 [
-    [ "BUDDYLOGFILES_HWIRELESS_H", "LogFiles_8h.html#ac305bf5e793e2527444b926aacaeabf1", null ],
     [ "CheckLogFileIsOpen", "LogFiles_8h.html#ac45f2f949ccfa372a8cbab3ef0b8caa8", null ],
     [ "CloseLogFile", "LogFiles_8h.html#a6f003363493fc53b69f9efc1f447a6a1", null ],
     [ "CreateTimeDateStamp", "LogFiles_8h.html#a1a0a5d73007aba01755e5274d12e6e9b", null ],

@@ -34,12 +34,11 @@ var searchData=
   ['boxwidth_31',['BOXWIDTH',['../1Definitions_8h.html#a0fb7ebbe6721928500c5501e071c8019',1,'1Definitions.h']]],
   ['brown_32',['Brown',['../1Definitions_8h.html#a3057a3f4d88842d385cd5ad6c5ddf80f',1,'1Definitions.h']]],
   ['buddychview_33',['BUDDYCHVIEW',['../1Definitions_8h.html#a292f677c644b13c00f8026f08ee648c9',1,'1Definitions.h']]],
-  ['buddylogfiles_5fhwireless_5fh_34',['BUDDYLOGFILES_HWIRELESS_H',['../LogFiles_8h.html#ac305bf5e793e2527444b926aacaeabf1',1,'LogFiles.h']]],
-  ['buddymsg_35',['BUDDYMSG',['../1Definitions_8h.html#a4369b0021c14140eca0aab3f7d3c83d1',1,'1Definitions.h']]],
-  ['buddyppmport_36',['BUDDYPPMPORT',['../1Definitions_8h.html#a7693b6311a14f65e0b9e2f3d202229b9',1,'1Definitions.h']]],
-  ['buddyview_37',['BUDDYVIEW',['../1Definitions_8h.html#a38c9376ad661411cad3019d4a43ac493',1,'1Definitions.h']]],
-  ['buffer_5flength_38',['BUFFER_LENGTH',['../I2Cdev_8cpp.html#af7b7dc9a200cb1404c280bd500fd1551',1,'I2Cdev.cpp']]],
-  ['buffersize_39',['BUFFERSIZE',['../ModelExchange_8h.html#ac3146f1e9227301bb4aa518f4d336cee',1,'ModelExchange.h']]],
-  ['button_5fsense_5fpin_40',['BUTTON_SENSE_PIN',['../1Definitions_8h.html#a6ee4615320320baaf7e0d8e87642141e',1,'1Definitions.h']]],
-  ['bytespermacro_41',['BYTESPERMACRO',['../1Definitions_8h.html#acb6ba8383362a5f2efee8416bc4300c9',1,'1Definitions.h']]]
+  ['buddymsg_34',['BUDDYMSG',['../1Definitions_8h.html#a4369b0021c14140eca0aab3f7d3c83d1',1,'1Definitions.h']]],
+  ['buddyppmport_35',['BUDDYPPMPORT',['../1Definitions_8h.html#a7693b6311a14f65e0b9e2f3d202229b9',1,'1Definitions.h']]],
+  ['buddyview_36',['BUDDYVIEW',['../1Definitions_8h.html#a38c9376ad661411cad3019d4a43ac493',1,'1Definitions.h']]],
+  ['buffer_5flength_37',['BUFFER_LENGTH',['../I2Cdev_8cpp.html#af7b7dc9a200cb1404c280bd500fd1551',1,'I2Cdev.cpp']]],
+  ['buffersize_38',['BUFFERSIZE',['../ModelExchange_8h.html#ac3146f1e9227301bb4aa518f4d336cee',1,'ModelExchange.h']]],
+  ['button_5fsense_5fpin_39',['BUTTON_SENSE_PIN',['../1Definitions_8h.html#a6ee4615320320baaf7e0d8e87642141e',1,'1Definitions.h']]],
+  ['bytespermacro_40',['BYTESPERMACRO',['../1Definitions_8h.html#acb6ba8383362a5f2efee8416bc4300c9',1,'1Definitions.h']]]
 ];

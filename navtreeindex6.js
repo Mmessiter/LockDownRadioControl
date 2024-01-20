@@ -1,6 +1,5 @@
 var NAVTREEINDEX6 =
 {
-"Quadcopter_2src_2main_8cpp.html#a7e41a2178d7943922a90e58da80ffa9d":[5,0,0,0,1,180],
 "Quadcopter_2src_2main_8cpp.html#a7f50a251f76d5d879a432d065a308d3b":[5,0,0,0,1,163],
 "Quadcopter_2src_2main_8cpp.html#a80829340aa26ca4f05f9b7fe30e1f489":[5,0,0,0,1,157],
 "Quadcopter_2src_2main_8cpp.html#a80f72952996d044a04f25ba02ecf8389":[5,0,0,0,1,61],
@@ -249,5 +248,6 @@ var NAVTREEINDEX6 =
 "Telemetry_8h.html#a83a79fb69771868d0a4d1d254644e6aa":[5,0,3,0,0,10,9],
 "Telemetry_8h.html#a90e8c9138d652fd7fc253a581ca1485a":[5,0,3,0,0,10,4],
 "Telemetry_8h.html#a98c67388b3e9a2bb7b98706f22612c0b":[5,0,3,0,0,10,3],
-"Telemetry_8h.html#adb1a04de9e49c7d96cfe009fd98c6383":[5,0,3,0,0,10,5]
+"Telemetry_8h.html#adb1a04de9e49c7d96cfe009fd98c6383":[5,0,3,0,0,10,5],
+"Telemetry_8h.html#ae687bc006af7ce7bffc6b7f8ec4f5ea3":[5,0,3,0,0,10,0]
 };
