@@ -910,11 +910,19 @@ FASTRUN void DoReverseSense()
 
 /************************************************************************************************************/
 void DelayWithDog(uint32_t HowLong)
-{ // Implements delay() and also kicks the dog (very cruelly) to keep it quiet.
+{                                                                       // Implements delay() and also kicks the dog (very cruelly) to keep it quiet.
     uint32_t ThisMoment = millis();
+    static bool AlreadyKicking = false;
+    if (AlreadyKicking) return;                                         // Guard against recursive calls
+    AlreadyKicking = true;
     while ((millis() - ThisMoment) < HowLong) {
         KickTheDog();
+        if (ModelMatched && BoundFlag){
+            GetNewChannelValues();                                      // Get new channel values from receiver even during delay
+            SendData();                                                 // Send new channel values to servos even during delay
+        }
     }
+    AlreadyKicking = false;
 }
 /************************************************************************************************************/
 template<typename any>
