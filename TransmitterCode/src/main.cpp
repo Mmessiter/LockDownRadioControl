@@ -5362,11 +5362,12 @@ void GetBank()   // ... and the other three switches
     ReadAutoAndMotorSwitch();
 
     if (SafetyWasOn != SafetyON) {
-        ShowScreenAgain();
+       // ShowScreenAgain();
         if (SafetyON)
-            ShowSafetyIsOn();
+            {ShowSafetyIsOn();}
         else
-            ShowSafetyIsOff();
+            {ShowSafetyIsOff();}
+        
         SafetyWasOn = SafetyON;
     }
 
@@ -5389,7 +5390,7 @@ void GetBank()   // ... and the other three switches
     }
 
     if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill)) { // MotorEnabled changed ?
-        ShowScreenAgain();
+       // ShowScreenAgain();
         if (MotorEnabled) {
             if (LedWasRed)
             {
@@ -5427,7 +5428,7 @@ void GetBank()   // ... and the other three switches
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
     if (Bank != PreviousBank) {
         LastTimeRead = 0;
-        ShowScreenAgain();
+       // ShowScreenAgain();
         if (UseLog) LogNewBank();
         if (MotorEnabled == MotorWasEnabled) { // When turning off motor, don't sound bank too.
             if (AnnounceBanks) SoundBank();

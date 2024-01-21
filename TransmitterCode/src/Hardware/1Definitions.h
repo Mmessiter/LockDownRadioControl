@@ -86,7 +86,7 @@
     #define MAXSHOWCOMMSSESCONDS   6                            // Assess average connection quality over most recent 6 seconds continously
     #define SHOWCOMMSDELAY         100                          // ms pauses between updated info on NEXTION
     #define WARMUPDELAY            300                          // fails at 200 so must be >200 ...
-    #define SCREENCHANGEWAIT       1                            // allow 1ms for screen to appear
+    #define SCREENCHANGEWAIT       2                            // allow 2ms for screen to appear
     #define BATTERY_CHECK_INTERVAL 15000                        // 15 seconds between battery checks
 
 // **************************************************************************
