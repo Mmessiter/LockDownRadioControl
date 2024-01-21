@@ -110,7 +110,7 @@ void SendCommand(char* tbox)
     }
     GetReturnCode();
     if (InStrng(blankview, tbox)) return;                      // Don't wait for blankview
-    if (InStrng(page, tbox)) DelayWithDog(SCREENCHANGEWAIT);    // Allow time for new page to appear
+    if (InStrng(page, tbox)) DelayWithDog(SCREENCHANGEWAIT);   // Allow time for new page to appear
 }
 /*********************************************************************************************************************************/
 void EndSend()

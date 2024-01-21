@@ -914,13 +914,6 @@ void DelayWithDog(uint32_t HowLong)
     uint32_t ThisMoment = millis();
     while ((millis() - ThisMoment) < HowLong) {
         KickTheDog();
-        if (BoundFlag && ModelMatched && (CurrentView != FRONTVIEW)) 
-        {
-           if (!AddExtraParameters){
-                for (int i = 0; i < CHANNELSUSED; ++i) SendBuffer[i] = PreviousBuffer[i];  // during a pause, keep sending the last values
-                SendData();
-           }
-        }
     }
 }
 /************************************************************************************************************/
