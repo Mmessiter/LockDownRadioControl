@@ -918,7 +918,7 @@ void DelayWithDog(uint32_t HowLong)
     while ((millis() - ThisMoment) < HowLong) {
         KickTheDog();
         if (ModelMatched && BoundFlag){
-            GetNewChannelValues();                                      // Get new channel values from receiver even during delay
+            GetNewChannelValues();                                      // Get new channel values from tx even during delay
             SendData();                                                 // Send new channel values to servos even during delay
         }
     }
