@@ -198,6 +198,7 @@
     #define PONGVIEW         37
     #define IDCHECKVIEW      38
     #define BLANKVIEW        39
+    #define TYPEVIEW         40
     
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -1000,6 +1001,16 @@ int     LastRXModelMaxAltitude = 0;
 float   LastRXTemperature      = 0;
 uint8_t RadioNumber            = 0;
 uint8_t LastRadioNumber        = 0;
+
+char    pDataView[]               = "page DataView";
+char    pSwitchesView[]           = "page SwitchesView";
+char    pInputsView[]             = "page InputsView";
+char    pOptionsViewS[]           = "page OptionsView"; 
+char    pMixesView[]              = "page MixesView";
+char    pTypeView[]               = "page TypeView";
+char    pFailSafe[]               = "page FailSafeView";
+char    pModelsView[]             = "page ModelsView";
+char    pRXSetupView[]            = "page RXSetupView";
 
 
 // **********************************************************************************************************************************

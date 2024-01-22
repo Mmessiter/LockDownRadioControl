@@ -2002,23 +2002,22 @@ void DeleteModelID()
     char Done[]             = "Model ID deleted.";
     char DoneAlready[]      = "No model ID not found.";
     char NotDone[]          = "Model ID retained.";
-    char page_RXSetupView[] = "page RXSetupView";
 
     strcpy(prompt, p);
     strcat(prompt, ModelName);
     strcat(prompt, p1);
 
     if (!ModelsMacUnionSaved.Val64) {
-        MsgBox(page_RXSetupView, DoneAlready);
+        MsgBox(pRXSetupView, DoneAlready);
         return;
     }
-    if (GetConfirmation(page_RXSetupView, prompt)) {
+    if (GetConfirmation(pRXSetupView, prompt)) {
         ModelsMacUnionSaved.Val64 = 0;
         SaveOneModel(ModelNumber);
-        MsgBox(page_RXSetupView, Done);
+        MsgBox(pRXSetupView, Done);
     }
     else {
-        MsgBox(page_RXSetupView, NotDone);
+        MsgBox(pRXSetupView, NotDone);
     }
 }
 
@@ -2031,7 +2030,6 @@ void StoreModelID()
     char p[]                = "Store ID for ";
     char p1[]               = "?";
     char Done[]             = "Model ID stored.";
-    char page_RXSetupView[] = "page RXSetupView";
     char NotDone[]          = "Model ID not stored.";
     char DoneAlready[]      = "No ID to store!";
 
@@ -2040,18 +2038,18 @@ void StoreModelID()
     strcat(prompt, p1);
 
     if (!ModelsMacUnion.Val64) {
-        MsgBox(page_RXSetupView, DoneAlready);
+        MsgBox(pRXSetupView, DoneAlready);
         return;
     }
 
-    if (GetConfirmation(page_RXSetupView, prompt)) {
+    if (GetConfirmation(pRXSetupView, prompt)) {
         PlaySound(MMSAVED);
         ModelsMacUnionSaved.Val64 = ModelsMacUnion.Val64;
         SaveOneModel(ModelNumber);
-        MsgBox(page_RXSetupView, Done);
+        MsgBox(pRXSetupView, Done);
     }
     else {
-        MsgBox(page_RXSetupView, NotDone);
+        MsgBox(pRXSetupView, NotDone);
     }
 }
 /*********************************************************************************************************************************/
@@ -2271,20 +2269,9 @@ void UpdateOneSwitchView()
     SendValue(SwNum, SwitchEditNumber); // show switch number
     DoOneSwitchView(SwitchEditNumber);
 }
-/*********************************************************************************************************************************/
-void RestoreBrightness()
-{
-    char cmd[20];
-    char dim[] = "dim=";
-    char nb[10];
-    if (Brightness < 10) Brightness = 10;
-    strcpy(cmd, dim);
-    Str(nb, Brightness, 0);
-    strcat(cmd, nb);
-    ScreenIsOff     = false;
-    SendCommand(cmd);
-    ScreenTimeTimer = millis(); // reset screen counter
-}
+
+
+
 
 /*********************************************************************************************************************************/
 
@@ -2478,7 +2465,6 @@ void PopulateMacrosView()
 
 void ExitMacrosView()
 {
-    char    pRXSetupView[]               = "page RXSetupView";
     char    MacroNumber[]                = "Mno";
     char    TriggerChannel[]             = "Tch";
     char    MoveToChannel[]              = "Mch";
@@ -2505,7 +2491,6 @@ void EndReverseView()
     char    fs[16][5] = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
     uint8_t i;
     char    ProgressStart[] = "vis Progress,1";
-    char    pRXSetupView[]  = "page RXSetupView";
     char    Progress[]      = "Progress";
     SendCommand(ProgressStart);
     ReversedChannelBITS = 0;
@@ -2572,7 +2557,6 @@ void EndBuddyView()
     bool Pupil           = false;
     bool Master          = false;
     char BuddyWireless[] = "wireless";
-    char pRXSetupView[]  = "page RXSetupView";
                      
     Pupil          = GetValue(BuddyP);        // Pupil ?
     Master         = GetValue(BuddyM);        // Master ?
@@ -2734,11 +2718,11 @@ void GotoMacrosView()
 /******************************************************************************************************************************/
 void SetupViewFM()
 {
-    char page_RXSetupView[] = "page RXSetupView";
+   
 
     SaveAllParameters();
     CurrentView = RXSETUPVIEW;
-    SendCommand(page_RXSetupView);
+    SendCommand(pRXSetupView);
     UpdateModelsNameEveryWhere();
 }
 
@@ -2868,7 +2852,6 @@ void RXSetup1End()
     char c2[]               = "c2"; // TimerDownwards timer on off
     char r0[]               = "r0"; // SBUS on
     char n5[]               = "n5"; // PPMChannelCount
-    char page_RXSetupView[] = "page RXSetupView";
     char ProgressStart[]    = "vis Progress,1";
     char Progress[]         = "Progress";
 
@@ -2900,7 +2883,7 @@ void RXSetup1End()
     CurrentView = RXSETUPVIEW;
     SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
-    SendCommand(page_RXSetupView);
+    SendCommand(pRXSetupView);
     AddParameterstoQueue(5);                // 5 is the ID for SBUS/PPM at RX selection and PPM channel count
   
 }
@@ -3332,7 +3315,6 @@ void ListenToBanks()
 /******************************************************************************************************************************/
 void StartModelSetup()
 {
-    char GotoModelSetup[] = "page RXSetupView";
     char fs[16][5]        = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
     char ProgressStart[]  = "vis Progress,1";
     char ProgressEnd[]    = "vis Progress,0";
@@ -3352,7 +3334,7 @@ void StartModelSetup()
         SendCommand(ProgressEnd);
     }
 
-    SendCommand(GotoModelSetup);
+    SendCommand(pRXSetupView);
     CurrentView = RXSETUPVIEW;
     SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
@@ -3879,26 +3861,6 @@ void SaveSwitches(){
     SendCommand(page_SetupView);
 }
 
-/******************************************************************************************************************************/
-void ShowScreenAgain(){
-    RestoreBrightness();
-    DelayWithDog(10);
-    GotoFrontView();
-    DelayWithDog(10);
-    ScreenIsOff  = false;
-}
-
-/******************************************************************************************************************************/
-void HideScreenAgain(){
-    char ScreenOff[]    = "page BlankView";
-    char NoBrightness[] = "dim=0";
-    SendCommand(ScreenOff);     // move to blank screen
-    DelayWithDog(10);           // wait a moment for screen to change
-    SendCommand(NoBrightness);  // turn off backlight
-    ScreenIsOff     = true;
-    CurrentView     = BLANKVIEW;
-}
-
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
 #define LASTFUNCTION 75 // One more than final one, because first is number zero
 
@@ -4132,13 +4094,9 @@ FASTRUN void ButtonWasPressed()
         char Dec_Date[]                = "DecDate";
         char Inc_Month[]               = "IncMonth";
         char Dec_Month[]               = "DecMonth";
-        char pDataView[]               = "page DataView";
-        char pSwitchesView[]           = "page SwitchesView";
-        char pInputsView[]             = "page InputsView";
-        char pOptionsViewS[]           = "page OptionsView"; // TX options view
-        char pMixesView[]              = "page MixesView";
-        char pTypeView[]               = "page TypeView";
-        char pFailSafe[]               = "page FailSafeView";
+        
+       
+
         char DataView_Clear[]          = "Clear";
         char DataView_AltZero[]        = "AltZero";
         char OptionsEnd[]              = "OptionsEnd";
@@ -4179,7 +4137,6 @@ FASTRUN void ButtonWasPressed()
         char ques[]              = "?";
         char hhead[]             = "Create backup file for";
         char fprompt[]           = "Filename?";
-        char page_RXSetupView[]  = "page RXSetupView";
         char ProgressStart[]     = "vis Progress,1";
         char ProgressEnd[]       = "vis Progress,0";
         char Progress[]          = "Progress";
@@ -4323,7 +4280,7 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(DataEnd, TextIn) > 0) { //  Exit from Data screen
-            SendCommand(page_RXSetupView);
+            SendCommand(pRXSetupView);
             CurrentView = RXSETUPVIEW;
             UpdateModelsNameEveryWhere();
             ClearText();
@@ -4605,7 +4562,7 @@ FASTRUN void ButtonWasPressed()
             SendValue(Progress, 100);
             UpdateButtonLabels();
             CurrentView = RXSETUPVIEW;
-            SendCommand(page_RXSetupView);
+            SendCommand(pRXSetupView);
             LastTimeRead = 0;
             ClearText();
             return;
@@ -5534,6 +5491,7 @@ void GotoFrontView()
     OldRate             = 235;  // forced different
     ForceVoltDisplay    = true; // force redisplay of voltage
     LastConnectionQuality = 0;  // force redisplay of connection quality
+   
 
     if (CurrentView != FRONTVIEW) {
         if (CurrentView == SCANVIEW) DoScanEnd();                       // Put transceiver back to normal mode
@@ -5559,6 +5517,8 @@ void GotoFrontView()
     }
     UpdateTrimView();
     if (BuddyPupilOnWireless) StartBuddyListen();
+
+     CurrentView = FRONTVIEW;
 }
 
 /************************************************************************************************************/
