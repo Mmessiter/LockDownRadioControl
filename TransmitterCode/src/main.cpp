@@ -3881,11 +3881,11 @@ void SaveSwitches(){
 
 /******************************************************************************************************************************/
 void ShowScreenAgain(){
-    if (ScreenIsOff) {
-        RestoreBrightness();
-        GotoFrontView();
-        ScreenIsOff = false;
-    }
+    RestoreBrightness();
+    DelayWithDog(10);
+    GotoFrontView();
+    DelayWithDog(10);
+    ScreenIsOff  = false;
 }
 
 /******************************************************************************************************************************/
@@ -5362,7 +5362,6 @@ void GetBank()   // ... and the other three switches
     ReadAutoAndMotorSwitch();
 
     if (SafetyWasOn != SafetyON) {
-        ShowScreenAgain();
         if (SafetyON)
             {ShowSafetyIsOn();}
         else
@@ -5390,7 +5389,6 @@ void GetBank()   // ... and the other three switches
     }
 
     if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill)) { // MotorEnabled changed ?
-        ShowScreenAgain();
         if (MotorEnabled) {
             if (LedWasRed)
             {
@@ -5428,7 +5426,6 @@ void GetBank()   // ... and the other three switches
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
     if (Bank != PreviousBank) {
         LastTimeRead = 0;
-        ShowScreenAgain();
         if (UseLog) LogNewBank();
         if (MotorEnabled == MotorWasEnabled) { // When turning off motor, don't sound bank too.
             if (AnnounceBanks) SoundBank();
@@ -5717,29 +5714,27 @@ void FASTRUN ManageTransmitter()
     uint32_t RightNow        = millis();
     uint32_t TXPacketElapsed = RightNow - LastPacketSentTime;
     KickTheDog(); // Watchdog ... ALWAYS!
-    if ((PACEMAKER - TXPacketElapsed < TIMEFORTXMANAGMENT) && ModelMatched) {
-        return;                                     // If it's almost time to send data, then do not start some other task which might easily take longer.
-    }
-    CheckPowerOffButton();                          // Pretty obvious really ...
-    CheckForNextionButtonPress();                   // Pretty obvious really ...
+    if ((PACEMAKER - TXPacketElapsed < TIMEFORTXMANAGMENT) && ModelMatched) return;                                 // If it's almost time to send data, then do not start some other task which might easily take longer.
+    CheckPowerOffButton();                                                                                          // Pretty obvious really ...
+    CheckForNextionButtonPress();                                                                                   // Pretty obvious really ...
 
-    if (RightNow - TransmitterLastManaged > 50) {   // 20 times a second is plenty
+    if (RightNow - TransmitterLastManaged > 50) {                                                                   // 20 times a second is plenty
         TransmitterLastManaged = millis();
-        if ((RightNow - LastTimeRead >= 500) && (CurrentView == MODELSVIEW)) CheckModelName();                    // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
+        if ((RightNow - LastTimeRead >= 500) && (CurrentView == MODELSVIEW)) CheckModelName();                      // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
         
-        if (RightNow - LastTimeRead >= 1000) {      // Only once a second for these...
+        if (RightNow - LastTimeRead >= 1000) {                                                                      // Only once a second for these...
             LastTimeRead = millis();
-            ReadTime();                             // Do the clock
-            GetGoodPacketsPerSecond();              // Do stats
+            ReadTime();                                                                                             // Do the clock
+            GetGoodPacketsPerSecond();                                                                              // Do stats
             UpdateTrimView();
-            SendOutstandingParameters();            // Send any parameters that have not been sent yet
-            ShowMotorTimer();                       // Screen Timer
-            return;                                 // That's enough housekeeping this time around
+            SendOutstandingParameters();                                                                            // Send any parameters that have not been sent yet
+            ShowMotorTimer();                                                                                       // Screen Timer
+            return;                                                                                                 // That's enough housekeeping this time around
         }
-        ReadSwitches();                             // Check switch positions 20 times a second
-        CheckHardwareTrims();                       // Trims 20 times a second
-        GetBank();                                  // Must not call too often
-        ShowComms();                                // Screen Telemetry Data (only every .333 seconds)
+        ReadSwitches();                                                                                             // Check switch positions 20 times a second
+        CheckHardwareTrims();                                                                                       // Trims 20 times a second
+        GetBank();                                                                                                  // Must not call too often
+        ShowComms();                                                                                                // Screen Telemetry Data
     }
 }
 /**********************************************************************************************************/

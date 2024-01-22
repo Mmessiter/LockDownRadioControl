@@ -413,7 +413,7 @@ void  PopulateFrontView(){
 
 FASTRUN void ShowComms() // heer 
 {
-   if (millis() - LastShowTime < SHOWCOMMSDELAY) return;  
+   if (millis() - LastShowTime < SHOWCOMMSDELAY) return;  // 10x a second is enough
     LastShowTime = millis();
     switch (CurrentView) {
             case FRONTVIEW:

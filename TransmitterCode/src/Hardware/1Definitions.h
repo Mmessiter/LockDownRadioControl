@@ -52,9 +52,9 @@
     #define CE_PIN                 7                             // for SPI to nRF24L01
     #define CSN_PIN                8                             // for SPI to nRF24L01
     #define BUDDYPPMPORT           10                            // wired Buddybox PPM pi
-    #define LOSTCONTACTCUTOFF      1                             // packets to lose before declaring lost contact 
+    #define LOSTCONTACTCUTOFF      1                             // packets to lose before declaring lost contact (only one)
    
-    #define TIMEFORTXMANAGMENT     3                             // was 3 ...  How many ms must remain spare between data packets before daring to undertake more trivial tasks
+    #define TIMEFORTXMANAGMENT     2                             // was 3 ...  How many ms must remain spare between data packets before daring to undertake more trivial tasks
     #define BINDINGTIME            2000                          // 2 seconds to bind ?
     #define CHANNELSUSED           16                           
     #define UNCOMPRESSEDWORDS      20                           // these are all bigger than needed  
