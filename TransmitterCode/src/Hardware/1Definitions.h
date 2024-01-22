@@ -53,8 +53,7 @@
     #define CSN_PIN                8                             // for SPI to nRF24L01
     #define BUDDYPPMPORT           10                            // wired Buddybox PPM pi
     #define LOSTCONTACTCUTOFF      1                             // packets to lose before declaring lost contact (only one)
-   
-    #define TIMEFORTXMANAGMENT     2                             // was 3 ...  How many ms must remain spare between data packets before daring to undertake more trivial tasks
+    #define TIMEFORTXMANAGMENT     3                             // 3 seems best!  ...  How many ms must remain spare between data packets before daring to undertake more trivial tasks
     #define BINDINGTIME            2000                          // 2 seconds to bind ?
     #define CHANNELSUSED           16                           
     #define UNCOMPRESSEDWORDS      20                           // these are all bigger than needed  
@@ -64,7 +63,7 @@
     #define MAXMIXES               32                           // 32 mixes
     #define TICKSPERMINUTE         60000                        // millis() = 60000 per minute
     #define PROPOCHANNELS          8                            // Only 4 have knobs / 2 sticks (= 4 hall sensors)
-    #define BANKSWITCH             4                            // Default MODE switch
+    #define BANKSWITCH             4                            // Default BANK switch
     #define AUTOSWITCH             1                            // Default AUTO switch
     #define BANKSUSED              4                            // Flight modes (AKA Banks)
     #define LOWBATTERY             42                           // Default percent for warning (User definable)
