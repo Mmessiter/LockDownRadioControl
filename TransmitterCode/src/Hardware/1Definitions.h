@@ -51,7 +51,7 @@
 
     #define CE_PIN                 7                             // for SPI to nRF24L01
     #define CSN_PIN                8                             // for SPI to nRF24L01
-    #define BUDDYPPMPORT           10                            // wired Buddybox PPM pi
+    #define BUDDYPPMPORT           10                            // wired Buddybox PPM pin number
     #define LOSTCONTACTCUTOFF      1                             // packets to lose before declaring lost contact (only one)
     #define TIMEFORTXMANAGMENT     3                             // 3 seems best!  ...  How many ms must remain spare between data packets before daring to undertake more trivial tasks
     #define BINDINGTIME            2000                          // 2 seconds to bind ?
@@ -80,7 +80,7 @@
     #define MAXDUALRATE            200
     #define MAXBUFFERSIZE          1024 * 6
     #define MAXMODELNUMBER         91
-    #define RED_LED_ON_TIME        2500                         // How many ms of no connection before RED led comes on
+    #define RED_LED_ON_TIME        2000                         // How many ms of no connection before RED led comes on
     #define LOW_VOLTAGE_TIME       10000                        // How many ms to endure low voltage before announcing it. (10 seconds)
     #define MAXSHOWCOMMSSESCONDS   6                            // Assess average connection quality over most recent 6 seconds continously
     #define SHOWCOMMSDELAY         100                          // ms pauses between updated info on NEXTION
