@@ -70,7 +70,7 @@ var searchData=
   ['resetswitchnumbers_67',['ResetSwitchNumbers',['../TransmitterCode_2src_2main_8cpp.html#ac1eb66fa4c391f27c315e687f5335015',1,'main.cpp']]],
   ['resettemperaturepath_68',['resetTemperaturePath',['../classMPU6050.html#a559c2d091d36a4e0489bc639916ddbb6',1,'MPU6050']]],
   ['resettransmittersettings_69',['ResetTransmitterSettings',['../1Definitions_8h.html#a5c7f22bae35d5d6df9d54fe79dbb8401',1,'ResetTransmitterSettings():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a5c7f22bae35d5d6df9d54fe79dbb8401',1,'ResetTransmitterSettings():&#160;main.cpp']]],
-  ['restorebrightness_70',['RestoreBrightness',['../1Definitions_8h.html#a49da3478d89a22069e29c7f00cb46a5f',1,'RestoreBrightness():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a49da3478d89a22069e29c7f00cb46a5f',1,'RestoreBrightness():&#160;main.cpp']]],
+  ['restorebrightness_70',['RestoreBrightness',['../1Definitions_8h.html#a49da3478d89a22069e29c7f00cb46a5f',1,'RestoreBrightness():&#160;Utilities.h'],['../Utilities_8h.html#a49da3478d89a22069e29c7f00cb46a5f',1,'RestoreBrightness():&#160;Utilities.h']]],
   ['restorecurrentmodel_71',['RestoreCurrentModel',['../TransmitterCode_2src_2main_8cpp.html#aa1f353c2c61131eeafa77c6e67608e45',1,'main.cpp']]],
   ['restoredimness_72',['RestoreDimness',['../1Definitions_8h.html#a648fc75947f973d46fbcc9b20fdca7f9',1,'1Definitions.h']]],
   ['rotate_73',['rotate',['../classVectorInt16.html#ac7bf149db0a2b66d7683b87ebeb2dfc5',1,'VectorInt16::rotate()'],['../classVectorFloat.html#afef0e6d631fb1eb67b6913e90730aa9e',1,'VectorFloat::rotate()']]],

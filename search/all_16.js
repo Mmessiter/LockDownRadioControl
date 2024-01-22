@@ -78,5 +78,6 @@ var searchData=
   ['txversion_5fminor_75',['TXVERSION_MINOR',['../1Definitions_8h.html#a892ac703d752012a921e12fc7d632bf2',1,'1Definitions.h']]],
   ['txvoltagecorrection_76',['TxVoltageCorrection',['../1Definitions_8h.html#a985d38323fbadec8df22d3e17ca18eb2',1,'1Definitions.h']]],
   ['ty_77',['tY',['../classMPU9250.html#ae100c82474b1e78337ecfdc8d18518d5',1,'MPU9250']]],
-  ['tz_78',['tZ',['../classMPU9250.html#a595f111a497c7727ac70a544b98162e1',1,'MPU9250']]]
+  ['typeview_78',['TYPEVIEW',['../1Definitions_8h.html#a850c2e77b15d1280719c7538b3503e6f',1,'1Definitions.h']]],
+  ['tz_79',['tZ',['../classMPU9250.html#a595f111a497c7727ac70a544b98162e1',1,'MPU9250']]]
 ];
