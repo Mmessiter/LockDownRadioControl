@@ -52,7 +52,7 @@ static uint8_t LastScreen = 0;
     // if (LastScreen == STICKSVIEW)      {SendCommand(pSticksView);                    CurrentView = STICKSVIEW;     return;}     // setup?
     // if (LastScreen == COLOURS_VIEW)    {SendCommand(pColoursView);                   CurrentView = COLOURS_VIEW;   return;}     // setup?
     // if (LastScreen == AUDIOVIEW)       {SendCommand(pAudioView);                     CurrentView = AUDIOVIEW;      return;}     // setup?
-    // if (LastScreen == HELP_VIEW)        {SendCommand(pHelpView);                     CurrentView = HELP_VIEW;      return;}     // setup?
+    // if (LastScreen == HELP_VIEW)       {SendCommand(pHelpView);                      CurrentView = HELP_VIEW;      return;}     // setup?
 
     if (LastScreen == CALIBRATEVIEW)   {SendCommand(pCalibrateView);                 CurrentView = CALIBRATEVIEW;  return;}
     if (LastScreen == FRONTVIEW)       {GotoFrontView();                             CurrentView = FRONTVIEW;      return;}
