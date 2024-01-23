@@ -53,7 +53,8 @@ static uint8_t LastScreen = 0;
     // if (LastScreen == COLOURS_VIEW)    {SendCommand(pColoursView);                   CurrentView = COLOURS_VIEW;   return;}     // setup?
     // if (LastScreen == AUDIOVIEW)       {SendCommand(pAudioView);                     CurrentView = AUDIOVIEW;      return;}     // setup?
     // if (LastScreen == HELP_VIEW)       {SendCommand(pHelpView);                      CurrentView = HELP_VIEW;      return;}     // setup?
-
+    // if (LastScreen == PONGVIEW)        {SendCommand(pPongView);                      CurrentView = PONGVIEW;       return;}
+   
     if (LastScreen == CALIBRATEVIEW)   {SendCommand(pCalibrateView);                 CurrentView = CALIBRATEVIEW;  return;}
     if (LastScreen == FRONTVIEW)       {GotoFrontView();                             CurrentView = FRONTVIEW;      return;}
     if (LastScreen == SWITCHES_VIEW)   {SendCommand(pSwitchesView);                  CurrentView = SWITCHES_VIEW;  return;}
@@ -102,6 +103,8 @@ void HideScreenAgain(){
     if (CurrentView == COLOURS_VIEW)    return;
     if (CurrentView == AUDIOVIEW)       return;
     if (CurrentView == HELP_VIEW)       return;
+    if (CurrentView == PONGVIEW)        return;
+
 
     SaveOrRestoreScreen(false);
     SendCommand(ScreenOff);     // move to blank screen

@@ -16,10 +16,8 @@ bool GameEnd(){
 }
 /*******************************************************************************************************************************/
 
-
 void StartPong()
 {
-    //char pPongView[] = "page PongView";
     SendCommand(pPongView);
     SetDefaultValues();
     CurrentView = PONGVIEW;
@@ -103,15 +101,11 @@ void PlayPong()
         incy = -incy;
         y    = (PONGY2 - PONGCLEAR) - 10;
         PlaySound(CLICKZERO);
-        ScreenTimeTimer = millis();
-        StartInactvityTimeout();
     }
     if (y <= (PONGY1 + PONGCLEAR)) { // bounce off top
         incy = -incy;
         y    = PONGY1 + PONGCLEAR + 10;
         PlaySound(CLICKZERO);
-        ScreenTimeTimer = millis();
-        StartInactvityTimeout();
     }
     if (((x + PONGCLEAR) >= PONGX2) && (x)) {
         if ((y < GOALBOT - 2) && (y > GOALTOP + 2)) { // scored on the right?
