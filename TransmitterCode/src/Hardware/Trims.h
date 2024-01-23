@@ -300,7 +300,7 @@ void CheckTrimValues()
 /// @brief 
 void StartSubTrimView()
 { // Subtrim view start
-    char pSubTrimView[] = "page SubTrimView";
+    
     char n0[]           = "n0";
     char h0[]           = "h0";
     SendCommand(pSubTrimView);

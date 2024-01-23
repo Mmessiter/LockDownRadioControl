@@ -1012,7 +1012,19 @@ char    pTypeView[]               = "page TypeView";
 char    pFailSafe[]               = "page FailSafeView";
 char    pModelsView[]             = "page ModelsView";
 char    pRXSetupView[]            = "page RXSetupView";
-
+char    pCalibrateView[]          = "page CalibrateView";
+char    pSubTrimView[]            = "page SubTrimView";
+char    pAudioView[]              = "page AudioView";
+char    pColoursView[]            = "page ColoursView";
+char    pSticksView[]             = "page SticksView";
+char    pGraphView[]              = "page GraphView";
+char    pSetupView[]              = "page TXSetupView";
+char    pBuddyChView[]            = "page BuddyChView";
+char    pBuddyView[]              = "page BuddyView";
+char    pOptionView2[]            = "page OptionView2";
+char    pFhssView[]               = "page FHSSView";
+char    pFrontView[]              = "page FrontView";
+char    pHelpView[]               = "page HelpView";
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

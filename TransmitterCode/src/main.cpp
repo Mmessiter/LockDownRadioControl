@@ -1392,11 +1392,11 @@ void ScrollHelpFile()
 /*********************************************************************************************************************************/
 void SendHelp()
 { // load new help file
-    char hcmd[] = "page HelpView";
+   
     char HelpFile[20];
     int  i = 9;
     int  j = 0;
-    SendCommand(hcmd); // first load the right screen
+    SendCommand(pHelpView); // first load the right screen
     while (TextIn[i] != 0 && j < 19) {
         HelpFile[j] = TextIn[i];
         ++i;
@@ -2692,10 +2692,9 @@ void LoadFileSelector()
 /******************************************************************************************************************************/
 void GotoModelsView()
 {
-    char GoModelsView[] = "page ModelsView";
-
+   
     SaveCurrentModel();
-    SendCommand(GoModelsView);
+    SendCommand(pModelsView);
     CurrentView = MODELSVIEW;
     UpdateModelsNameEveryWhere();
     BuildDirectory();
@@ -2730,11 +2729,11 @@ void SetupViewFM()
 void Options2End()
 { // back to setup?
     char dGMT[]           = "dGMT";
-    char page_SetupView[] = "page TXSetupView";
+    char pSetupView[] = "page TXSetupView";
     DeltaGMT              = GetValue(dGMT);
     SaveTransmitterParameters();
     CurrentView = TXSETUPVIEW;
-    SendCommand(page_SetupView);
+    SendCommand(pSetupView);
     UpdateModelsNameEveryWhere();
 }
 /******************************************************************************************************************************/
@@ -2907,7 +2906,7 @@ void OptionView3End() //
     char n2[]             = "n2";
     char n3[]             = "n3";
     char n4[]             = "n4";
-    char page_SetupView[] = "page TXSetupView";
+    char pSetupView[] = "page TXSetupView";
     char QNH[]            = "Qnh";
 
     TxVoltageCorrection    = GetValue(TxVCorrextion);
@@ -2923,7 +2922,7 @@ void OptionView3End() //
     CloseModelsFile();
     AddParameterstoQueue(2);  // 2 is the ID for sending QNH value to RX
     CurrentView             = TXSETUPVIEW;
-    SendCommand(page_SetupView);
+    SendCommand(pSetupView);
     UpdateModelsNameEveryWhere();
   
 }
@@ -2932,9 +2931,9 @@ void OptionView3End() //
 
 void BuddyChViewStart()
 {
-    char page_BuddyChView[] = "page BuddyChView";
+    char pBuddyChView[] = "page BuddyChView";
     char fs[16][5]          = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
-    SendCommand(page_BuddyChView);
+    SendCommand(pBuddyChView);
     CurrentView = BUDDYCHVIEW;
     UpdateButtonLabels();
     for (int i = 0; i < 16; ++i) {
@@ -2951,7 +2950,6 @@ void BuddyChViewStart()
 
 void BuddyChViewEnd()
 {
-    char page_BuddyView[] = "page BuddyView";
     char Progress[]       = "Progress";
     char ProgressStart[]  = "vis Progress,1";
     char fs[16][5]        = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
@@ -2963,7 +2961,7 @@ void BuddyChViewEnd()
     }
     SaveOneModel(ModelNumber);
     CloseModelsFile();
-    SendCommand(page_BuddyView);
+    SendCommand(pBuddyView);
     CurrentView = BUDDYVIEW;
 }
 /******************************************************************************************************************************/
@@ -3013,7 +3011,7 @@ void ResetTransmitterSettings()
     int  sofar            = 0;
     char ProgressStart[]  = "vis Progress,1";
     char Progress[]       = "Progress";
-    char pCalibrateView[] = "page CalibrateView";
+    
 
     if (!GetConfirmation(pCalibrateView, prompt)) return;
     SendCommand(ProgressStart);
@@ -3381,7 +3379,7 @@ void EndSlowView()
 void WriteNewCurve()
 {
     char CopyToAllBanks[]  = "callfm";
-    char page_SticksView[] = "page SticksView";
+    char pSticksView[] = "page SticksView";
 
     if (GetValue(CopyToAllBanks)) {
         for (int p = 1; p <= 4; ++p) {
@@ -3399,7 +3397,7 @@ void WriteNewCurve()
     ChanneltoSet = 0;
     SaveOneModel(ModelNumber);
     Force_ReDisplay();
-    SendCommand(page_SticksView); // Set to SticksView
+    SendCommand(pSticksView); // Set to SticksView
     CurrentView = STICKSVIEW;
     UpdateModelsNameEveryWhere();
     ClearText();
@@ -3608,13 +3606,12 @@ void RenameFile()
     char overwr[] = "Overwrite ";
     char ques[]   = "?";
     char Deleteable[42];
-    char GoModelsView[] = "page ModelsView";
-
+   
     SaveCurrentModel();
     GetText(ModelsView_filename, SingleModelFile);
     strcpy(Deleteable, SingleModelFile);
     LoadModelForRenaming();
-    if (GetBackupFilename(GoModelsView, SingleModelFile, model, Head, prompt)) {
+    if (GetBackupFilename(pModelsView, SingleModelFile, model, Head, prompt)) {
         FixFileName();
         if (strcmp(Deleteable, SingleModelFile) == 0) return;
         Serial.println(SingleModelFile);
@@ -3622,7 +3619,7 @@ void RenameFile()
             strcpy(Prompt, overwr);
             strcat(Prompt, SingleModelFile);
             strcat(Prompt, ques);
-            if (GetConfirmation(GoModelsView, Prompt))
+            if (GetConfirmation(pModelsView, Prompt))
             {
                 WriteBackup();
                 SD.remove(Deleteable);
@@ -3645,12 +3642,11 @@ void ModelViewEnd()
     char pr[] = "Select ";
     char buf[60];
     char q[]            = "?";
-    char GoModelsView[] = "page ModelsView";
     if (PreviousModelNumber != ModelNumber) {
         strcpy(buf, pr);
         strcat(buf, ModelName);
         strcat(buf, q);
-        GetConfirmation(GoModelsView, buf);
+        GetConfirmation(pModelsView, buf);
         if (Confirmed[0] != 'Y') {
             ModelNumber = PreviousModelNumber;
             ReadOneModel(ModelNumber);
@@ -3792,21 +3788,19 @@ void SelectChannelOrder()
 /******************************************************************************************************************************/
 void ResetClock() 
 {
-     char page_OptionView2[]    = "page OptionView2";
+     
      char Prompt[]              = "Reset clock?";   
      char Done[]                = "Clock reset!";    
      
-    if (GetConfirmation(page_OptionView2, Prompt)) {
+    if (GetConfirmation(pOptionView2, Prompt)) {
         SetDS1307ToCompilerTime();
-        MsgBox(page_OptionView2, Done);
+        MsgBox(pOptionView2, Done);
     }
 }
 /******************************************************************************************************************************/
 
 void TXModuleViewEnd()
 {
-
-    char page_SetupView[] = "page TXSetupView";
     char GoBack[]         = "page TXModuleView";
     char c1[]             = "c1"; // Use module
     char n3[]             = "n3"; // number of channels
@@ -3844,7 +3838,7 @@ void TXModuleViewEnd()
     DelayWithDog(10);
     SaveTransmitterParameters();
     DelayWithDog(10);
-    SendCommand(page_SetupView);
+    SendCommand(pSetupView);
     CurrentView = TXSETUPVIEW;
     DelayWithDog(10);
     if (PPMdata.UseTXModule != oldUseTxModule) {
@@ -3857,8 +3851,8 @@ void TXModuleViewEnd()
 void SaveSwitches(){
     SaveTransmitterParameters();
     DelayWithDog(100);
-    char page_SetupView[] = "page TXSetupView";
-    SendCommand(page_SetupView);
+    char pSetupView[] = "page TXSetupView";
+    SendCommand(pSetupView);
 }
 
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
@@ -4015,11 +4009,6 @@ FASTRUN void ButtonWasPressed()
         char Delete[]                  = "Delete";
         char MixesView_MixNumber[]     = "MixNumber";
         char ModelsView_ModelNumber[]  = "ModelNumber";
-        char page_SticksView[]         = "page SticksView";
-        char page_GraphView[]          = "page GraphView";
-        char page_SetupView[]          = "page TXSetupView";
-        char page_AudioView[]          = "page AudioView";
-        char page_ColoursView[]        = "page ColoursView";
         char GoSetupView[]             = "GoSetupView";
         char ColoursView[]             = "ColoursView";
         char SvT11[]                   = "t11";
@@ -4141,13 +4130,11 @@ FASTRUN void ButtonWasPressed()
         char ProgressEnd[]       = "vis Progress,0";
         char Progress[]          = "Progress";
         char ScreenViewTimeout[] = "Sto"; // needed for display info
-        char page_FhssView[]     = "page FhssView";
+        char pFhssView[]         = "page FhssView"; // ?????
         char FrontView_Hours[]   = "Hours";
         char FrontView_Mins[]    = "Mins";
         char FrontView_Secs[]    = "Secs";
         char StartBackGround[]   = "click Background,0";
-        char GoModelsView[]      = "page ModelsView";
-        char pCalibrateView[]    = "page CalibrateView";
         char NotConnected[]      = "Model isn't connected!";
         char Nb1[]               = "vis b1,0";
         char Nb0[]               = "vis b0,0";
@@ -4174,7 +4161,7 @@ FASTRUN void ButtonWasPressed()
             strcpy(Prompt, del);
             strcat(Prompt, ModelName);
             strcat(Prompt, ques);
-            if (GetConfirmation(GoModelsView, Prompt)) {
+            if (GetConfirmation(pModelsView, Prompt)) {
                 ModelNumber = GetValue(MMems) + 1;
                 SetDefaultValues();
                 SaveOneModel(ModelNumber);
@@ -4186,7 +4173,7 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(AudioView, TextIn) > 0) { // Display screen with audio options
             CurrentView = AUDIOVIEW;
-            SendCommand(page_AudioView);
+            SendCommand(pAudioView);
             SendValue(n0, AudioVolume);
             SendValue(Ex1, AudioVolume);
             SendValue(n1, Brightness);
@@ -4212,7 +4199,7 @@ FASTRUN void ButtonWasPressed()
             AnnounceConnected = GetValue(c5);
             SetAudioVolume(AudioVolume);
             CurrentView = TXSETUPVIEW;
-            SendCommand(page_SetupView);
+            SendCommand(pSetupView);
             LastTimeRead = 0;
             SaveTransmitterParameters();
             UpdateModelsNameEveryWhere();
@@ -4224,7 +4211,7 @@ FASTRUN void ButtonWasPressed()
             if (CurrentView == CALIBRATEVIEW) ReadOneModel(ModelNumber);  // because it was cleared for calibration
             SaveAllParameters();
             CurrentView = TXSETUPVIEW;
-            SendCommand(page_SetupView);
+            SendCommand(pSetupView);
             LastTimeRead = 0;
             CurrentView  = TXSETUPVIEW;
             ClearText();
@@ -4270,7 +4257,7 @@ FASTRUN void ButtonWasPressed()
             SendValue(Progress, 95);
             SendValue(Progress, 100);
             CurrentView = TXSETUPVIEW;
-            SendCommand(page_SetupView);
+            SendCommand(pSetupView);
             LastTimeRead = 0;
             SendCommand(ProgressEnd);
             UpdateModelsNameEveryWhere();
@@ -4312,7 +4299,7 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(Scan_End, TextIn) > 0) { //  goto setup screen from Scan screen
             CurrentView = TXSETUPVIEW;
-            SendCommand(page_SetupView);
+            SendCommand(pSetupView);
             LastTimeRead = 0;
             DoScanEnd();
             UpdateModelsNameEveryWhere();
@@ -4694,7 +4681,7 @@ FASTRUN void ButtonWasPressed()
             strcpy(Prompt, del);
             strcat(Prompt, SingleModelFile);
             strcat(Prompt, ques);
-            if (GetConfirmation(GoModelsView, Prompt)) {
+            if (GetConfirmation(pModelsView, Prompt)) {
                 SD.remove(SingleModelFile);
                 BuildDirectory();
                 LoadFileSelector();
@@ -4725,13 +4712,13 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(Export, TextIn)) {
             GetDefaultFilename();
-            if (GetBackupFilename(GoModelsView, SingleModelFile, ModelName, hhead, fprompt)) {
+            if (GetBackupFilename(pModelsView, SingleModelFile, ModelName, hhead, fprompt)) {
                 FixFileName();
                 if (CheckFileExists(SingleModelFile)) {
                     strcpy(Prompt, overwr);
                     strcat(Prompt, SingleModelFile);
                     strcat(Prompt, ques);
-                    if (GetConfirmation(GoModelsView, Prompt)) {
+                    if (GetConfirmation(pModelsView, Prompt)) {
                         WriteBackup();
                     }
                 }
@@ -4758,7 +4745,7 @@ FASTRUN void ButtonWasPressed()
             strcpy(Prompt, overwr);
             strcat(Prompt, ModelName);
             strcat(Prompt, ques);
-            if (GetConfirmation(GoModelsView, Prompt)) {
+            if (GetConfirmation(pModelsView, Prompt)) {
                 SendCommand(ProgressStart);
                 DelayWithDog(10);
                 SendValue(Progress, 5);
@@ -4790,7 +4777,7 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(GoSetupView, TextIn) > 0) {
             CurrentView = TXSETUPVIEW;
-            SendCommand(page_SetupView);
+            SendCommand(pSetupView);
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
@@ -4798,7 +4785,7 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(ColoursView, TextIn) > 0) {
             CurrentView = COLOURS_VIEW;
-            SendCommand(page_ColoursView);
+            SendCommand(pColoursView);
             SendCommand(StartBackGround);
             ClearText();
             return;
@@ -4815,7 +4802,7 @@ FASTRUN void ButtonWasPressed()
             SendValue(FrontView_Highlight, HighlightColour);
             SaveTransmitterParameters();
             CurrentView = TXSETUPVIEW;
-            SendCommand(page_SetupView);
+            SendCommand(pSetupView);
             LastTimeRead = 0;
             UpdateModelsNameEveryWhere();
             ClearText();
@@ -4885,7 +4872,7 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(Setup, TextIn) > 0) { // Which channel to setup ... Goes to GraphView
             ChanneltoSet = GetChannel();
             CurrentView  = GRAPHVIEW;
-            SendCommand(page_GraphView); // Set to GraphView
+            SendCommand(pGraphView); // Set to GraphView
             DisplayCurve();
             updateInterpolationTypes();
             UpdateModelsNameEveryWhere();
@@ -4904,10 +4891,10 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(Sticks_View, TextIn)) {
-            SendCommand(page_SticksView);
+            SendCommand(pSticksView);
             Force_ReDisplay();
             CurrentView = STICKSVIEW;
-            SendCommand(page_SticksView); // Set to SticksView
+            SendCommand(pSticksView); // Set to SticksView
             UpdateModelsNameEveryWhere();
             UpdateButtonLabels();
             ClearText();
@@ -4916,7 +4903,7 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(Fhss_View, TextIn)) {
             if (PPMdata.UseTXModule) InitRadio(DefaultPipe); // because scan fails if radio isn't initialised
-            SendCommand(page_FhssView);
+            SendCommand(pFhssView);
             DrawFhssBox();
             DoScanInit();
             CurrentMode = SCANWAVEBAND;
@@ -5470,7 +5457,7 @@ void GotoFrontView()
 {
     char fms[4][4]             = {{"fm1"}, {"fm2"}, {"fm3"}, {"fm4"}};
     char FrontView_Connected[] = "Connected";
-    char page_FrontView[]      = "page FrontView";
+   
 
     PupilIsAlive  = 0;
     MasterIsAlive = 0;
@@ -5485,7 +5472,7 @@ void GotoFrontView()
         if (CurrentView == SCANVIEW) DoScanEnd();                       // Put transceiver back to normal mode
         if (CurrentView == PONGVIEW) ReadOneModel(ModelNumber);         // Return to current model
         if (CurrentMode != LISTENMODE) CurrentMode = NORMAL;            // Return to normal mode unless in BUDDY listen mode
-        SendCommand(page_FrontView);                                    // Set to FrontView
+        SendCommand(pFrontView);                                    // Set to FrontView
         CurrentView = FRONTVIEW;                                        // Set to FrontView
         UpdateModelsNameEveryWhere();                                   // Update model name
         SafetyWasOn ^= 1;                                               // this forces a re-display of safety state
