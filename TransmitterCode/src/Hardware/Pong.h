@@ -8,10 +8,19 @@
 /*******************************************************************************************************************************/
 //                                                  PONG.h
 /*******************************************************************************************************************************/
+
+bool GameEnd(){
+        PlaySound(THEFANFARE);
+        DelayWithDog(6000); 
+        return true; // = play again ...
+}
+/*******************************************************************************************************************************/
+
+
 void StartPong()
 {
-    char page_PongView[] = "page PongView";
-    SendCommand(page_PongView);
+    //char pPongView[] = "page PongView";
+    SendCommand(pPongView);
     SetDefaultValues();
     CurrentView = PONGVIEW;
     CurrentMode = PONGMODE;
@@ -109,12 +118,15 @@ void PlayPong()
             ++RightScore;
             SendValue(n0, RightScore);
             if (RightScore >= 10) {
-                PlaySound(THEFANFARE);
-                DelayWithDog(6000);
-                RightScore = 0;
-                LeftScore  = 0;
-                SendValue(n0, RightScore);
-                SendValue(n1, LeftScore);
+               if (GameEnd()) {
+                    RightScore = 0;
+                    LeftScore  = 0;
+                    SendValue(n0, RightScore);
+                    SendValue(n1, LeftScore);
+                } else {
+                    GotoFrontView();
+                }
+                
             }
             x = PONGX2 + 5;
             MoveBall(x, y);
@@ -140,12 +152,16 @@ void PlayPong()
             PlaySound(BEEPCOMPLETE);
             SendValue(n1, LeftScore);
             if (LeftScore >= 10) {
-                PlaySound(THEFANFARE);
-                DelayWithDog(6000);
-                RightScore = 0;
-                LeftScore  = 0;
-                SendValue(n0, RightScore);
-                SendValue(n1, LeftScore);
+                if (GameEnd()) {
+                    RightScore = 0;
+                    LeftScore  = 0;
+                    SendValue(n0, RightScore);
+                    SendValue(n1, LeftScore);
+                } else {
+                     GotoFrontView();
+                }
+                   
+
             }
             DelayWithDog(500);
             x = -STARTX;

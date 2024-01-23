@@ -1025,6 +1025,7 @@ char    pOptionView2[]            = "page OptionView2";
 char    pFhssView[]               = "page FHSSView";
 char    pFrontView[]              = "page FrontView";
 char    pHelpView[]               = "page HelpView";
+char    pPongView[]               = "page PongView";
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
