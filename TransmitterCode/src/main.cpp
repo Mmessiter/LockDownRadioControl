@@ -5494,6 +5494,7 @@ void GotoFrontView()
     if (BuddyPupilOnWireless) StartBuddyListen();
 
      CurrentView = FRONTVIEW;
+     RestoreBrightness();
 }
 
 /************************************************************************************************************/

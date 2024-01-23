@@ -97,12 +97,11 @@ void HideScreenAgain(){
     char NoBrightness[] = "dim=0";
 
 
-    if (CurrentView == SCANVIEW) return; // recovery fails
-    if (CurrentView == SCANVIEW) return;
-    if (CurrentView == GRAPHVIEW) return;
-    if (CurrentView == COLOURS_VIEW)  return;
-    if (CurrentView == AUDIOVIEW) return;
-    if (CurrentView == HELP_VIEW) return;
+    if (CurrentView == SCANVIEW)        return; // recovery fails
+    if (CurrentView == GRAPHVIEW)       return;
+    if (CurrentView == COLOURS_VIEW)    return;
+    if (CurrentView == AUDIOVIEW)       return;
+    if (CurrentView == HELP_VIEW)       return;
 
     SaveOrRestoreScreen(false);
     SendCommand(ScreenOff);     // move to blank screen
