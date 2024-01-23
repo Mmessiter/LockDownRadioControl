@@ -5472,7 +5472,7 @@ void GotoFrontView()
         if (CurrentView == SCANVIEW) DoScanEnd();                       // Put transceiver back to normal mode
         if (CurrentView == PONGVIEW) ReadOneModel(ModelNumber);         // Return to current model
         if (CurrentMode != LISTENMODE) CurrentMode = NORMAL;            // Return to normal mode unless in BUDDY listen mode
-        SendCommand(pFrontView);                                    // Set to FrontView
+        SendCommand(pFrontView);                                        // Set to FrontView
         CurrentView = FRONTVIEW;                                        // Set to FrontView
         UpdateModelsNameEveryWhere();                                   // Update model name
         SafetyWasOn ^= 1;                                               // this forces a re-display of safety state
