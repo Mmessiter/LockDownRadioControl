@@ -701,6 +701,7 @@ var 1Definitions_8h =
     [ "pOptionView2", "1Definitions_8h.html#a29e3909665bd483afca2162b770e5d53", null ],
     [ "PowerOffWarningSeconds", "1Definitions_8h.html#a655d384f81374c34aa6629856258263a", null ],
     [ "PPMdata", "1Definitions_8h.html#aa1b99853b3bcc57b139282280f732b64", null ],
+    [ "pPongView", "1Definitions_8h.html#adb4b986d30ca952384ac797f8791f70c", null ],
     [ "PreMixBuffer", "1Definitions_8h.html#ac24c1436596363f5c1d3c50f2c3d5266", null ],
     [ "PrePreviousBuffer", "1Definitions_8h.html#a68457277add9c8d379d7bb8d86ad93cb", null ],
     [ "PreviousBank", "1Definitions_8h.html#a0c549e2af543242cf4588249b72bde71", null ],
