@@ -35,7 +35,7 @@ void SaveOrRestoreScreen(bool Restore){
 static uint8_t LastScreen = 0;
 
     if (!Restore){
-        LastScreen = CurrentView;
+        LastScreen = CurrentView;                                                                             // Saved the ID of the screen we are leaving
         return; 
     }
     else 
@@ -49,9 +49,9 @@ static uint8_t LastScreen = 0;
     if (LastScreen == TYPEVIEW)        {SendCommand(pTypeView);       CurrentView = TYPEVIEW;       return;}
     if (LastScreen == FAILSAFE_VIEW)   {SendCommand(pFailSafe);       CurrentView = FAILSAFE_VIEW;  return;}
     if (LastScreen == MODELSVIEW)      {SendCommand(pModelsView);     CurrentView = MODELSVIEW;     return;}
-    if (LastScreen == RXSETUPVIEW)     {SendCommand(pRXSetupView);    CurrentView = RXSETUPVIEW;    return;} // might add more later. Default is front view
+    if (LastScreen == RXSETUPVIEW)     {SendCommand(pRXSetupView);    CurrentView = RXSETUPVIEW;    return;} // ... might add more later. Default is front view
     }
-   GotoFrontView(); 
+   GotoFrontView();                                                                                          // Default is front view
 }
 
 /*********************************************************************************************************************************/
@@ -89,7 +89,7 @@ void HideScreenAgain(){
 }
 
 /*********************************************************************************************************************************/
-void CheckScreenTime() // turn off screen after a timeout
+void CheckScreenTime()          // turn off screen after a timeout
 {
     if (((millis() - ScreenTimeTimer) > ScreenTimeout * 1000) && (ScreenIsOff == false)) HideScreenAgain();  
 }
