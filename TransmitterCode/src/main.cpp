@@ -4983,19 +4983,7 @@ FASTRUN void ButtonWasPressed()
         {
             CurrentView  = DATAVIEW;
             LastShowTime = 0;
-            LastPacketsPerSecond = 0;
-            LastLostPackets      = 0;
-            LastGapLongest       = 0;
-            LastRadioSwaps       = 0;
-            LastRX1TotalTime     = 0;
-            LastRX2TotalTime     = 0;
-            LastGapAverage       = 0;
-            LastSbusRepeats      = 0;
-            LastRXModelAltitude  = 0;
-            LastRXModelMaxAltitude = 0;
-            LastRXTemperature    = 0;
-            LastRadioNumber      = 0;
-            ForceVoltDisplay    = true; 
+            ForceDataRedisplay();
             SendCommand(pDataView);
             ClearText();
             return;
@@ -5673,7 +5661,7 @@ void FASTRUN ManageTransmitter()
 
     uint32_t RightNow        = millis();
     uint32_t TXPacketElapsed = RightNow - LastPacketSentTime;
-    KickTheDog(); // Watchdog ... ALWAYS!
+    KickTheDog();                                                                                                   // Watchdog ... ALWAYS!
     if ((PACEMAKER - TXPacketElapsed < TIMEFORTXMANAGMENT) && ModelMatched) return;                                 // If it's almost time to send data, then do not start some other task which might easily take longer.
     CheckPowerOffButton();                                                                                          // Pretty obvious really ...
     CheckForNextionButtonPress();                                                                                   // Pretty obvious really ...
@@ -5681,20 +5669,21 @@ void FASTRUN ManageTransmitter()
     if (RightNow - TransmitterLastManaged > 50) {                                                                   // 20 times a second is plenty
         TransmitterLastManaged = millis();
         if ((RightNow - LastTimeRead >= 500) && (CurrentView == MODELSVIEW)) CheckModelName();                      // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
-        
         if (RightNow - LastTimeRead >= 1000) {                                                                      // Only once a second for these...
-            LastTimeRead = millis();
-            ReadTime();                                                                                             // Do the clock
-            GetGoodPacketsPerSecond();                                                                              // Do stats
-            UpdateTrimView();
-            SendOutstandingParameters();                                                                            // Send any parameters that have not been sent yet
-            ShowMotorTimer();                                                                                       // Screen Timer
+            LastTimeRead = millis();                                                                                         
+            GetGoodPacketsPerSecond();                                                                              // Do stats                                                                                         
+            if (CurrentView != BLANKVIEW) {
+                ReadTime();                                                                                         // Do the clock
+                SendOutstandingParameters();                                                                        // Send any parameters that have not been sent yet
+                UpdateTrimView();
+                ShowMotorTimer();                                                                                   // Screen Timer    
+            }                                                                   
             return;                                                                                                 // That's enough housekeeping this time around
         }
         ReadSwitches();                                                                                             // Check switch positions 20 times a second
         CheckHardwareTrims();                                                                                       // Trims 20 times a second
         GetBank();                                                                                                  // Must not call too often
-        ShowComms();                                                                                                // Screen Telemetry Data
+        if (CurrentView != BLANKVIEW) ShowComms();                                                                  // Screen Telemetry Data
     }
 }
 /**********************************************************************************************************/

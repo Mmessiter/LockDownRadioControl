@@ -609,6 +609,7 @@ FASTRUN bool     CheckRXVolts();
 bool             MayBeAddZero(uint8_t nn);
 void             SendText1(char* tbox, char* NewWord);
 void             ScrollHelpFile();
+void             ForceDataRedisplay();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *

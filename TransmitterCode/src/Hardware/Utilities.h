@@ -4,6 +4,30 @@
 #include "Hardware/1Definitions.h"
 #ifndef UTILITIES_H
     #define UTILITIES_H
+
+
+
+// ********************************************************************************************************************************
+
+// Because data are only displayed when different, this sets all to zero so that they will be displayed on the first pass.
+void ForceDataRedisplay(){
+    LastShowTime         = 0;
+    LastPacketsPerSecond = 0;
+    LastLostPackets      = 0;
+    LastGapLongest       = 0;
+    LastRadioSwaps       = 0;
+    LastRX1TotalTime     = 0;
+    LastRX2TotalTime     = 0;
+    LastGapAverage       = 0;
+    LastSbusRepeats      = 0;
+    LastRXModelAltitude  = 0;
+    LastRXModelMaxAltitude = 0;
+    LastRXTemperature    = 0;
+    LastRadioNumber      = 0;
+    ForceVoltDisplay     = true; 
+    return;
+}
+
 // ********************************************************************************************************************************
 
 void SaveOrRestoreScreen(bool Restore){
@@ -16,25 +40,7 @@ static uint8_t LastScreen = 0;
     }
     else 
     {
-    if (LastScreen == DATAVIEW) {
-            LastShowTime         = 0;
-            LastPacketsPerSecond = 0;
-            LastLostPackets      = 0;
-            LastGapLongest       = 0;
-            LastRadioSwaps       = 0;
-            LastRX1TotalTime     = 0;
-            LastRX2TotalTime     = 0;
-            LastGapAverage       = 0;
-            LastSbusRepeats      = 0;
-            LastRXModelAltitude  = 0;
-            LastRXModelMaxAltitude = 0;
-            LastRXTemperature    = 0;
-            LastRadioNumber      = 0;
-            ForceVoltDisplay     = true; 
-            SendCommand(pDataView); 
-            CurrentView          = DATAVIEW;
-            return;
-        }
+    if (LastScreen == DATAVIEW)        {ForceDataRedisplay();SendCommand(pDataView);CurrentView = DATAVIEW;return;}
     if (LastScreen == FRONTVIEW)       {GotoFrontView();              CurrentView = FRONTVIEW;      return;}
     if (LastScreen == SWITCHES_VIEW)   {SendCommand(pSwitchesView);   CurrentView = SWITCHES_VIEW;  return;}
     if (LastScreen == INPUTS_VIEW)     {SendCommand(pInputsView);     CurrentView = OPTIONS_VIEW;   return;}
@@ -65,9 +71,9 @@ void RestoreBrightness()
 
 /******************************************************************************************************************************/
 void ShowScreenAgain(){
-   SaveOrRestoreScreen(true);
-    RestoreBrightness();
-    ScreenIsOff  = false;
+        SaveOrRestoreScreen(true);
+        RestoreBrightness();
+        ScreenIsOff  = false;
 }
 
 /******************************************************************************************************************************/
@@ -85,16 +91,7 @@ void HideScreenAgain(){
 /*********************************************************************************************************************************/
 void CheckScreenTime() // turn off screen after a timeout
 {
-    char ScreenOff[] = "page BlankView";
-    char NoBrightness[] = "dim=0";
-    if (((millis() - ScreenTimeTimer) > ScreenTimeout * 1000) && (ScreenIsOff == false)) {
-        SaveOrRestoreScreen(false);
-        SendCommand(ScreenOff);     // goto screen that is blank
-        DelayWithDog(10);           // wait a moment for screen to change
-        SendCommand(NoBrightness);  // turn off screen brightness
-        ScreenIsOff     = true;
-        CurrentView     = BLANKVIEW;
-    }
+    if (((millis() - ScreenTimeTimer) > ScreenTimeout * 1000) && (ScreenIsOff == false)) HideScreenAgain();  
 }
 
 // ********************************************************************************************************************************
