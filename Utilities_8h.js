@@ -26,6 +26,7 @@ var Utilities_8h =
     [ "FillBox", "Utilities_8h.html#a93d9f055a2723479bb28f6c53fdb2643", null ],
     [ "FixCHNames", "Utilities_8h.html#ae9f11f030b85ae36e21266f42e6c65f3", null ],
     [ "FixDeltaGMTSign", "Utilities_8h.html#a493eeacfcf61a53db5933a893f7d94a6", null ],
+    [ "ForceDataRedisplay", "Utilities_8h.html#ad6fe0cbb180cb41ff0478ddb5101e6ca", null ],
     [ "getDate", "Utilities_8h.html#a100af87d91fcaa6f23f2ca6a2fe146cc", null ],
     [ "GetLEDBrightness", "Utilities_8h.html#a549a702bb9b539c6b3a4f20cce65adcc", null ],
     [ "GetNextNumber", "Utilities_8h.html#a3a1bb848113ddbbc27294921fa92f92a", null ],

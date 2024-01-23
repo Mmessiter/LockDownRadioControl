@@ -330,6 +330,7 @@ var 1Definitions_8h =
     [ "FixMotorChannel", "1Definitions_8h.html#ab584ae7dbc9b1af37538f91b00b8927f", null ],
     [ "FlushFifos", "1Definitions_8h.html#a07c27b4e208198453c70876517926052", null ],
     [ "Force_ReDisplay", "1Definitions_8h.html#aa1e81e58421a34fdfd7bfb31925f5a90", null ],
+    [ "ForceDataRedisplay", "1Definitions_8h.html#ad6fe0cbb180cb41ff0478ddb5101e6ca", null ],
     [ "GetButtonPress", "1Definitions_8h.html#acd96c3022716bba17005df2e6b3d0ed6", null ],
     [ "GetConfirmation", "1Definitions_8h.html#a6506bf72e0dd9e9ce480156b47625bff", null ],
     [ "GetIntFromAckPayload", "1Definitions_8h.html#a74e337818041d26084558b2d3b2a62d2", null ],

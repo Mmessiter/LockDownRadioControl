@@ -12,5 +12,6 @@ var searchData=
   ['fixmotorchannel_9',['FixMotorChannel',['../1Definitions_8h.html#ab584ae7dbc9b1af37538f91b00b8927f',1,'FixMotorChannel():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#ab584ae7dbc9b1af37538f91b00b8927f',1,'FixMotorChannel():&#160;main.cpp']]],
   ['floatfaderlinear_10',['floatFaderLinear',['../Quadcopter_2src_2main_8cpp.html#a52df4cd3a995a94095b13b2a5ff6413a',1,'main.cpp']]],
   ['flushfifos_11',['FlushFifos',['../1Definitions_8h.html#a07c27b4e208198453c70876517926052',1,'FlushFifos():&#160;transceiver.h'],['../transceiver_8h.html#a07c27b4e208198453c70876517926052',1,'FlushFifos():&#160;transceiver.h']]],
-  ['force_5fredisplay_12',['Force_ReDisplay',['../1Definitions_8h.html#aa1e81e58421a34fdfd7bfb31925f5a90',1,'Force_ReDisplay():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aa1e81e58421a34fdfd7bfb31925f5a90',1,'Force_ReDisplay():&#160;main.cpp']]]
+  ['force_5fredisplay_12',['Force_ReDisplay',['../1Definitions_8h.html#aa1e81e58421a34fdfd7bfb31925f5a90',1,'Force_ReDisplay():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aa1e81e58421a34fdfd7bfb31925f5a90',1,'Force_ReDisplay():&#160;main.cpp']]],
+  ['forcedataredisplay_13',['ForceDataRedisplay',['../1Definitions_8h.html#ad6fe0cbb180cb41ff0478ddb5101e6ca',1,'ForceDataRedisplay():&#160;Utilities.h'],['../Utilities_8h.html#ad6fe0cbb180cb41ff0478ddb5101e6ca',1,'ForceDataRedisplay():&#160;Utilities.h']]]
 ];

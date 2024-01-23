@@ -1,5 +1,6 @@
 var NAVTREEINDEX6 =
 {
+"Quadcopter_2src_2main_8cpp.html#a7570819bf9bd1d49a49ae3d697a2aff3":[5,0,0,0,1,118],
 "Quadcopter_2src_2main_8cpp.html#a75bdbb43faf9d8195ae95995b87fd425":[5,0,0,0,1,135],
 "Quadcopter_2src_2main_8cpp.html#a76b14e6113ae1578504f6ab84bcba2e7":[5,0,0,0,1,11],
 "Quadcopter_2src_2main_8cpp.html#a778e38aa889751afffa2dea6b803e67a":[5,0,0,0,1,110],
@@ -248,6 +249,5 @@ var NAVTREEINDEX6 =
 "SensorHubT32_2src_2main_8cpp.html#af5f2a2a78189687a7055abd054ac6058":[5,0,2,0,0,47],
 "SensorHubT32_2src_2main_8cpp.html#af92d3280f8b2a0ff5023e4a7505491d9":[5,0,2,0,0,40],
 "SensorHubT32_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f":[5,0,2,0,0,9],
-"SensorHubT32_2src_2main_8cpp_source.html":[5,0,2,0,0],
-"Telemetry_8h.html":[5,0,3,0,0,10]
+"SensorHubT32_2src_2main_8cpp_source.html":[5,0,2,0,0]
 };
