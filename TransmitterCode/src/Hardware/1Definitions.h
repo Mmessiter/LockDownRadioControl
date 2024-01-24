@@ -24,7 +24,7 @@
     #define TXVERSION_MAJOR   2 // first three must match RX but _EXTRA_ can be different
     #define TXVERSION_MINOR   4
     #define TXVERSION_MINIMUS 4 
-    #define TXVERSION_EXTRA   "h 22/01/24" 
+    #define TXVERSION_EXTRA   "i 24/01/24" 
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -1003,6 +1003,8 @@ float   LastRXTemperature      = 0;
 uint8_t RadioNumber            = 0;
 uint8_t LastRadioNumber        = 0;
 
+
+char    pFhssView[]               = "page FhssView";
 char    pDataView[]               = "page DataView";
 char    pSwitchesView[]           = "page SwitchesView";
 char    pInputsView[]             = "page InputsView";
@@ -1018,11 +1020,10 @@ char    pAudioView[]              = "page AudioView";
 char    pColoursView[]            = "page ColoursView";
 char    pSticksView[]             = "page SticksView";
 char    pGraphView[]              = "page GraphView";
-char    pSetupView[]              = "page TXSetupView";
+char    pTXSetupView[]            = "page TXSetupView";
 char    pBuddyChView[]            = "page BuddyChView";
 char    pBuddyView[]              = "page BuddyView";
 char    pOptionView2[]            = "page OptionView2";
-char    pFhssView[]               = "page FHSSView";
 char    pFrontView[]              = "page FrontView";
 char    pHelpView[]               = "page HelpView";
 char    pPongView[]               = "page PongView";

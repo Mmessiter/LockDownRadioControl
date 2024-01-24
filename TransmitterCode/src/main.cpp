@@ -2729,11 +2729,11 @@ void SetupViewFM()
 void Options2End()
 { // back to setup?
     char dGMT[]           = "dGMT";
-    char pSetupView[] = "page TXSetupView";
+    char pTXSetupView[] = "page TXSetupView";
     DeltaGMT              = GetValue(dGMT);
     SaveTransmitterParameters();
     CurrentView = TXSETUPVIEW;
-    SendCommand(pSetupView);
+    SendCommand(pTXSetupView);
     UpdateModelsNameEveryWhere();
 }
 /******************************************************************************************************************************/
@@ -2906,7 +2906,7 @@ void OptionView3End() //
     char n2[]             = "n2";
     char n3[]             = "n3";
     char n4[]             = "n4";
-    char pSetupView[] = "page TXSetupView";
+    char pTXSetupView[] = "page TXSetupView";
     char QNH[]            = "Qnh";
 
     TxVoltageCorrection    = GetValue(TxVCorrextion);
@@ -2922,7 +2922,7 @@ void OptionView3End() //
     CloseModelsFile();
     AddParameterstoQueue(2);  // 2 is the ID for sending QNH value to RX
     CurrentView             = TXSETUPVIEW;
-    SendCommand(pSetupView);
+    SendCommand(pTXSetupView);
     UpdateModelsNameEveryWhere();
   
 }
@@ -3838,7 +3838,7 @@ void TXModuleViewEnd()
     DelayWithDog(10);
     SaveTransmitterParameters();
     DelayWithDog(10);
-    SendCommand(pSetupView);
+    SendCommand(pTXSetupView);
     CurrentView = TXSETUPVIEW;
     DelayWithDog(10);
     if (PPMdata.UseTXModule != oldUseTxModule) {
@@ -3851,8 +3851,8 @@ void TXModuleViewEnd()
 void SaveSwitches(){
     SaveTransmitterParameters();
     DelayWithDog(100);
-    char pSetupView[] = "page TXSetupView";
-    SendCommand(pSetupView);
+    char pTXSetupView[] = "page TXSetupView";
+    SendCommand(pTXSetupView);
 }
 
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
@@ -4130,7 +4130,6 @@ FASTRUN void ButtonWasPressed()
         char ProgressEnd[]       = "vis Progress,0";
         char Progress[]          = "Progress";
         char ScreenViewTimeout[] = "Sto"; // needed for display info
-        char pFhssView[]         = "page FhssView"; // ?????
         char FrontView_Hours[]   = "Hours";
         char FrontView_Mins[]    = "Mins";
         char FrontView_Secs[]    = "Secs";
@@ -4199,7 +4198,7 @@ FASTRUN void ButtonWasPressed()
             AnnounceConnected = GetValue(c5);
             SetAudioVolume(AudioVolume);
             CurrentView = TXSETUPVIEW;
-            SendCommand(pSetupView);
+            SendCommand(pTXSetupView);
             LastTimeRead = 0;
             SaveTransmitterParameters();
             UpdateModelsNameEveryWhere();
@@ -4211,7 +4210,7 @@ FASTRUN void ButtonWasPressed()
             if (CurrentView == CALIBRATEVIEW) ReadOneModel(ModelNumber);  // because it was cleared for calibration
             SaveAllParameters();
             CurrentView = TXSETUPVIEW;
-            SendCommand(pSetupView);
+            SendCommand(pTXSetupView);
             LastTimeRead = 0;
             CurrentView  = TXSETUPVIEW;
             ClearText();
@@ -4257,7 +4256,7 @@ FASTRUN void ButtonWasPressed()
             SendValue(Progress, 95);
             SendValue(Progress, 100);
             CurrentView = TXSETUPVIEW;
-            SendCommand(pSetupView);
+            SendCommand(pTXSetupView);
             LastTimeRead = 0;
             SendCommand(ProgressEnd);
             UpdateModelsNameEveryWhere();
@@ -4299,7 +4298,7 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(Scan_End, TextIn) > 0) { //  goto setup screen from Scan screen
             CurrentView = TXSETUPVIEW;
-            SendCommand(pSetupView);
+            SendCommand(pTXSetupView);
             LastTimeRead = 0;
             DoScanEnd();
             UpdateModelsNameEveryWhere();
@@ -4693,7 +4692,7 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(SwitchesView, TextIn)) { // heer
+        if (InStrng(SwitchesView, TextIn)) { 
             SendCommand(pSwitchesView);
             UpdateSwitchesView();               // display saved values
             CurrentView = SWITCHES_VIEW;
@@ -4777,7 +4776,7 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(GoSetupView, TextIn) > 0) {
             CurrentView = TXSETUPVIEW;
-            SendCommand(pSetupView);
+            SendCommand(pTXSetupView);
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
@@ -4802,7 +4801,7 @@ FASTRUN void ButtonWasPressed()
             SendValue(FrontView_Highlight, HighlightColour);
             SaveTransmitterParameters();
             CurrentView = TXSETUPVIEW;
-            SendCommand(pSetupView);
+            SendCommand(pTXSetupView);
             LastTimeRead = 0;
             UpdateModelsNameEveryWhere();
             ClearText();

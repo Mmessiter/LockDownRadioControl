@@ -364,7 +364,7 @@ void DoScanInit()
     // This function draws or re-draws and clears the box that display wave band scanning information
     #define xx1      90 // Needed below... Edit xx1,yy1 to move box ....
     #define yy1      70 // Needed below... Edit xx1,yy1 to move box ....
-    #define YY1EXTRA 15
+    #define YY1EXTRA 15 // 15
 
 void DrawFhssBox()
 {

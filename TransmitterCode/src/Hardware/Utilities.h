@@ -42,20 +42,20 @@ static uint8_t LastScreen = 0;
     {
     if (LastScreen == DATAVIEW)        {ForceDataRedisplay();SendCommand(pDataView); CurrentView = DATAVIEW;       return;}
     if (LastScreen == SUBTRIMVIEW)     {SendCommand(pSubTrimView);                   CurrentView = SUBTRIMVIEW;    return;}
-    if (LastScreen == TXSETUPVIEW)     {SendCommand(pSetupView);                     CurrentView = TXSETUPVIEW;    return;}
+    if (LastScreen == TXSETUPVIEW)     {SendCommand(pTXSetupView);                     CurrentView = TXSETUPVIEW;    return;}
     if (LastScreen == BUDDYVIEW)       {SendCommand(pBuddyView);                     CurrentView = BUDDYVIEW;      return;} 
     if (LastScreen == BUDDYCHVIEW)     {SendCommand(pBuddyChView);                   CurrentView = BUDDYCHVIEW;    return;} 
     if (LastScreen == OPTIONVIEW2)     {SendCommand(pOptionView2);                   CurrentView = OPTIONVIEW2;    return;}
 
-    // if (LastScreen == SCANVIEW)        {SendCommand(pFhssView);   DrawFhssBox();     CurrentView = SCANVIEW;       return;}     // ????
-    // if (LastScreen == GRAPHVIEW)       {SendCommand(pGraphView);                     CurrentView = GRAPHVIEW;      return;}     // setup?
-    // if (LastScreen == STICKSVIEW)      {SendCommand(pSticksView);                    CurrentView = STICKSVIEW;     return;}     // setup?
-    // if (LastScreen == COLOURS_VIEW)    {SendCommand(pColoursView);                   CurrentView = COLOURS_VIEW;   return;}     // setup?
-    // if (LastScreen == AUDIOVIEW)       {SendCommand(pAudioView);                     CurrentView = AUDIOVIEW;      return;}     // setup?
-    // if (LastScreen == HELP_VIEW)       {SendCommand(pHelpView);                      CurrentView = HELP_VIEW;      return;}     // setup?
-    // if (LastScreen == PONGVIEW)        {SendCommand(pPongView);                      CurrentView = PONGVIEW;       return;}
+    // if (LastScreen == SCANVIEW)        {SendCommand(pFhssView);DrawFhssBox();     CurrentView = SCANVIEW;       return;}     
+    // if (LastScreen == GRAPHVIEW)       {SendCommand(pGraphView);                  CurrentView = GRAPHVIEW;      return;}     
+    // if (LastScreen == STICKSVIEW)      {SendCommand(pSticksView);                 CurrentView = STICKSVIEW;     return;}     
+    // if (LastScreen == COLOURS_VIEW)    {SendCommand(pColoursView);                CurrentView = COLOURS_VIEW;   return;}   
+    // if (LastScreen == AUDIOVIEW)       {SendCommand(pAudioView);                  CurrentView = AUDIOVIEW;      return;}    
+    // if (LastScreen == HELP_VIEW)       {SendCommand(pHelpView);                   CurrentView = HELP_VIEW;      return;}    
+    // if (LastScreen == PONGVIEW)        {SendCommand(pPongView);                   CurrentView = PONGVIEW;       return;}
+    // if (LastScreen == CALIBRATEVIEW)   {SendCommand(pCalibrateView);              CurrentView = CALIBRATEVIEW;  return;}
    
-    if (LastScreen == CALIBRATEVIEW)   {SendCommand(pCalibrateView);                 CurrentView = CALIBRATEVIEW;  return;}
     if (LastScreen == FRONTVIEW)       {GotoFrontView();                             CurrentView = FRONTVIEW;      return;}
     if (LastScreen == SWITCHES_VIEW)   {SendCommand(pSwitchesView);                  CurrentView = SWITCHES_VIEW;  return;}
     if (LastScreen == INPUTS_VIEW)     {SendCommand(pInputsView);                    CurrentView = OPTIONS_VIEW;   return;}
@@ -104,6 +104,7 @@ void HideScreenAgain(){
     if (CurrentView == AUDIOVIEW)       return;
     if (CurrentView == HELP_VIEW)       return;
     if (CurrentView == PONGVIEW)        return;
+    if (CurrentView == CALIBRATEVIEW)   return;
 
 
     SaveOrRestoreScreen(false);
