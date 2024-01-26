@@ -10,7 +10,7 @@ When you set this, bear in mind that when you turn off the motor, the voltage wi
 
 'RX Battery voltage correction' allows you to correct any slight error that the on board voltage sensor might have. This correction can be positive or negative and is the per cell voltage - not the combined voltage of every cell. Use a good voltmeter to compare the transmitter's readout with the more accurate figure, and adjust this setting as needed.||
 
-Motor channel 'off' value is usually -67, but in some cases might be different, if the servo was reversed etc.||
+Motor channel 'off' value is usually -67, and this is default. But in a few cases it might be different, if the servo was reversed etc.||
 
 Motor channel should be set to the number of the channel to which the motor is connected. Usually it's 3.||
 
