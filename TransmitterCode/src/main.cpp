@@ -3741,9 +3741,11 @@ void CheckAllModelIds()
 void TXModuleViewStart()
 {
 
-    char GoTXModule[] = "page TXModuleView";
-    if (ModelMatched) return;
-
+    char msg[] = "Please disconnect from model first!";
+    if (ModelMatched) {
+        MsgBox(pTXSetupView,msg);
+        return;
+    }
     CurrentView = TXMODULEVIEW;
 
     char c1[] = "c1"; // Use module
@@ -3752,7 +3754,7 @@ void TXModuleViewStart()
     char r1[] = "r1";
     char r2[] = "r2";
 
-    SendCommand(GoTXModule);
+    SendCommand(pTXModule);
     SendValue(c1, PPMdata.UseTXModule);
     SendValue(n3, PPMdata.PPMChannelsNumber);
     if (PPMdata.PPMOrderSelection == 1) {

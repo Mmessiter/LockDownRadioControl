@@ -1027,6 +1027,7 @@ char    pOptionView2[]            = "page OptionView2";
 char    pFrontView[]              = "page FrontView";
 char    pHelpView[]               = "page HelpView";
 char    pPongView[]               = "page PongView";
+char    pTXModule[]               = "page TXModuleView";
 
 
 
