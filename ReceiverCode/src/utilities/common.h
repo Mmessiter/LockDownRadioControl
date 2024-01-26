@@ -100,6 +100,7 @@ uint8_t         SizeOfParameters = sizeof(Parameters);
 #define BIND_EEPROM_OFFSET 0                      // use 8 bytes from here
 #define FS_EEPROM_OFFSET   BIND_EEPROM_OFFSET + 8 // use 16 bytes from here
 #define PIPES_TO_COMPARE   8
+//#define DOSTABILISATION    1
 
 RF24     Radio1(pinCE1, pinCSN1);
 RF24     Radio2(pinCE2, pinCSN2);

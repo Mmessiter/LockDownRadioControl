@@ -5,6 +5,9 @@
 #include <MPU6050_tockn.h>
 #include "utilities/common.h"
 
+
+#ifdef DOSTABILISATION
+ 
 // ************************************************************************************************************
 // PID control
 // Not used yet but will be needed for PID control
@@ -43,8 +46,6 @@ private:
 
 KalmanFilter kalman;
 
-
-
 // *****************************************************************************************************************
 class LowLatencyFilter { 
   private: 
@@ -52,8 +53,6 @@ class LowLatencyFilter {
     float ReturnedValue;
     float FilterFactor = 0; 
     float UsedFilterFactor;
-
-
 
 // *******************************************************************************
 float Method2(float NewDataPoint){
@@ -78,7 +77,6 @@ float Method2(float NewDataPoint){
     
     ReturnedValue = Method2(NewDataPoint);
  
-    
     return ReturnedValue;
   }
   // *****************************************************************************************************************   
@@ -89,38 +87,52 @@ LowLatencyFilter YF;
 
 
 
+// *****************************************************************************************************************
+void ReadMPU6050(){
 
-
+  }
 /************************************************************************************************************/
 
 void PIDEntryPoint(){
     static uint32_t LastTime = 0;
     static uint32_t lcount = 0;
+  
     if (millis()-LastTime >= 1000){
         LastTime = millis();
         Serial.print("Loop speed: ");
         Serial.print(lcount);
-        Serial.print(" Hz  - ");
-        Serial.println(" ");
+        Serial.print(" Hz  ");
+        Serial.println(millis());
         lcount = 0;
    }
    ++lcount;
+   
+   ReadMPU6050();
+
 }
 
 /************************************************************************************************************/
 
 void DoStabilsation(){  // This is called from the main loop and from all DelayMillis() loops
     
-    
-    return;         // later! <<<-----------------<<<<<<<<< ********* <<<<<<<<<<<<<<<<<
-
+    if (!MPU6050Connected) {
+      //  Look("No MPU6050 connected");
+        return;         
+    }
     static uint32_t LastTime = 0;
-    if (micros()-LastTime >= 50){
+    if (micros()-LastTime >= 3996){ // 4000 =250 Hz
         LastTime = micros();
         PIDEntryPoint();            // here we can call a timed stabilisation event at exactly 250 Hz
    }
 }
 
+#else
+
+void DoStabilsation(){ // no stabilisation
+    return;
+}
+
+#endif // DOSTABILISATION
 
 #endif // _SRC_PID_H
 
