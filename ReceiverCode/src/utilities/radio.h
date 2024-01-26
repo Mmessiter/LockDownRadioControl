@@ -432,7 +432,11 @@ void TryToConnectNow()
     uint32_t ATimer;
     CurrentRadio->startListening();
     ATimer = millis();
-    while ((!CurrentRadio->available(&Pipnum)) && (millis() - ATimer) < LISTEN_PERIOD) {DoStabilsation();}       // while connecting, do some other stuff (Stabilisation, GPS, etc)
+    while ((!CurrentRadio->available(&Pipnum)) && (millis() - ATimer) < LISTEN_PERIOD) {
+#ifdef  DOSTABILISATION   
+        DoStabilsation(); // while connecting, do some other stuff (Stabilisation, etc)
+#endif
+    }       
     Connected = CurrentRadio->available(&Pipnum);
     
 }

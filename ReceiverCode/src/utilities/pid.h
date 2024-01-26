@@ -128,9 +128,9 @@ void DoStabilsation(){  // This is called from the main loop and from all DelayM
 
 #else
 
-void DoStabilsation(){ // no stabilisation
-    return;
-}
+//void DoStabilsation(){ // no stabilisation
+//    return;
+//}
 
 #endif // DOSTABILISATION
 

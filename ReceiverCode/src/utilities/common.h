@@ -27,10 +27,15 @@
 // #define DB_RXTIMERS
 
 
- // >>>>>>>>>>>>>>>>                                  ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                       #define SECOND_TRANSCEIVER     // **** DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
- // >>>>>>>>>>>>>>>>                                  ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#define SECOND_TRANSCEIVER     //    **** DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
+// **************************************************************************
+//                           PID STABILISATION                              *
+//***************************************************************************
+
+//#define DOSTABILISATION    1 // Turn on if you want to use PID stabilisation
 
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
@@ -39,6 +44,7 @@
 #define WATCHDOGTIMEOUT 2000 // 2 Seconds before reboot (32ms -> 500 seconds)
 #define KICKRATE        500  // Kick twice a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
 #define WATCHDOGMAXRATE 250  // 250 ms secs between kicks is max rate allowed
+
 //**************************************************************************************************************************
 
 #define SENSOR_HUB_I2C_ADDRESS 8
@@ -100,7 +106,7 @@ uint8_t         SizeOfParameters = sizeof(Parameters);
 #define BIND_EEPROM_OFFSET 0                      // use 8 bytes from here
 #define FS_EEPROM_OFFSET   BIND_EEPROM_OFFSET + 8 // use 16 bytes from here
 #define PIPES_TO_COMPARE   8
-//#define DOSTABILISATION    1
+
 
 RF24     Radio1(pinCE1, pinCSN1);
 RF24     Radio2(pinCE2, pinCSN2);

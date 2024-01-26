@@ -64,7 +64,9 @@ void DelayMillis(uint16_t ms) // This replaces any delay() calls
 {
     uint32_t tt = millis();
     while (millis() - tt < ms) {
+#ifdef DOSTABILISATION
         DoStabilsation();
+#endif
     }
 }   
 /************************************************************************************************************/
@@ -615,15 +617,10 @@ FLASHMEM void setup()
 
 void BlinkLed()
 {
-    if ((millis() - BlinkTimer) > 100) {
-        BlinkTimer = millis();
-        BlinkValue ^= 1;
-        if (BlinkValue) {
-            TurnLedOn();
-        }
-        else {
-            TurnLedOff();
-        }
+    uint16_t Blinkrate = 222;
+    if (MPU6050Connected)   Blinkrate = 666; // Blink rate is reduced if MPU6050 is connected
+    if ((millis() - BlinkTimer) >= Blinkrate) {
+        BlinkTimer = millis(); if (BlinkValue ^= 1) TurnLedOn(); else TurnLedOff();
     }
 }
 
@@ -633,7 +630,9 @@ void BlinkLed()
 
 void loop()
 {
+#ifdef DOSTABILISATION
     DoStabilsation();
+#endif
     KickTheDog();
     ReceiveData();
     if (Blinking) BlinkLed();
