@@ -33,7 +33,7 @@ var searchData=
   ['doscanend_30',['DoScanEnd',['../1Definitions_8h.html#a31fb6a46af68482e107cddee58dfb677',1,'DoScanEnd():&#160;transceiver.h'],['../transceiver_8h.html#a31fb6a46af68482e107cddee58dfb677',1,'DoScanEnd():&#160;transceiver.h']]],
   ['doscaninit_31',['DoScanInit',['../1Definitions_8h.html#a77c4a4ffa609df08830ccece07bf283b',1,'DoScanInit():&#160;transceiver.h'],['../transceiver_8h.html#a77c4a4ffa609df08830ccece07bf283b',1,'DoScanInit():&#160;transceiver.h']]],
   ['doslowservos_32',['DoSlowServos',['../TransmitterCode_2src_2main_8cpp.html#a7a6560a77b8c4dd3925760790beafbd5',1,'main.cpp']]],
-  ['dostabilsation_33',['DoStabilsation',['../common_8h.html#a48050e81ef4521304a2dbeaf99e1a331',1,'DoStabilsation():&#160;pid.h'],['../pid_8h.html#a48050e81ef4521304a2dbeaf99e1a331',1,'DoStabilsation():&#160;pid.h']]],
+  ['dostabilsation_33',['DoStabilsation',['../common_8h.html#a48050e81ef4521304a2dbeaf99e1a331',1,'common.h']]],
   ['dotherequest_34',['DoTheRequest',['../SensorHubT32_2src_2main_8cpp.html#aa813a4b38095c6683d78bdf2baa33f69',1,'main.cpp']]],
   ['dowirelessbuddy_35',['DoWirelessBuddy',['../1Definitions_8h.html#a7d9257c21af6e77d71dba241aa349692',1,'1Definitions.h']]],
   ['dowirelessbuddylisten_36',['DoWirelessBuddyListen',['../TransmitterCode_2src_2main_8cpp.html#ad2c7ed441d88f2a2b2fca83ff61e714d',1,'main.cpp']]],
