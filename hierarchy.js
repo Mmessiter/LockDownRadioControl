@@ -3,8 +3,6 @@ var hierarchy =
     [ "CD", "structCD.html", null ],
     [ "CD2", "structCD2.html", null ],
     [ "I2Cdev", "classI2Cdev.html", null ],
-    [ "KalmanFilter", "classKalmanFilter.html", null ],
-    [ "LowLatencyFilter", "classLowLatencyFilter.html", null ],
     [ "MPU6050", "classMPU6050.html", null ],
     [ "MPU9250", "classMPU9250.html", [
       [ "MPU9250FIFO", "classMPU9250FIFO.html", null ]

@@ -8,10 +8,9 @@ var searchData=
   ['yeargps_5',['YearGPS',['../common_8h.html#a4a1012a9dfe5632ac326ce712f311472',1,'common.h']]],
   ['yellow_6',['Yellow',['../1Definitions_8h.html#a239cc4651865ee2ac90ac5c1e6d2d8b5',1,'1Definitions.h']]],
   ['yespressed_7',['YesPressed',['../TransmitterCode_2src_2main_8cpp.html#a742d8d0be4a05e1c241dad8b6ea5eba0',1,'main.cpp']]],
-  ['yf_8',['YF',['../pid_8h.html#ae7153fe121e1f00ec05ef717cd4f7126',1,'pid.h']]],
-  ['ypoint_9',['yPoint',['../1Definitions_8h.html#ac57deb5507c3835634b98d51b5d13c9b',1,'1Definitions.h']]],
-  ['ypoints_10',['yPoints',['../1Definitions_8h.html#aff20e4985ae632d4c59eeb3d772874c9',1,'1Definitions.h']]],
-  ['ytouchplace_11',['YtouchPlace',['../1Definitions_8h.html#a1ee9e6968fdbcee5ba9e5dc2070dbdb3',1,'1Definitions.h']]],
-  ['yy1_12',['yy1',['../transceiver_8h.html#a10274b74b5b9f35476ae844506775afe',1,'transceiver.h']]],
-  ['yy1extra_13',['YY1EXTRA',['../transceiver_8h.html#ad7ab066fbe7d750f032f5761dbaa2487',1,'transceiver.h']]]
+  ['ypoint_8',['yPoint',['../1Definitions_8h.html#ac57deb5507c3835634b98d51b5d13c9b',1,'1Definitions.h']]],
+  ['ypoints_9',['yPoints',['../1Definitions_8h.html#aff20e4985ae632d4c59eeb3d772874c9',1,'1Definitions.h']]],
+  ['ytouchplace_10',['YtouchPlace',['../1Definitions_8h.html#a1ee9e6968fdbcee5ba9e5dc2070dbdb3',1,'1Definitions.h']]],
+  ['yy1_11',['yy1',['../transceiver_8h.html#a10274b74b5b9f35476ae844506775afe',1,'transceiver.h']]],
+  ['yy1extra_12',['YY1EXTRA',['../transceiver_8h.html#ad7ab066fbe7d750f032f5761dbaa2487',1,'transceiver.h']]]
 ];
