@@ -714,6 +714,7 @@ var 1Definitions_8h =
     [ "pSticksView", "1Definitions_8h.html#a13c3873f422f498fd8dae8c5867adf18", null ],
     [ "pSubTrimView", "1Definitions_8h.html#a6b70f67a9a7d36e4c709110dc5d7b58a", null ],
     [ "pSwitchesView", "1Definitions_8h.html#a7b78287da7bf44c16f47bdb7e77319f0", null ],
+    [ "pTXModule", "1Definitions_8h.html#affec2cc7f0e2031becfc6fdd52f04726", null ],
     [ "pTXSetupView", "1Definitions_8h.html#a8356a721d3e7deffbe6efae7c70a50c1", null ],
     [ "pTypeView", "1Definitions_8h.html#a02f7fb4fe2ffe0a4d5a9a0121e0a4c57", null ],
     [ "PupilIsAlive", "1Definitions_8h.html#a67fb2e738afb8ad08fc01f95b138c79f", null ],
