@@ -1044,7 +1044,7 @@ uint8_t  FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15
                               54, 12, 80, 53, 22, 1, 74, 39, 58, 63, 70, 52, 42, 25, 43, 26, 14, 38, 48, 68, 33, 27, 60, 44, 46,
                               56, 7, 81, 5, 65, 4, 10};
 
-uint8_t* FHSSRecoveryPointer;
+uint8_t* FHSSRecoveryPointer    = Used_Recovery_Channels;
 uint8_t* FHSSChPointer          = FHSS_Channels;            // pointer for channels array
 uint8_t  NextChannelNumber      = 0;
 uint8_t  PaceMaker              = PACEMAKER;                // now variables are used
