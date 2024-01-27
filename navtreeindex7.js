@@ -1,5 +1,6 @@
 var NAVTREEINDEX7 =
 {
+"SensorHubT32_2src_2main_8cpp.html#abda84b8cbebce00b7d4b0ea759b8d07f":[5,0,2,0,0,19],
 "SensorHubT32_2src_2main_8cpp.html#ac5dd8c90defc2c0d78e99d2d5c1a0fd1":[5,0,2,0,0,2],
 "SensorHubT32_2src_2main_8cpp.html#acfa52f9c8cf5500ff86e33dd65b8eeaa":[5,0,2,0,0,35],
 "SensorHubT32_2src_2main_8cpp.html#ad84d94b7259bcf40213f0af9be706ee7":[5,0,2,0,0,44],
@@ -248,6 +249,5 @@ var NAVTREEINDEX7 =
 "Utilities_8h.html#a35439e94d9f2791ba41697d5eafd3f86":[5,0,3,0,0,13,32],
 "Utilities_8h.html#a374524dc113357d2ed6b8622f6ea85a8":[5,0,3,0,0,13,49],
 "Utilities_8h.html#a3a1bb848113ddbbc27294921fa92f92a":[5,0,3,0,0,13,29],
-"Utilities_8h.html#a3a793f5d71f6db34ad82272d211f8954":[5,0,3,0,0,13,2],
-"Utilities_8h.html#a3b1d8aa403e2724e55c71da3d9d13e7e":[5,0,3,0,0,13,18]
+"Utilities_8h.html#a3a793f5d71f6db34ad82272d211f8954":[5,0,3,0,0,13,2]
 };

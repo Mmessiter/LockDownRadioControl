@@ -1755,6 +1755,8 @@ Variables</h2></td></tr>
 <tr class="separator:af8aabad4d8f31671d0ae4b4eb9136b7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d7bce95b492dd0e27f6cfabdf47f391"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="1Definitions_8h.html#a7d7bce95b492dd0e27f6cfabdf47f391">LastRadioNumber</a> = 0</td></tr>
 <tr class="separator:a7d7bce95b492dd0e27f6cfabdf47f391"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25c24f4fa22f7ecea01c3bd391bcbf5e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="1Definitions_8h.html#a25c24f4fa22f7ecea01c3bd391bcbf5e">LastTrim</a> [5][17]</td></tr>
+<tr class="separator:a25c24f4fa22f7ecea01c3bd391bcbf5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15b5e061d009e0009bb9642ae286846d"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="1Definitions_8h.html#a15b5e061d009e0009bb9642ae286846d">pFhssView</a> [] = &quot;page FhssView&quot;</td></tr>
 <tr class="separator:a15b5e061d009e0009bb9642ae286846d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d745153b14c0ff0c740854aac704ccb"><td class="memItemLeft" align="right" valign="top">char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="1Definitions_8h.html#a6d745153b14c0ff0c740854aac704ccb">pDataView</a> [] = &quot;page DataView&quot;</td></tr>
@@ -1807,7 +1809,7 @@ Variables</h2></td></tr>
 <tr class="separator:a8380a667acd9e0130553ce2ae0defcce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a181cb451e5e95fa7cfcb19fff25b9318"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFHSS__data.html#a181cb451e5e95fa7cfcb19fff25b9318">FHSS_data::FHSS_Channels</a> [83]</td></tr>
 <tr class="separator:a181cb451e5e95fa7cfcb19fff25b9318"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3bc5776f7d9f04adaf25d4659c02f92e"><td class="memItemLeft" align="right" valign="top">uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFHSS__data.html#a3bc5776f7d9f04adaf25d4659c02f92e">FHSS_data::FHSSRecoveryPointer</a></td></tr>
+<tr class="memitem:a3bc5776f7d9f04adaf25d4659c02f92e"><td class="memItemLeft" align="right" valign="top">uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFHSS__data.html#a3bc5776f7d9f04adaf25d4659c02f92e">FHSS_data::FHSSRecoveryPointer</a> = Used_Recovery_Channels</td></tr>
 <tr class="separator:a3bc5776f7d9f04adaf25d4659c02f92e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9d000f86fb280637a15ae47d0a339023"><td class="memItemLeft" align="right" valign="top">uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceFHSS__data.html#a9d000f86fb280637a15ae47d0a339023">FHSS_data::FHSSChPointer</a> = <a class="el" href="common_8h.html#ad8056611eb984e8cacf9f0e526815a99">FHSS_Channels</a></td></tr>
 <tr class="separator:a9d000f86fb280637a15ae47d0a339023"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -6228,7 +6230,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html#l05617">5617</a> of file <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html#l05618">5618</a> of file <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -6559,7 +6561,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00598">598</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00603">603</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -6584,7 +6586,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html#l05502">5502</a> of file <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html#l05503">5503</a> of file <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -6672,11 +6674,11 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html#l05546">5546</a> of file <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html#l05547">5547</a> of file <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="1Definitions_8h_a6ae37c6938b8c10b83d1bc74e8643bd9_cgraph.svg" width="1820" height="1575"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="1Definitions_8h_a6ae37c6938b8c10b83d1bc74e8643bd9_cgraph.svg" width="1820" height="1296"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <div class="dynheader">
@@ -6776,7 +6778,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Trims_8h_source.html#l00276">276</a> of file <a class="el" href="Trims_8h_source.html">Trims.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Trims_8h_source.html#l00277">277</a> of file <a class="el" href="Trims_8h_source.html">Trims.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -6801,11 +6803,11 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00119">119</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00124">124</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="1Definitions_8h_adce05a2e4f5763c3b90c7126234d2cc8_cgraph.svg" width="2274" height="1331"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="1Definitions_8h_adce05a2e4f5763c3b90c7126234d2cc8_cgraph.svg" width="2244" height="1362"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <div class="dynheader">
@@ -6849,7 +6851,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Trims_8h_source.html#l00289">289</a> of file <a class="el" href="Trims_8h_source.html">Trims.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Trims_8h_source.html#l00290">290</a> of file <a class="el" href="Trims_8h_source.html">Trims.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -6911,7 +6913,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00743">743</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00748">748</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -6936,7 +6938,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00670">670</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00675">675</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -7015,7 +7017,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="1Definitions_8h_af8fe429ceb65bf9d257a2a0f1c63eccb_cgraph.svg" width="1819" height="1279"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="1Definitions_8h_af8fe429ceb65bf9d257a2a0f1c63eccb_cgraph.svg" width="1819" height="1354"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <div class="dynheader">
@@ -7206,7 +7208,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l01013">1013</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l01018">1018</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -7386,7 +7388,7 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00851">851</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00856">856</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -7487,7 +7489,7 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00906">906</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00911">911</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -7667,7 +7669,7 @@ Here is the caller graph for this function:</div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00878">878</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00883">883</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -7692,7 +7694,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html#l05692">5692</a> of file <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html#l05693">5693</a> of file <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -7783,7 +7785,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="1Definitions_8h_ad6fe0cbb180cb41ff0478ddb5101e6ca_icgraph.svg" width="3246" height="1879"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="1Definitions_8h_ad6fe0cbb180cb41ff0478ddb5101e6ca_icgraph.svg" width="3175" height="1578"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 
@@ -7850,7 +7852,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="1Definitions_8h_a6506bf72e0dd9e9ce480156b47625bff_cgraph.svg" width="1690" height="2278"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="1Definitions_8h_a6506bf72e0dd9e9ce480156b47625bff_cgraph.svg" width="1690" height="2348"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <div class="dynheader">
@@ -8075,7 +8077,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="1Definitions_8h_af63784896d400ae2d75d57852e143ca1_cgraph.svg" width="1915" height="1483"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="1Definitions_8h_af63784896d400ae2d75d57852e143ca1_cgraph.svg" width="1915" height="1367"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <div class="dynheader">
@@ -8227,7 +8229,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="1Definitions_8h_a2d16d1f4802d4029bc8933a18d213beb_cgraph.svg" width="1644" height="1154"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="1Definitions_8h_a2d16d1f4802d4029bc8933a18d213beb_cgraph.svg" width="1644" height="1152"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <div class="dynheader">
@@ -8945,7 +8947,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00521">521</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00526">526</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -8971,7 +8973,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Trims_8h_source.html#l00381">381</a> of file <a class="el" href="Trims_8h_source.html">Trims.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Trims_8h_source.html#l00382">382</a> of file <a class="el" href="Trims_8h_source.html">Trims.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -9110,7 +9112,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="1Definitions_8h_a694f4f5a0147f4dc29b0bc1a8951547d_cgraph.svg" width="2064" height="1196"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="1Definitions_8h_a694f4f5a0147f4dc29b0bc1a8951547d_cgraph.svg" width="2064" height="1230"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <div class="dynheader">
@@ -9172,7 +9174,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="1Definitions_8h_a66133191d50f6b4d010d56e6b53a853b_cgraph.svg" width="1762" height="1114"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="1Definitions_8h_a66133191d50f6b4d010d56e6b53a853b_cgraph.svg" width="1762" height="1256"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <div class="dynheader">
@@ -9200,7 +9202,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00139">139</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00144">144</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -9577,7 +9579,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00359">359</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00364">364</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -9668,7 +9670,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Trims_8h_source.html#l00049">49</a> of file <a class="el" href="Trims_8h_source.html">Trims.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Trims_8h_source.html#l00050">50</a> of file <a class="el" href="Trims_8h_source.html">Trims.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -9718,7 +9720,7 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00074">74</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00079">79</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -10226,7 +10228,7 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <p >Send 13 joined together char arrays to NEXTION </p>
 
-<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00681">681</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00686">686</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -10314,7 +10316,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html#l05626">5626</a> of file <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html#l05627">5627</a> of file <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -10345,7 +10347,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html#l05632">5632</a> of file <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html#l05633">5633</a> of file <a class="el" href="TransmitterCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -10849,7 +10851,7 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="1Definitions_8h_aac472b3398ab38e7f54b1a2cae96ba62_cgraph.svg" width="2002" height="1072"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
+<div class="center"><iframe scrolling="no" frameborder="0" src="1Definitions_8h_aac472b3398ab38e7f54b1a2cae96ba62_cgraph.svg" width="2019" height="1060"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe>
 </div>
 </div>
 <div class="dynheader">
@@ -10876,7 +10878,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00966">966</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00971">971</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -11153,7 +11155,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00619">619</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00624">624</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -11291,7 +11293,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00162">162</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="Utilities_8h_source.html#l00167">167</a> of file <a class="el" href="Utilities_8h_source.html">Utilities.h</a>.</p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -11533,7 +11535,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01075">1075</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01076">1076</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -11549,7 +11551,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01077">1077</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01078">1078</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -14113,6 +14115,22 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="a25c24f4fa22f7ecea01c3bd391bcbf5e" name="a25c24f4fa22f7ecea01c3bd391bcbf5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25c24f4fa22f7ecea01c3bd391bcbf5e">&#9670;&#160;</a></span>LastTrim</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int LastTrim[5][17]</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01005">1005</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+
+</div>
+</div>
 <a id="a77915a48e3521d96d558aee6ea3549c8" name="a77915a48e3521d96d558aee6ea3549c8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a77915a48e3521d96d558aee6ea3549c8">&#9670;&#160;</a></span>LEDBrightness</h2>
 
@@ -15033,7 +15051,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01019">1019</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01020">1020</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15065,7 +15083,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01024">1024</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01025">1025</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15081,7 +15099,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01025">1025</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01026">1026</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15097,7 +15115,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01017">1017</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01018">1018</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15113,7 +15131,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01020">1020</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01021">1021</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15129,7 +15147,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01008">1008</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01009">1009</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15145,7 +15163,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01014">1014</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01015">1015</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15161,7 +15179,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01007">1007</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01008">1008</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15177,7 +15195,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01027">1027</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01028">1028</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15193,7 +15211,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01022">1022</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01023">1023</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15209,7 +15227,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01028">1028</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01029">1029</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15225,7 +15243,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01010">1010</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01011">1011</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15257,7 +15275,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01012">1012</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01013">1013</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15273,7 +15291,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01015">1015</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01016">1016</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15305,7 +15323,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01011">1011</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01012">1012</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15321,7 +15339,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01026">1026</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01027">1027</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15353,7 +15371,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01106">1106</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01107">1107</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15369,7 +15387,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01029">1029</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01030">1030</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15513,7 +15531,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01016">1016</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01017">1017</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15529,7 +15547,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01021">1021</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01022">1022</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15545,7 +15563,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01018">1018</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01019">1019</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15561,7 +15579,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01009">1009</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01010">1010</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15577,7 +15595,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01030">1030</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01031">1031</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15593,7 +15611,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01023">1023</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01024">1024</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>
@@ -15609,7 +15627,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01013">1013</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="1Definitions_8h_source.html#l01014">1014</a> of file <a class="el" href="1Definitions_8h_source.html">1Definitions.h</a>.</p>
 
 </div>
 </div>

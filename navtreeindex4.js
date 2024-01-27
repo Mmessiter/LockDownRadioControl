@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"MPU6050_8h.html#a44bc0473921fbf0a6cdfc39ed4b26b15":[5,0,0,0,0,0,4,180],
 "MPU6050_8h.html#a45060dc0c7bdd30589a081dbe4d43b98":[5,0,0,0,0,0,4,279],
 "MPU6050_8h.html#a45b83ab5dc3f439636f6e5c591f1d5b1":[5,0,0,0,0,0,4,125],
 "MPU6050_8h.html#a484dc2c64005652ff208840ddc8c1cff":[5,0,0,0,0,0,4,132],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "MPU6050__6Axis__MotionApps20_8h.html#a0756e93e3e7d572f24952cbd8e35b158":[5,0,0,0,0,0,5,35],
 "MPU6050__6Axis__MotionApps20_8h.html#a1292f2f164a1997206e9cf714f2372fe":[5,0,0,0,0,0,5,36],
 "MPU6050__6Axis__MotionApps20_8h.html#a132cade895232da163e344f296267817":[5,0,0,0,0,0,5,37],
-"MPU6050__6Axis__MotionApps20_8h.html#a203d5b93e4077aa273c7013964a31f9e":[5,0,0,0,0,0,5,5],
-"MPU6050__6Axis__MotionApps20_8h.html#a27619bf0e01033f6049a11a6d5d754f3":[5,0,0,0,0,0,5,17]
+"MPU6050__6Axis__MotionApps20_8h.html#a203d5b93e4077aa273c7013964a31f9e":[5,0,0,0,0,0,5,5]
 };

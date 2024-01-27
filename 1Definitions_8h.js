@@ -621,6 +621,7 @@ var 1Definitions_8h =
     [ "LastSeconds", "1Definitions_8h.html#a461bdfbe0df771f541b8872ac04bb717", null ],
     [ "LastShowTime", "1Definitions_8h.html#ae818c99aa6e4a19030a586da53a9dcc4", null ],
     [ "LastTimeRead", "1Definitions_8h.html#ad70c8744223914d4350b199002cec7b7", null ],
+    [ "LastTrim", "1Definitions_8h.html#a25c24f4fa22f7ecea01c3bd391bcbf5e", null ],
     [ "LEDBrightness", "1Definitions_8h.html#a77915a48e3521d96d558aee6ea3549c8", null ],
     [ "LedGreenMoment", "1Definitions_8h.html#a92fbcdad17e613348bdbb4b273f220b5", null ],
     [ "LedIsBlinking", "1Definitions_8h.html#a733907c842f15a6a6c1c0ce292f55ba2", null ],
