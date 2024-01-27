@@ -1002,6 +1002,7 @@ int     LastRXModelMaxAltitude = 0;
 float   LastRXTemperature      = 0;
 uint8_t RadioNumber            = 0;
 uint8_t LastRadioNumber        = 0;
+int      LastTrim[5][17];
 
 
 char    pFhssView[]               = "page FhssView";

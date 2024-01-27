@@ -25,6 +25,11 @@ void ForceDataRedisplay(){
     LastRXTemperature    = 0;
     LastRadioNumber      = 0;
     ForceVoltDisplay     = true; 
+    for (int i = 0; i < 5; ++i) {
+       for (int j = 0; j < 17; ++j) {
+           LastTrim[i][j] = 0;
+       }
+    }
     return;
 }
 

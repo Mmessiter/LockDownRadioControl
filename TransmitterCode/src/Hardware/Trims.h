@@ -16,6 +16,7 @@ void StartTrimView()
     CurrentView = TRIM_VIEW;
     SendValue(n0, TrimMultiplier);
     SendValue(c0, CopyTrimsToAll);
+    ForceDataRedisplay();
     UpdateModelsNameEveryWhere(); // also updates trimview (If CurrentView == TRIM_VIEW!! :-)
     ClearText();
 }
@@ -242,7 +243,7 @@ void UpdateTrimView()
     char    TrimViewChannels[4][4] = {"ch1", "ch4", "ch2", "ch3"};
     char    TrimViewNumbers[4][3]  = {"n1", "n4", "n2", "n3"};
     char    TrimChannelNames[4][3] = {"c1", "c2", "c3", "c4"};
-    static int LastTrim[5][17];
+  
 
     if (CurrentView == FRONTVIEW || (CurrentView == TRIM_VIEW)) {
         for (int i = 0; i < 4; ++i) {

@@ -5491,6 +5491,7 @@ void GotoFrontView()
     for (int i = 0; i < 4; ++i) {
         SendText(fms[i], BankTexts[BanksInUse[i]]);
     }
+    ForceDataRedisplay();
     UpdateTrimView();
     if (BuddyPupilOnWireless) StartBuddyListen();
 
