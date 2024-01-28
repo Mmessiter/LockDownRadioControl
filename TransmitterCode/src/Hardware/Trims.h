@@ -437,7 +437,7 @@ void TrimsToSubtrim(){ //   Store trims to subtrims and reset trims to centre
            for (int i = 0; i < 4; ++i) {
                 SubTrims[i] += ((Trims[Bank][i] - 80) * TrimMultiplier / 5); // Subtrims' multiplier is 5 always
                 if (SubTrims[i] > 255) SubTrims[i] = 255;                    // Avoid overflow
-                Trims[Bank][i] = 80;                                         // Reset trims ordinaire to centre               
+                for (int j = 1; j < 5; ++j) Trims[j][i] = 80;                // Reset trims to centre
             }
         MsgBox(pTrimView,ItsAllDone);                                        // Done!
         ForceDataRedisplay();                                                // force Update trim view              
