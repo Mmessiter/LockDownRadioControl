@@ -1,7 +1,11 @@
 These trims on screen can be used instead of the hardware trims, or just as a clearer display. ||
 
-If the hardware trims and the screen display move in opposite directions, recalibrate the trims from the Setup menu.||
+If the hardware trims and the screen display move in opposite directions, recalibrate the hardware trims from the Transmitter Setup / Calibrate menu.||
 
-Remember to set the 'Trim multiplier' under Model Options to a value greater than zero. 5 or 6 is a good starting value. Also note that on the Model Options screen is the option to copy trims to all banks. If this is not set, the trims you set will be applied only the the current bank.||
+Remember to set the 'Trim multiplier' under Model Options to a value greater than zero. 5 or 6 is a good starting value. ||
+
+For a helicopter with a flybarless system, trims should be disabled by setting the 'Trim multiplier' to zero.
+
+On the Model Options screen there is also the option to copy trims to all banks. If this is not set, the trims you set will be applied only the the current bank.||
 
 Once you find the best place for all trims, you may like to transfer the settings to the subtrims. But note that subtrims always affect all banks equally.
