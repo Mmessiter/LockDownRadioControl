@@ -435,18 +435,18 @@ void TrimsToSubtrim(){ //   Store trims to subtrims and reset trims to centre
     char ItsAllDone[]           = "Done!";
     if (GetConfirmation(pTrimView,Prompt)) {
            for (int i = 0; i < 4; ++i) {
-                SubTrims[i] += ((Trims[Bank][i] - 80) * TrimMultiplier / 5); // Subtrims' multiplier is 5 always
-                if (SubTrims[i] > 255) SubTrims[i] = 255;                    // Avoid overflow
-                for (int j = 1; j < 5; ++j) Trims[j][i] = 80;                // Reset trims to centre
+                SubTrims[InputTrim[i]] += ((Trims[Bank][InputTrim[i]] - 80) * TrimMultiplier / 5);  // Subtrims' multiplier is 5 always
+                if (SubTrims[i] > 255) SubTrims[i] = 255;                                           // Avoid overflow
+                for (int j = 1; j < 5; ++j) Trims[j][InputTrim[i]] = 80;                            // Reset trims to centre
             }
-        MsgBox(pTrimView,ItsAllDone);                                        // Done!
-        ForceDataRedisplay();                                                // force Update trim view              
-        UpdateTrimView();                                                    // Update trim view               
-        SaveOneModel(ModelNumber);                                           // Save model memory              
+        MsgBox(pTrimView,ItsAllDone);                                                               // Done!
+        ForceDataRedisplay();                                                                       // force Update trim view              
+        UpdateTrimView();                                                                           // Update trim view               
+        SaveOneModel(ModelNumber);                                                                  // Save model memory              
     }else{
-        MsgBox(pTrimView,ItsCancelled);                                      // Cancelled
-        ForceDataRedisplay();                                                // force Update trim view          
-        UpdateTrimView();                                                    // Update trim view               
+        MsgBox(pTrimView,ItsCancelled);                                                             // Cancelled
+        ForceDataRedisplay();                                                                       // force Update trim view          
+        UpdateTrimView();                                                                           // Update trim view               
     }
 }
 

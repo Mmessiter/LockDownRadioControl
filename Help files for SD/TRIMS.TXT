@@ -12,4 +12,4 @@ Once you find the best place for all trims, you may like to transfer the trim se
 
 The button marked 'Move these trims to Subtrims?' Will do this for you automatically taking account of the current 'Trim multiplier'. This button will move the trims as set for the current Bank into the Subtrims. If the Subtrims already had a non zero value, the current trims are added.||
 
-After moving trims to subtrims, the trims are zeroed for all four Banks.
+After moving trims to subtrims, the trims for channels 1-4 are zeroed for all four Banks. Other channels' subtrim are not affected. 
