@@ -3527,6 +3527,12 @@ bool GetConfirmation(char* goback, char* Prompt)
     while (Confirmed[0] == '?') { // await user response
         CheckForNextionButtonPress();
         CheckPowerOffButton();
+        
+        if (BoundFlag && ModelMatched) {
+           GetNewChannelValues();
+           SendData();
+        }
+        
         KickTheDog();
     }
     SendCommand(goback);
@@ -3553,9 +3559,9 @@ void MsgBox(char* goback, char* Prompt)
     while (Confirmed[0] == '?') { // await user response
         CheckForNextionButtonPress();
         KickTheDog();
-        if (BoundFlag && ModelMatched) {
-            for (int i = 0; i < CHANNELSUSED; ++i) SendBuffer[i] = PreviousBuffer[i];  // during a pause, keep sending the last values
-            SendData();
+         if (BoundFlag && ModelMatched) {
+           GetNewChannelValues();
+           SendData();
         }
     }
     SendCommand(goback);
@@ -3857,8 +3863,9 @@ void SaveSwitches(){
     SendCommand(pTXSetupView);
 }
 
+
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 75 // One more than final one, because first is number zero
+#define LASTFUNCTION 76 // One more than final one, because first is number zero
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                    // 0
@@ -3935,7 +3942,8 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     ResetClock,               // 71
     SaveSwitches,             // 72 (NOW SAVED FROM TX SETUP MENU GLOBALLY FOR ALL MODELS)
     ShowScreenAgain,          // 73 End of screen timeout when someone touched screen
-    HideScreenAgain           // 74 Force immediate 'screen timeout' 
+    HideScreenAgain,          // 74 Force immediate 'screen timeout' 
+    TrimsToSubtrim            // 75
 
 }; // list will become longer ...
 

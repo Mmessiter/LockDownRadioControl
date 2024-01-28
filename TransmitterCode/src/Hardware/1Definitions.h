@@ -610,6 +610,7 @@ bool             MayBeAddZero(uint8_t nn);
 void             SendText1(char* tbox, char* NewWord);
 void             ScrollHelpFile();
 void             ForceDataRedisplay();
+void             TrimsToSubtrim();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
@@ -1029,6 +1030,8 @@ char    pFrontView[]              = "page FrontView";
 char    pHelpView[]               = "page HelpView";
 char    pPongView[]               = "page PongView";
 char    pTXModule[]               = "page TXModuleView";
+char    pTrimDefView[]            = "page TrimDefView";
+char    pTrimView[]               = "page TrimView";
 
 
 

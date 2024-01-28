@@ -9,7 +9,6 @@
 // **********************************************************************************************************************************
 void StartTrimView()
 {
-    char pTrimView[] = "page TrimView";
     char n0[]        = "n0";
     char c0[]        = "c0";
     SendCommand(pTrimView);
@@ -24,7 +23,7 @@ void StartTrimView()
 /******************************************************************************************************************************/
 void StartTrimDefView()
 {
-    char pTrimDefView[] = "page TrimDefView";
+   
     CurrentView         = TRIMDEFVIEW;
     SendCommand(pTrimDefView);
     ResetAllTrims();
@@ -426,7 +425,29 @@ void MoveaTrim(uint8_t i)
     }
 }
 
+/******************************************************************************************************************************/
+void TrimsToSubtrim(){ //   Store trims to subtrims and reset trims to centre
+ 
+   // Trims range from 40 to 120. 80 is centre. 
 
-
+    char Prompt[]               = "Move these trims to Subtrims?";
+    char ItsCancelled[]         = "Cancelled.";
+    char ItsAllDone[]           = "Done!";
+    if (GetConfirmation(pTrimView,Prompt)) {
+           for (int i = 0; i < 4; ++i) {
+                SubTrims[i] += ((Trims[Bank][i] - 80) * TrimMultiplier / 5); // Subtrims' multiplier is 5 always
+                if (SubTrims[i] > 255) SubTrims[i] = 255;                    // Avoid overflow
+                Trims[Bank][i] = 80;                                         // Reset trims ordinaire to centre               
+            }
+        MsgBox(pTrimView,ItsAllDone);                                        // Done!
+        ForceDataRedisplay();                                                // force Update trim view              
+        UpdateTrimView();                                                    // Update trim view               
+        SaveOneModel(ModelNumber);                                           // Save model memory              
+    }else{
+        MsgBox(pTrimView,ItsCancelled);                                      // Cancelled
+        ForceDataRedisplay();                                                // force Update trim view          
+        UpdateTrimView();                                                    // Update trim view               
+    }
+}
 
 #endif
