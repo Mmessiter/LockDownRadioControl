@@ -1,5 +1,8 @@
 var NAVTREEINDEX7 =
 {
+"SensorHubT32_2src_2main_8cpp.html#ab92133bc8cbae639e681505e0679bc28":[5,0,2,0,0,3],
+"SensorHubT32_2src_2main_8cpp.html#abb8b0387db0515eec168511ea9facd34":[5,0,2,0,0,48],
+"SensorHubT32_2src_2main_8cpp.html#abc801729e599fbe5b84d088ead6fae1a":[5,0,2,0,0,42],
 "SensorHubT32_2src_2main_8cpp.html#abda84b8cbebce00b7d4b0ea759b8d07f":[5,0,2,0,0,19],
 "SensorHubT32_2src_2main_8cpp.html#ac5dd8c90defc2c0d78e99d2d5c1a0fd1":[5,0,2,0,0,2],
 "SensorHubT32_2src_2main_8cpp.html#acfa52f9c8cf5500ff86e33dd65b8eeaa":[5,0,2,0,0,35],
@@ -224,6 +227,7 @@ var NAVTREEINDEX7 =
 "Trims_8h.html#a175b6111f05e020becf6f4fc8c3e474d":[5,0,3,0,0,12,5],
 "Trims_8h.html#a1930cb00e0e68d2c871cec56cc458064":[5,0,3,0,0,12,3],
 "Trims_8h.html#a40003084a0136ca08cf8ded75ff4aa4d":[5,0,3,0,0,12,6],
+"Trims_8h.html#a4032af894bb09f6ec94abf5bd8a83ff7":[5,0,3,0,0,12,15],
 "Trims_8h.html#a4d21fc3e237eec44b6cc9a5d102249dd":[5,0,3,0,0,12,0],
 "Trims_8h.html#a67037f3d9963a3107353a1badb1af3a6":[5,0,3,0,0,12,11],
 "Trims_8h.html#a688c8f45b7061a1574dcb7eb28eec56b":[5,0,3,0,0,12,2],
@@ -233,7 +237,7 @@ var NAVTREEINDEX7 =
 "Trims_8h.html#a883e18dbafdf41d3451879db47ab113f":[5,0,3,0,0,12,10],
 "Trims_8h.html#a8f725b11214f53b84fe2c7a9a4eb15ac":[5,0,3,0,0,12,12],
 "Trims_8h.html#aacd8b022714bb89847239dd878ad9509":[5,0,3,0,0,12,7],
-"Trims_8h.html#ac78966debc2cdc13d8ca958ce3b20c78":[5,0,3,0,0,12,15],
+"Trims_8h.html#ac78966debc2cdc13d8ca958ce3b20c78":[5,0,3,0,0,12,16],
 "Trims_8h.html#add643409678258cabdb0aa1ae76d802a":[5,0,3,0,0,12,1],
 "Trims_8h.html#ae4be4bb0e33569d140264079d28227fd":[5,0,3,0,0,12,4],
 "Trims_8h_source.html":[5,0,3,0,0,12],
@@ -245,9 +249,5 @@ var NAVTREEINDEX7 =
 "Utilities_8h.html#a100af87d91fcaa6f23f2ca6a2fe146cc":[5,0,3,0,0,13,27],
 "Utilities_8h.html#a15a54a63b911d3a5d622cd12bc440ab6":[5,0,3,0,0,13,50],
 "Utilities_8h.html#a17ff9f21040f9f831b6b01065f9285d8":[5,0,3,0,0,13,1],
-"Utilities_8h.html#a30a6637e60923c45a28bdfb938903207":[5,0,3,0,0,13,37],
-"Utilities_8h.html#a35439e94d9f2791ba41697d5eafd3f86":[5,0,3,0,0,13,32],
-"Utilities_8h.html#a374524dc113357d2ed6b8622f6ea85a8":[5,0,3,0,0,13,49],
-"Utilities_8h.html#a3a1bb848113ddbbc27294921fa92f92a":[5,0,3,0,0,13,29],
-"Utilities_8h.html#a3a793f5d71f6db34ad82272d211f8954":[5,0,3,0,0,13,2]
+"Utilities_8h.html#a30a6637e60923c45a28bdfb938903207":[5,0,3,0,0,13,37]
 };

@@ -1,5 +1,8 @@
 var NAVTREEINDEX6 =
 {
+"Quadcopter_2src_2main_8cpp.html#a5e5346796220b271615a52428f6ec6ca":[5,0,0,0,1,44],
+"Quadcopter_2src_2main_8cpp.html#a5e69f4df28f912eb1c3e6f120d4ca35b":[5,0,0,0,1,124],
+"Quadcopter_2src_2main_8cpp.html#a5f4347f2081e0c5bf0de471b9e591c9a":[5,0,0,0,1,120],
 "Quadcopter_2src_2main_8cpp.html#a5f9fe871bf862f4ea03cdb75c12d4093":[5,0,0,0,1,198],
 "Quadcopter_2src_2main_8cpp.html#a6268c9e7e07a8020e13bdf90dcab056d":[5,0,0,0,1,145],
 "Quadcopter_2src_2main_8cpp.html#a6269d32e1ded0138fc78e8a0de4e8c04":[5,0,0,0,1,48],
@@ -246,8 +249,5 @@ var NAVTREEINDEX6 =
 "SensorHubT32_2src_2main_8cpp.html#aa111fdf18410d5ea9db7bba30eb3867b":[5,0,2,0,0,28],
 "SensorHubT32_2src_2main_8cpp.html#aa2c448c0ec510ffaaecbc5991e726b53":[5,0,2,0,0,8],
 "SensorHubT32_2src_2main_8cpp.html#aa813a4b38095c6683d78bdf2baa33f69":[5,0,2,0,0,7],
-"SensorHubT32_2src_2main_8cpp.html#aac529433269b7b52ef0a627716a70aea":[5,0,2,0,0,14],
-"SensorHubT32_2src_2main_8cpp.html#ab92133bc8cbae639e681505e0679bc28":[5,0,2,0,0,3],
-"SensorHubT32_2src_2main_8cpp.html#abb8b0387db0515eec168511ea9facd34":[5,0,2,0,0,48],
-"SensorHubT32_2src_2main_8cpp.html#abc801729e599fbe5b84d088ead6fae1a":[5,0,2,0,0,42]
+"SensorHubT32_2src_2main_8cpp.html#aac529433269b7b52ef0a627716a70aea":[5,0,2,0,0,14]
 };

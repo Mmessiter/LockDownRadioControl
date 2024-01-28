@@ -15,5 +15,6 @@ var Trims_8h =
     [ "StartSubTrimView", "Trims_8h.html#a8f725b11214f53b84fe2c7a9a4eb15ac", null ],
     [ "StartTrimDefView", "Trims_8h.html#a6fed69b1bb6d33fc82707a4e70bf3ef4", null ],
     [ "StartTrimView", "Trims_8h.html#a76b1f472f8c90038b85799f8d7b33e7f", null ],
+    [ "TrimsToSubtrim", "Trims_8h.html#a4032af894bb09f6ec94abf5bd8a83ff7", null ],
     [ "UpdateTrimView", "Trims_8h.html#ac78966debc2cdc13d8ca958ce3b20c78", null ]
 ];
