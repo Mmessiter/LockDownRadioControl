@@ -20,9 +20,9 @@ void SendText(char* tbox, char* NewWord)
 {
     char txt[]   = ".txt=\"";
     char quote[] = "\"";
-    char CB[100];
+    char CB[120];
     char TooLong[] = "Too long!";
-    if (strlen(NewWord) > 90) {
+    if (strlen(NewWord) > 110) {
         strcpy(NewWord, TooLong);
     }
     strcpy(CB, tbox);
