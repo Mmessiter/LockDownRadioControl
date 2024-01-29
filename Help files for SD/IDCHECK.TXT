@@ -14,6 +14,8 @@ If duplicate IDs exist at connection time, the radio will connect to the model w
 
 When you save a model memory to a backup file, its ID is also saved, hence its ID will also be restored if you later restore from that file.||
 
-If you are not sure that the model's ID is correct for an installed receiver, turn off AMS (Automatic Model Selection) and manually select the correct model before connecting. The connection will then update the the ID so it will be correct next time.
+If you are not sure that the model's ID is correct for an installed receiver, turn off AMS (Automatic Model Selection) and manually select the correct model before connecting. Then after connecting, save the model ID from the Model setup screen. ||
+
+When you transfer a model memory to another transmitter wirelessly, that model's ID is also transferred, assuming you had earlier saved it. Hence the transmitter that receives that model memory will also be able immediately automatically to select that model memory when it connects.
 
 

@@ -7,8 +7,10 @@ A Slave's end points (as defined in the Slave's curve) are never exceeded.||
 
 A Slave can even have its own Master as its Slave. This is needed for V tails, flaperons, delta wings etc.||
 
-Master-Slave associations are not cascaded. That is, if a Slave is also a Master, its Slave(s) inherit nothing from their Master's Master.
+Master-Slave associations are not cascaded. That is, if a Slave is also a Master, its Slave(s) inherit nothing from their Master's Master.||
 
-Selecting 'One direction only' will only move the slave one way of course. This might be needed if for example you want up elevator with left AND right rudder.
+Selecting 'One direction only' will only move the slave one way of course. This might be needed if for example you want up elevator with left AND right rudder.||
 
-Offset is needed when the default position of the Master channel is not in the centre. Test different values to find which value gets the slave centred when master is at default position.
+Offset is needed when the default position of the Master channel is not in the centre. Test different values to find which value gets the slave centred when master is at default position.||
+
+The actual value needed for 'Offset' may change when the percentage for that mix changes. In a later version of the firmware this slight annoyance will be fixed! 

@@ -431,8 +431,8 @@ void TrimsToSubtrim(){ //   Store trims to subtrims and reset trims to centre
    // Trims range from 40 to 120. 80 is centre. 
 
     char Prompt[]               = "Move these trims to Subtrims?\r\n\r\nThis would re-centre these trims.";
-    char ItsCancelled[]         = "Cancelled. \r\nSubtrims were not changed.\r\nLook at the Subtrim view \r\nif you'd like to check.";
-    char ItsAllDone[]           = "Done! \r\nSubtrims have been amended.\r\n\r\nLook at the Subtrim view \r\nif you'd like to check.";
+    char ItsCancelled[]         = "Cancelled.\r\nSubtrims were not changed.\r\nLook at the Subtrim view \r\nif you'd like to check.";
+    char ItsAllDone[]           = "Done!\r\nSubtrims have been amended.\r\n\r\nLook at the Subtrim view \r\nif you'd like to check.";
 
     if (GetConfirmation(pTrimView,Prompt)) {
            for (int i = 0; i < 4; ++i) {

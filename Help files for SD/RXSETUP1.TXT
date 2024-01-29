@@ -1,12 +1,12 @@
 'Copy trims to all banks' does what you might expect!||
 
-Trim multiplier selects how much trim to apply. 5 for 6 is a good default setting||
+Trim multiplier selects how much trim to apply. 5 is a very good default setting||
 
-To disable trims (for flybarless helicopters etc.) set trim multiplier to 0 (zero).||
+To disable trims (for flybarless helicopters etc.) set Trim multiplier to 0 (zero).||
 
 'Stop flying' voltage is the receiver voltage (per cell) at which the transmitter's speaker will suggest unambiguously that it's time to 'Stop Flying!' ||
 
-When you set this, bear in mind that when you turn off the motor, the voltage will recover a little. Therefore set it a bit lower that you might have. Find the best setting by experiment since all models vary in this respect.|| 
+When you set this, bear in mind that when you turn off the motor, the voltage will recover a little. Therefore set it a bit lower than you might have. Find the best setting by experiment since all models vary in this respect.|| 
 
 'RX Battery voltage correction' allows you to correct any slight error that the on board voltage sensor might have. This correction can be positive or negative and is the per cell voltage - not the combined voltage of every cell. Use a good voltmeter to compare the transmitter's readout with the more accurate figure, and adjust this setting as needed.||
 

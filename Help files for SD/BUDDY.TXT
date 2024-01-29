@@ -2,7 +2,7 @@ Buddy-Boxing:||
 
 This feature allows dual control which is probably essential when teaching beginners to fly.||
 
-It needs two transmitters of course, one for the 'Master' and one for the pupil or 'Buddy' or pupil.||
+It needs two transmitters of course, one for the 'Master' and one for the pupil.||
 
 The Master uses a switch on the Master's transmitter to give control to the Buddy - and to take control back fast when pupil screws up - as they usually do.||
 
@@ -12,15 +12,15 @@ On the Master transmitter, you can select which channels are enabled for the Bud
 
 The same model memory should be loaded on both transmitters, and the Buddy (pupil) needs to know the ID of the Master transmitter. Both of these are easily achieved by sending the model memory from the Master to the pupil wirelessly. Embedded in the data sent is the needed ID of the sending transmitter. ||
 
-When moving the Buddy switch, both transmitters will announce either 'Master' or 'Buddy' in order to make clear who is in control.||
+If AMS (automatic model selection) is enabled on both transmitters and both transmitters have saved the ID of the model in use, then BOTH transmitters will automatically select the correct model if either had the wrong model loaded.|| 
 
-The wireless buddy feature is even supported when using a third party transmitter module. 
+When moving the Buddy switch, both transmitters will announce either 'Master' or 'Buddy' in order to make clearer who is in control.||
 
-Only one wireless buddy boxing session is currently possible at a time in one field. For additional teaching, others should use wired Buddy-Boxing.||
+The wireless buddy feature is even supported when using a third party transmitter module. ||
 
 Wired Buddy-Boxing:||
 
-Wired buddy-boxing is also supported. On very rare occasions this might be desirable if interference is suspected.||
+Wired buddy-boxing is also supported. On rare occasions this might be desirable if interference is suspected.||
 
 Connect the two transmitters with a normal 3.5 mm jack audio cable, mono or stereo.||
 

@@ -14,12 +14,12 @@ When using SBUS, the receiver maintains the SBUS frame-rate (100 fps) even when 
 
 (Note: 100 ms is one tenth of a second.) ||
 
-
+ 
 
 When using FHSS (as this radio-system does) it is likely, especially in the presence of WiFi etc., that the occasional lost packet will occur due to momentary collisions of frequencies. Recovery of connection after this usually takes less than a tenth of a second so it usually goes unnoticed to the pilot. ||
 
-This radio system hops around 83 different frequencies between 2.401 GHz and 2.483 Ghz. The frequency sequence is pseudo-random and hard coded. There are approximately 16 hops per second. The maximum transmission power is 100 Mw.||
+This radio system hops between 83 different frequencies between 2.401 GHz and 2.483 GHz. The frequency hopping sequence is pseudo-random. There are 20 hops per second, and 10 data packets are sent for each hop. So the frame rate to the model is 200Hz. The transmission power use is 100 mW.||
 
-(ie. This system is safe and legal for licence-free use in the United Kingdom and many other places.)||
+When Buddy-boxing wirelessly, the Master exchanges data packets with the pupil also at a rate of 200 per second. Hence the Master transmitter is, under these circumstances, sending a total of 400 packets per second: 200 to the model, and 200 to the pupil. The pupil includes in its acknowledgements' data packets, the position of all of its channels so that the Master can use these when needed. The pupil should stand not too far away from the Master as this range is much less than that to the model.||
 
-The maximum range is about 2 kilometres under good conditions.
+The maximum range to the model is about 2 kilometres under ideal conditions.
