@@ -87,7 +87,7 @@
     #define WARMUPDELAY            300                          // fails at 200 so must be >200 ...
     #define SCREENCHANGEWAIT       10                           // allow 10ms for screen to appear
     #define BATTERY_CHECK_INTERVAL 15000                        // 15 seconds between battery checks
-
+   
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
 //***************************************************************************
