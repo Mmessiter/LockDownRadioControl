@@ -432,15 +432,16 @@ void TrimsToSubtrim(){ //   Store trims to subtrims and reset trims to centre
 
     char Prompt[]               = "Move these trims to Subtrims?";
     char ItsCancelled[]         = "Cancelled.";
-    char ItsAllDone[]           = "Done!";
+    char ItsAllDone[]           = "Done! Look at the Subtrim view.";
+
     if (GetConfirmation(pTrimView,Prompt)) {
            for (int i = 0; i < 4; ++i) {
-                int temp = (int) (Trims[Bank][InputTrim[i]] - 80) * (int) TrimMultiplier;           // temp is needed to avoid overflow
+                int temp = (int) (Trims[Bank][InputTrim[i]] - 80) * (int) TrimMultiplier;           // 'int temp' is needed to avoid overflow
                 temp /= 5;                                                                          // Subtrims' multiplier is 5 always 
                 if (temp + SubTrims[InputTrim[i]] > 255) temp = 255 - SubTrims[InputTrim[i]];       // Avoid overflow
                 SubTrims[InputTrim[i]] += temp;                                                     // Trims *affected* channels are in the InputTrim[] array                                                                 
                 if (SubTrims[i] > 255) SubTrims[i] = 255;                                           // Avoid overflow
-                for (int j = 1; j < 5; ++j) Trims[j][InputTrim[i]] = 80;                            // Reset trims to centre
+                for (int j = 1; j < 5; ++j) Trims[j][InputTrim[i]] = 80;                            // Reset all four normal trims to centre
             }
         PlaySound(BEEPCOMPLETE);
         MsgBox(pTrimView,ItsAllDone);                                                               // Done!

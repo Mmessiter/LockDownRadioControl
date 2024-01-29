@@ -3527,7 +3527,6 @@ bool GetConfirmation(char* goback, char* Prompt)
     while (Confirmed[0] == '?') { // await user response
         CheckForNextionButtonPress();
         CheckPowerOffButton();
-        
         if (BoundFlag && ModelMatched) {
            GetNewChannelValues();
            SendData();
