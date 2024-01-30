@@ -5433,26 +5433,32 @@ FASTRUN void ReadSwitches() // and indeed read digital trims if these are fitted
 /************************************************************************************************************/
 
 void WarnUserOfVersionsMismatch(){
-        char TXVersionNumber[] = "Mismatch! TX=";
-        char RXVersionNumber[] = " but RX=";
-        char Prompt[50];
+        char TXVersionNumber[] = "Version mismatch!\r\n\r\nTX = ";
+        char RXVersionNumber[] = "\r\nRX = ";
+        char TheFix[]          = "\r\nPlease update TX and/or RX \r\nto the same version.";
+        char Prompt[150];
         char FrontView[]       = "page FrontView";
-        
         strcpy(Prompt, TXVersionNumber);
         strcat(Prompt, TransmitterVersionNumber);
         strcat(Prompt, RXVersionNumber);
         strcat(Prompt, ReceiverVersionNumber);
-        MsgBox(FrontView,Prompt);
+        strcat(Prompt, TheFix);                 // Build up the prompt
+        PlaySound(WHAHWHAHMSG);                 // Play warning sound
+        MsgBox(FrontView,Prompt); 
+        ForceDataRedisplay();                   // force redisplay of data on FrontView
+        CurrentView = 255;                      // force redisplay of data on FrontView
+        GotoFrontView();    
 }
 
 /************************************************************************************************************/
 
-void CompareVersionNumbers(){                                           // Warn  user if TX and RX versions don't match - but ignore final letter
+void CompareVersionNumbers(){                                                                                   // Warn  user if TX and RX versions don't match - but ignore final letter
+
     if (VersionsCompared) return;
-    if (strlen(ReceiverVersionNumber) > 6) return;                      // Too long for a version number. Probably binding data !
+    if ((strlen(ReceiverVersionNumber) > 11) || (ReceiverVersionNumber[1] != '.')) return;                     // Too long etc for a version number. Probably binding data !
     VersionsCompared = true;
     for (int i = 0; i < 5; ++i) {
-        if (ReceiverVersionNumber[i] != TransmitterVersionNumber[i]){   // Compare the two version numbers, but not the letter 
+        if (ReceiverVersionNumber[i] != TransmitterVersionNumber[i]){                                           // Compare the two version numbers, but not the letter 
             WarnUserOfVersionsMismatch();
             return;
         }  
