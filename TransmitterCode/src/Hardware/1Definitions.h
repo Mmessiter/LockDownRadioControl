@@ -24,7 +24,7 @@
     #define TXVERSION_MAJOR   2 // first three *must* match RX but _EXTRA can be different
     #define TXVERSION_MINOR   4
     #define TXVERSION_MINIMUS 4 
-    #define TXVERSION_EXTRA   "j 30/01/24" 
+    #define TXVERSION_EXTRA   "k 30/01/24" 
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -1041,12 +1041,12 @@ char    pTrimView[]               = "page TrimView";
 
 namespace FHSS_data {
     
-uint8_t Used_Recovery_Channels[3]       = {15, 71, 82};        // chanels 15, 71, 82 are used for recovery               
+uint8_t Used_Recovery_Channels[3]       = {15, 71, 82};        // channels 15, 71, 82 are used for recovery               
 
 uint8_t  FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 16, 72, // UK array
                               35, 57, 45, 29, 75, 3, 41, 62, 11, 9, 77, 37, 8, 31, 36, 18, 17, 50, 78, 73, 30, 79, 6, 23, 40,
                               54, 12, 80, 53, 22, 1, 74, 39, 58, 63, 70, 52, 42, 25, 43, 26, 14, 38, 48, 68, 33, 27, 60, 44, 46,
-                              56, 7, 81, 5, 65, 4, 10};
+                              56, 7, 81, 5, 65, 4, 10, 1};
 
 uint8_t* FHSSRecoveryPointer    = Used_Recovery_Channels;
 uint8_t* FHSSChPointer          = FHSS_Channels;            // pointer for channels array
