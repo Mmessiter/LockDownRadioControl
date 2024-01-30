@@ -301,7 +301,7 @@ if (!LastPacketsPerSecond)
             }
             SendText(LocalMacID, Vbuf);
             SendText(DataView_txv, TransmitterVersionNumber);
-            SendText(DataView_rxv, ReceiverVersionNumber);
+            if (BoundFlag && ModelMatched) SendText(DataView_rxv, ReceiverVersionNumber);
         }
 
         if (LastPacketsPerSecond != PacketsPerSecond) {

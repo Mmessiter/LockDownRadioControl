@@ -2,6 +2,8 @@ This screen shows some information about the quality of the current connection a
 
 Units are milliseconds, feet, and centigrade.||
 
+Near the bottom right of this screen are the version numbers for the firmware for the transmitter, the receiver and the Nextion screen. The 'receiver' version number position, when not connected, shows the version number for the firmware in the Nextion screen because it cannot show the receiver version number while not connected. Ideally all three versions should be the same. At least the three numbers should be the same for reliable operation.||
+
 Pressing 'Clear' will zero many parameters.||
 Pressing 'Zero Alt' toggles between altitude relative to sea level, and altitude relative to where the model was when 'Zero Alt' was pressed.|
 Pressing 'Mark here' marks the current location, if GPS was acquired. Thereafter 'Meters to mark' etc. will inform you how far away the model is from the mark.
@@ -14,7 +16,6 @@ When using SBUS, the receiver maintains the SBUS frame-rate (100 fps) even when 
 
 (Note: 100 ms is one tenth of a second.) ||
 
- 
 
 When using FHSS (as this radio-system does) it is likely, especially in the presence of WiFi etc., that the occasional lost packet will occur due to momentary collisions of frequencies. Recovery of connection after this usually takes less than a tenth of a second so it usually goes unnoticed to the pilot. ||
 
