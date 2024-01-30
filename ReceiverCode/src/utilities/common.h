@@ -11,8 +11,8 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   4
-#define RXVERSION_MINIMUS 4 // 24 January 2024
-#define RXVERSION_EXTRA   'k' 
+#define RXVERSION_MINIMUS 5 // 30 January 2024
+#define RXVERSION_EXTRA   'a' 
 
 #define HOPTIME           47     //  14-16 gives 50Hz FHSS, 46-48 gives 20Hz FHSS
 #define RECEIVE_TIMEOUT   5      //  was 14   
@@ -127,12 +127,12 @@ uint16_t Interations = 0;
 uint32_t HopStart;
 uint64_t NewPipeMaybe = 0;
 uint64_t PreviousNewPipes[PIPES_TO_COMPARE];
-uint8_t  PreviousNewPipesIndex = 0;
-bool     FailSafeSent          = true;
-uint16_t SbusRepeats           = 0;
-uint32_t RX1TotalTime          = 0;
-uint32_t RX2TotalTime          = 0;
-uint32_t RadioSwaps            = 0;
+uint8_t  PreviousNewPipesIndex  = 0;
+bool     FailSafeSent           = true;
+uint16_t SbusRepeats            = 0;
+uint32_t RX1TotalTime           = 0;
+uint32_t RX2TotalTime           = 0;
+uint32_t RadioSwaps             = 0;
 uint32_t  LastPacketArrivalTime = 0;
 bool      INA219Connected       = false; //  Volts from INA219 ?
 bool      MPU6050Connected      = false; //  Accelerometer and Gyro from MPU6050 ?

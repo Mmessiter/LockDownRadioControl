@@ -600,7 +600,7 @@ FASTRUN void Reconnect()
 void IncChannelNumber()
 {
     ++NextChannelNumber; // Move up the channels' array
-    if (NextChannelNumber > FREQUENCYSCOUNT) {
+    if (NextChannelNumber >= FREQUENCYSCOUNT) {
         NextChannelNumber = 0;
     }                                                        // If needed, wrap the channels' array pointer
     AckPayload.Byte5 = NextChannelNumber;                    // Tell the transmitter which element of the array to use next.
