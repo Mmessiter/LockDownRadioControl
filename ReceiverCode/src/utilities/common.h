@@ -8,6 +8,7 @@
 #include <PulsePosition.h>
 #include <Adafruit_INA219.h>
 #include <Servo.h>
+#include <MPU6050_tockn.h>
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   4
@@ -27,15 +28,13 @@
 // #define DB_RXTIMERS
 
 
-// >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-#define SECOND_TRANSCEIVER     //    **** DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-// >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THIS ONE !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-// **************************************************************************
-//                           PID STABILISATION                              *
-//***************************************************************************
+#define SECOND_TRANSCEIVER    1
+#define DOSTABILISATION       1 
 
-//#define DOSTABILISATION    1 // Turn on if you want to use PID stabilisation
+// >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
 
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
@@ -111,6 +110,9 @@ uint8_t         SizeOfParameters = sizeof(Parameters);
 RF24     Radio1(pinCE1, pinCSN1);
 RF24     Radio2(pinCE2, pinCSN2);
 RF24*    CurrentRadio = &Radio1;
+
+MPU6050   mpu6050(Wire);
+
 bool     Connected    = false;
 bool     SaveNewBind  = true;
 bool     HopNow       = false;

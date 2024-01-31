@@ -57,6 +57,7 @@
 #include "utilities/common.h"
 #include "utilities/radio.h"
 #include "utilities/pid.h"
+#include <MPU6050_tockn.h>
 
 
 
@@ -482,13 +483,17 @@ FLASHMEM void ScanI2c()
                 Serial.println("INA219 voltage meter detected!");
 #endif
             }
+
+#ifdef DOSTABILISATION       
             if (i == 0x68) {
                 MPU6050Connected = true;
-#ifdef DB_SENSORS
+    #ifdef DB_SENSORS
                 delay(3000);
                 Serial.println("MPU 6050 detected");  
-#endif 
+    #endif // DB_SENSORS
             }
+#endif // DOSTABILISATION
+
 
         }
     }
@@ -604,6 +609,14 @@ FLASHMEM void setup()
     InitCurrentRadio();
     ThisRadio = 2;
 #endif
+
+#ifdef DOSTABILISATION                      // only if MPU6050 is connected and working
+    if (MPU6050Connected) {
+        mpu6050.begin();
+        mpu6050.calcGyroOffsets(true);
+    }
+#endif
+
     WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
     WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
