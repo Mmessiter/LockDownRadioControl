@@ -11,15 +11,16 @@ var searchData=
   ['masterdetected_8',['MasterDetected',['../BuddyWireless_8h.html#a9028cb650cb079d28bc5dfc307242bb3',1,'BuddyWireless.h']]],
   ['maybeaddzero_9',['MayBeAddZero',['../Utilities_8h.html#ae310e7fc6397929ae886869c05cbc334',1,'MayBeAddZero(uint8_t nn):&#160;Utilities.h'],['../1Definitions_8h.html#ae310e7fc6397929ae886869c05cbc334',1,'MayBeAddZero(uint8_t nn):&#160;Utilities.h']]],
   ['modelviewend_10',['ModelViewEnd',['../TransmitterCode_2src_2main_8cpp.html#ae9f91b9da28f2e1e2fb126961f03c31c',1,'main.cpp']]],
-  ['moveatrim_11',['MoveaTrim',['../1Definitions_8h.html#a17123a117a96a9416dec48d9345f8a5b',1,'MoveaTrim(uint8_t i):&#160;Trims.h'],['../Trims_8h.html#a17123a117a96a9416dec48d9345f8a5b',1,'MoveaTrim(uint8_t i):&#160;Trims.h']]],
+  ['moveatrim_11',['MoveaTrim',['../Trims_8h.html#a17123a117a96a9416dec48d9345f8a5b',1,'MoveaTrim(uint8_t i):&#160;Trims.h'],['../1Definitions_8h.html#a17123a117a96a9416dec48d9345f8a5b',1,'MoveaTrim(uint8_t i):&#160;Trims.h']]],
   ['moveball_12',['MoveBall',['../Pong_8h.html#abead2677dc553c693bcf9bf0c54c0c81',1,'Pong.h']]],
   ['movecurrentpointdown_13',['MoveCurrentPointDown',['../TransmitterCode_2src_2main_8cpp.html#ac7a913ec35d5e97835e753fd1ee77dd7',1,'main.cpp']]],
   ['movecurrentpointup_14',['MoveCurrentPointUp',['../TransmitterCode_2src_2main_8cpp.html#adff425c4aac140ddca211d4ef4d98a7e',1,'main.cpp']]],
   ['movepaddles_15',['MovePaddles',['../Pong_8h.html#ae1838e25c06509f78c0de9f0e556d428',1,'Pong.h']]],
   ['movepoint_16',['MovePoint',['../TransmitterCode_2src_2main_8cpp.html#aad727ec0b0f9f34487a535eaa4a83172',1,'main.cpp']]],
   ['moveservos_17',['MoveServos',['../ReceiverCode_2src_2main_8cpp.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp'],['../common_8h.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp']]],
-  ['mpu6050_18',['MPU6050',['../classMPU6050.html#a50b99a2a37c9d8708e807ef90b31df9b',1,'MPU6050']]],
-  ['mpu9250_19',['MPU9250',['../classMPU9250.html#acaf2ae31cfdeb6d47b922996feb55b69',1,'MPU9250::MPU9250()'],['../classMPU9250FIFO.html#a4b15facd0ce38964d241db56b1c57f75',1,'MPU9250FIFO::MPU9250(SPIClass &amp;bus, uint8_t csPin)'],['../classMPU9250FIFO.html#acaf2ae31cfdeb6d47b922996feb55b69',1,'MPU9250FIFO::MPU9250(TwoWire &amp;bus, uint8_t address)'],['../classMPU9250.html#a4b15facd0ce38964d241db56b1c57f75',1,'MPU9250::MPU9250()']]],
-  ['msgbox_20',['MsgBox',['../1Definitions_8h.html#a6f5b0f1e4ca75768c16c4dd93f92a8de',1,'MsgBox(char *goback, char *Prompt):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a6f5b0f1e4ca75768c16c4dd93f92a8de',1,'MsgBox(char *goback, char *Prompt):&#160;main.cpp']]],
-  ['mysbus_21',['MySbus',['../common_8h.html#a5424788640aaa8d535d6ea077949ef82',1,'common.h']]]
+  ['mpu6050_18',['mpu6050',['../common_8h.html#af39b7b38f37c221162fb77e91305b7a3',1,'common.h']]],
+  ['mpu6050_19',['MPU6050',['../classMPU6050.html#a50b99a2a37c9d8708e807ef90b31df9b',1,'MPU6050']]],
+  ['mpu9250_20',['MPU9250',['../classMPU9250.html#acaf2ae31cfdeb6d47b922996feb55b69',1,'MPU9250::MPU9250()'],['../classMPU9250FIFO.html#a4b15facd0ce38964d241db56b1c57f75',1,'MPU9250FIFO::MPU9250(SPIClass &amp;bus, uint8_t csPin)'],['../classMPU9250FIFO.html#acaf2ae31cfdeb6d47b922996feb55b69',1,'MPU9250FIFO::MPU9250(TwoWire &amp;bus, uint8_t address)'],['../classMPU9250.html#a4b15facd0ce38964d241db56b1c57f75',1,'MPU9250::MPU9250()']]],
+  ['msgbox_21',['MsgBox',['../1Definitions_8h.html#a6f5b0f1e4ca75768c16c4dd93f92a8de',1,'MsgBox(char *goback, char *Prompt):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a6f5b0f1e4ca75768c16c4dd93f92a8de',1,'MsgBox(char *goback, char *Prompt):&#160;main.cpp']]],
+  ['mysbus_22',['MySbus',['../common_8h.html#a5424788640aaa8d535d6ea077949ef82',1,'common.h']]]
 ];
