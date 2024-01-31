@@ -611,6 +611,7 @@ void             SendText1(char* tbox, char* NewWord);
 void             ScrollHelpFile();
 void             ForceDataRedisplay();
 void             TrimsToSubtrim();
+void             SendAllAgain();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *

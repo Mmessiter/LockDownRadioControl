@@ -5674,6 +5674,7 @@ void FASTRUN ManageTransmitter()
         if ((RightNow - LastTimeRead >= 500) && (CurrentView == MODELSVIEW)) CheckModelName();                      // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
         if (RightNow - LastTimeRead >= 1000) {                                                                      // Only once a second for these...
             LastTimeRead = millis();                                                                                         
+            SendAllAgain();           
             GetGoodPacketsPerSecond();                                                                              // Do stats                                                                                         
             if (CurrentView != BLANKVIEW) {
                 ReadTime();                                                                                         // Do the clock

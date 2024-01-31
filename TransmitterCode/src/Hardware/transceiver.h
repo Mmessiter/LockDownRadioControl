@@ -174,6 +174,15 @@ void RecordsPacketSuccess(uint8_t s)
 }
 
 /************************************************************************************************************/
+
+void SendAllAgain(){
+    for (int i = 0; i < CHANNELSUSED; ++i) {
+        PrePreviousBuffer[i] = 0;
+        PreviousBuffer[i] = PrePreviousBuffer[i]; 
+    }   
+}
+
+/************************************************************************************************************/
 FASTRUN void FailedPacket()
 {
     RecordsPacketSuccess(0);                                                                // Record a failure
