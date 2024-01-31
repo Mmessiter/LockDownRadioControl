@@ -410,6 +410,7 @@ var 1Definitions_8h =
     [ "SDUpdate32BITS", "1Definitions_8h.html#a82e989b70d0f68854ead6262993255cc", null ],
     [ "SDUpdate8BITS", "1Definitions_8h.html#a512ed84f4270bd62e922cd7dd82fd427", null ],
     [ "SelectChannelOrder", "1Definitions_8h.html#a8ecf24a84e20841dab0219efd6b9797b", null ],
+    [ "SendAllAgain", "1Definitions_8h.html#ad8173130dc4881b13bb940773b4bc73b", null ],
     [ "SendCharArray", "1Definitions_8h.html#acd617ff93ca893aa7d65aaf2898dfc3d", null ],
     [ "SendCommand", "1Definitions_8h.html#aecac2f0c289f02ef3c92b85be82eacac", null ],
     [ "SendData", "1Definitions_8h.html#a3d7322e78f097d02d476f17a6306997c", null ],
