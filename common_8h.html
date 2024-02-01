@@ -223,15 +223,19 @@ Macros</h2></td></tr>
 <tr class="separator:ad529f0c2447693d8418608e122012388"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a820e3704750ed47bfb6bd2c3c6b54fce"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8h.html#a820e3704750ed47bfb6bd2c3c6b54fce">PIPES_TO_COMPARE</a>&#160;&#160;&#160;8</td></tr>
 <tr class="separator:a820e3704750ed47bfb6bd2c3c6b54fce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0ae0f3462879699116d1aacd24844c9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8h.html#af0ae0f3462879699116d1aacd24844c9">ACCELERATIONS_FACTOR</a>&#160;&#160;&#160;0.02</td></tr>
+<tr class="separator:af0ae0f3462879699116d1aacd24844c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7509e90c16789a7e344f9bbc64f9df9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8h.html#aa7509e90c16789a7e344f9bbc64f9df9">GYRO_FACTOR</a>&#160;&#160;&#160;1 - <a class="el" href="common_8h.html#af0ae0f3462879699116d1aacd24844c9">ACCELERATIONS_FACTOR</a></td></tr>
+<tr class="separator:aa7509e90c16789a7e344f9bbc64f9df9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:ad56e69e7f13623ba6b96aee925daa3c2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classMPU6050.html">MPU6050</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8h.html#ad56e69e7f13623ba6b96aee925daa3c2">mpu6050</a> (Wire, <a class="el" href="common_8h.html#af0ae0f3462879699116d1aacd24844c9">ACCELERATIONS_FACTOR</a>, <a class="el" href="common_8h.html#aa7509e90c16789a7e344f9bbc64f9df9">GYRO_FACTOR</a>)</td></tr>
+<tr class="separator:ad56e69e7f13623ba6b96aee925daa3c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e2d4126d864c50e7c23c988c2bfdd1a"><td class="memItemLeft" align="right" valign="top">RF24&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a">Radio1</a> (<a class="el" href="common_8h.html#a29eb13cced8716c95cf23e18ac99ffc7">pinCE1</a>, <a class="el" href="common_8h.html#a047f5702802c2bbf4918e9318f3e6a56">pinCSN1</a>)</td></tr>
 <tr class="separator:a6e2d4126d864c50e7c23c988c2bfdd1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b76f3c338025926421c7b308405bbfd"><td class="memItemLeft" align="right" valign="top">RF24&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8h.html#a8b76f3c338025926421c7b308405bbfd">Radio2</a> (<a class="el" href="common_8h.html#a86715d66aa5d1363f2db07ae6428eb90">pinCE2</a>, <a class="el" href="common_8h.html#a76971ffb50fdfd6bc8e2c3c6ac339459">pinCSN2</a>)</td></tr>
 <tr class="separator:a8b76f3c338025926421c7b308405bbfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af39b7b38f37c221162fb77e91305b7a3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classMPU6050.html">MPU6050</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8h.html#af39b7b38f37c221162fb77e91305b7a3">mpu6050</a> (Wire)</td></tr>
-<tr class="separator:af39b7b38f37c221162fb77e91305b7a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62ec0168b1eea5f5c14f663d9217574d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8h.html#a62ec0168b1eea5f5c14f663d9217574d">HopToNextChannel</a> ()</td></tr>
 <tr class="separator:a62ec0168b1eea5f5c14f663d9217574d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a48050e81ef4521304a2dbeaf99e1a331"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8h.html#a48050e81ef4521304a2dbeaf99e1a331">DoStabilsation</a> ()</td></tr>
@@ -497,8 +501,32 @@ Variables</h2></td></tr>
 <tr class="separator:a2d439a8558cff2d7ad534d1496dd6307"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3b6846ad8bf99c7fd148049995dfd91"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8h.html#ab3b6846ad8bf99c7fd148049995dfd91">HopMoment</a> = 0</td></tr>
 <tr class="separator:ab3b6846ad8bf99c7fd148049995dfd91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae07b17c18ab75286f725d95d66417a4c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8h.html#ae07b17c18ab75286f725d95d66417a4c">X_GyroOffset</a> = 0</td></tr>
+<tr class="separator:ae07b17c18ab75286f725d95d66417a4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0db1e7bf7821da43dd4364aecae033f"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8h.html#ac0db1e7bf7821da43dd4364aecae033f">Y_GyroOffset</a> = 0</td></tr>
+<tr class="separator:ac0db1e7bf7821da43dd4364aecae033f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38810fa016b56efa3a91d01b997a1f50"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8h.html#a38810fa016b56efa3a91d01b997a1f50">Z_GyroOffset</a> = 0</td></tr>
+<tr class="separator:a38810fa016b56efa3a91d01b997a1f50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae962b6c6eb62846284f2ff4516407952"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="common_8h.html#ae962b6c6eb62846284f2ff4516407952">GyroOffsetsSet</a> = false</td></tr>
+<tr class="separator:ae962b6c6eb62846284f2ff4516407952"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="af0ae0f3462879699116d1aacd24844c9" name="af0ae0f3462879699116d1aacd24844c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0ae0f3462879699116d1aacd24844c9">&#9670;&#160;</a></span>ACCELERATIONS_FACTOR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ACCELERATIONS_FACTOR&#160;&#160;&#160;0.02</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00112">112</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+
+</div>
+</div>
 <a id="a9711a7159ecb22d58fd6331700663ee7" name="a9711a7159ecb22d58fd6331700663ee7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9711a7159ecb22d58fd6331700663ee7">&#9670;&#160;</a></span>BIND_EEPROM_OFFSET</h2>
 
@@ -704,6 +732,22 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00106">106</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+
+</div>
+</div>
+<a id="aa7509e90c16789a7e344f9bbc64f9df9" name="aa7509e90c16789a7e344f9bbc64f9df9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7509e90c16789a7e344f9bbc64f9df9">&#9670;&#160;</a></span>GYRO_FACTOR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define GYRO_FACTOR&#160;&#160;&#160;1 - <a class="el" href="common_8h.html#af0ae0f3462879699116d1aacd24844c9">ACCELERATIONS_FACTOR</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00113">113</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -1250,7 +1294,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00631">631</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html#l00645">645</a> of file <a class="el" href="ReceiverCode_2src_2main_8cpp_source.html">main.cpp</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -1657,8 +1701,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="af39b7b38f37c221162fb77e91305b7a3" name="af39b7b38f37c221162fb77e91305b7a3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af39b7b38f37c221162fb77e91305b7a3">&#9670;&#160;</a></span>mpu6050()</h2>
+<a id="ad56e69e7f13623ba6b96aee925daa3c2" name="ad56e69e7f13623ba6b96aee925daa3c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad56e69e7f13623ba6b96aee925daa3c2">&#9670;&#160;</a></span>mpu6050()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1667,8 +1711,24 @@ Here is the caller graph for this function:</div>
           <td class="memname"><a class="el" href="classMPU6050.html">MPU6050</a> mpu6050 </td>
           <td>(</td>
           <td class="paramtype">Wire&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="common_8h.html#af0ae0f3462879699116d1aacd24844c9">ACCELERATIONS_FACTOR</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="common_8h.html#aa7509e90c16789a7e344f9bbc64f9df9">GYRO_FACTOR</a>&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -2134,7 +2194,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00218">218</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00224">224</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2150,7 +2210,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00216">216</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00222">222</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2166,7 +2226,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00205">205</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00211">211</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2182,7 +2242,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00206">206</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00212">212</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2198,7 +2258,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00243">243</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00249">249</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2214,7 +2274,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00245">245</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00251">251</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2230,7 +2290,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00244">244</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00250">250</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2246,7 +2306,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00196">196</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00202">202</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2262,7 +2322,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00116">116</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00122">122</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2278,7 +2338,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00220">220</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00226">226</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2294,7 +2354,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00254">254</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00260">260</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2310,7 +2370,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00112">112</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00120">120</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2342,7 +2402,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00221">221</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00227">227</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2358,7 +2418,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00253">253</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00259">259</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2374,7 +2434,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00219">219</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00225">225</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2390,7 +2450,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00237">237</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00243">243</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2406,7 +2466,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00200">200</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00206">206</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2422,7 +2482,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00201">201</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00207">207</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2438,7 +2498,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00133">133</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00139">139</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2458,7 +2518,7 @@ Here is the caller graph for this function:</div>
 <div class="line">                             54, 12, 80, 53, 22, 1, 74, 39, 58, 63, 70, 52, 42, 25, 43, 26, 14, 38, 48, 68, 33, 27, 60, 44, 46,</div>
 <div class="line">                             56, 7, 81, 5, 65, 4, 10, 1}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00144">144</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00150">150</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2474,7 +2534,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00143">143</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00149">149</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2490,7 +2550,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00148">148</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00154">154</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2506,7 +2566,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00236">236</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00242">242</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2522,7 +2582,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00202">202</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00208">208</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2538,7 +2598,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00203">203</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00209">209</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2554,7 +2614,23 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00217">217</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00223">223</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+
+</div>
+</div>
+<a id="ae962b6c6eb62846284f2ff4516407952" name="ae962b6c6eb62846284f2ff4516407952"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae962b6c6eb62846284f2ff4516407952">&#9670;&#160;</a></span>GyroOffsetsSet</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool GyroOffsetsSet = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00266">266</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2570,7 +2646,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00256">256</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00262">262</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2586,7 +2662,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00118">118</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00124">124</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2602,7 +2678,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00129">129</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00135">135</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2618,7 +2694,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00224">224</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00230">230</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2634,7 +2710,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00189">189</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00195">195</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2650,7 +2726,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00139">139</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00145">145</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2666,7 +2742,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00207">207</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00213">213</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2682,7 +2758,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00128">128</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00134">134</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2698,7 +2774,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00249">249</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00255">255</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2714,7 +2790,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00138">138</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00144">144</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2730,7 +2806,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00213">213</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00219">219</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2746,7 +2822,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00250">250</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00256">256</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2762,7 +2838,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00214">214</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00220">220</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2778,7 +2854,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00232">232</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00238">238</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2794,7 +2870,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00246">246</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00252">252</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2810,7 +2886,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00191">191</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00197">197</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2826,7 +2902,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00225">225</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00231">231</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2842,7 +2918,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00233">233</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00239">239</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2858,7 +2934,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00222">222</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00228">228</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2874,7 +2950,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00140">140</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00146">146</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2890,7 +2966,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00230">230</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00236">236</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2906,7 +2982,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00241">241</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00247">247</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2922,7 +2998,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00130">130</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00136">136</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2938,7 +3014,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00122">122</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00128">128</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2954,7 +3030,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00121">121</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00127">127</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2970,7 +3046,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00211">211</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00217">217</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -2986,7 +3062,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00124">124</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00130">130</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3018,7 +3094,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00242">242</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00248">248</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3034,7 +3110,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00251">251</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00257">257</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3050,7 +3126,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00149">149</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00155">155</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3066,7 +3142,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00252">252</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00258">258</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3082,7 +3158,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00239">239</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00245">245</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3098,7 +3174,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00238">238</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00244">244</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3114,7 +3190,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00194">194</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00200">200</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3130,7 +3206,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00127">127</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00133">133</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3146,7 +3222,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00131">131</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00137">137</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3162,7 +3238,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00132">132</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00138">138</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3178,7 +3254,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00192">192</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00198">198</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3194,7 +3270,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00210">210</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00216">216</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3210,7 +3286,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00231">231</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00237">237</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3226,7 +3302,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00137">137</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00143">143</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3242,7 +3318,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00255">255</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00261">261</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3258,7 +3334,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00125">125</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00131">131</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3274,7 +3350,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00126">126</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00132">132</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3290,7 +3366,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00141">141</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00147">147</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3306,7 +3382,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00204">204</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00210">210</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3322,7 +3398,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00123">123</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00129">129</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3338,7 +3414,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00135">135</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00141">141</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3354,7 +3430,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00136">136</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00142">142</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3370,7 +3446,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00212">212</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00218">218</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3386,7 +3462,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00120">120</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00126">126</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3402,7 +3478,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00117">117</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00123">123</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3418,7 +3494,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00198">198</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00204">204</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3434,7 +3510,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00134">134</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00140">140</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3450,7 +3526,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00199">199</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00205">205</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3466,7 +3542,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00226">226</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00232">232</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3482,7 +3558,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00209">209</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00215">215</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3498,7 +3574,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00190">190</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00196">196</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3514,7 +3590,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00229">229</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00235">235</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3530,7 +3606,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00208">208</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00214">214</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3547,7 +3623,7 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 <p >indicates if receiver paired with transmitter </p>
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00197">197</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00203">203</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3595,7 +3671,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00215">215</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00221">221</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3611,7 +3687,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00247">247</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00253">253</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3627,7 +3703,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00235">235</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00241">241</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3643,7 +3719,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00234">234</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00240">240</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3659,7 +3735,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00119">119</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00125">125</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3675,7 +3751,7 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00240">240</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00246">246</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3691,7 +3767,39 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00248">248</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00254">254</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+
+</div>
+</div>
+<a id="ae07b17c18ab75286f725d95d66417a4c" name="ae07b17c18ab75286f725d95d66417a4c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae07b17c18ab75286f725d95d66417a4c">&#9670;&#160;</a></span>X_GyroOffset</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float X_GyroOffset = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00263">263</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+
+</div>
+</div>
+<a id="ac0db1e7bf7821da43dd4364aecae033f" name="ac0db1e7bf7821da43dd4364aecae033f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0db1e7bf7821da43dd4364aecae033f">&#9670;&#160;</a></span>Y_GyroOffset</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Y_GyroOffset = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00264">264</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>
@@ -3707,7 +3815,23 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00223">223</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00229">229</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
+
+</div>
+</div>
+<a id="a38810fa016b56efa3a91d01b997a1f50" name="a38810fa016b56efa3a91d01b997a1f50"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38810fa016b56efa3a91d01b997a1f50">&#9670;&#160;</a></span>Z_GyroOffset</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Z_GyroOffset = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="common_8h_source.html#l00265">265</a> of file <a class="el" href="common_8h_source.html">common.h</a>.</p>
 
 </div>
 </div>

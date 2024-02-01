@@ -18,7 +18,7 @@ var searchData=
   ['movepaddles_15',['MovePaddles',['../Pong_8h.html#ae1838e25c06509f78c0de9f0e556d428',1,'Pong.h']]],
   ['movepoint_16',['MovePoint',['../TransmitterCode_2src_2main_8cpp.html#aad727ec0b0f9f34487a535eaa4a83172',1,'main.cpp']]],
   ['moveservos_17',['MoveServos',['../ReceiverCode_2src_2main_8cpp.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp'],['../common_8h.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp']]],
-  ['mpu6050_18',['mpu6050',['../common_8h.html#af39b7b38f37c221162fb77e91305b7a3',1,'common.h']]],
+  ['mpu6050_18',['mpu6050',['../common_8h.html#ad56e69e7f13623ba6b96aee925daa3c2',1,'common.h']]],
   ['mpu6050_19',['MPU6050',['../classMPU6050.html#a50b99a2a37c9d8708e807ef90b31df9b',1,'MPU6050']]],
   ['mpu9250_20',['MPU9250',['../classMPU9250.html#acaf2ae31cfdeb6d47b922996feb55b69',1,'MPU9250::MPU9250()'],['../classMPU9250FIFO.html#a4b15facd0ce38964d241db56b1c57f75',1,'MPU9250FIFO::MPU9250(SPIClass &amp;bus, uint8_t csPin)'],['../classMPU9250FIFO.html#acaf2ae31cfdeb6d47b922996feb55b69',1,'MPU9250FIFO::MPU9250(TwoWire &amp;bus, uint8_t address)'],['../classMPU9250.html#a4b15facd0ce38964d241db56b1c57f75',1,'MPU9250::MPU9250()']]],
   ['msgbox_21',['MsgBox',['../1Definitions_8h.html#a6f5b0f1e4ca75768c16c4dd93f92a8de',1,'MsgBox(char *goback, char *Prompt):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a6f5b0f1e4ca75768c16c4dd93f92a8de',1,'MsgBox(char *goback, char *Prompt):&#160;main.cpp']]],

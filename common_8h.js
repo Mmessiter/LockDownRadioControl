@@ -2,6 +2,7 @@ var common_8h =
 [
     [ "CD", "structCD.html", "structCD" ],
     [ "CD2", "structCD2.html", "structCD2" ],
+    [ "ACCELERATIONS_FACTOR", "common_8h.html#af0ae0f3462879699116d1aacd24844c9", null ],
     [ "BIND_EEPROM_OFFSET", "common_8h.html#a9711a7159ecb22d58fd6331700663ee7", null ],
     [ "BINDPLUG_PIN", "common_8h.html#a9986f66313bda8d791f5f4ec246d5709", null ],
     [ "BOUNDPIPENUMBER", "common_8h.html#a5f3f2939c5f5efcee13dc77b62dbaeb4", null ],
@@ -15,6 +16,7 @@ var common_8h =
     [ "FAILSAFE_TIMEOUT", "common_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c", null ],
     [ "FREQUENCYSCOUNT", "common_8h.html#afe5bce36baf737bd284d43cd0e805fdb", null ],
     [ "FS_EEPROM_OFFSET", "common_8h.html#ad529f0c2447693d8418608e122012388", null ],
+    [ "GYRO_FACTOR", "common_8h.html#aa7509e90c16789a7e344f9bbc64f9df9", null ],
     [ "HOPTIME", "common_8h.html#a57d506b5f34172770c8d645c12cb5ba2", null ],
     [ "KICKRATE", "common_8h.html#a639fb69a9b4f236e3b1a16435b82bb81", null ],
     [ "LED_PIN", "common_8h.html#ab4553be4db9860d940f81d7447173b2f", null ],
@@ -62,7 +64,7 @@ var common_8h =
     [ "Look1", "common_8h.html#aea423a497d09a142f394356bc8438c41", null ],
     [ "MarkHere", "common_8h.html#a5ae8a2aa29e834880ccf370c7547961b", null ],
     [ "MoveServos", "common_8h.html#a6f2443a0666140cf4d8b7352bb3b793c", null ],
-    [ "mpu6050", "common_8h.html#af39b7b38f37c221162fb77e91305b7a3", null ],
+    [ "mpu6050", "common_8h.html#ad56e69e7f13623ba6b96aee925daa3c2", null ],
     [ "MySbus", "common_8h.html#a5424788640aaa8d535d6ea077949ef82", null ],
     [ "PIDEntryPoint", "common_8h.html#af0885e7050f46e9be63fa1c9574ad9a0", null ],
     [ "Radio1", "common_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a", null ],
@@ -107,6 +109,7 @@ var common_8h =
     [ "FS_byte1", "common_8h.html#a3be9019b72265fa9443e1f1132fd9bc7", null ],
     [ "FS_byte2", "common_8h.html#a9949c81d8f6abc28616445945c5d24ba", null ],
     [ "GpsFix", "common_8h.html#a86c2722f6c671747562cc504a440e243", null ],
+    [ "GyroOffsetsSet", "common_8h.html#ae962b6c6eb62846284f2ff4516407952", null ],
     [ "HopMoment", "common_8h.html#ab3b6846ad8bf99c7fd148049995dfd91", null ],
     [ "HopNow", "common_8h.html#a8f6625d513c0e3887659968a39ddc325", null ],
     [ "HopStart", "common_8h.html#a937fc53e966c6b5c66b9d66c01cec13f", null ],
@@ -178,5 +181,8 @@ var common_8h =
     [ "ThisRadio", "common_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20", null ],
     [ "UseSBUS", "common_8h.html#a80f5214ddc3b9618293f3b2694dff6f7", null ],
     [ "WatchDogConfig", "common_8h.html#abf278d2a0f4b093a96fd83a6f635d8c8", null ],
-    [ "YearGPS", "common_8h.html#a4a1012a9dfe5632ac326ce712f311472", null ]
+    [ "X_GyroOffset", "common_8h.html#ae07b17c18ab75286f725d95d66417a4c", null ],
+    [ "Y_GyroOffset", "common_8h.html#ac0db1e7bf7821da43dd4364aecae033f", null ],
+    [ "YearGPS", "common_8h.html#a4a1012a9dfe5632ac326ce712f311472", null ],
+    [ "Z_GyroOffset", "common_8h.html#a38810fa016b56efa3a91d01b997a1f50", null ]
 ];

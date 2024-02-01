@@ -129,7 +129,7 @@ var searchData=
   ['movepaddles_126',['MovePaddles',['../Pong_8h.html#ae1838e25c06509f78c0de9f0e556d428',1,'Pong.h']]],
   ['movepoint_127',['MovePoint',['../TransmitterCode_2src_2main_8cpp.html#aad727ec0b0f9f34487a535eaa4a83172',1,'main.cpp']]],
   ['moveservos_128',['MoveServos',['../ReceiverCode_2src_2main_8cpp.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp'],['../common_8h.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp']]],
-  ['mpu6050_129',['mpu6050',['../Quadcopter_2src_2main_8cpp.html#a7e41a2178d7943922a90e58da80ffa9d',1,'mpu6050():&#160;main.cpp'],['../common_8h.html#af39b7b38f37c221162fb77e91305b7a3',1,'mpu6050(Wire):&#160;common.h']]],
+  ['mpu6050_129',['mpu6050',['../Quadcopter_2src_2main_8cpp.html#a7e41a2178d7943922a90e58da80ffa9d',1,'mpu6050():&#160;main.cpp'],['../common_8h.html#ad56e69e7f13623ba6b96aee925daa3c2',1,'mpu6050(Wire, ACCELERATIONS_FACTOR, GYRO_FACTOR):&#160;common.h']]],
   ['mpu6050_130',['MPU6050',['../classMPU6050.html',1,'MPU6050'],['../classMPU6050.html#a50b99a2a37c9d8708e807ef90b31df9b',1,'MPU6050::MPU6050()']]],
   ['mpu6050_2ecpp_131',['MPU6050.cpp',['../MPU6050_8cpp.html',1,'']]],
   ['mpu6050_2eh_132',['MPU6050.h',['../MPU6050_8h.html',1,'']]],

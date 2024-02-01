@@ -17,8 +17,8 @@ var searchData=
   ['gpscourseto_14',['GPSCourseTo',['../1Definitions_8h.html#a9557f718b9a7dd41a441c12555167908',1,'GPSCourseTo():&#160;1Definitions.h'],['../SensorHubT32_2src_2main_8cpp.html#a9557f718b9a7dd41a441c12555167908',1,'GPSCourseTo():&#160;main.cpp']]],
   ['gpsday_15',['GPSDay',['../1Definitions_8h.html#a882e41768b06234c5a87749be672ea06',1,'GPSDay():&#160;1Definitions.h'],['../SensorHubT32_2src_2main_8cpp.html#a882e41768b06234c5a87749be672ea06',1,'GPSDay():&#160;main.cpp']]],
   ['gpsdistanceto_16',['GPSDistanceTo',['../1Definitions_8h.html#a54a01db3255a3557b936ef1b8907adce',1,'GPSDistanceTo():&#160;1Definitions.h'],['../SensorHubT32_2src_2main_8cpp.html#a54a01db3255a3557b936ef1b8907adce',1,'GPSDistanceTo():&#160;main.cpp']]],
-  ['gpsfix_17',['GPSFix',['../SensorHubT32_2src_2main_8cpp.html#a0c32781a3efa57d89a067a024d9e00b9',1,'main.cpp']]],
-  ['gpsfix_18',['GpsFix',['../1Definitions_8h.html#a86c2722f6c671747562cc504a440e243',1,'GpsFix():&#160;1Definitions.h'],['../common_8h.html#a86c2722f6c671747562cc504a440e243',1,'GpsFix():&#160;common.h']]],
+  ['gpsfix_17',['GpsFix',['../1Definitions_8h.html#a86c2722f6c671747562cc504a440e243',1,'GpsFix():&#160;1Definitions.h'],['../common_8h.html#a86c2722f6c671747562cc504a440e243',1,'GpsFix():&#160;common.h']]],
+  ['gpsfix_18',['GPSFix',['../SensorHubT32_2src_2main_8cpp.html#a0c32781a3efa57d89a067a024d9e00b9',1,'main.cpp']]],
   ['gpsgroundaltitude_19',['GPSGroundAltitude',['../1Definitions_8h.html#acaa43339312ef300c8b54ef4fb1af054',1,'1Definitions.h']]],
   ['gpshours_20',['GPSHours',['../1Definitions_8h.html#a51b2b206ccc31e2626ee3770cce9fb36',1,'GPSHours():&#160;1Definitions.h'],['../SensorHubT32_2src_2main_8cpp.html#a51b2b206ccc31e2626ee3770cce9fb36',1,'GPSHours():&#160;main.cpp']]],
   ['gpslatitude_21',['GPSLatitude',['../1Definitions_8h.html#a4cde9fb46783d84afce8e92931ce51a3',1,'GPSLatitude():&#160;1Definitions.h'],['../SensorHubT32_2src_2main_8cpp.html#a4cde9fb46783d84afce8e92931ce51a3',1,'GPSLatitude():&#160;main.cpp']]],
@@ -54,10 +54,11 @@ var searchData=
   ['gyroerrorx_51',['GyroErrorX',['../Quadcopter_2src_2main_8cpp.html#a1e6b6ba2542eeb5a0f5daa3465aa1c3a',1,'main.cpp']]],
   ['gyroerrory_52',['GyroErrorY',['../Quadcopter_2src_2main_8cpp.html#a7570819bf9bd1d49a49ae3d697a2aff3',1,'main.cpp']]],
   ['gyroerrorz_53',['GyroErrorZ',['../Quadcopter_2src_2main_8cpp.html#af105bad5629a32c2749010880cfdef39',1,'main.cpp']]],
-  ['gyrox_54',['GyroX',['../Quadcopter_2src_2main_8cpp.html#a5f4347f2081e0c5bf0de471b9e591c9a',1,'main.cpp']]],
-  ['gyrox_5fprev_55',['GyroX_prev',['../Quadcopter_2src_2main_8cpp.html#a24cd59722a6eb0dd35891674be68d2da',1,'main.cpp']]],
-  ['gyroy_56',['GyroY',['../Quadcopter_2src_2main_8cpp.html#aa16d09d17ebe24f81ad98605b8aaf8f0',1,'main.cpp']]],
-  ['gyroy_5fprev_57',['GyroY_prev',['../Quadcopter_2src_2main_8cpp.html#a5a9eeef1ca657c0e3432f2304e92b0a7',1,'main.cpp']]],
-  ['gyroz_58',['GyroZ',['../Quadcopter_2src_2main_8cpp.html#a5e69f4df28f912eb1c3e6f120d4ca35b',1,'main.cpp']]],
-  ['gyroz_5fprev_59',['GyroZ_prev',['../Quadcopter_2src_2main_8cpp.html#a290eb62ad5738a3fd3415e99cf1c08c5',1,'main.cpp']]]
+  ['gyrooffsetsset_54',['GyroOffsetsSet',['../common_8h.html#ae962b6c6eb62846284f2ff4516407952',1,'common.h']]],
+  ['gyrox_55',['GyroX',['../Quadcopter_2src_2main_8cpp.html#a5f4347f2081e0c5bf0de471b9e591c9a',1,'main.cpp']]],
+  ['gyrox_5fprev_56',['GyroX_prev',['../Quadcopter_2src_2main_8cpp.html#a24cd59722a6eb0dd35891674be68d2da',1,'main.cpp']]],
+  ['gyroy_57',['GyroY',['../Quadcopter_2src_2main_8cpp.html#aa16d09d17ebe24f81ad98605b8aaf8f0',1,'main.cpp']]],
+  ['gyroy_5fprev_58',['GyroY_prev',['../Quadcopter_2src_2main_8cpp.html#a5a9eeef1ca657c0e3432f2304e92b0a7',1,'main.cpp']]],
+  ['gyroz_59',['GyroZ',['../Quadcopter_2src_2main_8cpp.html#a5e69f4df28f912eb1c3e6f120d4ca35b',1,'main.cpp']]],
+  ['gyroz_5fprev_60',['GyroZ_prev',['../Quadcopter_2src_2main_8cpp.html#a290eb62ad5738a3fd3415e99cf1c08c5',1,'main.cpp']]]
 ];
