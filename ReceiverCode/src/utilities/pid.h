@@ -70,7 +70,7 @@ void ReadMPU6050(){
 
 
 
-         Look("\t");
+       //  Look("\t");
 
   }
 /************************************************************************************************************/
@@ -97,16 +97,13 @@ void PIDEntryPoint(){
 /************************************************************************************************************/
 
 void DoStabilsation(){  // This is called from the main loop and from all DelayMillis() loops
-    
-    if (!MPU6050Connected) {
-      //  Look("No MPU6050 connected");
-        return;         
-    }
+       
     static uint32_t LastTime = 0;
     if (millis()-LastTime >= 5){ // 5000 = 200 Hz
         LastTime = millis();
         PIDEntryPoint();            // here we can call a timed stabilisation event at exactly 250 Hz
    }
+   Look (millis());
 }
 
 #else

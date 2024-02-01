@@ -66,7 +66,7 @@ void DelayMillis(uint16_t ms) // This replaces any delay() calls
     uint32_t tt = millis();
     while (millis() - tt < ms) {
 #ifdef DOSTABILISATION
-        DoStabilsation();
+      if (MPU6050Connected) DoStabilsation();
 #endif
     }
 }   
@@ -658,7 +658,7 @@ void BlinkLed()
 void loop()
 {
 #ifdef DOSTABILISATION
-    DoStabilsation();
+    if (MPU6050Connected) DoStabilsation();
 #endif
     KickTheDog();
     ReceiveData();

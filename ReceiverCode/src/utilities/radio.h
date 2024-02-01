@@ -434,7 +434,7 @@ void TryToConnectNow()
     ATimer = millis();
     while ((!CurrentRadio->available(&Pipnum)) && (millis() - ATimer) < LISTEN_PERIOD) {
 #ifdef  DOSTABILISATION   
-        DoStabilsation(); // while connecting, do some other stuff (Stabilisation, etc)
+      if (MPU6050Connected) DoStabilsation(); // while connecting, do some other stuff (Stabilisation, etc)
 #endif
     }       
     Connected = CurrentRadio->available(&Pipnum);
