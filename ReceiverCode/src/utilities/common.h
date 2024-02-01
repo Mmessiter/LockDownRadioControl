@@ -107,11 +107,17 @@ uint8_t         SizeOfParameters = sizeof(Parameters);
 #define PIPES_TO_COMPARE   8
 
 
+// ********************************** For the MPU6050tockn library ********************************************************************
+
+#define     ACCELERATIONS_FACTOR 0.02                           // default is 0.02 for the complementary filter
+#define     GYRO_FACTOR          1 - ACCELERATIONS_FACTOR
+MPU6050     mpu6050(Wire, ACCELERATIONS_FACTOR, GYRO_FACTOR); // 
+
+// ****************************************************************************************************************************************
+
 RF24     Radio1(pinCE1, pinCSN1);
 RF24     Radio2(pinCE2, pinCSN2);
 RF24*    CurrentRadio = &Radio1;
-
-MPU6050   mpu6050(Wire);
 
 bool     Connected    = false;
 bool     SaveNewBind  = true;
@@ -254,6 +260,10 @@ uint8_t       DefaultPipe[6] = {0x23, 0x94, 0x3e, 0xbe, 0xb7, 0x00};
 uint8_t       CurrentPipe[6];
 uint8_t       Randomized_Recovery_Channels_Counter = 0;
 uint32_t      HopMoment                           = 0;
+float         X_GyroOffset = 0;
+float         Y_GyroOffset = 0; 
+float         Z_GyroOffset = 0; 
+bool          GyroOffsetsSet = false;
 
 
 #endif // defined (_SRC_UTILITIES_COMMON_H)

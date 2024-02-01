@@ -49,6 +49,16 @@ void MPU6050::setGyroOffsets(float x, float y, float z){
   gyroZoffset = z;
 }
 
+//*************************************************************************************************************************
+//  This function is used to calculate the offsets of the gyroscope
+//  The MPU6050 must be placed in a horizontal position
+//  The function calculates the average of AVERAGEOFCOUNT readings of the gyroscope
+//  The average is subtracted from the current readings of the gyroscope
+//  The result is the offset that will be used in the calculations of the angular positions
+//  The function returns the offsets through the parameters offsetX, offsetY and offsetZ
+
+#define AVERAGEOFCOUNT 6000
+
 void MPU6050::calcGyroOffsets(bool console, uint16_t delayBefore, uint16_t delayAfter){
 	float x = 0, y = 0, z = 0;
 	int16_t rx, ry, rz;
@@ -60,7 +70,7 @@ void MPU6050::calcGyroOffsets(bool console, uint16_t delayBefore, uint16_t delay
     Serial.println("Calculating gyro offsets");
     Serial.print("DO NOT MOVE MPU6050");
   }
-  for(int i = 0; i < 3000; i++){
+  for(int i = 0; i < AVERAGEOFCOUNT; i++){
     if(console && i % 1000 == 0){
       Serial.print(".");
     }
@@ -77,9 +87,9 @@ void MPU6050::calcGyroOffsets(bool console, uint16_t delayBefore, uint16_t delay
     y += ((float)ry) / 65.5;
     z += ((float)rz) / 65.5;
   }
-  gyroXoffset = x / 3000;
-  gyroYoffset = y / 3000;
-  gyroZoffset = z / 3000;
+  gyroXoffset = x / AVERAGEOFCOUNT;
+  gyroYoffset = y / AVERAGEOFCOUNT;
+  gyroZoffset = z / AVERAGEOFCOUNT;
 
   if(console){
     Serial.println();

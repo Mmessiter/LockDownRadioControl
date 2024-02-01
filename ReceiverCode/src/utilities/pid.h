@@ -8,83 +8,6 @@
 
 #ifdef DOSTABILISATION
  
-// ************************************************************************************************************
-// PID control
-// Not used yet but will be needed for PID control
-
-
-
-
-class KalmanFilter {
-public:
-    KalmanFilter() {
-        Q = 0.001f;  // Process noise covariance
-        R = 0.01f;   // Measurement noise covariance
-        x = 0.0f;    // Initial state (estimate)
-        P = 1.0f;    // Initial estimate uncertainty
-    }
-
-    float filter(float z) {
-        // Prediction
-        float x_pred = x;
-        float P_pred = P + Q;
-
-        // Update
-        float K = P_pred / (P_pred + R);
-        x = x_pred + K * (z - x_pred);
-        P = (1 - K) * P_pred;
-
-        return x;
-    }
-
-private:
-    float Q;  // Process noise covariance
-    float R;  // Measurement noise covariance
-    float x;  // State (estimate)
-    float P;  // Estimate uncertainty
-};
-
-KalmanFilter kalman;
-
-// *****************************************************************************************************************
-class LowLatencyFilter { 
-  private: 
-   
-    float ReturnedValue;
-    float FilterFactor = 0; 
-    float UsedFilterFactor;
-
-// *******************************************************************************
-float Method2(float NewDataPoint){
-     static float OldDataPoints[8];
-     int count = 6;
-     ReturnedValue = 0;
-     OldDataPoints[count-1] = NewDataPoint;
-     for (int i = 1; i < count; ++i){  
-        ReturnedValue += OldDataPoints[i];
-        OldDataPoints[i-1] = OldDataPoints[i];
-      }
-    return ReturnedValue / (count-1);
-   }
-
-  public:   
-  // *****************************************************************************************************************
-      void SetFilterFactor(float f){
-      FilterFactor = f;
-    }
-  // *****************************************************************************************************************   
-    float Filter(float NewDataPoint){
-    
-    ReturnedValue = Method2(NewDataPoint);
- 
-    return ReturnedValue;
-  }
-  // *****************************************************************************************************************   
-};
-
-LowLatencyFilter XF;
-LowLatencyFilter YF;
-
 // *****************************************************************************************************************
 
 float Xaccel = 0;
@@ -105,44 +28,49 @@ void ReadMPU6050(){
 
         mpu6050.update();
 
-        Xaccel = mpu6050.getAccX();               //   Accelerations
-        Yaccel = mpu6050.getAccY();               //   Accelerations
-        Zaccel = mpu6050.getAccZ();               //   Accelerations
-
-        XAngularaccel = mpu6050.getGyroX();       //   Gyro Angular accelerations
-        YAngularaccel = mpu6050.getGyroY();       //   Gyro Angular accelerations
-        ZAngularaccel = mpu6050.getGyroZ();       //   Gyro Angular accelerations
-
-        xPos   = mpu6050.getAngleX();             //  Angular positions computed by integration of the angular accelerations
-        yPos   = mpu6050.getAngleY();             //  Angular positions computed by integration of the angular accelerations
-        zPos   = mpu6050.getAngleZ();             //  Angular positions computed by integration of the angular accelerations
+        Xaccel        = mpu6050.getAccX();                //   Accelerations
+        Yaccel        = mpu6050.getAccY();                //   Accelerations
+        Zaccel        = mpu6050.getAccZ();                //   Accelerations
+        XAngularaccel = mpu6050.getGyroX();               //   Gyro Angular accelerations
+        YAngularaccel = mpu6050.getGyroY();               //   Gyro Angular accelerations
+        ZAngularaccel = mpu6050.getGyroZ();               //   Gyro Angular accelerations
+        xPos          = mpu6050.getAngleX();              //   Angular positions computed by integration of the angular accelerations
+        yPos          = mpu6050.getAngleY();              //   Angular positions computed by integration of the angular accelerations
+        zPos          = mpu6050.getAngleZ();              //   Angular positions computed by integration of the angular accelerations
 
         MPU6050Temp = mpu6050.getTemp(); //  Temperature in degrees C
 
-        // Look1("Xaccel: ");
-        // Look(Xaccel);
-        // Look1("Yaccel: ");
-        // Look(Yaccel);
-        // Look1("Zaccel: ");
-        // Look(Zaccel);
+        // Look1("\tXaccel: ");
+        // Look1(Xaccel);
+        // Look1("\tYaccel: ");
+        // Look1(Yaccel);
+        // Look1("\tZaccel: ");
+        // Look1(Zaccel);
 
-        // Look1("XAngularaccel: ");
-        // Look(XAngularaccel);
-        // Look1("YAngularaccel: ");
-        // Look(YAngularaccel);
-        // Look1("ZAngularaccel: ");
-        // Look(ZAngularaccel);
 
-      //   Look1("xPos: ");
-      //   Look(xPos);
-        // Look1("yPos: ");
-        // Look(yPos);
-        // Look1("zPos: ");
-        // Look(zPos);
+
+        // Look1("\tXAngularaccel: ");
+        // Look1(XAngularaccel);
+        // Look1("\tYAngularaccel: ");
+        // Look1(YAngularaccel);
+        // Look1("\tZAngularaccel: ");
+        // Look1(ZAngularaccel);
+
+       
+        // Look1("xPos: ");
+        // Look1(xPos);
+        // Look1("\tyPos: ");
+        // Look1(yPos);
+      // Look1("\tzPos: ");
+     //  Look1(zPos);
 
         // Look1("MPU6050Temp: ");
         // Look(MPU6050Temp);
         
+
+
+
+         Look("\t");
 
   }
 /************************************************************************************************************/

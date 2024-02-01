@@ -610,10 +610,24 @@ FLASHMEM void setup()
     ThisRadio = 2;
 #endif
 
-#ifdef DOSTABILISATION                      // only if MPU6050 is connected and working
+#ifdef DOSTABILISATION                                          // only if MPU6050 is connected and working
     if (MPU6050Connected) {
         mpu6050.begin();
-        mpu6050.calcGyroOffsets(true);
+        if (GyroOffsetsSet){
+             mpu6050.setGyroOffsets(3.09,  -0.20, -3.39);       // These are the offsets for my MPU6050
+        }else{
+            Look("Calibrating MPU6050.... DON'T MOVE IT!! ");
+            mpu6050.calcGyroOffsets(false);              
+            X_GyroOffset = mpu6050.getGyroXoffset();
+            Y_GyroOffset = mpu6050.getGyroYoffset();
+            Z_GyroOffset = mpu6050.getGyroZoffset();
+            Look1("X_GyroOffset: ");
+            Look(X_GyroOffset);
+            Look1("Y_GyroOffset: ");
+            Look(Y_GyroOffset);
+            Look1("Z_GyroOffset: ");
+            Look(Z_GyroOffset);
+        }
     }
 #endif
 
