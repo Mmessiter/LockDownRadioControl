@@ -5657,11 +5657,9 @@ if (millis() - Localtimer < 1000) return;
   }
 }
 
-
 /************************************************************************************************************/
 void FASTRUN ManageTransmitter()
 {
-
     static uint32_t         LastModelScreenCheck    = 0;
     static uint32_t         TransmitterLastManaged  = 0;
     uint32_t                RightNow                = millis();
@@ -5671,7 +5669,7 @@ void FASTRUN ManageTransmitter()
     if ((PACEMAKER - TXPacketElapsed < TIMEFORTXMANAGMENT) && ModelMatched) return;                            // If it's almost time to send data, then do not start some other task which might easily take longer.
     CheckPowerOffButton(); CheckForNextionButtonPress();                                                       // Pretty obvious really ...
 
-    if (RightNow - LastTimeRead >= 1003) {                                                                     // Only once a second for these..                                                                                      
+    if (RightNow - LastTimeRead >= 1000) {                                                                     // Only once a second for these..                                                                                      
         SendAllAgain();           
         GetGoodPacketsPerSecond();                                                                             // Do stats                                                                                         
         if (CurrentView != BLANKVIEW) {ReadTime();SendOutstandingParameters();UpdateTrimView();ShowMotorTimer();}  
@@ -5679,14 +5677,14 @@ void FASTRUN ManageTransmitter()
         return;                                                                                                // That's enough housekeeping this time around
     }
     
-    if ((RightNow - LastModelScreenCheck >= 252) && (CurrentView == MODELSVIEW)) { 
+    if ((RightNow - LastModelScreenCheck >= 250) && (CurrentView == MODELSVIEW)) { 
         LastModelScreenCheck = RightNow;
-        if (CheckModelName()) {LastModelScreenCheck = RightNow; return;}                                      // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
+        if (CheckModelName()) {LastModelScreenCheck = RightNow; return;}                                       // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
     }     
 
-    if (RightNow - TransmitterLastManaged > 53) {                                                               // About 20 times a second is plenty
+    if (RightNow - TransmitterLastManaged >= 100) {                                                            // About 10 times a second is plenty
         ReadSwitches();CheckHardwareTrims();GetBank();                                                         // Check switch positions 20 times a secon                                                                                                                                                                            
-        if (CurrentView != BLANKVIEW) ShowComms();                                                              // Screen Telemetry Data
+        if (CurrentView != BLANKVIEW) ShowComms();                                                             // Screen Telemetry Data
         TransmitterLastManaged = millis();
     }
 }
