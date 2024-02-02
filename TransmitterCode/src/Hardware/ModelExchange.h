@@ -242,8 +242,11 @@ void ReceiveModelFile()
     strcpy(msg, ovwr);
     strcat(msg, ModelName);
     strcat(msg, ques);
+
+
     if (!GetConfirmation(GoModelsView, msg)) return; // Get confirmation or quit
     BlueLedOn();
+      
     ShowFileTransferWindow();
     SendText(ModelsView_filename, Waiting);
     SendText(t0, RXheader);
@@ -251,7 +254,6 @@ void ReceiveModelFile()
         InitRadio(DefaultPipe);
     }
     ConfigureRadio(); //  Start from known state
-
 
     RXPipe = FILEPIPEADDRESS;
     Radio1.setRetries(2, 15);
@@ -261,15 +263,20 @@ void ReceiveModelFile()
     Radio1.openReadingPipe(1, RXPipe);
     Radio1.startListening();
     NewFileBufferPointer = 0;
-    RXTimer              = millis(); // Start timer
-    ClearText();
+   
     CloseModelsFile();
-    for (int q = 0; q < 36; ++q) { // clear buffer
-        Fbuffer[q] = 0;
+   
+    for (int q = 0; q < 36; ++q) {                         
+        Fbuffer[q] = 0;                                     // clear buffer for the sender's macaddress
+        delay(5);                                           // give the radio a chance to clear the buffer      
+        KickTheDog();                                       // Keep Watchdog happy
+        GetButtonPress();                                   // Clear any pending button presses so they won't stop next bit ...             
+        ClearText();                                        // Clear any pending text           
     }
-    while (!Radio1.available()) { // Await the sender....
-        delayMicroseconds(250);
-        if (GetButtonPress()) {
+    RXTimer              = millis();                        // Start timer
+    while (!Radio1.available()) {                           // Await the sender....
+        delay(1);
+        if (GetButtonPress()) {                            // user can abandon the transfer wait by hitting a button now
             GotoModelsView();
             ClearText();
             NormaliseTheRadio();
@@ -279,14 +286,13 @@ void ReceiveModelFile()
         }
         KickTheDog(); // Watchdog
         if ((millis() - RXTimer) / 1000 >= FILETIMEOUT) {
-    #ifdef DB_MODEL_EXCHANGE
-            Serial.println("Timeout");
-    #endif
             SendText(ModelsView_filename, TimeoutMsg);
             NormaliseTheRadio();
+            
             return; // Give up waiting
         }
-        else {
+        else
+        {
             SecondsElapsed = (millis() - RXTimer) / 1000;
             if (SecondsElapsed == (int)SecondsElapsed) { // whole number of seconds?
                 strcpy(WaitMsg, Waiting);

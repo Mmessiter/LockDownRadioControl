@@ -139,6 +139,7 @@ bool GetButtonPress()
     uint8_t a             = 0;
     int     i             = 0;
     bool    ButtonPressed = false;
+   
     while (NEXTION.available()) {
         a = NEXTION.read();
         if (a > 31 && a < 254) {
