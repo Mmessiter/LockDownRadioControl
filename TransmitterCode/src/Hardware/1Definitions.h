@@ -825,7 +825,7 @@ tmElements_t    tm;
 char            TxName[40]             = "Unknown";
 uint32_t        LastTimeRead           = 0;
 uint32_t        LastScanButtonCheck    = 0;
-uint32_t        TransmitterLastManaged = 0;
+
 uint32_t        LastShowTime           = 0;
 uint8_t         MacAddress[8]          = {0, 0, 0, 0, 0, 0, 0, 0};
 uint8_t         MasterMacAddress[8]    = {0, 0, 0, 0, 0, 0, 0, 0};

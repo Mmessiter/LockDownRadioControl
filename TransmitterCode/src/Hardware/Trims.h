@@ -206,7 +206,7 @@ void CheckHardwareTrims()
                 return;
             }
             MoveaTrim(i);
-            TransmitterLastManaged = 0;                     //  to speed up repeat
+           // TransmitterLastManaged = 0;                     //  to speed up repeat
             TrimRepeatSpeed -= (TrimRepeatSpeed / 4);       //  accelerate repeat...
             if (TrimRepeatSpeed < 10) TrimRepeatSpeed = 30; //  ... up to a point...
         }

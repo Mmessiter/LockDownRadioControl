@@ -5517,16 +5517,9 @@ bool CheckModelName()
 { // In ModelsView, this function checks correct name is displayed.
   // it returns true if it has changed
     char MMems[]  = "MMems";
-    char Mfiles[] = "Mfiles";
     char mn[]     = "modelname";
-
+   
     ModelNumber      = GetValue(MMems) + 1;
-    FileNumberInView = GetValue(Mfiles);
-    CheckForNextionButtonPress();                 
-    if (FileNumberInView != LastFileInView) {
-        ShowFileNumber();
-        LastFileInView = FileNumberInView;
-    }
     if (LastModelLoaded != ModelNumber) {
         if ((ModelNumber >= MAXMODELNUMBER) || (ModelNumber < 1)) {
             ModelNumber = 1;
@@ -5538,7 +5531,7 @@ bool CheckModelName()
         LastModelLoaded = ModelNumber;
         UpdateModelsNameEveryWhere();
         return true;
-    }
+    } 
     ClearText();
     return false;
 }
@@ -5662,6 +5655,9 @@ if (millis() - Localtimer < 1000) return;
 void FASTRUN ManageTransmitter()
 {
 
+    static uint32_t         LastModelScreenCheck = 0;
+    static uint32_t         TransmitterLastManaged = 0;
+
     uint32_t RightNow        = millis();
     uint32_t TXPacketElapsed = RightNow - LastPacketSentTime;
     KickTheDog();                                                                                                   // Watchdog ... ALWAYS!
@@ -5669,9 +5665,8 @@ void FASTRUN ManageTransmitter()
     CheckPowerOffButton();                                                                                          // Pretty obvious really ...
     CheckForNextionButtonPress();                                                                                   // Pretty obvious really ...
 
-    if (RightNow - TransmitterLastManaged > 50) {                                                                   // 20 times a second is plenty
-        TransmitterLastManaged = millis();
-        if ((RightNow - LastTimeRead >= 500) && (CurrentView == MODELSVIEW)) CheckModelName();                      // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
+    
+
         if (RightNow - LastTimeRead >= 1000) {                                                                      // Only once a second for these...
             LastTimeRead = millis();                                                                                         
             SendAllAgain();           
@@ -5684,11 +5679,24 @@ void FASTRUN ManageTransmitter()
             }                                                                   
             return;                                                                                                 // That's enough housekeeping this time around
         }
-        ReadSwitches();                                                                                             // Check switch positions 20 times a second
-        CheckHardwareTrims();                                                                                       // Trims 20 times a second
-        GetBank();                                                                                                  // Must not call too often
-        if (CurrentView != BLANKVIEW) ShowComms();                                                                  // Screen Telemetry Data
-    }
+
+
+    
+        if ((RightNow - LastModelScreenCheck >= 500) && (CurrentView == MODELSVIEW)) { 
+                CheckModelName();                                                                                      // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
+                LastModelScreenCheck = RightNow; 
+                return;
+        }     
+
+
+        if (RightNow - TransmitterLastManaged > 50) {                                                                   // 20 times a second is plenty
+            TransmitterLastManaged = millis();
+            ReadSwitches();                                                                                             // Check switch positions 20 times a second
+            CheckHardwareTrims();                                                                                       // Trims 20 times a second
+            GetBank();                                                                                                  // Must not call too often
+            if (CurrentView != BLANKVIEW) ShowComms();                                                                  // Screen Telemetry Data
+            return;
+        }
 }
 /**********************************************************************************************************/
 
