@@ -5682,7 +5682,7 @@ void FASTRUN ManageTransmitter()
         if (CheckModelName()) {LastModelScreenCheck = RightNow; return;}                                       // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
     }     
 
-    if (RightNow - TransmitterLastManaged >= 100) {                                                            // About 10 times a second is plenty
+    if (RightNow - TransmitterLastManaged >= 50) {                                                             // 20 times a second is good
         ReadSwitches();CheckHardwareTrims();GetBank();                                                         // Check switch positions 20 times a secon                                                                                                                                                                            
         if (CurrentView != BLANKVIEW) ShowComms();                                                             // Screen Telemetry Data
         TransmitterLastManaged = millis();
