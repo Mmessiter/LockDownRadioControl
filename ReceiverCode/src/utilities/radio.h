@@ -172,7 +172,7 @@ bool ReadData()
              if (AckCounter > MaxAckCounter) { // heer
                  AckCounter = 0;
                  LoadAckPayload();
-                 CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);          // send big PAYLOAD OCCASIONALLY
+                 CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);          // send big PAYLOAD EVERY 100th time (2 per second)
              }else{
                  LoadShortAckPayload();  
                  CurrentRadio->writeAckPayload(1, &AckPayload, 2);                       // send VERY little 99% of the time
