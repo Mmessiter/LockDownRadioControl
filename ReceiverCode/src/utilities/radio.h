@@ -172,7 +172,6 @@ bool ReadData()
              if (AckCounter > MaxAckCounter) { // heer
                  AckCounter = 0;
                  LoadAckPayload();
-                // Look(millis());
                  CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);          // send big PAYLOAD OCCASIONALLY
              }else{
                  LoadShortAckPayload();  

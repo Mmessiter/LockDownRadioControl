@@ -118,9 +118,9 @@ void CheckBatteryStates(){
     char         WarnNow[]             = "vis Warning,1";
     char         WarnOff[]             = "vis Warning,0";
     static uint32_t LocalTimer = 0;
-
-    if ((millis() - LocalTimer < BATTERY_CHECK_INTERVAL) && (!ForceVoltDisplay)) return;    // Only check every 15 seconds unless forced
-   
+    if (((millis()) - LedGreenMoment) < 5000)  ForceVoltDisplay = true;
+    if ((millis() - LocalTimer < BATTERY_CHECK_INTERVAL) && (!ForceVoltDisplay)) return;    // Only check every 15 seconds unless forced or recently connected
+    
     LocalTimer = millis();
     ForceVoltDisplay = false;
     if (CheckTXVolts() || CheckRXVolts()) {                                                 // Note: If TX Battery is low, then CheckRXVolts() is not even called.
@@ -430,7 +430,7 @@ FASTRUN void ShowComms() // heer
     }
     CheckScreenTime();                  // Check if screen needs to be turned off
     CheckBatteryStates();               // Only every 15 seconds now
-   // Look(millis() - LastShowTime);   // This is to see how long it takes to run for optimisation purposes
-} // end ShowComms()
+   // Look(millis() - LastShowTime);    // This is to see how long it takes to run for optimisation purposes
+}  // end ShowComms()
 
     #endif
