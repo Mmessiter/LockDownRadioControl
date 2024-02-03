@@ -5,7 +5,7 @@ var searchData=
   ['datefix_2',['DateFix',['../1Definitions_8h.html#af963d49af3aeb834d322601d3c3e3d04',1,'1Definitions.h']]],
   ['daygps_3',['DayGPS',['../common_8h.html#a4c722ec4fa2ff675bd4a2d511e80cd6e',1,'common.h']]],
   ['debugtimer_4',['DebugTimer',['../SensorHubT32_2src_2main_8cpp.html#a7867e45e2d19ce05cda4ef2692ee0dbe',1,'main.cpp']]],
-  ['defaultpipe_5',['DefaultPipe',['../common_8h.html#ac17bcdae8bda705ade2cf0935e12853d',1,'DefaultPipe():&#160;common.h'],['../1Definitions_8h.html#a0b9fd9f8e85725c128617f006132ea57',1,'DefaultPipe():&#160;1Definitions.h']]],
+  ['defaultpipe_5',['defaultpipe',['../common_8h.html#ac17bcdae8bda705ade2cf0935e12853d',1,'DefaultPipe:&#160;common.h'],['../1Definitions_8h.html#a0b9fd9f8e85725c128617f006132ea57',1,'DefaultPipe:&#160;1Definitions.h']]],
   ['defaultswitchnumber_6',['DefaultSwitchNumber',['../1Definitions_8h.html#a0040cba31e48ea25f429ce1668f8c21f',1,'1Definitions.h']]],
   ['definingtrims_7',['DefiningTrims',['../1Definitions_8h.html#a53d8c3d55ec5cdfd424929c62efe1677',1,'1Definitions.h']]],
   ['deltagmt_8',['DeltaGMT',['../1Definitions_8h.html#ab509e0e6c824d1a805643fbdae7a9a5e',1,'1Definitions.h']]],

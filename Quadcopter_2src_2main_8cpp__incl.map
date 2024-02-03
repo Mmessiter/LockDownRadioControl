@@ -1,11 +1,20 @@
 <map id="Quadcopter/src/main.cpp" name="Quadcopter/src/main.cpp">
-<area shape="rect" id="node1" title=" " alt="" coords="101,5,268,31"/>
-<area shape="rect" id="node2" title=" " alt="" coords="85,152,161,177"/>
-<area shape="rect" id="node3" title=" " alt="" coords="23,79,82,104"/>
-<area shape="rect" id="node4" title=" " alt="" coords="107,79,161,104"/>
-<area shape="rect" id="node5" title=" " alt="" coords="186,79,285,104"/>
-<area shape="rect" id="node6" href="$SBUS_8h.html" title=" " alt="" coords="309,79,441,104"/>
-<area shape="rect" id="node8" href="$MPU6050_8h.html" title=" " alt="" coords="465,79,640,104"/>
-<area shape="rect" id="node7" href="$elapsedMillis_8h.html" title=" " alt="" coords="322,152,429,177"/>
-<area shape="rect" id="node9" href="$I2Cdev_8h.html" title=" " alt="" coords="516,152,589,177"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="99,5,265,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="84,153,160,178"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,31,51,48,30,62,13,80,9,90,9,99,20,117,43,132,71,145,68,150,40,137,16,121,4,101,4,89,9,78,27,58,49,44,97,26"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="24,79,81,105"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="161,34,89,73,87,69,159,29"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="106,79,159,105"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="176,33,152,68,147,65,172,30"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="184,79,281,105"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="192,30,217,65,213,68,188,33"/>
+<area shape="rect" id="Node000006" href="$SBUS_8h.html" title=" " alt="" coords="306,79,437,105"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="215,29,326,71,324,76,213,34"/>
+<area shape="rect" id="Node000008" href="$MPU6050_8h.html" title=" " alt="" coords="461,79,634,105"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="245,29,471,73,470,78,244,34"/>
+<area shape="poly" id="edge6_Node000006_Node000002" title=" " alt="" coords="330,108,175,152,174,147,328,103"/>
+<area shape="rect" id="Node000007" href="$elapsedMillis_8h.html" title=" " alt="" coords="318,153,424,178"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="374,105,374,137,369,137,369,105"/>
+<area shape="rect" id="Node000009" href="$I2Cdev_8h.html" title=" " alt="" coords="511,153,583,178"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="550,105,550,137,545,137,545,105"/>
 </map>

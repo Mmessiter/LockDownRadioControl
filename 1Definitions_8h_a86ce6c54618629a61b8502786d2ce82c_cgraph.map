@@ -1,5 +1,8 @@
 <map id="InitRadio" name="InitRadio">
-<area shape="rect" id="node1" title=" " alt="" coords="5,31,79,56"/>
-<area shape="rect" id="node2" href="$transceiver_8h.html#aee3ca81ae2f60bb0b65e05a4289e5e74" title=" " alt="" coords="127,5,236,31"/>
-<area shape="rect" id="node3" href="$common_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a" title=" " alt="" coords="284,31,347,56"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,78,56"/>
+<area shape="rect" id="Node000002" href="$transceiver_8h.html#aee3ca81ae2f60bb0b65e05a4289e5e74" title=" " alt="" coords="126,5,234,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="78,34,110,28,111,33,79,40"/>
+<area shape="rect" id="Node000003" href="$common_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a" title=" " alt="" coords="282,31,343,56"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="78,41,266,41,266,46,78,46"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="235,26,267,32,266,37,234,31"/>
 </map>

@@ -1,8 +1,13 @@
 <map id="setup" name="setup">
-<area shape="rect" id="node1" title=" " alt="" coords="5,104,60,129"/>
-<area shape="rect" id="node2" href="$SensorHubT32_2src_2main_8cpp.html#aa2c448c0ec510ffaaecbc5991e726b53" title=" " alt="" coords="138,5,229,31"/>
-<area shape="rect" id="node3" href="$SensorHubT32_2src_2main_8cpp.html#a2be9d0838709dc3a88a9a54108bd2b4a" title=" " alt="" coords="108,55,259,80"/>
-<area shape="rect" id="node4" href="$ReceiverCode_2src_2main_8cpp.html#a887240a00b11c00c971e633ed47319f9" title=" " alt="" coords="148,104,219,129"/>
-<area shape="rect" id="node5" href="$SensorHubT32_2src_2main_8cpp.html#aac529433269b7b52ef0a627716a70aea" title=" " alt="" coords="111,153,256,179"/>
-<area shape="rect" id="node6" href="$SensorHubT32_2src_2main_8cpp.html#a18c4f8439b510a2e7274d0a6165021d2" title=" " alt="" coords="136,203,231,228"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,104,59,130"/>
+<area shape="rect" id="Node000002" href="$SensorHubT32_2src_2main_8cpp.html#aa2c448c0ec510ffaaecbc5991e726b53" title=" " alt="" coords="137,5,226,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="41,102,68,71,105,40,121,32,123,37,108,44,71,75,45,106"/>
+<area shape="rect" id="Node000003" href="$SensorHubT32_2src_2main_8cpp.html#a2be9d0838709dc3a88a9a54108bd2b4a" title=" " alt="" coords="107,55,256,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="58,105,106,89,123,83,125,88,108,94,60,110"/>
+<area shape="rect" id="Node000004" href="$ReceiverCode_2src_2main_8cpp.html#a887240a00b11c00c971e633ed47319f9" title=" " alt="" coords="147,104,216,130"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="59,114,131,114,131,120,59,120"/>
+<area shape="rect" id="Node000005" href="$SensorHubT32_2src_2main_8cpp.html#aac529433269b7b52ef0a627716a70aea" title=" " alt="" coords="109,153,254,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="60,123,108,140,125,145,123,150,106,145,58,128"/>
+<area shape="rect" id="Node000006" href="$SensorHubT32_2src_2main_8cpp.html#a18c4f8439b510a2e7274d0a6165021d2" title=" " alt="" coords="134,203,229,228"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="45,128,71,159,108,189,121,196,118,201,105,194,68,162,41,132"/>
 </map>

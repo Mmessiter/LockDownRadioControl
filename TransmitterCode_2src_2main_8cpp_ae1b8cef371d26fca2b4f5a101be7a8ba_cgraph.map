@@ -1,15 +1,28 @@
 <map id="CalibrateSticks" name="CalibrateSticks">
-<area shape="rect" id="node1" title=" " alt="" coords="5,179,116,204"/>
-<area shape="rect" id="node2" href="$TransmitterCode_2src_2main_8cpp.html#a26ae4f6ca14f760bd5eb6e7588fe7c81" title="GET NEW SERVO POSITIONS." alt="" coords="164,179,321,204"/>
-<area shape="rect" id="node3" href="$TransmitterCode_2src_2main_8cpp.html#ac5728db610c441820a6f47295967cbab" title=" " alt="" coords="377,5,484,31"/>
-<area shape="rect" id="node4" href="$TransmitterCode_2src_2main_8cpp.html#ac77bd940a0faad7b997c9ddf40a7acc6" title=" " alt="" coords="395,55,467,80"/>
-<area shape="rect" id="node6" href="$Utilities_8h.html#acbd7adcd2b0e2095a89b4a98042b526e" title=" " alt="" coords="369,104,492,129"/>
-<area shape="rect" id="node7" href="$TransmitterCode_2src_2main_8cpp.html#a4be5821d4f80bdcdbee25adc69051d3e" title=" " alt="" coords="371,153,490,179"/>
-<area shape="rect" id="node8" href="$TransmitterCode_2src_2main_8cpp.html#a7a6560a77b8c4dd3925760790beafbd5" title=" " alt="" coords="377,203,485,228"/>
-<area shape="rect" id="node9" href="$TransmitterCode_2src_2main_8cpp.html#af9c038b48102eca9032f10fefd9d5736" title=" " alt="" coords="379,301,483,327"/>
-<area shape="rect" id="node12" href="$TransmitterCode_2src_2main_8cpp.html#a248db02e07497e7a4149db17b4e5c2f3" title=" " alt="" coords="379,252,482,277"/>
-<area shape="rect" id="node13" href="$Trims_8h.html#aacd8b022714bb89847239dd878ad9509" title=" " alt="" coords="373,351,488,376"/>
-<area shape="rect" id="node5" href="$Utilities_8h.html#a0d8d8a0d67cb9b04481f1692abe75368" title=" " alt="" coords="540,153,645,179"/>
-<area shape="rect" id="node10" href="$TransmitterCode_2src_2main_8cpp.html#afeabb54d48ef7e55693014e057d2943d" title=" " alt="" coords="541,301,644,327"/>
-<area shape="rect" id="node11" href="$TransmitterCode_2src_2main_8cpp.html#a8f53f86499d740b350f7b6d791c90497" title=" " alt="" coords="545,351,640,376"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,179,115,204"/>
+<area shape="rect" id="Node000002" href="$TransmitterCode_2src_2main_8cpp.html#a26ae4f6ca14f760bd5eb6e7588fe7c81" title="GET NEW SERVO POSITIONS." alt="" coords="163,179,319,204"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,189,147,189,147,194,115,194"/>
+<area shape="rect" id="Node000003" href="$TransmitterCode_2src_2main_8cpp.html#ac5728db610c441820a6f47295967cbab" title=" " alt="" coords="376,5,481,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="248,177,293,112,326,74,365,40,371,36,374,41,369,44,330,78,297,116,252,180"/>
+<area shape="rect" id="Node000004" href="$TransmitterCode_2src_2main_8cpp.html#ac77bd940a0faad7b997c9ddf40a7acc6" title=" " alt="" coords="393,55,464,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="254,176,301,135,366,89,377,83,379,88,368,94,305,139,258,180"/>
+<area shape="rect" id="Node000006" href="$Utilities_8h.html#acbd7adcd2b0e2095a89b4a98042b526e" title=" " alt="" coords="367,104,489,130"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="274,176,366,138,378,133,380,138,368,143,276,181"/>
+<area shape="rect" id="Node000007" href="$TransmitterCode_2src_2main_8cpp.html#a4be5821d4f80bdcdbee25adc69051d3e" title=" " alt="" coords="370,153,487,179"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="319,178,354,174,354,179,320,184"/>
+<area shape="rect" id="Node000008" href="$TransmitterCode_2src_2main_8cpp.html#a7a6560a77b8c4dd3925760790beafbd5" title=" " alt="" coords="375,203,482,228"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="320,199,359,204,358,209,319,204"/>
+<area shape="rect" id="Node000009" href="$TransmitterCode_2src_2main_8cpp.html#af9c038b48102eca9032f10fefd9d5736" title=" " alt="" coords="377,301,480,327"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="258,203,305,244,368,288,376,292,374,297,366,292,302,248,254,207"/>
+<area shape="rect" id="Node000012" href="$TransmitterCode_2src_2main_8cpp.html#a248db02e07497e7a4149db17b4e5c2f3" title=" " alt="" coords="378,252,479,278"/>
+<area shape="poly" id="edge11_Node000002_Node000012" title=" " alt="" coords="277,202,380,243,378,248,275,207"/>
+<area shape="rect" id="Node000013" href="$Trims_8h.html#aacd8b022714bb89847239dd878ad9509" title=" " alt="" coords="372,351,485,376"/>
+<area shape="poly" id="edge13_Node000002_Node000013" title=" " alt="" coords="252,203,297,267,330,304,369,337,374,341,371,345,365,342,327,308,293,270,248,206"/>
+<area shape="rect" id="Node000005" href="$Utilities_8h.html#a0d8d8a0d67cb9b04481f1692abe75368" title=" " alt="" coords="537,153,642,179"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="466,77,491,89,530,115,564,141,561,146,527,119,488,94,463,82"/>
+<area shape="rect" id="Node000010" href="$TransmitterCode_2src_2main_8cpp.html#afeabb54d48ef7e55693014e057d2943d" title=" " alt="" coords="538,301,641,327"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="480,312,523,312,523,317,480,317"/>
+<area shape="rect" id="Node000011" href="$TransmitterCode_2src_2main_8cpp.html#a8f53f86499d740b350f7b6d791c90497" title=" " alt="" coords="543,351,636,376"/>
+<area shape="poly" id="edge10_Node000009_Node000011" title=" " alt="" coords="474,325,531,343,530,348,472,330"/>
+<area shape="poly" id="edge12_Node000012_Node000005" title=" " alt="" coords="466,249,488,239,527,213,561,187,564,191,530,217,491,243,469,254"/>
 </map>

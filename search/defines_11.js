@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['rangemax_0',['RANGEMAX',['../1Definitions_8h.html#a152ff5774ac656fc5f23664a214a8b53',1,'RANGEMAX():&#160;1Definitions.h'],['../common_8h.html#a152ff5774ac656fc5f23664a214a8b53',1,'RANGEMAX():&#160;common.h']]],
-  ['rangemin_1',['RANGEMIN',['../common_8h.html#a2279f0fac9f7362b46f3c53ae91a5ce8',1,'RANGEMIN():&#160;common.h'],['../1Definitions_8h.html#a2279f0fac9f7362b46f3c53ae91a5ce8',1,'RANGEMIN():&#160;1Definitions.h']]],
+  ['rangemax_0',['rangemax',['../1Definitions_8h.html#a152ff5774ac656fc5f23664a214a8b53',1,'RANGEMAX:&#160;1Definitions.h'],['../common_8h.html#a152ff5774ac656fc5f23664a214a8b53',1,'RANGEMAX:&#160;common.h']]],
+  ['rangemin_1',['rangemin',['../common_8h.html#a2279f0fac9f7362b46f3c53ae91a5ce8',1,'RANGEMIN:&#160;common.h'],['../1Definitions_8h.html#a2279f0fac9f7362b46f3c53ae91a5ce8',1,'RANGEMIN:&#160;1Definitions.h']]],
   ['rate1_2',['RATE1',['../1Definitions_8h.html#ad35dcec60fb61a3768da09d05a16c5a7',1,'1Definitions.h']]],
   ['rate2_3',['RATE2',['../1Definitions_8h.html#a83b34f9971fcd11d43f6da5dd51e74c5',1,'1Definitions.h']]],
   ['rate3_4',['RATE3',['../1Definitions_8h.html#a1dd2b1861fe9917fe9311cac14025c32',1,'1Definitions.h']]],

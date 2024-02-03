@@ -1,8 +1,13 @@
 <map id="MPU6050::setStandbyZGyroEnabled" name="MPU6050::setStandbyZGyroEnabled">
-<area shape="rect" id="node1" title=" " alt="" coords="5,23,192,63"/>
-<area shape="rect" id="node2" href="$classI2Cdev.html#aa68890af87de5471d32e583ebbd91acb" title=" " alt="" coords="240,31,353,56"/>
-<area shape="rect" id="node3" href="$classI2Cdev.html#ad3fb41ce124a29f93749d99611c75c33" title=" " alt="" coords="403,5,523,31"/>
-<area shape="rect" id="node5" href="$classI2Cdev.html#aeb297637ef985cd562da465ba61b7042" title=" " alt="" coords="401,55,524,80"/>
-<area shape="rect" id="node4" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="574,5,701,31"/>
-<area shape="rect" id="node6" href="$classI2Cdev.html#aa4e39cac6c0eac5112f9132084bcc93e" title=" " alt="" coords="572,55,703,80"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,23,191,64"/>
+<area shape="rect" id="Node000002" href="$classI2Cdev.html#aa68890af87de5471d32e583ebbd91acb" title=" " alt="" coords="239,31,351,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="191,41,223,41,223,46,191,46"/>
+<area shape="rect" id="Node000003" href="$classI2Cdev.html#ad3fb41ce124a29f93749d99611c75c33" title=" " alt="" coords="401,5,520,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="351,32,385,27,386,32,352,38"/>
+<area shape="rect" id="Node000005" href="$classI2Cdev.html#aeb297637ef985cd562da465ba61b7042" title=" " alt="" coords="399,55,521,80"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="352,49,384,54,384,59,351,54"/>
+<area shape="rect" id="Node000004" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="571,5,697,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="520,16,555,16,555,21,520,21"/>
+<area shape="rect" id="Node000006" href="$classI2Cdev.html#aa4e39cac6c0eac5112f9132084bcc93e" title=" " alt="" coords="569,55,699,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="522,65,554,65,554,70,522,70"/>
 </map>

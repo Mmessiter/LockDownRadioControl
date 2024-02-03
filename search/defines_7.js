@@ -4,7 +4,7 @@ var searchData=
   ['goaltop_1',['GOALTOP',['../1Definitions_8h.html#a46603c2a51d5a3cf0bbeffe6806d01d8',1,'1Definitions.h']]],
   ['gpsbaudrate_2',['GPSBAUDRATE',['../SensorHubT32_2src_2main_8cpp.html#a372295c11945751efdddfd98372e4aa7',1,'main.cpp']]],
   ['gpsdevice_3',['GPSDEVICE',['../SensorHubT32_2src_2main_8cpp.html#ac5dd8c90defc2c0d78e99d2d5c1a0fd1',1,'main.cpp']]],
-  ['gpsi2cbytes_4',['GPSI2CBYTES',['../ReceiverCode_2src_2main_8cpp.html#ab92133bc8cbae639e681505e0679bc28',1,'GPSI2CBYTES():&#160;main.cpp'],['../SensorHubT32_2src_2main_8cpp.html#ab92133bc8cbae639e681505e0679bc28',1,'GPSI2CBYTES():&#160;main.cpp']]],
+  ['gpsi2cbytes_4',['gpsi2cbytes',['../ReceiverCode_2src_2main_8cpp.html#ab92133bc8cbae639e681505e0679bc28',1,'GPSI2CBYTES:&#160;main.cpp'],['../SensorHubT32_2src_2main_8cpp.html#ab92133bc8cbae639e681505e0679bc28',1,'GPSI2CBYTES:&#160;main.cpp']]],
   ['gpsview_5',['GPSVIEW',['../1Definitions_8h.html#a634deb320121023b685707098898a400',1,'1Definitions.h']]],
   ['graphview_6',['GRAPHVIEW',['../1Definitions_8h.html#a336e60cae8bfcec917447fe101efa4f4',1,'1Definitions.h']]],
   ['gray_7',['Gray',['../1Definitions_8h.html#aab957a0fe1c92d227cced2922967fb97',1,'1Definitions.h']]],

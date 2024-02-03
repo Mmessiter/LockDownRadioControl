@@ -1,6 +1,9 @@
 var searchData=
 [
-  ['z_0',['z',['../classQuaternion.html#a625cb732d8ff3083e7852b86b736ab29',1,'Quaternion::z()'],['../classVectorInt16.html#af1b5c4c297bdd32751ab4519480b919f',1,'VectorInt16::z()'],['../classVectorFloat.html#a54b8e4234e3b48e106d090570755f107',1,'VectorFloat::z()']]],
-  ['z_5fgyrooffset_1',['Z_GyroOffset',['../common_8h.html#a38810fa016b56efa3a91d01b997a1f50',1,'common.h']]],
-  ['zerodatascreen_2',['ZeroDataScreen',['../1Definitions_8h.html#a6da9a1fd0b003151f79eabc702ba80ff',1,'ZeroDataScreen():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a6da9a1fd0b003151f79eabc702ba80ff',1,'ZeroDataScreen():&#160;main.cpp']]]
+  ['x_0',['x',['../classQuaternion.html#a8b80f191a3155cc0158d2b4f4d50b2cb',1,'Quaternion::x'],['../classVectorInt16.html#a648435b4c99e9da9c95549ac344beaec',1,'VectorInt16::x'],['../classVectorFloat.html#a2d8e5159f045ca977769d168af75320c',1,'VectorFloat::x']]],
+  ['x_5fgyrooffset_1',['X_GyroOffset',['../common_8h.html#ae07b17c18ab75286f725d95d66417a4c',1,'common.h']]],
+  ['xpoint_2',['xPoint',['../1Definitions_8h.html#a36b7f1f7174274a965e69e8853a3c90c',1,'1Definitions.h']]],
+  ['xpoints_3',['xPoints',['../1Definitions_8h.html#aa5b385037c6719d392b15313f432b472',1,'1Definitions.h']]],
+  ['xtouchplace_4',['XtouchPlace',['../1Definitions_8h.html#a265a814b38964ab65a1eb65730f4e707',1,'1Definitions.h']]],
+  ['xx1_5',['xx1',['../transceiver_8h.html#af12cb4fe3d6d02738ca7a75e1e1fd722',1,'transceiver.h']]]
 ];

@@ -1,8 +1,15 @@
 <map id="MPU6050::writeMemoryBlock" name="MPU6050::writeMemoryBlock">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,199,105"/>
-<area shape="rect" id="node2" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="297,5,423,31"/>
-<area shape="rect" id="node3" href="$classMPU6050.html#aa0c1753f6d2dacb1942fbef156a075bc" title=" " alt="" coords="270,55,450,80"/>
-<area shape="rect" id="node5" href="$classI2Cdev.html#aa4e39cac6c0eac5112f9132084bcc93e" title=" " alt="" coords="692,129,823,155"/>
-<area shape="rect" id="node6" href="$classMPU6050.html#a45013abb39103e858d432cc720bc351a" title=" " alt="" coords="247,104,473,129"/>
-<area shape="rect" id="node4" href="$classI2Cdev.html#aeb297637ef985cd562da465ba61b7042" title=" " alt="" coords="521,104,644,129"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,80,198,106"/>
+<area shape="rect" id="Node000002" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="295,5,422,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,77,245,40,279,31,281,36,246,45,137,82"/>
+<area shape="rect" id="Node000003" href="$classMPU6050.html#aa0c1753f6d2dacb1942fbef156a075bc" title=" " alt="" coords="269,55,448,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="198,81,253,75,253,81,198,86"/>
+<area shape="rect" id="Node000005" href="$classI2Cdev.html#aa4e39cac6c0eac5112f9132084bcc93e" title=" " alt="" coords="689,129,819,155"/>
+<area shape="poly" id="edge7_Node000001_Node000005" title=" " alt="" coords="133,104,185,124,246,140,362,153,478,156,586,153,674,148,674,153,586,159,478,161,362,158,245,145,184,129,131,109"/>
+<area shape="rect" id="Node000006" href="$classMPU6050.html#a45013abb39103e858d432cc720bc351a" title=" " alt="" coords="246,104,471,130"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="198,99,230,102,230,108,198,104"/>
+<area shape="rect" id="Node000004" href="$classI2Cdev.html#aeb297637ef985cd562da465ba61b7042" title=" " alt="" coords="519,104,641,130"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="423,78,472,89,508,97,507,103,470,94,422,83"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="642,123,674,128,673,133,641,128"/>
+<area shape="poly" id="edge6_Node000006_Node000004" title=" " alt="" coords="471,114,503,114,503,120,471,120"/>
 </map>

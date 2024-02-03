@@ -1,6 +1,9 @@
 <map id="MPU6050::getIntFreefallEnabled" name="MPU6050::getIntFreefallEnabled">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,213,31"/>
-<area shape="rect" id="node2" href="$classI2Cdev.html#abe6d8ea07027d362419de86188981559" title=" " alt="" coords="261,5,372,31"/>
-<area shape="rect" id="node3" href="$classI2Cdev.html#ad3fb41ce124a29f93749d99611c75c33" title=" " alt="" coords="420,5,540,31"/>
-<area shape="rect" id="node4" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="588,5,715,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,213,31"/>
+<area shape="rect" id="Node000002" href="$classI2Cdev.html#abe6d8ea07027d362419de86188981559" title=" " alt="" coords="261,5,370,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="213,16,245,16,245,21,213,21"/>
+<area shape="rect" id="Node000003" href="$classI2Cdev.html#ad3fb41ce124a29f93749d99611c75c33" title=" " alt="" coords="418,5,537,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="370,16,402,16,402,21,370,21"/>
+<area shape="rect" id="Node000004" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="585,5,712,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="538,16,569,16,569,21,538,21"/>
 </map>

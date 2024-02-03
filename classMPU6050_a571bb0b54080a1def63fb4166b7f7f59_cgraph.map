@@ -1,8 +1,13 @@
 <map id="MPU6050::setXGyroOffsetTC" name="MPU6050::setXGyroOffsetTC">
-<area shape="rect" id="node1" title=" " alt="" coords="5,31,197,56"/>
-<area shape="rect" id="node2" href="$classI2Cdev.html#a913371251b6a41520c080115650e1b59" title=" " alt="" coords="245,31,365,56"/>
-<area shape="rect" id="node3" href="$classI2Cdev.html#ad3fb41ce124a29f93749d99611c75c33" title=" " alt="" coords="415,5,535,31"/>
-<area shape="rect" id="node5" href="$classI2Cdev.html#aeb297637ef985cd562da465ba61b7042" title=" " alt="" coords="413,55,536,80"/>
-<area shape="rect" id="node4" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="586,5,713,31"/>
-<area shape="rect" id="node6" href="$classI2Cdev.html#aa4e39cac6c0eac5112f9132084bcc93e" title=" " alt="" coords="584,55,715,80"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,197,56"/>
+<area shape="rect" id="Node000002" href="$classI2Cdev.html#a913371251b6a41520c080115650e1b59" title=" " alt="" coords="245,31,364,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,41,229,41,229,46,197,46"/>
+<area shape="rect" id="Node000003" href="$classI2Cdev.html#ad3fb41ce124a29f93749d99611c75c33" title=" " alt="" coords="414,5,533,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="364,32,398,27,399,32,365,37"/>
+<area shape="rect" id="Node000005" href="$classI2Cdev.html#aeb297637ef985cd562da465ba61b7042" title=" " alt="" coords="412,55,534,80"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="365,49,397,54,396,59,364,55"/>
+<area shape="rect" id="Node000004" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="584,5,710,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="533,16,568,16,568,21,533,21"/>
+<area shape="rect" id="Node000006" href="$classI2Cdev.html#aa4e39cac6c0eac5112f9132084bcc93e" title=" " alt="" coords="582,55,712,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="535,65,567,65,567,70,535,70"/>
 </map>

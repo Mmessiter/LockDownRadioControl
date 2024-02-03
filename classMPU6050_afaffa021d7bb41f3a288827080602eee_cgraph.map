@@ -1,8 +1,13 @@
 <map id="MPU6050::setSlaveEnabled" name="MPU6050::setSlaveEnabled">
-<area shape="rect" id="node1" title=" " alt="" coords="5,31,188,56"/>
-<area shape="rect" id="node2" href="$classI2Cdev.html#aa68890af87de5471d32e583ebbd91acb" title=" " alt="" coords="236,31,349,56"/>
-<area shape="rect" id="node3" href="$classI2Cdev.html#ad3fb41ce124a29f93749d99611c75c33" title=" " alt="" coords="399,5,519,31"/>
-<area shape="rect" id="node5" href="$classI2Cdev.html#aeb297637ef985cd562da465ba61b7042" title=" " alt="" coords="397,55,520,80"/>
-<area shape="rect" id="node4" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="570,5,697,31"/>
-<area shape="rect" id="node6" href="$classI2Cdev.html#aa4e39cac6c0eac5112f9132084bcc93e" title=" " alt="" coords="568,55,699,80"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,188,56"/>
+<area shape="rect" id="Node000002" href="$classI2Cdev.html#aa68890af87de5471d32e583ebbd91acb" title=" " alt="" coords="236,31,348,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,41,220,41,220,46,188,46"/>
+<area shape="rect" id="Node000003" href="$classI2Cdev.html#ad3fb41ce124a29f93749d99611c75c33" title=" " alt="" coords="398,5,517,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="348,32,382,27,383,32,349,38"/>
+<area shape="rect" id="Node000005" href="$classI2Cdev.html#aeb297637ef985cd562da465ba61b7042" title=" " alt="" coords="396,55,518,80"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="349,49,381,54,381,59,348,54"/>
+<area shape="rect" id="Node000004" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="568,5,694,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="517,16,552,16,552,21,517,21"/>
+<area shape="rect" id="Node000006" href="$classI2Cdev.html#aa4e39cac6c0eac5112f9132084bcc93e" title=" " alt="" coords="566,55,696,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="519,65,551,65,551,70,519,70"/>
 </map>

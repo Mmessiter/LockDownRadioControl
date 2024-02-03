@@ -1,22 +1,42 @@
 <map id="loop" name="loop">
-<area shape="rect" id="node1" title=" " alt="" coords="5,327,52,352"/>
-<area shape="rect" id="node2" href="$Quadcopter_2src_2main_8cpp.html#a65f83d03987a32aea44172062214273d" title=" " alt="" coords="106,5,213,31"/>
-<area shape="rect" id="node3" href="$Quadcopter_2src_2main_8cpp.html#a95a8288a82a1168b82213a00cf085a0f" title=" " alt="" coords="113,55,205,80"/>
-<area shape="rect" id="node4" href="$Quadcopter_2src_2main_8cpp.html#a3b309466c71a16820f1d84a81b8cfb93" title=" " alt="" coords="126,104,193,129"/>
-<area shape="rect" id="node5" href="$Quadcopter_2src_2main_8cpp.html#a1b77774f1cb110ce91fbdbd73b0577ce" title=" " alt="" coords="106,153,213,179"/>
-<area shape="rect" id="node7" href="$Quadcopter_2src_2main_8cpp.html#a015cac11ab7ab478d8e82b67890bf3e3" title=" " alt="" coords="112,203,207,228"/>
-<area shape="rect" id="node8" href="$Quadcopter_2src_2main_8cpp.html#a51eb1b9af3af61201788a25660fc0e04" title=" " alt="" coords="121,252,198,277"/>
-<area shape="rect" id="node9" href="$Quadcopter_2src_2main_8cpp.html#ab829dfc83a4be765bcbee507516732fe" title=" " alt="" coords="114,301,205,327"/>
-<area shape="rect" id="node12" href="$Quadcopter_2src_2main_8cpp.html#a9826c5f7dba6f1d578d9a90d06d4a373" title=" " alt="" coords="122,351,197,376"/>
-<area shape="rect" id="node13" href="$Quadcopter_2src_2main_8cpp.html#a368045f053bb43109cbd14504673bff6" title=" " alt="" coords="123,400,196,425"/>
-<area shape="rect" id="node14" href="$Quadcopter_2src_2main_8cpp.html#a6269d32e1ded0138fc78e8a0de4e8c04" title=" " alt="" coords="119,449,200,475"/>
-<area shape="rect" id="node17" href="$Quadcopter_2src_2main_8cpp.html#a5d92a8b955d4f84b865069cd0ea4dfad" title=" " alt="" coords="118,499,201,524"/>
-<area shape="rect" id="node18" href="$Quadcopter_2src_2main_8cpp.html#a8d52798485917f4265993ca62bd6ced4" title=" " alt="" coords="100,548,219,573"/>
-<area shape="rect" id="node19" href="$Quadcopter_2src_2main_8cpp.html#a80f72952996d044a04f25ba02ecf8389" title=" " alt="" coords="104,597,215,623"/>
-<area shape="rect" id="node20" href="$Quadcopter_2src_2main_8cpp.html#adbf254c377f0aa7a03dc3c41d502068d" title=" " alt="" coords="118,647,201,672"/>
-<area shape="rect" id="node6" href="$classSBUS.html#a44376d88b040d2cdf85f1a6d93633935" title=" " alt="" coords="297,153,387,179"/>
-<area shape="rect" id="node10" href="$classMPU6050.html#a574d3093dc131e4251a9b37adf208ca7" title=" " alt="" coords="267,301,417,327"/>
-<area shape="rect" id="node11" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="465,301,592,327"/>
-<area shape="rect" id="node15" href="$Quadcopter_2src_2main_8cpp.html#a5e5346796220b271615a52428f6ec6ca" title=" " alt="" coords="497,449,560,475"/>
-<area shape="rect" id="node16" href="$Quadcopter_2src_2main_8cpp.html#a4278fb2ce7c65958d85f41dd3f585bc4" title=" " alt="" coords="285,475,399,500"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,327,51,352"/>
+<area shape="rect" id="Node000002" href="$Quadcopter_2src_2main_8cpp.html#a65f83d03987a32aea44172062214273d" title=" " alt="" coords="105,5,211,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="28,326,50,181,70,97,83,64,97,41,98,39,102,42,101,44,88,66,76,99,55,182,33,327"/>
+<area shape="rect" id="Node000003" href="$Quadcopter_2src_2main_8cpp.html#a95a8288a82a1168b82213a00cf085a0f" title=" " alt="" coords="112,55,204,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="27,326,29,282,38,220,59,151,75,119,97,90,98,88,102,92,101,93,80,122,64,153,43,221,34,283,32,326"/>
+<area shape="rect" id="Node000004" href="$Quadcopter_2src_2main_8cpp.html#a3b309466c71a16820f1d84a81b8cfb93" title=" " alt="" coords="125,104,191,130"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="28,326,32,290,44,240,64,187,79,162,97,139,110,129,113,133,101,143,83,165,69,189,49,242,38,291,33,327"/>
+<area shape="rect" id="Node000005" href="$Quadcopter_2src_2main_8cpp.html#a1b77774f1cb110ce91fbdbd73b0577ce" title=" " alt="" coords="105,153,211,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="30,325,50,261,70,222,97,188,99,186,103,190,101,192,74,225,55,263,35,327"/>
+<area shape="rect" id="Node000007" href="$Quadcopter_2src_2main_8cpp.html#a015cac11ab7ab478d8e82b67890bf3e3" title=" " alt="" coords="111,203,205,228"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="33,325,57,283,75,259,97,237,101,234,104,239,100,242,79,262,62,285,38,327"/>
+<area shape="rect" id="Node000008" href="$Quadcopter_2src_2main_8cpp.html#a51eb1b9af3af61201788a25660fc0e04" title=" " alt="" coords="120,252,196,278"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="44,324,97,287,105,282,108,287,100,291,47,328"/>
+<area shape="rect" id="Node000009" href="$Quadcopter_2src_2main_8cpp.html#ab829dfc83a4be765bcbee507516732fe" title=" " alt="" coords="113,301,203,327"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="50,333,97,323,98,329,51,338"/>
+<area shape="rect" id="Node000012" href="$Quadcopter_2src_2main_8cpp.html#a9826c5f7dba6f1d578d9a90d06d4a373" title=" " alt="" coords="121,351,195,376"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="51,341,106,351,105,357,50,346"/>
+<area shape="rect" id="Node000013" href="$Quadcopter_2src_2main_8cpp.html#a368045f053bb43109cbd14504673bff6" title=" " alt="" coords="122,400,194,426"/>
+<area shape="poly" id="edge12_Node000001_Node000013" title=" " alt="" coords="47,351,100,387,108,391,106,396,97,391,44,355"/>
+<area shape="rect" id="Node000014" href="$Quadcopter_2src_2main_8cpp.html#a6269d32e1ded0138fc78e8a0de4e8c04" title=" " alt="" coords="118,449,198,475"/>
+<area shape="poly" id="edge13_Node000001_Node000014" title=" " alt="" coords="38,351,62,393,80,416,100,436,106,440,103,444,97,440,76,419,58,396,33,354"/>
+<area shape="rect" id="Node000017" href="$Quadcopter_2src_2main_8cpp.html#a5d92a8b955d4f84b865069cd0ea4dfad" title=" " alt="" coords="117,499,199,524"/>
+<area shape="poly" id="edge17_Node000001_Node000017" title=" " alt="" coords="35,352,55,415,74,453,101,486,105,489,101,493,97,489,70,456,50,417,30,354"/>
+<area shape="rect" id="Node000018" href="$Quadcopter_2src_2main_8cpp.html#a8d52798485917f4265993ca62bd6ced4" title=" " alt="" coords="99,548,217,574"/>
+<area shape="poly" id="edge18_Node000001_Node000018" title=" " alt="" coords="33,353,38,388,49,437,69,489,83,513,101,535,103,537,99,541,97,539,79,516,64,491,44,438,33,389,28,353"/>
+<area shape="rect" id="Node000019" href="$Quadcopter_2src_2main_8cpp.html#a80f72952996d044a04f25ba02ecf8389" title=" " alt="" coords="103,597,213,623"/>
+<area shape="poly" id="edge19_Node000001_Node000019" title=" " alt="" coords="32,352,34,396,43,457,64,525,80,556,101,584,102,586,98,590,97,588,75,559,59,527,38,459,29,396,27,353"/>
+<area shape="rect" id="Node000020" href="$Quadcopter_2src_2main_8cpp.html#adbf254c377f0aa7a03dc3c41d502068d" title=" " alt="" coords="117,647,199,672"/>
+<area shape="poly" id="edge20_Node000001_Node000020" title=" " alt="" coords="33,352,56,496,76,579,88,612,101,634,106,639,102,643,97,637,83,614,71,581,50,497,28,353"/>
+<area shape="rect" id="Node000006" href="$classSBUS.html#a44376d88b040d2cdf85f1a6d93633935" title=" " alt="" coords="295,153,384,179"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="211,164,280,164,280,169,211,169"/>
+<area shape="rect" id="Node000010" href="$classMPU6050.html#a574d3093dc131e4251a9b37adf208ca7" title=" " alt="" coords="265,301,414,327"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="203,312,249,312,249,317,203,317"/>
+<area shape="rect" id="Node000011" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="462,301,589,327"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="415,312,447,312,447,317,415,317"/>
+<area shape="rect" id="Node000015" href="$Quadcopter_2src_2main_8cpp.html#a5e5346796220b271615a52428f6ec6ca" title=" " alt="" coords="494,449,557,475"/>
+<area shape="poly" id="edge14_Node000014_Node000015" title=" " alt="" coords="199,460,479,460,479,465,199,465"/>
+<area shape="rect" id="Node000016" href="$Quadcopter_2src_2main_8cpp.html#a4278fb2ce7c65958d85f41dd3f585bc4" title=" " alt="" coords="283,475,397,500"/>
+<area shape="poly" id="edge15_Node000014_Node000016" title=" " alt="" coords="199,465,267,475,267,480,198,470"/>
+<area shape="poly" id="edge16_Node000016_Node000015" title=" " alt="" coords="397,477,478,466,479,471,398,482"/>
 </map>

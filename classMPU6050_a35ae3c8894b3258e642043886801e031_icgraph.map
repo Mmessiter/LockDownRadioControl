@@ -1,16 +1,29 @@
 <map id="MPU6050::getDeviceID" name="MPU6050::getDeviceID">
-<area shape="rect" id="node1" title=" " alt="" coords="567,203,724,228"/>
-<area shape="rect" id="node2" href="$classMPU6050.html#afdfe715ced419d117c2c47007d631f9e" title=" " alt="" coords="332,5,513,31"/>
-<area shape="rect" id="node3" href="$classMPU6050.html#a7753d3c3f5d9e341f1ed0712079a0d12" title=" " alt="" coords="332,55,513,80"/>
-<area shape="rect" id="node4" href="$classMPU6050.html#ac9a45355c735a09501b6a58c92fb752c" title=" " alt="" coords="333,104,513,129"/>
-<area shape="rect" id="node5" href="$classMPU6050.html#aa0805d780a0f9ee25101db72f8e3e1b5" title=" " alt="" coords="369,153,477,179"/>
-<area shape="rect" id="node8" href="$classMPU6050.html#ae15c8f3eecce2a9c66786a1d602202cd" title=" " alt="" coords="327,203,519,228"/>
-<area shape="rect" id="node9" href="$classMPU6050.html#a447144e025f55b1dc96d7c209c5defd6" title=" " alt="" coords="332,252,513,277"/>
-<area shape="rect" id="node10" href="$classMPU6050.html#a6214fa36c8881f3b02a3e7033678bfb3" title=" " alt="" coords="332,301,513,327"/>
-<area shape="rect" id="node11" href="$classMPU6050.html#a4d1868b660d695eae912ef73407e21e8" title=" " alt="" coords="333,351,513,376"/>
-<area shape="rect" id="node12" href="$classMPU6050.html#a95ffab7b44fce3834236e0813687d11a" title=" " alt="" coords="336,400,509,425"/>
-<area shape="rect" id="node6" href="$classMPU6050.html#a921f5d34643655bf3a584dd52615a526" title="Fully calibrate Accel from ZERO in about 6&#45;7 Loops 600&#45;700 readings." alt="" coords="108,129,279,155"/>
-<area shape="rect" id="node7" href="$classMPU6050.html#a562f930682e7c24628783561acbf51c1" title="Fully calibrate Gyro from ZERO in about 6&#45;7 Loops 600&#45;700 readings." alt="" coords="111,179,275,204"/>
-<area shape="rect" id="node13" href="$Quadcopter_2src_2main_8cpp.html#a2b033451ecabbb1e6e0aec20d547bc25" title=" " alt="" coords="161,400,225,425"/>
-<area shape="rect" id="node14" href="$Quadcopter_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title=" " alt="" coords="5,400,60,425"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="563,203,720,228"/>
+<area shape="rect" id="Node000002" href="$classMPU6050.html#afdfe715ced419d117c2c47007d631f9e" title=" " alt="" coords="330,5,510,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="626,190,608,156,583,117,552,77,514,44,494,34,496,29,517,40,556,74,588,114,613,154,631,188"/>
+<area shape="rect" id="Node000003" href="$classMPU6050.html#a7753d3c3f5d9e341f1ed0712079a0d12" title=" " alt="" coords="330,55,510,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="620,192,575,142,546,116,514,94,490,83,492,78,517,89,549,112,579,138,624,189"/>
+<area shape="rect" id="Node000004" href="$classMPU6050.html#ac9a45355c735a09501b6a58c92fb752c" title=" " alt="" coords="330,104,509,130"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="608,196,564,169,514,143,483,133,485,128,516,138,567,164,611,191"/>
+<area shape="rect" id="Node000005" href="$classMPU6050.html#aa0805d780a0f9ee25101db72f8e3e1b5" title=" " alt="" coords="366,153,473,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="565,201,473,181,474,175,566,196"/>
+<area shape="rect" id="Node000008" href="$classMPU6050.html#ae15c8f3eecce2a9c66786a1d602202cd" title=" " alt="" coords="324,203,515,228"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="548,218,516,218,516,213,548,213"/>
+<area shape="rect" id="Node000009" href="$classMPU6050.html#a447144e025f55b1dc96d7c209c5defd6" title=" " alt="" coords="330,252,510,278"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="566,235,481,254,480,249,565,230"/>
+<area shape="rect" id="Node000010" href="$classMPU6050.html#a6214fa36c8881f3b02a3e7033678bfb3" title=" " alt="" coords="330,301,510,327"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="611,240,567,267,516,293,485,303,483,298,514,288,564,262,608,235"/>
+<area shape="rect" id="Node000011" href="$classMPU6050.html#a4d1868b660d695eae912ef73407e21e8" title=" " alt="" coords="330,351,509,376"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="624,242,579,293,549,319,517,342,492,353,490,348,514,337,546,315,575,289,620,239"/>
+<area shape="rect" id="Node000012" href="$classMPU6050.html#a95ffab7b44fce3834236e0813687d11a" title=" " alt="" coords="334,400,506,426"/>
+<area shape="poly" id="edge11_Node000001_Node000012" title=" " alt="" coords="631,243,613,277,588,317,556,357,517,391,496,402,494,397,514,387,552,354,583,314,608,275,626,241"/>
+<area shape="rect" id="Node000006" href="$classMPU6050.html#a921f5d34643655bf3a584dd52615a526" title="Fully calibrate Accel from ZERO in about 6&#45;7 Loops 600&#45;700 readings." alt="" coords="107,129,276,155"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="350,162,276,154,277,148,351,156"/>
+<area shape="rect" id="Node000007" href="$classMPU6050.html#a562f930682e7c24628783561acbf51c1" title="Fully calibrate Gyro from ZERO in about 6&#45;7 Loops 600&#45;700 readings." alt="" coords="110,179,273,204"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="351,176,274,185,273,180,350,171"/>
+<area shape="rect" id="Node000013" href="$Quadcopter_2src_2main_8cpp.html#a2b033451ecabbb1e6e0aec20d547bc25" title=" " alt="" coords="160,400,223,426"/>
+<area shape="poly" id="edge12_Node000012_Node000013" title=" " alt="" coords="318,416,223,416,223,410,318,410"/>
+<area shape="rect" id="Node000014" href="$Quadcopter_2src_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d" title=" " alt="" coords="5,400,59,426"/>
+<area shape="poly" id="edge13_Node000013_Node000014" title=" " alt="" coords="144,416,59,416,59,410,144,410"/>
 </map>

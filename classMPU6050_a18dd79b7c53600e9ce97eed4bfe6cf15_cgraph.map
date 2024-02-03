@@ -1,8 +1,13 @@
 <map id="MPU6050::setFreefallDetectionCounterDecrement" name="MPU6050::setFreefallDetectionCounterDecrement">
-<area shape="rect" id="node1" title=" " alt="" coords="5,23,208,63"/>
-<area shape="rect" id="node2" href="$classI2Cdev.html#a913371251b6a41520c080115650e1b59" title=" " alt="" coords="256,31,376,56"/>
-<area shape="rect" id="node3" href="$classI2Cdev.html#ad3fb41ce124a29f93749d99611c75c33" title=" " alt="" coords="425,5,545,31"/>
-<area shape="rect" id="node5" href="$classI2Cdev.html#aeb297637ef985cd562da465ba61b7042" title=" " alt="" coords="424,55,547,80"/>
-<area shape="rect" id="node4" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="597,5,723,31"/>
-<area shape="rect" id="node6" href="$classI2Cdev.html#aa4e39cac6c0eac5112f9132084bcc93e" title=" " alt="" coords="595,55,725,80"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,23,207,64"/>
+<area shape="rect" id="Node000002" href="$classI2Cdev.html#a913371251b6a41520c080115650e1b59" title=" " alt="" coords="255,31,374,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="207,41,239,41,239,46,207,46"/>
+<area shape="rect" id="Node000003" href="$classI2Cdev.html#ad3fb41ce124a29f93749d99611c75c33" title=" " alt="" coords="424,5,543,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="374,32,408,27,409,32,375,37"/>
+<area shape="rect" id="Node000005" href="$classI2Cdev.html#aeb297637ef985cd562da465ba61b7042" title=" " alt="" coords="422,55,544,80"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="375,49,407,54,406,59,374,55"/>
+<area shape="rect" id="Node000004" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="594,5,720,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="543,16,578,16,578,21,543,21"/>
+<area shape="rect" id="Node000006" href="$classI2Cdev.html#aa4e39cac6c0eac5112f9132084bcc93e" title=" " alt="" coords="592,55,722,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="545,65,577,65,577,70,545,70"/>
 </map>

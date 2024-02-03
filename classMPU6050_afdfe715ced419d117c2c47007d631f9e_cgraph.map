@@ -1,7 +1,12 @@
 <map id="MPU6050::getXAccelOffset" name="MPU6050::getXAccelOffset">
-<area shape="rect" id="node1" title=" " alt="" coords="5,31,187,56"/>
-<area shape="rect" id="node2" href="$classMPU6050.html#a35ae3c8894b3258e642043886801e031" title=" " alt="" coords="235,5,392,31"/>
-<area shape="rect" id="node5" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="773,31,900,56"/>
-<area shape="rect" id="node3" href="$classI2Cdev.html#a8e5e9742072bb80db06ccd46f52e2b6d" title=" " alt="" coords="440,5,557,31"/>
-<area shape="rect" id="node4" href="$classI2Cdev.html#ad3fb41ce124a29f93749d99611c75c33" title=" " alt="" coords="605,5,725,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,186,56"/>
+<area shape="rect" id="Node000002" href="$classMPU6050.html#a35ae3c8894b3258e642043886801e031" title=" " alt="" coords="234,5,390,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="186,30,218,27,218,32,187,36"/>
+<area shape="rect" id="Node000005" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="770,31,896,56"/>
+<area shape="poly" id="edge5_Node000001_Node000005" title=" " alt="" coords="186,41,754,41,754,46,186,46"/>
+<area shape="rect" id="Node000003" href="$classI2Cdev.html#a8e5e9742072bb80db06ccd46f52e2b6d" title=" " alt="" coords="438,5,554,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="390,16,422,16,422,21,390,21"/>
+<area shape="rect" id="Node000004" href="$classI2Cdev.html#ad3fb41ce124a29f93749d99611c75c33" title=" " alt="" coords="602,5,722,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="555,16,587,16,587,21,555,21"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="723,24,754,29,754,34,722,30"/>
 </map>

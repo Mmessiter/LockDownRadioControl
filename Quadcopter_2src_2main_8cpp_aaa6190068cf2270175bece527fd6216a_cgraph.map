@@ -1,10 +1,18 @@
 <map id="calibrateAttitude" name="calibrateAttitude">
-<area shape="rect" id="node1" title=" " alt="" coords="5,55,121,80"/>
-<area shape="rect" id="node2" href="$Quadcopter_2src_2main_8cpp.html#ab829dfc83a4be765bcbee507516732fe" title=" " alt="" coords="169,5,260,31"/>
-<area shape="rect" id="node5" href="$Quadcopter_2src_2main_8cpp.html#a368045f053bb43109cbd14504673bff6" title=" " alt="" coords="178,55,251,80"/>
-<area shape="rect" id="node6" href="$Quadcopter_2src_2main_8cpp.html#a6269d32e1ded0138fc78e8a0de4e8c04" title=" " alt="" coords="174,104,255,129"/>
-<area shape="rect" id="node3" href="$classMPU6050.html#a574d3093dc131e4251a9b37adf208ca7" title=" " alt="" coords="308,5,459,31"/>
-<area shape="rect" id="node4" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="507,5,633,31"/>
-<area shape="rect" id="node7" href="$Quadcopter_2src_2main_8cpp.html#a5e5346796220b271615a52428f6ec6ca" title=" " alt="" coords="539,105,601,131"/>
-<area shape="rect" id="node8" href="$Quadcopter_2src_2main_8cpp.html#a4278fb2ce7c65958d85f41dd3f585bc4" title=" " alt="" coords="326,131,441,156"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,55,121,80"/>
+<area shape="rect" id="Node000002" href="$Quadcopter_2src_2main_8cpp.html#ab829dfc83a4be765bcbee507516732fe" title=" " alt="" coords="169,5,258,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,51,157,34,158,39,106,57"/>
+<area shape="rect" id="Node000005" href="$Quadcopter_2src_2main_8cpp.html#a368045f053bb43109cbd14504673bff6" title=" " alt="" coords="177,55,250,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="121,65,161,65,161,70,121,70"/>
+<area shape="rect" id="Node000006" href="$Quadcopter_2src_2main_8cpp.html#a6269d32e1ded0138fc78e8a0de4e8c04" title=" " alt="" coords="173,104,254,130"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="106,78,159,96,157,101,104,84"/>
+<area shape="rect" id="Node000003" href="$classMPU6050.html#a574d3093dc131e4251a9b37adf208ca7" title=" " alt="" coords="306,5,455,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="258,16,290,16,290,21,258,21"/>
+<area shape="rect" id="Node000004" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="503,5,630,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="456,16,488,16,488,21,456,21"/>
+<area shape="rect" id="Node000007" href="$Quadcopter_2src_2main_8cpp.html#a5e5346796220b271615a52428f6ec6ca" title=" " alt="" coords="535,105,598,131"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="254,114,520,115,520,121,254,120"/>
+<area shape="rect" id="Node000008" href="$Quadcopter_2src_2main_8cpp.html#a4278fb2ce7c65958d85f41dd3f585bc4" title=" " alt="" coords="324,131,438,156"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="255,121,309,129,308,135,254,126"/>
+<area shape="poly" id="edge8_Node000008_Node000007" title=" " alt="" coords="438,133,519,122,520,127,439,138"/>
 </map>

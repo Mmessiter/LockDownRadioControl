@@ -1,7 +1,14 @@
 <map id="MPU9250::enableWakeOnMotion" name="MPU9250::enableWakeOnMotion">
-<area shape="rect" id="node1" title=" " alt="" coords="5,81,219,107"/>
-<area shape="rect" id="node2" href="$classMPU9250.html#aeca0dc4aed0420c54cf13acba0bdf4d5" title=" " alt="" coords="267,56,475,81"/>
-<area shape="rect" id="node5" href="$classMPU9250.html#a5712e6a1fa4a34cf44234c1e44f1ca52" title=" " alt="" coords="783,56,945,81"/>
-<area shape="rect" id="node3" href="$classMPU9250.html#a8882aa5158664912c4d4354739d2bc23" title=" " alt="" coords="523,5,735,31"/>
-<area shape="rect" id="node4" href="$classMPU9250.html#a1c68fa77b74761fdb2eac5f7c0887f48" title=" " alt="" coords="993,31,1160,56"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,81,218,107"/>
+<area shape="rect" id="Node000002" href="$classMPU9250.html#aeca0dc4aed0420c54cf13acba0bdf4d5" title=" " alt="" coords="266,56,473,82"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,81,250,78,250,83,218,86"/>
+<area shape="rect" id="Node000005" href="$classMPU9250.html#a5712e6a1fa4a34cf44234c1e44f1ca52" title=" " alt="" coords="780,56,942,82"/>
+<area shape="poly" id="edge7_Node000001_Node000005" title=" " alt="" coords="218,93,473,92,627,84,764,74,765,79,627,89,473,97,218,99"/>
+<area shape="rect" id="Node000003" href="$classMPU9250.html#a8882aa5158664912c4d4354739d2bc23" title=" " alt="" coords="521,5,732,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="438,53,543,32,544,37,439,58"/>
+<area shape="poly" id="edge6_Node000002_Node000005" title=" " alt="" coords="473,66,765,66,765,72,473,72"/>
+<area shape="rect" id="Node000004" href="$classMPU9250.html#a1c68fa77b74761fdb2eac5f7c0887f48" title=" " alt="" coords="990,31,1155,56"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="733,22,974,35,974,41,733,27"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="690,29,784,50,783,55,689,34"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="941,57,974,53,974,58,942,62"/>
 </map>

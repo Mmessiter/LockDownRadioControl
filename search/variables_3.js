@@ -48,7 +48,7 @@ var searchData=
   ['compresseddata_45',['CompressedData',['../structCD.html#a5b881ba5098e3896258185c0932d7db7',1,'CD']]],
   ['config_46',['CONFIG',['../classMPU9250.html#aab05dcc81b5628ed687e152263c52966',1,'MPU9250']]],
   ['confirmed_47',['Confirmed',['../1Definitions_8h.html#a5034d37305ec158f8bc486558dcd8f53',1,'1Definitions.h']]],
-  ['connected_48',['Connected',['../common_8h.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;common.h'],['../1Definitions_8h.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected():&#160;1Definitions.h']]],
+  ['connected_48',['connected',['../common_8h.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected:&#160;common.h'],['../1Definitions_8h.html#a5318db734c71b1b08208ef690f1f0146',1,'Connected:&#160;1Definitions.h']]],
   ['connectionassessseconds_49',['ConnectionAssessSeconds',['../1Definitions_8h.html#ac58a25a73bcc60b4f892b7ad285d7adc',1,'1Definitions.h']]],
   ['copytrimstoall_50',['CopyTrimsToAll',['../1Definitions_8h.html#ae737f11637caa631c30255f614800ba6',1,'1Definitions.h']]],
   ['countdownindex_51',['CountDownIndex',['../1Definitions_8h.html#adfcd3241fc01c3231bd87d8711016b15',1,'1Definitions.h']]],

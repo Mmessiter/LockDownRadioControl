@@ -1,6 +1,9 @@
 <map id="AttachServos" name="AttachServos">
-<area shape="rect" id="node1" title=" " alt="" coords="5,31,107,56"/>
-<area shape="rect" id="node2" href="$classSBUS.html#a5c2fccbffff0bd17ed522529fd6b2d8f" title=" " alt="" coords="155,5,251,31"/>
-<area shape="rect" id="node4" href="$common_8h.html#a5424788640aaa8d535d6ea077949ef82" title=" " alt="" coords="168,55,237,80"/>
-<area shape="rect" id="node3" href="$classSBUS.html#a58a6caab31090f4019d4f2439ab20fc2" title=" " alt="" coords="299,5,441,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,106,56"/>
+<area shape="rect" id="Node000002" href="$classSBUS.html#a5c2fccbffff0bd17ed522529fd6b2d8f" title=" " alt="" coords="154,5,249,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,32,138,26,139,32,107,37"/>
+<area shape="rect" id="Node000004" href="$common_8h.html#a5424788640aaa8d535d6ea077949ef82" title=" " alt="" coords="167,55,236,80"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="107,49,153,57,152,62,106,54"/>
+<area shape="rect" id="Node000003" href="$classSBUS.html#a58a6caab31090f4019d4f2439ab20fc2" title=" " alt="" coords="297,5,438,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="250,16,282,16,282,21,250,21"/>
 </map>

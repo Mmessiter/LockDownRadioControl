@@ -1,8 +1,13 @@
 <map id="MPU6050::setWakeCycleEnabled" name="MPU6050::setWakeCycleEnabled">
-<area shape="rect" id="node1" title=" " alt="" coords="5,31,220,56"/>
-<area shape="rect" id="node2" href="$classI2Cdev.html#aa68890af87de5471d32e583ebbd91acb" title=" " alt="" coords="268,31,381,56"/>
-<area shape="rect" id="node3" href="$classI2Cdev.html#ad3fb41ce124a29f93749d99611c75c33" title=" " alt="" coords="431,5,551,31"/>
-<area shape="rect" id="node5" href="$classI2Cdev.html#aeb297637ef985cd562da465ba61b7042" title=" " alt="" coords="429,55,552,80"/>
-<area shape="rect" id="node4" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="602,5,729,31"/>
-<area shape="rect" id="node6" href="$classI2Cdev.html#aa4e39cac6c0eac5112f9132084bcc93e" title=" " alt="" coords="600,55,731,80"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,220,56"/>
+<area shape="rect" id="Node000002" href="$classI2Cdev.html#aa68890af87de5471d32e583ebbd91acb" title=" " alt="" coords="268,31,380,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="220,41,252,41,252,46,220,46"/>
+<area shape="rect" id="Node000003" href="$classI2Cdev.html#ad3fb41ce124a29f93749d99611c75c33" title=" " alt="" coords="430,5,549,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="380,32,414,27,415,32,381,38"/>
+<area shape="rect" id="Node000005" href="$classI2Cdev.html#aeb297637ef985cd562da465ba61b7042" title=" " alt="" coords="428,55,550,80"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="381,49,413,54,413,59,380,54"/>
+<area shape="rect" id="Node000004" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="600,5,726,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="549,16,584,16,584,21,549,21"/>
+<area shape="rect" id="Node000006" href="$classI2Cdev.html#aa4e39cac6c0eac5112f9132084bcc93e" title=" " alt="" coords="598,55,728,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="551,65,583,65,583,70,551,70"/>
 </map>

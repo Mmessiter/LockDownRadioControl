@@ -1,13 +1,13 @@
 var searchData=
 [
   ['failedsafe_0',['FailedSafe',['../common_8h.html#a6aa44585f8f06cb4f4760da8352b2df7',1,'common.h']]],
-  ['failsafechannel_1',['FailSafeChannel',['../common_8h.html#aeda79da3882f657a3eaefc5800122da5',1,'FailSafeChannel():&#160;common.h'],['../1Definitions_8h.html#adcce7cd9ef6dc6629d7409fc5f5c13fc',1,'FailSafeChannel():&#160;1Definitions.h']]],
+  ['failsafechannel_1',['failsafechannel',['../common_8h.html#aeda79da3882f657a3eaefc5800122da5',1,'FailSafeChannel:&#160;common.h'],['../1Definitions_8h.html#adcce7cd9ef6dc6629d7409fc5f5c13fc',1,'FailSafeChannel:&#160;1Definitions.h']]],
   ['failsafedataloaded_2',['FailSafeDataLoaded',['../common_8h.html#a08ed7a870be8e84ae26ee0b972866bb3',1,'common.h']]],
   ['failsafesent_3',['FailSafeSent',['../common_8h.html#a97bbae82012a7c41f47dcb8ce8a48a90',1,'common.h']]],
   ['failsafetimer_4',['FailSafeTimer',['../1Definitions_8h.html#abe06b5671242a2e75a695a87a3159a00',1,'1Definitions.h']]],
-  ['fhss_5fchannels_5',['FHSS_Channels',['../namespaceFHSS__data.html#a181cb451e5e95fa7cfcb19fff25b9318',1,'FHSS_data::FHSS_Channels()'],['../common_8h.html#ad8056611eb984e8cacf9f0e526815a99',1,'FHSS_Channels():&#160;common.h']]],
+  ['fhss_5fchannels_5',['fhss_channels',['../namespaceFHSS__data.html#a181cb451e5e95fa7cfcb19fff25b9318',1,'FHSS_data::FHSS_Channels'],['../common_8h.html#ad8056611eb984e8cacf9f0e526815a99',1,'FHSS_Channels:&#160;common.h']]],
   ['fhss_5frecovery_5fchannels_6',['FHSS_Recovery_Channels',['../common_8h.html#a45400cd0009b7631aa0d578dbbac2a90',1,'common.h']]],
-  ['fhsschpointer_7',['FHSSChPointer',['../namespaceFHSS__data.html#a9d000f86fb280637a15ae47d0a339023',1,'FHSS_data::FHSSChPointer()'],['../common_8h.html#a76b48a1dfbe2bd97ee5e0479ff16e8ef',1,'FHSSChPointer():&#160;common.h']]],
+  ['fhsschpointer_7',['fhsschpointer',['../namespaceFHSS__data.html#a9d000f86fb280637a15ae47d0a339023',1,'FHSS_data::FHSSChPointer'],['../common_8h.html#a76b48a1dfbe2bd97ee5e0479ff16e8ef',1,'FHSSChPointer:&#160;common.h']]],
   ['fhssrecoverypointer_8',['FHSSRecoveryPointer',['../namespaceFHSS__data.html#a3bc5776f7d9f04adaf25d4659c02f92e',1,'FHSS_data']]],
   ['fifo_5faccel_9',['FIFO_ACCEL',['../classMPU9250.html#ad24cca1803d0d63bcf8f0c800170e03a',1,'MPU9250']]],
   ['fifo_5fcount_10',['FIFO_COUNT',['../classMPU9250.html#a1b50ee530507b784e6bc3aa9195c9b80',1,'MPU9250']]],

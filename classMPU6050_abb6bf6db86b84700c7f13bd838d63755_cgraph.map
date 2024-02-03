@@ -1,8 +1,13 @@
 <map id="MPU6050::setDMPEnabled" name="MPU6050::setDMPEnabled">
-<area shape="rect" id="node1" title=" " alt="" coords="5,31,184,56"/>
-<area shape="rect" id="node2" href="$classI2Cdev.html#aa68890af87de5471d32e583ebbd91acb" title=" " alt="" coords="232,31,345,56"/>
-<area shape="rect" id="node3" href="$classI2Cdev.html#ad3fb41ce124a29f93749d99611c75c33" title=" " alt="" coords="395,5,515,31"/>
-<area shape="rect" id="node5" href="$classI2Cdev.html#aeb297637ef985cd562da465ba61b7042" title=" " alt="" coords="393,55,516,80"/>
-<area shape="rect" id="node4" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="566,5,693,31"/>
-<area shape="rect" id="node6" href="$classI2Cdev.html#aa4e39cac6c0eac5112f9132084bcc93e" title=" " alt="" coords="564,55,695,80"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,184,56"/>
+<area shape="rect" id="Node000002" href="$classI2Cdev.html#aa68890af87de5471d32e583ebbd91acb" title=" " alt="" coords="232,31,344,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="184,41,216,41,216,46,184,46"/>
+<area shape="rect" id="Node000003" href="$classI2Cdev.html#ad3fb41ce124a29f93749d99611c75c33" title=" " alt="" coords="394,5,513,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="344,32,378,27,379,32,345,38"/>
+<area shape="rect" id="Node000005" href="$classI2Cdev.html#aeb297637ef985cd562da465ba61b7042" title=" " alt="" coords="392,55,514,80"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="345,49,377,54,377,59,344,54"/>
+<area shape="rect" id="Node000004" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="564,5,690,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="513,16,548,16,548,21,513,21"/>
+<area shape="rect" id="Node000006" href="$classI2Cdev.html#aa4e39cac6c0eac5112f9132084bcc93e" title=" " alt="" coords="562,55,692,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="515,65,547,65,547,70,515,70"/>
 </map>

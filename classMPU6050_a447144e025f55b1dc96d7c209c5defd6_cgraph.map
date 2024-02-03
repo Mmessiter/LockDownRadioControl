@@ -1,9 +1,15 @@
 <map id="MPU6050::setXAccelOffset" name="MPU6050::setXAccelOffset">
-<area shape="rect" id="node1" title=" " alt="" coords="5,31,187,56"/>
-<area shape="rect" id="node2" href="$classMPU6050.html#a35ae3c8894b3258e642043886801e031" title=" " alt="" coords="235,5,392,31"/>
-<area shape="rect" id="node6" href="$classI2Cdev.html#acbe68a802d6a177301736e60bedd1def" title=" " alt="" coords="250,55,377,80"/>
-<area shape="rect" id="node3" href="$classI2Cdev.html#a8e5e9742072bb80db06ccd46f52e2b6d" title=" " alt="" coords="449,5,566,31"/>
-<area shape="rect" id="node4" href="$classI2Cdev.html#ad3fb41ce124a29f93749d99611c75c33" title=" " alt="" coords="623,5,743,31"/>
-<area shape="rect" id="node5" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="791,5,917,31"/>
-<area shape="rect" id="node7" href="$classI2Cdev.html#aae37c0526e4b4730a5b2ffd752fd8b21" title=" " alt="" coords="440,55,575,80"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,186,56"/>
+<area shape="rect" id="Node000002" href="$classMPU6050.html#a35ae3c8894b3258e642043886801e031" title=" " alt="" coords="234,5,390,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="186,30,218,27,218,32,187,36"/>
+<area shape="rect" id="Node000006" href="$classI2Cdev.html#acbe68a802d6a177301736e60bedd1def" title=" " alt="" coords="249,55,375,80"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="187,51,233,56,233,61,186,56"/>
+<area shape="rect" id="Node000003" href="$classI2Cdev.html#a8e5e9742072bb80db06ccd46f52e2b6d" title=" " alt="" coords="447,5,563,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="391,16,431,16,431,21,391,21"/>
+<area shape="rect" id="Node000004" href="$classI2Cdev.html#ad3fb41ce124a29f93749d99611c75c33" title=" " alt="" coords="619,5,739,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="563,16,604,16,604,21,563,21"/>
+<area shape="rect" id="Node000005" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="787,5,913,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="739,16,771,16,771,21,739,21"/>
+<area shape="rect" id="Node000007" href="$classI2Cdev.html#aae37c0526e4b4730a5b2ffd752fd8b21" title=" " alt="" coords="438,55,571,80"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="375,65,423,65,423,70,375,70"/>
 </map>

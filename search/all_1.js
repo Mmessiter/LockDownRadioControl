@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['1definitions_2eh_0',['1Definitions.h',['../1Definitions_8h.html',1,'']]]
+  ['0_20pins_0',['TEENSY 4.0 PINS',['../RXCODE.html#rxpinout',1,'']]]
 ];

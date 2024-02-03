@@ -1,8 +1,13 @@
 <map id="MPU6050::resetAccelerometerPath" name="MPU6050::resetAccelerometerPath">
-<area shape="rect" id="node1" title=" " alt="" coords="5,31,232,56"/>
-<area shape="rect" id="node2" href="$classI2Cdev.html#aa68890af87de5471d32e583ebbd91acb" title=" " alt="" coords="280,31,393,56"/>
-<area shape="rect" id="node3" href="$classI2Cdev.html#ad3fb41ce124a29f93749d99611c75c33" title=" " alt="" coords="443,5,563,31"/>
-<area shape="rect" id="node5" href="$classI2Cdev.html#aeb297637ef985cd562da465ba61b7042" title=" " alt="" coords="441,55,564,80"/>
-<area shape="rect" id="node4" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="614,5,741,31"/>
-<area shape="rect" id="node6" href="$classI2Cdev.html#aa4e39cac6c0eac5112f9132084bcc93e" title=" " alt="" coords="612,55,743,80"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,231,56"/>
+<area shape="rect" id="Node000002" href="$classI2Cdev.html#aa68890af87de5471d32e583ebbd91acb" title=" " alt="" coords="279,31,391,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="231,41,263,41,263,46,231,46"/>
+<area shape="rect" id="Node000003" href="$classI2Cdev.html#ad3fb41ce124a29f93749d99611c75c33" title=" " alt="" coords="441,5,560,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="391,32,425,27,426,32,392,38"/>
+<area shape="rect" id="Node000005" href="$classI2Cdev.html#aeb297637ef985cd562da465ba61b7042" title=" " alt="" coords="439,55,561,80"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="392,49,424,54,424,59,391,54"/>
+<area shape="rect" id="Node000004" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="611,5,737,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="560,16,595,16,595,21,560,21"/>
+<area shape="rect" id="Node000006" href="$classI2Cdev.html#aa4e39cac6c0eac5112f9132084bcc93e" title=" " alt="" coords="609,55,739,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="562,65,594,65,594,70,562,70"/>
 </map>

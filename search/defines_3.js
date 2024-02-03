@@ -2,11 +2,11 @@ var searchData=
 [
   ['calibratelimits_0',['CALIBRATELIMITS',['../1Definitions_8h.html#a8d671ce93ba33f2f6b5c314108d3592d',1,'1Definitions.h']]],
   ['calibrateview_1',['CALIBRATEVIEW',['../1Definitions_8h.html#ad2d9a19870ac880f7f6b2485345ccb6d',1,'1Definitions.h']]],
-  ['ce_5foff_2',['CE_OFF',['../common_8h.html#a45f36ff4dbd4f62c8d80b9cd22a05e75',1,'CE_OFF():&#160;common.h'],['../1Definitions_8h.html#a45f36ff4dbd4f62c8d80b9cd22a05e75',1,'CE_OFF():&#160;1Definitions.h']]],
-  ['ce_5fon_3',['CE_ON',['../common_8h.html#af59ccf587172ff1ab593f7a51276a720',1,'CE_ON():&#160;common.h'],['../1Definitions_8h.html#af59ccf587172ff1ab593f7a51276a720',1,'CE_ON():&#160;1Definitions.h']]],
+  ['ce_5foff_2',['ce_off',['../common_8h.html#a45f36ff4dbd4f62c8d80b9cd22a05e75',1,'CE_OFF:&#160;common.h'],['../1Definitions_8h.html#a45f36ff4dbd4f62c8d80b9cd22a05e75',1,'CE_OFF:&#160;1Definitions.h']]],
+  ['ce_5fon_3',['ce_on',['../common_8h.html#af59ccf587172ff1ab593f7a51276a720',1,'CE_ON:&#160;common.h'],['../1Definitions_8h.html#af59ccf587172ff1ab593f7a51276a720',1,'CE_ON:&#160;1Definitions.h']]],
   ['ce_5fpin_4',['CE_PIN',['../1Definitions_8h.html#abb388c9dfbdca89b280a12c4af1a030f',1,'1Definitions.h']]],
   ['centresticks_5',['CENTRESTICKS',['../1Definitions_8h.html#a53bc52cfc1253f58c2f3835aa39205a3',1,'1Definitions.h']]],
-  ['channelsused_6',['CHANNELSUSED',['../common_8h.html#ad143c01c2b36424b292b568f48cbe014',1,'CHANNELSUSED():&#160;common.h'],['../1Definitions_8h.html#ad143c01c2b36424b292b568f48cbe014',1,'CHANNELSUSED():&#160;1Definitions.h']]],
+  ['channelsused_6',['channelsused',['../common_8h.html#ad143c01c2b36424b292b568f48cbe014',1,'CHANNELSUSED:&#160;common.h'],['../1Definitions_8h.html#ad143c01c2b36424b292b568f48cbe014',1,'CHANNELSUSED:&#160;1Definitions.h']]],
   ['charsmax_7',['CHARSMAX',['../1Definitions_8h.html#a2214b1aa5fbdf61eaa9061c051d3826d',1,'1Definitions.h']]],
   ['checksumerror_8',['CHECKSUMERROR',['../1Definitions_8h.html#a3ea624f3ab1d95d1843e9c4024425a7a',1,'1Definitions.h']]],
   ['clickone_9',['CLICKONE',['../1Definitions_8h.html#a896a6492ebc1b214b4e7e5ac4c3db2cd',1,'1Definitions.h']]],
@@ -15,7 +15,7 @@ var searchData=
   ['compressedwords_12',['COMPRESSEDWORDS',['../1Definitions_8h.html#a461caf7198eaa60ce589088ff38b97cb',1,'1Definitions.h']]],
   ['connectedmsg_13',['CONNECTEDMSG',['../1Definitions_8h.html#a2a2b035486dce4d0e5d5e956da201121',1,'1Definitions.h']]],
   ['cruise_14',['CRUISE',['../1Definitions_8h.html#afe63280e8006a836668a21fa62ed7630',1,'1Definitions.h']]],
-  ['csn_5foff_15',['CSN_OFF',['../common_8h.html#a834c4941fd9b037a25a8053912995e61',1,'CSN_OFF():&#160;common.h'],['../1Definitions_8h.html#a834c4941fd9b037a25a8053912995e61',1,'CSN_OFF():&#160;1Definitions.h']]],
-  ['csn_5fon_16',['CSN_ON',['../common_8h.html#ab22ef6e01ad09b637ca55f3fcd3cae94',1,'CSN_ON():&#160;common.h'],['../1Definitions_8h.html#ab22ef6e01ad09b637ca55f3fcd3cae94',1,'CSN_ON():&#160;1Definitions.h']]],
+  ['csn_5foff_15',['csn_off',['../common_8h.html#a834c4941fd9b037a25a8053912995e61',1,'CSN_OFF:&#160;common.h'],['../1Definitions_8h.html#a834c4941fd9b037a25a8053912995e61',1,'CSN_OFF:&#160;1Definitions.h']]],
+  ['csn_5fon_16',['csn_on',['../common_8h.html#ab22ef6e01ad09b637ca55f3fcd3cae94',1,'CSN_ON:&#160;common.h'],['../1Definitions_8h.html#ab22ef6e01ad09b637ca55f3fcd3cae94',1,'CSN_ON:&#160;1Definitions.h']]],
   ['csn_5fpin_17',['CSN_PIN',['../1Definitions_8h.html#a6c4d73944fe1bd2ff7ceee867c315ac1',1,'1Definitions.h']]]
 ];

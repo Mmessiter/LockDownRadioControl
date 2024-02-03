@@ -1,9 +1,17 @@
 <map id="MPU6050::writeProgMemoryBlock" name="MPU6050::writeProgMemoryBlock">
-<area shape="rect" id="node1" title=" " alt="" coords="5,73,192,113"/>
-<area shape="rect" id="node2" href="$classMPU6050.html#aae135772b45e1c7968b55f4f01b3757f" title=" " alt="" coords="240,80,433,105"/>
-<area shape="rect" id="node3" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="531,5,658,31"/>
-<area shape="rect" id="node4" href="$classMPU6050.html#aa0c1753f6d2dacb1942fbef156a075bc" title=" " alt="" coords="505,55,685,80"/>
-<area shape="rect" id="node6" href="$classI2Cdev.html#aa4e39cac6c0eac5112f9132084bcc93e" title=" " alt="" coords="927,129,1057,155"/>
-<area shape="rect" id="node7" href="$classMPU6050.html#a45013abb39103e858d432cc720bc351a" title=" " alt="" coords="481,104,708,129"/>
-<area shape="rect" id="node5" href="$classI2Cdev.html#aeb297637ef985cd562da465ba61b7042" title=" " alt="" coords="756,104,879,129"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,72,192,113"/>
+<area shape="rect" id="Node000002" href="$classMPU6050.html#aae135772b45e1c7968b55f4f01b3757f" title=" " alt="" coords="240,80,432,106"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,90,224,90,224,96,192,96"/>
+<area shape="rect" id="Node000003" href="$classI2Cdev.html#aca9c503da5cffd6ac6f8eff9b195c5f4" title=" " alt="" coords="530,5,656,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="370,77,479,40,514,31,515,36,481,45,372,82"/>
+<area shape="rect" id="Node000004" href="$classMPU6050.html#aa0c1753f6d2dacb1942fbef156a075bc" title=" " alt="" coords="503,55,682,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="432,81,487,75,488,81,433,86"/>
+<area shape="rect" id="Node000006" href="$classI2Cdev.html#aa4e39cac6c0eac5112f9132084bcc93e" title=" " alt="" coords="924,129,1053,155"/>
+<area shape="poly" id="edge8_Node000002_Node000006" title=" " alt="" coords="367,104,419,124,480,140,596,153,713,156,820,153,908,148,909,153,820,159,713,161,596,158,480,145,418,129,366,109"/>
+<area shape="rect" id="Node000007" href="$classMPU6050.html#a45013abb39103e858d432cc720bc351a" title=" " alt="" coords="480,104,705,130"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="433,99,465,102,464,108,432,104"/>
+<area shape="rect" id="Node000005" href="$classI2Cdev.html#aeb297637ef985cd562da465ba61b7042" title=" " alt="" coords="753,104,876,130"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="658,78,706,89,743,97,741,103,705,94,656,83"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="877,123,909,128,908,133,876,128"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="706,114,737,114,737,120,706,120"/>
 </map>
