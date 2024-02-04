@@ -255,8 +255,6 @@ FASTRUN void ShowMotorTimer()
 
     if (TimesUp) return;
 
-    if (CurrentView != FRONTVIEW) return;
-
     uint8_t Recording[10] = {ONEMINUTE, TWOMINUTES, THREEMINUTES, FOURMINUTES, FIVEMINUTES, SIXMINUTES, SEVENMINUTES, EIGHTMINUTES, NINEMINUTES, TENMINUTES};
 
     uint8_t Cdown[10] = {TEN, NINE, EIGHT, SEVEN, SIX, FIVE, FOUR, THREE, TWO, ONE};
@@ -5671,7 +5669,8 @@ void FASTRUN ManageTransmitter()
     if (RightNow - LastTimeRead >= 1000) {                                                                     // Only once a second for these..                                                                                      
         SendAllAgain();           
         GetGoodPacketsPerSecond();                                                                             // Do stats                                                                                         
-        if (CurrentView != BLANKVIEW) {ReadTime();SendOutstandingParameters();UpdateTrimView();ShowMotorTimer();}  
+        if (CurrentView != BLANKVIEW) {UpdateTrimView();}  
+        ReadTime();ShowMotorTimer();SendOutstandingParameters();
         LastTimeRead = millis();                                                                  
         return;                                                                                                // That's enough housekeeping this time around
     }
