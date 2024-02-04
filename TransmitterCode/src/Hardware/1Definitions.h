@@ -86,7 +86,7 @@
     #define SHOWCOMMSDELAY         100                          // ms pauses between updated info on NEXTION
     #define WARMUPDELAY            300                          // fails at 200 so must be >200 ...
     #define SCREENCHANGEWAIT       10                           // allow 10ms for screen to appear
-    #define BATTERY_CHECK_INTERVAL 2000                         // 2 seconds between battery checks
+    #define BATTERY_CHECK_INTERVAL 1000                         // 2 seconds between battery checks
    
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
