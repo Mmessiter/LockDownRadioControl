@@ -31,7 +31,7 @@
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 #define SECOND_TRANSCEIVER    1
-#define DOSTABILISATION       1 
+//#define DOSTABILISATION       1 
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

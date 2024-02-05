@@ -5669,8 +5669,8 @@ void FASTRUN ManageTransmitter()
     if (RightNow - LastTimeRead >= 1000) {                                                                     // Only once a second for these..                                                                                      
         SendAllAgain();           
         GetGoodPacketsPerSecond();                                                                             // Do stats                                                                                         
-        if (CurrentView != BLANKVIEW) {UpdateTrimView();}  
-        ReadTime();ShowMotorTimer();SendOutstandingParameters();
+        if (CurrentView != BLANKVIEW) {ReadTime();UpdateTrimView();}  
+        ShowMotorTimer();SendOutstandingParameters();
         LastTimeRead = millis();                                                                  
         return;                                                                                                // That's enough housekeeping this time around
     }
