@@ -3527,6 +3527,7 @@ bool GetConfirmation(char* goback, char* Prompt)
         CheckPowerOffButton();
         if (BoundFlag && ModelMatched) {
            GetNewChannelValues();
+           FixMotorChannel(); // heer
            SendData();
         }
         
@@ -3558,6 +3559,7 @@ void MsgBox(char* goback, char* Prompt)
         KickTheDog();
          if (BoundFlag && ModelMatched) {
            GetNewChannelValues();
+           FixMotorChannel();
            SendData();
         }
     }

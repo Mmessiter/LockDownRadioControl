@@ -1025,6 +1025,7 @@ void DelayWithDog(uint32_t HowLong)
         KickTheDog();
         if (ModelMatched && BoundFlag){
             GetNewChannelValues();                                      // Get new channel values from tx even during delay
+            FixMotorChannel();
             SendData();                                                 // Send new channel values to servos even during delay
         }
     }
