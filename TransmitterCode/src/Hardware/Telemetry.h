@@ -42,6 +42,7 @@ FASTRUN bool CheckTXVolts()
             SendText(t17, nbuf);
         }
     }
+  
     return TXWarningFlag;
 }
 
@@ -49,10 +50,11 @@ FASTRUN bool CheckTXVolts()
 
 FASTRUN bool CheckRXVolts()
 {
+    static bool    RXWarningFlag   = false;
     float   ReadVolts       = 0;
     uint8_t GreenPercentBar = 0;
     char    JRX[]           = "JRX";
-    bool    RXWarningFlag   = false;
+    
     char    Vbuf[10];
     char    RXBattInfo[80];
     float   VoltsPerCell     = 0;
@@ -88,16 +90,12 @@ FASTRUN bool CheckRXVolts()
                 SendText(t6, Vbuf);
             }
 
-            if (VoltsPerCell < StopFlyingVoltsPerCell && GreenPercentBar > 0) {
-                if (!LowVoltstimer) LowVoltstimer = millis();      // Start a timer if not running already
-                if (millis() - LowVoltstimer > LOW_VOLTAGE_TIME) { // Is RX Lipo down to storage volts for over 5 seconds?
+            if ((VoltsPerCell <= StopFlyingVoltsPerCell) && (BoundFlag && ModelMatched)) {
                     RXWarningFlag = true;
                     WarningSound  = STORAGECHARGE;
-                }
             }
-            else {
-                LowVoltstimer = 0;
-                RXWarningFlag = false; // Reset timer as voltage recovered
+            if (VoltsPerCell > StopFlyingVoltsPerCell) {
+                    RXWarningFlag = false;                                  // Reset warning as voltage recovered
             }
         }
     }
@@ -114,22 +112,20 @@ FASTRUN bool CheckRXVolts()
 /*********************************************************************************************************************************/
 
 void CheckBatteryStates(){
-    
+    static uint32_t WarnTimer = 0;
     char         WarnNow[]             = "vis Warning,1";
     char         WarnOff[]             = "vis Warning,0";
-    static uint32_t LocalTimer = 0;
-    if (((millis()) - LedGreenMoment) < 5000)  ForceVoltDisplay = true;
-    if ((millis() - LocalTimer < BATTERY_CHECK_INTERVAL) && (!ForceVoltDisplay)) return;    // Only check every 15 seconds unless forced or recently connected
-    
-    LocalTimer = millis();
-    ForceVoltDisplay = false;
-    if (CheckTXVolts() || CheckRXVolts()) {                                                 // Note: If TX Battery is low, then CheckRXVolts() is not even called.
-            PlaySound(WarningSound);                                                        // Issue audible warning 
+  
+    if ((CheckTXVolts() || CheckRXVolts())) {                                           // Note: If TX Battery is low, then CheckRXVolts() is not even called
+        if (millis() - WarnTimer > 5000){                                               // issue warning every 5 seconds
+            WarnTimer = millis();
+            PlaySound(WarningSound);                                                    // Issue audible warning
             LedIsBlinking = true;
-           if (CurrentView == FRONTVIEW) SendCommand(WarnNow);
+            if (CurrentView == FRONTVIEW) SendCommand(WarnNow);
+        }
     }
     else {
-        if (LedIsBlinking && (CurrentView == FRONTVIEW)) SendCommand(WarnOff);
+        if (LedIsBlinking && (CurrentView == FRONTVIEW)) SendCommand(WarnOff);  
         LedIsBlinking = false;
     }
 }
@@ -427,9 +423,7 @@ FASTRUN void ShowComms() // heer
                 break;  
             default:    
                 break;
-    }
-    CheckScreenTime();                  // Check if screen needs to be turned off
-    CheckBatteryStates();               // Only every 15 seconds now
+    }  
    // Look(millis() - LastShowTime);    // This is to see how long it takes to run for optimisation purposes
 }  // end ShowComms()
 

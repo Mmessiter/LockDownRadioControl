@@ -1204,7 +1204,7 @@ void RationaliseBuddy()
     }
 }
 /*********************************************************************************************************************************/
-void GetGoodPacketsPerSecond()
+void GetFrameRate()
 {
     if (RecentGoodPacketsCount) PacketsPerSecond = RecentGoodPacketsCount;
     RecentGoodPacketsCount = 0;
@@ -5669,12 +5669,14 @@ void FASTRUN ManageTransmitter()
     CheckPowerOffButton(); CheckForNextionButtonPress();                                                       // Pretty obvious really ...
 
     if (RightNow - LastTimeRead >= 1000) {                                                                     // Only once a second for these..                                                                                      
-        SendAllAgain();           
-        GetGoodPacketsPerSecond();                                                                             // Do stats                                                                                         
-        if (CurrentView != BLANKVIEW) {ReadTime();UpdateTrimView();}  
-        ShowMotorTimer();SendOutstandingParameters();
-        LastTimeRead = millis();                                                                  
-        return;                                                                                                // That's enough housekeeping this time around
+        SendAllAgain();                                                                                        // in case of missed packets          
+        GetFrameRate();                                                                                        // Get the frame rate
+        CheckScreenTime();                                                                                     // Check if screen needs to be turned off
+        CheckBatteryStates();                                                                                  // Check battery states                                                       
+        if (CurrentView != BLANKVIEW) {ReadTime();UpdateTrimView();}                                           // Show time and trim positions
+        ShowMotorTimer();SendOutstandingParameters();                                                          // Show motor timer and send any queued parameters
+        LastTimeRead = millis();                                                                               // Reset this timer
+        return;                                                                                                // That's enough housekeeping for this time around
     }
     
     if ((RightNow - LastModelScreenCheck >= 250) && (CurrentView == MODELSVIEW)) { 

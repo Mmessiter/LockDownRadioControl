@@ -24,7 +24,7 @@
     #define TXVERSION_MAJOR   2 // first three *must* match RX but _EXTRA can be different
     #define TXVERSION_MINOR   4
     #define TXVERSION_MINIMUS 5
-    #define TXVERSION_EXTRA   "b 06/02/24" 
+    #define TXVERSION_EXTRA   "c 07/02/24" 
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -943,7 +943,6 @@ bool     SafetyON               = false;
 bool     BuddyON                = false;
 bool     SafetyWasOn            = false;
 u_int8_t WarningSound           = BATTERYISLOW;
-uint32_t LowVoltstimer          = 0;
 float    StopFlyingVoltsPerCell = 0;
 uint16_t SFV                    = 0; // =StopFlyingVoltsPerCell * 100
 bool     NewCompressNeeded      = true;
