@@ -68,7 +68,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "GetDefaultFilename", "TransmitterCode_2src_2main_8cpp.html#aef4c7d5735dca16e9201a2b4cdba1fe8", null ],
     [ "GetDifference", "TransmitterCode_2src_2main_8cpp.html#ab0fbc217177ad0a97b822eb78a17010d", null ],
     [ "GetDotPositions", "TransmitterCode_2src_2main_8cpp.html#a4abc073f79b7ab2a2b4429990420cbf0", null ],
-    [ "GetGoodPacketsPerSecond", "TransmitterCode_2src_2main_8cpp.html#a1dceeb0a05b1ebc2c7016b5e0272db82", null ],
+    [ "GetFrameRate", "TransmitterCode_2src_2main_8cpp.html#ad2a7eca49609bdcfe2724303ce270809", null ],
     [ "GetNewChannelValues", "TransmitterCode_2src_2main_8cpp.html#a26ae4f6ca14f760bd5eb6e7588fe7c81", null ],
     [ "GetStickInput", "TransmitterCode_2src_2main_8cpp.html#a248db02e07497e7a4149db17b4e5c2f3", null ],
     [ "GetStickInputInputOnly", "TransmitterCode_2src_2main_8cpp.html#af1030157034999448f5ca611d6209385", null ],

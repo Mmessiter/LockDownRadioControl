@@ -634,7 +634,6 @@ var 1Definitions_8h =
     [ "LogRXSwaps", "1Definitions_8h.html#a16515797c15a76da539562acaa1e1275", null ],
     [ "LostContactFlag", "1Definitions_8h.html#ad5f463902789a79fc622b3befd9409b9", null ],
     [ "LowBattery", "1Definitions_8h.html#a841a740574f81e5bb80ea1a16f704be5", null ],
-    [ "LowVoltstimer", "1Definitions_8h.html#aff9eea2f8a1a10bc94b26b1f84b7b27b", null ],
     [ "MacAddress", "1Definitions_8h.html#ad343661d8a4343426f171e531b9d8aa9", null ],
     [ "MacrosBuffer", "1Definitions_8h.html#a961efaa3441c7a8fc7ecea83b2cd3260", null ],
     [ "MacroStartTime", "1Definitions_8h.html#abacba397df8422d772f9f387649a9494", null ],

@@ -111,7 +111,7 @@ var searchData=
   ['restorecurrentmodel_108',['RestoreCurrentModel',['../TransmitterCode_2src_2main_8cpp.html#aa1f353c2c61131eeafa77c6e67608e45',1,'main.cpp']]],
   ['restoredimness_109',['RestoreDimness',['../1Definitions_8h.html#a648fc75947f973d46fbcc9b20fdca7f9',1,'1Definitions.h']]],
   ['retrycount_110',['retrycount',['../1Definitions_8h.html#a0cf4668725c06b3a6d64a2895c906379',1,'RETRYCOUNT:&#160;1Definitions.h'],['../namespaceFHSS__data.html#ae8ce3cb8a245c0b0bd6a401c3a39e708',1,'FHSS_data::RetryCount']]],
-  ['retrywait_111',['retrywait',['../1Definitions_8h.html#aadc879b4b6396135d31e22c22955a753',1,'RETRYWAIT:&#160;1Definitions.h'],['../namespaceFHSS__data.html#a44efaec885381f16becf823f63b385d2',1,'FHSS_data::RetryWait']]],
+  ['retrywait_111',['retrywait',['../namespaceFHSS__data.html#a44efaec885381f16becf823f63b385d2',1,'FHSS_data::RetryWait'],['../1Definitions_8h.html#aadc879b4b6396135d31e22c22955a753',1,'RETRYWAIT:&#160;1Definitions.h']]],
   ['reversedchannelbits_112',['ReversedChannelBITS',['../1Definitions_8h.html#ab67a250be0b26224543450b96a5f11bf',1,'1Definitions.h']]],
   ['reverseview_113',['REVERSEVIEW',['../1Definitions_8h.html#a3bedd97d2e81444eda8c2d43050b88c9',1,'1Definitions.h']]],
   ['rightpaddlex_114',['RIGHTPADDLEX',['../1Definitions_8h.html#ac486479fd9b023454968dd48a4ebefa4',1,'1Definitions.h']]],

@@ -47,6 +47,5 @@ var searchData=
   ['looptimer_44',['LoopTimer',['../SensorHubT32_2src_2main_8cpp.html#a46536419f1b2ee88934f4f812fd6140c',1,'main.cpp']]],
   ['lostcontactflag_45',['LostContactFlag',['../1Definitions_8h.html#ad5f463902789a79fc622b3befd9409b9',1,'1Definitions.h']]],
   ['lowbattery_46',['LowBattery',['../1Definitions_8h.html#a841a740574f81e5bb80ea1a16f704be5',1,'1Definitions.h']]],
-  ['lowvoltstimer_47',['LowVoltstimer',['../1Definitions_8h.html#aff9eea2f8a1a10bc94b26b1f84b7b27b',1,'1Definitions.h']]],
-  ['lp_5faccel_5fodr_48',['LP_ACCEL_ODR',['../classMPU9250.html#a20a0eee49ffef67d73ba8275486ba47e',1,'MPU9250']]]
+  ['lp_5faccel_5fodr_47',['LP_ACCEL_ODR',['../classMPU9250.html#a20a0eee49ffef67d73ba8275486ba47e',1,'MPU9250']]]
 ];

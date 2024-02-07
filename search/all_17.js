@@ -41,7 +41,7 @@ var searchData=
   ['sbus_38',['sbus',['../classSBUS.html',1,'SBUS'],['../Quadcopter_2src_2main_8cpp.html#ab1ddf25403a51681bc1e0130d18a91b8',1,'sbus:&#160;main.cpp'],['../classSBUS.html#aee0b4b879b6415eac8d79879c24bf88d',1,'SBUS::SBUS()']]],
   ['sbus_2ecpp_39',['SBUS.cpp',['../SBUS_8cpp.html',1,'']]],
   ['sbus_2eh_40',['SBUS.h',['../SBUS_8h.html',1,'']]],
-  ['sbuschannels_41',['sbuschannels',['../Quadcopter_2src_2main_8cpp.html#a4d64aa2a5312e59da5893f5a579022c5',1,'sbusChannels:&#160;main.cpp'],['../common_8h.html#a8331e76046c0a5dfd554712b1e54507c',1,'SbusChannels:&#160;common.h']]],
+  ['sbuschannels_41',['sbuschannels',['../common_8h.html#a8331e76046c0a5dfd554712b1e54507c',1,'SbusChannels:&#160;common.h'],['../Quadcopter_2src_2main_8cpp.html#a4d64aa2a5312e59da5893f5a579022c5',1,'sbusChannels:&#160;main.cpp']]],
   ['sbusfailsafe_42',['sbusFailSafe',['../Quadcopter_2src_2main_8cpp.html#a0288a9dce1770a78ecf548d3dfd00f9f',1,'main.cpp']]],
   ['sbuslostframe_43',['sbusLostFrame',['../Quadcopter_2src_2main_8cpp.html#a787a7f2fa593dc0afa9bcda44281ff21',1,'main.cpp']]],
   ['sbusport_44',['SBUSPORT',['../common_8h.html#aa82f9d8a298740acdbaa5c78a9e9f50c',1,'common.h']]],
