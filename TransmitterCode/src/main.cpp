@@ -1087,7 +1087,7 @@ FLASHMEM void setup()
     InitSwitchesAndTrims();
 
     if (PPMdata.UseTXModule)
-    {
+    {       
         PPMdata.PPMOutputModule.begin(PPMPORT);
         SelectChannelOrder();
     }
@@ -1105,7 +1105,7 @@ FLASHMEM void setup()
         }
     }
 
-    delay(WARMUPDELAY);                         // Allow Nextion time to warm up
+    delay(WARMUPDELAY);                                // Allow Nextion time to warm up
     SendValue(FrontView_BackGround, BackGroundColour); // Get colours ready
     SendValue(FrontView_ForeGround, ForeGroundColour);
     SendValue(FrontView_Special, SpecialColour);
@@ -1164,7 +1164,7 @@ FLASHMEM void setup()
             }
         }
     }
-    ConfigureRadio();  
+    if (!PPMdata.UseTXModule) ConfigureRadio();  
     RationaliseBuddy();
 }
 // **************************************************************************************************************************************************************
@@ -1175,7 +1175,7 @@ void RationaliseBuddy()
     CurrentMode     = NORMAL;
 
     if (WasBuddyPupilOnWireless && !BuddyPupilOnWireless) {         // Pupil has just gone off buddy mode
-        ConfigureRadio();                                           // Very like InitRadio but without Radio1.begin() !
+        if (!PPMdata.UseTXModule) ConfigureRadio();                 // Very like InitRadio but without Radio1.begin() !
         WasBuddyPupilOnWireless = false;
         DontChangePipeAddress   = false;
     }
@@ -3036,7 +3036,7 @@ void ResetTransmitterSettings()
     SpeakingClock    = true;
     AnnounceBanks    = true;
     ResetSwitchNumbers();
-    MinimumGap        = 75;
+    MinimumGap        = 50;
     LogRXSwaps        = true;
     UseLog            = false;
     AnnounceConnected = true;
@@ -4910,7 +4910,10 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(Fhss_View, TextIn)) {
-            if (PPMdata.UseTXModule) InitRadio(DefaultPipe); // because scan fails if radio isn't initialised
+            if (PPMdata.UseTXModule) {
+                InitRadio(DefaultPipe); // because scan fails if radio isn't initialised
+                ConfigureRadio();  
+            }
             SendCommand(pFhssView);
             DrawFhssBox();
             DoScanInit();

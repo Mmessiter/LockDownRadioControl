@@ -407,6 +407,7 @@ void LogEND()
     CurrentView      = DATAVIEW;
     LastShowTime     = 0;
     MinimumGap       = GetValue(n0);
+    if (MinimumGap < 50) MinimumGap = 50;
     LogRXSwaps       = GetValue(c0);
     UseLog           = GetValue(sw0);
     SaveTransmitterParameters();
