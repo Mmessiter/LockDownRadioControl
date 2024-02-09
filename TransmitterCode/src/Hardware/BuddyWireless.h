@@ -154,24 +154,18 @@ void SendSpecialPacket()                                                    // H
     static bool     NeedToRecover   = false;
     static uint8_t  ChannelSentLastTime = 0;                                // The old channel number
     static uint8_t  Index           = 82;                                   // The current channel number
-  
-     struct spd
+    struct spd
     {
         char        Command[2];
         uint64_t    ModelID;
         uint8_t     Channel = QUIETCHANNEL;
     };
-
     static spd SpecialPacketData;
 
     rf24_datarate_e faster = FASTDATARATE, slower = DATARATE;               // Save the data rates
-   
-   
-    if (!PPMdata.UseTXModule) { 
-        if ((!BoundFlag || !ModelMatched  || (PupilIsAlive != 1))){        // Don't send too often if not connected, nor if buddy was not found
-            if (((millis() - LocalTimer) < 20)) return;    
-                LocalTimer = millis();
-        }
+    if ((!BoundFlag || !ModelMatched  || (PupilIsAlive != 1))){        // Don't send too often if not connected, nor if buddy was not found
+        if (((millis() - LocalTimer) < 20)) return;    
+            LocalTimer = millis();
     }
     SpecialPacketData.ModelID =  ModelsMacUnionSaved.Val64;                 // Send the model ID so that pupil can check it
     SpecialPacketData.Command[0]                    = 'M';                  // Send M to indicate Master is ON
@@ -191,7 +185,6 @@ void SendSpecialPacket()                                                    // H
     }
     ChangeTXTarget(CurrentChannel,TeensyMACAddPipe,slower);                 // Set the TX target back to the receiver in model.
 }
-
 
 //*************************************************************************************************************************
 void SendSpecialPacketFromPPMModule()                                       // Here the (PPM!) MASTER sends to PUPIL tx. This is called about 200 times a second.
