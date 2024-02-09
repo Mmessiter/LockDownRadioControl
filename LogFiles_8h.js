@@ -9,6 +9,7 @@ var LogFiles_8h =
     [ "DelLOG", "LogFiles_8h.html#a53d438145d004c3b053f245f494f4284", null ],
     [ "DownLog", "LogFiles_8h.html#a01be76cc3bf8a963f987ae47916dc8d3", null ],
     [ "GetOverallSuccessRate", "LogFiles_8h.html#aed2ffdf0e904c6c985ac806ab6f294c1", null ],
+    [ "LogBuddyChange", "LogFiles_8h.html#aeacd61777f3824d867fcdb35fb4f198c", null ],
     [ "LogConnection", "LogFiles_8h.html#aaa3e86084c43b049d52d7d62c58a00b9", null ],
     [ "LogDisConnection", "LogFiles_8h.html#a2d5ec5fd5ed62d5b7b071fabe2225405", null ],
     [ "LogEND", "LogFiles_8h.html#acb3300c8b0e64f0fb381f7b96158dfc1", null ],
