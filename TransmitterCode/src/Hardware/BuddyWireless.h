@@ -165,9 +165,13 @@ void SendSpecialPacket()                                                    // H
     static spd SpecialPacketData;
 
     rf24_datarate_e faster = FASTDATARATE, slower = DATARATE;               // Save the data rates
-    if ((!BoundFlag || !ModelMatched  || (PupilIsAlive != 1))){             // Don't send too often if not connected, nor if buddy was not found
-        if (((millis() - LocalTimer) < 20)) return;    
-            LocalTimer = millis();
+   
+   
+    if (!PPMdata.UseTXModule) { 
+        if ((!BoundFlag || !ModelMatched  || (PupilIsAlive != 1))){        // Don't send too often if not connected, nor if buddy was not found
+            if (((millis() - LocalTimer) < 20)) return;    
+                LocalTimer = millis();
+        }
     }
     SpecialPacketData.ModelID =  ModelsMacUnionSaved.Val64;                 // Send the model ID so that pupil can check it
     SpecialPacketData.Command[0]                    = 'M';                  // Send M to indicate Master is ON
@@ -187,6 +191,63 @@ void SendSpecialPacket()                                                    // H
     }
     ChangeTXTarget(CurrentChannel,TeensyMACAddPipe,slower);                 // Set the TX target back to the receiver in model.
 }
+
+
+//*************************************************************************************************************************
+void SendSpecialPacketFromPPMModule()                                       // Here the (PPM!) MASTER sends to PUPIL tx. This is called about 200 times a second.
+{                                                                           // Master Sends M or B to indicate whether Buddy is on or off, and the ID of the model which should be loaded.
+                                                                            // The Pupil's Ack Payload contains the pupil's control data (in BuddyBuffer[]) which is compressed and must be decompressed before use.
+                                                                            // This function is called from SendData() function which is called from the main loop.
+                                                                            // GetSlaveChannelValuesWireless() then uses the BuddyBuffer data to replace some or all of the Master's control data. 
+                                                                            // Because the datarate is 2 meg the exchange is very fast.
+    static uint32_t LocalTimer      = 0;
+    static bool     NeedToRecover   = false;
+    static uint8_t  ChannelSendLastTime = 0;                                // The old channel number
+    static uint8_t  Index           = 82;                                   // The current channel number
+    struct spd
+    {
+        char        Command[2];
+        uint64_t    ModelID;
+        uint8_t     Channel = QUIETCHANNEL;
+    };
+    static spd SpecialPacketData;
+    if  (PupilIsAlive != 1){                                                 // Don't send too often if buddy was not found
+        if (((millis() - LocalTimer) < 20)) return;    
+            LocalTimer = millis();
+    }
+    
+    SpecialPacketData.ModelID =  ModelsMacUnionSaved.Val64;                 // Send the model ID so that pupil can check it
+    SpecialPacketData.Command[0]                    = 'M';                  // Send M to indicate Master is ON
+    if (BuddyON)       SpecialPacketData.Command[0] = 'B';                  // Send B to indicate Buddy is ON
+    ChannelSendLastTime = SpecialPacketData.Channel;                        // Use the old channel number because Buddy hasn't yet hopped
+    --Index; if (Index < 1) Index = 82;                                     // use the same array but in reverse order
+    SpecialPacketData.Channel = FHSS_data::FHSS_Channels[Index];            // Set the  new channel number for next time
+    if (NeedToRecover) SpecialPacketData.Channel = QUIETCHANNEL;            // If contact lost, then use the recovery channel to recover
+    Radio1.stopListening();
+    delayMicroseconds(STOPLISTENINGDELAY);
+    Radio1.setChannel(ChannelSendLastTime);
+    delayMicroseconds(STOPLISTENINGDELAY);
+    if (Radio1.write(&SpecialPacketData, sizeof SpecialPacketData)) {       // Send the packet
+        GetPupilAck();                                                      // Get ack from pupil WITH HIS CONTROL DATA!!
+        PupilDetected(true);                                                // Pupil is alive
+        NeedToRecover = false;                                              // No need to recover             
+    } else {
+        PupilDetected(false);                                               // Pupil is dead
+        NeedToRecover = true;                                               // Need to recover                 
+    }
+}
+
+//*************************************************************************************************************************
+void SetUpTargetForBuddy()                                                           // Once only because the model is connected via module. Only the Buddy is using the nRF24L01 in here
+{
+        Radio1.setDataRate(FASTDATARATE);                                            // Set the data rate
+        delayMicroseconds(STOPLISTENINGDELAY);
+        Radio1.openWritingPipe(TeensyMACAddPipe ^ ENCRYPT_KEY);                      // Set the pipe address
+        delayMicroseconds(STOPLISTENINGDELAY);
+        Radio1.stopListening();
+        delayMicroseconds(STOPLISTENINGDELAY);
+}
+
 //*************************************************************************************************************************
 void GetSpecialPacket()                                                                 // Here the PUPIL tx gets a packet from MASTER tx. This function is called from main loop very fast.
 {                                                                                       // Master tells Pupil whether buddy is on or off, and the ID of the model which should be loaded.
@@ -225,7 +286,6 @@ void GetSpecialPacket()                                                         
         }
         MasterDetected(true);                                                           // Master is alive
         ++PacketCounter;                                                                // Count the packets
-       
         if (millis() - LocalTimer > 1000) {                                             // Every second
             LocalTimer = millis();                                                      // reset the timer
             PacketsPerSecond = PacketCounter;                                           // save the packets per second for use on the data diplay

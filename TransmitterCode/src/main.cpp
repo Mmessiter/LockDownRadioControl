@@ -1093,6 +1093,7 @@ FLASHMEM void setup()
         if (BuddyMasterOnWireless){
              InitRadio(DefaultPipe); // heer
              ConfigureRadio();
+             SetUpTargetForBuddy(); 
         }
     }
     else
@@ -1180,6 +1181,8 @@ void RationaliseBuddy()
 
     if (WasBuddyPupilOnWireless && !BuddyPupilOnWireless) {         // Pupil has just gone off buddy mode
         if (!PPMdata.UseTXModule) ConfigureRadio();                 // Very like InitRadio but without Radio1.begin() !
+        
+        
         WasBuddyPupilOnWireless = false;
         DontChangePipeAddress   = false;
     }
@@ -5704,24 +5707,21 @@ void FASTRUN ManageTransmitter()
 }
 /**********************************************************************************************************/
 
-
 void SendPPM()
 { // Send a frame of PPM to Third party TX module
-    
-     if (BuddyMasterOnWireless) {
-        if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { // not yet right (Pupil loses packets?)
-            SendSpecialPacket();                       
+    if (millis() - PPMdata.LastPPMFrame >= 10) {
+        PPMdata.LastPPMFrame = millis();
+        for (int j = 0; j < PPMdata.PPMChannelsNumber; ++j) {
+            PPMdata.PPMOutputModule.write(*(PPMdata.PPMChannelOrder + j), SendBuffer[j]);
+        } 
+    }
+   if (BuddyMasterOnWireless) {
+        if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { // 
             LastPacketSentTime = millis();
+            SendSpecialPacketFromPPMModule();                          // Send to buddy using Nrf24L01
         }
     }
-
-    if (millis() - PPMdata.LastPPMFrame < 10) return; // 100Hz max
-    PPMdata.LastPPMFrame = millis();
-    for (int j = 0; j < PPMdata.PPMChannelsNumber; ++j) {
-        PPMdata.PPMOutputModule.write(*(PPMdata.PPMChannelOrder + j), SendBuffer[j]);
-    } 
 }
-
 
 /************************************************************************************************************/
 void FixMotorChannel()
@@ -5771,7 +5771,7 @@ FASTRUN void loop()
                 SendData(); // local TX
             }
             else {
-                SendPPM(); // for TX module
+                SendPPM(); 
                 NewCompressNeeded = false;
             }
             break;

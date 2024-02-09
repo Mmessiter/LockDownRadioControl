@@ -18,13 +18,13 @@
 #include <InterpolationLib.h>
  
 // *************************************************************************************
-//               TX VERSION NUMBER   (May 2020 - January 2024 Malcolm Messiter)       *
+//               TX VERSION NUMBER   (May 2020 - February 2024 Malcolm Messiter)       *
 //**************************************************************************************
 
     #define TXVERSION_MAJOR   2 // first three *must* match RX but _EXTRA can be different
     #define TXVERSION_MINOR   4
     #define TXVERSION_MINIMUS 5
-    #define TXVERSION_EXTRA   "d 08/02/24" 
+    #define TXVERSION_EXTRA   "e 09/02/24" 
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -613,6 +613,8 @@ void             ForceDataRedisplay();
 void             TrimsToSubtrim();
 void             SendAllAgain();
 void             LogBuddyChange();
+void             SetUpTargetForBuddy();
+void             SendSpecialPacketFromPPMModule();     
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
