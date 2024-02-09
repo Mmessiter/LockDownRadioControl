@@ -1090,6 +1090,10 @@ FLASHMEM void setup()
     {       
         PPMdata.PPMOutputModule.begin(PPMPORT);
         SelectChannelOrder();
+        if (BuddyMasterOnWireless){
+             InitRadio(DefaultPipe); // heer
+             ConfigureRadio();
+        }
     }
     else
     {
@@ -3527,7 +3531,7 @@ bool GetConfirmation(char* goback, char* Prompt)
         CheckPowerOffButton();
         if (BoundFlag && ModelMatched) {
            GetNewChannelValues();
-           FixMotorChannel(); // heer
+           FixMotorChannel(); 
            SendData();
         }
         
@@ -5205,10 +5209,15 @@ void ReadSafetySwitch(){
 void ReadBuddySwitch(){
     if (BuddyMasterOnPPM || BuddyMasterOnWireless) {
         BuddyON  = false;
+        static bool BuddyWasOn = false;    
         if ((BuddySwitch == 1) && (Switch[7] == SWITCH1Reversed)) BuddyON = true;
         if ((BuddySwitch == 2) && (Switch[5] == SWITCH2Reversed)) BuddyON = true;
         if ((BuddySwitch == 3) && (Switch[1] == SWITCH3Reversed)) BuddyON = true;
         if ((BuddySwitch == 4) && (Switch[2] == SWITCH4Reversed)) BuddyON = true;
+        if (BuddyON != BuddyWasOn) {
+            BuddyWasOn = BuddyON;
+            LogBuddyChange();
+        }
     }
 }
 
@@ -5698,11 +5707,19 @@ void FASTRUN ManageTransmitter()
 
 void SendPPM()
 { // Send a frame of PPM to Third party TX module
-    if (millis() - PPMdata.LastPPMFrame < 10) return;
+    
+     if (BuddyMasterOnWireless) {
+        if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { // not yet right 
+            SendSpecialPacket();                       
+            LastPacketSentTime = millis();
+        }
+    }
+
+    if (millis() - PPMdata.LastPPMFrame < 10) return; // 100Hz max
     PPMdata.LastPPMFrame = millis();
     for (int j = 0; j < PPMdata.PPMChannelsNumber; ++j) {
         PPMdata.PPMOutputModule.write(*(PPMdata.PPMChannelOrder + j), SendBuffer[j]);
-    }
+    } 
 }
 
 

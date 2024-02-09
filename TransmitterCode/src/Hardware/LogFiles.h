@@ -286,7 +286,13 @@ FASTRUN void LogLongestGap()
     snprintf(thetext, 45, "Longest gap: %d", (short int)GapLongest);
     LogText(thetext, strlen(thetext));
 }
+// ************************************************************************
+ FASTRUN void LogBuddyChange(){
 
+    char OnText[] = "Buddy ON";
+    char OffText[] = "Buddy OFF";
+    if (BuddyON) LogText(OnText, strlen(OnText)); else LogText(OffText, strlen(OffText));  
+ }
 // ************************************************************************
 
 void LogTotalLostPackets()
@@ -357,9 +363,6 @@ void ShowLogFile(uint8_t StartLine)
     ReadTextFile(LogFileName, TheText, StartLine, MAXLINES); // Then load text
     SendText1(LogTeXt, TheText);                             // Then send it
 }
-
-
-
 
 /******************************************************************************************************************************/
 void UpLog()

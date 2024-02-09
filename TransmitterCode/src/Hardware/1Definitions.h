@@ -612,6 +612,7 @@ void             ScrollHelpFile();
 void             ForceDataRedisplay();
 void             TrimsToSubtrim();
 void             SendAllAgain();
+void             LogBuddyChange();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
