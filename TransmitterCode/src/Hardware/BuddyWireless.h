@@ -152,7 +152,7 @@ void SendSpecialPacket()                                                    // H
                                                                             // Because the datarate is 2 meg the exchange is very fast.
     static uint32_t LocalTimer      = 0;
     static bool     NeedToRecover   = false;
-    static uint8_t  ChannelSendLastTime = 0;                                // The old channel number
+    static uint8_t  ChannelSentLastTime = 0;                                // The old channel number
     static uint8_t  Index           = 82;                                   // The current channel number
   
      struct spd
@@ -176,11 +176,11 @@ void SendSpecialPacket()                                                    // H
     SpecialPacketData.ModelID =  ModelsMacUnionSaved.Val64;                 // Send the model ID so that pupil can check it
     SpecialPacketData.Command[0]                    = 'M';                  // Send M to indicate Master is ON
     if (BuddyON)       SpecialPacketData.Command[0] = 'B';                  // Send B to indicate Buddy is ON
-    ChannelSendLastTime = SpecialPacketData.Channel;                        // Use the old channel number because Buddy hasn't yet hopped
+    ChannelSentLastTime = SpecialPacketData.Channel;                        // Use the old channel number because Buddy hasn't yet hopped
     --Index; if (Index < 1) Index = 82;                                     // use the same array but in reverse order
     SpecialPacketData.Channel = FHSS_data::FHSS_Channels[Index];            // Set the  new channel number for next time
     if (NeedToRecover) SpecialPacketData.Channel = QUIETCHANNEL;            // If contact lost, then use the recovery channel to recover
-    ChangeTXTarget(ChannelSendLastTime,TeensyMACAddPipe ^ ENCRYPT_KEY,faster); // Set the TX target to the Buddy
+    ChangeTXTarget(ChannelSentLastTime,TeensyMACAddPipe ^ ENCRYPT_KEY,faster); // Set the TX target to the Buddy
     if (Radio1.write(&SpecialPacketData, sizeof SpecialPacketData)) {       // Send the packet
         GetPupilAck();                                                      // Get ack from pupil WITH HIS CONTROL DATA!!
         PupilDetected(true);                                                // Pupil is alive
@@ -200,9 +200,10 @@ void SendSpecialPacketFromPPMModule()                                       // H
                                                                             // This function is called from SendData() function which is called from the main loop.
                                                                             // GetSlaveChannelValuesWireless() then uses the BuddyBuffer data to replace some or all of the Master's control data. 
                                                                             // Because the datarate is 2 meg the exchange is very fast.
+                                                                            // This uses the nRF24L01 while the model is connected via TX module. Only the Buddy is using the nRF24L01 in here
     static uint32_t LocalTimer      = 0;
     static bool     NeedToRecover   = false;
-    static uint8_t  ChannelSendLastTime = 0;                                // The old channel number
+    static uint8_t  ChannelSentLastTime = 0;                                // The old channel number
     static uint8_t  Index           = 82;                                   // The current channel number
     struct spd
     {
@@ -219,13 +220,13 @@ void SendSpecialPacketFromPPMModule()                                       // H
     SpecialPacketData.ModelID =  ModelsMacUnionSaved.Val64;                 // Send the model ID so that pupil can check it
     SpecialPacketData.Command[0]                    = 'M';                  // Send M to indicate Master is ON
     if (BuddyON)       SpecialPacketData.Command[0] = 'B';                  // Send B to indicate Buddy is ON
-    ChannelSendLastTime = SpecialPacketData.Channel;                        // Use the old channel number because Buddy hasn't yet hopped
+    ChannelSentLastTime = SpecialPacketData.Channel;                        // Use the old channel number because Buddy hasn't yet hopped
     --Index; if (Index < 1) Index = 82;                                     // use the same array but in reverse order
     SpecialPacketData.Channel = FHSS_data::FHSS_Channels[Index];            // Set the  new channel number for next time
     if (NeedToRecover) SpecialPacketData.Channel = QUIETCHANNEL;            // If contact lost, then use the recovery channel to recover
     Radio1.stopListening();
     delayMicroseconds(STOPLISTENINGDELAY);
-    Radio1.setChannel(ChannelSendLastTime);
+    Radio1.setChannel(ChannelSentLastTime);
     delayMicroseconds(STOPLISTENINGDELAY);
     if (Radio1.write(&SpecialPacketData, sizeof SpecialPacketData)) {       // Send the packet
         GetPupilAck();                                                      // Get ack from pupil WITH HIS CONTROL DATA!!
