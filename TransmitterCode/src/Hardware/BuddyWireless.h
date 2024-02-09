@@ -150,10 +150,10 @@ void SendSpecialPacket()                                                    // H
                                                                             // This function is called from SendData() function which is called from the main loop.
                                                                             // GetSlaveChannelValuesWireless() then uses the BuddyBuffer data to replace some or all of the Master's control data. 
                                                                             // Because the datarate is 2 meg the exchange is very fast.
-    static uint32_t LocalTimer      = 0;
-    static bool     NeedToRecover   = false;
+    static uint32_t LocalTimer          = 0;
+    static bool     NeedToRecover       = false;
     static uint8_t  ChannelSentLastTime = 0;                                // The old channel number
-    static uint8_t  Index           = 82;                                   // The current channel number
+    static uint8_t  Index               = 82;                               // The current channel number
     struct spd
     {
         char        Command[2];
@@ -194,10 +194,10 @@ void SendSpecialPacketFromPPMModule()                                       // H
                                                                             // GetSlaveChannelValuesWireless() then uses the BuddyBuffer data to replace some or all of the Master's control data. 
                                                                             // Because the datarate is 2 meg the exchange is very fast.
                                                                             // This uses the nRF24L01 while the model is connected via TX module. Only the Buddy is using the nRF24L01 in here
-    static uint32_t LocalTimer      = 0;
-    static bool     NeedToRecover   = false;
+    static uint32_t LocalTimer          = 0;
+    static bool     NeedToRecover       = false;
     static uint8_t  ChannelSentLastTime = 0;                                // The old channel number
-    static uint8_t  Index           = 82;                                   // The current channel number
+    static uint8_t  Index               = 82;                               // The current channel number
     struct spd
     {
         char        Command[2];
