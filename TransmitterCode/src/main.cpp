@@ -5709,7 +5709,7 @@ void SendPPM()
 { // Send a frame of PPM to Third party TX module
     
      if (BuddyMasterOnWireless) {
-        if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { // not yet right 
+        if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) { // not yet right (Pupil loses packets?)
             SendSpecialPacket();                       
             LastPacketSentTime = millis();
         }
