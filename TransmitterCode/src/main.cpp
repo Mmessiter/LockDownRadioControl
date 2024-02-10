@@ -685,9 +685,8 @@ GetNewChannelValues()
         }
         PreMixBuffer[OutputChannel] = OutputValue; SendBuffer[OutputChannel]   = OutputValue; // put result into both buffers
     }
-
     DoMixes();                                                                  // Mixes PremixBuffer and returns it in SendBuffer (All 16 channels)
-    DoTrimsAndSubtrims();                                                       // Trims must be after mixing.    
+    DoTrimsAndSubtrims();                                                       // Trims after mixing.    
     DoSlowServos();                                                             // Some servos may need to be slowed down
     DoRouteOutputs();                                                           // This function might re-route outputs to user-defined channels (Before reversing)
     DoReverseSense();                                                           // This function reverses servos if needed (After routing)  
