@@ -163,7 +163,7 @@ void SendSpecialPacket()                                                    // H
     static spd SpecialPacketData;
 
     rf24_datarate_e faster = FASTDATARATE, slower = DATARATE;               // Save the data rates
-    if ((!BoundFlag || !ModelMatched  || (PupilIsAlive != 1))){        // Don't send too often if not connected, nor if buddy was not found
+    if ((!BoundFlag || !ModelMatched  || (PupilIsAlive != 1))){             // Don't send too often if not connected, nor if buddy was not found
         if (((millis() - LocalTimer) < 20)) return;    
             LocalTimer = millis();
     }
@@ -193,7 +193,7 @@ void SendSpecialPacketFromPPMModule()                                       // H
                                                                             // This function is called from SendData() function which is called from the main loop.
                                                                             // GetSlaveChannelValuesWireless() then uses the BuddyBuffer data to replace some or all of the Master's control data. 
                                                                             // Because the datarate is 2 meg the exchange is very fast.
-                                                                            // This uses the nRF24L01 while the model is connected via TX module. Only the Buddy is using the nRF24L01 in here
+                                                                            // This uses the nRF24L01 while the model is connected via TX module. Only the Buddy is using the nRF24L01 here
     static uint32_t LocalTimer          = 0;
     static bool     NeedToRecover       = false;
     static uint8_t  ChannelSentLastTime = 0;                                // The old channel number
