@@ -42,6 +42,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "DoOneSwitchView", "TransmitterCode_2src_2main_8cpp.html#a5774631aa02a8875cb823d0146e0c550", null ],
     [ "DoRouteOutputs", "TransmitterCode_2src_2main_8cpp.html#a4be5821d4f80bdcdbee25adc69051d3e", null ],
     [ "DoSlowServos", "TransmitterCode_2src_2main_8cpp.html#a7a6560a77b8c4dd3925760790beafbd5", null ],
+    [ "DoTrimsAndSubtrims", "TransmitterCode_2src_2main_8cpp.html#acd70b997cf150e55d943df5d6f1cff51", null ],
     [ "DoWirelessBuddyListen", "TransmitterCode_2src_2main_8cpp.html#ad2c7ed441d88f2a2b2fca83ff61e714d", null ],
     [ "DualRatesEnd", "TransmitterCode_2src_2main_8cpp.html#acaf005c908c2b6706d7ab9579f456ca8", null ],
     [ "DualRatesRefresh", "TransmitterCode_2src_2main_8cpp.html#af110521855e780717b5248c3aacc799e", null ],

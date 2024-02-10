@@ -37,7 +37,7 @@ var searchData=
   ['macros_2eh_34',['macros.h',['../macros_8h.html',1,'']]],
   ['macros_5fview_35',['MACROS_VIEW',['../1Definitions_8h.html#a0a68d90e2d484ab8d703ffc7a5f0ade9',1,'1Definitions.h']]],
   ['macrosbuffer_36',['MacrosBuffer',['../1Definitions_8h.html#a961efaa3441c7a8fc7ecea83b2cd3260',1,'1Definitions.h']]],
-  ['macrostarttime_37',['macrostarttime',['../1Definitions_8h.html#a0ed0c416beb6781a8c8a52c37d059957',1,'MACROSTARTTIME:&#160;1Definitions.h'],['../1Definitions_8h.html#abacba397df8422d772f9f387649a9494',1,'MacroStartTime:&#160;1Definitions.h']]],
+  ['macrostarttime_37',['macrostarttime',['../1Definitions_8h.html#abacba397df8422d772f9f387649a9494',1,'MacroStartTime:&#160;1Definitions.h'],['../1Definitions_8h.html#a0ed0c416beb6781a8c8a52c37d059957',1,'MACROSTARTTIME:&#160;1Definitions.h']]],
   ['macrostoptime_38',['MacroStopTime',['../1Definitions_8h.html#a9e444f8769253f982906c933290b1369',1,'1Definitions.h']]],
   ['macrotriggerchannel_39',['MACROTRIGGERCHANNEL',['../1Definitions_8h.html#af8ab3c768a28f2a28475c81309bcf379',1,'1Definitions.h']]],
   ['madgwick_40',['Madgwick',['../Quadcopter_2src_2main_8cpp.html#a6269d32e1ded0138fc78e8a0de4e8c04',1,'main.cpp']]],

@@ -83,11 +83,11 @@ var NAVTREEINDEX =
 "MPU6050__6Axis__MotionApps20_8h.html",
 "Quadcopter_2src_2main_8cpp.html#a5a46682cae29e1f9b8404a7c75c5ab7c",
 "SensorHubT32_2src_2main_8cpp.html#a9e66319eb62ac284544d36d69f59bda5",
-"Utilities_8h.html#a0d8d8a0d67cb9b04481f1692abe75368",
-"classMPU6050.html#aa31427588f059c69d93ddb00ba257b12",
-"classMPU9250.html#a9bb3dfd24f86ce01d45cc34759eff5f5",
-"common_8h.html#a6e2d4126d864c50e7c23c988c2bfdd1a",
-"globals_func_z.html"
+"Utilities_8h.html#a066dc26c890b68ae8f6652b29bb461cd",
+"classMPU6050.html#aa23c8d66502345c30915e69975fd2cc9",
+"classMPU9250.html#a9b971effc265898fecc36d343d37ed81",
+"common_8h.html#a6d87eba17154f7f4f2f3802ef8ee261f",
+"globals_func_y.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
