@@ -678,12 +678,15 @@ GetNewChannelValues()
         GetCurveDots(OutputChannel, DualRateValue);                             // This for the Dual Rates function
         if (InputChannel > 7) {                                                 // Must be a switch if over 7
             OutputValue = GetStickInput(InputChannel);                          // Four 3 postion switches
+            InputValue = OutputValue;
         }
         else {                                                                  // i.e. l <= 7 so it's a Stick/knob/switch
             InputValue  = AnalogueReed(InputChannel);                           // Get values from sticks' pots taking into account mode 1 and mode 2
             OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputValue, InputChannel, OutputChannel); // Use function pointer array to invoke selected interpolation.
         }
-        PreMixBuffer[OutputChannel] = OutputValue; SendBuffer[OutputChannel]   = OutputValue; // put result into both buffers
+     //   PreMixBuffer[OutputChannel] = InputValue;  // test this idea later  ...
+          PreMixBuffer[OutputChannel] = OutputValue; // ready to add mixes ...
+          SendBuffer[OutputChannel]   = OutputValue; // put result into buffer for when no mix
     }
     DoMixes();                                                                  // Mixes PremixBuffer and returns it in SendBuffer (All 16 channels)
     DoTrimsAndSubtrims();                                                       // Trims after mixing.    
@@ -1102,7 +1105,7 @@ FLASHMEM void setup()
         PPMdata.PPMOutputModule.begin(PPMPORT);
         SelectChannelOrder();
         if (BuddyMasterOnWireless){
-             InitRadio(DefaultPipe); // heer
+             InitRadio(DefaultPipe);
              ConfigureRadio();
              SetUpTargetForBuddy(); 
         }
@@ -4963,6 +4966,7 @@ FASTRUN void ButtonWasPressed()
         }
         if (InStrng(Mixes_View, TextIn)) { // Mix number OR a parameter has changed
             CurrentView = MIXESVIEW;
+         
             UpdateModelsNameEveryWhere();
             uint8_t ThisMixNumber = MixNumber; // save it
             MixNumber             = GetValue(MixesView_MixNumber);
@@ -4980,10 +4984,7 @@ FASTRUN void ButtonWasPressed()
                 SendCommand(Yb1);               // show mix change button
                 SendCommand(Yb0);               // show mix change button
             }
-            else
-            {
-                FixCHNames(); // just redisplay ch names
-            }
+            FixCHNames();
             ClearText();
             return;
         }
@@ -5705,7 +5706,7 @@ void FASTRUN ManageTransmitter()
         return;                                                                                                // That's enough housekeeping for this time around
     }
     
-    if ((RightNow - LastModelScreenCheck >= 250) && (CurrentView == MODELSVIEW)) { 
+    if ((RightNow - LastModelScreenCheck >= 500) && (CurrentView == MODELSVIEW)) { 
         LastModelScreenCheck = RightNow;
         if (CheckModelName()) {LastModelScreenCheck = RightNow; return;}                                       // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
     }     

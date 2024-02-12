@@ -729,20 +729,39 @@ int GetNextNumber(int p1, char text1[CHARSMAX])
 
 /*********************************************************************************************************************************/
 
-void FixCHNames()
+void FixCHNames()                                                                       // channel names on Mix screen now with Bank name and enabled status too.
 {
 
     char MixesView_chM[]           = "chM";
     char MixesView_chS[]           = "chS";
     char MixesView_MasterChannel[] = "MasterChannel";
     char MixesView_SlaveChannel[]  = "SlaveChannel";
-
+    char BankNameLable[]           = "t10";
+    char t11[]                     = "t11";
+    uint8_t temp                   =    0;
+    char fm[]                      =  "FlightMode";
+    char All[]                     =  "All banks";
+    char Enabled[]                 = "Enabled";
+    char Yes[]                     = "Yes";
+    char No[]                      = "No";
     Mixes[MixNumber][M_MasterChannel] = GetValue(MixesView_MasterChannel);
     Mixes[MixNumber][M_SlaveChannel]  = GetValue(MixesView_SlaveChannel);
-    SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
-    SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
-}
+    SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);       // show master channel
+    SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);        // show slave channel
+    temp = GetValue(fm);
+    if (temp){
+        SendText(BankNameLable, BankTexts[BanksInUse[--temp]]);                         // Show bank name 
+    }else{
+         SendText(BankNameLable, All);
+    }
+    temp = GetValue(Enabled);                                                           // Show whether enabled
+    if (temp){
+        SendText(t11,Yes);
+    }else{
+        SendText(t11,No);
 
+    }
+}
 /*********************************************************************************************************************************/
 
 void ClearSuccessRate()
@@ -790,7 +809,7 @@ void SaveMixValues()
 
 /*********************************************************************************************************************************/
 
-void ShowMixValues() // sends mix values to Nextion screen
+void ShowMixValues() // sends mix values to Nextion screen 
 {
     char MixesView_Enabled[]       = "Enabled";
     char MixesView_Bank[]          = "FlightMode";
@@ -802,11 +821,11 @@ void ShowMixValues() // sends mix values to Nextion screen
     char MixesView_chS[]           = "chS";
     char MixesView_od[]            = "od";
     char MixesView_offset[]        = "Offset";
-
-    SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
-    SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
+    
+    
     SendValue(MixesView_Enabled, Mixes[MixNumber][M_Enabled]);
     SendValue(MixesView_Bank, Mixes[MixNumber][M_Bank]);
+    
     if (Mixes[MixNumber][M_MasterChannel] == 0) Mixes[MixNumber][M_MasterChannel] = 1;
     SendValue(MixesView_MasterChannel, Mixes[MixNumber][M_MasterChannel]);
     if (Mixes[MixNumber][M_SlaveChannel] == 0) Mixes[MixNumber][M_SlaveChannel] = 1;
