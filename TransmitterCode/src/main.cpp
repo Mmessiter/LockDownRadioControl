@@ -430,9 +430,70 @@ FASTRUN uint16_t GetStickInputInputOnly(uint8_t l) // This returns the input onl
 }
 
 /*********************************************************************************************************************************/
-// MIXES  (Channel mixes)
+//   INPUT Mixes
 /*********************************************************************************************************************************/
-FASTRUN void DoMixes()
+FASTRUN void DoMixInputs() // heer
+{
+    for (short MixNumber = 1; MixNumber < MAXMIXES; ++MixNumber)
+    {
+        if (Mixes[MixNumber][M_Enabled])
+        {
+            if (Mixes[MixNumber][M_Bank] == Bank || (!Mixes[MixNumber][M_Bank]))
+            {
+                for (short MasterChannel = 0; MasterChannel < CHANNELSUSED; ++MasterChannel)
+                {
+                    if ((Mixes[MixNumber][M_MasterChannel] - 1) == MasterChannel)
+                    {
+                        short SlaveChannel  =   (Mixes[MixNumber][M_SlaveChannel] - 1) ;
+                        short max           =   ChannelMax[SlaveChannel]; 
+                        short min           =   ChannelMin[SlaveChannel];
+                        short mid           =   ((max - min) / 2);
+                       
+                        short MappedInput   =   map (InputsBuffer[MasterChannel], ChannelMin[MasterChannel], ChannelMax[MasterChannel], ChannelMin[SlaveChannel], ChannelMax[SlaveChannel]);
+                        short MixValue      =   map (MappedInput,min,max,-mid,mid) * (short)Mixes[MixNumber][M_Percent] / 100;
+                      
+                        if (Mixes[MixNumber][M_ONEDIRECTION])
+                        {
+                            if (Mixes[MixNumber][M_Reversed])
+                            {
+                                if (MixValue > 0) MixValue = -MixValue;
+                            }
+                            else
+                            {
+                                if (MixValue < 0) MixValue = -MixValue;
+                            }
+                        }
+                        else
+                        {
+                            if (Mixes[MixNumber][M_Reversed]) MixValue = -MixValue;
+                        }
+                        MixValue += (Mixes[MixNumber][M_OFFSET] - 127) * 8;                 // add offset
+                        
+                        MixValue += InputsBuffer[SlaveChannel] ;                             // This is the actual mix moment! (MixValue is now the mixed value)
+
+                        InputsBuffer[SlaveChannel] = MixValue;                              // put the mixed value back into the input buffer
+                        
+                        short MinimumDeg = ChannelMin[SlaveChannel];
+                        short MaximumDeg = ChannelMax[SlaveChannel]; 
+                        if (MinimumDeg > MaximumDeg)
+                        {
+                           InputsBuffer[SlaveChannel] = constrain(MixValue, MaximumDeg, MinimumDeg);
+                        }
+                        else
+                        {
+                            InputsBuffer[SlaveChannel] = constrain(MixValue, MinimumDeg, MaximumDeg);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*********************************************************************************************************************************/
+//   OUTPUT Mixes
+/*********************************************************************************************************************************/
+FASTRUN void DoMixOutputs()
 {
     short MixNumber, ChannelNumber, MixValue, MinimumDeg, MaximumDeg;
 
@@ -663,11 +724,52 @@ void DoTrimsAndSubtrims() {
     }
 }
 
+//**************************************************************************************************************************************************************
+//                                                                      new version of GET NEW SERVO POSITIONS 
+//**************************************************************************************************************************************************************
+
+/** @brief GET NEW SERVO POSITIONS */
+FASTRUN void GetNewChannelValues()
+{
+    if (NewCompressNeeded) return;                                                      // Have we compressed the last one yet?
+    NewCompressNeeded = true;                                                           // No. It's therefore time for new data.
+    uint16_t OutputValue,OutputChannel;
+    for (OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {            // FIRST READ ALL 16 INPUTS
+        if (InPutStick[OutputChannel] <= 7) InputsBuffer[OutputChannel] = AnalogueReed(InPutStick[OutputChannel]);  // Get values from sticks' pots taking into account mode 1 and mode 2
+    }
+    
+    //                             ^^^INPUTS BUFFER NOW CONTAINS ALL 16 INPUTS^^^ 
+
+    // ***********************************************************************************
+
+        DoMixInputs();                                                        // Mixes InputsBuffer and returns it in InputsBuffer (All 16 channels)
+
+    // ***********************************************************************************
+    //                            From here on, we are dealing with the 16 OUTPUTS
+
+    for (OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {    // NOW DO ALL 16 OUTPUTS
+        uint16_t InputChannel = InPutStick[OutputChannel];                      // Input sticks knobs & switches are mapped by user
+        GetCurveDots(OutputChannel, DualRateValue);                             // This for the Dual Rates function
+        if (InputChannel > 7) {                                                 // Must be a switch if over 7
+            OutputValue = GetStickInput(InputChannel);                          // Four 3 postion switches
+        }
+        else {                                                                  // it's a Stick or knob
+            OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputsBuffer[OutputChannel], InPutStick[OutputChannel], OutputChannel); // Use function pointer array to invoke selected interpolation.
+        }
+        PreMixBuffer[OutputChannel] = OutputValue; 
+        SendBuffer[OutputChannel]   = OutputValue; 
+    }
+ //   DoMixOutputs();                                                             // Mixes PremixBuffer and returns it in SendBuffer (All 16 channels)
+    DoTrimsAndSubtrims();                                                       // Trims after mixing.    
+    DoSlowServos();                                                             // Some servos may need to be slowed down
+    DoRouteOutputs();                                                           // This function might re-route outputs to user-defined channels (Before reversing)
+    DoReverseSense();                                                           // This function reverses servos if needed (After routing)  
+}
+
 /*********************************************************************************************************************************/
 
 /** @brief GET NEW SERVO POSITIONS */
-FASTRUN void
-GetNewChannelValues()
+FASTRUN void GetNewChannelValues_OLD_VERSION()
 {
     if (NewCompressNeeded) return;                                              // Have we compressed the last one yet?
     NewCompressNeeded = true;                                                   // No. It's therefore time for new data.
@@ -685,16 +787,12 @@ GetNewChannelValues()
             OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputValue, InputChannel, OutputChannel); // Use function pointer array to invoke selected interpolation.
         }
 
-
-
-
-
-       // PreMixBuffer[OutputChannel] = map(InputValue, ChannelMin[InputChannel], ChannelMax[InputChannel], IntoHigherRes(CurveDots[0]), IntoHigherRes(CurveDots[4])); // heer
+       // PreMixBuffer[OutputChannel] = map(InputValue, ChannelMin[InputChannel], ChannelMax[InputChannel], IntoHigherRes(CurveDots[0]), IntoHigherRes(CurveDots[4])); 
         PreMixBuffer[OutputChannel] = OutputValue; // This was the original line
         
         SendBuffer[OutputChannel]   = OutputValue; // put result into buffer for when no mix
     }
-    DoMixes();                                                                  // Mixes PremixBuffer and returns it in SendBuffer (All 16 channels)
+    DoMixOutputs();                                                                  // Mixes PremixBuffer and returns it in SendBuffer (All 16 channels)
     DoTrimsAndSubtrims();                                                       // Trims after mixing.    
     DoSlowServos();                                                             // Some servos may need to be slowed down
     DoRouteOutputs();                                                           // This function might re-route outputs to user-defined channels (Before reversing)
@@ -731,7 +829,7 @@ void CalibrateSticks() // This discovers end of travel place for sticks etc.
     {
         p = analogRead(AnalogueInput[i]);
         if (ChannelMax[i] < p) ChannelMax[i] = p;
-        if (ChannelMin[i] > p) ChannelMin[i] = p;
+        if (ChannelMin[i] > p) ChannelMin[i] = p; 
     }
     NewCompressNeeded = false; // fake it as we are not sending data
     GetNewChannelValues();

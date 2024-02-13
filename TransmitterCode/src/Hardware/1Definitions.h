@@ -650,6 +650,7 @@ uint16_t      SendBuffer[SENDBUFFERSIZE+1];                                     
 uint16_t      BuddyBuffer[SENDBUFFERSIZE+1];                                        //    Data from wireless or PPM buddy (16 words)
 uint16_t      ShownBuffer[SENDBUFFERSIZE+1];                                        //    Data shown before
 uint16_t      RawDataBuffer[SENDBUFFERSIZE+1];                                      //    Data as actually sent
+uint16_t      InputsBuffer[CHANNELSUSED+1];                                         //    Data from pots 
 uint16_t      LastBuffer[CHANNELSUSED + 1];                                         //    Used to spot any change
 uint16_t      PreMixBuffer[CHANNELSUSED + 1];                                       //    Data collected from sticks
 uint8_t       MaxDegrees[5][CHANNELSUSED + 1];                                      //    Max degrees (180)
