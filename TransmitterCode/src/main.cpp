@@ -684,9 +684,15 @@ GetNewChannelValues()
             InputValue  = AnalogueReed(InputChannel);                           // Get values from sticks' pots taking into account mode 1 and mode 2
             OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputValue, InputChannel, OutputChannel); // Use function pointer array to invoke selected interpolation.
         }
-     //   PreMixBuffer[OutputChannel] = InputValue;  // test this idea later  ...
-          PreMixBuffer[OutputChannel] = OutputValue; // ready to add mixes ...
-          SendBuffer[OutputChannel]   = OutputValue; // put result into buffer for when no mix
+
+
+
+
+
+       // PreMixBuffer[OutputChannel] = map(InputValue, ChannelMin[InputChannel], ChannelMax[InputChannel], IntoHigherRes(CurveDots[0]), IntoHigherRes(CurveDots[4])); // heer
+        PreMixBuffer[OutputChannel] = OutputValue; // This was the original line
+        
+        SendBuffer[OutputChannel]   = OutputValue; // put result into buffer for when no mix
     }
     DoMixes();                                                                  // Mixes PremixBuffer and returns it in SendBuffer (All 16 channels)
     DoTrimsAndSubtrims();                                                       // Trims after mixing.    
