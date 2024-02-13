@@ -15,7 +15,7 @@ var searchData=
   ['banksnamesview_12',['BANKSNAMESVIEW',['../1Definitions_8h.html#a3e5a3899e1c4af97aaae48211045cde5',1,'1Definitions.h']]],
   ['banksounds_13',['BankSounds',['../1Definitions_8h.html#ade4ac1f396d9c6a9b601c8f7041fba9c',1,'1Definitions.h']]],
   ['banksused_14',['BANKSUSED',['../1Definitions_8h.html#a16ec6f28a04c27b65af626adf8a994f6',1,'1Definitions.h']]],
-  ['bankswitch_15',['bankswitch',['../1Definitions_8h.html#a582e13b912bcd3ca62f855f79eea6a64',1,'BANKSWITCH:&#160;1Definitions.h'],['../1Definitions_8h.html#a25c91ee36493ae708c7e96d77b786d0d',1,'BankSwitch:&#160;1Definitions.h']]],
+  ['bankswitch_15',['bankswitch',['../1Definitions_8h.html#a25c91ee36493ae708c7e96d77b786d0d',1,'BankSwitch:&#160;1Definitions.h'],['../1Definitions_8h.html#a582e13b912bcd3ca62f855f79eea6a64',1,'BANKSWITCH:&#160;1Definitions.h']]],
   ['banktexts_16',['BankTexts',['../1Definitions_8h.html#a44936e9f900587ebc19fb8564033c892',1,'1Definitions.h']]],
   ['bankthree_17',['BANKTHREE',['../1Definitions_8h.html#a2e95db48bdc3034a76977452d767933c',1,'1Definitions.h']]],
   ['banktwo_18',['BANKTWO',['../1Definitions_8h.html#a4fe53fd1760aef0ce87d3a5a452eb652',1,'1Definitions.h']]],

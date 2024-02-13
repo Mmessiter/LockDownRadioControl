@@ -593,6 +593,7 @@ var 1Definitions_8h =
     [ "ina219", "1Definitions_8h.html#a69393b86406e49dbacfbabd283877495", null ],
     [ "Inactivity_Start", "1Definitions_8h.html#a42f848041eda5cd5b98d334ab44a15a1", null ],
     [ "Inactivity_Timeout", "1Definitions_8h.html#ae99f193f5a3e06508bbe4b32ee91a963", null ],
+    [ "InputsBuffer", "1Definitions_8h.html#aaf63e8961a55dbde928db40c88b72d5d", null ],
     [ "InPutStick", "1Definitions_8h.html#ab9d98ee9d26a1af8f20291fd0b717056", null ],
     [ "InputTrim", "1Definitions_8h.html#aa7902ad07a101f48774eafbde7456c40", null ],
     [ "InterpolationTypes", "1Definitions_8h.html#a5424ceb23e086124c417474911365a58", null ],
