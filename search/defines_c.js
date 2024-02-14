@@ -1,12 +1,12 @@
 var searchData=
 [
   ['m_5fbank_0',['M_Bank',['../1Definitions_8h.html#afbfbe35486d9ee68d5286e84b4134d04',1,'1Definitions.h']]],
-  ['m_5fenabled_1',['M_Enabled',['../1Definitions_8h.html#ad2b2fe49829868cf9b49c2e65dfaa006',1,'1Definitions.h']]],
-  ['m_5fmasterchannel_2',['M_MasterChannel',['../1Definitions_8h.html#ad6c3cb6bd50690ce1867594d589cc727',1,'1Definitions.h']]],
-  ['m_5foffset_3',['M_OFFSET',['../1Definitions_8h.html#ae5f33e4ec3ed8ebdb04ae87f790636c0',1,'1Definitions.h']]],
-  ['m_5fonedirection_4',['M_ONEDIRECTION',['../1Definitions_8h.html#a84a1dfac58dea9586fff2df38ebe6060',1,'1Definitions.h']]],
-  ['m_5fpercent_5',['M_Percent',['../1Definitions_8h.html#a1d2c1a7c2e532457f8a16284d4560094',1,'1Definitions.h']]],
-  ['m_5fr1_6',['M_R1',['../1Definitions_8h.html#a25c000282c221bb28fa3fac74ccb1eae',1,'1Definitions.h']]],
+  ['m_5fmasterchannel_1',['M_MasterChannel',['../1Definitions_8h.html#ad6c3cb6bd50690ce1867594d589cc727',1,'1Definitions.h']]],
+  ['m_5fmix_5finputs_2',['M_MIX_INPUTS',['../1Definitions_8h.html#a204b855eb3fcda39f47dcbd63847b8f4',1,'1Definitions.h']]],
+  ['m_5fmix_5foutputs_3',['M_MIX_OUTPUTS',['../1Definitions_8h.html#a2a9cdabec136ba751010e394af716541',1,'1Definitions.h']]],
+  ['m_5foffset_4',['M_OFFSET',['../1Definitions_8h.html#ae5f33e4ec3ed8ebdb04ae87f790636c0',1,'1Definitions.h']]],
+  ['m_5fonedirection_5',['M_ONEDIRECTION',['../1Definitions_8h.html#a84a1dfac58dea9586fff2df38ebe6060',1,'1Definitions.h']]],
+  ['m_5fpercent_6',['M_Percent',['../1Definitions_8h.html#a1d2c1a7c2e532457f8a16284d4560094',1,'1Definitions.h']]],
   ['m_5fr2_7',['M_R2',['../1Definitions_8h.html#a4a4b6ec654cebc103b3e88037cf29de8',1,'1Definitions.h']]],
   ['m_5freversed_8',['M_Reversed',['../1Definitions_8h.html#a0cfa6a19316c6fd6dc867618db62bbe0',1,'1Definitions.h']]],
   ['m_5fslavechannel_9',['M_SlaveChannel',['../1Definitions_8h.html#af4336a5f819b0e4442cad77a362e97d9',1,'1Definitions.h']]],
