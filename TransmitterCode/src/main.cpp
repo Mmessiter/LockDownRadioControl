@@ -391,7 +391,7 @@ FASTRUN uint16_t ReadThreePositionSwitch(uint8_t l) // This returns the input on
             if (Channel12SwitchValue == 180) k = ChannelMax[l];
             break;
         default:
-            k = ChannelCentre[l]; // Centre is default for channels 13,14,15 & 16 because no input is possible
+            k = 1500; // Centre is default for channels 13,14,15 & 16 because no input is possible
             break;
     }
     return k;
@@ -416,7 +416,6 @@ FASTRUN void DoMixInputs() // heer
                         short max           =   ChannelMax[SlaveChannel]; 
                         short min           =   ChannelMin[SlaveChannel];
                         short mid           =   ((max - min) / 2);
-                       
                         short MappedInput   =   map (InputsBuffer[MasterChannel], ChannelMin[MasterChannel], ChannelMax[MasterChannel], ChannelMin[SlaveChannel], ChannelMax[SlaveChannel]);
                         short MixValue      =   map (MappedInput,min,max,-mid,mid) * (short)Mixes[MixNumber][M_Percent] / 100;
                       
@@ -705,7 +704,7 @@ FASTRUN void GetNewChannelValues()
         }
     }
     
-    DoMixInputs();                                                                // *** >> if needed, Mixes InputsBuffer[] and returns results in InputsBuffer[] (All 16 channels)
+    DoMixInputs();                                                               // *** >> if needed, Mixes InputsBuffer[] and returns results in InputsBuffer[] (All 16 channels)
    
     // *** NOW Calculate 16 OUTPUTS ***
 
