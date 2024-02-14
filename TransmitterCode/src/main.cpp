@@ -436,7 +436,7 @@ FASTRUN void DoMixInputs() // heer
 {
     for (short MixNumber = 1; MixNumber < MAXMIXES; ++MixNumber)
     {
-        if (Mixes[MixNumber][M_Enabled])
+        if (Mixes[MixNumber][M_MIX_INPUTS])
         {
             if (Mixes[MixNumber][M_Bank] == Bank || (!Mixes[MixNumber][M_Bank]))
             {
@@ -499,7 +499,7 @@ FASTRUN void DoMixOutputs()
 
     for (MixNumber = 1; MixNumber < MAXMIXES; ++MixNumber)
     {
-        if (Mixes[MixNumber][M_Enabled])
+        if (Mixes[MixNumber][M_MIX_OUTPUTS])
         {
             if (Mixes[MixNumber][M_Bank] == Bank || (!Mixes[MixNumber][M_Bank]))
             {
@@ -731,23 +731,23 @@ void DoTrimsAndSubtrims() {
 /** @brief GET NEW SERVO POSITIONS */
 FASTRUN void GetNewChannelValues()
 {
-    if (NewCompressNeeded) return;                                                      // Have we compressed the last one yet?
-    NewCompressNeeded = true;                                                           // No. It's therefore time for new data.
-    uint16_t OutputValue,OutputChannel;
-    for (OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {            // FIRST READ ALL 16 INPUTS
+    if (NewCompressNeeded) return;                                                                                  // Have we compressed the last one yet?
+    NewCompressNeeded = true;                                                                                       // No. It's therefore time for new data.
+    for (uint16_t OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {                               // FIRST READ ALL 16 INPUTS
         if (InPutStick[OutputChannel] <= 7) InputsBuffer[OutputChannel] = AnalogueReed(InPutStick[OutputChannel]);  // Get values from sticks' pots taking into account mode 1 and mode 2
     }
     
-    //                             ^^^INPUTS BUFFER NOW CONTAINS ALL 16 INPUTS^^^ 
-
+    //                            *** INPUTS BUFFER NOW CONTAINS ALL 16 INPUTS ***
     // ***********************************************************************************
 
-        DoMixInputs();                                                        // Mixes InputsBuffer and returns it in InputsBuffer (All 16 channels)
+        DoMixInputs();       // Mixes InputsBuffer and returns it in InputsBuffer (All 16 channels)
 
     // ***********************************************************************************
-    //                            From here on, we are dealing with the 16 OUTPUTS
+    //                            *** From here on, we are dealing with the 16 OUTPUTS ***
 
-    for (OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {    // NOW DO ALL 16 OUTPUTS
+     uint16_t OutputValue;
+
+    for (uint16_t OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {    // NOW DO ALL 16 OUTPUTS
         uint16_t InputChannel = InPutStick[OutputChannel];                      // Input sticks knobs & switches are mapped by user
         GetCurveDots(OutputChannel, DualRateValue);                             // This for the Dual Rates function
         if (InputChannel > 7) {                                                 // Must be a switch if over 7
@@ -759,7 +759,7 @@ FASTRUN void GetNewChannelValues()
         PreMixBuffer[OutputChannel] = OutputValue; 
         SendBuffer[OutputChannel]   = OutputValue; 
     }
- //   DoMixOutputs();                                                             // Mixes PremixBuffer and returns it in SendBuffer (All 16 channels)
+    DoMixOutputs();                                                             // Mixes PremixBuffer and returns it in SendBuffer (All 16 channels)
     DoTrimsAndSubtrims();                                                       // Trims after mixing.    
     DoSlowServos();                                                             // Some servos may need to be slowed down
     DoRouteOutputs();                                                           // This function might re-route outputs to user-defined channels (Before reversing)
@@ -1743,7 +1743,6 @@ void SetDefaultValues()
         ChannelOutPut[i] = i;
     }
    
-
     for (i = 0; i < CHANNELSUSED; ++i) {
         FailSafeChannel[i] = false;
     }
@@ -1753,9 +1752,9 @@ void SetDefaultValues()
             ChannelNames[i][j] = DefaultChannelNames[i][j];
         }
     }
-    for (j = 0; j < BANKSUSED; ++j) {
+    for (j = 1; j <= BANKSUSED; ++j) {
         for (i = 0; i < CHANNELSUSED; ++i) {
-            Exponential[j][i] = DEFAULT_EXPO; // 0% (50) expo = default
+            Exponential[j][i] = DEFAULT_EXPO;               // 0% (50) expo = default
         }
     }
     for (j = 0; j < BANKSUSED; ++j) {

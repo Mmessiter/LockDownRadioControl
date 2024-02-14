@@ -24,7 +24,7 @@
     #define TXVERSION_MAJOR   2 // first three *must* match RX but _EXTRA can be different
     #define TXVERSION_MINOR   4
     #define TXVERSION_MINIMUS 5
-    #define TXVERSION_EXTRA   "f 10/02/24" 
+    #define TXVERSION_EXTRA   "g 14/02/24" 
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -143,16 +143,17 @@
 //                               Mixes                                      *
 // **************************************************************************
 
-    #define M_Enabled       0 // Offsets for Mixes array ( up to 17)
+    #define M_MIX_OUTPUTS   0 // Offsets for Mixes array ( up to 17)
     #define M_Bank          1
     #define M_MasterChannel 2
     #define M_SlaveChannel  3
     #define M_Reversed      4
     #define M_Percent       5
-    #define M_R1            6
+    #define M_MIX_INPUTS    6
     #define M_R2            7
     #define M_ONEDIRECTION  8
     #define M_OFFSET        9
+   
 
 // **************************************************************************
 //                               Screens                                    *
@@ -623,7 +624,7 @@ void             SendSpecialPacketFromPPMModule();
 RF24          Radio1(CE_PIN, CSN_PIN);
 WDT_T4<WDT3>  TeensyWatchDog;
 WDT_timings_t WatchDogConfig;
-byte          Mixes[MAXMIXES + 1][17];                      // 17 possible elements per mix. NOTHING to do with channels count!!!
+uint8_t       Mixes[MAXMIXES + 1][17];                      // 17 possible elements per mix. NOTHING to do with channels count!!!
 int           Trims[BANKSUSED + 1][CHANNELSUSED + 1];       // Trims to store
 uint8_t       Exponential[BANKSUSED + 1][CHANNELSUSED + 1]; // Exponential
 uint8_t       InterpolationTypes[BANKSUSED + 1][CHANNELSUSED + 1];
@@ -644,7 +645,6 @@ uint8_t       GPSMarkHere      = 0;
 uint16_t      TrimRepeatSpeed  = 600;
 char          na[]             = "";
 uint8_t       StepSize[16]     = {0, 0, 0, 0, 0, 0, 0, 0, 5, 25, 5, 25, 5, 25, 5, 25}; //    How far to move each time on slow servos
-
 uint16_t      CurrentPosition[SENDBUFFERSIZE+1];                                    //    Position from which a slow servo started (0 = not started yet)
 uint16_t      SendBuffer[SENDBUFFERSIZE+1];                                         //    Data to send to rx (16 words)
 uint16_t      BuddyBuffer[SENDBUFFERSIZE+1];                                        //    Data from wireless or PPM buddy (16 words)
