@@ -731,22 +731,21 @@ FASTRUN void GetNewChannelValues()
 {
     if (NewCompressNeeded) return;                                                                                  // Have we compressed the last one yet?
     NewCompressNeeded = true;                                                                                       // No. It's therefore time for new data.
+  
     for (uint16_t OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {                               // FIRST READ ALL 16 INPUTS
+        InputsBuffer[OutputChannel] =  ChannelCentre[OutputChannel] ;
         if (InPutStick[OutputChannel] <= 7) InputsBuffer[OutputChannel] = AnalogueReed(InPutStick[OutputChannel]);  // Get values from sticks' pots taking into account mode 1 and mode 2
     }
-    
     //                            *** INPUTS BUFFER NOW CONTAINS ALL 16 INPUTS ***
     // ***********************************************************************************
-
-        DoMixInputs();       // Mixes InputsBuffer and returns it in InputsBuffer (All 16 channels)
-
+        DoMixInputs();                                                          // Mixes InputsBuffer and returns it in InputsBuffer (All 16 channels)
     // ***********************************************************************************
     //                            *** From here on, we are dealing with the 16 OUTPUTS ***
     for (uint16_t OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {    // NOW DO ALL 16 OUTPUTS
-        uint16_t InputChannel = InPutStick[OutputChannel];                      // Input sticks knobs & switches are mapped by user
-        GetCurveDots(OutputChannel, DualRateValue);                             // This for the Dual Rates function
-        if (InputChannel > 7) {                                                 // Must be a switch if over 7
-             PreMixBuffer[OutputChannel] = GetStickInput(InputChannel);         // Four 3 postion switches
+        uint16_t InputChannel   = InPutStick[OutputChannel];                     // Input sticks knobs & switches are mapped by user
+        GetCurveDots(OutputChannel, DualRateValue);                              // This for the Dual Rates function
+        if ((InputChannel > 7) && (!InputsBuffer[OutputChannel])){               // Must be a switch if over 7
+              PreMixBuffer[OutputChannel] = GetStickInput(InputChannel);         // 3 postion switches above channel 8 cannot be used as mix input masters but can be used as mix output slaves
         }
         else {                                                                  // it's a Stick or knob
              PreMixBuffer[OutputChannel] = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputsBuffer[OutputChannel], InPutStick[OutputChannel], OutputChannel); // Use function pointer array to invoke selected interpolation.
