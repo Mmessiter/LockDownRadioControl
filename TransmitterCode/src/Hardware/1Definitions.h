@@ -615,7 +615,8 @@ void             TrimsToSubtrim();
 void             SendAllAgain();
 void             LogBuddyChange();
 void             SetUpTargetForBuddy();
-void             SendSpecialPacketFromPPMModule();     
+void             SendSpecialPacketFromPPMModule();  
+FASTRUN uint16_t ReadThreePositionSwitch(uint8_t l); // This returns the input only   
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *

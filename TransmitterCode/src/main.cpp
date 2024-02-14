@@ -350,7 +350,7 @@ FASTRUN void ShowServoPos()
         if (InputDevice < 8)
             InputAmount = AnalogueReed(InputDevice);
         else
-            InputAmount = GetStickInputInputOnly(InputDevice);                                                    // not analogue
+            InputAmount = ReadThreePositionSwitch(InputDevice);                                                    // not analogue
         InputAmount  = map(InputAmount, ChannelCentre[InputDevice], ChannelMax[InputDevice], 0, 100);             // input stick position
         OutputAmount = map(SendBuffer[InputDevice], MINMICROS, MAXMICROS, -100, 100);                             // output servo position
         SendValue(ChannelInput, InputAmount);                                                                     // input stick position
@@ -366,39 +366,7 @@ FASTRUN void ShowServoPos()
 }
 
 /*********************************************************************************************************************************/
-FASTRUN uint16_t GetStickInput(uint8_t l) // This returns the proper output - not just input
-{
-    uint16_t k = 0;
-    switch (l) {
-        case 8:
-            if (Channel9SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][8]);
-            if (Channel9SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][8]);
-            if (Channel9SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][8]);
-            break;
-        case 9:
-            if (Channel10SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][9]);
-            if (Channel10SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][9]);
-            if (Channel10SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][9]);
-            break;
-        case 10:
-            if (Channel11SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][10]);
-            if (Channel11SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][10]);
-            if (Channel11SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][10]);
-            break;
-        case 11:
-            if (Channel12SwitchValue == 0) k = IntoHigherRes(MinDegrees[Bank][11]);
-            if (Channel12SwitchValue == 90) k = IntoHigherRes(CentreDegrees[Bank][11]);
-            if (Channel12SwitchValue == 180) k = IntoHigherRes(MaxDegrees[Bank][11]);
-            break;
-        default:
-            k = IntoHigherRes(90); // channels 13,14,15,16 are simply centred
-            break;
-    }
-    return k;
-}
-
-/*********************************************************************************************************************************/
-FASTRUN uint16_t GetStickInputInputOnly(uint8_t l) // This returns the input only
+FASTRUN uint16_t ReadThreePositionSwitch(uint8_t l) // This returns the input only
 {
     uint16_t k = 0;
     switch (l) {
@@ -468,20 +436,15 @@ FASTRUN void DoMixInputs() // heer
                             if (Mixes[MixNumber][M_Reversed]) MixValue = -MixValue;
                         }
                         MixValue += (Mixes[MixNumber][M_OFFSET] - 127) * 8;                 // add offset
-                        
-                        MixValue += InputsBuffer[SlaveChannel] ;                             // This is the actual mix moment! (MixValue is now the mixed value)
-
+                        MixValue += InputsBuffer[SlaveChannel] ;                            // This is the actual mix moment! (MixValue is now the mixed value
                         InputsBuffer[SlaveChannel] = MixValue;                              // put the mixed value back into the input buffer
-                        
-                        short MinimumDeg = ChannelMin[SlaveChannel];
-                        short MaximumDeg = ChannelMax[SlaveChannel]; 
-                        if (MinimumDeg > MaximumDeg)
+                        if (ChannelMin[SlaveChannel] > ChannelMax[SlaveChannel])
                         {
-                           InputsBuffer[SlaveChannel] = constrain(MixValue, MaximumDeg, MinimumDeg);
+                           InputsBuffer[SlaveChannel] = constrain(MixValue, ChannelMax[SlaveChannel],  ChannelMin[SlaveChannel]);
                         }
                         else
                         {
-                            InputsBuffer[SlaveChannel] = constrain(MixValue, MinimumDeg, MaximumDeg);
+                            InputsBuffer[SlaveChannel] = constrain(MixValue,  ChannelMin[SlaveChannel], ChannelMax[SlaveChannel]);
                         }
                     }
                 }
@@ -732,64 +695,32 @@ FASTRUN void GetNewChannelValues()
     if (NewCompressNeeded) return;                                                                                  // Have we compressed the last one yet?
     NewCompressNeeded = true;                                                                                       // No. It's therefore time for new data.
   
-    for (uint16_t OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {                               // FIRST READ ALL 16 INPUTS
-        InputsBuffer[OutputChannel] =  ChannelCentre[OutputChannel] ;
-        if (InPutStick[OutputChannel] <= 7) InputsBuffer[OutputChannel] = AnalogueReed(InPutStick[OutputChannel]);  // Get values from sticks' pots taking into account mode 1 and mode 2
-    }
-    //                            *** INPUTS BUFFER NOW CONTAINS ALL 16 INPUTS ***
-    // ***********************************************************************************
-        DoMixInputs();                                                          // Mixes InputsBuffer and returns it in InputsBuffer (All 16 channels)
-    // ***********************************************************************************
-    //                            *** From here on, we are dealing with the 16 OUTPUTS ***
-    for (uint16_t OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {    // NOW DO ALL 16 OUTPUTS
-        uint16_t InputChannel   = InPutStick[OutputChannel];                     // Input sticks knobs & switches are mapped by user
-        GetCurveDots(OutputChannel, DualRateValue);                              // This for the Dual Rates function
-        if ((InputChannel > 7) && (!InputsBuffer[OutputChannel])){               // Must be a switch if over 7
-              PreMixBuffer[OutputChannel] = GetStickInput(InputChannel);         // 3 postion switches above channel 8 cannot be used as mix input masters but can be used as mix output slaves
-        }
-        else {                                                                  // it's a Stick or knob
-             PreMixBuffer[OutputChannel] = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputsBuffer[OutputChannel], InPutStick[OutputChannel], OutputChannel); // Use function pointer array to invoke selected interpolation.
-        }
-        SendBuffer[OutputChannel]        =   PreMixBuffer[OutputChannel]; 
-    }
-    DoMixOutputs();                                                             // Mixes PremixBuffer and returns it in SendBuffer (All 16 channels)
-    DoTrimsAndSubtrims();                                                       // Trims after mixing.    
-    DoSlowServos();                                                             // Some servos may need to be slowed down
-    DoRouteOutputs();                                                           // This function might re-route outputs to user-defined channels (Before reversing)
-    DoReverseSense();                                                           // This function reverses servos if needed (After routing)  
-}
-/*********************************************************************************************************************************/
-
-/** @brief GET NEW SERVO POSITIONS */
-FASTRUN void GetNewChannelValues_OLD_VERSION()
-{
-    if (NewCompressNeeded) return;                                              // Have we compressed the last one yet?
-    NewCompressNeeded = true;                                                   // No. It's therefore time for new data.
-    uint16_t OutputValue, InputChannel, InputValue, OutputChannel;
+   //  *** FIRST, READ ALL 16 INPUTS and store these in InputsBuffer[] array ***
     
-    for (OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {    // Do 16 channels
-        InputChannel = InPutStick[OutputChannel];                               // Input sticks knobs & switches are mapped by user
-        GetCurveDots(OutputChannel, DualRateValue);                             // This for the Dual Rates function
-        if (InputChannel > 7) {                                                 // Must be a switch if over 7
-            OutputValue = GetStickInput(InputChannel);                          // Four 3 postion switches
-            InputValue = OutputValue;
+    for (uint16_t OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {                             
+        if (InPutStick[OutputChannel] < 8) {
+            InputsBuffer[OutputChannel] = AnalogueReed(InPutStick[OutputChannel]);  // Get values from sticks' pots (taking into account mode 1 and mode 2!)
+        } else {
+            InputsBuffer[OutputChannel] = ReadThreePositionSwitch(OutputChannel);
         }
-        else {                                                                  // i.e. l <= 7 so it's a Stick/knob/switch
-            InputValue  = AnalogueReed(InputChannel);                           // Get values from sticks' pots taking into account mode 1 and mode 2
-            OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputValue, InputChannel, OutputChannel); // Use function pointer array to invoke selected interpolation.
-        }
-
-       // PreMixBuffer[OutputChannel] = map(InputValue, ChannelMin[InputChannel], ChannelMax[InputChannel], IntoHigherRes(CurveDots[0]), IntoHigherRes(CurveDots[4])); 
-        PreMixBuffer[OutputChannel] = OutputValue; // This was the original line
-        
-        SendBuffer[OutputChannel]   = OutputValue; // put result into buffer for when no mix
     }
-    DoMixOutputs();                                                                  // Mixes PremixBuffer and returns it in SendBuffer (All 16 channels)
+    
+    DoMixInputs(); // *** if needed, Mixes InputsBuffer and returns it in InputsBuffer (All 16 channels)
+   
+    // *** NOW DO ALL 16 OUTPUTS ***
+
+    for (uint16_t OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {    // NOW DO ALL 16 OUTPUTS
+        GetCurveDots(OutputChannel, DualRateValue);                             // This for the Dual Rates function                                             
+        PreMixBuffer[OutputChannel] = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputsBuffer[OutputChannel], InPutStick[OutputChannel], OutputChannel); // Use function pointer array to invoke selected interpolation.
+        SendBuffer[OutputChannel]   =   PreMixBuffer[OutputChannel]; 
+    }
+    DoMixOutputs();                                                             // If needed, Mixes PremixBuffer and returns it in SendBuffer (All 16 channels)
     DoTrimsAndSubtrims();                                                       // Trims after mixing.    
     DoSlowServos();                                                             // Some servos may need to be slowed down
     DoRouteOutputs();                                                           // This function might re-route outputs to user-defined channels (Before reversing)
     DoReverseSense();                                                           // This function reverses servos if needed (After routing)  
 }
+
 /*********************************************************************************************************************************/
 
 void ReduceLimits()
