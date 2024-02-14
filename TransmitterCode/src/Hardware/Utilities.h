@@ -1038,7 +1038,7 @@ bool AnyMatches(uint8_t a, uint8_t b, uint8_t c)
 
 /******************************************** CHANNEL REVERSE FUNCTION **********************************************************/
 
-FASTRUN void DoReverseSense()
+FASTRUN void DoServoReverse()
 {
     for (uint8_t i = 0; i < 16; i++) {
         if (ReversedChannelBITS & 1 << i) {                                                   // Is this channel reversed?

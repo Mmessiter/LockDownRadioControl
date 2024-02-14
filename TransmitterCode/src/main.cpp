@@ -371,27 +371,27 @@ FASTRUN uint16_t ReadThreePositionSwitch(uint8_t l) // This returns the input on
     uint16_t k = 0;
     switch (l) {
         case 8:
-            if (Channel9SwitchValue == 0) k = ChannelMin[l];
-            if (Channel9SwitchValue == 90) k = ChannelCentre[l];
+            if (Channel9SwitchValue == 0)   k = ChannelMin[l];
+            if (Channel9SwitchValue == 90)  k = ChannelCentre[l];
             if (Channel9SwitchValue == 180) k = ChannelMax[l];
             break;
         case 9:
-            if (Channel10SwitchValue == 0) k = ChannelMin[l];
-            if (Channel10SwitchValue == 90) k = ChannelCentre[l];
+            if (Channel10SwitchValue == 0)   k = ChannelMin[l];
+            if (Channel10SwitchValue == 90)  k = ChannelCentre[l];
             if (Channel10SwitchValue == 180) k = ChannelMax[l];
             break;
         case 10:
-            if (Channel11SwitchValue == 0) k = ChannelMin[l];
-            if (Channel11SwitchValue == 90) k = ChannelCentre[l];
+            if (Channel11SwitchValue == 0)   k = ChannelMin[l];
+            if (Channel11SwitchValue == 90)  k = ChannelCentre[l];
             if (Channel11SwitchValue == 180) k = ChannelMax[l];
             break;
         case 11:
-            if (Channel12SwitchValue == 0) k = ChannelMin[l];
-            if (Channel12SwitchValue == 90) k = ChannelCentre[l];
+            if (Channel12SwitchValue == 0)   k = ChannelMin[l];
+            if (Channel12SwitchValue == 90)  k = ChannelCentre[l];
             if (Channel12SwitchValue == 180) k = ChannelMax[l];
             break;
         default:
-            k = 1500; // Centre because no input possible
+            k = ChannelCentre[l]; // Centre is default for channels 13,14,15 & 16 because no input is possible
             break;
     }
     return k;
@@ -658,7 +658,7 @@ void DoSlowServos()
     }
 }
 /*********************************************************************************************************************************/
-void DoRouteOutputs()
+void DoRerouteOutputs()
 { // This function re-routes outputs to the defined channels
 
     uint16_t temp[CHANNELSUSED];
@@ -692,33 +692,33 @@ void DoTrimsAndSubtrims() {
 /** @brief GET NEW SERVO POSITIONS */
 FASTRUN void GetNewChannelValues()
 {
-    if (NewCompressNeeded) return;                                                                                  // Have we compressed the last one yet?
-    NewCompressNeeded = true;                                                                                       // No. It's therefore time for new data.
+    if (NewCompressNeeded) return;                                               // Have we compressed the last one yet?
+    NewCompressNeeded = true;                                                    // No. It's therefore time for new data.
   
-   //  *** FIRST, READ ALL 16 INPUTS and store these in InputsBuffer[] array ***
+   //  *** FIRST, READ ALL 16 INPUTS and simply store these in InputsBuffer[] array ***
     
     for (uint16_t OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {                             
         if (InPutStick[OutputChannel] < 8) {
-            InputsBuffer[OutputChannel] = AnalogueReed(InPutStick[OutputChannel]);  // Get values from sticks' pots (taking into account mode 1 and mode 2!)
+            InputsBuffer[OutputChannel] = AnalogueReed(InPutStick[OutputChannel]);// Get values from sticks' pots (taking into account mode 1 and mode 2!)
         } else {
-            InputsBuffer[OutputChannel] = ReadThreePositionSwitch(OutputChannel);
+            InputsBuffer[OutputChannel] = ReadThreePositionSwitch(OutputChannel); // Get values from switches
         }
     }
     
-    DoMixInputs(); // *** if needed, Mixes InputsBuffer and returns it in InputsBuffer (All 16 channels)
+    DoMixInputs();                                                                // *** >> if needed, Mixes InputsBuffer[] and returns results in InputsBuffer[] (All 16 channels)
    
-    // *** NOW DO ALL 16 OUTPUTS ***
+    // *** NOW Calculate 16 OUTPUTS ***
 
-    for (uint16_t OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {    // NOW DO ALL 16 OUTPUTS
+    for (uint16_t OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {    
         GetCurveDots(OutputChannel, DualRateValue);                             // This for the Dual Rates function                                             
         PreMixBuffer[OutputChannel] = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputsBuffer[OutputChannel], InPutStick[OutputChannel], OutputChannel); // Use function pointer array to invoke selected interpolation.
-        SendBuffer[OutputChannel]   =   PreMixBuffer[OutputChannel]; 
+        SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel];              // Copy now to SendBuffer in case no mixes are needed
     }
-    DoMixOutputs();                                                             // If needed, Mixes PremixBuffer and returns it in SendBuffer (All 16 channels)
-    DoTrimsAndSubtrims();                                                       // Trims after mixing.    
-    DoSlowServos();                                                             // Some servos may need to be slowed down
-    DoRouteOutputs();                                                           // This function might re-route outputs to user-defined channels (Before reversing)
-    DoReverseSense();                                                           // This function reverses servos if needed (After routing)  
+    DoMixOutputs();                                                             // If needed, Mixes PremixBuffer and returns it in SendBuffer.
+    DoTrimsAndSubtrims();                                                       // Add trims to output after mixing.    
+    DoSlowServos();                                                             // Some servos may need to be slowed down for flaps etc.
+    DoRerouteOutputs();                                                         // This function might re-route outputs to user-defined channels.
+    DoServoReverse();                                                           // This function reverses servos if needed.
 }
 
 /*********************************************************************************************************************************/
