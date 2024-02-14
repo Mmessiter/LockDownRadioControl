@@ -495,19 +495,17 @@ FASTRUN void DoMixInputs() // heer
 /*********************************************************************************************************************************/
 FASTRUN void DoMixOutputs()
 {
-    short MixNumber, ChannelNumber, MixValue, MinimumDeg, MaximumDeg;
-
-    for (MixNumber = 1; MixNumber < MAXMIXES; ++MixNumber)
+    for (short MixNumber = 1; MixNumber < MAXMIXES; ++MixNumber)
     {
         if (Mixes[MixNumber][M_MIX_OUTPUTS])
         {
             if (Mixes[MixNumber][M_Bank] == Bank || (!Mixes[MixNumber][M_Bank]))
             {
-                for (ChannelNumber = 0; ChannelNumber < CHANNELSUSED; ++ChannelNumber)
+                for (short ChannelNumber = 0; ChannelNumber < CHANNELSUSED; ++ChannelNumber)
                 {
                     if ((Mixes[MixNumber][M_MasterChannel] - 1) == ChannelNumber)
                     {
-                        MixValue = (map(PreMixBuffer[ChannelNumber], MINMICROS, MAXMICROS, -HALFMICROSRANGE, HALFMICROSRANGE)) * (short)Mixes[MixNumber][M_Percent] / 100;
+                        short MixValue = (map(PreMixBuffer[ChannelNumber], MINMICROS, MAXMICROS, -HALFMICROSRANGE, HALFMICROSRANGE)) * (short)Mixes[MixNumber][M_Percent] / 100;
 
                         if (Mixes[MixNumber][M_ONEDIRECTION])
                         {
@@ -526,8 +524,8 @@ FASTRUN void DoMixOutputs()
                         }
                         MixValue += SendBuffer[(Mixes[MixNumber][M_SlaveChannel]) - 1]; // This is the actual mix moment! (MixValue is now the mixed value)
                         MixValue += (Mixes[MixNumber][M_OFFSET] - 127) * 8;
-                        MinimumDeg = IntoHigherRes(MinDegrees[Bank][(Mixes[MixNumber][M_SlaveChannel]) - 1]);
-                        MaximumDeg = IntoHigherRes(MaxDegrees[Bank][(Mixes[MixNumber][M_SlaveChannel]) - 1]);
+                        short MinimumDeg = IntoHigherRes(MinDegrees[Bank][(Mixes[MixNumber][M_SlaveChannel]) - 1]);
+                        short MaximumDeg = IntoHigherRes(MaxDegrees[Bank][(Mixes[MixNumber][M_SlaveChannel]) - 1]);
                         if (MinimumDeg > MaximumDeg)
                         {
                             SendBuffer[(Mixes[MixNumber][M_SlaveChannel]) - 1] = constrain(MixValue, MaximumDeg, MinimumDeg);
@@ -744,20 +742,16 @@ FASTRUN void GetNewChannelValues()
 
     // ***********************************************************************************
     //                            *** From here on, we are dealing with the 16 OUTPUTS ***
-
-     uint16_t OutputValue;
-
     for (uint16_t OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {    // NOW DO ALL 16 OUTPUTS
         uint16_t InputChannel = InPutStick[OutputChannel];                      // Input sticks knobs & switches are mapped by user
         GetCurveDots(OutputChannel, DualRateValue);                             // This for the Dual Rates function
         if (InputChannel > 7) {                                                 // Must be a switch if over 7
-            OutputValue = GetStickInput(InputChannel);                          // Four 3 postion switches
+             PreMixBuffer[OutputChannel] = GetStickInput(InputChannel);         // Four 3 postion switches
         }
         else {                                                                  // it's a Stick or knob
-            OutputValue = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputsBuffer[OutputChannel], InPutStick[OutputChannel], OutputChannel); // Use function pointer array to invoke selected interpolation.
+             PreMixBuffer[OutputChannel] = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputsBuffer[OutputChannel], InPutStick[OutputChannel], OutputChannel); // Use function pointer array to invoke selected interpolation.
         }
-        PreMixBuffer[OutputChannel] = OutputValue; 
-        SendBuffer[OutputChannel]   = OutputValue; 
+        SendBuffer[OutputChannel]        =   PreMixBuffer[OutputChannel]; 
     }
     DoMixOutputs();                                                             // Mixes PremixBuffer and returns it in SendBuffer (All 16 channels)
     DoTrimsAndSubtrims();                                                       // Trims after mixing.    
@@ -765,7 +759,6 @@ FASTRUN void GetNewChannelValues()
     DoRouteOutputs();                                                           // This function might re-route outputs to user-defined channels (Before reversing)
     DoReverseSense();                                                           // This function reverses servos if needed (After routing)  
 }
-
 /*********************************************************************************************************************************/
 
 /** @brief GET NEW SERVO POSITIONS */
