@@ -19,7 +19,7 @@ var Utilities_8h =
     [ "DecYear", "Utilities_8h.html#ad712237b8d367326a7f460181dade102", null ],
     [ "DegsToPercent", "Utilities_8h.html#a68b36025c7478c0710565b4fb059d9bc", null ],
     [ "DelayWithDog", "Utilities_8h.html#a3b1d8aa403e2724e55c71da3d9d13e7e", null ],
-    [ "DoReverseSense", "Utilities_8h.html#acbd7adcd2b0e2095a89b4a98042b526e", null ],
+    [ "DoServoReverse", "Utilities_8h.html#a3c9681b9994461b9c262eaeebd1b4bf2", null ],
     [ "DrawBox", "Utilities_8h.html#a060d8c4636339f7e6760cf835307530e", null ],
     [ "DrawDot", "Utilities_8h.html#ad0feb21fbea69455d1d206f142b563ac", null ],
     [ "DrawLine", "Utilities_8h.html#acbef1d41e1bd646b60a6e8afd9c66880", null ],
