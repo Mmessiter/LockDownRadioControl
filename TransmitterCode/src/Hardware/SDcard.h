@@ -90,9 +90,20 @@ void CheckOutPutChannels() // This function checks for bad or duplicate output c
 void CheckServoSpeeds()
 { // for slow servos
 
-    for (int j = 0; j < 4; ++j) {
-        for (int i = 0; i < 16; ++i) {
-            if ((ServoSpeed[j][i] > 100) || (!ServoSpeed[j][i]))  ServoSpeed[j][i] = 100;
+bool flag = false;
+    for (int j = 0; j < BANKSUSED + 1; ++j) {
+        for (int i = 0; i < CHANNELSUSED+1; ++i) {
+            if ((ServoSpeed[j][i] > 100) || (!ServoSpeed[j][i])){
+                flag = true; 
+                break;
+            }
+        }
+    }
+    if (flag) {
+        for (int j = 0; j < BANKSUSED + 1; ++j) {
+            for (int i = 0; i < CHANNELSUSED+1; ++i) {
+                ServoSpeed[j][i] = 100;
+            }
         }
     }
 }
@@ -171,7 +182,7 @@ bool ReadOneModel(uint32_t Mnum)
     }
     for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            ServoSpeed[j][i] = SDRead8BITS(SDCardAddress); // Goonspeed
+            ServoSpeed[j][i] = SDRead8BITS(SDCardAddress); 
             ++SDCardAddress;
         }
     } 
@@ -323,7 +334,7 @@ bool ReadOneModel(uint32_t Mnum)
     CheckBanksInUse();
    
     for (i = 0; i < 16; ++i) {
-       // ServoSpeed[0][i] = SDRead8BITS(SDCardAddress); // Goonspeed
+       // ServoSpeed[0][i] = SDRead8BITS(SDCardAddress); // GONE FROM HERE!
         ++SDCardAddress;
     }
    
@@ -966,7 +977,7 @@ void SaveOneModel(uint32_t mnum)
     }
     for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            SDUpdate8BITS(SDCardAddress, ServoSpeed[j][i]);  // new GOONSPEED
+            SDUpdate8BITS(SDCardAddress, ServoSpeed[j][i]);  // Save servo speeds
             ++SDCardAddress;
         }
     }
@@ -1102,7 +1113,7 @@ void SaveOneModel(uint32_t mnum)
         ++SDCardAddress;
     }
     for (i = 0; i < 16; ++i) {
-       // SDUpdate8BITS(SDCardAddress, ServoSpeed[0][i]);              // Goonspeed
+       // SDUpdate8BITS(SDCardAddress, ServoSpeed[0][i]);              // GONE FROM HERE!
         ++SDCardAddress;
     }
 
