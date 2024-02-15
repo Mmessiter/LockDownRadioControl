@@ -87,10 +87,10 @@ void CheckOutPutChannels() // This function checks for bad or duplicate output c
 
 
 /*********************************************************************************************************************************/
-void CheckStepSizes()
+void CheckServoSpeeds()
 { // for slow servos
     for (int i = 0; i < 16; ++i)
-        if (StepSize[i] > 100) StepSize[i] = 100;
+        if (ServoSpeed[i] > 100) ServoSpeed[i] = 100;
 }
 /*********************************************************************************************************************************/
 void CheckBanksInUse()
@@ -319,10 +319,10 @@ bool ReadOneModel(uint32_t Mnum)
     }
     CheckBanksInUse();
     for (i = 0; i < 16; ++i) {
-        StepSize[i] = SDRead8BITS(SDCardAddress);
+        ServoSpeed[i] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
-    CheckStepSizes();
+    CheckServoSpeeds();
     TimerDownwards = (bool)SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     TimerStartTime = SDRead16BITS(SDCardAddress);
@@ -996,7 +996,7 @@ void SaveOneModel(uint32_t mnum)
 
     SDCardAddress += 1;
 
-    for (i = 0; i < CHANNELSUSED; ++i) {
+    for (i = 0; i < CHANNELSUSED; ++i) {  
         SDUpdate8BITS(SDCardAddress, InPutStick[i]);
         ++SDCardAddress;
     }
@@ -1096,7 +1096,7 @@ void SaveOneModel(uint32_t mnum)
         ++SDCardAddress;
     }
     for (i = 0; i < 16; ++i) {
-        SDUpdate8BITS(SDCardAddress, StepSize[i]);
+        SDUpdate8BITS(SDCardAddress, ServoSpeed[i]);              // This bit must go
         ++SDCardAddress;
     }
 

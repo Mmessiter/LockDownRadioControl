@@ -400,7 +400,7 @@ FASTRUN uint16_t ReadThreePositionSwitch(uint8_t l) // This returns the input on
 /*********************************************************************************************************************************/
 //   INPUT Mixes
 /*********************************************************************************************************************************/
-FASTRUN void DoMixInputs() // heer
+FASTRUN void MixAnyInputs() // heer
 {
     for (short MixNumber = 1; MixNumber < MAXMIXES; ++MixNumber)
     {
@@ -455,7 +455,7 @@ FASTRUN void DoMixInputs() // heer
 /*********************************************************************************************************************************/
 //   OUTPUT Mixes
 /*********************************************************************************************************************************/
-FASTRUN void DoMixOutputs()
+FASTRUN void MixAnyOutputs()
 {
     for (short MixNumber = 1; MixNumber < MAXMIXES; ++MixNumber)
     {
@@ -636,16 +636,16 @@ void GetCurveDots(uint16_t OutputChannel, uint16_t TheRate) // This for the Dual
 /**************************** This function implements slowed servos for flaps, U/Cs etc. ****************************************/
 /*********************************************************************************************************************************/
 
-void DoSlowServos()
+void SlowAnyServos()                                                             // This function implements slowed servos for flaps, U/Cs etc.
 {
-    static uint32_t SlowTime[16];                                                //
+    static uint32_t SlowTime[16];                                                // TODO: Make it BY BANK and not every bank <<<<<<<<<<<<<<*****************************
     for (int i = 0; i < 16; ++i) {                                               // Test every channel
-        if (StepSize[i] < 100) {                                                 // If StepSize = 100, use full speed. No slowing
+        if (ServoSpeed[i] < 100) {                                                 // If ServoSpeed = 100, use full speed. No slowing
             if ((millis() - SlowTime[i]) > 10) {                                 // This next part runs only 100 times per second
                 SlowTime[i] = millis();                                          // Store start time of this iteration
                 if (CurrentPosition[i] == 0) CurrentPosition[i] = SendBuffer[i]; // Must start somewhere
                 int distance = SendBuffer[i] - CurrentPosition[i];               // Define how far to move
-                int SSize    = StepSize[i];                                      // Get step size
+                int SSize    = ServoSpeed[i];                                      // Get step size
                 if (SSize > abs(distance)) SSize = 1;                            // This avoids overshooting the limit
                 if (distance < 0) SSize = -SSize;                                // Negative?
                 if (!distance) SSize = 0;                                        // Already arrived?
@@ -657,7 +657,7 @@ void DoSlowServos()
     }
 }
 /*********************************************************************************************************************************/
-void DoRerouteOutputs()
+void RerouteOutputs()
 { // This function re-routes outputs to the defined channels
 
     uint16_t temp[CHANNELSUSED];
@@ -683,7 +683,24 @@ void DoTrimsAndSubtrims() {
         PreMixBuffer[OutputChannel] =  SendBuffer[OutputChannel] ;                      // premixbuffer will be needed again...
     }
 }
-
+//**************************************************************************************************************************************************************
+void CalculateAllOutputs(){
+    for (uint16_t OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {    
+        GetCurveDots(OutputChannel, DualRateValue);                             // This for the Dual Rates function                                             
+        PreMixBuffer[OutputChannel] = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputsBuffer[OutputChannel], InPutStick[OutputChannel], OutputChannel); // Use function pointer array to invoke selected interpolation.
+        SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel];              // Copy now to SendBuffer in case no mixes are needed
+    }
+}
+//**************************************************************************************************************************************************************
+void GetAllInputs(){
+ for (uint16_t OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {                             
+        if (InPutStick[OutputChannel] < 8) {
+            InputsBuffer[OutputChannel] = AnalogueReed(InPutStick[OutputChannel]);// Get values from sticks' pots (taking into account mode 1 and mode 2!)
+        } else {
+            InputsBuffer[OutputChannel] = ReadThreePositionSwitch(OutputChannel); // Get values from switches
+        }
+    }
+}
 //**************************************************************************************************************************************************************
 //                                                                      new version of GET NEW SERVO POSITIONS 
 //**************************************************************************************************************************************************************
@@ -691,33 +708,17 @@ void DoTrimsAndSubtrims() {
 /** @brief GET NEW SERVO POSITIONS */
 FASTRUN void GetNewChannelValues()
 {
-    if (NewCompressNeeded) return;                                               // Have we compressed the last one yet?
-    NewCompressNeeded = true;                                                    // No. It's therefore time for new data.
-  
-   //  *** FIRST, READ ALL 16 INPUTS and simply store these in InputsBuffer[] array ***
-    
-    for (uint16_t OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {                             
-        if (InPutStick[OutputChannel] < 8) {
-            InputsBuffer[OutputChannel] = AnalogueReed(InPutStick[OutputChannel]);// Get values from sticks' pots (taking into account mode 1 and mode 2!)
-        } else {
-            InputsBuffer[OutputChannel] = ReadThreePositionSwitch(OutputChannel); // Get values from switches
-        }
+    if (!NewCompressNeeded){
+        NewCompressNeeded = true;                                                   
+        GetAllInputs();                                                             // Get all user inputs from sticks, pots and switches
+        MixAnyInputs();                                                             // Mixes InputsBuffer[] and returns results in InputsBuffer[] (All 16 channels)
+        CalculateAllOutputs();                                                      // Calculate all outputs
+        MixAnyOutputs();                                                            // If needed, Mixes PremixBuffer and returns it in SendBuffer.
+        DoTrimsAndSubtrims();                                                       // Add trims to output after mixing.    
+        SlowAnyServos();                                                            // Some servos may need to be slowed down for flaps etc.
+        RerouteOutputs();                                                           // This function might re-route outputs to user-defined channels.
+        ServoReverse();                                                             // This function reverses servos if needed.
     }
-    
-    DoMixInputs();                                                               // *** >> if needed, Mixes InputsBuffer[] and returns results in InputsBuffer[] (All 16 channels)
-   
-    // *** NOW Calculate 16 OUTPUTS ***
-
-    for (uint16_t OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel) {    
-        GetCurveDots(OutputChannel, DualRateValue);                             // This for the Dual Rates function                                             
-        PreMixBuffer[OutputChannel] = Interpolate[InterpolationTypes[Bank][OutputChannel]](InputsBuffer[OutputChannel], InPutStick[OutputChannel], OutputChannel); // Use function pointer array to invoke selected interpolation.
-        SendBuffer[OutputChannel]   = PreMixBuffer[OutputChannel];              // Copy now to SendBuffer in case no mixes are needed
-    }
-    DoMixOutputs();                                                             // If needed, Mixes PremixBuffer and returns it in SendBuffer.
-    DoTrimsAndSubtrims();                                                       // Add trims to output after mixing.    
-    DoSlowServos();                                                             // Some servos may need to be slowed down for flaps etc.
-    DoRerouteOutputs();                                                         // This function might re-route outputs to user-defined channels.
-    DoServoReverse();                                                           // This function reverses servos if needed.
 }
 
 /*********************************************************************************************************************************/
@@ -1726,7 +1727,7 @@ void SetDefaultValues()
         BanksInUse[i] = i + 4;
     }
     for (int i = 0; i < 16; ++i) {
-        StepSize[i] = 100;
+        ServoSpeed[i] = 100;
     }
     TrimMultiplier = 5;
     ModelDefined = 42;
@@ -3372,7 +3373,7 @@ void StartModelSetup()
     }
 
     if (CurrentView == MIXESVIEW) { //  read mixes
-        SaveMixValues();
+        ReadMixValues();
         SendCommand(ProgressEnd);
     }
 
@@ -3389,19 +3390,30 @@ void EndModelSetup()
     GotoFrontView();
 }
 
+
+/******************************************************************************************************************************/
+void UpdateSpeedScreen(){
+    char ns[16][4]           = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}};
+    char t14[]               = "t14";
+    
+    
+    for (int i = 0; i < 16; ++i) {
+        SendValue(ns[i], ServoSpeed[i]);
+    }
+
+
+     SendText(t14, BankTexts[BanksInUse[Bank-1]]);
+}
+
 /******************************************************************************************************************************/
 void StartSlowView()
 {
-
     char GoSlowServoScreen[] = "page SlowServoView";
-    char ns[16][4]           = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}};
     SendCommand(GoSlowServoScreen);
     CurrentView = SLOWSERVOVIEW;
     UpdateButtonLabels();
     UpdateModelsNameEveryWhere();
-    for (int i = 0; i < 16; ++i) {
-        SendValue(ns[i], StepSize[i]);
-    }
+    UpdateSpeedScreen();
 }
 /******************************************************************************************************************************/
 void EndSlowView()
@@ -3411,10 +3423,10 @@ void EndSlowView()
     char Progress[]      = "Progress";
     SendCommand(ProgressStart);
     for (int i = 0; i < 16; ++i) {
-        StepSize[i] = GetValue(ns[i]);
+        ServoSpeed[i] = GetValue(ns[i]);
         SendValue(Progress, i * (100 / 16));
     }
-    CheckStepSizes();
+    CheckServoSpeeds();
     SaveOneModel(ModelNumber);
     SendValue(Progress, 100);
     StartModelSetup();
@@ -4978,7 +4990,7 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(MIXES_VIEW, TextIn)) { //        First call to load screen
+        if (InStrng(MIXES_VIEW, TextIn)) {      // First call to load screen
             SendCommand(pMixesView);
             CurrentView = MIXESVIEW;
             UpdateModelsNameEveryWhere();
@@ -4987,27 +4999,29 @@ FASTRUN void ButtonWasPressed()
             SendValue(MixesView_MixNumber, MixNumber); // New load of mix window
             ShowMixValues();
             ClearText();
+            Look ("tets");
             return;
         }
-        if (InStrng(Mixes_View, TextIn)) { // Mix number OR a parameter has changed
+        if (InStrng(Mixes_View, TextIn)) {     // Mix number OR a parameter has changed
             CurrentView = MIXESVIEW;
-         
-            UpdateModelsNameEveryWhere();
             uint8_t ThisMixNumber = MixNumber; // save it
             MixNumber             = GetValue(MixesView_MixNumber);
-            if (LastMixNumber != MixNumber) // Did number change?
+            if (LastMixNumber != MixNumber)    // Did number change?
             {
-                SendCommand(Nb1);              // hide mix change button
-                SendCommand(Nb0);              // hide mix change button
-                LastMixNumber = MixNumber;     // save new mix number
-                MixNumber     = ThisMixNumber; // force back to old number to grab last lot before doing new one
-                SaveMixValues();               // save them
-                SaveOneModel(ModelNumber);
-                SendCommand(ProgressEnd);
+                SendCommand(Nb1);               // hide mix change button
+                SendCommand(Nb0);               // hide mix change button
+                LastMixNumber = MixNumber;      // save new mix number
+                MixNumber     = ThisMixNumber;  // Force back to old number to grab last lot before doing new one
+                ReadMixValues();                // Read them from screen
+                SaveOneModel(ModelNumber);      // Save them to SD card
+                SendCommand(ProgressEnd);       // End progress bar
                 MixNumber = LastMixNumber;      // back to new one
                 ShowMixValues();                // show new lot
                 SendCommand(Yb1);               // show mix change button
                 SendCommand(Yb0);               // show mix change button
+            } else {
+                ReadMixValues();                // heer??
+                SendCommand(ProgressEnd);
             }
             FixCHNames();
             ClearText();
@@ -5428,6 +5442,7 @@ void GetBank()   // ... and the other three switches
             UpdateModelsNameEveryWhere();
         }
         if (CurrentView == GRAPHVIEW) DisplayCurveAndServoPos();
+        if (CurrentView == SLOWSERVOVIEW) UpdateSpeedScreen();
     }
     MotorWasEnabled = MotorEnabled; // Remember motor state
     PreviousBank    = Bank;         // Remember BANK

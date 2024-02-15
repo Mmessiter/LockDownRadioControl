@@ -617,6 +617,8 @@ void             LogBuddyChange();
 void             SetUpTargetForBuddy();
 void             SendSpecialPacketFromPPMModule();  
 FASTRUN uint16_t ReadThreePositionSwitch(uint8_t l); // This returns the input only   
+void             UpdateSpeedScreen();
+
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
@@ -645,7 +647,9 @@ uint16_t      PacketNumber     = 0;
 uint8_t       GPSMarkHere      = 0;
 uint16_t      TrimRepeatSpeed  = 600;
 char          na[]             = "";
-uint8_t       StepSize[16]     = {0, 0, 0, 0, 0, 0, 0, 0, 5, 25, 5, 25, 5, 25, 5, 25}; //    How far to move each time on slow servos
+
+uint8_t       ServoSpeed[16];                                                         //    How far to move each time on slow servos
+
 uint16_t      CurrentPosition[SENDBUFFERSIZE+1];                                    //    Position from which a slow servo started (0 = not started yet)
 uint16_t      SendBuffer[SENDBUFFERSIZE+1];                                         //    Data to send to rx (16 words)
 uint16_t      BuddyBuffer[SENDBUFFERSIZE+1];                                        //    Data from wireless or PPM buddy (16 words)

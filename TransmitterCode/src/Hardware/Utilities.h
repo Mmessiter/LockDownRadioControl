@@ -783,12 +783,11 @@ void ClearSuccessRate()
 
 /*********************************************************************************************************************************/
 
-void SaveMixValues()   // just reads from the screen and saves to Mixes array
+void ReadMixValues()   // just reads from the screen and saves to Mixes array
 
 {
-
     char MixesView_MixOutput[]     = "Enabled";
-     char MixesView_MixInput[]     = "c0";
+    char MixesView_MixInput[]      = "c0";
     char MixesView_Bank[]          = "FlightMode";
     char MixesView_MasterChannel[] = "MasterChannel";
     char MixesView_SlaveChannel[]  = "SlaveChannel";
@@ -801,23 +800,23 @@ void SaveMixValues()   // just reads from the screen and saves to Mixes array
 
     SendCommand(ProgressStart);
     SendValue(Progress, 5);
-    Mixes[MixNumber][M_MIX_OUTPUTS] = GetValue(MixesView_MixOutput);
+    Mixes[MixNumber][M_MIX_OUTPUTS]     = GetValue(MixesView_MixOutput);
     SendValue(Progress, 7);
-    Mixes[MixNumber][M_MIX_INPUTS] = GetValue(MixesView_MixInput);
+    Mixes[MixNumber][M_MIX_INPUTS]      = GetValue(MixesView_MixInput);
     SendValue(Progress, 10);
-    Mixes[MixNumber][M_Bank] = GetValue(MixesView_Bank);
+    Mixes[MixNumber][M_Bank]            = GetValue(MixesView_Bank);
     SendValue(Progress, 25);
-    Mixes[MixNumber][M_MasterChannel] = GetValue(MixesView_MasterChannel);
+    Mixes[MixNumber][M_MasterChannel]   = GetValue(MixesView_MasterChannel);
     SendValue(Progress, 40);
-    Mixes[MixNumber][M_SlaveChannel] = GetValue(MixesView_SlaveChannel);
+    Mixes[MixNumber][M_SlaveChannel]    = GetValue(MixesView_SlaveChannel);
     SendValue(Progress, 55);
-    Mixes[MixNumber][M_Reversed] = GetValue(MixesView_Reversed);
+    Mixes[MixNumber][M_Reversed]        = GetValue(MixesView_Reversed);
     SendValue(Progress, 70);
-    Mixes[MixNumber][M_Percent] = GetValue(MixesView_Percent);
+    Mixes[MixNumber][M_Percent]         = GetValue(MixesView_Percent);
     SendValue(Progress, 87);
-    Mixes[MixNumber][M_ONEDIRECTION] = GetValue(MixesView_od);
+    Mixes[MixNumber][M_ONEDIRECTION]    = GetValue(MixesView_od);
     SendValue(Progress, 95);
-    Mixes[MixNumber][M_OFFSET] = GetValue(MixesView_offset) + 127; // because it's unsigned
+    Mixes[MixNumber][M_OFFSET]          = GetValue(MixesView_offset) + 127; // because it's unsigned
     SendValue(Progress, 100);
 }
 
@@ -1038,7 +1037,7 @@ bool AnyMatches(uint8_t a, uint8_t b, uint8_t c)
 
 /******************************************** CHANNEL REVERSE FUNCTION **********************************************************/
 
-FASTRUN void DoServoReverse()
+FASTRUN void ServoReverse()
 {
     for (uint8_t i = 0; i < 16; i++) {
         if (ReversedChannelBITS & 1 << i) {                                                   // Is this channel reversed?
