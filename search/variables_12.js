@@ -14,7 +14,7 @@ var searchData=
   ['recentpacketslost_11',['RecentPacketsLost',['../1Definitions_8h.html#a75bea305c82af413e997a07f6554ff93',1,'1Definitions.h']]],
   ['recentstartline_12',['RecentStartLine',['../1Definitions_8h.html#a1c51abf9c65ed93e152859c5c080f578',1,'1Definitions.h']]],
   ['recenttextfile_13',['RecentTextFile',['../1Definitions_8h.html#a850ebf7e5e2cefc8e47c06ad7523e9b8',1,'1Definitions.h']]],
-  ['reconnectchannel_14',['reconnectchannel',['../1Definitions_8h.html#a00c739eb670d33ce9b84f4576a4eb8ff',1,'ReConnectChannel:&#160;1Definitions.h'],['../common_8h.html#aff74788ae1118de652848453b4152a9d',1,'ReconnectChannel:&#160;common.h']]],
+  ['reconnectchannel_14',['reconnectchannel',['../common_8h.html#aff74788ae1118de652848453b4152a9d',1,'ReconnectChannel:&#160;common.h'],['../1Definitions_8h.html#a00c739eb670d33ce9b84f4576a4eb8ff',1,'ReConnectChannel:&#160;1Definitions.h']]],
   ['reconnected_15',['Reconnected',['../1Definitions_8h.html#a0f8aa0f6f0fca3b57e848eec8d23724e',1,'1Definitions.h']]],
   ['reconnectedmoment_16',['ReconnectedMoment',['../common_8h.html#ae6657a547a79d8e304b8ddeb3f6a38e0',1,'common.h']]],
   ['reconnectindex_17',['ReconnectIndex',['../common_8h.html#a90d98310365e78ee5ec06aaa7a4092f1',1,'common.h']]],

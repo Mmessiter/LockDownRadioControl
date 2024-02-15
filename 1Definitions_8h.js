@@ -773,7 +773,7 @@ var 1Definitions_8h =
     [ "Secs", "1Definitions_8h.html#a80df3d83e93a9ae7e2711eac4c42f033", null ],
     [ "SendBuffer", "1Definitions_8h.html#ac069b4ec7abb88811ddd06bbd401ee4c", null ],
     [ "SendNoData", "1Definitions_8h.html#ae2e29194ec87a0075a6ad4decfa37d8e", null ],
-    [ "ServoSpeed", "1Definitions_8h.html#a8e3d6706627a48316cea3dde925d63df", null ],
+    [ "ServoSpeed", "1Definitions_8h.html#aeafcca0684ace962be3301d6baa97425", null ],
     [ "SFV", "1Definitions_8h.html#a4d9a54ff71f98b95960f247428225810", null ],
     [ "ShownBuffer", "1Definitions_8h.html#a03b15ad4b4852d45e5d4ac49f3d29e90", null ],
     [ "ShowServoTimer", "1Definitions_8h.html#ae4989662282fe08eb2deb769a3611fa0", null ],
