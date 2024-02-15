@@ -89,8 +89,12 @@ void CheckOutPutChannels() // This function checks for bad or duplicate output c
 /*********************************************************************************************************************************/
 void CheckServoSpeeds()
 { // for slow servos
-    for (int i = 0; i < 16; ++i)
-        if (ServoSpeed[i] > 100) ServoSpeed[i] = 100;
+
+    for (int j = 0; j < 4; ++j) {
+        for (int i = 0; i < 16; ++i) {
+            if ((ServoSpeed[j][i] > 100) || (!ServoSpeed[j][i]))  ServoSpeed[j][i] = 100;
+        }
+    }
 }
 /*********************************************************************************************************************************/
 void CheckBanksInUse()
@@ -167,12 +171,11 @@ bool ReadOneModel(uint32_t Mnum)
     }
     for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-
-            // Nothing read!  - This space is spare for future use (5 * 17)
-
+            ServoSpeed[j][i] = SDRead8BITS(SDCardAddress); // Goonspeed
             ++SDCardAddress;
         }
-    }
+    } 
+    CheckServoSpeeds();
     RXCellCount = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     TrimMultiplier = SDRead16BITS(SDCardAddress);
@@ -318,11 +321,14 @@ bool ReadOneModel(uint32_t Mnum)
         ++SDCardAddress;
     }
     CheckBanksInUse();
+   
     for (i = 0; i < 16; ++i) {
-        ServoSpeed[i] = SDRead8BITS(SDCardAddress);
+       // ServoSpeed[0][i] = SDRead8BITS(SDCardAddress); // Goonspeed
         ++SDCardAddress;
     }
-    CheckServoSpeeds();
+   
+   
+   
     TimerDownwards = (bool)SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     TimerStartTime = SDRead16BITS(SDCardAddress);
@@ -960,7 +966,7 @@ void SaveOneModel(uint32_t mnum)
     }
     for (j = 0; j < BANKSUSED + 1; ++j) {
         for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            //  Nothing written!  - This space is spare for future use (5 * 17 = 85 bytes)
+            SDUpdate8BITS(SDCardAddress, ServoSpeed[j][i]);  // new GOONSPEED
             ++SDCardAddress;
         }
     }
@@ -1096,7 +1102,7 @@ void SaveOneModel(uint32_t mnum)
         ++SDCardAddress;
     }
     for (i = 0; i < 16; ++i) {
-        SDUpdate8BITS(SDCardAddress, ServoSpeed[i]);              // This bit must go
+       // SDUpdate8BITS(SDCardAddress, ServoSpeed[0][i]);              // Goonspeed
         ++SDCardAddress;
     }
 

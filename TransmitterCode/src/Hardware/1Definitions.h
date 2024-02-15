@@ -648,8 +648,7 @@ uint8_t       GPSMarkHere      = 0;
 uint16_t      TrimRepeatSpeed  = 600;
 char          na[]             = "";
 
-uint8_t       ServoSpeed[16];                                                         //    How far to move each time on slow servos
-
+uint8_t       ServoSpeed[BANKSUSED + 1][CHANNELSUSED+1];                            //    Speed of servo movement                                      
 uint16_t      CurrentPosition[SENDBUFFERSIZE+1];                                    //    Position from which a slow servo started (0 = not started yet)
 uint16_t      SendBuffer[SENDBUFFERSIZE+1];                                         //    Data to send to rx (16 words)
 uint16_t      BuddyBuffer[SENDBUFFERSIZE+1];                                        //    Data from wireless or PPM buddy (16 words)

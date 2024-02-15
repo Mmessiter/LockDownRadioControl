@@ -640,12 +640,12 @@ void SlowAnyServos()                                                            
 {
     static uint32_t SlowTime[16];                                                // TODO: Make it BY BANK and not every bank <<<<<<<<<<<<<<*****************************
     for (int i = 0; i < 16; ++i) {                                               // Test every channel
-        if (ServoSpeed[i] < 100) {                                                 // If ServoSpeed = 100, use full speed. No slowing
+        if (ServoSpeed[Bank-1][i] < 100) {                                       // If ServoSpeed = 100, use full speed. No slowing
             if ((millis() - SlowTime[i]) > 10) {                                 // This next part runs only 100 times per second
                 SlowTime[i] = millis();                                          // Store start time of this iteration
                 if (CurrentPosition[i] == 0) CurrentPosition[i] = SendBuffer[i]; // Must start somewhere
                 int distance = SendBuffer[i] - CurrentPosition[i];               // Define how far to move
-                int SSize    = ServoSpeed[i];                                      // Get step size
+                int SSize    = ServoSpeed[Bank-1][i];                                      // Get step size
                 if (SSize > abs(distance)) SSize = 1;                            // This avoids overshooting the limit
                 if (distance < 0) SSize = -SSize;                                // Negative?
                 if (!distance) SSize = 0;                                        // Already arrived?
@@ -1726,8 +1726,10 @@ void SetDefaultValues()
     for (int i = 0; i < 4; ++i) {
         BanksInUse[i] = i + 4;
     }
-    for (int i = 0; i < 16; ++i) {
-        ServoSpeed[i] = 100;
+    for (int j = 0; j < 4; ++j){
+        for (int i = 0; i < 16; ++i) {
+            ServoSpeed[j][i] = 100;
+        }
     }
     TrimMultiplier = 5;
     ModelDefined = 42;
@@ -3395,14 +3397,11 @@ void EndModelSetup()
 void UpdateSpeedScreen(){
     char ns[16][4]           = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}};
     char t14[]               = "t14";
-    
-    
+    CheckServoSpeeds();
     for (int i = 0; i < 16; ++i) {
-        SendValue(ns[i], ServoSpeed[i]);
+        SendValue(ns[i], ServoSpeed[Bank-1][i]);
     }
-
-
-     SendText(t14, BankTexts[BanksInUse[Bank-1]]);
+    SendText(t14, BankTexts[BanksInUse[Bank-1]]);
 }
 
 /******************************************************************************************************************************/
@@ -3415,20 +3414,30 @@ void StartSlowView()
     UpdateModelsNameEveryWhere();
     UpdateSpeedScreen();
 }
+
+
 /******************************************************************************************************************************/
-void EndSlowView()
-{
+void ReadSpeedsScreen(uint8_t bk){
+
     char ns[16][4]       = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}};
-    char ProgressStart[] = "vis Progress,1";
     char Progress[]      = "Progress";
+    char ProgressStart[] = "vis Progress,1";
+    char ProgressEnd[]  = "vis Progress,0";
     SendCommand(ProgressStart);
     for (int i = 0; i < 16; ++i) {
-        ServoSpeed[i] = GetValue(ns[i]);
+        ServoSpeed[bk][i] = GetValue(ns[i]);
         SendValue(Progress, i * (100 / 16));
     }
+    SendValue(Progress, 100);
+    SendCommand(ProgressEnd);
+}
+
+/******************************************************************************************************************************/
+void EndSpeedsScreen()
+{
+    ReadSpeedsScreen(Bank-1);
     CheckServoSpeeds();
     SaveOneModel(ModelNumber);
-    SendValue(Progress, 100);
     StartModelSetup();
 }
 /******************************************************************************************************************************/
@@ -3981,7 +3990,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     EndBankNames,             // 53
     ListenToBanks,            // 54
     StartSlowView,            // 55
-    EndSlowView,              // 56
+    EndSpeedsScreen,              // 56
     WriteNewCurve,            // 57
     StartRenameModel,         // 58
     EndRenameModel,           // 59
@@ -5442,7 +5451,10 @@ void GetBank()   // ... and the other three switches
             UpdateModelsNameEveryWhere();
         }
         if (CurrentView == GRAPHVIEW) DisplayCurveAndServoPos();
-        if (CurrentView == SLOWSERVOVIEW) UpdateSpeedScreen();
+        if (CurrentView == SLOWSERVOVIEW) {
+            ReadSpeedsScreen(PreviousBank-1);
+            UpdateSpeedScreen();
+            }
     }
     MotorWasEnabled = MotorEnabled; // Remember motor state
     PreviousBank    = Bank;         // Remember BANK
