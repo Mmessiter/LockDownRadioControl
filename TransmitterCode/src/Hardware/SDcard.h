@@ -93,7 +93,7 @@ void CheckServoSpeeds()
 bool flag = false;
     for (int j = 0; j < BANKSUSED + 1; ++j) {
         for (int i = 0; i < CHANNELSUSED+1; ++i) {
-            if ((ServoSpeed[j][i] > 100) || (!ServoSpeed[j][i])){
+            if ((ServoSpeed[j][i] > 100) || (!ServoSpeed[j][i])){   // out of range or zero means the list is corrupt and needs resetting
                 flag = true; 
                 break;
             }
