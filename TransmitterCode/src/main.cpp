@@ -651,8 +651,8 @@ void SlowAnyServos()                                                            
                 if (!distance) SSize = 0;                                        // Already arrived?
                 CurrentPosition[i] += SSize;                                     // Move Current Position a little bit towards goal
             }
-            SendBuffer[i]   = CurrentPosition[i]; // Modify next servo position
-            PreMixBuffer[i] = SendBuffer[i];      // mix the slowed version
+            SendBuffer[i]   = CurrentPosition[i];                                // Modify next servo position
+            PreMixBuffer[i] = SendBuffer[i];                                     // Maybe mix the slowed version
         }
     }
 }
@@ -713,9 +713,9 @@ FASTRUN void GetNewChannelValues()
         GetAllInputs();                                                             // Get all user inputs from sticks, pots and switches
         MixAnyInputs();                                                             // Mixes InputsBuffer[] and returns results in InputsBuffer[] (All 16 channels)
         CalculateAllOutputs();                                                      // Calculate all outputs
+        SlowAnyServos();                                                            // Some servos may need to be slowed down for flaps etc.
         MixAnyOutputs();                                                            // If needed, Mixes PremixBuffer and returns it in SendBuffer.
         DoTrimsAndSubtrims();                                                       // Add trims to output after mixing.    
-        SlowAnyServos();                                                            // Some servos may need to be slowed down for flaps etc.
         RerouteOutputs();                                                           // This function might re-route outputs to user-defined channels.
         ServoReverse();                                                             // This function reverses servos if needed.
     }
