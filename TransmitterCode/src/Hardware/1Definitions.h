@@ -423,6 +423,24 @@
     #define RIGHTPADDLEX  PONGX2 - PADDLEGAP
     #define EXTRAPONG     38
 
+
+
+// **************************************************************************
+//                           ScreenData                                     *
+//***************************************************************************
+   
+    // MIXES SCREEN
+   
+    #define MIXINPUT        0
+    #define MIXOUTPUT       1
+    #define BANK            2
+    #define MASTERCHANNEL   3
+    #define SLAVECHANNEL    4
+    #define ONEDIRECTION    5
+    #define REVERSED        6
+    #define OFFSET          7
+    #define PERCENT         8
+
 // **************************************************************************
 //                            Function Prototypes                           *
 //***************************************************************************

@@ -737,12 +737,11 @@ void FixCHNames()                                                               
     uint8_t temp                   =    0;
     char fm[]                      =  "FlightMode";
     char All[]                     =  "All banks";
-                                         // Mix the Inputs label
+    
    
-     Mixes[MixNumber][M_MasterChannel] =ScreenData[3];
-     Mixes[MixNumber][M_SlaveChannel]  = ScreenData[4];
-    SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);       // show master channel
-    SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);        // show slave channel
+    SendText(MixesView_chM, ChannelNames[ScreenData[MASTERCHANNEL]-1]);       // show master channel
+    SendText(MixesView_chS, ChannelNames[ScreenData[SLAVECHANNEL]-1]);        // show slave channel
+    
     temp = GetValue(fm);
     if (temp){
         SendText(BankNameLable, BankTexts[BanksInUse[--temp]]);                         // Show bank name 
@@ -794,22 +793,32 @@ void ShowMixValues() // sends mix values to Nextion screen
     
     
     SendValue(MixesView_MixOutput, Mixes[MixNumber][M_MIX_OUTPUTS]); // heer load the ScreenData array with the mix values tomorrow
+    ScreenData[MIXINPUT] = Mixes[MixNumber][M_MIX_INPUTS];
     SendValue(MixesView_MixInput, Mixes[MixNumber][M_MIX_INPUTS]);
+    ScreenData[MIXOUTPUT] = Mixes[MixNumber][M_MIX_INPUTS];
     SendValue(MixesView_Bank, Mixes[MixNumber][M_Bank]);
+    ScreenData[BANK] = Mixes[MixNumber][M_Bank];
     if (Mixes[MixNumber][M_MasterChannel] == 0) Mixes[MixNumber][M_MasterChannel] = 1;
     SendValue(MixesView_MasterChannel, Mixes[MixNumber][M_MasterChannel]);
+    ScreenData[MASTERCHANNEL] = Mixes[MixNumber][M_MasterChannel];
     if (Mixes[MixNumber][M_SlaveChannel] == 0) Mixes[MixNumber][M_SlaveChannel] = 1;
     SendValue(MixesView_SlaveChannel, Mixes[MixNumber][M_SlaveChannel]);
+    ScreenData[SLAVECHANNEL] = Mixes[MixNumber][M_SlaveChannel];
     SendValue(MixesView_Reversed, Mixes[MixNumber][M_Reversed]);
+    ScreenData[REVERSED] = Mixes[MixNumber][M_Reversed];
     if (Mixes[MixNumber][M_Percent] == 0) Mixes[MixNumber][M_Percent] = 100;
     if (Mixes[MixNumber][M_SlaveChannel] == Mixes[MixNumber][M_MasterChannel]) {
         Mixes[MixNumber][M_SlaveChannel]++;
         SendValue(MixesView_SlaveChannel, Mixes[MixNumber][M_SlaveChannel]);
+        ScreenData[SLAVECHANNEL] = Mixes[MixNumber][M_SlaveChannel];
     }
     SendValue(MixesView_Percent, Mixes[MixNumber][M_Percent]);
+    ScreenData[PERCENT] = Mixes[MixNumber][M_Percent];
     SendValue(MixesView_od, Mixes[MixNumber][M_ONEDIRECTION]);
+    ScreenData[ONEDIRECTION] = Mixes[MixNumber][M_ONEDIRECTION];
     if (((Mixes[MixNumber][M_OFFSET]) > 227) || ((Mixes[MixNumber][M_OFFSET]) < 27)) Mixes[MixNumber][M_OFFSET] = 127; // zeroed if out of range
-    SendValue(MixesView_offset, Mixes[MixNumber][M_OFFSET] - 127);                                                     // because it's 'unsigned'
+    SendValue(MixesView_offset, Mixes[MixNumber][M_OFFSET] - 127);    // because it's 'unsigned'
+    ScreenData[OFFSET] = Mixes[MixNumber][M_OFFSET] - 127;
     SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
     SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
 }
