@@ -30,7 +30,7 @@
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
 //**************************************************************************************
 
-// #define DB_NEXTION        // Debug NEXTION
+ //#define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
 // #define DB_FHSS           // Debug real time FHSS data
@@ -1011,6 +1011,10 @@ int     LastRXModelMaxAltitude = 0;
 float   LastRXTemperature      = 0;
 uint8_t RadioNumber            = 0;
 uint8_t LastRadioNumber        = 0;
+
+uint16_t ScreenData[50];
+uint8_t  ScreenDataCount = 0;
+
 int      LastTrim[5][17];
 
 

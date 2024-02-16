@@ -136,20 +136,14 @@ void SendValue(char* nbox, int value)
 /*********************************************************************************************************************************/
 bool GetButtonPress()
 {
-    uint8_t a             = 0;
     int     i             = 0;
     bool    ButtonPressed = false;
-   
     while (NEXTION.available()) {
-        a = NEXTION.read();
-        if (a > 31 && a < 254) {
-            ButtonPressed = true;
-            TextIn[i]     = a;
-            if (TextIn[i] == '$') TextIn[i] = 0;
-            TextIn[i + 1] = 0;
-        }
+        ButtonPressed  = true;
+        TextIn[i]      = NEXTION.read();
+        TextIn[i + 1]  = 0;   
         if (i < CHARSMAX - 1) ++i;
-        delay(1); // needed!!
+        delayMicroseconds(500);        // needed!!
     }
     if (ButtonPressed && ButtonClicks) PlaySound(CLICKONE);
     return ButtonPressed;

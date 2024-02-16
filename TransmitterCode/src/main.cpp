@@ -3928,9 +3928,37 @@ void SaveSwitches(){
     SendCommand(pTXSetupView);
 }
 
+/******************************************************************************************************************************/
+// This function receives upto 50 data elements from the Nextion display and loads it into ScreenData array of uint16_t
+
+void ReceiveLotsofData(){ // heer
+    int i = 0;
+    union{
+        uint8_t  First4Bytes[4];
+        uint32_t FirstDWord;
+    }
+    NextionData;
+  
+    for  (int field = 1; field <= 50; ++field){
+        int offset = field * 4;
+        for (int p = 0; p < 4; ++p) NextionData.First4Bytes[p] =  TextIn[offset+p];
+        if (NextionData.FirstDWord < 0xFFFF){
+            ScreenData[i] = NextionData.FirstDWord;
+            ++i;
+       }else{
+           break;
+       }
+    }       
+//    Look(millis());
+//     for (int j = 0; j < i; ++j){
+//        Look(ScreenData[j]);
+//     } 
+
+    ScreenDataCount = i;
+}
 
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 76 // One more than final one, because first is number zero
+#define LASTFUNCTION 77 // One more than final one, because first is number zero
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                    // 0
@@ -3989,7 +4017,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     EndBankNames,             // 53
     ListenToBanks,            // 54
     StartSlowView,            // 55
-    EndSpeedsScreen,              // 56
+    EndSpeedsScreen,          // 56
     WriteNewCurve,            // 57
     StartRenameModel,         // 58
     EndRenameModel,           // 59
@@ -4008,7 +4036,9 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     SaveSwitches,             // 72 (NOW SAVED FROM TX SETUP MENU GLOBALLY FOR ALL MODELS)
     ShowScreenAgain,          // 73 End of screen timeout when someone touched screen
     HideScreenAgain,          // 74 Force immediate 'screen timeout' 
-    TrimsToSubtrim            // 75
+    TrimsToSubtrim,           // 75
+    ReceiveLotsofData         // 76
+
 
 }; // list will become longer ...
 
@@ -4033,12 +4063,12 @@ FASTRUN void ButtonWasPressed()
 
 #ifdef DB_NEXTION
         if (TextIn[0] < 128) {
-            Serial.print("Command WORD: -> ");
-            Serial.println(TextIn);
+            Look1("Command WORD: -> ");
+            Look(TextIn);
         }
         else {
-            Serial.print("Command NUMBER: -> ");
-            Serial.println(NumberedCommand);
+            Look1("Command NUMBER: -> ");
+            Look(NumberedCommand);
         }
 
 #endif
@@ -5007,7 +5037,6 @@ FASTRUN void ButtonWasPressed()
             SendValue(MixesView_MixNumber, MixNumber); // New load of mix window
             ShowMixValues();
             ClearText();
-            Look ("tets");
             return;
         }
         if (InStrng(Mixes_View, TextIn)) {     // Mix number OR a parameter has changed
@@ -5029,7 +5058,6 @@ FASTRUN void ButtonWasPressed()
                 SendCommand(Yb0);               // show mix change button
             } else {
                 ReadMixValues();                // heer??
-                SendCommand(ProgressEnd);
             }
             FixCHNames();
             ClearText();
