@@ -119,6 +119,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "ReadSwitches", "TransmitterCode_2src_2main_8cpp.html#aa144942814b12daf2b2a454c08d29cab", null ],
     [ "ReadTextFile", "TransmitterCode_2src_2main_8cpp.html#abd6446fb403bd9b07d150a5e4fdd86e1", null ],
     [ "ReadThreePositionSwitch", "TransmitterCode_2src_2main_8cpp.html#a787973ed0df098048a54e5110896eeb6", null ],
+    [ "ReceiveLotsofData", "TransmitterCode_2src_2main_8cpp.html#a7c9a26d1f7e8eb474c7e08c860e74f7e", null ],
     [ "RedLedOn", "TransmitterCode_2src_2main_8cpp.html#a7d34cec6e8edc20c8b50424e15dcc7c7", null ],
     [ "ReduceLimits", "TransmitterCode_2src_2main_8cpp.html#ad875fe28566f35ffc5f90e73d0089fc6", null ],
     [ "RenameFile", "TransmitterCode_2src_2main_8cpp.html#a9d94366336f1e5fd43edb9c24bec5821", null ],

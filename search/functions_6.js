@@ -210,7 +210,7 @@ var searchData=
   ['gettimefromackpayload_207',['GetTimeFromAckPayload',['../transceiver_8h.html#a86523345ecdd52f3d93dccd6fcf4370a',1,'transceiver.h']]],
   ['gettrimamount_208',['GetTrimAmount',['../Trims_8h.html#aacd8b022714bb89847239dd878ad9509',1,'Trims.h']]],
   ['gettxversionnumber_209',['GetTXVersionNumber',['../TransmitterCode_2src_2main_8cpp.html#aee99c2684d91ac475ed24480da4dcc30',1,'main.cpp']]],
-  ['getvalue_210',['getvalue',['../1Definitions_8h.html#a6e4fac4e296c09388b8b56353402d67a',1,'GetValue(char *nbox):&#160;Nextion.h'],['../Nextion_8h.html#a6e4fac4e296c09388b8b56353402d67a',1,'GetValue(char *nbox):&#160;Nextion.h'],['../1Definitions_8h.html#aff6fa8906188d3249b01bf59de47df2f',1,'getvalue(char *nbox):&#160;Nextion.h'],['../Nextion_8h.html#aff6fa8906188d3249b01bf59de47df2f',1,'getvalue(char *nbox):&#160;Nextion.h']]],
+  ['getvalue_210',['getvalue',['../1Definitions_8h.html#aff6fa8906188d3249b01bf59de47df2f',1,'getvalue(char *nbox):&#160;Nextion.h'],['../Nextion_8h.html#aff6fa8906188d3249b01bf59de47df2f',1,'getvalue(char *nbox):&#160;Nextion.h'],['../1Definitions_8h.html#a6e4fac4e296c09388b8b56353402d67a',1,'GetValue(char *nbox):&#160;Nextion.h'],['../Nextion_8h.html#a6e4fac4e296c09388b8b56353402d67a',1,'GetValue(char *nbox):&#160;Nextion.h']]],
   ['getwaitforexternalsensorenabled_211',['getWaitForExternalSensorEnabled',['../classMPU6050.html#a4e2ebda47b85b4c5463f041c790bf5c0',1,'MPU6050']]],
   ['getwakecycleenabled_212',['getWakeCycleEnabled',['../classMPU6050.html#a89afc5235b9088c696e2cc7841f5259a',1,'MPU6050']]],
   ['getwakefrequency_213',['getWakeFrequency',['../classMPU6050.html#a249a905ae4572a462414f2d94236258a',1,'MPU6050']]],
