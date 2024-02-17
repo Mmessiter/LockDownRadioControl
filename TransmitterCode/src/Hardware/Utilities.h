@@ -766,6 +766,7 @@ void ReadMixValues()   // just reads from the screen and saves to Mixes array
     Mixes[MixNumber][M_Reversed]        = ScreenData[6];
     Mixes[MixNumber][M_OFFSET]          = ScreenData[7] + 127; // because it's unsigned
     Mixes[MixNumber][M_Percent]         = ScreenData[8];
+    FixCHNames();
 }
 
 /*********************************************************************************************************************************/

@@ -321,11 +321,9 @@ bool ReadOneModel(uint32_t Mnum)
         ++SDCardAddress;
     }
     CheckDualRatesValues();
-// TREX
-//    BuddySwitch = SDRead8BITS(SDCardAddress);
-    ++SDCardAddress;
-//    DualRatesSwitch = SDRead8BITS(SDCardAddress);
-    ++SDCardAddress;
+
+    ++SDCardAddress; // Spare byte
+    ++SDCardAddress;// Spare byte
 
     for (i = 0; i < 4; ++i) {
         BanksInUse[i] = SDRead8BITS(SDCardAddress);
@@ -334,7 +332,7 @@ bool ReadOneModel(uint32_t Mnum)
     CheckBanksInUse();
    
     for (i = 0; i < 16; ++i) {
-       // ServoSpeed[0][i] = SDRead8BITS(SDCardAddress); // GONE FROM HERE!
+      // 16 Spare bytes
         ++SDCardAddress;
     }
    
@@ -1017,27 +1015,16 @@ void SaveOneModel(uint32_t mnum)
         SDUpdate8BITS(SDCardAddress, InPutStick[i]);
         ++SDCardAddress;
     }
-    //  TREX
-
-  //  SDUpdate8BITS(SDCardAddress, BankSwitch);
+    
+    ++SDCardAddress;// Spare bytes
     ++SDCardAddress;
-  //  SDUpdate8BITS(SDCardAddress, Autoswitch);
     ++SDCardAddress;
-  //  SDUpdate8BITS(SDCardAddress, Channel9Switch);
     ++SDCardAddress;
-  //  SDUpdate8BITS(SDCardAddress, Channel10Switch);
     ++SDCardAddress;
-  // SDUpdate8BITS(SDCardAddress, Channel11Switch);
     ++SDCardAddress;
-  //  SDUpdate8BITS(SDCardAddress, Channel12Switch);
     ++SDCardAddress;
-   // SDUpdate8BITS(SDCardAddress, SWITCH1Reversed);
     ++SDCardAddress;
-  //  SDUpdate8BITS(SDCardAddress, SWITCH2Reversed);
     ++SDCardAddress;
-   // SDUpdate8BITS(SDCardAddress, SWITCH3Reversed);
-    ++SDCardAddress;
-   // SDUpdate8BITS(SDCardAddress, SWITCH4Reversed);
     ++SDCardAddress;
     
     // *********************************************************************************
@@ -1084,13 +1071,12 @@ void SaveOneModel(uint32_t mnum)
     SDUpdate8BITS(SDCardAddress, MotorChannel);
     if (MotorChannel > 15) MotorChannel = 15;
     ++SDCardAddress;
-   
-   //TREX
-    ++SDCardAddress;
+    ++SDCardAddress;// Spare byte
    
     SDUpdate16BITS(SDCardAddress, SFV);
     ++SDCardAddress;
     ++SDCardAddress;
+   
     SDUpdate8BITS(SDCardAddress, Drate2);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, Drate3);
@@ -1102,25 +1088,21 @@ void SaveOneModel(uint32_t mnum)
         SDUpdate8BITS(SDCardAddress, DualRateChannels[i]);
         ++SDCardAddress;
     }
-    //  TREX
- //   SDUpdate8BITS(SDCardAddress, BuddySwitch);
-    ++SDCardAddress;
- //   SDUpdate8BITS(SDCardAddress, DualRatesSwitch);
-    ++SDCardAddress;
+    ++SDCardAddress;// Spare byte
+    ++SDCardAddress;// Spare byte
 
     for (i = 0; i < 4; ++i) {
         SDUpdate8BITS(SDCardAddress, BanksInUse[i]);
         ++SDCardAddress;
     }
     for (i = 0; i < 16; ++i) {
-       // SDUpdate8BITS(SDCardAddress, ServoSpeed[0][i]);              // GONE FROM HERE!
+       // 16 Spare bytes
         ++SDCardAddress;
     }
 
     SDUpdate8BITS(SDCardAddress, TimerDownwards);
     ++SDCardAddress;
     SDUpdate16BITS(SDCardAddress, TimerStartTime);
-
     ++SDCardAddress;
     ++SDCardAddress;
 
