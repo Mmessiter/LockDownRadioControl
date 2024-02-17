@@ -425,9 +425,9 @@ $(document).ready(function(){initNavTree('TransmitterCode_2src_2main_8cpp_source
 <div class="line"><a id="l00428" name="l00428"></a><span class="lineno">  428</span>                        }</div>
 <div class="line"><a id="l00429" name="l00429"></a><span class="lineno">  429</span> </div>
 <div class="line"><a id="l00430" name="l00430"></a><span class="lineno">  430</span>                        <span class="keywordflow">if</span> (MappedInput &lt; mid) {</div>
-<div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>                            MixValue = map (MappedInput,min,mid,-midl,0);</div>
+<div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span>                            MixValue = map (MappedInput,min,mid,-midl,0) * (short)<a class="code hl_variable" href="1Definitions_8h.html#a0639f14e1a1c9e1c3ca92527f7481b0c">Mixes</a>[<a class="code hl_variable" href="1Definitions_8h.html#a0d282903963a177c43890298809943aa">MixNumber</a>][<a class="code hl_define" href="1Definitions_8h.html#a1d2c1a7c2e532457f8a16284d4560094">M_Percent</a>] / 100;</div>
 <div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span>                        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>                            MixValue = map (MappedInput,mid,max,0,midh);</div>
+<div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span>                            MixValue = map (MappedInput,mid,max,0,midh)  * (short)<a class="code hl_variable" href="1Definitions_8h.html#a0639f14e1a1c9e1c3ca92527f7481b0c">Mixes</a>[<a class="code hl_variable" href="1Definitions_8h.html#a0d282903963a177c43890298809943aa">MixNumber</a>][<a class="code hl_define" href="1Definitions_8h.html#a1d2c1a7c2e532457f8a16284d4560094">M_Percent</a>] / 100;</div>
 <div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span>                        }</div>
 <div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span>                      </div>
 <div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span>                        <span class="keywordflow">if</span> (<a class="code hl_variable" href="1Definitions_8h.html#a0639f14e1a1c9e1c3ca92527f7481b0c">Mixes</a>[<a class="code hl_variable" href="1Definitions_8h.html#a0d282903963a177c43890298809943aa">MixNumber</a>][<a class="code hl_define" href="1Definitions_8h.html#a84a1dfac58dea9586fff2df38ebe6060">M_ONEDIRECTION</a>])</div>
@@ -4225,7 +4225,7 @@ $(document).ready(function(){initNavTree('TransmitterCode_2src_2main_8cpp_source
 <div class="line"><a id="l03953" name="l03953"></a><span class="lineno"> 3953</span>    }</div>
 <div class="line"><a id="l03954" name="l03954"></a><span class="lineno"> 3954</span>    NextionData;</div>
 <div class="line"><a id="l03955" name="l03955"></a><span class="lineno"> 3955</span>  </div>
-<div class="line"><a id="l03956" name="l03956"></a><span class="lineno"> 3956</span>    <span class="keywordflow">for</span>  (<span class="keywordtype">int</span> field = 1; field &lt;= 50; ++field){</div>
+<div class="line"><a id="l03956" name="l03956"></a><span class="lineno"> 3956</span>    <span class="keywordflow">for</span>  (<span class="keywordtype">int</span> field = 1; field &lt; 49; ++field){</div>
 <div class="line"><a id="l03957" name="l03957"></a><span class="lineno"> 3957</span>        <span class="keywordtype">int</span> offset = field * 4;</div>
 <div class="line"><a id="l03958" name="l03958"></a><span class="lineno"> 3958</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> p = 0; p &lt; 4; ++p) NextionData.First4Bytes[p] =  <a class="code hl_variable" href="1Definitions_8h.html#a527f04236d0e03be6e0224a0e748f0c3">TextIn</a>[offset+p];</div>
 <div class="line"><a id="l03959" name="l03959"></a><span class="lineno"> 3959</span>        <span class="keywordflow">if</span> (NextionData.FirstDWord &lt; 0xFFFF){</div>
@@ -4235,12 +4235,12 @@ $(document).ready(function(){initNavTree('TransmitterCode_2src_2main_8cpp_source
 <div class="line"><a id="l03963" name="l03963"></a><span class="lineno"> 3963</span>           <span class="keywordflow">break</span>;</div>
 <div class="line"><a id="l03964" name="l03964"></a><span class="lineno"> 3964</span>       }</div>
 <div class="line"><a id="l03965" name="l03965"></a><span class="lineno"> 3965</span>    }       </div>
-<div class="line"><a id="l03966" name="l03966"></a><span class="lineno"> 3966</span><span class="comment">//    Look(millis());</span></div>
-<div class="line"><a id="l03967" name="l03967"></a><span class="lineno"> 3967</span><span class="comment">//     for (int j = 0; j &lt; i; ++j){</span></div>
-<div class="line"><a id="l03968" name="l03968"></a><span class="lineno"> 3968</span><span class="comment">//        Look(ScreenData[j]);</span></div>
-<div class="line"><a id="l03969" name="l03969"></a><span class="lineno"> 3969</span><span class="comment">//     } </span></div>
-<div class="line"><a id="l03970" name="l03970"></a><span class="lineno"> 3970</span> </div>
-<div class="line"><a id="l03971" name="l03971"></a><span class="lineno"> 3971</span>    <a class="code hl_variable" href="1Definitions_8h.html#a68799503db37bf96760779f2cf7ed301">ScreenDataCount</a> = i;</div>
+<div class="line"><a id="l03966" name="l03966"></a><span class="lineno"> 3966</span>    <a class="code hl_variable" href="1Definitions_8h.html#a68799503db37bf96760779f2cf7ed301">ScreenDataCount</a> = i;</div>
+<div class="line"><a id="l03967" name="l03967"></a><span class="lineno"> 3967</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="1Definitions_8h.html#a2c76c41cd62573eb7227882fc9b9e557">CurrentView</a> == <a class="code hl_define" href="1Definitions_8h.html#aaa7f851829299cf35b8f281e6d76e27c">MIXESVIEW</a>) {</div>
+<div class="line"><a id="l03968" name="l03968"></a><span class="lineno"> 3968</span>        <a class="code hl_function" href="Utilities_8h.html#a9b4c2ea3dc1fc9f5835f5e90ae4e21e6">ReadMixValues</a>();</div>
+<div class="line"><a id="l03969" name="l03969"></a><span class="lineno"> 3969</span>     <span class="comment">//   Look(&quot;MIXESVIEW&quot;);</span></div>
+<div class="line"><a id="l03970" name="l03970"></a><span class="lineno"> 3970</span>     <span class="comment">//   Look(millis());</span></div>
+<div class="line"><a id="l03971" name="l03971"></a><span class="lineno"> 3971</span>    }</div>
 <div class="line"><a id="l03972" name="l03972"></a><span class="lineno"> 3972</span>}</div>
 </div>
 <div class="line"><a id="l03973" name="l03973"></a><span class="lineno"> 3973</span> </div>
