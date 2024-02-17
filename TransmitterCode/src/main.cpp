@@ -428,9 +428,9 @@ FASTRUN void MixInputs() // heer
                         }
 
                         if (MappedInput < mid) {
-                            MixValue = map (MappedInput,min,mid,-midl,0);
+                            MixValue = map (MappedInput,min,mid,-midl,0) * (short)Mixes[MixNumber][M_Percent] / 100;
                         } else {
-                            MixValue = map (MappedInput,mid,max,0,midh);
+                            MixValue = map (MappedInput,mid,max,0,midh)  * (short)Mixes[MixNumber][M_Percent] / 100;
                         }
                       
                         if (Mixes[MixNumber][M_ONEDIRECTION])
@@ -3953,7 +3953,7 @@ void ReceiveLotsofData(){ // heer
     }
     NextionData;
   
-    for  (int field = 1; field <= 50; ++field){
+    for  (int field = 1; field < 49; ++field){
         int offset = field * 4;
         for (int p = 0; p < 4; ++p) NextionData.First4Bytes[p] =  TextIn[offset+p];
         if (NextionData.FirstDWord < 0xFFFF){
@@ -3963,12 +3963,12 @@ void ReceiveLotsofData(){ // heer
            break;
        }
     }       
-//    Look(millis());
-//     for (int j = 0; j < i; ++j){
-//        Look(ScreenData[j]);
-//     } 
-
     ScreenDataCount = i;
+    if (CurrentView == MIXESVIEW) {
+        ReadMixValues();
+     //   Look("MIXESVIEW");
+     //   Look(millis());
+    }
 }
 
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
