@@ -729,26 +729,19 @@ int GetNextNumber(int p1, char text1[CHARSMAX])
 
 /*********************************************************************************************************************************/
 
-void FixCHNames()                                                                       // channel names on Mix screen now with Bank name and enabled status too.
+void FixCHNames()                                                             // channel names on Mix screen now with Bank name and enabled status too.
 {
     char MixesView_chM[]           = "chM";
     char MixesView_chS[]           = "chS";
     char BankNameLable[]           = "t10";
-    uint8_t temp                   =    0;
-    char fm[]                      =  "FlightMode";
     char All[]                     =  "All banks";
-    
-   
     SendText(MixesView_chM, ChannelNames[ScreenData[MASTERCHANNEL]-1]);       // show master channel
     SendText(MixesView_chS, ChannelNames[ScreenData[SLAVECHANNEL]-1]);        // show slave channel
-    
-    temp = GetValue(fm);
-    if (temp){
-        SendText(BankNameLable, BankTexts[BanksInUse[--temp]]);                         // Show bank name 
+    if (ScreenData[BANK] > 0){
+        SendText(BankNameLable, BankTexts[BanksInUse[ScreenData[BANK]-1]]);   // Show bank name 
     }else{
         SendText(BankNameLable, All);
     }
-
 }
 /*********************************************************************************************************************************/
 
@@ -770,9 +763,9 @@ void ReadMixValues()   // just reads from the screen and saves to Mixes array
     Mixes[MixNumber][M_MasterChannel]   = ScreenData[3];
     Mixes[MixNumber][M_SlaveChannel]    = ScreenData[4];
     Mixes[MixNumber][M_ONEDIRECTION]    = ScreenData[5];
-    Mixes[MixNumber][M_Reversed]        =  ScreenData[6];
-    Mixes[MixNumber][M_OFFSET]          =  ScreenData[7] + 127; // because it's unsigned
-    Mixes[MixNumber][M_Percent]         =  ScreenData[8];
+    Mixes[MixNumber][M_Reversed]        = ScreenData[6];
+    Mixes[MixNumber][M_OFFSET]          = ScreenData[7] + 127; // because it's unsigned
+    Mixes[MixNumber][M_Percent]         = ScreenData[8];
 }
 
 /*********************************************************************************************************************************/

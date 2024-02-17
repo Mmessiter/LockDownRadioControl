@@ -400,7 +400,7 @@ FASTRUN uint16_t ReadThreePositionSwitch(uint8_t l) // This returns the input on
 /*********************************************************************************************************************************/
 //   INPUT Mixes
 /*********************************************************************************************************************************/
-FASTRUN void MixAnyInputs() // heer
+FASTRUN void MixInputs() // heer
 {
     for (short MixNumber = 1; MixNumber < MAXMIXES; ++MixNumber)
     {
@@ -414,10 +414,24 @@ FASTRUN void MixAnyInputs() // heer
                     {
                         short SlaveChannel  =   (Mixes[MixNumber][M_SlaveChannel] - 1) ;
                         short max           =   ChannelMax[SlaveChannel]; 
+                        short mid           =   ChannelCentre[SlaveChannel];
                         short min           =   ChannelMin[SlaveChannel];
-                        short mid           =   ((max - min) / 2);
-                        short MappedInput   =   map (InputsBuffer[MasterChannel], ChannelMin[MasterChannel], ChannelMax[MasterChannel], ChannelMin[SlaveChannel], ChannelMax[SlaveChannel]);
-                        short MixValue      =   map (MappedInput,min,max,-mid,mid) * (short)Mixes[MixNumber][M_Percent] / 100;
+                        short midl          =   mid - min;
+                        short midh          =   max - mid;
+                        short MappedInput;
+                        short MixValue;
+                        
+                        if (InputsBuffer[MasterChannel] < ChannelCentre[MasterChannel]) {
+                            MappedInput = map (InputsBuffer[MasterChannel], ChannelMin[MasterChannel], ChannelCentre[MasterChannel], ChannelMin[SlaveChannel], ChannelCentre[SlaveChannel]);
+                        } else {
+                            MappedInput = map (InputsBuffer[MasterChannel], ChannelCentre[MasterChannel], ChannelMax[MasterChannel], ChannelCentre[SlaveChannel], ChannelMax[SlaveChannel]);
+                        }
+
+                        if (MappedInput < mid) {
+                            MixValue = map (MappedInput,min,mid,-midl,0);
+                        } else {
+                            MixValue = map (MappedInput,mid,max,0,midh);
+                        }
                       
                         if (Mixes[MixNumber][M_ONEDIRECTION])
                         {
@@ -455,7 +469,7 @@ FASTRUN void MixAnyInputs() // heer
 /*********************************************************************************************************************************/
 //   OUTPUT Mixes
 /*********************************************************************************************************************************/
-FASTRUN void MixAnyOutputs()
+FASTRUN void MixOutputs()
 {
     for (short MixNumber = 1; MixNumber < MAXMIXES; ++MixNumber)
     {
@@ -710,10 +724,10 @@ FASTRUN void GetNewChannelValues()
     if (!NewCompressNeeded){
         NewCompressNeeded = true;                                                   
         GetAllInputs();                                                             // Get all user inputs from sticks, pots and switches
-        MixAnyInputs();                                                             // Mixes InputsBuffer[] and returns results in InputsBuffer[] (All 16 channels)
+        MixInputs();                                                                // Mixes InputsBuffer[] and returns results in InputsBuffer[] (All 16 channels)
         CalculateAllOutputs();                                                      // Calculate all outputs
         SlowAnyServos();                                                            // Some servos may need to be slowed down for flaps etc.
-        MixAnyOutputs();                                                            // If needed, Mixes PremixBuffer and returns it in SendBuffer.
+        MixOutputs();                                                               // If needed, Mixes PremixBuffer and returns it in SendBuffer.
         DoTrimsAndSubtrims();                                                       // Add trims to output after mixing.    
         RerouteOutputs();                                                           // This function might re-route outputs to user-defined channels.
         ServoReverse();                                                             // This function reverses servos if needed.
@@ -4227,6 +4241,7 @@ FASTRUN void ButtonWasPressed()
         char MMems[]                   = "MMems";
         char Prompt[60];
         char del[]               = "Delete ";
+        char msg[]               = "Model deleted!";
         char overwr[]            = "Overwrite ";
         char ques[]              = "?";
         char hhead[]             = "Create backup file for";
@@ -4240,10 +4255,7 @@ FASTRUN void ButtonWasPressed()
         char FrontView_Secs[]    = "Secs";
         char StartBackGround[]   = "click Background,0";
         char NotConnected[]      = "Model isn't connected!";
-        char Nb1[]               = "vis b1,0";
-        char Nb0[]               = "vis b0,0";
-        char Yb1[]               = "vis b1,1";
-        char Yb0[]               = "vis b0,1";
+       
 
         // ************************* test many input words from Nextion *****************
 
@@ -4270,6 +4282,7 @@ FASTRUN void ButtonWasPressed()
                 SetDefaultValues();
                 SaveOneModel(ModelNumber);
                 LoadModelSelector();
+                MsgBox(pModelsView, msg);
             }
             ClearText();
             return;
@@ -5036,6 +5049,7 @@ FASTRUN void ButtonWasPressed()
             LastMixNumber = MixNumber;
             SendValue(MixesView_MixNumber, MixNumber); // New load of mix window
             ShowMixValues();
+            FixCHNames();
             ClearText();
             return;
         }
@@ -5045,8 +5059,6 @@ FASTRUN void ButtonWasPressed()
             MixNumber             = GetValue(MixesView_MixNumber);
             if (LastMixNumber != MixNumber)    // Did number change?
             {
-                SendCommand(Nb1);               // hide mix change button
-                SendCommand(Nb0);               // hide mix change button
                 LastMixNumber = MixNumber;      // save new mix number
                 MixNumber     = ThisMixNumber;  // Force back to old number to grab last lot before doing new one
                 ReadMixValues();                // Read them from screen
@@ -5054,8 +5066,6 @@ FASTRUN void ButtonWasPressed()
                 SendCommand(ProgressEnd);       // End progress bar
                 MixNumber = LastMixNumber;      // back to new one
                 ShowMixValues();                // show new lot
-                SendCommand(Yb1);               // show mix change button
-                SendCommand(Yb0);               // show mix change button
             } else {
                 ReadMixValues();                // heer??
             }
