@@ -3952,7 +3952,6 @@ void ReceiveLotsofData(){ // heer
         uint32_t FirstDWord;
     }
     NextionData;
-  
     for  (int field = 1; field < 49; ++field){
         int offset = field * 4;
         for (int p = 0; p < 4; ++p) NextionData.First4Bytes[p] =  TextIn[offset+p];
@@ -4255,7 +4254,10 @@ FASTRUN void ButtonWasPressed()
         char FrontView_Secs[]    = "Secs";
         char StartBackGround[]   = "click Background,0";
         char NotConnected[]      = "Model isn't connected!";
-       
+        char invisb1[]           = "vis b1,0";   
+        char invisb0[]           = "vis b0,0";  
+        char visb1[]             = "vis b1,1";   
+        char visb0[]             = "vis b0,1";  
 
         // ************************* test many input words from Nextion *****************
 
@@ -5059,6 +5061,8 @@ FASTRUN void ButtonWasPressed()
             MixNumber             = GetValue(MixesView_MixNumber);
             if (LastMixNumber != MixNumber)    // Did number change?
             {
+                SendCommand(invisb1);
+                SendCommand(invisb0);
                 LastMixNumber = MixNumber;      // save new mix number
                 MixNumber     = ThisMixNumber;  // Force back to old number to grab last lot before doing new one
                 ReadMixValues();                // Read them from screen
@@ -5066,6 +5070,8 @@ FASTRUN void ButtonWasPressed()
                 SendCommand(ProgressEnd);       // End progress bar
                 MixNumber = LastMixNumber;      // back to new one
                 ShowMixValues();                // show new lot
+                SendCommand(visb1);
+                SendCommand(visb0);
             } else {
                 ReadMixValues();                // heer??
             }
