@@ -947,6 +947,7 @@ void SaveOneModel(uint32_t mnum)
         if (ModelName[j] == 0) EndOfName = true;
         ++SDCardAddress;
     }
+
     for (i = 0; i < CHANNELSUSED; ++i) {
         for (j = 1; j <= 4; ++j) {
             SDUpdate8BITS(SDCardAddress, MaxDegrees[j][i]); // Max requested in degrees (180)

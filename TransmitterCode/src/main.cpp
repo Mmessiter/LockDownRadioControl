@@ -3965,8 +3965,8 @@ void ReceiveLotsofData(){ // heer
     ScreenDataCount = i;
     if (CurrentView == MIXESVIEW) {
         ReadMixValues();
-     //   Look("MIXESVIEW");
-     //   Look(millis());
+      //  Look("MIXESVIEW");
+       // Look(millis());
     }
 }
 
@@ -5051,6 +5051,8 @@ FASTRUN void ButtonWasPressed()
             LastMixNumber = MixNumber;
             SendValue(MixesView_MixNumber, MixNumber); // New load of mix window
             ShowMixValues();
+            DelayWithDog(100);
+            ReceiveLotsofData();
             FixCHNames();
             ClearText();
             return;
@@ -5067,7 +5069,6 @@ FASTRUN void ButtonWasPressed()
                 MixNumber     = ThisMixNumber;  // Force back to old number to grab last lot before doing new one
                 ReadMixValues();                // Read them from screen
                 SaveOneModel(ModelNumber);      // Save them to SD card
-                SendCommand(ProgressEnd);       // End progress bar
                 MixNumber = LastMixNumber;      // back to new one
                 ShowMixValues();                // show new lot
                 SendCommand(visb1);
