@@ -5051,7 +5051,7 @@ FASTRUN void ButtonWasPressed()
             LastMixNumber = MixNumber;
             SendValue(MixesView_MixNumber, MixNumber); // New load of mix window
             ShowMixValues();
-            DelayWithDog(100);
+            DelayWithDog(100); // allow time for screen to load  before reading data
             ReceiveLotsofData();
             FixCHNames();
             ClearText();
