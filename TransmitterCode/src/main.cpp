@@ -3243,9 +3243,7 @@ void DisplayDualRateValues()
 
 void DualRatesStart()
 {
-
     char GotoDualRates[] = "page DualRatesView";
-
     SendCommand(GotoDualRates);
     CurrentView = DUALRATESVIEW;
     DisplayDualRateValues();
@@ -3256,46 +3254,21 @@ void DualRatesStart()
 
 void ReadDualRatesValues()
 {
-    char rate2[]         = "rate2";
-    char rate3[]         = "rate3";
-    char rate1[]         = "rate1";
-    char ChNumber1[]     = "n2";
-    char ChNumber2[]     = "n0";
-    char ChNumber3[]     = "n1";
-    char ChNumber4[]     = "n3";
-    char ChNumber5[]     = "n6";
-    char ChNumber6[]     = "n4";
-    char ChNumber7[]     = "n5";
-    char ChNumber8[]     = "n7";
-    char ProgressStart[] = "vis Progress,1";
-    char ProgressEnd[]   = "vis Progress,0";
-    char Progress[]      = "Progress";
-    SendCommand(ProgressStart);
-    SendValue(Progress, 10);
-    DelayWithDog(10);
-    Drate1 = GetValue(rate1);
+    if (ScreenData[10]  > 15) return;                   //  if channel number is out of range means it is not updated yet
+    Drate1 = ScreenData[0];
     if (Drate1 > MAXDUALRATE) Drate1 = MAXDUALRATE;
-    Drate2 = GetValue(rate2);
+    Drate2 = ScreenData[1];
     if (Drate2 > MAXDUALRATE) Drate2 = MAXDUALRATE;
-    Drate3 = GetValue(rate3);
+     Drate3 = ScreenData[2];
     if (Drate3 > MAXDUALRATE) Drate3 = MAXDUALRATE;
-    SendValue(Progress, 50);
-    DelayWithDog(10);
-    DualRateChannels[0] = CheckRange(GetValue(ChNumber1), 0, 8);
-    DualRateChannels[1] = CheckRange(GetValue(ChNumber2), 0, 8);
-    DualRateChannels[2] = CheckRange(GetValue(ChNumber3), 0, 8);
-    SendValue(Progress, 60);
-    DelayWithDog(10);
-    DualRateChannels[3] = CheckRange(GetValue(ChNumber4), 0, 8);
-    DualRateChannels[4] = CheckRange(GetValue(ChNumber5), 0, 8);
-    DualRateChannels[5] = CheckRange(GetValue(ChNumber6), 0, 8);
-    SendValue(Progress, 75);
-    DelayWithDog(10);
-    DualRateChannels[6] = CheckRange(GetValue(ChNumber7), 0, 8);
-    DualRateChannels[7] = CheckRange(GetValue(ChNumber8), 0, 8);
-    SendValue(Progress, 100);
-    DelayWithDog(10);
-    SendCommand(ProgressEnd);
+    DualRateChannels[0] = CheckRange(ScreenData[3], 0, 8);
+    DualRateChannels[1] = CheckRange(ScreenData[4], 0, 8);
+    DualRateChannels[2] = CheckRange(ScreenData[5], 0, 8);
+    DualRateChannels[3] = CheckRange(ScreenData[6], 0, 8);
+    DualRateChannels[4] = CheckRange(ScreenData[7], 0, 8);
+    DualRateChannels[5] = CheckRange(ScreenData[8], 0, 8);
+    DualRateChannels[6] = CheckRange(ScreenData[9], 0, 8);
+    DualRateChannels[7] = CheckRange(ScreenData[10], 0, 8);
 }
 /******************************************************************************************************************************/
 
@@ -3314,7 +3287,6 @@ void DualRatesEnd()
 
 void DualRatesRefresh()
 {
-
     ReadDualRatesValues();
     DisplayDualRateValues();
 }
