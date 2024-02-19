@@ -636,6 +636,8 @@ void             SetUpTargetForBuddy();
 void             SendSpecialPacketFromPPMModule();  
 FASTRUN uint16_t ReadThreePositionSwitch(uint8_t l); // This returns the input only   
 void             UpdateSpeedScreen();
+void             SetNewDualRate();
+void             CheckSelectedRatesMode();
 
 
 // **************************************************************************
@@ -981,7 +983,10 @@ bool     UseDualRates           = false;
 uint8_t  Drate1                 = 100;
 uint8_t  Drate2                 = 75;
 uint8_t  Drate3                 = 50;
+
 uint8_t  DualRateChannels[8]    = {1, 2, 4, 0, 0, 0, 0, 0};
+uint8_t  DualRateRate[5];
+
 uint8_t  DualRateValue          = 100;
 uint16_t CurveDots[5];
 char     Confirmed[2];

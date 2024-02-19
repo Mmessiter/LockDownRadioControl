@@ -400,7 +400,7 @@ FASTRUN uint16_t ReadThreePositionSwitch(uint8_t l) // This returns the input on
 /*********************************************************************************************************************************/
 //   INPUT Mixes
 /*********************************************************************************************************************************/
-FASTRUN void MixInputs() // heer
+FASTRUN void MixInputs() 
 {
     for (short MixNumber = 1; MixNumber < MAXMIXES; ++MixNumber)
     {
@@ -3189,7 +3189,21 @@ void ShowDualRateChannelsName(char* nm, uint8_t n)
     }
     else {
         SendText(nm, nu);
-    } // not user if zero
+    } // not used if zero
+}
+
+
+
+/******************************************************************************************************************************/
+
+void    DisplayNewDualRateBank(){
+        char rate[] = "rate";
+        char t1[] = "t1";                                               // heer?
+        SendValue(rate, DualRateRate[Bank - 1]);
+        DelayWithDog(100);
+        SendText(t1, BankTexts[BanksInUse[Bank - 1]]);                  // display bank name in Rates view ************* heer....
+        CheckSelectedRatesMode();                                       // heer
+
 }
 
 /******************************************************************************************************************************/
@@ -3215,11 +3229,9 @@ void DisplayDualRateValues()
     char ChNumber6[] = "n4";
     char ChNumber7[] = "n5";
     char ChNumber8[] = "n7";
-
     SendValue(rate1, Drate1);
     SendValue(rate2, Drate2);
     SendValue(rate3, Drate3);
-
     SendValue(ChNumber1, DualRateChannels[0]);
     SendValue(ChNumber2, DualRateChannels[1]);
     SendValue(ChNumber3, DualRateChannels[2]);
@@ -3228,7 +3240,6 @@ void DisplayDualRateValues()
     SendValue(ChNumber6, DualRateChannels[5]);
     SendValue(ChNumber7, DualRateChannels[6]);
     SendValue(ChNumber8, DualRateChannels[7]);
-
     ShowDualRateChannelsName(ChName1, DualRateChannels[0]);
     ShowDualRateChannelsName(ChName2, DualRateChannels[1]);
     ShowDualRateChannelsName(ChName3, DualRateChannels[2]);
@@ -3237,6 +3248,8 @@ void DisplayDualRateValues()
     ShowDualRateChannelsName(ChName6, DualRateChannels[5]);
     ShowDualRateChannelsName(ChName7, DualRateChannels[6]);
     ShowDualRateChannelsName(ChName8, DualRateChannels[7]);
+    DisplayNewDualRateBank();
+
 }
 
 /******************************************************************************************************************************/
@@ -3252,8 +3265,9 @@ void DualRatesStart()
 
 /******************************************************************************************************************************/
 
-void ReadDualRatesValues()
+void ReadDualRatesValues() 
 {
+
     if (ScreenData[10]  > 15) return;                   //  if channel number is out of range means it is not updated yet
     Drate1 = ScreenData[0];
     if (Drate1 > MAXDUALRATE) Drate1 = MAXDUALRATE;
@@ -3261,21 +3275,26 @@ void ReadDualRatesValues()
     if (Drate2 > MAXDUALRATE) Drate2 = MAXDUALRATE;
      Drate3 = ScreenData[2];
     if (Drate3 > MAXDUALRATE) Drate3 = MAXDUALRATE;
-    DualRateChannels[0] = CheckRange(ScreenData[3], 0, 8);
-    DualRateChannels[1] = CheckRange(ScreenData[4], 0, 8);
-    DualRateChannels[2] = CheckRange(ScreenData[5], 0, 8);
-    DualRateChannels[3] = CheckRange(ScreenData[6], 0, 8);
-    DualRateChannels[4] = CheckRange(ScreenData[7], 0, 8);
-    DualRateChannels[5] = CheckRange(ScreenData[8], 0, 8);
-    DualRateChannels[6] = CheckRange(ScreenData[9], 0, 8);
-    DualRateChannels[7] = CheckRange(ScreenData[10], 0, 8);
+    DualRateChannels[0]     = CheckRange(ScreenData[3], 0, 8);
+    DualRateChannels[1]     = CheckRange(ScreenData[4], 0, 8);
+    DualRateChannels[2]     = CheckRange(ScreenData[5], 0, 8);
+    DualRateChannels[3]     = CheckRange(ScreenData[6], 0, 8);
+    DualRateChannels[4]     = CheckRange(ScreenData[7], 0, 8);
+    DualRateChannels[5]     = CheckRange(ScreenData[8], 0, 8);
+    DualRateChannels[6]     = CheckRange(ScreenData[9], 0, 8);
+    DualRateChannels[7]     = CheckRange(ScreenData[10], 0, 8);
+    DualRateRate[Bank-1]    = ScreenData[11]; 
+    
+
+
+
 }
 /******************************************************************************************************************************/
 
 void DualRatesEnd()
 {
     char GotoSticksView[] = "page SticksView";
-    ReadDualRatesValues();
+   // ReadDualRatesValues();
     SaveOneModel(ModelNumber);
     SendCommand(GotoSticksView);
     Force_ReDisplay();
@@ -3924,26 +3943,74 @@ void ReceiveLotsofData(){ // heer
         uint32_t FirstDWord;
     }
     NextionData;
+   //  Look1("***************  ");
+   //  Look(millis());
     for  (int field = 1; field < 49; ++field){
         int offset = field * 4;
         for (int p = 0; p < 4; ++p) NextionData.First4Bytes[p] =  TextIn[offset+p];
         if (NextionData.FirstDWord < 0xFFFF){
             ScreenData[i] = NextionData.FirstDWord;
+    //        Look1 (i);
+    //        Look1 (" -> ");
+    //        Look(ScreenData[i]);
             ++i;
        }else{
            break;
        }
     }       
     ScreenDataCount = i;
-    if (CurrentView == MIXESVIEW) {
-        ReadMixValues();
-      //  Look("MIXESVIEW");
-       // Look(millis());
+    
+    if (CurrentView == MIXESVIEW) ReadMixValues();
+    if (CurrentView == DUALRATESVIEW) DualRatesRefresh();
+
+}
+
+/******************************************************************************************************************************/
+ void CheckSelectedRatesMode(){ // heer
+
+    char rate[]= "rate";
+    static uint8_t lastbank = 0;
+
+    uint8_t rateMode = GetValue(rate);
+    if ((rateMode != DualRateRate[Bank-1]) || (Bank !=lastbank))    // if the rate has changed
+    {
+        TextIn[4] = rateMode;
+        SetNewDualRate();
+        lastbank = Bank;
     }
+ }
+
+
+/******************************************************************************************************************************/
+void SetNewDualRate(){ // heer
+
+        char buf[40];
+        char t3[] = "t3";
+        char join[] = " will use ";
+        char quote[] = "\'";
+        char rates[4][12] = {{"rate switch"}, {"rate 1"}, {"rate 2"}, {"rate 3"}};
+        char rate[] = "rate";
+        
+        DualRateRate[Bank-1] = TextIn[4];
+
+        if (DualRateRate[Bank-1] > 3)  {
+            DualRateRate[Bank-1] = 0;
+            SendValue(rate, 0);
+        }
+        strcpy(buf,quote);
+        strcat(buf, BankTexts[BanksInUse[Bank-1]]);
+        strcat(buf,quote);
+        strcat(buf, join);
+        if (DualRateRate[Bank-1]){    // if not zero which means "the switch"
+            strcat(buf, rates[DualRateRate[Bank-1]]);
+        }else{
+            strcat(buf, rates[0]);
+        }
+        SendText(t3, buf);
 }
 
 // ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
-#define LASTFUNCTION 77 // One more than final one, because first is number zero
+#define LASTFUNCTION 78 // One more than final one, because first is number zero
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                    // 0
@@ -4022,7 +4089,8 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     ShowScreenAgain,          // 73 End of screen timeout when someone touched screen
     HideScreenAgain,          // 74 Force immediate 'screen timeout' 
     TrimsToSubtrim,           // 75
-    ReceiveLotsofData         // 76
+    ReceiveLotsofData,        // 76
+    SetNewDualRate            // 77 // when the DualRate behavior scrollable thingy is changed
 
 
 }; // list will become longer ...
@@ -5046,7 +5114,7 @@ FASTRUN void ButtonWasPressed()
                 SendCommand(visb1);
                 SendCommand(visb0);
             } else {
-                ReadMixValues();                // heer??
+                ReadMixValues();                // 
             }
             FixCHNames();
             ClearText();
@@ -5338,7 +5406,7 @@ void ReadBuddySwitch(){
  }
 
 /************************************************************************************************************/
- void  ReadFlightModeSwitch(){
+ void  ReadBankSwitch(){
     if (BankSwitch == 4) ReadBankSwitch(Switch[2], Switch[3], SWITCH4Reversed);
     if (BankSwitch == 3) ReadBankSwitch(Switch[0], Switch[1], SWITCH3Reversed);
     if (BankSwitch == 2) ReadBankSwitch(Switch[4], Switch[5], SWITCH2Reversed);
@@ -5389,7 +5457,7 @@ void GetBank()   // ... and the other three switches
     ReadSafetySwitch();
     ReadBuddySwitch();
     ReadDualRateSwitch();
-    ReadFlightModeSwitch();
+    ReadBankSwitch();
     ReadAutoAndMotorSwitch();
 
     if (SafetyWasOn != SafetyON) {
@@ -5471,6 +5539,9 @@ void GetBank()   // ... and the other three switches
             ReadSpeedsScreen(PreviousBank-1);
             UpdateSpeedScreen();
             }
+        if (CurrentView == DUALRATESVIEW) { // heer
+            DisplayNewDualRateBank();
+        }
     }
     MotorWasEnabled = MotorEnabled; // Remember motor state
     PreviousBank    = Bank;         // Remember BANK
@@ -5774,9 +5845,17 @@ void FASTRUN ManageTransmitter()
         return;                                                                                                // That's enough housekeeping for this time around
     }
     
-    if ((RightNow - LastModelScreenCheck >= 500) && (CurrentView == MODELSVIEW)) { 
-        LastModelScreenCheck = RightNow;
-        if (CheckModelName()) {LastModelScreenCheck = RightNow; return;}                                       // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
+    if ((RightNow - LastModelScreenCheck >= 500)) {
+        if (CurrentView == MODELSVIEW) { 
+            LastModelScreenCheck = RightNow;
+            if (CheckModelName()) {
+                LastModelScreenCheck = RightNow; return;                                                        // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
+            }
+        }
+        if (CurrentView == DUALRATESVIEW){
+            CheckSelectedRatesMode();   // heer
+            LastModelScreenCheck = RightNow;
+        }
     }     
 
     if (RightNow - TransmitterLastManaged >= 50) {                                                             // 20 times a second is good
