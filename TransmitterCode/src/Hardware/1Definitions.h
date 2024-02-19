@@ -74,7 +74,7 @@
     #define DS1307_ADDRESS         0x68                         // I2C address for RTC
     #define MAXLINES               30                           // text to load at once for log and help screens
     #define DEFAULT_EXPO           50                           // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
-    #define CHARSMAX               250                          // Max length for char arrays  
+    #define CHARSMAX               250                          // Max length for char arrays  (was 120)
     #define DEFAULTLEDBRIGHTNESS   20                           // LED brightness
     #define DEFAULTPOWEROFFWARNING 3                            // Default time to warn before cutting power
     #define MAXDUALRATE            200
