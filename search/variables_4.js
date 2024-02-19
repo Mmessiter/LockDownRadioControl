@@ -24,6 +24,7 @@ var searchData=
   ['dt_21',['dt',['../Quadcopter_2src_2main_8cpp.html#a778e38aa889751afffa2dea6b803e67a',1,'main.cpp']]],
   ['dualratechannels_22',['DualRateChannels',['../1Definitions_8h.html#ade150617ac0f31361fa0ac903acf3160',1,'1Definitions.h']]],
   ['dualrateinuse_23',['DualRateInUse',['../1Definitions_8h.html#a3effe8f46dcf634627a86397621f0cbc',1,'1Definitions.h']]],
-  ['dualratesswitch_24',['DualRatesSwitch',['../1Definitions_8h.html#a4df69e16a4039792dea25b6def556141',1,'1Definitions.h']]],
-  ['dualratevalue_25',['DualRateValue',['../1Definitions_8h.html#ade79cdae89d2e1ff6ca095d901e7371a',1,'1Definitions.h']]]
+  ['dualraterate_24',['DualRateRate',['../1Definitions_8h.html#a27de3f189a9cc7af2580d4ee2161a67d',1,'1Definitions.h']]],
+  ['dualratesswitch_25',['DualRatesSwitch',['../1Definitions_8h.html#a4df69e16a4039792dea25b6def556141',1,'1Definitions.h']]],
+  ['dualratevalue_26',['DualRateValue',['../1Definitions_8h.html#ade79cdae89d2e1ff6ca095d901e7371a',1,'1Definitions.h']]]
 ];
