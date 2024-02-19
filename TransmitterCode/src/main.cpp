@@ -5376,7 +5376,9 @@ void ReadBuddySwitch(){
     if (DualRatesSwitch == 3) ReadDRSwitch(Switch[0], Switch[1], SWITCH3Reversed);
     if (DualRatesSwitch == 2) ReadDRSwitch(Switch[4], Switch[5], SWITCH2Reversed);
     if (DualRatesSwitch == 1) ReadDRSwitch(Switch[6], Switch[7], SWITCH1Reversed);
-
+    
+    if (DualRateRate[Bank - 1] > 0) DualRateInUse = DualRateRate[Bank - 1];   // if using a forced rate !
+   
     if (DualRateInUse == 1) DualRateValue = Drate1;
     if (DualRateInUse == 2) DualRateValue = Drate2;
     if (DualRateInUse == 3) DualRateValue = Drate3;
