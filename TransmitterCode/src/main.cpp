@@ -1744,6 +1744,11 @@ void SetDefaultValues()
             ServoSpeed[j][i] = 100;
         }
     }
+
+    for (i = 0; i < 4; ++i) {
+       DualRateRate[i] = 0;   
+   }
+
     TrimMultiplier = 5;
     ModelDefined = 42;
 }
@@ -5372,6 +5377,7 @@ void ReadBuddySwitch(){
  void ReadDualRateSwitch(){
      
     DualRateInUse = 4; // default to 100%
+
     if (DualRatesSwitch == 4) ReadDRSwitch(Switch[2], Switch[3], SWITCH4Reversed);
     if (DualRatesSwitch == 3) ReadDRSwitch(Switch[0], Switch[1], SWITCH3Reversed);
     if (DualRatesSwitch == 2) ReadDRSwitch(Switch[4], Switch[5], SWITCH2Reversed);
@@ -5401,7 +5407,7 @@ void ReadBuddySwitch(){
                     PlaySound(RATE3);
                     break;
                 default:
-                    break;
+                    break;   
             }
         }
     }

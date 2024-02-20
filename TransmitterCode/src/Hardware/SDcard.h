@@ -229,27 +229,17 @@ bool ReadOneModel(uint32_t Mnum)
         ++SDCardAddress;
     }
 
-    // TREX
+    for (i = 0; i < 4; ++i) {
+        DualRateRate[i] = SDRead8BITS(SDCardAddress);
+        if (DualRateRate[i] > 3) DualRateRate[i] = 0;
+        ++SDCardAddress;
+   }
 
-//    BankSwitch = SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;  // spare bytes
     ++SDCardAddress;
-//    Autoswitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-//    Channel9Switch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-//    Channel10Switch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-//    Channel11Switch = SDRead8BITS(SDCardAddress);
-    ++SDCardAddress;
-//    Channel12Switch = SDRead8BITS(SDCardAddress);
-    ++SDCardAddress;
-//    SWITCH1Reversed = bool(SDRead8BITS(SDCardAddress));
-    ++SDCardAddress;
-//    SWITCH2Reversed = bool(SDRead8BITS(SDCardAddress));
-    ++SDCardAddress;
-//    SWITCH3Reversed = bool(SDRead8BITS(SDCardAddress));
-    ++SDCardAddress;
-//    SWITCH4Reversed = bool(SDRead8BITS(SDCardAddress));
     ++SDCardAddress;
 
     for (i = 0; i < CHANNELSUSED; ++i) {
@@ -1017,10 +1007,11 @@ void SaveOneModel(uint32_t mnum)
         ++SDCardAddress;
     }
     
-    ++SDCardAddress;// Spare bytes
-    ++SDCardAddress;
-    ++SDCardAddress;
-    ++SDCardAddress;
+    for (i = 0; i < 4; ++i) {
+        SDUpdate8BITS(SDCardAddress,DualRateRate[i]);
+        ++SDCardAddress;
+   }
+
     ++SDCardAddress;
     ++SDCardAddress;
     ++SDCardAddress;
