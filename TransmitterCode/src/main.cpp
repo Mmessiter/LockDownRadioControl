@@ -3203,11 +3203,11 @@ void ShowDualRateChannelsName(char* nm, uint8_t n)
 
 void    DisplayNewDualRateBank(){
         char rate[] = "rate";
-        char t1[] = "t1";                                               // heer?
+        char t1[] = "t1";                                              
         SendValue(rate, DualRateRate[Bank - 1]);
         DelayWithDog(100);
-        SendText(t1, BankTexts[BanksInUse[Bank - 1]]);                  // display bank name in Rates view ************* heer....
-        CheckSelectedRatesMode();                                       // heer
+        SendText(t1, BankTexts[BanksInUse[Bank - 1]]);                  // display bank name in Rates view
+        CheckSelectedRatesMode();                                       
 
 }
 
@@ -3298,13 +3298,10 @@ void ReadDualRatesValues()
 
 void DualRatesEnd()
 {
-    char GotoSticksView[] = "page SticksView";
-   // ReadDualRatesValues();
+   
+   // ReadDualRatesValues(); ??
     SaveOneModel(ModelNumber);
-    SendCommand(GotoSticksView);
-    Force_ReDisplay();
-    ShowServoPos();
-    CurrentView = STICKSVIEW;
+    StartModelSetup();
 }
 
 /******************************************************************************************************************************/
@@ -3941,7 +3938,7 @@ void SaveSwitches(){
 /******************************************************************************************************************************/
 // This function receives upto 50 data elements from the Nextion display and loads it into ScreenData array of uint16_t
 
-void ReceiveLotsofData(){ // heer
+void ReceiveLotsofData(){ 
     int i = 0;
     union{
         uint8_t  First4Bytes[4];
@@ -3971,7 +3968,7 @@ void ReceiveLotsofData(){ // heer
 }
 
 /******************************************************************************************************************************/
- void CheckSelectedRatesMode(){ // heer
+ void CheckSelectedRatesMode(){ 
 
     char rate[]= "rate";
     static uint8_t lastbank = 0;
@@ -3987,7 +3984,7 @@ void ReceiveLotsofData(){ // heer
 
 
 /******************************************************************************************************************************/
-void SetNewDualRate(){ // heer
+void SetNewDualRate(){
 
         char buf[40];
         char t3[] = "t3";
@@ -5547,7 +5544,7 @@ void GetBank()   // ... and the other three switches
             ReadSpeedsScreen(PreviousBank-1);
             UpdateSpeedScreen();
             }
-        if (CurrentView == DUALRATESVIEW) { // heer
+        if (CurrentView == DUALRATESVIEW) { 
             DisplayNewDualRateBank();
         }
     }
@@ -5861,7 +5858,7 @@ void FASTRUN ManageTransmitter()
             }
         }
         if (CurrentView == DUALRATESVIEW){
-            CheckSelectedRatesMode();   // heer
+            CheckSelectedRatesMode();  
             LastModelScreenCheck = RightNow;
         }
     }     
