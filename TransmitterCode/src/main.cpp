@@ -3205,10 +3205,8 @@ void    DisplayNewDualRateBank(){
         char rate[] = "rate";
         char t1[] = "t1";                                              
         SendValue(rate, DualRateRate[Bank - 1]);
-        DelayWithDog(100);
         SendText(t1, BankTexts[BanksInUse[Bank - 1]]);                  // display bank name in Rates view
         CheckSelectedRatesMode();                                       
-
 }
 
 /******************************************************************************************************************************/
@@ -5856,10 +5854,6 @@ void FASTRUN ManageTransmitter()
             if (CheckModelName()) {
                 LastModelScreenCheck = RightNow; return;                                                        // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
             }
-        }
-        if (CurrentView == DUALRATESVIEW){
-            CheckSelectedRatesMode();  
-            LastModelScreenCheck = RightNow;
         }
     }     
 
