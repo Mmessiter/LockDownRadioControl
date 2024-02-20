@@ -3945,16 +3945,16 @@ void ReceiveLotsofData(){
         uint32_t FirstDWord;
     }
     NextionData;
-   //  Look1("***************  ");
-   //  Look(millis());
+     Look1("***************  ");
+     Look(millis());
     for  (int field = 1; field < 49; ++field){
         int offset = field * 4;
         for (int p = 0; p < 4; ++p) NextionData.First4Bytes[p] =  TextIn[offset+p];
         if (NextionData.FirstDWord < 0xFFFF){
             ScreenData[i] = NextionData.FirstDWord;
-    //        Look1 (i);
-    //        Look1 (" -> ");
-    //        Look(ScreenData[i]);
+            Look1 (i);
+            Look1 (" -> ");
+           Look(ScreenData[i]);
             ++i;
        }else{
            break;
