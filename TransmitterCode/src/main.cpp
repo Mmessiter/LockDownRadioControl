@@ -158,6 +158,10 @@
 void ClearMostParameters(){ // called from RED LED ON
 
         RXVoltsDetected         = false;
+        
+        ModelsMacUnionSaved.Val64 = 0;
+        ModelsMacUnion.Val64    = 0;
+        
         LedWasGreen             = false;
         ModelIdentified         = false;
         ModelMatched            = false;
@@ -165,7 +169,7 @@ void ClearMostParameters(){ // called from RED LED ON
         LastShowTime            = 0;
         TotalGoodPackets        = 0;
         BindingTimer            = 0;
-        RecentGoodPacketsCount    = 0;
+        RecentGoodPacketsCount  = 0;
         RecentPacketsLost       = 0;
         DontChangePipeAddress   = false;
         UsingDefaultPipeAddress = true;
