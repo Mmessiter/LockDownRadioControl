@@ -11,7 +11,7 @@ var searchData=
   ['uplog_8',['UpLog',['../LogFiles_8h.html#a2206c19b4fc075f4c9f1bb957ca89e1d',1,'LogFiles.h']]],
   ['usedefaultrecoverychannels_9',['usedefaultrecoverychannels',['../common_8h.html#a23be886d0f26b1bd0487babfb4d7ed7e',1,'UseDefaultRecoveryChannels():&#160;common.h'],['../1Definitions_8h.html#a23be886d0f26b1bd0487babfb4d7ed7e',1,'UseDefaultRecoveryChannels():&#160;1Definitions.h']]],
   ['useextraparameters_10',['useextraparameters',['../common_8h.html#a3c0ffefc9101d9a52b4a210b4ed34552',1,'UseExtraParameters():&#160;radio.h'],['../radio_8h.html#a3c0ffefc9101d9a52b4a210b4ed34552',1,'UseExtraParameters():&#160;radio.h']]],
-  ['usefullrate_11',['UseFullRate',['../TransmitterCode_2src_2main_8cpp.html#a8f53f86499d740b350f7b6d791c90497',1,'main.cpp']]],
+  ['usefullrate_11',['UseFullRate',['../Rates_8h.html#a8f53f86499d740b350f7b6d791c90497',1,'Rates.h']]],
   ['userandomizedrecoverychannels_12',['userandomizedrecoverychannels',['../common_8h.html#a03cd5e24f66a381a38effaa16922c0a8',1,'UseRandomizedRecoveryChannels():&#160;common.h'],['../1Definitions_8h.html#a03cd5e24f66a381a38effaa16922c0a8',1,'UseRandomizedRecoveryChannels():&#160;1Definitions.h']]],
   ['usereceiveddata_13',['UseReceivedData',['../radio_8h.html#ae81f764427dc5f290cc6e16ab92e83b8',1,'radio.h']]]
 ];

@@ -20,8 +20,8 @@ var searchData=
   ['disabledatareadyinterrupt_17',['disableDataReadyInterrupt',['../classMPU9250.html#a9483f60ce79ce2d1aaad23a4deef6e4b',1,'MPU9250']]],
   ['displaycurve_18',['displaycurve',['../1Definitions_8h.html#af941d3a33327b2cee79e058ba9cd65f6',1,'DisplayCurve():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#acf49567c45af927603ae83a7f46e6534',1,'DisplayCurve():&#160;main.cpp']]],
   ['displaycurveandservopos_19',['DisplayCurveAndServoPos',['../TransmitterCode_2src_2main_8cpp.html#aa61377ec59e711151913086167f2f48f',1,'main.cpp']]],
-  ['displaydualratevalues_20',['DisplayDualRateValues',['../TransmitterCode_2src_2main_8cpp.html#a922416bc71ebe2b10fcd879f271e7c1c',1,'main.cpp']]],
-  ['displaynewdualratebank_21',['DisplayNewDualRateBank',['../TransmitterCode_2src_2main_8cpp.html#accb14f03e8fb425d550d16c6e3884f38',1,'main.cpp']]],
+  ['displaydualratevalues_20',['displaydualratevalues',['../Rates_8h.html#a922416bc71ebe2b10fcd879f271e7c1c',1,'DisplayDualRateValues():&#160;Rates.h'],['../1Definitions_8h.html#a922416bc71ebe2b10fcd879f271e7c1c',1,'DisplayDualRateValues():&#160;Rates.h']]],
+  ['displaynewdualratebank_21',['DisplayNewDualRateBank',['../Rates_8h.html#accb14f03e8fb425d550d16c6e3884f38',1,'Rates.h']]],
   ['displaypipe_22',['DisplayPipe',['../transceiver_8h.html#ab8a2a13d9c9cb089a3adc17ce3332f08',1,'transceiver.h']]],
   ['dolasttimeread_23',['DoLastTimeRead',['../TransmitterCode_2src_2main_8cpp.html#ab0c7618cd8a08986e1405b50c7ab64e5',1,'main.cpp']]],
   ['domfname_24',['DoMFName',['../TransmitterCode_2src_2main_8cpp.html#ae267eaa80a4b3eb49ba10a97469eb7e9',1,'main.cpp']]],
@@ -40,7 +40,7 @@ var searchData=
   ['drawdot_37',['DrawDot',['../Utilities_8h.html#ad0feb21fbea69455d1d206f142b563ac',1,'Utilities.h']]],
   ['drawfhssbox_38',['drawfhssbox',['../1Definitions_8h.html#a6bdc6419b47dda71d0d2c8faf652adc2',1,'DrawFhssBox():&#160;transceiver.h'],['../transceiver_8h.html#a6bdc6419b47dda71d0d2c8faf652adc2',1,'DrawFhssBox():&#160;transceiver.h']]],
   ['drawline_39',['drawline',['../1Definitions_8h.html#acbef1d41e1bd646b60a6e8afd9c66880',1,'DrawLine(int x1, int y1, int x2, int y2, int c):&#160;Utilities.h'],['../Utilities_8h.html#acbef1d41e1bd646b60a6e8afd9c66880',1,'DrawLine(int x1, int y1, int x2, int y2, int c):&#160;Utilities.h']]],
-  ['dualratesend_40',['DualRatesEnd',['../TransmitterCode_2src_2main_8cpp.html#acaf005c908c2b6706d7ab9579f456ca8',1,'main.cpp']]],
-  ['dualratesrefresh_41',['DualRatesRefresh',['../TransmitterCode_2src_2main_8cpp.html#af110521855e780717b5248c3aacc799e',1,'main.cpp']]],
-  ['dualratesstart_42',['DualRatesStart',['../TransmitterCode_2src_2main_8cpp.html#a6e3590b95598a6cced18d591c2e1879f',1,'main.cpp']]]
+  ['dualratesend_40',['DualRatesEnd',['../Rates_8h.html#acaf005c908c2b6706d7ab9579f456ca8',1,'Rates.h']]],
+  ['dualratesrefresh_41',['DualRatesRefresh',['../Rates_8h.html#af110521855e780717b5248c3aacc799e',1,'Rates.h']]],
+  ['dualratesstart_42',['DualRatesStart',['../Rates_8h.html#a6e3590b95598a6cced18d591c2e1879f',1,'Rates.h']]]
 ];

@@ -17,7 +17,7 @@ var searchData=
   ['usedefaultrecoverychannels_14',['usedefaultrecoverychannels',['../common_8h.html#a23be886d0f26b1bd0487babfb4d7ed7e',1,'UseDefaultRecoveryChannels():&#160;common.h'],['../1Definitions_8h.html#a23be886d0f26b1bd0487babfb4d7ed7e',1,'UseDefaultRecoveryChannels():&#160;1Definitions.h']]],
   ['usedualrates_15',['UseDualRates',['../1Definitions_8h.html#a5f6ebf5df29e0ee922a462cbdd419ed8',1,'1Definitions.h']]],
   ['useextraparameters_16',['useextraparameters',['../common_8h.html#a3c0ffefc9101d9a52b4a210b4ed34552',1,'UseExtraParameters():&#160;radio.h'],['../radio_8h.html#a3c0ffefc9101d9a52b4a210b4ed34552',1,'UseExtraParameters():&#160;radio.h']]],
-  ['usefullrate_17',['UseFullRate',['../TransmitterCode_2src_2main_8cpp.html#a8f53f86499d740b350f7b6d791c90497',1,'main.cpp']]],
+  ['usefullrate_17',['UseFullRate',['../Rates_8h.html#a8f53f86499d740b350f7b6d791c90497',1,'Rates.h']]],
   ['uselog_18',['UseLog',['../1Definitions_8h.html#aa42482a0bb01edaf26f217dbc38643d2',1,'1Definitions.h']]],
   ['usemacros_19',['UseMacros',['../1Definitions_8h.html#a42a6363bff83773c1b99caa06aebb1f5',1,'1Definitions.h']]],
   ['usemotorkill_20',['UseMotorKill',['../1Definitions_8h.html#ad76445c097f9d33a6935be5c2489bd34',1,'1Definitions.h']]],
