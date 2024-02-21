@@ -638,7 +638,10 @@ FASTRUN uint16_t ReadThreePositionSwitch(uint8_t l); // This returns the input o
 void             UpdateSpeedScreen();
 void             SetNewDualRate();
 void             CheckSelectedRatesMode();
-
+void             GetCurveDots(uint16_t OutputChannel, uint16_t TheRate); // This for the Dual Rates function
+void             CheckDualRatesValues();
+void             ReadDualRatesValues();
+void             DisplayDualRateValues();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
