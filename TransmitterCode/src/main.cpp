@@ -3627,9 +3627,17 @@ void ReceiveLotsofData(){
        }
     }       
     ScreenDataCount = i;
-    
-    if (CurrentView == MIXESVIEW) ReadMixValues();
-    if (CurrentView == DUALRATESVIEW) DualRatesRefresh();
+
+    switch (CurrentView) {
+        case MIXESVIEW:
+            ReadMixValues();
+            break;
+        case DUALRATESVIEW:
+            DualRatesRefresh();
+            break;
+        default:
+            break;
+    }
 
 }
 
