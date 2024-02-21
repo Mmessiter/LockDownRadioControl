@@ -340,7 +340,4 @@ void GetCurveDots(uint16_t OutputChannel, uint16_t TheRate) // This for the Dual
     for (int i = 0; i < 5; ++i) CurveDots[i] = UseFullRate(i, OutputChannel); // ... channel not used so 100%
 }
 
-
-
-
 #endif
