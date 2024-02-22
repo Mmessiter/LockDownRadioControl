@@ -158,8 +158,8 @@ void ClearMostParameters(){ // called from RED LED ON
 
         RXVoltsDetected         = false;
         
-      //  ModelsMacUnionSaved.Val64 = 0;
-        ModelsMacUnion.Val64    = 0;
+    //  ModelsMacUnionSaved.Val64 = 0;
+        ModelsMacUnion.Val64      = 0;
         
         LedWasGreen             = false;
         ModelIdentified         = false;
