@@ -14,8 +14,7 @@
  * - Unlimited model files for backup (32 Gig)
  * - "ModelMatch" plus automatic model memory selection. (Avoid flying with wrong memory loaded.)
  * - "ModelExchange" - share model memories wirelessly.
- * - Wireless BuddyBoxing - share total control of a model wirelessly.
- * - Traditional (wired) Buddyboxing with selectable channels.
+ * - Wireless or wired Buddyboxing with selectable channels.
  * - Voice messages and other audio prompts.
  * - User defined Channel names
  * - 2.4 Ghz FHSS ISM band licence free in UK and most other countries.

@@ -143,6 +143,7 @@ bool GetButtonPress()
         TextIn[i]      = NEXTION.read();
         TextIn[i + 1]  = 0;   
         if (i < CHARSMAX - 1) ++i;
+        KickTheDog();
         delayMicroseconds(500);        // needed!!
     }
     if (ButtonPressed && ButtonClicks) PlaySound(CLICKONE);
