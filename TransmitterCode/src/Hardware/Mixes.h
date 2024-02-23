@@ -58,7 +58,6 @@ FASTRUN void MixInputs()
                         }
                         MixValue += (Mixes[MixNumber][M_OFFSET] - 127) * 8;                 // add offset
                         MixValue += InputsBuffer[SlaveChannel] ;                            // This is the actual mix moment! (MixValue is now the mixed value
-                        InputsBuffer[SlaveChannel] = MixValue;                              // put the mixed value back into the input buffer
                         if (ChannelMin[SlaveChannel] > ChannelMax[SlaveChannel])
                         {
                            InputsBuffer[SlaveChannel] = constrain(MixValue, ChannelMax[SlaveChannel],  ChannelMin[SlaveChannel]);
