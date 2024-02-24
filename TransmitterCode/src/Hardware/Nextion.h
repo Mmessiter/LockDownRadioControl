@@ -83,19 +83,32 @@ void SendOtherValue(char* nbox, int value)
 }
 
 /*********************************************************************************************************************************/
-void GetTextIn()
+void GetTextIn() // heer
 {
-    int j = 0;
     delayMicroseconds(20);
     if (NEXTION.available()) {
+        int j = 0;
         while (NEXTION.available()) {
-            TextIn[j] = uint8_t(NEXTION.read());
-            if (TextIn[j] == '$') TextIn[j] = 0;
+            TextIn[j] = NEXTION.read();
+            KickTheDog();
             if (j < CHARSMAX) ++j;
             delayMicroseconds(20);
         }
     }
 }
+
+
+/*********************************************************************************************************************************/
+bool GetButtonPress() // heer 
+{
+    if (NEXTION.available()){
+        GetTextIn();
+        if (ButtonClicks) PlaySound(CLICKONE);
+        return true;
+    }     
+    return false;
+}
+
 
 /*********************************************************************************************************************************/
 void SendCommand(char* tbox)
@@ -131,23 +144,6 @@ void SendValue(char* nbox, int value)
     SendCommand(CB);
     ValueSent = true;
     GetReturnCode();
-}
-
-/*********************************************************************************************************************************/
-bool GetButtonPress()
-{
-    int     i             = 0;
-    bool    ButtonPressed = false;
-    while (NEXTION.available()) {
-        ButtonPressed  = true;
-        TextIn[i]      = NEXTION.read();
-        TextIn[i + 1]  = 0;   
-        if (i < CHARSMAX - 1) ++i;
-        KickTheDog();
-        delayMicroseconds(500);        // needed!!
-    }
-    if (ButtonPressed && ButtonClicks) PlaySound(CLICKONE);
-    return ButtonPressed;
 }
 
 /*********************************************************************************************************************************/
