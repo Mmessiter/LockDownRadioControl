@@ -14,10 +14,10 @@ void CompareModelsIDs()
     
     if (BuddyPupilOnWireless) return;   //  Don't do this if we are a pupil
     if (BuddyON) return;                //  Don't do this if buddy is on
-    if (ModelMatched) return;           // must not change when model connected
+    if (ModelMatched) return;           //  must not change when model connected
     GotoFrontView();
     RestoreBrightness();
-    if (ModelIdentified) { //  We have both bits of Model ID?
+    if (ModelIdentified) {              //  We have both bits of Model ID?
         if ((ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64)) { //  Is it a match for current model?
             if (AnnounceConnected) {
                 if (AutoModelSelect) {
@@ -25,12 +25,12 @@ void CompareModelsIDs()
                     DelayWithDog(1500);
                 }
             }
-            ModelMatched = true; //  It's a match so start flying!
+            ModelMatched = true;        //  It's a match so start flying!
             return;
         }
         else {
             if (AutoModelSelect)
-            {                                                                           //  It's not a match so search for it.
+            {                           //  It's not a match so search for it.
                 ModelNumber = 0;
                 while ((ModelMatched == false) && (ModelNumber < MAXMODELNUMBER - 1)) { //  Try to match the ID with a saved one
                     ++ModelNumber;
@@ -44,17 +44,15 @@ void CompareModelsIDs()
                         PlaySound(MMFOUND);
                         DelayWithDog(1500);
                     }
-                    SaveAllParameters(); //  Save it
+                    SaveAllParameters();        //  Save it
                     GotoFrontView();
                 }
                 else 
                 {
-
-
                 ModelNumber = SavedModelNumber;  // on second thoughts, just use the saved one
                 ReadOneModel(ModelNumber);
                 BindNow();
-                MsgBox(pFrontView, NotFound);
+                MsgBox(pFrontView, NotFound);   //  Tell the user it's not found
                 }
             }
             if (!AutoModelSelect) 
