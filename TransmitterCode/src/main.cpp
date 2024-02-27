@@ -3630,8 +3630,6 @@ void ReceiveLotsofData(){
            break;
        }
     }       
-    ScreenDataCount = i;
-
     switch (CurrentView) {
         case MIXESVIEW:
             ReadMixValues();

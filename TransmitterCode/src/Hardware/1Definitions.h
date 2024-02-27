@@ -1039,10 +1039,8 @@ uint8_t RadioNumber            = 0;
 uint8_t LastRadioNumber        = 0;
 
 uint16_t ScreenData[50];
-uint8_t  ScreenDataCount = 0;
 
 int      LastTrim[5][17];
-
 
 char    pFhssView[]               = "page FhssView";
 char    pDataView[]               = "page DataView";
