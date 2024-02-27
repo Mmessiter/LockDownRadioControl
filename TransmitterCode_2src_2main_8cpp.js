@@ -65,6 +65,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "GetNewChannelValues", "TransmitterCode_2src_2main_8cpp.html#a26ae4f6ca14f760bd5eb6e7588fe7c81", null ],
     [ "GetTeensyMacAddress", "TransmitterCode_2src_2main_8cpp.html#a079eed93efcfacfd2a78c69e8a6f3085", null ],
     [ "GetTXVersionNumber", "TransmitterCode_2src_2main_8cpp.html#aee99c2684d91ac475ed24480da4dcc30", null ],
+    [ "GetYesOrNo", "TransmitterCode_2src_2main_8cpp.html#aaa204b24e5593d481873dd88611c0c2a", null ],
     [ "GotoFrontView", "TransmitterCode_2src_2main_8cpp.html#a2d16d1f4802d4029bc8933a18d213beb", null ],
     [ "GotoGPSView", "TransmitterCode_2src_2main_8cpp.html#acfb857911a5c8c11020e345c71bd36ec", null ],
     [ "GotoMacrosView", "TransmitterCode_2src_2main_8cpp.html#abdecfd433e1830c6497040b03450bed7", null ],
