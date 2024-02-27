@@ -782,7 +782,6 @@ var 1Definitions_8h =
     [ "SbusRepeats", "1Definitions_8h.html#a62cc4d43d463897ef0d417150d6e7f3f", null ],
     [ "ScanSensitivity", "1Definitions_8h.html#aeeea59b14879c44a6809a64ac3c31187", null ],
     [ "ScreenData", "1Definitions_8h.html#a8cad75ee9523e6d9bd0b29d6b30e1c0d", null ],
-    [ "ScreenDataCount", "1Definitions_8h.html#a68799503db37bf96760779f2cf7ed301", null ],
     [ "ScreenIsOff", "1Definitions_8h.html#aff4581f5a99a6d8eb37ef22e94d858d3", null ],
     [ "ScreenTimeout", "1Definitions_8h.html#a3c8096a17fd0f8dbb05f47be54fd7637", null ],
     [ "ScreenTimeTimer", "1Definitions_8h.html#a83b0bce3874e15bbce39bac61907b689", null ],
