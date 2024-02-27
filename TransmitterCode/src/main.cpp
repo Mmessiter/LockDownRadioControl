@@ -3760,14 +3760,15 @@ FASTRUN void ButtonWasPressed()
 
 #endif
 
-        if (TextIn[0] >= 128) {                       // (First byte != printable char) indicates a numbered command...
-            if (NumberedCommand < LASTFUNCTION) {     // ...so this system currently only permits 127 numbered functions to be supported.
-                                                      // But that's OK! Because only about 110 still need converting, after which
-                                                      // the restriction can be removed and the max will then be a full 32 bit value.
-                                                      // **********************************************************************************************************************************
-                NumberedFunctions[NumberedCommand](); // Call the needed function -- with a function pointer                     *
-                                                      // **********************************************************************************************************************************
-           
+        // if (TextIn[0] == 255 ) {                  // ... Later! ... This can be expanded to handle more than 127 commands when the first byte is 255
+        //         NumberedFunctions1[NumberedCommand](); 
+        //         ClearText();
+        //         return;
+        // }
+
+        if (TextIn[0] >= 128) {                       
+            if (NumberedCommand < LASTFUNCTION) {     
+                NumberedFunctions[NumberedCommand](); // Call the needed function -- with a function pointer                                             
                 ClearText();
                 return;
             }
