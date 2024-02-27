@@ -3235,23 +3235,11 @@ void EndRenameModel()
     SaveOneModel(ModelNumber);
     GotoModelsView();
 }
+
+
 /******************************************************************************************************************************/
-bool GetBackupFilename(char* goback, char* tt1, char* MMname, char* heading, char* pprompt)
-{ // HERE THE USER CAN REPLACE DEFAULT FILENAME IF HE WANTS TO
 
-    char GoBackupView[] = "page BackupView";
-    char t0[]           = "t0";        // prompt
-    char t1[]           = "t1";        // default filename
-    char t3[]           = "t3";        // heading
-    char Mname[]        = "Modelname"; // model name
-
-    SendCommand(GoBackupView);
-
-    SendText(t0, pprompt);   // prompt
-    SendText(t1, tt1);       // filename
-    SendText(Mname, MMname); // Model name
-    SendText(t3, heading);   // heading
-
+void GetYesOrNo(){  // on return, Confirmed[0] will be Y or N
     Confirmed[0] = '?';
     while (Confirmed[0] == '?') { // await user response
         CheckForNextionButtonPress();
@@ -3263,6 +3251,22 @@ bool GetBackupFilename(char* goback, char* tt1, char* MMname, char* heading, cha
            SendData();
         }
     }
+}
+/******************************************************************************************************************************/
+bool GetBackupFilename(char* goback, char* tt1, char* MMname, char* heading, char* pprompt)
+{ // HERE THE USER CAN REPLACE DEFAULT FILENAME IF HE WANTS TO
+
+    char GoBackupView[] = "page BackupView";
+    char t0[]           = "t0";        // prompt
+    char t1[]           = "t1";        // default filename
+    char t3[]           = "t3";        // heading
+    char Mname[]        = "Modelname"; // model name
+    SendCommand(GoBackupView);
+    SendText(t0, pprompt);   // prompt
+    SendText(t1, tt1);       // filename
+    SendText(Mname, MMname); // Model name
+    SendText(t3, heading);   // heading
+    GetYesOrNo();
     GetText(t1, SingleModelFile);
     SendCommand(goback);
     if (Confirmed[0] == 'Y') return true;
@@ -3280,18 +3284,7 @@ bool GetConfirmation(char* goback, char* Prompt)
     char Dialog[]      = "Dialog";
     SendCommand(GoPopupView);
     SendText(Dialog, Prompt);
-    Confirmed[0] = '?';
-    while (Confirmed[0] == '?') { // await user response
-        CheckForNextionButtonPress();
-        CheckPowerOffButton();
-        if (BoundFlag && ModelMatched) {
-           GetNewChannelValues();
-           FixMotorChannel(); 
-           SendData();
-        }
-        
-        KickTheDog();
-    }
+    GetYesOrNo();
     SendCommand(goback);
     LastFileInView = 120;
     if (Confirmed[0] == 'Y') return true; // tell caller OK to continue
@@ -3311,20 +3304,9 @@ void MsgBox(char* goback, char* Prompt)
     char NoCancel[]    = "vis b1,0"; // hide cancel button
     SendCommand(GoPopupView);
     SendCommand(NoCancel);
-   
     SendText(Dialog, Prompt);
-    Confirmed[0] = '?';
-    while (Confirmed[0] == '?') { // await user response
-        CheckForNextionButtonPress();
-        KickTheDog();
-         if (BoundFlag && ModelMatched) {
-           GetNewChannelValues();
-           FixMotorChannel();
-           SendData();
-        }
-    }
+    GetYesOrNo();
     SendCommand(goback);
-   
     LastFileInView = 120;
     return;
 }
