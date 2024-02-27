@@ -2505,7 +2505,7 @@ void LoadModelSelector()
     int32_t SavedModelNumber = ModelNumber;
     for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber) {
         ReadOneModel(ModelNumber);
-        if(!ModelsMacUnionSaved.Val64){ // heer
+        if(!ModelsMacUnionSaved.Val64){ 
             strcpy(lb," *");
             strcpy(rb,"*");
         }else{
@@ -3255,8 +3255,13 @@ bool GetBackupFilename(char* goback, char* tt1, char* MMname, char* heading, cha
     Confirmed[0] = '?';
     while (Confirmed[0] == '?') { // await user response
         CheckForNextionButtonPress();
-        CheckPowerOffButton();
+        CheckPowerOffButton();// heer
         KickTheDog();
+        if (BoundFlag && ModelMatched) {
+           GetNewChannelValues();
+           FixMotorChannel();
+           SendData();
+        }
     }
     GetText(t1, SingleModelFile);
     SendCommand(goback);
@@ -3306,6 +3311,7 @@ void MsgBox(char* goback, char* Prompt)
     char NoCancel[]    = "vis b1,0"; // hide cancel button
     SendCommand(GoPopupView);
     SendCommand(NoCancel);
+   
     SendText(Dialog, Prompt);
     Confirmed[0] = '?';
     while (Confirmed[0] == '?') { // await user response
@@ -3318,6 +3324,7 @@ void MsgBox(char* goback, char* Prompt)
         }
     }
     SendCommand(goback);
+   
     LastFileInView = 120;
     return;
 }
@@ -5509,7 +5516,7 @@ FASTRUN void loop()
             GetBuddyData();    // Only if master
             FixMotorChannel(); // Maybe force it low BEFORE Binding data is added
             ShowServoPos();    // Show servo positions to user
-            SendBindingPipe(); // Only if not bound yet - overwrite low throttle setting
+            SendBindingPipe(); // Only if not bound yet - overwride low throttle setting
         }
     }
 
