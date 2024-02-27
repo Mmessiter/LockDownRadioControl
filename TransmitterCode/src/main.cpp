@@ -157,10 +157,7 @@
 void ClearMostParameters(){ // called from RED LED ON
 
         RXVoltsDetected         = false;
-        
-    //  ModelsMacUnionSaved.Val64 = 0;
         ModelsMacUnion.Val64      = 0;
-        
         LedWasGreen             = false;
         ModelIdentified         = false;
         ModelMatched            = false;
@@ -656,6 +653,14 @@ void UpdateModelsNameEveryWhere()
     strcpy(mn1, ModelName);
 
     if (CurrentView == FRONTVIEW) SendText(Owner, TxName);
+
+    if(!ModelsMacUnionSaved.Val64){ 
+        strcpy(lb, " *"); 
+        strcpy(rb, "*");
+    }else{
+        strcpy(lb, " ("); 
+        strcpy(rb, ")");
+    }   
 
     if (CurrentView != MODELSVIEW) {
         strcat(mn1, lb);
@@ -2500,13 +2505,20 @@ void LoadModelSelector()
     int32_t SavedModelNumber = ModelNumber;
     for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber) {
         ReadOneModel(ModelNumber);
+        if(!ModelsMacUnionSaved.Val64){ // heer
+            strcpy(lb," *");
+            strcpy(rb,"*");
+        }else{
+            strcpy(lb," (");
+            strcpy(rb,")");
+        }
         if (ModelNumber == 1) {
             strcpy(buf, ModelName);
             strcat(buf, lb);
             Str(nb, ModelNumber, 0);
             strcat(buf, nb);
             strcat(buf, rb);
-            strcat(buf, crlf);
+            strcat(buf, crlf); 
         }
         else {
             strcat(buf, ModelName);
@@ -5250,6 +5262,7 @@ void GotoFrontView()
         SendText(fms[i], BankTexts[BanksInUse[i]]);
     }
     ForceDataRedisplay();
+    ShowAMS();
     UpdateTrimView();
     if (BuddyPupilOnWireless) StartBuddyListen();
 

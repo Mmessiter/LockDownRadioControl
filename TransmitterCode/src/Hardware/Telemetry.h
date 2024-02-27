@@ -162,14 +162,19 @@ void ShowCurrentRate(){ // if it has changed
 
 void ShowAMS(){
     char         ams[]                 = "ams";
-    char         AmsOnMsg[]            = "AMS";
-    char         AmsOffMsg[]           = "   ";
+    char         AmsOnMsg[]            = "AMS  ";
+    char         AmsOffMsg[]           = "     ";
+    
+    if(!ModelsMacUnionSaved.Val64){ 
+        strcpy(AmsOnMsg, "*AMS*"); 
+    }
+    
     if (AutoModelSelect) {
-                SendText(ams, AmsOnMsg);
-            }
-            else {
-                SendText(ams, AmsOffMsg);
-            }
+        SendText(ams, AmsOnMsg);
+    }
+    else {
+        SendText(ams, AmsOffMsg);
+    }
 }
 
 /*********************************************************************************************************************************/
@@ -367,7 +372,7 @@ void  PopulateFrontView(){
     char         InVisible[]            = "vis Quality,0";
         
         ShowConnectionQuality();
-        if (LastAutoModelSelect != AutoModelSelect) {
+        if ((LastAutoModelSelect != AutoModelSelect) || (!ModelsMacUnionSaved.Val64)){
             LastAutoModelSelect = AutoModelSelect;
             ShowAMS();
         }
