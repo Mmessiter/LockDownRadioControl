@@ -3239,7 +3239,7 @@ void EndRenameModel()
 
 /******************************************************************************************************************************/
 
-void GetYesOrNo(){  // on return, Confirmed[0] will be Y or N
+void GetYesOrNo(){                  // on return from here, Confirmed[0] will be Y or N
     Confirmed[0] = '?';
     while (Confirmed[0] == '?') { // await user response
         CheckForNextionButtonPress();
