@@ -3643,11 +3643,48 @@ void ReceiveLotsofData(){
 
 }
 
-// ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
+// ********************************************************************************************************************************************
+
+void DeleteModel(){
+
+    char Prompt[60]; 
+    char del[]               = "Delete ";
+    char ques[]              = "?";
+    char MMems[]             = "MMems";
+    char msg[]               = "Model deleted!";
+            strcpy(Prompt, del);
+            strcat(Prompt, ModelName);
+            strcat(Prompt, ques);
+            if (GetConfirmation(pModelsView, Prompt)) {
+                ModelNumber = GetValue(MMems) + 1;
+                SetDefaultValues();
+                SaveOneModel(ModelNumber);
+                LoadModelSelector();
+                MsgBox(pModelsView, msg);
+            }
+            ClearText();
+}
+
+// ******************************** Global Array1 of numbered function pointers OK up the **********************************
+
+// This new list can be huge - up to 24 BITS!
+#define LASTFUNCTION1 2 // One more than final one
+
+void (*NumberedFunctions1[LASTFUNCTION1])() {
+        Blank,                       // 0 // spare
+        DeleteModel                  // 1
+};
+
+ // This list migth become MUCH longer as it limit is 24 bits big
+
+// ******************************** Global Array0 of numbered function pointers - OK up to 127 functions ... **********************************
+
+// This list can be only up to 127 (7 BITS) functions long
+
 #define LASTFUNCTION 78 // One more than final one, because first is number zero
 
 void (*NumberedFunctions[LASTFUNCTION])() {
-    Blank,                    // 0
+    Blank,                    // 0 // spare
     DoMFName,                 // 1
     ModelViewEnd,             // 2
     DoLastTimeRead,           // 3
@@ -3711,7 +3748,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     NoPressed,                // 61
     RenameFile,               // 62
     CheckAllModelIds,         // 63
-    Blank,                    // 64
+    Blank,                    // 64  // spare
     ReceiveModelFile,         // 65
     TXModuleViewStart,        // 66
     TXModuleViewEnd,          // 67
@@ -3727,52 +3764,67 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     SetNewDualRate            // 77 // when the DualRate behavior scrollable thingy is changed
 
 
-}; // list will become longer ...
+}; // This list migth become longer but a new one is now started above without the 127 limit
 
 /*********************************************************************************************************************************
  *                          BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)                                            *
  *********************************************************************************************************************************/
 FASTRUN void ButtonWasPressed()
 {
-    if (strlen(TextIn) > 0) {
+    if ((TextIn[0]) || (TextIn[1]) || (TextIn[2]) || (TextIn[3])){  // is there anything in first four bytes?
         StartInactvityTimeout();
-        ScreenTimeTimer = millis(); // reset screen timeout counter
+        ScreenTimeTimer = millis();                                 // reset screen timeout counter
         union
         {
             uint8_t  First4Bytes[4];
             uint32_t FirstDWord;
         } NextionCommand;
+        
         NextionCommand.First4Bytes[0] = TextIn[0];
         NextionCommand.First4Bytes[1] = TextIn[1];
-        NextionCommand.First4Bytes[2] = 0;
-        NextionCommand.First4Bytes[3] = 0;
-        uint32_t NumberedCommand      = NextionCommand.FirstDWord - 128;
+        NextionCommand.First4Bytes[2] = TextIn[2];
+        NextionCommand.First4Bytes[3] = TextIn[3];
+
+        uint32_t NumberedCommand      = NextionCommand.FirstDWord & 0x7F; // Just clear the hi BIT ( i.e. -128)
+        uint32_t NumberedCommand1     = NextionCommand.FirstDWord >> 8;   // Shift over to the right to get a number up to 24 BITS
 
 #ifdef DB_NEXTION
-        if (TextIn[0] < 128) {
-            Look1("Command WORD: -> ");
+      
+
+        if ((TextIn[0] < 128) && (TextIn[0] > 28)) {
+            Look1("Command WORD: ");
             Look(TextIn);
         }
-        else {
-            Look1("Command NUMBER: -> ");
+        
+        if ((TextIn[0] > 128) && (TextIn[0] < 255))  {
+            Look1("7 BIT Command NUMBER: ");
             Look(NumberedCommand);
+        }
+
+        if (TextIn[0] == 0)  {
+            Look1("24 BIT command NUMBER: ");
+            Look(NumberedCommand1);
         }
 
 #endif
 
-        // if (TextIn[0] == 255 ) {                  // ... Later! ... This can be expanded to handle more than 127 commands when the first byte is 255
-        //         NumberedFunctions1[NumberedCommand](); 
-        //         ClearText();
-        //         return;
-        // }
+        if (!TextIn[0]) {                                   //  Now expanded to handle FAR more than 127 functions
+                if (NumberedCommand1 < LASTFUNCTION1) {  
+                    NumberedFunctions1[NumberedCommand1](); // Call the needed function -- with a function pointer   
+                }
+                ClearText();
+                return;
+        }
 
         if (TextIn[0] >= 128) {                       
             if (NumberedCommand < LASTFUNCTION) {     
-                NumberedFunctions[NumberedCommand](); // Call the needed function -- with a function pointer                                             
-                ClearText();
-                return;
+                NumberedFunctions[NumberedCommand]();       // Call the needed function -- with a function pointer                                             
             }
+            ClearText();
+            return;
         }
+
+
         int  i                         = 0;
         int  j                         = 0;
         int  p                         = 0;
@@ -3799,7 +3851,6 @@ FASTRUN void ButtonWasPressed()
         char FM3[]                     = "FM 3";
         char FM4[]                     = "FM 4";
         char ReScan[]                  = "ReScan";
-        char Delete[]                  = "Delete";
         char MixesView_MixNumber[]     = "MixNumber";
         char ModelsView_ModelNumber[]  = "ModelNumber";
         char GoSetupView[]             = "GoSetupView";
@@ -3876,9 +3927,6 @@ FASTRUN void ButtonWasPressed()
         char Dec_Date[]                = "DecDate";
         char Inc_Month[]               = "IncMonth";
         char Dec_Month[]               = "DecMonth";
-        
-       
-
         char DataView_Clear[]          = "Clear";
         char DataView_AltZero[]        = "AltZero";
         char OptionsEnd[]              = "OptionsEnd";
@@ -3912,10 +3960,8 @@ FASTRUN void ButtonWasPressed()
         char pLogView[]                = "page LogView";
         char dGMT[]                    = "dGMT";
         char TxNme[]                   = "TxName";
-        char MMems[]                   = "MMems";
         char Prompt[60];
         char del[]               = "Delete ";
-        char msg[]               = "Model deleted!";
         char overwr[]            = "Overwrite ";
         char ques[]              = "?";
         char hhead[]             = "Create backup file for";
@@ -3936,7 +3982,7 @@ FASTRUN void ButtonWasPressed()
 
         // ************************* test many input words from Nextion *****************
 
-        if (InStrng(StCH, TextIn)) { // select sub trim channel
+        if (InStrng(StCH, TextIn)) {                        // select sub trim channel
             SubTrimToEdit = GetValue(s0)-1;
             SendValue(n0, SubTrims[SubTrimToEdit] - 127);
             SendValue(h0, SubTrims[SubTrimToEdit]);
@@ -3950,20 +3996,6 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(Delete, TextIn) > 0) {
-            strcpy(Prompt, del);
-            strcat(Prompt, ModelName);
-            strcat(Prompt, ques);
-            if (GetConfirmation(pModelsView, Prompt)) {
-                ModelNumber = GetValue(MMems) + 1;
-                SetDefaultValues();
-                SaveOneModel(ModelNumber);
-                LoadModelSelector();
-                MsgBox(pModelsView, msg);
-            }
-            ClearText();
-            return;
-        }
 
         if (InStrng(AudioView, TextIn) > 0) { // Display screen with audio options
             CurrentView = AUDIOVIEW;
@@ -3982,6 +4014,8 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
+
+
         if (InStrng(SetupAud, TextIn) > 0) { // Exit from screen with audio options
             AudioVolume       = GetValue(n0);
             Brightness        = GetValue(n1);
@@ -4000,6 +4034,8 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
+
+
         if (InStrng(SetupView, TextIn) > 0) { //  goto main setup screen
             ClearText();
             if (CurrentView == CALIBRATEVIEW) ReadOneModel(ModelNumber);  // because it was cleared for calibration

@@ -18,19 +18,19 @@
 #include <InterpolationLib.h>
  
 // *************************************************************************************
-//               TX VERSION NUMBER   (May 2020 - February 2024 Malcolm Messiter)       *
+//               TX VERSION NUMBER   (May 2020 - March 2024 Malcolm Messiter)       *
 //**************************************************************************************
 
     #define TXVERSION_MAJOR   2 // first three *must* match RX but _EXTRA can be different
     #define TXVERSION_MINOR   4
     #define TXVERSION_MINIMUS 5
-    #define TXVERSION_EXTRA   "i 20/02/24" 
+    #define TXVERSION_EXTRA   "j 29/02/24" 
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
 //**************************************************************************************
 
- //#define DB_NEXTION        // Debug NEXTION
+// #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
 // #define DB_FHSS           // Debug real time FHSS data
