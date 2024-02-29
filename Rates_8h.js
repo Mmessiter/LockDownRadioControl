@@ -6,7 +6,6 @@ var Rates_8h =
     [ "DisplayDualRateValues", "Rates_8h.html#a922416bc71ebe2b10fcd879f271e7c1c", null ],
     [ "DisplayNewDualRateBank", "Rates_8h.html#accb14f03e8fb425d550d16c6e3884f38", null ],
     [ "DualRatesEnd", "Rates_8h.html#acaf005c908c2b6706d7ab9579f456ca8", null ],
-    [ "DualRatesRefresh", "Rates_8h.html#af110521855e780717b5248c3aacc799e", null ],
     [ "DualRatesStart", "Rates_8h.html#a6e3590b95598a6cced18d591c2e1879f", null ],
     [ "GetCurveDots", "Rates_8h.html#af9c038b48102eca9032f10fefd9d5736", null ],
     [ "ReadDRSwitch", "Rates_8h.html#a0d5901e43a27733953343dd462178ada", null ],

@@ -101,7 +101,7 @@ var searchData=
   ['populatedataview_98',['populatedataview',['../1Definitions_8h.html#a98c67388b3e9a2bb7b98706f22612c0b',1,'PopulateDataView():&#160;Telemetry.h'],['../Telemetry_8h.html#a98c67388b3e9a2bb7b98706f22612c0b',1,'PopulateDataView():&#160;Telemetry.h']]],
   ['populatefrontview_99',['populatefrontview',['../1Definitions_8h.html#a90e8c9138d652fd7fc253a581ca1485a',1,'PopulateFrontView():&#160;Telemetry.h'],['../Telemetry_8h.html#a90e8c9138d652fd7fc253a581ca1485a',1,'PopulateFrontView():&#160;Telemetry.h']]],
   ['populategpsview_100',['populategpsview',['../1Definitions_8h.html#adb1a04de9e49c7d96cfe009fd98c6383',1,'PopulateGPSView():&#160;Telemetry.h'],['../Telemetry_8h.html#adb1a04de9e49c7d96cfe009fd98c6383',1,'PopulateGPSView():&#160;Telemetry.h']]],
-  ['populatemacrosview_101',['PopulateMacrosView',['../TransmitterCode_2src_2main_8cpp.html#a58fe79634784085398cb1f382f6bf57d',1,'main.cpp']]],
+  ['populatemacrosview_101',['populatemacrosview',['../1Definitions_8h.html#a58fe79634784085398cb1f382f6bf57d',1,'PopulateMacrosView():&#160;MenuOptions.h'],['../MenuOptions_8h.html#a58fe79634784085398cb1f382f6bf57d',1,'PopulateMacrosView():&#160;MenuOptions.h']]],
   ['power_5foff_5fpin_102',['POWER_OFF_PIN',['../1Definitions_8h.html#aac8f9c268e406507be95a1255281323c',1,'1Definitions.h']]],
   ['poweroffwarningseconds_103',['PowerOffWarningSeconds',['../1Definitions_8h.html#a655d384f81374c34aa6629856258263a',1,'1Definitions.h']]],
   ['ppmarea_104',['PPMArea',['../structPPMArea.html',1,'']]],

@@ -210,7 +210,7 @@ var searchData=
   ['gettimefromackpayload_207',['GetTimeFromAckPayload',['../transceiver_8h.html#a86523345ecdd52f3d93dccd6fcf4370a',1,'transceiver.h']]],
   ['gettrimamount_208',['GetTrimAmount',['../Trims_8h.html#aacd8b022714bb89847239dd878ad9509',1,'Trims.h']]],
   ['gettxversionnumber_209',['GetTXVersionNumber',['../TransmitterCode_2src_2main_8cpp.html#aee99c2684d91ac475ed24480da4dcc30',1,'main.cpp']]],
-  ['getvalue_210',['getvalue',['../Nextion_8h.html#aff6fa8906188d3249b01bf59de47df2f',1,'getvalue(char *nbox):&#160;Nextion.h'],['../1Definitions_8h.html#aff6fa8906188d3249b01bf59de47df2f',1,'getvalue(char *nbox):&#160;Nextion.h'],['../Nextion_8h.html#a6e4fac4e296c09388b8b56353402d67a',1,'GetValue(char *nbox):&#160;Nextion.h'],['../1Definitions_8h.html#a6e4fac4e296c09388b8b56353402d67a',1,'GetValue(char *nbox):&#160;Nextion.h']]],
+  ['getvalue_210',['getvalue',['../Nextion_8h.html#a6e4fac4e296c09388b8b56353402d67a',1,'GetValue(char *nbox):&#160;Nextion.h'],['../1Definitions_8h.html#a6e4fac4e296c09388b8b56353402d67a',1,'GetValue(char *nbox):&#160;Nextion.h'],['../Nextion_8h.html#aff6fa8906188d3249b01bf59de47df2f',1,'getvalue(char *nbox):&#160;Nextion.h'],['../1Definitions_8h.html#aff6fa8906188d3249b01bf59de47df2f',1,'getvalue(char *nbox):&#160;Nextion.h']]],
   ['getwaitforexternalsensorenabled_211',['getWaitForExternalSensorEnabled',['../classMPU6050.html#a4e2ebda47b85b4c5463f041c790bf5c0',1,'MPU6050']]],
   ['getwakecycleenabled_212',['getWakeCycleEnabled',['../classMPU6050.html#a89afc5235b9088c696e2cc7841f5259a',1,'MPU6050']]],
   ['getwakefrequency_213',['getWakeFrequency',['../classMPU6050.html#a249a905ae4572a462414f2d94236258a',1,'MPU6050']]],
@@ -242,7 +242,7 @@ var searchData=
   ['getzposmotiondetected_239',['getZPosMotionDetected',['../classMPU6050.html#a33c766cd415fc5780417b1ed76717875',1,'MPU6050']]],
   ['gotofrontview_240',['gotofrontview',['../1Definitions_8h.html#a2d16d1f4802d4029bc8933a18d213beb',1,'GotoFrontView():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a2d16d1f4802d4029bc8933a18d213beb',1,'GotoFrontView():&#160;main.cpp']]],
   ['gotogpsview_241',['GotoGPSView',['../TransmitterCode_2src_2main_8cpp.html#acfb857911a5c8c11020e345c71bd36ec',1,'main.cpp']]],
-  ['gotomacrosview_242',['GotoMacrosView',['../TransmitterCode_2src_2main_8cpp.html#abdecfd433e1830c6497040b03450bed7',1,'main.cpp']]],
-  ['gotomodelsview_243',['gotomodelsview',['../1Definitions_8h.html#a446a94169d966af920710f7acddc5257',1,'GotoModelsView():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a446a94169d966af920710f7acddc5257',1,'GotoModelsView():&#160;main.cpp']]],
+  ['gotomacrosview_242',['GotoMacrosView',['../MenuOptions_8h.html#abdecfd433e1830c6497040b03450bed7',1,'MenuOptions.h']]],
+  ['gotomodelsview_243',['gotomodelsview',['../1Definitions_8h.html#a446a94169d966af920710f7acddc5257',1,'GotoModelsView():&#160;MenuOptions.h'],['../MenuOptions_8h.html#a446a94169d966af920710f7acddc5257',1,'GotoModelsView():&#160;MenuOptions.h']]],
   ['greenledon_244',['greenledon',['../1Definitions_8h.html#a62e53eb9359c32b666e3386d62c57037',1,'GreenLedOn():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a62e53eb9359c32b666e3386d62c57037',1,'GreenLedOn():&#160;main.cpp']]]
 ];

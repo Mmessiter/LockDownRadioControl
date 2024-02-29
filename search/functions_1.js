@@ -4,7 +4,7 @@ var searchData=
   ['begin_1',['begin',['../classSBUS.html#a5c2fccbffff0bd17ed522529fd6b2d8f',1,'SBUS::begin()'],['../classMPU9250.html#ab0e26058e7148ebf5af4569138337a02',1,'MPU9250::begin()']]],
   ['bindmodel_2',['bindmodel',['../ReceiverCode_2src_2main_8cpp.html#aa0c6905579a33aef28d737d43676cbbd',1,'BindModel():&#160;main.cpp'],['../common_8h.html#aa0c6905579a33aef28d737d43676cbbd',1,'BindModel():&#160;main.cpp']]],
   ['bindnow_3',['bindnow',['../1Definitions_8h.html#a7b8f152779a09d867292d3a8e7f76d85',1,'BindNow():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a7b8f152779a09d867292d3a8e7f76d85',1,'BindNow():&#160;main.cpp']]],
-  ['blank_4',['Blank',['../TransmitterCode_2src_2main_8cpp.html#a0bd2123bbb9dfc3a3af87642de04b591',1,'main.cpp']]],
+  ['blank_4',['Blank',['../MenuOptions_8h.html#a0bd2123bbb9dfc3a3af87642de04b591',1,'MenuOptions.h']]],
   ['blinkled_5',['blinkled',['../ReceiverCode_2src_2main_8cpp.html#aa477cf7453bb57dab00e7b654f62cb13',1,'BlinkLed():&#160;main.cpp'],['../common_8h.html#aa477cf7453bb57dab00e7b654f62cb13',1,'BlinkLed():&#160;main.cpp']]],
   ['blueledon_6',['blueledon',['../1Definitions_8h.html#aa1f9aec467eb00917ad9ffdc0bd5b20d',1,'BlueLedOn():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aa1f9aec467eb00917ad9ffdc0bd5b20d',1,'BlueLedOn():&#160;main.cpp']]],
   ['buddychviewend_7',['BuddyChViewEnd',['../TransmitterCode_2src_2main_8cpp.html#ad332e97e29352b9b7bf0ada90b4dcf06',1,'main.cpp']]],

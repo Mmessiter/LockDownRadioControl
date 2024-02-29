@@ -12,7 +12,7 @@ var searchData=
   ['populatedataview_9',['populatedataview',['../1Definitions_8h.html#a98c67388b3e9a2bb7b98706f22612c0b',1,'PopulateDataView():&#160;Telemetry.h'],['../Telemetry_8h.html#a98c67388b3e9a2bb7b98706f22612c0b',1,'PopulateDataView():&#160;Telemetry.h']]],
   ['populatefrontview_10',['populatefrontview',['../1Definitions_8h.html#a90e8c9138d652fd7fc253a581ca1485a',1,'PopulateFrontView():&#160;Telemetry.h'],['../Telemetry_8h.html#a90e8c9138d652fd7fc253a581ca1485a',1,'PopulateFrontView():&#160;Telemetry.h']]],
   ['populategpsview_11',['populategpsview',['../1Definitions_8h.html#adb1a04de9e49c7d96cfe009fd98c6383',1,'PopulateGPSView():&#160;Telemetry.h'],['../Telemetry_8h.html#adb1a04de9e49c7d96cfe009fd98c6383',1,'PopulateGPSView():&#160;Telemetry.h']]],
-  ['populatemacrosview_12',['PopulateMacrosView',['../TransmitterCode_2src_2main_8cpp.html#a58fe79634784085398cb1f382f6bf57d',1,'main.cpp']]],
+  ['populatemacrosview_12',['populatemacrosview',['../1Definitions_8h.html#a58fe79634784085398cb1f382f6bf57d',1,'PopulateMacrosView():&#160;MenuOptions.h'],['../MenuOptions_8h.html#a58fe79634784085398cb1f382f6bf57d',1,'PopulateMacrosView():&#160;MenuOptions.h']]],
   ['prescan_13',['PreScan',['../1Definitions_8h.html#a5e3e764f8311564f5e20c3a838b25c07',1,'1Definitions.h']]],
   ['printacceldata_14',['printAccelData',['../Quadcopter_2src_2main_8cpp.html#aacb9f52bb633a473b642fed6febab7a7',1,'main.cpp']]],
   ['printactiveoffsets_15',['PrintActiveOffsets',['../classMPU6050.html#ae15c8f3eecce2a9c66786a1d602202cd',1,'MPU6050']]],

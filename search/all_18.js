@@ -73,7 +73,7 @@ var searchData=
   ['tx_70',['tX',['../classMPU9250.html#af7d992743ffa2e15d5674b45a100791e',1,'MPU9250']]],
   ['txlipo_71',['TXLiPo',['../1Definitions_8h.html#ae15fd0f1128566cd1120f3dd2e287dc1',1,'1Definitions.h']]],
   ['txmoduleview_72',['TXMODULEVIEW',['../1Definitions_8h.html#a70a0f4317ce7de6e2ef8b8725d23b945',1,'1Definitions.h']]],
-  ['txmoduleviewend_73',['TXModuleViewEnd',['../TransmitterCode_2src_2main_8cpp.html#a3c55ef7c23759a89a86f6519569c4f7a',1,'main.cpp']]],
+  ['txmoduleviewend_73',['TXModuleViewEnd',['../MenuOptions_8h.html#a3c55ef7c23759a89a86f6519569c4f7a',1,'MenuOptions.h']]],
   ['txmoduleviewstart_74',['TXModuleViewStart',['../TransmitterCode_2src_2main_8cpp.html#a6a61a2c5b0349843efa66a58c0b956be',1,'main.cpp']]],
   ['txname_75',['TxName',['../1Definitions_8h.html#a2706b92e2f31363ec86e745e2014afef',1,'1Definitions.h']]],
   ['txsetupview_76',['TXSETUPVIEW',['../1Definitions_8h.html#a59446de1638c86e10c4ac9e5e2871511',1,'1Definitions.h']]],

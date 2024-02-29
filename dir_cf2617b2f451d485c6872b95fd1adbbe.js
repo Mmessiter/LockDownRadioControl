@@ -5,6 +5,7 @@ var dir_cf2617b2f451d485c6872b95fd1adbbe =
     [ "BuddyWireless.h", "BuddyWireless_8h.html", "BuddyWireless_8h" ],
     [ "LogFiles.h", "LogFiles_8h.html", "LogFiles_8h" ],
     [ "macros.h", "macros_8h.html", "macros_8h" ],
+    [ "MenuOptions.h", "MenuOptions_8h.html", "MenuOptions_8h" ],
     [ "Mixes.h", "Mixes_8h.html", "Mixes_8h" ],
     [ "ModelExchange.h", "ModelExchange_8h.html", "ModelExchange_8h" ],
     [ "ModelMatch.h", "ModelMatch_8h.html", "ModelMatch_8h" ],
