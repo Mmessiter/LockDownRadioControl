@@ -9,5 +9,6 @@ var searchData=
   ['newpipemaybe_6',['NewPipeMaybe',['../common_8h.html#a3662a2886499f793d8cfcfe589798574',1,'common.h']]],
   ['nextchannel_7',['nextchannel',['../common_8h.html#a4c9fbf66b2c98730d43dc9dfe573a998',1,'NextChannel:&#160;common.h'],['../1Definitions_8h.html#a4c9fbf66b2c98730d43dc9dfe573a998',1,'NextChannel:&#160;1Definitions.h']]],
   ['nextchannelnumber_8',['nextchannelnumber',['../common_8h.html#a372b457a109ccee3253b219df1a47412',1,'NextChannelNumber:&#160;common.h'],['../namespaceFHSS__data.html#a052746df02560319bc39fa4c7d87408e',1,'FHSS_data::NextChannelNumber']]],
-  ['numberedfunctions_9',['NumberedFunctions',['../TransmitterCode_2src_2main_8cpp.html#abb4fb8e30aec6f80bfcb85d5f4c7931f',1,'main.cpp']]]
+  ['numberedfunctions_9',['NumberedFunctions',['../TransmitterCode_2src_2main_8cpp.html#abb4fb8e30aec6f80bfcb85d5f4c7931f',1,'main.cpp']]],
+  ['numberedfunctions1_10',['NumberedFunctions1',['../TransmitterCode_2src_2main_8cpp.html#a37e973bfa7dcf01b07d2ca1cb571383c',1,'main.cpp']]]
 ];

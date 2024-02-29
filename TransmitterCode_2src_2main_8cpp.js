@@ -2,6 +2,7 @@ var TransmitterCode_2src_2main_8cpp =
 [
     [ "APPROXIMATION", "TransmitterCode_2src_2main_8cpp.html#aee8c3c363eab49d6a90d3f74587694d5", null ],
     [ "LASTFUNCTION", "TransmitterCode_2src_2main_8cpp.html#a7b562fa140e3020f492686ce35e4ac52", null ],
+    [ "LASTFUNCTION1", "TransmitterCode_2src_2main_8cpp.html#a06463caaab5a1a62443fe203c83718d4", null ],
     [ "MAXWIDTH", "TransmitterCode_2src_2main_8cpp.html#ac101c663138f79260b6d5ea00140fa22", null ],
     [ "AddParameterstoQueue", "TransmitterCode_2src_2main_8cpp.html#a281e0b7f5a10148c72a3c00cadd1be11", null ],
     [ "AileronLeftTrim", "TransmitterCode_2src_2main_8cpp.html#a71f72bed656884a7e88b70f73f8d81a4", null ],
@@ -29,6 +30,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "ClearMostParameters", "TransmitterCode_2src_2main_8cpp.html#afeaea883a32e6ebe461d419fab1b9f59", null ],
     [ "CompareVersionNumbers", "TransmitterCode_2src_2main_8cpp.html#ad496cd10d726d7c5757d01a922c2aa25", null ],
     [ "ConvertBuddyPipeTo64BITS", "TransmitterCode_2src_2main_8cpp.html#a9938fb6967cdd208ca6d6e54531a5610", null ],
+    [ "DeleteModel", "TransmitterCode_2src_2main_8cpp.html#af1c87773b2f836fbb4d0d1175c0d7f4d", null ],
     [ "DeleteModelID", "TransmitterCode_2src_2main_8cpp.html#ac45477c637c975e13189e2988c8813b3", null ],
     [ "DisplayCurve", "TransmitterCode_2src_2main_8cpp.html#acf49567c45af927603ae83a7f46e6534", null ],
     [ "DisplayCurveAndServoPos", "TransmitterCode_2src_2main_8cpp.html#aa61377ec59e711151913086167f2f48f", null ],
@@ -177,5 +179,6 @@ var TransmitterCode_2src_2main_8cpp =
     [ "YesPressed", "TransmitterCode_2src_2main_8cpp.html#a742d8d0be4a05e1c241dad8b6ea5eba0", null ],
     [ "ZeroDataScreen", "TransmitterCode_2src_2main_8cpp.html#a6da9a1fd0b003151f79eabc702ba80ff", null ],
     [ "Interpolate", "TransmitterCode_2src_2main_8cpp.html#ac8ce9c3b3ac8639fb34ffe64bef87c34", null ],
-    [ "NumberedFunctions", "TransmitterCode_2src_2main_8cpp.html#abb4fb8e30aec6f80bfcb85d5f4c7931f", null ]
+    [ "NumberedFunctions", "TransmitterCode_2src_2main_8cpp.html#abb4fb8e30aec6f80bfcb85d5f4c7931f", null ],
+    [ "NumberedFunctions1", "TransmitterCode_2src_2main_8cpp.html#a37e973bfa7dcf01b07d2ca1cb571383c", null ]
 ];
