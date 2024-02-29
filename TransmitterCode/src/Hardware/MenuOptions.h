@@ -1,0 +1,416 @@
+// *************************************** MenuOptions.h  *****************************************
+#include <Arduino.h>
+#include "Hardware/1Definitions.h"
+
+#ifndef MENUOPTIONS_H
+    #define MENUOPTIONS_H
+    
+
+
+
+
+
+/******************************** FUNCTIONS FOR ARRAY OF POINTERS *************************************************************/
+void Blank()
+{
+    return;
+}
+
+
+
+/*********************************************************************************************************************************/
+
+void EndReverseView()
+{ // channel reverse flags are 16 individual BITs in var 'ReversedChannelBITS'
+    char    fs[16][5] = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
+    uint8_t i;
+    char    ProgressStart[] = "vis Progress,1";
+    char    Progress[]      = "Progress";
+    SendCommand(ProgressStart);
+    ReversedChannelBITS = 0;
+    for (i = 0; i < 16; ++i) {
+        SendValue(Progress, (i * (100 / 16)));
+        if (GetValue(fs[i])) ReversedChannelBITS |= 1 << i; // set a BIT
+    }
+    SaveOneModel(ModelNumber);
+    SendCommand(pRXSetupView);
+    CurrentView = RXSETUPVIEW;
+    UpdateModelsNameEveryWhere();
+}
+
+/*********************************************************************************************************************************/
+
+void StartReverseView()
+{ // channel reverse flags are 16 individual BITs in ReversedChannelBITS
+    char    pReverseView[] = "page ReverseView";
+    char    fs[16][5]      = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
+    uint8_t i;
+    char    ProgressStart[] = "vis Progress,1";
+    char    ProgressEnd[]   = "vis Progress,0";
+    char    Progress[]      = "Progress";
+
+    CurrentView = REVERSEVIEW;
+    SendCommand(pReverseView);
+    UpdateButtonLabels();
+    SendCommand(ProgressStart);
+    for (i = 0; i < 16; ++i) {
+        SendValue(Progress, (i * (100 / 16)));
+        if (ReversedChannelBITS & 1 << i) { // is BIT set??
+            SendValue(fs[i], 1);
+        }
+        else {
+            SendValue(fs[i], 0);
+        }
+    }
+    SendCommand(ProgressEnd);
+    UpdateModelsNameEveryWhere();
+}
+
+
+
+/*********************************************************************************************************************************/
+
+void FixCHNames()                                                             // channel names on Mix screen now with Bank name and enabled status too.
+{
+    char MixesView_chM[]           = "chM";
+    char MixesView_chS[]           = "chS";
+    char BankNameLable[]           = "t10";
+    char All[]                     =  "All banks";
+    SendText(MixesView_chM, ChannelNames[ScreenData[MASTERCHANNEL]-1]);       // show master channel
+    SendText(MixesView_chS, ChannelNames[ScreenData[SLAVECHANNEL]-1]);        // show slave channel
+    if (ScreenData[BANK] > 0){
+        SendText(BankNameLable, BankTexts[BanksInUse[ScreenData[BANK]-1]]);   // Show bank name 
+    }else{
+        SendText(BankNameLable, All);
+    }
+}
+
+/******************************************************************************************************************************/
+
+void DualRatesRefresh()
+{
+    ReadDualRatesValues();
+    DisplayDualRateValues();
+}
+
+/*********************************************************************************************************************************/
+
+void ReadMixValues()   // just reads from the screen and saves to Mixes array
+
+{
+    Mixes[MixNumber][M_MIX_INPUTS]      = ScreenData[0];
+    Mixes[MixNumber][M_MIX_OUTPUTS]     = ScreenData[1];
+    Mixes[MixNumber][M_Bank]            = ScreenData[2];
+    Mixes[MixNumber][M_MasterChannel]   = ScreenData[3];
+    Mixes[MixNumber][M_SlaveChannel]    = ScreenData[4];
+    Mixes[MixNumber][M_ONEDIRECTION]    = ScreenData[5];
+    Mixes[MixNumber][M_Reversed]        = ScreenData[6];
+    Mixes[MixNumber][M_OFFSET]          = ScreenData[7] + 127; // because it's unsigned
+    Mixes[MixNumber][M_Percent]         = ScreenData[8];
+    FixCHNames();
+}
+
+/*********************************************************************************************************************************/
+
+void ShowMixValues() // sends mix values to Nextion screen 
+{
+    char MixesView_MixOutput[]     = "Enabled";
+    char MixesView_MixInput[]      = "c0";
+    char MixesView_Bank[]          = "FlightMode";
+    char MixesView_MasterChannel[] = "MasterChannel";
+    char MixesView_SlaveChannel[]  = "SlaveChannel";
+    char MixesView_Reversed[]      = "Reversed";
+    char MixesView_Percent[]       = "Percent";
+    char MixesView_chM[]           = "chM";
+    char MixesView_chS[]           = "chS";
+    char MixesView_od[]            = "od";
+    char MixesView_offset[]        = "Offset";
+    
+    
+    SendValue(MixesView_MixOutput, Mixes[MixNumber][M_MIX_OUTPUTS]); // heer load the ScreenData array with the mix values tomorrow
+    ScreenData[MIXINPUT] = Mixes[MixNumber][M_MIX_INPUTS];
+    SendValue(MixesView_MixInput, Mixes[MixNumber][M_MIX_INPUTS]);
+    ScreenData[MIXOUTPUT] = Mixes[MixNumber][M_MIX_INPUTS];
+    SendValue(MixesView_Bank, Mixes[MixNumber][M_Bank]);
+    ScreenData[BANK] = Mixes[MixNumber][M_Bank];
+    if (Mixes[MixNumber][M_MasterChannel] == 0) Mixes[MixNumber][M_MasterChannel] = 1;
+    SendValue(MixesView_MasterChannel, Mixes[MixNumber][M_MasterChannel]);
+    ScreenData[MASTERCHANNEL] = Mixes[MixNumber][M_MasterChannel];
+    if (Mixes[MixNumber][M_SlaveChannel] == 0) Mixes[MixNumber][M_SlaveChannel] = 1;
+    SendValue(MixesView_SlaveChannel, Mixes[MixNumber][M_SlaveChannel]);
+    ScreenData[SLAVECHANNEL] = Mixes[MixNumber][M_SlaveChannel];
+    SendValue(MixesView_Reversed, Mixes[MixNumber][M_Reversed]);
+    ScreenData[REVERSED] = Mixes[MixNumber][M_Reversed];
+    if (Mixes[MixNumber][M_Percent] == 0) Mixes[MixNumber][M_Percent] = 100;
+    if (Mixes[MixNumber][M_SlaveChannel] == Mixes[MixNumber][M_MasterChannel]) {
+        Mixes[MixNumber][M_SlaveChannel]++;
+        SendValue(MixesView_SlaveChannel, Mixes[MixNumber][M_SlaveChannel]);
+        ScreenData[SLAVECHANNEL] = Mixes[MixNumber][M_SlaveChannel];
+    }
+    SendValue(MixesView_Percent, Mixes[MixNumber][M_Percent]);
+    ScreenData[PERCENT] = Mixes[MixNumber][M_Percent];
+    SendValue(MixesView_od, Mixes[MixNumber][M_ONEDIRECTION]);
+    ScreenData[ONEDIRECTION] = Mixes[MixNumber][M_ONEDIRECTION];
+    if (((Mixes[MixNumber][M_OFFSET]) > 227) || ((Mixes[MixNumber][M_OFFSET]) < 27)) Mixes[MixNumber][M_OFFSET] = 127; // zeroed if out of range
+    SendValue(MixesView_offset, Mixes[MixNumber][M_OFFSET] - 127);    // because it's 'unsigned'
+    ScreenData[OFFSET] = Mixes[MixNumber][M_OFFSET] - 127;
+    SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
+    SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
+}
+
+
+/***************************************************** ShowChannelName ****************************************************************************/
+
+void ShowChannelName()
+{
+    char    MoveToChannel[]  = "Mch";
+    char    MacrosView_chM[] = "chM";
+    uint8_t ch               = GetValue(MoveToChannel);
+    if (ch > 0) --ch; // no zero
+    SendText(MacrosView_chM, ChannelNames[ch]);
+}
+/*********************************************************************************************************************************/
+
+void ExitMacrosView()
+{
+    char    MacroNumber[]                = "Mno";
+    char    TriggerChannel[]             = "Tch";
+    char    MoveToChannel[]              = "Mch";
+    char    MoveToPosition[]             = "Pos";
+    char    Delay[]                      = "Del";
+    char    Duration[]                   = "Dur";
+    uint8_t n                            = GetValue(MacroNumber) - 1;
+    MacrosBuffer[n][MACROTRIGGERCHANNEL] = GetValue(TriggerChannel);
+    MacrosBuffer[n][MACROMOVECHANNEL]    = GetValue(MoveToChannel);
+    MacrosBuffer[n][MACROMOVETOPOSITION] = GetValue(MoveToPosition);
+    MacrosBuffer[n][MACROSTARTTIME]      = GetValue(Delay);
+    MacrosBuffer[n][MACRODURATION]       = GetValue(Duration);
+    UseMacros                            = true;
+    SaveOneModel(ModelNumber);
+    SendCommand(pRXSetupView);
+    CurrentView = RXSETUPVIEW;
+    UpdateModelsNameEveryWhere();
+}
+
+
+
+
+
+/***************************************************** Populate Macros View ****************************************************************************/
+
+void PopulateMacrosView()
+{
+    char    MacroNumber[]    = "Mno";
+    char    TriggerChannel[] = "Tch";
+    char    MoveToChannel[]  = "Mch";
+    char    MoveToPosition[] = "Pos";
+    char    Delay[]          = "Del";
+    char    Duration[]       = "Dur";
+    uint8_t n                = PreviousMacroNumber;
+
+    if (n < 8) { // Read previous values before moveing to next
+        MacrosBuffer[n][MACROTRIGGERCHANNEL] = GetValue(TriggerChannel);
+        MacrosBuffer[n][MACROMOVECHANNEL]    = GetValue(MoveToChannel);
+        MacrosBuffer[n][MACROMOVETOPOSITION] = GetValue(MoveToPosition);
+        MacrosBuffer[n][MACROSTARTTIME]      = GetValue(Delay);
+        MacrosBuffer[n][MACRODURATION]       = GetValue(Duration);
+    }
+    n = GetValue(MacroNumber) - 1;
+    SendValue(TriggerChannel, MacrosBuffer[n][MACROTRIGGERCHANNEL]);
+    SendValue(MoveToChannel, MacrosBuffer[n][MACROMOVECHANNEL]);
+    SendValue(MoveToPosition, MacrosBuffer[n][MACROMOVETOPOSITION]);
+    SendValue(Delay, MacrosBuffer[n][MACROSTARTTIME]);
+    SendValue(Duration, MacrosBuffer[n][MACRODURATION]);
+    ShowChannelName();
+    PreviousMacroNumber = n;
+}
+
+
+
+
+/******************************************************************************************************************************/
+void GotoMacrosView()
+{
+    char pMacrosView[]  = "page MacrosView";
+    PreviousMacroNumber = 200; // i.e. no usable number
+    SendCommand(pMacrosView);  // Display MacroView
+    CurrentView = MACROS_VIEW;
+    DelayWithDog(200); // allow enough time for screen to display
+    UpdateModelsNameEveryWhere();
+    PopulateMacrosView();
+}
+
+
+/******************************************************************************************************************************/
+void GotoModelsView()
+{
+   
+    SaveCurrentModel();
+    SendCommand(pModelsView);
+    CurrentView = MODELSVIEW;
+    UpdateModelsNameEveryWhere();
+    BuildDirectory();
+    LoadFileSelector();
+    ShowFileNumber();
+    PreviousModelNumber = ModelNumber; // save number
+    LoadModelSelector();
+}
+
+
+/******************************************************************************************************************************/
+void DoLastTimeRead()
+{
+    LastTimeRead = 0;
+}
+
+/******************************************************************************************************************************/
+
+void ModelViewEnd()
+{
+    char pr[] = "Select ";
+    char buf[60];
+    char q[]            = "?";
+    if (PreviousModelNumber != ModelNumber) {
+        strcpy(buf, pr);
+        strcat(buf, ModelName);
+        strcat(buf, q);
+        GetConfirmation(pModelsView, buf);
+        if (Confirmed[0] != 'Y') {
+            ModelNumber = PreviousModelNumber;
+            ReadOneModel(ModelNumber);
+        }
+    }
+    SaveAllParameters();
+    GotoFrontView();
+}
+
+/******************************************************************************************************************************/
+
+void DoMFName()
+{
+    DelayWithDog(100);
+    CheckModelName();
+}
+
+/******************************************************************************************************************************/
+// This function receives upto 50 data elements from the Nextion display and loads it into ScreenData array of uint16_t
+
+void ReceiveLotsofData(){ 
+    int i = 0;
+    union{
+        uint8_t  First4Bytes[4];
+        uint32_t FirstDWord;
+    }
+    NextionData;
+  //   Look1("***************  ");
+  //   Look(millis());
+    for  (int field = 1; field < 49; ++field){
+        int offset = field * 4;
+        for (int p = 0; p < 4; ++p) NextionData.First4Bytes[p] =  TextIn[offset+p];
+        if (NextionData.FirstDWord < 0xFFFF){
+            ScreenData[i] = NextionData.FirstDWord;
+          //  Look1 (i);
+          //  Look1 (" -> ");
+          //  Look(ScreenData[i]);
+            ++i;
+       }else{
+           break;
+       }
+    }       
+    switch (CurrentView) {
+        case MIXESVIEW:
+            ReadMixValues();
+            break;
+        case DUALRATESVIEW:
+            DualRatesRefresh();
+            break;
+        default:
+            break;
+    }
+
+}
+
+
+/******************************************************************************************************************************/
+
+void TXModuleViewEnd()
+{
+    char GoBack[]         = "page TXModuleView";
+    char c1[]             = "c1"; // Use module
+    char n3[]             = "n3"; // number of channels
+    char r0[]             = "r0";
+    char r1[]             = "r1";
+    char r2[]             = "r2";
+    char prompt[]         = "Power off transmitter?";
+    bool oldUseTxModule   = PPMdata.UseTXModule;
+    char ProgressStart[]  = "vis Progress,1";
+    char Progress[]       = "Progress";
+
+    SendCommand(ProgressStart);
+    SendValue(Progress, 10);
+    PPMdata.UseTXModule = GetValue(c1);
+    if (PPMdata.UseTXModule != oldUseTxModule) {
+        if (!GetConfirmation(GoBack, prompt)) {
+            PPMdata.UseTXModule = oldUseTxModule;
+            SendValue(c1, PPMdata.UseTXModule);
+            return;
+        }
+    }
+    SendValue(Progress, 30);
+    DelayWithDog(100);
+    PPMdata.PPMChannelsNumber = GetValue(n3);
+    SendValue(Progress, 51);
+    if (GetValue(r0)) PPMdata.PPMOrderSelection = 1;
+    SendValue(Progress, 63);
+    DelayWithDog(10);
+    if (GetValue(r1)) PPMdata.PPMOrderSelection = 2;
+    SendValue(Progress, 88);
+    DelayWithDog(10);
+    if (GetValue(r2)) PPMdata.PPMOrderSelection = 3;
+    SelectChannelOrder();
+    SendValue(Progress, 99);
+    DelayWithDog(10);
+    SaveTransmitterParameters();
+    DelayWithDog(10);
+    SendCommand(pTXSetupView);
+    CurrentView = TXSETUPVIEW;
+    DelayWithDog(10);
+    if (PPMdata.UseTXModule != oldUseTxModule) {
+        digitalWrite(POWER_OFF_PIN, HIGH);
+    }
+}
+
+
+/******************************************************************************************************************************/
+
+void SaveSwitches(){
+    SaveTransmitterParameters();
+    DelayWithDog(100);
+    char pTXSetupView[] = "page TXSetupView";
+    SendCommand(pTXSetupView);
+}
+
+// ********************************************************************************************************************************************
+
+void DeleteModel(){
+
+    char Prompt[60]; 
+    char del[]               = "Delete ";
+    char ques[]              = "?";
+    char MMems[]             = "MMems";
+    char msg[]               = "Model deleted!";
+            strcpy(Prompt, del);
+            strcat(Prompt, ModelName);
+            strcat(Prompt, ques);
+            if (GetConfirmation(pModelsView, Prompt)) {
+                ModelNumber = GetValue(MMems) + 1;
+                SetDefaultValues();
+                SaveOneModel(ModelNumber);
+                LoadModelSelector();
+                MsgBox(pModelsView, msg);
+            }
+            ClearText();
+}
+
+
+#endif

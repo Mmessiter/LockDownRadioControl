@@ -150,6 +150,8 @@
 #include "Hardware/LogFiles.h"
 #include "Hardware/Rates.h"
 #include "Hardware/Mixes.h"
+#include "Hardware/MenuOptions.h"
+
 
 
 /*********************************************************************************************************************************/
@@ -2289,115 +2291,6 @@ void ReadNewSwitchFunction()
     SendCommand(ProgressEnd);
     return;
 }
-/***************************************************** ShowChannelName ****************************************************************************/
-
-void ShowChannelName()
-{
-    char    MoveToChannel[]  = "Mch";
-    char    MacrosView_chM[] = "chM";
-    uint8_t ch               = GetValue(MoveToChannel);
-    if (ch > 0) --ch; // no zero
-    SendText(MacrosView_chM, ChannelNames[ch]);
-}
-/***************************************************** Populate Macros View ****************************************************************************/
-
-void PopulateMacrosView()
-{
-    char    MacroNumber[]    = "Mno";
-    char    TriggerChannel[] = "Tch";
-    char    MoveToChannel[]  = "Mch";
-    char    MoveToPosition[] = "Pos";
-    char    Delay[]          = "Del";
-    char    Duration[]       = "Dur";
-    uint8_t n                = PreviousMacroNumber;
-
-    if (n < 8) { // Read previous values before moveing to next
-        MacrosBuffer[n][MACROTRIGGERCHANNEL] = GetValue(TriggerChannel);
-        MacrosBuffer[n][MACROMOVECHANNEL]    = GetValue(MoveToChannel);
-        MacrosBuffer[n][MACROMOVETOPOSITION] = GetValue(MoveToPosition);
-        MacrosBuffer[n][MACROSTARTTIME]      = GetValue(Delay);
-        MacrosBuffer[n][MACRODURATION]       = GetValue(Duration);
-    }
-    n = GetValue(MacroNumber) - 1;
-    SendValue(TriggerChannel, MacrosBuffer[n][MACROTRIGGERCHANNEL]);
-    SendValue(MoveToChannel, MacrosBuffer[n][MACROMOVECHANNEL]);
-    SendValue(MoveToPosition, MacrosBuffer[n][MACROMOVETOPOSITION]);
-    SendValue(Delay, MacrosBuffer[n][MACROSTARTTIME]);
-    SendValue(Duration, MacrosBuffer[n][MACRODURATION]);
-    ShowChannelName();
-    PreviousMacroNumber = n;
-}
-
-/*********************************************************************************************************************************/
-
-void ExitMacrosView()
-{
-    char    MacroNumber[]                = "Mno";
-    char    TriggerChannel[]             = "Tch";
-    char    MoveToChannel[]              = "Mch";
-    char    MoveToPosition[]             = "Pos";
-    char    Delay[]                      = "Del";
-    char    Duration[]                   = "Dur";
-    uint8_t n                            = GetValue(MacroNumber) - 1;
-    MacrosBuffer[n][MACROTRIGGERCHANNEL] = GetValue(TriggerChannel);
-    MacrosBuffer[n][MACROMOVECHANNEL]    = GetValue(MoveToChannel);
-    MacrosBuffer[n][MACROMOVETOPOSITION] = GetValue(MoveToPosition);
-    MacrosBuffer[n][MACROSTARTTIME]      = GetValue(Delay);
-    MacrosBuffer[n][MACRODURATION]       = GetValue(Duration);
-    UseMacros                            = true;
-    SaveOneModel(ModelNumber);
-    SendCommand(pRXSetupView);
-    CurrentView = RXSETUPVIEW;
-    UpdateModelsNameEveryWhere();
-}
-
-/*********************************************************************************************************************************/
-
-void EndReverseView()
-{ // channel reverse flags are 16 individual BITs in var 'ReversedChannelBITS'
-    char    fs[16][5] = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
-    uint8_t i;
-    char    ProgressStart[] = "vis Progress,1";
-    char    Progress[]      = "Progress";
-    SendCommand(ProgressStart);
-    ReversedChannelBITS = 0;
-    for (i = 0; i < 16; ++i) {
-        SendValue(Progress, (i * (100 / 16)));
-        if (GetValue(fs[i])) ReversedChannelBITS |= 1 << i; // set a BIT
-    }
-    SaveOneModel(ModelNumber);
-    SendCommand(pRXSetupView);
-    CurrentView = RXSETUPVIEW;
-    UpdateModelsNameEveryWhere();
-}
-
-/*********************************************************************************************************************************/
-
-void StartReverseView()
-{ // channel reverse flags are 16 individual BITs in ReversedChannelBITS
-    char    pReverseView[] = "page ReverseView";
-    char    fs[16][5]      = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
-    uint8_t i;
-    char    ProgressStart[] = "vis Progress,1";
-    char    ProgressEnd[]   = "vis Progress,0";
-    char    Progress[]      = "Progress";
-
-    CurrentView = REVERSEVIEW;
-    SendCommand(pReverseView);
-    UpdateButtonLabels();
-    SendCommand(ProgressStart);
-    for (i = 0; i < 16; ++i) {
-        SendValue(Progress, (i * (100 / 16)));
-        if (ReversedChannelBITS & 1 << i) { // is BIT set??
-            SendValue(fs[i], 1);
-        }
-        else {
-            SendValue(fs[i], 0);
-        }
-    }
-    SendCommand(ProgressEnd);
-    UpdateModelsNameEveryWhere();
-}
 
 /*********************************************************************************************************************************/
 
@@ -2478,17 +2371,6 @@ FASTRUN void DisplayCurveAndServoPos()
     ShowServoPos();     // this calls displaycurve!!!
     ClearText();
 }
-/******************************** FUNCTIONS FOR ARRAY OF POINTERS *************************************************************/
-void Blank()
-{
-    return;
-}
-
-/******************************************************************************************************************************/
-void DoLastTimeRead()
-{
-    LastTimeRead = 0;
-}
 
 /******************************************************************************************************************************/
 void LoadModelSelector()
@@ -2563,31 +2445,6 @@ void LoadFileSelector()
     LastFileInView   = 120;
 }
 
-/******************************************************************************************************************************/
-void GotoModelsView()
-{
-   
-    SaveCurrentModel();
-    SendCommand(pModelsView);
-    CurrentView = MODELSVIEW;
-    UpdateModelsNameEveryWhere();
-    BuildDirectory();
-    LoadFileSelector();
-    ShowFileNumber();
-    PreviousModelNumber = ModelNumber; // save number
-    LoadModelSelector();
-}
-/******************************************************************************************************************************/
-void GotoMacrosView()
-{
-    char pMacrosView[]  = "page MacrosView";
-    PreviousMacroNumber = 200; // i.e. no usable number
-    SendCommand(pMacrosView);  // Display MacroView
-    CurrentView = MACROS_VIEW;
-    DelayWithDog(200); // allow enough time for screen to display
-    UpdateModelsNameEveryWhere();
-    PopulateMacrosView();
-}
 /******************************************************************************************************************************/
 void SetupViewFM()
 {
@@ -3383,34 +3240,7 @@ void RenameFile()
     RestoreCurrentModel();
 }
 
-/******************************************************************************************************************************/
 
-void ModelViewEnd()
-{
-    char pr[] = "Select ";
-    char buf[60];
-    char q[]            = "?";
-    if (PreviousModelNumber != ModelNumber) {
-        strcpy(buf, pr);
-        strcat(buf, ModelName);
-        strcat(buf, q);
-        GetConfirmation(pModelsView, buf);
-        if (Confirmed[0] != 'Y') {
-            ModelNumber = PreviousModelNumber;
-            ReadOneModel(ModelNumber);
-        }
-    }
-    SaveAllParameters();
-    GotoFrontView();
-}
-
-/******************************************************************************************************************************/
-
-void DoMFName()
-{
-    DelayWithDog(100);
-    CheckModelName();
-}
 
 /******************************************************************************************************************************/
 // Function to display all model IDs and check for duplcates
@@ -3547,123 +3377,7 @@ void ResetClock()
         MsgBox(pOptionView2, Done);
     }
 }
-/******************************************************************************************************************************/
 
-void TXModuleViewEnd()
-{
-    char GoBack[]         = "page TXModuleView";
-    char c1[]             = "c1"; // Use module
-    char n3[]             = "n3"; // number of channels
-    char r0[]             = "r0";
-    char r1[]             = "r1";
-    char r2[]             = "r2";
-    char prompt[]         = "Power off transmitter?";
-    bool oldUseTxModule   = PPMdata.UseTXModule;
-    char ProgressStart[]  = "vis Progress,1";
-    char Progress[]       = "Progress";
-
-    SendCommand(ProgressStart);
-    SendValue(Progress, 10);
-    PPMdata.UseTXModule = GetValue(c1);
-    if (PPMdata.UseTXModule != oldUseTxModule) {
-        if (!GetConfirmation(GoBack, prompt)) {
-            PPMdata.UseTXModule = oldUseTxModule;
-            SendValue(c1, PPMdata.UseTXModule);
-            return;
-        }
-    }
-    SendValue(Progress, 30);
-    DelayWithDog(100);
-    PPMdata.PPMChannelsNumber = GetValue(n3);
-    SendValue(Progress, 51);
-    if (GetValue(r0)) PPMdata.PPMOrderSelection = 1;
-    SendValue(Progress, 63);
-    DelayWithDog(10);
-    if (GetValue(r1)) PPMdata.PPMOrderSelection = 2;
-    SendValue(Progress, 88);
-    DelayWithDog(10);
-    if (GetValue(r2)) PPMdata.PPMOrderSelection = 3;
-    SelectChannelOrder();
-    SendValue(Progress, 99);
-    DelayWithDog(10);
-    SaveTransmitterParameters();
-    DelayWithDog(10);
-    SendCommand(pTXSetupView);
-    CurrentView = TXSETUPVIEW;
-    DelayWithDog(10);
-    if (PPMdata.UseTXModule != oldUseTxModule) {
-        digitalWrite(POWER_OFF_PIN, HIGH);
-    }
-}
-
-/******************************************************************************************************************************/
-
-void SaveSwitches(){
-    SaveTransmitterParameters();
-    DelayWithDog(100);
-    char pTXSetupView[] = "page TXSetupView";
-    SendCommand(pTXSetupView);
-}
-
-/******************************************************************************************************************************/
-// This function receives upto 50 data elements from the Nextion display and loads it into ScreenData array of uint16_t
-
-void ReceiveLotsofData(){ 
-    int i = 0;
-    union{
-        uint8_t  First4Bytes[4];
-        uint32_t FirstDWord;
-    }
-    NextionData;
-  //   Look1("***************  ");
-  //   Look(millis());
-    for  (int field = 1; field < 49; ++field){
-        int offset = field * 4;
-        for (int p = 0; p < 4; ++p) NextionData.First4Bytes[p] =  TextIn[offset+p];
-        if (NextionData.FirstDWord < 0xFFFF){
-            ScreenData[i] = NextionData.FirstDWord;
-          //  Look1 (i);
-          //  Look1 (" -> ");
-          //  Look(ScreenData[i]);
-            ++i;
-       }else{
-           break;
-       }
-    }       
-    switch (CurrentView) {
-        case MIXESVIEW:
-            ReadMixValues();
-            break;
-        case DUALRATESVIEW:
-            DualRatesRefresh();
-            break;
-        default:
-            break;
-    }
-
-}
-
-// ********************************************************************************************************************************************
-
-void DeleteModel(){
-
-    char Prompt[60]; 
-    char del[]               = "Delete ";
-    char ques[]              = "?";
-    char MMems[]             = "MMems";
-    char msg[]               = "Model deleted!";
-            strcpy(Prompt, del);
-            strcat(Prompt, ModelName);
-            strcat(Prompt, ques);
-            if (GetConfirmation(pModelsView, Prompt)) {
-                ModelNumber = GetValue(MMems) + 1;
-                SetDefaultValues();
-                SaveOneModel(ModelNumber);
-                LoadModelSelector();
-                MsgBox(pModelsView, msg);
-            }
-            ClearText();
-}
 
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
@@ -3809,21 +3523,21 @@ FASTRUN void ButtonWasPressed()
 #endif
 
         if (!TextIn[0]) {                                   //  Now expanded to handle FAR more than 127 functions
-                if (NumberedCommand1 < LASTFUNCTION1) {  
-                    NumberedFunctions1[NumberedCommand1](); // Call the needed function -- with a function pointer   
-                }
-                ClearText();
-                return;
-        }
-
-        if (TextIn[0] >= 128) {                       
-            if (NumberedCommand < LASTFUNCTION) {     
-                NumberedFunctions[NumberedCommand]();       // Call the needed function -- with a function pointer                                             
+            if (NumberedCommand1 < LASTFUNCTION1) {  
+                NumberedFunctions1[NumberedCommand1](); // Call the needed 24 BIT function -- with a function pointer   
             }
             ClearText();
             return;
         }
 
+        if (TextIn[0] >= 128) {                       
+            if (NumberedCommand < LASTFUNCTION) {     
+                NumberedFunctions[NumberedCommand]();       // Call the needed 7 BIT function -- with a function pointer                                             
+            }
+            ClearText();
+            return;
+        }
+         // By here, TextIn[0] must be a character 
 
         int  i                         = 0;
         int  j                         = 0;

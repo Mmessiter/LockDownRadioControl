@@ -642,6 +642,7 @@ void             GetCurveDots(uint16_t OutputChannel, uint16_t TheRate); // This
 void             CheckDualRatesValues();
 void             ReadDualRatesValues();
 void             DisplayDualRateValues();
+void             PopulateMacrosView();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
