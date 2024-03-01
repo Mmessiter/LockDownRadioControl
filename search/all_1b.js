@@ -28,7 +28,7 @@ var searchData=
   ['wordwrap_25',['WordWrap',['../TransmitterCode_2src_2main_8cpp.html#a6d6ab5dcee82c319640e3a0a0537ebf7',1,'main.cpp']]],
   ['write_26',['write',['../classSBUS.html#aeb87d0ab21224d4cc84848c93a788848',1,'SBUS']]],
   ['writeak8963register_27',['writeAK8963Register',['../classMPU9250.html#aeca0dc4aed0420c54cf13acba0bdf4d5',1,'MPU9250']]],
-  ['writebackup_28',['WriteBackup',['../TransmitterCode_2src_2main_8cpp.html#a587550ef1abb518e4562576aa2b7bbd7',1,'main.cpp']]],
+  ['writebackup_28',['writebackup',['../TransmitterCode_2src_2main_8cpp.html#a587550ef1abb518e4562576aa2b7bbd7',1,'WriteBackup():&#160;main.cpp'],['../1Definitions_8h.html#a587550ef1abb518e4562576aa2b7bbd7',1,'WriteBackup():&#160;main.cpp']]],
   ['writebit_29',['writeBit',['../classI2Cdev.html#aa68890af87de5471d32e583ebbd91acb',1,'I2Cdev']]],
   ['writebits_30',['writeBits',['../classI2Cdev.html#a913371251b6a41520c080115650e1b59',1,'I2Cdev']]],
   ['writebitsw_31',['writeBitsW',['../classI2Cdev.html#a8f8652a1328224cce867eed665a45c4d',1,'I2Cdev']]],

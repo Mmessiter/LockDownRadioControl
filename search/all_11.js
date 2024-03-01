@@ -488,6 +488,6 @@ var searchData=
   ['mpu9250_2ecpp_485',['MPU9250.cpp',['../MPU9250_8cpp.html',1,'']]],
   ['mpu9250_2eh_486',['MPU9250.h',['../MPU9250_8h.html',1,'']]],
   ['mpu9250fifo_487',['MPU9250FIFO',['../classMPU9250FIFO.html',1,'']]],
-  ['msgbox_488',['msgbox',['../1Definitions_8h.html#a6f5b0f1e4ca75768c16c4dd93f92a8de',1,'MsgBox(char *goback, char *Prompt):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a6f5b0f1e4ca75768c16c4dd93f92a8de',1,'MsgBox(char *goback, char *Prompt):&#160;main.cpp']]],
+  ['msgbox_488',['msgbox',['../1Definitions_8h.html#a6f5b0f1e4ca75768c16c4dd93f92a8de',1,'MsgBox(char *goback, char *Prompt):&#160;Utilities.h'],['../Utilities_8h.html#a6f5b0f1e4ca75768c16c4dd93f92a8de',1,'MsgBox(char *goback, char *Prompt):&#160;Utilities.h']]],
   ['mysbus_489',['MySbus',['../common_8h.html#a5424788640aaa8d535d6ea077949ef82',1,'common.h']]]
 ];

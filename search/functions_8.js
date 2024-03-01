@@ -16,9 +16,10 @@ var searchData=
   ['initmaxmin_13',['InitMaxMin',['../TransmitterCode_2src_2main_8cpp.html#a07064494c6f54db67dfab08c1f744a65',1,'main.cpp']]],
   ['initradio_14',['initradio',['../1Definitions_8h.html#a86ce6c54618629a61b8502786d2ce82c',1,'InitRadio(uint64_t Pipe):&#160;transceiver.h'],['../transceiver_8h.html#a799f38bc33abdb30eec1d7db3cf27d58',1,'InitRadio(uint64_t Pipe):&#160;transceiver.h']]],
   ['initswitchesandtrims_15',['InitSwitchesAndTrims',['../TransmitterCode_2src_2main_8cpp.html#aa43884078cb84d9ae16d8cd6791c7042',1,'main.cpp']]],
-  ['instrng_16',['instrng',['../1Definitions_8h.html#a5f109790a6fe0b972a502f3cac4ed1e7',1,'InStrng(char *text1, char *text2):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a5f109790a6fe0b972a502f3cac4ed1e7',1,'InStrng(char *text1, char *text2):&#160;main.cpp']]],
-  ['intodegrees_17',['IntoDegrees',['../Utilities_8h.html#a442340cad0d09e58be5ec6afdd5b27d1',1,'Utilities.h']]],
-  ['intohigherres_18',['IntoHigherRes',['../Utilities_8h.html#a0d8d8a0d67cb9b04481f1692abe75368',1,'Utilities.h']]],
-  ['intolowerres_19',['IntoLowerRes',['../Utilities_8h.html#a5cdbe11d62e0de7610ba323e60b97d33',1,'Utilities.h']]],
-  ['invsqrt_20',['invSqrt',['../Quadcopter_2src_2main_8cpp.html#a5e5346796220b271615a52428f6ec6ca',1,'main.cpp']]]
+  ['inputsviewend_16',['InputsViewEnd',['../MenuOptions_8h.html#a81793ba8b656923d9715c39f9237e415',1,'MenuOptions.h']]],
+  ['instrng_17',['instrng',['../1Definitions_8h.html#a5f109790a6fe0b972a502f3cac4ed1e7',1,'InStrng(char *text1, char *text2):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a5f109790a6fe0b972a502f3cac4ed1e7',1,'InStrng(char *text1, char *text2):&#160;main.cpp']]],
+  ['intodegrees_18',['IntoDegrees',['../Utilities_8h.html#a442340cad0d09e58be5ec6afdd5b27d1',1,'Utilities.h']]],
+  ['intohigherres_19',['IntoHigherRes',['../Utilities_8h.html#a0d8d8a0d67cb9b04481f1692abe75368',1,'Utilities.h']]],
+  ['intolowerres_20',['IntoLowerRes',['../Utilities_8h.html#a5cdbe11d62e0de7610ba323e60b97d33',1,'Utilities.h']]],
+  ['invsqrt_21',['invSqrt',['../Quadcopter_2src_2main_8cpp.html#a5e5346796220b271615a52428f6ec6ca',1,'main.cpp']]]
 ];
