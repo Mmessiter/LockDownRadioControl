@@ -657,8 +657,8 @@ void UpdateModelsNameEveryWhere()
     if (CurrentView == FRONTVIEW) SendText(Owner, TxName);
 
     if(!ModelsMacUnionSaved.Val64){ 
-        strcpy(lb, " *"); 
-        strcpy(rb, "*");
+        strcpy(lb, " ["); 
+        strcpy(rb, "]");
     }else{
         strcpy(lb, " ("); 
         strcpy(rb, ")");

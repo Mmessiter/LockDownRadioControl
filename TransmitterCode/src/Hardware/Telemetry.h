@@ -166,7 +166,7 @@ void ShowAMS(){
     char         AmsOffMsg[]           = "     ";
     
     if(!ModelsMacUnionSaved.Val64){ 
-        strcpy(AmsOnMsg, "*AMS*"); 
+        strcpy(AmsOnMsg, "[AMS]"); 
     }
     
     if (AutoModelSelect) {

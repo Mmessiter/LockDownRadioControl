@@ -650,8 +650,8 @@ void LoadModelSelector()
     for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber) {
         ReadOneModel(ModelNumber);
         if(!ModelsMacUnionSaved.Val64){ 
-            strcpy(lb," *");
-            strcpy(rb,"*");
+            strcpy(lb," [");
+            strcpy(rb,"]");
         }else{
             strcpy(lb," (");
             strcpy(rb,")");
