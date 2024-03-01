@@ -13,15 +13,12 @@
 float Xaccel = 0;
 float Yaccel = 0;
 float Zaccel = 0;
-
 float XAngularaccel = 0;
 float YAngularaccel = 0;
 float ZAngularaccel = 0;
-
 float xPos = 0;
 float yPos = 0;
 float zPos = 0;
-
 float MPU6050Temp = 0;
 
 void ReadMPU6050(){
@@ -57,12 +54,12 @@ void ReadMPU6050(){
         // Look1(ZAngularaccel);
 
        
-        // Look1("xPos: ");
-        // Look1(xPos);
-        // Look1("\tyPos: ");
-        // Look1(yPos);
-      // Look1("\tzPos: ");
-     //  Look1(zPos);
+        Look1("xPos: ");
+        Look1(xPos);
+        Look1("\tyPos: ");
+        Look(yPos);
+       // Look1("\tzPos: ");
+       // Look1(zPos);
 
         // Look1("MPU6050Temp: ");
         // Look(MPU6050Temp);
@@ -103,7 +100,7 @@ void DoStabilsation(){  // This is called from the main loop and from all DelayM
         LastTime = millis();
         PIDEntryPoint();            // here we can call a timed stabilisation event at exactly 250 Hz
    }
-   Look (millis());
+  // Look (millis());
 }
 
 #else

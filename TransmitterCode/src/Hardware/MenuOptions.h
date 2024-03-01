@@ -7,14 +7,14 @@
     
 /*********************************************************************************************************************************/
 
-void SystenPage1Start(){
-        char lpm[]               = "lpm";// Auto model selection
+void SystemPage1Start(){
+        char lpm[]               = "c0";// Auto model selection
         char Bwn[]               = "Bwn";
         char n0[]                = "n0";
         char ScreenViewTimeout[] = "Sto"; // needed for display info
         char Pto[]               = "Pto";
-        char dGMT[]                    = "dGMT";
-        char Tx_Name[]                 = "TxName";
+        char dGMT[]              = "dGMT";
+        char Tx_Name[]           = "TxName";
 
             FixDeltaGMTSign();
             if (CurrentView == OPTIONVIEW2) DeltaGMT = GetValue(dGMT);

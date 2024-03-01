@@ -2971,7 +2971,7 @@ void SelectChannelOrder()
 
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
-// This new list can be huge - up to 24 BITS!
+// This new list can be huge - up to 24 BITS unsigned!
 #define LASTFUNCTION1 8 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])() {
@@ -2982,7 +2982,7 @@ void (*NumberedFunctions1[LASTFUNCTION1])() {
         StartTXSetupView,             // 4
         InputsViewEnd,                // 5 
         SystemPage1End,               // 6
-        SystenPage1Start              // 7  
+        SystemPage1Start              // 7  
 };
 
  // This list migth become MUCH longer as it limit is 24 bits big
@@ -3562,30 +3562,6 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-
-        // if (InStrng(InputsDone, TextIn) > 0) {
-        //     SendCommand(ProgressStart);
-        //     for (int i = 0; i < 16; ++i) {
-        //       //  if (ModelMatched) {
-        //       //      NewCompressNeeded = false;
-        //       //      SendData(); // To prevent failsafe, keep sending data as this takes a while
-        //       //  }
-        //         InPutStick[i]    = CheckRange((GetValue(InputStick_Labels[i]) - 1), 0, 15);
-        //         ChannelOutPut[i] = CheckRange((GetValue(OutputStick_Labels[i]) - 1), 0, 15);
-        //         if (i < 4) InputTrim[i] = CheckRange((GetValue(InputTrim_labels[i]) - 1), 0, 15);
-        //         SendValue(Progress, (((i + 1) * 100) / 16) - 1);
-        //     }
-        //     CheckOutPutChannels();
-        //     SendValue(Progress, 95);
-        //     SaveOneModel(ModelNumber);
-        //     SendValue(Progress, 100);
-        //     UpdateButtonLabels();
-        //     CurrentView = RXSETUPVIEW;
-        //     SendCommand(pRXSetupView);
-        //     LastTimeRead = 0;
-        //     ClearText();
-        //     return;
-        // }
 
         if (InStrng(CH1NAME, TextIn) > 0) {
             p = InStrng(CH1NAME, TextIn);

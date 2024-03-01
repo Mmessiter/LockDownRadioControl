@@ -151,7 +151,7 @@ void UseReceivedData(uint8_t DynamicPayloadSize)                            // D
         HopNow   = false;                                                   // ... and clear the flag,
         HopStart = millis();                                                // ... and start the timer.
     }
-   // Look(ReceivedData[15]);
+  
 }
 /************************************************************************************************************/
 bool ReadData()
@@ -470,7 +470,6 @@ void SwapChipEnableLines()
         digitalWrite(pinCSN2, CSN_ON);
         digitalWrite(pinCE2, CE_ON);
     }
-    //delayMicroseconds(200); // Allow swap over a little time to be noticed ...
     delayMicroseconds(STOPLISTENINGDELAY);
 }
 
@@ -718,8 +717,6 @@ void LoadAckPayload()
     }
     uint8_t MaxAckP = 4;        // 4 if only RX
     AckPayload.Purpose &= 0x7F; // NOTE: The HIGH BIT of "purpose" bit is the HOPNOW flag. It gets set only when it's time to hop.
-   
-  // Look(AckPayload.Purpose);
    
     ++AckPayload.Purpose;
     if (INA219Connected) MaxAckP = 5;

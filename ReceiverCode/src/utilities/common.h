@@ -12,8 +12,8 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   4
-#define RXVERSION_MINIMUS 5 // 3 Feb 2024
-#define RXVERSION_EXTRA   'b' 
+#define RXVERSION_MINIMUS 5 // 1 March 2024
+#define RXVERSION_EXTRA   'j' 
 
 #define HOPTIME           47     //  14-16 gives 50Hz FHSS, 46-48 gives 20Hz FHSS
 #define RECEIVE_TIMEOUT   5      //  was 14   
@@ -31,7 +31,7 @@
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
   #define SECOND_TRANSCEIVER    1
-//#define DOSTABILISATION       1 
+ // #define DOSTABILISATION       1 
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
