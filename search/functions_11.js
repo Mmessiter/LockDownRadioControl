@@ -192,7 +192,7 @@ var searchData=
   ['showchannelname_189',['ShowChannelName',['../MenuOptions_8h.html#a4d8497742bcb615831e3b52c5d463cde',1,'MenuOptions.h']]],
   ['showcomms_190',['showcomms',['../1Definitions_8h.html#aac472b3398ab38e7f54b1a2cae96ba62',1,'ShowComms():&#160;Telemetry.h'],['../Telemetry_8h.html#a5d3a46c21927cf7a3031a1e68e0b7b48',1,'ShowComms():&#160;Telemetry.h']]],
   ['showconnectionquality_191',['showconnectionquality',['../1Definitions_8h.html#a77e9a1ed6c347897af1e92db48c68b77',1,'ShowConnectionQuality():&#160;Utilities.h'],['../Utilities_8h.html#a77e9a1ed6c347897af1e92db48c68b77',1,'ShowConnectionQuality():&#160;Utilities.h']]],
-  ['showcurrentrate_192',['showcurrentrate',['../1Definitions_8h.html#a370c4af22d463cad6d6de59d269c75af',1,'ShowCurrentRate():&#160;Telemetry.h'],['../Telemetry_8h.html#a370c4af22d463cad6d6de59d269c75af',1,'ShowCurrentRate():&#160;Telemetry.h']]],
+  ['showcurrentrate_192',['showcurrentrate',['../Telemetry_8h.html#a370c4af22d463cad6d6de59d269c75af',1,'ShowCurrentRate():&#160;Telemetry.h'],['../1Definitions_8h.html#a370c4af22d463cad6d6de59d269c75af',1,'ShowCurrentRate():&#160;Telemetry.h']]],
   ['showdualratechannelsname_193',['ShowDualRateChannelsName',['../Rates_8h.html#a8234968ed0c44d259a165e08d5b06424',1,'Rates.h']]],
   ['showfileerrormsg_194',['ShowFileErrorMsg',['../TransmitterCode_2src_2main_8cpp.html#a1e7673fa1ef97d68711edd0da2abed9b',1,'main.cpp']]],
   ['showfilenumber_195',['showfilenumber',['../1Definitions_8h.html#aa337d6e5cf496fbca7cdc61818f8239a',1,'ShowFileNumber():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#aa337d6e5cf496fbca7cdc61818f8239a',1,'ShowFileNumber():&#160;main.cpp']]],
@@ -241,5 +241,7 @@ var searchData=
   ['swap_238',['swap',['../1Definitions_8h.html#a31322f63ce3e02c4ef9a0c1e0c7f1ff5',1,'swap(uint8_t *a, uint8_t *b):&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a31322f63ce3e02c4ef9a0c1e0c7f1ff5',1,'swap(uint8_t *a, uint8_t *b):&#160;main.cpp']]],
   ['switchrollyaw_239',['switchRollYaw',['../Quadcopter_2src_2main_8cpp.html#a575c5d2a29402a56610d376470b73848',1,'main.cpp']]],
   ['switchspienabled_240',['switchSPIEnabled',['../classMPU6050.html#a269710b7bca814bbf67e7bb38c381650',1,'MPU6050']]],
-  ['synchrtcwithgpstime_241',['SynchRTCwithGPSTime',['../Utilities_8h.html#abb1ea95b6b3f033883aa87682d3240ab',1,'Utilities.h']]]
+  ['synchrtcwithgpstime_241',['SynchRTCwithGPSTime',['../Utilities_8h.html#abb1ea95b6b3f033883aa87682d3240ab',1,'Utilities.h']]],
+  ['systempage1end_242',['SystemPage1End',['../MenuOptions_8h.html#a364f7decd2b91610050af5a7d73ee13e',1,'MenuOptions.h']]],
+  ['systenpage1start_243',['SystenPage1Start',['../MenuOptions_8h.html#af3cee28aa9b7b5e439f84379995a6b2d',1,'MenuOptions.h']]]
 ];

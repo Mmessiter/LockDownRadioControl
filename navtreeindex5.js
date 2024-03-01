@@ -156,7 +156,8 @@ var NAVTREEINDEX5 =
 "MenuOptions_8h.html#a0fd05538ecf66d14f69d146dfaefba0f":[5,0,3,0,0,5,32],
 "MenuOptions_8h.html#a16c65917a148c7f6c17babf11e977b69":[5,0,3,0,0,5,8],
 "MenuOptions_8h.html#a35f886d783cd5aa95171f1ecba39ef0b":[5,0,3,0,0,5,26],
-"MenuOptions_8h.html#a3c55ef7c23759a89a86f6519569c4f7a":[5,0,3,0,0,5,33],
+"MenuOptions_8h.html#a364f7decd2b91610050af5a7d73ee13e":[5,0,3,0,0,5,33],
+"MenuOptions_8h.html#a3c55ef7c23759a89a86f6519569c4f7a":[5,0,3,0,0,5,35],
 "MenuOptions_8h.html#a446a94169d966af920710f7acddc5257":[5,0,3,0,0,5,13],
 "MenuOptions_8h.html#a488388f6430a0fc7bec57074ba750a2d":[5,0,3,0,0,5,10],
 "MenuOptions_8h.html#a4d8497742bcb615831e3b52c5d463cde":[5,0,3,0,0,5,27],
@@ -164,7 +165,7 @@ var NAVTREEINDEX5 =
 "MenuOptions_8h.html#a618bc6ca4ab71bb4d5d7e00dc71f9e56":[5,0,3,0,0,5,31],
 "MenuOptions_8h.html#a655678efeeb8cf037c04f7535aa5cae8":[5,0,3,0,0,5,25],
 "MenuOptions_8h.html#a6684199e9da3ca0bdb0e01260eec7e30":[5,0,3,0,0,5,16],
-"MenuOptions_8h.html#a6a61a2c5b0349843efa66a58c0b956be":[5,0,3,0,0,5,34],
+"MenuOptions_8h.html#a6a61a2c5b0349843efa66a58c0b956be":[5,0,3,0,0,5,36],
 "MenuOptions_8h.html#a75875d66db3193e4034c3768c175f8ef":[5,0,3,0,0,5,24],
 "MenuOptions_8h.html#a7c9a26d1f7e8eb474c7e08c860e74f7e":[5,0,3,0,0,5,22],
 "MenuOptions_8h.html#a81793ba8b656923d9715c39f9237e415":[5,0,3,0,0,5,14],
@@ -185,6 +186,7 @@ var NAVTREEINDEX5 =
 "MenuOptions_8h.html#ae9f91b9da28f2e1e2fb126961f03c31c":[5,0,3,0,0,5,17],
 "MenuOptions_8h.html#af110521855e780717b5248c3aacc799e":[5,0,3,0,0,5,6],
 "MenuOptions_8h.html#af1c87773b2f836fbb4d0d1175c0d7f4d":[5,0,3,0,0,5,3],
+"MenuOptions_8h.html#af3cee28aa9b7b5e439f84379995a6b2d":[5,0,3,0,0,5,34],
 "MenuOptions_8h.html#af8aa7c4f2ef78bf4778ded869db51fde":[5,0,3,0,0,5,29],
 "MenuOptions_8h.html#afd3dd964eafc30405e000b03579dd00c":[5,0,3,0,0,5,9],
 "MenuOptions_8h_source.html":[5,0,3,0,0,5],
@@ -247,7 +249,5 @@ var NAVTREEINDEX5 =
 "Quadcopter_2src_2main_8cpp.html#a0b98df1ff2ca4c30c974221fb809bdb6":[5,0,0,0,1,150],
 "Quadcopter_2src_2main_8cpp.html#a0d68de6dd54c2a0e3497fa80879f42ee":[5,0,0,0,1,83],
 "Quadcopter_2src_2main_8cpp.html#a0f47a7b0fc5b6ce2dfd72e75f4c3e8aa":[5,0,0,0,1,227],
-"Quadcopter_2src_2main_8cpp.html#a0fd62fddc65725616819cf617952a303":[5,0,0,0,1,232],
-"Quadcopter_2src_2main_8cpp.html#a10fb36aa27c7dc52fc438516b0f2546b":[5,0,0,0,1,167],
-"Quadcopter_2src_2main_8cpp.html#a1133dab9b24a25c94c296de99c5db1a4":[5,0,0,0,1,26]
+"Quadcopter_2src_2main_8cpp.html#a0fd62fddc65725616819cf617952a303":[5,0,0,0,1,232]
 };

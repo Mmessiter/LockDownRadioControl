@@ -33,6 +33,8 @@ var MenuOptions_8h =
     [ "StartBuddyView", "MenuOptions_8h.html#aaf48dfa7ac69b0baa5134fd9547f722c", null ],
     [ "StartReverseView", "MenuOptions_8h.html#a618bc6ca4ab71bb4d5d7e00dc71f9e56", null ],
     [ "StartTXSetupView", "MenuOptions_8h.html#a0fd05538ecf66d14f69d146dfaefba0f", null ],
+    [ "SystemPage1End", "MenuOptions_8h.html#a364f7decd2b91610050af5a7d73ee13e", null ],
+    [ "SystenPage1Start", "MenuOptions_8h.html#af3cee28aa9b7b5e439f84379995a6b2d", null ],
     [ "TXModuleViewEnd", "MenuOptions_8h.html#a3c55ef7c23759a89a86f6519569c4f7a", null ],
     [ "TXModuleViewStart", "MenuOptions_8h.html#a6a61a2c5b0349843efa66a58c0b956be", null ]
 ];
