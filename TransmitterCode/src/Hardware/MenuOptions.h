@@ -5,18 +5,85 @@
 #ifndef MENUOPTIONS_H
     #define MENUOPTIONS_H
     
+/*********************************************************************************************************************************/
 
+void SystenPage1Start(){
+        char lpm[]               = "lpm";// Auto model selection
+        char Bwn[]               = "Bwn";
+        char n0[]                = "n0";
+        char ScreenViewTimeout[] = "Sto"; // needed for display info
+        char Pto[]               = "Pto";
+        char dGMT[]                    = "dGMT";
+        char Tx_Name[]                 = "TxName";
 
+            FixDeltaGMTSign();
+            if (CurrentView == OPTIONVIEW2) DeltaGMT = GetValue(dGMT);
+            SendCommand(pOptionsViewS); // TX options view
+            SendValue(n0, SticksMode);
+            SendValue(ScreenViewTimeout, ScreenTimeout);
+            SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
+            SendText(Tx_Name, TxName);
+            SendValue(lpm, AutoModelSelect);
+            SendValue(Bwn, LowBattery);
+            CurrentView = OPTIONS_VIEW;
+            ClearText();
+}
 
+/*********************************************************************************************************************************/
 
+void SystemPage1End(){
+        char ProgressStart[]     = "vis Progress,1";
+        char ProgressEnd[]       = "vis Progress,0";
+        char Progress[]          = "Progress";
+        char TxNme[]             = "TxName";
+        char lpm[]               = "c0";
+        char Bwn[]               = "Bwn";
+        char n0[]                = "n0";
+        char ScreenViewTimeout[] = "Sto"; // needed for display info
+        char Pto[]               = "Pto";
 
-/******************************** FUNCTIONS FOR ARRAY OF POINTERS *************************************************************/
+            SendCommand(ProgressStart);
+            SendValue(Progress, 10);
+            SticksMode = CheckRange(GetValue(n0), 1, 2);
+            GetText(TxNme, TxName);
+            SendValue(Progress, 40);
+            AutoModelSelect = GetValue(lpm);
+            SendValue(Progress, 50);
+            LowBattery = GetValue(Bwn);
+            SendValue(Progress, 60);
+            ScreenTimeout = GetValue(ScreenViewTimeout);
+            SendValue(Progress, 70);
+            SendValue(Progress, 80);
+            Inactivity_Timeout = GetValue(Pto) * TICKSPERMINUTE;
+            if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
+            if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
+            SendValue(Progress, 90);
+            FixDeltaGMTSign();
+            if (BuddyPupilOnPPM)
+            {
+                Connected            = false;
+                LostContactFlag      = true;
+                PacketsPerSecond     = 0;
+                RecentGoodPacketsCount = 0;
+                BlueLedOn();
+            }
+            SaveAllParameters();
+            SendValue(Progress, 95);
+            SendValue(Progress, 100);
+            CurrentView = TXSETUPVIEW;
+            SendCommand(pTXSetupView);
+            LastTimeRead = 0;
+            SendCommand(ProgressEnd);
+            UpdateModelsNameEveryWhere();
+            ClearText();
+            ConfigureStickMode();
+}
+
+/*****************************************************************************************************/
 void Blank()
 {
     return;
 }
-
-
 
 /*********************************************************************************************************************************/
 
@@ -65,8 +132,6 @@ void StartReverseView()
     SendCommand(ProgressEnd);
     UpdateModelsNameEveryWhere();
 }
-
-
 
 /*********************************************************************************************************************************/
 
@@ -126,7 +191,6 @@ void ShowMixValues() // sends mix values to Nextion screen
     char MixesView_od[]            = "od";
     char MixesView_offset[]        = "Offset";
     
-    
     SendValue(MixesView_MixOutput, Mixes[MixNumber][M_MIX_OUTPUTS]); // heer load the ScreenData array with the mix values tomorrow
     ScreenData[MIXINPUT] = Mixes[MixNumber][M_MIX_INPUTS];
     SendValue(MixesView_MixInput, Mixes[MixNumber][M_MIX_INPUTS]);
@@ -157,7 +221,6 @@ void ShowMixValues() // sends mix values to Nextion screen
     SendText(MixesView_chM, ChannelNames[Mixes[MixNumber][M_MasterChannel] - 1]);
     SendText(MixesView_chS, ChannelNames[Mixes[MixNumber][M_SlaveChannel] - 1]);
 }
-
 
 /***************************************************** ShowChannelName ****************************************************************************/
 
@@ -192,10 +255,6 @@ void ExitMacrosView()
     UpdateModelsNameEveryWhere();
 }
 
-
-
-
-
 /***************************************************** Populate Macros View ****************************************************************************/
 
 void PopulateMacrosView()
@@ -225,9 +284,6 @@ void PopulateMacrosView()
     PreviousMacroNumber = n;
 }
 
-
-
-
 /******************************************************************************************************************************/
 void GotoMacrosView()
 {
@@ -239,7 +295,6 @@ void GotoMacrosView()
     UpdateModelsNameEveryWhere();
     PopulateMacrosView();
 }
-
 
 /******************************************************************************************************************************/
 void GotoModelsView()
@@ -256,13 +311,11 @@ void GotoModelsView()
     LoadModelSelector();
 }
 
-
 /******************************************************************************************************************************/
 void DoLastTimeRead()
 {
     LastTimeRead = 0;
 }
-
 /******************************************************************************************************************************/
 
 void ModelViewEnd()
@@ -330,7 +383,6 @@ void ReceiveLotsofData(){
 
 }
 
-
 /******************************************************************************************************************************/
 
 void TXModuleViewEnd()
@@ -379,7 +431,6 @@ void TXModuleViewEnd()
         digitalWrite(POWER_OFF_PIN, HIGH);
     }
 }
-
 
 /******************************************************************************************************************************/
 

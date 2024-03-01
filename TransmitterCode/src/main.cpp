@@ -2972,7 +2972,7 @@ void SelectChannelOrder()
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS!
-#define LASTFUNCTION1 6 // One more than final one
+#define LASTFUNCTION1 8 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])() {
         Blank,                        // 0 Cannot be used
@@ -2980,7 +2980,9 @@ void (*NumberedFunctions1[LASTFUNCTION1])() {
         StartAudioVisualView,         // 2
         EndAudioVisualView,           // 3
         StartTXSetupView,             // 4
-        InputsViewEnd                 // 5 
+        InputsViewEnd,                // 5 
+        SystemPage1End,               // 6
+        SystenPage1Start              // 7  
 };
 
  // This list migth become MUCH longer as it limit is 24 bits big
@@ -3133,10 +3135,11 @@ FASTRUN void ButtonWasPressed()
         }
          // By here, TextIn[0] must be start of a character based command
 
+         // The very old code below here is gradually and carefully being replaced by new code in multiple functions - it works fine but is not as efficient as the new code
+
         int  i                         = 0;
         int  j                         = 0;
         int  p                         = 0;
-        char lpm[]                     = "c0"; // Auto model selection
         char Setup[]                   = "Setup";
         char ClickX[]                  = "ClickX";
         char ClickY[]                  = "ClickY";
@@ -3210,10 +3213,7 @@ FASTRUN void ButtonWasPressed()
         char CH15NAME[]                = "CH15NAME=";
         char CH16NAME[]                = "CH16NAME=";
         char HelpView[]                = "HelpView";
-        char SendModel[]               = "SendModel";
-        char OptionsViewS[]            = "OptionsViewS";
-        char Pto[]                     = "Pto";
-        char Tx_Name[]                 = "TxName";
+        char SendModel[]               = "SendModel";     
         char Exrite[]                  = "Exrite";
         char ExpR[]                    = "Exp";
         char Smooth[]                  = "Smooth";
@@ -3232,9 +3232,7 @@ FASTRUN void ButtonWasPressed()
         char Dec_Month[]               = "DecMonth";
         char DataView_Clear[]          = "Clear";
         char DataView_AltZero[]        = "AltZero";
-        char OptionsEnd[]              = "OptionsEnd";
         char Mark[]                    = "Mark";
-        char Bwn[]                     = "Bwn";
         char SetupCol[]                = "SetupCol";
         char b0_bco[]                  = "b0.bco";
         char b0_pco[]                  = "b0.pco";
@@ -3251,8 +3249,6 @@ FASTRUN void ButtonWasPressed()
         char s0[]                      = "s0";
         char StEDIT[]                  = "StEDIT";
         char pLogView[]                = "page LogView";
-        char dGMT[]                    = "dGMT";
-        char TxNme[]                   = "TxName";
         char Prompt[60];
         char del[]               = "Delete ";
         char overwr[]            = "Overwrite ";
@@ -3262,7 +3258,6 @@ FASTRUN void ButtonWasPressed()
         char ProgressStart[]     = "vis Progress,1";
         char ProgressEnd[]       = "vis Progress,0";
         char Progress[]          = "Progress";
-        char ScreenViewTimeout[] = "Sto"; // needed for display info
         char FrontView_Hours[]   = "Hours";
         char FrontView_Mins[]    = "Mins";
         char FrontView_Secs[]    = "Secs";
@@ -3291,7 +3286,7 @@ FASTRUN void ButtonWasPressed()
 
 
 
-        if (InStrng(SetupView, TextIn) > 0) { //  goto main setup screen
+        if (InStrng(SetupView, TextIn) > 0) { //  goto main TX setup screen
             ClearText();
             if (CurrentView == CALIBRATEVIEW) ReadOneModel(ModelNumber);  // because it was cleared for calibration
             SaveAllParameters();
@@ -3303,6 +3298,8 @@ FASTRUN void ButtonWasPressed()
             UpdateModelsNameEveryWhere();
             return;
         }
+
+
         if (InStrng(Mark, TextIn) > 0) {
             GPSMarkHere    = 255; // Mark this location
             GPSMaxDistance = 0;
@@ -3310,46 +3307,7 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
          }
-       
 
-        if (InStrng(OptionsEnd, TextIn) > 0) { // Exit from TX Options screen1
-            SendCommand(ProgressStart);
-            SendValue(Progress, 10);
-            SticksMode = CheckRange(GetValue(n0), 1, 2);
-            GetText(TxNme, TxName);
-            SendValue(Progress, 40);
-            AutoModelSelect = GetValue(lpm);
-            SendValue(Progress, 50);
-            LowBattery = GetValue(Bwn);
-            SendValue(Progress, 60);
-            ScreenTimeout = GetValue(ScreenViewTimeout);
-            SendValue(Progress, 70);
-            SendValue(Progress, 80);
-            Inactivity_Timeout = GetValue(Pto) * TICKSPERMINUTE;
-            if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
-            if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
-            SendValue(Progress, 90);
-            FixDeltaGMTSign();
-            if (BuddyPupilOnPPM)
-            {
-                Connected            = false;
-                LostContactFlag      = true;
-                PacketsPerSecond     = 0;
-                RecentGoodPacketsCount = 0;
-                BlueLedOn();
-            }
-            SaveAllParameters();
-            SendValue(Progress, 95);
-            SendValue(Progress, 100);
-            CurrentView = TXSETUPVIEW;
-            SendCommand(pTXSetupView);
-            LastTimeRead = 0;
-            SendCommand(ProgressEnd);
-            UpdateModelsNameEveryWhere();
-            ClearText();
-            ConfigureStickMode();
-            return;
-        }
 
         if (InStrng(DataEnd, TextIn) > 0) { //  Exit from Data screen
             SendCommand(pRXSetupView);
@@ -3358,6 +3316,9 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
+
+
+
         if (InStrng(DataView_Clear, TextIn) > 0) { //  Clear Data screen
             ZeroDataScreen();
             ClearText();
@@ -3454,20 +3415,6 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(OptionsViewS, TextIn) > 0) { // start tx options screen 1
-            FixDeltaGMTSign();
-            if (CurrentView == OPTIONVIEW2) DeltaGMT = GetValue(dGMT);
-            SendCommand(pOptionsViewS); // TX options view
-            SendValue(n0, SticksMode);
-            SendValue(ScreenViewTimeout, ScreenTimeout);
-            SendValue(Pto, (Inactivity_Timeout / TICKSPERMINUTE));
-            SendText(Tx_Name, TxName);
-            SendValue(lpm, AutoModelSelect);
-            SendValue(Bwn, LowBattery);
-            CurrentView = OPTIONS_VIEW;
-            ClearText();
-            return;
-        }
         if (InStrng(GOTO, TextIn) > 0) { // Return from Help screen returns here to relevent config screen
             i = 5;
             while (uint8_t(TextIn[i]) && i < 30) {
