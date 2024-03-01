@@ -67,6 +67,7 @@ var 1Definitions_8h =
     [ "CSN_PIN", "1Definitions_8h.html#a6c4d73944fe1bd2ff7ceee867c315ac1", null ],
     [ "DATARATE", "1Definitions_8h.html#a6e3511acbf8184c2b874c1175f86f7fd", null ],
     [ "DATAVIEW", "1Definitions_8h.html#a5d4f7906962f2c612f1eeabd809f2f52", null ],
+    [ "DB_NEXTION", "1Definitions_8h.html#a37c149666ecf7d90765ce2a9df4b8fb8", null ],
     [ "DEFAULT_EXPO", "1Definitions_8h.html#a2a42bee007b474de05c409af41aba395", null ],
     [ "DEFAULTLEDBRIGHTNESS", "1Definitions_8h.html#a2a95d6724b678596120391f5ea8f1ebe", null ],
     [ "DEFAULTPIPEADDRESS", "1Definitions_8h.html#a4882e6035f50cbda34385a5388985813", null ],

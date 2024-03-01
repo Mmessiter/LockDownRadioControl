@@ -386,5 +386,5 @@ var searchData=
   ['switchspienabled_383',['switchSPIEnabled',['../classMPU6050.html#a269710b7bca814bbf67e7bb38c381650',1,'MPU6050']]],
   ['synchrtcwithgpstime_384',['SynchRTCwithGPSTime',['../Utilities_8h.html#abb1ea95b6b3f033883aa87682d3240ab',1,'Utilities.h']]],
   ['systempage1end_385',['SystemPage1End',['../MenuOptions_8h.html#a364f7decd2b91610050af5a7d73ee13e',1,'MenuOptions.h']]],
-  ['systenpage1start_386',['SystenPage1Start',['../MenuOptions_8h.html#af3cee28aa9b7b5e439f84379995a6b2d',1,'MenuOptions.h']]]
+  ['systempage1start_386',['SystemPage1Start',['../MenuOptions_8h.html#a494cc8c6f40645d6528b9001b8725d3b',1,'MenuOptions.h']]]
 ];

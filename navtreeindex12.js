@@ -1,5 +1,6 @@
 var NAVTREEINDEX12 =
 {
+"globals_b.html":[5,1,0,2],
 "globals_c.html":[5,1,0,3],
 "globals_d.html":[5,1,0,4],
 "globals_defs.html":[5,1,4,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX12 =
 "unionuMacReceived.html#af8aa15491569577bab017ff1d0824936":[4,0,10,0],
 "unionuMacStored.html":[4,0,11],
 "unionuMacStored.html#a17b42292dd1e696f7598aa6dfc739d3b":[4,0,11,2],
-"unionuMacStored.html#a3a3d261d97d65572301f77d221791966":[4,0,11,1],
-"unionuMacStored.html#a918cd89cf3bdb5e0aca37af03720125d":[4,0,11,0]
+"unionuMacStored.html#a3a3d261d97d65572301f77d221791966":[4,0,11,1]
 };
