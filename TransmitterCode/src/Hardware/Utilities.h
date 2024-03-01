@@ -956,5 +956,97 @@ void Look1(const any& value) // this is a template function that can print anyth
     Serial.print(value);
 }
 
+
+
+/******************************************************************************************************************************/
+// Gets Windows style confirmation (FILE OVERWRITE ETC.)
+// params:
+// Prompt is the prompt
+// goback is the command needed to return to calling page
+
+bool GetConfirmation(char* goback, char* Prompt)
+{
+    char GoPopupView[] = "page PopupView";
+    char Dialog[]      = "Dialog";
+    SendCommand(GoPopupView);
+    SendText(Dialog, Prompt);
+    GetYesOrNo();
+    SendCommand(goback);
+    LastFileInView = 120;
+    if (Confirmed[0] == 'Y') return true; // tell caller OK to continue
+    return false;                         // tell caller STOP!
+}
+
+/******************************************************************************************************************************/
+// Windows style MSGBOX
+// params:
+// Prompt is the prompt
+// goback is the command needed to return to calling page
+
+void MsgBox(char* goback, char* Prompt)
+{
+    char GoPopupView[] = "page PopupView";
+    char Dialog[]      = "Dialog";
+    char NoCancel[]    = "vis b1,0"; // hide cancel button
+    SendCommand(GoPopupView);
+    SendCommand(NoCancel);
+    SendText(Dialog, Prompt);
+    GetYesOrNo();
+    SendCommand(goback);
+    LastFileInView = 120;
+    return;
+}
+
+/******************************************************************************************************************************/
+void YesPressed() { Confirmed[0] = 'Y'; }
+/******************************************************************************************************************************/
+void NoPressed() { Confirmed[0] = 'N'; }
+/******************************************************************************************************************************/
+
+
+/******************************************************************************************************************************/
+
+void GetYesOrNo(){                  // on return from here, Confirmed[0] will be Y or N
+    Confirmed[0] = '?';
+    while (Confirmed[0] == '?') { // await user response
+        CheckForNextionButtonPress();
+        CheckPowerOffButton();// heer
+        KickTheDog();
+        if (BoundFlag && ModelMatched) {
+           GetNewChannelValues();
+           FixMotorChannel();
+           SendData();
+        }
+    }
+}
+/******************************************************************************************************************************/
+bool GetBackupFilename(char* goback, char* tt1, char* MMname, char* heading, char* pprompt)
+{ // HERE THE USER CAN REPLACE DEFAULT FILENAME IF HE WANTS TO
+
+    char GoBackupView[] = "page BackupView";
+    char t0[]           = "t0";        // prompt
+    char t1[]           = "t1";        // default filename
+    char t3[]           = "t3";        // heading
+    char Mname[]        = "Modelname"; // model name
+    SendCommand(GoBackupView);
+    SendText(t0, pprompt);   // prompt
+    SendText(t1, tt1);       // filename
+    SendText(Mname, MMname); // Model name
+    SendText(t3, heading);   // heading
+    GetYesOrNo();
+    GetText(t1, SingleModelFile);
+    SendCommand(goback);
+    if (Confirmed[0] == 'Y') return true;
+    return false;
+}
+
+void SaveCurrentModel()
+{
+    SavedModelNumber = ModelNumber;
+}
+
+
+
+
 /************************************************************************************************************/
 #endif 

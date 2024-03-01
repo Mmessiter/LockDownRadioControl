@@ -24,7 +24,7 @@
     #define TXVERSION_MAJOR   2 // first three *must* match RX but _EXTRA can be different
     #define TXVERSION_MINOR   4
     #define TXVERSION_MINIMUS 5
-    #define TXVERSION_EXTRA   "j 29/02/24" 
+    #define TXVERSION_EXTRA   "j 01/03/24" 
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -643,7 +643,13 @@ void             CheckDualRatesValues();
 void             ReadDualRatesValues();
 void             DisplayDualRateValues();
 void             PopulateMacrosView();
-
+void             LoadModelForRenaming();
+bool             GetBackupFilename(char* goback, char* tt1, char* MMname, char* heading, char* pprompt);
+void             FixFileName();
+void             WriteBackup();
+void             RestoreCurrentModel();
+void             GetYesOrNo();
+uint16_t         GetText(char* TextBoxName, char* TheText);
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************

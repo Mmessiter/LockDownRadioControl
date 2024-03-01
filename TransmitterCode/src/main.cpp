@@ -2292,75 +2292,6 @@ void ReadNewSwitchFunction()
     return;
 }
 
-/*********************************************************************************************************************************/
-
-void StartBuddyView()
-{
-    char BuddyM[]        = "BuddyM";
-    char BuddyP[]        = "BuddyP";
-    char BuddyWireless[] = "wireless";
-    char pBuddyView[]    = "page BuddyView";
-    SendCommand(pBuddyView);
-    CurrentView = BUDDYVIEW;
-    WirelessBuddy = true;                   // default to wireless
-    SendValue(BuddyM, BuddyMasterOnPPM || BuddyMasterOnWireless);
-    SendValue(BuddyP, BuddyPupilOnPPM || BuddyPupilOnWireless);
-    SendValue(BuddyWireless, WirelessBuddy);
-}
-
-/*********************************************************************************************************************************/
-
-void EndBuddyView()
-{
-    char BuddyM[]        = "BuddyM";
-    char BuddyP[]        = "BuddyP";
-    bool Pupil           = false;
-    bool Master          = false;
-    char BuddyWireless[] = "wireless";
-                     
-    Pupil          = GetValue(BuddyP);        // Pupil ?
-    Master         = GetValue(BuddyM);        // Master ?
-    WirelessBuddy  = GetValue(BuddyWireless); // wireless ?
-    if (Pupil) {
-        if (WirelessBuddy) // wireless switch on?
-        {
-            BuddyPupilOnWireless = true;
-            BuddyPupilOnPPM      = false;
-        }
-        if (!WirelessBuddy) {
-            BuddyPupilOnWireless = false;
-            BuddyPupilOnPPM      = true;
-        }
-    }
-    if (!Pupil)
-    {
-        BuddyPupilOnWireless = false;
-        BuddyPupilOnPPM      = false;
-    }
-
-    if (Master) {
-        if (WirelessBuddy) { // wireless switch on?
-            BuddyMasterOnWireless = true;
-            BuddyMasterOnPPM      = false;
-        }
-        if (!WirelessBuddy) { // wireless switch off?
-            BuddyMasterOnWireless = false;
-            BuddyMasterOnPPM      = true;
-        }
-    }
-    if (!Master) {
-        BuddyMasterOnWireless = false;
-        BuddyMasterOnPPM      = false;
-    }
-    SaveAllParameters();
-    SendCommand(pRXSetupView);
-    CurrentView = RXSETUPVIEW;
-    UpdateModelsNameEveryWhere();
-    RationaliseBuddy();
-    if (BuddyPupilOnWireless) {
-        GotoFrontView();
-    }
-}
 
 /*********************************************************************************************************************************/
 FASTRUN void DisplayCurveAndServoPos()
@@ -2372,131 +2303,6 @@ FASTRUN void DisplayCurveAndServoPos()
     ClearText();
 }
 
-/******************************************************************************************************************************/
-void LoadModelSelector()
-{
-    char MMemsp[] = "MMems.path=\"";
-    char MMems[]  = "MMems";
-    char crlf[]   = {13, 10, 0};
-    char lb[]     = " (";
-    char rb[]     = ")";
-    char nb[4];
-    char buf[MAXBUFFERSIZE];
-    char mn[] = "modelname";
-
-    int32_t SavedModelNumber = ModelNumber;
-    for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber) {
-        ReadOneModel(ModelNumber);
-        if(!ModelsMacUnionSaved.Val64){ 
-            strcpy(lb," *");
-            strcpy(rb,"*");
-        }else{
-            strcpy(lb," (");
-            strcpy(rb,")");
-        }
-        if (ModelNumber == 1) {
-            strcpy(buf, ModelName);
-            strcat(buf, lb);
-            Str(nb, ModelNumber, 0);
-            strcat(buf, nb);
-            strcat(buf, rb);
-            strcat(buf, crlf); 
-        }
-        else {
-            strcat(buf, ModelName);
-            strcat(buf, lb);
-            Str(nb, ModelNumber, 0);
-            strcat(buf, nb);
-            strcat(buf, rb);
-            strcat(buf, crlf);
-        }
-    }
-    SendOtherText(MMemsp, buf);
-    ModelNumber = SavedModelNumber;
-    ReadOneModel(ModelNumber);
-    SendValue(MMems, ModelNumber - 1);
-    SendText(mn, ModelName);
-}
-
-/******************************************************************************************************************************/
-
-void LoadFileSelector()
-{
-    char Mfilesp[] = "Mfiles.path=\"";
-    char Mfiles[]  = "Mfiles";
-    char crlf[]    = {13, 10, 0};
-    char buf[MAXBUFFERSIZE];
-    char nofiles[] = "(No files)";
-
-    strcpy(buf, nofiles);
-    for (int f = 0; f < ExportedFileCounter; ++f) {
-        if (f == 0)
-        {
-            strcpy(buf, TheFilesList[f]);
-            strcat(buf, crlf);
-        }
-        else {
-            strcat(buf, TheFilesList[f]);
-            strcat(buf, crlf);
-        }
-    }
-    SendOtherText(Mfilesp, buf);
-    FileNumberInView = GetValue(Mfiles);
-    LastFileInView   = 120;
-}
-
-/******************************************************************************************************************************/
-void SetupViewFM()
-{
-   
-
-    SaveAllParameters();
-    CurrentView = RXSETUPVIEW;
-    SendCommand(pRXSetupView);
-    UpdateModelsNameEveryWhere();
-}
-
-/******************************************************************************************************************************/
-void Options2End()
-{ // back to setup?
-    char dGMT[]           = "dGMT";
-    char pTXSetupView[] = "page TXSetupView";
-    DeltaGMT              = GetValue(dGMT);
-    SaveTransmitterParameters();
-    CurrentView = TXSETUPVIEW;
-    SendCommand(pTXSetupView);
-    UpdateModelsNameEveryWhere();
-}
-/******************************************************************************************************************************/
-
-void OptionView2Start()
-{
-    char dGMT[] = "dGMT"; // Time zone
-    char n1[]   = "n1";
-    char n2[]   = "n2";
-    char n3[]   = "n3";
-
-    char OptionV2Start[] = "page OptionView2";
-    char TxVCorrextion[] = "t2";
-
-    if (CurrentView == OPTIONVIEW3) { //  TODO: And what if was Options 1??
-
-        TxVoltageCorrection    = GetValue(TxVCorrextion);
-        PowerOffWarningSeconds = GetValue(n2);
-        PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 1, 10);
-
-        if (LEDBrightness != GetValue(n1)) UpdateLED();
-        ConnectionAssessSeconds = GetValue(n3);
-        ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
-        SaveAllParameters();
-    }
-
-    CurrentView  = OPTIONVIEW2;
-    LastTimeRead = 0;
-    SendCommand(OptionV2Start);
-    DelayWithDog(100);
-    SendValue(dGMT, DeltaGMT);
-}
 
 /******************************************************************************************************************************/
 
@@ -2658,43 +2464,6 @@ void OptionView3End() //
   
 }
 
-/******************************************************************************************************************************/
-
-void BuddyChViewStart()
-{
-    char pBuddyChView[] = "page BuddyChView";
-    char fs[16][5]          = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
-    SendCommand(pBuddyChView);
-    CurrentView = BUDDYCHVIEW;
-    UpdateButtonLabels();
-    for (int i = 0; i < 16; ++i) {
-        if (BuddyControlled & 1 << i) {
-            SendValue(fs[i], 1);
-        }
-        else {
-            SendValue(fs[i], 0);
-        }
-    }
-}
-
-/******************************************************************************************************************************/
-
-void BuddyChViewEnd()
-{
-    char Progress[]       = "Progress";
-    char ProgressStart[]  = "vis Progress,1";
-    char fs[16][5]        = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
-    SendCommand(ProgressStart);
-    BuddyControlled = 0;
-    for (int i = 0; i < 16; ++i) {
-        BuddyControlled |= GetValue(fs[i]) << i;
-        SendValue(Progress, i * (100 / 16));
-    }
-    SaveOneModel(ModelNumber);
-    CloseModelsFile();
-    SendCommand(pBuddyView);
-    CurrentView = BUDDYVIEW;
-}
 /******************************************************************************************************************************/
 void RudderLeftTrim() { MoveaTrim(7); }
 /******************************************************************************************************************************/
@@ -3096,90 +2865,6 @@ void EndRenameModel()
 
 /******************************************************************************************************************************/
 
-void GetYesOrNo(){                  // on return from here, Confirmed[0] will be Y or N
-    Confirmed[0] = '?';
-    while (Confirmed[0] == '?') { // await user response
-        CheckForNextionButtonPress();
-        CheckPowerOffButton();// heer
-        KickTheDog();
-        if (BoundFlag && ModelMatched) {
-           GetNewChannelValues();
-           FixMotorChannel();
-           SendData();
-        }
-    }
-}
-/******************************************************************************************************************************/
-bool GetBackupFilename(char* goback, char* tt1, char* MMname, char* heading, char* pprompt)
-{ // HERE THE USER CAN REPLACE DEFAULT FILENAME IF HE WANTS TO
-
-    char GoBackupView[] = "page BackupView";
-    char t0[]           = "t0";        // prompt
-    char t1[]           = "t1";        // default filename
-    char t3[]           = "t3";        // heading
-    char Mname[]        = "Modelname"; // model name
-    SendCommand(GoBackupView);
-    SendText(t0, pprompt);   // prompt
-    SendText(t1, tt1);       // filename
-    SendText(Mname, MMname); // Model name
-    SendText(t3, heading);   // heading
-    GetYesOrNo();
-    GetText(t1, SingleModelFile);
-    SendCommand(goback);
-    if (Confirmed[0] == 'Y') return true;
-    return false;
-}
-/******************************************************************************************************************************/
-// Gets Windows style confirmation (FILE OVERWRITE ETC.)
-// params:
-// Prompt is the prompt
-// goback is the command needed to return to calling page
-
-bool GetConfirmation(char* goback, char* Prompt)
-{
-    char GoPopupView[] = "page PopupView";
-    char Dialog[]      = "Dialog";
-    SendCommand(GoPopupView);
-    SendText(Dialog, Prompt);
-    GetYesOrNo();
-    SendCommand(goback);
-    LastFileInView = 120;
-    if (Confirmed[0] == 'Y') return true; // tell caller OK to continue
-    return false;                         // tell caller STOP!
-}
-
-/******************************************************************************************************************************/
-// Windows style MSGBOX
-// params:
-// Prompt is the prompt
-// goback is the command needed to return to calling page
-
-void MsgBox(char* goback, char* Prompt)
-{
-    char GoPopupView[] = "page PopupView";
-    char Dialog[]      = "Dialog";
-    char NoCancel[]    = "vis b1,0"; // hide cancel button
-    SendCommand(GoPopupView);
-    SendCommand(NoCancel);
-    SendText(Dialog, Prompt);
-    GetYesOrNo();
-    SendCommand(goback);
-    LastFileInView = 120;
-    return;
-}
-
-/******************************************************************************************************************************/
-void YesPressed() { Confirmed[0] = 'Y'; }
-/******************************************************************************************************************************/
-void NoPressed() { Confirmed[0] = 'N'; }
-/******************************************************************************************************************************/
-
-void SaveCurrentModel()
-{
-    SavedModelNumber = ModelNumber;
-}
-/******************************************************************************************************************************/
-
 void LoadModelForRenaming()
 {
     CloseModelsFile();
@@ -3195,49 +2880,6 @@ void RestoreCurrentModel()
     SingleModelFlag = false;
     ReadOneModel(ModelNumber);
     SaveAllParameters();
-}
-
-/******************************************************************************************************************************/
-
-// This implements the impossible "SD card rename file" ... by reading, re-saveing under new name, then deleting old file.
-
-void RenameFile()
-{
-    char ModelsView_filename[] = "filename";
-    char Head[]                = "Rename this backup";
-    char model[]               = "(i.e. just change its filename)";
-    char prompt[]              = "New filename?";
-    char Prompt[50];
-    char overwr[] = "Overwrite ";
-    char ques[]   = "?";
-    char Deleteable[42];
-   
-    SaveCurrentModel();
-    GetText(ModelsView_filename, SingleModelFile);
-    strcpy(Deleteable, SingleModelFile);
-    LoadModelForRenaming();
-    if (GetBackupFilename(pModelsView, SingleModelFile, model, Head, prompt)) {
-        FixFileName();
-        if (strcmp(Deleteable, SingleModelFile) == 0) return;
-        Serial.println(SingleModelFile);
-        if (CheckFileExists(SingleModelFile)) {
-            strcpy(Prompt, overwr);
-            strcat(Prompt, SingleModelFile);
-            strcat(Prompt, ques);
-            if (GetConfirmation(pModelsView, Prompt))
-            {
-                WriteBackup();
-                SD.remove(Deleteable);
-            }
-        }
-        else {
-            WriteBackup();
-            SD.remove(Deleteable);
-        }
-    }
-    BuildDirectory();
-    LoadFileSelector();
-    RestoreCurrentModel();
 }
 
 
@@ -3314,46 +2956,6 @@ void CheckAllModelIds()
     ReadOneModel(ModelNumber);
 }
 
-/******************************************************************************************************************************/
-
-void TXModuleViewStart()
-{
-
-    char msg[] = "Please disconnect from model first!";
-    if (ModelMatched) {
-        MsgBox(pTXSetupView,msg);
-        return;
-    }
-    CurrentView = TXMODULEVIEW;
-
-    char c1[] = "c1"; // Use module
-    char n3[] = "n3"; // number of channels
-    char r0[] = "r0";
-    char r1[] = "r1";
-    char r2[] = "r2";
-
-    SendCommand(pTXModule);
-    SendValue(c1, PPMdata.UseTXModule);
-    SendValue(n3, PPMdata.PPMChannelsNumber);
-    if (PPMdata.PPMOrderSelection == 1) {
-        SendValue(r0, 1);
-    }
-    else {
-        SendValue(r0, 0);
-    }
-    if (PPMdata.PPMOrderSelection == 2) {
-        SendValue(r1, 1);
-    }
-    else {
-        SendValue(r1, 0);
-    }
-    if (PPMdata.PPMOrderSelection == 3) {
-        SendValue(r2, 1);
-    }
-    else {
-        SendValue(r2, 0);
-    }
-}
 
 /******************************************************************************************************************************/
 
@@ -3365,28 +2967,20 @@ void SelectChannelOrder()
     if (PPMdata.PPMOrderSelection == 3) PPMdata.PPMChannelOrder = PPMdata.PPMChannelOrder3;
 }
 
-/******************************************************************************************************************************/
-void ResetClock() 
-{
-     
-     char Prompt[]              = "Reset clock?";   
-     char Done[]                = "Clock reset!";    
-     
-    if (GetConfirmation(pOptionView2, Prompt)) {
-        SetDS1307ToCompilerTime();
-        MsgBox(pOptionView2, Done);
-    }
-}
 
 
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS!
-#define LASTFUNCTION1 2 // One more than final one
+#define LASTFUNCTION1 6 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])() {
-        Blank,                       // 0 // spare
-        DeleteModel                  // 1
+        Blank,                        // 0 Cannot be used
+        DeleteModel,                  // 1
+        StartAudioVisualView,         // 2
+        EndAudioVisualView,           // 3
+        StartTXSetupView,             // 4
+        InputsViewEnd                 // 5 
 };
 
  // This list migth become MUCH longer as it limit is 24 bits big
@@ -3398,7 +2992,7 @@ void (*NumberedFunctions1[LASTFUNCTION1])() {
 #define LASTFUNCTION 78 // One more than final one, because first is number zero
 
 void (*NumberedFunctions[LASTFUNCTION])() {
-    Blank,                    // 0 // spare
+    Blank,                    // 0  Cannot be used
     DoMFName,                 // 1
     ModelViewEnd,             // 2
     DoLastTimeRead,           // 3
@@ -3537,7 +3131,7 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-         // By here, TextIn[0] must be a character 
+         // By here, TextIn[0] must be start of a character based command
 
         int  i                         = 0;
         int  j                         = 0;
@@ -3567,7 +3161,6 @@ FASTRUN void ButtonWasPressed()
         char ReScan[]                  = "ReScan";
         char MixesView_MixNumber[]     = "MixNumber";
         char ModelsView_ModelNumber[]  = "ModelNumber";
-        char GoSetupView[]             = "GoSetupView";
         char ColoursView[]             = "ColoursView";
         char SvT11[]                   = "t11";
         char CMsg1[]                   = "Move all controls to their full\r\nextent several times,\r\nthen press Next.";
@@ -3593,10 +3186,6 @@ FASTRUN void ButtonWasPressed()
         char OneSwitchView[]           = "OneSwitchView";
         char PageOneSwitchView[]       = "page OneSwitchView";
         char InputsView[]              = "InputsView";
-        char InputsDone[]              = "InputsDone";
-        char InputStick_Labels[16][4]  = {"c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10", "c11", "c12", "c13", "c14", "c15", "c16"};
-        char OutputStick_Labels[16][4] = {"n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11", "n12", "n13", "n14", "n15", "n16", "n17", "n18", "n19"};
-        char InputTrim_labels[4][4]    = {"n0", "n1", "n2", "n3"};
         char Export[]                  = "Export";
         char Import[]                  = "Import";
         char DelFile[]                 = "DelFile";
@@ -3655,19 +3244,9 @@ FASTRUN void ButtonWasPressed()
         char FrontView_ForeGround[]    = "FrontView.ForeGround";
         char FrontView_Special[]       = "FrontView.Special";
         char FrontView_Highlight[]     = "FrontView.Highlight";
-        char SetupAud[]                = "SetupAud";
         char n0[]                      = "n0";
-        char Ex1[]                     = "Ex1";
         char Expo[]                    = "Expo";
-        char AudioView[]               = "AudioView";
-        char n1[]                      = "n1";
-        char h0[]                      = "h0";
-        char c0[]                      = "c0";
-        char c1[]                      = "c1";
-        char c2[]                      = "c2";
-        char c3[]                      = "c3";
-        char c4[]                      = "c4";
-        char c5[]                      = "c5";
+        char h0[]                      = "h0";     
         char StCH[]                    = "StCH";
         char s0[]                      = "s0";
         char StEDIT[]                  = "StEDIT";
@@ -3710,44 +3289,6 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-
-        if (InStrng(AudioView, TextIn) > 0) { // Display screen with audio options
-            CurrentView = AUDIOVIEW;
-            SendCommand(pAudioView);
-            SendValue(n0, AudioVolume);
-            SendValue(Ex1, AudioVolume);
-            SendValue(n1, Brightness);
-            SendValue(h0, Brightness);
-            SendValue(c0, PlayFanfare);
-            SendValue(c1, TrimClicks);
-            SendValue(c2, ButtonClicks);
-            SendValue(c3, SpeakingClock);
-            SendValue(c4, AnnounceBanks);
-            SendValue(c5, AnnounceConnected);
-            SetAudioVolume(AudioVolume);
-            ClearText();
-            return;
-        }
-
-
-        if (InStrng(SetupAud, TextIn) > 0) { // Exit from screen with audio options
-            AudioVolume       = GetValue(n0);
-            Brightness        = GetValue(n1);
-            PlayFanfare       = GetValue(c0);
-            TrimClicks        = GetValue(c1);
-            ButtonClicks      = GetValue(c2);
-            SpeakingClock     = GetValue(c3);
-            AnnounceBanks     = GetValue(c4);
-            AnnounceConnected = GetValue(c5);
-            SetAudioVolume(AudioVolume);
-            CurrentView = TXSETUPVIEW;
-            SendCommand(pTXSetupView);
-            LastTimeRead = 0;
-            SaveTransmitterParameters();
-            UpdateModelsNameEveryWhere();
-            ClearText();
-            return;
-        }
 
 
         if (InStrng(SetupView, TextIn) > 0) { //  goto main setup screen
@@ -4075,29 +3616,29 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(InputsDone, TextIn) > 0) {
-            SendCommand(ProgressStart);
-            for (int i = 0; i < 16; ++i) {
-              //  if (ModelMatched) {
-              //      NewCompressNeeded = false;
-              //      SendData(); // To prevent failsafe, keep sending data as this takes a while
-              //  }
-                InPutStick[i]    = CheckRange((GetValue(InputStick_Labels[i]) - 1), 0, 15);
-                ChannelOutPut[i] = CheckRange((GetValue(OutputStick_Labels[i]) - 1), 0, 15);
-                if (i < 4) InputTrim[i] = CheckRange((GetValue(InputTrim_labels[i]) - 1), 0, 15);
-                SendValue(Progress, (((i + 1) * 100) / 16) - 1);
-            }
-            CheckOutPutChannels();
-            SendValue(Progress, 95);
-            SaveOneModel(ModelNumber);
-            SendValue(Progress, 100);
-            UpdateButtonLabels();
-            CurrentView = RXSETUPVIEW;
-            SendCommand(pRXSetupView);
-            LastTimeRead = 0;
-            ClearText();
-            return;
-        }
+        // if (InStrng(InputsDone, TextIn) > 0) {
+        //     SendCommand(ProgressStart);
+        //     for (int i = 0; i < 16; ++i) {
+        //       //  if (ModelMatched) {
+        //       //      NewCompressNeeded = false;
+        //       //      SendData(); // To prevent failsafe, keep sending data as this takes a while
+        //       //  }
+        //         InPutStick[i]    = CheckRange((GetValue(InputStick_Labels[i]) - 1), 0, 15);
+        //         ChannelOutPut[i] = CheckRange((GetValue(OutputStick_Labels[i]) - 1), 0, 15);
+        //         if (i < 4) InputTrim[i] = CheckRange((GetValue(InputTrim_labels[i]) - 1), 0, 15);
+        //         SendValue(Progress, (((i + 1) * 100) / 16) - 1);
+        //     }
+        //     CheckOutPutChannels();
+        //     SendValue(Progress, 95);
+        //     SaveOneModel(ModelNumber);
+        //     SendValue(Progress, 100);
+        //     UpdateButtonLabels();
+        //     CurrentView = RXSETUPVIEW;
+        //     SendCommand(pRXSetupView);
+        //     LastTimeRead = 0;
+        //     ClearText();
+        //     return;
+        // }
 
         if (InStrng(CH1NAME, TextIn) > 0) {
             p = InStrng(CH1NAME, TextIn);
@@ -4319,13 +3860,6 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(GoSetupView, TextIn) > 0) {
-            CurrentView = TXSETUPVIEW;
-            SendCommand(pTXSetupView);
-            UpdateModelsNameEveryWhere();
-            ClearText();
-            return;
-        }
 
         if (InStrng(ColoursView, TextIn) > 0) {
             CurrentView = COLOURS_VIEW;
