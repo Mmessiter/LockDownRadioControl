@@ -126,7 +126,7 @@ $(document).ready(function(){initNavTree('ReceiverCode_2src_2main_8cpp_source.ht
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>{</div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    uint32_t tt = millis();</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    <span class="keywordflow">while</span> (millis() - tt &lt; ms) {</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="preprocessor">#ifdef DOSTABILISATION</span></div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span><span class="preprocessor">#ifdef DO_STABILISATION_TOCKN</span></div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>      <span class="keywordflow">if</span> (<a class="code hl_variable" href="common_8h.html#ae1b4d7a19b953a18531ad4ac365f81a4">MPU6050Connected</a>) <a class="code hl_function" href="common_8h.html#a48050e81ef4521304a2dbeaf99e1a331">DoStabilsation</a>();</div>
 <div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    }</div>
@@ -582,7 +582,7 @@ $(document).ready(function(){initNavTree('ReceiverCode_2src_2main_8cpp_source.ht
 <div class="line"><a id="l00484" name="l00484"></a><span class="lineno">  484</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00485" name="l00485"></a><span class="lineno">  485</span>            }</div>
 <div class="line"><a id="l00486" name="l00486"></a><span class="lineno">  486</span> </div>
-<div class="line"><a id="l00487" name="l00487"></a><span class="lineno">  487</span><span class="preprocessor">#ifdef DOSTABILISATION       </span></div>
+<div class="line"><a id="l00487" name="l00487"></a><span class="lineno">  487</span><span class="preprocessor">#ifdef DO_STABILISATION_TOCKN       </span></div>
 <div class="line"><a id="l00488" name="l00488"></a><span class="lineno">  488</span>            <span class="keywordflow">if</span> (i == 0x68) {</div>
 <div class="line"><a id="l00489" name="l00489"></a><span class="lineno">  489</span>                <a class="code hl_variable" href="common_8h.html#ae1b4d7a19b953a18531ad4ac365f81a4">MPU6050Connected</a> = <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00490" name="l00490"></a><span class="lineno">  490</span><span class="preprocessor">    #ifdef DB_SENSORS</span></div>
@@ -590,7 +590,7 @@ $(document).ready(function(){initNavTree('ReceiverCode_2src_2main_8cpp_source.ht
 <div class="line"><a id="l00492" name="l00492"></a><span class="lineno">  492</span>                Serial.println(<span class="stringliteral">&quot;MPU 6050 detected&quot;</span>);  </div>
 <div class="line"><a id="l00493" name="l00493"></a><span class="lineno">  493</span><span class="preprocessor">    #endif </span><span class="comment">// DB_SENSORS</span></div>
 <div class="line"><a id="l00494" name="l00494"></a><span class="lineno">  494</span>            }</div>
-<div class="line"><a id="l00495" name="l00495"></a><span class="lineno">  495</span><span class="preprocessor">#endif </span><span class="comment">// DOSTABILISATION</span></div>
+<div class="line"><a id="l00495" name="l00495"></a><span class="lineno">  495</span><span class="preprocessor">#endif </span><span class="comment">// DO_STABILISATION_TOCKN</span></div>
 <div class="line"><a id="l00496" name="l00496"></a><span class="lineno">  496</span> </div>
 <div class="line"><a id="l00497" name="l00497"></a><span class="lineno">  497</span> </div>
 <div class="line"><a id="l00498" name="l00498"></a><span class="lineno">  498</span>        }</div>
@@ -718,7 +718,7 @@ $(document).ready(function(){initNavTree('ReceiverCode_2src_2main_8cpp_source.ht
 <div class="line"><a id="l00610" name="l00610"></a><span class="lineno">  610</span>    <a class="code hl_variable" href="common_8h.html#a25cc3bb5cb94f4bbef0f2c5b79140c20">ThisRadio</a> = 2;</div>
 <div class="line"><a id="l00611" name="l00611"></a><span class="lineno">  611</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00612" name="l00612"></a><span class="lineno">  612</span> </div>
-<div class="line"><a id="l00613" name="l00613"></a><span class="lineno">  613</span><span class="preprocessor">#ifdef DOSTABILISATION                                          </span><span class="comment">// only if MPU6050 is connected and working</span></div>
+<div class="line"><a id="l00613" name="l00613"></a><span class="lineno">  613</span><span class="preprocessor">#ifdef DO_STABILISATION_TOCKN                                          </span><span class="comment">// only if MPU6050 is connected and working</span></div>
 <div class="line"><a id="l00614" name="l00614"></a><span class="lineno">  614</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="common_8h.html#ae1b4d7a19b953a18531ad4ac365f81a4">MPU6050Connected</a>) {</div>
 <div class="line"><a id="l00615" name="l00615"></a><span class="lineno">  615</span>        <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#a7e41a2178d7943922a90e58da80ffa9d">mpu6050</a>.begin();</div>
 <div class="line"><a id="l00616" name="l00616"></a><span class="lineno">  616</span>        <span class="keywordflow">if</span> (<a class="code hl_variable" href="common_8h.html#ae962b6c6eb62846284f2ff4516407952">GyroOffsetsSet</a>){</div>
@@ -769,7 +769,7 @@ $(document).ready(function(){initNavTree('ReceiverCode_2src_2main_8cpp_source.ht
 <div class="foldopen" id="foldopen00658" data-start="{" data-end="}">
 <div class="line"><a id="l00658" name="l00658"></a><span class="lineno"><a class="line" href="ReceiverCode_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f">  658</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="Quadcopter_2src_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f">loop</a>()</div>
 <div class="line"><a id="l00659" name="l00659"></a><span class="lineno">  659</span>{</div>
-<div class="line"><a id="l00660" name="l00660"></a><span class="lineno">  660</span><span class="preprocessor">#ifdef DOSTABILISATION</span></div>
+<div class="line"><a id="l00660" name="l00660"></a><span class="lineno">  660</span><span class="preprocessor">#ifdef DO_STABILISATION_TOCKN</span></div>
 <div class="line"><a id="l00661" name="l00661"></a><span class="lineno">  661</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="common_8h.html#ae1b4d7a19b953a18531ad4ac365f81a4">MPU6050Connected</a>) <a class="code hl_function" href="common_8h.html#a48050e81ef4521304a2dbeaf99e1a331">DoStabilsation</a>();</div>
 <div class="line"><a id="l00662" name="l00662"></a><span class="lineno">  662</span><span class="preprocessor">#endif</span></div>
 <div class="line"><a id="l00663" name="l00663"></a><span class="lineno">  663</span>    <a class="code hl_function" href="ReceiverCode_2src_2main_8cpp.html#ada95a00a341e4a80176eda743a94ab2e">KickTheDog</a>();</div>
