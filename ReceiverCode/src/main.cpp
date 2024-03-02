@@ -65,7 +65,7 @@ void DelayMillis(uint16_t ms) // This replaces any delay() calls
 {
     uint32_t tt = millis();
     while (millis() - tt < ms) {
-#ifdef DOSTABILISATION
+#ifdef DO_STABILISATION_TOCKN
       if (MPU6050Connected) DoStabilsation();
 #endif
     }
@@ -484,7 +484,7 @@ FLASHMEM void ScanI2c()
 #endif
             }
 
-#ifdef DOSTABILISATION       
+#ifdef DO_STABILISATION_TOCKN       
             if (i == 0x68) {
                 MPU6050Connected = true;
     #ifdef DB_SENSORS
@@ -492,7 +492,7 @@ FLASHMEM void ScanI2c()
                 Serial.println("MPU 6050 detected");  
     #endif // DB_SENSORS
             }
-#endif // DOSTABILISATION
+#endif // DO_STABILISATION_TOCKN
 
 
         }
@@ -610,7 +610,7 @@ FLASHMEM void setup()
     ThisRadio = 2;
 #endif
 
-#ifdef DOSTABILISATION                                          // only if MPU6050 is connected and working
+#ifdef DO_STABILISATION_TOCKN                                          // only if MPU6050 is connected and working
     if (MPU6050Connected) {
         mpu6050.begin();
         if (GyroOffsetsSet){
@@ -657,7 +657,7 @@ void BlinkLed()
 
 void loop()
 {
-#ifdef DOSTABILISATION
+#ifdef DO_STABILISATION_TOCKN
     if (MPU6050Connected) DoStabilsation();
 #endif
     KickTheDog();

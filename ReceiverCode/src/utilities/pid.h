@@ -2,11 +2,11 @@
 #define _SRC_PID_H
 
 #include <Arduino.h>
-#include <MPU6050_tockn.h>
 #include "utilities/common.h"
 
 
-#ifdef DOSTABILISATION
+#ifdef DO_STABILISATION_TOCKN
+#include <MPU6050_tockn.h>
  
 // *****************************************************************************************************************
 
@@ -109,7 +109,7 @@ void DoStabilsation(){  // This is called from the main loop and from all DelayM
 //    return;
 //}
 
-#endif // DOSTABILISATION
+#endif // DO_STABILISATION_TOCKN
 
 #endif // _SRC_PID_H
 
