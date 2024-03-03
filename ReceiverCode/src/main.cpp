@@ -50,7 +50,11 @@
 #include <stdint.h>
 #include <EEPROM.h>
 #include <Wire.h>
+
+#ifdef USE_SERVO_LIBRARY
 #include <Servo.h>
+#endif
+
 #include <SBUS.h>
 #include <PulsePosition.h>
 #include <Watchdog_t4.h>
@@ -114,7 +118,7 @@ bool CheckCrazyValues()
     return true;
 }
 /************************************************************************************************************/
-
+ #ifdef USE_SERVO_LIBRARY
 void MoveServos()
 {
     if (!CheckCrazyValues()) {
@@ -143,6 +147,15 @@ void MoveServos()
     }
 }
 
+#else
+
+void MoveServos(){
+
+    
+}
+
+#endif
+
 /************************************************************************************************************/
 
 /** Execute FailSafe data from EEPROM. */
@@ -153,7 +166,9 @@ void FailSafe()
         LoadFailSafeData();
         Connected = true; // to force sending this data!
         MapToSBUS();
+#ifdef USE_SERVO_LIBRARY
         MoveServos();
+#endif
         Connected = false; // I lied earlier - we're not really connected.
     }
     FailSafeSent = true; // Once is enough
@@ -165,12 +180,15 @@ void FailSafe()
 /************************************************************************************************************/
 void AttachServos()
 {
+
+#ifdef USE_SERVO_LIBRARY
     if (!ServosAttached) {
         for (uint8_t i = 0; i < SERVOSUSED; ++i) {
             MCMServo[i].attach(PWMPins[i]);
         }
         ServosAttached = true;
     }
+#endif
     if (UseSBUS) {
         MySbus.begin(); // AND START SBUS
     }
@@ -664,9 +682,12 @@ void loop()
     ReceiveData();
     if (Blinking) BlinkLed();
     if (BoundFlag && Connected && ModelMatched) { // Only move servos if everything is good
+        
         if (millis() - SBUSTimer >= SBUSRATE) {   // SBUSRATE rate is also good enough for servo rate
             SBUSTimer = millis();                 // timer starts before send starts....
+#ifdef USE_SERVO_LIBRARY
             MoveServos();                         // Actually do something useful at last
+#endif
         }
     }
     else {
