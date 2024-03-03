@@ -16,7 +16,8 @@ var searchData=
   ['endspeedsscreen_13',['EndSpeedsScreen',['../TransmitterCode_2src_2main_8cpp.html#ade5ca67db519e3671105fcd86d20f9a8',1,'main.cpp']]],
   ['endsubtrimview_14',['EndSubTrimView',['../Trims_8h.html#a40003084a0136ca08cf8ded75ff4aa4d',1,'Trims.h']]],
   ['endtrimview_15',['EndTrimView',['../1Definitions_8h.html#a4a3b3a5edf41e8d1ce82c15077d0e1b0',1,'1Definitions.h']]],
-  ['executemacro_16',['executemacro',['../1Definitions_8h.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;macros.h'],['../macros_8h.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;macros.h']]],
-  ['exitmacrosview_17',['ExitMacrosView',['../MenuOptions_8h.html#a488388f6430a0fc7bec57074ba750a2d',1,'MenuOptions.h']]],
-  ['exponentialinterpolation_18',['ExponentialInterpolation',['../TransmitterCode_2src_2main_8cpp.html#ab309da1bf9c1b4a4b7763d8968d7f83e',1,'main.cpp']]]
+  ['endwifiscan_16',['EndWifiScan',['../MenuOptions_8h.html#a62e133c280135dbfe30b6c874968064c',1,'MenuOptions.h']]],
+  ['executemacro_17',['executemacro',['../1Definitions_8h.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;macros.h'],['../macros_8h.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;macros.h']]],
+  ['exitmacrosview_18',['ExitMacrosView',['../MenuOptions_8h.html#a488388f6430a0fc7bec57074ba750a2d',1,'MenuOptions.h']]],
+  ['exponentialinterpolation_19',['ExponentialInterpolation',['../TransmitterCode_2src_2main_8cpp.html#ab309da1bf9c1b4a4b7763d8968d7f83e',1,'main.cpp']]]
 ];
