@@ -255,6 +255,38 @@ void ExitMacrosView()
     UpdateModelsNameEveryWhere();
 }
 
+/*********************************************************************************************************************************/
+void EndWifiScan()
+{
+            CurrentView = TXSETUPVIEW;
+            SendCommand(pTXSetupView);
+            LastTimeRead = 0;
+            DoScanEnd();
+            UpdateModelsNameEveryWhere();
+            ClearText();
+}
+/*********************************************************************************************************************************/
+
+void StartWifiScan(){
+            char prompt[] = "Model still connected! Continue?";
+            if (ModelMatched && BoundFlag) {
+                if (!GetConfirmation(pTXSetupView, prompt)) return;
+            }
+            if (PPMdata.UseTXModule) {
+                InitRadio(DefaultPipe); // because scan fails if radio isn't initialised
+                ConfigureRadio();  
+            }
+            SendCommand(pFhssView);
+            DrawFhssBox();
+            DoScanInit();
+            CurrentMode = SCANWAVEBAND;
+            CurrentView = SCANVIEW;
+            BlueLedOn();         
+            ClearText();
+}
+
+
+
 /***************************************************** Populate Macros View ****************************************************************************/
 
 void PopulateMacrosView()
@@ -299,7 +331,10 @@ void GotoMacrosView()
 /******************************************************************************************************************************/
 void GotoModelsView()
 {
-   
+    char prompt[] = "Model still connected! Continue?";
+    if (ModelMatched && BoundFlag) {
+        if (!GetConfirmation(pRXSetupView, prompt)) return;
+    }
     SaveCurrentModel();
     SendCommand(pModelsView);
     CurrentView = MODELSVIEW;

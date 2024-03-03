@@ -2972,7 +2972,7 @@ void SelectChannelOrder()
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!
-#define LASTFUNCTION1 8 // One more than final one
+#define LASTFUNCTION1 10 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])() {
         Blank,                        // 0 Cannot be used
@@ -2982,7 +2982,9 @@ void (*NumberedFunctions1[LASTFUNCTION1])() {
         StartTXSetupView,             // 4
         InputsViewEnd,                // 5 
         SystemPage1End,               // 6
-        SystemPage1Start              // 7  
+        SystemPage1Start,             // 7  
+        StartWifiScan,                // 8
+        EndWifiScan                   // 9   
 };
 
  // This list migth become MUCH longer as it limit is 24 bits big
@@ -3148,7 +3150,6 @@ FASTRUN void ButtonWasPressed()
         char Sticks_View[]             = "SticksView";
         char Graph_View[]              = "GraphView";
         char SetupView[]               = "MainSetup";
-        char Scan_End[]                = "ScanEnd";
         char DataEnd[]                 = "DataEnd";
         char Data_View[]               = "DataView";
         char CalibrateView[]           = "CalibrateView";
@@ -3156,7 +3157,6 @@ FASTRUN void ButtonWasPressed()
         char TRIMS50[]                 = "TRIMS50";
         char MIXES_VIEW[]              = "MIXESVIEW"; // first call
         char Mixes_View[]              = "MixesView";
-        char Fhss_View[]               = "FhssView";
         char FM1[]                     = "FM 1";
         char FM2[]                     = "FM 2";
         char FM3[]                     = "FM 3";
@@ -3339,16 +3339,6 @@ FASTRUN void ButtonWasPressed()
             }
             GPSMaxaltitude     = 0;
             RXMAXModelAltitude = 0;
-            ClearText();
-            return;
-        }
-
-        if (InStrng(Scan_End, TextIn) > 0) { //  goto setup screen from Scan screen
-            CurrentView = TXSETUPVIEW;
-            SendCommand(pTXSetupView);
-            LastTimeRead = 0;
-            DoScanEnd();
-            UpdateModelsNameEveryWhere();
             ClearText();
             return;
         }
@@ -3902,20 +3892,6 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(Fhss_View, TextIn)) {
-            if (PPMdata.UseTXModule) {
-                InitRadio(DefaultPipe); // because scan fails if radio isn't initialised
-                ConfigureRadio();  
-            }
-            SendCommand(pFhssView);
-            DrawFhssBox();
-            DoScanInit();
-            CurrentMode = SCANWAVEBAND;
-            CurrentView = SCANVIEW;
-            BlueLedOn();         
-            ClearText();
-            return;
-        }
 
         if (InStrng(ReScan, TextIn))
         {
