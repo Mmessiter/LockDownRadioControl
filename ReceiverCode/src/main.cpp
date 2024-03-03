@@ -151,6 +151,38 @@ void MoveServos()
 
 void MoveServos(){
 
+ //   PWMPins[SERVOSUSED]
+
+if (!CheckCrazyValues()) {
+        TurnLedOff();
+        return;
+    }
+    else {
+        TurnLedOn();
+    }
+
+    if (UseSBUS)
+    {
+        MySbus.write(SbusChannels); // Send SBUS data
+    }
+    else
+    { // not SBUS = PPM
+        for (int j = 0; j < PPMChannelCount; ++j) {
+            PPMOutput.write(PPMChannelOrder[j], map(ReceivedData[j], MINMICROS, MAXMICROS, 1000, 2000));
+        }
+    }
+    for (int j = 0; j < SERVOSUSED; ++j) {
+        if (PreviousData[j] != ReceivedData[j]) { // if same as last time, don't send again.
+          
+          analogWrite(PWMPins[j], map(ReceivedData[j], MINMICROS, MAXMICROS, 0, 255));
+          if (!j) Look(map(ReceivedData[j], MINMICROS, MAXMICROS, 0, 255));
+          PreviousData[j] = ReceivedData[j];
+        }
+    }
+
+
+
+
     
 }
 
@@ -166,9 +198,9 @@ void FailSafe()
         LoadFailSafeData();
         Connected = true; // to force sending this data!
         MapToSBUS();
-#ifdef USE_SERVO_LIBRARY
+
         MoveServos();
-#endif
+
         Connected = false; // I lied earlier - we're not really connected.
     }
     FailSafeSent = true; // Once is enough
@@ -685,9 +717,9 @@ void loop()
         
         if (millis() - SBUSTimer >= SBUSRATE) {   // SBUSRATE rate is also good enough for servo rate
             SBUSTimer = millis();                 // timer starts before send starts....
-#ifdef USE_SERVO_LIBRARY
+
             MoveServos();                         // Actually do something useful at last
-#endif
+
         }
     }
     else {
