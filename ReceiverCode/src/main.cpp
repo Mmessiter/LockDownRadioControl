@@ -144,6 +144,7 @@ void MoveServos()
             MCMServo[j].writeMicroseconds(ReceivedData[j]);
 #else
             analogWrite(PWMPins[j], ReceivedData[j]+SERVO_CONSTANT);
+          //  analogWrite(PWMPins[j],map(ReceivedData[j],MINMICROS,MAXMICROS,0,4095));
 #endif
             PreviousData[j] = ReceivedData[j];
         }
