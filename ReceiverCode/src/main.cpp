@@ -118,7 +118,6 @@ bool CheckCrazyValues()
     return true;
 }
 /************************************************************************************************************/
- #ifdef USE_SERVO_LIBRARY
 void MoveServos()
 {
     if (!CheckCrazyValues()) {
@@ -141,52 +140,15 @@ void MoveServos()
     }
     for (int j = 0; j < SERVOSUSED; ++j) {
         if (PreviousData[j] != ReceivedData[j]) { // if same as last time, don't send again.
+#ifdef USE_SERVO_LIBRARY
             MCMServo[j].writeMicroseconds(ReceivedData[j]);
+#else
+            analogWrite(PWMPins[j], ReceivedData[j]+SERVO_CONSTANT);
+#endif
             PreviousData[j] = ReceivedData[j];
         }
     }
 }
-
-#else
-
-void MoveServos(){
-
- //   PWMPins[SERVOSUSED]
-
-if (!CheckCrazyValues()) {
-        TurnLedOff();
-        return;
-    }
-    else {
-        TurnLedOn();
-    }
-
-    if (UseSBUS)
-    {
-        MySbus.write(SbusChannels); // Send SBUS data
-    }
-    else
-    { // not SBUS = PPM
-        for (int j = 0; j < PPMChannelCount; ++j) {
-            PPMOutput.write(PPMChannelOrder[j], map(ReceivedData[j], MINMICROS, MAXMICROS, 1000, 2000));
-        }
-    }
-    for (int j = 0; j < SERVOSUSED; ++j) {
-        if (PreviousData[j] != ReceivedData[j]) { // if same as last time, don't send again.
-          
-          analogWrite(PWMPins[j], map(ReceivedData[j], MINMICROS, MAXMICROS, 0, 255));
-          if (!j) Look(map(ReceivedData[j], MINMICROS, MAXMICROS, 0, 255));
-          PreviousData[j] = ReceivedData[j];
-        }
-    }
-
-
-
-
-    
-}
-
-#endif
 
 /************************************************************************************************************/
 
@@ -220,7 +182,15 @@ void AttachServos()
         }
         ServosAttached = true;
     }
+#else
+    analogWriteResolution(SERVO_RESOLUTION);
+    for (uint8_t i = 0; i < SERVOSUSED; ++i) {
+            analogWriteFrequency(PWMPins[i], SERVO_FREQUENCY); // ?Hz
+        }
 #endif
+
+
+
     if (UseSBUS) {
         MySbus.begin(); // AND START SBUS
     }

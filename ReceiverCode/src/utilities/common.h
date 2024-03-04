@@ -30,9 +30,17 @@
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-   #define SECOND_TRANSCEIVER       1
-// #define DO_STABILISATION_TOCKN   1 
-   #define USE_SERVO_LIBRARY        1
+        #define SECOND_TRANSCEIVER          1
+    // #define DO_STABILISATION_TOCKN       1 
+       #define USE_SERVO_LIBRARY            1
+        
+        #define SERVO_FREQUENCY          50     // 50 Hz
+        #define SERVO_RESOLUTION         14     // 14 bits
+        #define SERVO_CONSTANT           -265   // fixes centre error?! 
+
+
+
+
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 
