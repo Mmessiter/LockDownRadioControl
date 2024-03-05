@@ -131,8 +131,8 @@ bool CheckCrazyValues()
 // }
 
 // Optimised version of the above function
-int GetPWMValue(int resolution, int frequency, int length) {
-    return (int)(((float)length / (1000000.0 / frequency)) * resolution);
+int GetPWMValue(int frequency, int length) {
+    return ((float)length / (1000000.0 / frequency)) * SERVO_RESOLUTION;
 }
 
 /************************************************************************************************************/
@@ -161,7 +161,7 @@ void MoveServos()
 #ifdef USE_SERVO_LIBRARY
             MCMServo[j].writeMicroseconds(ReceivedData[j]);
 #else
-            analogWrite(PWMPins[j],GetPWMValue(SERVO_RESOLUTION, SERVO_FREQUENCY, ReceivedData[j]));
+            analogWrite(PWMPins[j],GetPWMValue(SERVO_FREQUENCY, ReceivedData[j]));
 #endif
             PreviousData[j] = ReceivedData[j];
         }

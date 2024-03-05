@@ -31,8 +31,8 @@
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
         #define SECOND_TRANSCEIVER          1
-    //  #define DO_STABILISATION_TOCKN       1 
-    //    #define USE_SERVO_LIBRARY            1
+    //  #define DO_STABILISATION_TOCKN      1 
+    //  #define USE_SERVO_LIBRARY           1
         
         #define SERVO_FREQUENCY          50      //  Hz
         #define SERVO_RES_BITS           12
