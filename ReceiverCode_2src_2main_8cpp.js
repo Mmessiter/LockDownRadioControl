@@ -9,6 +9,7 @@ var ReceiverCode_2src_2main_8cpp =
     [ "CheckCrazyValues", "ReceiverCode_2src_2main_8cpp.html#ae5188cdc179ab32d9a36de911e3a2d45", null ],
     [ "DelayMillis", "ReceiverCode_2src_2main_8cpp.html#a9692998537a18fea0930c692647e25ad", null ],
     [ "FailSafe", "ReceiverCode_2src_2main_8cpp.html#a42318598726782ebb2e1857f167c8cda", null ],
+    [ "GetPWMValue", "ReceiverCode_2src_2main_8cpp.html#a3b50a7cdd1c08a1eac2d9c159b92e941", null ],
     [ "KickTheDog", "ReceiverCode_2src_2main_8cpp.html#ada95a00a341e4a80176eda743a94ab2e", null ],
     [ "LoadFailSafeData", "ReceiverCode_2src_2main_8cpp.html#a7b232e8049c83655363495df07fc96d9", null ],
     [ "Look", "ReceiverCode_2src_2main_8cpp.html#a6d87eba17154f7f4f2f3802ef8ee261f", null ],
