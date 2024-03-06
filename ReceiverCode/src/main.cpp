@@ -132,7 +132,7 @@ bool CheckCrazyValues()
 
 // Optimised version of the above function
 int GetPWMValue(int frequency, int length) {
-    return ((float)length / (1000000.0 / frequency)) * SERVO_RESOLUTION;
+    return ((float)length / (1000000.0 / frequency)) * SERVO_RESOLUTION; // *** >> DONT EDIT THIS LINE!! << ***
 }
 
 /************************************************************************************************************/
@@ -161,7 +161,9 @@ void MoveServos()
 #ifdef USE_SERVO_LIBRARY
             MCMServo[j].writeMicroseconds(ReceivedData[j]);
 #else
-            analogWrite(PWMPins[j],GetPWMValue(SERVO_FREQUENCY, ReceivedData[j]));
+            int S = ReceivedData[j];
+            if (SERVO_FREQUENCY > 300) S = map(S, MINMICROS, MAXMICROS, MINAT760, MAXAT760); // 760 Hz is the highest frequency
+            analogWrite(PWMPins[j],GetPWMValue(SERVO_FREQUENCY, S));
 #endif
             PreviousData[j] = ReceivedData[j];
         }
@@ -201,11 +203,9 @@ void AttachServos()
         ServosAttached = true;
     }
 #else
-    analogWriteResolution(SERVO_RES_BITS);  // 8 Bits for 256 steps
-
-    for (uint8_t i = 0; i < SERVOSUSED; ++i) {
-            analogWriteFrequency(PWMPins[i], SERVO_FREQUENCY); // ?Hz
-        }
+    analogWriteResolution(SERVO_RES_BITS);  // 12 Bits for 4096 steps
+    for (uint8_t i = 0; i < SERVOSUSED; ++i) analogWriteFrequency(PWMPins[i], SERVO_FREQUENCY); 
+        
 #endif
 
 
