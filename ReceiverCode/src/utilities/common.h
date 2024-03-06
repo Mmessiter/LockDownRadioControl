@@ -39,10 +39,10 @@
         #define SERVO_RESOLUTION         4096    
 
 
-        #define MINMICROS   500       // normal servos
+        #define MINMICROS   500             // normal servos
         #define MAXMICROS   2500
 
-        #define EXTRAAT760  700      // high frequency servos
+        #define EXTRAAT760  350             // high frequency servos
         #define MAXAT760    760 + EXTRAAT760
         #define MINAT760    760 - EXTRAAT760
        
@@ -209,8 +209,13 @@ void Look1(const any& value);
 
 Adafruit_INA219     ina219;
 bool                SensorHubConnected = false; //  GPS (Adafruit Ultimate GPS) ?
+
+#ifdef USE_SERVO_LIBRARY    
 Servo               MCMServo[SERVOSUSED];
-uint8_t             PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 9 PWMs, remaining 7 via sbus
+#endif
+
+//                               Channels: 1  2 [3][4] 5  6  7  8  9 ... [10][11] (Channels 3,4 & 10,11 must have same frquency)
+uint8_t             PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 22  23  remaining via sbus
 SBUS                MySbus(SBUSPORT);                                  // SBUS
 PulsePositionOutput PPMOutput;                                         // PPM
 
