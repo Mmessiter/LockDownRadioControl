@@ -331,7 +331,7 @@ bool ReadOneModel(uint32_t Mnum)
     ServoFrequency = SDRead16BITS(SDCardAddress);
     ++SDCardAddress;
     ++SDCardAddress;
-    if (ServoCentrePulse > 1000 && ServoCentrePulse < 2000) ServoCentrePulse = 1500;
+    if (ServoCentrePulse > 1000 ) ServoCentrePulse = 1500;
     if (ServoCentrePulse < 1000) ServoCentrePulse = 760;
     ServoFrequency = CheckRange(ServoFrequency, 50, 900);
    
@@ -1100,7 +1100,7 @@ void SaveOneModel(uint32_t mnum)
         ++SDCardAddress;
     }
 
-    if (ServoCentrePulse > 1000 && ServoCentrePulse < 2000) ServoCentrePulse = 1500;
+    if (ServoCentrePulse > 1000) ServoCentrePulse = 1500;
     if (ServoCentrePulse < 1000) ServoCentrePulse = 760;
     ServoFrequency = CheckRange(ServoFrequency, 50, 900);
     SDUpdate16BITS(SDCardAddress, ServoCentrePulse);
