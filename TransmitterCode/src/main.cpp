@@ -1583,6 +1583,10 @@ void SetDefaultValues()
    }
 
     TrimMultiplier = 5;
+
+    ServoFrequency = 100;
+    ServoCentrePulse = 1500;
+
     ModelDefined = 42;
 }
 

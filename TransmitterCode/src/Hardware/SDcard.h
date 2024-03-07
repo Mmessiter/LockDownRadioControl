@@ -114,6 +114,16 @@ void CheckBanksInUse()
         if (BanksInUse[i] > 23) BanksInUse[i] = i;
     }
 }
+/*********************************************************************************************************************************/
+
+void CheckServoType(){
+
+    if (ServoCentrePulse > 1000 ) ServoCentrePulse = 1500;
+    if (ServoCentrePulse < 1000) ServoCentrePulse = 760;
+    if ((ServoFrequency > 1000) || (ServoFrequency < 50)) ServoFrequency = 50;
+    ServoFrequency = CheckRange(ServoFrequency, 50, 900);
+   
+}
 
 /************************************************************************************************************************************************/
 /**********************************  READ A MODEL ***********************************************************************************************/
@@ -331,10 +341,7 @@ bool ReadOneModel(uint32_t Mnum)
     ServoFrequency = SDRead16BITS(SDCardAddress);
     ++SDCardAddress;
     ++SDCardAddress;
-    if (ServoCentrePulse > 1000 ) ServoCentrePulse = 1500;
-    if (ServoCentrePulse < 1000) ServoCentrePulse = 760;
-    ServoFrequency = CheckRange(ServoFrequency, 50, 900);
-   
+    CheckServoType();
     TimerDownwards = (bool)SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     TimerStartTime = SDRead16BITS(SDCardAddress);
@@ -1099,10 +1106,7 @@ void SaveOneModel(uint32_t mnum)
       // 12 Spare bytes was 16
         ++SDCardAddress;
     }
-
-    if (ServoCentrePulse > 1000) ServoCentrePulse = 1500;
-    if (ServoCentrePulse < 1000) ServoCentrePulse = 760;
-    ServoFrequency = CheckRange(ServoFrequency, 50, 900);
+    CheckServoType();
     SDUpdate16BITS(SDCardAddress, ServoCentrePulse);
     ++SDCardAddress;
     ++SDCardAddress;
