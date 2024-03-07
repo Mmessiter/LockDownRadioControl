@@ -7,7 +7,6 @@
 #include <RF24.h>
 #include <PulsePosition.h>
 #include <Adafruit_INA219.h>
-#include <Servo.h>
 #include <MPU6050_tockn.h>
 
 #define RXVERSION_MAJOR   2
@@ -32,16 +31,14 @@
 
         #define SECOND_TRANSCEIVER          1
     //  #define DO_STABILISATION_TOCKN      1 
-    //  #define USE_SERVO_LIBRARY           1
-        
+
         #define SERVO_FREQUENCY          50      //  Hz
         #define SERVO_RES_BITS           12
         #define SERVO_RESOLUTION         4096    
 
-
         #define MINMICROS   500             // normal servos
         #define MAXMICROS   2500
-
+        
         #define EXTRAAT760  350             // high frequency servos
         #define MAXAT760    760 + EXTRAAT760
         #define MINAT760    760 - EXTRAAT760
@@ -209,18 +206,12 @@ void Look1(const any& value);
 
 Adafruit_INA219     ina219;
 bool                SensorHubConnected = false; //  GPS (Adafruit Ultimate GPS) ?
-
-#ifdef USE_SERVO_LIBRARY    
-Servo               MCMServo[SERVOSUSED];
-#endif
-
 //                               Channels: 1  2 [3][4] 5  6  7  8  9 ... [10][11] (Channels 3,4 & 10,11 must have same frquency)
 uint8_t             PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 22  23  remaining via sbus
 SBUS                MySbus(SBUSPORT);                                  // SBUS
 PulsePositionOutput PPMOutput;                                         // PPM
 
 bool          BoundFlag      = false; /** indicates if receiver paired with transmitter */
-bool          ServosAttached = false;
 uint16_t      SbusChannels[CHANNELSUSED + 1]; // Just one spare
 uint32_t      SBUSTimer = 0;
 bool          FailSafeChannel[17];
