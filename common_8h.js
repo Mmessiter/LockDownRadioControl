@@ -177,7 +177,6 @@ var common_8h =
     [ "SensorHubConnected", "common_8h.html#af5ed7b5350f1500e976e56af6f24efb0", null ],
     [ "SensorHubDead", "common_8h.html#a659690e0af000763b022ee0a915a162b", null ],
     [ "SensorTime", "common_8h.html#a1e9e8116136abd96cf87d7f0fd20a3d8", null ],
-    [ "ServosAttached", "common_8h.html#a95b22fb572f7a91a89a431c7f1236575", null ],
     [ "SizeOfDataReceived", "common_8h.html#ab47a51a2951eb285884ced3eebfe8328", null ],
     [ "SizeOfParameters", "common_8h.html#a311fa84226f57f796ac3f05e6a8ed8f1", null ],
     [ "SpeedGPS", "common_8h.html#af02319a1e0d8c0c651f23e49acc228f8", null ],
