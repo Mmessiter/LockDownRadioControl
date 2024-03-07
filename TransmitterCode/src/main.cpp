@@ -4287,6 +4287,10 @@ void GetBank()   // ... and the other three switches
     Channel11SwitchValue = CheckSwitch(Channel11Switch);
     Channel12SwitchValue = CheckSwitch(Channel12Switch);
     if (Bank != PreviousBank) {
+        if ((CurrentView == FRONTVIEW) || (CurrentView == TRIM_VIEW)){
+            for (int pp = 0;pp < 4; ++pp) LastTrim[Bank][pp] = 0; // force a trimview update
+            UpdateTrimView();
+        }
         if (UseLog) LogNewBank();
         if (MotorEnabled == MotorWasEnabled) { // When turning off motor, don't sound bank too.
             if (AnnounceBanks) SoundBank();
