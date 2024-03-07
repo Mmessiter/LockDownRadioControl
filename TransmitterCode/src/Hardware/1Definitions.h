@@ -948,6 +948,10 @@ bool      LogFileOpen             = false;
 bool      ShowVPC                 = false;
 short int TxVoltageCorrection     = 0;
 short int RxVoltageCorrection     = 0;
+
+uint16_t  ServoCentrePulse        = 1500;
+uint16_t  ServoFrequency          = 100;
+
 uint8_t   LEDBrightness           = DEFAULTLEDBRIGHTNESS; // needs only 8 bits really
 uint8_t   PowerOffWarningSeconds  = 2;
 uint8_t   ConnectionAssessSeconds = 1;

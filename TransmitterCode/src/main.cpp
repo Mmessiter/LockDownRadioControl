@@ -2353,6 +2353,8 @@ void RXOptionsViewStart() // model options screen
     char r0[] = "r0"; // SBUS on
     char r1[] = "r1"; // PPM on
     char n5[] = "n5"; // PPMChannelCount
+    char n6[] = "n6"; // Servo Frequency
+    char n7[] = "n7"; // Servo Centre Pulse
 
     SendCommand(pRXSetup1);
     SendValue(c1, CopyTrimsToAll);
@@ -2368,13 +2370,15 @@ void RXOptionsViewStart() // model options screen
     SendValue(r0, PPMdata.UseSBUSFromRX);
     SendValue(r1, !PPMdata.UseSBUSFromRX);
     SendValue(n5, PPMdata.PPMChannelCount);
+    SendValue(n6, ServoFrequency);
+    SendValue(n7, ServoCentrePulse);
     CurrentView = RXSETUPVIEW1;
     UpdateModelsNameEveryWhere();
 }
 
 /******************************************************************************************************************************/
 
-void RXSetup1End()
+void RXOptionsViewEnd()
 {
     char UseKill[]  = "c0";
     char Mchannel[] = "n1";
@@ -2388,6 +2392,9 @@ void RXSetup1End()
     char c2[]               = "c2"; // TimerDownwards timer on off
     char r0[]               = "r0"; // SBUS on
     char n5[]               = "n5"; // PPMChannelCount
+    char n6[]               = "n6"; // Servo Frequency
+    char n7[]               = "n7"; // Servo Centre Pulse
+
     char ProgressStart[]    = "vis Progress,1";
     char Progress[]         = "Progress";
 
@@ -2413,8 +2420,12 @@ void RXSetup1End()
     TimerStartTime = GetValue(n4) * 60;
     SendValue(Progress, 80);
     PPMdata.UseSBUSFromRX = GetValue(r0);
-    SendValue(Progress, 90);
+    SendValue(Progress, 85);
     PPMdata.PPMChannelCount = GetValue(n5);
+    SendValue(Progress, 90);
+    ServoFrequency = GetValue(n6);
+    SendValue(Progress, 95);
+    ServoCentrePulse = GetValue(n7);
     SendValue(Progress, 100);
     CurrentView = RXSETUPVIEW;
     SaveOneModel(ModelNumber);
@@ -3035,7 +3046,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     ThrottleDownTrim,         // 36
     ThrottleUpTrim,           // 37
     RXOptionsViewStart,       // 38
-    RXSetup1End,              // 39
+    RXOptionsViewEnd,              // 39
     ResetTransmitterSettings, // 40
     BindNow,                  // 41 Not CALLED FrOM Here now
     PointUp,                  // 42

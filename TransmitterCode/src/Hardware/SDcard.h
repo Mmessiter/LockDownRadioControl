@@ -321,12 +321,19 @@ bool ReadOneModel(uint32_t Mnum)
     }
     CheckBanksInUse();
    
-    for (i = 0; i < 16; ++i) {
-      // 16 Spare bytes
+    for (i = 0; i < 12; ++i) {
+      // 12 Spare bytes was 16
         ++SDCardAddress;
     }
-   
-   
+    ServoCentrePulse = SDRead16BITS(SDCardAddress);
+    ++SDCardAddress;
+    ++SDCardAddress;
+    ServoFrequency = SDRead16BITS(SDCardAddress);
+    ++SDCardAddress;
+    ++SDCardAddress;
+    if (ServoCentrePulse > 1000 && ServoCentrePulse < 2000) ServoCentrePulse = 1500;
+    if (ServoCentrePulse < 1000) ServoCentrePulse = 760;
+    ServoFrequency = CheckRange(ServoFrequency, 50, 900);
    
     TimerDownwards = (bool)SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
@@ -1087,24 +1094,31 @@ void SaveOneModel(uint32_t mnum)
         SDUpdate8BITS(SDCardAddress, BanksInUse[i]);
         ++SDCardAddress;
     }
-    for (i = 0; i < 16; ++i) {
-       // 16 Spare bytes
+  
+    for (i = 0; i < 12; ++i) {
+      // 12 Spare bytes was 16
         ++SDCardAddress;
     }
 
+    if (ServoCentrePulse > 1000 && ServoCentrePulse < 2000) ServoCentrePulse = 1500;
+    if (ServoCentrePulse < 1000) ServoCentrePulse = 760;
+    ServoFrequency = CheckRange(ServoFrequency, 50, 900);
+    SDUpdate16BITS(SDCardAddress, ServoCentrePulse);
+    ++SDCardAddress;
+    ++SDCardAddress;
+    SDUpdate16BITS(SDCardAddress, ServoFrequency);
+    ++SDCardAddress;
+    ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, TimerDownwards);
     ++SDCardAddress;
     SDUpdate16BITS(SDCardAddress, TimerStartTime);
     ++SDCardAddress;
     ++SDCardAddress;
-
     SDUpdate8BITS(SDCardAddress, PPMdata.UseSBUSFromRX);
     ++SDCardAddress;
-
     SDUpdate16BITS(SDCardAddress, PPMdata.PPMChannelCount);
     ++SDCardAddress;
     ++SDCardAddress;
-
     for (i = 0; i < 16; ++i) {
         SDUpdate8BITS(SDCardAddress, ChannelOutPut[i]);
         ++SDCardAddress;
