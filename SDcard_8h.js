@@ -6,6 +6,7 @@ var SDcard_8h =
     [ "CheckFileExists", "SDcard_8h.html#a6913f10b439e4856898d699adb4ca373", null ],
     [ "CheckOutPutChannels", "SDcard_8h.html#a81f424711e329d4db746d65d6cbc7b1f", null ],
     [ "CheckServoSpeeds", "SDcard_8h.html#a9dbd6232a8aac676a6ce6db89d519df6", null ],
+    [ "CheckServoType", "SDcard_8h.html#ae4c8348152f80712fd75678f9025eb7f", null ],
     [ "CloseModelsFile", "SDcard_8h.html#a6922974b734cfe3a511e074a2d6ac33c", null ],
     [ "LoadAllParameters", "SDcard_8h.html#a909acb7ed667a5cc9c4ec6191fc33e75", null ],
     [ "OpenModelsFile", "SDcard_8h.html#ae7618f38a148877bc5681be58cba8354", null ],
