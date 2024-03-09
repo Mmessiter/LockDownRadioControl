@@ -37,12 +37,16 @@
         #define SERVO_RES_BITS           12
         #define SERVO_RESOLUTION         4096    
 
-        #define MINMICROS   500             // normal servos
-        #define MAXMICROS   2500
         
-        #define EXTRAAT760  350             // high frequency servos
-        #define MAXAT760    760 + EXTRAAT760
-        #define MINAT760    760 - EXTRAAT760
+        
+        
+        #define EXTRAAT1500  1000                          
+        #define MINMICROS    500            // normal servos
+        #define MAXMICROS    2500
+        
+        #define EXTRAAT760   350                        // high frequency servos
+        #define MAXAT760     760 + EXTRAAT760
+        #define MINAT760     760 - EXTRAAT760
 
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *

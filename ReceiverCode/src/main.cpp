@@ -144,7 +144,11 @@ void MoveServos()
     for (int j = 0; j < SERVOSUSED; ++j) {
         if (PreviousData[j] != ReceivedData[j]) { // if same as last time, don't send again.
             int S = ReceivedData[j];
-            if (ServoCentrePulse == 760) S = map(S, MINMICROS, MAXMICROS, MINAT760, MAXAT760); 
+            if (ServoCentrePulse < 1000) {
+                S = map(S, MINMICROS, MAXMICROS, ServoCentrePulse - EXTRAAT760, ServoCentrePulse + EXTRAAT760);   // these lines allow for the fact that some servos don't like 760 - 2240
+            }else{
+                S = map(S, MINMICROS, MAXMICROS, ServoCentrePulse - EXTRAAT1500, ServoCentrePulse + EXTRAAT1500);  // these lines allow for the fact that some servos don't like 760 - 2240
+            }
             analogWrite(PWMPins[j],GetPWMValue(ServoFrequency, S));
             PreviousData[j] = ReceivedData[j];
         }

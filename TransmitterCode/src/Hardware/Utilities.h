@@ -927,7 +927,7 @@ FASTRUN void ServoReverse()
 
 /************************************************************************************************************/
 void DelayWithDog(uint32_t HowLong)
-{                                                                       // Implements delay() and also kicks the dog (very cruelly) to keep it quiet.
+{                                                                       // Implements delay() and meanwhile keeps kicking the dog (very cruelly) to keep it quiet.
     uint32_t ThisMoment = millis();
     static bool AlreadyKicking = false;
     if (AlreadyKicking) return;                                         // Guard against recursive calls
@@ -1039,14 +1039,11 @@ bool GetBackupFilename(char* goback, char* tt1, char* MMname, char* heading, cha
     if (Confirmed[0] == 'Y') return true;
     return false;
 }
-
+/******************************************************************************************************************************/
 void SaveCurrentModel()
 {
     SavedModelNumber = ModelNumber;
 }
-
-
-
 
 /************************************************************************************************************/
 #endif 

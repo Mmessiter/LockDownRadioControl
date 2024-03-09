@@ -292,12 +292,12 @@ void SendExtraParamemters()                       // parameters must be loaded b
     RawDataBuffer[1]  = Parameters.word1;
     RawDataBuffer[2]  = Parameters.word2;
     
-    Look1("Parameter ID: ");
-    Look(Parameters.ID);
-    Look1("Word1: ");
-    Look(Parameters.word1);
-    Look1("Word2: ");
-    Look(Parameters.word2);
+    // Look1("Parameter ID: ");
+    // Look(Parameters.ID);
+    // Look1("Word1: ");
+    // Look(Parameters.word1);
+    // Look1("Word2: ");
+    // Look(Parameters.word2);
     
 }
 /************************************************************************************************************/
