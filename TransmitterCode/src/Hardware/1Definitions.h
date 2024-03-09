@@ -1026,7 +1026,7 @@ uint32_t BindingTimer        = 0;
 bool     BeQuiet             = false;
 bool     ReconnectingNow     = true;
 uint32_t LastHopTime         = 0;                                       //  Time of last hop
-uint8_t  ParametersToBeSent[40];
+uint8_t  ParametersToBeSent[80];
 uint8_t  ParametersToBeSentPointer  = 0;
 bool     UsingDefaultPipeAddress    = true;
 bool     DontChangePipeAddress      = false;

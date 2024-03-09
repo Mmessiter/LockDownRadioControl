@@ -2435,8 +2435,9 @@ void RXOptionsViewEnd()
     SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
     SendCommand(pRXSetupView);
-    AddParameterstoQueue(5);                // 5 is the ID for SBUS/PPM at RX selection and PPM channel count
-  
+    AddParameterstoQueue(5);               // 5 is the ID for SBUS/PPM at RX selection and PPM channel count
+    DelayWithDog(1000);
+    AddParameterstoQueue(4);               // 4 Send default servo frequency and centre pulse width
 }
 
 /******************************************************************************************************************************/
@@ -4578,16 +4579,18 @@ void CheckPowerOffButton()
 
 void AddParameterstoQueue(uint8_t ID)
 {
-    if (ParametersToBeSentPointer < 40){
+    if (ParametersToBeSentPointer < 78){
          ++ParametersToBeSentPointer;
         ParametersToBeSent[ParametersToBeSentPointer] = ID;
     }
+    AddExtraParameters = true;
 }
 /*********************************************************************************************************************************/
 
 void SendInitialSetupParams(){ 
    AddParameterstoQueue (5);            // Sbus / PPM at rx
    AddParameterstoQueue (2);            // QNH
+   AddParameterstoQueue (4);            // Send default servo frequency and centre pulse width
 }
 
 /************************************************************************************************************/

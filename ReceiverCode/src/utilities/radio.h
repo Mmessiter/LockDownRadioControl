@@ -42,10 +42,7 @@ void UseExtraParameters()
 {
     uint16_t TwoBytes = 0;
 
-     
     switch (Parameters.ID) {
-       //      case 0:
-       //      break;
         case 1:   // working!
             FS_byte1  = Parameters.word1;                               // These 2 bytes are 16 failsafe flags
             FS_byte2  = Parameters.word2;                               // These 2 bytes are 16 failsafe flags
@@ -65,7 +62,12 @@ void UseExtraParameters()
                 Parameters.word2 = 0; // ... Once only
             }
             break;
-        
+
+        case 4:
+            ServoCentrePulse    =   Parameters.word1;
+            ServoFrequency      =   Parameters.word2;
+            SetServoFrequency();
+            break;
         case 5:
             UseSBUS         = (bool)Parameters.word1; // if false means PPM
             PPMChannelCount = Parameters.word2;

@@ -144,10 +144,8 @@ void MoveServos()
     for (int j = 0; j < SERVOSUSED; ++j) {
         if (PreviousData[j] != ReceivedData[j]) { // if same as last time, don't send again.
             int S = ReceivedData[j];
-            if (SERVO_FREQUENCY > 300) S = map(S, MINMICROS, MAXMICROS, MINAT760, MAXAT760); 
-           
-            analogWrite(PWMPins[j],GetPWMValue(SERVO_FREQUENCY, S));
-           
+            if (ServoCentrePulse == 760) S = map(S, MINMICROS, MAXMICROS, MINAT760, MAXAT760); 
+            analogWrite(PWMPins[j],GetPWMValue(ServoFrequency, S));
             PreviousData[j] = ReceivedData[j];
         }
     }
@@ -172,13 +170,18 @@ void FailSafe()
     MacAddressSentCounter = 0;
 }
 
+
+/************************************************************************************************************/
+void SetServoFrequency()
+{
+     analogWriteResolution(SERVO_RES_BITS);  // 12 Bits for 4096 steps
+    for (uint8_t i = 0; i < SERVOSUSED; ++i) analogWriteFrequency(PWMPins[i], ServoFrequency);
+}
+
 /************************************************************************************************************/
 void AttachServos()
 {
-
-    analogWriteResolution(SERVO_RES_BITS);  // 12 Bits for 4096 steps
-    for (uint8_t i = 0; i < SERVOSUSED; ++i) analogWriteFrequency(PWMPins[i], SERVO_FREQUENCY); 
-    
+    SetServoFrequency();
     if (UseSBUS) {
         MySbus.begin(); // AND START SBUS
     }

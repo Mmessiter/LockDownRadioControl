@@ -32,7 +32,8 @@
         #define SECOND_TRANSCEIVER          1
     //  #define DO_STABILISATION_TOCKN      1 
 
-        #define SERVO_FREQUENCY          50      //  Hz
+// >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
         #define SERVO_RES_BITS           12
         #define SERVO_RESOLUTION         4096    
 
@@ -42,11 +43,6 @@
         #define EXTRAAT760  350             // high frequency servos
         #define MAXAT760    760 + EXTRAAT760
         #define MINAT760    760 - EXTRAAT760
-       
-
-
-// >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
 
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
@@ -166,6 +162,9 @@ uint8_t   FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 1
 uint8_t*  FHSSChPointer = FHSS_Channels; // Pointer for FHSS channels' array
 bool    PipeSeen        = false;
 
+uint16_t ServoCentrePulse =  1500;
+uint16_t ServoFrequency   = 50;
+
 /************************************************************************************************************/
 
 void HopToNextChannel();
@@ -196,7 +195,8 @@ void TurnLedOff();
 void TurnLedOn();
 void SaveFailSafeData();
 void LoadShortAckPayload();
-void  IncChannelNumber();
+void IncChannelNumber();
+void SetServoFrequency();
 
 template<typename any>
 void Look(const any& value);
