@@ -36,6 +36,7 @@ var searchData=
   ['exponentialinterpolation_33',['ExponentialInterpolation',['../TransmitterCode_2src_2main_8cpp.html#ab309da1bf9c1b4a4b7763d8968d7f83e',1,'main.cpp']]],
   ['exportedfilecounter_34',['ExportedFileCounter',['../1Definitions_8h.html#a1252681409ac5c9ed335a78f80633236',1,'1Definitions.h']]],
   ['ext_5fsens_5fdata_5f00_35',['EXT_SENS_DATA_00',['../classMPU9250.html#af3ff49b6a515f043ed76fc3f0088ccfe',1,'MPU9250']]],
-  ['extraat760_36',['EXTRAAT760',['../common_8h.html#afbf638b0d1bf0522ba6629495f826e96',1,'common.h']]],
-  ['extrapong_37',['EXTRAPONG',['../1Definitions_8h.html#a36f8bd51861e67da0f91c9d70340d665',1,'1Definitions.h']]]
+  ['extraat1500_36',['EXTRAAT1500',['../common_8h.html#aaf4096e786de4203cc22a49540323a2b',1,'common.h']]],
+  ['extraat760_37',['EXTRAAT760',['../common_8h.html#afbf638b0d1bf0522ba6629495f826e96',1,'common.h']]],
+  ['extrapong_38',['EXTRAPONG',['../1Definitions_8h.html#a36f8bd51861e67da0f91c9d70340d665',1,'1Definitions.h']]]
 ];

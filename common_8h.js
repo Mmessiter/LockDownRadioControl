@@ -12,6 +12,7 @@ var common_8h =
     [ "CSN_OFF", "common_8h.html#a834c4941fd9b037a25a8053912995e61", null ],
     [ "CSN_ON", "common_8h.html#ab22ef6e01ad09b637ca55f3fcd3cae94", null ],
     [ "DATARATE", "common_8h.html#a6e3511acbf8184c2b874c1175f86f7fd", null ],
+    [ "EXTRAAT1500", "common_8h.html#aaf4096e786de4203cc22a49540323a2b", null ],
     [ "EXTRAAT760", "common_8h.html#afbf638b0d1bf0522ba6629495f826e96", null ],
     [ "FAILSAFE_TIMEOUT", "common_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c", null ],
     [ "FREQUENCYSCOUNT", "common_8h.html#afe5bce36baf737bd284d43cd0e805fdb", null ],
