@@ -26,6 +26,7 @@ var ReceiverCode_2src_2main_8cpp =
     [ "SendQnhToSensorHub", "ReceiverCode_2src_2main_8cpp.html#af2b1ba43295661243b7bb78004d470d8", null ],
     [ "SendToSensorHub", "ReceiverCode_2src_2main_8cpp.html#a3f80da71956ba53fcff126bfe2296e65", null ],
     [ "SensorHubHasFailed", "ReceiverCode_2src_2main_8cpp.html#ad8b70060a07f5323c3e1011dd6b1dd6f", null ],
+    [ "SetServoFrequency", "ReceiverCode_2src_2main_8cpp.html#a57ad32e24d25e5034abb459116b9bc9e", null ],
     [ "setup", "ReceiverCode_2src_2main_8cpp.html#a17699f358cf9f7c3155a9c5daf8ff13c", null ],
     [ "teensyMAC", "ReceiverCode_2src_2main_8cpp.html#a06122bf4eee8af08c02c45022253a4f4", null ],
     [ "TurnLedOff", "ReceiverCode_2src_2main_8cpp.html#aadfccc52afc40455e31e965015c29b46", null ],
