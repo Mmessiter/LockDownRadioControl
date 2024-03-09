@@ -117,12 +117,10 @@ void CheckBanksInUse()
 /*********************************************************************************************************************************/
 
 void CheckServoType(){
-
     if (ServoCentrePulse > 1000 ) ServoCentrePulse = 1500;
     if (ServoCentrePulse < 1000) ServoCentrePulse = 760;
     if ((ServoFrequency > 1000) || (ServoFrequency < 50)) ServoFrequency = 50;
     ServoFrequency = CheckRange(ServoFrequency, 50, 900);
-   
 }
 
 /************************************************************************************************************************************************/
