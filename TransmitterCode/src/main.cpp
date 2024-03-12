@@ -4595,7 +4595,6 @@ void SendInitialSetupParams(){
         AddParameterstoQueue (5);            // Sbus / PPM at rx
         AddParameterstoQueue (4);            // Send default servo frequency and centre pulse width
         AddParameterstoQueue (2);            // QNH
-       // AddParameterstoQueue (1);            // Failsafe
     }
 }
 /************************************************************************************************************/
