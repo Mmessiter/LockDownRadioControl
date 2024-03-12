@@ -121,8 +121,9 @@ int GetPWMValue(int frequency, int length) {return float(length / (1000000.00 / 
 /************************************************************************************************************/
 void MoveServos()
 {
-    if (!CheckCrazyValues()) {
+    if (!CheckCrazyValues()||(millis() < 10000)) {
         TurnLedOff();
+        for (int j = 0; j < SERVOSUSED; ++j) PreviousData[j] = 0; // Force a send when data is good again
         return;
     }
     else {

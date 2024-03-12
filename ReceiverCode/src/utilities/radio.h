@@ -162,7 +162,7 @@ void UseReceivedData(uint8_t DynamicPayloadSize)                            // D
 bool ReadData()
 {
     
-    uint8_t MaxAckCounter = 100;
+    uint8_t MaxAckCounter = 250;
     static uint8_t AckCounter = 0;
 
     Connected = false;
@@ -170,7 +170,7 @@ bool ReadData()
     if (CurrentRadio->available(&Pipnum))
     {
         CurrentRadio->flush_tx();                                                        // This avoids a lockup that happens when the FIFO gets full   
-        if ((millis() - ReconnectedMoment) < 100) {
+        if ((millis() - ReconnectedMoment) < 00) {
              LoadAckPayload();
              CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);              // Send FULL telemetry when first connected 
         } else {
