@@ -711,6 +711,7 @@ var 1Definitions_8h =
     [ "Parameters", "1Definitions_8h.html#adefe865b827a3f50e85ebee02d0347bb", null ],
     [ "ParametersToBeSent", "1Definitions_8h.html#a086f3bd85ed185380eb53b1ab1176d1b", null ],
     [ "ParametersToBeSentPointer", "1Definitions_8h.html#a4ba3a53759d48893a024d2bcfea4db32", null ],
+    [ "ParaNames", "1Definitions_8h.html#aff5af8b662100b91c39dd8e64c72582d", null ],
     [ "pAudioView", "1Definitions_8h.html#acf102b4e984dffc411664c32263b4e1e", null ],
     [ "PausedSecs", "1Definitions_8h.html#a39d02faa564fd940b3d34bb1ea0f2599", null ],
     [ "pBuddyChView", "1Definitions_8h.html#ad34f98a241600d5c56a81518661031d8", null ],

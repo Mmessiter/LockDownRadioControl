@@ -9,7 +9,7 @@ var searchData=
   ['mapwithexponential_6',['MapWithExponential',['../Utilities_8h.html#a927484b01116cd14fd1ade706bc06d51',1,'Utilities.h']]],
   ['markhere_7',['markhere',['../common_8h.html#a5ae8a2aa29e834880ccf370c7547961b',1,'MarkHere():&#160;main.cpp'],['../ReceiverCode_2src_2main_8cpp.html#a5ae8a2aa29e834880ccf370c7547961b',1,'MarkHere():&#160;main.cpp']]],
   ['masterdetected_8',['MasterDetected',['../BuddyWireless_8h.html#a9028cb650cb079d28bc5dfc307242bb3',1,'BuddyWireless.h']]],
-  ['maybeaddzero_9',['maybeaddzero',['../Utilities_8h.html#ae310e7fc6397929ae886869c05cbc334',1,'MayBeAddZero(uint8_t nn):&#160;Utilities.h'],['../1Definitions_8h.html#ae310e7fc6397929ae886869c05cbc334',1,'MayBeAddZero(uint8_t nn):&#160;Utilities.h']]],
+  ['maybeaddzero_9',['maybeaddzero',['../1Definitions_8h.html#ae310e7fc6397929ae886869c05cbc334',1,'MayBeAddZero(uint8_t nn):&#160;Utilities.h'],['../Utilities_8h.html#ae310e7fc6397929ae886869c05cbc334',1,'MayBeAddZero(uint8_t nn):&#160;Utilities.h']]],
   ['mixinputs_10',['MixInputs',['../Mixes_8h.html#a5aa9208b1f2a522a0cdb348301fe0593',1,'Mixes.h']]],
   ['mixoutputs_11',['MixOutputs',['../Mixes_8h.html#a376c11f3a285138341edc0783f930ff3',1,'Mixes.h']]],
   ['modelviewend_12',['ModelViewEnd',['../MenuOptions_8h.html#ae9f91b9da28f2e1e2fb126961f03c31c',1,'MenuOptions.h']]],
@@ -20,7 +20,7 @@ var searchData=
   ['movepaddles_17',['MovePaddles',['../Pong_8h.html#ae1838e25c06509f78c0de9f0e556d428',1,'Pong.h']]],
   ['movepoint_18',['MovePoint',['../TransmitterCode_2src_2main_8cpp.html#aad727ec0b0f9f34487a535eaa4a83172',1,'main.cpp']]],
   ['moveservos_19',['moveservos',['../ReceiverCode_2src_2main_8cpp.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp'],['../common_8h.html#a6f2443a0666140cf4d8b7352bb3b793c',1,'MoveServos():&#160;main.cpp']]],
-  ['mpu6050_20',['mpu6050',['../common_8h.html#ad56e69e7f13623ba6b96aee925daa3c2',1,'mpu6050():&#160;common.h'],['../classMPU6050.html#a50b99a2a37c9d8708e807ef90b31df9b',1,'MPU6050::MPU6050()']]],
+  ['mpu6050_20',['MPU6050',['../classMPU6050.html#a50b99a2a37c9d8708e807ef90b31df9b',1,'MPU6050']]],
   ['mpu9250_21',['mpu9250',['../classMPU9250.html#acaf2ae31cfdeb6d47b922996feb55b69',1,'MPU9250::MPU9250()'],['../classMPU9250FIFO.html#a4b15facd0ce38964d241db56b1c57f75',1,'MPU9250FIFO::MPU9250(SPIClass &amp;bus, uint8_t csPin)'],['../classMPU9250FIFO.html#acaf2ae31cfdeb6d47b922996feb55b69',1,'MPU9250FIFO::MPU9250(TwoWire &amp;bus, uint8_t address)'],['../classMPU9250.html#a4b15facd0ce38964d241db56b1c57f75',1,'MPU9250::MPU9250()']]],
   ['msgbox_22',['msgbox',['../1Definitions_8h.html#a6f5b0f1e4ca75768c16c4dd93f92a8de',1,'MsgBox(char *goback, char *Prompt):&#160;Utilities.h'],['../Utilities_8h.html#a6f5b0f1e4ca75768c16c4dd93f92a8de',1,'MsgBox(char *goback, char *Prompt):&#160;Utilities.h']]],
   ['mysbus_23',['MySbus',['../common_8h.html#a5424788640aaa8d535d6ea077949ef82',1,'common.h']]]

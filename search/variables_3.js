@@ -57,9 +57,11 @@ var searchData=
   ['currentchannel_54',['CurrentChannel',['../1Definitions_8h.html#aeb0e129885651a4398539e6a4f6545c4',1,'1Definitions.h']]],
   ['currentmode_55',['CurrentMode',['../1Definitions_8h.html#aacabee92eb3ddd2e3cf31695c00a912e',1,'1Definitions.h']]],
   ['currentpipe_56',['CurrentPipe',['../common_8h.html#a8accdcf1df9fea74266e2f169346cc81',1,'common.h']]],
-  ['currentpoint_57',['CurrentPoint',['../1Definitions_8h.html#af10ffe07503b33fd55065fd9021e17e7',1,'1Definitions.h']]],
-  ['currentposition_58',['CurrentPosition',['../1Definitions_8h.html#ad46bd090bda2877738cc95246e6ba503',1,'1Definitions.h']]],
-  ['currentradio_59',['CurrentRadio',['../common_8h.html#a7bca81159d93f215060f40f45f19b0de',1,'common.h']]],
-  ['currentview_60',['CurrentView',['../1Definitions_8h.html#a2c76c41cd62573eb7227882fc9b9e557',1,'1Definitions.h']]],
-  ['curvedots_61',['CurveDots',['../1Definitions_8h.html#a434509284a88e9637c9b9847efe0b0e0',1,'1Definitions.h']]]
+  ['currentpitchangle_57',['CurrentPitchAngle',['../common_8h.html#a983b36592a10b7755ef2d5de5e845b48',1,'common.h']]],
+  ['currentpoint_58',['CurrentPoint',['../1Definitions_8h.html#af10ffe07503b33fd55065fd9021e17e7',1,'1Definitions.h']]],
+  ['currentposition_59',['CurrentPosition',['../1Definitions_8h.html#ad46bd090bda2877738cc95246e6ba503',1,'1Definitions.h']]],
+  ['currentradio_60',['CurrentRadio',['../common_8h.html#a7bca81159d93f215060f40f45f19b0de',1,'common.h']]],
+  ['currentrollangle_61',['CurrentRollAngle',['../common_8h.html#a11200b9ad58f15182293c79540812782',1,'common.h']]],
+  ['currentview_62',['CurrentView',['../1Definitions_8h.html#a2c76c41cd62573eb7227882fc9b9e557',1,'1Definitions.h']]],
+  ['curvedots_63',['CurveDots',['../1Definitions_8h.html#a434509284a88e9637c9b9847efe0b0e0',1,'1Definitions.h']]]
 ];

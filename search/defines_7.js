@@ -11,11 +11,10 @@ var searchData=
   ['green_8',['Green',['../1Definitions_8h.html#aa429cd977709122166b6e31fa10903d1',1,'1Definitions.h']]],
   ['greenled_9',['GREENLED',['../1Definitions_8h.html#aef42a90443e2cce65762788edcbfb8ee',1,'1Definitions.h']]],
   ['gyro_5f250dps_10',['GYRO_250DPS',['../Quadcopter_2src_2main_8cpp.html#a68bc5d52c72e3692e23ef0cd45f36142',1,'main.cpp']]],
-  ['gyro_5ffactor_11',['GYRO_FACTOR',['../common_8h.html#aa7509e90c16789a7e344f9bbc64f9df9',1,'common.h']]],
-  ['gyro_5ffs_5fsel_5f1000_12',['GYRO_FS_SEL_1000',['../Quadcopter_2src_2main_8cpp.html#a76b14e6113ae1578504f6ab84bcba2e7',1,'main.cpp']]],
-  ['gyro_5ffs_5fsel_5f2000_13',['GYRO_FS_SEL_2000',['../Quadcopter_2src_2main_8cpp.html#a1b8b264b9f127099af53bb68d197a1d5',1,'main.cpp']]],
-  ['gyro_5ffs_5fsel_5f250_14',['GYRO_FS_SEL_250',['../Quadcopter_2src_2main_8cpp.html#a63858ae7113c6b6ab61bc032d4087847',1,'main.cpp']]],
-  ['gyro_5ffs_5fsel_5f500_15',['GYRO_FS_SEL_500',['../Quadcopter_2src_2main_8cpp.html#ada046b15782fee829013693d347dceb9',1,'main.cpp']]],
-  ['gyro_5fscale_16',['GYRO_SCALE',['../Quadcopter_2src_2main_8cpp.html#abdeac7f9288bf09fd6e1739d22ff8bea',1,'main.cpp']]],
-  ['gyro_5fscale_5ffactor_17',['GYRO_SCALE_FACTOR',['../Quadcopter_2src_2main_8cpp.html#a9a726f5df52d7d55a122b9949686036d',1,'main.cpp']]]
+  ['gyro_5ffs_5fsel_5f1000_11',['GYRO_FS_SEL_1000',['../Quadcopter_2src_2main_8cpp.html#a76b14e6113ae1578504f6ab84bcba2e7',1,'main.cpp']]],
+  ['gyro_5ffs_5fsel_5f2000_12',['GYRO_FS_SEL_2000',['../Quadcopter_2src_2main_8cpp.html#a1b8b264b9f127099af53bb68d197a1d5',1,'main.cpp']]],
+  ['gyro_5ffs_5fsel_5f250_13',['GYRO_FS_SEL_250',['../Quadcopter_2src_2main_8cpp.html#a63858ae7113c6b6ab61bc032d4087847',1,'main.cpp']]],
+  ['gyro_5ffs_5fsel_5f500_14',['GYRO_FS_SEL_500',['../Quadcopter_2src_2main_8cpp.html#ada046b15782fee829013693d347dceb9',1,'main.cpp']]],
+  ['gyro_5fscale_15',['GYRO_SCALE',['../Quadcopter_2src_2main_8cpp.html#abdeac7f9288bf09fd6e1739d22ff8bea',1,'main.cpp']]],
+  ['gyro_5fscale_5ffactor_16',['GYRO_SCALE_FACTOR',['../Quadcopter_2src_2main_8cpp.html#a9a726f5df52d7d55a122b9949686036d',1,'main.cpp']]]
 ];

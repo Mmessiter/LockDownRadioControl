@@ -100,129 +100,168 @@ $(document).ready(function(){initNavTree('pid_8h_source.html',''); initResizable
   <div class="headertitle"><div class="title">pid.h</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="pid_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#ifndef _SRC_PID_H</span></div>
-<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#define _SRC_PID_H</span></div>
-<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span> </div>
-<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;Arduino.h&gt;</span></div>
-<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &quot;<a class="code" href="common_8h.html">utilities/common.h</a>&quot;</span></div>
-<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span> </div>
-<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span> </div>
-<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#ifdef DO_STABILISATION_TOCKN</span></div>
-<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;MPU6050_tockn.h&gt;</span></div>
+<a href="pid_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">// This file contains the PID controller and the Kalman filter for the MPU6050 ****************************************************************************************</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span> </div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#ifndef _SRC_PID_H</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#define _SRC_PID_H</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span> </div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;Arduino.h&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &quot;<a class="code" href="common_8h.html">utilities/common.h</a>&quot;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span> </div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#ifdef USE_STABILISATION</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">// *****************************************************************************************************************</span></div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span> </div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="keywordtype">float</span> Xaccel = 0;</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="keywordtype">float</span> Yaccel = 0;</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keywordtype">float</span> Zaccel = 0;</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keywordtype">float</span> XAngularaccel = 0;</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keywordtype">float</span> YAngularaccel = 0;</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="keywordtype">float</span> ZAngularaccel = 0;</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keywordtype">float</span> xPos = 0;</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keywordtype">float</span> yPos = 0;</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="keywordtype">float</span> zPos = 0;</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keywordtype">float</span> MPU6050Temp = 0;</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="keywordtype">void</span> ReadMPU6050(){</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>        <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#a7e41a2178d7943922a90e58da80ffa9d">mpu6050</a>.update();</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>        Xaccel        = <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#a7e41a2178d7943922a90e58da80ffa9d">mpu6050</a>.getAccX();                <span class="comment">//   Accelerations</span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>        Yaccel        = <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#a7e41a2178d7943922a90e58da80ffa9d">mpu6050</a>.getAccY();                <span class="comment">//   Accelerations</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>        Zaccel        = <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#a7e41a2178d7943922a90e58da80ffa9d">mpu6050</a>.getAccZ();                <span class="comment">//   Accelerations</span></div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>        XAngularaccel = <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#a7e41a2178d7943922a90e58da80ffa9d">mpu6050</a>.getGyroX();               <span class="comment">//   Gyro Angular accelerations</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>        YAngularaccel = <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#a7e41a2178d7943922a90e58da80ffa9d">mpu6050</a>.getGyroY();               <span class="comment">//   Gyro Angular accelerations</span></div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>        ZAngularaccel = <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#a7e41a2178d7943922a90e58da80ffa9d">mpu6050</a>.getGyroZ();               <span class="comment">//   Gyro Angular accelerations</span></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>        xPos          = <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#a7e41a2178d7943922a90e58da80ffa9d">mpu6050</a>.getAngleX();              <span class="comment">//   Angular positions computed by integration of the angular accelerations</span></div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>        yPos          = <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#a7e41a2178d7943922a90e58da80ffa9d">mpu6050</a>.getAngleY();              <span class="comment">//   Angular positions computed by integration of the angular accelerations</span></div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>        zPos          = <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#a7e41a2178d7943922a90e58da80ffa9d">mpu6050</a>.getAngleZ();              <span class="comment">//   Angular positions computed by integration of the angular accelerations</span></div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        MPU6050Temp = <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#a7e41a2178d7943922a90e58da80ffa9d">mpu6050</a>.getTemp(); <span class="comment">//  Temperature in degrees C</span></div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        <span class="comment">// Look1(&quot;\tXaccel: &quot;);</span></div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>        <span class="comment">// Look1(Xaccel);</span></div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        <span class="comment">// Look1(&quot;\tYaccel: &quot;);</span></div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>        <span class="comment">// Look1(Yaccel);</span></div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>        <span class="comment">// Look1(&quot;\tZaccel: &quot;);</span></div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>        <span class="comment">// Look1(Zaccel);</span></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>        <span class="comment">// Look1(&quot;\tXAngularaccel: &quot;);</span></div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>        <span class="comment">// Look1(XAngularaccel);</span></div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>        <span class="comment">// Look1(&quot;\tYAngularaccel: &quot;);</span></div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>        <span class="comment">// Look1(YAngularaccel);</span></div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>        <span class="comment">// Look1(&quot;\tZAngularaccel: &quot;);</span></div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>        <span class="comment">// Look1(ZAngularaccel);</span></div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>       </div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>        <a class="code hl_function" href="ReceiverCode_2src_2main_8cpp.html#aea423a497d09a142f394356bc8438c41">Look1</a>(<span class="stringliteral">&quot;xPos: &quot;</span>);</div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>        <a class="code hl_function" href="ReceiverCode_2src_2main_8cpp.html#aea423a497d09a142f394356bc8438c41">Look1</a>(xPos);</div>
-<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        <a class="code hl_function" href="ReceiverCode_2src_2main_8cpp.html#aea423a497d09a142f394356bc8438c41">Look1</a>(<span class="stringliteral">&quot;\tyPos: &quot;</span>);</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        <a class="code hl_function" href="ReceiverCode_2src_2main_8cpp.html#a6d87eba17154f7f4f2f3802ef8ee261f">Look</a>(yPos);</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>       <span class="comment">// Look1(&quot;\tzPos: &quot;);</span></div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>       <span class="comment">// Look1(zPos);</span></div>
-<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        <span class="comment">// Look1(&quot;MPU6050Temp: &quot;);</span></div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>        <span class="comment">// Look(MPU6050Temp);</span></div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        </div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>       <span class="comment">//  Look(&quot;\t&quot;);</span></div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>  }</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span><span class="comment">/************************************************************************************************************/</span></div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="keywordtype">void</span> <a class="code hl_function" href="common_8h.html#af0885e7050f46e9be63fa1c9574ad9a0">PIDEntryPoint</a>(){</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>  <span class="comment">//   static uint32_t LastTime = 0;</span></div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>  <span class="comment">//   static uint32_t lcount = 0;</span></div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>  </div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>  <span class="comment">//   if (millis()-LastTime &gt;= 1000){</span></div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>  <span class="comment">//       LastTime = millis();</span></div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>  <span class="comment">//       Serial.print(&quot;Loop speed: &quot;);</span></div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>  <span class="comment">//       Serial.print(lcount);</span></div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>  <span class="comment">//       Serial.print(&quot; Hz  &quot;);</span></div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>  <span class="comment">//       Serial.println(millis());</span></div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>  <span class="comment">//       lcount = 0;</span></div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>  <span class="comment">//  }</span></div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>  <span class="comment">//  ++lcount;</span></div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>   </div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>   ReadMPU6050();</div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>}</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span><span class="comment">/************************************************************************************************************/</span></div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span><span class="keywordtype">void</span> <a class="code hl_function" href="common_8h.html#a48050e81ef4521304a2dbeaf99e1a331">DoStabilsation</a>(){  <span class="comment">// This is called from the main loop and from all DelayMillis() loops</span></div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>       </div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    <span class="keyword">static</span> uint32_t LastTime = 0;</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    <span class="keywordflow">if</span> (millis()-LastTime &gt;= 5){ <span class="comment">// 5000 = 200 Hz</span></div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        LastTime = millis();</div>
-<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        <a class="code hl_function" href="common_8h.html#af0885e7050f46e9be63fa1c9574ad9a0">PIDEntryPoint</a>();            <span class="comment">// here we can call a timed stabilisation event at exactly 250 Hz</span></div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>   }</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>  <span class="comment">// Look (millis());</span></div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>}</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span> </div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span><span class="preprocessor">#else</span></div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span><span class="comment">//void DoStabilsation(){ // dummy function for no stabilisation</span></div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span><span class="comment">//    return;</span></div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span><span class="comment">//}</span></div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span><span class="preprocessor">#endif </span><span class="comment">// DO_STABILISATION_TOCKN</span></div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span> </div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span><span class="preprocessor">#endif </span><span class="comment">// _SRC_PID_H</span></div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span><span class="comment">// End of file: src/utilities/pid.h</span></div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span> </div>
-<div class="ttc" id="aQuadcopter_2src_2main_8cpp_html_a7e41a2178d7943922a90e58da80ffa9d"><div class="ttname"><a href="Quadcopter_2src_2main_8cpp.html#a7e41a2178d7943922a90e58da80ffa9d">mpu6050</a></div><div class="ttdeci">MPU6050 mpu6050</div><div class="ttdef"><b>Definition</b> <a href="Quadcopter_2src_2main_8cpp_source.html#l00023">main.cpp:23</a></div></div>
-<div class="ttc" id="aReceiverCode_2src_2main_8cpp_html_a6d87eba17154f7f4f2f3802ef8ee261f"><div class="ttname"><a href="ReceiverCode_2src_2main_8cpp.html#a6d87eba17154f7f4f2f3802ef8ee261f">Look</a></div><div class="ttdeci">void Look(const any &amp;value)</div><div class="ttdef"><b>Definition</b> <a href="ReceiverCode_2src_2main_8cpp_source.html#l00315">main.cpp:315</a></div></div>
-<div class="ttc" id="aReceiverCode_2src_2main_8cpp_html_aea423a497d09a142f394356bc8438c41"><div class="ttname"><a href="ReceiverCode_2src_2main_8cpp.html#aea423a497d09a142f394356bc8438c41">Look1</a></div><div class="ttdeci">void Look1(const any &amp;value)</div><div class="ttdef"><b>Definition</b> <a href="ReceiverCode_2src_2main_8cpp_source.html#l00322">main.cpp:322</a></div></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="comment">// This function reads the MPU6050 registers  frequently to get the gyro and accelerometer signals</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="keywordtype">void</span> Read_MPU6050(<span class="keywordtype">void</span>)</div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>{</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>  Wire.beginTransmission(0x68);</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>  Wire.write(0x1A);</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>  Wire.write(0x05);</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>  Wire.endTransmission();</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>  Wire.beginTransmission(0x68);</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>  Wire.write(0x1C);</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>  Wire.write(0x10);</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>  Wire.endTransmission();</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>  Wire.beginTransmission(0x68);</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>  Wire.write(0x3B);</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>  Wire.endTransmission();</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>  Wire.requestFrom(0x68, 6);</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>  int16_t AccXLSB = Wire.read() &lt;&lt; 8 | Wire.read();</div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>  int16_t AccYLSB = Wire.read() &lt;&lt; 8 | Wire.read();</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>  int16_t AccZLSB = Wire.read() &lt;&lt; 8 | Wire.read();</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>  Wire.beginTransmission(0x68);</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>  Wire.write(0x1B);</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>  Wire.write(0x8);</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>  Wire.endTransmission();</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>  Wire.beginTransmission(0x68);</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>  Wire.write(0x43);</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>  Wire.endTransmission();</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>  Wire.requestFrom(0x68, 6);</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>  int16_t <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#a5f4347f2081e0c5bf0de471b9e591c9a">GyroX</a> = Wire.read() &lt;&lt; 8 | Wire.read();</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>  int16_t <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#aa16d09d17ebe24f81ad98605b8aaf8f0">GyroY</a> = Wire.read() &lt;&lt; 8 | Wire.read();</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>  int16_t <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#a5e69f4df28f912eb1c3e6f120d4ca35b">GyroZ</a> = Wire.read() &lt;&lt; 8 | Wire.read();</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>  <a class="code hl_variable" href="common_8h.html#a191e6f70a84077ccfa37898bc2ac30e3">RateRoll</a> = (float)<a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#a5f4347f2081e0c5bf0de471b9e591c9a">GyroX</a>  / 65.5;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>  <a class="code hl_variable" href="common_8h.html#aa71f508ee9466f567e3e1228b78ebd57">RatePitch</a> = (float)<a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#aa16d09d17ebe24f81ad98605b8aaf8f0">GyroY</a> / 65.5;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>  <a class="code hl_variable" href="common_8h.html#a6bbc772fdd49a4f9368d73e5fa4fb5d7">RateYaw</a> = (float)<a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#a5e69f4df28f912eb1c3e6f120d4ca35b">GyroZ</a>   / 65.5;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>  <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#a6ed95662a853b2d1a0eac89115d2f461">AccX</a> = (float)AccXLSB    / 4096;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>  <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#aba700621707e686873c98dbbeba0ab78">AccY</a> = (float)AccYLSB    / 4096;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>  <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#af9a08745989f56ac72e8757359a30d5e">AccZ</a> = (float)AccZLSB    / 4096;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>  <a class="code hl_variable" href="common_8h.html#abbb25cd06caa174fc27a55f5ebedfa9b">AngleRoll</a>  = atan(<a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#aba700621707e686873c98dbbeba0ab78">AccY</a>   / sqrt(<a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#a6ed95662a853b2d1a0eac89115d2f461">AccX</a> * <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#a6ed95662a853b2d1a0eac89115d2f461">AccX</a> + <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#af9a08745989f56ac72e8757359a30d5e">AccZ</a> * <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#af9a08745989f56ac72e8757359a30d5e">AccZ</a>)) * 1 / (3.142 / 180);</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>  <a class="code hl_variable" href="common_8h.html#aa50892912e93f32e6392de26dc7ec497">AnglePitch</a> = -atan(<a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#a6ed95662a853b2d1a0eac89115d2f461">AccX</a>  / sqrt(<a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#aba700621707e686873c98dbbeba0ab78">AccY</a> * <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#aba700621707e686873c98dbbeba0ab78">AccY</a> + <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#af9a08745989f56ac72e8757359a30d5e">AccZ</a> * <a class="code hl_variable" href="Quadcopter_2src_2main_8cpp.html#af9a08745989f56ac72e8757359a30d5e">AccZ</a>)) * 1 / (3.142 / 180);</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>}</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="comment">// ******************************************************************************************************************************************************************</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="keywordtype">void</span> BlinkFast(){   <span class="comment">// This function blinks the LED fast to indicate that the gyro is being calibrated</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>  <span class="keyword">static</span> uint32_t <a class="code hl_variable" href="common_8h.html#a79ef591b711372e0f452e2afe8d2a718">BlinkTimer</a> = millis();</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>  <span class="keywordflow">if</span> (millis() - <a class="code hl_variable" href="common_8h.html#a79ef591b711372e0f452e2afe8d2a718">BlinkTimer</a> &lt; 80) <span class="keywordflow">return</span>;  <span class="comment">// Blink only for 80ms</span></div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>  <a class="code hl_variable" href="common_8h.html#a79ef591b711372e0f452e2afe8d2a718">BlinkTimer</a> = millis();</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>  <span class="keywordflow">if</span> (<a class="code hl_variable" href="common_8h.html#a3ca00afe3d594df8b2a34589b39b0c03">LedIsOn</a>) <a class="code hl_function" href="ReceiverCode_2src_2main_8cpp.html#aadfccc52afc40455e31e965015c29b46">TurnLedOff</a>(); <span class="keywordflow">else</span> <a class="code hl_function" href="ReceiverCode_2src_2main_8cpp.html#a852569e2aefff6371f3adad09fcd746f">TurnLedOn</a>();  </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>}</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span><span class="comment">// ******************************************************************************************************************************************************************</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span><span class="comment">// This function initialises the MPU6050 and calibrates the gyro</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span><span class="keywordtype">void</span> InitialiseTheMPU6050(){</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>  </div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>  <span class="keywordtype">int</span> Iterations = 1000;    <span class="comment">// make bigger for better calibration after tests</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>  </div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>  Wire.setClock(400000);</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>  Wire.begin();</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>  delay(250);</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>  Wire.beginTransmission(0x68);</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>  Wire.write(0x6B);</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>  Wire.write(0x00);</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>  Wire.endTransmission();</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>  <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; Iterations; ++i)</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>  {</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    Read_MPU6050();</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <a class="code hl_variable" href="common_8h.html#a2b9cb518f60f784d4719092d21db5c95">RateCalibrationRoll</a>  += <a class="code hl_variable" href="common_8h.html#a191e6f70a84077ccfa37898bc2ac30e3">RateRoll</a>;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <a class="code hl_variable" href="common_8h.html#a7bbf65ad4608b6f6d83e300d4cef4c17">RateCalibrationPitch</a> += <a class="code hl_variable" href="common_8h.html#aa71f508ee9466f567e3e1228b78ebd57">RatePitch</a>;</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <a class="code hl_variable" href="common_8h.html#a115915a6808be7836bd1d2798a3fc05a">RateCalibrationYaw</a>   += <a class="code hl_variable" href="common_8h.html#a6bbc772fdd49a4f9368d73e5fa4fb5d7">RateYaw</a>;</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    delay(1);</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    BlinkFast();</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>  }</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>  <a class="code hl_variable" href="common_8h.html#a2b9cb518f60f784d4719092d21db5c95">RateCalibrationRoll</a>  /= Iterations;</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>  <a class="code hl_variable" href="common_8h.html#a7bbf65ad4608b6f6d83e300d4cef4c17">RateCalibrationPitch</a> /= Iterations;</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>  <a class="code hl_variable" href="common_8h.html#a115915a6808be7836bd1d2798a3fc05a">RateCalibrationYaw</a>   /= Iterations;</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>}</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span><span class="comment">// ******************************************************************************************************************************************************************</span></div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span><span class="comment">// This function is the Kalman filter for 1D signals</span></div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span><span class="keywordtype">void</span> Kalman_Filter_1d(<span class="keywordtype">float</span> KalmanState, <span class="keywordtype">float</span> KalmanUncertainty, <span class="keywordtype">float</span> KalmanInput, <span class="keywordtype">float</span> KalmanMeasurement) </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>{</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>  KalmanState = KalmanState + 0.004 * KalmanInput;</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>  KalmanUncertainty = KalmanUncertainty + 0.004 * 0.004 * 4 * 4;</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>  <span class="keywordtype">float</span> KalmanGain = KalmanUncertainty * 1 / (1 * KalmanUncertainty + 3 * 3);</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>  KalmanState = KalmanState + KalmanGain * (KalmanMeasurement - KalmanState);</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>  KalmanUncertainty = (1 - KalmanGain) * KalmanUncertainty;</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>  <a class="code hl_variable" href="common_8h.html#a43b19525b118887eca2d0c4bd612c6b4">Kalman1DOutput</a>[0] = KalmanState;</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>  <a class="code hl_variable" href="common_8h.html#a43b19525b118887eca2d0c4bd612c6b4">Kalman1DOutput</a>[1] = KalmanUncertainty;</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>}</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span><span class="comment">// ******************************************************************************************************************************************************************</span></div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span><span class="comment">// This function gets the current attitude of the aircraft</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span><span class="keywordtype">void</span> GetCurrentAttitude(){</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>  <span class="keyword">static</span> uint32_t <a class="code hl_variable" href="SensorHubT32_2src_2main_8cpp.html#a46536419f1b2ee88934f4f812fd6140c">LoopTimer</a> = micros();</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>  <span class="keywordflow">if</span> (micros() - <a class="code hl_variable" href="SensorHubT32_2src_2main_8cpp.html#a46536419f1b2ee88934f4f812fd6140c">LoopTimer</a> &lt; 5000) <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>  <a class="code hl_variable" href="SensorHubT32_2src_2main_8cpp.html#a46536419f1b2ee88934f4f812fd6140c">LoopTimer</a> = micros();</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>  Read_MPU6050();               <span class="comment">// Read the gyro and accelerometer</span></div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>  </div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>  <a class="code hl_variable" href="common_8h.html#a191e6f70a84077ccfa37898bc2ac30e3">RateRoll</a>  -= <a class="code hl_variable" href="common_8h.html#a2b9cb518f60f784d4719092d21db5c95">RateCalibrationRoll</a>;</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>  <a class="code hl_variable" href="common_8h.html#aa71f508ee9466f567e3e1228b78ebd57">RatePitch</a> -= <a class="code hl_variable" href="common_8h.html#a7bbf65ad4608b6f6d83e300d4cef4c17">RateCalibrationPitch</a>;</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>  <a class="code hl_variable" href="common_8h.html#a6bbc772fdd49a4f9368d73e5fa4fb5d7">RateYaw</a>   -= <a class="code hl_variable" href="common_8h.html#a115915a6808be7836bd1d2798a3fc05a">RateCalibrationYaw</a>;</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>  </div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>  Kalman_Filter_1d(<a class="code hl_variable" href="common_8h.html#a11200b9ad58f15182293c79540812782">CurrentRollAngle</a>, <a class="code hl_variable" href="common_8h.html#aba9349a49df0030cdd858bd188853467">KalmanUncertaintyAngleRoll</a>, <a class="code hl_variable" href="common_8h.html#a191e6f70a84077ccfa37898bc2ac30e3">RateRoll</a>, <a class="code hl_variable" href="common_8h.html#abbb25cd06caa174fc27a55f5ebedfa9b">AngleRoll</a>); <span class="comment">// Kalman filter for roll</span></div>
+<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>  <a class="code hl_variable" href="common_8h.html#a11200b9ad58f15182293c79540812782">CurrentRollAngle</a> = <a class="code hl_variable" href="common_8h.html#a43b19525b118887eca2d0c4bd612c6b4">Kalman1DOutput</a>[0];</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>  <a class="code hl_variable" href="common_8h.html#aba9349a49df0030cdd858bd188853467">KalmanUncertaintyAngleRoll</a> = <a class="code hl_variable" href="common_8h.html#a43b19525b118887eca2d0c4bd612c6b4">Kalman1DOutput</a>[1];</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>  </div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>  Kalman_Filter_1d(<a class="code hl_variable" href="common_8h.html#a983b36592a10b7755ef2d5de5e845b48">CurrentPitchAngle</a>, <a class="code hl_variable" href="common_8h.html#a897634f0acc33c6cc44fe2089994c53f">KalmanUncertaintyAnglePitch</a>, <a class="code hl_variable" href="common_8h.html#aa71f508ee9466f567e3e1228b78ebd57">RatePitch</a>, <a class="code hl_variable" href="common_8h.html#aa50892912e93f32e6392de26dc7ec497">AnglePitch</a>); <span class="comment">// Kalman filter for pitch</span></div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>  <a class="code hl_variable" href="common_8h.html#a983b36592a10b7755ef2d5de5e845b48">CurrentPitchAngle</a> = <a class="code hl_variable" href="common_8h.html#a43b19525b118887eca2d0c4bd612c6b4">Kalman1DOutput</a>[0];</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>  <a class="code hl_variable" href="common_8h.html#a897634f0acc33c6cc44fe2089994c53f">KalmanUncertaintyAnglePitch</a> = <a class="code hl_variable" href="common_8h.html#a43b19525b118887eca2d0c4bd612c6b4">Kalman1DOutput</a>[1];</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span> </div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>  <span class="comment">// Serial.print(&quot;Roll Angle [°] &quot;);</span></div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>  <span class="comment">// Serial.print(CurrentRollAngle);</span></div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>  <span class="comment">// Serial.print(&quot; Pitch Angle [°] &quot;);</span></div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>  <span class="comment">// Serial.println(CurrentPitchAngle);</span></div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>  <span class="comment">// // Serial.println(RateYaw);</span></div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>}</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="keywordtype">void</span> <a class="code hl_function" href="common_8h.html#a48050e81ef4521304a2dbeaf99e1a331">DoStabilsation</a>(){ </div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    GetCurrentAttitude();</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>}</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span><span class="preprocessor">#endif </span><span class="comment">// USE_STABILISATION</span></div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span> </div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><span class="preprocessor">#endif </span><span class="comment">// _SRC_PID_H</span></div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span> </div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span><span class="comment">// End of file: src/utilities/pid.h</span></div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span> </div>
+<div class="ttc" id="aQuadcopter_2src_2main_8cpp_html_a5e69f4df28f912eb1c3e6f120d4ca35b"><div class="ttname"><a href="Quadcopter_2src_2main_8cpp.html#a5e69f4df28f912eb1c3e6f120d4ca35b">GyroZ</a></div><div class="ttdeci">float GyroZ</div><div class="ttdef"><b>Definition</b> <a href="Quadcopter_2src_2main_8cpp_source.html#l00167">main.cpp:167</a></div></div>
+<div class="ttc" id="aQuadcopter_2src_2main_8cpp_html_a5f4347f2081e0c5bf0de471b9e591c9a"><div class="ttname"><a href="Quadcopter_2src_2main_8cpp.html#a5f4347f2081e0c5bf0de471b9e591c9a">GyroX</a></div><div class="ttdeci">float GyroX</div><div class="ttdef"><b>Definition</b> <a href="Quadcopter_2src_2main_8cpp_source.html#l00167">main.cpp:167</a></div></div>
+<div class="ttc" id="aQuadcopter_2src_2main_8cpp_html_a6ed95662a853b2d1a0eac89115d2f461"><div class="ttname"><a href="Quadcopter_2src_2main_8cpp.html#a6ed95662a853b2d1a0eac89115d2f461">AccX</a></div><div class="ttdeci">float AccX</div><div class="ttdef"><b>Definition</b> <a href="Quadcopter_2src_2main_8cpp_source.html#l00165">main.cpp:165</a></div></div>
+<div class="ttc" id="aQuadcopter_2src_2main_8cpp_html_aa16d09d17ebe24f81ad98605b8aaf8f0"><div class="ttname"><a href="Quadcopter_2src_2main_8cpp.html#aa16d09d17ebe24f81ad98605b8aaf8f0">GyroY</a></div><div class="ttdeci">float GyroY</div><div class="ttdef"><b>Definition</b> <a href="Quadcopter_2src_2main_8cpp_source.html#l00167">main.cpp:167</a></div></div>
+<div class="ttc" id="aQuadcopter_2src_2main_8cpp_html_aba700621707e686873c98dbbeba0ab78"><div class="ttname"><a href="Quadcopter_2src_2main_8cpp.html#aba700621707e686873c98dbbeba0ab78">AccY</a></div><div class="ttdeci">float AccY</div><div class="ttdef"><b>Definition</b> <a href="Quadcopter_2src_2main_8cpp_source.html#l00165">main.cpp:165</a></div></div>
+<div class="ttc" id="aQuadcopter_2src_2main_8cpp_html_af9a08745989f56ac72e8757359a30d5e"><div class="ttname"><a href="Quadcopter_2src_2main_8cpp.html#af9a08745989f56ac72e8757359a30d5e">AccZ</a></div><div class="ttdeci">float AccZ</div><div class="ttdef"><b>Definition</b> <a href="Quadcopter_2src_2main_8cpp_source.html#l00165">main.cpp:165</a></div></div>
+<div class="ttc" id="aReceiverCode_2src_2main_8cpp_html_a852569e2aefff6371f3adad09fcd746f"><div class="ttname"><a href="ReceiverCode_2src_2main_8cpp.html#a852569e2aefff6371f3adad09fcd746f">TurnLedOn</a></div><div class="ttdeci">void TurnLedOn()</div><div class="ttdef"><b>Definition</b> <a href="ReceiverCode_2src_2main_8cpp_source.html#l00203">main.cpp:203</a></div></div>
+<div class="ttc" id="aReceiverCode_2src_2main_8cpp_html_aadfccc52afc40455e31e965015c29b46"><div class="ttname"><a href="ReceiverCode_2src_2main_8cpp.html#aadfccc52afc40455e31e965015c29b46">TurnLedOff</a></div><div class="ttdeci">void TurnLedOff()</div><div class="ttdef"><b>Definition</b> <a href="ReceiverCode_2src_2main_8cpp_source.html#l00213">main.cpp:213</a></div></div>
+<div class="ttc" id="aSensorHubT32_2src_2main_8cpp_html_a46536419f1b2ee88934f4f812fd6140c"><div class="ttname"><a href="SensorHubT32_2src_2main_8cpp.html#a46536419f1b2ee88934f4f812fd6140c">LoopTimer</a></div><div class="ttdeci">uint32_t LoopTimer</div><div class="ttdef"><b>Definition</b> <a href="SensorHubT32_2src_2main_8cpp_source.html#l00051">main.cpp:51</a></div></div>
 <div class="ttc" id="acommon_8h_html"><div class="ttname"><a href="common_8h.html">common.h</a></div></div>
+<div class="ttc" id="acommon_8h_html_a11200b9ad58f15182293c79540812782"><div class="ttname"><a href="common_8h.html#a11200b9ad58f15182293c79540812782">CurrentRollAngle</a></div><div class="ttdeci">float CurrentRollAngle</div><div class="ttdef"><b>Definition</b> <a href="common_8h_source.html#l00170">common.h:170</a></div></div>
+<div class="ttc" id="acommon_8h_html_a115915a6808be7836bd1d2798a3fc05a"><div class="ttname"><a href="common_8h.html#a115915a6808be7836bd1d2798a3fc05a">RateCalibrationYaw</a></div><div class="ttdeci">float RateCalibrationYaw</div><div class="ttdef"><b>Definition</b> <a href="common_8h_source.html#l00167">common.h:167</a></div></div>
+<div class="ttc" id="acommon_8h_html_a191e6f70a84077ccfa37898bc2ac30e3"><div class="ttname"><a href="common_8h.html#a191e6f70a84077ccfa37898bc2ac30e3">RateRoll</a></div><div class="ttdeci">float RateRoll</div><div class="ttdef"><b>Definition</b> <a href="common_8h_source.html#l00166">common.h:166</a></div></div>
+<div class="ttc" id="acommon_8h_html_a2b9cb518f60f784d4719092d21db5c95"><div class="ttname"><a href="common_8h.html#a2b9cb518f60f784d4719092d21db5c95">RateCalibrationRoll</a></div><div class="ttdeci">float RateCalibrationRoll</div><div class="ttdef"><b>Definition</b> <a href="common_8h_source.html#l00167">common.h:167</a></div></div>
+<div class="ttc" id="acommon_8h_html_a3ca00afe3d594df8b2a34589b39b0c03"><div class="ttname"><a href="common_8h.html#a3ca00afe3d594df8b2a34589b39b0c03">LedIsOn</a></div><div class="ttdeci">bool LedIsOn</div><div class="ttdef"><b>Definition</b> <a href="common_8h_source.html#l00275">common.h:275</a></div></div>
+<div class="ttc" id="acommon_8h_html_a43b19525b118887eca2d0c4bd612c6b4"><div class="ttname"><a href="common_8h.html#a43b19525b118887eca2d0c4bd612c6b4">Kalman1DOutput</a></div><div class="ttdeci">float Kalman1DOutput[]</div><div class="ttdef"><b>Definition</b> <a href="common_8h_source.html#l00174">common.h:174</a></div></div>
 <div class="ttc" id="acommon_8h_html_a48050e81ef4521304a2dbeaf99e1a331"><div class="ttname"><a href="common_8h.html#a48050e81ef4521304a2dbeaf99e1a331">DoStabilsation</a></div><div class="ttdeci">void DoStabilsation()</div></div>
-<div class="ttc" id="acommon_8h_html_af0885e7050f46e9be63fa1c9574ad9a0"><div class="ttname"><a href="common_8h.html#af0885e7050f46e9be63fa1c9574ad9a0">PIDEntryPoint</a></div><div class="ttdeci">void PIDEntryPoint()</div></div>
+<div class="ttc" id="acommon_8h_html_a6bbc772fdd49a4f9368d73e5fa4fb5d7"><div class="ttname"><a href="common_8h.html#a6bbc772fdd49a4f9368d73e5fa4fb5d7">RateYaw</a></div><div class="ttdeci">float RateYaw</div><div class="ttdef"><b>Definition</b> <a href="common_8h_source.html#l00166">common.h:166</a></div></div>
+<div class="ttc" id="acommon_8h_html_a79ef591b711372e0f452e2afe8d2a718"><div class="ttname"><a href="common_8h.html#a79ef591b711372e0f452e2afe8d2a718">BlinkTimer</a></div><div class="ttdeci">uint32_t BlinkTimer</div><div class="ttdef"><b>Definition</b> <a href="common_8h_source.html#l00270">common.h:270</a></div></div>
+<div class="ttc" id="acommon_8h_html_a7bbf65ad4608b6f6d83e300d4cef4c17"><div class="ttname"><a href="common_8h.html#a7bbf65ad4608b6f6d83e300d4cef4c17">RateCalibrationPitch</a></div><div class="ttdeci">float RateCalibrationPitch</div><div class="ttdef"><b>Definition</b> <a href="common_8h_source.html#l00167">common.h:167</a></div></div>
+<div class="ttc" id="acommon_8h_html_a897634f0acc33c6cc44fe2089994c53f"><div class="ttname"><a href="common_8h.html#a897634f0acc33c6cc44fe2089994c53f">KalmanUncertaintyAnglePitch</a></div><div class="ttdeci">float KalmanUncertaintyAnglePitch</div><div class="ttdef"><b>Definition</b> <a href="common_8h_source.html#l00173">common.h:173</a></div></div>
+<div class="ttc" id="acommon_8h_html_a983b36592a10b7755ef2d5de5e845b48"><div class="ttname"><a href="common_8h.html#a983b36592a10b7755ef2d5de5e845b48">CurrentPitchAngle</a></div><div class="ttdeci">float CurrentPitchAngle</div><div class="ttdef"><b>Definition</b> <a href="common_8h_source.html#l00172">common.h:172</a></div></div>
+<div class="ttc" id="acommon_8h_html_aa50892912e93f32e6392de26dc7ec497"><div class="ttname"><a href="common_8h.html#aa50892912e93f32e6392de26dc7ec497">AnglePitch</a></div><div class="ttdeci">float AnglePitch</div><div class="ttdef"><b>Definition</b> <a href="common_8h_source.html#l00169">common.h:169</a></div></div>
+<div class="ttc" id="acommon_8h_html_aa71f508ee9466f567e3e1228b78ebd57"><div class="ttname"><a href="common_8h.html#aa71f508ee9466f567e3e1228b78ebd57">RatePitch</a></div><div class="ttdeci">float RatePitch</div><div class="ttdef"><b>Definition</b> <a href="common_8h_source.html#l00166">common.h:166</a></div></div>
+<div class="ttc" id="acommon_8h_html_aba9349a49df0030cdd858bd188853467"><div class="ttname"><a href="common_8h.html#aba9349a49df0030cdd858bd188853467">KalmanUncertaintyAngleRoll</a></div><div class="ttdeci">float KalmanUncertaintyAngleRoll</div><div class="ttdef"><b>Definition</b> <a href="common_8h_source.html#l00171">common.h:171</a></div></div>
+<div class="ttc" id="acommon_8h_html_abbb25cd06caa174fc27a55f5ebedfa9b"><div class="ttname"><a href="common_8h.html#abbb25cd06caa174fc27a55f5ebedfa9b">AngleRoll</a></div><div class="ttdeci">float AngleRoll</div><div class="ttdef"><b>Definition</b> <a href="common_8h_source.html#l00169">common.h:169</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

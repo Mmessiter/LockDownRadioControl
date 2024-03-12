@@ -6,6 +6,7 @@ var radio_8h =
     [ "ConfigureRadio", "radio_8h.html#a3bb52983d9a2108589830301007bdce1", null ],
     [ "CopyCurrentPipe", "radio_8h.html#aa55e98a44b0bcb87b4e318381fece092", null ],
     [ "Decompress", "radio_8h.html#a6feccc8c0583de3235616d42076f1371", null ],
+    [ "DoSensorHub", "radio_8h.html#a7dfb4993ecdbf5fc3bd8c4c52edd465e", null ],
     [ "GetNewPipe", "radio_8h.html#ad8b2470258da4e397b34d67ffce9ebaf", null ],
     [ "GetOldPipe", "radio_8h.html#a198affe6f9f64da7272c5fcfe16c1621", null ],
     [ "HopToNextChannel", "radio_8h.html#a62ec0168b1eea5f5c14f663d9217574d", null ],
