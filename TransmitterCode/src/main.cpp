@@ -2431,7 +2431,7 @@ void RXOptionsViewEnd()
     SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
     SendCommand(pRXSetupView);
-    for (int i = 1; i < 4; ++i){
+    for (int i = 1; i < 8; ++i){
         AddParameterstoQueue(4);               // 4 Send default servo frequency and centre pulse width
         AddParameterstoQueue(5);               // 5 is the ID for SBUS/PPM at RX selection and PPM channel count
     }
@@ -4591,27 +4591,25 @@ void AddParameterstoQueue(uint8_t ID)
 /*********************************************************************************************************************************/
 void SendInitialSetupParams(){
     
-    for (int i = 1; i< 4; ++i){
+    for (int i = 1; i < 8; ++i){
         AddParameterstoQueue (5);            // Sbus / PPM at rx
-        AddParameterstoQueue (2);            // QNH
         AddParameterstoQueue (4);            // Send default servo frequency and centre pulse width
+        AddParameterstoQueue (2);            // QNH
+       // AddParameterstoQueue (1);            // Failsafe
     }
 }
 /************************************************************************************************************/
 void SendOutstandingParameters(){  // Send any QUEUED parameters that have not been sent yet at the rate of one per second max 
 
-static uint32_t Localtimer = 0;
-if (millis() - Localtimer < 250) return;
-    Localtimer = millis();
     if (BoundFlag && ModelMatched && LedWasGreen){
     if (ParametersToBeSentPointer > 0) {
         Parameters.ID = ParametersToBeSent[ParametersToBeSentPointer];
         --ParametersToBeSentPointer;
         AddExtraParameters = true;
-        // Look1("Sent: ");
-        // Look1(Parameters.ID);
-        // Look1(" ");
-        // Look(ParaNames[Parameters.ID-1]);
+        Look1("Sent: ");
+        Look1(Parameters.ID);
+        Look1(" ");
+        Look(ParaNames[Parameters.ID-1]);
     }   
   }
 }
@@ -4623,6 +4621,7 @@ void FASTRUN ManageTransmitter()
 {
     static uint32_t         LastModelScreenCheck    = 0;
     static uint32_t         TransmitterLastManaged  = 0;
+    static uint32_t         LastParameterSent       = 0;
     uint32_t                RightNow                = millis();
     uint32_t                TXPacketElapsed         = RightNow - LastPacketSentTime;
     
@@ -4636,16 +4635,21 @@ void FASTRUN ManageTransmitter()
         CheckScreenTime();                                                                                     // Check if screen needs to be turned off
         CheckBatteryStates();                                                                                  // Check battery states                                                       
         if (CurrentView != BLANKVIEW) {ReadTime();UpdateTrimView();}                                           // Show time and trim positions
-        ShowMotorTimer();SendOutstandingParameters();                                                          // Show motor timer and send any queued parameters
+        ShowMotorTimer();                                                                                      // Show motor timer and send any queued parameters
         LastTimeRead = millis();                                                                               // Reset this timer
         return;                                                                                                // That's enough housekeeping for this time around
     }
+
+    if (RightNow - LastParameterSent >= 150) {                                                                 // Send queued parameters
+        SendOutstandingParameters();
+        LastParameterSent = RightNow;
+    }   
     
     if ((RightNow - LastModelScreenCheck >= 500)) {
         if (CurrentView == MODELSVIEW) { 
             LastModelScreenCheck = RightNow;
             if (CheckModelName()) {
-                LastModelScreenCheck = RightNow; return;                                                        // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
+                LastModelScreenCheck = RightNow; return;                                                       // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
             }
         }
     }     
