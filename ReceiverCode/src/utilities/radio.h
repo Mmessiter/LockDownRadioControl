@@ -72,7 +72,7 @@ void UseExtraParameters()
             UseSBUS         = (bool)Parameters.word1; // if false means PPM
             PPMChannelCount = Parameters.word2;
             break;
-          default:
+        default:
               break;
         }
    return;
@@ -110,7 +110,6 @@ void Decompress(uint16_t* uncompressed_buf, uint16_t* compressed_buf, uint8_t un
         ++p;
     }
 }
-/************************************************************************************************************/
 
 /************************************************************************************************************/
 void RearrangeTheChannels(){
@@ -121,17 +120,21 @@ void RearrangeTheChannels(){
     }
     return;
 }
+
 /************************************************************************************************************/
 void ReadMoreParameters(){                                       
-        Parameters.ID    =  RawDataIn[0] ;              // NumberOfChangedChannels points past the end of the changed channels
+        Parameters.ID    =  RawDataIn[0];                           // NumberOfChangedChannels points past the end of the changed channels
+        if ((Parameters.ID == 0) || (Parameters.ID > 5 )) return;   // not a valid ID
         Parameters.word1 =  RawDataIn[1];
         Parameters.word2 =  RawDataIn[2];
-        // Look1("Parameters.ID:\t\t");
-        // Look(Parameters.ID);
-        // Look1("Parameters.word1:\t");
-        // Look(Parameters.word1);
-        // Look1("Parameters.word2:\t");
-        // Look(Parameters.word2);
+        Look1("Parameters.ID:\t\t");
+        Look1(Parameters.ID);
+        Look1(" ");
+        Look(ParaNames[Parameters.ID-1]);
+        Look1("Parameters.word1:\t");
+        Look(Parameters.word1);
+        Look1("Parameters.word2:\t");
+        Look(Parameters.word2);
         UseExtraParameters();    
 }
 /************************************************************************************************************/
@@ -192,19 +195,16 @@ bool ReadData()
 }
 
 // ******************************************************************************************************************************************************************
-
-FASTRUN void ReceiveData()
-{
-    uint32_t TimeTest;
-
+ //  If it is connected, try to read the sensor hub
+void DoSensorHub(){
+  uint32_t TimeTest;
     if (Connected) {
-
         if ((millis() - SensorHubAccessed) > 10) {                               //  Reading Sensor hub 100 x per second should be enough
             if (millis() - LastPacketArrivalTime < 1) {                          //  If, and only if, we have still absolutely loads of time, do stuff now while waiting ...
                 SensorHubAccessed = millis();                                    //  Note the moment of last attempted read.
                 if (!SensorHubDead) {                                            //  Better check it hasn't died.
                     TimeTest = millis();                                         //  Time the I2C calls. If too long, don't repeat it ... save the model.
-                    if (SensorHubConnected) ReadTheSensorHub();                  //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
+                    ReadTheSensorHub();                                          //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
                     if (INA219Connected) INA219Volts = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected separately (as will be needed on 'planes with no GPS fitted.)
                     if ((millis() - NewConnectionMoment) > 5000) {
                         if ((millis() - TimeTest) > 6) SensorHubHasFailed(); //  If sensor hub and/or INA219 fails, don't bother calling either again (It normally returns within 2 ms.
@@ -213,10 +213,17 @@ FASTRUN void ReceiveData()
             }
         }
     }
-   if  ((!CurrentRadio->available(&Pipnum)) && (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT)) Reconnect(); // Try to reconnect. //  RECEIVE_TIMEOUT???
-    if (!ReadData()) {
+}
+
+// ******************************************************************************************************************************************************************
+
+FASTRUN void ReceiveData()
+{
+   if (SensorHubConnected) DoSensorHub(); //  If it is connected, try to read the sensor hub
+   if ((!CurrentRadio->available(&Pipnum)) && (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT)) Reconnect(); // Try to reconnect. //  RECEIVE_TIMEOUT???
+   if (!ReadData()) {
         if (millis() - SBUSTimer >= SBUSRATE) { // No new packet yet - but maybe it's time to dispatch the last?
-            if (BoundFlag && (millis() > 10000)) {
+            if (BoundFlag && (millis() > 10000)) {  // > 10 seconds after binding, we might need to keep sbus happy
                 if (Connected) {
                     KeepSbusHappy(); // if it's time - send a SBUS packet. It might be new data.
                     --SbusRepeats;   // It's not really a "repeat".
@@ -434,9 +441,11 @@ void TryToConnectNow()
     CurrentRadio->startListening();
     ATimer = millis();
     while ((!CurrentRadio->available(&Pipnum)) && (millis() - ATimer) < LISTEN_PERIOD) {
-#ifdef  DOSTABILISATION   
-      if (MPU6050Connected) DoStabilsation(); // while connecting, do some other stuff (Stabilisation, etc)
+        KickTheDog();
+#ifdef USE_STABILISATION
+     if (MPU6050Connected)  DoStabilsation(); 
 #endif
+
     }       
     Connected = CurrentRadio->available(&Pipnum);
     

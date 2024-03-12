@@ -57,17 +57,15 @@
 #include "utilities/common.h"
 #include "utilities/radio.h"
 #include "utilities/pid.h"
-#include <MPU6050_tockn.h>
-
-
 
 void DelayMillis(uint16_t ms) // This replaces any delay() calls
 {
     uint32_t tt = millis();
     while (millis() - tt < ms) {
-#ifdef DO_STABILISATION_TOCKN
+#ifdef USE_STABILISATION
       if (MPU6050Connected) DoStabilsation();
 #endif
+
     }
 }   
 /************************************************************************************************************/
@@ -179,7 +177,13 @@ void FailSafe()
 void SetServoFrequency()
 {
      analogWriteResolution(SERVO_RES_BITS);  // 12 Bits for 4096 steps
-    for (uint8_t i = 0; i < SERVOSUSED; ++i) analogWriteFrequency(PWMPins[i], ServoFrequency);
+  //   DelayMillis(2);
+    for (uint8_t i = 0; i < SERVOSUSED; ++i)
+    { 
+        analogWriteFrequency(PWMPins[i], ServoFrequency);
+    //    DelayMillis(2);
+    }
+//Look(ServoCentrePulse);
 }
 
 /************************************************************************************************************/
@@ -498,8 +502,6 @@ FLASHMEM void ScanI2c()
                 Serial.println("INA219 voltage meter detected!");
 #endif
             }
-
-#ifdef DO_STABILISATION_TOCKN       
             if (i == 0x68) {
                 MPU6050Connected = true;
     #ifdef DB_SENSORS
@@ -507,7 +509,7 @@ FLASHMEM void ScanI2c()
                 Serial.println("MPU 6050 detected");  
     #endif // DB_SENSORS
             }
-#endif // DO_STABILISATION_TOCKN
+
 
 
         }
@@ -592,9 +594,17 @@ FLASHMEM void setup()
     else {
         delay(200);
     }
+    
     Wire.begin();
     delay(20);
     ScanI2c(); // Detect what's connected
+
+
+#ifdef USE_STABILISATION
+    if (MPU6050Connected) InitialiseTheMPU6050();
+#endif
+
+
     if (INA219Connected) ina219.begin();
     teensyMAC(MacAddress);
     PipePointer = DefaultPipe;
@@ -625,26 +635,6 @@ FLASHMEM void setup()
     ThisRadio = 2;
 #endif
 
-#ifdef DO_STABILISATION_TOCKN                                          // only if MPU6050 is connected and working
-    if (MPU6050Connected) {
-        mpu6050.begin();
-        if (GyroOffsetsSet){
-             mpu6050.setGyroOffsets(3.09,  -0.20, -3.39);       // These are the offsets for my MPU6050
-        }else{
-            Look("Calibrating MPU6050.... DON'T MOVE IT!! ");
-            mpu6050.calcGyroOffsets(false);              
-            X_GyroOffset = mpu6050.getGyroXoffset();
-            Y_GyroOffset = mpu6050.getGyroYoffset();
-            Z_GyroOffset = mpu6050.getGyroZoffset();
-            Look1("X_GyroOffset: ");
-            Look(X_GyroOffset);
-            Look1("Y_GyroOffset: ");
-            Look(Y_GyroOffset);
-            Look1("Z_GyroOffset: ");
-            Look(Z_GyroOffset);
-        }
-    }
-#endif
 
     WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
     WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
@@ -672,9 +662,10 @@ void BlinkLed()
 
 void loop()
 {
-#ifdef DO_STABILISATION_TOCKN
-    if (MPU6050Connected) DoStabilsation();
+#ifdef USE_STABILISATION
+    if (MPU6050Connected)  DoStabilsation();
 #endif
+
     KickTheDog();
     ReceiveData();
     if (Blinking) BlinkLed();

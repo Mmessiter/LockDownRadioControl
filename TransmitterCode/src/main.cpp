@@ -1577,16 +1577,12 @@ void SetDefaultValues()
             ServoSpeed[j][i] = 100;
         }
     }
-
     for (i = 0; i < 4; ++i) {
        DualRateRate[i] = 0;   
    }
-
     TrimMultiplier = 5;
-
-    ServoFrequency = 100;
+    ServoFrequency = 50;
     ServoCentrePulse = 1500;
-
     ModelDefined = 42;
 }
 
@@ -2435,9 +2431,10 @@ void RXOptionsViewEnd()
     SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
     SendCommand(pRXSetupView);
-    AddParameterstoQueue(5);               // 5 is the ID for SBUS/PPM at RX selection and PPM channel count
-    DelayWithDog(1000);
-    AddParameterstoQueue(4);               // 4 Send default servo frequency and centre pulse width
+    for (int i = 1; i < 4; ++i){
+        AddParameterstoQueue(4);               // 4 Send default servo frequency and centre pulse width
+        AddParameterstoQueue(5);               // 5 is the ID for SBUS/PPM at RX selection and PPM channel count
+    }
 }
 
 /******************************************************************************************************************************/
@@ -3051,7 +3048,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     ThrottleDownTrim,         // 36
     ThrottleUpTrim,           // 37
     RXOptionsViewStart,       // 38
-    RXOptionsViewEnd,              // 39
+    RXOptionsViewEnd,         // 39
     ResetTransmitterSettings, // 40
     BindNow,                  // 41 Not CALLED FrOM Here now
     PointUp,                  // 42
@@ -4579,34 +4576,47 @@ void CheckPowerOffButton()
 
 void AddParameterstoQueue(uint8_t ID)
 {
+    if (!ID) return;
     if (ParametersToBeSentPointer < 78){
          ++ParametersToBeSentPointer;
         ParametersToBeSent[ParametersToBeSentPointer] = ID;
     }
     AddExtraParameters = true;
+    DelayWithDog(10);
+    // Look1("Queued: ");
+    // Look1(ID);
+    // Look1(" ");
+    // Look(ParaNames[ID-1]);
 }
 /*********************************************************************************************************************************/
-
-void SendInitialSetupParams(){ 
-   AddParameterstoQueue (5);            // Sbus / PPM at rx
-   AddParameterstoQueue (2);            // QNH
-   AddParameterstoQueue (4);            // Send default servo frequency and centre pulse width
+void SendInitialSetupParams(){
+    
+    for (int i = 1; i< 4; ++i){
+        AddParameterstoQueue (5);            // Sbus / PPM at rx
+        AddParameterstoQueue (2);            // QNH
+        AddParameterstoQueue (4);            // Send default servo frequency and centre pulse width
+    }
 }
-
 /************************************************************************************************************/
 void SendOutstandingParameters(){  // Send any QUEUED parameters that have not been sent yet at the rate of one per second max 
 
 static uint32_t Localtimer = 0;
-if (millis() - Localtimer < 1000) return;
+if (millis() - Localtimer < 250) return;
     Localtimer = millis();
     if (BoundFlag && ModelMatched && LedWasGreen){
     if (ParametersToBeSentPointer > 0) {
         Parameters.ID = ParametersToBeSent[ParametersToBeSentPointer];
         --ParametersToBeSentPointer;
         AddExtraParameters = true;
+        // Look1("Sent: ");
+        // Look1(Parameters.ID);
+        // Look1(" ");
+        // Look(ParaNames[Parameters.ID-1]);
     }   
   }
 }
+
+
 
 /************************************************************************************************************/
 void FASTRUN ManageTransmitter()

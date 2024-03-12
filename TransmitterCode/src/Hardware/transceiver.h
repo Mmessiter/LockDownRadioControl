@@ -129,7 +129,7 @@ void LoadParameters()
     uint8_t  FS_Byte2;
  
     switch (Parameters.ID) {
-        case 1:
+        case 1:                             // 1 = FailSafeChannels
             Twobytes          = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
             FS_Byte1          = uint8_t(Twobytes >> 8);        // Send as two bytes   
             FS_Byte2          = uint8_t(Twobytes & 0x00FF);
@@ -137,12 +137,12 @@ void LoadParameters()
             Parameters.word2  = FS_Byte2;                      // These are failsafe flags
             break;
 
-       case 2:
+       case 2:                              // 2 = QNH
             Parameters.word1  =  Qnh;      
             Parameters.word2  =  2000;    
             break;
 
-        case 3:
+        case 3:                             // 3 = GPSMarkHere
             if (GPSMarkHere) {
                 Parameters.word1  = 0;
                 Parameters.word2  = GPSMarkHere;
@@ -150,13 +150,13 @@ void LoadParameters()
             }
             break;
      
-        case 4:                                             // 4 = set servo centre pulse and frequency
+        case 4:                            // 4 = set servo centre pulse and frequency
             Parameters.word1 = ServoCentrePulse;   
             Parameters.word2 = ServoFrequency; 
               
          
             break;
-        case 5:
+        case 5:                            // 5 = SBUS/PPM           
               Parameters.word1 = PPMdata.UseSBUSFromRX;   // 1 - 0
               Parameters.word2 = PPMdata.PPMChannelCount; 
             break;
@@ -248,23 +248,16 @@ void FlushFifos()
 /************************************************************************************************************/
 void SuccessfulPacket()
 {
-#define PARAMREPEATS 4                                      // Send parameters PARAMREPEATS times in case of a packet loss or two
-
-    static uint8_t ParamsSend = 0;
     CheckGapsLength();
     RecordsPacketSuccess(1);
     ++RecentGoodPacketsCount;
     ++PacketNumber;
-    if (AddExtraParameters && (ParamsSend < PARAMREPEATS)) {  // Send parameters PARAMREPEATS times in case of a packet loss or two
-        ++ParamsSend;
-        if (ParamsSend >= PARAMREPEATS) {
-            ParamsSend = 0;
+     if (AddExtraParameters) {  
             AddExtraParameters = false;
             Parameters.ID = 0;
-        }   
-    }
+     }   
     if (RecentPacketsLost){
-        TotalLostPackets += (RecentPacketsLost / 2);        // divide by 2 because some acks are lost too
+        TotalLostPackets += (RecentPacketsLost / 2);        // divide by 2 because acks get lost too
         RecentPacketsLost = 0;
     }
     Connected         = true;
@@ -287,13 +280,17 @@ void SuccessfulPacket()
 /************************************************************************************************************/
 void SendExtraParamemters()                       // parameters must be loaded before this function is called
 {                                                 // only the ***low 12 bits*** of each parameter are actually sent
+    
+    if (Parameters.ID == 0) return;               // no parameters to send
     LoadParameters();
     RawDataBuffer[0]  = Parameters.ID;            // copy current parameter values into the rawdatabuffer instead of the channels for 3 packets
     RawDataBuffer[1]  = Parameters.word1;
     RawDataBuffer[2]  = Parameters.word2;
     
     // Look1("Parameter ID: ");
-    // Look(Parameters.ID);
+    // Look1(Parameters.ID);
+    // Look1(" ");
+    // Look(ParaNames[Parameters.ID - 1]);
     // Look1("Word1: ");
     // Look(Parameters.word1);
     // Look1("Word2: ");

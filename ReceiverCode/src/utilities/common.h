@@ -30,16 +30,13 @@
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
         #define SECOND_TRANSCEIVER          1
-    //  #define DO_STABILISATION_TOCKN      1 
+        #define USE_STABILISATION                  1
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
         #define SERVO_RES_BITS           12
         #define SERVO_RESOLUTION         4096    
 
-        
-        
-        
         #define EXTRAAT1500  1000                          
         #define MINMICROS    500            // normal servos
         #define MAXMICROS    2500
@@ -119,12 +116,6 @@ uint8_t         SizeOfParameters = sizeof(Parameters);
 #define PIPES_TO_COMPARE   8
 
 
-// ********************************** For the MPU6050tockn library ********************************************************************
-
-#define     ACCELERATIONS_FACTOR 0.02                           // default is 0.02 for the complementary filter
-#define     GYRO_FACTOR          1 - ACCELERATIONS_FACTOR
-MPU6050     mpu6050(Wire, ACCELERATIONS_FACTOR, GYRO_FACTOR); // 
-
 // ****************************************************************************************************************************************
 
 RF24     Radio1(pinCE1, pinCSN1);
@@ -168,6 +159,19 @@ bool    PipeSeen        = false;
 
 uint16_t ServoCentrePulse =  1500;
 uint16_t ServoFrequency   = 50;
+char ParaNames[5][30] = {"(FailSafeChannels)", "(Qnh)", "(GPSMarkHere)","(ServoCentre & Frequency)", "(SBUS/PPM)"};
+
+// Kalman data ********************************************************************************************************************
+                                                                 
+float RateRoll = 0, RatePitch = 0, RateYaw = 0;
+float RateCalibrationRoll = 0, RateCalibrationPitch = 0, RateCalibrationYaw = 0;
+float AccX = 0, AccY = 0, AccZ = 0;
+float AngleRoll = 0, AnglePitch = 0;
+float CurrentRollAngle = 0;
+float KalmanUncertaintyAngleRoll = 4;
+float CurrentPitchAngle = 0;
+float KalmanUncertaintyAnglePitch = 4;
+float Kalman1DOutput[] = {0, 0};
 
 /************************************************************************************************************/
 

@@ -1048,11 +1048,10 @@ int     LastRXModelMaxAltitude = 0;
 float   LastRXTemperature      = 0;
 uint8_t RadioNumber            = 0;
 uint8_t LastRadioNumber        = 0;
-
+char ParaNames[5][30] = {"(FailSafeChannels)", "(Qnh)", "(GPSMarkHere)","(ServoCentre & Frequency)", "(SBUS/PPM)"};
 uint16_t ScreenData[50];
 
 int      LastTrim[5][17];
-
 char    pFhssView[]               = "page FhssView";
 char    pDataView[]               = "page DataView";
 char    pSwitchesView[]           = "page SwitchesView";
