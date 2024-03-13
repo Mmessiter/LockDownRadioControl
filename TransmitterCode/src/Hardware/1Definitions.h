@@ -87,6 +87,7 @@
     #define WARMUPDELAY            300                          // fails at 200 so must be >200 ...
     #define SCREENCHANGEWAIT       10                           // allow 10ms for screen to appear
     #define BATTERY_CHECK_INTERVAL 1000                         // 2 seconds between battery checks
+    #define PARAMETERSENDREPEATS   15                           // How many times to send each parameter in case it gets lost                      
    
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
