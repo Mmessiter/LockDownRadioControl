@@ -177,6 +177,7 @@ var 1Definitions_8h =
     [ "PACEMAKER", "1Definitions_8h.html#a56e90cbec59fa96bebfb3db997e6a3fe", null ],
     [ "PADDLEGAP", "1Definitions_8h.html#a4fd3982c93d3562882d68e6902d4bed3", null ],
     [ "PADDLEHEIGHT", "1Definitions_8h.html#acc5eb8a97e160ba0bcf65b6d7caaf38f", null ],
+    [ "PARAMETERSENDREPEATS", "1Definitions_8h.html#a40f1bdd7a5e1e63eb0245fb3de0d2d93", null ],
     [ "PERCENT", "1Definitions_8h.html#a9b321fc8474a410f24deb460c4fa014e", null ],
     [ "PERFECTPACKETSPERSECOND", "1Definitions_8h.html#ad19ebeeabe5c8ede82c5be3f8d3f7776", null ],
     [ "PLSTURNOFF", "1Definitions_8h.html#a3d9e7817e8c3f47044067ead9b8ce38b", null ],
