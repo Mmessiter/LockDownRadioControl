@@ -199,10 +199,10 @@ FASTRUN void FailedPacket()
     }
     
     if (!AddExtraParameters){
-        for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = PrePreviousBuffer[i];    // force last update repeat 
+        for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = PrePreviousBuffer[i];    // force last update repeat if not sending parameters
     }
    
-    if (RecentPacketsLost   >= LOSTCONTACTCUTOFF) {                                         // Don't immeditately change channel
+    if (RecentPacketsLost   >= LOSTCONTACTCUTOFF) {                                         // If we have lost contact
             LostContactFlag  =   true;
             TryToReconnect();  
     }

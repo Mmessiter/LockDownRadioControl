@@ -4576,7 +4576,7 @@ void CheckPowerOffButton()
 void AddParameterstoQueue(uint8_t ID)  // todo:  This function repeats the same parameter 12 times.  Should not be necessary.
 {
     
-    for (int i = 0; i < 30; ++i){
+    for (int i = 0; i < PARAMETERSENDREPEATS; ++i){
         if (ParametersToBeSentPointer < 78){
              ++ParametersToBeSentPointer;
             ParametersToBeSent[ParametersToBeSentPointer] = ID;
