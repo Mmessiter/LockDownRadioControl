@@ -124,17 +124,26 @@ void RearrangeTheChannels(){
 /************************************************************************************************************/
 void ReadMoreParameters(){                                       
         Parameters.ID    =  RawDataIn[0];                           // NumberOfChangedChannels points past the end of the changed channels
-        if ((Parameters.ID == 0) || (Parameters.ID > 5 )) return;   // not a valid ID
+        if ((Parameters.ID == 0) || (Parameters.ID > 5 )){
+            // Look1("Invalid ID: ");
+            // Look(Parameters.ID);
+            // Look1(" ");
+            // Look(Parameters.word1);
+            // Look1(" ");
+            // Look(Parameters.word2);
+            // Look1(" ");
+            return;   // not a valid ID
+        } 
         Parameters.word1 =  RawDataIn[1];
         Parameters.word2 =  RawDataIn[2];
-        Look1("Parameters.ID:\t\t");
-        Look1(Parameters.ID);
-        Look1(" ");
-        Look(ParaNames[Parameters.ID-1]);
-        Look1("Parameters.word1:\t");
-        Look(Parameters.word1);
-        Look1("Parameters.word2:\t");
-        Look(Parameters.word2);
+        // Look1("Parameters.ID:\t\t");
+        // Look1(Parameters.ID);
+        // Look1(" ");
+        // Look(ParaNames[Parameters.ID-1]);
+        // Look1("Parameters.word1:\t");
+        // Look(Parameters.word1);
+        // Look1("Parameters.word2:\t");
+        // Look(Parameters.word2);
         UseExtraParameters();    
 }
 /************************************************************************************************************/
@@ -161,28 +170,20 @@ void UseReceivedData(uint8_t DynamicPayloadSize)                            // D
 /************************************************************************************************************/
 bool ReadData()
 {
-    
-    uint8_t MaxAckCounter = 250;
+    uint8_t MaxSmallAcks = 25;
     static uint8_t AckCounter = 0;
-
     Connected = false;
-    if (SensorHubConnected) MaxAckCounter = 25;
     if (CurrentRadio->available(&Pipnum))
     {
         CurrentRadio->flush_tx();                                                        // This avoids a lockup that happens when the FIFO gets full   
-        if ((millis() - ReconnectedMoment) < 00) {
-             LoadAckPayload();
-             CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);              // Send FULL telemetry when first connected 
-        } else {
-             if (AckCounter > MaxAckCounter) { // heer
-                 AckCounter = 0;
-                 LoadAckPayload();
-                 CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);          // send big PAYLOAD EVERY 100th time (2 per second)
-             }else{
-                 LoadShortAckPayload();  
-                 CurrentRadio->writeAckPayload(1, &AckPayload, 2);                       // send VERY little 99% of the time
-                 ++AckCounter;
-             }
+        if (AckCounter > MaxSmallAcks) { // heer
+            AckCounter = 0;
+            LoadAckPayload();
+            CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);          // send big PAYLOAD EVERY 100th time (2 per second)
+        }else{
+            LoadShortAckPayload();  
+            CurrentRadio->writeAckPayload(1, &AckPayload, 2);                       // send VERY little 99% of the time
+            ++AckCounter;
         }
         DelayMillis(2);    
         uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize();           // Get the size of the new data (14)   
