@@ -4607,7 +4607,9 @@ void SendOutstandingParameters(){  // Send any QUEUED parameters that have not b
         // Look1(Parameters.ID);
         // Look1(" ");
         // Look(ParaNames[Parameters.ID-1]);
-    }   
+    }   else {
+     //   AddExtraParameters = false;
+    }
   }
 }
 

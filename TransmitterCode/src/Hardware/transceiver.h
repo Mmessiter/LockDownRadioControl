@@ -249,10 +249,7 @@ void SuccessfulPacket()
     RecordsPacketSuccess(1);
     ++RecentGoodPacketsCount;
     ++PacketNumber;
-     if (AddExtraParameters) {  
-            AddExtraParameters = false;
-            Parameters.ID = 0;
-     }   
+    if (AddExtraParameters) AddExtraParameters = false;
     if (RecentPacketsLost){
         TotalLostPackets += (RecentPacketsLost / 2);        // divide by 2 because acks get lost too
         RecentPacketsLost = 0;
