@@ -2431,10 +2431,9 @@ void RXOptionsViewEnd()
     SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
     SendCommand(pRXSetupView);
-    for (int i = 1; i < 8; ++i){
-        AddParameterstoQueue(4);               // 4 Send default servo frequency and centre pulse width
-        AddParameterstoQueue(5);               // 5 is the ID for SBUS/PPM at RX selection and PPM channel count
-    }
+    AddParameterstoQueue(4);               // 4 Send default servo frequency and centre pulse width
+    AddParameterstoQueue(5);               // 5 is the ID for SBUS/PPM at RX selection and PPM channel count
+   
 }
 
 /******************************************************************************************************************************/
@@ -4574,15 +4573,15 @@ void CheckPowerOffButton()
 }
 /*********************************************************************************************************************************/
 
-void AddParameterstoQueue(uint8_t ID)
+void AddParameterstoQueue(uint8_t ID)  // todo:  This function repeats the same parameter 12 times.  Should not be necessary.
 {
-    if (!ID) return;
-    if (ParametersToBeSentPointer < 78){
-         ++ParametersToBeSentPointer;
-        ParametersToBeSent[ParametersToBeSentPointer] = ID;
+    
+    for (int i = 0; i < 12; ++i){
+        if (ParametersToBeSentPointer < 78){
+             ++ParametersToBeSentPointer;
+            ParametersToBeSent[ParametersToBeSentPointer] = ID;
+        }
     }
-    AddExtraParameters = true;
-    DelayWithDog(10);
     // Look1("Queued: ");
     // Look1(ID);
     // Look1(" ");
@@ -4590,12 +4589,11 @@ void AddParameterstoQueue(uint8_t ID)
 }
 /*********************************************************************************************************************************/
 void SendInitialSetupParams(){
-    
-    for (int i = 1; i < 8; ++i){
+   
         AddParameterstoQueue (5);            // Sbus / PPM at rx
         AddParameterstoQueue (4);            // Send default servo frequency and centre pulse width
         AddParameterstoQueue (2);            // QNH
-    }
+   
 }
 /************************************************************************************************************/
 void SendOutstandingParameters(){  // Send any QUEUED parameters that have not been sent yet at the rate of one per second max 
@@ -4605,10 +4603,10 @@ void SendOutstandingParameters(){  // Send any QUEUED parameters that have not b
         Parameters.ID = ParametersToBeSent[ParametersToBeSentPointer];
         --ParametersToBeSentPointer;
         AddExtraParameters = true;
-        Look1("Sent: ");
-        Look1(Parameters.ID);
-        Look1(" ");
-        Look(ParaNames[Parameters.ID-1]);
+        // Look1("Sent: ");
+        // Look1(Parameters.ID);
+        // Look1(" ");
+        // Look(ParaNames[Parameters.ID-1]);
     }   
   }
 }
@@ -4639,7 +4637,7 @@ void FASTRUN ManageTransmitter()
         return;                                                                                                // That's enough housekeeping for this time around
     }
 
-    if (RightNow - LastParameterSent >= 150) {                                                                 // Send queued parameters
+    if (RightNow - LastParameterSent >= 25) {                                                                 // Send queued parameters
         SendOutstandingParameters();
         LastParameterSent = RightNow;
     }   

@@ -136,12 +136,10 @@ void LoadParameters()
             Parameters.word1  = FS_Byte1;                      // These are failsafe flags
             Parameters.word2  = FS_Byte2;                      // These are failsafe flags
             break;
-
        case 2:                              // 2 = QNH
             Parameters.word1  =  Qnh;      
-            Parameters.word2  =  2000;    
+            Parameters.word2  =  1234;    
             break;
-
         case 3:                             // 3 = GPSMarkHere
             if (GPSMarkHere) {
                 Parameters.word1  = 0;
@@ -149,18 +147,17 @@ void LoadParameters()
                 GPSMarkHere       = 0;
             }
             break;
-     
         case 4:                            // 4 = set servo centre pulse and frequency
             Parameters.word1 = ServoCentrePulse;   
             Parameters.word2 = ServoFrequency; 
-              
-         
             break;
         case 5:                            // 5 = SBUS/PPM           
               Parameters.word1 = PPMdata.UseSBUSFromRX;   // 1 - 0
               Parameters.word2 = PPMdata.PPMChannelCount; 
             break;
         default: 
+            Parameters.word1 = 0;   
+            Parameters.word2 = 0; 
             break;
     }
 }
@@ -278,10 +275,10 @@ void SuccessfulPacket()
     LostContactFlag = false;
 }
 /************************************************************************************************************/
-void SendExtraParamemters()                       // parameters must be loaded before this function is called
+bool SendExtraParamemters()                       // parameters must be loaded before this function is called
 {                                                 // only the ***low 12 bits*** of each parameter are actually sent
     
-    if (Parameters.ID == 0) return;               // no parameters to send
+    if (Parameters.ID == 0) return false;         // no parameters to send
     LoadParameters();
     RawDataBuffer[0]  = Parameters.ID;            // copy current parameter values into the rawdatabuffer instead of the channels for 3 packets
     RawDataBuffer[1]  = Parameters.word1;
@@ -295,6 +292,8 @@ void SendExtraParamemters()                       // parameters must be loaded b
     // Look(Parameters.word1);
     // Look1("Word2: ");
     // Look(Parameters.word2);
+
+    return true;
     
 }
 /************************************************************************************************************/
@@ -333,8 +332,8 @@ FASTRUN void SendData()
         Connected = false;                                                                                // Assume failure until an ACK is received.
         FlushFifos();                                                                                     // This flush avoids a lockup that happens when the FIFO gets full.
         if (AddExtraParameters) {  // Send parameters here if there are some to go
-            SendExtraParamemters(); 
-            NumberOfChangedChannels = 4;                                                                  // This is for calculating the packet size. It's not really the number of changed channels.
+            if (SendExtraParamemters())  {NumberOfChangedChannels = 4;}
+            else {NumberOfChangedChannels = 0;}                                                                  // This is for calculating the packet size. It's not really the number of changed channels.
         }else {
             NumberOfChangedChannels = EncodeTheChangedChannels();                                         // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels.
         }
