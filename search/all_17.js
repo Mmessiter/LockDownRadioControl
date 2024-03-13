@@ -82,7 +82,7 @@ var searchData=
   ['senddata_79',['senddata',['../1Definitions_8h.html#a3d7322e78f097d02d476f17a6306997c',1,'SendData():&#160;transceiver.h'],['../transceiver_8h.html#a049bfb836e7aa4a3a48a1a4bd225fafc',1,'SendData():&#160;transceiver.h']]],
   ['senddatatoreceiver_80',['SendDataToReceiver',['../SensorHubT32_2src_2main_8cpp.html#aac529433269b7b52ef0a627716a70aea',1,'main.cpp']]],
   ['senddatetoackpayload_81',['SendDateToAckPayload',['../radio_8h.html#affa2dcc4341b8daecac77e6e0a354b2d',1,'radio.h']]],
-  ['sendextraparamemters_82',['SendExtraParamemters',['../transceiver_8h.html#a188ad446d11b2db284476c093de58b2f',1,'transceiver.h']]],
+  ['sendextraparamemters_82',['SendExtraParamemters',['../transceiver_8h.html#a5a043d48a3d1761777eb9e7c3faa8753',1,'transceiver.h']]],
   ['sendhelp_83',['SendHelp',['../TransmitterCode_2src_2main_8cpp.html#a038111bf598c53ad7b9a62ca45259356',1,'main.cpp']]],
   ['sendinitialsetupparams_84',['sendinitialsetupparams',['../1Definitions_8h.html#a0689e46060ebded46afaba01b54fab8b',1,'SendInitialSetupParams():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a0689e46060ebded46afaba01b54fab8b',1,'SendInitialSetupParams():&#160;main.cpp']]],
   ['sendinttoackpayload_85',['SendIntToAckPayload',['../radio_8h.html#a5b9bcce29081b0c53837ecb90e0a6b33',1,'radio.h']]],

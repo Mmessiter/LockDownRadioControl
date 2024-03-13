@@ -709,7 +709,7 @@ var 1Definitions_8h =
     [ "PacketsHistoryBuffer", "1Definitions_8h.html#a6418df611b6c36d20a2b81f834b2a94c", null ],
     [ "PacketsPerSecond", "1Definitions_8h.html#aa7dff891c96c5574f3a8dfb38a1aad0d", null ],
     [ "Parameters", "1Definitions_8h.html#adefe865b827a3f50e85ebee02d0347bb", null ],
-    [ "ParametersToBeSent", "1Definitions_8h.html#a086f3bd85ed185380eb53b1ab1176d1b", null ],
+    [ "ParametersToBeSent", "1Definitions_8h.html#afd60cd5a97e9c3d80f4d4f31f0b4fc31", null ],
     [ "ParametersToBeSentPointer", "1Definitions_8h.html#a4ba3a53759d48893a024d2bcfea4db32", null ],
     [ "ParaNames", "1Definitions_8h.html#aff5af8b662100b91c39dd8e64c72582d", null ],
     [ "pAudioView", "1Definitions_8h.html#acf102b4e984dffc411664c32263b4e1e", null ],

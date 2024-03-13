@@ -76,9 +76,9 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "1Definitions_8h.html",
-"1Definitions_8h.html#a4e93c6d21a52ae42832359ee0e4c8b2d",
-"1Definitions_8h.html#a920f01d8bd6e26cf3e4c387cef2ad495",
-"1Definitions_8h.html#ade79cdae89d2e1ff6ca095d901e7371a",
+"1Definitions_8h.html#a4f545e5688bbbd16b52e1ab80e1ae69b",
+"1Definitions_8h.html#a922416bc71ebe2b10fcd879f271e7c1c",
+"1Definitions_8h.html#adefa82095f6c3bde3743d857f63b5ec2",
 "MPU6050_8h.html#a27f6318269af082372464d232eb8fd61",
 "MPU6050_8h.html#ae79610c4ceb7d51823836a1242e81f28",
 "Quadcopter_2src_2main_8cpp.html#a0a076e0ba1a7d3bb34c4d1e2e7b37727",
