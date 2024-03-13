@@ -361,6 +361,32 @@ if (!LastPacketsPerSecond)
         }
     }
 
+
+/*********************************************************************************************************************************/
+// this function looks at the most recent ((uint16_t) ConnectionAssessSeconds) few seconds of packets which succeeded and expresses these
+// as a percentage of total attempted packets using a progress bar on the screen.
+
+void ShowConnectionQuality()
+{
+    char Quality[] = "Quality";
+    char FrontView_Connected[]    = "Connected";                    // this is both the label name and the text to be displayed :=)
+    char Visible[]                = "vis Quality,1";
+    char TXModuleMSG[]            = "** Using TX module **";
+    uint16_t  ConnectionQuality   = GetSuccessRate();
+    if (PPMdata.UseTXModule) SendText(FrontView_Connected, TXModuleMSG);
+    if (!LedWasGreen) return;
+    if (!LastConnectionQuality) {SendText(FrontView_Connected, FrontView_Connected);SendCommand(Visible);}                                      // once only!
+    if (ConnectionQuality != LastConnectionQuality) {LastConnectionQuality = ConnectionQuality;SendValue(Quality, ConnectionQuality);}          // only if changed
+}
+
+/*********************************************************************************************************************************/
+
+void ShowSendingParameters(){
+    char FrontView_Connected[]    = "Connected"; 
+    char SendingParameters[]      = "Sending parameters to RX";
+    if (!LedWasGreen) return;
+    SendText(FrontView_Connected, SendingParameters);
+}
 /*********************************************************************************************************************************/
 
 void  PopulateFrontView(){
@@ -371,7 +397,12 @@ void  PopulateFrontView(){
     char         FrontView_Connected[]  = "Connected";
     char         InVisible[]            = "vis Quality,0";
         
-        ShowConnectionQuality();
+
+        if (ParametersToBeSentPointer == 0) {
+            ShowConnectionQuality();
+        }else{
+            ShowSendingParameters();
+        }
         if ((LastAutoModelSelect != AutoModelSelect) || (!ModelsMacUnionSaved.Val64)){
             LastAutoModelSelect = AutoModelSelect;
             ShowAMS();

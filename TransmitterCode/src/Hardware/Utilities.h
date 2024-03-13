@@ -876,22 +876,6 @@ uint16_t GetSuccessRate()
 }
 
 /*********************************************************************************************************************************/
-// this function looks at the most recent ((uint16_t) ConnectionAssessSeconds) few seconds of packets which succeeded and expresses these
-// as a percentage of total attempted packets using a progress bar on the screen.
-
-void ShowConnectionQuality()
-{
-    char Quality[] = "Quality";
-    char FrontView_Connected[]    = "Connected";                    // this is both the label name and the text to be displayed :=)
-    char Visible[]                = "vis Quality,1";
-    char TXModuleMSG[]            = "** Using TX module **";
-    uint16_t  ConnectionQuality   = GetSuccessRate();
-    if (PPMdata.UseTXModule) SendText(FrontView_Connected, TXModuleMSG);
-    if (!LedWasGreen) return;
-    if (!LastConnectionQuality) {SendText(FrontView_Connected, FrontView_Connected);SendCommand(Visible);}                                      // once only!
-    if (ConnectionQuality != LastConnectionQuality) {LastConnectionQuality = ConnectionQuality;SendValue(Quality, ConnectionQuality);}          // only if changed
-}
-/*********************************************************************************************************************************/
 //                  My new version of the the traditional "map()" function -- but here with exponential added.
 /*********************************************************************************************************************************/
 
