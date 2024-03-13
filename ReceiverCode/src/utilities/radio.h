@@ -124,7 +124,7 @@ void RearrangeTheChannels(){
 /************************************************************************************************************/
 void ReadMoreParameters(){                                       
         Parameters.ID    =  RawDataIn[0];                           // NumberOfChangedChannels points past the end of the changed channels
-        if ((Parameters.ID == 0) || (Parameters.ID > 5 )){
+        if ((Parameters.ID == 0) || (Parameters.ID > MAXPARAMETERS)){
             Look1("Invalid ID: ");
             Look(Parameters.ID);
             Look1(" ");

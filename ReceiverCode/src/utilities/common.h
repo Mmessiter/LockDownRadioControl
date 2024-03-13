@@ -44,7 +44,7 @@
         #define EXTRAAT760   350                        // high frequency servos
         #define MAXAT760     760 + EXTRAAT760
         #define MINAT760     760 - EXTRAAT760
-
+        #define MAXPARAMETERS          5                            // Max number of parameters to send        
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
 //***************************************************************************
