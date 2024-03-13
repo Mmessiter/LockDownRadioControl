@@ -172,16 +172,42 @@ void RecordsPacketSuccess(uint8_t s)
     ++TotalGoodPackets;
     if (PacketsHistoryIndex >= (PERFECTPACKETSPERSECOND * ConnectionAssessSeconds)) PacketsHistoryIndex = 0; //
 }
-
 /************************************************************************************************************/
-
 void SendAllAgain(){
     for (int i = 0; i < CHANNELSUSED; ++i) {
         PrePreviousBuffer[i] = 0;
         PreviousBuffer[i] = PrePreviousBuffer[i]; 
     }   
 }
+/************************************************************************************************************/
+void CheckGap(){
+if (!GapStart) 
+    {
+        GapStart     =   millis();                                                          // To keep track of this gap's length
+    } else 
+    {
+        if (((millis() - GapStart) > RED_LED_ON_TIME) && !LedWasRed) RedLedOn();            // Put on red led - receiver must be off
+    }
 
+}
+/************************************************************************************************************/
+void CheckDataRepeat(){
+    if (!AddExtraParameters){
+        for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = PrePreviousBuffer[i];    // force last update repeat if not sending parameters
+    }
+}
+/************************************************************************************************************/
+void CheckLostContact(){
+    if (RecentPacketsLost   >= LOSTCONTACTCUTOFF) {                                         // If we have lost contact
+            LostContactFlag  =   true;
+            TryToReconnect();  
+    }
+}
+/************************************************************************************************************/
+void CheckInactivityTimeout(){
+    int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
+    if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);                           // INACTIVITY POWER OFF HERE!!
+}
 /************************************************************************************************************/
 FASTRUN void FailedPacket()
 {
@@ -190,24 +216,10 @@ FASTRUN void FailedPacket()
     Reconnected         =   false; 
     ReconnectingNow     =   true;
     LastPacketSentTime  =   0;                                                              // Force a new packet to be sent immediately
-    if (!GapStart) 
-    {
-        GapStart     =   millis();                                                          // To keep track of this gap's length
-    } else 
-    {
-        if (((millis() - GapStart) > RED_LED_ON_TIME) && !LedWasRed) RedLedOn();            // Put on red led - receiver must be off
-    }
-    
-    if (!AddExtraParameters){
-        for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = PrePreviousBuffer[i];    // force last update repeat if not sending parameters
-    }
-   
-    if (RecentPacketsLost   >= LOSTCONTACTCUTOFF) {                                         // If we have lost contact
-            LostContactFlag  =   true;
-            TryToReconnect();  
-    }
-    int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
-    if (SecondsRemaining <= 0) digitalWrite(POWER_OFF_PIN, HIGH);                           // INACTIVITY POWER OFF HERE!!
+    CheckGap();
+    CheckDataRepeat();
+    CheckLostContact();
+    CheckInactivityTimeout();
 }
 /************************************************************************************************************/
 FASTRUN void TryOtherPipe()
