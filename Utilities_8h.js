@@ -61,7 +61,6 @@ var Utilities_8h =
     [ "ServoReverse", "Utilities_8h.html#a2d10590a11f1790e37c47f70f294f10d", null ],
     [ "SetAudioVolume", "Utilities_8h.html#a9f7ebc44d49714174b6be3085e6a36ab", null ],
     [ "SetTheRTC", "Utilities_8h.html#aab56bfb50b2e8997275de7ea611e5bb4", null ],
-    [ "ShowConnectionQuality", "Utilities_8h.html#a77e9a1ed6c347897af1e92db48c68b77", null ],
     [ "ShowScreenAgain", "Utilities_8h.html#a789aa2c47bd0fb1851c64e6b2e0c3f85", null ],
     [ "StartInactvityTimeout", "Utilities_8h.html#a793b7bcd77531c95fe72ed4356d421c8", null ],
     [ "Str", "Utilities_8h.html#a590a9174319918d7e3d7baca323fcf26", null ],

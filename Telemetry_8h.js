@@ -8,6 +8,8 @@ var Telemetry_8h =
     [ "PopulateGPSView", "Telemetry_8h.html#adb1a04de9e49c7d96cfe009fd98c6383", null ],
     [ "ShowAMS", "Telemetry_8h.html#a40de40ada06b86bb254a898b1899d988", null ],
     [ "ShowComms", "Telemetry_8h.html#a5d3a46c21927cf7a3031a1e68e0b7b48", null ],
+    [ "ShowConnectionQuality", "Telemetry_8h.html#a77e9a1ed6c347897af1e92db48c68b77", null ],
     [ "ShowCurrentRate", "Telemetry_8h.html#a370c4af22d463cad6d6de59d269c75af", null ],
+    [ "ShowSendingParameters", "Telemetry_8h.html#a6417dcaa476b4a0ac5560f7a9c1fe227", null ],
     [ "ShowTrimToAll", "Telemetry_8h.html#a83a79fb69771868d0a4d1d254644e6aa", null ]
 ];
