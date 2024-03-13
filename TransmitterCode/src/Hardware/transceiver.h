@@ -197,7 +197,11 @@ FASTRUN void FailedPacket()
     {
         if (((millis() - GapStart) > RED_LED_ON_TIME) && !LedWasRed) RedLedOn();            // Put on red led - receiver must be off
     }
-    for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = PrePreviousBuffer[i];        // force last update repeat 
+    
+    if (!AddExtraParameters){
+        for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = PrePreviousBuffer[i];    // force last update repeat 
+    }
+   
     if (RecentPacketsLost   >= LOSTCONTACTCUTOFF) {                                         // Don't immeditately change channel
             LostContactFlag  =   true;
             TryToReconnect();  
