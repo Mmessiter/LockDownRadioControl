@@ -125,17 +125,19 @@ void RearrangeTheChannels(){
 void ReadMoreParameters(){                                       
         Parameters.ID    =  RawDataIn[0];                           // NumberOfChangedChannels points past the end of the changed channels
         if ((Parameters.ID == 0) || (Parameters.ID > 5 )){
-            // Look1("Invalid ID: ");
-            // Look(Parameters.ID);
-            // Look1(" ");
-            // Look(Parameters.word1);
-            // Look1(" ");
-            // Look(Parameters.word2);
-            // Look1(" ");
+            Look1("Invalid ID: ");
+            Look(Parameters.ID);
+            Look1(" ");
+            Look(Parameters.word1);
+            Look1(" ");
+            Look(Parameters.word2);
+            Look1(" ");
             return;   // not a valid ID
         } 
         Parameters.word1 =  RawDataIn[1];
         Parameters.word2 =  RawDataIn[2];
+        UseExtraParameters();    
+
         // Look1("Parameters.ID:\t\t");
         // Look1(Parameters.ID);
         // Look1(" ");
@@ -144,8 +146,7 @@ void ReadMoreParameters(){
         // Look(Parameters.word1);
         // Look1("Parameters.word2:\t");
         // Look(Parameters.word2);
-        UseExtraParameters();    
-}
+} 
 /************************************************************************************************************/
 void UseReceivedData(uint8_t DynamicPayloadSize)                            // DynamicPayloadSize is length of incomming data
 {
