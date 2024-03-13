@@ -4576,7 +4576,7 @@ void CheckPowerOffButton()
 void AddParameterstoQueue(uint8_t ID)  // todo:  This function repeats the same parameter 12 times.  Should not be necessary.
 {
     
-    for (int i = 0; i < 12; ++i){
+    for (int i = 0; i < 30; ++i){
         if (ParametersToBeSentPointer < 78){
              ++ParametersToBeSentPointer;
             ParametersToBeSent[ParametersToBeSentPointer] = ID;
@@ -4598,6 +4598,8 @@ void SendInitialSetupParams(){
 /************************************************************************************************************/
 void SendOutstandingParameters(){  // Send any QUEUED parameters that have not been sent yet at the rate of one per second max 
 
+
+    //if (AddExtraParameters)return;                          // If we are still waiting for the last parameter to be sent, then don't send any more yet.
     if (BoundFlag && ModelMatched && LedWasGreen){
     if (ParametersToBeSentPointer > 0) {
         Parameters.ID = ParametersToBeSent[ParametersToBeSentPointer];
@@ -4607,8 +4609,6 @@ void SendOutstandingParameters(){  // Send any QUEUED parameters that have not b
         // Look1(Parameters.ID);
         // Look1(" ");
         // Look(ParaNames[Parameters.ID-1]);
-    }   else {
-     //   AddExtraParameters = false;
     }
   }
 }
