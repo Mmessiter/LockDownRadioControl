@@ -24,6 +24,7 @@ var common_8h =
     [ "MAXAT760", "common_8h.html#af2d88b72b859f094211ca3e949114d2f", null ],
     [ "MAXMICROS", "common_8h.html#a843e3db36f734b45096220f7ca4b8d9f", null ],
     [ "MAXMICROS", "common_8h.html#a843e3db36f734b45096220f7ca4b8d9f", null ],
+    [ "MAXPARAMETERS", "common_8h.html#a5156660ff5bae06b1902c1e70d945784", null ],
     [ "MINAT760", "common_8h.html#aa578f6260ee57a0b96f027c331e5b655", null ],
     [ "MINMICROS", "common_8h.html#ac67e087c11a86a3790c656a29f8c7195", null ],
     [ "MINMICROS", "common_8h.html#ac67e087c11a86a3790c656a29f8c7195", null ],
