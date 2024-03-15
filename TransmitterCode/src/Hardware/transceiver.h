@@ -295,33 +295,43 @@ void SuccessfulPacket()
     LostContactFlag = false;
 }
 /************************************************************************************************************/
-bool SendExtraParamemters()                       // parameters must be loaded before this function is called
-{                                                 // only the ***low 12 bits*** of each parameter are actually sent
-    if ((Parameters.ID == 0) || (Parameters.ID > 5)){
-        Look1("Parameter error: ID is ");
-        Look(Parameters.ID);
-        return false;         
-    }
-    LoadParameters();
-    RawDataBuffer[0]  = Parameters.ID;            // copy current parameter values into the rawdatabuffer instead of the channels for 3 packets
+
+void LoadRawDataWithParameters(){
+    RawDataBuffer[0]  = Parameters.ID;            // copy current parameter values into the rawdatabuffer instead of the channels 
     RawDataBuffer[1]  = Parameters.word1;
     RawDataBuffer[2]  = Parameters.word2;
     RawDataBuffer[3]  = Parameters.word3;
     RawDataBuffer[4]  = Parameters.word4;
-    
-    // Look1("Parameter ID: ");
-    // Look1(Parameters.ID);
-    // Look1(" ");
-    // Look(ParaNames[Parameters.ID - 1]);
-    // Look1("Word1: ");
-    // Look(Parameters.word1);
-    // Look1("Word2: ");
-    // Look(Parameters.word2);
-    // Look1("Word3: ");
-    // Look(Parameters.word3);
-    // Look1("Word4: ");
-    // Look(Parameters.word4);
-    return true;
+}
+
+/************************************************************************************************************/
+
+void DebugParamsOut(){
+    Look1("Parameter ID: ");
+    Look1(Parameters.ID);
+    Look1(" ");
+    Look(ParaNames[Parameters.ID - 1]);
+    Look1("Word1: ");
+    Look(Parameters.word1);
+    Look1("Word2: ");
+    Look(Parameters.word2);
+    Look1("Word3: ");
+    Look(Parameters.word3);
+    Look1("Word4: ");
+    Look(Parameters.word4);
+}
+/************************************************************************************************************/
+void SendExtraParamemters()                       // parameters must be loaded before this function is called
+{                                                 // only the ***low 12 bits*** of each parameter are actually sent
+    if ((Parameters.ID == 0) || (Parameters.ID > 5)){
+        Look1("Parameter error: ID is ");
+        Look(Parameters.ID);
+        return ;         
+    }
+    LoadParameters();
+    LoadRawDataWithParameters();
+  //  DebugParamsOut();
+    return;
 }
 /************************************************************************************************************/
 uint8_t EncodeTheChangedChannels(){
@@ -358,12 +368,10 @@ FASTRUN void SendData()
         if (BuddyPupilOnPPM) {SendViaPPM(); return;}                                                      // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         Connected = false;                                                                                // Assume failure until an ACK is received.
         FlushFifos();                                                                                     // This flush avoids a lockup that happens when the FIFO gets full.
-        if (AddExtraParameters) {  // Send parameters here if there are some to go
-            if (SendExtraParamemters())  {NumberOfChangedChannels = 4;}
-            else {NumberOfChangedChannels = 0;}                                                           // This is for calculating the packet size. It's not really the number of changed channels.
-        }else {
-            NumberOfChangedChannels = EncodeTheChangedChannels();                                         // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels.
-        }
+        
+        if (AddExtraParameters) { SendExtraParamemters(); NumberOfChangedChannels = 5;                    // Here the 'number of changed channels' is actually the number of parameters to send + 1
+        } else { NumberOfChangedChannels = EncodeTheChangedChannels(); }                                  // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels.
+        
         if (NumberOfChangedChannels){                                                                     // Any channels changed? Or parameters to send?
             ByteCountToTransmit     =  ((float) NumberOfChangedChannels * 1.5f) + 4;                      // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 word because int rounds downwards.
             uint8_t SizeOfUnCompressedData  =   (ByteCountToTransmit / 1.5) ;                                

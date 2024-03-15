@@ -182,8 +182,8 @@ bool ReadData()
     if (CurrentRadio->available(&Pipnum))
     {
         uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize();         // Get the size of the new data (14) 
-        if (DynamicPayloadSize > 10) {                                              // must be a parameter packet
-           
+        if (DynamicPayloadSize > 10) {                                              // heer! if size = 16 it must be a parameter packet
+             // todo: Send ACK that says "I got a parameter" heer!!
             // Look1(millis());
             // Look1(" ");                                              
             // Look1("DynamicPayloadSize: ");
