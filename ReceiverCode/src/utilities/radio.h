@@ -66,6 +66,9 @@ void UseExtraParameters()
         case 4:
             ServoCentrePulse    =   Parameters.word1;
             ServoFrequency      =   Parameters.word2;
+            // Look(Parameters.word3);
+            // Look(Parameters.word4);
+
             SetServoFrequency();
             break;
         case 5:
@@ -126,16 +129,14 @@ void ReadMoreParameters(){
         Parameters.ID    =  RawDataIn[0];                           // NumberOfChangedChannels points past the end of the changed channels
         if ((Parameters.ID == 0) || (Parameters.ID > MAXPARAMETERS)){
             Look1("Invalid ID: ");
-            Look(Parameters.ID);
-            Look1(" ");
-            Look(Parameters.word1);
-            Look1(" ");
-            Look(Parameters.word2);
-            Look1(" ");
+            Look(Parameters.ID);           
             return;   // not a valid ID
         } 
         Parameters.word1 =  RawDataIn[1];
         Parameters.word2 =  RawDataIn[2];
+        Parameters.word3 =  RawDataIn[3];
+        Parameters.word4 =  RawDataIn[4];
+        
         UseExtraParameters();    
 
         // Look1("Parameters.ID:\t\t");
@@ -146,6 +147,10 @@ void ReadMoreParameters(){
         // Look(Parameters.word1);
         // Look1("Parameters.word2:\t");
         // Look(Parameters.word2);
+        // Look1("Parameters.word3:\t");
+        // Look(Parameters.word3);
+        // Look1("Parameters.word4:\t");
+        // Look(Parameters.word4);
 } 
 /************************************************************************************************************/
 void UseReceivedData(uint8_t DynamicPayloadSize)                            // DynamicPayloadSize is length of incomming data
@@ -176,7 +181,15 @@ bool ReadData()
     Connected = false;
     if (CurrentRadio->available(&Pipnum))
     {
-        CurrentRadio->flush_tx();                                                        // This avoids a lockup that happens when the FIFO gets full   
+        uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize();         // Get the size of the new data (14) 
+        if (DynamicPayloadSize > 10) {                                              // must be a parameter packet
+           
+            // Look1(millis());
+            // Look1(" ");                                              
+            // Look1("DynamicPayloadSize: ");
+            // Look(DynamicPayloadSize);
+        }
+        CurrentRadio->flush_tx();                                                   // This avoids a lockup that happens when the FIFO gets full   
         if (AckCounter > MaxSmallAcks) { // heer
             AckCounter = 0;
             LoadAckPayload();
@@ -187,8 +200,7 @@ bool ReadData()
             ++AckCounter;
         }
         DelayMillis(2);    
-        uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize();           // Get the size of the new data (14)   
-        CurrentRadio->read(&DataReceived, DynamicPayloadSize);                        //  ** >> Read new data from master << ** // Get the size of the new data (14)
+        CurrentRadio->read(&DataReceived, DynamicPayloadSize);                      //  ** >> Read new data from master << ** // Get the size of the new data (14)
         Connected = true;
         NewData   = true;
        if (Connected) UseReceivedData(DynamicPayloadSize);
