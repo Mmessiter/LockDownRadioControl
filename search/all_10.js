@@ -101,7 +101,7 @@ var searchData=
   ['lostcontactflag_98',['LostContactFlag',['../1Definitions_8h.html#ad5f463902789a79fc622b3befd9409b9',1,'1Definitions.h']]],
   ['lostcontactthreshold_99',['LOSTCONTACTTHRESHOLD',['../BuddyWireless_8h.html#adc8ab6e023609f6548762eea2746eea1',1,'BuddyWireless.h']]],
   ['low_5fvoltage_5ftime_100',['LOW_VOLTAGE_TIME',['../1Definitions_8h.html#a26bf5116f8cb804123206e63f1432746',1,'1Definitions.h']]],
-  ['lowbattery_101',['lowbattery',['../1Definitions_8h.html#a841a740574f81e5bb80ea1a16f704be5',1,'LowBattery:&#160;1Definitions.h'],['../1Definitions_8h.html#adca16f7a43b448d4584dcb62897068a5',1,'LOWBATTERY:&#160;1Definitions.h']]],
+  ['lowbattery_101',['lowbattery',['../1Definitions_8h.html#adca16f7a43b448d4584dcb62897068a5',1,'LOWBATTERY:&#160;1Definitions.h'],['../1Definitions_8h.html#a841a740574f81e5bb80ea1a16f704be5',1,'LowBattery:&#160;1Definitions.h']]],
   ['lp_5faccel_5fodr_102',['LP_ACCEL_ODR',['../classMPU9250.html#a20a0eee49ffef67d73ba8275486ba47e',1,'MPU9250']]],
   ['lp_5faccel_5fodr_5f0_5f24hz_103',['LP_ACCEL_ODR_0_24HZ',['../classMPU9250.html#a497013a9b2a7273571fb83c9c2b2266fa8945357aea8cde759c5267d07e1306c2',1,'MPU9250']]],
   ['lp_5faccel_5fodr_5f0_5f49hz_104',['LP_ACCEL_ODR_0_49HZ',['../classMPU9250.html#a497013a9b2a7273571fb83c9c2b2266fada769d356ca88e1a292828a80c4f9106',1,'MPU9250']]],
