@@ -851,6 +851,8 @@ struct CD2{
     uint16_t        ID    = 0;          
     uint16_t        word1 = 0;
     uint16_t        word2 = 0;   
+    uint16_t        word3 = 0;
+    uint16_t        word4 = 0;   
 };  
 CD2 Parameters;
 
