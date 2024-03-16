@@ -87,7 +87,7 @@
     #define WARMUPDELAY            300                          // fails at 200 so must be >200 ...
     #define SCREENCHANGEWAIT       10                           // allow 10ms for screen to appear
     #define BATTERY_CHECK_INTERVAL 1000                         // 2 seconds between battery checks
-    #define PARAMETERSENDREPEATS   15                           // How many times to send each parameter in case it gets lost                      
+    #define PARAMETERSENDREPEATS   2                          // How many times to send each parameter in case it gets lost                      
    
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
@@ -852,7 +852,11 @@ struct CD2{
     uint16_t        word1 = 0;
     uint16_t        word2 = 0;   
     uint16_t        word3 = 0;
-    uint16_t        word4 = 0;   
+    uint16_t        word4 = 0;
+    uint16_t        word5 = 0;
+    uint16_t        word6 = 0;   
+    uint16_t        word7 = 0;
+    uint16_t        word8 = 0;   
 };  
 CD2 Parameters;
 

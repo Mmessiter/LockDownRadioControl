@@ -4598,8 +4598,6 @@ void SendInitialSetupParams(){
 /************************************************************************************************************/
 void SendOutstandingParameters(){  // Send any QUEUED parameters that have not been sent yet at the rate of one per second max 
 
-
-    //if (AddExtraParameters)return;                          // If we are still waiting for the last parameter to be sent, then don't send any more yet.
     if (BoundFlag && ModelMatched && LedWasGreen){
     if (ParametersToBeSentPointer > 0) {
         Parameters.ID = ParametersToBeSent[ParametersToBeSentPointer];
