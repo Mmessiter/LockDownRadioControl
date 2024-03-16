@@ -143,6 +143,7 @@ var 1Definitions_8h =
     [ "MAXMICROS", "1Definitions_8h.html#a843e3db36f734b45096220f7ca4b8d9f", null ],
     [ "MAXMIXES", "1Definitions_8h.html#a78eca4e2f9590ad626beb2486d11610d", null ],
     [ "MAXMODELNUMBER", "1Definitions_8h.html#a8c7bf0307f35092b09d270a84f4d98c5", null ],
+    [ "MAXPARAMETERS", "1Definitions_8h.html#a5156660ff5bae06b1902c1e70d945784", null ],
     [ "MAXSHOWCOMMSSESCONDS", "1Definitions_8h.html#a9238da810f8a31cafd344a46dc6825ac", null ],
     [ "MIDMICROS", "1Definitions_8h.html#aa4dd4979e290d977d813a5a4af263b0d", null ],
     [ "MINMICROS", "1Definitions_8h.html#ac67e087c11a86a3790c656a29f8c7195", null ],
