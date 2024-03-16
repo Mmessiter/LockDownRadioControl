@@ -178,11 +178,9 @@ void FailSafe()
 void SetServoFrequency()
 {
      analogWriteResolution(SERVO_RES_BITS);  // 12 Bits for 4096 steps
-  //   DelayMillis(2);
     for (uint8_t i = 0; i < SERVOSUSED; ++i)
     { 
         analogWriteFrequency(PWMPins[i], ServoFrequency);
-    //    DelayMillis(2);
     }
 //Look(ServoCentrePulse);
 }

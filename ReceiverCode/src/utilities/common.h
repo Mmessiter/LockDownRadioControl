@@ -14,7 +14,7 @@
 #define RXVERSION_MINIMUS 5 // 10 March 2024
 #define RXVERSION_EXTRA   'h' 
 
-#define HOPTIME           47     //  14-16 gives 50Hz FHSS, 46-48 gives 20Hz FHSS
+#define HOPTIME           1     //  14-16 gives 50Hz FHSS, 46-48 gives 20Hz FHSS
 #define RECEIVE_TIMEOUT   5      //  was 14   
 
 // **************************************************************************
@@ -85,6 +85,10 @@ struct CD2{
     uint16_t        word2 = 0;
     uint16_t        word3 = 0;
     uint16_t        word4 = 0;  
+    uint16_t        word5 = 0;
+    uint16_t        word6 = 0;
+    uint16_t        word7 = 0;
+    uint16_t        word8 = 0; 
 };  
 
 CD2 Parameters;

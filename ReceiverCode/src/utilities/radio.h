@@ -66,9 +66,6 @@ void UseExtraParameters()
         case 4:
             ServoCentrePulse    =   Parameters.word1;
             ServoFrequency      =   Parameters.word2;
-            // Look(Parameters.word3);
-            // Look(Parameters.word4);
-
             SetServoFrequency();
             break;
         case 5:
@@ -136,7 +133,10 @@ void ReadMoreParameters(){
         Parameters.word2 =  RawDataIn[2];
         Parameters.word3 =  RawDataIn[3];
         Parameters.word4 =  RawDataIn[4];
-        
+        Parameters.word5 =  RawDataIn[5];
+        Parameters.word6 =  RawDataIn[6];
+        Parameters.word7 =  RawDataIn[7];
+        Parameters.word8 =  RawDataIn[8];
         UseExtraParameters();    
 
         // Look1("Parameters.ID:\t\t");
@@ -151,6 +151,14 @@ void ReadMoreParameters(){
         // Look(Parameters.word3);
         // Look1("Parameters.word4:\t");
         // Look(Parameters.word4);
+        // Look1("Parameters.word5:\t");
+        // Look(Parameters.word5);
+        // Look1("Parameters.word6:\t");
+        // Look(Parameters.word6);
+        // Look1("Parameters.word7:\t");
+        // Look(Parameters.word7);
+        // Look1("Parameters.word8:\t");
+        // Look(Parameters.word8);
 } 
 /************************************************************************************************************/
 void UseReceivedData(uint8_t DynamicPayloadSize)                            // DynamicPayloadSize is length of incomming data
@@ -158,11 +166,10 @@ void UseReceivedData(uint8_t DynamicPayloadSize)                            // D
     if (DataReceived.ChannelBitMask){                                       // Any changed channels?
         Decompress(RawDataIn, DataReceived.CompressedData, 8);              // Decompress the most recent data 8 enough? Don't know yet how may channels will be sent
         RearrangeTheChannels();                                             // Rearrange the channels for actual control since only changed ones are sent 
-    } else {                                                                
-        if (DynamicPayloadSize > 2) {                                       // No changed channels BUT MAYBE parameters!
-            Decompress(RawDataIn, DataReceived.CompressedData, 8);             
-            ReadMoreParameters();                                               
-        }
+    }                                                                 
+    if (DynamicPayloadSize == 16) {                                         // len = 16 means only parameters!
+        Decompress(RawDataIn, DataReceived.CompressedData, 10);             // 10 allows 8 parameters per packet         
+        ReadMoreParameters();                                               
     }
     MapToSBUS();                                                            // Get SBUS data ready
     LastPacketArrivalTime = millis();                                       // Note the arrival time  
@@ -182,14 +189,16 @@ bool ReadData()
     if (CurrentRadio->available(&Pipnum))
     {
         uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize();         // Get the size of the new data (14) 
-        if (DynamicPayloadSize >10) {                                               // heer! if size = 16 it must be a parameter packet if over 10 bytes  // todo: Send ACK that says "I got a parameter" heer!!
+        CurrentRadio->flush_tx();                                                   // This avoids a lockup that happens when the FIFO gets full   
+    
+        if (DynamicPayloadSize == 16) {                                             // If size = 16 it must be a parameter packet if over 10 bytes  // todo: Send ACK that says "I got a parameter" heer!!
             // Look1(millis());
             // Look1(" ");                                              
             // Look1("DynamicPayloadSize: ");
             // Look(DynamicPayloadSize);
+            AckCounter = 0; // force small ack
         }
-        CurrentRadio->flush_tx();                                                   // This avoids a lockup that happens when the FIFO gets full   
-        if (AckCounter > MaxSmallAcks) { // heer
+          if (AckCounter > MaxSmallAcks) { // heer
             AckCounter = 0;
             LoadAckPayload();
             CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);          // send big PAYLOAD EVERY 100th time (2 per second)
