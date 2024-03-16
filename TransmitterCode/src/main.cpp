@@ -4599,7 +4599,6 @@ void SendInitialSetupParams(){
 void SendOutstandingParameters(){  // Send any QUEUED parameters that have not been sent yet at the rate of one per second max 
 
     if (BoundFlag && ModelMatched && LedWasGreen){
-    if (ParametersToBeSentPointer > 0) {
         Parameters.ID = ParametersToBeSent[ParametersToBeSentPointer];
         --ParametersToBeSentPointer;
         AddExtraParameters = true;
@@ -4607,7 +4606,6 @@ void SendOutstandingParameters(){  // Send any QUEUED parameters that have not b
         // Look1(Parameters.ID);
         // Look1(" ");
         // Look(ParaNames[Parameters.ID-1]);
-    }
   }
 }
 
@@ -4638,7 +4636,7 @@ void FASTRUN ManageTransmitter()
     }
 
     if (RightNow - LastParameterSent >= 100) {                                                                 // Send queued parameters
-        SendOutstandingParameters();
+       if (ParametersToBeSentPointer > 0) SendOutstandingParameters();
         LastParameterSent = RightNow;
     }   
     

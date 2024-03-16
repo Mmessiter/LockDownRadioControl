@@ -14,7 +14,7 @@
 #define RXVERSION_MINIMUS 6 // 16 March 2024
 #define RXVERSION_EXTRA   'a' 
 
-#define HOPTIME           1     //  14-16 gives 50Hz FHSS, 46-48 gives 20Hz FHSS
+#define HOPTIME           47     //  14-16 gives 50Hz FHSS, 46-48 gives 20Hz FHSS
 #define RECEIVE_TIMEOUT   5      //  was 14   
 
 // **************************************************************************
