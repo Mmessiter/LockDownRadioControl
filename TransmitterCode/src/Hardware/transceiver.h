@@ -275,7 +275,7 @@ void SuccessfulPacket()
     RecordsPacketSuccess(1);
     ++RecentGoodPacketsCount;
     ++PacketNumber;
-    if (AddExtraParameters) AddExtraParameters = false;
+    AddExtraParameters = false;
     if (RecentPacketsLost){
         TotalLostPackets += (RecentPacketsLost / 2);        // divide by 2 because acks get lost too
         RecentPacketsLost = 0;
@@ -373,7 +373,7 @@ FASTRUN void SendData()
         if (AddExtraParameters) {
             NumberOfChangedChannels = SendExtraParamemters();                                                         
         } else { 
-            NumberOfChangedChannels = EncodeTheChangedChannels();  // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels.
+            NumberOfChangedChannels = EncodeTheChangedChannels();                                         // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels.
         }                                                                                                  
 
         if (NumberOfChangedChannels){                                                                     // Any channels changed? Or parameters to send?
@@ -384,7 +384,7 @@ FASTRUN void SendData()
             ByteCountToTransmit = 2;    
             NewCompressNeeded = false;                                                                    // No channels changed nor any params to send, so just send the flag
         }
-        if (BuddyMasterOnWireless) SendSpecialPacket();                                                   // Talk to the buddy pupil if we are a master also 200 x per second
+        if (BuddyMasterOnWireless &&  !AddExtraParameters) SendSpecialPacket();                                                   // Talk to the buddy pupil if we are a master also 200 x per second
         if (Radio1.write(&DataTosend, ByteCountToTransmit)) {SuccessfulPacket();} else {FailedPacket();}  // Send the data packet complete with ChannelBitMask and compressed data 
      
         // ShowPacketData(ByteCountToTransmit, NumberOfChangedChannels);                                  // Just for debugging                          

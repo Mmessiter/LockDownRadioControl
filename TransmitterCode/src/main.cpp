@@ -4629,14 +4629,14 @@ void FASTRUN ManageTransmitter()
         GetFrameRate();                                                                                        // Get the frame rate
         CheckScreenTime();                                                                                     // Check if screen needs to be turned off
         CheckBatteryStates();                                                                                  // Check battery states                                                       
-        if (CurrentView != BLANKVIEW) {ReadTime();UpdateTrimView();}                                           // Show time and trim positions
+        if (CurrentView != BLANKVIEW) {ReadTime();UpdateTrimView();ShowComms();}                                           // Show time and trim positions
         ShowMotorTimer();                                                                                      // Show motor timer and send any queued parameters
         LastTimeRead = millis();                                                                               // Reset this timer
         return;                                                                                                // That's enough housekeeping for this time around
     }
 
     if (RightNow - LastParameterSent >= 100) {                                                                 // Send queued parameters
-       if (ParametersToBeSentPointer > 0) SendOutstandingParameters();
+       if (ParametersToBeSentPointer) SendOutstandingParameters();
         LastParameterSent = RightNow;
     }   
     
@@ -4651,7 +4651,6 @@ void FASTRUN ManageTransmitter()
 
     if (RightNow - TransmitterLastManaged >= 50) {                                                             // 20 times a second is good
         ReadSwitches();CheckHardwareTrims();GetBank();                                                         // Check switch positions 20 times a secon                                                                                                                                                                            
-        if (CurrentView != BLANKVIEW) ShowComms();                                                             // Screen Telemetry Data
         TransmitterLastManaged = millis();
     }
 }
@@ -4688,10 +4687,10 @@ void GetBuddyData()                                                 // For Maste
 }
 /************************************************************************************************************/
 void DoWirelessBuddyListen(){                                // For Slave only
-    GetNewChannelValues();                                   // Read sticks and trims and switches etc
-    FixMotorChannel(); 
-    ShowServoPos();
-    GetSpecialPacket();                                      // Get the special packet and send our control data in the ask payload
+     GetNewChannelValues();                                  // Read sticks and trims and switches etc
+     FixMotorChannel(); 
+     ShowServoPos();
+     GetSpecialPacket();                                     // Get the special packet and send our control data in the ask payload
 }
 /************************************************************************************************************/
 // LOOP

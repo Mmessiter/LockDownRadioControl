@@ -251,7 +251,7 @@ void GetSpecialPacket()                                                         
     static bool MasterIsInControl = true; 
     static uint16_t PacketCounter = 0;
     static uint32_t LocalTimer = 0;
-    static uint32_t LastModelID = 0;
+    static uint64_t LastModelID = 0;
     struct spd {
         char        Command[2];
         uint64_t    ModelID = 0;
@@ -272,12 +272,15 @@ void GetSpecialPacket()                                                         
             MasterIsInControl = true;                                                   // Master is now in control
             PlaySound(MASTERMSG);                                                       // Announce the Master is now in control
         }
+        
+      
         if (SpecialPacketData.ModelID != LastModelID) {                                 // if the model ID has changed, match it if we can
             LastModelID = SpecialPacketData.ModelID;                                    // Save the model ID so we can know if it changed
             if (SpecialPacketData.ModelID != ModelsMacUnionSaved.Val64){                // is it the currently loaded model?
                 LoadCorrectModel(SpecialPacketData.ModelID);                            // if not then try only once to load the correct model 
             }   
         }
+        
         MasterDetected(true);                                                           // Master is alive
         ++PacketCounter;                                                                // Count the packets
         if (millis() - LocalTimer > 1000) {                                             // Every second
