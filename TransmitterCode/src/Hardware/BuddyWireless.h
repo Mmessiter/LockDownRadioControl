@@ -28,7 +28,7 @@ void LoadCorrectModel(uint64_t ModelID){                                        
     }else{
         ModelNumber = SavedModelNumber;                                         //  Restore the current model number
         ReadOneModel(ModelNumber);                                              //  Restore the current model 
-        GotoFrontView();
+        GotoFrontView();                                                        //  todo: show a message on the front view 'model was not found'
     }
 }
 
