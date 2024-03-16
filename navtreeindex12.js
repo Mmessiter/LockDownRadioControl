@@ -3,8 +3,8 @@ var NAVTREEINDEX12 =
 "functions_t.html":[4,3,0,16],
 "functions_u.html":[4,3,0,17],
 "functions_v.html":[4,3,0,18],
-"functions_vars.html":[4,3,2,0],
 "functions_vars.html":[4,3,2],
+"functions_vars.html":[4,3,2,0],
 "functions_vars_a.html":[4,3,2,1],
 "functions_vars_b.html":[4,3,2,2],
 "functions_vars_c.html":[4,3,2,3],
@@ -209,8 +209,12 @@ var NAVTREEINDEX12 =
 "structCD2.html":[4,0,1],
 "structCD2.html#a03a8786925e6a47a07d5ea5b7ef7499d":[4,0,1,0],
 "structCD2.html#a12c5a409b4ae8403460e8f7df080d1fb":[4,0,1,2],
+"structCD2.html#a17442319e913667719e1634ced3e2fc3":[4,0,1,7],
 "structCD2.html#a40f22f539394a95ba1f58b8041e30e57":[4,0,1,1],
+"structCD2.html#aaef3d8445eeca4a1b43d5724d1bce5ec":[4,0,1,5],
+"structCD2.html#ac73a85d12050335c63256956a7687ae6":[4,0,1,6],
 "structCD2.html#acb6aeabae2d3f086690a3e74d5b2c92d":[4,0,1,4],
+"structCD2.html#ad6fdd7e845e6df92177719216b775e22":[4,0,1,8],
 "structCD2.html#adaa3a24813932267f5fb5b08ca4b0ddb":[4,0,1,3],
 "structPPMArea.html":[4,0,7],
 "structPPMArea.html#a0be2173ac79cabafe4f149db60ce052c":[4,0,7,4],
@@ -245,9 +249,5 @@ var NAVTREEINDEX12 =
 "transceiver_8h.html#a18d9866d5425cd145044b1fddbfc00a0":[5,0,3,0,0,14,10],
 "transceiver_8h.html#a19f6fc09d690832e74fd3c679207f07f":[5,0,3,0,0,14,29],
 "transceiver_8h.html#a1c11bb6771548de7d96723045b922620":[5,0,3,0,0,14,46],
-"transceiver_8h.html#a1ddd5e8d5bd649dd98ce3710fbff651b":[5,0,3,0,0,14,12],
-"transceiver_8h.html#a31fb6a46af68482e107cddee58dfb677":[5,0,3,0,0,14,17],
-"transceiver_8h.html#a3cf130d144a13a07623d938ff62fa7ca":[5,0,3,0,0,14,34],
-"transceiver_8h.html#a4144c213e5448a7e02d4172881f08219":[5,0,3,0,0,14,20],
-"transceiver_8h.html#a494cb4acb30856d1f53f08df1b80c41b":[5,0,3,0,0,14,27]
+"transceiver_8h.html#a1ddd5e8d5bd649dd98ce3710fbff651b":[5,0,3,0,0,14,12]
 };
