@@ -11,8 +11,8 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   4
-#define RXVERSION_MINIMUS 5 // 10 March 2024
-#define RXVERSION_EXTRA   'h' 
+#define RXVERSION_MINIMUS 6 // 16 March 2024
+#define RXVERSION_EXTRA   'a' 
 
 #define HOPTIME           1     //  14-16 gives 50Hz FHSS, 46-48 gives 20Hz FHSS
 #define RECEIVE_TIMEOUT   5      //  was 14   
@@ -81,14 +81,7 @@ uint16_t SizeOfDataReceived = sizeof(DataReceived);
 
 struct CD2{
     uint16_t        ID    = 0;          
-    uint16_t        word1 = 0;
-    uint16_t        word2 = 0;
-    uint16_t        word3 = 0;
-    uint16_t        word4 = 0;  
-    uint16_t        word5 = 0;
-    uint16_t        word6 = 0;
-    uint16_t        word7 = 0;
-    uint16_t        word8 = 0; 
+    uint16_t        word[9] = {0,0,0,0,0,0,0,0,0}; // The 0th word isn't used, yet ...
 };  
 
 CD2 Parameters;

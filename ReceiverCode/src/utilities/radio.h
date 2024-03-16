@@ -44,33 +44,33 @@ void UseExtraParameters()
 
     switch (Parameters.ID) {
         case 1:   // working!
-            FS_byte1  = Parameters.word1;                               // These 2 bytes are 16 failsafe flags
-            FS_byte2  = Parameters.word2;                               // These 2 bytes are 16 failsafe flags
+            FS_byte1  = Parameters.word[1];                               // These 2 bytes are 16 failsafe flags
+            FS_byte2  = Parameters.word[2];                               // These 2 bytes are 16 failsafe flags
             TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
             RebuildFlags(FailSafeChannel, TwoBytes);
             SaveFailSafeData(); 
             break;
 
         case 2:
-            Qnh = Parameters.word1;   //  for pressure here at sea level
+            Qnh = Parameters.word[1];   //  for pressure here at sea level
             if (OldQnh != Qnh) SendQnhToSensorHub();
             OldQnh = Qnh;      // Send new one once only
             break;
         case 3:
-            if (Parameters.word2 == 255) { // Mark this location
+            if (Parameters.word[2] == 255) { // Mark this location
                 MarkHere();
-                Parameters.word2 = 0; // ... Once only
+                Parameters.word[2] = 0; // ... Once only
             }
             break;
 
         case 4:
-            ServoCentrePulse    =   Parameters.word1;
-            ServoFrequency      =   Parameters.word2;
+            ServoCentrePulse    =   Parameters.word[1];
+            ServoFrequency      =   Parameters.word[2];
             SetServoFrequency();
             break;
         case 5:
-            UseSBUS         = (bool)Parameters.word1; // if false means PPM
-            PPMChannelCount = Parameters.word2;
+            UseSBUS         = (bool)Parameters.word[1]; // if false means PPM
+            PPMChannelCount = Parameters.word[2];
             break;
         default:
               break;
@@ -112,6 +112,7 @@ void Decompress(uint16_t* uncompressed_buf, uint16_t* compressed_buf, uint8_t un
 }
 
 /************************************************************************************************************/
+
 void RearrangeTheChannels(){
  //  This function looks at the 16 BITS of DataReceived.ChannelBitMask and rearranges the channels accordingly.
     uint8_t p = 0;
@@ -122,43 +123,32 @@ void RearrangeTheChannels(){
 }
 
 /************************************************************************************************************/
+
+void DebugParameters(){
+    Look1("Parameters.ID:\t\t");
+    Look1(Parameters.ID);
+    Look1(" ");
+    Look(ParaNames[Parameters.ID-1]);
+    for (int i = 1 ; i < 9; ++i){
+        Look1("Parameters.word[");
+        Look1(i);
+        Look1("]:\t");
+        Look(Parameters.word[i]);
+    }
+}
+/************************************************************************************************************/
 void ReadMoreParameters(){                                       
-        Parameters.ID    =  RawDataIn[0];                           // NumberOfChangedChannels points past the end of the changed channels
+        Parameters.ID    =  RawDataIn[0];                                   // NumberOfChangedChannels points past the end of the changed channels
         if ((Parameters.ID == 0) || (Parameters.ID > MAXPARAMETERS)){
             Look1("Invalid ID: ");
             Look(Parameters.ID);           
             return;   // not a valid ID
         } 
-        Parameters.word1 =  RawDataIn[1];
-        Parameters.word2 =  RawDataIn[2];
-        Parameters.word3 =  RawDataIn[3];
-        Parameters.word4 =  RawDataIn[4];
-        Parameters.word5 =  RawDataIn[5];
-        Parameters.word6 =  RawDataIn[6];
-        Parameters.word7 =  RawDataIn[7];
-        Parameters.word8 =  RawDataIn[8];
+        for (int i = 1; i < 9; ++i) {
+            Parameters.word[i] = RawDataIn[i];                              // 8 words - of 12 useful BITs each
+        }
         UseExtraParameters();    
-
-        // Look1("Parameters.ID:\t\t");
-        // Look1(Parameters.ID);
-        // Look1(" ");
-        // Look(ParaNames[Parameters.ID-1]);
-        // Look1("Parameters.word1:\t");
-        // Look(Parameters.word1);
-        // Look1("Parameters.word2:\t");
-        // Look(Parameters.word2);
-        // Look1("Parameters.word3:\t");
-        // Look(Parameters.word3);
-        // Look1("Parameters.word4:\t");
-        // Look(Parameters.word4);
-        // Look1("Parameters.word5:\t");
-        // Look(Parameters.word5);
-        // Look1("Parameters.word6:\t");
-        // Look(Parameters.word6);
-        // Look1("Parameters.word7:\t");
-        // Look(Parameters.word7);
-        // Look1("Parameters.word8:\t");
-        // Look(Parameters.word8);
+        //DebugParameters();
 } 
 /************************************************************************************************************/
 void UseReceivedData(uint8_t DynamicPayloadSize)                            // DynamicPayloadSize is length of incomming data
@@ -166,10 +156,11 @@ void UseReceivedData(uint8_t DynamicPayloadSize)                            // D
     if (DataReceived.ChannelBitMask){                                       // Any changed channels?
         Decompress(RawDataIn, DataReceived.CompressedData, 8);              // Decompress the most recent data 8 enough? Don't know yet how may channels will be sent
         RearrangeTheChannels();                                             // Rearrange the channels for actual control since only changed ones are sent 
-    }                                                                 
-    if (DynamicPayloadSize == 16) {                                         // len = 16 means only parameters!
-        Decompress(RawDataIn, DataReceived.CompressedData, 10);             // 10 allows 8 parameters per packet         
-        ReadMoreParameters();                                               
+    } else {                                                             
+         if (DynamicPayloadSize > 2) {                                      // parameter packet
+            Decompress(RawDataIn, DataReceived.CompressedData, 10);         // 10 allows 8 parameter elements per packet         
+            ReadMoreParameters();                                               
+        }
     }
     MapToSBUS();                                                            // Get SBUS data ready
     LastPacketArrivalTime = millis();                                       // Note the arrival time  
