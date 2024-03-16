@@ -23,8 +23,8 @@
 
     #define TXVERSION_MAJOR   2 // first three *must* match RX but _EXTRA can be different
     #define TXVERSION_MINOR   4
-    #define TXVERSION_MINIMUS 5
-    #define TXVERSION_EXTRA   "h 10/03/24" 
+    #define TXVERSION_MINIMUS 6
+    #define TXVERSION_EXTRA   "a 16/03/24" 
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -87,7 +87,8 @@
     #define WARMUPDELAY            300                          // fails at 200 so must be >200 ...
     #define SCREENCHANGEWAIT       10                           // allow 10ms for screen to appear
     #define BATTERY_CHECK_INTERVAL 1000                         // 2 seconds between battery checks
-    #define PARAMETERSENDREPEATS   2                          // How many times to send each parameter in case it gets lost                      
+    #define PARAMETERSENDREPEATS   3                            // How many times to send each parameter in case it gets lost  
+    #define MAXPARAMETERS          5                            // Max types of parameters packet to send  ... will increase.                  
    
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
@@ -849,14 +850,7 @@ bool AddExtraParameters = false;
 
 struct CD2{
     uint16_t        ID    = 0;          
-    uint16_t        word1 = 0;
-    uint16_t        word2 = 0;   
-    uint16_t        word3 = 0;
-    uint16_t        word4 = 0;
-    uint16_t        word5 = 0;
-    uint16_t        word6 = 0;   
-    uint16_t        word7 = 0;
-    uint16_t        word8 = 0;   
+    uint16_t        word[9] = {0,0,0,0,0,0,0,0,0};
 };  
 CD2 Parameters;
 

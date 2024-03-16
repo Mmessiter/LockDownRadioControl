@@ -128,53 +128,46 @@ void LoadParameters()
     uint8_t  FS_Byte1;
     uint8_t  FS_Byte2;
 
-            Parameters.word1 = 0;
-            Parameters.word2 = 0;
-            Parameters.word3 = 0;
-            Parameters.word4 = 0;
-            Parameters.word5 = 0;
-            Parameters.word6 = 0;
-            Parameters.word7 = 0;
-            Parameters.word8 = 0;
-   
+        for (int i = 0; i < 9; ++i) Parameters.word[i] = 0; // clear the parameters
+
    switch (Parameters.ID) {
         case 1:                             // 1 = FailSafeChannels
             Twobytes          = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
             FS_Byte1          = uint8_t(Twobytes >> 8);        // Send as two bytes   
             FS_Byte2          = uint8_t(Twobytes & 0x00FF);
-            Parameters.word1  = FS_Byte1;                      // These are failsafe flags
-            Parameters.word2  = FS_Byte2;                      // These are failsafe flags
+            Parameters.word[1]  = FS_Byte1;                      // These are failsafe flags
+            Parameters.word[2]  = FS_Byte2;                      // These are failsafe flags
             break;
        case 2:                              // 2 = QNH
-            Parameters.word1  =  Qnh;      
-            Parameters.word2  =  1234;    
+            Parameters.word[1]  =  Qnh;      
+            Parameters.word[2]  =  1234;    
             break;
         case 3:                             // 3 = GPSMarkHere
             if (GPSMarkHere) {
-                Parameters.word1  = 0;
-                Parameters.word2  = GPSMarkHere;
+                Parameters.word[1]  = 0;
+                Parameters.word[2]  = GPSMarkHere;
                 GPSMarkHere       = 0;
             }
             break;
         case 4:                            // 4 = set servo centre pulse and frequency
-            Parameters.word1 = ServoCentrePulse;   
-            Parameters.word2 = ServoFrequency; 
-            Parameters.word3 = 300;
-            Parameters.word4 = 400; 
-            Parameters.word5 = 500;
-            Parameters.word6 = 600;
-            Parameters.word7 = 700;
-            Parameters.word8 = 800;
+            Parameters.word[1] = ServoCentrePulse;   
+            Parameters.word[2] = ServoFrequency; 
+            Parameters.word[3] = 300;
+            Parameters.word[4] = 400; 
+            Parameters.word[5] = 500;
+            Parameters.word[6] = 600;
+            Parameters.word[7] = 700;
+            Parameters.word[8] = 800;
 
 
             break;
         case 5:                            // 5 = SBUS/PPM           
-              Parameters.word1 = PPMdata.UseSBUSFromRX;   // 1 - 0
-              Parameters.word2 = PPMdata.PPMChannelCount; 
+              Parameters.word[1] = PPMdata.UseSBUSFromRX;   // 1 - 0
+              Parameters.word[2] = PPMdata.PPMChannelCount; 
             break;
         default: 
-            Parameters.word1 = 0;   
-            Parameters.word2 = 0; 
+            Parameters.word[1] = 0;   
+            Parameters.word[2] = 0; 
             break;
     }
 }
@@ -308,14 +301,9 @@ void SuccessfulPacket()
 
 void LoadRawDataWithParameters(){
     RawDataBuffer[0]  = Parameters.ID;            // copy current parameter values into the rawdatabuffer instead of the channels 
-    RawDataBuffer[1]  = Parameters.word1;
-    RawDataBuffer[2]  = Parameters.word2;
-    RawDataBuffer[3]  = Parameters.word3;
-    RawDataBuffer[4]  = Parameters.word4;
-    RawDataBuffer[5]  = Parameters.word5;
-    RawDataBuffer[6]  = Parameters.word6;
-    RawDataBuffer[7]  = Parameters.word7;
-    RawDataBuffer[8]  = Parameters.word8;
+    for (int i = 1; i < 9; ++i) {                 
+        RawDataBuffer[i] = Parameters.word[i];     // copy current parameter values into the rawdatabuffer instead of the channels 
+    }
 }
 
 /************************************************************************************************************/
@@ -325,35 +313,26 @@ void DebugParamsOut(){
     Look1(Parameters.ID);
     Look1(" ");
     Look(ParaNames[Parameters.ID - 1]);
-    Look1("Word1: ");
-    Look(Parameters.word1);
-    Look1("Word2: ");
-    Look(Parameters.word2);
-    Look1("Word3: ");
-    Look(Parameters.word3);
-    Look1("Word4: ");
-    Look(Parameters.word4);
-    Look1("Word5: ");
-    Look(Parameters.word5);
-    Look1("Word6: ");
-    Look(Parameters.word6);
-    Look1("Word7: ");
-    Look(Parameters.word7);
-    Look1("Word8: ");
-    Look(Parameters.word8);
+   for (int i = 1; i < 9; ++i) {
+        Look1("  Word[");
+        Look1(i);
+        Look1("]: ");
+        Look(Parameters.word[i]);
+   }      
 }
 /************************************************************************************************************/
-void SendExtraParamemters()                       // parameters must be loaded before this function is called
+int SendExtraParamemters()                       // parameters must be loaded before this function is called
 {                                                 // only the ***low 12 bits*** of each parameter are actually sent
-    if ((Parameters.ID == 0) || (Parameters.ID > 5)){
+    if ((Parameters.ID == 0) || (Parameters.ID > MAXPARAMETERS)){
         Look1("Parameter error: ID is ");
         Look(Parameters.ID);
-        return ;         
+        return 8;         
     }
     LoadParameters();
     LoadRawDataWithParameters();
+    DataTosend.ChannelBitMask = 0;                       // zero channels to send with this packet
    // DebugParamsOut();
-    return;
+    return 8;                                            // 8 is the number of parameters to send
 }
 /************************************************************************************************************/
 uint8_t EncodeTheChangedChannels(){
@@ -391,9 +370,12 @@ FASTRUN void SendData()
         Connected = false;                                                                                // Assume failure until an ACK is received.
         FlushFifos();                                                                                     // This flush avoids a lockup that happens when the FIFO gets full.
         
-        if (AddExtraParameters) {SendExtraParamemters(); NumberOfChangedChannels = 8;                     // Here the 'number of changed channels' is actually the number of parameters to send
-        } else { NumberOfChangedChannels = EncodeTheChangedChannels();}                                   // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels.
-        
+        if (AddExtraParameters) {
+            NumberOfChangedChannels = SendExtraParamemters();                                                         
+        } else { 
+            NumberOfChangedChannels = EncodeTheChangedChannels();  // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels.
+        }                                                                                                  
+
         if (NumberOfChangedChannels){                                                                     // Any channels changed? Or parameters to send?
             ByteCountToTransmit     =  ((float) NumberOfChangedChannels * 1.5f) + 4;                      // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 word because int rounds downwards.
             uint8_t SizeOfUnCompressedData  =   (ByteCountToTransmit / 1.5) ;                                
