@@ -6,7 +6,7 @@ var searchData=
   ['calibrateaccel_3',['calibrateaccel',['../classMPU6050.html#a921f5d34643655bf3a584dd52615a526',1,'MPU6050::CalibrateAccel()'],['../classMPU9250.html#ad5f4d08b299f35374d1bca9d7122fcdc',1,'MPU9250::calibrateAccel()']]],
   ['calibrateattitude_4',['calibrateAttitude',['../Quadcopter_2src_2main_8cpp.html#aaa6190068cf2270175bece527fd6216a',1,'main.cpp']]],
   ['calibrateedgeswitches_5',['calibrateedgeswitches',['../1Definitions_8h.html#a128fe47088693b102796cd67a175ea08',1,'CalibrateEdgeSwitches():&#160;main.cpp'],['../TransmitterCode_2src_2main_8cpp.html#a128fe47088693b102796cd67a175ea08',1,'CalibrateEdgeSwitches():&#160;main.cpp']]],
-  ['calibrategyro_6',['calibrategyro',['../classMPU6050.html#a562f930682e7c24628783561acbf51c1',1,'MPU6050::CalibrateGyro()'],['../classMPU9250.html#a88596ddf9d0f52ca7b9181706d17217f',1,'MPU9250::calibrateGyro()']]],
+  ['calibrategyro_6',['calibrategyro',['../classMPU9250.html#a88596ddf9d0f52ca7b9181706d17217f',1,'MPU9250::calibrateGyro()'],['../classMPU6050.html#a562f930682e7c24628783561acbf51c1',1,'MPU6050::CalibrateGyro()']]],
   ['calibratemag_7',['calibrateMag',['../classMPU9250.html#aba735458296fb277a05efcb1a3ceb761',1,'MPU9250']]],
   ['calibratemagnetometer_8',['calibrateMagnetometer',['../Quadcopter_2src_2main_8cpp.html#ac15aa9622766ddd0b67c720c4e2a7c96',1,'main.cpp']]],
   ['calibratesticks_9',['CalibrateSticks',['../TransmitterCode_2src_2main_8cpp.html#ae1b8cef371d26fca2b4f5a101be7a8ba',1,'main.cpp']]],
