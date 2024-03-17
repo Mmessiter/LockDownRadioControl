@@ -384,7 +384,7 @@ FASTRUN void SendData()
             ByteCountToTransmit = 2;    
             NewCompressNeeded = false;                                                                    // No channels changed nor any params to send, so just send the flag
         }
-        if (BuddyMasterOnWireless &&  !AddExtraParameters) SendSpecialPacket();                                                   // Talk to the buddy pupil if we are a master also 200 x per second
+        if (BuddyMasterOnWireless) SendSpecialPacket();                                                   // Talk to the buddy pupil if we are a master also 200 x per second
         if (Radio1.write(&DataTosend, ByteCountToTransmit)) {SuccessfulPacket();} else {FailedPacket();}  // Send the data packet complete with ChannelBitMask and compressed data 
      
         // ShowPacketData(ByteCountToTransmit, NumberOfChangedChannels);                                  // Just for debugging                          

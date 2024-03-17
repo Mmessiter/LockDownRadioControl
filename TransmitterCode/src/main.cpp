@@ -2430,10 +2430,10 @@ void RXOptionsViewEnd()
     CurrentView = RXSETUPVIEW;
     SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
-    SendCommand(pRXSetupView);
+   // SendCommand(pRXSetupView);
     AddParameterstoQueue(4);               // 4 Send default servo frequency and centre pulse width
     AddParameterstoQueue(5);               // 5 is the ID for SBUS/PPM at RX selection and PPM channel count
-   
+    GotoFrontView();
 }
 
 /******************************************************************************************************************************/
