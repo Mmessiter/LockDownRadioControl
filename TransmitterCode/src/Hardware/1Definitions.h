@@ -652,6 +652,7 @@ void             WriteBackup();
 void             RestoreCurrentModel();
 void             GetYesOrNo();
 uint16_t         GetText(char* TextBoxName, char* TheText);
+void             StoreModelID();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************
