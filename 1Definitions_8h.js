@@ -475,6 +475,7 @@ var 1Definitions_8h =
     [ "StartModelSetup", "1Definitions_8h.html#a1a700b085b2f15c2ce4589f1be3ed492", null ],
     [ "StartPong", "1Definitions_8h.html#a01ddd63e9f328dd117ee13b789852868", null ],
     [ "StopBuddyListen", "1Definitions_8h.html#ae77cabeca1f2af2de00334db1dae23a0", null ],
+    [ "StoreModelID", "1Definitions_8h.html#a3838aa0b33bb22d3b9934da05d2716d8", null ],
     [ "Str", "1Definitions_8h.html#a6bac145d5df31efb9c90e2a60a4cbca5", null ],
     [ "swap", "1Definitions_8h.html#a31322f63ce3e02c4ef9a0c1e0c7f1ff5", null ],
     [ "TrimsToSubtrim", "1Definitions_8h.html#a4032af894bb09f6ec94abf5bd8a83ff7", null ],
