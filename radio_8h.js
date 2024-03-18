@@ -10,6 +10,7 @@ var radio_8h =
     [ "DoSensorHub", "radio_8h.html#a7dfb4993ecdbf5fc3bd8c4c52edd465e", null ],
     [ "GetNewPipe", "radio_8h.html#ad8b2470258da4e397b34d67ffce9ebaf", null ],
     [ "GetOldPipe", "radio_8h.html#a198affe6f9f64da7272c5fcfe16c1621", null ],
+    [ "GetRXVolts", "radio_8h.html#a79b5170b28687a975a36408630f93dd3", null ],
     [ "HopToNextChannel", "radio_8h.html#a62ec0168b1eea5f5c14f663d9217574d", null ],
     [ "IncChannelNumber", "radio_8h.html#ae913e02ff1fdfed85e4248ec648c1c6e", null ],
     [ "InitCurrentRadio", "radio_8h.html#ab652df130d9feb78c0accd5beedf7d80", null ],
