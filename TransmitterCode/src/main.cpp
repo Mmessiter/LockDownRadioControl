@@ -244,6 +244,7 @@ void GreenLedOn()
         Reconnected = false;
         ForceVoltDisplay = true; // Force a battery check of the models battery
         SendInitialSetupParams();
+        ResetMotorTimer();
     }else{
         if (LedIsBlinking) analogWrite(GREENLED, GetLEDBrightness());               //Blink Led!
     }
@@ -4220,11 +4221,31 @@ void ReadBuddySwitch(){
  }
 
 /************************************************************************************************************/
+ void ResetMotorTimer(){
+        char FrontView_Hours[] = "Hours";
+        char FrontView_Mins[]  = "Mins";
+        char FrontView_Secs[]  = "Secs";
+       
+        TimesUp        = false;
+        PausedSecs     = 0;
+        CountDownIndex = 0;
+        if (CurrentView == FRONTVIEW) {
+            if (TimerDownwards) {
+                Mins = TimerStartTime / 60;
+            }
+            else {
+                Mins = 0;
+            }
+            SendValue(FrontView_Secs, 0);
+            SendValue(FrontView_Mins, Mins);
+            SendValue(FrontView_Hours, 0);
+        }
+ }
+
+/************************************************************************************************************/
 void GetBank()   // ... and the other three switches
 { 
-    char FrontView_Hours[] = "Hours";
-    char FrontView_Mins[]  = "Mins";
-    char FrontView_Secs[]  = "Secs";
+   
     char WarnOff[]         = "vis Warning,0";
     
     if ((CurrentMode != NORMAL) && (CurrentMode != LISTENMODE)) return; // not needed if calibrating
@@ -4246,20 +4267,6 @@ void GetBank()   // ... and the other three switches
 
     if (SafetyON) {
         MotorEnabled   = false;
-        TimesUp        = false;
-        PausedSecs     = 0;
-        CountDownIndex = 0;
-        if (CurrentView == FRONTVIEW) {
-            if (TimerDownwards) {
-                Mins = TimerStartTime / 60;
-            }
-            else {
-                Mins = 0;
-            }
-            SendValue(FrontView_Secs, 0);
-            SendValue(FrontView_Mins, Mins);
-            SendValue(FrontView_Hours, 0);
-        }
     }
 
     if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill)) { // MotorEnabled changed ?
