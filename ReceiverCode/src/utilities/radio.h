@@ -228,18 +228,27 @@ void DoSensorHub(){
 }
 
 // ******************************************************************************************************************************************************************
+//  Get RX LIPO volts if connected separately (as needed on 'planes with no GPS fitted.)
+void GetRXVolts()
+{   static uint32_t LastTime = 0;
+    if ((millis() - LastTime > 1000) &&  (INA219Connected)) {
+        LastTime = millis();
+        INA219Volts = ina219.getBusVoltage_V();                 //  Get RX LIPO volts if connected separately (as needed on 'planes with no GPS fitted.)              
+    }
+}
+// ******************************************************************************************************************************************************************
 
 FASTRUN void ReceiveData()
 {
-   if (SensorHubConnected) DoSensorHub(); //  If it is connected, try to read the sensor hub
-   if (INA219Connected) INA219Volts = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected separately (as will be needed on 'planes with no GPS fitted.)              
-   if ((!CurrentRadio->available(&Pipnum)) && (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT)) Reconnect(); // Try to reconnect. //  RECEIVE_TIMEOUT???
+   if (SensorHubConnected) DoSensorHub();                                       //  If it is connected, try to read the sensor hub
+   GetRXVolts();                                                                //  Get RX LIPO volts if connected separately (as needed on 'planes with no GPS fitted.)              
+   if ((!CurrentRadio->available(&Pipnum)) && (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT)) Reconnect(); // Try to reconnect. 
    if (!ReadData()) {
-        if (millis() - SBUSTimer >= SBUSRATE) { // No new packet yet - but maybe it's time to dispatch the last?
-            if (BoundFlag && (millis() > 10000)) {  // > 10 seconds after binding, we might need to keep sbus happy
+        if (millis() - SBUSTimer >= SBUSRATE) {                                 // No new packet yet - but maybe it's time to dispatch the last?
+            if (BoundFlag && (millis() > 10000)) {                              // > 10 seconds after binding, we might need to keep sbus happy
                 if (Connected) {
-                    KeepSbusHappy(); // if it's time - send a SBUS packet. It might be new data.
-                    --SbusRepeats;   // It's not really a "repeat".
+                    KeepSbusHappy();                                            // if it's time - send a SBUS packet. It might be new data.
+                    --SbusRepeats;                                              // It's not really a "repeat".
                 }
             }
         }
