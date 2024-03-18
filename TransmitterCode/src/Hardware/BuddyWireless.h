@@ -11,25 +11,26 @@
     #define ENCRYPT_KEY            0xFEADFEADBB                                 // The encryption key is used for the Pipe address between the transmitters 
 
 //*************************************************************************************************************************
-void StoreModelID1()
+void StoreMastersModelID_at_Buddy()
 { // This stores current model ID
 
-    char prompt[60];
-    char p[]                = "Store ID for ";
+    char prompt[120];
+    char p[]                = "Master's model ID was not found!\r\n\r\nWould you like to store Master's \r\nmodel ID for '";
     char p1[]               = "?";
-    char Done[]             = "Model ID stored.";
-    char NotDone[]          = "Model ID not stored.";
-    char DoneAlready[]      = "No ID to store!";
+    char Done[]             = "Master's model ID stored here.";
+    char NotDone[]          = "No model ID was stored.";
+    char nb[10];                                                                //  Buffer for the  number
+    char lb[]= " (";
+    char rb[]= ")'";
 
+    Str(nb, ModelNumber,0);
     strcpy(prompt, p);
     strcat(prompt, ModelName);
+    strcat(prompt, lb);
+    strcat(prompt, nb);
+    strcat(prompt, rb);
     strcat(prompt, p1);
-
-    if (!ModelsMacUnion.Val64) {
-        MsgBox(pFrontView, DoneAlready);
-        return;
-    }
-
+    
     if (GetConfirmation(pRXSetupView, prompt)) {
         PlaySound(MMSAVED);
         ModelsMacUnionSaved.Val64 = ModelsMacUnion.Val64;
@@ -43,9 +44,9 @@ void StoreModelID1()
 
 //*************************************************************************************************************************
 
-void LoadCorrectModel(uint64_t ModelID){                                        //  Gets Buddy onto same model as master, quietly.                                            
+void LoadCorrectModel(uint64_t ModelID){                                        //  Gets Buddy onto same model as master, quietly.            
+    static bool ModelMatchFailed = false;                                
     uint32_t SavedModelNumber = ModelNumber;                                    //  Save the current model number
-    char msg[] = "Model not found";                                             //  Message to show on front view
     ModelMatched = false;
     ModelNumber = 0;
     while (!ModelMatched && (ModelNumber < MAXMODELNUMBER - 1)) {               //  Try to match the ID with a saved one
@@ -58,13 +59,15 @@ void LoadCorrectModel(uint64_t ModelID){                                        
         SaveAllParameters();                                                    //  Save it
         GotoFrontView();
     }else{
-        ModelNumber = SavedModelNumber;                                         //  Restore the current model number
-        ReadOneModel(ModelNumber);                                              //  Restore the current model  
-        MsgBox(pFrontView, msg);                                                //  Show a message on the front view
-        GotoFrontView();                                                        // 
-        ModelsMacUnion.Val64 = ModelID;                                         //  Store the actual model ID ...
-        StoreModelID1();                                                        //  ... in this line
-        GotoFrontView();                                                        //    
+        ModelNumber = SavedModelNumber;                                         //  Restore the current model number 
+        ReadOneModel(ModelNumber);                                              //  Restore the current model
+        if (!ModelMatchFailed) {                                                //  Only do this once
+            ModelsMacUnion.Val64 = ModelID;                                     //  Offer option to store the actual model ID ...
+            StoreMastersModelID_at_Buddy();                                     //  ... in this line
+            ModelMatchFailed = true;                                            //  Done so don't do it again
+        }
+        GotoFrontView();                                                        //  pretty obvious really   
+        UpdateModelsNameEveryWhere();                                           //  Show model name everywhere.
     }
 }
 
