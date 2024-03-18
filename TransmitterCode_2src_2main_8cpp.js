@@ -91,6 +91,7 @@ var TransmitterCode_2src_2main_8cpp =
     [ "RedLedOn", "TransmitterCode_2src_2main_8cpp.html#a7d34cec6e8edc20c8b50424e15dcc7c7", null ],
     [ "ReduceLimits", "TransmitterCode_2src_2main_8cpp.html#ad875fe28566f35ffc5f90e73d0089fc6", null ],
     [ "RerouteOutputs", "TransmitterCode_2src_2main_8cpp.html#a92bb36e29cd297189daefb3b79deaac3", null ],
+    [ "ResetMotorTimer", "TransmitterCode_2src_2main_8cpp.html#a03c65e54e3402aeeeee4da9b7fdbb447", null ],
     [ "ResetSwitchNumbers", "TransmitterCode_2src_2main_8cpp.html#ac1eb66fa4c391f27c315e687f5335015", null ],
     [ "ResetTransmitterSettings", "TransmitterCode_2src_2main_8cpp.html#a5c7f22bae35d5d6df9d54fe79dbb8401", null ],
     [ "RestoreCurrentModel", "TransmitterCode_2src_2main_8cpp.html#aa1f353c2c61131eeafa77c6e67608e45", null ],

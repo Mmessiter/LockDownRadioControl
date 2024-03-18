@@ -418,6 +418,7 @@ var 1Definitions_8h =
     [ "ReEnableScanButton", "1Definitions_8h.html#a0a3d89dfcfab70c6cbc50401fff1afeb", null ],
     [ "ReInitRadio", "1Definitions_8h.html#ac148524792a820f47637fe5d848c5e2c", null ],
     [ "ResetAllTrims", "1Definitions_8h.html#a883e18dbafdf41d3451879db47ab113f", null ],
+    [ "ResetMotorTimer", "1Definitions_8h.html#a03c65e54e3402aeeeee4da9b7fdbb447", null ],
     [ "ResetTransmitterSettings", "1Definitions_8h.html#a5c7f22bae35d5d6df9d54fe79dbb8401", null ],
     [ "RestoreBrightness", "1Definitions_8h.html#a49da3478d89a22069e29c7f00cb46a5f", null ],
     [ "RestoreCurrentModel", "1Definitions_8h.html#aa1f353c2c61131eeafa77c6e67608e45", null ],
