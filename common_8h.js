@@ -46,6 +46,7 @@ var common_8h =
     [ "RXVERSION_MINOR", "common_8h.html#adeb76229aa4087c3bc1e1fd17bd865b2", null ],
     [ "SBUSPORT", "common_8h.html#aa82f9d8a298740acdbaa5c78a9e9f50c", null ],
     [ "SBUSRATE", "common_8h.html#a39848a06498c1e6444c458f25542b252", null ],
+    [ "SECOND_TRANSCEIVER", "common_8h.html#a2894a289b91f0bc795407decb6e4c39d", null ],
     [ "SENSOR_HUB_I2C_ADDRESS", "common_8h.html#a07a2f33887ffa40ffbc3b895fcfc1999", null ],
     [ "SERVO_RES_BITS", "common_8h.html#a52cd9cf24887928d9be617b55dbe6ba1", null ],
     [ "SERVO_RESOLUTION", "common_8h.html#ac10969d83b9cdee051df76a50fe6ab93", null ],
