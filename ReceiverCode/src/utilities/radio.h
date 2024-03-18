@@ -233,7 +233,7 @@ void GetRXVolts()
 {   static uint32_t LastTime = 0;
     if ((millis() - LastTime > 1000) &&  (INA219Connected)) {
         LastTime = millis();
-        INA219Volts = ina219.getBusVoltage_V();                 //  Get RX LIPO volts if connected separately (as needed on 'planes with no GPS fitted.)              
+        INA219Volts = ina219.getBusVoltage_V();                                 //  Get RX LIPO volts if connected separately (as needed on 'planes with no GPS fitted.)              
     }
 }
 // ******************************************************************************************************************************************************************
