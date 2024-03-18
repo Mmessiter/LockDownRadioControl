@@ -218,7 +218,6 @@ void DoSensorHub(){
                 if (!SensorHubDead) {                                            //  Better check it hasn't died.
                     TimeTest = millis();                                         //  Time the I2C calls. If too long, don't repeat it ... save the model.
                     ReadTheSensorHub();                                          //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
-                    if (INA219Connected) INA219Volts = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected separately (as will be needed on 'planes with no GPS fitted.)
                     if ((millis() - NewConnectionMoment) > 5000) {
                         if ((millis() - TimeTest) > 6) SensorHubHasFailed(); //  If sensor hub and/or INA219 fails, don't bother calling either again (It normally returns within 2 ms.
                     }
@@ -233,6 +232,7 @@ void DoSensorHub(){
 FASTRUN void ReceiveData()
 {
    if (SensorHubConnected) DoSensorHub(); //  If it is connected, try to read the sensor hub
+   if (INA219Connected) INA219Volts = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected separately (as will be needed on 'planes with no GPS fitted.)              
    if ((!CurrentRadio->available(&Pipnum)) && (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT)) Reconnect(); // Try to reconnect. //  RECEIVE_TIMEOUT???
    if (!ReadData()) {
         if (millis() - SBUSTimer >= SBUSRATE) { // No new packet yet - but maybe it's time to dispatch the last?
