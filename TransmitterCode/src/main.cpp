@@ -1582,8 +1582,11 @@ void SetDefaultValues()
        DualRateRate[i] = 0;   
    }
     TrimMultiplier = 5;
-    ServoFrequency = 50;
-    ServoCentrePulse = 1500;
+    for (int i = 0; i < 8; ++i){
+        ServoFrequency[i] = 50;
+        ServoCentrePulse[i] = 1500;
+    }
+ 
     ModelDefined = 42;
 }
 
@@ -2354,8 +2357,6 @@ void RXOptionsViewStart() // model options screen
     char r0[] = "r0"; // SBUS on
     char r1[] = "r1"; // PPM on
     char n5[] = "n5"; // PPMChannelCount
-    char n6[] = "n6"; // Servo Frequency
-    char n7[] = "n7"; // Servo Centre Pulse
 
     SendCommand(pRXSetup1);
     SendValue(c1, CopyTrimsToAll);
@@ -2371,8 +2372,6 @@ void RXOptionsViewStart() // model options screen
     SendValue(r0, PPMdata.UseSBUSFromRX);
     SendValue(r1, !PPMdata.UseSBUSFromRX);
     SendValue(n5, PPMdata.PPMChannelCount);
-    SendValue(n6, ServoFrequency);
-    SendValue(n7, ServoCentrePulse);
     CurrentView = RXSETUPVIEW1;
     UpdateModelsNameEveryWhere();
 }
@@ -2393,9 +2392,6 @@ void RXOptionsViewEnd()
     char c2[]               = "c2"; // TimerDownwards timer on off
     char r0[]               = "r0"; // SBUS on
     char n5[]               = "n5"; // PPMChannelCount
-    char n6[]               = "n6"; // Servo Frequency
-    char n7[]               = "n7"; // Servo Centre Pulse
-
     char ProgressStart[]    = "vis Progress,1";
     char Progress[]         = "Progress";
 
@@ -2421,18 +2417,12 @@ void RXOptionsViewEnd()
     TimerStartTime = GetValue(n4) * 60;
     SendValue(Progress, 80);
     PPMdata.UseSBUSFromRX = GetValue(r0);
-    SendValue(Progress, 85);
-    PPMdata.PPMChannelCount = GetValue(n5);
     SendValue(Progress, 90);
-    ServoFrequency = GetValue(n6);
-    SendValue(Progress, 95);
-    ServoCentrePulse = GetValue(n7);
+    PPMdata.PPMChannelCount = GetValue(n5);
     SendValue(Progress, 100);
     CurrentView = RXSETUPVIEW;
     SaveOneModel(ModelNumber);
     UpdateModelsNameEveryWhere();
-   // SendCommand(pRXSetupView);
-    AddParameterstoQueue(4);               // 4 Send default servo frequency and centre pulse width
     AddParameterstoQueue(5);               // 5 is the ID for SBUS/PPM at RX selection and PPM channel count
     GotoFrontView();
 }
@@ -2456,7 +2446,7 @@ void OptionView3End() //
     char n2[]             = "n2";
     char n3[]             = "n3";
     char n4[]             = "n4";
-    char pTXSetupView[] = "page TXSetupView";
+    char pTXSetupView[]   = "page TXSetupView";
     char QNH[]            = "Qnh";
 
     TxVoltageCorrection    = GetValue(TxVCorrextion);
@@ -2969,23 +2959,56 @@ void CheckAllModelIds()
     ReadOneModel(ModelNumber);
 }
 
-
 /******************************************************************************************************************************/
 
 void SelectChannelOrder()
 {
-
     if (PPMdata.PPMOrderSelection == 1) PPMdata.PPMChannelOrder = PPMdata.PPMChannelOrder1;
     if (PPMdata.PPMOrderSelection == 2) PPMdata.PPMChannelOrder = PPMdata.PPMChannelOrder2;
     if (PPMdata.PPMOrderSelection == 3) PPMdata.PPMChannelOrder = PPMdata.PPMChannelOrder3;
 }
 
+/******************************************************************************************************************************/
 
+void StartServosTypeView() // Frequency and centre pulse width
+{
+    char n_labels[16][5] = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}};
+    char GoServoTypesView[] = "page ServosTypeView";
+    SendCommand(GoServoTypesView);
+    for (int i = 0; i < 8; ++i) {
+        SendValue(n_labels[i], ServoFrequency[i]); // heer
+        SendValue(n_labels[i+8], ServoCentrePulse[i]);
+    }
+    CurrentView = SERVOTYPESVIEW;
+    UpdateModelsNameEveryWhere();
+}
+
+/******************************************************************************************************************************/
+
+void  EndServoTypeView(){ // Frequency and centre pulse width
+
+    char n_labels[16][5] = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}};
+    char ProgressStart[] = "vis Progress,1";
+    char ProgressEnd[]   = "vis Progress,0";
+    char Progress[]      = "Progress";
+    SendCommand(ProgressStart);
+    for (int i = 0; i < 8; ++i) {
+        ServoFrequency[i]   = GetValue(n_labels[i]); // heer
+        ServoCentrePulse[i] = GetValue(n_labels[i+8]); 
+        SendValue(Progress, i * (100 / 8));
+    }
+    SendValue(Progress, 100);
+    SendCommand(ProgressEnd);    
+  //  RXOptionsViewStart();
+    GotoFrontView();
+    AddParameterstoQueue(6);
+    AddParameterstoQueue(7);
+}
 
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!
-#define LASTFUNCTION1 10 // One more than final one
+#define LASTFUNCTION1 12 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])() {
         Blank,                        // 0 Cannot be used
@@ -2997,7 +3020,9 @@ void (*NumberedFunctions1[LASTFUNCTION1])() {
         SystemPage1End,               // 6
         SystemPage1Start,             // 7  
         StartWifiScan,                // 8
-        EndWifiScan                   // 9   
+        EndWifiScan,                  // 9   
+        StartServosTypeView,          // 10
+        EndServoTypeView              // 11
 };
 
  // This list migth become MUCH longer as it limit is 24 bits big
@@ -4597,9 +4622,10 @@ void AddParameterstoQueue(uint8_t ID)  // todo:  This function repeats the same 
 /*********************************************************************************************************************************/
 void SendInitialSetupParams(){
    
-        AddParameterstoQueue (5);            // Sbus / PPM at rx
-        AddParameterstoQueue (4);            // Send default servo frequency and centre pulse width
-        AddParameterstoQueue (2);            // QNH
+        AddParameterstoQueue (5);           // Sbus / PPM at rx
+        AddParameterstoQueue (2);           // QNH
+        AddParameterstoQueue (6);           // Servo Frequencies
+        AddParameterstoQueue (7);           // Servo Pulse Widths
    
 }
 /************************************************************************************************************/
