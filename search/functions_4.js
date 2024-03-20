@@ -13,11 +13,12 @@ var searchData=
   ['endrenamemodel_10',['EndRenameModel',['../TransmitterCode_2src_2main_8cpp.html#a7af8e147bab19bdc499ffef595d30aae',1,'main.cpp']]],
   ['endreverseview_11',['EndReverseView',['../MenuOptions_8h.html#afd3dd964eafc30405e000b03579dd00c',1,'MenuOptions.h']]],
   ['endsend_12',['endsend',['../1Definitions_8h.html#ad7b8aa834c87265667a5687b1787a1cc',1,'EndSend():&#160;Nextion.h'],['../Nextion_8h.html#ad7b8aa834c87265667a5687b1787a1cc',1,'EndSend():&#160;Nextion.h']]],
-  ['endspeedsscreen_13',['EndSpeedsScreen',['../TransmitterCode_2src_2main_8cpp.html#ade5ca67db519e3671105fcd86d20f9a8',1,'main.cpp']]],
-  ['endsubtrimview_14',['EndSubTrimView',['../Trims_8h.html#a40003084a0136ca08cf8ded75ff4aa4d',1,'Trims.h']]],
-  ['endtrimview_15',['EndTrimView',['../1Definitions_8h.html#a4a3b3a5edf41e8d1ce82c15077d0e1b0',1,'1Definitions.h']]],
-  ['endwifiscan_16',['EndWifiScan',['../MenuOptions_8h.html#a62e133c280135dbfe30b6c874968064c',1,'MenuOptions.h']]],
-  ['executemacro_17',['executemacro',['../1Definitions_8h.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;macros.h'],['../macros_8h.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;macros.h']]],
-  ['exitmacrosview_18',['ExitMacrosView',['../MenuOptions_8h.html#a488388f6430a0fc7bec57074ba750a2d',1,'MenuOptions.h']]],
-  ['exponentialinterpolation_19',['ExponentialInterpolation',['../TransmitterCode_2src_2main_8cpp.html#ab309da1bf9c1b4a4b7763d8968d7f83e',1,'main.cpp']]]
+  ['endservotypeview_13',['EndServoTypeView',['../TransmitterCode_2src_2main_8cpp.html#a905da27bb4d5aa98114ff0558783adaf',1,'main.cpp']]],
+  ['endspeedsscreen_14',['EndSpeedsScreen',['../TransmitterCode_2src_2main_8cpp.html#ade5ca67db519e3671105fcd86d20f9a8',1,'main.cpp']]],
+  ['endsubtrimview_15',['EndSubTrimView',['../Trims_8h.html#a40003084a0136ca08cf8ded75ff4aa4d',1,'Trims.h']]],
+  ['endtrimview_16',['EndTrimView',['../1Definitions_8h.html#a4a3b3a5edf41e8d1ce82c15077d0e1b0',1,'1Definitions.h']]],
+  ['endwifiscan_17',['EndWifiScan',['../MenuOptions_8h.html#a62e133c280135dbfe30b6c874968064c',1,'MenuOptions.h']]],
+  ['executemacro_18',['executemacro',['../1Definitions_8h.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;macros.h'],['../macros_8h.html#a78f22801971c106db61d728dd345e28e',1,'ExecuteMacro():&#160;macros.h']]],
+  ['exitmacrosview_19',['ExitMacrosView',['../MenuOptions_8h.html#a488388f6430a0fc7bec57074ba750a2d',1,'MenuOptions.h']]],
+  ['exponentialinterpolation_20',['ExponentialInterpolation',['../TransmitterCode_2src_2main_8cpp.html#ab309da1bf9c1b4a4b7763d8968d7f83e',1,'main.cpp']]]
 ];
