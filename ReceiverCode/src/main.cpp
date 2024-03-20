@@ -143,12 +143,12 @@ void MoveServos()
     for (int j = 0; j < SERVOSUSED; ++j) {
         if (PreviousData[j] != ReceivedData[j]) { // if same as last time, don't send again.
             int S = ReceivedData[j];
-            if (ServoCentrePulse < 1000) {
-                S = map(S, MINMICROS, MAXMICROS, ServoCentrePulse - EXTRAAT760, ServoCentrePulse + EXTRAAT760);   // these lines allow for the fact that some servos don't like 760 - 2240
+            if (ServoCentrePulse[j] < 1000) {
+                S = map(S, MINMICROS, MAXMICROS, ServoCentrePulse[j] - EXTRAAT760, ServoCentrePulse[j] + EXTRAAT760);   // these lines allow for the fact that some servos don't like 760 - 2240
             }else{
-                S = map(S, MINMICROS, MAXMICROS, ServoCentrePulse - EXTRAAT1500, ServoCentrePulse + EXTRAAT1500);  // these lines allow for the fact that some servos don't like 760 - 2240
+                S = map(S, MINMICROS, MAXMICROS, ServoCentrePulse[j] - EXTRAAT1500, ServoCentrePulse[j] + EXTRAAT1500);  // these lines allow for the fact that some servos don't like 760 - 2240
             }
-            analogWrite(PWMPins[j],GetPWMValue(ServoFrequency, S));
+            analogWrite(PWMPins[j],GetPWMValue(ServoFrequency[j], S));
             PreviousData[j] = ReceivedData[j];
         }
     }
@@ -180,9 +180,9 @@ void SetServoFrequency()
      analogWriteResolution(SERVO_RES_BITS);  // 12 Bits for 4096 steps
     for (uint8_t i = 0; i < SERVOSUSED; ++i)
     { 
-        analogWriteFrequency(PWMPins[i], ServoFrequency);
+        analogWriteFrequency(PWMPins[i], ServoFrequency[i]); 
     }
-//Look(ServoCentrePulse);
+
 }
 
 /************************************************************************************************************/

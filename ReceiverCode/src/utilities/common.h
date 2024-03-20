@@ -44,7 +44,7 @@
         #define EXTRAAT760   350                        // high frequency servos
         #define MAXAT760     760 + EXTRAAT760
         #define MINAT760     760 - EXTRAAT760
-        #define MAXPARAMETERS          5                            // Max number of parameters to send        
+        #define MAXPARAMETERS          7                            // Max number of parameters types to expect        
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
 //***************************************************************************
@@ -156,9 +156,11 @@ uint8_t   FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 1
 uint8_t*  FHSSChPointer = FHSS_Channels; // Pointer for FHSS channels' array
 bool    PipeSeen        = false;
 
-uint16_t ServoCentrePulse =  1500;
-uint16_t ServoFrequency   = 50;
-char ParaNames[5][30] = {"(FailSafeChannels)", "(Qnh)", "(GPSMarkHere)","(ServoCentre & Frequency)", "(SBUS/PPM)"};
+uint16_t  ServoCentrePulse[9]     = {1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500,1500};    // 9 channels for servo centre pulse
+uint16_t  ServoFrequency[9]       = {50, 50, 50, 50, 50, 50, 50, 50, 50};                     // 9 channels for servo frequency
+
+
+char ParaNames[7][30] = {"(FailSafeChannels)", "(Qnh)", "(GPSMarkHere)","(ServoCentre & Frequency)", "(SBUS/PPM)","(Servo frequencies)","(Servo centre pulses)"};
 
 // Kalman data ********************************************************************************************************************
                                                                  

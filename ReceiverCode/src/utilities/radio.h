@@ -62,15 +62,22 @@ void UseExtraParameters()
                 Parameters.word[2] = 0; // ... Once only
             }
             break;
-
         case 4:
-            ServoCentrePulse    =   Parameters.word[1];
-            ServoFrequency      =   Parameters.word[2];
-            SetServoFrequency();
+            // ServoCentrePulse[0]    =   Parameters.word[1];
+            // ServoFrequency[0]      =   Parameters.word[2];
+            // SetServoFrequency();
             break;
         case 5:
             UseSBUS         = (bool)Parameters.word[1]; // if false means PPM
             PPMChannelCount = Parameters.word[2];
+            break;
+        case 6:
+            for (int i = 0; i < 8; ++i) ServoFrequency[i]   = Parameters.word[i+1];
+            SetServoFrequency();
+            break;
+        case 7:
+            for (int i = 0; i < 8; ++i) ServoCentrePulse[i] = Parameters.word[i+1];
+            SetServoFrequency();
             break;
         default:
               break;
@@ -148,7 +155,7 @@ void ReadMoreParameters(){
             Parameters.word[i] = RawDataIn[i];                              // 8 words - of 12 useful BITs each
         }
         UseExtraParameters();    
-        //DebugParameters();
+       // DebugParameters();
 } 
 /************************************************************************************************************/
 void UseReceivedData(uint8_t DynamicPayloadSize)                            // DynamicPayloadSize is length of incomming data
