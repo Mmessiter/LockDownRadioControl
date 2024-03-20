@@ -130,44 +130,46 @@ void LoadParameters()
 
         for (int i = 0; i < 9; ++i) Parameters.word[i] = 0; // clear the parameters
 
-   switch (Parameters.ID) {
-        case 1:                             // 1 = FailSafeChannels
-            Twobytes          = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
-            FS_Byte1          = uint8_t(Twobytes >> 8);        // Send as two bytes   
+   switch (Parameters.ID) {                                         // ID is the parameter number. Each has 8 elements
+        case 1:                                                     // 1 = FailSafeChannels
+            Twobytes          = MakeTwobytes(FailSafeChannel);      // 16 bool values compressed to 16 bits
+            FS_Byte1          = uint8_t(Twobytes >> 8);             // Send as two bytes   
             FS_Byte2          = uint8_t(Twobytes & 0x00FF);
-            Parameters.word[1]  = FS_Byte1;                      // These are failsafe flags
-            Parameters.word[2]  = FS_Byte2;                      // These are failsafe flags
+            Parameters.word[1]  = FS_Byte1;                         // These are failsafe flags
+            Parameters.word[2]  = FS_Byte2;                         // These are failsafe flags
             break;
-       case 2:                              // 2 = QNH
+       case 2:                                                      // 2 = QNH
             Parameters.word[1]  =  Qnh;      
             Parameters.word[2]  =  1234;    
             break;
-        case 3:                             // 3 = GPSMarkHere
+        case 3:                                                     // 3 = GPSMarkHere
             if (GPSMarkHere) {
                 Parameters.word[1]  = 0;
                 Parameters.word[2]  = GPSMarkHere;
                 GPSMarkHere       = 0;
             }
             break;
-        case 4:                            // 4 = set servo centre pulse and frequency
-            Parameters.word[1] = ServoCentrePulse;   
-            Parameters.word[2] = ServoFrequency; 
-            Parameters.word[3] = 300;
-            Parameters.word[4] = 400; 
-            Parameters.word[5] = 500;
-            Parameters.word[6] = 600;
-            Parameters.word[7] = 700;
-            Parameters.word[8] = 800;
-
-
+        case 4:                                                     // 4 = set servo centre pulse and frequency // depreceiated!!
+            // Parameters.word[1] = ServoCentrePulse[0];   
+            // Parameters.word[2] = ServoFrequency[0]; 
+            // Parameters.word[3] = 300;
+            // Parameters.word[4] = 400; 
+            // Parameters.word[5] = 500;
+            // Parameters.word[6] = 600;
+            // Parameters.word[7] = 700;
+            // Parameters.word[8] = 800;
             break;
-        case 5:                            // 5 = SBUS/PPM           
-              Parameters.word[1] = PPMdata.UseSBUSFromRX;   // 1 - 0
+        case 5:                                                     // 5 = SBUS/PPM           
+              Parameters.word[1] = PPMdata.UseSBUSFromRX;           // 1 - 0
               Parameters.word[2] = PPMdata.PPMChannelCount; 
             break;
+        case 6:                                                     // 6 = Servo Frequencies
+            for (int i = 0; i < 8; ++i) Parameters.word[i+1] = ServoFrequency[i];   
+            break;
+        case 7:                                                     // 7 = Servo Pulse Widths
+            for (int i = 0; i < 8; ++i) Parameters.word[i+1] = ServoCentrePulse[i];
+            break;    
         default: 
-            Parameters.word[1] = 0;   
-            Parameters.word[2] = 0; 
             break;
     }
 }

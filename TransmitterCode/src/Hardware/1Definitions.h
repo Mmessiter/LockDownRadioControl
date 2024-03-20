@@ -76,7 +76,7 @@
     #define DEFAULT_EXPO           50                           // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
     #define CHARSMAX               250                          // Max length for char arrays  (was 120)
     #define DEFAULTLEDBRIGHTNESS   20                           // LED brightness
-    #define DEFAULTPOWEROFFWARNING 3                            // Default time to warn before cutting power
+    #define DEFAULTPOWEROFFWARNING 2                            // Default time to warn before cutting power
     #define MAXDUALRATE            200
     #define MAXBUFFERSIZE          1024 * 6
     #define MAXMODELNUMBER         91
@@ -88,7 +88,7 @@
     #define SCREENCHANGEWAIT       10                           // allow 10ms for screen to appear
     #define BATTERY_CHECK_INTERVAL 1000                         // 2 seconds between battery checks
     #define PARAMETERSENDREPEATS   3                            // How many times to send each parameter in case it gets lost  
-    #define MAXPARAMETERS          5                            // Max types of parameters packet to send  ... will increase.                  
+    #define MAXPARAMETERS          7                            // Max types of parameters packet to send  ... will increase.                  
    
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
@@ -202,6 +202,7 @@
     #define IDCHECKVIEW      38
     #define BLANKVIEW        39
     #define TYPEVIEW         40
+    #define SERVOTYPESVIEW   41
     
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -951,11 +952,9 @@ bool      LogFileOpen             = false;
 bool      ShowVPC                 = false;
 short int TxVoltageCorrection     = 0;
 short int RxVoltageCorrection     = 0;
-
-uint16_t  ServoCentrePulse        = 1500;
-uint16_t  ServoFrequency          = 100;
-
-uint8_t   LEDBrightness           = DEFAULTLEDBRIGHTNESS; // needs only 8 bits really
+uint16_t  ServoCentrePulse[8]     = {1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500};    // 8 channels for servo centre pulse
+uint16_t  ServoFrequency[8]       = {50, 50, 50, 50, 50, 50, 50, 50};                    // 8 channels for servo frequency
+uint8_t   LEDBrightness           = DEFAULTLEDBRIGHTNESS;                                // 0-255
 uint8_t   PowerOffWarningSeconds  = 2;
 uint8_t   ConnectionAssessSeconds = 1;
 uint32_t  PreviousPowerOffTimer   = 0;

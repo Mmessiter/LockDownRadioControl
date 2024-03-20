@@ -117,10 +117,12 @@ void CheckBanksInUse()
 /*********************************************************************************************************************************/
 
 void CheckServoType(){
-    if (ServoFrequency > 1000)   ServoFrequency = 50;
-    if (ServoFrequency < 50)     ServoFrequency = 50;
-    if (ServoCentrePulse > 2500) ServoCentrePulse = 1500;
-    if (ServoCentrePulse < 500)  ServoCentrePulse = 760;
+    for (int i = 0; i < 8; ++i) {
+        if (ServoFrequency[i] > 1000)   ServoFrequency[i] = 50;
+        if (ServoFrequency[i] < 50)     ServoFrequency[i] = 50;
+        if (ServoCentrePulse[i] > 2500) ServoCentrePulse[i] = 1500;
+        if (ServoCentrePulse[i] < 300)  ServoCentrePulse[i] = 760;
+    }
 }
 
 /************************************************************************************************************************************************/
@@ -333,13 +335,13 @@ bool ReadOneModel(uint32_t Mnum)
       // 12 Spare bytes was 16
         ++SDCardAddress;
     }
-    ServoCentrePulse = SDRead16BITS(SDCardAddress);
+    ServoCentrePulse[0] = SDRead16BITS(SDCardAddress);
     ++SDCardAddress;
     ++SDCardAddress;
-    ServoFrequency = SDRead16BITS(SDCardAddress);
+    ServoFrequency[0] = SDRead16BITS(SDCardAddress);
     ++SDCardAddress;
     ++SDCardAddress;
-    CheckServoType();
+   
     TimerDownwards = (bool)SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     TimerStartTime = SDRead16BITS(SDCardAddress);
@@ -359,7 +361,17 @@ bool ReadOneModel(uint32_t Mnum)
         ChannelOutPut[i] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
+    for (int i = 0; i < 8; ++i) {
+        ServoFrequency[i]   =  SDRead16BITS(SDCardAddress);
+        ++SDCardAddress;
+        ++SDCardAddress;
+        ServoCentrePulse[i] =  SDRead16BITS(SDCardAddress); 
+        ++SDCardAddress;   
+        ++SDCardAddress;
+    }
+    
     CheckOutPutChannels();
+    CheckServoType();
 
     // **************************************
 
@@ -1105,10 +1117,10 @@ void SaveOneModel(uint32_t mnum)
         ++SDCardAddress;
     }
     CheckServoType();
-    SDUpdate16BITS(SDCardAddress, ServoCentrePulse);
+    SDUpdate16BITS(SDCardAddress, ServoCentrePulse[0]);
     ++SDCardAddress;
     ++SDCardAddress;
-    SDUpdate16BITS(SDCardAddress, ServoFrequency);
+    SDUpdate16BITS(SDCardAddress, ServoFrequency[0]);
     ++SDCardAddress;
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, TimerDownwards);
@@ -1125,7 +1137,14 @@ void SaveOneModel(uint32_t mnum)
         SDUpdate8BITS(SDCardAddress, ChannelOutPut[i]);
         ++SDCardAddress;
     }
-
+    for (int i = 0; i < 8; ++i) {
+        SDUpdate16BITS(SDCardAddress, ServoFrequency[i]);
+        ++SDCardAddress;
+        ++SDCardAddress;
+        SDUpdate16BITS(SDCardAddress, ServoCentrePulse[i]);
+        ++SDCardAddress;   
+        ++SDCardAddress;
+    }
     SaveCheckSum32(); // Save the Model parametres checksm
 
     // ********************** Add more
