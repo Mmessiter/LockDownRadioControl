@@ -306,12 +306,13 @@ void GetSpecialPacket()                                                         
             PlaySound(MASTERMSG);                                                       // Announce the Master is now in control
         }
         
-      
-        if (SpecialPacketData.ModelID != LastModelID) {                                 // if the model ID has changed, match it if we can
-            LastModelID = SpecialPacketData.ModelID;                                    // Save the model ID so we can know if it changed
-            if (SpecialPacketData.ModelID != ModelsMacUnionSaved.Val64){                // is it the currently loaded model?
-                LoadCorrectModel(SpecialPacketData.ModelID);                            // if not then try only once to load the correct model 
-            }   
+        if (AutoModelSelect) {                                                          // If auto model select is on
+            if (SpecialPacketData.ModelID != LastModelID) {                             // if the model ID has changed, match it if we can
+                LastModelID = SpecialPacketData.ModelID;                                // Save the model ID so we can know if it changed
+                if (SpecialPacketData.ModelID != ModelsMacUnionSaved.Val64){            // is it the currently loaded model?
+                    LoadCorrectModel(SpecialPacketData.ModelID);                        // if not then try only once to load the correct model 
+                }   
+            }
         }
         
         MasterDetected(true);                                                           // Master is alive
