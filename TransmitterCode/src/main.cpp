@@ -4668,7 +4668,7 @@ void FASTRUN ManageTransmitter()
         return;                                                                                                // That's enough housekeeping for this time around
     }
 
-    if (RightNow - LastParameterSent >= 100) {                                                                 // Send queued parameters
+    if (RightNow - LastParameterSent >= 20) {                                                                 // Send queued parameters
        if (ParametersToBeSentPointer) SendOutstandingParameters();
         LastParameterSent = RightNow;
     }   

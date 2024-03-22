@@ -17,8 +17,6 @@ void StoreMastersModelID_at_Buddy()
     char prompt[120];
     char p[]                = "Master's model ID was not found!\r\n\r\nWould you like to store Master's \r\nmodel ID for '";
     char p1[]               = "?";
-    char Done[]             = "Master's model ID stored here.";
-    char NotDone[]          = "No model ID was stored.";
     char nb[10];                                                                //  Buffer for the  number
     char lb[]= " (";
     char rb[]= ")'";
@@ -35,10 +33,6 @@ void StoreMastersModelID_at_Buddy()
         PlaySound(MMSAVED);
         ModelsMacUnionSaved.Val64 = ModelsMacUnion.Val64;
         SaveOneModel(ModelNumber);
-        MsgBox(pFrontView, Done);
-    }
-    else {
-        MsgBox(pFrontView, NotDone);
     }
 }
 
