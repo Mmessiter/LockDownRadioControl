@@ -14,8 +14,9 @@
 #define RXVERSION_MINIMUS 7 // 20 March 2024
 #define RXVERSION_EXTRA   'b' 
 
-#define HOPTIME           47     //  14-16 gives 50Hz FHSS, 46-48 gives 20Hz FHSS
-#define RECEIVE_TIMEOUT   5      //  was 14   
+#define HOPTIME           17 // 47     //  17 gives 50Hz FHSS, 47 gives 20Hz FHSS
+
+#define RECEIVE_TIMEOUT   5  // 5 milliseconds is also the expected time between each packet    
 
 // **************************************************************************
 
@@ -30,7 +31,7 @@
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
         #define SECOND_TRANSCEIVER          1
-       // #define USE_STABILISATION                  1
+       // #define USE_STABILISATION         1
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
