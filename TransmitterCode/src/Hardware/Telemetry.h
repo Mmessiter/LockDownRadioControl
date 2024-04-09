@@ -89,14 +89,16 @@ FASTRUN bool CheckRXVolts()
                 dtostrf(VoltsPerCell, 2, 2, Vbuf);
                 SendText(t6, Vbuf);
             }
-
+            
+            RXWarningFlag = false;                                              // new as bit below is removed now.
+            
             if ((VoltsPerCell <= StopFlyingVoltsPerCell) && (BoundFlag && ModelMatched)) {
                     RXWarningFlag = true;
                     WarningSound  = STORAGECHARGE;
             }
-            if (VoltsPerCell > StopFlyingVoltsPerCell) {
-                    RXWarningFlag = false;                                  // Reset warning as voltage recovered
-            }
+            // if (VoltsPerCell > StopFlyingVoltsPerCell) {
+            //         RXWarningFlag = false;                                  // Reset warning as voltage recovered
+            // }
         }
     }
     else {
