@@ -205,7 +205,7 @@ bool ReadData()
             CurrentRadio->writeAckPayload(1, &AckPayload, 2);                       // send VERY little 99% of the time
             ++AckCounter;
         }
-        DelayMillis(2);    
+        DelayMillis(1);                                                             // 1 ms delay
         CurrentRadio->read(&DataReceived, DynamicPayloadSize);                      //  ** >> Read new data from master << ** // Get the size of the new data (14)
         Connected = true;
         NewData   = true;
