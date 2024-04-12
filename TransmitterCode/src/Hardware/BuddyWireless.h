@@ -158,7 +158,7 @@ void PupilDetected(bool Detected)
 // GetSlaveChannelValuesWireless() then uses the BuddyBuffer data to replace some or all of the Master's control data. 
 void GetPupilAck()                                    
 {
-    uint16_t AckSpecial[COMPRESSEDWORDS];                                   // Ack payload will contain all the pupil's control data
+    uint16_t AckSpecial[COMPRESSEDWORDS];                                   // Ack payload will contain all the pupil's control data                                                               // <-  *MUST* allow the ACK time to get going, otherwise the sender sees a failed packet
     if (Radio1.available()) {                                               // if a packet has arrived
         Radio1.read(&AckSpecial, sizeof AckSpecial);                        // read the packet
         Decompress(BuddyBuffer, AckSpecial, UNCOMPRESSEDWORDS);             // decompress the data into buddybuffer array
@@ -295,7 +295,7 @@ void GetSpecialPacket()                                                         
     Compress(DataTosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS);                 // Compress 
     if (Radio1.available()) {                                                           // if a packet has arrived
         Radio1.writeAckPayload(1, &DataTosend.CompressedData, SizeOfCompressedData);    // Acknowledge the packet BY SENDING MY CHANNEL DATA!
-        delay(1);                                                                       // <-  *MUST* allow the ACK time to get going, otherwise the sender sees a failed packet          
+        delayMicroseconds(100);                                                         // <-  *MUST* allow the ACK time to get going, otherwise the sender sees a failed packet          
         Radio1.read(&SpecialPacketData, sizeof SpecialPacketData);                      // read the packet if its still there
         if ((SpecialPacketData.Command[0] == 'B') && (MasterIsInControl)) {             // Buddy is now in control
             MasterIsInControl = false;                                                  // Buddy is now in control
