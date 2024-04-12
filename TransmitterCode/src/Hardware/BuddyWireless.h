@@ -156,13 +156,36 @@ void PupilDetected(bool Detected)
 // Pupil's Ack Payload contains the pupil's control data (in BuddyBuffer[]) which is compressed and must be decompressed before use.
 // This function is called from SendSpecialPacket() which is called from the main loop.
 // GetSlaveChannelValuesWireless() then uses the BuddyBuffer data to replace some or all of the Master's control data. 
+
+
+//#define DebugPupilAck 
+
 void GetPupilAck()                                    
 {
-    uint16_t AckSpecial[COMPRESSEDWORDS];                                   // Ack payload will contain all the pupil's control data                                                               // <-  *MUST* allow the ACK time to get going, otherwise the sender sees a failed packet
+#ifdef DebugPupilAck
+    static uint32_t GoodOnes =  0;
+    static uint32_t BadOnes  =  0;
+    static uint32_t lastrate   =   0.0;
+#endif
+
+    uint16_t AckSpecial[COMPRESSEDWORDS];                                   // Ack payload will contain all the pupil's control data                                                               // <-  *MUST* allow the ACK time to get going, otherwise the sender sees a failed packet  
     if (Radio1.available()) {                                               // if a packet has arrived
         Radio1.read(&AckSpecial, sizeof AckSpecial);                        // read the packet
         Decompress(BuddyBuffer, AckSpecial, UNCOMPRESSEDWORDS);             // decompress the data into buddybuffer array
+    #ifdef DebugPupilAck
+            ++GoodOnes;
+    }else{
+            ++BadOnes;
+    #endif
     }
+    #ifdef DebugPupilAck
+        if (lastrate != ((GoodOnes * 100) / (GoodOnes + BadOnes))){
+            Look1(GoodOnes);
+            Look1(" Percent Good Ones: ");
+            Look ((GoodOnes * 100) / (GoodOnes + BadOnes)); 
+            lastrate = ((GoodOnes * 100) / (GoodOnes + BadOnes));
+        }
+    #endif
 }
 
 //*************************************************************************************************************************
@@ -295,7 +318,7 @@ void GetSpecialPacket()                                                         
     Compress(DataTosend.CompressedData, SendBuffer, UNCOMPRESSEDWORDS);                 // Compress 
     if (Radio1.available()) {                                                           // if a packet has arrived
         Radio1.writeAckPayload(1, &DataTosend.CompressedData, SizeOfCompressedData);    // Acknowledge the packet BY SENDING MY CHANNEL DATA!
-        delayMicroseconds(100);                                                         // <-  *MUST* allow the ACK time to get going, otherwise the sender sees a failed packet          
+        delayMicroseconds(250);                                                         // <-  *MUST* allow the ACK time to get going, otherwise the sender sees a failed packet          
         Radio1.read(&SpecialPacketData, sizeof SpecialPacketData);                      // read the packet if its still there
         if ((SpecialPacketData.Command[0] == 'B') && (MasterIsInControl)) {             // Buddy is now in control
             MasterIsInControl = false;                                                  // Buddy is now in control
