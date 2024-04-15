@@ -281,15 +281,14 @@ uint8_t EncodeTheChangedChannels1(){
     uint8_t NumberOfChangedChannels = 0;                                                                    // Number of channels that have changed since last packet
     if (SpecialPacketData.ResendAllChannels)                                                                // If no ack, then please resend all channels
     {
-        for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = 0;                                       // Clear the PreviousBuffer once a second and when all channels are to be resent
+        for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = 0;                                       // Clear the PreviousBuffer when all channels are to be resent
         SpecialPacketData.ResendAllChannels = false;
     }                                        
-        DataTosend.ChannelBitMask = 0;                                                                      // Clear the ChannelBitMask 16 BIT WORD (1 bit per channel)
-        for (int i = 0; i < CHANNELSUSED; ++i){                                                             // Check for changed channels and load them into the rawdatabuffer  
+    DataTosend.ChannelBitMask = 0;                                                                          // Clear the ChannelBitMask 16 BIT WORD (1 bit per channel)
+    for (int i = 0; i < CHANNELSUSED; ++i){                                                                 // Check for changed channels and load them into the rawdatabuffer  
         if ((abs(SendBuffer[i] - PreviousBuffer[i]) >= MIN_CHANGE) && (NumberOfChangedChannels < 4))        // 4 is the maximum number of channel changes that will be sent in one packet ... 
         {                                                                                                   // ... any other changes will be sent in the next packet, only 5ms later.
             RawDataBuffer[NumberOfChangedChannels]  = SendBuffer[i];                                        // Load a changed channel into the rawdatabuffer. 
-            PrePreviousBuffer[i] = PreviousBuffer[i];                                                       // Save previous buffer in case we need to repeat it.
             PreviousBuffer[i] = SendBuffer[i];                                                              // Save it for next time in case it succeeds this time.
             DataTosend.ChannelBitMask |= (1 << i);                                                          // Set the current bit in the ChannelBitMask word.
             ++NumberOfChangedChannels;                                                                      // Increment the number of channel changes (rawdatabuffer index pointer).
