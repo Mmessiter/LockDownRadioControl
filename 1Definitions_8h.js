@@ -220,6 +220,7 @@ var 1Definitions_8h =
     [ "SCANVIEW", "1Definitions_8h.html#a6f1464e66db944aef96d5617811acb8b", null ],
     [ "SCANWAVEBAND", "1Definitions_8h.html#af8400c0c2d5c4779f32223055a12336d", null ],
     [ "SCREENCHANGEWAIT", "1Definitions_8h.html#a5fa58304135bf4162814d78de050f1c0", null ],
+    [ "SELECTTARGETDELAY", "1Definitions_8h.html#a6d077e0c1461ad4aad1d8efd30a4259a", null ],
     [ "SENDBUFFERSIZE", "1Definitions_8h.html#a2b3b13f7549f70267d828e8f6b1aedb5", null ],
     [ "SENDNOTHING", "1Definitions_8h.html#aa8cb091644f8785e060422c38a5ee334", null ],
     [ "SERVOTYPESVIEW", "1Definitions_8h.html#ae34cfcc9e1de7025830eeb4243d91a07", null ],
