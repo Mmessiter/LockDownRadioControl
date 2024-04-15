@@ -4723,7 +4723,7 @@ void DoWirelessBuddyListen(){                                // For Slave only
      GetNewChannelValues();                                  // Read sticks and trims and switches etc
      FixMotorChannel(); 
      ShowServoPos();
-     GetSpecialPacket1();                                     // Get the special packet and send our control data in the ask payload
+     GetSpecialPacket();                                     // Get the special packet and send our control data in the ask payload
 }
 /************************************************************************************************************/
 // LOOP

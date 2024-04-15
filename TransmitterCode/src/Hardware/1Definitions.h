@@ -18,13 +18,13 @@
 #include <InterpolationLib.h>
  
 // *************************************************************************************
-//               TX VERSION NUMBER   (May 2020 - March 2024 Malcolm Messiter)       *
+//               TX VERSION NUMBER   (May 2020 - April 2024 Malcolm Messiter)       *
 //**************************************************************************************
 
     #define TXVERSION_MAJOR   2 // first three *must* match RX but _EXTRA can be different
     #define TXVERSION_MINOR   4
     #define TXVERSION_MINIMUS 7
-    #define TXVERSION_EXTRA   "c 12/04/24" 
+    #define TXVERSION_EXTRA   "d 15/04/24" 
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -585,7 +585,7 @@ void             SetTestFrequencies();
 void             SetUKFrequencies();
 uint16_t         MakeTwobytes(bool* f);
 void             SendSpecialPacket();
-void             GetSpecialPacket1();
+void             GetSpecialPacket();
 void             StartBuddyListen();
 void             StopBuddyListen();
 void             DoWirelessBuddy();
@@ -1137,6 +1137,16 @@ struct Payload
 Payload AckPayload;
 
 const uint8_t AckPayloadSize = sizeof(AckPayload); // i.e. 6
+
+
+struct spd // Special Packet Data for Wireless Buddy functions
+    {
+        char        Command[2];
+        uint64_t    ModelID;
+        uint8_t     Channel = QUIETCHANNEL;
+        bool        ResendAllChannels = true;
+    };
+spd SpecialPacketData;
 
 // *****************************************************************************************************************
 
