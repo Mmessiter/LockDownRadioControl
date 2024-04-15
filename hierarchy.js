@@ -2,6 +2,7 @@ var hierarchy =
 [
     [ "CD", "structCD.html", null ],
     [ "CD2", "structCD2.html", null ],
+    [ "CD_buddy", "structCD__buddy.html", null ],
     [ "I2Cdev", "classI2Cdev.html", null ],
     [ "MPU6050", "classMPU6050.html", null ],
     [ "MPU9250", "classMPU9250.html", [

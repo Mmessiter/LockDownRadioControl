@@ -35,7 +35,7 @@ var searchData=
   ['maxtriespertransceiver_32',['MAXTRIESPERTRANSCEIVER',['../radio_8h.html#a4a03f701a3917500a6060344738e5fd4',1,'radio.h']]],
   ['maxwidth_33',['MAXWIDTH',['../TransmitterCode_2src_2main_8cpp.html#ac101c663138f79260b6d5ea00140fa22',1,'main.cpp']]],
   ['midmicros_34',['MIDMICROS',['../1Definitions_8h.html#aa4dd4979e290d977d813a5a4af263b0d',1,'1Definitions.h']]],
-  ['min_5fchange_35',['MIN_CHANGE',['../transceiver_8h.html#ab0f10204b4b2238cd208ef91e2a2e151',1,'transceiver.h']]],
+  ['min_5fchange_35',['min_change',['../BuddyWireless_8h.html#ab0f10204b4b2238cd208ef91e2a2e151',1,'MIN_CHANGE:&#160;BuddyWireless.h'],['../transceiver_8h.html#ab0f10204b4b2238cd208ef91e2a2e151',1,'MIN_CHANGE:&#160;transceiver.h']]],
   ['minat760_36',['MINAT760',['../common_8h.html#aa578f6260ee57a0b96f027c331e5b655',1,'common.h']]],
   ['minmicros_37',['minmicros',['../1Definitions_8h.html#ac67e087c11a86a3790c656a29f8c7195',1,'MINMICROS:&#160;1Definitions.h'],['../common_8h.html#ac67e087c11a86a3790c656a29f8c7195',1,'MINMICROS:&#160;common.h'],['../common_8h.html#ac67e087c11a86a3790c656a29f8c7195',1,'MINMICROS:&#160;common.h']]],
   ['mixesview_38',['MIXESVIEW',['../1Definitions_8h.html#aaa7f851829299cf35b8f281e6d76e27c',1,'1Definitions.h']]],

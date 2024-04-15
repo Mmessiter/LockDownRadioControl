@@ -45,7 +45,7 @@ var searchData=
   ['readtime_42',['ReadTime',['../Utilities_8h.html#a483cced19b61975f76957f5696425fe9',1,'Utilities.h']]],
   ['readword_43',['readWord',['../classI2Cdev.html#a545cd48b1e806e7e467b542c9e38e8c8',1,'I2Cdev']]],
   ['readwords_44',['readWords',['../classI2Cdev.html#a1b3d895dc6a00cbb5fb3b0441b2e35de',1,'I2Cdev']]],
-  ['rearrangethechannels_45',['RearrangeTheChannels',['../radio_8h.html#a324d644a6306bb8be3b7f46b4bb32421',1,'radio.h']]],
+  ['rearrangethechannels_45',['rearrangethechannels',['../radio_8h.html#a324d644a6306bb8be3b7f46b4bb32421',1,'RearrangeTheChannels():&#160;radio.h'],['../BuddyWireless_8h.html#a324d644a6306bb8be3b7f46b4bb32421',1,'RearrangeTheChannels():&#160;BuddyWireless.h']]],
   ['reboot_46',['Reboot',['../Utilities_8h.html#a374524dc113357d2ed6b8622f6ea85a8',1,'Utilities.h']]],
   ['rebuildflags_47',['rebuildflags',['../ReceiverCode_2src_2main_8cpp.html#ad86a39e4cba19592c760833870f6f69c',1,'RebuildFlags(bool *f, uint16_t tb):&#160;main.cpp'],['../common_8h.html#ad86a39e4cba19592c760833870f6f69c',1,'RebuildFlags(bool *f, uint16_t tb):&#160;main.cpp']]],
   ['receivedata_48',['ReceiveData',['../radio_8h.html#a06807a4f185694d37f774702ba74db0a',1,'radio.h']]],
