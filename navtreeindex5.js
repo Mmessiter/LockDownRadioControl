@@ -1,5 +1,6 @@
 var NAVTREEINDEX5 =
 {
+"MPU6050_8h.html#ad68a24c7c13fc57697ae7748c28c60bc":[5,0,0,0,0,0,4,275],
 "MPU6050_8h.html#ad6a2299d2c4e78faa704c70a80a6c7c8":[5,0,0,0,0,0,4,182],
 "MPU6050_8h.html#ad6cd3b81b148be477d13a9eb103bb366":[5,0,0,0,0,0,4,85],
 "MPU6050_8h.html#ad6e414ff4b69bb789ac93215a28c8d9c":[5,0,0,0,0,0,4,13],
@@ -248,6 +249,5 @@ var NAVTREEINDEX5 =
 "Nextion_8h_source.html":[5,0,3,0,0,9],
 "Pong_8h.html":[5,0,3,0,0,10],
 "Pong_8h.html#a01ddd63e9f328dd117ee13b789852868":[5,0,3,0,0,10,4],
-"Pong_8h.html#a66133191d50f6b4d010d56e6b53a853b":[5,0,3,0,0,10,3],
-"Pong_8h.html#a9c93d1ffce7d5ff083a90a9ea221206f":[5,0,3,0,0,10,0]
+"Pong_8h.html#a66133191d50f6b4d010d56e6b53a853b":[5,0,3,0,0,10,3]
 };

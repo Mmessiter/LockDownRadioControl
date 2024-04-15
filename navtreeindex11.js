@@ -1,8 +1,9 @@
 var NAVTREEINDEX11 =
 {
-"classVectorInt16.html#aeb8087ac5732450bc18ac944a16d0694":[4,0,14,2],
-"classVectorInt16.html#aefdadb30fbc20b564bbbf0b1a885e349":[4,0,14,5],
-"classVectorInt16.html#af1b5c4c297bdd32751ab4519480b919f":[4,0,14,9],
+"classVectorInt16.html#acce45f37b3f90df1d5aff6edbf12f02b":[4,0,15,1],
+"classVectorInt16.html#aeb8087ac5732450bc18ac944a16d0694":[4,0,15,2],
+"classVectorInt16.html#aefdadb30fbc20b564bbbf0b1a885e349":[4,0,15,5],
+"classVectorInt16.html#af1b5c4c297bdd32751ab4519480b919f":[4,0,15,9],
 "classes.html":[4,1],
 "common_8h.html":[5,0,1,0,0,0],
 "common_8h.html#a00a419fbe253e6e9cb4d716d02d0b2b7":[5,0,1,0,0,0,39],
@@ -248,6 +249,5 @@ var NAVTREEINDEX11 =
 "functions_func_i.html":[4,3,1,5],
 "functions_func_m.html":[4,3,1,6],
 "functions_func_n.html":[4,3,1,7],
-"functions_func_p.html":[4,3,1,8],
-"functions_func_q.html":[4,3,1,9]
+"functions_func_p.html":[4,3,1,8]
 };
