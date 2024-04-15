@@ -291,11 +291,11 @@ void SendSpecialPacketFromPPMModule()                                       // H
 void SetUpTargetForBuddy()                                                           // Once only because the model is connected via module. Only the Buddy is using the nRF24L01 in here
 {
         Radio1.setDataRate(FASTDATARATE);                                            // Set the data rate
-        delayMicroseconds(STOPLISTENINGDELAY);
+        delayMicroseconds(SELECTTARGETDELAY);
         Radio1.openWritingPipe(TeensyMACAddPipe ^ ENCRYPT_KEY);                      // Set the pipe address
-        delayMicroseconds(STOPLISTENINGDELAY);
+        delayMicroseconds(SELECTTARGETDELAY);
         Radio1.stopListening();
-        delayMicroseconds(STOPLISTENINGDELAY);
+        delayMicroseconds(SELECTTARGETDELAY);
 }
 
 //*************************************************************************************************************************

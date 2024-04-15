@@ -100,7 +100,8 @@
     #define RETRYCOUNT               2              // was 2. Auto retries inside nRF24L01. MAX is 15. Fails below 2.
     #define RETRYWAIT                1              // was 1. 250us = Wait between retries (RetryWait+1 * 250us))
     #define QUIETCHANNEL             5              // This was found to be the least busy channel in the 2.4GHz band in my house
-    #define STOPLISTENINGDELAY       100            // was 30 but 100 seems close to ideal <<<<< *********
+    #define STOPLISTENINGDELAY       30             // 30 seems close to ideal <<<<< *********
+    #define SELECTTARGETDELAY        100            
 
 // **************************************************************************
 //           Channel curves box position and dimentions                     *
