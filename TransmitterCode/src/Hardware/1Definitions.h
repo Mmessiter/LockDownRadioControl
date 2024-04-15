@@ -585,7 +585,7 @@ void             SetTestFrequencies();
 void             SetUKFrequencies();
 uint16_t         MakeTwobytes(bool* f);
 void             SendSpecialPacket();
-void             GetSpecialPacket();
+void             GetSpecialPacket1();
 void             StartBuddyListen();
 void             StopBuddyListen();
 void             DoWirelessBuddy();
@@ -857,6 +857,15 @@ struct CD2{
     uint16_t        word[9] = {0,0,0,0,0,0,0,0,0};
 };  
 CD2 Parameters;
+
+
+struct  CD_buddy{
+    uint16_t      ChannelBitMask = 0;                   
+    uint16_t      CompressedData[20];   // 40 bytes ... far too big
+};
+uint16_t RawDataIn    [21];             //  21 x 16 BIT words
+
+CD_buddy DataReceived;
 
 
 uint16_t        SizeOfDataTosend = sizeof(DataTosend); 
