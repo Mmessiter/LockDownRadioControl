@@ -1148,6 +1148,24 @@ struct spd // Special Packet Data for Wireless Buddy functions
     };
 spd SpecialPacketData;
 
+
+
+struct spds // Shorter Special Packet Data for Wireless Buddy functions
+    {
+        char        Command[2];
+        uint8_t     Channel = QUIETCHANNEL;
+        bool        ResendAllChannels = true;
+    };
+spds ShorterSpecialPacketData;
+
+bool MasterIsInControl = true; 
+
+     bool     NeedToRecover       = false;
+     uint8_t  ChannelSentLastTime = 0;                                // The old channel number
+     uint8_t  Index               = 82; 
+
+
+
 // *****************************************************************************************************************
 
 // **********************************************************************************************************************************

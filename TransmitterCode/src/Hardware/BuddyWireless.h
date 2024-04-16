@@ -160,10 +160,10 @@ void RearrangeTheChannels(){
     return;
 }
 //*************************************************************************************************************************
-// Master gets Ack from pupil.  NEW VERSION <<<<<<<<<<<<<<<<<<
+// Master gets Ack from pupil. 
 
 void GetPupilAck()         
-{                                                                                  // Ack payload will contain all the pupil's control data                                                               // <-  *MUST* allow the ACK time to get going, otherwise the sender sees a failed packet  
+{                                                                                  
     if (Radio1.available()) {                                  
         SpecialPacketData.ResendAllChannels = false;
         uint8_t DynamicPayloadSize = Radio1.getDynamicPayloadSize();               // if a packet has arrived
@@ -178,33 +178,19 @@ void GetPupilAck()
 }
 
 //*************************************************************************************************************************
-void ChangeTXTarget(uint8_t ch,uint64_t p,rf24_datarate_e faster)           // Swap between Buddy and Master
-{                                                                           // ch is the channel, p is the pipe address, speed is the data rate
-     Radio1.setDataRate(faster);                                            // Set the data rate
-     Radio1.openWritingPipe(p);                                             // Set the pipe address
+void ChangeTXTarget(uint8_t ch,uint64_t p,rf24_datarate_e rate)           // Swap between Buddy and Master
+{                                                                         // ch is the channel, p is the pipe address, speed is the data rate
+     Radio1.setDataRate(rate);                                            // Set the data rate
+     Radio1.openWritingPipe(p);                                           // Set the pipe address
      Radio1.stopListening();
      delayMicroseconds(STOPLISTENINGDELAY);
-     Radio1.setChannel(ch);                                                 // Set the frequency channel
+     Radio1.setChannel(ch);                                               // Set the frequency channel
      delayMicroseconds(STOPLISTENINGDELAY);
 }
 
-//*************************************************************************************************************************
-void SendSpecialPacket()                                                    // Here the MASTER sends to PUPIL tx. This is called about 200 times a second.
-{                                                                           // Master Sends M or B to indicate whether Buddy is on or off, and the ID of the model which should be loaded.
-                                                                            // The Pupil's Ack Payload contains the pupil's control data (in BuddyBuffer[]) which is compressed and must be decompressed before use.
-                                                                            // This function is called from SendData() function which is called from the main loop.
-                                                                            // GetSlaveChannelValuesWireless() then uses the BuddyBuffer data to replace some or all of the Master's control data. 
-                                                                            // Because the datarate is 2 meg the exchange is very fast.
-    static uint32_t LocalTimer          = 0;
-    static bool     NeedToRecover       = false;
-    static uint8_t  ChannelSentLastTime = 0;                                // The old channel number
-    static uint8_t  Index               = 82;                               // The current channel number
+// ************************************************************************************************************
+void DoTheLongerSpecialPacket(){
     
-    rf24_datarate_e faster = FASTDATARATE, slower = DATARATE;               // Save the data rates
-    if ((!BoundFlag || !ModelMatched  || (PupilIsAlive != 1))){             // Don't send too often if not connected, nor if buddy was not found
-        if (((millis() - LocalTimer) < 20)) return;    
-            LocalTimer = millis();
-    }
     SpecialPacketData.ModelID =  ModelsMacUnionSaved.Val64;                 // Send the model ID so that pupil can check it
     SpecialPacketData.Command[0]                    = 'M';                  // Send M to indicate Master is ON
     if (BuddyON)       SpecialPacketData.Command[0] = 'B';                  // Send B to indicate Buddy is ON
@@ -212,7 +198,9 @@ void SendSpecialPacket()                                                    // H
     --Index; if (Index < 1) Index = 82;                                     // use the same array but in reverse order
     SpecialPacketData.Channel = FHSS_data::FHSS_Channels[Index];            // Set the  new channel number for next time
     if (NeedToRecover) SpecialPacketData.Channel = QUIETCHANNEL;            // If contact lost, then use the recovery channel to recover
-    ChangeTXTarget(ChannelSentLastTime,TeensyMACAddPipe ^ ENCRYPT_KEY, faster); // Set the TX target to the Buddy
+    
+    ChangeTXTarget(ChannelSentLastTime,TeensyMACAddPipe ^ ENCRYPT_KEY, FASTDATARATE); // Set the TX target to the Buddy
+  
     if (Radio1.write(&SpecialPacketData, sizeof SpecialPacketData)) {       // Send the packet
         GetPupilAck();                                                      // Get ack from pupil WITH HIS CONTROL DATA!!
         PupilDetected(true);                                                // Pupil is alive
@@ -221,8 +209,47 @@ void SendSpecialPacket()                                                    // H
         PupilDetected(false);                                               // Pupil is dead
         NeedToRecover = true;                                               // Need to recover  
         SpecialPacketData.ResendAllChannels = true;                         // Please resend all channels               
+    }   
+}
+ 
+// ************************************************************************************************************
+void DoTheShorterSpecialPacket(){  // not working yet ??!?!?!?!? **** <<<<<<<<
+    
+    ShorterSpecialPacketData.Command[0]                    = 'M';                  // Send M to indicate Master is ON
+    if (BuddyON)       ShorterSpecialPacketData.Command[0] = 'B';                  // Send B to indicate Buddy is ON
+    ChannelSentLastTime = ShorterSpecialPacketData.Channel;                        // Use the old channel number because Buddy hasn't yet hopped
+    --Index; if (Index < 1) Index = 82;                                            // use the same array but in reverse order
+    ShorterSpecialPacketData.Channel = FHSS_data::FHSS_Channels[Index];            // Set the  new channel number for next time
+    if (NeedToRecover) ShorterSpecialPacketData.Channel = QUIETCHANNEL;            // If contact lost, then use the recovery channel to recover
+    
+    ChangeTXTarget(ChannelSentLastTime,TeensyMACAddPipe ^ ENCRYPT_KEY, FASTDATARATE);// Set the TX target to the Buddy
+    
+    if (Radio1.write(&ShorterSpecialPacketData, sizeof ShorterSpecialPacketData)) {  // Send the shorter packet
+                                               
+        GetPupilAck();                                                          // Get ack from pupil WITH HIS CONTROL DATA!!
+        PupilDetected(true);                                                    // Pupil is alive
+        NeedToRecover = false;                                                  // No need to recover             
+    } else {
+        PupilDetected(false);                                                   // Pupil is dead
+        NeedToRecover = true;                                                   // Need to recover  
+        ShorterSpecialPacketData.ResendAllChannels = true;                      // Please resend all channels               
     }
-    ChangeTXTarget(CurrentChannel,TeensyMACAddPipe,slower);                 // Set the TX target back to the receiver in model.
+}
+
+//*************************************************************************************************************************
+void SendSpecialPacket()                                                   
+{                                                                           
+    static uint32_t LocalTimer = 0;
+    if ((!BoundFlag || !ModelMatched  || (PupilIsAlive != 1))){          
+        if (((millis() - LocalTimer) < 20)) return;    
+            LocalTimer = millis();
+    }
+    if (BoundFlag && ModelMatched){
+          DoTheShorterSpecialPacket();  
+    }else{
+          DoTheLongerSpecialPacket();
+     }  
+    ChangeTXTarget(CurrentChannel,TeensyMACAddPipe,DATARATE);                 // Set the TX target back to the receiver in model.
 }
 
 //*************************************************************************************************************************
@@ -303,30 +330,21 @@ void SendTheSpecialAckPayload(){
         uint8_t NumberOfChangedChannels = EncodeTheChangedChannels1();                                     // Encode the changed channels
         
         if (NumberOfChangedChannels){                                                                     // Any channels changed? Or parameters to send?
-            ByteCountToTransmit     =  ((float) NumberOfChangedChannels * 1.5f) + 4;                      // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 word because int rounds downwards.
+            ByteCountToTransmit     =  ((float) NumberOfChangedChannels * 1.5f) + 4;                      // Calculate the number of bytes to transmit
             uint8_t SizeOfUnCompressedData  =   (ByteCountToTransmit / 1.5) ;                                
-            Compress(DataTosend.CompressedData, RawDataBuffer, SizeOfUnCompressedData);                   // Compress the raw data buffer into the compressed data buffer (reduces it to 75% of original size)
+            Compress(DataTosend.CompressedData, RawDataBuffer, SizeOfUnCompressedData);               
         }else{
             ByteCountToTransmit = 2;    
             NewCompressNeeded = false;   
         }
         Radio1.writeAckPayload(1, &DataTosend, ByteCountToTransmit);                                        // Acknowledge the packet BY SENDING MY CHANNEL DATA!
-        delayMicroseconds(250);                                                                             // <-  *MUST* allow the ACK time to get going, otherwise the sender sees a failed packet
+        delayMicroseconds(30);                            
 }
-//*************************************************************************************************************************
-void GetSpecialPacket()                                                                // Here the PUPIL tx gets a packet from MASTER tx. This function is called from main loop very fast.
-{                                                                                       // Master tells Pupil whether buddy is on or off, and the ID of the model which should be loaded.
-                                                                                        // The Pupil's Ack Payload contains the pupil's control data (in BuddyBuffer[]) which is compressed and must be decompressed before use.
-                                                                                        // GetSlaveChannelValuesWireless() in Master then uses the BuddyBuffer data to replace some or all of the Master's control data. 
-                                                                                        // Because the datarate is 2 meg the exchange is very fast. 
-   
-    static bool MasterIsInControl = true; 
-    static uint16_t PacketCounter = 0;
-    static uint32_t LocalTimer = 0;
-    static uint64_t LastModelID = 0;
-    
-    if (Radio1.available()) {                                                           // if a packet has arrived
-        SendTheSpecialAckPayload();                                                     // Send the ack payload which contains our cunningly abbrevieated channel data                                
+// ************************************************************************************************************
+void ParseLongerSpecialPacket(){ // This is called from GetSpecialPacket() function just below
+
+        static uint64_t LastModelID = 0;
+
         Radio1.read(&SpecialPacketData, sizeof SpecialPacketData);                      // read the packet if its still there
         if ((SpecialPacketData.Command[0] == 'B') && (MasterIsInControl)) {             // Buddy is now in control
             MasterIsInControl = false;                                                  // Buddy is now in control
@@ -336,7 +354,6 @@ void GetSpecialPacket()                                                         
             MasterIsInControl = true;                                                   // Master is now in control
             PlaySound(MASTERMSG);                                                       // Announce the Master is now in control
         }
-        
         if (AutoModelSelect) {                                                          // If auto model select is on
             if (SpecialPacketData.ModelID != LastModelID) {                             // if the model ID has changed, match it if we can
                 LastModelID = SpecialPacketData.ModelID;                                // Save the model ID so we can know if it changed
@@ -344,19 +361,55 @@ void GetSpecialPacket()                                                         
                     LoadCorrectModel(SpecialPacketData.ModelID);                        // if not then try only once to load the correct model 
                 }   
             }
+        }    
+        Radio1.stopListening(); 
+        Radio1.setChannel(SpecialPacketData.Channel);                                   // Set the frequency channel
+        Radio1.startListening(); 
+}
+
+// ************************************************************************************************************
+
+void ParseShorterSpecialPacket(){
+
+        Radio1.read(&ShorterSpecialPacketData, sizeof ShorterSpecialPacketData);        // read the packet if its still there
+        if ((ShorterSpecialPacketData.Command[0] == 'B') && (MasterIsInControl)) {      // Buddy is now in control
+            MasterIsInControl = false;                                                  // Buddy is now in control
+            PlaySound(BUDDYMSG);                                                        // Announce the Buddy is now in control
         }
-        
+        if ((ShorterSpecialPacketData.Command[0] == 'M') && (!MasterIsInControl)) {     // Master is now in control
+            MasterIsInControl = true;                                                   // Master is now in control
+            PlaySound(MASTERMSG);                                                       // Announce the Master is now in control
+        }
+        Radio1.stopListening(); 
+        Radio1.setChannel(ShorterSpecialPacketData.Channel);                                   // Set the frequency channel
+        Radio1.startListening(); 
+}
+
+//*************************************************************************************************************************
+void GetSpecialPacket(){
+                                                                
+        static uint32_t LocalTimer = 0;
+        static uint16_t PacketCounter = 0;
+    
+    if (Radio1.available()) {                                                           // if a packet has arrived
+        SendTheSpecialAckPayload();                                       
+        uint8_t p = Radio1.getDynamicPayloadSize();                                     // Get the size of the packet  
+        if (p == 24){    // 24 or 4
+            ParseLongerSpecialPacket();    
+        }else{
+            ParseShorterSpecialPacket();
+        }
+
         MasterDetected(true);                                                           // Master is alive
         ++PacketCounter;                                                                // Count the packets
-        if (millis() - LocalTimer > 1000) {                                             // Every second
+
+        if (millis() - LocalTimer >= 1000) {                                            // Every second
             LocalTimer = millis();                                                      // reset the timer
             PacketsPerSecond = PacketCounter;                                           // save the packets per second for use on the data diplay
             PacketCounter = 0;                                                          // reset the counter
         }
         LastPassivePacketTime = millis();                                               // reset the timer
-        Radio1.stopListening(); 
-        Radio1.setChannel(SpecialPacketData.Channel);                                   // Set the frequency channel
-        Radio1.startListening();                                                        // Start listening
+   
     }else{                                                                              // No packet arrived so maybe master's dead? 
         if (millis() - LastPassivePacketTime > PACEMAKER) {                             // We expect a packet every PACEMAKER ( = 5 ) milliseconds. If none, a packet was lost.
             Radio1.stopListening(); 
