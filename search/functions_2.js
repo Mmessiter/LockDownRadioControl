@@ -12,7 +12,7 @@ var searchData=
   ['calibratesticks_9',['CalibrateSticks',['../TransmitterCode_2src_2main_8cpp.html#ae1b8cef371d26fca2b4f5a101be7a8ba',1,'main.cpp']]],
   ['catmullsplineinterpolation_10',['CatmullSplineInterpolation',['../TransmitterCode_2src_2main_8cpp.html#a11049cdf3f4d84a837d204e7dc687fe3',1,'main.cpp']]],
   ['centretrims_11',['CentreTrims',['../Trims_8h.html#a4d21fc3e237eec44b6cc9a5d102249dd',1,'Trims.h']]],
-  ['changetxtarget_12',['ChangeTXTarget',['../BuddyWireless_8h.html#a65c503df23c5a965282f5bf8946c76e5',1,'BuddyWireless.h']]],
+  ['changetxtarget_12',['ChangeTXTarget',['../BuddyWireless_8h.html#adcf60ad1a186299e73af5fb9c846f259',1,'BuddyWireless.h']]],
   ['channelcentres_13',['ChannelCentres',['../TransmitterCode_2src_2main_8cpp.html#a0e7ca9043d8fa769e8a9290df885e594',1,'main.cpp']]],
   ['checkallmodelids_14',['CheckAllModelIds',['../TransmitterCode_2src_2main_8cpp.html#a6a25e5ab5c13c780c12cdd6fe0a85049',1,'main.cpp']]],
   ['checkbanksinuse_15',['CheckBanksInUse',['../SDcard_8h.html#a38063272143a3da8735678470d210d29',1,'SDcard.h']]],

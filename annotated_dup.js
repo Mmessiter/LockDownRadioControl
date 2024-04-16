@@ -12,6 +12,7 @@ var annotated_dup =
     [ "Quaternion", "classQuaternion.html", "classQuaternion" ],
     [ "SBUS", "classSBUS.html", "classSBUS" ],
     [ "spd", "structspd.html", "structspd" ],
+    [ "spds", "structspds.html", "structspds" ],
     [ "uMacReceived", "unionuMacReceived.html", "unionuMacReceived" ],
     [ "uMacStored", "unionuMacStored.html", "unionuMacStored" ],
     [ "VectorFloat", "classVectorFloat.html", "classVectorFloat" ],

@@ -13,6 +13,7 @@ var hierarchy =
     [ "Quaternion", "classQuaternion.html", null ],
     [ "SBUS", "classSBUS.html", null ],
     [ "spd", "structspd.html", null ],
+    [ "spds", "structspds.html", null ],
     [ "uMacReceived", "unionuMacReceived.html", null ],
     [ "uMacStored", "unionuMacStored.html", null ],
     [ "VectorFloat", "classVectorFloat.html", null ],
