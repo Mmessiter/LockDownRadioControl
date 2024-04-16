@@ -166,6 +166,7 @@ void GetPupilAck()
 {                                                                                  
     if (Radio1.available()) {                                  
         SpecialPacketData.ResendAllChannels = false;
+        ShorterSpecialPacketData.ResendAllChannels = false;
         uint8_t DynamicPayloadSize = Radio1.getDynamicPayloadSize();               // if a packet has arrived
         Radio1.read(&DataReceived, DynamicPayloadSize);                            // read only bytes sent in the packet
         if (DataReceived.ChannelBitMask){                                          // any channel changes? 
@@ -174,6 +175,7 @@ void GetPupilAck()
         }                                    
     } else {
         SpecialPacketData.ResendAllChannels = true;                                // If no ack, then please resend all channels
+        ShorterSpecialPacketData.ResendAllChannels = true;                         // If no ack, then please resend all channels
     }
 }
 
@@ -232,7 +234,8 @@ void DoTheShorterSpecialPacket(){
     } else {
         PupilDetected(false);                                                   // Pupil is dead
         NeedToRecover = true;                                                   // Need to recover  
-        ShorterSpecialPacketData.ResendAllChannels = true;                      // Please resend all channels               
+        ShorterSpecialPacketData.ResendAllChannels = true;                      // Please resend all channels      
+                 
     }
 }
 
@@ -306,12 +309,13 @@ void SetUpTargetForBuddy()                                                      
 
 /************************************************************************************************************/
 uint8_t EncodeTheChangedChannels1(){
-    #define MIN_CHANGE 4                                                                                                             // Very tiny changes in channel values are ignored. That's most likely only noise...                                                                                                 // ... This reduces the average packet size                                                                                                    // ... Values <= 20 are imperceptible. So 4 is just fine here.
+    #define MIN_CHANGE 4                                                                                    // Very tiny changes in channel values are ignored. That's most likely only noise...                                                                                                 // ... This reduces the average packet size                                                                                                    // ... Values <= 20 are imperceptible. So 4 is just fine here.
     uint8_t NumberOfChangedChannels = 0;                                                                    // Number of channels that have changed since last packet
-    if (SpecialPacketData.ResendAllChannels)                                                                // If no ack, then please resend all channels
+    if ((SpecialPacketData.ResendAllChannels) || (ShorterSpecialPacketData.ResendAllChannels))              // If no ack, then please resend all channels
     {
         for (int i = 0; i < CHANNELSUSED; ++i) PreviousBuffer[i] = 0;                                       // Clear the PreviousBuffer when all channels are to be resent
         SpecialPacketData.ResendAllChannels = false;
+        ShorterSpecialPacketData.ResendAllChannels = false;
     }                                        
     DataTosend.ChannelBitMask = 0;                                                                          // Clear the ChannelBitMask 16 BIT WORD (1 bit per channel)
     for (int i = 0; i < CHANNELSUSED; ++i){                                                                 // Check for changed channels and load them into the rawdatabuffer  
