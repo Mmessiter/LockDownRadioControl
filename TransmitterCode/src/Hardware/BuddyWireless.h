@@ -213,7 +213,7 @@ void DoTheLongerSpecialPacket(){
 }
  
 // ************************************************************************************************************
-void DoTheShorterSpecialPacket(){  // not working yet ??!?!?!?!? **** <<<<<<<<
+void DoTheShorterSpecialPacket(){  
     
     ShorterSpecialPacketData.Command[0]                    = 'M';                  // Send M to indicate Master is ON
     if (BuddyON)       ShorterSpecialPacketData.Command[0] = 'B';                  // Send B to indicate Buddy is ON
@@ -240,10 +240,12 @@ void DoTheShorterSpecialPacket(){  // not working yet ??!?!?!?!? **** <<<<<<<<
 void SendSpecialPacket()                                                   
 {                                                                           
     static uint32_t LocalTimer = 0;
+   
     if ((!BoundFlag || !ModelMatched  || (PupilIsAlive != 1))){          
         if (((millis() - LocalTimer) < 20)) return;    
             LocalTimer = millis();
     }
+    
     if (BoundFlag && ModelMatched){
           DoTheShorterSpecialPacket();  
     }else{
