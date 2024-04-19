@@ -11,35 +11,8 @@
     #define ENCRYPT_KEY            0xFEADFEADBB                                 // The encryption key is used for the Pipe address between the transmitters 
 
 //*************************************************************************************************************************
-void StoreMastersModelID_at_Buddy()
-{ // This stores current model ID
-
-    char prompt[120];
-    char p[]                = "Master's model ID was not found!\r\n\r\nWould you like to store Master's \r\nmodel ID for '";
-    char p1[]               = "?";
-    char nb[10];                                                                //  Buffer for the  number
-    char lb[]= " (";
-    char rb[]= ")'";
-
-    Str(nb, ModelNumber,0);
-    strcpy(prompt, p);
-    strcat(prompt, ModelName);
-    strcat(prompt, lb);
-    strcat(prompt, nb);
-    strcat(prompt, rb);
-    strcat(prompt, p1);
-    
-    if (GetConfirmation(pRXSetupView, prompt)) {
-        PlaySound(MMSAVED);
-        ModelsMacUnionSaved.Val64 = ModelsMacUnion.Val64;
-        SaveOneModel(ModelNumber);
-    }
-}
-
-//*************************************************************************************************************************
 
 void LoadCorrectModel(uint64_t ModelID){                                        //  Gets Buddy onto same model as master, quietly.            
-    static bool ModelMatchFailed = false;                                
     uint32_t SavedModelNumber = ModelNumber;                                    //  Save the current model number
     ModelMatched = false;
     ModelNumber = 0;
@@ -55,16 +28,10 @@ void LoadCorrectModel(uint64_t ModelID){                                        
     }else{
         ModelNumber = SavedModelNumber;                                         //  Restore the current model number 
         ReadOneModel(ModelNumber);                                              //  Restore the current model
-        if (!ModelMatchFailed) {                                                //  Only do this once
-            ModelsMacUnion.Val64 = ModelID;                                     //  Offer option to store the actual model ID ...
-            StoreMastersModelID_at_Buddy();                                     //  ... in this line
-            ModelMatchFailed = true;                                            //  Done so don't do it again
-        }
         GotoFrontView();                                                        //  pretty obvious really   
         UpdateModelsNameEveryWhere();                                           //  Show model name everywhere.
     }
 }
-
 //*************************************************************************************************************************
 void GetSlaveChannelValuesWireless(){                                           // Very Like the PPM function only a bit simpler
 
@@ -399,8 +366,6 @@ void GetSpecialPacket(){
     if (Radio1.available()) {                                                           // if a packet has arrived
         SendTheSpecialAckPayload();                                       
         uint8_t p = Radio1.getDynamicPayloadSize();                                     // Get the size of the packet  
-
-      // Look(p); 
 
         if (p > 12){                                                                    // p is either 24 or 4
             ParseLongerSpecialPacket();    
