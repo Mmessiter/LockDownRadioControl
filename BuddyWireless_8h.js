@@ -20,6 +20,5 @@ var BuddyWireless_8h =
     [ "SendSpecialPacketFromPPMModule", "BuddyWireless_8h.html#ab838639c4ecf6256fc1e2a256c8761b6", null ],
     [ "SendTheSpecialAckPayload", "BuddyWireless_8h.html#aeec8bb264090ecb72246e35e9b24f8ce", null ],
     [ "SetUpTargetForBuddy", "BuddyWireless_8h.html#a889a4e76e28150baa320d6f94d775603", null ],
-    [ "StartBuddyListen", "BuddyWireless_8h.html#a1edeacb3cc2ed18a8ba2c736d1f3542e", null ],
-    [ "StoreMastersModelID_at_Buddy", "BuddyWireless_8h.html#aa4511fbec9ff9402d76813a0e284c580", null ]
+    [ "StartBuddyListen", "BuddyWireless_8h.html#a1edeacb3cc2ed18a8ba2c736d1f3542e", null ]
 ];

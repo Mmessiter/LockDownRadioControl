@@ -150,7 +150,6 @@ var NAVTREEINDEX3 =
 "BuddyWireless_8h.html#a897ee4534284a764134394bb140c3c5e":[5,0,3,0,0,2,12],
 "BuddyWireless_8h.html#a89fc05df708fec875356b62d21b2ce7b":[5,0,3,0,0,2,14],
 "BuddyWireless_8h.html#a9028cb650cb079d28bc5dfc307242bb3":[5,0,3,0,0,2,11],
-"BuddyWireless_8h.html#aa4511fbec9ff9402d76813a0e284c580":[5,0,3,0,0,2,21],
 "BuddyWireless_8h.html#ab0ba1642fb6c43525579b989c7b60dad":[5,0,3,0,0,2,10],
 "BuddyWireless_8h.html#ab0f10204b4b2238cd208ef91e2a2e151":[5,0,3,0,0,2,2],
 "BuddyWireless_8h.html#ab838639c4ecf6256fc1e2a256c8761b6":[5,0,3,0,0,2,17],
@@ -249,5 +248,6 @@ var NAVTREEINDEX3 =
 "MPU6050_8h.html#a14806887f28db8ea569f25651a2699d4":[5,0,0,0,0,0,4,336],
 "MPU6050_8h.html#a1571b92d8bf4afbac27987d166192239":[5,0,0,0,0,0,4,252],
 "MPU6050_8h.html#a15fc642e77fceab2590b0f52b30b5b64":[5,0,0,0,0,0,4,73],
-"MPU6050_8h.html#a1696357738f5b7e4bc50ec4170be3324":[5,0,0,0,0,0,4,121]
+"MPU6050_8h.html#a1696357738f5b7e4bc50ec4170be3324":[5,0,0,0,0,0,4,121],
+"MPU6050_8h.html#a17ebe2e554d2920a69943bc8d6e84232":[5,0,0,0,0,0,4,64]
 };
