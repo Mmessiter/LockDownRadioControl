@@ -248,13 +248,12 @@ void SendSpecialPacket()
         if (((millis() - LocalTimer) < 20)) return;    
             LocalTimer = millis();
     }
-    
-    if (BoundFlag && ModelMatched){
-          DoTheShorterSpecialPacket();  
+    if (millis() - LedGreenMoment > 5000){                                  // Allowing the buddy time to select the model
+          DoTheShorterSpecialPacket();                                      // Send the shorter packet    (no model ID sent)        
     }else{
-          DoTheLongerSpecialPacket();
+          DoTheLongerSpecialPacket();                                       // Send the longer packet     (model ID sent)
      }  
-    ChangeTXTarget(CurrentChannel,TeensyMACAddPipe,DATARATE);                 // Set the TX target back to the receiver in model.
+    ChangeTXTarget(CurrentChannel,TeensyMACAddPipe,DATARATE);               // Set the TX target back to the receiver in model.
 }
 
 //*************************************************************************************************************************
@@ -400,7 +399,10 @@ void GetSpecialPacket(){
     if (Radio1.available()) {                                                           // if a packet has arrived
         SendTheSpecialAckPayload();                                       
         uint8_t p = Radio1.getDynamicPayloadSize();                                     // Get the size of the packet  
-        if (p == 24){    // 24 or 4
+
+      // Look(p); 
+
+        if (p > 12){                                                                    // p is either 24 or 4
             ParseLongerSpecialPacket();    
         }else{
             ParseShorterSpecialPacket();
