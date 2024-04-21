@@ -475,6 +475,7 @@ var 1Definitions_8h =
     [ "ShowRemoteID", "1Definitions_8h.html#ac36bdea2efcd030a336293af16f5dc09", null ],
     [ "ShowServoPos", "1Definitions_8h.html#ad959eec03b0151ade81dc088593d816c", null ],
     [ "ShowTrimToAll", "1Definitions_8h.html#a83a79fb69771868d0a4d1d254644e6aa", null ],
+    [ "SpeedTest", "1Definitions_8h.html#aed5a480dfa6d13c6f72ee21b78a4aab0", null ],
     [ "StartBuddyListen", "1Definitions_8h.html#a1edeacb3cc2ed18a8ba2c736d1f3542e", null ],
     [ "StartInactvityTimeout", "1Definitions_8h.html#a793b7bcd77531c95fe72ed4356d421c8", null ],
     [ "StartLogFile", "1Definitions_8h.html#a514afc8dd077db77334696ca719a99b7", null ],
