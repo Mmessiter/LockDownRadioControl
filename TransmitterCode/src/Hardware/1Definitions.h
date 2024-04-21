@@ -656,6 +656,7 @@ void             GetYesOrNo();
 uint16_t         GetText(char* TextBoxName, char* TheText);
 void             StoreModelID();
 void             ResetMotorTimer();
+void             SpeedTest();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************

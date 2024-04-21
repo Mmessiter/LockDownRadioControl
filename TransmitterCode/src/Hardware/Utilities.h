@@ -941,6 +941,40 @@ void Look1(const any& value) // this is a template function that can print anyth
 }
 
 
+// ********************************************************************************************************************
+void SpeedTest(){
+
+  // calculate how many prime numbers are there between 1 and 100000
+  // and also how long it takes to calculate them
+  Look("Calculating prime numbers between 1 and 100000 ...");
+  int count = 0;
+  unsigned long start = millis();
+  for (int i = 1; i < 100000; i++)
+  {
+    KickTheDog();
+    bool isPrime = true;
+    for (int j = 2; j <= i / 2; j++)
+    {
+      if (i % j == 0)
+      {
+        isPrime = false;
+        break;
+      }
+    }
+    if (isPrime)
+    {
+      count++;
+    }
+  }
+  unsigned long end = millis();
+  Look1("There are ");
+  Look1(count);
+  Look(" prime numbers between 1 and 100000");
+  Look1("Time taken to calculate them is ");
+  Look1(end - start);
+  Look(" milliseconds");
+  DelayWithDog(1000);
+}
 
 /******************************************************************************************************************************/
 // Gets Windows style confirmation (FILE OVERWRITE ETC.)

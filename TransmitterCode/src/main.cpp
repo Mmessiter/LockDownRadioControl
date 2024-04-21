@@ -950,6 +950,9 @@ FLASHMEM void setup()
     WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
     WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
+ 
+    
+
     TeensyWatchDog.begin(WatchDogConfig);
     delay(300); // <<********************* MUST ALLOW DOG TO INITIALISE
     DelayWithDog(WARMUPDELAY);
@@ -1059,6 +1062,10 @@ FLASHMEM void setup()
     }
     if (!PPMdata.UseTXModule) ConfigureRadio();  
     RationaliseBuddy();
+    // SpeedTest(); 
+    // SpeedTest();
+    // SpeedTest();
+    // SpeedTest();
 }
 // **************************************************************************************************************************************************************
 void RationaliseBuddy()
