@@ -89,9 +89,7 @@ FASTRUN bool CheckRXVolts()
                 dtostrf(VoltsPerCell, 2, 2, Vbuf);
                 SendText(t6, Vbuf);
             }
-            
             RXWarningFlag = false;                                              // new as bit below is removed now.
-            
             if ((VoltsPerCell < StopFlyingVoltsPerCell) && (VoltsPerCell > 2)){
                     RXWarningFlag = true;
                     WarningSound  = STORAGECHARGE;
