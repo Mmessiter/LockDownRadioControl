@@ -96,9 +96,6 @@ FASTRUN bool CheckRXVolts()
                     RXWarningFlag = true;
                     WarningSound  = STORAGECHARGE;
             }
-            // if (VoltsPerCell > StopFlyingVoltsPerCell) {
-            //         RXWarningFlag = false;                                  // Reset warning as voltage recovered
-            // }
         }
     }
     else {
