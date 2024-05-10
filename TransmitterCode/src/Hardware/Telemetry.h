@@ -92,7 +92,7 @@ FASTRUN bool CheckRXVolts()
             
             RXWarningFlag = false;                                              // new as bit below is removed now.
             
-            if ((VoltsPerCell <= StopFlyingVoltsPerCell) && (BoundFlag && ModelMatched)) {
+            if ((VoltsPerCell < StopFlyingVoltsPerCell) && (VoltsPerCell > 2)){
                     RXWarningFlag = true;
                     WarningSound  = STORAGECHARGE;
             }
@@ -121,7 +121,7 @@ void CheckBatteryStates(){
     if ((CheckTXVolts() || CheckRXVolts())) {                                           // Note: If TX Battery is low, then CheckRXVolts() is not even called
         if (millis() - WarnTimer > 5000){                                               // issue warning every 5 seconds
             WarnTimer = millis();
-            PlaySound(WarningSound);                                                    // Issue audible warning
+              if (ModelMatched && Connected) PlaySound(WarningSound);                      // Issue audible warning // heer
             LedIsBlinking = true;
             if (CurrentView == FRONTVIEW) SendCommand(WarnNow);
         }
@@ -445,7 +445,7 @@ void  PopulateFrontView(){
 // It is called once a second
 // it's re-optimised now to run in about 0.5ms usually 
 
-FASTRUN void ShowComms() // heer 
+FASTRUN void ShowComms() 
 {
    if (millis() - LastShowTime < SHOWCOMMSDELAY) return;  // 10x a second is enough
     LastShowTime = millis();
