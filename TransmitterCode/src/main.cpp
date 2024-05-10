@@ -804,8 +804,10 @@ void SendColour(char* but, int Colour)
 /*********************************************************************************************************************************/
 void ShowSafetyIsOn()
 {
-
-    if (AnnounceBanks && !BeQuiet) PlaySound(SAFEON);
+    if (AnnounceBanks && !BeQuiet) {
+        PlaySound(SAFEON);
+        if (UseLog) LogSafety(1);
+        }
     if (CurrentView == FRONTVIEW) {
         char bco[]  = "bt0.bco=";
         char bco2[] = "bt0.bco2=";
@@ -817,13 +819,14 @@ void ShowSafetyIsOn()
         SendColour(pco2, HighlightColour);
         BeQuiet = false;
     }
-    if (UseLog) LogSafety(1);
 }
 /*********************************************************************************************************************************/
 void ShowSafetyIsOff()
 {
-
-     if (AnnounceBanks && !BeQuiet) PlaySound(SAFEOFF);
+     if (AnnounceBanks && !BeQuiet) {
+         PlaySound(SAFEOFF);
+         if (UseLog) LogSafety(0);
+     }
      if (CurrentView == FRONTVIEW) {
         char bco[]  = "bt0.bco=";
         char bco2[] = "bt0.bco2=";
@@ -835,7 +838,6 @@ void ShowSafetyIsOff()
         SendColour(pco2, HighlightColour);
         BeQuiet = false;
     }
-    if (UseLog) LogSafety(0);
 }
 /*********************************************************************************************************************************/
 
