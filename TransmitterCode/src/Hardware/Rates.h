@@ -118,7 +118,6 @@ void SetNewDualRate(){
 
 void ReadDualRatesValues() 
 {
-
     if (ScreenData[10]  > 15) return;                   //  if channel number is out of range means it is not updated yet
     Drate1 = ScreenData[0];
     if (Drate1 > MAXDUALRATE) Drate1 = MAXDUALRATE;
@@ -135,22 +134,15 @@ void ReadDualRatesValues()
     DualRateChannels[6]     = CheckRange(ScreenData[9], 0, 8);
     DualRateChannels[7]     = CheckRange(ScreenData[10], 0, 8);
     DualRateRate[Bank-1]    = ScreenData[11]; 
-    
-
-
-
 }
 
 /******************************************************************************************************************************/
 
 void DualRatesEnd()
 {
-   
-   // ReadDualRatesValues(); ??
     SaveOneModel(ModelNumber);
     StartModelSetup();
 }
-
 
 /******************************************************************************************************************************/
 
@@ -224,7 +216,14 @@ void DisplayDualRateValues()
 
 }
 
+/******************************************************************************************************************************/
 
+void DualRatesRefresh()
+{
+    DelayWithDog(200);
+    ReadDualRatesValues();
+    DisplayDualRateValues();
+}
 
 /******************************************************************************************************************************/
 
@@ -236,11 +235,6 @@ void DualRatesStart()
     DisplayDualRateValues();
     UpdateModelsNameEveryWhere();
 }
-
-
-
-
-
 /*********************************************************************************************************************************/
 
 void CheckDualRatesValues()
