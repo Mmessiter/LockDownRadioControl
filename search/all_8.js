@@ -96,7 +96,7 @@ var searchData=
   ['dualrateinuse_93',['DualRateInUse',['../1Definitions_8h.html#a3effe8f46dcf634627a86397621f0cbc',1,'1Definitions.h']]],
   ['dualraterate_94',['DualRateRate',['../1Definitions_8h.html#a27de3f189a9cc7af2580d4ee2161a67d',1,'1Definitions.h']]],
   ['dualratesend_95',['DualRatesEnd',['../Rates_8h.html#acaf005c908c2b6706d7ab9579f456ca8',1,'Rates.h']]],
-  ['dualratesrefresh_96',['DualRatesRefresh',['../MenuOptions_8h.html#af110521855e780717b5248c3aacc799e',1,'MenuOptions.h']]],
+  ['dualratesrefresh_96',['DualRatesRefresh',['../Rates_8h.html#af110521855e780717b5248c3aacc799e',1,'Rates.h']]],
   ['dualratesstart_97',['DualRatesStart',['../Rates_8h.html#a6e3590b95598a6cced18d591c2e1879f',1,'Rates.h']]],
   ['dualratesswitch_98',['DualRatesSwitch',['../1Definitions_8h.html#a4df69e16a4039792dea25b6def556141',1,'1Definitions.h']]],
   ['dualratesview_99',['DUALRATESVIEW',['../1Definitions_8h.html#a9003bf850d4b53a17692c707fbf4e4d4',1,'1Definitions.h']]],

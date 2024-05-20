@@ -6,7 +6,6 @@ var MenuOptions_8h =
     [ "DeleteModel", "MenuOptions_8h.html#af1c87773b2f836fbb4d0d1175c0d7f4d", null ],
     [ "DoLastTimeRead", "MenuOptions_8h.html#ab0c7618cd8a08986e1405b50c7ab64e5", null ],
     [ "DoMFName", "MenuOptions_8h.html#ae267eaa80a4b3eb49ba10a97469eb7e9", null ],
-    [ "DualRatesRefresh", "MenuOptions_8h.html#af110521855e780717b5248c3aacc799e", null ],
     [ "EndAudioVisualView", "MenuOptions_8h.html#a94edc8b3c9f21a47a348873b1629623c", null ],
     [ "EndBuddyView", "MenuOptions_8h.html#a16c65917a148c7f6c17babf11e977b69", null ],
     [ "EndReverseView", "MenuOptions_8h.html#afd3dd964eafc30405e000b03579dd00c", null ],
