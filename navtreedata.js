@@ -87,8 +87,8 @@ var NAVTREEINDEX =
 "classMPU6050.html#a574d3093dc131e4251a9b37adf208ca7",
 "classMPU9250.html#a497013a9b2a7273571fb83c9c2b2266fad4cfaae574a08c12aa0612c8d7547456",
 "classVectorFloat.html#ab4093d50e98baf0d98b437a2b3ee7c2e",
-"functions_func.html",
-"structPPMArea.html#aa75050972c449f88ad26c434b63b0870"
+"functions_f.html",
+"structPPMArea.html#a9eda1c64dd812c0bf852b335de026189"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

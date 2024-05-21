@@ -39,6 +39,7 @@ var common_8h =
     [ "RANGEMIN", "common_8h.html#a2279f0fac9f7362b46f3c53ae91a5ce8", null ],
     [ "RECEIVE_TIMEOUT", "common_8h.html#a4c69942f01447fa7563c5726c7d8abf2", null ],
     [ "RECEIVEBUFFERSIZE", "common_8h.html#a334e228f37e18af9d262347f62f92d07", null ],
+    [ "RECONNECTDELAY", "common_8h.html#a7d49dca1d3a45bc531e356ce5735fa2d", null ],
     [ "RECONNECTGAP", "common_8h.html#a00a419fbe253e6e9cb4d716d02d0b2b7", null ],
     [ "RXVERSION_EXTRA", "common_8h.html#a5a3e52f9ed278bdb28e321cd8997742d", null ],
     [ "RXVERSION_MAJOR", "common_8h.html#a2b147d5155fcf962e9f1c4885b32c67d", null ],
