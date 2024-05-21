@@ -119,6 +119,9 @@ void SetNewDualRate(){
 void ReadDualRatesValues() 
 {
     if (ScreenData[10]  > 15) return;                   //  if channel number is out of range means it is not updated yet
+    if(!ScreenData[0]) return;                          // if no data, return
+    if(!ScreenData[1]) return;                          // if no data, return
+    if(!ScreenData[2]) return;                          // if no data, return
     Drate1 = ScreenData[0];
     if (Drate1 > MAXDUALRATE) Drate1 = MAXDUALRATE;
     Drate2 = ScreenData[1];
