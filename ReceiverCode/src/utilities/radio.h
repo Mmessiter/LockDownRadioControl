@@ -424,6 +424,7 @@ void HopToNextChannel()
     CurrentRadio->stopListening();
     delayMicroseconds(STOPLISTENINGDELAY);
     CurrentRadio->setChannel(NextChannel);
+    delayMicroseconds(STOPLISTENINGDELAY);
     CurrentRadio->startListening();
     delayMicroseconds(STOPLISTENINGDELAY);
     HopMoment = millis();
@@ -447,7 +448,7 @@ void ConfigureRadio()
     CurrentRadio->maskIRQ(1, 1, 1);          // no interrupts - seems NEEDED at the moment
     CurrentRadio->openReadingPipe(PIPENUMBER, PipePointer);
     CurrentRadio->startListening();
-    delayMicroseconds(STOPLISTENINGDELAY);
+    delayMicroseconds(RECONNECTDELAY);
 }
 
 /**************************************************************************************************************/
@@ -485,11 +486,10 @@ void TryToConnectNow()
 void ProdRadio(uint8_t Recon_Ch)
 { // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
     ConfigureRadio();
-    CurrentRadio->stopListening();
-    delayMicroseconds(STOPLISTENINGDELAY);
+    delay(2);
     CurrentRadio->setChannel(Recon_Ch);
     CurrentRadio->startListening();
-    delayMicroseconds(STOPLISTENINGDELAY);
+    delay(2);
     TryToConnectNow();
 }
 
@@ -510,7 +510,7 @@ void SwapChipEnableLines()
         digitalWrite(pinCSN2, CSN_ON);
         digitalWrite(pinCE2, CE_ON);
     }
-    delayMicroseconds(STOPLISTENINGDELAY);
+    delay(2);
 }
 
 /************************************************************************************************************/
@@ -518,6 +518,7 @@ void SwapChipEnableLines()
 void TryTheOtherTransceiver(uint8_t Recon_Ch)
 {
     CurrentRadio->stopListening();
+    delayMicroseconds(RECONNECTDELAY);
     if (ThisRadio == 2) {
         CurrentRadio = &Radio1;
         ThisRadio    = 1;
@@ -528,7 +529,7 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch)
     }
     SwapChipEnableLines();
     ProdRadio(Recon_Ch);
-    DelayMillis(1);
+  
 }
 #endif // defined (SECOND_TRANSCEIVER)
 
@@ -569,17 +570,18 @@ FASTRUN void Reconnect()
         KickTheDog();
         if (BoundFlag) KeepSbusHappy(); // Some SBUS systems timeout FAST, so resend old data to keep it happy
         CurrentRadio->stopListening();
-        delayMicroseconds(STOPLISTENINGDELAY);
+        delayMicroseconds(RECONNECTDELAY);
         CurrentRadio->flush_tx();
         CurrentRadio->flush_rx();
         ReconnectChannel = FHSS_Recovery_Channels[ReconnectIndex];
         ++ReconnectIndex;           
         if (ReconnectIndex >= 3) ReconnectIndex = 0;
         CurrentRadio->stopListening();
-        delayMicroseconds(STOPLISTENINGDELAY);
+        delayMicroseconds(RECONNECTDELAY);
         CurrentRadio->setChannel(ReconnectChannel);
+        delayMicroseconds(RECONNECTDELAY);
         CurrentRadio->startListening();
-        delayMicroseconds(STOPLISTENINGDELAY);
+        delayMicroseconds(RECONNECTDELAY);
         ++Attempts;
         if (Attempts < MAXTRIESPERTRANSCEIVER) {
             TryToConnectNow();
