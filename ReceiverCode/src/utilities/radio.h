@@ -32,7 +32,6 @@ struct Payload
 Payload AckPayload;
 uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed etc. (=6)
 
-
 /************************************************************************************************************/
 /** Read extra parameters from the transmitter.
  * extra parameters are sent using the last few words bytes in every data packet.
@@ -128,7 +127,6 @@ void RearrangeTheChannels(){
     }
     return;
 }
-
 /************************************************************************************************************/
 
 void DebugParameters(){
@@ -155,7 +153,7 @@ void ReadMoreParameters(){
             Parameters.word[i] = RawDataIn[i];                              // 8 words - of 12 useful BITs each
         }
         UseExtraParameters();    
-       // DebugParameters();
+          // DebugParameters();
 } 
 /************************************************************************************************************/
 void UseReceivedData(uint8_t DynamicPayloadSize)                            // DynamicPayloadSize is length of incomming data
@@ -424,7 +422,6 @@ void HopToNextChannel()
     CurrentRadio->stopListening();
     delayMicroseconds(STOPLISTENINGDELAY);
     CurrentRadio->setChannel(NextChannel);
-    delayMicroseconds(STOPLISTENINGDELAY);
     CurrentRadio->startListening();
     delayMicroseconds(STOPLISTENINGDELAY);
     HopMoment = millis();
@@ -448,7 +445,7 @@ void ConfigureRadio()
     CurrentRadio->maskIRQ(1, 1, 1);          // no interrupts - seems NEEDED at the moment
     CurrentRadio->openReadingPipe(PIPENUMBER, PipePointer);
     CurrentRadio->startListening();
-    delayMicroseconds(RECONNECTDELAY);
+    delayMicroseconds(STOPLISTENINGDELAY);
 }
 
 /**************************************************************************************************************/
@@ -486,10 +483,11 @@ void TryToConnectNow()
 void ProdRadio(uint8_t Recon_Ch)
 { // After switching radios, this prod allows EITHER to connect. Don't know why - yet!
     ConfigureRadio();
-    delay(2);
+    CurrentRadio->stopListening();
+    delayMicroseconds(STOPLISTENINGDELAY);
     CurrentRadio->setChannel(Recon_Ch);
     CurrentRadio->startListening();
-    delay(2);
+    delayMicroseconds(STOPLISTENINGDELAY);
     TryToConnectNow();
 }
 
@@ -510,7 +508,7 @@ void SwapChipEnableLines()
         digitalWrite(pinCSN2, CSN_ON);
         digitalWrite(pinCE2, CE_ON);
     }
-    delay(2);
+    delayMicroseconds(STOPLISTENINGDELAY);
 }
 
 /************************************************************************************************************/
@@ -518,7 +516,6 @@ void SwapChipEnableLines()
 void TryTheOtherTransceiver(uint8_t Recon_Ch)
 {
     CurrentRadio->stopListening();
-    delayMicroseconds(RECONNECTDELAY);
     if (ThisRadio == 2) {
         CurrentRadio = &Radio1;
         ThisRadio    = 1;
@@ -529,7 +526,7 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch)
     }
     SwapChipEnableLines();
     ProdRadio(Recon_Ch);
-  
+    DelayMillis(1);
 }
 #endif // defined (SECOND_TRANSCEIVER)
 
@@ -570,18 +567,17 @@ FASTRUN void Reconnect()
         KickTheDog();
         if (BoundFlag) KeepSbusHappy(); // Some SBUS systems timeout FAST, so resend old data to keep it happy
         CurrentRadio->stopListening();
-        delayMicroseconds(RECONNECTDELAY);
+        delayMicroseconds(STOPLISTENINGDELAY);
         CurrentRadio->flush_tx();
         CurrentRadio->flush_rx();
         ReconnectChannel = FHSS_Recovery_Channels[ReconnectIndex];
         ++ReconnectIndex;           
         if (ReconnectIndex >= 3) ReconnectIndex = 0;
         CurrentRadio->stopListening();
-        delayMicroseconds(RECONNECTDELAY);
+        delayMicroseconds(STOPLISTENINGDELAY);
         CurrentRadio->setChannel(ReconnectChannel);
-        delayMicroseconds(RECONNECTDELAY);
         CurrentRadio->startListening();
-        delayMicroseconds(RECONNECTDELAY);
+        delayMicroseconds(STOPLISTENINGDELAY);
         ++Attempts;
         if (Attempts < MAXTRIESPERTRANSCEIVER) {
             TryToConnectNow();
@@ -739,6 +735,7 @@ void SendMacAddress()
         case 1:
             SendIntToAckPayload(ThisUnion.Val32[1]);
             break;
+            
         default:
             break;
     }

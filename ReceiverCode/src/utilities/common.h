@@ -11,8 +11,8 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   4
-#define RXVERSION_MINIMUS 7 // 12 April 2024
-#define RXVERSION_EXTRA   'h' 
+#define RXVERSION_MINIMUS 7 // 22 May 2024
+#define RXVERSION_EXTRA   'i' 
 
 #define HOPTIME           17 // 47     //  17 gives 50Hz FHSS, 47 gives 20Hz FHSS
 
@@ -21,16 +21,16 @@
 // **************************************************************************
 
 
-// #define DB_FHSS
-// #define DB_SENSORS
-// #define DB_BIND
-// #define DB_FAILSAFE
-// #define DB_RXTIMERS
+//  #define DB_FHSS
+//  #define DB_SENSORS
+//  #define DB_BIND
+//  #define DB_FAILSAFE
+//  #define DB_RXTIMERS
 
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-         #define SECOND_TRANSCEIVER          1
+        #define SECOND_TRANSCEIVER          1
        // #define USE_STABILISATION         1
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -39,10 +39,10 @@
         #define SERVO_RESOLUTION         4096    
 
         #define EXTRAAT1500  1000                          
-        #define MINMICROS    500                                    // normal servos
+        #define MINMICROS    500            // normal servos
         #define MAXMICROS    2500
         
-        #define EXTRAAT760   350                                    // high frequency servos
+        #define EXTRAAT760   350                        // high frequency servos
         #define MAXAT760     760 + EXTRAAT760
         #define MINAT760     760 - EXTRAAT760
         #define MAXPARAMETERS          7                            // Max number of parameters types to expect        
@@ -62,7 +62,6 @@
 
 #define LISTEN_PERIOD           14   //  14 (How many ms to listen for TX in Reconnect())
 #define STOPLISTENINGDELAY      30   //  microseconds to wait after stopListening() in Reconnect()
-#define RECONNECTDELAY          100  //  milliseconds to wait after reconnecting
 
 // *************************************************************************************
 
