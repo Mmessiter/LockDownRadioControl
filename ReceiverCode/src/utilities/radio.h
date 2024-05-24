@@ -179,14 +179,14 @@ void UseReceivedData(uint8_t DynamicPayloadSize)                            // D
 /************************************************************************************************************/
 bool ReadData()
 {
-    uint8_t MaxSmallAcks = 25;
+    uint8_t MAXSMALLACKS = 100;
     static uint8_t AckCounter = 0;
     Connected = false;
     if (CurrentRadio->available(&Pipnum))
     {
         uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize();         // Get the size of the new data (14) 
-        CurrentRadio->flush_tx();                                                   // This avoids a lockup that happens when the FIFO gets full   
-    
+        CurrentRadio->flush_tx();                                                   // This avoids a lockup that happens when the FIFO gets full     
+
         if (DynamicPayloadSize == 16) {                                             // If size = 16 it must be a parameter packet if over 10 bytes  // todo: Send ACK that says "I got a parameter" heer!!
             // Look1(millis());
             // Look1(" ");                                              
@@ -194,7 +194,7 @@ bool ReadData()
             // Look(DynamicPayloadSize);
             AckCounter = 0; // force small ack
         }
-          if (AckCounter > MaxSmallAcks) { // heer
+          if (AckCounter > MAXSMALLACKS) { // heer
             AckCounter = 0;
             LoadAckPayload();
             CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);          // send big PAYLOAD EVERY 100th time (2 per second)
@@ -553,7 +553,7 @@ void KeepSbusHappy()
 
 FASTRUN void Reconnect()
 { // This is called when contact is lost, to reconnect ASAP
-    #define MAXTRIESPERTRANSCEIVER 4
+    #define MAXTRIESPERTRANSCEIVER 2
    
     uint32_t SearchStartTime  = millis(); 
     uint8_t  PreviousRadio    = ThisRadio;
@@ -599,8 +599,10 @@ FASTRUN void Reconnect()
                 if (!FailSafeSent) FailSafe();
             }
         }
-    }   //  cannot pass here if not connected
-        //  must have connected by here
+    }   
+    
+         // cannot pass here if not connected
+         // must have connected by here
          // Look1 ("Reconnected on channel ");
          // Look  (ReconnectChannel);
        
