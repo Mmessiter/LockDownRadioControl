@@ -60,7 +60,7 @@
 
 // ********************* >>> Reconnect params <<< ***************************************
 
-#define LISTEN_PERIOD           14   //  14 (How many ms to listen for TX in Reconnect())
+#define LISTEN_PERIOD           14   //  was 14 (How many ms to listen for TX in Reconnect())
 #define STOPLISTENINGDELAY      30   //  microseconds to wait after stopListening() in Reconnect()
 
 // *************************************************************************************
