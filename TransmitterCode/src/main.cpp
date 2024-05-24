@@ -1109,9 +1109,21 @@ void RationaliseBuddy()
 }
 /*********************************************************************************************************************************/
 void GetFrameRate()
-{
+{   
+    // static uint64_t GoodPackets = 0;
+    // static uint64_t Count  = 0;
+    // uint64_t Average = 0;
     if (RecentGoodPacketsCount) PacketsPerSecond = RecentGoodPacketsCount;
     RecentGoodPacketsCount = 0;
+    // if (Count) {
+    //     GoodPackets +=  PacketsPerSecond;
+    //     Average = GoodPackets / Count;
+    //     Look1("Average Packets per second: "); 
+    //     Look1(Average);
+    //     Look1(",  Total Packets: "); 
+    //     Look(GoodPackets);
+    //  } 
+    //  Count++;
 }
 
 /*********************************************************************************************************************************/
