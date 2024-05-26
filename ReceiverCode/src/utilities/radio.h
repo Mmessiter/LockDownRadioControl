@@ -553,7 +553,7 @@ void KeepSbusHappy()
 
 FASTRUN void Reconnect()
 { // This is called when contact is lost, to reconnect ASAP
-    #define MAXTRIESPERTRANSCEIVER 2
+    #define MAXTRIESPERTRANSCEIVER 3
    
     uint32_t SearchStartTime  = millis(); 
     uint8_t  PreviousRadio    = ThisRadio;
