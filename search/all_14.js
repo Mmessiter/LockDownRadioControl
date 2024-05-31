@@ -178,7 +178,7 @@ var searchData=
   ['pupilisalive_175',['PupilIsAlive',['../1Definitions_8h.html#a67fb2e738afb8ad08fc01f95b138c79f',1,'1Definitions.h']]],
   ['purple_176',['Purple',['../1Definitions_8h.html#a5168ce33eb581e85fbfa454e89012bfb',1,'1Definitions.h']]],
   ['purpose_177',['Purpose',['../structPayload.html#ac18701f2aa35ebd8402f45f840d5c445',1,'Payload']]],
-  ['pwmpins_178',['PWMPins',['../common_8h.html#a19f864fa6bdea0867325f70e162c92ef',1,'common.h']]],
+  ['pwmpins_178',['PWMPins',['../common_8h.html#a4f564ea3210798c442dee32ed42b7a66',1,'common.h']]],
   ['pwr_5fcycle_179',['PWR_CYCLE',['../classMPU9250.html#aa45b7c35140a74784f0dbb10d4a9b064',1,'MPU9250']]],
   ['pwr_5fmgmnt_5f1_180',['PWR_MGMNT_1',['../classMPU9250.html#aa0bc719f1a0caff0f1864618a2a2fa80',1,'MPU9250']]],
   ['pwr_5fmgmnt_5f2_181',['PWR_MGMNT_2',['../classMPU9250.html#af2ddd3ae16ad94754edb57aade224e1e',1,'MPU9250']]],

@@ -236,7 +236,7 @@ var NAVTREEINDEX12 =
 "structCD.html#a63ffe2f179e77f9bc60acf38f509ea5a":[4,0,0,0],
 "structCD2.html":[4,0,1],
 "structCD2.html#a03a8786925e6a47a07d5ea5b7ef7499d":[4,0,1,0],
-"structCD2.html#a7c2715e9176a8dbbc9e3fec97c1bf44b":[4,0,1,1],
+"structCD2.html#a386e182bd988a0ab7795cc17c0f96fcc":[4,0,1,1],
 "structCD__buddy.html":[4,0,2],
 "structCD__buddy.html#a6de77aa1a6962b4546a70bf81c121960":[4,0,2,1],
 "structCD__buddy.html#a86614de1d3c268bf88abaac749cb32dd":[4,0,2,0],
