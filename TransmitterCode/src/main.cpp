@@ -3019,7 +3019,7 @@ void  EndServoTypeView(){ // Frequency and centre pulse width
     for (int i = 0; i < 11; ++i) {
         ServoFrequency[i]   = GetValue(n_labels[i]); // heer
         ServoCentrePulse[i] = GetValue(n_labels[i+11]); 
-        SendValue(Progress, i * (100 / 11));
+        SendValue(Progress, (i+1) * (100 / 11));
     }
     SendValue(Progress, 100);
     SendCommand(ProgressEnd);    
