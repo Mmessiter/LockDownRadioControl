@@ -117,7 +117,7 @@ void CheckBanksInUse()
 /*********************************************************************************************************************************/
 
 void CheckServoType(){
-    for (int i = 0; i < 8; ++i) {
+    for (int i = 0; i < 11; ++i) {
         if (ServoFrequency[i] > 1000)   ServoFrequency[i] = 50;
         if (ServoFrequency[i] < 50)     ServoFrequency[i] = 50;
         if (ServoCentrePulse[i] > 2500) ServoCentrePulse[i] = 1500;
@@ -361,7 +361,7 @@ bool ReadOneModel(uint32_t Mnum)
         ChannelOutPut[i] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
-    for (int i = 0; i < 8; ++i) {
+    for (int i = 0; i < 11; ++i) {
         ServoFrequency[i]   =  SDRead16BITS(SDCardAddress);
         ++SDCardAddress;
         ++SDCardAddress;
@@ -1137,7 +1137,7 @@ void SaveOneModel(uint32_t mnum)
         SDUpdate8BITS(SDCardAddress, ChannelOutPut[i]);
         ++SDCardAddress;
     }
-    for (int i = 0; i < 8; ++i) {
+    for (int i = 0; i < 11; ++i) {
         SDUpdate16BITS(SDCardAddress, ServoFrequency[i]);
         ++SDCardAddress;
         ++SDCardAddress;

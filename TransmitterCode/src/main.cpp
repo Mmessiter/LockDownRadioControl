@@ -1603,7 +1603,7 @@ void SetDefaultValues()
        DualRateRate[i] = 0;   
    }
     TrimMultiplier = 5;
-    for (int i = 0; i < 8; ++i){
+    for (int i = 0; i < 11; ++i){
         ServoFrequency[i] = 50;
         ServoCentrePulse[i] = 1500;
     }
@@ -2992,13 +2992,16 @@ void SelectChannelOrder()
 /******************************************************************************************************************************/
 
 void StartServosTypeView() // Frequency and centre pulse width
-{
-    char n_labels[16][5] = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}};
+{   char n_labels[22][5] = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"},{"n16"},{"n18"},{"n20"},{"n8"},{"n9"},{"n10"},{"n11"},{"n12"},{"n13"},{"n14"},{"n15"} ,{"n17"}, {"n19"},{"n21"}};
+    char ch_labels[11][5] = {{"ch1"}, {"ch2"}, {"ch3"}, {"ch4"}, {"ch5"}, {"ch6"}, {"ch7"}, {"ch8"}, {"t13"}, {"t14"}, {"t16"}}; // 11
     char GoServoTypesView[] = "page ServosTypeView";
+
     SendCommand(GoServoTypesView);
-    for (int i = 0; i < 8; ++i) {
+    
+    for (int i = 0; i < 11; ++i) {
         SendValue(n_labels[i], ServoFrequency[i]); // heer
-        SendValue(n_labels[i+8], ServoCentrePulse[i]);
+        SendValue(n_labels[i+11], ServoCentrePulse[i]);
+        SendText(ch_labels[i], ChannelNames[i]);
     }
     CurrentView = SERVOTYPESVIEW;
     UpdateModelsNameEveryWhere();
@@ -3008,15 +3011,15 @@ void StartServosTypeView() // Frequency and centre pulse width
 
 void  EndServoTypeView(){ // Frequency and centre pulse width
 
-    char n_labels[16][5] = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}};
+    char n_labels[22][5] = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"},{"n16"},{"n18"},{"n20"},{"n8"},{"n9"},{"n10"},{"n11"},{"n12"},{"n13"},{"n14"},{"n15"} ,{"n17"}, {"n19"},{"n21"}};
     char ProgressStart[] = "vis Progress,1";
     char ProgressEnd[]   = "vis Progress,0";
     char Progress[]      = "Progress";
     SendCommand(ProgressStart);
-    for (int i = 0; i < 8; ++i) {
+    for (int i = 0; i < 11; ++i) {
         ServoFrequency[i]   = GetValue(n_labels[i]); // heer
-        ServoCentrePulse[i] = GetValue(n_labels[i+8]); 
-        SendValue(Progress, i * (100 / 8));
+        ServoCentrePulse[i] = GetValue(n_labels[i+11]); 
+        SendValue(Progress, i * (100 / 11));
     }
     SendValue(Progress, 100);
     SendCommand(ProgressEnd);    

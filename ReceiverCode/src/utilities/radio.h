@@ -71,11 +71,11 @@ void UseExtraParameters()
             PPMChannelCount = Parameters.word[2];
             break;
         case 6:
-            for (int i = 0; i < 8; ++i) ServoFrequency[i]   = Parameters.word[i+1];
+            for (int i = 0; i < SERVOSUSED; ++i) ServoFrequency[i]   = Parameters.word[i+1];
             SetServoFrequency();
             break;
         case 7:
-            for (int i = 0; i < 8; ++i) ServoCentrePulse[i] = Parameters.word[i+1];
+            for (int i = 0; i < SERVOSUSED; ++i) ServoCentrePulse[i] = Parameters.word[i+1];
             SetServoFrequency();
             break;
         default:
@@ -134,7 +134,7 @@ void DebugParameters(){
     Look1(Parameters.ID);
     Look1(" ");
     Look(ParaNames[Parameters.ID-1]);
-    for (int i = 1 ; i < 9; ++i){
+    for (int i = 1 ; i < 12; ++i){
         Look1("Parameters.word[");
         Look1(i);
         Look1("]:\t");
@@ -149,11 +149,11 @@ void ReadMoreParameters(){
             Look(Parameters.ID);           
             return;   // not a valid ID
         } 
-        for (int i = 1; i < 9; ++i) {
+        for (int i = 1; i < 12; ++i) {
             Parameters.word[i] = RawDataIn[i];                              // 8 words - of 12 useful BITs each
         }
         UseExtraParameters();    
-          // DebugParameters();
+       // DebugParameters();
 } 
 /************************************************************************************************************/
 void UseReceivedData(uint8_t DynamicPayloadSize)                            // DynamicPayloadSize is length of incomming data

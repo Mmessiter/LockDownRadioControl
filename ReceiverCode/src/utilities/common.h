@@ -11,8 +11,8 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   4
-#define RXVERSION_MINIMUS 7 // 28 May 2024
-#define RXVERSION_EXTRA   'j' 
+#define RXVERSION_MINIMUS 7 // 31 May 2024
+#define RXVERSION_EXTRA   'M' 
 
 #define HOPTIME           17 // 47     //  17 gives 50Hz FHSS, 47 gives 20Hz FHSS
 
@@ -20,18 +20,20 @@
 
 // **************************************************************************
 
-
- // #define DB_FHSS
+//  #define DB_FHSS
 //  #define DB_SENSORS
-//  #define DB_BIND
+ // #define DB_BIND
 //  #define DB_FAILSAFE
 //  #define DB_RXTIMERS
 
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-        #define SECOND_TRANSCEIVER          1
-       // #define USE_STABILISATION         1
+         #define SECOND_TRANSCEIVER          1
+       //  #define USE_11PWM_OUTPUTS           1
+
+
+        // #define USE_STABILISATION         1
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -82,7 +84,7 @@ uint16_t SizeOfDataReceived = sizeof(DataReceived);
 
 struct CD2{
     uint16_t        ID    = 0;          
-    uint16_t        word[9] = {0,0,0,0,0,0,0,0,0}; // The 0th word isn't used, yet ...
+    uint16_t        word[12] = {0,0,0,0,0,0,0,0,0,0,0,0}; // The 0th word isn't used, yet ...
 };  
 
 CD2 Parameters;
@@ -90,7 +92,13 @@ uint8_t         SizeOfParameters = sizeof(Parameters);
 
 
 #define FREQUENCYSCOUNT  83                             // uses 83 different channels
-#define SERVOSUSED       9                              // But all 16 are available via SBUS
+
+#ifdef USE_11PWM_OUTPUTS 
+    #define SERVOSUSED       11
+#else
+    #define SERVOSUSED       9                          // But all 16 are available via SBUS
+#endif
+
 #define SBUSRATE         10                             // SBUS frame every 10 milliseconds
 #define SBUSPORT         Serial3                        // = 14
 #define PPMPORT          14                             // same as SBUS
@@ -102,8 +110,15 @@ uint8_t         SizeOfParameters = sizeof(Parameters);
 #define BINDPLUG_PIN     17
 #define RANGEMAX         2047                        // = Frsky at 150 %
 #define RANGEMIN         0
-#define pinCE1           9                           // NRF1
-#define pinCSN1          10                          // NRF1
+
+#ifdef USE_11PWM_OUTPUTS
+    #define pinCE1           22                          // NRF1
+    #define pinCSN1          23                          // NRF1 
+#else
+    #define pinCE1           9                           // NRF1
+    #define pinCSN1          10                          // NRF1
+#endif
+
 #define pinCSN2          20                          // NRF2
 #define pinCE2           21                          // NRF2
 #define FAILSAFE_TIMEOUT 2000                        // two seconds until failsafe
@@ -157,8 +172,8 @@ uint8_t   FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 1
 uint8_t*  FHSSChPointer = FHSS_Channels; // Pointer for FHSS channels' array
 bool    PipeSeen        = false;
 
-uint16_t  ServoCentrePulse[9]     = {1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500,1500};    // 9 channels for servo centre pulse
-uint16_t  ServoFrequency[9]       = {50, 50, 50, 50, 50, 50, 50, 50, 50};                     // 9 channels for servo frequency
+uint16_t  ServoCentrePulse[11]     = {1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500}; // 11 channels for servo centre pulse
+uint16_t  ServoFrequency[11]       = {50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50};                       // 11 channels for servo frequency
 
 
 char ParaNames[7][30] = {"(FailSafeChannels)", "(Qnh)", "(GPSMarkHere)","(ServoCentre & Frequency)", "(SBUS/PPM)","(Servo frequencies)","(Servo centre pulses)"};
@@ -216,8 +231,10 @@ void Look1(const any& value);
 
 Adafruit_INA219     ina219;
 bool                SensorHubConnected = false; //  GPS (Adafruit Ultimate GPS) ?
-//                               Channels: 1  2 [3][4] 5  6  7  8  9 ... [10][11] (Channels 3,4 & 10,11 must have same frquency)
-uint8_t             PWMPins[SERVOSUSED] = {0, 1, 2, 3, 4, 5, 6, 7, 8}; // 22  23  remaining via sbus
+//                         Channels: 1  2 [3][4] 5  6 {7} 8  9 {10} 11 (Channels 3+4 & 7+10 must have same frquency)
+uint8_t               PWMPins[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9,  10}; //  if only SERVOSUSED = 9 then last two are ignored
+
+
 SBUS                MySbus(SBUSPORT);                                  // SBUS
 PulsePositionOutput PPMOutput;                                         // PPM
 

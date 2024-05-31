@@ -24,7 +24,7 @@
     #define TXVERSION_MAJOR   2 // first three *must* match RX but _EXTRA can be different
     #define TXVERSION_MINOR   4
     #define TXVERSION_MINIMUS 7
-    #define TXVERSION_EXTRA   "i 27/05/24" 
+    #define TXVERSION_EXTRA   "M 31/05/24" 
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -855,7 +855,7 @@ bool AddExtraParameters = false;
 
 struct CD2{
     uint16_t        ID    = 0;          
-    uint16_t        word[9] = {0,0,0,0,0,0,0,0,0};
+    uint16_t        word[12] = {0,0,0,0,0,0,0,0,0,0,0,0};
 };  
 CD2 Parameters;
 
@@ -963,8 +963,8 @@ bool      LogFileOpen             = false;
 bool      ShowVPC                 = false;
 short int TxVoltageCorrection     = 0;
 short int RxVoltageCorrection     = 0;
-uint16_t  ServoCentrePulse[8]     = {1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500};    // 8 channels for servo centre pulse
-uint16_t  ServoFrequency[8]       = {50, 50, 50, 50, 50, 50, 50, 50};                    // 8 channels for servo frequency
+uint16_t  ServoCentrePulse[11]     = {1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500};   // 11 channels for servo centre pulse
+uint16_t  ServoFrequency[11]       = {50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50};       // 11 channels for servo frequency
 uint8_t   LEDBrightness           = DEFAULTLEDBRIGHTNESS;                                // 0-255
 uint8_t   PowerOffWarningSeconds  = 2;
 uint8_t   ConnectionAssessSeconds = 1;

@@ -23,9 +23,9 @@
  * @section rxpinout TEENSY 4.0 PINS
  * | pin number(s) | purpose |
  * |---------------|---------|
- * | 0...8 | PWM SERVOS Channels 1 - 9 |  (Channels 10 - 16 available via SBUS)  (TODO:the 8 PWM outputs on PCB could be expanded to 11.)
- * | 9     | SPI CE1  (FOR RADIO1) |
- * | 10    | SPI CSN1 (FOR RADIO1)  |
+ * | 0...8 | PWM SERVOS Channels 1 - 9 |  (Channels 10 - 16 available via SBUS)  
+ * | 9     | SPI CE1  (FOR RADIO1) | ... or PWM channel 10
+ * | 10    | SPI CSN1 (FOR RADIO1)  | ... or PWM channel 11
  * | 11    | SPI MOSI (FOR BOTH RADIOS)  |
  * | 12    | SPI MISO (FOR BOTH RADIOS)  |
  * | 13    | SPI SCK  (FOR BOTH RADIOS) |
@@ -37,8 +37,8 @@
  * | 19    | I2C SCK (FOR I2C) | *** --- >> YELLOW WIRE = 19 !! << --- ***
  * | 20    | SPI CSN2 (FOR RADIO2)  |
  * | 21    | SPI CE2 (FOR RADIO2) |
- * | 22    | Spare (CH10 ? ... or CE1)
- * | 23    | Spare (CH11 ? ... or CSN1)
+ * | 22    | Spare (CE1?)
+ * | 23    | Spare (CSN1?)
  *
  * @see ReceiverCode/src/main.cpp
  */
@@ -184,6 +184,10 @@ void SetServoFrequency()
     for (uint8_t i = 0; i < SERVOSUSED; ++i)
     { 
         analogWriteFrequency(PWMPins[i], ServoFrequency[i]); 
+        // Look1("Channel Frequency: ");
+        // Look1(i+1);
+        // Look1(" = ");
+        // Look(ServoFrequency[i]);
     }
 
 }
