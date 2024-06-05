@@ -2,7 +2,7 @@
 // ************************************************** Receiver code **************************************************
 
 /** @file ReceiverCode/src/main.cpp
- * // Malcolm Messiter 2020 - 2023
+ * // Malcolm Messiter 2020 - 2024
  * @page RXCODE RecieverCode
  *
  * @section rx Features List
@@ -24,22 +24,22 @@
  * | pin number(s) | purpose |
  * |---------------|---------|
  * | 0...8 | PWM SERVOS Channels 1 - 9 |  (Channels 10 - 16 available via SBUS)  
- * | 9     | SPI CE1  (FOR RADIO1) | or PWM channel 10 when 11 PWM channels are used
+ * | 9     | SPI CE1  (FOR RADIO1)  | or PWM channel 10 when 11 PWM channels are used
  * | 10    | SPI CSN1 (FOR RADIO1)  | or PWM channel 11 when 11 PWM channels are used
  * | 11    | SPI MOSI (FOR BOTH RADIOS)  |
  * | 12    | SPI MISO (FOR BOTH RADIOS)  |
- * | 13    | SPI SCK  (FOR BOTH RADIOS) |
+ * | 13    | SPI SCK  (FOR BOTH RADIOS)  |
  * | 14    | SBUS *OR PPM* output (Serial TX3) |
  * | 15    | Don't use if using SBUS. The driver takes it (RX3) |
  * | 16    | RED LED  - This LED is ON when connected, OFF when disconnected and blinking when binding
  * | 17 << | BIND PLUG (held LOW means plug is in)
  * | 18    | I2C SDA (FOR I2C) | *** --- >> BLUE WIRE   = 18 !! << --- ***
  * | 19    | I2C SCK (FOR I2C) | *** --- >> YELLOW WIRE = 19 !! << --- ***
- * | 20    | SPI CSN2 (FOR RADIO2)  |
- * | 21    | SPI CE2 (FOR RADIO2) |
- * | 22    | SPI CE1 (FOR RADIO1) when 11 PWM channels are used | Otherwise unused
- * | 23    | SPI CSN1  (FOR RADIO1) when 11 PWM channels are used | Otherwise unused
- *
+ * | 20    | SPI CSN2 (FOR RADIO2) |
+ * | 21    | SPI CE2  (FOR RADIO2) |
+ * | 22    | SPI CE1  (FOR RADIO1) when 11 PWM channels are used | Otherwise unused
+ * | 23    | SPI CSN1 (FOR RADIO1) when 11 PWM channels are used | Otherwise unused
+ * | All exposed pins now used but oututs 34 - 39 are still available as solder pads on the back of the board for extra PWM channels etc
  * @see ReceiverCode/src/main.cpp
  */
 
@@ -57,8 +57,6 @@
 #include "utilities/common.h"
 #include "utilities/radio.h"
 #include "utilities/pid.h"
-
-
 
 
 void DelayMillis(uint16_t ms) // This replaces any delay() calls
