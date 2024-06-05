@@ -24,8 +24,8 @@
  * | pin number(s) | purpose |
  * |---------------|---------|
  * | 0...8 | PWM SERVOS Channels 1 - 9 |  (Channels 10 - 16 available via SBUS)  
- * | 9     | SPI CE1  (FOR RADIO1) | ... or PWM channel 10
- * | 10    | SPI CSN1 (FOR RADIO1)  | ... or PWM channel 11
+ * | 9     | SPI CE1  (FOR RADIO1) | or PWM channel 10 when 11 PWM channels are used
+ * | 10    | SPI CSN1 (FOR RADIO1)  | or PWM channel 11 when 11 PWM channels are used
  * | 11    | SPI MOSI (FOR BOTH RADIOS)  |
  * | 12    | SPI MISO (FOR BOTH RADIOS)  |
  * | 13    | SPI SCK  (FOR BOTH RADIOS) |
@@ -37,8 +37,8 @@
  * | 19    | I2C SCK (FOR I2C) | *** --- >> YELLOW WIRE = 19 !! << --- ***
  * | 20    | SPI CSN2 (FOR RADIO2)  |
  * | 21    | SPI CE2 (FOR RADIO2) |
- * | 22    | Spare (CE1?)
- * | 23    | Spare (CSN1?)
+ * | 22    | SPI CE1 (FOR RADIO1) when 11 PWM channels are used | Otherwise unused
+ * | 23    | SPI CSN1  (FOR RADIO1) when 11 PWM channels are used | Otherwise unused
  *
  * @see ReceiverCode/src/main.cpp
  */
