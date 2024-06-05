@@ -29,8 +29,8 @@
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-        #define SECOND_TRANSCEIVER          1
-        #define USE_11PWM_OUTPUTS           1
+        #define SECOND_TRANSCEIVER          1  // must be undefined if not using two transceivers
+        #define USE_11PWM_OUTPUTS           1  // must be undefined if not using all 11 PWM outputs
 //      #define USE_STABILISATION           1
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
