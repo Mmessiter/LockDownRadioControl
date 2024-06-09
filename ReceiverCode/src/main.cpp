@@ -576,11 +576,46 @@ void ReadBindPlug()
         BindModel(); // TODO check this...
     }
 }
+
+/************************************************************************************************************/
+void S_or_O(int d1, int d2, int d3)  // This function blinks the LED for S or O in Morse code
+{
+    for (int i = 0; i < 3; ++i) {
+        TurnLedOn();
+        delay(d1);
+        TurnLedOff();
+        delay(d2);
+    }
+    delay(d3);
+}
+/************************************************************************************************************/
+void SOS_Led()  // This function blinks the LED for SOS in Morse code
+{
+    uint16_t Blinkrate = 150;
+    S_or_O(Blinkrate, Blinkrate,Blinkrate * 2);               // = S
+    S_or_O(Blinkrate * 3, Blinkrate * 1.5, Blinkrate * 2);    // = O
+    S_or_O(Blinkrate, Blinkrate,Blinkrate * 7);               // = S
+}
+/************************************************************************************************************/
+void TestSbusPin(){
+    pinMode(SBUSPIN, OUTPUT);
+    delay(10);
+    digitalWrite(SBUSPIN, HIGH);
+    delay(10);
+    if (!digitalRead(SBUSPIN)){ // is the SBUS pin held low?!?!?!?!?!?!?
+        while (true) SOS_Led();// This is a fatal error Stop and send SOS!!
+    }
+    Serial3.begin(100000);
+}
+
 /************************************************************************************************************/
 // SETUP
 /************************************************************************************************************/
 FLASHMEM void setup()
 {
+      
+    pinMode(LED_RED, OUTPUT);
+    TestSbusPin();
     pinMode(LED_PIN, OUTPUT);
     pinMode(pinCSN1, OUTPUT);
 #ifdef SECOND_TRANSCEIVER
@@ -588,7 +623,7 @@ FLASHMEM void setup()
     pinMode(pinCE2, OUTPUT);
 #endif
     pinMode(pinCE1, OUTPUT);
-    pinMode(LED_RED, OUTPUT);
+    
     pinMode(BINDPLUG_PIN, INPUT_PULLUP);
     digitalWrite(LED_PIN, HIGH);
     TurnLedOff();
@@ -647,7 +682,13 @@ FLASHMEM void setup()
     KickTheDog();
     ReadBindPlug();
     digitalWrite(LED_PIN, LOW);
+
+ 
+
+
 }
+
+
 
 /************************************************************************************************************/
 

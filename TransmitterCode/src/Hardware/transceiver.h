@@ -259,6 +259,7 @@ void TryToReconnect()
     if (BuddyPupilOnPPM) return;
     if (!DontChangePipeAddress) TryOtherPipe(); 
     ++ReconnectionIndex;
+    delayMicroseconds(42); // ???
     if (ReconnectionIndex >= 3) ReconnectionIndex = 0;
     NextChannel = FHSS_data::Used_Recovery_Channels[ReconnectionIndex];
     HopToNextChannel();

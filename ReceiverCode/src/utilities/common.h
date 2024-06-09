@@ -11,8 +11,8 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   4
-#define RXVERSION_MINIMUS 7 // 31 May 2024
-#define RXVERSION_EXTRA   'M' 
+#define RXVERSION_MINIMUS 7 // 9 June 2024
+#define RXVERSION_EXTRA   'N' 
 
 
 #define HOPTIME           17 // 47     //  17 gives 50Hz FHSS, 47 gives 20Hz FHSS
@@ -30,7 +30,7 @@
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
         #define SECOND_TRANSCEIVER          1  // must be undefined if not using two transceivers
-        #define USE_11PWM_OUTPUTS           1  // must be undefined if not using all 11 PWM outputs
+ //       #define USE_11PWM_OUTPUTS           1  // must be undefined if not using all 11 PWM outputs
 //      #define USE_STABILISATION           1
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -99,6 +99,7 @@ uint8_t         SizeOfParameters = sizeof(Parameters);
 
 #define SBUSRATE         10                             // SBUS frame every 10 milliseconds
 #define SBUSPORT         Serial3                        // = 14
+#define SBUSPIN          14                             // same as PPM pin
 #define PPMPORT          14                             // same as SBUS
 #define RECONNECTGAP     25                             // Send no data to servos for 25 ms after a reconnect (10 was not quite enough)
 #define MINMICROS        500
