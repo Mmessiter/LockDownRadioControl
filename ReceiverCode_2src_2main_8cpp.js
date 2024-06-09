@@ -21,6 +21,7 @@ var ReceiverCode_2src_2main_8cpp =
     [ "ReadSavedPipe", "ReceiverCode_2src_2main_8cpp.html#a56ee137fc60749fa274236bc239c3291", null ],
     [ "ReadTheSensorHub", "ReceiverCode_2src_2main_8cpp.html#a5d2350b2507883d3644251013370bc5b", null ],
     [ "RebuildFlags", "ReceiverCode_2src_2main_8cpp.html#ad86a39e4cba19592c760833870f6f69c", null ],
+    [ "S_or_O", "ReceiverCode_2src_2main_8cpp.html#ae66b8b5534a2dabeeb26660467073a74", null ],
     [ "SaveFailSafeData", "ReceiverCode_2src_2main_8cpp.html#a96891035aa9f064462b6a614c5878f51", null ],
     [ "ScanI2c", "ReceiverCode_2src_2main_8cpp.html#a887240a00b11c00c971e633ed47319f9", null ],
     [ "SendQnhToSensorHub", "ReceiverCode_2src_2main_8cpp.html#af2b1ba43295661243b7bb78004d470d8", null ],
@@ -28,7 +29,9 @@ var ReceiverCode_2src_2main_8cpp =
     [ "SensorHubHasFailed", "ReceiverCode_2src_2main_8cpp.html#ad8b70060a07f5323c3e1011dd6b1dd6f", null ],
     [ "SetServoFrequency", "ReceiverCode_2src_2main_8cpp.html#a57ad32e24d25e5034abb459116b9bc9e", null ],
     [ "setup", "ReceiverCode_2src_2main_8cpp.html#a17699f358cf9f7c3155a9c5daf8ff13c", null ],
+    [ "SOS_Led", "ReceiverCode_2src_2main_8cpp.html#a7120da580f2fb6fd927321cba11459f2", null ],
     [ "teensyMAC", "ReceiverCode_2src_2main_8cpp.html#a06122bf4eee8af08c02c45022253a4f4", null ],
+    [ "TestSbusPin", "ReceiverCode_2src_2main_8cpp.html#a6b03ed1ced4e7f2e4a790c0d28f4261c", null ],
     [ "TurnLedOff", "ReceiverCode_2src_2main_8cpp.html#aadfccc52afc40455e31e965015c29b46", null ],
     [ "TurnLedOn", "ReceiverCode_2src_2main_8cpp.html#a852569e2aefff6371f3adad09fcd746f", null ],
     [ "WatchDogCallBack", "ReceiverCode_2src_2main_8cpp.html#ae410be09c6f449451d8f2327fd895c7d", null ]
