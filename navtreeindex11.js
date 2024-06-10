@@ -1,5 +1,7 @@
 var NAVTREEINDEX11 =
 {
+"classVectorFloat.html#a3b12ed03e28bded4316275882433e5aa":[4,0,15,1],
+"classVectorFloat.html#a4affe2a9de97600b3d8df98586679e14":[4,0,15,8],
 "classVectorFloat.html#a54b8e4234e3b48e106d090570755f107":[4,0,15,9],
 "classVectorFloat.html#a8b54ec5c117ca7101cff478b3cfaa0cc":[4,0,15,0],
 "classVectorFloat.html#aacb5e7ca59563c47dd066d8b1264ec4b":[4,0,15,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX11 =
 "functions.html":[4,3,0],
 "functions.html":[4,3,0,0],
 "functions_a.html":[4,3,0,1],
-"functions_b.html":[4,3,0,2],
-"functions_c.html":[4,3,0,3],
-"functions_d.html":[4,3,0,4]
+"functions_b.html":[4,3,0,2]
 };

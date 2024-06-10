@@ -83,12 +83,12 @@ var NAVTREEINDEX =
 "MPU6050_8h.html#accc9b8669e7b799c8630e8a84cd24692",
 "Nextion_8h.html#ad7b8aa834c87265667a5687b1787a1cc",
 "Quadcopter_2src_2main_8cpp_source.html",
-"TransmitterCode_2src_2main_8cpp.html#aa1f9aec467eb00917ad9ffdc0bd5b20d",
-"classMPU6050.html#a55f99c88cc84901f245924ed5e3fe47e",
-"classMPU9250.html#a497013a9b2a7273571fb83c9c2b2266fa7e2b7a3eabf7f7e75fa5bdbd8b1e7ef7",
-"classVectorFloat.html#a54b8e4234e3b48e106d090570755f107",
-"functions_e.html",
-"structPPMArea.html#a75e7d9eae4a3ab6b0d06bbe28b5582f4"
+"TransmitterCode_2src_2main_8cpp.html#aa1e81e58421a34fdfd7bfb31925f5a90",
+"classMPU6050.html#a559de8cd420d329c93f215938e8483e2",
+"classMPU9250.html#a497013a9b2a7273571fb83c9c2b2266fa562a884187720e6ef4a99117df19f61e",
+"classVectorFloat.html#a3b12ed03e28bded4316275882433e5aa",
+"functions_c.html",
+"structPPMArea.html#a6f623131e7bf583da7799c58fe3d9c08"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

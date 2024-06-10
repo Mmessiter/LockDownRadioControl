@@ -6,7 +6,7 @@ var searchData=
   ['p_5fygain_5fdefault_3',['P_YGAIN_DEFAULT',['../Quadcopter_2src_2main_8cpp.html#a1133dab9b24a25c94c296de99c5db1a4',1,'main.cpp']]],
   ['p_5fygain_5fmax_4',['P_YGAIN_MAX',['../Quadcopter_2src_2main_8cpp.html#a9129676dcb370ea0a1589049672c9f3d',1,'main.cpp']]],
   ['p_5fygain_5fmin_5',['P_YGAIN_MIN',['../Quadcopter_2src_2main_8cpp.html#aef1650a66fba052880c3eb57ee630a99',1,'main.cpp']]],
-  ['pacemaker_6',['pacemaker',['../1Definitions_8h.html#a56e90cbec59fa96bebfb3db997e6a3fe',1,'PACEMAKER:&#160;1Definitions.h'],['../namespaceFHSS__data.html#a99dc8e91f9f022271674b0d7923a5a4d',1,'FHSS_data::PaceMaker']]],
+  ['pacemaker_6',['pacemaker',['../namespaceFHSS__data.html#a99dc8e91f9f022271674b0d7923a5a4d',1,'FHSS_data::PaceMaker'],['../1Definitions_8h.html#a56e90cbec59fa96bebfb3db997e6a3fe',1,'PACEMAKER:&#160;1Definitions.h']]],
   ['packetnumber_7',['packetnumber',['../1Definitions_8h.html#afe41d3be378c52d1dc2c6e8310ac9a0e',1,'PacketNumber:&#160;1Definitions.h'],['../common_8h.html#a09cb370d93005b5a43e932a3d6093ea2',1,'PacketNumber:&#160;common.h']]],
   ['packetshistorybuffer_8',['PacketsHistoryBuffer',['../1Definitions_8h.html#a6418df611b6c36d20a2b81f834b2a94c',1,'1Definitions.h']]],
   ['packetspersecond_9',['PacketsPerSecond',['../1Definitions_8h.html#aa7dff891c96c5574f3a8dfb38a1aad0d',1,'1Definitions.h']]],
