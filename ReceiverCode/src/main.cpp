@@ -591,21 +591,38 @@ void S_or_O(int d1, int d2, int d3)  // This function blinks the LED for S or O 
 /************************************************************************************************************/
 void SOS_Led()  // This function blinks the LED for SOS in Morse code
 {
-    uint16_t Blinkrate = 150;
+    uint16_t Blinkrate = 125;
     S_or_O(Blinkrate, Blinkrate,Blinkrate * 2);               // = S
     S_or_O(Blinkrate * 3, Blinkrate * 1.5, Blinkrate * 2);    // = O
     S_or_O(Blinkrate, Blinkrate,Blinkrate * 7);               // = S
 }
 /************************************************************************************************************/
-void TestSbusPin(){
+
+// This function never returns. It's a fatal error. Stop here and send SOS on LED !!    
+void Abort(){while (true) SOS_Led();}            // This is a fatal error Stop here and send SOS!!
+
+/************************************************************************************************************/
+// This function is called at statup to check that the SBUS pin is not held low (plug in wrong way round)
+
+void TestTheSBUSPin(){
     pinMode(SBUSPIN, OUTPUT);
-    delay(10);
+    delay(1);
     digitalWrite(SBUSPIN, HIGH);
-    delay(10);
-    if (!digitalRead(SBUSPIN)){ // is the SBUS pin held low?!?!?!?!?!?!?
-        while (true) SOS_Led();// This is a fatal error Stop and send SOS!!
+    delay(1);
+    if (!digitalRead(SBUSPIN)) Abort();         // is the SBUS pin held low?!?!?!?!?!?!?
+    SBUSPORT.begin(100000);                     // SBUS protocol uses 100000 baud. Re initialise it since we've just used it as an output
+}
+/************************************************************************************************************/
+ // This function is called at statup to check that the no PWM pins are held low (plug in wrong way round)
+
+void TestAllPWMPins(){
+    for (uint8_t i = 0; i < SERVOSUSED; ++i) {
+        pinMode(PWMPins[i], OUTPUT); 
+        delay(1);
+        digitalWrite(PWMPins[i], HIGH);
+        delay(1);
+        if (!digitalRead(PWMPins[i])) Abort();      // is this PWM pin held low?!?!?!?!?!?!?
     }
-    Serial3.begin(100000);
 }
 
 /************************************************************************************************************/
@@ -613,9 +630,9 @@ void TestSbusPin(){
 /************************************************************************************************************/
 FLASHMEM void setup()
 {
-      
     pinMode(LED_RED, OUTPUT);
-    TestSbusPin();
+    TestTheSBUSPin();                   // Check that the SBUS pin is not held low (plug in wrong way round)
+    TestAllPWMPins();                   // Check that the no PWM pins are held low (plug in wrong way round)
     pinMode(LED_PIN, OUTPUT);
     pinMode(pinCSN1, OUTPUT);
 #ifdef SECOND_TRANSCEIVER
@@ -673,8 +690,6 @@ FLASHMEM void setup()
     InitCurrentRadio();
     ThisRadio = 2;
 #endif
-
-
     WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
     WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
@@ -682,13 +697,7 @@ FLASHMEM void setup()
     KickTheDog();
     ReadBindPlug();
     digitalWrite(LED_PIN, LOW);
-
- 
-
-
 }
-
-
 
 /************************************************************************************************************/
 
