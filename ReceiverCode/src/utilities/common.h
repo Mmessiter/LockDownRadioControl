@@ -40,13 +40,13 @@
         #define SERVO_RESOLUTION         4096    
 
         #define EXTRAAT1500  1000                          
-        #define MINMICROS    500            // normal servos
+        #define MINMICROS    500                        // normal servos
         #define MAXMICROS    2500
         
         #define EXTRAAT760   350                        // high frequency servos
         #define MAXAT760     760 + EXTRAAT760
         #define MINAT760     760 - EXTRAAT760
-        #define MAXPARAMETERS          7                            // Max number of parameters types to expect        
+        #define MAXPARAMETERS          7                // Max number of parameters types to expect        
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
 //***************************************************************************
