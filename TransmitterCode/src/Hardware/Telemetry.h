@@ -263,8 +263,11 @@ void PopulateDataView(){
     char         Vbuf[50];
     char         nb2[5];
     char         DataView_txv[]         = "txv";  
-    unsigned int TempModelId = 0;
+    char         MeanFrameRate[]        = "n0";
+    char         TimeSinceBoot[]        = "n1";
 
+    unsigned int TempModelId = 0;
+    uint32_t BootedMinutes = millis() / 60000;
 
 if (!LastPacketsPerSecond) 
         {                                                    // these only need displaying once - they will not change
@@ -355,6 +358,12 @@ if (!LastPacketsPerSecond)
             LastSbusRepeats = SbusRepeats;
             snprintf(Vbuf, 7, "%d", (int)SbusRepeats);
             SendText(Sbs, Vbuf);
+        }
+            SendValue(TimeSinceBoot, BootedMinutes);
+        if (BoundFlag && ModelMatched){
+            SendValue(MeanFrameRate, AverageFrameRate);
+        }else{
+            SendValue(MeanFrameRate, 0);
         }
     }
 

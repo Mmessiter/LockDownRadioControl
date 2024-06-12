@@ -24,7 +24,7 @@
     #define TXVERSION_MAJOR   2 // first three *must* match RX but _EXTRA can be different
     #define TXVERSION_MINOR   4
     #define TXVERSION_MINIMUS 7
-    #define TXVERSION_EXTRA   "M 31/05/24" 
+    #define TXVERSION_EXTRA   "N 12/06/24" 
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -1063,6 +1063,9 @@ uint8_t RadioNumber            = 0;
 uint8_t LastRadioNumber        = 0;
 char ParaNames[5][30] = {"(FailSafeChannels)", "(Qnh)", "(GPSMarkHere)","(ServoCentre & Frequency)", "(SBUS/PPM)"};
 uint16_t ScreenData[50];
+uint16_t AverageFrameRate       = 0;
+uint64_t TotalFrameRate         = 0;
+uint32_t FrameRateCounter       = 0;
 
 int      LastTrim[5][17];
 char    pFhssView[]               = "page FhssView";

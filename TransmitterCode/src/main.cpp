@@ -1109,21 +1109,11 @@ void RationaliseBuddy()
 }
 /*********************************************************************************************************************************/
 void GetFrameRate()
-{   
-    // static uint64_t GoodPackets = 0;
-    // static uint64_t Count  = 0;
-    // uint64_t Average = 0;
+{   // This function calculates the frame rate and the average frame rate
     if (RecentGoodPacketsCount) PacketsPerSecond = RecentGoodPacketsCount;
     RecentGoodPacketsCount = 0;
-    // if (Count) {
-    //     GoodPackets +=  PacketsPerSecond;
-    //     Average = GoodPackets / Count;
-    //     Look1("Average Packets per second: "); 
-    //     Look1(Average);
-    //     Look1(",  Total Packets: "); 
-    //     Look(GoodPackets);
-    //  } 
-    //  Count++;
+    TotalFrameRate += PacketsPerSecond;
+    AverageFrameRate = TotalFrameRate / ++FrameRateCounter;
 }
 
 /*********************************************************************************************************************************/
@@ -2186,6 +2176,8 @@ void ZeroDataScreen()
     GPSMaxDistance      = 0;
     GPSMaxSpeed         = 0;
     LastShowTime        = 0; // for instant redisplay
+    TotalFrameRate      = 0;
+    FrameRateCounter    = 0;
 }
 /***************************************************** ReadNewSwitchFunction ****************************************************************************/
 
