@@ -1,13 +1,16 @@
 var NAVTREEINDEX12 =
 {
+"functions.html":[4,3,0,0],
+"functions_a.html":[4,3,0,1],
+"functions_b.html":[4,3,0,2],
 "functions_c.html":[4,3,0,3],
 "functions_d.html":[4,3,0,4],
 "functions_e.html":[4,3,0,5],
 "functions_enum.html":[4,3,3],
 "functions_eval.html":[4,3,4],
 "functions_f.html":[4,3,0,6],
-"functions_func.html":[4,3,1,0],
 "functions_func.html":[4,3,1],
+"functions_func.html":[4,3,1,0],
 "functions_func_c.html":[4,3,1,1],
 "functions_func_d.html":[4,3,1,2],
 "functions_func_e.html":[4,3,1,3],
@@ -246,8 +249,5 @@ var NAVTREEINDEX12 =
 "structCD__buddy.html":[4,0,2],
 "structCD__buddy.html#a6de77aa1a6962b4546a70bf81c121960":[4,0,2,1],
 "structCD__buddy.html#a86614de1d3c268bf88abaac749cb32dd":[4,0,2,0],
-"structPPMArea.html":[4,0,8],
-"structPPMArea.html#a0be2173ac79cabafe4f149db60ce052c":[4,0,8,4],
-"structPPMArea.html#a52e475cf8a0672360f670b56a26c387f":[4,0,8,6],
-"structPPMArea.html#a6ac130b16519ab38c553c4fb657ab4ea":[4,0,8,8]
+"structPPMArea.html":[4,0,8]
 };

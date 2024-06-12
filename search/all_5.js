@@ -73,5 +73,6 @@ var searchData=
   ['audiovolume_70',['AudioVolume',['../1Definitions_8h.html#adddcbca54e7b49592c3f6c360bf04494',1,'1Definitions.h']]],
   ['auto_71',['AUTO',['../1Definitions_8h.html#a0cc6f7717df9fbdc0f33efb88720a639',1,'1Definitions.h']]],
   ['automodelselect_72',['AutoModelSelect',['../1Definitions_8h.html#a77387f8b9f18e9b75448e01d821ae17e',1,'1Definitions.h']]],
-  ['autoswitch_73',['autoswitch',['../1Definitions_8h.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'AUTOSWITCH:&#160;1Definitions.h'],['../1Definitions_8h.html#a5b8bae72a42da5c8a19ad3b4c1692538',1,'Autoswitch:&#160;1Definitions.h']]]
+  ['autoswitch_73',['autoswitch',['../1Definitions_8h.html#a5b8bae72a42da5c8a19ad3b4c1692538',1,'Autoswitch:&#160;1Definitions.h'],['../1Definitions_8h.html#aa4414f3ff790f01b8bb41a0f51d1518f',1,'AUTOSWITCH:&#160;1Definitions.h']]],
+  ['averageframerate_74',['AverageFrameRate',['../1Definitions_8h.html#ae126a675143ec2ab84bf8a420833719a',1,'1Definitions.h']]]
 ];

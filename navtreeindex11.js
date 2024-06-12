@@ -1,5 +1,8 @@
 var NAVTREEINDEX11 =
 {
+"classVectorFloat.html":[4,0,15],
+"classVectorFloat.html#a112eaf8758a6f51b96ed1ccb71700495":[4,0,15,5],
+"classVectorFloat.html#a2d8e5159f045ca977769d168af75320c":[4,0,15,7],
 "classVectorFloat.html#a3b12ed03e28bded4316275882433e5aa":[4,0,15,1],
 "classVectorFloat.html#a4affe2a9de97600b3d8df98586679e14":[4,0,15,8],
 "classVectorFloat.html#a54b8e4234e3b48e106d090570755f107":[4,0,15,9],
@@ -126,8 +129,8 @@ var NAVTREEINDEX11 =
 "common_8h.html#a8251d20351fc918ea452ad591c75116e":[5,0,1,0,0,0,129],
 "common_8h.html#a8331e76046c0a5dfd554712b1e54507c":[5,0,1,0,0,0,186],
 "common_8h.html#a834c4941fd9b037a25a8053912995e61":[5,0,1,0,0,0,8],
-"common_8h.html#a843e3db36f734b45096220f7ca4b8d9f":[5,0,1,0,0,0,22],
 "common_8h.html#a843e3db36f734b45096220f7ca4b8d9f":[5,0,1,0,0,0,23],
+"common_8h.html#a843e3db36f734b45096220f7ca4b8d9f":[5,0,1,0,0,0,22],
 "common_8h.html#a85141adc0aa19e8a8d1d9b3e5796500f":[5,0,1,0,0,0,167],
 "common_8h.html#a852569e2aefff6371f3adad09fcd746f":[5,0,1,0,0,0,85],
 "common_8h.html#a86715d66aa5d1363f2db07ae6428eb90":[5,0,1,0,0,0,29],
@@ -189,8 +192,8 @@ var NAVTREEINDEX11 =
 "common_8h.html#ac10969d83b9cdee051df76a50fe6ab93":[5,0,1,0,0,0,50],
 "common_8h.html#ac17bcdae8bda705ade2cf0935e12853d":[5,0,1,0,0,0,110],
 "common_8h.html#ac2fc49f3335ebd2b38d0184306dfcf9b":[5,0,1,0,0,0,119],
-"common_8h.html#ac67e087c11a86a3790c656a29f8c7195":[5,0,1,0,0,0,26],
 "common_8h.html#ac67e087c11a86a3790c656a29f8c7195":[5,0,1,0,0,0,27],
+"common_8h.html#ac67e087c11a86a3790c656a29f8c7195":[5,0,1,0,0,0,26],
 "common_8h.html#ac8e10a08e9da70138c4a8459c6902d7d":[5,0,1,0,0,0,131],
 "common_8h.html#aca314b55765a1c3af5397c0cb3ce47ff":[5,0,1,0,0,0,78],
 "common_8h.html#acbe14cc301f6ba68e2431684bf688916":[5,0,1,0,0,0,127],
@@ -246,8 +249,5 @@ var NAVTREEINDEX11 =
 "elapsedMillis_8h.html":[5,0,0,0,0,2,0],
 "elapsedMillis_8h_source.html":[5,0,0,0,0,2,0],
 "files.html":[5,0],
-"functions.html":[4,3,0],
-"functions.html":[4,3,0,0],
-"functions_a.html":[4,3,0,1],
-"functions_b.html":[4,3,0,2]
+"functions.html":[4,3,0]
 };

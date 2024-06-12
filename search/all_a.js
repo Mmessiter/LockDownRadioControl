@@ -4,7 +4,7 @@ var searchData=
   ['failed_1',['Failed',['../ReceiverCode_2src_2main_8cpp.html#aed7f6b5b10b7b8235e38d72a5dfc20d8',1,'main.cpp']]],
   ['failedpacket_2',['failedpacket',['../1Definitions_8h.html#a783a0141bea15d8539730afd4b3b06a3',1,'FailedPacket():&#160;transceiver.h'],['../transceiver_8h.html#a5fbd3c8613a4163425c94965704ce5f8',1,'FailedPacket():&#160;transceiver.h']]],
   ['failedsafe_3',['FailedSafe',['../common_8h.html#a6aa44585f8f06cb4f4760da8352b2df7',1,'common.h']]],
-  ['failsafe_4',['failsafe',['../common_8h.html#a42318598726782ebb2e1857f167c8cda',1,'FailSafe():&#160;main.cpp'],['../ReceiverCode_2src_2main_8cpp.html#a42318598726782ebb2e1857f167c8cda',1,'FailSafe():&#160;main.cpp'],['../Quadcopter_2src_2main_8cpp.html#a3b309466c71a16820f1d84a81b8cfb93',1,'failSafe():&#160;main.cpp']]],
+  ['failsafe_4',['failsafe',['../Quadcopter_2src_2main_8cpp.html#a3b309466c71a16820f1d84a81b8cfb93',1,'failSafe():&#160;main.cpp'],['../common_8h.html#a42318598726782ebb2e1857f167c8cda',1,'FailSafe():&#160;main.cpp'],['../ReceiverCode_2src_2main_8cpp.html#a42318598726782ebb2e1857f167c8cda',1,'FailSafe():&#160;main.cpp']]],
   ['failsafe_5ftimeout_5',['FAILSAFE_TIMEOUT',['../common_8h.html#a0634ad724c86cd2b4ac7cfebbb622a9c',1,'common.h']]],
   ['failsafe_5fview_6',['FAILSAFE_VIEW',['../1Definitions_8h.html#a1ef5fc5af54a467bfc4d8fd805081e3c',1,'1Definitions.h']]],
   ['failsafechannel_7',['failsafechannel',['../1Definitions_8h.html#adcce7cd9ef6dc6629d7409fc5f5c13fc',1,'FailSafeChannel:&#160;1Definitions.h'],['../common_8h.html#aeda79da3882f657a3eaefc5800122da5',1,'FailSafeChannel:&#160;common.h']]],
@@ -56,9 +56,10 @@ var searchData=
   ['found_5fina219_53',['FOUND_INA219',['../SensorHubT32_2src_2main_8cpp.html#af1b5290b72a9f9bc5d1d70c7c14df9b0',1,'main.cpp']]],
   ['four_54',['FOUR',['../1Definitions_8h.html#a64a9b58c6a5bcd3724f3b56ad6d006a7',1,'1Definitions.h']]],
   ['fourminutes_55',['FOURMINUTES',['../1Definitions_8h.html#aad932f138e888f84b6cd1c268fdabb84',1,'1Definitions.h']]],
-  ['frequencyscount_56',['FREQUENCYSCOUNT',['../common_8h.html#afe5bce36baf737bd284d43cd0e805fdb',1,'common.h']]],
-  ['frontview_57',['FRONTVIEW',['../1Definitions_8h.html#a8204cbed1c612a522a43c80f071eee2a',1,'1Definitions.h']]],
-  ['fs_5fbyte1_58',['FS_byte1',['../common_8h.html#a3be9019b72265fa9443e1f1132fd9bc7',1,'common.h']]],
-  ['fs_5fbyte2_59',['FS_byte2',['../common_8h.html#a9949c81d8f6abc28616445945c5d24ba',1,'common.h']]],
-  ['fs_5feeprom_5foffset_60',['FS_EEPROM_OFFSET',['../common_8h.html#ad529f0c2447693d8418608e122012388',1,'common.h']]]
+  ['frameratecounter_56',['FrameRateCounter',['../1Definitions_8h.html#ac82a1b4f650f2f658ecd09e1186ae615',1,'1Definitions.h']]],
+  ['frequencyscount_57',['FREQUENCYSCOUNT',['../common_8h.html#afe5bce36baf737bd284d43cd0e805fdb',1,'common.h']]],
+  ['frontview_58',['FRONTVIEW',['../1Definitions_8h.html#a8204cbed1c612a522a43c80f071eee2a',1,'1Definitions.h']]],
+  ['fs_5fbyte1_59',['FS_byte1',['../common_8h.html#a3be9019b72265fa9443e1f1132fd9bc7',1,'common.h']]],
+  ['fs_5fbyte2_60',['FS_byte2',['../common_8h.html#a9949c81d8f6abc28616445945c5d24ba',1,'common.h']]],
+  ['fs_5feeprom_5foffset_61',['FS_EEPROM_OFFSET',['../common_8h.html#ad529f0c2447693d8418608e122012388',1,'common.h']]]
 ];

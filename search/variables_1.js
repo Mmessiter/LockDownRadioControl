@@ -22,7 +22,7 @@ var searchData=
   ['accx_5fprev_19',['AccX_prev',['../Quadcopter_2src_2main_8cpp.html#a556270e4fff7dd2c6c549415b786c3e2',1,'main.cpp']]],
   ['accy_20',['accy',['../common_8h.html#aba700621707e686873c98dbbeba0ab78',1,'AccY:&#160;common.h'],['../Quadcopter_2src_2main_8cpp.html#aba700621707e686873c98dbbeba0ab78',1,'AccY:&#160;main.cpp']]],
   ['accy_5fprev_21',['AccY_prev',['../Quadcopter_2src_2main_8cpp.html#a94379192c0c07ed9a9d947f302ced332',1,'main.cpp']]],
-  ['accz_22',['accz',['../Quadcopter_2src_2main_8cpp.html#af9a08745989f56ac72e8757359a30d5e',1,'AccZ:&#160;main.cpp'],['../common_8h.html#af9a08745989f56ac72e8757359a30d5e',1,'AccZ:&#160;common.h']]],
+  ['accz_22',['accz',['../common_8h.html#af9a08745989f56ac72e8757359a30d5e',1,'AccZ:&#160;common.h'],['../Quadcopter_2src_2main_8cpp.html#af9a08745989f56ac72e8757359a30d5e',1,'AccZ:&#160;main.cpp']]],
   ['accz_5fprev_23',['AccZ_prev',['../Quadcopter_2src_2main_8cpp.html#a4f12d0d2fdb0d0fa64c642c085341efa',1,'main.cpp']]],
   ['ackpayload_24',['ackpayload',['../radio_8h.html#a30a079d60b4731ce1531091ffe56a703',1,'AckPayload:&#160;radio.h'],['../1Definitions_8h.html#a30a079d60b4731ce1531091ffe56a703',1,'AckPayload:&#160;1Definitions.h']]],
   ['ackpayloadsize_25',['ackpayloadsize',['../radio_8h.html#a6dc99d00582ef356ea3d57700dca6dab',1,'AckPayloadSize:&#160;radio.h'],['../1Definitions_8h.html#a81b9fbb62d8099a8e75c5d4720f41895',1,'AckPayloadSize:&#160;1Definitions.h']]],
@@ -47,5 +47,6 @@ var searchData=
   ['announceconnected_44',['AnnounceConnected',['../1Definitions_8h.html#a7f979f6e267f37833beb30c91b796cae',1,'1Definitions.h']]],
   ['audiovolume_45',['AudioVolume',['../1Definitions_8h.html#adddcbca54e7b49592c3f6c360bf04494',1,'1Definitions.h']]],
   ['automodelselect_46',['AutoModelSelect',['../1Definitions_8h.html#a77387f8b9f18e9b75448e01d821ae17e',1,'1Definitions.h']]],
-  ['autoswitch_47',['Autoswitch',['../1Definitions_8h.html#a5b8bae72a42da5c8a19ad3b4c1692538',1,'1Definitions.h']]]
+  ['autoswitch_47',['Autoswitch',['../1Definitions_8h.html#a5b8bae72a42da5c8a19ad3b4c1692538',1,'1Definitions.h']]],
+  ['averageframerate_48',['AverageFrameRate',['../1Definitions_8h.html#ae126a675143ec2ab84bf8a420833719a',1,'1Definitions.h']]]
 ];
