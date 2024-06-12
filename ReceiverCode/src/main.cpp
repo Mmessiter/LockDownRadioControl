@@ -599,7 +599,14 @@ void SOS_Led()  // This function blinks the LED for SOS in Morse code
 /************************************************************************************************************/
 
 // This function never returns. It's a fatal error. Stop here and send SOS on LED !!    
-void Abort(){while (true) SOS_Led();}            // This is a fatal error Stop here and send SOS!!
+void Abort(){
+   for (uint32_t i = 0; i < 0xFFFFFFFF; ++i) 
+        {
+            Look1(i);
+            Look(" FATAL ERROR - PLUG IN WRONG WAY ROUND!");
+            SOS_Led(); // This is a fatal error Stop here and send SOS!!
+        } 
+    }        
 
 /************************************************************************************************************/
 // This function is called at statup to check that the SBUS pin is not held low (plug in wrong way round)
@@ -609,7 +616,12 @@ void TestTheSBUSPin(){
     delay(1);
     digitalWrite(SBUSPIN, HIGH);
     delay(1);
-    if (!digitalRead(SBUSPIN)) Abort();         // is the SBUS pin held low?!?!?!?!?!?!?
+    if (!digitalRead(SBUSPIN)) 
+    {
+        while (true) {
+            Abort();
+        }                                       // This is a fatal error Stop here and send SOS!!
+    }         
     SBUSPORT.begin(100000);                     // SBUS protocol uses 100000 baud. Re initialise it since we've just used it as an output
 }
 /************************************************************************************************************/
