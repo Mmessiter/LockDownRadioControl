@@ -2991,7 +2991,7 @@ void StartServosTypeView() // Frequency and centre pulse width
     SendCommand(GoServoTypesView);
     
     for (int i = 0; i < 11; ++i) {
-        SendValue(n_labels[i], ServoFrequency[i]); // heer
+        SendValue(n_labels[i], ServoFrequency[i]);
         SendValue(n_labels[i+11], ServoCentrePulse[i]);
         SendText(ch_labels[i], ChannelNames[i]);
     }
@@ -3009,7 +3009,7 @@ void  EndServoTypeView(){ // Frequency and centre pulse width
     char Progress[]      = "Progress";
     SendCommand(ProgressStart);
     for (int i = 0; i < 11; ++i) {
-        ServoFrequency[i]   = GetValue(n_labels[i]); // heer
+        ServoFrequency[i]   = GetValue(n_labels[i]); 
         ServoCentrePulse[i] = GetValue(n_labels[i+11]); 
         SendValue(Progress, (i+1) * (100 / 11));
     }

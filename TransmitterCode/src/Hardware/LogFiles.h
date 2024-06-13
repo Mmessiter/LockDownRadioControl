@@ -401,7 +401,7 @@ void RefreshLog()
     }
 }
 /******************************************************************************************************************************/
-void LogEND()
+void LogEND() // heer
 { // close log screen
     char n0[]        = "n0";
     char c0[]        = "c0";
@@ -410,10 +410,11 @@ void LogEND()
     CurrentView      = DATAVIEW;
     LastShowTime     = 0;
     MinimumGap       = GetValue(n0);
-    if (MinimumGap < 50) MinimumGap = 50;
+    if (MinimumGap < 10) MinimumGap = 10;
     LogRXSwaps       = GetValue(c0);
     UseLog           = GetValue(sw0);
     SaveTransmitterParameters();
+    LastPacketsPerSecond = 0;
     SendCommand(pDataView);
 }
 /******************************************************************************************************************************/

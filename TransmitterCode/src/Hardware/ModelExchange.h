@@ -226,8 +226,8 @@ void ReceiveModelFile()
     uint8_t       p              = 5;
     char          nb1[40];
 
-    char Received[] = "Received ";
-    char of[]       = " of ";
+    char Received[]      = "Received ";
+    char of[]            = " of ";
     char msg[50];
     char bytes[]         = " bytes.";
     char t0[]            = "t0";
@@ -238,15 +238,15 @@ void ReceiveModelFile()
     char ProgressEnd[]   = "vis Progress,0";
     char GoModelsView[]  = "page ModelsView";
     char Progress[]      = "Progress";
-
-    strcpy(msg, ovwr);
-    strcat(msg, ModelName);
-    strcat(msg, ques);
-
-
-    if (!GetConfirmation(GoModelsView, msg)) return; // Get confirmation or quit
-    BlueLedOn();
-      
+    
+    if (strcmp(ModelName, "Not in use")) {      // If not in use, we can overwrite it without asking
+        strcpy(msg, ovwr);                      // Ask user if they want to overwrite current model
+        strcat(msg, ModelName);
+        strcat(msg, ques);
+        if (!GetConfirmation(GoModelsView, msg)) return; // Get confirmation or quit
+    }
+    
+    BlueLedOn();  
     ShowFileTransferWindow();
     SendText(ModelsView_filename, Waiting);
     SendText(t0, RXheader);
