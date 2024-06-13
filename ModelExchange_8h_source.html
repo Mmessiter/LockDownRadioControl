@@ -339,8 +339,8 @@ $(document).ready(function(){initNavTree('ModelExchange_8h_source.html',''); ini
 <div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>    uint8_t       p              = 5;</div>
 <div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>    <span class="keywordtype">char</span>          nb1[40];</div>
 <div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span> </div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>    <span class="keywordtype">char</span> Received[] = <span class="stringliteral">&quot;Received &quot;</span>;</div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>    <span class="keywordtype">char</span> of[]       = <span class="stringliteral">&quot; of &quot;</span>;</div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span>    <span class="keywordtype">char</span> Received[]      = <span class="stringliteral">&quot;Received &quot;</span>;</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>    <span class="keywordtype">char</span> of[]            = <span class="stringliteral">&quot; of &quot;</span>;</div>
 <div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>    <span class="keywordtype">char</span> msg[50];</div>
 <div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>    <span class="keywordtype">char</span> bytes[]         = <span class="stringliteral">&quot; bytes.&quot;</span>;</div>
 <div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    <span class="keywordtype">char</span> t0[]            = <span class="stringliteral">&quot;t0&quot;</span>;</div>
@@ -351,15 +351,15 @@ $(document).ready(function(){initNavTree('ModelExchange_8h_source.html',''); ini
 <div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>    <span class="keywordtype">char</span> ProgressEnd[]   = <span class="stringliteral">&quot;vis Progress,0&quot;</span>;</div>
 <div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>    <span class="keywordtype">char</span> GoModelsView[]  = <span class="stringliteral">&quot;page ModelsView&quot;</span>;</div>
 <div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>    <span class="keywordtype">char</span> Progress[]      = <span class="stringliteral">&quot;Progress&quot;</span>;</div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span> </div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>    strcpy(msg, ovwr);</div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>    strcat(msg, <a class="code hl_variable" href="1Definitions_8h.html#a70d32371e38c7c5862fdc7e149609f7c">ModelName</a>);</div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>    strcat(msg, ques);</div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span> </div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span> </div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>    <span class="keywordflow">if</span> (!<a class="code hl_function" href="1Definitions_8h.html#a6506bf72e0dd9e9ce480156b47625bff">GetConfirmation</a>(GoModelsView, msg)) <span class="keywordflow">return</span>; <span class="comment">// Get confirmation or quit</span></div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>    <a class="code hl_function" href="1Definitions_8h.html#aa1f9aec467eb00917ad9ffdc0bd5b20d">BlueLedOn</a>();</div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>      </div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>    </div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>    <span class="keywordflow">if</span> (strcmp(<a class="code hl_variable" href="1Definitions_8h.html#a70d32371e38c7c5862fdc7e149609f7c">ModelName</a>, <span class="stringliteral">&quot;Not in use&quot;</span>)) {      <span class="comment">// If not in use, we can overwrite it without asking</span></div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>        strcpy(msg, ovwr);                      <span class="comment">// Ask user if they want to overwrite current model</span></div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>        strcat(msg, <a class="code hl_variable" href="1Definitions_8h.html#a70d32371e38c7c5862fdc7e149609f7c">ModelName</a>);</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>        strcat(msg, ques);</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>        <span class="keywordflow">if</span> (!<a class="code hl_function" href="1Definitions_8h.html#a6506bf72e0dd9e9ce480156b47625bff">GetConfirmation</a>(GoModelsView, msg)) <span class="keywordflow">return</span>; <span class="comment">// Get confirmation or quit</span></div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>    }</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>    </div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>    <a class="code hl_function" href="1Definitions_8h.html#aa1f9aec467eb00917ad9ffdc0bd5b20d">BlueLedOn</a>();  </div>
 <div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>    <a class="code hl_function" href="ModelExchange_8h.html#a76c4e62912d1c13f6d13e049f507fd55">ShowFileTransferWindow</a>();</div>
 <div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>    <a class="code hl_function" href="1Definitions_8h.html#afe513398f72d5e48f691830a1ef6eb42">SendText</a>(ModelsView_filename, Waiting);</div>
 <div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>    <a class="code hl_function" href="1Definitions_8h.html#afe513398f72d5e48f691830a1ef6eb42">SendText</a>(t0, RXheader);</div>
