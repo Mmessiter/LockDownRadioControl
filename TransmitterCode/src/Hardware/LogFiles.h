@@ -401,7 +401,7 @@ void RefreshLog()
     }
 }
 /******************************************************************************************************************************/
-void LogEND() // heer
+void LogEND() 
 { // close log screen
     char n0[]        = "n0";
     char c0[]        = "c0";
@@ -414,7 +414,7 @@ void LogEND() // heer
     LogRXSwaps       = GetValue(c0);
     UseLog           = GetValue(sw0);
     SaveTransmitterParameters();
-    LastPacketsPerSecond = 0;
+    ForceDataRedisplay();
     SendCommand(pDataView);
 }
 /******************************************************************************************************************************/
