@@ -7,7 +7,7 @@ The motor timer runs automatically when the motor is running. ||
 
 It can run forwards, or backwards from a specified number of minutes. (Under Model setup / Options).||
 
-The timer pauses when the motor is not running and is reset to 0 when the 'Safety' switch is used, or the transmitter is turned on.||
+The timer pauses when the motor is not running and is reset to 0 when the transmitter is turned on.||
 
 LED blue  = The radio is not trying to connect.|
 LED red   = The radio is trying to connect.|
