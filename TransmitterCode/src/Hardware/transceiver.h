@@ -282,6 +282,7 @@ void SuccessfulPacket()
     if (RecentPacketsLost){
         TotalLostPackets += (RecentPacketsLost / 2);        // divide by 2 because acks get lost too
         RecentPacketsLost = 0;
+        if(!TotalLostPackets) TotalLostPackets = 1;         // RecentPacketsLost was only 1
     }
     Connected         = true;
     if (Radio1.available()){

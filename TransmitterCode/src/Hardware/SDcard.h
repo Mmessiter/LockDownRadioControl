@@ -61,7 +61,7 @@ void ReadCheckSum32()
 bool CheckDuplicate(uint8_t ch, int8_t j)
 {
     for (int i = 0; i < j; ++i) {
-        if (ch == ChannelOutPut[i]) return false; // no duplicates allowed
+        if (ch == ChannelOutPut[i]) return false; // no duplicate output channels allowed
     }
     return true;
 }
