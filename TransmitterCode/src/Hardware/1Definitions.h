@@ -89,7 +89,7 @@
     #define BATTERY_CHECK_INTERVAL 1000                         // 2 seconds between battery checks
     #define PARAMETERSENDREPEATS   3                            // How many times to send each parameter in case it gets lost  
     #define MAXPARAMETERS          7                            // Max types of parameters packet to send  ... will increase.      
-    #define POWERONOFFDELAY        10000                        // Delay after power on before power off button is active
+    #define POWERONOFFDELAY        2000                         // Delay after power on before power off button is active
                                                                 // and delay after power off before power on button is active                   
    
 // **************************************************************************

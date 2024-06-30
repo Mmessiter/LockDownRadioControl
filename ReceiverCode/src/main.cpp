@@ -122,7 +122,7 @@ int GetPWMValue(int frequency, int length) {return float(length / (1000000.00 / 
 /************************************************************************************************************/
 void MoveServos()
 {
-    if (!CheckCrazyValues()||(millis() < 7000)) {
+    if (!CheckCrazyValues()||(millis() < 7)) { //000?
         TurnLedOff();
         for (int j = 0; j < SERVOSUSED; ++j) PreviousData[j] = 0; // Force a send when data is good again
         return;
@@ -638,13 +638,8 @@ void TestAllPWMPins(){
 }
 
 /************************************************************************************************************/
-// SETUP
-/************************************************************************************************************/
-FLASHMEM void setup()
-{
-    pinMode(LED_RED, OUTPUT);
-    TestTheSBUSPin();                   // Check that the SBUS pin is not held low (plug in wrong way round)
-    TestAllPWMPins();                   // Check that the no PWM pins are held low (plug in wrong way round)
+
+void SetupPINMODES(){
     pinMode(LED_PIN, OUTPUT);
     pinMode(pinCSN1, OUTPUT);
 #ifdef SECOND_TRANSCEIVER
@@ -652,36 +647,20 @@ FLASHMEM void setup()
     pinMode(pinCE2, OUTPUT);
 #endif
     pinMode(pinCE1, OUTPUT);
-    
     pinMode(BINDPLUG_PIN, INPUT_PULLUP);
+    pinMode(LED_RED, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
-    TurnLedOff();
-    if (digitalRead(BINDPLUG_PIN)) {
-        delay(2500); // Needed so that the Sensor hub can boot first and be detected (no bind plug)
+}
+// ***************************************************************************************************************************************************
+void SetupRadios(){
+
+    if (digitalRead(BINDPLUG_PIN)) { // ie no bind plug, so initialise to bound pipe
+        GetOldPipe();
     }
-    else {
-        delay(200);
-    }
-    
-    Wire.begin();
-    delay(20);
-    ScanI2c(); // Detect what's connected
-
-
-#ifdef USE_STABILISATION
-    if (MPU6050Connected) InitialiseTheMPU6050();
-#endif
-
-
-    if (INA219Connected) ina219.begin();
     teensyMAC(MacAddress);
     PipePointer = DefaultPipe;
     CopyCurrentPipe(DefaultPipe, PIPENUMBER);
     CurrentRadio = &Radio1;
-    if (digitalRead(BINDPLUG_PIN)) { // ie no bind plug, so initialise to bound pipe
-        GetOldPipe();
-    }
-
 #ifdef SECOND_TRANSCEIVER
     digitalWrite(pinCSN2, CSN_OFF);
     digitalWrite(pinCE2, CE_OFF);
@@ -691,7 +670,6 @@ FLASHMEM void setup()
     delay(4);
     InitCurrentRadio();
     ThisRadio = 1;
-
 #ifdef SECOND_TRANSCEIVER
     CurrentRadio = &Radio2;
     digitalWrite(pinCSN1, CSN_OFF);
@@ -702,11 +680,42 @@ FLASHMEM void setup()
     InitCurrentRadio();
     ThisRadio = 2;
 #endif
+}
+
+/***********************************************************************************************************/
+
+void SetupWatchDog(){
+
     WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
     WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
-    KickTheDog();
+    LastDogKick = millis();
+}
+
+/************************************************************************************************************/
+// SETUP
+/************************************************************************************************************/
+FLASHMEM void setup()
+{
+    SetupPINMODES();
+    TestTheSBUSPin();                   // Check that the SBUS pin is not held low (plug in wrong way round)
+    TestAllPWMPins();                   // Check that the no PWM pins are held low (plug in wrong way round)
+    if (digitalRead(BINDPLUG_PIN)) {
+ //       delay(2500); // Needed so that the Sensor hub can boot first and be detected (no bind plug) IF SENSOR HUB IS USED
+    }
+    else {
+  //      delay(200);
+    }
+    Wire.begin();
+    delay(20);
+    ScanI2c(); // Detect what's connected
+#ifdef USE_STABILISATION
+    if (MPU6050Connected) InitialiseTheMPU6050();
+#endif
+    if (INA219Connected) ina219.begin();
+    SetupRadios();
+    SetupWatchDog();
     ReadBindPlug();
     digitalWrite(LED_PIN, LOW);
 }
