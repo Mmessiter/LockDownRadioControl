@@ -122,7 +122,8 @@ int GetPWMValue(int frequency, int length) {return float(length / (1000000.00 / 
 /************************************************************************************************************/
 void MoveServos()
 {
-    if (!CheckCrazyValues()||(millis() < 7000)) {
+ // if (!CheckCrazyValues()||(millis() < 7000)) {// don't know why this is here
+    if (!CheckCrazyValues()) {
         TurnLedOff();
         for (int j = 0; j < SERVOSUSED; ++j) PreviousData[j] = 0; // Force a send when data is good again
         return;
@@ -656,22 +657,21 @@ FLASHMEM void setup()
     pinMode(BINDPLUG_PIN, INPUT_PULLUP);
     digitalWrite(LED_PIN, HIGH);
     TurnLedOff();
-    if (digitalRead(BINDPLUG_PIN)) {
-        delay(2500); // Needed so that the Sensor hub can boot first and be detected (no bind plug)
+    
+    if (digitalRead(BINDPLUG_PIN)) { // FIX THIS FOR SENSOR HUB
+      //  delay(2500); // Needed so that the Sensor hub can boot first and be detected (bind plug out)
     }
     else {
-        delay(200);
+     //   delay(200);  // Bind plug in
     }
     
     Wire.begin();
-    delay(20);
+    delay(1);
     ScanI2c(); // Detect what's connected
-
 
 #ifdef USE_STABILISATION
     if (MPU6050Connected) InitialiseTheMPU6050();
 #endif
-
 
     if (INA219Connected) ina219.begin();
     teensyMAC(MacAddress);
@@ -688,7 +688,7 @@ FLASHMEM void setup()
 #endif
     digitalWrite(pinCSN1, CSN_ON);
     digitalWrite(pinCE1, CE_ON);
-    delay(4);
+    delay(1);
     InitCurrentRadio();
     ThisRadio = 1;
 
@@ -698,7 +698,7 @@ FLASHMEM void setup()
     digitalWrite(pinCE1, CE_OFF);
     digitalWrite(pinCSN2, CSN_ON);
     digitalWrite(pinCE2, CE_ON);
-    delay(4);
+    delay(1);
     InitCurrentRadio();
     ThisRadio = 2;
 #endif
