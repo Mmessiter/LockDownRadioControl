@@ -19,7 +19,7 @@ void Read_MPU6050(void)
   Wire.write(0x1C);
   Wire.write(0x10);
   Wire.endTransmission();
-  Wire.beginTransmission(0x68);
+  Wire.beginTransmission(0x68);//
   Wire.write(0x3B);
   Wire.endTransmission();
   Wire.requestFrom(0x68, 6);

@@ -71,7 +71,7 @@ void DelayMillis(uint16_t ms) // This replaces any delay() calls
 }   
 /************************************************************************************************************/
 
-void LoadFailSafeData()
+void LoadFailSafeData() //
 {
     uint8_t  FS_Offset = FS_EEPROM_OFFSET;
     uint16_t s[CHANNELSUSED];
@@ -122,8 +122,7 @@ int GetPWMValue(int frequency, int length) {return float(length / (1000000.00 / 
 /************************************************************************************************************/
 void MoveServos()
 {
- // if (!CheckCrazyValues()||(millis() < 7000)) {// don't know why this is here...
-    if (!CheckCrazyValues()) {
+    if (!CheckCrazyValues()||(millis() < 7000)) {
         TurnLedOff();
         for (int j = 0; j < SERVOSUSED; ++j) PreviousData[j] = 0; // Force a send when data is good again
         return;
@@ -653,23 +652,26 @@ FLASHMEM void setup()
     pinMode(pinCE2, OUTPUT);
 #endif
     pinMode(pinCE1, OUTPUT);
+    
     pinMode(BINDPLUG_PIN, INPUT_PULLUP);
     digitalWrite(LED_PIN, HIGH);
-    TurnLedOff();    
-    if (digitalRead(BINDPLUG_PIN)) { // FIX THIS FOR SENSOR HUB
-       delay(2500); // Needed so that the Sensor hub can boot first and be detected (bind plug out)
+    TurnLedOff();
+    if (digitalRead(BINDPLUG_PIN)) {
+        delay(2500); // Needed so that the Sensor hub can boot first and be detected (no bind plug)
     }
     else {
-       delay(250);  // Bind plug in
+        delay(200);
     }
     
     Wire.begin();
-    delay(1);
+    delay(20);
     ScanI2c(); // Detect what's connected
+
 
 #ifdef USE_STABILISATION
     if (MPU6050Connected) InitialiseTheMPU6050();
 #endif
+
 
     if (INA219Connected) ina219.begin();
     teensyMAC(MacAddress);
@@ -686,7 +688,7 @@ FLASHMEM void setup()
 #endif
     digitalWrite(pinCSN1, CSN_ON);
     digitalWrite(pinCE1, CE_ON);
-    delay(1);
+    delay(4);
     InitCurrentRadio();
     ThisRadio = 1;
 
@@ -696,20 +698,17 @@ FLASHMEM void setup()
     digitalWrite(pinCE1, CE_OFF);
     digitalWrite(pinCSN2, CSN_ON);
     digitalWrite(pinCE2, CE_ON);
-    delay(10);
+    delay(4);
     InitCurrentRadio();
     ThisRadio = 2;
 #endif
-   
     WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
     WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
-    LastDogKick = millis();
-    
+    KickTheDog();
     ReadBindPlug();
     digitalWrite(LED_PIN, LOW);
-   
 }
 
 /************************************************************************************************************/

@@ -23,7 +23,7 @@ struct Payload
      **/
 
     uint8_t Purpose = 0; // 0  Purpose
-    uint8_t Byte1   = 0; // 1
+    uint8_t Byte1   = 0; // 1..
     uint8_t Byte2   = 0; // 2
     uint8_t Byte3   = 0; // 3
     uint8_t Byte4   = 0; // 4
