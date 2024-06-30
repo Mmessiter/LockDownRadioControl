@@ -700,12 +700,16 @@ FLASHMEM void setup()
     InitCurrentRadio();
     ThisRadio = 2;
 #endif
+   
     WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
     WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
+    TeensyWatchDog.begin(WatchDogConfig);
+    LastDogKick = millis();
+    
     ReadBindPlug();
     digitalWrite(LED_PIN, LOW);
-    TeensyWatchDog.begin(WatchDogConfig);// ...
+   
 }
 
 /************************************************************************************************************/
