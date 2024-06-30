@@ -4538,15 +4538,15 @@ bool CheckModelName()
 
 /************************************************************************************************************/
 void SimulateCloseDown()
-{ // Because real closedown occurs only after button is released, this function simulates it.
+{                                                   // Because real closedown occurs only after button is released, this function simulates it.
     char ScreenOff[] = "dim=0";
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, 0);
     SendCommand(ScreenOff);
     SaveAllParameters();
-    DelayWithDog(250);
-    digitalWrite(POWER_OFF_PIN, HIGH);
+    DelayWithDog(POWERONOFFDELAY);                   // 10 seconds delay in case button held down too long
+    digitalWrite(POWER_OFF_PIN, HIGH);               // Power off really, eventually ...
 }
 
 /************************************************************************************************************/
@@ -4558,11 +4558,13 @@ void CheckPowerOffButton()
     char            PowerMsg[15];
     char            PowerPre[] = "TURN OFF?! ";
     char            nb[4];
-    char            NotStillConnected[] = "vis StillConnected,0";
-    char            StillConnected[]    = "vis StillConnected,1";
-    char            StillConnectedBox[] = "StillConnected";
+    char            HideStillConnected[]    = "vis StillConnected,0";
+    char            ShowStillConnected[]    = "vis StillConnected,1";
+    char            StillConnectedBox[]     = "StillConnected";
+    
 
-    if (!digitalRead(BUTTON_SENSE_PIN)) {
+    if ((!digitalRead(BUTTON_SENSE_PIN)) && (millis() > POWERONOFFDELAY)) // no power off for first 10 seconds in case button held down too long
+    { // power button is pressed!
         
         if (BoundFlag && ModelMatched)  GotoFrontView();
         
@@ -4583,16 +4585,16 @@ void CheckPowerOffButton()
         TurnOffSecondToGo = PowerOffWarningSeconds;
     }
 
-    if (PowerOffTimer) { // count down started
+    if (PowerOffTimer) {                    // count down started
         if (!PowerWarningVisible) {
-            SendCommand(StillConnected);
-            SaveOneModel(ModelNumber); // in case any trim change etc wasn't saved
+            SendCommand(ShowStillConnected);
+            SaveOneModel(ModelNumber);      // in case any trim change etc wasn't saved (not really needed)
             PowerWarningVisible = true;
         }
     }
     else {
         if (PowerWarningVisible) {
-            SendCommand(NotStillConnected);
+            SendCommand(HideStillConnected);
             PowerWarningVisible = false;
             TurnOffSecondToGo   = PowerOffWarningSeconds;
         }
