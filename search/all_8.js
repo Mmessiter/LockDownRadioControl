@@ -15,7 +15,7 @@ var searchData=
   ['debug_5fprintlnf_12',['debug_printlnf',['../MPU6050__6Axis__MotionApps20_8h.html#ad1937eefa9a7b6d3c9034dd9e62ab114',1,'DEBUG_PRINTLNF:&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#ad1937eefa9a7b6d3c9034dd9e62ab114',1,'DEBUG_PRINTLNF:&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#ad1937eefa9a7b6d3c9034dd9e62ab114',1,'DEBUG_PRINTLNF:&#160;MPU6050_9Axis_MotionApps41.h']]],
   ['debugparameters_13',['DebugParameters',['../radio_8h.html#a06dba33e26647c6312803d2b8f48c9e9',1,'radio.h']]],
   ['debugparamsout_14',['DebugParamsOut',['../transceiver_8h.html#a0cf27bda755aae94a2a8f9d507cb3a14',1,'transceiver.h']]],
-  ['debugtimer_15',['debugtimer',['../SensorHubT32_2src_2main_8cpp.html#a6d8ac148d16fbe92176033a667d3ef8a',1,'DEBUGTIMER:&#160;main.cpp'],['../SensorHubT32_2src_2main_8cpp.html#a7867e45e2d19ce05cda4ef2692ee0dbe',1,'DebugTimer:&#160;main.cpp']]],
+  ['debugtimer_15',['debugtimer',['../SensorHubT32_2src_2main_8cpp.html#a7867e45e2d19ce05cda4ef2692ee0dbe',1,'DebugTimer:&#160;main.cpp'],['../SensorHubT32_2src_2main_8cpp.html#a6d8ac148d16fbe92176033a667d3ef8a',1,'DEBUGTIMER:&#160;main.cpp']]],
   ['decdate_16',['DecDate',['../Utilities_8h.html#ac00389a3b76e3ced4517c6ad4147e86a',1,'Utilities.h']]],
   ['dechour_17',['DecHour',['../Utilities_8h.html#a053bee2e90b7d0bacffe990847973d4a',1,'Utilities.h']]],
   ['decminute_18',['DecMinute',['../Utilities_8h.html#a87fe692c91177cb3eddffaae43ad6d4d',1,'Utilities.h']]],

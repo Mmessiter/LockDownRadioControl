@@ -1,5 +1,8 @@
 var NAVTREEINDEX10 =
 {
+"classMPU9250.html#a472679872163e0c4994ae125982d5fd2":[4,0,5,51],
+"classMPU9250.html#a478a3d1f96f703ce49a8d1794d8ce984":[4,0,5,157],
+"classMPU9250.html#a4818a1d98ba1f54ba37e66421eb7a872":[4,0,5,85],
 "classMPU9250.html#a494b80d59f74314546b4a09d0513cd85":[4,0,5,103],
 "classMPU9250.html#a497013a9b2a7273571fb83c9c2b2266f":[4,0,5,3],
 "classMPU9250.html#a497013a9b2a7273571fb83c9c2b2266fa33dcfe34b71ee693945952cf7d2f4534":[4,0,5,3,6],
@@ -246,8 +249,5 @@ var NAVTREEINDEX10 =
 "classSBUS.html#a44376d88b040d2cdf85f1a6d93633935":[4,0,10,6],
 "classSBUS.html#a58a6caab31090f4019d4f2439ab20fc2":[4,0,10,8],
 "classSBUS.html#a59c19023bc4851dbfddc079761d0af6b":[4,0,10,3],
-"classSBUS.html#a5c2fccbffff0bd17ed522529fd6b2d8f":[4,0,10,2],
-"classSBUS.html#a96b6c9fdafb74f656ee3c476ff40fb23":[4,0,10,10],
-"classSBUS.html#aeb87d0ab21224d4cc84848c93a788848":[4,0,10,11],
-"classSBUS.html#aecb494398de660b416a5619316a4b7af":[4,0,10,9]
+"classSBUS.html#a5c2fccbffff0bd17ed522529fd6b2d8f":[4,0,10,2]
 };

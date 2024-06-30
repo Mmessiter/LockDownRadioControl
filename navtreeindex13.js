@@ -1,5 +1,8 @@
 var NAVTREEINDEX13 =
 {
+"structCD2.html#a386e182bd988a0ab7795cc17c0f96fcc":[4,0,1,1],
+"structCD__buddy.html":[4,0,2],
+"structCD__buddy.html#a6de77aa1a6962b4546a70bf81c121960":[4,0,2,1],
 "structCD__buddy.html#a86614de1d3c268bf88abaac749cb32dd":[4,0,2,0],
 "structPPMArea.html":[4,0,8],
 "structPPMArea.html#a0be2173ac79cabafe4f149db60ce052c":[4,0,8,4],
