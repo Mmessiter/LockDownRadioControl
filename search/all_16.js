@@ -85,7 +85,7 @@ var searchData=
   ['recenttextfile_82',['RecentTextFile',['../1Definitions_8h.html#a850ebf7e5e2cefc8e47c06ad7523e9b8',1,'1Definitions.h']]],
   ['recievercode_83',['RecieverCode',['../RXCODE.html',1,'']]],
   ['reconnect_84',['reconnect',['../common_8h.html#aca314b55765a1c3af5397c0cb3ce47ff',1,'Reconnect():&#160;radio.h'],['../radio_8h.html#aca314b55765a1c3af5397c0cb3ce47ff',1,'Reconnect():&#160;radio.h']]],
-  ['reconnectchannel_85',['reconnectchannel',['../common_8h.html#aff74788ae1118de652848453b4152a9d',1,'ReconnectChannel:&#160;common.h'],['../1Definitions_8h.html#a00c739eb670d33ce9b84f4576a4eb8ff',1,'ReConnectChannel:&#160;1Definitions.h']]],
+  ['reconnectchannel_85',['reconnectchannel',['../1Definitions_8h.html#a00c739eb670d33ce9b84f4576a4eb8ff',1,'ReConnectChannel:&#160;1Definitions.h'],['../common_8h.html#aff74788ae1118de652848453b4152a9d',1,'ReconnectChannel:&#160;common.h']]],
   ['reconnected_86',['Reconnected',['../1Definitions_8h.html#a0f8aa0f6f0fca3b57e848eec8d23724e',1,'1Definitions.h']]],
   ['reconnectedmoment_87',['ReconnectedMoment',['../common_8h.html#ae6657a547a79d8e304b8ddeb3f6a38e0',1,'common.h']]],
   ['reconnectgap_88',['RECONNECTGAP',['../common_8h.html#a00a419fbe253e6e9cb4d716d02d0b2b7',1,'common.h']]],

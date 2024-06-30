@@ -53,7 +53,6 @@ var common_8h =
     [ "SERVO_RESOLUTION", "common_8h.html#ac10969d83b9cdee051df76a50fe6ab93", null ],
     [ "SERVOSUSED", "common_8h.html#ab1515f8a159ef919c7afb5a1d71f55a3", null ],
     [ "STOPLISTENINGDELAY", "common_8h.html#a565d61935c13b35fc13071614aa5b378", null ],
-    [ "USE_11PWM_OUTPUTS", "common_8h.html#acf1ec78d8659aebe3ed98dd2e5b4af65", null ],
     [ "WATCHDOGMAXRATE", "common_8h.html#af3358f12fbced88c655895c7e56f1ca6", null ],
     [ "WATCHDOGTIMEOUT", "common_8h.html#a263fd3c52a680256641d33815e7ef6a4", null ],
     [ "BindModel", "common_8h.html#aa0c6905579a33aef28d737d43676cbbd", null ],
