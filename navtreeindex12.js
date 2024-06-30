@@ -1,5 +1,6 @@
 var NAVTREEINDEX12 =
 {
+"files.html":[5,0],
 "functions.html":[4,3,0],
 "functions.html":[4,3,0,0],
 "functions_a.html":[4,3,0,1],
@@ -10,8 +11,8 @@ var NAVTREEINDEX12 =
 "functions_enum.html":[4,3,3],
 "functions_eval.html":[4,3,4],
 "functions_f.html":[4,3,0,6],
-"functions_func.html":[4,3,1],
 "functions_func.html":[4,3,1,0],
+"functions_func.html":[4,3,1],
 "functions_func_c.html":[4,3,1,1],
 "functions_func_d.html":[4,3,1,2],
 "functions_func_e.html":[4,3,1,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX12 =
 "structCD2.html#a03a8786925e6a47a07d5ea5b7ef7499d":[4,0,1,0],
 "structCD2.html#a386e182bd988a0ab7795cc17c0f96fcc":[4,0,1,1],
 "structCD__buddy.html":[4,0,2],
-"structCD__buddy.html#a6de77aa1a6962b4546a70bf81c121960":[4,0,2,1],
-"structCD__buddy.html#a86614de1d3c268bf88abaac749cb32dd":[4,0,2,0]
+"structCD__buddy.html#a6de77aa1a6962b4546a70bf81c121960":[4,0,2,1]
 };
