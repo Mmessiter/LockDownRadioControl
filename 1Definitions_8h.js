@@ -197,6 +197,7 @@ var 1Definitions_8h =
     [ "PONGY1", "1Definitions_8h.html#a66de0cbabb238c74d05d27b5ec4666f5", null ],
     [ "PONGY2", "1Definitions_8h.html#a4da41663b0c024a528722f4c92cb0850", null ],
     [ "POWER_OFF_PIN", "1Definitions_8h.html#aac8f9c268e406507be95a1255281323c", null ],
+    [ "POWERONOFFDELAY", "1Definitions_8h.html#a667d5d3c603b61d332796ef390f3a785", null ],
     [ "PPMBUDDYFRAMERATE", "1Definitions_8h.html#a382154ba197e2cdf260955df9437b707", null ],
     [ "PPMPORT", "1Definitions_8h.html#a95812254c835135cc2281a48a97d7664", null ],
     [ "PROPOCHANNELS", "1Definitions_8h.html#a19677884790860fea7a21dae72e1b862", null ],

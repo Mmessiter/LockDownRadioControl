@@ -44,11 +44,12 @@ var searchData=
   ['pongy1_41',['PONGY1',['../1Definitions_8h.html#a66de0cbabb238c74d05d27b5ec4666f5',1,'1Definitions.h']]],
   ['pongy2_42',['PONGY2',['../1Definitions_8h.html#a4da41663b0c024a528722f4c92cb0850',1,'1Definitions.h']]],
   ['power_5foff_5fpin_43',['POWER_OFF_PIN',['../1Definitions_8h.html#aac8f9c268e406507be95a1255281323c',1,'1Definitions.h']]],
-  ['ppmbuddyframerate_44',['PPMBUDDYFRAMERATE',['../1Definitions_8h.html#a382154ba197e2cdf260955df9437b707',1,'1Definitions.h']]],
-  ['ppmport_45',['ppmport',['../1Definitions_8h.html#a95812254c835135cc2281a48a97d7664',1,'PPMPORT:&#160;1Definitions.h'],['../common_8h.html#a95812254c835135cc2281a48a97d7664',1,'PPMPORT:&#160;common.h']]],
-  ['printfloatx_46',['printfloatx',['../MPU6050_8cpp.html#a4846b5f0cc3c43f0bd038519c2cc1340',1,'MPU6050.cpp']]],
-  ['progmem_47',['progmem',['../MPU6050__6Axis__MotionApps20_8h.html#a75acaba9e781937468d0911423bc0c35',1,'PROGMEM:&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#a75acaba9e781937468d0911423bc0c35',1,'PROGMEM:&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#a75acaba9e781937468d0911423bc0c35',1,'PROGMEM:&#160;MPU6050_9Axis_MotionApps41.h']]],
-  ['propochannels_48',['PROPOCHANNELS',['../1Definitions_8h.html#a19677884790860fea7a21dae72e1b862',1,'1Definitions.h']]],
-  ['pstr_49',['pstr',['../MPU6050__6Axis__MotionApps20_8h.html#a73809107539df84eaf01f6a4dea4fbff',1,'PSTR:&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#a73809107539df84eaf01f6a4dea4fbff',1,'PSTR:&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#a73809107539df84eaf01f6a4dea4fbff',1,'PSTR:&#160;MPU6050_9Axis_MotionApps41.h']]],
-  ['purple_50',['Purple',['../1Definitions_8h.html#a5168ce33eb581e85fbfa454e89012bfb',1,'1Definitions.h']]]
+  ['poweronoffdelay_44',['POWERONOFFDELAY',['../1Definitions_8h.html#a667d5d3c603b61d332796ef390f3a785',1,'1Definitions.h']]],
+  ['ppmbuddyframerate_45',['PPMBUDDYFRAMERATE',['../1Definitions_8h.html#a382154ba197e2cdf260955df9437b707',1,'1Definitions.h']]],
+  ['ppmport_46',['ppmport',['../common_8h.html#a95812254c835135cc2281a48a97d7664',1,'PPMPORT:&#160;common.h'],['../1Definitions_8h.html#a95812254c835135cc2281a48a97d7664',1,'PPMPORT:&#160;1Definitions.h']]],
+  ['printfloatx_47',['printfloatx',['../MPU6050_8cpp.html#a4846b5f0cc3c43f0bd038519c2cc1340',1,'MPU6050.cpp']]],
+  ['progmem_48',['progmem',['../MPU6050__6Axis__MotionApps20_8h.html#a75acaba9e781937468d0911423bc0c35',1,'PROGMEM:&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#a75acaba9e781937468d0911423bc0c35',1,'PROGMEM:&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#a75acaba9e781937468d0911423bc0c35',1,'PROGMEM:&#160;MPU6050_9Axis_MotionApps41.h']]],
+  ['propochannels_49',['PROPOCHANNELS',['../1Definitions_8h.html#a19677884790860fea7a21dae72e1b862',1,'1Definitions.h']]],
+  ['pstr_50',['pstr',['../MPU6050__6Axis__MotionApps20_8h.html#a73809107539df84eaf01f6a4dea4fbff',1,'PSTR:&#160;MPU6050_6Axis_MotionApps20.h'],['../MPU6050__6Axis__MotionApps__V6__12_8h.html#a73809107539df84eaf01f6a4dea4fbff',1,'PSTR:&#160;MPU6050_6Axis_MotionApps_V6_12.h'],['../MPU6050__9Axis__MotionApps41_8h.html#a73809107539df84eaf01f6a4dea4fbff',1,'PSTR:&#160;MPU6050_9Axis_MotionApps41.h']]],
+  ['purple_51',['Purple',['../1Definitions_8h.html#a5168ce33eb581e85fbfa454e89012bfb',1,'1Definitions.h']]]
 ];

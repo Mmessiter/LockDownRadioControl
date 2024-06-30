@@ -1,5 +1,6 @@
 var NAVTREEINDEX11 =
 {
+"classSBUS.html#aee0b4b879b6415eac8d79879c24bf88d":[4,0,10,0],
 "classVectorFloat.html":[4,0,15],
 "classVectorFloat.html#a112eaf8758a6f51b96ed1ccb71700495":[4,0,15,5],
 "classVectorFloat.html#a2d8e5159f045ca977769d168af75320c":[4,0,15,7],
@@ -248,6 +249,5 @@ var NAVTREEINDEX11 =
 "dir_d97f32bc8f4241c30356624fcd958639.html":[5,0,0,0],
 "elapsedMillis_8h.html":[5,0,0,0,0,2,0],
 "elapsedMillis_8h_source.html":[5,0,0,0,0,2,0],
-"files.html":[5,0],
-"functions.html":[4,3,0]
+"files.html":[5,0]
 };
