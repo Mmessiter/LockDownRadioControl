@@ -656,12 +656,12 @@ FLASHMEM void setup()
     pinMode(BINDPLUG_PIN, INPUT_PULLUP);
     digitalWrite(LED_PIN, HIGH);
     TurnLedOff();    
-    // if (digitalRead(BINDPLUG_PIN)) { // FIX THIS FOR SENSOR HUB
-    //    // delay(2500); // Needed so that the Sensor hub can boot first and be detected (bind plug out)
-    // }
-    // else {
-    //    // delay(150);  // Bind plug in
-    // }
+    if (digitalRead(BINDPLUG_PIN)) { // FIX THIS FOR SENSOR HUB
+       delay(2500); // Needed so that the Sensor hub can boot first and be detected (bind plug out)
+    }
+    else {
+       delay(250);  // Bind plug in
+    }
     
     Wire.begin();
     delay(1);
