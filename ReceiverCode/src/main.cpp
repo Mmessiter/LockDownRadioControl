@@ -653,17 +653,15 @@ FLASHMEM void setup()
     pinMode(pinCE2, OUTPUT);
 #endif
     pinMode(pinCE1, OUTPUT);
-    
     pinMode(BINDPLUG_PIN, INPUT_PULLUP);
     digitalWrite(LED_PIN, HIGH);
-    TurnLedOff();
-    
-    if (digitalRead(BINDPLUG_PIN)) { // FIX THIS FOR SENSOR HUB
-        delay(2500); // Needed so that the Sensor hub can boot first and be detected (bind plug out)
-    }
-    else {
-        delay(200);  // Bind plug in
-    }
+    TurnLedOff();    
+    // if (digitalRead(BINDPLUG_PIN)) { // FIX THIS FOR SENSOR HUB
+    //    // delay(2500); // Needed so that the Sensor hub can boot first and be detected (bind plug out)
+    // }
+    // else {
+    //    // delay(150);  // Bind plug in
+    // }
     
     Wire.begin();
     delay(1);
@@ -698,17 +696,16 @@ FLASHMEM void setup()
     digitalWrite(pinCE1, CE_OFF);
     digitalWrite(pinCSN2, CSN_ON);
     digitalWrite(pinCE2, CE_ON);
-    delay(1);
+    delay(10);
     InitCurrentRadio();
     ThisRadio = 2;
 #endif
     WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
     WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
-    TeensyWatchDog.begin(WatchDogConfig);
-    KickTheDog();
     ReadBindPlug();
     digitalWrite(LED_PIN, LOW);
+    TeensyWatchDog.begin(WatchDogConfig);
 }
 
 /************************************************************************************************************/
