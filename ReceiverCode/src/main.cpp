@@ -122,7 +122,7 @@ int GetPWMValue(int frequency, int length) {return float(length / (1000000.00 / 
 /************************************************************************************************************/
 void MoveServos()
 {
- // if (!CheckCrazyValues()||(millis() < 7000)) {// don't know why this is here
+ // if (!CheckCrazyValues()||(millis() < 7000)) {// don't know why this is here...
     if (!CheckCrazyValues()) {
         TurnLedOff();
         for (int j = 0; j < SERVOSUSED; ++j) PreviousData[j] = 0; // Force a send when data is good again
@@ -705,7 +705,7 @@ FLASHMEM void setup()
     WatchDogConfig.callback = WatchDogCallBack;
     ReadBindPlug();
     digitalWrite(LED_PIN, LOW);
-    TeensyWatchDog.begin(WatchDogConfig);
+    TeensyWatchDog.begin(WatchDogConfig);// ...
 }
 
 /************************************************************************************************************/
