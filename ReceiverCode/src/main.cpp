@@ -659,10 +659,10 @@ FLASHMEM void setup()
     TurnLedOff();
     
     if (digitalRead(BINDPLUG_PIN)) { // FIX THIS FOR SENSOR HUB
-      //  delay(2500); // Needed so that the Sensor hub can boot first and be detected (bind plug out)
+        delay(2500); // Needed so that the Sensor hub can boot first and be detected (bind plug out)
     }
     else {
-     //   delay(200);  // Bind plug in
+        delay(200);  // Bind plug in
     }
     
     Wire.begin();
