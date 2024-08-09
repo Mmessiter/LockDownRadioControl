@@ -1,0 +1,9 @@
+First select a channel by touching it. That channel will be highlighted.||
+
+Then use the slider or the + and - buttons to adjust the subtrim.||
+
+Subtrim is applied always and equally in all banks and is used mainly for getting the centre position of a servo in just the right place for a particular model and function.||
+
+Very large values of subtrim shouldn't be needed. If very large amounts are needed, it'd be  better to modify the mechanical setup such that small amounts are enough.  ||
+
+Subtrim always uses a multiplier of 5 so that it's possible to modify the Trims' 'Trim multiplier' without inadvertently also changing all Subtrims. 

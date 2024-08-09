@@ -1,0 +1,18 @@
+Mixes can be applied to inputs or outputs. If neither is selected , then that mix is not enabled.||
+
+To make a Mix apply to all Banks, enter '0' (zero) as its 'Bank'. ||
+Each 'Master' channel can have many 'Slaves', and each Slave can also have multiple Masters ... just like in ancient Egypt.||
+
+A percentage of the curve that was defined for the Master is passed to each of its Slaves. The Slave's own curve is used when its stick or knob is moved.||
+
+A Slave's end points (as defined in the Slave's curve) are never exceeded.||
+
+A Slave can even have its own Master as its Slave. This is needed for V tails, flaperons, delta wings etc.||
+
+Master-Slave associations are not cascaded. That is, if a Slave is also a Master, its Slave(s) inherit nothing from their Master's Master.||
+
+Selecting 'One direction only' will only move the slave one way of course. This might be needed if for example you want up elevator with left AND right rudder.||
+
+Offset is needed when the default position of the Master channel is not in the centre. Test different values to find which value gets the slave centred when master is at default position.||
+
+The actual value needed for 'Offset' may change when the percentage for that mix changes. In a later version of the firmware this slight annoyance will be fixed! 

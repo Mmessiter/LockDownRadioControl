@@ -1,0 +1,5 @@
+Here you should define how many cells are in the model's LiPo battery, and the type of battery in the transmitter. ||
+
+This information is needed so that the percentage remaining and the average cell voltages can be calculated.||
+
+If '12s' is selected for the receiver, please use a voltage divider to halve the actual voltage sent to the INA219 sensor. The firmware code will do the needed arithmetic and the INA219 voltage sensor cannot cope with more than 26 volts.   

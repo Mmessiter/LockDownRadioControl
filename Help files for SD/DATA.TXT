@@ -1,0 +1,26 @@
+This screen shows some information about the quality of the current connection and other data including GPS if one is connected.||
+
+Units are milliseconds, feet, and centigrade.||
+
+Near the bottom right of this screen are the version numbers for the firmware for the transmitter, the receiver and the Nextion screen. The 'receiver' version number position, when not connected, shows the version number for the firmware in the Nextion screen because it cannot show the receiver version number while not connected. Ideally all three versions should be the same. At least the three numbers should be the same for reliable operation.||
+
+Pressing 'Clear' will zero many parameters.||
+Pressing 'Zero Alt' toggles between altitude relative to sea level, and altitude relative to where the model was when 'Zero Alt' was pressed.|
+Pressing 'Mark here' marks the current location, if GPS was acquired. Thereafter 'Meters to mark' etc. will inform you how far away the model is from the mark.
+
+If you are using a two-transceiver receiver, then this screen shows which is in current use, and how long each was in use so far.
+
+When using SBUS, the receiver maintains the SBUS frame-rate (100 fps) even when it is reconnecting (if this reconnection take longer than about 10 ms). This it does by simply repeating the most recent SBUS packet. These SBUS repeats are counted and shown on this screen. 
+
+'gap' on this screen means the number of milliseconds between losing connection and re-establishing a connection. |
+
+(Note: 100 ms is one tenth of a second.) ||
+
+
+When using FHSS (as this radio-system does) it is likely, especially in the presence of WiFi etc., that the occasional lost packet will occur due to momentary collisions of frequencies. Recovery of connection after this usually takes less than a tenth of a second so it usually goes unnoticed to the pilot. ||
+
+This radio system hops between 83 different frequencies between 2.401 GHz and 2.483 GHz. The frequency hopping sequence is pseudo-random. There are 20 hops per second, and 10 data packets are sent for each hop. So the frame rate to the model is 200Hz. The transmission power use is 100 mW.||
+
+When Buddy-boxing wirelessly, the Master exchanges data packets with the pupil also at a rate of 200 per second. Hence the Master transmitter is, under these circumstances, sending a total of 400 packets per second: 200 to the model, and 200 to the pupil. The pupil includes in its acknowledgements' data packets, the position of all of its channels so that the Master can use these when needed. The pupil should stand not too far away from the Master as this range is much less than that to the model.||
+
+The maximum range to the model is about 2 kilometres under ideal conditions.
