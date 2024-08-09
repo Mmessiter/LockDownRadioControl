@@ -271,8 +271,10 @@ void SendSpecialPacket()
     // if ((millis() - LedGreenMoment > 5000)){                             // Allowing the buddy time to select the model
     //       DoTheShorterSpecialPacket();                                   // Send the shorter packet    (no model ID sent)        
     // }else{
-             DoTheLongerSpecialPacket();                                    // Send the longer packet (model ID sent) EVERYTIME?!
-    // }  
+
+             DoTheLongerSpecialPacket();                                    // Send the longer packet (model ID sent) EVERYTIME!
+  
+   // }  
     ChangeTXTarget(CurrentChannel,TeensyMACAddPipe,DATARATE);               // Set the TX target back to the receiver in model.
 }
 
