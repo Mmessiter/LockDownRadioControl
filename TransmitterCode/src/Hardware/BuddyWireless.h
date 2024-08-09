@@ -265,7 +265,7 @@ void SendSpecialPacket()
     static uint32_t LocalTimer = 0;
    
     if ((!BoundFlag || !ModelMatched  || (PupilIsAlive != 1))){          
-        if (((millis() - LocalTimer) < 100)) return;    //
+        if (((millis() - LocalTimer) < 100)) return;    
             LocalTimer = millis();
     }
     // if ((millis() - LedGreenMoment > 5000)){                             // Allowing the buddy time to select the model
