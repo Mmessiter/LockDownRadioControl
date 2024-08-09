@@ -234,30 +234,30 @@ void DoTheLongerSpecialPacket(){
  }
 // ************************************************************************************************************
 
-void DoTheShorterSpecialPacket(){  // here must tell buddy who has motor switch 
+// void DoTheShorterSpecialPacket(){  // here must tell buddy who has motor switch 
     
-    GetCommandbytes(&ShorterSpecialPacketData.Command[0], &ShorterSpecialPacketData.Command[1]);
+//     GetCommandbytes(&ShorterSpecialPacketData.Command[0], &ShorterSpecialPacketData.Command[1]);
 
-    ChannelSentLastTime = ShorterSpecialPacketData.Channel;                        // Use the old channel number because Buddy hasn't yet hopped
-    --Index; if (Index < 1) Index = 82;                                            // use the same array but in reverse order
+//     ChannelSentLastTime = ShorterSpecialPacketData.Channel;                        // Use the old channel number because Buddy hasn't yet hopped
+//     --Index; if (Index < 1) Index = 82;                                            // use the same array but in reverse order
    
-    ShorterSpecialPacketData.Channel = FHSS_data::FHSS_Channels[Index];            // Set the  new channel number for next time
-    if (NeedToRecover) ShorterSpecialPacketData.Channel = QUIETCHANNEL;            // If contact lost, then use the recovery channel to recover
+//     ShorterSpecialPacketData.Channel = FHSS_data::FHSS_Channels[Index];            // Set the  new channel number for next time
+//     if (NeedToRecover) ShorterSpecialPacketData.Channel = QUIETCHANNEL;            // If contact lost, then use the recovery channel to recover
     
-    ChangeTXTarget(ChannelSentLastTime,TeensyMACAddPipe ^ ENCRYPT_KEY, FASTDATARATE);// Set the TX target to the Buddy
+//     ChangeTXTarget(ChannelSentLastTime,TeensyMACAddPipe ^ ENCRYPT_KEY, FASTDATARATE);// Set the TX target to the Buddy
     
-    if (Radio1.write(&ShorterSpecialPacketData, sizeof ShorterSpecialPacketData)) {  // Send the shorter packet
+//     if (Radio1.write(&ShorterSpecialPacketData, sizeof ShorterSpecialPacketData)) {  // Send the shorter packet
                                                
-        GetPupilAck();                                                          // Get ack from pupil WITH HIS CONTROL DATA!!
-        PupilDetected(true);                                                    // Pupil is alive
-        NeedToRecover = false;                                                  // No need to recover             
-    } else {
-        PupilDetected(false);                                                   // Pupil is dead
-        NeedToRecover = true;                                                   // Need to recover  
-        ShorterSpecialPacketData.ResendAllChannels = true;                      // Please resend all channels      
+//         GetPupilAck();                                                          // Get ack from pupil WITH HIS CONTROL DATA!!
+//         PupilDetected(true);                                                    // Pupil is alive
+//         NeedToRecover = false;                                                  // No need to recover             
+//     } else {
+//         PupilDetected(false);                                                   // Pupil is dead
+//         NeedToRecover = true;                                                   // Need to recover  
+//         ShorterSpecialPacketData.ResendAllChannels = true;                      // Please resend all channels      
                  
-    }
-}
+//     }
+// }
 
 //*************************************************************************************************************************
 void SendSpecialPacket()                                                   
