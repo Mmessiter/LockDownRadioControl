@@ -1166,7 +1166,6 @@ Payload AckPayload;
 
 const uint8_t AckPayloadSize = sizeof(AckPayload); // i.e. 6
 
-
 struct spd // Special Packet Data for Wireless Buddy functions
     {
         uint8_t     Command[2];
@@ -1176,23 +1175,11 @@ struct spd // Special Packet Data for Wireless Buddy functions
     };
 spd SpecialPacketData; // longer version
 
-
-
-struct spds // Shorter Special Packet Data for Wireless Buddy functions
-    {
-        uint8_t     Command[2];
-        uint8_t     Channel = QUIETCHANNEL;
-        bool        ResendAllChannels = true;
-    };
-spds ShorterSpecialPacketData;
-
 bool MasterIsInControl = true; 
 
      bool     NeedToRecover       = false;
      uint8_t  ChannelSentLastTime = 0;                                // The old channel number
      uint8_t  Index               = 82; 
-
-
 
 // *****************************************************************************************************************
 
