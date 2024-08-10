@@ -1,6 +1,6 @@
 Buddy-Boxing:||
 
-This feature allows dual control which is probably essential when teaching beginners to fly.||
+This feature allows 'dual control' which is really handy when teaching beginners to fly.||
 
 It needs two transmitters of course, one for the 'Master' and one for the pupil.||
 
@@ -9,6 +9,8 @@ The Master uses a switch on the Master's transmitter to give control to the Budd
 When using the Buddy box feature, a switch on the Master transmitter must be defined as 'Buddy'. It's probably best if this is a spring-return switch because then simply releasing the switch will return full control to the Master instantly. ||
 
 On the Master transmitter, you can select which channels are enabled for the Buddy. Any channels not selected will remain always under the control of the Master even after selecting Buddy with the switch.||
+
+On that same screen, near the bottom, you can control whether Master or Buddy 'switches' will be used when Buddy is in control. In general it's probably better NOT to give Buddy control of the switches, especially for a beginner. That way the Master can always control motor on/off, safety, Bank and Rates. But if the buddy is more advanced and is perhaps learning to do autorotations with a helicopter, he or she will ideally need to control these switches too when in control. When Master is in control, Master's switches are always used.
 
 The same model memory should be loaded on both transmitters, and the Buddy (pupil) needs to know the ID of the Master transmitter. Both of these are easily achieved by sending the model memory from the Master to the pupil wirelessly. Embedded in the data sent is the needed ID of the sending transmitter. ||
 
@@ -20,12 +22,12 @@ The wireless buddy feature is even supported when using a third party transmitte
 
 Wired Buddy-Boxing:||
 
-Wired buddy-boxing is also supported. On rare occasions this might be desirable if interference is suspected.||
+Wired buddy-boxing is also supported. This is supported because it was implemented first; but it's hard to think of an occasion when you'd actually want to use it.||
 
 Connect the two transmitters with a normal 3.5 mm jack audio cable, mono or stereo.||
 
 The selected buddy channels are saved on a per model basis.||
 
-After changing buddy-box settings, the transmitter should be re-started.||
+After changing buddy-box settings, the transmitters should be re-started.||
 
 
