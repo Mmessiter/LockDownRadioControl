@@ -1,4 +1,8 @@
 // *************************************** BuddyPPM.h  *****************************************
+// This file does Buddy by a wire and PPM. 
+// It's very rarely used now, but it's here for those who want to use it.
+// The new Wireless Buddy function is just better in many ways.
+
 #include <Arduino.h>
 #include "Hardware/1Definitions.h"
 
