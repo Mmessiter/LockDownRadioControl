@@ -42,8 +42,8 @@ Here is a summary of the features this radio offers at the time of writing (Augu
 18. User mapped input and output channels.
 19. 5 point editable curves for every channel and every flight mode. Supports straight, smoothed, and expo.
 20. Failsafe.
-21. User definalble switches.
-22. Digital trims, rates, subtrim, servo reverse, servo speeds, macros, timer, log files, etc.
+21. 4 user definable switches.
+22. Digital trims, rates, subtrim, servo reverse, servo speeds, macros, timer, log files, etc., etc.
 23. Support for SBUS, PWM (with definable frequency and centre position), and PPM.
 24. Support for third party transmitter models (JR type).
 
