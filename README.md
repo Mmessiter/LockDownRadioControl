@@ -1,5 +1,6 @@
 
 # Lockdown Radio Control
+![Image](./Images/TX_and_RX.jpg)
 ## Introduction
 
 This is a very full featured 16 channel Radio Control system for models of all kinds. I've been developing this project since Lockdown in May 2020. 
