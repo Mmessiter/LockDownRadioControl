@@ -19,7 +19,7 @@ The recommended transceivers are Ebyte's **ML01DP5** for the transmitter, and tw
 
 The screen is a **Nextion NX8048P050 5" Capacitive touch screen**.
 
-The cases for the transmitter and recevier are 3D printed in whatever plastic you prefer. I prefer PETG.
+The cases for the transmitter and receiver are 3D printed in whatever plastic you prefer. I prefer PETG.
 
 This repository contains not only the code for the transmitter, its screen and the receiver; but also the Gerble files for the printed circuit boards, the .STL files for the cases etc. and the text files for the help screens (to go onto the SD card.). So there's nothing to stop anyone from buiding one.
 
@@ -36,11 +36,7 @@ New features are added from time to time, especially when requested by users and
 
 
 Here is a brief summary of the features supported at the time of writing (August 2024): -
-
-* 16 Channels.
-* Range of about 2 kilometres.
-* Very easy to use touch screen graphic user interface.
-* 4 flight modes (or banks).
+receiver
 * 32 mixes (mix inputs or outputs).
 * 90 model memories.
 * 11 PWM servo outputs.
