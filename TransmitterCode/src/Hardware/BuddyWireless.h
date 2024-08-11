@@ -7,8 +7,8 @@
 #ifndef BUDDYWIRELESS_H
     #define BUDDYWIRELESS_H
 
-    #define LOSTCONTACTTHRESHOLD 100             // 100 fails in a row and we declare the buddy or master dead
-    #define ENCRYPT_KEY          0xFEADFEADBB   // The encryption key is used for the Pipe address between the transmitters 
+    #define LOSTCONTACTTHRESHOLD 100             // 100 fails in a row and we declare the buddy or master dead (0.5 seconds)
+    #define ENCRYPT_KEY          0xFEADFEADBB    // The encryption key is used for the Pipe address between the transmitters 
    
 // ********* BIT MAPPED SWITCH POSITIONS ENCODING IN CONTROL BYTE FROM MASTER TO PUPIL ************************************
 //     BIT 0 is the BUDDY'S SWITCHES ENABLED
