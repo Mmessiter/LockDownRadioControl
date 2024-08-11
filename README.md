@@ -6,19 +6,21 @@ I started this project during Lockdown (May 2020) because I've always loved flyi
 
 Back then, I didn't expect it to become useful for flying expensive models. But after flying all my models with it for about 4 years without even one failure, I am delighted to say it's now proven to be at least as good as, and in many respects better than, commercially available systems. 
 
-It is also **much** cheaper than an equivalent commercial system. I estimate the cost to be only around £120 per transmitter, and around £35 per receiver depending on where you buy the components. If you would like to have one, I'll be happy to help. 
+It is also **cheaper** than an equivalent commercial system. I doubt that a truly equivalent commercial system even exists. 
 
-Just email me: Malcolm Messiter (mmessiter@gmail.com)
+I estimate the cost to be only around £120 per transmitter, and around £35 per receiver depending on where you buy the components. 
+
+Anyone can build one. If you would like to I'll be happy to help you.  Just email me: Malcolm Messiter (**mmessiter@gmail.com**)
 
 ## Features 
 
 The microcontroller is an **ARM Cortex M7 (at 600 Mhz)**. These are on the Teensy 4.1 and 4.0 boards.
 The strongly recommended transceivers to use are Ebyte's **ML01DP5** for the transmitter, and two **ML01SP4**s for the receiver. 
 
-Almost any nRF24L01+ could be used, but testing was done using only the recommended Ebyte transceivers.
+Almost any nRF24L01+ *could* be used, but testing was done using only the recommended Ebyte transceivers.
 
 New features are added from time to time, especially when requested by users. 
-Here is a summary of the features this radio offers at the time of writing (August 2024).
+Here is a summary of the features this radio offers at the time of writing (August 2024): -
 
 1. 16 Channels.
 2. Range of about 2 kilometers.
@@ -32,8 +34,8 @@ Here is a summary of the features this radio offers at the time of writing (Augu
 10. 12 BIT resolution.
 11. Wireless Buddy Box for training beginners.
 12. "AMS" (**A**utomatic **M**odel **S**election) loads correct model memory automatically on connection to model. 
-13. Buddy transmitter automatically loads the same model as Master has loaded.
-14. Wireless model memory exchange. This allows sharing model memories without removing SD card.
+13. **Buddy** transmitter also automatically loads the same model memory as **Master** has loaded.
+14. Wireless model memory sharing. This allows copying model memories across to another transmitter without removing any SD cards.
 15. Telemetry including model volts (and GPS, temperature & barometric pressure, when using custom sensor hub)
 16. Speaker gives critical voice messages and other audio prompts.
 17. User defined Channel names.
