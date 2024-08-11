@@ -21,7 +21,7 @@ Here is a brief summary of the features this radio offers at the time of writing
 6. 90 model memories.
 7. Model memory backup and restore using internal SD card.
 8. FHSS at 50Hz on the 2.4 Ghz waveband.
-9. "AMS" (automatic model match) loads correct model memory automatically on connection to model. 
+9. "AMS" (**A**utomatic **M**odel **S**election) loads correct model memory automatically on connection to model. 
 10. Wireless Buddy Box
 11. Using AMS, Buddy always loads the same model as Master has loaded, automatically.
 12. Wireless model memory exchange. This allows sharing model memories without removing SD card.
