@@ -42,6 +42,7 @@ Here is a brief summary of the features supported at the time of writing (August
 * 4 flight modes (or banks).
 * 32 mixes (mix inputs or outputs).
 * 90 model memories.
+* 11 PWM servo outputs.
 * Model memory backup and restore using internal SD card.
 * 50 Hz FHSS at using 82 separate frequencies on the 2.4 GHz ISM waveband.
 * 200 Hz frame rate for very low latency.
