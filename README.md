@@ -2,11 +2,13 @@
 # LockDownRadioControl
 This is a very full featured 16 channel Radio Control system for models of all kinds. 
 
-I started this project during Lockdown (May 2020) because I've always loved flying model aircraft - and for a while we all had to stay busy at home! 
+I started this project during Lockdown (May 2020) because I've always loved flying R/C model aircraft - and during Lockdown we all had to stay busy at home! 
 
-Back then, I didn't expect it to become useful for flying expensive models. But after flying all my models with it for about 4 years, without even one failure, I am delighted to say it's now proven to be at least as good as, and maybe better than, commercially available systems. 
+Back then, I didn't expect it to become useful for flying expensive models. But after flying all my models with it for about 4 years without even one failure, I am delighted to say it's now proven to be at least as good as, and in many respects better than, commercially available systems. 
 
-It is also much cheaper than an equivalent commercial system. I estimate the cost to be around £120 per transmitter, and around £35 per receiver depending on where you buy the components.
+It is also **much** cheaper than an equivalent commercial system. I estimate the cost to be only around £120 per transmitter, and around £35 per receiver depending on where you buy the components. If you would like to have one, I'll be happy to help. 
+
+Just email me: Malcolm Messiter (mmessiter@gmail.com)
 
 ## Features 
 
