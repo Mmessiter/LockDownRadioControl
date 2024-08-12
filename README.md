@@ -36,7 +36,6 @@ New features are added from time to time, especially when requested by users and
 
 
 Here is a brief summary of the features supported at the time of writing (August 2024): -
-receiver.
 
 * 16 Channels. 
 * 4 flight modes.
