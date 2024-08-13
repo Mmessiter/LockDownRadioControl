@@ -8,7 +8,7 @@ This is a very full featured 16 channel Radio Control system for models of all k
 
 I and several friends have flown many models with it for about 4 years so far, without _even one_ problem.
 
-It's proven to be at least as good as, and in many respects better than, popular commercially available radio control systems, and indeed other open source radios.
+It's proven to be at good as, and in some respects better than, popular commercially available radio control systems, and indeed other open source radios.
 
 It is also **far cheaper**. Though I doubt that a really equivalent commercial system even exists.
 
