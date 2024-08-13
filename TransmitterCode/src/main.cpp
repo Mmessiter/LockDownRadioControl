@@ -1016,8 +1016,8 @@ FLASHMEM void setup()
     GotoFrontView();
     SetAudioVolume(AudioVolume);
     if (PlayFanfare) {
-        PlaySound(THEFANFARE);
-        DelayWithDog(4000); // Fanfare takes about 4 seconds
+        PlaySound(WINDOWS1);
+        DelayWithDog(3000); // Fanfare takes about 4 seconds
     }
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
@@ -4595,7 +4595,7 @@ void CheckPowerOffButton()
             if (TurnOffSecondToGo <= 0) {  // Time's up!
                 if (UseLog) LogPowerOff(); // log the event
                 if (PlayFanfare) {
-                    PlaySound(WHAHWHAHMSG);
+                    PlaySound(WINDOWS2);
                     DelayWithDog(2300);
                 }
                 SimulateCloseDown();

@@ -11,9 +11,6 @@
 void CompareModelsIDs()
 {                                       // The saved MacAddress is compared with the one just received from the model ... etc ...
     uint8_t SavedModelNumber = ModelNumber;
-    char NotFound[] = "           ** WARNING! **\r\n\r\n   Model memory not found!\r\n If correct, please store its ID.";
-    
-    
     if (BuddyPupilOnWireless) return;   //  Don't do this if we are a pupil
     if (BuddyON) return;                //  Don't do this if buddy is on
     if (ModelMatched) return;           //  must not change when model connected
@@ -53,11 +50,12 @@ void CompareModelsIDs()
                 }
                 else 
                 {
-                ModelNumber = SavedModelNumber;  // on second thoughts, just use the saved one
-                ReadOneModel(ModelNumber);
-                BindNow();
-                if (UseLog) LogModelNotFound();
-                MsgBox(pFrontView, NotFound);   //  Tell the user it's not found
+                    ModelNumber = SavedModelNumber;  // on second thoughts, just use the saved one
+                    ReadOneModel(ModelNumber);
+                    if (UseLog) LogModelNotFound();
+                    PlaySound(NOTFOUND);
+                    DelayWithDog(2000);
+                    BindNow();
                 }
             }
             if (!AutoModelSelect) 

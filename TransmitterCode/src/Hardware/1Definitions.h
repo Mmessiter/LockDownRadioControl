@@ -324,6 +324,11 @@
     #define MMSAVED         72
     #define SAFEON          73
     #define SAFEOFF         74
+    #define NOTFOUND        75 // or 33 !! :-)
+    #define WINDOWS1        76
+    #define WINDOWS2        77
+    
+
 
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
