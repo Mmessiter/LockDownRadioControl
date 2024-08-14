@@ -4530,7 +4530,8 @@ void SimulateCloseDown()
     analogWrite(REDLED, 0);
     SendCommand(ScreenOff);
     SaveAllParameters();
-    DelayWithDog(POWERONOFFDELAY);                   // 10 seconds delay in case button held down too long
+    if (PlayFanfare) PlaySound(WINDOWS2);            // Play the fanfare
+    DelayWithDog(POWERONOFFDELAY);                   // 2 seconds delay in case button held down too long
     digitalWrite(POWER_OFF_PIN, HIGH);               // Power off really, eventually ...
 }
 
@@ -4594,10 +4595,6 @@ void CheckPowerOffButton()
             SendText(StillConnectedBox, PowerMsg);
             if (TurnOffSecondToGo <= 0) {  // Time's up!
                 if (UseLog) LogPowerOff(); // log the event
-                if (PlayFanfare) {
-                    PlaySound(WINDOWS2);
-                    DelayWithDog(2300);
-                }
                 SimulateCloseDown();
             }
             --TurnOffSecondToGo;

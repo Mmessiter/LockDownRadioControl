@@ -39,12 +39,13 @@ bool LoadCorrectModel(uint64_t ModelID){                                        
         UpdateModelsNameEveryWhere();                                           //  Show it everywhere.
         SaveAllParameters();                                                    //  Save it
         GotoFrontView();                                                        //  pretty obvious really
+        FailedID = 0;                                                           //  Reset the failed ID
         return true;                                                            //  Success
     }else{
+        PlaySound(NOTFOUND);                                                    //  Play the not found sound
         ModelNumber = SavedModelNumber;                                         //  Restore the current model number 
         FailedID = ModelID;                                                     //  Save the failed ID so we don't try again
         ReadOneModel(ModelNumber);                                              //  Restore the current model                                              
-        PlaySound(NOTFOUND);                                                    //  Play the not found sound
         GotoFrontView();                                                        //  pretty obvious really   
         UpdateModelsNameEveryWhere();                                           //  Show model name everywhere.
         return false;                                                           //  Failed to match the model
