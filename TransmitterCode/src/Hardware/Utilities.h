@@ -144,6 +144,12 @@ uint8_t Ascii(char c)
 void PlaySound(uint16_t TheSound)
 { // Plays a sound identified by a number
 
+    static uint32_t SoundTimer = millis();
+    static uint16_t LastSound   = 0;
+    uint32_t m = millis(); // one call to millis() is enough
+    if (((m - SoundTimer) < 1000) && (m > 5000)  && (TheSound == LastSound)) return; // prevent sound repeats
+    SoundTimer = millis();
+    LastSound = TheSound;
     char Sound[20];
     char SoundPrefix[]  = "play 0,";
     char SoundPostfix[] = "0";
