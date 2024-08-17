@@ -7,6 +7,116 @@
 #ifndef LOGFILES_H
     #define LOGFILES_H
 
+/******************************************************************************************************************************/
+void          LogAverageFrameRate(){
+    char TheText[] = "Average frame rate: ";
+    char buf[40]   = " ";
+    char NB[10];
+    char fps[]     = " fps";
+    Str(NB, AverageFrameRate, 0);
+    strcpy(buf, TheText);
+    strcat(buf, NB);
+    strcat(buf, fps);
+    LogText(buf, sizeof(buf));
+}
+
+/******************************************************************************************************************************/
+// This function logs the number of minutes the motor has been running
+
+void   LogTimer(uint32_t Mins){
+    char TheText[] = "Motor running for ";
+    char buf[40]   = " ";
+    char NB[10];
+    Str(NB, Mins, 0);
+    strcpy(buf, TheText);
+    strcat(buf, NB);
+    strcat(buf, " minute");
+    if (Mins > 1) strcat(buf, "s");
+    LogText(buf, sizeof(buf));
+}
+
+/*********************************************************************************************************************************/
+// This function now scrolls by loading only part of the text file
+// This allows very long files to be handled ok.
+
+void ReadTextFile(char* fname, char* htext, uint16_t StartLineNumber, uint16_t MaxLines)
+{
+#define MAXWIDTH 68
+    char     errormsg[]     = "File not found! -> ";
+    uint16_t LineCounter    = 0;
+    uint16_t StopLineNumber = 0;
+    uint16_t i              = 0;
+    uint8_t  Column         = 0;
+    File     fnumber;
+
+    char crlf[]         = {13, 10, 0};
+    char a[]            = " ";
+    char dots[]         = "(Hit 'Down' for more ...) ";
+    char dots1[]        = "(Hit 'Up' to scroll up ...) ";
+    char slash[]        = "/";
+    char OpenBracket[]  = "( ";
+    char CloseBracket[] = " )";
+    char SearchFile[40];
+
+    StopLineNumber = StartLineNumber + MaxLines;
+    strcpy(SearchFile, slash);
+    strcat(SearchFile, fname);
+    strcpy(htext, OpenBracket);
+    strcat(htext, SearchFile);
+    strcat(htext, CloseBracket);
+    strcat(htext, crlf);
+    strcat(htext, crlf);
+    if (StartLineNumber > 1) {
+        strcat(htext, crlf);
+        strcat(htext, dots1);
+        strcat(htext, crlf);
+    }
+
+    ThereIsMoreToSee = false;
+    fnumber          = SD.open(SearchFile, FILE_READ);
+    if (fnumber) {
+        while (fnumber.available() && i < (MAXFILELEN - 10)) {
+            a[0] = fnumber.read(); //  Read in one byte at a time.
+            if (a[0] == '|') {     //  New Line character = '|'
+                if ((LineCounter >= StartLineNumber) && (LineCounter <= StopLineNumber)) {
+                    strcat(htext, crlf);
+                    ++i;
+                    ++i;
+                }
+                Column = 0;
+                ++LineCounter;
+                a[0] = 34; // a '34'  ( " ) is ignored.
+            }
+            if (Column >= MAXWIDTH) {
+                Column = WordWrap(htext);
+                ++LineCounter;
+            }
+            if ((a[0] == 13) || (a[0] == 10)) a[0] = 34; // Ignore CrLfs
+            if (a[0] != 34) {
+                if ((LineCounter >= StartLineNumber) && (LineCounter <= StopLineNumber)) {
+                    strcat(htext, a);
+                    ++Column;
+                    ++i;
+                }
+            }
+            if (LineCounter > StopLineNumber) {
+                strcat(htext, crlf);
+                strcat(htext, dots);
+                ThereIsMoreToSee = true;
+                break;
+            }
+        }
+    }
+    else
+    {
+        strcpy(htext, errormsg);
+        strcat(htext, fname);
+    }
+    fnumber.close();
+}
+
+
+
 /************************************************************************************************************/
 FASTRUN void CreateTimeStamp(char* DateAndTime)
 {
@@ -190,6 +300,7 @@ FASTRUN void LogDisConnection()
     LogTotalLostPackets();
     LogTotalGoodPackets();
     LogOverallSuccessRate();
+    LogAverageFrameRate();
 }
 // ************************************************************************
 FASTRUN void LogNewBank()
@@ -319,7 +430,9 @@ LogPowerOn()
 FASTRUN void LogPowerOff()
 {
     char Ltext[] = "Power OFF";
+    char sp[]    = "*******************************************";
     LogText(Ltext, strlen(Ltext));
+    LogText(sp, strlen(sp));
 }
 
 // ************************************************************************
@@ -334,7 +447,7 @@ FASTRUN void LogThisModel()
 }
 // ************************************************************************
 
-void ShowLogFile(uint8_t StartLine)
+void ShowLogFile(uint16_t StartLine)
 {
     char TheText[MAXFILELEN + 10]; // MAX = 5K or so
     char LogTeXt[] = "LogText";

@@ -199,6 +199,7 @@ void RedLedOn()
     if (LedWasGreen) {
         if (AnnounceConnected & !WirelessBuddy) PlaySound(DISCONNECTEDMSG);
         if (UseLog) LogDisConnection(); 
+        
         ClearMostParameters();
         if (CurrentView == FRONTVIEW) {
             SendText(FrontView_Connected, na);
@@ -300,6 +301,7 @@ FASTRUN void ShowMotorTimer()
         if ((Mins <= 10) && (Mins > 0)) {
             PlaySound(Recording[Mins - 1]);
         }
+        if (Mins) LogTimer(Mins);
         if (TimerDownwards) {
             if ((!Mins) && (!Secs) && (ElapsedSeconds > 2)) {
                 PlaySound(STORAGECHARGE); // = Stop Flyfing!
@@ -1203,85 +1205,7 @@ uint16_t WordWrap(char* htext)
     strcpy(htext, temp1);
     return len;
 }
-/*********************************************************************************************************************************/
-// This function now scrolls by loading only part of the text file
-// This allows very long files to be handled ok.
 
-void ReadTextFile(char* fname, char* htext, uint8_t StartLineNumber, uint8_t MaxLines)
-{
-#define MAXWIDTH 68
-    char     errormsg[]     = "File not found! -> ";
-    uint16_t LineCounter    = 0;
-    uint16_t StopLineNumber = 0;
-    uint16_t i              = 0;
-    uint8_t  Column         = 0;
-    File     fnumber;
-
-    char crlf[]         = {13, 10, 0};
-    char a[]            = " ";
-    char dots[]         = "(Hit 'Down' for more ...) ";
-    char dots1[]        = "(Hit 'Up' to scroll up ...) ";
-    char slash[]        = "/";
-    char OpenBracket[]  = "( ";
-    char CloseBracket[] = " )";
-    char SearchFile[40];
-
-    StopLineNumber = StartLineNumber + MaxLines;
-    strcpy(SearchFile, slash);
-    strcat(SearchFile, fname);
-    strcpy(htext, OpenBracket);
-    strcat(htext, SearchFile);
-    strcat(htext, CloseBracket);
-    strcat(htext, crlf);
-    strcat(htext, crlf);
-    if (StartLineNumber > 1) {
-        strcat(htext, crlf);
-        strcat(htext, dots1);
-        strcat(htext, crlf);
-    }
-
-    ThereIsMoreToSee = false;
-    fnumber          = SD.open(SearchFile, FILE_READ);
-    if (fnumber) {
-        while (fnumber.available() && i < (MAXFILELEN - 10)) {
-            a[0] = fnumber.read(); //  Read in one byte at a time.
-            if (a[0] == '|') {     //  New Line character = '|'
-                if ((LineCounter >= StartLineNumber) && (LineCounter <= StopLineNumber)) {
-                    strcat(htext, crlf);
-                    ++i;
-                    ++i;
-                }
-                Column = 0;
-                ++LineCounter;
-                a[0] = 34; // a '34'  ( " ) is ignored.
-            }
-            if (Column >= MAXWIDTH) {
-                Column = WordWrap(htext);
-                ++LineCounter;
-            }
-            if ((a[0] == 13) || (a[0] == 10)) a[0] = 34; // Ignore CrLfs
-            if (a[0] != 34) {
-                if ((LineCounter >= StartLineNumber) && (LineCounter <= StopLineNumber)) {
-                    strcat(htext, a);
-                    ++Column;
-                    ++i;
-                }
-            }
-            if (LineCounter > StopLineNumber) {
-                strcat(htext, crlf);
-                strcat(htext, dots);
-                ThereIsMoreToSee = true;
-                break;
-            }
-        }
-    }
-    else
-    {
-        strcpy(htext, errormsg);
-        strcat(htext, fname);
-    }
-    fnumber.close();
-}
 
 /*********************************************************************************************************************************/
 /** @brief Discover which channel to setup */
@@ -4530,9 +4454,10 @@ void SimulateCloseDown()
     analogWrite(REDLED, 0);
     SendCommand(ScreenOff);
     SaveAllParameters();
-    if (PlayFanfare) PlaySound(WINDOWS2);            // Play the fanfare
-    DelayWithDog(POWERONOFFDELAY);                   // 2 seconds delay in case button held down too long
-    digitalWrite(POWER_OFF_PIN, HIGH);               // Power off really, eventually ...
+    if (UseLog) LogPowerOff();                        // log the event
+    if (PlayFanfare) PlaySound(WINDOWS2);             // Play the fanfare
+    DelayWithDog(POWERONOFFDELAY);                    // 2 seconds delay in case button held down too long
+    digitalWrite(POWER_OFF_PIN, HIGH);                // Power off really, eventually ...
 }
 
 /************************************************************************************************************/
@@ -4594,7 +4519,6 @@ void CheckPowerOffButton()
             strcat(PowerMsg, nb);
             SendText(StillConnectedBox, PowerMsg);
             if (TurnOffSecondToGo <= 0) {  // Time's up!
-                if (UseLog) LogPowerOff(); // log the event
                 SimulateCloseDown();
             }
             --TurnOffSecondToGo;

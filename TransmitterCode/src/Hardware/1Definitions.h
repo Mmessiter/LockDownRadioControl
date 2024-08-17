@@ -519,7 +519,7 @@ void          LogConnection();
 void          LogDisConnection();
 void          CloseLogFile();
 void          StartLogFile();
-void          ShowLogFile(uint8_t StartLine);
+void          ShowLogFile(uint16_t StartLine);
 void          LogLongestGap();
 void          LogThisModel();
 void          Force_ReDisplay();
@@ -527,6 +527,9 @@ FASTRUN void  Compress(uint16_t* compressed_buf, uint16_t* uncompressed_buf, uin
 FASTRUN void  Decompress(uint16_t* uncompressed_buf, uint16_t* compressed_buf, uint8_t uncompressed_size);
 FASTRUN void  BufferTeensyMACAddPipe();
 void          ExecuteMacro();
+void          LogTimer(uint32_t Mins);
+FASTRUN void  LogText(char* TheText, uint16_t len);
+void          LogAverageFrameRate();
 
 template<typename any>
 void Look(const any& value);
@@ -679,6 +682,7 @@ void             ScrollHelpFile();
 FASTRUN void     MakeLogFileName();
 void             GetCommandbytes(uint8_t * C, uint8_t * C1);
 void             TestTheCommandByte(uint8_t C , uint8_t C1);
+uint16_t         WordWrap(char* htext);
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
@@ -936,7 +940,7 @@ uint16_t  Qnh             = 1009; // pressure at sea level here
 uint16_t  LastModelLoaded = 0;
 uint16_t  LastFileInView  = 0;
 uint8_t   MinimumGap      = 75;
-uint8_t   RecentStartLine = 0;
+uint16_t  RecentStartLine = 0;
 char      RecentTextFile[30];
 bool      LogRXSwaps       = false;
 bool      ThereIsMoreToSee = false;

@@ -13,7 +13,6 @@ void ClearFilesList(){
         strcpy(TheFilesList[i], "");
     }
 }
-
 /******************************************************************************************************************************/
 void StartLogFilesListScreen(){
     char pLogFiles[] = "page LogFiles";//
