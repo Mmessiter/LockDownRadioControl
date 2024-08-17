@@ -51,9 +51,10 @@
 #include <EEPROM.h>
 #include <Wire.h>
 
-#include <SBUS.h>
+
 #include <PulsePosition.h>
 #include <Watchdog_t4.h>
+#include "utilities/SBUS.h" // SBUS library
 #include "utilities/common.h"
 #include "utilities/radio.h"
 #include "utilities/pid.h"
