@@ -57,7 +57,7 @@ FASTRUN bool CheckRXVolts()
     
     char    Vbuf[10];
     char    RXBattInfo[80];
-    float   VoltsPerCell     = 0;
+    
     char    FrontView_RXBV[] = "RXBV";
     char    RXPC[]           = "RXPC";
     char    PerCell[]        = " per cell)";
@@ -73,24 +73,24 @@ FASTRUN bool CheckRXVolts()
         GreenPercentBar = constrain(GreenPercentBar, 0, 100);
         WarningSound    = BATTERYISLOW;
         if (BoundFlag) {
-            VoltsPerCell = (ReadVolts / RXCellCount) / 100;
+            RXVoltsPerCell = (ReadVolts / RXCellCount) / 100;
             if (CurrentView == FRONTVIEW) {
                 SendValue(JRX, GreenPercentBar);
                 strcat(Str(Vbuf, GreenPercentBar, 0), pc);
                 SendText(RXPC, Vbuf);
                 strcpy(RXBattInfo, ModelVolts);
                 strcat(RXBattInfo, v);
-                dtostrf(VoltsPerCell, 2, 2, Vbuf);
+                dtostrf(RXVoltsPerCell, 2, 2, Vbuf);
                 strcat(RXBattInfo, Vbuf);
                 strcat(RXBattInfo, PerCell);
                 SendText(FrontView_RXBV, RXBattInfo);
             }
             if (CurrentView == DATAVIEW) {
-                dtostrf(VoltsPerCell, 2, 2, Vbuf);
+                dtostrf(RXVoltsPerCell, 2, 2, Vbuf);
                 SendText(t6, Vbuf);
             }
             RXWarningFlag = false;                                              // new as bit below is removed now.
-            if ((VoltsPerCell < StopFlyingVoltsPerCell) && (VoltsPerCell > 2)){
+            if ((RXVoltsPerCell < StopFlyingVoltsPerCell) && (RXVoltsPerCell > 2)){
                     RXWarningFlag = true;
                     WarningSound  = STORAGECHARGE;
             }
@@ -116,9 +116,13 @@ void CheckBatteryStates(){
     if ((CheckTXVolts() || CheckRXVolts())) {                                           // Note: If TX Battery is low, then CheckRXVolts() is not even called
         if (millis() - WarnTimer > 5000){                                               // issue warning every 5 seconds
             WarnTimer = millis();
-              if (ModelMatched && Connected) PlaySound(WarningSound);                      // Issue audible warning // heer
-            LedIsBlinking = true;
-            if (CurrentView == FRONTVIEW) SendCommand(WarnNow);
+              if (ModelMatched && Connected) {
+                PlaySound(WarningSound);                                                 // Issue audible warning // heer
+                LogStopFlyingMsg();                                                      // Log the stop flying message
+                LogRXVoltsPerCell();                                                     // Log the RX volts per cell
+                LedIsBlinking = true;
+                if (CurrentView == FRONTVIEW) SendCommand(WarnNow);
+            }
         }
     }
     else {

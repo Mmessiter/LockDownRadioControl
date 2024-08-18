@@ -683,6 +683,8 @@ FASTRUN void     MakeLogFileName();
 void             GetCommandbytes(uint8_t * C, uint8_t * C1);
 void             TestTheCommandByte(uint8_t C , uint8_t C1);
 uint16_t         WordWrap(char* htext);
+void             LogRXVoltsPerCell();
+void             LogStopFlyingMsg();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
@@ -825,6 +827,7 @@ char            Maxaltitude[11]               = {'0', 0x20, 0x20, 0x20, 0x20, 0x
 char            ReceiverVersionNumber[20]; 
 char            TransmitterVersionNumber[20];
 char            ModelVolts[11]                = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0};
+float           RXVoltsPerCell                = 0;
 File            ModelsFileNumber;
 Adafruit_INA219 ina219;
 char            SingleModelFile[40];

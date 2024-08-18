@@ -33,6 +33,7 @@ void   LogTimer(uint32_t Mins){
     strcat(buf, " minute");
     if (Mins > 1) strcat(buf, "s");
     LogText(buf, sizeof(buf));
+    LogRXVoltsPerCell();
 }
 
 /*********************************************************************************************************************************/
@@ -286,6 +287,25 @@ uint32_t GetOverallSuccessRate()
 {
     return (TotalGoodPackets * 100) / (TotalGoodPackets + TotalLostPackets);
 }
+
+// ************************************************************************
+
+void LogRXVoltsPerCell(){    
+
+    char TheText[] = "RX Volts per cell: ";
+    char buf[40]   = " ";
+    char NB[10];
+    if (RXVoltsPerCell < 0.1) return;
+    dtostrf(RXVoltsPerCell, 2, 2, NB);
+    strcpy(buf, TheText);
+    strcat(buf, NB);
+    LogText(buf, sizeof(buf));
+}
+// ************************************************************************
+void LogStopFlyingMsg(){
+    char TheText[] = "'Stop flying' warning issued!";
+    LogText(TheText, sizeof(TheText));
+}
 // ************************************************************************
 FASTRUN void LogDisConnection()
 {
@@ -301,6 +321,8 @@ FASTRUN void LogDisConnection()
     LogTotalGoodPackets();
     LogOverallSuccessRate();
     LogAverageFrameRate();
+    LogRXVoltsPerCell();   
+
 }
 // ************************************************************************
 FASTRUN void LogNewBank()
