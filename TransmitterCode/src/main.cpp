@@ -1136,7 +1136,8 @@ int InStrng(char* text1, char* text2)
 /****************************************************************************************************************************/
 
 /** Bubble sort */
-void SortDirectory()
+void SortDirectory()   // Bubble sort for alphabetising the files. Not ideal for dates but OK for names.
+                       // TODO: Make a version that sorts by date in reverse order
 {
     int  f      = 0;
     bool flag   = true;
@@ -1145,7 +1146,7 @@ void SortDirectory()
     while (flag && Scount < 10000) {
         flag = false;
         for (f = 0; f < ExportedFileCounter - 1; ++f) {
-            if (strcmp(TheFilesList[f], TheFilesList[f + 1]) > 0) {
+            if (strcmp(TheFilesList[f], TheFilesList[f + 1]) > 0) { 
                 strcpy(TempArray, TheFilesList[f]);
                 strcpy(TheFilesList[f], TheFilesList[f + 1]);
                 strcpy(TheFilesList[f + 1], TempArray);
