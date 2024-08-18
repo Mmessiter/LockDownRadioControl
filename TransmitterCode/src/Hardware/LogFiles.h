@@ -225,6 +225,9 @@ FASTRUN void LogFilePreamble()
 FASTRUN void LogText(char* TheText, uint16_t len)
 {
     char crlf[] = {'|', 13, 10, 0};
+    static char LastText[100];
+    if (strcmp(TheText, LastText) == 0) return;  // Don't log the same thing twice
+    strcpy(LastText, TheText);
     LogFilePreamble();
     WriteToLogFile(TheText, len);
     WriteToLogFile(crlf, sizeof(crlf));
@@ -408,7 +411,6 @@ FASTRUN void LogThisGap()
     LogText(thetext, 8);
 }
 // ************************************************************************
-
 FASTRUN void LogLongestGap()
 {
     char thetext[50];
@@ -423,15 +425,12 @@ FASTRUN void LogLongestGap()
     if (BuddyON) LogText(OnText, strlen(OnText)); else LogText(OffText, strlen(OffText));  
  }
 // ************************************************************************
-
 void LogTotalLostPackets()
 {
     char thetext[50];
     snprintf(thetext, 45, "Total lost packets: %d", (short int)TotalLostPackets);
     LogText(thetext, strlen(thetext));
 }
-
-
 // ************************************************************************
 
 void LogTotalGoodPackets()
@@ -440,7 +439,6 @@ void LogTotalGoodPackets()
     snprintf(thetext, 45, "Total good packets: %d", (uint16_t)TotalGoodPackets);
     LogText(thetext, strlen(thetext));
 }
-
 // ************************************************************************
 
 void LogOverallSuccessRate()
@@ -470,7 +468,6 @@ FASTRUN void LogPowerOff()
 {
     char Ltext[] = "Power OFF";
     char sp[]    = "*******************************************";
-    LogTXVoltsPerCell();
     LogText(Ltext, strlen(Ltext));
     LogText(sp, strlen(sp));
 }
