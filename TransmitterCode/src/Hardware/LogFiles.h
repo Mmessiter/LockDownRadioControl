@@ -251,6 +251,8 @@ FASTRUN void LogConnection()
     strcat(buf, ModelName);
     LogText(buf, sizeof(buf));
     LogMinGap();
+    LogRXVoltsPerCell();
+    LogTXVoltsPerCell();
 }
 
 // ************************************************************************
@@ -290,8 +292,19 @@ uint32_t GetOverallSuccessRate()
 
 // ************************************************************************
 
-void LogRXVoltsPerCell(){    
+void LogTXVoltsPerCell(){    
+    char TheText[] = "TX Volts per cell: ";
+    char buf[40]   = " ";
+    char NB[10];
+    if (TXVoltsPerCell < 0.1) return;
+    dtostrf(TXVoltsPerCell, 2, 2, NB);
+    strcpy(buf, TheText);
+    strcat(buf, NB);
+    LogText(buf, sizeof(buf));
+}
+// ************************************************************************
 
+void LogRXVoltsPerCell(){    
     char TheText[] = "RX Volts per cell: ";
     char buf[40]   = " ";
     char NB[10];
@@ -300,7 +313,9 @@ void LogRXVoltsPerCell(){
     strcpy(buf, TheText);
     strcat(buf, NB);
     LogText(buf, sizeof(buf));
+    LogTXVoltsPerCell();
 }
+
 // ************************************************************************
 void LogStopFlyingMsg(){
     char TheText[] = "'Stop flying' warning issued!";
@@ -445,6 +460,8 @@ LogPowerOn()
     char sp[]    = "*******************************************";
     LogText(sp, strlen(sp));
     LogText(Ltext, strlen(Ltext));
+    CheckTXVolts();
+    LogTXVoltsPerCell();
 }
 
 // ************************************************************************
@@ -453,6 +470,7 @@ FASTRUN void LogPowerOff()
 {
     char Ltext[] = "Power OFF";
     char sp[]    = "*******************************************";
+    LogTXVoltsPerCell();
     LogText(Ltext, strlen(Ltext));
     LogText(sp, strlen(sp));
 }

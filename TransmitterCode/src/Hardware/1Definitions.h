@@ -24,7 +24,7 @@
     #define TXVERSION_MAJOR   2 // first three *must* match RX but _EXTRA can be different
     #define TXVERSION_MINOR   4
     #define TXVERSION_MINIMUS 7
-    #define TXVERSION_EXTRA   "Q 9/08/24" 
+    #define TXVERSION_EXTRA   "P 18/08/24" 
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -684,6 +684,7 @@ void             GetCommandbytes(uint8_t * C, uint8_t * C1);
 void             TestTheCommandByte(uint8_t C , uint8_t C1);
 uint16_t         WordWrap(char* htext);
 void             LogRXVoltsPerCell();
+void             LogTXVoltsPerCell();
 void             LogStopFlyingMsg();
 
 // **************************************************************************
@@ -828,6 +829,7 @@ char            ReceiverVersionNumber[20];
 char            TransmitterVersionNumber[20];
 char            ModelVolts[11]                = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0};
 float           RXVoltsPerCell                = 0;
+float           TXVoltsPerCell                = 0;
 File            ModelsFileNumber;
 Adafruit_INA219 ina219;
 char            SingleModelFile[40];
