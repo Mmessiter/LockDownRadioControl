@@ -924,6 +924,23 @@ void ConvertBuddyPipeTo64BITS()
 }
 
 /*********************************************************************************************************************************/
+
+void WarnUserIfBuddyBoxIsOn() // This function warns the user if the buddy box is on
+{
+   if (BuddyPupilOnWireless) {
+        PlaySound(BUDDYMSG);
+        DelayWithDog(1000);
+        PlaySound(BUDDYMSG);
+        DelayWithDog(1000);
+    }
+    if (BuddyMasterOnWireless) {
+        PlaySound(MASTERMSG);
+        DelayWithDog(1000);
+         PlaySound(MASTERMSG);
+        DelayWithDog(1000);
+    }
+}
+/*********************************************************************************************************************************/
 // SETUP
 /*********************************************************************************************************************************/
 FLASHMEM void setup()
@@ -1069,6 +1086,7 @@ FLASHMEM void setup()
     }
     if (!PPMdata.UseTXModule) ConfigureRadio();  
     RationaliseBuddy();
+    WarnUserIfBuddyBoxIsOn();
 }
 // **************************************************************************************************************************************************************
 void RationaliseBuddy()
@@ -1976,7 +1994,7 @@ void MovePoint()
 
 void SoundBank()
 {
-    if (millis() < 2500) return; // don't announce bank if just booted
+    if (millis() < 5000) return; // don't announce bank if just booted
     PlaySound(BankSounds[BanksInUse[Bank - 1]]);
     ScreenTimeTimer = millis(); // reset screen counter
 }

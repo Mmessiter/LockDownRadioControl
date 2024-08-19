@@ -311,7 +311,7 @@ void LogRXVoltsPerCell(){
     char TheText[] = "RX Volts per cell: ";
     char buf[40]   = " ";
     char NB[10];
-    if (RXVoltsPerCell < 0.1) return;
+    if (RXVoltsPerCell < 2) return;                                                     // No point in logging if not connected
     dtostrf(RXVoltsPerCell, 2, 2, NB);
     strcpy(buf, TheText);
     strcat(buf, NB);
