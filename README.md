@@ -44,7 +44,7 @@ Here is a brief summary of the features supported at the time of writing (August
 - 90 model memories.
 - 11 PWM servo outputs.
 - Model memory backup and restore using internal SD card.
-- 50 Hz FHSS at using 82 separate frequencies on the 2.4 GHz ISM waveband.
+- 50 Hz FHSS using 82 separate frequencies on the 2.4 GHz ISM waveband.
 - 200 Hz frame rate for very low latency.
 - 12 BIT resolution.
 - Wireless Buddy Box for training beginners.
