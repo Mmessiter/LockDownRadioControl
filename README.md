@@ -8,7 +8,7 @@ This is a very full featured 16 channel Radio Control system for models of all k
 
 I and several friends have flown many models with it for about 4 years so far, without any problem.
 
-It's proven to be at good as, and in some respects better than, popular commercially available radio control systems, as well as the other open source radio control firmware.
+It's proven to be as good as, and in some respects better than, popular commercially available radio control systems, as well as the other open source radio control firmware.
 
 It is also **far cheaper**. Though I doubt that a really equivalent commercial system even exists.
 
@@ -44,7 +44,7 @@ Here is a brief summary of the features supported at the time of writing (August
 - 90 model memories.
 - 11 PWM servo outputs.
 - Model memory backup and restore using internal SD card.
-- 50 Hz FHSS at using 82 separate frequencies on the 2.4 GHz ISM waveband.
+- 50 Hz FHSS using 82 separate frequencies on the 2.4 GHz ISM waveband.
 - 200 Hz frame rate for very low latency.
 - 12 BIT resolution.
 - Wireless Buddy Box for training beginners.
