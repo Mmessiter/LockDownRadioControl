@@ -336,7 +336,7 @@
 
     #define TXSIZE         512      // SD space reserved for transmitter (WAS  250)
     #define MODELSIZE      2048     // SD space reserved for each model (WAS 1600)
-    #define MAXFILELEN     1024 * 3 // MAX SIZE FOR HELP AND LOG FILES
+    #define MAXFILELEN     (1024 * 5) // 3?? MAX SIZE FOR HELP AND LOG FILES
     #define MAXBACKUPFILES 95
 
 // **************************************************************************
