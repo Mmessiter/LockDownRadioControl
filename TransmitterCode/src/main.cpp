@@ -1996,7 +1996,7 @@ void SoundBank()
 {
     if (millis() < 10000) return; // don't announce bank if booted < 10 seconds ago
     PlaySound(BankSounds[BanksInUse[Bank - 1]]);
-    ScreenTimeTimer = millis(); // reset screen counter
+    ScreenTimeTimer = millis(); // reset screen counter to make sure its updated soon
 }
 /*********************************************************************************************************************************/
 void ShowBank()
@@ -2068,9 +2068,6 @@ void UpdateOneSwitchView()
     SendValue(SwNum, SwitchEditNumber); // show switch number
     DoOneSwitchView(SwitchEditNumber);
 }
-
-
-
 
 /*********************************************************************************************************************************/
 
@@ -2636,7 +2633,6 @@ void EndModelSetup()
     GotoFrontView();
 }
 
-
 /******************************************************************************************************************************/
 void UpdateSpeedScreen(){
     char ns[16][4]           = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}};
@@ -2658,7 +2654,6 @@ void StartSlowView()
     UpdateModelsNameEveryWhere();
     UpdateSpeedScreen();
 }
-
 
 /******************************************************************************************************************************/
 void ReadSpeedsScreen(uint8_t bk){
