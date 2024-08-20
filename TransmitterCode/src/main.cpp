@@ -1994,7 +1994,7 @@ void MovePoint()
 
 void SoundBank()
 {
-    if (millis() < 5000) return; // don't announce bank if just booted
+    if (millis() < 10000) return; // don't announce bank if booted < 10 seconds ago
     PlaySound(BankSounds[BanksInUse[Bank - 1]]);
     ScreenTimeTimer = millis(); // reset screen counter
 }
