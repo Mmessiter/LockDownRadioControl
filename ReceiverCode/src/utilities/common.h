@@ -12,7 +12,7 @@
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   4
 #define RXVERSION_MINIMUS 7 // 17 August 2024
-#define RXVERSION_EXTRA   'Q' 
+#define RXVERSION_EXTRA   'P' 
 
 
 #define HOPTIME           17 // 47     //  17 gives 50Hz FHSS, 47 gives 20Hz FHSS
@@ -31,8 +31,8 @@
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-       // #define SECOND_TRANSCEIVER          1  // must be undefined if not using two transceivers
-     //   #define USE_11PWM_OUTPUTS           1  // must be undefined if not using all 11 PWM outputs  
+        #define SECOND_TRANSCEIVER          1  // must be undefined if not using two transceivers
+        #define USE_11PWM_OUTPUTS           1  // must be undefined if not using all 11 PWM outputs  
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
