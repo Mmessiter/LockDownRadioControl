@@ -1151,6 +1151,45 @@ int InStrng(char* text1, char* text2)
     }
     return 0; // Found no match
 }
+
+/***********************************************************************************************************/
+
+int GetDateAsInt(int f){ // dates are in format 23-08.LOG ie 23rd August (year is not important)
+                         // DateInt is 23 + (8 * 31) = 263 
+    int DateInt = 0;
+    char Date[7];
+    for (int i = 0; i < 2; ++i) Date[i] = TheFilesList[f][i];
+    Date[2] = 0;
+    DateInt = atoi(Date);
+    for (int i = 3; i < 5; ++i) Date[i-3] = TheFilesList[f][i];
+    Date[2] = 0;
+    DateInt += atoi(Date) * 31;
+    return DateInt;
+}
+
+/***********************************************************************************************************/
+void SortByDateInDescendingOrder() 
+{
+    int  f      = 0;
+    bool flag   = true;
+    int  Scount = 0;
+    char TempArray[18];
+    int d1, d2;
+    while (flag && Scount < 10000) {
+        flag = false;
+        for (f = 0; f < ExportedFileCounter - 1; ++f) {
+            d1 = GetDateAsInt(f);
+            d2 = GetDateAsInt(f + 1);
+            if ( d1 < d2) {                                                 // Sort by date in descending order so recent log files are at the top
+                strcpy(TempArray, TheFilesList[f]);
+                strcpy(TheFilesList[f], TheFilesList[f + 1]);
+                strcpy(TheFilesList[f + 1], TempArray);
+                flag = true;
+                ++Scount;
+            }
+        }
+    }
+}
 /****************************************************************************************************************************/
 
 /** Bubble sort */
@@ -1161,6 +1200,14 @@ void SortDirectory()   // Bubble sort for alphabetising the files. Not ideal for
     bool flag   = true;
     int  Scount = 0;
     char TempArray[18];
+    
+    if (strcmp(MOD,".LOG") == 0) {
+
+        SortByDateInDescendingOrder();
+        return;
+    }
+
+
     while (flag && Scount < 10000) {
         flag = false;
         for (f = 0; f < ExportedFileCounter - 1; ++f) {

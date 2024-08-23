@@ -21,7 +21,6 @@ void StartLogFilesListScreen(){
         MsgBox(pLogView, prompt);       // Display a message box and return
        return;
     }
-  //  UseLog = false;                     // Set the UseLog flag to false
     SendCommand(pLogFiles);             // Go to the LogFiles screen
     CurrentView = LOGFILESLISTVIEW;     // Set the current view to LogFilesList
     strcpy (MOD,".LOG");                // Set the file extension to .LOG
