@@ -18,6 +18,12 @@ bool GameEnd(){
 
 void StartPong()
 {
+    if (BoundFlag) { // if connected to model, don't start pong
+        char no[] = "Please disconnect first!";
+        MsgBox(pFrontView,no);
+        GotoFrontView();
+        return;
+    }
     SendCommand(pPongView);
     SetDefaultValues();
     CurrentView = PONGVIEW;
