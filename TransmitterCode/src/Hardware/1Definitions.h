@@ -279,7 +279,7 @@
     #define BINDNEEDED      27
     #define MMFOUND         28
     #define MMMATCHED       29
-    #define MMNOTFOUND      30
+  //  #define MMNOTFOUND      30
     #define MOTORON         31
     #define MOTOROFF        32
     #define STORAGECHARGE   33
@@ -324,7 +324,7 @@
     #define MMSAVED         72
     #define SAFEON          73
     #define SAFEOFF         74
-    #define NOTFOUND        75 // or 33 !! :-)
+    #define NOTFOUND        75 // or 30 !! :-)
     #define WINDOWS1        76
     #define WINDOWS2        77
     

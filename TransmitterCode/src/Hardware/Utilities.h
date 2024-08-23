@@ -147,7 +147,9 @@ void PlaySound(uint16_t TheSound)
     static uint32_t SoundTimer = millis();
     static uint16_t LastSound   = 0;
     uint32_t m = millis(); // one call to millis() is enough
-    if (((m - SoundTimer) < 1000) && (m > 5000)  && (TheSound == LastSound)) return; // prevent sound repeats
+    if (CurrentView != PONGVIEW){
+        if (((m - SoundTimer) < 1000) && (m > 5000)  && (TheSound == LastSound)) return; // prevent sound repeats unless in pongview
+    }
     SoundTimer = millis();
     LastSound = TheSound;
     char Sound[20];

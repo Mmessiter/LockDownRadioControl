@@ -4463,11 +4463,12 @@ bool CheckModelName()
 void SimulateCloseDown()
 {                                                   // Because real closedown occurs only after button is released, this function simulates it.
     char ScreenOff[] = "dim=0";
+    char NotInUse[]  = "Not in use";
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, 0);
     SendCommand(ScreenOff);
-    SaveAllParameters();
+    if (strcmp(ModelName, NotInUse) != 0) SaveAllParameters(); // Save the model if it's not 'Not in use'
     if (UseLog) LogPowerOff();                        // log the event
     if (PlayFanfare) PlaySound(WINDOWS2);             // Play the fanfare
     DelayWithDog(POWERONOFFDELAY);                    // 2 seconds delay in case button held down too long
