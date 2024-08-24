@@ -145,18 +145,21 @@ FASTRUN void MakeLogFileName()
     char dash[] = "-";
     if (strlen(LogFileName) > 0) return; // Already done
     if (RTC.read(tm)) {
-        if (MayBeAddZero(tm.Day)) 
+        ReadTheRTC();
+          if (MayBeAddZero(GmonthDay)) 
         {
             strcpy(LogFileName, "0");
-            strcat(LogFileName, Str(NB, tm.Day, 0));
+            strcat(LogFileName, Str(NB, GmonthDay, 0));
         }
         else
         {
-            strcpy(LogFileName, Str(NB, tm.Day, 0));
+            strcpy(LogFileName, Str(NB,GmonthDay, 0));
         }
         strcat(LogFileName, dash);
-        if (MayBeAddZero(tm.Month)) strcat(LogFileName, "0");
-        strcat(LogFileName, Str(NB, tm.Month, 0));
+        if (MayBeAddZero(Gmonth)) strcat(LogFileName, "0");
+        strcat(LogFileName, Str(NB, Gmonth, 0));
+        strcat(LogFileName, dash);
+        strcat(LogFileName, Str(NB, Gyear, 0));
         strcat(LogFileName, ".LOG");
     }
 }
@@ -470,6 +473,19 @@ FASTRUN void LogPowerOff()
     char sp[]    = "*******************************************";
     LogText(Ltext, strlen(Ltext));
     LogText(sp, strlen(sp));
+}
+
+// ************************************************************************
+
+void LogNewRateInUse(){
+
+    char TheText[] = "Rate: ";
+    char buf[40]   = " ";
+    char NB[10];
+    Str(NB, DualRateInUse, 0);
+    strcpy(buf, TheText);
+    strcat(buf, NB);
+    LogText(buf, sizeof(buf));
 }
 
 // ************************************************************************

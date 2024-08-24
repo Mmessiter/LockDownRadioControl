@@ -38,7 +38,6 @@ void LoadNewLogFile(){
     char FileBox[] = "FilesBox";
     char sw0[] = "sw0";
     strcpy (LogFileName,TheFilesList[GetValue(FileBox)]);       // Get the selected file name
-  //  UseLog = false;                                             // Set the UseLog flag to false
     SendCommand(pLogView);
     SendValue(sw0, UseLog);
     CurrentView = LOGVIEW;

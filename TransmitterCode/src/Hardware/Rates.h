@@ -49,6 +49,7 @@ void ReadDRSwitch(bool sw1, bool sw2, bool rev) // Dual Rate Switch
 
     if (PreviousDualRateInUse != DualRateInUse) {
         PreviousDualRateInUse = DualRateInUse;
+        LogNewRateInUse();
         LastShowTime          = 0;
         LastTimeRead          = 0;
         if (AnnounceBanks) {

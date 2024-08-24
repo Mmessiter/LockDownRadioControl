@@ -1053,6 +1053,7 @@ FLASHMEM void setup()
     if (UseLog) {
         LogPowerOn();
         LogThisModel();
+        LogNewRateInUse();
     }
     SendText(FrontView_Connected, na);
     UpdateModelsNameEveryWhere();
@@ -1154,16 +1155,19 @@ int InStrng(char* text1, char* text2)
 
 /***********************************************************************************************************/
 
-int GetDateAsInt(int f){ // dates are in format 23-08.LOG ie 23rd August (year is not important)
-                         // DateInt is 23 + (8 * 31) = 263 
+int GetDateAsInt(int f){ // dates are in format 23-08-24.LOG ie 23rd August '24
+                         // DateInt is 23 + (8 * 31)  + (24 * 31 * 12) =  23 + 248 + 8768 = 9019
     int DateInt = 0;
-    char Date[7];
+    char Date[10];
     for (int i = 0; i < 2; ++i) Date[i] = TheFilesList[f][i];
     Date[2] = 0;
-    DateInt = atoi(Date);
+    DateInt = atoi(Date);                                       // the DAY
     for (int i = 3; i < 5; ++i) Date[i-3] = TheFilesList[f][i];
     Date[2] = 0;
-    DateInt += atoi(Date) * 31;
+    DateInt += atoi(Date) * 31;                                 // the MONTH
+    for (int i = 6; i < 8; ++i) Date[i-6] = TheFilesList[f][i];
+    Date[2] = 0;
+    DateInt += atoi(Date) * 31 * 12;                            // the YEAR
     return DateInt;
 }
 
@@ -1201,12 +1205,10 @@ void SortDirectory()   // Bubble sort for alphabetising the files. Not ideal for
     int  Scount = 0;
     char TempArray[18];
     
-    if (strcmp(MOD,".LOG") == 0) {
-
+    if (strcmp(MOD,".LOG") == 0) {                              // if it's a log file, sort by date in descending order
         SortByDateInDescendingOrder();
         return;
     }
-
 
     while (flag && Scount < 10000) {
         flag = false;

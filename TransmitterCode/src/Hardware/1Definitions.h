@@ -24,7 +24,7 @@
     #define TXVERSION_MAJOR   2 // first three *must* match RX but _EXTRA can be different
     #define TXVERSION_MINOR   4
     #define TXVERSION_MINIMUS 7
-    #define TXVERSION_EXTRA   "P 18/08/24" 
+    #define TXVERSION_EXTRA   "R 24/08/24" 
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -48,7 +48,6 @@
 
 
     #define PACEMAKER              5                             // 5ms means about 210 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-
     #define CE_PIN                 7                             // for SPI to nRF24L01
     #define CSN_PIN                8                             // for SPI to nRF24L01
     #define BUDDYPPMPORT           10                            // wired Buddybox PPM pin number
@@ -686,6 +685,7 @@ uint16_t         WordWrap(char* htext);
 void             LogRXVoltsPerCell();
 void             LogTXVoltsPerCell();
 void             LogStopFlyingMsg();
+void             LogNewRateInUse();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
@@ -868,7 +868,7 @@ uint8_t         InPutStick[17]       = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
 uint8_t         ChannelOutPut[17]    = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}; // User defined channel outputs
 uint8_t         InputTrim[4]         = {0, 1, 2, 3};                                           // User defined trim inputs
 uint8_t         ExportedFileCounter  = 0;
-char            TheFilesList[100][14];
+char            TheFilesList[150][24];
 uint16_t        FileNumberInView     = 0;
 bool            FileError            = false;
 uint32_t        RangeTestStart       = 0;

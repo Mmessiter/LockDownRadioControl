@@ -734,33 +734,77 @@ void Options2End()
 
 /******************************************************************************************************************************/
 
+uint32_t GetFileSize(char * filename)
+{
+    File file = SD.open(filename, FILE_READ);
+    if (!file) return 0;
+    uint32_t size = file.size();
+    file.close();
+    return size;
+}
+
+/******************************************************************************************************************************/
+
+char * AddSizeToFilename(int ff, char * size){
+    char nb[20];
+    if (strcmp(MOD, ".LOG") != 0) 
+    return size;
+    float s = (float) GetFileSize(TheFilesList[ff]) /  (float)1024.00;
+    dtostrf(s, 2, 2, nb);
+    strcat(size, " (");
+    strcat(size, nb); 
+    strcat(size, " K)");
+    return size;
+}
+
+/******************************************************************************************************************************/
+
+void   ShowFreeSpaceEtc(){
+
+    float FreeSpaceOnSD = (SD.totalSize() - SD.usedSize()) / ((float) (1024 * 1024 * 1024));
+    float UsedSpaceOnSD = SD.usedSize() / ((float) (1024 * 1024 * 1024));
+    char t4[] = "t4";
+    char t5[] = "t5";
+    char t6[] = "t6";
+    char NB[20];
+    char Gbytes[] = " Gbytes";
+    
+    dtostrf(SD.totalSize() / (float) (1024 * 1024 * 1024), 2, 2, NB);
+    strcat(NB, Gbytes);
+    SendText(t4, NB);
+    dtostrf(FreeSpaceOnSD, 2, 2, NB);
+    strcat(NB, Gbytes);
+    SendText(t6, NB);  
+    dtostrf(UsedSpaceOnSD, 2, 2, NB);
+    strcat(NB, Gbytes);
+    SendText(t5, NB);
+}
+
+/******************************************************************************************************************************/
+
 void LoadFileSelector()
 {
     char Mfilesp[20];
     char crlf[]    = {13, 10, 0};
     char buf[MAXBUFFERSIZE];
     char nofiles[] = "(No files)";
-    
+    char SizeBuf[20];
+
     strcpy(Mfilesp, Mfiles);
     strcat(Mfilesp, ".path=\"");
-    
     strcpy(buf, nofiles);
     for (int f = 0; f < ExportedFileCounter; ++f) {
-        if (f == 0)
-        {
-            strcpy(buf, TheFilesList[f]);
-            strcat(buf, crlf);
-        }
-        else {
-            strcat(buf, TheFilesList[f]);
-            strcat(buf, crlf);
-        }
+        strcpy(SizeBuf, "");
+        if (!strcmp(MOD, ".LOG")) AddSizeToFilename(f, SizeBuf);
+        if (!f) strcpy(buf, TheFilesList[f]); else strcat(buf, TheFilesList[f]); // first one? if not, concatenate
+        if (!strcmp(MOD, ".LOG")) strcat(buf, SizeBuf);
+        strcat(buf, crlf);
     }
     SendOtherText(Mfilesp, buf);
     FileNumberInView = GetValue(Mfiles);
     LastFileInView   = 120;
+    if (!strcmp(MOD, ".LOG")) ShowFreeSpaceEtc(); // show free space etc if log files are being viewed
 }
-
 
 /******************************************************************************************************************************/
 
