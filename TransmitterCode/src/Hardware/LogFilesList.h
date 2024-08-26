@@ -84,7 +84,7 @@ char * AddSizeToFilename(int ff, char * size){
     return size;
     float s = (float) GetFileSize(TheFilesList[ff]) /  (float)1024.00;
     dtostrf(s, 2, 2, nb);
-    while ((strlen(size) + strlen (nb)) < 6 ) strcat(size, " ");
+    while ((strlen(size) + strlen (nb)) < 7 ) strcat(size, " ");
     strcat(size, nb); 
     strcat(size, " KB");
     return size;
