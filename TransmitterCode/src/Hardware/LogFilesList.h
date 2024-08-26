@@ -92,23 +92,37 @@ char * AddSizeToFilename(int ff, char * size){
 
 /******************************************************************************************************************************/
 
+char * AddSpacesBefore(char * s, uint8_t n){
+    char temp[20];
+    strcpy(temp, "");
+    while ((strlen(temp) + strlen(s)) < n) strcat(temp, " ");
+    strcat(temp, s);
+    strcpy(s, temp);
+    return s;
+}
+/******************************************************************************************************************************/
+
 void   ShowFreeSpaceEtc(){
 
     float FreeSpaceOnSD = (SD.totalSize() - SD.usedSize()) / ((float) (1024 * 1024 * 1024));
     float UsedSpaceOnSD = SD.usedSize() / ((float) (1024 * 1024 * 1024));
+    
     char t4[] = "t4";
     char t5[] = "t5";
     char t6[] = "t6";
     char NB[20];
-    char Gbytes[] = " Gbytes";
-    
+    char Gbytes[] = " GB";
+
     dtostrf(SD.totalSize() / (float) (1024 * 1024 * 1024), 2, 2, NB);
+    AddSpacesBefore(NB, 6);
     strcat(NB, Gbytes);
     SendText(t4, NB);
     dtostrf(FreeSpaceOnSD, 2, 2, NB);
+    AddSpacesBefore(NB, 6);
     strcat(NB, Gbytes);
     SendText(t6, NB);  
     dtostrf(UsedSpaceOnSD, 2, 2, NB);
+    AddSpacesBefore(NB, 6);
     strcat(NB, Gbytes);
     SendText(t5, NB);
 }
