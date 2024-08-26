@@ -527,7 +527,7 @@ FASTRUN void  Decompress(uint16_t* uncompressed_buf, uint16_t* compressed_buf, u
 FASTRUN void  BufferTeensyMACAddPipe();
 void          ExecuteMacro();
 void          LogTimer(uint32_t Mins);
-FASTRUN void  LogText(char* TheText, uint16_t len);
+FASTRUN void  LogText(char* TheText, uint16_t len, bool TimeStamp);
 void          LogAverageFrameRate();
 
 template<typename any>
@@ -687,8 +687,6 @@ void             LogTXVoltsPerCell();
 void             LogStopFlyingMsg();
 void             LogNewRateInUse();
 void             LogTotalRXSwaps();
-FASTRUN void     LogShortText(char* TheText, uint16_t len);
-
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************

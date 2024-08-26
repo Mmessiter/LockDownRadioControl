@@ -17,7 +17,7 @@ void LogAverageFrameRate(){
     strcpy(buf, TheText);
     strcat(buf, NB);
     strcat(buf, fps);
-    LogShortText(buf, sizeof(buf));
+    LogText(buf, sizeof(buf),false);
 }
 
 /******************************************************************************************************************************/
@@ -32,7 +32,7 @@ void   LogTimer(uint32_t Mins){
     strcat(buf, NB);
     strcat(buf, " minute");
     if (Mins > 1) strcat(buf, "s");
-    LogText(buf, sizeof(buf));
+    LogText(buf, sizeof(buf),true);
     LogRXVoltsPerCell();
 }
 
@@ -189,12 +189,12 @@ FASTRUN void DeleteLogFile()
 FASTRUN void DeleteLogFile1()
 {
     
-    char LogTeXt[]   = "LogText";
+    char LogTeXt1[]   = "LogText";
     char BlankText[] = " ";
     CloseLogFile();
     MakeLogFileName();
     DeleteLogFile();
-    SendText1(LogTeXt, BlankText);
+    SendText1(LogTeXt1, BlankText);
     if (!UseLog) return;
     if (LedWasGreen) {
         RecentStartLine = 0;
@@ -214,40 +214,45 @@ FASTRUN void WriteToLogFile(char* SomeData, uint16_t len)
     LogFileNumber.write(SomeData, len);
 }
 // ************************************************************************
-FASTRUN void LogFilePreamble()
+FASTRUN bool LogFilePreamble()
 {
     char dbuf[22];
     char Divider[] = " - ";
-    CheckLogFileIsOpen();
+    static char LastTimeStamp[20];
     CreateTimeStamp(dbuf);    // Put time stamp into buffer
+    if (strcmp(dbuf, LastTimeStamp) == 0) return false; // Don't log the same thing twice
+    strcpy(LastTimeStamp, dbuf);
     WriteToLogFile(dbuf, 9);  // Add time stamp 9 bytes long
     WriteToLogFile(Divider, 3);
+    return true;
 }
 
 // ************************************************************************
-FASTRUN void LogText(char* TheText, uint16_t len)
+FASTRUN void LogText(char* TheText, uint16_t len, bool TimeStamp)
+
 {
     char crlf[] = {'|', 13, 10, 0};
+      char Tab[]   = "               - ";
     static char LastText[100];
     if (strcmp(TheText, LastText) == 0) return;  // Don't log the same thing twice
-    strcpy(LastText, TheText);
-    LogFilePreamble();
-    WriteToLogFile(TheText, len);
-    WriteToLogFile(crlf, sizeof(crlf));
-    CloseLogFile();
-}
-// ************************************************************************
-FASTRUN void LogShortText(char* TheText, uint16_t len) // Short text is not time stamped but has tab at start
-{
-    char crlf[] = {'|', 13, 10, 0};
-    char Tab[]   = "               - ";
-   
+    
     CheckLogFileIsOpen();
-    WriteToLogFile(Tab, strlen(Tab)); 
+    strcpy(LastText, TheText);
+  
+    if (TimeStamp) 
+        {
+           if(!LogFilePreamble()) WriteToLogFile(Tab, strlen(Tab)); 
+        }   
+        else
+        {
+            WriteToLogFile(Tab, strlen(Tab)); 
+        }
+  
     WriteToLogFile(TheText, len);
     WriteToLogFile(crlf, sizeof(crlf));
     CloseLogFile();
 }
+
 
 // ************************************************************************
 FASTRUN void LogMinGap()
@@ -259,7 +264,7 @@ FASTRUN void LogMinGap()
     Str(NB, MinimumGap, 0);
     strcpy(buf, TheText);
     strcat(buf, NB);
-    LogText(buf, sizeof(buf));
+    LogText(buf, sizeof(buf), false);
 }
 // ************************************************************************
 FASTRUN void LogConnection()
@@ -268,7 +273,7 @@ FASTRUN void LogConnection()
     char buf[40]   = " ";
     strcpy(buf, TheText);
     strcat(buf, ModelName);
-    LogText(buf, sizeof(buf));
+    LogText(buf, sizeof(buf),true);
     LogMinGap();
     LogRXVoltsPerCell();
     LogTXVoltsPerCell();
@@ -280,7 +285,7 @@ void MMLog(char * TheText){ // Model Memory Log called from below
   char buf[40]   = " ";
     strcpy(buf, TheText);
     strcat(buf, ModelName);
-    LogText(buf, sizeof(buf));
+    LogText(buf, sizeof(buf),false);
 }
 // ************************************************************************
 
@@ -319,7 +324,7 @@ void LogTXVoltsPerCell(){
     dtostrf(TXVoltsPerCell, 2, 2, NB);
     strcpy(buf, TheText);
     strcat(buf, NB);
-    LogText(buf, sizeof(buf));
+    LogText(buf, sizeof(buf),false);
 }
 // ************************************************************************
 
@@ -331,20 +336,20 @@ void LogRXVoltsPerCell(){
     dtostrf(RXVoltsPerCell, 2, 2, NB);
     strcpy(buf, TheText);
     strcat(buf, NB);
-    LogText(buf, sizeof(buf));
+    LogText(buf, sizeof(buf),false);
     
 }
 // ************************************************************************
 void LogStopFlyingMsg(){
     char TheText[] = "'Stop flying' warning issued!";
-    LogText(TheText, sizeof(TheText));
+    LogText(TheText, sizeof(TheText),true);
 }
 // ************************************************************************
 
 FASTRUN void LogEndLine()
 {
     char sp[]    = "(End of this flight log.)";
-    LogShortText(sp, strlen(sp));
+    LogText(sp, strlen(sp),false);
 }
 // ************************************************************************
 FASTRUN void LogDisConnection()
@@ -353,11 +358,13 @@ FASTRUN void LogDisConnection()
     char TheText[] = "Disconnected from ";
     strcpy(buf, TheText);
     strcat(buf, ModelName);
-    LogText(buf, sizeof(buf));
+    LogText(buf, sizeof(buf),true);
     LogLongestGap();
     LogTotalLostPackets();
     LogTotalGoodPackets();
     LogTotalRXSwaps();
+    LogRXVoltsPerCell();
+    LogTXVoltsPerCell();
     LogOverallSuccessRate();
     LogAverageFrameRate();
     LogEndLine();
@@ -371,7 +378,7 @@ FASTRUN void LogNewBank()
     Str(NB, Bank, 0);
     strcpy(thetext, Ltext);
     strcat(thetext, NB);
-    LogText(thetext, 7);
+    LogText(thetext, 7,true);
 }
 
 // ************************************************************************
@@ -384,7 +391,7 @@ FASTRUN void LogMotor(bool On)
         strcpy(thetext, Ltext1);
     else
         strcpy(thetext, Ltext0);
-    LogText(thetext, 9);
+    LogText(thetext, 9,true);
 }
 
 
@@ -398,7 +405,7 @@ FASTRUN void LogSafety(bool On)
         strcpy(thetext, Ltext1);
     else
         strcpy(thetext, Ltext0);
-    LogText(thetext, 10);
+    LogText(thetext, 10,true);
 }
 // ************************************************************************
 
@@ -408,14 +415,14 @@ FASTRUN void LogThisRX()
     char thetext[10];
     strcpy(thetext, Ltext);
     strcat(thetext, ThisRadio);
-    LogText(thetext, 5);
+    LogText(thetext, 5,true);
 }
 
 // ************************************************************************
 FASTRUN void LogLowBattery()
 { // Not yet implemented
     char TheText[] = "Low battery";
-    LogText(TheText, strlen(TheText));
+    LogText(TheText, strlen(TheText),true);
 }
 // ************************************************************************
 
@@ -428,28 +435,28 @@ FASTRUN void LogThisGap()
     Str(NB, ThisGap, 0);
     strcpy(thetext, Ltext);
     strcat(thetext, NB);
-    LogText(thetext, 8);
+    LogText(thetext, 8,true);
 }
 // ************************************************************************
 FASTRUN void LogLongestGap()
 {
     char thetext[50];
     snprintf(thetext, 45, "Longest gap: %d", (short int)GapLongest);
-    LogShortText(thetext, strlen(thetext));
+    LogText(thetext, strlen(thetext),false);
 }
 // ************************************************************************
  FASTRUN void LogBuddyChange(){
 
     char OnText[] = "Buddy ON";
     char OffText[] = "Buddy OFF";
-    if (BuddyON) LogText(OnText, strlen(OnText)); else LogText(OffText, strlen(OffText));  
+    if (BuddyON) LogText(OnText, strlen(OnText),true); else LogText(OffText, strlen(OffText),true);  
  }
 // ************************************************************************
 void LogTotalLostPackets()
 {
     char thetext[50];
     snprintf(thetext, 45, "Total lost packets: %d", (short int)TotalLostPackets);
-    LogShortText(thetext, strlen(thetext));
+    LogText(thetext, strlen(thetext),false);
 }
 // ************************************************************************
 
@@ -457,7 +464,7 @@ void LogTotalGoodPackets()
 {
     char thetext[50];
     snprintf(thetext, 45, "Total good packets: %d", (uint16_t)TotalGoodPackets);
-    LogShortText(thetext, strlen(thetext));
+    LogText(thetext, strlen(thetext),false);
 }
 // ************************************************************************
 
@@ -467,17 +474,16 @@ void LogOverallSuccessRate()
     uint32_t OverallSuccessRate = 0;
     OverallSuccessRate          = GetOverallSuccessRate();
     snprintf(thetext, 45, "Overall success rate: %d%%", (uint8_t)OverallSuccessRate);
-    LogShortText(thetext, strlen(thetext));
+    LogText(thetext, strlen(thetext),false);
 }
 // ************************************************************************
 
-FASTRUN void
-LogPowerOn()
+FASTRUN void LogPowerOn()
 {
     char Ltext[] = "Power ON";
     char sp[]    = "*******************************************";
-    LogText(sp, strlen(sp));
-    LogText(Ltext, strlen(Ltext));
+    LogText(sp, strlen(sp),false);
+    LogText(Ltext, strlen(Ltext),true);
     CheckTXVolts();
     LogTXVoltsPerCell();
 }
@@ -488,8 +494,8 @@ FASTRUN void LogPowerOff()
 {
     char Ltext[] = "Power OFF";
     char sp[]    = "*******************************************";
-    LogText(Ltext, strlen(Ltext));
-    LogText(sp, strlen(sp));
+    LogText(Ltext, strlen(Ltext),true);
+    LogText(sp, strlen(sp),false);
 }
 
 // ************************************************************************
@@ -499,10 +505,11 @@ void LogNewRateInUse(){
     char TheText[] = "Rate: ";
     char buf[40]   = " ";
     char NB[10];
+    if (DualRateInUse > 3) return;
     Str(NB, DualRateInUse, 0);
     strcpy(buf, TheText);
     strcat(buf, NB);
-    LogText(buf, sizeof(buf));
+    LogText(buf, sizeof(buf),true);
 }
 
 // ************************************************************************
@@ -513,17 +520,17 @@ FASTRUN void LogThisModel()
     char thetext[75];
     strcpy(thetext, Ltext);
     strcat(thetext, ModelName);
-    LogText(thetext, strlen(Ltext) + strlen(ModelName));
+    LogText(thetext, strlen(Ltext) + strlen(ModelName),false);
 }
 // ************************************************************************
 
 void ShowLogFile(uint16_t StartLine)
 {
     char TheText[MAXFILELEN + 10]; // MAX = 5K or so
-    char LogTeXt[] = "LogText";
+    char LogTeXt1[] = "LogText";
     CloseLogFile();
     ReadTextFile(LogFileName, TheText, StartLine, MAXLINES); // Then load text
-    SendText1(LogTeXt, TheText);                             // Then send it
+    SendText1(LogTeXt1, TheText);                             // Then send it
 }
 
 /******************************************************************************************************************************/
@@ -598,7 +605,7 @@ void  LogTotalRXSwaps(){
     Str(NB, RadioSwaps, 0);
     strcpy(buf, TheText);
     strcat(buf, NB);
-    LogShortText(buf, sizeof(buf));
+    LogText(buf, sizeof(buf),false);
 }
 
 #endif
