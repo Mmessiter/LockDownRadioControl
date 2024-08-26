@@ -686,6 +686,8 @@ void             LogRXVoltsPerCell();
 void             LogTXVoltsPerCell();
 void             LogStopFlyingMsg();
 void             LogNewRateInUse();
+void             LogTotalRXSwaps();
+FASTRUN void     LogShortText(char* TheText, uint16_t len);
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *

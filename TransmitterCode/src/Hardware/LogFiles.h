@@ -8,7 +8,7 @@
     #define LOGFILES_H
 
 /******************************************************************************************************************************/
-void          LogAverageFrameRate(){
+void LogAverageFrameRate(){
     char TheText[] = "Average frame rate: ";
     char buf[40]   = " ";
     char NB[10];
@@ -17,7 +17,7 @@ void          LogAverageFrameRate(){
     strcpy(buf, TheText);
     strcat(buf, NB);
     strcat(buf, fps);
-    LogText(buf, sizeof(buf));
+    LogShortText(buf, sizeof(buf));
 }
 
 /******************************************************************************************************************************/
@@ -237,6 +237,19 @@ FASTRUN void LogText(char* TheText, uint16_t len)
     CloseLogFile();
 }
 // ************************************************************************
+FASTRUN void LogShortText(char* TheText, uint16_t len) // Short text is not time stamped but has tab at start
+{
+    char crlf[] = {'|', 13, 10, 0};
+    char Tab[]   = "               - ";
+   
+    CheckLogFileIsOpen();
+    WriteToLogFile(Tab, strlen(Tab)); 
+    WriteToLogFile(TheText, len);
+    WriteToLogFile(crlf, sizeof(crlf));
+    CloseLogFile();
+}
+
+// ************************************************************************
 FASTRUN void LogMinGap()
 {
     char TheText[] = "Min logged gap: ";
@@ -319,31 +332,35 @@ void LogRXVoltsPerCell(){
     strcpy(buf, TheText);
     strcat(buf, NB);
     LogText(buf, sizeof(buf));
-    LogTXVoltsPerCell();
+    
 }
-
 // ************************************************************************
 void LogStopFlyingMsg(){
     char TheText[] = "'Stop flying' warning issued!";
     LogText(TheText, sizeof(TheText));
 }
 // ************************************************************************
+
+FASTRUN void LogEndLine()
+{
+    char sp[]    = "(End of this flight log.)";
+    LogShortText(sp, strlen(sp));
+}
+// ************************************************************************
 FASTRUN void LogDisConnection()
 {
     char buf[40]   = " ";
     char TheText[] = "Disconnected from ";
-
     strcpy(buf, TheText);
     strcat(buf, ModelName);
     LogText(buf, sizeof(buf));
-
     LogLongestGap();
     LogTotalLostPackets();
     LogTotalGoodPackets();
+    LogTotalRXSwaps();
     LogOverallSuccessRate();
     LogAverageFrameRate();
-    LogRXVoltsPerCell();   
-
+    LogEndLine();
 }
 // ************************************************************************
 FASTRUN void LogNewBank()
@@ -418,7 +435,7 @@ FASTRUN void LogLongestGap()
 {
     char thetext[50];
     snprintf(thetext, 45, "Longest gap: %d", (short int)GapLongest);
-    LogText(thetext, strlen(thetext));
+    LogShortText(thetext, strlen(thetext));
 }
 // ************************************************************************
  FASTRUN void LogBuddyChange(){
@@ -432,7 +449,7 @@ void LogTotalLostPackets()
 {
     char thetext[50];
     snprintf(thetext, 45, "Total lost packets: %d", (short int)TotalLostPackets);
-    LogText(thetext, strlen(thetext));
+    LogShortText(thetext, strlen(thetext));
 }
 // ************************************************************************
 
@@ -440,7 +457,7 @@ void LogTotalGoodPackets()
 {
     char thetext[50];
     snprintf(thetext, 45, "Total good packets: %d", (uint16_t)TotalGoodPackets);
-    LogText(thetext, strlen(thetext));
+    LogShortText(thetext, strlen(thetext));
 }
 // ************************************************************************
 
@@ -450,7 +467,7 @@ void LogOverallSuccessRate()
     uint32_t OverallSuccessRate = 0;
     OverallSuccessRate          = GetOverallSuccessRate();
     snprintf(thetext, 45, "Overall success rate: %d%%", (uint8_t)OverallSuccessRate);
-    LogText(thetext, strlen(thetext));
+    LogShortText(thetext, strlen(thetext));
 }
 // ************************************************************************
 
@@ -570,6 +587,18 @@ void LogVIEW()
         MakeLogFileName();  
         ShowLogFile(RecentStartLine);
     }
+}
+
+/******************************************************************************************************************************/
+
+void  LogTotalRXSwaps(){
+    char TheText[] = "Total RX swaps: ";
+    char buf[40]   = " ";
+    char NB[10];
+    Str(NB, RadioSwaps, 0);
+    strcpy(buf, TheText);
+    strcat(buf, NB);
+    LogShortText(buf, sizeof(buf));
 }
 
 #endif
