@@ -105,13 +105,15 @@ char * AddSpacesBefore(char * s, uint8_t n){
 void   ShowFreeSpaceEtc(){
 
     float FreeSpaceOnSD = (SD.totalSize() - SD.usedSize()) / ((float) (1024 * 1024 * 1024));
-    float UsedSpaceOnSD = SD.usedSize() / ((float) (1024 * 1024 * 1024));
+    float UsedSpaceOnSD = SD.usedSize() / ((float) (1024 * 1024));
     
     char t4[] = "t4";
     char t5[] = "t5";
     char t6[] = "t6";
     char NB[20];
     char Gbytes[] = " GB";
+    char Mbytes[] = " MB";
+    char * Bbytes = Gbytes;
 
     dtostrf(SD.totalSize() / (float) (1024 * 1024 * 1024), 2, 2, NB);
     AddSpacesBefore(NB, 5);
@@ -121,9 +123,16 @@ void   ShowFreeSpaceEtc(){
     AddSpacesBefore(NB, 5);
     strcat(NB, Gbytes);
     SendText(t6, NB);  
+
+   if (UsedSpaceOnSD >= 100) // less than 100 MB?
+    {
+        UsedSpaceOnSD /= 1024;
+    } else {
+        Bbytes = Mbytes; // use MB not GB
+    }
     dtostrf(UsedSpaceOnSD, 2, 2, NB);
-    AddSpacesBefore(NB, 5);
-    strcat(NB, Gbytes);
+    AddSpacesBefore(NB, 5);            
+    strcat(NB, Bbytes);
     SendText(t5, NB);
 }
 
