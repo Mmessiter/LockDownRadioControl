@@ -84,7 +84,7 @@ char * AddSizeToFilename(int ff, char * size){
     return size;
     float s = (float) GetFileSize(TheFilesList[ff]) /  (float)1024.00;
     dtostrf(s, 2, 2, nb);
-    while ((strlen(size) + strlen (nb)) < 7 ) strcat(size, " ");
+    while ((strlen(size) + strlen (nb)) < 6 ) strcat(size, " ");
     strcat(size, nb); 
     strcat(size, " KB");
     return size;
@@ -114,15 +114,15 @@ void   ShowFreeSpaceEtc(){
     char Gbytes[] = " GB";
 
     dtostrf(SD.totalSize() / (float) (1024 * 1024 * 1024), 2, 2, NB);
-    AddSpacesBefore(NB, 6);
+    AddSpacesBefore(NB, 5);
     strcat(NB, Gbytes);
     SendText(t4, NB);
     dtostrf(FreeSpaceOnSD, 2, 2, NB);
-    AddSpacesBefore(NB, 6);
+    AddSpacesBefore(NB, 5);
     strcat(NB, Gbytes);
     SendText(t6, NB);  
     dtostrf(UsedSpaceOnSD, 2, 2, NB);
-    AddSpacesBefore(NB, 6);
+    AddSpacesBefore(NB, 5);
     strcat(NB, Gbytes);
     SendText(t5, NB);
 }
