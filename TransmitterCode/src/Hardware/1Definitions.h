@@ -687,6 +687,7 @@ void             LogTXVoltsPerCell();
 void             LogStopFlyingMsg();
 void             LogNewRateInUse();
 void             LogTotalRXSwaps();
+void             LogTimeSinceBoot();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************

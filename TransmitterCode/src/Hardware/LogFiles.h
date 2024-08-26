@@ -88,9 +88,11 @@ void ReadTextFile(char* fname, char* htext, uint16_t StartLineNumber, uint16_t M
                 ++LineCounter;
                 a[0] = 34; // a '34'  ( " ) is ignored.
             }
-            if (Column >= MAXWIDTH) {
-                Column = WordWrap(htext);
-                ++LineCounter;
+            if (CurrentView != LOGVIEW) { // If not a log file word wrap is allowed 
+                if (Column >= MAXWIDTH) {
+                    Column = WordWrap(htext);
+                    ++LineCounter;
+                }
             }
             if ((a[0] == 13) || (a[0] == 10)) a[0] = 34; // Ignore CrLfs
             if (a[0] != 34) {
@@ -203,6 +205,8 @@ FASTRUN void DeleteLogFile1()
     }
 }
 
+/************************************************************************************************************/
+
 FASTRUN void CloseLogFile()
 {
     if (LogFileOpen) LogFileNumber.close();
@@ -232,7 +236,7 @@ FASTRUN void LogText(char* TheText, uint16_t len, bool TimeStamp)
 
 {
     char crlf[] = {'|', 13, 10, 0};
-      char Tab[]   = "               - ";
+    char Tab[]   = "               - ";
     static char LastText[100];
     if (strcmp(TheText, LastText) == 0) return;  // Don't log the same thing twice
     
@@ -277,6 +281,7 @@ FASTRUN void LogConnection()
     LogMinGap();
     LogRXVoltsPerCell();
     LogTXVoltsPerCell();
+    LogTimeSinceBoot();
 }
 
 // ************************************************************************
@@ -367,6 +372,7 @@ FASTRUN void LogDisConnection()
     LogTXVoltsPerCell();
     LogOverallSuccessRate();
     LogAverageFrameRate();
+    LogTimeSinceBoot();
     LogEndLine();
 }
 // ************************************************************************
@@ -608,4 +614,26 @@ void  LogTotalRXSwaps(){
     LogText(buf, sizeof(buf),false);
 }
 
+/******************************************************************************************************************************/
+
+void LogTimeSinceBoot(){
+    char TheText[] = "Time since boot: ";
+    char buf[70]   = " ";
+    char NB[10];
+    char min[]     = " minute";
+    char s[]       = "s";
+    char rhBracket[] = ")";
+    uint8_t NB1;
+    Str(NB, millis() / 1000, 0);
+    strcpy(buf, TheText);
+    strcat(buf, NB);
+    strcat(buf, " seconds (or less than ");
+    NB1 = (millis() / 60000) + 1;
+    Str(NB, NB1, 0);
+    strcat(buf, NB);
+    strcat(buf, min);
+    if (NB1 > 1) strcat(buf, s);
+    strcat(buf, rhBracket);
+    LogText(buf, sizeof(buf),false);
+}
 #endif
