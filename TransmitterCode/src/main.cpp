@@ -152,7 +152,7 @@
 #include "Hardware/Mixes.h"
 #include "Hardware/MenuOptions.h"
 #include "Hardware/LogFilesList.h"
-#include "Hardware/Help.h"//
+#include "Hardware/Help.h"
 
 /*********************************************************************************************************************************/
 
@@ -1088,6 +1088,7 @@ FLASHMEM void setup()
     if (!PPMdata.UseTXModule) ConfigureRadio();  
     RationaliseBuddy();
     WarnUserIfBuddyBoxIsOn();
+    ClearMostParameters();
 }
 // **************************************************************************************************************************************************************
 void RationaliseBuddy()
