@@ -380,13 +380,18 @@ FASTRUN void LogDisConnection()
 // ************************************************************************
 FASTRUN void LogNewBank()
 {
-    char Ltext[] = "Bank: ";//
+    char Ltext[50];
+    char colon[] = " (Bank ";
+    char rhb[]   = ")";
     char NB[5];
-    char thetext[20];
+    char thetext[40];
+    strcpy(Ltext, BankTexts[BanksInUse[Bank - 1]]); //"Bank: ";
+    strcat(Ltext, colon);
     Str(NB, Bank, 0);
     strcpy(thetext, Ltext);
     strcat(thetext, NB);
-    LogText(thetext, 7,true);
+    strcat(thetext, rhb);
+    LogText(thetext, strlen(thetext),true);
 }
 
 // ************************************************************************
