@@ -730,7 +730,80 @@ void Options2End()
     SendCommand(pTXSetupView);
     UpdateModelsNameEveryWhere();
 }
+/******************************************************************************************************************************/
 
+void OptionView3End() //
+{
+    char TxVCorrextion[]  = "t2";
+    char n1[]             = "n1";
+    char n2[]             = "n2";
+    char n3[]             = "n3";
+    char n4[]             = "n4";
+    char pTXSetupView[]   = "page TXSetupView";
+    char QNH[]            = "Qnh";
+
+    char sw0[] = "sw0";
+    char sw1[] = "sw1";
+    char n0[]  = "n0";
+
+
+
+    TxVoltageCorrection    = GetValue(TxVCorrextion);
+    PowerOffWarningSeconds = GetValue(n2);
+    PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 1, 10);
+    Qnh                    = (uint16_t)GetValue(QNH);
+    if (LEDBrightness != GetValue(n1)) UpdateLED();
+    ConnectionAssessSeconds = GetValue(n3);
+    ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
+    ScanSensitivity         = GetValue(n4);
+    ScanSensitivity         = CheckRange(ScanSensitivity, 1, 255); 
+     MinimumGap             = GetValue(n0);
+     if (MinimumGap < 10)   MinimumGap = 10;
+     UseLog                 = GetValue(sw0);
+     LogRXSwaps             = GetValue(sw1);
+    
+
+    SaveTransmitterParameters();
+    CloseModelsFile();
+    AddParameterstoQueue(2);  // 2 is the ID for sending QNH value to RX
+    CurrentView             = TXSETUPVIEW;
+    SendCommand(pTXSetupView);
+    UpdateModelsNameEveryWhere();
+  
+}
+
+
+/******************************************************************************************************************************/
+
+void OptionView3Start()
+{
+    char TxVCorrextion[] = "t2";
+    char n1[]            = "n1";
+    char n2[]            = "n2";
+    char n3[]            = "n3";
+    char n4[]            = "n4";
+    char lpm[]           = "c0"; // Low power mode
+    char OptionV3Start[] = "page OptionView3";
+    char QNH[]           = "Qnh";
+    char sw0[] = "sw0";
+    char sw1[] = "sw1";
+    char n0[]  = "n0";
+
+    CurrentView = OPTIONVIEW3;
+    SendCommand(OptionV3Start);
+    DelayWithDog(250);
+    SendValue(TxVCorrextion, TxVoltageCorrection);
+    SendValue(n2, PowerOffWarningSeconds);
+    SendValue(n3, ConnectionAssessSeconds);
+    SendValue(n4, ScanSensitivity);
+    SendValue(lpm, AutoModelSelect);
+    if (LEDBrightness < 15) LEDBrightness = DEFAULTLEDBRIGHTNESS;
+    SendValue(n1, LEDBrightness);
+    SendValue(QNH, Qnh);
+    SendValue(sw0, UseLog);
+    SendValue(sw1, LogRXSwaps);
+    SendValue(n0, MinimumGap);
+}
 
 /******************************************************************************************************************************/
 
@@ -749,7 +822,6 @@ void OptionView2Start()
         TxVoltageCorrection    = GetValue(TxVCorrextion);
         PowerOffWarningSeconds = GetValue(n2);
         PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 1, 10);
-
         if (LEDBrightness != GetValue(n1)) UpdateLED();
         ConnectionAssessSeconds = GetValue(n3);
         ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);

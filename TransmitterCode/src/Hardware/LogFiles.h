@@ -569,17 +569,10 @@ void RefreshLog()
 /******************************************************************************************************************************/
 void LogEND() 
 { // close log screen
-    char n0[]        = "n0";
-    char c0[]        = "c0";
-    char sw0[]       = "sw0";
+    
     char pDataView[] = "page DataView";
     CurrentView      = DATAVIEW;
     LastShowTime     = 0;
-    MinimumGap       = GetValue(n0);
-    if (MinimumGap < 10) MinimumGap = 10;
-    LogRXSwaps       = GetValue(c0);
-    UseLog           = GetValue(sw0);
-    SaveTransmitterParameters();
     ForceDataRedisplay();
     SendCommand(pDataView);
 }
@@ -599,19 +592,11 @@ void DelLOG() // This is not called anymore
 /******************************************************************************************************************************/
 void LogVIEW()
 { // Start log screen
-    char n0[]       = "n0";
-    char c0[]       = "c0";
-    char sw0[]      = "sw0";
+    
     char pLogView[] = "page LogView";
-    char HelpView[] = "HelpText";
-    char blank[]    = " ";
     SendCommand(pLogView);
     CurrentView = LOGVIEW;
     ClearFilesList();
-    SendText(HelpView, blank);
-    SendValue(n0, MinimumGap);
-    SendValue(c0, LogRXSwaps);
-    SendValue(sw0, UseLog);
     if (UseLog) {
         RecentStartLine = 0;
         MakeLogFileName();  

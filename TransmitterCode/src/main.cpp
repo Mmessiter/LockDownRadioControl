@@ -2285,36 +2285,6 @@ FASTRUN void DisplayCurveAndServoPos()
 
 /******************************************************************************************************************************/
 
-void OptionView3Start()
-{
-    char TxVCorrextion[] = "t2";
-    char n1[]            = "n1";
-    char n2[]            = "n2";
-    char n3[]            = "n3";
-    char n4[]            = "n4";
-    char t10[]           = "t10";
-    char lpm[]           = "c0"; // Low power mode
-    char Vbuf[10];
-    char OptionV3Start[] = "page OptionView3";
-    char QNH[]           = "Qnh";
-
-    CurrentView = OPTIONVIEW3;
-    SendCommand(OptionV3Start);
-    DelayWithDog(250);
-    snprintf(Vbuf, 5, "%1.2f", StopFlyingVoltsPerCell);
-    SendText(t10, Vbuf);
-    SendValue(TxVCorrextion, TxVoltageCorrection);
-    SendValue(n2, PowerOffWarningSeconds);
-    SendValue(n3, ConnectionAssessSeconds);
-    SendValue(n4, ScanSensitivity);
-    SendValue(lpm, AutoModelSelect);
-    if (LEDBrightness < 15) LEDBrightness = DEFAULTLEDBRIGHTNESS;
-    SendValue(n1, LEDBrightness);
-    SendValue(QNH, Qnh);
-}
-
-/******************************************************************************************************************************/
-
 void RXOptionsViewStart() // model options screen
 {
     char pRXSetup1[] = "page RXOptionsView";
@@ -2410,36 +2380,6 @@ void UpdateLED()
     LEDBrightness = GetValue(n1);
     LEDBrightness = CheckRange(LEDBrightness, 1, 254);
     LedWasGreen   = false; // Forces a redisplay if brightness has changed
-}
-
-/******************************************************************************************************************************/
-
-void OptionView3End() //
-{
-    char TxVCorrextion[]  = "t2";
-    char n1[]             = "n1";
-    char n2[]             = "n2";
-    char n3[]             = "n3";
-    char n4[]             = "n4";
-    char pTXSetupView[]   = "page TXSetupView";
-    char QNH[]            = "Qnh";
-
-    TxVoltageCorrection    = GetValue(TxVCorrextion);
-    PowerOffWarningSeconds = GetValue(n2);
-    PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 1, 10);
-    Qnh                    = (uint16_t)GetValue(QNH);
-    if (LEDBrightness != GetValue(n1)) UpdateLED();
-    ConnectionAssessSeconds = GetValue(n3);
-    ConnectionAssessSeconds = CheckRange(ConnectionAssessSeconds, 1, 6);
-    ScanSensitivity         = GetValue(n4);
-    ScanSensitivity         = CheckRange(ScanSensitivity, 1, 255); 
-    SaveTransmitterParameters();
-    CloseModelsFile();
-    AddParameterstoQueue(2);  // 2 is the ID for sending QNH value to RX
-    CurrentView             = TXSETUPVIEW;
-    SendCommand(pTXSetupView);
-    UpdateModelsNameEveryWhere();
-  
 }
 
 /******************************************************************************************************************************/
