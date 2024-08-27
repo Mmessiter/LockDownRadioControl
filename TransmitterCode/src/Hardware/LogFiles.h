@@ -238,6 +238,7 @@ FASTRUN void LogText(char* TheText, uint16_t len, bool TimeStamp)
     char crlf[] = {'|', 13, 10, 0};
     char Tab[]   = "               - ";
     static char LastText[100];
+    if (!len) return;
     if (strcmp(TheText, LastText) == 0) return;  // Don't log the same thing twice
     
     CheckLogFileIsOpen();
@@ -381,16 +382,23 @@ FASTRUN void LogDisConnection()
 FASTRUN void LogNewBank()
 {
     char Ltext[50];
-    char colon[] = " (Bank ";
-    char rhb[]   = ")";
-    char NB[5];
+    char bk[]    = "Bank";
     char thetext[40];
-    strcpy(Ltext, BankTexts[BanksInUse[Bank - 1]]); //"Bank: ";
-    strcat(Ltext, colon);
-    Str(NB, Bank, 0);
-    strcpy(thetext, Ltext);
-    strcat(thetext, NB);
-    strcat(thetext, rhb);
+
+    strcpy(Ltext, BankTexts[BanksInUse[Bank - 1]]); // Get the bank name text
+     if (!InStrng(bk,Ltext))                         // If not already there, add the bank number    
+     {
+        char colon[] = " (Bank ";
+        char rhb[]   = ")";
+        char NB[5];
+        strcat(Ltext, colon);
+        Str(NB, Bank, 0);
+        strcpy(thetext, Ltext);
+        strcat(thetext, NB);
+        strcat(thetext, rhb);
+     }else{
+        strcpy(thetext, Ltext);
+     }
     LogText(thetext, strlen(thetext),true);
 }
 
