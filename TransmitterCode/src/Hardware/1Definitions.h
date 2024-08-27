@@ -688,6 +688,7 @@ void             LogStopFlyingMsg();
 void             LogNewRateInUse();
 void             LogTotalRXSwaps();
 void             LogTimeSinceBoot();
+void             LogConnectedDuration();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************

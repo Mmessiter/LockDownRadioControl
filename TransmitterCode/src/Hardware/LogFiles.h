@@ -257,17 +257,18 @@ FASTRUN void LogText(char* TheText, uint16_t len, bool TimeStamp)
     CloseLogFile();
 }
 
-
 // ************************************************************************
 FASTRUN void LogMinGap()
 {
     char TheText[] = "Min logged gap: ";
     char buf[25]   = " ";
     char NB[]      = "    ";
+    char ms[]      = " ms";
 
     Str(NB, MinimumGap, 0);
     strcpy(buf, TheText);
     strcat(buf, NB);
+    strcat(buf, ms);
     LogText(buf, sizeof(buf), false);
 }
 // ************************************************************************
@@ -364,6 +365,7 @@ FASTRUN void LogDisConnection()
     strcpy(buf, TheText);
     strcat(buf, ModelName);
     LogText(buf, sizeof(buf),true);
+    LogConnectedDuration();
     LogLongestGap();
     LogTotalLostPackets();
     LogTotalGoodPackets();
@@ -447,7 +449,9 @@ FASTRUN void LogThisGap()
 FASTRUN void LogLongestGap()
 {
     char thetext[50];
+    char ms[] = " ms";
     snprintf(thetext, 45, "Longest gap: %d", (short int)GapLongest);
+    strcat(thetext, ms);
     LogText(thetext, strlen(thetext),false);
 }
 // ************************************************************************
@@ -614,26 +618,38 @@ void  LogTotalRXSwaps(){
     LogText(buf, sizeof(buf),false);
 }
 
+
+
 /******************************************************************************************************************************/
 
-void LogTimeSinceBoot(){
-    char TheText[] = "Time since boot: ";
-    char buf[70]   = " ";
-    char NB[10];
-    char min[]     = " minute";
-    char s[]       = "s";
-    char rhBracket[] = ")";
-    uint8_t NB1;
-    Str(NB, millis() / 1000, 0);
+void LogTimeSince(char* TheText, uint32_t Time){
+   
+    char buf[90]   = " ";
+    char NB[20];
+    // how many minutes and seconds since Time
+
+    Str(NB, Time / 60000, 0);
     strcpy(buf, TheText);
     strcat(buf, NB);
-    strcat(buf, " seconds (or less than ");
-    NB1 = (millis() / 60000) + 1;
-    Str(NB, NB1, 0);
+    strcat(buf, " minute");
+    if ((Time / 60000 > 1) || (Time / 60000 == 0)) strcat(buf, "s");
+    strcat(buf, " and ");
+    Str(NB, (Time % 60000) / 1000, 0);
     strcat(buf, NB);
-    strcat(buf, min);
-    if (NB1 > 1) strcat(buf, s);
-    strcat(buf, rhBracket);
+    strcat(buf, " second");
+    if ((Time % 60000) / 1000 > 1) strcat(buf, "s");
     LogText(buf, sizeof(buf),false);
+}
+/******************************************************************************************************************************/
+void LogTimeSinceBoot(){
+    char TheText[] = "Time since boot: ";
+    LogTimeSince(TheText, millis());// how many minutes and seconds since boot
+
+}
+/******************************************************************************************************************************/
+void LogConnectedDuration(){
+    uint32_t Duration = millis() - LedGreenMoment;
+    char TheText[] = "Time connected: ";
+    LogTimeSince(TheText, Duration); // how many minutes and seconds since connection
 }
 #endif
