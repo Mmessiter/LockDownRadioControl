@@ -224,7 +224,7 @@ FASTRUN bool LogFilePreamble()
     char Divider[] = " - ";
     static char LastTimeStamp[20];
     CreateTimeStamp(dbuf);    // Put time stamp into buffer
-    if (strcmp(dbuf, LastTimeStamp) == 0) return false; // Don't log the same thing twice
+    if (strcmp(dbuf, LastTimeStamp) == 0) return false; // Don't log the same time twice
     strcpy(LastTimeStamp, dbuf);
     WriteToLogFile(dbuf, 9);  // Add time stamp 9 bytes long
     WriteToLogFile(Divider, 3);
@@ -463,7 +463,7 @@ FASTRUN void LogLongestGap()
 {
     char thetext[50];
     char ms[] = " ms";
-    snprintf(thetext, 45, "Longest gap: %d", (short int)GapLongest);
+    snprintf(thetext, 45, "Longest gap: %lu", (unsigned long)GapLongest);
     strcat(thetext, ms);
     LogText(thetext, strlen(thetext),false);
 }
@@ -478,7 +478,7 @@ FASTRUN void LogLongestGap()
 void LogTotalLostPackets()
 {
     char thetext[50];
-    snprintf(thetext, 45, "Total lost packets: %d", (short int)TotalLostPackets);
+    snprintf(thetext, 45, "Total lost packets:  %lu", (unsigned long)TotalLostPackets);
     LogText(thetext, strlen(thetext),false);
 }
 // ************************************************************************
@@ -486,7 +486,7 @@ void LogTotalLostPackets()
 void LogTotalGoodPackets()
 {
     char thetext[50];
-    snprintf(thetext, 45, "Total good packets: %d", (uint16_t)TotalGoodPackets);
+    snprintf(thetext, 45, "Total good packets: %lu", (unsigned long)TotalGoodPackets);
     LogText(thetext, strlen(thetext),false);
 }
 // ************************************************************************
@@ -551,10 +551,16 @@ void ShowLogFile(uint16_t StartLine)
 {
     char TheText[MAXFILELEN + 10]; // MAX = 5K or so
     char LogTeXt1[] = "LogText";
+    char Left8FileName[10];
+    char t0[]       = "t0";
     CloseLogFile();
     ReadTextFile(LogFileName, TheText, StartLine, MAXLINES); // Then load text
-    SendText1(LogTeXt1, TheText);                             // Then send it
-}
+    
+    strncpy(Left8FileName, LogFileName, 8);
+    Left8FileName[8] = 0;
+    SendText(t0, Left8FileName);
+    SendText1(LogTeXt1, TheText); // Send it to the screen
+   }
 
 /******************************************************************************************************************************/
 void RefreshLog()
@@ -595,6 +601,7 @@ void LogVIEW()
     
     char pLogView[] = "page LogView";
     SendCommand(pLogView);
+    DelayWithDog(200);
     CurrentView = LOGVIEW;
     ClearFilesList();
     if (UseLog) {
