@@ -551,14 +551,18 @@ void ShowLogFile(uint16_t StartLine)
 {
     char TheText[MAXFILELEN + 10]; // MAX = 5K or so
     char LogTeXt1[] = "LogText";
-    char Left8FileName[10];
     char t0[]       = "t0";
+    char Logtitle[] = "Log date: ";
+    char buf[40]    = " ";
     CloseLogFile();
     ReadTextFile(LogFileName, TheText, StartLine, MAXLINES); // Then load text
-    
-    strncpy(Left8FileName, LogFileName, 8);
-    Left8FileName[8] = 0;
-    SendText(t0, Left8FileName);
+    strcpy(buf, Logtitle);
+    for (uint8_t i = 0; i < 8; i++) {
+        buf[i + 10] = LogFileName[i];
+        if (buf[i + 10] == '-') buf[i + 10] = '/';
+        buf[i + 11] = 0;
+    }
+    SendText(t0, buf);
     SendText1(LogTeXt1, TheText); // Send it to the screen
    }
 
