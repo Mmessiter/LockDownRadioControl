@@ -261,7 +261,7 @@ FASTRUN void LogText(char* TheText, uint16_t len, bool TimeStamp)
 // ************************************************************************
 FASTRUN void LogMinGap()
 {
-    char TheText[] = "Min logged gap: ";
+    char TheText[] = "Minimum logged gap: ";
     char buf[25]   = " ";
     char NB[]      = "    ";
     char ms[]      = " ms";
@@ -478,7 +478,7 @@ FASTRUN void LogLongestGap()
 void LogTotalLostPackets()
 {
     char thetext[50];
-    snprintf(thetext, 45, "Total lost packets:  %lu", (unsigned long)TotalLostPackets);
+    snprintf(thetext, 45, "Lost data packets:  %lu", (unsigned long)TotalLostPackets);
     LogText(thetext, strlen(thetext),false);
 }
 // ************************************************************************
@@ -486,7 +486,7 @@ void LogTotalLostPackets()
 void LogTotalGoodPackets()
 {
     char thetext[50];
-    snprintf(thetext, 45, "Total good packets: %lu", (unsigned long)TotalGoodPackets);
+    snprintf(thetext, 45, "Good data packets: %lu", (unsigned long)TotalGoodPackets);
     LogText(thetext, strlen(thetext),false);
 }
 // ************************************************************************
@@ -496,7 +496,7 @@ void LogOverallSuccessRate()
     char     thetext[50];
     uint32_t OverallSuccessRate = 0;
     OverallSuccessRate          = GetOverallSuccessRate();
-    snprintf(thetext, 45, "Overall success rate: %d%%", (uint8_t)OverallSuccessRate);
+    snprintf(thetext, 45, "Success rate: %d%%", (uint8_t)OverallSuccessRate);
     LogText(thetext, strlen(thetext),false);
 }
 // ************************************************************************
@@ -545,6 +545,32 @@ FASTRUN void LogThisModel()
     strcat(thetext, ModelName);
     LogText(thetext, strlen(Ltext) + strlen(ModelName),false);
 }
+
+// ************************************************************************
+
+void LogReleased(){
+
+}
+ 
+// ************************************************************************
+
+    
+void LogTouched(){                                              // *********** heer
+    // char Screen_Y[] = SCREEN_Y; 
+    // DelayWithDog(25);
+    // char logtextvaly[] = "LogText.val_y";
+    // char HitDown[] = "Hit 'Down'";
+    // char buf[40]   = " ";
+    // char NB[10];
+    // char TheText[] = "Screen touched at Y: ";
+    // Str(NB, GetOtherValue(Screen_Y), 0); // position of touch on screen
+    // strcpy(buf, TheText);
+    // strcat(buf, NB);
+    // Look (buf);
+    // Look(GetOtherValue(logtextvaly));// how far scrolling has gone
+    // Look("");
+}
+
 // ************************************************************************
 
 void ShowLogFile(uint16_t StartLine)
@@ -554,6 +580,7 @@ void ShowLogFile(uint16_t StartLine)
     char t0[]       = "t0";
     char Logtitle[] = "Log date: ";
     char buf[40]    = " ";
+    
     CloseLogFile();
     ReadTextFile(LogFileName, TheText, StartLine, MAXLINES); // Then load text
     strcpy(buf, Logtitle);
@@ -576,6 +603,8 @@ void RefreshLog()
         ClearText();
     }
 }
+ 
+
 /******************************************************************************************************************************/
 void LogEND() 
 { // close log screen
@@ -618,7 +647,7 @@ void LogVIEW()
 /******************************************************************************************************************************/
 
 void  LogTotalRXSwaps(){
-    char TheText[] = "Total RX swaps: ";
+    char TheText[] = "RX swaps: ";
     char buf[40]   = " ";
     char NB[10];
     Str(NB, RadioSwaps, 0);

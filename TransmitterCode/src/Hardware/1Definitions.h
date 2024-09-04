@@ -437,10 +437,15 @@
 
 
 // **************************************************************************
-//                           ScreenData                                     *
+//                           Screenposition                                 *
 //***************************************************************************
    
-    // MIXES SCREEN
+#define SCREEN_X "tch2"
+#define SCREEN_Y "tch1"
+   
+// **************************************************************************
+//                               MIXES                                      *
+//***************************************************************************
    
     #define MIXINPUT        0
     #define MIXOUTPUT       1
@@ -689,6 +694,10 @@ void             LogNewRateInUse();
 void             LogTotalRXSwaps();
 void             LogTimeSinceBoot();
 void             LogConnectedDuration();
+void             LogReleased();
+void             LogTouched();
+void             DownLog();
+void             UpLog();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************

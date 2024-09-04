@@ -2915,7 +2915,6 @@ void  EndServoTypeView(){ // Frequency and centre pulse width
     }
     SendValue(Progress, 100);
     SendCommand(ProgressEnd);    
-  //  RXOptionsViewStart();
     GotoFrontView();
     AddParameterstoQueue(6);
     AddParameterstoQueue(7);
@@ -2924,7 +2923,7 @@ void  EndServoTypeView(){ // Frequency and centre pulse width
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!  ( Use "NUMBER<<8" )
-#define LASTFUNCTION1 14 // One more than final one
+#define LASTFUNCTION1 16 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])() {
         Blank,                        // 0 Cannot be used
@@ -2940,7 +2939,10 @@ void (*NumberedFunctions1[LASTFUNCTION1])() {
         StartServosTypeView,          // 10
         EndServoTypeView,             // 11
         LoadNewLogFile,               // 12
-        DeleteThisLogFile             // 13
+        DeleteThisLogFile,            // 13
+        LogReleased,                  // 14  
+        LogTouched                    // 15
+
 
 };
 
