@@ -195,6 +195,13 @@ void ShowTrimToAll(){
 
 /*********************************************************************************************************************************/
 
+/**
+ * @brief Populates the GPS view on the NEXTION data screen with the current GPS data.
+ * 
+ * This function updates the labels on the GPS view screen with the current GPS data. It displays information such as GPS fix status, longitude, latitude, bearing, distance, speed, altitude, and satellite count.
+ * 
+ * @note The function assumes that the GPS data variables (e.g., GpsFix, GPSSatellites, GPSLongitude, etc.) have been properly initialized before calling this function.
+ */
 void PopulateGPSView(){
 
     char         Vbuf[50];
@@ -203,9 +210,9 @@ void PopulateGPSView(){
     char         Lat[]                 = "Lat";
     char         Bear[]                = "Bear";
     char         Dist[]                = "Dist";
-    char         Sped[]                = "Sped";
+    char         Sped[]                = "Sped";    
     char         yes[]                 = "Yes";
-    char         no[]                  = "No";
+    char         no[]                  = "No";  
     char         ALT[]                 = "ALT";
     char         MALT[]                = "MALT";
     char         MxS[]                 = "MxS";

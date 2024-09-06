@@ -138,6 +138,8 @@ FASTRUN void CreateTimeStamp(char* DateAndTime)
         strcat(DateAndTime, Colon);
         if (MayBeAddZero(tm.Second)) strcat(DateAndTime, zero);
         strcat(DateAndTime, Str(NB, tm.Second, 0));
+    }else{
+        strcpy(DateAndTime, "NO_CLOCK");
     }
 }
 /************************************************************************************************************/
@@ -163,6 +165,10 @@ FASTRUN void MakeLogFileName()
         strcat(LogFileName, dash);
         strcat(LogFileName, Str(NB, Gyear, 0));
         strcat(LogFileName, ".LOG");
+    }
+    else
+    {
+        strcpy(LogFileName, "NO_CLOCK.LOG");
     }
 }
 /************************************************************************************************************/
