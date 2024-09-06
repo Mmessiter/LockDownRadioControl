@@ -174,6 +174,7 @@ void ClearMostParameters(){ // called from RED LED ON
         UsingDefaultPipeAddress = true;
         AddExtraParameters      = false;
         VersionsCompared        = false;
+        LogLineNumber           = 0;
         for (int i = 0; i < CHANNELSUSED; ++i) {
             PrePreviousBuffer[i]    = 0;
             PreviousBuffer[i]       = 0;                         
@@ -927,17 +928,19 @@ void ConvertBuddyPipeTo64BITS()
 
 void WarnUserIfBuddyBoxIsOn() // This function warns the user if the buddy box is on
 {
+ #define PAUSEFORMSG 550
+  
    if (BuddyPupilOnWireless) {
         PlaySound(BUDDYMSG);
-        DelayWithDog(1000);
+        DelayWithDog(PAUSEFORMSG);
         PlaySound(BUDDYMSG);
-        DelayWithDog(1000);
+        DelayWithDog(PAUSEFORMSG);
     }
     if (BuddyMasterOnWireless) {
         PlaySound(MASTERMSG);
-        DelayWithDog(1000);
+        DelayWithDog(PAUSEFORMSG);
          PlaySound(MASTERMSG);
-        DelayWithDog(1000);
+        DelayWithDog(PAUSEFORMSG);
     }
 }
 /*********************************************************************************************************************************/
@@ -2970,7 +2973,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     EndBuddyView,             // 12
     UpLog,                    // 13
     DownLog,                  // 14
-    RefreshLog,               // 15
+    GotoEndsOfLog,             // 15
     LogEND,                   // 16
     StartLogFilesListScreen,  // 17 // was DelLOG. not now though. 
     LogVIEW,                  // 18

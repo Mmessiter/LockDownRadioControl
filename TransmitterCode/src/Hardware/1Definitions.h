@@ -888,7 +888,7 @@ uint8_t         SaveBank             = 0;
 bool            FailSafeChannel[CHANNELSUSED + 1];
 bool            SaveFailSafeNow = false;
 uint32_t        FailSafeTimer;
-
+uint16_t        LogLineNumber = 0;
 struct CD{
     uint16_t        ChannelBitMask = 0;                    
     uint16_t        CompressedData[COMPRESSEDWORDS+12];   // Much Bigger than needed for safety 
