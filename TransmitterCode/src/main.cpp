@@ -175,6 +175,7 @@ void ClearMostParameters(){ // called from RED LED ON
         AddExtraParameters      = false;
         VersionsCompared        = false;
         LogLineNumber           = 0;
+        strcpy(LogFileName,"");
         for (int i = 0; i < CHANNELSUSED; ++i) {
             PrePreviousBuffer[i]    = 0;
             PreviousBuffer[i]       = 0;                         
@@ -248,7 +249,7 @@ void GreenLedOn()
         ForceVoltDisplay = true; // Force a battery check of the models battery
         SendInitialSetupParams();
         ResetMotorTimer();
-        strcpy(LogFileName,"");
+        strcpy(LogFileName,"");  // avoid logging to the wrong file
     }else{
         if (LedIsBlinking) analogWrite(GREENLED, GetLEDBrightness());               //Blink Led!
     }
@@ -2943,19 +2944,19 @@ void (*NumberedFunctions1[LASTFUNCTION1])() {
         EndServoTypeView,             // 11
         LoadNewLogFile,               // 12
         DeleteThisLogFile,            // 13
-        LogReleased,                  // 14  
-        LogTouched                    // 15
+        LogReleased,                  // 14   // these do nothing, yet
+        LogTouched                    // 15   // these do nothing, yet
 
 
 };
 
  // This list migth become MUCH longer as it limit is 24 bits big
 
-// ******************************** Global Array0 of numbered function pointers - OK up to 127 functions ... **********************************
+// ******************************** Global Array of numbered function pointers - OK up to 127 functions ... **********************************
 
 // This list can be only up to 127 (7 BITS) functions long
 
-#define LASTFUNCTION 79 // One more than final one, because first is number zero
+#define LASTFUNCTION 80 // One more than final one, because first is number zero
 
 void (*NumberedFunctions[LASTFUNCTION])() {
     Blank,                    // 0  Cannot be used
@@ -2973,9 +2974,9 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     EndBuddyView,             // 12
     UpLog,                    // 13
     DownLog,                  // 14
-    GotoEndsOfLog,             // 15
+    BottomOfLogFile,          // 15  // goto bottom of log file
     LogEND,                   // 16
-    StartLogFilesListScreen,  // 17 // was DelLOG. not now though. 
+    StartLogFilesListScreen,  // 17  // was DelLOG. not now though. 
     LogVIEW,                  // 18
     SetupViewFM,              // 19
     StartSubTrimView,         // 20
@@ -3022,7 +3023,7 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     NoPressed,                // 61
     RenameFile,               // 62
     CheckAllModelIds,         // 63
-    Blank,                    // 64  // spare
+    Blank,                    // 64  // spare ****************************************************
     ReceiveModelFile,         // 65
     TXModuleViewStart,        // 66
     TXModuleViewEnd,          // 67
@@ -3036,10 +3037,12 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     TrimsToSubtrim,           // 75
     ReceiveLotsofData,        // 76
     SetNewDualRate,           // 77 // when the DualRate behavior scrollable thingy is changed
-    EndLogFilesListScreen     // 78
-
-
-}; // This list migth become longer but a new one is now started above without the 127 limit
+    EndLogFilesListScreen,    // 78
+    TopOfLogFile              // 79 // goto top of log file
+   
+   
+   // must stop at 126
+}; // This list might become longer but a new one is now started above without the 127 limit
 
 /*********************************************************************************************************************************
  *                          BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)                                            *
@@ -4464,7 +4467,11 @@ void SimulateCloseDown()
     analogWrite(REDLED, 0);
     SendCommand(ScreenOff);
     if (strcmp(ModelName, NotInUse) != 0) SaveAllParameters(); // Save the model if it's not 'Not in use'
-    if (UseLog) LogPowerOff();                        // log the event
+    if (UseLog)
+    {
+        strcpy(LogFileName,"");  // avoid logging to the wrong file
+        LogPowerOff();
+    }                       // log the event
     if (PlayFanfare) PlaySound(WINDOWS2);             // Play the fanfare
     DelayWithDog(POWERONOFFDELAY);                    // 2 seconds delay in case button held down too long
     digitalWrite(POWER_OFF_PIN, HIGH);                // Power off really, eventually ...

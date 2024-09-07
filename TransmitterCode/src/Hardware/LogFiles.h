@@ -224,6 +224,11 @@ FASTRUN void WriteToLogFile(char* SomeData, uint16_t len)
     LogFileNumber.write(SomeData, len);
 }
 // ************************************************************************
+/**
+ * @brief Checks if the current time stamp is different from the last time stamp and logs the time stamp to a file.
+ * 
+ * @return true if the time stamp is different and successfully logged, false otherwise.
+ */
 FASTRUN bool LogFilePreamble()
 {
     char dbuf[22];
@@ -238,25 +243,25 @@ FASTRUN bool LogFilePreamble()
 }
 
 // ************************************************************************
+/**
+ * @brief Logs the given text to a file.
+ * 
+ * This function logs the provided text to a file. It checks if the text is the same as the last logged text and avoids logging it again. 
+ * The function also supports adding a timestamp to the log entry.
+ * 
+ * @param TheText The text to be logged.
+ * @param len The length of the text.
+ * @param TimeStamp Flag indicating whether to add a timestamp to the log entry.
+ */
 FASTRUN void LogText(char* TheText, uint16_t len, bool TimeStamp)
 
 {
     char crlf[] = {'|', 13, 10, 0};
     char Tab[]   = "               - ";
     static char LastText[100];
-    char buf[100];
     if (!len) return;
     if (strcmp(TheText, LastText) == 0) return;  // Don't log the same thing twice
-    
     CheckLogFileIsOpen();
-  
-    strcpy(LastText, TheText);
-    Str(buf, LogLineNumber, 0);
-    ++LogLineNumber;
-    strcat(buf, ") ");
-    WriteToLogFile(buf, strlen(buf));
-    
-    
     if (TimeStamp) 
         {
            if(!LogFilePreamble()) WriteToLogFile(Tab, strlen(Tab)); 
@@ -265,7 +270,6 @@ FASTRUN void LogText(char* TheText, uint16_t len, bool TimeStamp)
         {
             WriteToLogFile(Tab, strlen(Tab)); 
         }
-  
     WriteToLogFile(TheText, len);
     WriteToLogFile(crlf, sizeof(crlf));
     CloseLogFile();
@@ -372,6 +376,19 @@ FASTRUN void LogEndLine()
     LogText(sp, strlen(sp),false);
 }
 // ************************************************************************
+/**
+ * @brief Logs the disconnection event.
+ * 
+ * This function logs the disconnection event by creating a log message with the information about the disconnection. 
+ * It includes the model name and various statistics related to the radio control system. 
+ * The log message is then passed to the LogText function for logging.
+ * 
+ * @note This function assumes that the variable ModelName is defined and contains the model name.
+ * 
+ * @note This function should be called when a disconnection event occurs.
+ * 
+ * @note This function is marked with the FASTRUN attribute to optimize its execution speed.
+ */
 FASTRUN void LogDisConnection()
 {
     char buf[40]   = " ";
@@ -562,28 +579,10 @@ FASTRUN void LogThisModel()
 // ************************************************************************
 
 void LogReleased(){
-
 }
- 
 // ************************************************************************
-
-    
-void LogTouched(){                                              // *********** heer
-    // char Screen_Y[] = SCREEN_Y; 
-    // DelayWithDog(25);
-    // char logtextvaly[] = "LogText.val_y";
-    // char HitDown[] = "Hit 'Down'";
-    // char buf[40]   = " ";
-    // char NB[10];
-    // char TheText[] = "Screen touched at Y: ";
-    // Str(NB, GetOtherValue(Screen_Y), 0); // position of touch on screen
-    // strcpy(buf, TheText);
-    // strcat(buf, NB);
-    // Look (buf);
-    // Look(GetOtherValue(logtextvaly));// how far scrolling has gone
-    // Look("");
+void LogTouched(){                                         
 }
-
 // ************************************************************************
 
 void ShowLogFile(uint16_t StartLine)
@@ -607,33 +606,26 @@ void ShowLogFile(uint16_t StartLine)
    }
 
 /******************************************************************************************************************************/
-/**
- * @brief Moves the cursor to the ends of the log and updates the log display.
- * 
- * This function is responsible for moving the cursor to the ends of the log and updating the log display accordingly. 
- * It toggles the direction of movement between up and down. 
- * If the direction is set to up, it sets the recent start line to 1, shows the log file starting from the recent start line, 
- * and sends a value of 0 for the "LogText.val_y" to another function. If the direction is set to down, it calls the UpLog() 
- * function and continues moving down the log until there is no more content to display. It also delays for 30 milliseconds between each movement. 
- * Finally, it sends the maximum value of "LogText.maxval_y" to another function.
- */
-void GotoEndsOfLog()
+
+void TopOfLogFile()
+{
+    char LogTeXt_val_y[]= "LogText.val_y";
+    RecentStartLine = 0;
+    ShowLogFile(RecentStartLine);
+    DelayWithDog(15);
+    SendOtherValue(LogTeXt_val_y, 0);
+}
+/******************************************************************************************************************************/
+
+void BottomOfLogFile()
 {   
-    static bool GoDown = false; 
     char LogTeXt_val_y[]= "LogText.val_y";
     char Logtext_maxval_y[] = "LogText.maxval_y";
     uint16_t maxval_y = GetOtherValue(Logtext_maxval_y);
-    GoDown = !GoDown;
-    if(!GoDown)  {
-        RecentStartLine = 1;
-        ShowLogFile(RecentStartLine);
-        SendOtherValue(LogTeXt_val_y, 0);
-        return;
-    }
     UpLog();
     while(ThereIsMoreToSee) {
         DownLog();
-        DelayWithDog(30);
+        DelayWithDog(15);
     }
     SendOtherValue(LogTeXt_val_y, maxval_y);
 }
