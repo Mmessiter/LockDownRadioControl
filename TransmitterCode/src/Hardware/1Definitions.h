@@ -1142,6 +1142,7 @@ char    pTXModule[]               = "page TXModuleView";
 char    pTrimDefView[]            = "page TrimDefView";
 char    pTrimView[]               = "page TrimView";
 char    pLogView[]                = "page LogView";
+bool    ScrollWithoutDisplaying   = false;
 
 
 

@@ -602,7 +602,7 @@ void ShowLogFile(uint16_t StartLine)
         buf[i + 11] = 0;
     }
     SendText(t0, buf);
-    SendText1(LogTeXt1, TheText); // Send it to the screen
+    if (!ScrollWithoutDisplaying) SendText1(LogTeXt1, TheText); // Send it to the screen
    }
 
 /******************************************************************************************************************************/
@@ -616,17 +616,19 @@ void TopOfLogFile()
     SendOtherValue(LogTeXt_val_y, 0);
 }
 /******************************************************************************************************************************/
-
+/**
+ * 
+ * This function scrolls to the bottom of the log file and displays the most recent log entries.
+ */
 void BottomOfLogFile()
 {   
     char LogTeXt_val_y[]= "LogText.val_y";
     char Logtext_maxval_y[] = "LogText.maxval_y";
     uint16_t maxval_y = GetOtherValue(Logtext_maxval_y);
-    UpLog();
-    while(ThereIsMoreToSee) {
-        DownLog();
-        DelayWithDog(15);
-    }
+    ScrollWithoutDisplaying = true;
+    while(ThereIsMoreToSee) DownLog();
+    ScrollWithoutDisplaying = false;
+    ShowLogFile(RecentStartLine);
     SendOtherValue(LogTeXt_val_y, maxval_y);
 }
  
@@ -663,9 +665,10 @@ void LogVIEW()
     CurrentView = LOGVIEW;
     ClearFilesList();
     if (UseLog) {
-        RecentStartLine = 0;
         MakeLogFileName();  
+        RecentStartLine = 0;
         ShowLogFile(RecentStartLine);
+       // BottomOfLogFile(); // ???
     }
 }
 
