@@ -58,6 +58,7 @@
 #include "utilities/common.h"
 #include "utilities/radio.h"
 #include "utilities/pid.h"
+#include "utilities/GPS.h"
 
 
 void DelayMillis(uint16_t ms) // This replaces any delay() calls
@@ -509,11 +510,20 @@ FLASHMEM void ScanI2c()
             }
             if (i == 0x68) {
                 MPU6050Connected = true;
-    #ifdef DB_SENSORS
+#ifdef DB_SENSORS
                 delay(3000);
                 Serial.println("MPU 6050 detected");  
-    #endif // DB_SENSORS
+#endif // DB_SENSORS
             }
+            if (i == 0x10) 
+            {
+                GPS_Connected = true;
+#ifdef DB_SENSORS
+                Serial.println("GPS detected");  
+#endif// DB_SENSORS
+            }
+
+                
 
 
 
@@ -702,12 +712,14 @@ FLASHMEM void setup()
     SetupPINMODES();
     TestTheSBUSPin();                   // Check that the SBUS pin is not held low (plug in wrong way round)
     TestAllPWMPins();                   // Check that the no PWM pins are held low (plug in wrong way round)
-    if (digitalRead(BINDPLUG_PIN)) {
- //       delay(2500); // Needed so that the Sensor hub can boot first and be detected (no bind plug) IF SENSOR HUB IS USED
-    }
-    else {
-  //      delay(200);
-    }
+  
+    //   if (digitalRead(BINDPLUG_PIN)) {
+    //       delay(2500); // Needed so that the Sensor hub can boot first and be detected (no bind plug) IF SENSOR HUB IS USED
+    //  }
+    //  else {
+    //      delay(200);
+    //  }
+  
     Wire.begin();
     delay(20);
     ScanI2c(); // Detect what's connected

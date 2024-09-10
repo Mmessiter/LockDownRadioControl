@@ -11,8 +11,8 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   4
-#define RXVERSION_MINIMUS 7 // 17 August 2024
-#define RXVERSION_EXTRA   'R' 
+#define RXVERSION_MINIMUS 7 // 10 Sept 2024
+#define RXVERSION_EXTRA   'S' // now with GPS 
 
 
 #define HOPTIME           17 // 47     //  17 gives 50Hz FHSS, 47 gives 20Hz FHSS
@@ -253,6 +253,8 @@ uint32_t      SensorTime        = 0;
 uint32_t      SensorHubAccessed = 0;
 uint16_t      Qnh               = 0; // Pressure at sea level here and now (defined at TX)
 uint16_t      OldQnh            = 0;
+
+
 uint8_t       SatellitesGPS;
 float         LatitudeGPS;
 float         LongitudeGPS;
@@ -268,7 +270,9 @@ uint8_t       YearGPS;
 uint8_t       HoursGPS;
 uint8_t       MinsGPS;
 uint8_t       SecsGPS;
-
+float         StoredLatitudeGPS   = 51.922291; // haverfordwest!
+float         StoredLongitudeGPS  = -5.213110; // haverfordwest!
+bool          GPS_Connected = false;
 
 bool          SensorHubDead       = false;
 uint32_t      NewConnectionMoment = 0;
