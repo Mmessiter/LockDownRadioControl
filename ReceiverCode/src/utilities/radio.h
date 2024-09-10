@@ -761,7 +761,7 @@ void LoadAckPayload()
    
     ++AckPayload.Purpose;
     if (INA219Connected) MaxAckP = 5;
-    if (SensorHubConnected) MaxAckP = 18;                     // its 14 + GPS
+    if (SensorHubConnected || GPS_Connected) MaxAckP = 18;                     // its 14 + GPS
     if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0; // wrap after max
     switch (AckPayload.Purpose) {
         case 0:

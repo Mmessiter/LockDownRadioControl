@@ -486,21 +486,15 @@ void SensorHubHasFailed()
 }
 
 
+// ******************************************************************************************************************************************************************
+
 // Discover what was connected on I2C
 
-FLASHMEM void ScanI2c()
+void ScanI2c()
 {
-      
     for (uint8_t i = 1; i < 127; ++i) {
         Wire.beginTransmission(i);
-
         if (Wire.endTransmission() == 0) {
-            if (i == SENSOR_HUB_I2C_ADDRESS) {
-                SensorHubConnected = true;
-#ifdef DB_SENSORS
-                Serial.println("Sensor Hub with Adafruit Ultimate GPS etc. detected");
-#endif
-            }
             if (i == 0x40) {
                 INA219Connected = true;
 #ifdef DB_SENSORS
@@ -517,16 +511,9 @@ FLASHMEM void ScanI2c()
             }
             if (i == 0x10) 
             {
-                GPS_Connected = true;
-#ifdef DB_SENSORS
-                Serial.println("GPS detected");  
-#endif// DB_SENSORS
+                 GPS_Connected = true;
+                 Serial.println("GPS detected");  
             }
-
-                
-
-
-
         }
     }
 }
@@ -712,21 +699,17 @@ FLASHMEM void setup()
     SetupPINMODES();
     TestTheSBUSPin();                   // Check that the SBUS pin is not held low (plug in wrong way round)
     TestAllPWMPins();                   // Check that the no PWM pins are held low (plug in wrong way round)
-  
-    //   if (digitalRead(BINDPLUG_PIN)) {
-    //       delay(2500); // Needed so that the Sensor hub can boot first and be detected (no bind plug) IF SENSOR HUB IS USED
-    //  }
-    //  else {
-    //      delay(200);
-    //  }
-  
+    delay(300);
     Wire.begin();
-    delay(20);
-    ScanI2c(); // Detect what's connected
+    delay(300);
+    ScanI2c();                          // Detect what's connected
+    
 #ifdef USE_STABILISATION
     if (MPU6050Connected) InitialiseTheMPU6050();
 #endif
+
     if (INA219Connected) ina219.begin();
+    if (GPS_Connected) setupGPS();
     SetupRadios();
     SetupWatchDog();
     ReadBindPlug();
@@ -758,6 +741,7 @@ void loop()
     ReceiveData();
     if (Blinking) BlinkLed();
     if (BoundFlag && Connected && ModelMatched) { // Only move servos if everything is good
+        if (GPS_Connected) ReadGPS();             // heer !! <<<< **********************************
         if (millis() - SBUSTimer >= SBUSRATE) {   // SBUSRATE rate is also good enough for servo rate
             SBUSTimer = millis();                 // timer starts before send starts....
             MoveServos();                         // Actually do something useful at last

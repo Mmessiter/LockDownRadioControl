@@ -10,7 +10,6 @@ Adafruit_GPS GPS(&Wire);
 
 void setupGPS()
 {
-    if (!GPS_Connected) return;
     GPS.begin(0x10);
     GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
     GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);
@@ -123,17 +122,13 @@ void GetGPSLocation()
 
 void ReadGPS()
 {
-    if (!GPS_Connected) return;
     static uint32_t timer = millis();
     GPS.read();
-    if (GPS.newNMEAreceived())
-        if (!GPS.parse(GPS.lastNMEA()))
-            return; // receive and parse ... this also sets the newNMEAreceived() flag to false
-
+    if (GPS.newNMEAreceived()) if (!GPS.parse(GPS.lastNMEA())) return; // receive and parse ... this also sets the newNMEAreceived() flag to false
     if (millis() - timer > 1000)
     {
         timer = millis();
-        GpsFix = GPS.fix;
+        GpsFix =  GPS.fix;
 
         if (GpsFix)
         {
@@ -143,11 +138,11 @@ void ReadGPS()
             DisplayGPSLocation();
         }
         else
-        {
-            Serial.print("Minutes: ");
-            Serial.print(millis() / 60000);
-            Serial.print(" Satellites: ");
-            Serial.println((int)GPS.satellites);
+         {
+        //     Serial.print("Minutes: ");
+        //     Serial.print(millis() / 60000);
+        //     Serial.print(" Satellites: ");
+        //     Serial.println((int)GPS.satellites);
         }
     }
 }
