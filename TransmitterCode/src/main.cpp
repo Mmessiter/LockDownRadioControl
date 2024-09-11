@@ -3291,20 +3291,11 @@ FASTRUN void ButtonWasPressed()
             return;
         }
         if (InStrng(DataView_AltZero, TextIn) > 0) { //  Set zero altitude on data screen
-            if (!GroundModelAltitude) {
-                GroundModelAltitude = RXModelAltitude;
-            }
-            else {
-                GroundModelAltitude = 0;
-            }
-            if (!GPSGroundAltitude) {
-                GPSGroundAltitude = GPSAltitude;
-            }
-            else {
-                GPSGroundAltitude = 0;
-            }
-            GPSMaxaltitude     = 0;
-            RXMAXModelAltitude = 0;
+            
+            GroundModelAltitude = RXModelAltitude;
+            GPSGroundAltitude   = GPSAltitude;
+            GPSMaxaltitude      = 0;
+            RXMAXModelAltitude  = 0;
             ClearText();
             return;
         }

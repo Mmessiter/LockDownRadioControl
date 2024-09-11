@@ -240,7 +240,7 @@ void PopulateGPSView(){
         SendText(Sped, Vbuf);
         snprintf(Vbuf, 6, "%d", (int)GPSMaxSpeed);
         SendText(MxS, Vbuf);
-        snprintf(Vbuf, 6, "%d", (int)GPSAltitude);
+        snprintf(Vbuf, 6, "%d", ((int)GPSAltitude -(int)GPSGroundAltitude));
         SendText(ALT, Vbuf);
         snprintf(Vbuf, 6, "%d", (int)GPSMaxaltitude);
         SendText(MALT, Vbuf);
