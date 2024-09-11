@@ -7,8 +7,8 @@
  *
  * @section rx Features List
  * - WORKS ON TEENSY 4.0
- * - Detects and uses INA219 to read volts (NOW IN SENSOR HUB as well)
- * - Detects and uses BMP280 pressure sensor for altitude (NOW IN SENSOR HUB)
+ * - Detects and uses INA219 to read volts 
+ * - Detects and uses BMP280 pressure sensor for altitude 
  * - Binding implemented
  * - SBUS implemented
  * - PPM Implemented on the same pin as SBUS (Serial 3 / Pin 14)
@@ -16,7 +16,6 @@
  * - RESOLUTION INCREASED TO 12 BITS
  * - Channels increased to 16. 9 PWM outputs.  SBUS can handle all. PPM Does 8
  * - Exponential implemented (at TX end)
- * - Sensor Hub added with GPS and more sensors
  * - Supports one or two tranceivers (nRF24L01+)
  *
  * 
@@ -282,20 +281,6 @@ void ReadSavedPipe() // read only 6 bytes
     TheReceivedPipe[5] = 0;
 }
 
-// ***************************************************************************************************************************************************
-void SendToSensorHub(char m[])
-{
-    Wire.beginTransmission(SENSOR_HUB_I2C_ADDRESS);
-    Wire.write(m);
-    Wire.endTransmission(true);
-}
-// ***************************************************************************************************************************************************
-
-void MarkHere()
-{
-    char MRK[4] = "MRK";
-    SendToSensorHub(MRK); // Mark this GPS location
-}
 /************************************************************************************************************/
 void RebuildFlags(bool* f, uint16_t tb)
 { // Pass arraypointer and the two bytes to be decoded
@@ -304,21 +289,6 @@ void RebuildFlags(bool* f, uint16_t tb)
         if (tb & 1 << i) f[15 - i] = true; // sets true if bit was on
     }
 }
-/************************************************************************************************************/
-void SendQnhToSensorHub()
-{
-    union
-    {
-        uint16_t Val16;
-        uint8_t  Val8[2];
-    } Uqnh;
-    char QNH[] = "QNH=??";
-    Uqnh.Val16 = Qnh;
-    QNH[4]     = Uqnh.Val8[0];
-    QNH[5]     = Uqnh.Val8[1];
-    SendToSensorHub(QNH);
-}
-
 /************************************************************************************************************/
 
 template<typename any>
@@ -332,157 +302,6 @@ template<typename any>
 void Look1(const any& value) // this is a template function that can print anything but cannot be used to change anything
 {
     Serial.print(value);
-}
-
-
-// ***************************************************************************************************************************************************
-// Here the GPS (Sensor) HUB is asked for 7 bytes of data over I2C.
-// The first IDLEN (=3) bytes are the ID (LAT, LNG, etc...)
-// The next 4 bytes are the value (as a float).
-// The ID changes with each call
-
-FASTRUN void ReadTheSensorHub()
-{
-
-#define IDLEN       3
-#define GPSI2CBYTES IDLEN + 4 // = 7 (only floats now)
-
-    char  FIX[IDLEN + 1] = "FIX"; // GPS Fix
-    char  SAT[IDLEN + 1] = "SAT"; // How many satellites
-    char  LAT[IDLEN + 1] = "LAT"; // Latitude
-    char  LON[IDLEN + 1] = "LON"; // Longitude
-    char  ALT[IDLEN + 1] = "ALT"; // GPS Altitude
-    char  SPD[IDLEN + 1] = "SPD"; // Speed
-    char  COR[IDLEN + 1] = "COR"; // Course
-    char  CTO[IDLEN + 1] = "CTO"; // Course to Mark
-    char  DTO[IDLEN + 1] = "DTO"; // Distance to Mark
-    char  HRS[IDLEN + 1] = "HRS"; // GMT Hours
-    char  MNS[IDLEN + 1] = "MNS"; // GMT Minutes
-    char  SEC[IDLEN + 1] = "SEC"; // GMT Seconds
-    char  BLT[IDLEN + 1] = "BLT"; // Altitiude from BMP280
-    char  TMP[IDLEN + 1] = "TMP"; // Temperature from BMP280
-    char  VLT[IDLEN + 1] = "VLT"; // Volts from INA219
-    char  DAY[IDLEN + 1] = "DAY"; // DAY
-    char  MTH[IDLEN + 1] = "MTH"; // MONTH
-    char  YER[IDLEN + 1] = "YER"; // YEAR
-    char  RdataID[IDLEN + 1];
-    float RdataIn;
-    union
-    {
-        float   Val32;
-        uint8_t Val8[4];
-    } Rdata; // 'union' allows access to every byte
-
-    Wire.requestFrom(SENSOR_HUB_I2C_ADDRESS, GPSI2CBYTES); // Ask hub for data
-    for (int j = 0; j < GPSI2CBYTES; ++j) {
-        if (Wire.available()) { // Listen to HUB
-            if (j < IDLEN) {
-                RdataID[j] = Wire.read(); // This gets the three-char data id (eg LAT)
-            }
-            else {
-                Rdata.Val8[j - IDLEN] = Wire.read(); // This gets the 64 bit value for that data ID
-            }
-        }
-    }
-    RdataID[3] = 0;           // To terminate the ID string.
-    RdataIn    = Rdata.Val32; // To re-assemble the 64 BIT data to a double
-
-    if (strcmp(FIX, RdataID) == 0) {
-        if (int(RdataIn) == 1) {
-            GpsFix = true;
-            return;
-        }
-    }
-    if (strcmp(LAT, RdataID) == 0) {
-        LatitudeGPS = RdataIn;
-        return;
-    }
-    if (strcmp(LON, RdataID) == 0) {
-        LongitudeGPS = RdataIn;
-        return;
-    }
-    if (strcmp(SPD, RdataID) == 0) {
-        SpeedGPS = RdataIn;
-        return;
-    }
-    if (strcmp(COR, RdataID) == 0) {
-        AngleGPS = RdataIn;
-        return;
-    }
-    if (strcmp(ALT, RdataID) == 0) {
-        AltitudeGPS = RdataIn;
-        return;
-    }
-    if (strcmp(DTO, RdataID) == 0) {
-        DistanceGPS = RdataIn;
-        return;
-    }
-    if (strcmp(SAT, RdataID) == 0) {
-        SatellitesGPS = uint8_t(RdataIn);
-        return;
-    }
-    if (strcmp(CTO, RdataID) == 0) {
-        CourseToGPS = RdataIn;
-        return;
-    }
-    if (strcmp(HRS, RdataID) == 0) {
-        HoursGPS = uint8_t(RdataIn);
-        return;
-    }
-    if (strcmp(MNS, RdataID) == 0) {
-        MinsGPS = uint8_t(RdataIn);
-        return;
-    }
-    if (strcmp(SEC, RdataID) == 0) {
-        SecsGPS = uint8_t(RdataIn);
-        return;
-    }
-    if (strcmp(BLT, RdataID) == 0) {
-        BaroAltitude = RdataIn;
-        return;
-    }
-    if (strcmp(TMP, RdataID) == 0) {
-        BaroTemperature = RdataIn;
-        return;
-    }
-    if (strcmp(VLT, RdataID) == 0) {
-        if (!INA219Connected) INA219Volts = RdataIn; // if there's a locally connected sensor, use it.
-        return;
-    }
-    if (strcmp(DAY, RdataID) == 0) {
-        DayGPS = uint8_t(RdataIn);
-        return;
-    }
-    if (strcmp(MTH, RdataID) == 0) {
-        MonthGPS = uint8_t(RdataIn);
-        return;
-    }
-    if (strcmp(YER, RdataID) == 0) {
-        YearGPS = uint8_t(RdataIn);
-        return;
-    }
-}
-
-// ******************************************************************************************************************************************************************
-void SensorHubHasFailed()
-{ // If the I2C bus gets its knickers in a twist, it can lock up the receiver, so DON'T call it until landed and reset.
-#define Failed 42
-    LatitudeGPS     = Failed;
-    LongitudeGPS    = Failed;
-    SpeedGPS        = Failed;
-    AngleGPS        = Failed;
-    AltitudeGPS     = Failed;
-    DistanceGPS     = Failed;
-    SatellitesGPS   = Failed;
-    CourseToGPS     = Failed;
-    HoursGPS        = Failed;
-    MinsGPS         = Failed;
-    SecsGPS         = Failed;
-    BaroAltitude    = Failed;
-    BaroTemperature = Failed;
-    INA219Volts     = 0;
-    GpsFix          = 0;
-    SensorHubDead   = true; // This flag inhibits further attempts to call the hub, which might save a model.
 }
 
 

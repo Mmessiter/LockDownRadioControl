@@ -14,7 +14,7 @@ void setupGPS()
     GPS.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCGGA);
     GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);
     delay(1000);
-    // GPS.println(PMTK_Q_RELEASE);
+    GPS.println(PMTK_Q_RELEASE); // ??
 }
 // *************************************************************
 void DisplayGPSTime()
@@ -138,11 +138,11 @@ void ReadGPS()
             DisplayGPSLocation();
         }
         else
-         {
-        //     Serial.print("Minutes: ");
-        //     Serial.print(millis() / 60000);
-        //     Serial.print(" Satellites: ");
-        //     Serial.println((int)GPS.satellites);
+        {
+            Serial.print("Minutes: ");
+            Serial.print(millis() / 60000);
+            Serial.print(" Satellites: ");
+            Serial.println((int)GPS.satellites);
         }
     }
 }

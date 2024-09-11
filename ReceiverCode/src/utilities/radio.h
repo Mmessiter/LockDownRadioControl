@@ -51,20 +51,13 @@ void UseExtraParameters()
             break;
 
         case 2:
-            Qnh = Parameters.word[1];   //  for pressure here at sea level
-            if (OldQnh != Qnh) SendQnhToSensorHub();
-            OldQnh = Qnh;      // Send new one once only
-            break;
+            
+             break;
         case 3:
-            if (Parameters.word[2] == 255) { // Mark this location
-                MarkHere();
-                Parameters.word[2] = 0; // ... Once only
-            }
+            
             break;
         case 4:
-            // ServoCentrePulse[0]    =   Parameters.word[1];
-            // ServoFrequency[0]      =   Parameters.word[2];
-            // SetServoFrequency();
+            
             break;
         case 5:
             UseSBUS         = (bool)Parameters.word[1]; // if false means PPM
@@ -212,25 +205,6 @@ bool ReadData()
     return Connected;
 }
 
-// ******************************************************************************************************************************************************************
- //  If it is connected, try to read the sensor hub
-void DoSensorHub(){
-  uint32_t TimeTest;
-    if (Connected) {
-        if ((millis() - SensorHubAccessed) > 10) {                               //  Reading Sensor hub 100 x per second should be enough
-            if (millis() - LastPacketArrivalTime < 1) {                          //  If, and only if, we have still absolutely loads of time, do stuff now while waiting ...
-                SensorHubAccessed = millis();                                    //  Note the moment of last attempted read.
-                if (!SensorHubDead) {                                            //  Better check it hasn't died.
-                    TimeTest = millis();                                         //  Time the I2C calls. If too long, don't repeat it ... save the model.
-                    ReadTheSensorHub();                                          //  Sensor now has its own MCU. Calls return in far less that 6 ms unless it lost I2C synch
-                    if ((millis() - NewConnectionMoment) > 5000) {
-                        if ((millis() - TimeTest) > 6) SensorHubHasFailed(); //  If sensor hub and/or INA219 fails, don't bother calling either again (It normally returns within 2 ms.
-                    }
-                }
-            }
-        }
-    }
-}
 
 // ******************************************************************************************************************************************************************
 //  Get RX LIPO volts if connected separately (as needed on 'planes with no GPS fitted.)
@@ -245,7 +219,6 @@ void GetRXVolts()
 
 FASTRUN void ReceiveData()
 {
-   if (SensorHubConnected) DoSensorHub();                                       //  If it is connected, try to read the sensor hub
    GetRXVolts();                                                                //  Get RX LIPO volts if connected separately (as needed on 'planes with no GPS fitted.)              
    if ((!CurrentRadio->available(&Pipnum)) && (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT)) Reconnect(); // Try to reconnect. 
    if (!ReadData()) {
@@ -761,7 +734,7 @@ void LoadAckPayload()
    
     ++AckPayload.Purpose;
     if (INA219Connected) MaxAckP = 5;
-    if (SensorHubConnected || GPS_Connected) MaxAckP = 18;                     // its 14 + GPS
+    if (GPS_Connected)   MaxAckP = 18;                     // its 14 + GPS
     if (AckPayload.Purpose > MaxAckP) AckPayload.Purpose = 0; // wrap after max
     switch (AckPayload.Purpose) {
         case 0:
