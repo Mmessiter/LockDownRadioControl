@@ -128,7 +128,7 @@ void ReadGPS()
     if (millis() - timer > 1000)
     {
         timer = millis();
-        GpsFix =  GPS.fix;
+        GpsFix = GPS.fix;
 
         if (GpsFix)
         {
