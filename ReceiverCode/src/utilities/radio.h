@@ -54,7 +54,11 @@ void UseExtraParameters()
             
              break;
         case 3:
-            
+              if (Parameters.word[2] == 255) 
+              { // Mark this location
+                MarkHere();
+                Parameters.word[2] = 0; // ... Once only
+                }
             break;
         case 4:
             

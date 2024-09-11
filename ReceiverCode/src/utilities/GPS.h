@@ -67,7 +67,7 @@ float GetDistance(float lat1, float lon1, float lat2, float lon2)
             sin(dLon / 2) * sin(dLon / 2);
     float c = 2 * atan2(sqrt(a), sqrt(1 - a));
     float distance = EARTH_RADIUS * c;
-    return distance; // Distance in kilometers
+    return distance * 1000; // convert to meters
 }
 
 // *************************************************************
@@ -86,10 +86,8 @@ void DisplayGPSLocation()
     Serial.println(AltitudeGPS); //< Altitude in meters above MSL
     Serial.print("Satellites: ");
     Serial.println(SatellitesGPS); //< Number of satellites in use
-    DistanceGPS = GetDistance(LatitudeGPS, LongitudeGPS, StoredLatitudeGPS, StoredLongitudeGPS);
     Serial.print("Distance to mark: ");
     Serial.println(DistanceGPS, 5);
-    CourseToGPS  = GetHeading(LatitudeGPS, LongitudeGPS, StoredLatitudeGPS, StoredLongitudeGPS);
     Serial.print("Heading to mark: ");
     Serial.println(CourseToGPS, 5);
 }
@@ -116,6 +114,14 @@ void GetGPSLocation()
     SpeedGPS        = GPS.speed;
     AngleGPS        = GPS.angle;
     SatellitesGPS   = GPS.satellites;
+    DistanceGPS     = GetDistance(LatitudeGPS, LongitudeGPS, StoredLatitudeGPS, StoredLongitudeGPS);
+    CourseToGPS     = GetHeading(LatitudeGPS, LongitudeGPS, StoredLatitudeGPS, StoredLongitudeGPS);
+}
+
+// *************************************************************
+void MarkHere(){
+    StoredLatitudeGPS  = LatitudeGPS;
+    StoredLongitudeGPS = LongitudeGPS;
 }
 
 // *************************************************************

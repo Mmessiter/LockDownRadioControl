@@ -4605,7 +4605,7 @@ void FASTRUN ManageTransmitter()
         GetFrameRate();                                                                                        // Get the frame rate
         CheckScreenTime();                                                                                     // Check if screen needs to be turned off
         CheckBatteryStates();                                                                                  // Check battery states                                                       
-        if (CurrentView != BLANKVIEW) {ReadTime();UpdateTrimView();ShowComms();}                                           // Show time and trim positions
+        if (CurrentView != BLANKVIEW) {ReadTime();UpdateTrimView();ShowComms();}                               // Show time and trim positions
         ShowMotorTimer();                                                                                      // Show motor timer and send any queued parameters
         LastTimeRead = millis();                                                                               // Reset this timer
         return;                                                                                                // That's enough housekeeping for this time around
