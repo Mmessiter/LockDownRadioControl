@@ -153,6 +153,9 @@
 #include "Hardware/MenuOptions.h"
 #include "Hardware/LogFilesList.h"
 #include "Hardware/Help.h"
+#ifdef USE_GPS
+#include "Hardware/GPS.h"
+#endif
 
 /*********************************************************************************************************************************/
 
@@ -634,6 +637,12 @@ FLASHMEM void ScanI2c()
             Serial.print(ii, HEX); // in case new one shows up
             Serial.print("   ");
             if (ii == 0x40) Serial.println("INA219 voltage meter detected!");
+#endif
+
+#ifdef USE_GPS
+            if (ii == 0x10) {
+                Look("GPS detected!");
+            }
 #endif
             if (ii == 0x40) {
                 USE_INA219 = true;
