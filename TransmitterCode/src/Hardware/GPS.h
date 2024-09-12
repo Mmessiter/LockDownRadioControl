@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 #include "Hardware/1Definitions.h"
-#ifdef USE_GPS
+#ifdef USE_LOCAL_GPS
 #ifndef GPS_H
 #define GPS_H
 

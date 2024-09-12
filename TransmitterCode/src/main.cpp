@@ -153,7 +153,7 @@
 #include "Hardware/MenuOptions.h"
 #include "Hardware/LogFilesList.h"
 #include "Hardware/Help.h"
-#ifdef USE_GPS
+#ifdef USE_LOCAL_GPS
 #include "Hardware/GPS.h"
 #endif
 
@@ -639,7 +639,7 @@ FLASHMEM void ScanI2c()
             if (ii == 0x40) Serial.println("INA219 voltage meter detected!");
 #endif
 
-#ifdef USE_GPS
+#ifdef USE_LOCAL_GPS
             if (ii == 0x10) {
                 Look("GPS detected!");
             }

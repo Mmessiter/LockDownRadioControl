@@ -40,7 +40,7 @@
 // #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
 // #define DB_GAPS           // Debug Connection Gap assessment
 // #define DB_IDS            // Debug Model IDs (Hitting the 'BACK' button on models' screen will Serial.print these to the terminal)
-  #define USE_GPS           // Use GPS
+  #define USE_LOCAL_GPS           // Use GPS
 
 // ************************************************************************************
 //                                       General                                      *
