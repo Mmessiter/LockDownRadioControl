@@ -331,8 +331,9 @@ void SynchRTCwithGPSTime()
         Ghour          = GPSHours;
         GmonthDay      = GPSDay;
         Gmonth         = GPSMonth;
-        Gyear          = GPSYear + 1744; // ????
+        Gyear          = GPSYear + 1696; // ????
         SetTheRTC();
+        GPSTimeSynched = true;
     }
 }
 

@@ -877,12 +877,12 @@ FASTRUN void ParseAckPayload()
             break;
         case 18:
             GetTimeFromAckPayload();
-            ReadTheRTC();
+            ReadTheRTC();  
             if (GPSDay != GmonthDay) GPSTimeSynched = false;
-            if (GPSMonth != Gmonth) GPSTimeSynched = false;
-            if (GPSMins != Gminute) GPSTimeSynched = false;
-            if (GPSHours != Ghour) GPSTimeSynched = false;
-            if (GPSSecs != Gsecond) GPSTimeSynched = false;
+            if (GPSMonth != Gmonth)  GPSTimeSynched = false;
+            if (GPSMins != Gminute)  GPSTimeSynched = false;
+            if (GPSHours != Ghour)   GPSTimeSynched = false;
+            if (abs(GPSSecs - Gsecond) > 2)  GPSTimeSynched = false; // this is not very reliable because of the delay in the radio
             if (GpsFix) SynchRTCwithGPSTime();
             break;
         default:
