@@ -642,6 +642,7 @@ FLASHMEM void ScanI2c()
 #ifdef USE_LOCAL_GPS
             if (ii == 0x10) {
                 Look("GPS detected!");
+                LocalGPSFound = true;
             }
 #endif
             if (ii == 0x40) {
@@ -1099,6 +1100,9 @@ FLASHMEM void setup()
         }
     }
     if (!PPMdata.UseTXModule) ConfigureRadio();  
+#ifdef USE_LOCAL_GPS
+    if (LocalGPSFound) setupGPS();
+#endif
     RationaliseBuddy();
     WarnUserIfBuddyBoxIsOn();
     ClearMostParameters();
@@ -4625,8 +4629,11 @@ void FASTRUN ManageTransmitter()
         }
     }     
 
-    if (RightNow - TransmitterLastManaged >= 50) {                                                             // 20 times a second is good
+    if (RightNow - TransmitterLastManaged >= 20) {        // was 50 ... 20 times a second is good
         ReadSwitches();CheckHardwareTrims();GetBank();                                                         // Check switch positions 20 times a secon                                                                                                                                                                            
+#ifdef USE_LOCAL_GPS
+         if (LocalGPSFound) ReadGPS();
+#endif
         TransmitterLastManaged = millis();
     }
 }
@@ -4676,6 +4683,7 @@ FASTRUN void loop()
 {  
     ManageTransmitter();   // Do the needed chores ... (if there's time)
     GetNewChannelValues(); // Load SendBuffer with new servo positions very frequently
+
     if (CurrentMode < 3) {
         if (UseMacros) ExecuteMacro(); // Modify it if macro is running
         if (BuddyPupilOnPPM) {

@@ -26,6 +26,7 @@ uint8_t       SecsGPS;
 float         StoredLatitudeGPS   = 51.922291; // haverfordwest!
 float         StoredLongitudeGPS  = -5.213110; // haverfordwest!
 bool          GPS_Connected = false;
+bool          LocalGPSFound = false;
 
 // *************************************************************
 
