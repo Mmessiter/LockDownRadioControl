@@ -176,7 +176,8 @@ void UseReceivedData(uint8_t DynamicPayloadSize)                            // D
 /************************************************************************************************************/
 bool ReadData()
 {
-    uint8_t MAXSMALLACKS = 100;
+    uint8_t MAXSMALLACKS = 5;
+ // uint8_t MAXSMALLACKS = 100;
     static uint8_t AckCounter = 0;
     Connected = false;
     if (CurrentRadio->available(&Pipnum))

@@ -147,17 +147,10 @@ void LoadParameters()
                 Parameters.word[1]  = 0;
                 Parameters.word[2]  = GPSMarkHere;
                 GPSMarkHere       = 0;
+                GPSMaxDistance    = 0;
             }
             break;
-        case 4:                                                     // 4 = set servo centre pulse and frequency // depreceiated!!
-            // Parameters.word[1] = ServoCentrePulse[0];   
-            // Parameters.word[2] = ServoFrequency[0]; 
-            // Parameters.word[3] = 300;
-            // Parameters.word[4] = 400; 
-            // Parameters.word[5] = 500;
-            // Parameters.word[6] = 600;
-            // Parameters.word[7] = 700;
-            // Parameters.word[8] = 800;
+        case 4:                                                     // 4 = NOT USED YET
             break;
         case 5:                                                     // 5 = SBUS/PPM           
               Parameters.word[1] = PPMdata.UseSBUSFromRX;           // 1 - 0
@@ -336,7 +329,7 @@ int SendExtraParamemters()                       // parameters must be loaded be
     LoadRawDataWithParameters();
     DataTosend.ChannelBitMask = 0;                       // zero channels to send with this packet
   //  DebugParamsOut();
-    return 11; // was 8                                           // 8 is the number of parameters to send
+    return 11; // was 8                                  // 8 is the number of parameters to send
 }
 /************************************************************************************************************/
 uint8_t EncodeTheChangedChannels(){
@@ -866,6 +859,8 @@ FASTRUN void ParseAckPayload()
             GPSAltitude = GetFromAckPayload() - GPSGroundAltitude;
             if (GPSAltitude < 0) GPSAltitude = 0;
             if (GPSMaxaltitude < GPSAltitude) GPSMaxaltitude = GPSAltitude;
+            // Look1("GPSAltitude: ");
+            // Serial.println(GPSAltitude);
             break;
         case 14:
             GPSDistanceTo = GetFromAckPayload();
