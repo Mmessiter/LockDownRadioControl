@@ -331,14 +331,12 @@ void SynchRTCwithGPSTime()
         Ghour          = GPSHours;
         GmonthDay      = GPSDay;
         Gmonth         = GPSMonth;
-        Gyear          = GPSYear + 1696; // ????
+        Gyear          = GPSYear;
         SetTheRTC();
         GPSTimeSynched = true;
     }
 }
-
 /*********************************************************************************************************************************/
-
 void AdjustDateTime(uint8_t MinChange, uint8_t HourChange, uint8_t YearChange, uint8_t MonthChange, uint8_t DateChange)
 {
     ReadTheRTC();

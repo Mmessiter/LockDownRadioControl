@@ -882,6 +882,7 @@ FASTRUN void ParseAckPayload()
             if (GPSMonth != Gmonth)  GPSTimeSynched = false;
             if (GPSMins != Gminute)  GPSTimeSynched = false;
             if (GPSHours != Ghour)   GPSTimeSynched = false;
+            if (GPSYear != Gyear)    GPSTimeSynched = false;
             if (abs(GPSSecs - Gsecond) > 2)  GPSTimeSynched = false; // this is not very reliable because of the delay in the radio
             if (GpsFix) SynchRTCwithGPSTime();
             break;
