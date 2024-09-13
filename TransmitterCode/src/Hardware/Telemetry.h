@@ -219,34 +219,40 @@ void PopulateGPSView(){
     char         Mxd[]                 = "Mxd";
     char         BTo[]                 = "BTo";
     char         Sat[]                 = "Sat";
+    static bool  LastGpsFix            = false;
      
         if (GpsFix) { // if no fix, then leave display as before
             SendText(Fix, yes);
+            if (!LastGpsFix) {
+                LastGpsFix = true;
+                PlaySound(THEFANFARE);
+            }
         }
         else {
             SendText(Fix, no);
+            LastGpsFix = false;
         }
         snprintf(Vbuf, 7, "%d", GPSSatellites);
         SendText(Sat, Vbuf);
-        snprintf(Vbuf, 10, "%f", GPSLongitude);
+        snprintf(Vbuf, 15, "%.12f", GPSLongitude);
         SendText(Lon, Vbuf);
-        snprintf(Vbuf, 10, "%f", GPSLatitude);
+        snprintf(Vbuf, 15, "%.12f", GPSLatitude);
         SendText(Lat, Vbuf);
-        snprintf(Vbuf, 7, "%d", int(GPSAngle));
+        snprintf(Vbuf, 7, "%.3f",GPSAngle);
         SendText(Bear, Vbuf);
-        snprintf(Vbuf, 7, "%d", (int)GPSDistanceTo);
+        snprintf(Vbuf, 7, "%.3f", GPSDistanceTo);
         SendText(Dist, Vbuf);
-        snprintf(Vbuf, 6, "%d", (int)GPSSpeed);
+        snprintf(Vbuf, 6, "%.3f", GPSSpeed);
         SendText(Sped, Vbuf);
-        snprintf(Vbuf, 6, "%d", (int)GPSMaxSpeed);
+        snprintf(Vbuf, 6, "%.3f", GPSMaxSpeed);
         SendText(MxS, Vbuf);
-        snprintf(Vbuf, 6, "%d", ((int)GPSAltitude));
+        snprintf(Vbuf, 6, "%.3f", GPSAltitude);
         SendText(ALT, Vbuf);
-        snprintf(Vbuf, 6, "%d", (int)GPSMaxaltitude);
+        snprintf(Vbuf, 6, "%.3f", GPSMaxaltitude);
         SendText(MALT, Vbuf);
-        snprintf(Vbuf, 6, "%d", (int)GPSCourseTo);
+        snprintf(Vbuf, 6, "%.3f", GPSCourseTo);
         SendText(BTo, Vbuf);
-        snprintf(Vbuf, 6, "%d", (int)GPSMaxDistance);
+        snprintf(Vbuf, 6, "%.3f", GPSMaxDistance);
         SendText(Mxd, Vbuf);
 }
 
