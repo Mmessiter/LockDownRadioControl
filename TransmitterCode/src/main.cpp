@@ -642,7 +642,7 @@ FLASHMEM void ScanI2c()
 #ifdef USE_LOCAL_GPS
             if (ii == 0x10) {
                 Look("GPS detected!");
-                LocalGPSFound = true;
+                Found_TX_GPS = true;
             }
 #endif
             if (ii == 0x40) {
@@ -1101,7 +1101,7 @@ FLASHMEM void setup()
     }
     if (!PPMdata.UseTXModule) ConfigureRadio();  
 #ifdef USE_LOCAL_GPS
-    if (LocalGPSFound) setupGPS();
+    if (Found_TX_GPS) setupGPS();
 #endif
     RationaliseBuddy();
     WarnUserIfBuddyBoxIsOn();
@@ -2150,10 +2150,10 @@ void ZeroDataScreen()
     GapCount            = 0;
     GapStart            = 0;
     RXMAXModelAltitude  = 0;
-    GPSMaxaltitude      = 0;
+    GPS_RX_Maxaltitude      = 0;
     ThisGap             = 0;
-    GPSMaxDistance      = 0;
-    GPSMaxSpeed         = 0;
+    GPS_RX_MaxDistance      = 0;
+    GPS_RX_MaxSpeed         = 0;
     LastShowTime        = 0; // for instant redisplay
     TotalFrameRate      = 0;
     FrameRateCounter    = 0;
@@ -3278,11 +3278,15 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-
         if (InStrng(Mark, TextIn) > 0) {
-            GPSMarkHere    = 255; // Mark this location
-            GPSMaxDistance = 0;
-            AddParameterstoQueue(3);   // 3 is the ID of the MARK HERE parameter
+#ifdef USE_LOCAL_GPS 
+            StoredLatitude_TX_GPS  = GPS_RX_Latitude + LatitudeGPS_Correction; // Mark this location LOCALLY 
+            StoredLongitude_TX_GPS = GPS_RX_Longitude + LongitudeGPS_Correction;
+#else
+            GPSMarkHere    = 255;                       // Mark this at RX
+            GPS_RX_MaxDistance = 0;
+            AddParameterstoQueue(3);                    // 3 is the ID of the MARK HERE parameter
+#endif
             ClearText();
             return;
          }
@@ -3306,8 +3310,8 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(DataView_AltZero, TextIn) > 0) { //  Set zero altitude on data screen
             
             GroundModelAltitude = RXModelAltitude;
-            GPSGroundAltitude   = GPSAltitude;
-            GPSMaxaltitude      = 0;
+            GPS_RX_GroundAltitude   = GPS_RX_Altitude;
+            GPS_RX_Maxaltitude      = 0;
             RXMAXModelAltitude  = 0;
             ClearText();
             return;
@@ -4632,7 +4636,7 @@ void FASTRUN ManageTransmitter()
     if (RightNow - TransmitterLastManaged >= 20) {        // was 50 ... 20 times a second is good
         ReadSwitches();CheckHardwareTrims();GetBank();                                                         // Check switch positions 20 times a secon                                                                                                                                                                            
 #ifdef USE_LOCAL_GPS
-         if (LocalGPSFound) ReadGPS();
+         if (Found_TX_GPS) ReadGPS();
 #endif
         TransmitterLastManaged = millis();
     }

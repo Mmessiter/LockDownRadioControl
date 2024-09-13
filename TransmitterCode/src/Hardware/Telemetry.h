@@ -200,7 +200,7 @@ void ShowTrimToAll(){
  * 
  * This function updates the labels on the GPS view screen with the current GPS data. It displays information such as GPS fix status, longitude, latitude, bearing, distance, speed, altitude, and satellite count.
  * 
- * @note The function assumes that the GPS data variables (e.g., GpsFix, GPSSatellites, GPSLongitude, etc.) have been properly initialized before calling this function.
+ * @note The function assumes that the GPS data variables (e.g., GPS_RX_FIX, GPS_RX_Satellites, GPS_RX_Longitude, etc.) have been properly initialized before calling this function.
  */
 void PopulateGPSView(){
 
@@ -219,40 +219,48 @@ void PopulateGPSView(){
     char         Mxd[]                 = "Mxd";
     char         BTo[]                 = "BTo";
     char         Sat[]                 = "Sat";
-    static bool  LastGpsFix            = false;
+    static bool  LastGPS_RX_FIX            = false;
      
-        if (GpsFix) { // if no fix, then leave display as before
+        if (GPS_RX_FIX) { // if no fix, then leave display as before
             SendText(Fix, yes);
-            if (!LastGpsFix) {
-                LastGpsFix = true;
+            if (!LastGPS_RX_FIX) {
+                LastGPS_RX_FIX = true;
                 PlaySound(THEFANFARE);
             }
         }
         else {
             SendText(Fix, no);
-            LastGpsFix = false;
+            LastGPS_RX_FIX = false;
         }
-        snprintf(Vbuf, 7, "%d", GPSSatellites);
+        snprintf(Vbuf, 7, "%d", GPS_RX_Satellites);
         SendText(Sat, Vbuf);
-        snprintf(Vbuf, 15, "%.12f", GPSLongitude);
+        snprintf(Vbuf, 15, "%.12f", GPS_RX_Longitude);
         SendText(Lon, Vbuf);
-        snprintf(Vbuf, 15, "%.12f", GPSLatitude);
+        snprintf(Vbuf, 15, "%.12f", GPS_RX_Latitude);
         SendText(Lat, Vbuf);
-        snprintf(Vbuf, 7, "%.3f",GPSAngle);
+        snprintf(Vbuf, 7, "%.3f",GPS_RX_ANGLE);
         SendText(Bear, Vbuf);
-        snprintf(Vbuf, 7, "%.3f", GPSDistanceTo);
-        SendText(Dist, Vbuf);
-        snprintf(Vbuf, 6, "%.3f", GPSSpeed);
+        if (Found_TX_GPS) {
+            snprintf(Vbuf, 7, "%.3f", Distance_TX_GPS);
+            SendText(Dist, Vbuf);
+            snprintf(Vbuf, 6, "%.3f", Course_TX_ToGPS);
+            SendText(BTo, Vbuf);
+        }else{
+            snprintf(Vbuf, 7, "%.3f", GPS_RX_DistanceTo);
+            SendText(Dist, Vbuf);
+            snprintf(Vbuf, 6, "%.3f", GPS_RX_CourseTo);
+            SendText(BTo, Vbuf); 
+        }
+        snprintf(Vbuf, 6, "%.3f", GPS_RX_Speed);
         SendText(Sped, Vbuf);
-        snprintf(Vbuf, 6, "%.3f", GPSMaxSpeed);
+        snprintf(Vbuf, 6, "%.3f", GPS_RX_MaxSpeed);
         SendText(MxS, Vbuf);
-        snprintf(Vbuf, 6, "%.3f", GPSAltitude);
+        snprintf(Vbuf, 6, "%.3f", GPS_RX_Altitude);
         SendText(ALT, Vbuf);
-        snprintf(Vbuf, 6, "%.3f", GPSMaxaltitude);
+        snprintf(Vbuf, 6, "%.3f", GPS_RX_Maxaltitude);
         SendText(MALT, Vbuf);
-        snprintf(Vbuf, 6, "%.3f", GPSCourseTo);
-        SendText(BTo, Vbuf);
-        snprintf(Vbuf, 6, "%.3f", GPSMaxDistance);
+       
+        snprintf(Vbuf, 6, "%.3f", GPS_RX_MaxDistance);
         SendText(Mxd, Vbuf);
 }
 

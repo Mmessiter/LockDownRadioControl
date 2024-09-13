@@ -3,33 +3,15 @@
 #include <Arduino.h>
 #include "Hardware/1Definitions.h"
 #ifdef USE_LOCAL_GPS
-#ifndef GPS_H
-#define GPS_H
-
-#include <Adafruit_GPS.h>
+ #ifndef GPS_H
+ #define GPS_H
+ #include <Adafruit_GPS.h>
 Adafruit_GPS GPS(&Wire);
-uint8_t       SatellitesGPS;
-float         LatitudeGPS;
-float         LongitudeGPS;
-float         SpeedGPS;
-float         AngleGPS;
-bool          GPSLocalFIX = false;
-float         AltitudeGPS;
-float         DistanceGPS;
-float         CourseToGPS;
-uint8_t       DayGPS;
-uint8_t       MonthGPS;
-uint8_t       YearGPS;
-uint8_t       HoursGPS;
-uint8_t       MinsGPS;
-uint8_t       SecsGPS;
-float         StoredLatitudeGPS   = 51.922291; // haverfordwest!
-float         StoredLongitudeGPS  = -5.213110; // haverfordwest!
-bool          GPS_Connected = false;
-bool          LocalGPSFound = false;
+
+
+
 
 // *************************************************************
-
 void setupGPS()
 {
     GPS.begin(0x10);
@@ -37,22 +19,6 @@ void setupGPS()
     GPS.sendCommand(PMTK_SET_NMEA_UPDATE_1HZ);
     delay(1000);
     GPS.println(PMTK_Q_RELEASE); // ??
-}
-// *************************************************************
-void DisplayGPSTime()
-{
-    Serial.print("\nTime: ");
-    Serial.print(HoursGPS, DEC);
-    Serial.print(':');
-    Serial.print(MinsGPS, DEC);
-    Serial.print(':');
-    Serial.println(SecsGPS, DEC);
-    Serial.print("Date: ");
-    Serial.print(DayGPS, DEC);
-    Serial.print('/');
-    Serial.print(MonthGPS, DEC);
-    Serial.print("/");
-    Serial.println(YearGPS, DEC);
 }
 
 // *************************************************************
@@ -94,58 +60,49 @@ float GetDistance(float lat1, float lon1, float lat2, float lon2)
 
 // *************************************************************
 
-void DisplayGPSLocation()
+void GetGPSTime()
 {
-    Serial.print("Latitude: ");
-    Serial.println(LatitudeGPS, 4);
-    Serial.print("Longitude: ");
-    Serial.println(LongitudeGPS, 4);
-    Serial.print("Speed (knots): ");
-    Serial.println(SpeedGPS); //< Current speed over ground in knots
-    Serial.print("Current heading: ");
-    Serial.println(AngleGPS); //< Course in degrees from true north
-    Serial.print("Altitude: ");
-    Serial.println(AltitudeGPS); //< Altitude in meters above MSL
-    Serial.print("Satellites: ");
-    Serial.println(SatellitesGPS); //< Number of satellites in use
-    Serial.print("Distance to mark: ");
-    Serial.println(DistanceGPS, 5);
-    Serial.print("Heading to mark: ");
-    Serial.println(CourseToGPS, 5);
+    Hours_TX_GPS    =   GPS.hour;
+    Mins_TX_GPS     =   GPS.minute;
+    Secs_TX_GPS     =   GPS.seconds;
+    Day_TX_GPS      =   GPS.day;
+    Month_TX_GPS    =   GPS.month;
+    Year_TX_GPS     =   GPS.year;
 }
 
 // *************************************************************
 
-void GetGPSTime()
-{
-    HoursGPS    =   GPS.hour;
-    MinsGPS     =   GPS.minute;
-    SecsGPS     =   GPS.seconds;
-    DayGPS      =   GPS.day;
-    MonthGPS    =   GPS.month;
-    YearGPS     =   GPS.year;
+void CalculateGPSAverages(){
+    Local_GPS_Readings_Count++;
+    LatitudeGPS_Sum         += Latitude_TX_GPS;
+    LongitudeGPS_Sum        += Longitude_TX_GPS;
+    AltitudeGPS_Sum         += Attitude_TX_GPS;
+    LatitudeGPS_Average     =  LatitudeGPS_Sum  / (float) Local_GPS_Readings_Count;
+    LongitudeGPS_Average    =  LongitudeGPS_Sum / (float) Local_GPS_Readings_Count;
+    AltitudeGPS_Average     =  AltitudeGPS_Sum  / (float) Local_GPS_Readings_Count;
 }
-
+// *************************************************************
+void CalculateGPSCorrections(){
+    LatitudeGPS_Correction  = LatitudeGPS_Average  - Latitude_TX_GPS;
+    LongitudeGPS_Correction = LongitudeGPS_Average - Longitude_TX_GPS;
+    AltitudeGPS_Correction  = AltitudeGPS_Average  - Attitude_TX_GPS;
+}
 // *************************************************************
 
 void GetGPSLocation()
 {
-    LatitudeGPS     = GPS.latitudeDegrees;
-    LongitudeGPS    = GPS.longitudeDegrees;
-    AltitudeGPS     = GPS.altitude;
-    SpeedGPS        = GPS.speed;
-    AngleGPS        = GPS.angle;
-    SatellitesGPS   = GPS.satellites;
-    DistanceGPS     = GetDistance(LatitudeGPS, LongitudeGPS, StoredLatitudeGPS, StoredLongitudeGPS);
-    CourseToGPS     = GetHeading(LatitudeGPS, LongitudeGPS, StoredLatitudeGPS, StoredLongitudeGPS);
+    Latitude_TX_GPS     = GPS.latitudeDegrees;
+    Longitude_TX_GPS    = GPS.longitudeDegrees;
+    Attitude_TX_GPS     = GPS.altitude;
+  //  SpeedGPS        = GPS.speed;
+  //  AngleGPS        = GPS.angle;
+  //  Satellites_TX_GPS   = GPS.satellites;
+    CalculateGPSAverages();
+    CalculateGPSCorrections();
+    Distance_TX_GPS     = GetDistance(GPS_RX_Latitude + LatitudeGPS_Correction, GPS_RX_Longitude + LongitudeGPS_Correction, StoredLatitude_TX_GPS, StoredLongitude_TX_GPS);
+    Course_TX_ToGPS     = GetHeading(GPS_RX_Latitude + LatitudeGPS_Correction, GPS_RX_Longitude + LongitudeGPS_Correction, StoredLatitude_TX_GPS, StoredLongitude_TX_GPS);
+  
 }
-
-// *************************************************************
-void MarkHere(){
-    StoredLatitudeGPS  = LatitudeGPS;
-    StoredLongitudeGPS = LongitudeGPS;
-}
-
 // *************************************************************
 
 void ReadGPS()
@@ -156,24 +113,16 @@ void ReadGPS()
     if (millis() - timer > 1000)
     {
         timer = millis();
-        GPSLocalFIX = GPS.fix;
-
-        if (GPSLocalFIX)
+        GOT_A_FIX_TX_GPS = GPS.fix;
+        if (GOT_A_FIX_TX_GPS)
         {
-            GetGPSTime();
+            GetGPSTime(); // maybe later
             GetGPSLocation();
-            DisplayGPSTime();
-            DisplayGPSLocation();
-        }
-        else
-        {
-            Serial.print("Minutes: ");
-            Serial.print(millis() / 60000);
-            Serial.print(" Satellites: ");
-            Serial.println((int)GPS.satellites);
+            CalculateGPSAverages();
+            CalculateGPSCorrections();
         }
     }
 }
 
-#endif
+  #endif
 #endif

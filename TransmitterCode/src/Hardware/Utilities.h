@@ -326,12 +326,12 @@ void SynchRTCwithGPSTime()
 { // This function corrects the time and the date.
     if (!GPSTimeSynched) {
         GPSTimeSynched = true;
-        Gsecond        = GPSSecs;
-        Gminute        = GPSMins;
-        Ghour          = GPSHours;
-        GmonthDay      = GPSDay;
-        Gmonth         = GPSMonth;
-        Gyear          = GPSYear;
+        Gsecond        = GPS_RX_SECS;
+        Gminute        = GPS_RX_Mins;
+        Ghour          = GPS_RX_Hours;
+        GmonthDay      = GPS_RX_DAY;
+        Gmonth         = GPS_RX_MONTH;
+        Gyear          = GPS_RX_YEAR;
         SetTheRTC();
         GPSTimeSynched = true;
     }

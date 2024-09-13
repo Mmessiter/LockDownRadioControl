@@ -147,7 +147,7 @@ void LoadParameters()
                 Parameters.word[1]  = 0;
                 Parameters.word[2]  = GPSMarkHere;
                 GPSMarkHere       = 0;
-                GPSMaxDistance    = 0;
+                GPS_RX_MaxDistance    = 0;
             }
             break;
         case 4:                                                     // 4 = NOT USED YET
@@ -686,16 +686,16 @@ FASTRUN float GetFromAckPayload()
 /************************************************************************************************************/
 void GetTimeFromAckPayload()
 {
-    GPSSecs  = AckPayload.Byte1;
-    GPSMins  = AckPayload.Byte2;
-    GPSHours = AckPayload.Byte3;
+    GPS_RX_SECS  = AckPayload.Byte1;
+    GPS_RX_Mins  = AckPayload.Byte2;
+    GPS_RX_Hours = AckPayload.Byte3;
 }
 /************************************************************************************************************/
 void GetDateFromAckPayload()
 {
-    GPSDay   = AckPayload.Byte1;
-    GPSMonth = AckPayload.Byte2;
-    GPSYear  = AckPayload.Byte3;
+    GPS_RX_DAY   = AckPayload.Byte1;
+    GPS_RX_MONTH = AckPayload.Byte2;
+    GPS_RX_YEAR  = AckPayload.Byte3;
 }
 /************************************************************************************************************/
 void GetAltitude()
@@ -840,37 +840,37 @@ FASTRUN void ParseAckPayload()
             GetTemperature();
             break;
         case 8:
-            GPSLatitude = GetFromAckPayload();
+            GPS_RX_Latitude = GetFromAckPayload();
             break;
         case 9:
-            GPSLongitude = GetFromAckPayload();
+            GPS_RX_Longitude = GetFromAckPayload();
             break;
         case 10:
-            GPSAngle = GetFromAckPayload();
+            GPS_RX_ANGLE = GetFromAckPayload();
             break;
         case 11:
-            GPSSpeed = GetFromAckPayload();
-            if (GPSMaxSpeed < GPSSpeed) GPSMaxSpeed = GPSSpeed;
+            GPS_RX_Speed = GetFromAckPayload();
+            if (GPS_RX_MaxSpeed < GPS_RX_Speed) GPS_RX_MaxSpeed = GPS_RX_Speed;
             break;
         case 12:
-            GpsFix = GetFromAckPayload();
+            GPS_RX_FIX = GetFromAckPayload();
             break;
         case 13:
-            GPSAltitude = GetFromAckPayload() - GPSGroundAltitude;
-            if (GPSAltitude < 0) GPSAltitude = 0;
-            if (GPSMaxaltitude < GPSAltitude) GPSMaxaltitude = GPSAltitude;
-            // Look1("GPSAltitude: ");
-            // Serial.println(GPSAltitude);
+            GPS_RX_Altitude = GetFromAckPayload() - GPS_RX_GroundAltitude;
+            if (GPS_RX_Altitude < 0) GPS_RX_Altitude = 0;
+            if (GPS_RX_Maxaltitude < GPS_RX_Altitude) GPS_RX_Maxaltitude = GPS_RX_Altitude;
+            // Look1("GPS_RX_Altitude: ");
+            // Serial.println(GPS_RX_Altitude);
             break;
         case 14:
-            GPSDistanceTo = GetFromAckPayload();
-            if (GPSMaxDistance < GPSDistanceTo) GPSMaxDistance = GPSDistanceTo;
+            GPS_RX_DistanceTo = GetFromAckPayload(); // now calculated locally
+            if (GPS_RX_MaxDistance < GPS_RX_DistanceTo) GPS_RX_MaxDistance = GPS_RX_DistanceTo;
             break;
         case 15:
-            GPSCourseTo = GetFromAckPayload();
+            GPS_RX_CourseTo = GetFromAckPayload();
             break;
         case 16:
-            GPSSatellites = (uint8_t)GetFromAckPayload();
+            GPS_RX_Satellites = (uint8_t)GetFromAckPayload();
             break;
         case 17:
             GetDateFromAckPayload();
@@ -878,16 +878,16 @@ FASTRUN void ParseAckPayload()
         case 18:
             GetTimeFromAckPayload();
             ReadTheRTC();  
-            if (GPSDay != GmonthDay) GPSTimeSynched = false;
-            if (GPSMonth != Gmonth)  GPSTimeSynched = false;
-            if (GPSMins != Gminute)  GPSTimeSynched = false;
-            if (GPSHours != Ghour)   GPSTimeSynched = false;
-            if (GPSYear != Gyear)    GPSTimeSynched = false;
-            if (abs(GPSSecs - Gsecond) > 5) GPSTimeSynched = false; // this is not very accurate because of latency
-            if (GpsFix && !GPSTimeSynched) 
+            if (GPS_RX_DAY != GmonthDay) GPSTimeSynched = false;
+            if (GPS_RX_MONTH != Gmonth)  GPSTimeSynched = false;
+            if (GPS_RX_Mins != Gminute)  GPSTimeSynched = false;
+            if (GPS_RX_Hours != Ghour)   GPSTimeSynched = false;
+            if (GPS_RX_YEAR != Gyear)    GPSTimeSynched = false;
+            if (abs(GPS_RX_SECS - Gsecond) > 5) GPSTimeSynched = false; // this is not very accurate because of latency
+            if (GPS_RX_FIX && !GPSTimeSynched) 
                 {
                     // Look("Synching RTC with GPS time");
-                    // Look(GPSSecs - Gsecond);
+                    // Look(GPS_RX_SECS - Gsecond);
                     SynchRTCwithGPSTime();
                 }
             break;

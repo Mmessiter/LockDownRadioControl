@@ -809,25 +809,57 @@ uint32_t        GapStart                     = 0;
 uint32_t        ThisGap                      = 0;
 uint32_t        GapAverage                   = 0;
 uint32_t        GapCount                     = 0;
-float           GPSLatitude                  = 0;
-float           GPSLongitude                 = 0;
-float           GPSAngle                     = 0;
-bool            GpsFix                       = 0;
-uint8_t         GPSSatellites                = 0;
-float           GPSSpeed                     = 0;
-float           GPSMaxSpeed                  = 0;
-uint8_t         GPSHours                     = 0;
-uint8_t         GPSMins                      = 0;
-uint8_t         GPSSecs                      = 0;
-uint8_t         GPSDay                       = 0;
-uint8_t         GPSMonth                     = 0;
-uint8_t         GPSYear                      = 0;
-float           GPSAltitude                  = 0;
-float           GPSMaxaltitude               = 0;
-float           GPSGroundAltitude            = 0;
-float           GPSDistanceTo                = 0;
-float           GPSCourseTo                  = 0;
-float           GPSMaxDistance               = 0;
+// *********************************** RX GPS ***************************************
+float           GPS_RX_Latitude                  = 0;
+float           GPS_RX_Longitude                 = 0;
+float           GPS_RX_Altitude                  = 0;
+float           GPS_RX_ANGLE                     = 0;
+bool            GPS_RX_FIX                       = 0;
+uint8_t         GPS_RX_Satellites                = 0;
+float           GPS_RX_Speed                     = 0;
+float           GPS_RX_MaxSpeed                  = 0;
+uint8_t         GPS_RX_Hours                     = 0;
+uint8_t         GPS_RX_Mins                      = 0;
+uint8_t         GPS_RX_SECS                      = 0;
+uint8_t         GPS_RX_DAY                       = 0;
+uint8_t         GPS_RX_MONTH                     = 0;
+uint8_t         GPS_RX_YEAR                      = 0;
+float           GPS_RX_Maxaltitude               = 0;
+float           GPS_RX_GroundAltitude            = 0;
+float           GPS_RX_DistanceTo                = 0;
+float           GPS_RX_CourseTo                  = 0;
+float           GPS_RX_MaxDistance               = 0;
+#ifdef USE_LOCAL_GPS  // **************** TX GPS ************************************
+uint8_t       Satellites_TX_GPS;
+float         Latitude_TX_GPS;
+float         Longitude_TX_GPS;
+float         Attitude_TX_GPS;
+bool          GOT_A_FIX_TX_GPS = false;
+float         Distance_TX_GPS;
+float         Course_TX_ToGPS;
+uint8_t       Day_TX_GPS;
+uint8_t       Month_TX_GPS;
+uint8_t       Year_TX_GPS;
+uint8_t       Hours_TX_GPS;
+uint8_t       Mins_TX_GPS;
+uint8_t       Secs_TX_GPS;
+float         StoredLatitude_TX_GPS   = 51.922291; // haverfordwest!
+float         StoredLongitude_TX_GPS  = -5.213110; // haverfordwest!
+bool          Found_TX_GPS = false;                // Merely found the hardware in the TX
+float         LatitudeGPS_Sum = 0;
+float         LongitudeGPS_Sum = 0;
+float         AltitudeGPS_Sum = 0;
+float         LatitudeGPS_Average = 0;
+float         LongitudeGPS_Average = 0;
+float         AltitudeGPS_Average = 0;
+float         LatitudeGPS_Correction = 0;
+float         LongitudeGPS_Correction = 0;
+float         AltitudeGPS_Correction = 0;
+uint32_t      Local_GPS_Readings_Count = 0;
+#endif
+// **************************************************************************
+
+
 float           RXModelVolts                 = 0;
 int             RXModelAltitude              = 0;
 int             RXMAXModelAltitude           = 0;
