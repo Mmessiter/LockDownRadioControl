@@ -2139,10 +2139,10 @@ void ZeroDataScreen()
     GapCount            = 0;
     GapStart            = 0;
     RXMAXModelAltitude  = 0;
-    GPS_RX_Maxaltitude      = 0;
+    GPS_RX_Maxaltitude  = 0;
     ThisGap             = 0;
-    GPS_RX_MaxDistance      = 0;
-    GPS_RX_MaxSpeed         = 0;
+    GPS_RX_MaxDistance  = 0;
+    GPS_RX_MaxSpeed     = 0;
     LastShowTime        = 0; // for instant redisplay
     TotalFrameRate      = 0;
     FrameRateCounter    = 0;
@@ -2547,7 +2547,12 @@ void PointSelect()
 
 void GotoGPSView()
 {
-
+  char NoFixMsg[] = "Continue without GPS fix?";
+  
+  if (!GPS_RX_FIX) {
+        if (!GetConfirmation(pRXSetupView, NoFixMsg))
+        return;
+  }
     char GotoGPSView[] = "page GPSView";
     SendCommand(GotoGPSView);
     CurrentView = GPSVIEW;
