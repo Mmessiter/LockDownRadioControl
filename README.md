@@ -39,26 +39,27 @@ New features are added from time to time, especially when requested by users and
 Here is a brief summary of the features supported at the time of writing (August 2024): -
 
 - 16 Channels.
-- 4 flight modes.
-- 32 mixes (mix inputs or outputs).
-- 90 model memories.
-- 11 PWM servo outputs.
+- 4 flight modes, each with its own curve for output.
+- 32 mixes (for inputs or outputs).
+- 90 model memories; with almost unlimited backup file space.
+- 8 or 11 PWM servo outputs, all with definable centre points and frequencies.
+- 'Dual rates' (... except there are actually *three* rates.)  
 - Model memory backup and restore using internal SD card.
 - 50 Hz FHSS using 82 separate frequencies on the 2.4 GHz ISM waveband.
-- 200 Hz frame rate for very low latency.
-- 12 BIT resolution.
+- 200 Hz frame rate (for exceptionally low latency.)
+- 12 BIT servo resolution.
+- Very small data packet size, to reduce FHSS frequency collisions.
 - Wireless Buddy Box for training beginners.
 - "AMS" (**A**utomatic **M**odel **S**election) loads correct model memory automatically on connection to model.
 - **Buddy** transmitter also automatically loads the same model memory as **Master** has loaded.
-- Wireless model memory sharing. This allows copying model memories across to another transmitter without removing any SD cards.
-- Telemetry including model volts (and GPS, temperature & barometric pressure, when using custom sensor hub)
+- Wireless model memory sharing. This allows copying model memories to another transmitter **without** removing any SD cards.
+- Telemetry including model's battery volts and GPS location, speed, altitude, heading, distance from home, etc.
 - Speaker gives critical voice messages and other audio prompts.
-- User defined Channel names.
-- User mapped input and output channels.
-- 5 point editable curves for every channel and every flight mode. Supports straight, smoothed, and expo.
+- User defined Channel names, and inputs and outputs,
+- 5 point curves for each channel and all four flight modes. Supports straight, smoothed, and expo.
 - Failsafe.
-- 4 user definable switches.
-- Digital trims, rates, subtrim, servo reverse, servo speeds, macros, timer, log files, etc., etc.
+- 8 user definable switches. (and four of these can be knobs for continious variation of a channel).
+- Digital trims, subtrim, servo reverse, servo speeds, user macros, motor timer, log files, etc., etc...
 - Support for SBUS, PWM (with definable frequency and centre position), and PPM.
 - Support for third party transmitter models (JR type).
 - Context sensitive help screens for all functions.
