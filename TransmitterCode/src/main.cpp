@@ -4617,7 +4617,7 @@ void FASTRUN ManageTransmitter()
         }
     }     
 
-    if (RightNow - TransmitterLastManaged >= 20) {        // was 50 ... 20 times a second is good
+    if (RightNow - TransmitterLastManaged >= 50) {        // 50 = 20 times a second
         ReadSwitches();CheckHardwareTrims();GetBank();                                                         // Check switch positions 20 times a secon                                                                                                                                                                            
         TransmitterLastManaged = millis();
     }

@@ -41,12 +41,10 @@
 // #define DB_GAPS           // Debug Connection Gap assessment
 // #define DB_IDS            // Debug Model IDs (Hitting the 'BACK' button on models' screen will Serial.print these to the terminal)
 
-
 // ************************************************************************************
 //                                       General                                      *
 // ************************************************************************************
 /*********************************************************************************************************************************/
-
 
     #define PACEMAKER              5                             // 5ms means about 210 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
     #define CE_PIN                 7                             // for SPI to nRF24L01
@@ -91,7 +89,6 @@
     #define MAXPARAMETERS          7                            // Max types of parameters packet to send  ... will increase.      
     #define POWERONOFFDELAY        2000                         // Delay after power on before power off button is active
                                                                 // and delay after power off before power on button is active                   
-   
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
 //***************************************************************************

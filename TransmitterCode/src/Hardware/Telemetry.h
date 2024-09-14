@@ -219,18 +219,12 @@ void PopulateGPSView(){
     char         Mxd[]                 = "Mxd";
     char         BTo[]                 = "BTo";
     char         Sat[]                 = "Sat";
-    static bool  LastGPS_RX_FIX            = false;
      
         if (GPS_RX_FIX) { // if no fix, then leave display as before
             SendText(Fix, yes);
-            if (!LastGPS_RX_FIX) {
-                LastGPS_RX_FIX = true;
-                PlaySound(THEFANFARE);
-            }
         }
         else {
             SendText(Fix, no);
-            LastGPS_RX_FIX = false;
         }
         snprintf(Vbuf, 7, "%d", GPS_RX_Satellites);
         SendText(Sat, Vbuf);
