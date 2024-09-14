@@ -24,7 +24,7 @@
     #define TXVERSION_MAJOR   2 // first three *must* match RX but _EXTRA can be different
     #define TXVERSION_MINOR   4
     #define TXVERSION_MINIMUS 7
-    #define TXVERSION_EXTRA   "S 12/09/24" 
+    #define TXVERSION_EXTRA   "R 14/09/24" 
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -40,7 +40,7 @@
 // #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
 // #define DB_GAPS           // Debug Connection Gap assessment
 // #define DB_IDS            // Debug Model IDs (Hitting the 'BACK' button on models' screen will Serial.print these to the terminal)
-  #define USE_LOCAL_GPS           // Use GPS
+
 
 // ************************************************************************************
 //                                       General                                      *
@@ -829,37 +829,6 @@ float           GPS_RX_GroundAltitude            = 0;
 float           GPS_RX_DistanceTo                = 0;
 float           GPS_RX_CourseTo                  = 0;
 float           GPS_RX_MaxDistance               = 0;
-#ifdef USE_LOCAL_GPS  // **************** TX GPS ************************************
-uint8_t       Satellites_TX_GPS;
-float         Latitude_TX_GPS;
-float         Longitude_TX_GPS;
-float         Attitude_TX_GPS;
-bool          GOT_A_FIX_TX_GPS = false;
-float         Distance_TX_GPS;
-float         Course_TX_ToGPS;
-uint8_t       Day_TX_GPS;
-uint8_t       Month_TX_GPS;
-uint8_t       Year_TX_GPS;
-uint8_t       Hours_TX_GPS;
-uint8_t       Mins_TX_GPS;
-uint8_t       Secs_TX_GPS;
-float         StoredLatitude_TX_GPS   = 51.922291; // haverfordwest!
-float         StoredLongitude_TX_GPS  = -5.213110; // haverfordwest!
-bool          Found_TX_GPS = false;                // Merely found the hardware in the TX
-float         LatitudeGPS_Sum = 0;
-float         LongitudeGPS_Sum = 0;
-float         AltitudeGPS_Sum = 0;
-float         LatitudeGPS_Average = 0;
-float         LongitudeGPS_Average = 0;
-float         AltitudeGPS_Average = 0;
-float         LatitudeGPS_Correction = 0;
-float         LongitudeGPS_Correction = 0;
-float         AltitudeGPS_Correction = 0;
-uint32_t      Local_GPS_Readings_Count = 0;
-#endif
-// **************************************************************************
-
-
 float           RXModelVolts                 = 0;
 int             RXModelAltitude              = 0;
 int             RXMAXModelAltitude           = 0;

@@ -153,9 +153,7 @@
 #include "Hardware/MenuOptions.h"
 #include "Hardware/LogFilesList.h"
 #include "Hardware/Help.h"
-#ifdef USE_LOCAL_GPS
-#include "Hardware/GPS.h"
-#endif
+
 
 /*********************************************************************************************************************************/
 
@@ -639,12 +637,6 @@ FLASHMEM void ScanI2c()
             if (ii == 0x40) Serial.println("INA219 voltage meter detected!");
 #endif
 
-#ifdef USE_LOCAL_GPS
-            if (ii == 0x10) {
-                Look("GPS detected!");
-                Found_TX_GPS = true;
-            }
-#endif
             if (ii == 0x40) {
                 USE_INA219 = true;
             }
@@ -1100,9 +1092,6 @@ FLASHMEM void setup()
         }
     }
     if (!PPMdata.UseTXModule) ConfigureRadio();  
-#ifdef USE_LOCAL_GPS
-    if (Found_TX_GPS) setupGPS();
-#endif
     RationaliseBuddy();
     WarnUserIfBuddyBoxIsOn();
     ClearMostParameters();
@@ -3279,14 +3268,9 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(Mark, TextIn) > 0) {
-#ifdef USE_LOCAL_GPS 
-            StoredLatitude_TX_GPS  = GPS_RX_Latitude + LatitudeGPS_Correction; // Mark this location LOCALLY 
-            StoredLongitude_TX_GPS = GPS_RX_Longitude + LongitudeGPS_Correction;
-#else
             GPSMarkHere    = 255;                       // Mark this at RX
             GPS_RX_MaxDistance = 0;
             AddParameterstoQueue(3);                    // 3 is the ID of the MARK HERE parameter
-#endif
             ClearText();
             return;
          }
@@ -4635,9 +4619,6 @@ void FASTRUN ManageTransmitter()
 
     if (RightNow - TransmitterLastManaged >= 20) {        // was 50 ... 20 times a second is good
         ReadSwitches();CheckHardwareTrims();GetBank();                                                         // Check switch positions 20 times a secon                                                                                                                                                                            
-#ifdef USE_LOCAL_GPS
-         if (Found_TX_GPS) ReadGPS();
-#endif
         TransmitterLastManaged = millis();
     }
 }

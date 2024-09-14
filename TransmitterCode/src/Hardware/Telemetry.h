@@ -234,33 +234,27 @@ void PopulateGPSView(){
         }
         snprintf(Vbuf, 7, "%d", GPS_RX_Satellites);
         SendText(Sat, Vbuf);
-        snprintf(Vbuf, 15, "%.12f", GPS_RX_Longitude);
-        SendText(Lon, Vbuf);
-        snprintf(Vbuf, 15, "%.12f", GPS_RX_Latitude);
-        SendText(Lat, Vbuf);
         snprintf(Vbuf, 7, "%.3f",GPS_RX_ANGLE);
         SendText(Bear, Vbuf);
-        if (Found_TX_GPS) {
-            snprintf(Vbuf, 7, "%.3f", Distance_TX_GPS);
-            SendText(Dist, Vbuf);
-            snprintf(Vbuf, 6, "%.3f", Course_TX_ToGPS);
-            SendText(BTo, Vbuf);
-        }else{
-            snprintf(Vbuf, 7, "%.3f", GPS_RX_DistanceTo);
-            SendText(Dist, Vbuf);
-            snprintf(Vbuf, 6, "%.3f", GPS_RX_CourseTo);
-            SendText(BTo, Vbuf); 
-        }
+
+        snprintf(Vbuf, 6, "%.3f", GPS_RX_Altitude);
+        SendText(ALT, Vbuf);
+        snprintf(Vbuf, 7, "%.3f", GPS_RX_DistanceTo);
+        SendText(Dist, Vbuf);
+        snprintf(Vbuf, 6, "%.3f", GPS_RX_CourseTo);
+        SendText(BTo, Vbuf);
+        snprintf(Vbuf, 15, "%.12f", GPS_RX_Longitude );
+        SendText(Lon, Vbuf);
+        snprintf(Vbuf, 15, "%.12f", GPS_RX_Latitude );
+        SendText(Lat, Vbuf);
+
         snprintf(Vbuf, 6, "%.3f", GPS_RX_Speed);
         SendText(Sped, Vbuf);
         snprintf(Vbuf, 6, "%.3f", GPS_RX_MaxSpeed);
         SendText(MxS, Vbuf);
-        snprintf(Vbuf, 6, "%.3f", GPS_RX_Altitude);
-        SendText(ALT, Vbuf);
-        snprintf(Vbuf, 6, "%.3f", GPS_RX_Maxaltitude);
+        snprintf(Vbuf, 6, "%.3f", GPS_RX_Maxaltitude); // ?? todo
         SendText(MALT, Vbuf);
-       
-        snprintf(Vbuf, 6, "%.3f", GPS_RX_MaxDistance);
+        snprintf(Vbuf, 6, "%.3f", GPS_RX_MaxDistance); //  ??
         SendText(Mxd, Vbuf);
 }
 
