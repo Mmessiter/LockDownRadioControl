@@ -696,6 +696,7 @@ void             LogReleased();
 void             LogTouched();
 void             DownLog();
 void             UpLog();
+void             RefreshDualRatesNew();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************

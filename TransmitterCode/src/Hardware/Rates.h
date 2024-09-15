@@ -30,6 +30,42 @@ void ReadDRSwitch(bool sw1, bool sw2, bool rev) // Dual Rate Switch
     }
 }
 
+
+/************************************************************************************************************/
+
+void ReadDualRatesFromScreen(){
+
+    char rate1[]     = "rate1";
+    char rate2[]     = "rate2";
+    char rate3[]     = "rate3";
+    char ChNumber1[] = "n2";
+    char ChNumber2[] = "n0";
+    char ChNumber3[] = "n1";
+    char ChNumber4[] = "n3";
+    char ChNumber5[] = "n6";
+    char ChNumber6[] = "n4";
+    char ChNumber7[] = "n5";
+    char ChNumber8[] = "n7";
+
+    Drate1 = GetValue(rate1);
+    Drate2 = GetValue(rate2);
+    Drate3 = GetValue(rate3);
+    DualRateChannels[0] = GetValue(ChNumber1);
+    DualRateChannels[1] = GetValue(ChNumber2);
+    DualRateChannels[2] = GetValue(ChNumber3);
+    DualRateChannels[3] = GetValue(ChNumber4);
+    DualRateChannels[4] = GetValue(ChNumber5);
+    DualRateChannels[5] = GetValue(ChNumber6);
+    DualRateChannels[6] = GetValue(ChNumber7);
+    DualRateChannels[7] = GetValue(ChNumber8);
+}
+
+/************************************************************************************************************/
+
+void RefreshDualRatesNew(){
+        ReadDualRatesFromScreen();
+        DisplayDualRateValues();
+}
 /************************************************************************************************************/
  void ReadDualRateSwitch(){
      
@@ -170,30 +206,7 @@ void    DisplayNewDualRateBank(){
 
 void DualRatesEnd() 
 {
-     char rate1[]    = "rate1";
-    char rate2[]     = "rate2";
-    char rate3[]     = "rate3";
-    char ChNumber1[] = "n2";
-    char ChNumber2[] = "n0";
-    char ChNumber3[] = "n1";
-    char ChNumber4[] = "n3";
-    char ChNumber5[] = "n6";
-    char ChNumber6[] = "n4";
-    char ChNumber7[] = "n5";
-    char ChNumber8[] = "n7";
-
-    Drate1 = GetValue(rate1);//
-    Drate2 = GetValue(rate2);
-    Drate3 = GetValue(rate3);
-    DualRateChannels[0] = GetValue(ChNumber1);
-    DualRateChannels[1] = GetValue(ChNumber2);
-    DualRateChannels[2] = GetValue(ChNumber3);
-    DualRateChannels[3] = GetValue(ChNumber4);
-    DualRateChannels[4] = GetValue(ChNumber5);
-    DualRateChannels[5] = GetValue(ChNumber6);
-    DualRateChannels[6] = GetValue(ChNumber7);
-    DualRateChannels[7] = GetValue(ChNumber8);
-
+    ReadDualRatesFromScreen();
     SaveOneModel(ModelNumber);
     StartModelSetup();
 }
@@ -241,7 +254,6 @@ void DisplayDualRateValues()
     ShowDualRateChannelsName(ChName7, DualRateChannels[6]);
     ShowDualRateChannelsName(ChName8, DualRateChannels[7]);
     DisplayNewDualRateBank();
-
 }
 
 /******************************************************************************************************************************/
