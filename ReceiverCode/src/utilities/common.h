@@ -32,7 +32,7 @@
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
           #define SECOND_TRANSCEIVER          1  // must be undefined if not using two transceivers
-      //  #define USE_11PWM_OUTPUTS           1  // must be undefined if not using all 11 PWM outputs  
+          #define USE_11PWM_OUTPUTS           1  // must be undefined if not using all 11 PWM outputs  
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
