@@ -942,7 +942,7 @@ char     ThisRadio[6]  = "0 ";
 uint8_t  LastRadio     = 0;
 uint8_t  NextChannel   = 0;
 
-bool WirelessBuddy = false; // use RF for buddy?!?!
+bool WirelessBuddy = false; // use RF for buddy
 
 bool BuddyPupilOnWireless = false;
 bool WasBuddyPupilOnWireless = false;
