@@ -201,7 +201,7 @@ void RedLedOn()
     analogWrite(REDLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
     if (LedWasGreen) {
         if (AnnounceConnected & !BuddyPupilOnWireless) PlaySound(DISCONNECTEDMSG);
-        if (UseLog) LogDisConnection(); // heer
+        if (UseLog) LogDisConnection(); 
         
         ClearMostParameters();
         if (CurrentView == FRONTVIEW) {
