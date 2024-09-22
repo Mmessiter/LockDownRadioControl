@@ -891,7 +891,6 @@ void GetTeensyMacAddress()
     for (int i = 1; i < 6; ++i) {
         MacAddress[i] = CheckPipeNibbles(MacAddress[i]); // Fix PIPE if needed !
     }
-    //   MacAddress[1] = 0x42; // for buddy box ... 
 
 #ifdef DB_BIND
     Serial.println("");
@@ -909,7 +908,6 @@ void GetTeensyMacAddress()
     TeensyMACAddPipe += (uint64_t)MacAddress[3] << 16;
     TeensyMACAddPipe += (uint64_t)MacAddress[4] << 8;
     TeensyMACAddPipe += (uint64_t)MacAddress[5];
-    // TeensyMACAddPipe &= 0xffffffffff;
 }
 
 /*********************************************************************************************************************************/
@@ -922,9 +920,9 @@ void ConvertBuddyPipeTo64BITS()
     BuddyMACAddPipe += (uint64_t)BuddyMacAddress[3] << 16;
     BuddyMACAddPipe += (uint64_t)BuddyMacAddress[4] << 8;
     BuddyMACAddPipe += (uint64_t)BuddyMacAddress[5];
-    BuddyMACAddPipe >>= 8; // Correction needed :-) !
+    BuddyMACAddPipe >>= 8; 
 
-    // TeensyMACAddPipe &= 0xffffffffff;
+   
 }
 
 /*********************************************************************************************************************************/

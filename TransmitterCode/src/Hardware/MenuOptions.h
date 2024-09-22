@@ -746,8 +746,6 @@ void OptionView3End() //
     char sw1[] = "sw1";
     char n0[]  = "n0";
 
-
-
     TxVoltageCorrection    = GetValue(TxVCorrextion);
     PowerOffWarningSeconds = GetValue(n2);
     PowerOffWarningSeconds = CheckRange(PowerOffWarningSeconds, 1, 10);
@@ -762,7 +760,6 @@ void OptionView3End() //
      UseLog                 = GetValue(sw0);
      LogRXSwaps             = GetValue(sw1);
     
-
     SaveTransmitterParameters();
     CloseModelsFile();
     AddParameterstoQueue(2);  // 2 is the ID for sending QNH value to RX
