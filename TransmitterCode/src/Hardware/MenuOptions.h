@@ -26,7 +26,7 @@ void SystemPage1Start(){
             SendText(Tx_Name, TxName);
             SendValue(lpm, AutoModelSelect);
             SendValue(Bwn, LowBattery);
-            SendValue(n1, ScrollAmount);
+            SendValue(n1,ScrollAmount);
             CurrentView = OPTIONS_VIEW;
             ClearText();
 }
