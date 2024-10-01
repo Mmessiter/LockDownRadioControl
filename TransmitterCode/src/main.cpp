@@ -1885,17 +1885,21 @@ void StoreModelID()
     char p1[]               = "?";
     char Done[]             = "Model ID stored.";
     char NotDone[]          = "Model ID not stored.";
-    char DoneAlready[]      = "No ID to store!";
+    char DoneAlready[]      = "ID was already stored.";
+    char NotConnected[]     = "No ID to store.";
 
     strcpy(prompt, p);
     strcat(prompt, ModelName);
     strcat(prompt, p1);
 
-    if (!ModelsMacUnion.Val64) {
+    if (ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64) {
         MsgBox(pRXSetupView, DoneAlready);
         return;
     }
-
+    if (!ModelsMacUnion.Val64) {
+        MsgBox(pRXSetupView, NotConnected);
+        return;
+    }
     if (GetConfirmation(pRXSetupView, prompt)) {
         PlaySound(MMSAVED);
         ModelsMacUnionSaved.Val64 = ModelsMacUnion.Val64;
