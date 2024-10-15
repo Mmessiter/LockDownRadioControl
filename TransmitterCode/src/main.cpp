@@ -153,6 +153,9 @@
 #include "Hardware/MenuOptions.h"
 #include "Hardware/LogFilesList.h"
 #include "Hardware/Help.h"
+#ifdef USE_BTLE
+#include "Hardware/BTLE.h"
+#endif
 
 
 /*********************************************************************************************************************************/
@@ -4385,17 +4388,13 @@ void GotoFrontView()
 {
     char fms[4][4]             = {{"fm1"}, {"fm2"}, {"fm3"}, {"fm4"}};
     char FrontView_Connected[] = "Connected";
-   
-
     PupilIsAlive  = 0;
     MasterIsAlive = 0;
     LastAutoModelSelect = true; 
     LastCopyTrimsToAll  = true; 
-    OldRate             = 235;  // forced different
-    ForceVoltDisplay    = true; // force redisplay of voltage
-    LastConnectionQuality = 0;  // force redisplay of connection quality
-   
-
+    OldRate             = 235;                                          // forced different
+    ForceVoltDisplay    = true;                                         // force redisplay of voltage
+    LastConnectionQuality = 0;                                          // force redisplay of connection quality
     if (CurrentView != FRONTVIEW) {
         if (CurrentView == SCANVIEW) DoScanEnd();                       // Put transceiver back to normal mode
         if (CurrentView == PONGVIEW) ReadOneModel(ModelNumber);         // Return to current model
@@ -4412,7 +4411,7 @@ void GotoFrontView()
         Force_ReDisplay();
         ShowMotorTimer();
         ClearText();
-        LastShowTime = 0;                                              // this is to make redisplay sooner (in ShowComms())
+        LastShowTime = 0;                                               // this is to make redisplay sooner (in ShowComms())
         SendText(FrontView_Connected, na);
     }
     for (int i = 0; i < 4; ++i) {
@@ -4422,9 +4421,8 @@ void GotoFrontView()
     ShowAMS();
     UpdateTrimView();
     if (BuddyPupilOnWireless) StartBuddyListen();
-
-     CurrentView = FRONTVIEW;
-     RestoreBrightness();
+    CurrentView = FRONTVIEW;
+    RestoreBrightness();
 }
 
 /************************************************************************************************************/
@@ -4595,6 +4593,8 @@ void FASTRUN ManageTransmitter()
     uint32_t                RightNow                = millis();
     uint32_t                TXPacketElapsed         = RightNow - LastPacketSentTime;
     
+ // SendViaBLE();
+
     KickTheDog();                                                                                              // Watchdog ... ALWAYS!                                            
     if ((PACEMAKER - TXPacketElapsed < TIMEFORTXMANAGMENT) && ModelMatched) 
         {
@@ -4614,12 +4614,12 @@ void FASTRUN ManageTransmitter()
 
     if (RightNow - LastParameterSent >= 20) {                                                                 // Send queued parameters
        if (ParametersToBeSentPointer) SendOutstandingParameters();
-        LastParameterSent = RightNow;
+        LastParameterSent = RightNow;    
     }   
     
     if ((RightNow - LastModelScreenCheck >= 500)) {
         if (CurrentView == MODELSVIEW) { 
-            LastModelScreenCheck = RightNow;
+            LastModelScreenCheck = RightNow;            
             if (CheckModelName()) {
                 LastModelScreenCheck = RightNow; return;                                                       // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
             }

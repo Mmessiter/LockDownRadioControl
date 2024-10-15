@@ -5,6 +5,9 @@
 //            This header file has prototypes, definitions and global variables                 *
 // **********************************************************************************************
 
+//#define USE_BTLE  // testing!
+
+
 #include <Arduino.h>
 #include <Watchdog_t4.h>
 #include <TeensyID.h>
@@ -16,6 +19,9 @@
 #include <Adafruit_INA219.h>
 #include <DS1307RTC.h>
 #include <InterpolationLib.h>
+#ifdef USE_BTLE
+#include <BTLE.h>
+#endif
  
 // *************************************************************************************
 //               TX VERSION NUMBER   (May 2020 - August 2024 Malcolm Messiter)       *
@@ -25,6 +31,7 @@
     #define TXVERSION_MINOR   4
     #define TXVERSION_MINIMUS 7
     #define TXVERSION_EXTRA   "S 14/09/24" 
+            
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -697,11 +704,18 @@ void             LogTouched();
 void             DownLog();
 void             UpLog();
 void             RefreshDualRatesNew();
+#ifdef USE_BTLE
+void             SendViaBLE();
+#endif
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************
 
 RF24          Radio1(CE_PIN, CSN_PIN);
+#ifdef USE_BTLE
+BTLE          btle(&Radio1);
+#endif
+
 WDT_T4<WDT3>  TeensyWatchDog;
 WDT_timings_t WatchDogConfig;
 uint8_t       Mixes[MAXMIXES + 1][17];                      // 17 possible elements per mix. NOTHING to do with channels count!!!
