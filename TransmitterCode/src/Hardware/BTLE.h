@@ -2,10 +2,10 @@
 #ifndef BTLE_H
     #define BTLE_H
 
+#ifdef USE_BTLE
 #include "Hardware/1Definitions.h"
 #include <Arduino.h>
 
-#ifdef USE_BTLE
 
 // ************************************************************************************************************
 void SendViaBLE(){
