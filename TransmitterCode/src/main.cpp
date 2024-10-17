@@ -61,15 +61,15 @@
  * |-----------------|-------------|
  * | GND        | GND |
  * | Vin        | +5V power in  |
- * | 0  (RX1)   | NEXTION  (TX) |
- * | 1  (TX2)   | NEXTION  (RX) |
+ * | 0  (RX1)   | NEXTION  (TX) | // RX1
+ * | 1  (TX2)   | NEXTION  (RX) | // TX1
  * | 2  LED     | RED |
  * | 3  LED     | GREEN |
  * | 4  LED     | BLUE |
  * | 5  (POLOLU)| 2808 ALL POWER OFF SIGNAL (When high)|
  **| 6  (PPM)   | PPM IN or OUT NEW PCB TX MODULE 
- * | 7  (CE)    | nRF24l01 (CE)  
- * | 8  (CSN)   | nRF24l01 (CSN)
+ * | 7  (CE)    | nRF24l01 (CE)   // RX2
+ * | 8  (CSN)   | nRF24l01 (CSN)  // TX2
  **| 9  SPARE   | <<<< *SPARE* !
  **| 10 (PPM)   | Wired Buddy PPM IN or OUT (Could become a SPARE if PPM Buddy is not used)
  **| 11 (MOSI)  | nRF24l01 (MOSI) |
@@ -81,21 +81,22 @@
  * | 17 (A3)    | Joystick POT CH4 |
  **| 18 (I2C)   | I2C bus  SDA |
  **| 19 (I2C)   | I2C bus  SCL |
- * | 20 (A6)    | POT KNOB CH5 |
- * | 21 (A7)    | POT KNOB CH6 |
- * | 22 (A8)    | POT KNOB CH7 |
+ * | 20 (A6)    | POT KNOB CH5 |// TX5
+ * | 21 (A7)    | POT KNOB CH6 |// RX5
+ * | 22 (A8)    | POT KNOB CH7 | 
  * | 23 (A9)    | POT KNOB CH8 |
- * | 25         | Switch 1 |
- * | 26         | Switch 1 |
+ * | 24         | Spare         // TX6 ********  Usable as serial 
+ * | 25         | Switch 1 |    // RX6 ********  Usable as serial (only if Switch 1 is centred)
+ * | 26         | Switch 1 |    
  * | 27         | Switch 2 |
- * | 28         | Switch 2 |
- * | 29         | Switch 3 |
+ * | 28         | Switch 2 |    // RX7
+ * | 29         | Switch 3 |    // TX7
  * | 30         | Switch 3 |
  * | 31         | Switch 4 |
  * | 32         | Switch 4 |
  * | 33         | Sensor for power button press while on 
- * | 34         |TRIM (CH1a)|
- * | 35         |TRIM (CH1b)|
+ * | 34         |TRIM (CH1a)|   // RX8  ********  Usable as serial while hardware trims are not used  (Best option)
+ * | 35         |TRIM (CH1b)|   // TX8  ********  Usable as serial while hardware trims are not used  (Best option)
  * | 36         |TRIM (CH2a)|
  * | 37         |TRIM (CH2b)|
  * | 38         |TRIM (CH3a)|
@@ -108,14 +109,14 @@
  * | 45         Built-in SD card
  * | 46         Built-in SD card
  * | 47         Built-in SD card
- * |  (Solder pads on the back:)
- * | 48<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (!! SPARE !!)
- * | 49<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (!! SPARE !!)
- * | 50<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (!! SPARE !!)
- * | 51<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (!! SPARE !!)
- * | 52<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (!! SPARE !!)
- * | 53<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (!! SPARE !!)
- * | 54<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (!! SPARE !!)
+ * |  Solder pads on the back: 
+ * | 48<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (SPARE)
+ * | 49<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (SPARE)
+ * | 50<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (SPARE)
+ * | 51<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (SPARE)
+ * | 52<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (SPARE)
+ * | 53<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (SPARE)
+ * | 54<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (SPARE)
  * @see TransmitterCode/src/main.cpp
  */
 // ************************************************** TRANSMITTER CODE **************************************************
