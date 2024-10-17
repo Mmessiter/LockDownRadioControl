@@ -86,7 +86,7 @@
  * | 22 (A8)    | POT KNOB CH7 | 
  * | 23 (A9)    | POT KNOB CH8 |
  * | 24         | Spare         // TX6 ********  Usable as serial 
- * | 25         | Switch 1 |    // RX6 ********  Usable as serial (only if Switch 1 is centred)
+ * | 25         | Switch 1 |    // RX6 ********  Usable as serial (but only while Switch 1 is centred)
  * | 26         | Switch 1 |    
  * | 27         | Switch 2 |
  * | 28         | Switch 2 |    // RX7
