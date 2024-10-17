@@ -8,7 +8,8 @@
     "vector": "cpp",
     "string_view": "cpp",
     "initializer_list": "cpp",
-    "*.tpp": "cpp"
+    "*.tpp": "cpp",
+    "random": "cpp"
   },
   "lldb.library": "/Applications/Xcode.app/Contents/SharedFrameworks/LLDB.framework/Versions/A/LLDB",
   "lldb.launch.expressions": "native"

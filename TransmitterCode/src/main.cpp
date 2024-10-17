@@ -1039,7 +1039,6 @@ FLASHMEM void setup()
     SendValue(FrontView_ForeGround, ForeGroundColour);
     SendValue(FrontView_Special, SpecialColour);
     SendValue(FrontView_Highlight, HighlightColour);
-
     CurrentView = 254;
     GotoFrontView();
     SetAudioVolume(AudioVolume);
@@ -4387,6 +4386,7 @@ void CompareVersionNumbers(){                                                   
 
 void GotoFrontView()
 {
+   
     char fms[4][4]             = {{"fm1"}, {"fm2"}, {"fm3"}, {"fm4"}};
     char FrontView_Connected[] = "Connected";
     PupilIsAlive  = 0;

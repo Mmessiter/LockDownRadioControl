@@ -132,7 +132,7 @@ void SetNewDualRate(){
         }else{
             strcat(buf, rates[0]);
         }
-        SendText(t3, buf);
+        SendText(t3, buf); 
 }
 
 /******************************************************************************************************************************/
@@ -184,10 +184,10 @@ void ShowDualRateChannelsName(char* nm, uint8_t n)
     char nu[] = "Not used";
 
     if (n) {
-        SendText(nm, ChannelNames[n - 1]);
+        SendText(nm, ChannelNames[n - 1]); 
     }
     else {
-        SendText(nm, nu);
+        SendText(nm, nu); 
     } // not used if zero
 }
 
@@ -198,7 +198,7 @@ void    DisplayNewDualRateBank(){
         char rate[] = "rate";
         char t1[] = "t1";                                              
         SendValue(rate, DualRateRate[Bank - 1]);
-        SendText(t1, BankTexts[BanksInUse[Bank - 1]]);                  // display bank name in Rates view
+        SendText(t1, BankTexts[BanksInUse[Bank - 1]]);                  // display bank name in Rates view 
         CheckSelectedRatesMode();                                       
 }
 

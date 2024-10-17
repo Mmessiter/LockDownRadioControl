@@ -7,11 +7,18 @@
 /*********************************************************************************************************************************/
 //                        NEXTION functions
 /*********************************************************************************************************************************/
-void GetReturnCode()
-{ // Currently this is absorbed but ignored. This seems to be essential.
+void GetReturnCode(char* tbox)
+{ // This function reads the return code from the NEXTION display
     delayMicroseconds(70);
     while (NEXTION.available()) {
-        NEXTION.read();
+         NEXTION.read();
+        // char c = NEXTION.read(); // get return code for debugging
+        // uint8_t j = Ascii(c);
+        // if (j < 0xFF) {
+        //     Serial.print(j, HEX);
+        //     Look1 (" -> ");
+        //     Look (tbox);
+        // }
         delayMicroseconds(70);
     }
 }
@@ -30,7 +37,7 @@ void SendText(char* tbox, char* NewWord)
     strcat(CB, NewWord);
     strcat(CB, quote);
     SendCommand(CB);
-    GetReturnCode();
+    GetReturnCode(tbox);
 }
 
 /*********************************************************************************************************************************/
@@ -47,7 +54,7 @@ void SendOtherText(char* tbox, char* NewWord)
     strcat(CB, NewWord);
     strcat(CB, quote);
     SendCommand(CB);
-    GetReturnCode();
+    GetReturnCode(tbox);
 }
 
 /*********************************************************************************************************************************/
@@ -66,7 +73,7 @@ void SendText1(char* tbox, char* NewWord)
     strcat(CB, NewWord);
     strcat(CB, quote);
     SendCommand(CB);
-    GetReturnCode();
+    GetReturnCode(tbox);
 }
 /*********************************************************************************************************************************/
 void SendOtherValue(char* nbox, int value)
@@ -79,7 +86,7 @@ void SendOtherValue(char* nbox, int value)
     strcat(CB, Str(NB, value, 0));
     SendCommand(CB);
     ValueSent = true;
-    GetReturnCode();
+    GetReturnCode(nbox);
 }
 
 /*********************************************************************************************************************************/
@@ -119,7 +126,7 @@ void SendCommand(char* tbox)
     NEXTION.print(tbox);
     for (int i = 0; i < 3; ++i) NEXTION.write(0xff);
     delayMicroseconds(70);
-    GetReturnCode();
+    GetReturnCode(tbox);
     if (InStrng(blankview, tbox)) return;                      // Don't wait for blankview
     if (InStrng(page, tbox)) DelayWithDog(SCREENCHANGEWAIT);   // Allow time for new page to appear
 }
@@ -143,7 +150,7 @@ void SendValue(char* nbox, int value)
     strcat(CB, Str(NB, value, 0));
     SendCommand(CB);
     ValueSent = true;
-    GetReturnCode();
+    GetReturnCode(nbox);
 }
 
 /*********************************************************************************************************************************/
