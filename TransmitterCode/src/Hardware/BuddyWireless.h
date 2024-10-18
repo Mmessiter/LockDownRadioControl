@@ -212,24 +212,23 @@ void DoTheLongerSpecialPacket(){
  void  GetCommandbytes(uint8_t * C, uint8_t * C1){    // we have two bytes to send to the buddy.   
     if (BuddyON) 
     {
-        * C = 'B';            // Send B to indicate Buddy is ON
-    } else 
+        * C = 'B';                          // Send B to indicate Buddy is ON
+    } 
+    else 
     {
-        * C = 'M';            // Send M to indicate Master is ON
+        * C = 'M';                          // Send M to indicate Master is ON
     }
-    
     if (BuddyHasAllSwitches) 
     {
         * C1 = 1;                           // Buddy has all the switches
     }
-    if (!BuddyHasAllSwitches)               // Otherwise, inform pupil of all our switch positions
+    else                               // Otherwise, inform pupil of all our switch positions
     {   
         * C1  = (DualRateInUse - 1) << 1;   // Uses low two bits, clears all the rest. 
-        * C1 |= (Bank - 1)   << 3;          // Sets the bank bits in the command byte at bits 3 & 4
-        * C1 |= MotorEnabled << 5;          // Sets the motor bit in the command byte at bit 5
-        * C1 |= SafetyON << 6;              // Sets the safety bit in the command byte at bit 6
+        * C1 |= (Bank - 1)          << 3;   // Sets the bank bits in the command byte at bits 3 & 4
+        * C1 |= MotorEnabled        << 5;   // Sets the motor bit in the command byte at bit 5
+        * C1 |= SafetyON            << 6;   // Sets the safety bit in the command byte at bit 6
     }       
-    return ;
  }
 //*************************************************************************************************************************
 void SendSpecialPacket()                                                   

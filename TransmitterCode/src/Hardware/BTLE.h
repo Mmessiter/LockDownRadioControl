@@ -20,7 +20,6 @@ if (!BLEStarted) {
   btle.advertise(&buf,6);  // 6 bytes only per send.
   btle.hopChannel();
   Look1(".");
-
 }
 // ************************************************************************************************************
     #endif // #ifndef USE_BTLE 
