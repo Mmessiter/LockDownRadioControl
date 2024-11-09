@@ -1,0 +1,54 @@
+{
+    "folders": [
+        {
+            "path": ".github"
+        },
+        {
+            "path": "Docs"
+        },
+        {
+            "path": "Pictures"
+        },
+        {
+            "path": "ReceiverCode"
+        },
+        {
+            "path": "TransmitterCode"
+        },
+        {
+            "path": "Help files for SD"
+        },
+        {
+            "path": "SensorHubT32"
+        }
+    ],
+    "settings": {
+        "files.associations": {
+            "*.tcc": "cpp",
+            "chrono": "cpp",
+            "string": "cpp",
+            "unordered_map": "cpp",
+            "vector": "cpp",
+            "functional": "cpp",
+            "fstream": "cpp",
+            "istream": "cpp",
+            "ostream": "cpp",
+            "sstream": "cpp",
+            "streambuf": "cpp",
+            "system_error": "cpp",
+            "tuple": "cpp"
+        },
+        "files.trimTrailingWhitespace": true,
+        "files.trimFinalNewlines": true,
+        "diffEditor.ignoreTrimWhitespace": false,
+        "clang-format.fallbackStyle": "WebKit"
+    },
+    "extensions": {
+        "recommendations": [
+            "platformio.platformio-ide",
+            "xaver.clang-format",
+            "eamodio.gitlens",
+            "davidanson.vscode-markdownlint"
+        ]
+    }
+}
