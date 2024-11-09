@@ -1,0 +1,19 @@
+Use this screen to view a log file of many communications events.||
+
+Log files are stored on the SD card.|
+A new LOG file is started every day. Its filename is built from the date.||
+
+You can opt to record (or not to record) when the receiver swapped transceivers.|
+The minimum 'Gap' that's logged is defined here too. Gaps are in milliseconds. ||
+
+Gaps occur when a data packet or packets fails to arrived owing to interference and/or great distance.|
+The system then reconnects as fast as possible.||
+
+Short gaps, up to 100 ms or so, are not detectable by most pilots. More than that might indicate an issue. ||
+
+Also this screen allows the the LOG function to be switched right off - to save wear and tear on the SD card.
+SD cards only last a year or so. They last longer when rarely written to. |
+So a backup of the SD card's files on your computer is a very good idea.
+
+
+

@@ -1,0 +1,32 @@
+'Copy trims to all banks' does what you might expect!||
+
+Trim multiplier selects how much trim to apply. 5 is a very good default setting||
+
+To disable trims (for flybarless helicopters etc.) set Trim multiplier to 0 (zero).||
+
+'Stop flying' voltage is the receiver voltage (per cell) at which the transmitter's speaker will suggest unambiguously that it's time to 'Stop Flying!' ||
+
+When you set this, bear in mind that when you turn off the motor, the voltage will recover a little. Therefore set it a bit lower than you might have. Find the best setting by experiment since all models vary in this respect.|| 
+
+'RX Battery voltage correction' allows you to correct any slight error that the on board voltage sensor might have. This correction can be positive or negative and is the per cell voltage - not the combined voltage of every cell. Use a good voltmeter to compare the transmitter's readout with the more accurate figure, and adjust this setting as needed.||
+
+Motor channel 'off' value is usually -67, and this is default. But in a few cases it might be different, if the servo was reversed etc.||
+
+Motor channel should be set to the number of the channel to which the motor is connected. Usually it's 3.||
+
+The 'motor kill switch' is the switch used for Bank 4. If you use this option, the three position switch will kill the motor when in its third position.||
+
+That is:||
+
+Position one = Bank 1,2, or 3.|
+Position two = Bank 4.|
+Position three = motor off. ( ... and still Bank 4)||
+
+'Run timer backwards' oddly enough will run the timer backwards starting from the number of minutes set just below. When the backwards timer reaches zero the loudspeaker will suggest that you 'Stop Flying!||
+
+The receiver can output SBUS or PPM, but not both as these use the same connector. SBUS will always give 16 channels. PPM usually supports fewer, and this number is selectable here. Don't use a number greater than needed as this might impair performance.
+
+
+
+
+  

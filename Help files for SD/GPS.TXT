@@ -1,0 +1,18 @@
+This screen displays GNSS data if a GNSS device is connected.||
+
+The GNSS functions are designed to use a PA1010D GNSS device on an I2C breakout board using i2c communications at address 0x10. Connect one to the receiver's i2c port to use it.||
+
+The 'Zero alt' button marks the current altitude as zero. If not pressed, the altitude displayed is relative to mean sea level. Press this button while on the ground in order later to see the model's altitude above the ground where you are.||
+
+The 'Mark here' button 'marks' or 'remembers' the current location. Thereafter, 'Meters to mark' and 'Heading to mark' and 'Max distance' are all calculated relative to this marked location. ||
+
+If you mark your location before take off, this function can tell you how far you went and even which way is back again. ||
+
+Heading is degrees clockwise from due north.|| 
+
+Location accuracy is within about 2 meters under good conditions. Under poor conditions it will most probably be rather less accurate. Obtaining a first 'Fix' can take a few minutes, so please be patient. ||
+
+Accuracy improves with the number of satellites found.||
+
+Because GNSS satellites use super accurate atomic clocks, the clock on this transmitter will be automatically corrected using their data, and will therefore be amazingly accurate.
+ 

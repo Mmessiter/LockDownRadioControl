@@ -1,0 +1,14 @@
+This screen shows some information about the quality of the current connection and other data including GPS if one is connected.||
+
+Pressing 'Clear' will zero many parameters.||
+Pressing 'Zero Alt' toggles between altitude relative to sea level, and altitude relative to where the model was when 'Zero Alt' was pressed.|
+Pressing 'Mark here' marks the current location, if GPS was acquired. Thereafter 'Meters to mark' etc. will inform you how far away the model is from the mark.
+
+If you are using a two-transceiver receiver, then this screen shows which transceiver is in current use, and how long each was in use so far.
+
+'Gap' on this screen means the number of milliseconds between losing connection and re-establishing a connection. ||
+
+(Note: 100 ms is one tenth of a second.) ||
+
+When using FHSS (as this radio-system does) it is likely, especially in the presence of WiFi etc., that the occasional lost packet will occur due to momentary collisions of frequencies. Recovery of connection after this usually takes less than a tenth of a second so it usually goes unnoticed to the pilot. ||
+

@@ -1,0 +1,15 @@
+Four colours can be defined here. These can change the appearance and visibility of the transmitter.||
+
+These are 'Normal', 'Highlighted','Special' and 'Background'.||
+
+Each colour is built individually by varying its values for RED, GREEN, and BLUE.||
+
+First select which colour to define, then slide the three colours around until you like what you see.||
+
+Press 'Defaults' to return all to default values.||
+
+You may notice that Blue always has a value below 32, Green always has a larger value, and Red larger still.||
+
+This is because the Nextion screen stores a colour as a single 16 BIT value. The lowest 5 BITS are for Blue, the next 6 BITS are for Green, and the highest 5 BITS are for Red.
+
+
