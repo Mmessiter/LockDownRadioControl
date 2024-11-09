@@ -2,7 +2,7 @@
  * // Malcolm Messiter 2020 - 2024
  * @brief This is the main file for the transmitter code.
  *
- * @page TransmitterCode...
+ * @page TransmitterCode....
  * @section LockDown Radio Control Features list, so far:
  * - Uses Teensy 4.1 MCU (at 600 Mhz) with nRF24L01+ transceiver
  * - (Ebyte's ML01DP5 recommended for TX, two ML01SP4s for RX.)
