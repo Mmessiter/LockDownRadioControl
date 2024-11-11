@@ -195,6 +195,7 @@ uint16_t BuildLinesArray(char *ReadBuffer, uint16_t BytesRead, uint32_t StartSee
     }
     // Look1("Bytes actually Sent To Nextion: " );
     // Look(BytesSentToNextion);
+    
     return LinesCounter;
 }
 /******************************************************************************************************************************/
@@ -219,6 +220,8 @@ uint16_t ReadAFewLines()
        CloseLogFile();
        FinalReadStartLine = StartReadLine;
     }
+    // Look1("This Seek Position: ");
+    // Look(StartReadLine);
     return BuildLinesArray(ReadBuffer, BytesRead, ThisSeekPosition);   // build the lines array and return the number of lines
 }
 /******************************************************************************************************************************/
