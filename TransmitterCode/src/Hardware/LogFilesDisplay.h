@@ -9,13 +9,13 @@
 #ifndef LOGFILESDISPLAY_H
     #define LOGFILESDISPLAY_H
 /******************************************************************************************************************************/
-                                                    // Later, must put these into definitions.h ( ... Much later!)
-#define READBUFFERSIZE      2048                    // was 2048 and when used also for Help files might need again to be 2048 or more
-#define BUFFEREDLINES       6                       // was 15
+                                                    // Later, might put these into definitions.h ( ... Much later!)
+#define READBUFFERSIZE      2048                    // Buffer to read in
+#define BUFFEREDLINES       15                      // 
 #define MXLINES             BUFFEREDLINES * 4       // must be an integer and about 4 * BUFFEREDLINES
 #define SCROLLTRIGGER       0.75                    // was 0.75  ... and apparently still is!
 #define MXLINELENGTH        110
-#define WRAPPOINT           66
+#define WRAPPOINT           66                      // where to word-wrap
 #define MAXSEEKPOSITIONS    5000                    // hope it's enough
 #define FONTPOINTS          24                      // 24 point font at Nextion
 #define GOING_NOWHERE       0
@@ -57,6 +57,16 @@ void BottomOfLogFileNEW()
     ShowLogFileNew(ReadAFewLines());
     SendOtherValue(Current_Y_Nextion_Label, Max_Y);
     Previous_Current_Y = Max_Y;
+    
+    // for (int i = 0; i < MAXSEEKPOSITIONS; ++i) // heer
+    // {
+    //     if (SeekPosition[i]){
+    //         Look1(i);
+    //         Look1(" : ");
+    //         Look(SeekPosition[i]);
+    //     }
+    // }
+
 }
 
 // ************************************************************************
@@ -147,6 +157,16 @@ File OpenTheLogFileForReading()
     File fnumber = SD.open(SearchFile, FILE_READ);
     return fnumber;
 }
+
+/******************************************************************************************************************/
+// if there is still room in the array, this function stores the file pointer so scrolling up is possible
+
+void StoreThisNewSeekPosition(uint16_t ThisPosition, uint32_t ThisValue)
+{
+    if (ThisPosition < MAXSEEKPOSITIONS)
+        SeekPosition[ThisPosition] = ThisValue; 
+}
+
 /******************************************************************************************************************/
 // This function reads the log file buffer and builds an array of lines.
 // It also stores the file seek position of each line so we can scroll back to it later.
@@ -166,8 +186,7 @@ uint16_t BuildLinesArray(char *ReadBuffer, uint16_t BytesRead, uint32_t StartSee
             LogLines[i][j] = 0;
         }
     }
-
-    SeekPosition[LinesCounter + StartReadLine] = StartSeekPosition;                             // zero at top
+   StoreThisNewSeekPosition((LinesCounter + StartReadLine), StartSeekPosition);
     LogLines[LinesCounter][ColumnIndex] = 0;                                                    // make sure it's a null string at start
     while (BufferIndex < BytesRead) {                                                           // while not at end of buffer
          while (ReadBuffer[BufferIndex] == 124) {                                               // 124 is the pipe character (means new line)
@@ -179,23 +198,23 @@ uint16_t BuildLinesArray(char *ReadBuffer, uint16_t BytesRead, uint32_t StartSee
                 ++BytesSentToNextion;                                                           //cr (later)
                 ++BytesSentToNextion;                                                           //lf (later)
             }                                                                                    // skip the 124 and zero the column
-            SeekPosition[LinesCounter + StartReadLine] = StartSeekPosition + BufferIndex;       // store this seek position so we can scroll back effortlessly to it
-        }
+            StoreThisNewSeekPosition(LinesCounter + StartReadLine, StartSeekPosition + BufferIndex);
+         }
         if (ReadBuffer[BufferIndex] >= 32) {
             LogLines[LinesCounter][ColumnIndex] = ReadBuffer[BufferIndex];                      // copy one ASCII character
             ++BytesSentToNextion;                                                                                   
             ++ColumnIndex; LogLines[LinesCounter][ColumnIndex] = 0;                             // inc column & make sure this line is null terminated
-            if (ColumnIndex >= WRAPPOINT && LogLines[LinesCounter][ColumnIndex-1] == 32) {      // Were we past the word-wrap point?
+            if ((ColumnIndex >= WRAPPOINT) && (LogLines[LinesCounter][ColumnIndex - 1] == 32 || LogLines[LinesCounter][ColumnIndex - 1] == '-'))
+            {                                                                                   // Were we past the word-wrap point?
                 if (LinesCounter < MXLINES - 1) ++LinesCounter;                                 // increment the number of lines read if less than max
-                ColumnIndex = 0;                                                                
-                SeekPosition[LinesCounter + StartReadLine] = StartSeekPosition + BufferIndex;   // store this seek position so we can scroll back effortlessly to it
+                ColumnIndex = 0;
+                StoreThisNewSeekPosition(LinesCounter + StartReadLine, StartSeekPosition + BufferIndex);
             }
         }  
         ++BufferIndex;
     }
     // Look1("Bytes actually Sent To Nextion: " );
     // Look(BytesSentToNextion);
-    
     return LinesCounter;
 }
 /******************************************************************************************************************************/
@@ -247,7 +266,7 @@ void LogVIEWNew()   // Start log screen
     ClearFilesList();
     MakeLogFileName();  
     CloseLogFile();
-    for (uint16_t i = 0; i < MAXSEEKPOSITIONS; ++i) SeekPosition[i] = 0;
+    for (uint16_t i = 0; i < MAXSEEKPOSITIONS; ++i) SeekPosition[i] = 0; // clear all seekpositions
     StartReadLine = 0;
     LogFileNumber = OpenTheLogFileForReading();
     if (LogFileNumber) {
