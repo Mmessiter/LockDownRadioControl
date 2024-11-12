@@ -263,6 +263,7 @@ void LogVIEWNew()   // Start log screen
     SendCommand(pLogView);
     FinalReadStartLine = 0xFFFF;
     CurrentView = LOGVIEW;
+    SavedCurrentView = LOGVIEW;
     ClearFilesList();
     MakeLogFileName();  
     CloseLogFile();
