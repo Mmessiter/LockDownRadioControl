@@ -3410,10 +3410,7 @@ FASTRUN void ButtonWasPressed()
                 }
             }
             if (CurrentView == LOGVIEW) {
-                if (UseLog) {
-                    GotoFrontView(); // otherwise it goes round for ever
-                 // LogVIEWNew();
-                }
+                GotoFrontView();                    // otherwise it goes round for ever ... might fix later
             }
             UpdateModelsNameEveryWhere();
             ClearText();
