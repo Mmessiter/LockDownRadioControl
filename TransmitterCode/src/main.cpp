@@ -3232,6 +3232,7 @@ FASTRUN void ButtonWasPressed()
         char invisb0[]           = "vis b0,0";  
         char visb1[]             = "vis b1,1";   
         char visb0[]             = "vis b0,1";  
+        char LOG[]               = ".LOG";
 
         // ************************* test many input words from Nextion *****************
 
@@ -3366,7 +3367,20 @@ FASTRUN void ButtonWasPressed()
                 WhichPage[i] = TextIn[i];
                 ++i;
                 WhichPage[i] = 0;
-            }                       // Get page name to which to return
+            }
+            // Look1("Returned from help: ");
+            // Look(LogFileName);
+            // Look(WhichPage);
+
+            if (InStrng(LOG, LogFileName))
+                {
+                    CurrentView = DATAVIEW;
+                    SavedCurrentView = DATAVIEW;
+                    strcpy(WhichPage, pDataView);
+                    Look(WhichPage);
+                }
+            // Get page name to which to return
+            
             SendCommand(WhichPage); // this sends nextion back to last screen
 
             CurrentView = SavedCurrentView;
@@ -3389,10 +3403,6 @@ FASTRUN void ButtonWasPressed()
                 ShowMixValues();
             }
 
-           // if (CurrentView == MACROS_VIEW) {
-                // Do nothing!
-           // }
-
             if (CurrentView == CALIBRATEVIEW) {
                 Force_ReDisplay();
                 ShowServoPos();
@@ -3409,9 +3419,12 @@ FASTRUN void ButtonWasPressed()
                     LastConnectionQuality = 0;
                 }
             }
+
+          
             if (CurrentView == LOGVIEW) {
-                GotoFrontView();                    // otherwise it goes round for ever ... might fix later
+                GotoFrontView(); // otherwise it goes round for ever ... might fix later
             }
+
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
@@ -3732,7 +3745,7 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(SetupCol, TextIn) > 0) { // This is the return from Colours setup
+        if (InStrng(SetupCol, TextIn) > 0) { // This is  return fr Colours setup
             HighlightColour  = GetOtherValue(High_pco);
             ForeGroundColour = GetOtherValue(b0_pco);
             BackGroundColour = GetOtherValue(b0_bco);
