@@ -78,6 +78,7 @@ void LogReleasedNEW()
 
     if (Direction == GOING_DOWN)
     {
+     //   Look("DOWN?");
         if (Current_Y > (Max_Y * SCROLLTRIGGER))
         {
             StartReadLine += BUFFEREDLINES;
@@ -92,9 +93,10 @@ void LogReleasedNEW()
     }
     if (Direction == GOING_UP)
     {
+       // Look("UP?");
         if (Current_Y < (Max_Y * (1 - SCROLLTRIGGER)))
         {
-            if (StartReadLine < BUFFEREDLINES)
+            if (StartReadLine <= BUFFEREDLINES*4)
             {
                 StartReadLine = 0;
                 Current_Y = 0;
@@ -103,6 +105,8 @@ void LogReleasedNEW()
             {
                 Current_Y += (BUFFEREDLINES * FONTPOINTS);
                 StartReadLine -= BUFFEREDLINES;
+                // Look1("StartReadLine: ");
+                // Look(StartReadLine);
             }
             ShowLogFileNew(ReadAFewLines());
             SendOtherValue(Current_Y_Nextion_Label, Current_Y);
@@ -223,9 +227,9 @@ uint16_t BuildLinesArray(char *ReadBuffer, uint16_t BytesRead, uint32_t StartSee
         while (ReadBuffer[BufferIndex] == 124)
         { // 124 is the pipe character (means new line)
             ++BufferIndex;
+            ColumnIndex = 0;
             if (LinesCounter < MXLINES - 1)
             {
-                ColumnIndex = 0;
                 ++LinesCounter;                          // increment the number of lines read if less than max
                 LogLines[LinesCounter][ColumnIndex] = 0; // make sure this line is null terminated
                 ++BytesSentToNextion;                    // cr (later)

@@ -3377,7 +3377,7 @@ FASTRUN void ButtonWasPressed()
                     CurrentView = DATAVIEW;
                     SavedCurrentView = DATAVIEW;
                     strcpy(WhichPage, pDataView);
-                    Look(WhichPage);
+                  //  Look(WhichPage);
                 }
             // Get page name to which to return
             
