@@ -295,7 +295,6 @@ uint16_t ReadAFewLines()
 
 void StartLogFileView()
 {
-
     strcpy(LogFileName, "");
     LogVIEWNew();
 }
