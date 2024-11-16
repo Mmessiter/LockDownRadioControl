@@ -24,7 +24,7 @@
 
 char LogLines[MXLINES + 1][MXLINELENGTH + 1];
 uint32_t SeekPosition[MAXSEEKPOSITIONS];
-uint16_t StartReadLine = 0;
+short StartReadLine = 0;
 uint32_t ThisSeekPosition = 0;
 uint16_t FinalReadStartLine = 0xFFFF;
 
@@ -78,7 +78,6 @@ void LogReleasedNEW()
 
     if (Direction == GOING_DOWN)
     {
-     //   Look("DOWN?");
         if (Current_Y > (Max_Y * SCROLLTRIGGER))
         {
             StartReadLine += BUFFEREDLINES;
@@ -93,10 +92,9 @@ void LogReleasedNEW()
     }
     if (Direction == GOING_UP)
     {
-       // Look("UP?");
         if (Current_Y < (Max_Y * (1 - SCROLLTRIGGER)))
         {
-            if (StartReadLine <= BUFFEREDLINES*4)
+            if (StartReadLine < BUFFEREDLINES)
             {
                 StartReadLine = 0;
                 Current_Y = 0;
@@ -105,8 +103,6 @@ void LogReleasedNEW()
             {
                 Current_Y += (BUFFEREDLINES * FONTPOINTS);
                 StartReadLine -= BUFFEREDLINES;
-                // Look1("StartReadLine: ");
-                // Look(StartReadLine);
             }
             ShowLogFileNew(ReadAFewLines());
             SendOtherValue(Current_Y_Nextion_Label, Current_Y);
@@ -121,10 +117,6 @@ void ShowLogFileNew(uint16_t LinesCounter)
 {
     if (ScrollWithoutDisplaying)
         return;                    // if we are just scrolling to bottom, don't display anything
-    
-    // Look1("LinesCounter: ");
-    // Look(LinesCounter);
-
     char TheText[MAXFILELEN + 10]; // MAX = 5K or so
     char LogTeXt1[] = "LogText";
     char t0[] = "t0";
@@ -174,19 +166,7 @@ File OpenTheLogFileForReading()
     strcpy(SearchFile, "/");
     strcat(SearchFile, LogFileName);
     File fnumber = SD.open(SearchFile, FILE_READ);
-
-    if (!fnumber)
-    {
-        // Look1("File not opened: ");
-        // Look(SearchFile);
-    }
-    else
-    {
-        // Look1("File opened: ");
-        // Look(SearchFile);
-        LogFileOpen = true;
-    }
-
+    if (fnumber) LogFileOpen = true;
     return fnumber;
 }
 

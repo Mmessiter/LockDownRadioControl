@@ -31,7 +31,7 @@
     #define TXVERSION_MAJOR   2 // first three *must* match RX but _EXTRA can be different
     #define TXVERSION_MINOR   4
     #define TXVERSION_MINIMUS 7
-    #define TXVERSION_EXTRA   "U 08/11/24" 
+    #define TXVERSION_EXTRA   "U 16/11/24" 
             
 
 // *************************************************************************************
