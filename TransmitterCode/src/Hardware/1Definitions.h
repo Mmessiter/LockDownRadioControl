@@ -1173,10 +1173,7 @@ bool    ScrollWithoutDisplaying   = false;
 int     Previous_Current_Y        = 0; // for scrolling log file
 int     Max_Y                     = 666;
 uint32_t NextionReturn            = 0;
-bool    ReadingaFile = false;
-
-
-
+bool    ReadingaFile              = false;
 
 
 // **********************************************************************************************************************************

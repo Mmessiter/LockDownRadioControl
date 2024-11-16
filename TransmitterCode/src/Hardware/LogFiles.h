@@ -130,6 +130,9 @@ FASTRUN void CloseLogFile()
 /************************************************************************************************************/
 FASTRUN void WriteToLogFile(char* SomeData, uint16_t len)
 {
+    char txt[] = ".TXT";
+    if (InStrng(txt, LogFileName))
+        return; // Don't write to a HELP file
     LogFileNumber.write(SomeData, len);
 }
 // ************************************************************************

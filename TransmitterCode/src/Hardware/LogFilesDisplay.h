@@ -11,7 +11,7 @@
 /******************************************************************************************************************************/
 // Later, might put these into definitions.h ( ... Much later!)
 #define READBUFFERSIZE 2048         // Buffer to read in
-#define BUFFEREDLINES 6             // 15 might be too much
+#define BUFFEREDLINES 7             // 6? 15 might be too much
 #define MXLINES BUFFEREDLINES * 4   // must be an integer and about 4 * BUFFEREDLINES
 #define SCROLLTRIGGER 0.75          // was 0.75  ... and apparently still is!
 #define MXLINELENGTH 110
@@ -78,6 +78,7 @@ void LogReleasedNEW()
 
     if (Direction == GOING_DOWN)
     {
+       
         if (Current_Y > (Max_Y * SCROLLTRIGGER))
         {
             StartReadLine += BUFFEREDLINES;
@@ -94,7 +95,8 @@ void LogReleasedNEW()
     {
         if (Current_Y < (Max_Y * (1 - SCROLLTRIGGER)))
         {
-            if (StartReadLine < BUFFEREDLINES)
+            if (!StartReadLine) return;
+            if (StartReadLine <= MXLINES) // if we are almost at the top of the file (or at the top) go there!
             {
                 StartReadLine = 0;
                 Current_Y = 0;
