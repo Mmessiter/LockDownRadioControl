@@ -10,14 +10,14 @@
 #define LOGFILESDISPLAY_H
 /******************************************************************************************************************************/
 // Later, might put these into definitions.h ( ... Much later!)
-#define READBUFFERSIZE 2048         // Buffer to read in
-#define BUFFEREDLINES 7             // 6? 15 might be too much
-#define MXLINES BUFFEREDLINES * 4   // must be an integer and about 4 * BUFFEREDLINES
-#define SCROLLTRIGGER 0.75          // was 0.75  ... and apparently still is!
+#define READBUFFERSIZE 2048       // Buffer to read in
+#define BUFFEREDLINES 10          // 15 might be too much
+#define MXLINES BUFFEREDLINES * 4 // must be an integer and about 4 * BUFFEREDLINES
+#define SCROLLTRIGGER 0.75        // was 0.75  ... and apparently still is!
 #define MXLINELENGTH 110
-#define WRAPPOINT 66                // where to word-wrap
-#define MAXSEEKPOSITIONS 5000       // hope it's enough
-#define FONTPOINTS 24               // 24 point font at Nextion
+#define WRAPPOINT 66          // where to word-wrap
+#define MAXSEEKPOSITIONS 5000 // hope it's enough
+#define FONTPOINTS 24         // 24 point font at Nextion
 #define GOING_NOWHERE 0
 #define GOING_UP 1
 #define GOING_DOWN 2
@@ -78,7 +78,7 @@ void LogReleasedNEW()
 
     if (Direction == GOING_DOWN)
     {
-       
+
         if (Current_Y > (Max_Y * SCROLLTRIGGER))
         {
             StartReadLine += BUFFEREDLINES;
@@ -95,8 +95,9 @@ void LogReleasedNEW()
     {
         if (Current_Y < (Max_Y * (1 - SCROLLTRIGGER)))
         {
-            if (!StartReadLine) return;
-            if (StartReadLine <= MXLINES) // if we are almost at the top of the file (or at the top) go there!
+            if (!StartReadLine)
+                return;
+            if (StartReadLine <= BUFFEREDLINES * 4) // if we are almost at the top of the file (or at the top) go there!
             {
                 StartReadLine = 0;
                 Current_Y = 0;
@@ -168,7 +169,8 @@ File OpenTheLogFileForReading()
     strcpy(SearchFile, "/");
     strcat(SearchFile, LogFileName);
     File fnumber = SD.open(SearchFile, FILE_READ);
-    if (fnumber) LogFileOpen = true;
+    if (fnumber)
+        LogFileOpen = true;
     return fnumber;
 }
 
@@ -183,63 +185,43 @@ void StoreThisNewSeekPosition(uint16_t ThisPosition, uint32_t ThisValue)
 
 /******************************************************************************************************************/
 // This function reads the log file buffer and builds an array of lines.
-// It also stores the file seek position of each line so we can scroll back to it later.
-// It returns the number of lines created.
-// The lines are stored in a global 2D array of characters (LogLines[]).
-// It implements fairly crude word wrapping at the WRAPPOINT and line wrapping at the MXLINELENGTH.
+// It also stores the seek positions so scrolling up is possible.
 
 uint16_t BuildLinesArray(char *ReadBuffer, uint16_t BytesRead, uint32_t StartSeekPosition)
 {
     uint16_t LinesCounter = 0;
     uint32_t BufferIndex = 0;
     uint16_t ColumnIndex = 0;
-    uint16_t BytesSentToNextion = 0;
 
-    for (int i = 0; i < MXLINES; ++i)
-    {
-        for (int j = 0; j < MXLINELENGTH; ++j)
-        {
-            LogLines[i][j] = 0;
-        }
-    }
+    for (int i = 0; i < MXLINES; ++i) for (int j = 0; j < MXLINELENGTH; ++j) LogLines[i][j] = 0;
     StoreThisNewSeekPosition((LinesCounter + StartReadLine), StartSeekPosition);
-    LogLines[LinesCounter][ColumnIndex] = 0; // make sure it's a null string at start
     while (BufferIndex < BytesRead)
-    { // while not at end of buffer
-        while (ReadBuffer[BufferIndex] == 124)
-        { // 124 is the pipe character (means new line)
+    {                                         
+        while (ReadBuffer[BufferIndex] == '|') // skip the | and zero the column
+        {
             ++BufferIndex;
             ColumnIndex = 0;
             if (LinesCounter < MXLINES - 1)
-            {
-                ++LinesCounter;                          // increment the number of lines read if less than max
-                LogLines[LinesCounter][ColumnIndex] = 0; // make sure this line is null terminated
-                ++BytesSentToNextion;                    // cr (later)
-                ++BytesSentToNextion;                    // lf (later)
-            } // skip the 124 and zero the column
+                ++LinesCounter; 
+            else
+                break;
             StoreThisNewSeekPosition(LinesCounter + StartReadLine, StartSeekPosition + BufferIndex);
         }
         if (ReadBuffer[BufferIndex] >= 32)
         {
-            LogLines[LinesCounter][ColumnIndex] = ReadBuffer[BufferIndex]; // copy one ASCII character
-            ++BytesSentToNextion;
+            LogLines[LinesCounter][ColumnIndex] = ReadBuffer[BufferIndex]; // get one character
             ++ColumnIndex;
-            LogLines[LinesCounter][ColumnIndex] = 0; // inc column & make sure this line is null terminated
-            if ((ColumnIndex >= WRAPPOINT) && (LogLines[LinesCounter][ColumnIndex - 1] == 32 || LogLines[LinesCounter][ColumnIndex - 1] == '-'))
-            { // Were we past the word-wrap point?
+            LogLines[LinesCounter][ColumnIndex] = 0;
+            if ((ColumnIndex >= WRAPPOINT) && (LogLines[LinesCounter][ColumnIndex - 1] == 32)) // Were we past the word-wrap point?
+            { 
                 if (LinesCounter < MXLINES - 1)
-                    ++LinesCounter; // increment the number of lines read if less than max
+                    ++LinesCounter; 
                 ColumnIndex = 0;
                 StoreThisNewSeekPosition(LinesCounter + StartReadLine, StartSeekPosition + BufferIndex);
             }
         }
         ++BufferIndex;
     }
-    // Look1("Bytes actually Sent To Nextion: " );
-    // Look(BytesSentToNextion);
-    // Look1("LinesCounter: ");
-    // Look(LinesCounter);
-   
     return LinesCounter;
 }
 /******************************************************************************************************************************/
@@ -262,8 +244,7 @@ uint16_t ReadAFewLines()
     }
     LogFileNumber.seek(ThisSeekPosition);                                // seek to the position
     uint16_t BytesRead = LogFileNumber.read(ReadBuffer, READBUFFERSIZE); // read in the buffer
-    
-   
+
     if (BytesRead < READBUFFERSIZE)
     {
         CloseLogFile();
