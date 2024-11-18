@@ -54,6 +54,7 @@ void StartLogFilesListScreen()
     }
     BuildDirectory();           // Build the directory
     strcpy(Mfiles, "FilesBox"); // Set the file box name
+    SavedCurrentView = LOGVIEW; // to stop it going round for ever!
     LoadFileSelector();         // Load the file selector
 }
 /******************************************************************************************************************************/

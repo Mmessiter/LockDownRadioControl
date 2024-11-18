@@ -3371,6 +3371,7 @@ FASTRUN void ButtonWasPressed()
             // Look1("Returned from help: ");
             // Look(LogFileName);
             // Look(WhichPage);
+            // Look(SavedCurrentView);
 
             if (InStrng(LOG, LogFileName))
                 {
