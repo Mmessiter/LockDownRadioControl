@@ -3051,7 +3051,6 @@ void (*NumberedFunctions[LASTFUNCTION])() {
     ReceiveLotsofData,        // 76
     SetNewDualRate,           // 77 // when the DualRate behavior scrollable thingy is changed
     EndLogFilesListScreen,    // 78
-    //TopOfLogFile            // 79 // goto top of log file OLD
     TopOfLogFileNEW           // 79 // goto top of log file NEW
    
    
