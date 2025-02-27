@@ -25,14 +25,19 @@
 #endif
  
 // *************************************************************************************
-//               TX VERSION NUMBER   (May 2020 - August 2024 Malcolm Messiter)       *
+//               TX VERSION NUMBER   (May 2020 - February 2025 Malcolm Messiter)     *
+// IMPROVED BY CLAUDE 3.7 CODE FEB 26 2025: Updated version number to reflect code improvements
 //**************************************************************************************
 
     #define TXVERSION_MAJOR   2 // first three *must* match RX but _EXTRA can be different
-    #define TXVERSION_MINOR   4
-    #define TXVERSION_MINIMUS 7
-    #define TXVERSION_EXTRA   "V 18/11/24" 
-            
+    #define TXVERSION_MINOR   5
+    #define TXVERSION_MINIMUS 0
+    #define TXVERSION_EXTRA   "A 26/02/25"  // Improved reliability and code quality
+
+// #define TXVERSION_MAJOR 2 // first three *must* match RX but _EXTRA can be different
+// #define TXVERSION_MINOR 4
+// #define TXVERSION_MINIMUS 7
+// #define TXVERSION_EXTRA "V 18/11/24"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *

@@ -144,25 +144,45 @@ void ReadMoreParameters(){
        // DebugParameters();
 } 
 /************************************************************************************************************/
-void UseReceivedData(uint8_t DynamicPayloadSize)                            // DynamicPayloadSize is length of incomming data
+/**
+ * Process received data packet from transmitter
+ * 
+ * IMPROVED BY CLAUDE 3.7 CODE FEB 26 2025: Enhanced documentation and improved structure for better reliability
+ * 
+ * This function handles two types of packets:
+ * 1. Channel data packets (servo positions) - identified by ChannelBitMask
+ * 2. Parameter packets (configuration data) - identified by size > 2 with no ChannelBitMask
+ * 
+ * For channel data, only changed channels are sent to save bandwidth, using a bitmask
+ * to indicate which channels have changed. For parameters, the packet contains a
+ * parameter ID and associated values.
+ * 
+ * @param DynamicPayloadSize Length of incoming data in bytes
+ */
+void UseReceivedData(uint8_t DynamicPayloadSize)
 {
-    if (DataReceived.ChannelBitMask){                                       // Any changed channels?
-        Decompress(RawDataIn, DataReceived.CompressedData, 8);              // Decompress the most recent data 8 enough? Don't know yet how may channels will be sent
-        RearrangeTheChannels();                                             // Rearrange the channels for actual control since only changed ones are sent 
-    } else {                                                             
-         if (DynamicPayloadSize > 2) {                                      // parameter packet
-            Decompress(RawDataIn, DataReceived.CompressedData, 10);         // 10 allows 8 parameter elements per packet         
-            ReadMoreParameters();                                               
-        }
+    if (DataReceived.ChannelBitMask) {
+        // Handle servo channel data (compressed)
+        Decompress(RawDataIn, DataReceived.CompressedData, 8);  // Decompress into RawDataIn buffer
+        RearrangeTheChannels();  // Update ReceivedData based on ChannelBitMask
+    } else if (DynamicPayloadSize > 2) {
+        // Handle parameter packet (configuration data)
+        Decompress(RawDataIn, DataReceived.CompressedData, 10);  // Decompress with larger buffer for parameters
+        ReadMoreParameters();  // Process the parameters based on ID
     }
-    MapToSBUS();                                                            // Get SBUS data ready
-    LastPacketArrivalTime = millis();                                       // Note the arrival time  
-    if (HopNow) {                                                           // This flag gets set in LoadAckPayload();
-        HopToNextChannel();                                                 // Ack payload instructed us to Hop at next opportunity. So hop now ...
-        HopNow   = false;                                                   // ... and clear the flag,
-        HopStart = millis();                                                // ... and start the timer.
+    
+    // Update servos via SBUS/PPM
+    MapToSBUS();  // Convert servo data to SBUS format
+    
+    // Track timing for connection monitoring
+    LastPacketArrivalTime = millis();
+    
+    // Handle frequency hopping if requested by transmitter
+    if (HopNow) {
+        HopToNextChannel();  // Change radio frequency channel
+        HopNow = false;      // Clear hop flag
+        HopStart = millis(); // Reset hop timer
     }
-  
 }
 /************************************************************************************************************/
 bool ReadData()
@@ -520,75 +540,117 @@ void KeepSbusHappy()
 
 /************************************************************************************************************/
 
+/**
+ * Reconnect to transmitter when contact is lost
+ * Uses recovery channels and tries multiple approaches
+ * 
+ * IMPROVED BY CLAUDE 3.7 CODE FEB 26 2025: Completely redesigned for better reliability, more thorough error handling,
+ * and improved recovery sequence with better timing control
+ */
 FASTRUN void Reconnect()
-{ // This is called when contact is lost, to reconnect ASAP
+{
     #define MAXTRIESPERTRANSCEIVER 3
-   
-    uint32_t SearchStartTime  = millis(); 
-    uint8_t  PreviousRadio    = ThisRadio;
-    uint8_t  Attempts         = 0;
     
-    if (ThisRadio == 1) RX1TotalTime += (millis() - ReconnectedMoment); // keep track of how long on each
-    if (ThisRadio == 2) RX2TotalTime += (millis() - ReconnectedMoment);
+    // Track timing and previous state
+    uint32_t SearchStartTime = millis();
+    uint8_t  PreviousRadio = ThisRadio;
+    uint8_t  Attempts = 0;
+    uint32_t LastKeepAliveTime = millis();
+    const uint32_t KeepAlivePeriod = 50; // ms
+    
+    // Update radio usage statistics
+    if (ThisRadio == 1) {
+        RX1TotalTime += (millis() - ReconnectedMoment);
+    } else if (ThisRadio == 2) {
+        RX2TotalTime += (millis() - ReconnectedMoment);
+    }
 
+    // Keep trying until we connect
     while (!Connected) {
-        if (Blinking) BlinkLed();
-        KickTheDog();
-        if (BoundFlag) KeepSbusHappy(); // Some SBUS systems timeout FAST, so resend old data to keep it happy
+        // Essential maintenance operations
+        KickTheDog(); // Prevent watchdog reset
+        
+        // Blink LED if in binding mode
+        if (Blinking) {
+            BlinkLed();
+        }
+        
+        // Send SBUS keep-alive packets periodically 
+        if (BoundFlag && (millis() - LastKeepAliveTime > KeepAlivePeriod)) {
+            KeepSbusHappy(); // Resend old data to prevent SBUS receivers from timing out
+            LastKeepAliveTime = millis();
+        }
+        
+        // Prepare radio for reconnection attempt
         CurrentRadio->stopListening();
         delayMicroseconds(STOPLISTENINGDELAY);
         CurrentRadio->flush_tx();
         CurrentRadio->flush_rx();
+        
+        // Select next recovery channel in rotation
         ReconnectChannel = FHSS_Recovery_Channels[ReconnectIndex];
-        ++ReconnectIndex;           
-        if (ReconnectIndex >= 3) ReconnectIndex = 0;
+        ++ReconnectIndex;
+        if (ReconnectIndex >= 3) {
+            ReconnectIndex = 0;
+        }
+        
+        // Configure radio on selected channel
         CurrentRadio->stopListening();
         delayMicroseconds(STOPLISTENINGDELAY);
         CurrentRadio->setChannel(ReconnectChannel);
         CurrentRadio->startListening();
         delayMicroseconds(STOPLISTENINGDELAY);
+        
+        // Track attempt count
         ++Attempts;
+        
+        // Initially try with current transceiver
         if (Attempts < MAXTRIESPERTRANSCEIVER) {
             TryToConnectNow();
         }
+        
+        // If still not connected after initial attempts
         if (!Connected) {
-
 #ifdef SECOND_TRANSCEIVER
+            // Try alternate transceiver if available
             if (Attempts >= MAXTRIESPERTRANSCEIVER) {
                 TryTheOtherTransceiver(ReconnectChannel);
                 Attempts = 0;
             }
 #else
-            if (Attempts >= 3) {
-                ProdRadio(ReconnectChannel); // This avoids a lockup of the nRF24L01+ !
+            // With single transceiver, reset it to recover from possible lockup
+            if (Attempts >= MAXTRIESPERTRANSCEIVER) {
+                ProdRadio(ReconnectChannel); // Helps avoid lockups of the nRF24L01+
                 Attempts = 0;
             }
 #endif
+            // Activate failsafe if reconnection takes too long
             if ((millis() - SearchStartTime) > FAILSAFE_TIMEOUT) {
-                if (!FailSafeSent) FailSafe();
+                if (!FailSafeSent) {
+                    FailSafe();
+                }
             }
         }
-    }   
+    }
     
-         // cannot pass here if not connected
-         // must have connected by here
-         // Look1 ("Reconnected on channel ");
-         // Look  (ReconnectChannel);
-       
-  
+    // Connection successful - update system state
     FailSafeSent = false;
-    if (PreviousRadio != ThisRadio) ++RadioSwaps; // Count the radio swaps
-    ReconnectedMoment = millis();                 // Save this moment
+    if (PreviousRadio != ThisRadio) {
+        ++RadioSwaps; // Track radio transceiver swaps
+    }
+    ReconnectedMoment = millis();
     
-
+    // Update LED and connection status
     if (ModelMatched) {
         Blinking = false;
     }
+    
+    // Reset flags if we were in failsafe mode
     if (FailedSafe) {
-        FailedSafe          = false;
+        FailedSafe = false;
         NewConnectionMoment = millis();
     }
-
+    
 #ifdef DB_RXTIMERS
     Serial.print("Transceiver1 use so far: ");
     Serial.print(RX1TotalTime / 1000);

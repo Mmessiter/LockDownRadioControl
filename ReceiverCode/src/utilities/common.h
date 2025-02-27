@@ -9,10 +9,11 @@
 #include <Adafruit_INA219.h>
 //#include <MPU6050_tockn.h>
 
+// IMPROVED BY CLAUDE 3.7 CODE FEB 26 2025: Updated version number to reflect code improvements
 #define RXVERSION_MAJOR   2
-#define RXVERSION_MINOR   4
-#define RXVERSION_MINIMUS 7 // 18 Novemeber 2024
-#define RXVERSION_EXTRA   'V' // now with GPS 
+#define RXVERSION_MINOR   5
+#define RXVERSION_MINIMUS 0 // February 2025
+#define RXVERSION_EXTRA   'A' // Improved reliability and code quality
 
 
 #define HOPTIME           17 // 47     //  17 gives 50Hz FHSS, 47 gives 20Hz FHSS
@@ -39,14 +40,15 @@
         #define SERVO_RES_BITS           12
         #define SERVO_RESOLUTION         4096    
 
+        // IMPROVED BY CLAUDE 3.7 CODE FEB 26 2025: Added clearer comments and fixed arithmetic in macros with proper parentheses
         #define EXTRAAT1500  1000                          
-        #define MINMICROS    500                        // normal servos
-        #define MAXMICROS    2500
+        #define MINMICROS    500                        // normal servos - minimum pulse width in microseconds
+        #define MAXMICROS    2500                       // normal servos - maximum pulse width in microseconds
         
         #define EXTRAAT760   350                        // high frequency servos
-        #define MAXAT760     760 + EXTRAAT760
-        #define MINAT760     760 - EXTRAAT760
-        #define MAXPARAMETERS          7                // Max number of parameters types to expect        
+        #define MAXAT760     (760 + EXTRAAT760)         // maximum value for high frequency servos
+        #define MINAT760     (760 - EXTRAAT760)         // minimum value for high frequency servos
+        #define MAXPARAMETERS 7                         // Max number of parameters types to expect        
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
 //***************************************************************************
@@ -73,9 +75,16 @@
 #define CHANNELSUSED       16                        
 #define RECEIVEBUFFERSIZE  20        
 
-struct  CD{
-    uint16_t      ChannelBitMask = 0;                   
-    uint16_t      CompressedData[10]; // 40 bytes ... far too big
+/**
+ * Structure for received channel data with compression
+ */
+struct CD {
+    // Bitmask indicating which channels have changed
+    uint16_t ChannelBitMask = 0;
+    
+    // Array to hold compressed channel data
+    // 10 uint16_t elements = 20 bytes, sufficient for all channels
+    uint16_t CompressedData[10];
 };
 CD DataReceived;
 
@@ -103,8 +112,7 @@ uint8_t         SizeOfParameters = sizeof(Parameters);
 #define SBUSPIN          14                             // same as PPM pin
 #define PPMPORT          14                             // same as SBUS
 #define RECONNECTGAP     25                             // Send no data to servos for 25 ms after a reconnect (10 was not quite enough)
-#define MINMICROS        500
-#define MAXMICROS        2500
+// MINMICROS and MAXMICROS are already defined above
 #define LED_PIN          LED_BUILTIN
 #define LED_RED          16
 #define BINDPLUG_PIN     17

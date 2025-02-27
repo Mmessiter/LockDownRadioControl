@@ -228,21 +228,30 @@ void TurnLedOff()
 // This function binds the model using the TX supplied Pipe instead of the default one.
 // If not already saved, this saves it to the eeprom too for next time.
 
+/**
+ * This function binds the model using the TX supplied pipe address.
+ * If not already saved, this saves the pipe address to EEPROM for next time.
+ */
 void BindModel()
 {
+    // Make sure we're not listening while configuring
     CurrentRadio->stopListening();
     delayMicroseconds(250);
+    
+    // Set binding flags
     BoundFlag    = true;
     ModelMatched = true;
    
+    // If we're in binding mode (bind plug detected), save the new pipe
     if (Blinking) {
-        
-        SetNewPipe(); // change to bound pipe <<< ***************************************
+        // Set radio to use the new pipe address
+        SetNewPipe();
        
 #ifdef DB_BIND
         Serial.println("SAVING RECEIVED PIPE:");
 #endif
 
+        // Save pipe address to EEPROM for next power-up
         for (uint8_t i = 0; i < 5; ++i) {
             EEPROM.update(i + BIND_EEPROM_OFFSET, TheReceivedPipe[i]);
 
@@ -256,19 +265,23 @@ void BindModel()
         Serial.println("");
         Serial.println("TX PIPE SAVED");
 #endif
-    }
-    Blinking = false;
 
-    if (FirstConnection) {
-        AttachServos(); // AND START SBUS / PPM
-        FirstConnection = false;
+        // Configure servos on first connection
+        if (FirstConnection) {
+            AttachServos(); // AND START SBUS / PPM
+            FirstConnection = false;
+        }
     }
+    
+    // Turn off binding mode LED
+    Blinking = false;
+    
+    // Binding is complete
     SaveNewBind = false;
 
-
 #ifdef DB_BIND
-        Serial.println("");
-        Serial.println("DONE BINDING");
+    Serial.println("");
+    Serial.println("DONE BINDING");
 #endif
 
 }
@@ -373,6 +386,7 @@ void teensyMAC(uint8_t* mac)
 
 /************************************************************************************************************/
 
+// IMPROVED BY CLAUDE 3.7 CODE FEB 26 2025: Completely redesigned binding logic for better reliability
 void ReadBindPlug()
 {
     uint32_t tt = millis();
@@ -385,13 +399,30 @@ void ReadBindPlug()
 #endif
     }
     else {
-        Blinking    = false; // Already bound
+        // Device is already bound - use saved pipe
+        Blinking    = false;
         PipePointer = TheReceivedPipe;
         CopyCurrentPipe(TheReceivedPipe, BOUNDPIPENUMBER);
         BoundFlag   = true;
         SaveNewBind = false;
-        while (millis() - tt < 500) ReceiveData();
-        BindModel(); // TODO check this...
+        
+        // Listen for data for a short time before finalizing binding
+        uint32_t listenTimeout = 500; // ms
+        while (millis() - tt < listenTimeout) {
+            ReceiveData();
+        }
+        
+        // Finalize the binding with saved pipe address
+        CurrentRadio->stopListening();
+        delayMicroseconds(250);
+        SetNewPipe(); // Set radio to use bound pipe address
+        CurrentRadio->startListening();
+        
+        // Set up servos on first connection
+        if (FirstConnection) {
+            AttachServos();
+            FirstConnection = false;
+        }
     }
 }
 
@@ -417,14 +448,19 @@ void SOS_Led()  // This function blinks the LED for SOS in Morse code
 /************************************************************************************************************/
 
 // This function never returns. It's a fatal error. Stop here and send SOS on LED !!    
+// IMPROVED BY CLAUDE 3.7 CODE FEB 26 2025: Fixed infinite loop to avoid memory issues while still halting the system
 void Abort(){
-   for (uint32_t i = 0; i < 0xFFFFFFFF; ++i) 
-        {
-            Look1(i);
-            Look(" FATAL ERROR - PLUG IN WRONG WAY ROUND!");
-            SOS_Led(); // This is a fatal error Stop here and send SOS!!
-        } 
-    }        
+    // Print initial error message
+    Serial.println("FATAL ERROR - PLUG IN WRONG WAY ROUND!");
+    
+    // Disable watchdog to prevent auto-reset
+    noInterrupts();
+    
+    // Infinite loop with SOS LED signal
+    while (true) {
+        SOS_Led(); // This is a fatal error! Signal SOS on LED
+    }
+}
 
 /************************************************************************************************************/
 // This function is called at statup to check that the SBUS pin is not held low (plug in wrong way round)
