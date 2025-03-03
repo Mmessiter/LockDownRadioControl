@@ -1,6 +1,32 @@
 /** @file TransmitterCode/src/main.cpp
- * // Malcolm Messiter 2020 - 2024
+ * // Malcolm Messiter 2020 - 2025
  * @brief This is the main file for the transmitter code.
+ * 
+ * @section Project_Status Current Development Status
+ * 
+ * SIGNAL QUALITY MONITORING SYSTEM:
+ * We've implemented a connection quality monitoring system that detects and alerts
+ * when signal quality is degrading before complete signal loss occurs. This gives pilots
+ * early warning to fly back to safety when the connection begins to degrade.
+ * 
+ * The system features:
+ * - Three quality thresholds (GOOD, WARNING, CRITICAL) with different messages
+ * - Audio feedback using sounds: CONNECTION_GOOD, CONNECTION_WARNING, CONNECTION_CRITICAL
+ * - Visual feedback with colored messages on the display
+ * - Integration with the existing battery warning system to avoid conflicts
+ * 
+ * Current status:
+ * - Code is compiled and uploaded to the Teensy hardware
+ * - Visual warnings appear correctly
+ * - Audio files need to be recorded and tested
+ * 
+ * @section TODO Next Development Steps
+ *
+ * Implement PID stabilization for:
+ *    - Fixed-wing aircraft
+ *    - Multirotors (quadcopters, hexacopters, etc.)
+ *    - Helicopters
+ * 
  *
  * @page TransmitterCode....
  * @section LockDown Radio Control Features list, so far:
@@ -133,9 +159,7 @@
 #include <Adafruit_INA219.h>
 #include <DS1307RTC.h>
 #include <InterpolationLib.h>
-
 #include "Hardware/1Definitions.h" // must be here! (not higher or lower);
-
 #include "Hardware/Utilities.h"
 #include "Hardware/transceiver.h"
 #include "Hardware/Pong.h"
@@ -1176,11 +1200,14 @@ void GetFrameRate()
  * IMPROVED BY CLAUDE 3.7 CODE FEB 26 2025: Completely rewrote this function for better reliability
  * and proper string length handling to avoid buffer overflows
  * 
+ * IMPROVED BY CLAUDE 3.7 CODE FEB 28 2025: Updated to accept const char* parameters
+ * for better const-correctness and compatibility with string literals
+ * 
  * @param needle The substring to find
  * @param haystack The string to search within
  * @return Position of needle within haystack (1-based) or 0 if not found
  */
-int InStrng(char* needle, char* haystack)
+int InStrng(const char* needle, const char* haystack)
 {
     // Handle null pointers
     if (!needle || !haystack) {
@@ -1216,6 +1243,21 @@ int InStrng(char* needle, char* haystack)
     
     // Not found
     return 0;
+}
+
+/**
+ * Overload of InStrng that accepts non-const char pointers for backward compatibility
+ * 
+ * This allows us to maintain compatibility with existing code while
+ * gradually migrating to const-correct versions.
+ * 
+ * @param needle The substring to find (non-const version)
+ * @param haystack The string to search within (non-const version)
+ * @return Position of needle within haystack (1-based) or 0 if not found
+ */
+int InStrng(char* needle, char* haystack) {
+    // Just forward to the const version
+    return InStrng(static_cast<const char*>(needle), static_cast<const char*>(haystack));
 }
 
 /***********************************************************************************************************/
@@ -3092,205 +3134,497 @@ void (*NumberedFunctions[LASTFUNCTION])() {
 /*********************************************************************************************************************************
  *                          BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)                                            *
  *********************************************************************************************************************************/
+/**
+ * Handle all view navigation commands
+ * 
+ * Returns true if a command was handled, false otherwise
+ */
+bool handleViewNavigationCommands() {
+    // View navigation command constants
+    static const char Front_View[] = "FrontView";
+    static const char Sticks_View[] = "SticksView";
+    static const char Graph_View[] = "GraphView";
+    static const char Data_View[] = "DataView";
+    static const char FM1[] = "FM 1";
+    static const char FM2[] = "FM 2";
+    static const char FM3[] = "FM 3";
+    static const char FM4[] = "FM 4";
+    
+    // Front view
+    if (InStrng(Front_View, TextIn)) {
+        CurrentView = FRONTVIEW;
+        PreviousBank = 250; // sure to be different
+        UpdateModelsNameEveryWhere();
+        return true;
+    }
+
+    // Sticks view
+    if (InStrng(Sticks_View, TextIn)) {
+        SendCommand(pSticksView);
+        Force_ReDisplay();
+        CurrentView = STICKSVIEW;
+        SendCommand(pSticksView); // Set to SticksView
+        UpdateModelsNameEveryWhere();
+        UpdateButtonLabels();
+        return true;
+    }
+
+    // Graph view
+    if (InStrng(Graph_View, TextIn)) {
+        CurrentView = GRAPHVIEW;
+        return true;
+    }
+
+    // Data view
+    if (InStrng(Data_View, TextIn)) {
+        CurrentView = DATAVIEW;
+        LastShowTime = 0;
+        ForceDataRedisplay();
+        SendCommand(pDataView);
+        return true;
+    }
+
+    // Flight mode selection
+    if (InStrng(FM1, TextIn)) {
+        Bank = 1;
+        PreviousBank = 1;
+        UpdateModelsNameEveryWhere();
+        return true;
+    }
+
+    if (InStrng(FM2, TextIn)) {
+        Bank = 2;
+        PreviousBank = 2;
+        UpdateModelsNameEveryWhere();
+        return true;
+    }
+
+    if (InStrng(FM3, TextIn)) {
+        Bank = 3;
+        PreviousBank = 3;
+        UpdateModelsNameEveryWhere();
+        return true;
+    }
+
+    if (InStrng(FM4, TextIn)) {
+        Bank = 4;
+        PreviousBank = 4;
+        UpdateModelsNameEveryWhere();
+        return true;
+    }
+    
+    return false; // No view command was handled
+}
+
+/**
+ * Handle setup and configuration commands
+ * 
+ * Returns true if a command was handled, false otherwise
+ */
+bool handleSetupCommands() {
+    // Setup command constants
+    static const char SetupView[] = "MainSetup";
+    static const char Setup[] = "Setup";
+    static const char TypeView[] = "TypeView";
+    static const char RXBAT[] = "RXBAT";
+    static const char ColoursView[] = "ColoursView";
+    static const char SetupCol[] = "SetupCol";
+    
+    // Main setup view
+    if (InStrng(SetupView, TextIn)) {
+        ClearText();
+        if (CurrentView == CALIBRATEVIEW) ReadOneModel(ModelNumber);  // because it was cleared for calibration
+        SaveAllParameters();
+        CurrentView = TXSETUPVIEW;
+        SendCommand(pTXSetupView);
+        LastTimeRead = 0;
+        CurrentView = TXSETUPVIEW;
+        UpdateModelsNameEveryWhere();
+        return true;
+    }
+    
+    // Channel setup
+    if (InStrng(Setup, TextIn)) {
+        ChanneltoSet = GetChannel();
+        CurrentView = GRAPHVIEW;
+        SendCommand(pGraphView); // Set to GraphView
+        DisplayCurve();
+        updateInterpolationTypes();
+        UpdateModelsNameEveryWhere();
+        char callfm[] = "callfm";
+        SendValue(callfm, 0); // CopyToAllBanks
+        return true;
+    }
+    
+    // Type configuration
+    if (InStrng(TypeView, TextIn)) {
+        SendCommand(pTypeView);
+        char r2s[] = "r2s";
+        char r3s[] = "r3s";
+        char r4s[] = "r4s";
+        char r5s[] = "r5s";
+        char r6s[] = "r6s";
+        char r12s[] = "r12s";
+        char r0[] = "r0";
+        char r1[] = "r1";
+        
+        SendValue(r2s, 0); // Zero all RX batt cell count
+        SendValue(r3s, 0);
+        SendValue(r4s, 0);
+        SendValue(r5s, 0);
+        SendValue(r6s, 0);
+        SendValue(r12s, 0);
+        SendValue(r0, 0);
+        SendValue(r1, 0);
+        
+        if (RXCellCount == 2) SendValue(r2s, 1); // Then update RX batt cell count
+        if (RXCellCount == 3) SendValue(r3s, 1);
+        if (RXCellCount == 4) SendValue(r4s, 1);
+        if (RXCellCount == 5) SendValue(r5s, 1);
+        if (RXCellCount == 6) SendValue(r6s, 1);
+        if (RXCellCount == 12) SendValue(r12s, 1);
+        
+        if (TXLiPo)
+            SendValue(r1, 1);
+        else
+            SendValue(r0, 1);
+        UpdateModelsNameEveryWhere();
+        return true;
+    }
+    
+    // RX battery settings
+    if (InStrng(RXBAT, TextIn)) {
+        char r2s[] = "r2s";
+        char r3s[] = "r3s";
+        char r4s[] = "r4s";
+        char r5s[] = "r5s";
+        char r6s[] = "r6s";
+        char r12s[] = "r12s";
+        char r0[] = "r0";
+        char r1[] = "r1";
+        
+        if (GetValue(r2s) == 1) RXCellCount = 2;
+        if (GetValue(r3s) == 1) RXCellCount = 3;
+        if (GetValue(r4s) == 1) RXCellCount = 4;
+        if (GetValue(r5s) == 1) RXCellCount = 5;
+        if (GetValue(r6s) == 1) RXCellCount = 6;
+        if (GetValue(r12s) == 1) RXCellCount = 12;
+        if (GetValue(r0) == 1) TXLiPo = false; // TX LIFE
+        if (GetValue(r1) == 1) TXLiPo = true;  // TX LIPO
+        SaveAllParameters();
+        return true;
+    }
+    
+    // Colors configuration
+    if (InStrng(ColoursView, TextIn)) {
+        CurrentView = COLOURS_VIEW;
+        SendCommand(pColoursView);
+        char clickBackground[] = "click Background,0";
+        SendCommand(clickBackground);
+        return true;
+    }
+    
+    // Save colors settings
+    if (InStrng(SetupCol, TextIn)) {
+        char High_pco[] = "High.pco";
+        char b0_pco[] = "b0.pco";
+        char b0_bco[] = "b0.bco";
+        char Fm_pco[] = "Fm.pco";
+        char FrontView_BackGround[] = "FrontView.BackGround";
+        char FrontView_ForeGround[] = "FrontView.ForeGround";
+        char FrontView_Special[] = "FrontView.Special";
+        char FrontView_Highlight[] = "FrontView.Highlight";
+        
+        HighlightColour = GetOtherValue(High_pco);
+        ForeGroundColour = GetOtherValue(b0_pco);
+        BackGroundColour = GetOtherValue(b0_bco);
+        SpecialColour = GetOtherValue(Fm_pco);
+        SendValue(FrontView_BackGround, BackGroundColour);
+        SendValue(FrontView_ForeGround, ForeGroundColour);
+        SendValue(FrontView_Special, SpecialColour);
+        SendValue(FrontView_Highlight, HighlightColour);
+        SaveTransmitterParameters();
+        CurrentView = TXSETUPVIEW;
+        SendCommand(pTXSetupView);
+        LastTimeRead = 0;
+        UpdateModelsNameEveryWhere();
+        return true;
+    }
+    
+    return false; // No setup command was handled
+}
+
+/**
+ * Handle click commands for user interactions on the touchscreen
+ * 
+ * Returns true if a command was handled, false otherwise
+ */
+bool handleClickCommands() {
+    // Click command constants
+    static const char ClickX[] = "ClickX";
+    static const char ClickY[] = "ClickY";
+    static const char Reset[] = "Reset";
+    
+    int p = 0;
+    
+    // Handle X clicks (track screen touches)
+    p = InStrng(ClickX, TextIn);
+    if (p > 0) {
+        XtouchPlace = GetNextNumber(p + 7, TextIn);
+        // This needs a corresponding Y click to be processed fully
+        // (no return here, as we need to capture the Y value as well)
+        return false;
+    }
+    
+    // Handle Y clicks and move the point (completes the X/Y pair)
+    p = InStrng(ClickY, TextIn);
+    if (p > 0) {
+        YtouchPlace = GetNextNumber(p + 7, TextIn);
+        MovePoint();
+        DisplayCurveAndServoPos();
+        return true;
+    }
+    
+    // Reset button for resetting curves
+    if (InStrng(Reset, TextIn)) {
+        // Reset exponential and curve type for current channel
+        Exponential[Bank][ChanneltoSet - 1] = DEFAULT_EXPO;
+        InterpolationTypes[Bank][ChanneltoSet - 1] = EXPONENTIALCURVES; // expo = default
+        DisplayCurveAndServoPos();
+        return true;
+    }
+    
+    return false; // No click command was handled
+}
+
+/*********************************************************************************************************************************
+ *                          BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)                                            *
+ *********************************************************************************************************************************/
 FASTRUN void ButtonWasPressed()
 {
-    int Command_number =  GetIntFromTextIn(0); 
-    if (Command_number){  // is there anything ?
+    int Command_number = GetIntFromTextIn(0);
+    if (Command_number)
+    { // is there anything ?
         StartInactvityTimeout();
-        ScreenTimeTimer = millis();                                 // reset screen timeout counter
-        uint32_t NumberedCommand      =  Command_number & 0x7F; // NextionCommand.FirstDWord & 0x7F; // Just clear the hi BIT ( i.e. -128)
-        uint32_t NumberedCommand1     =  Command_number >> 8;   // Shift over to the right to get a number up to 24 BITS
+        ScreenTimeTimer = millis();                       // reset screen timeout counter
+        uint32_t NumberedCommand = Command_number & 0x7F; // NextionCommand.FirstDWord & 0x7F; // Just clear the hi BIT ( i.e. -128)
+        uint32_t NumberedCommand1 = Command_number >> 8;  // Shift over to the right to get a number up to 24 BITS
 
 #ifdef DB_NEXTION
-        if ((TextIn[0] < 128) && (TextIn[0] > 28)) {
+        if ((TextIn[0] < 128) && (TextIn[0] > 28))
+        {
             Look1("Command WORD: ");
             Look(TextIn);
         }
-        
-        if ((TextIn[0] > 128) && (TextIn[0] < 255))  {
+
+        if ((TextIn[0] > 128) && (TextIn[0] < 255))
+        {
             Look1("7 BIT Command NUMBER: ");
             Look(NumberedCommand);
         }
 
-        if (TextIn[0] == 0)  {
+        if (TextIn[0] == 0)
+        {
             Look1("24 BIT command NUMBER: ");
             Look(NumberedCommand1);
         }
 #endif
-        if (!TextIn[0]) {                                   //  Now expanded to handle FAR more than 127 functions
-            if (NumberedCommand1 < LASTFUNCTION1) {  
-                NumberedFunctions1[NumberedCommand1](); // Call the needed 24 BIT function -- with a function pointer   
+        if (!TextIn[0])
+        { //  Now expanded to handle FAR more than 127 functions
+            if (NumberedCommand1 < LASTFUNCTION1)
+            {
+                NumberedFunctions1[NumberedCommand1](); // Call the needed 24 BIT function -- with a function pointer
             }
             ClearText();
             return;
         }
 
-        if (TextIn[0] >= 128) {                       
-            if (NumberedCommand < LASTFUNCTION) {     
-                NumberedFunctions[NumberedCommand]();       // Call the needed 7 BIT function -- with a function pointer                                             
+        if (TextIn[0] >= 128)
+        {
+            if (NumberedCommand < LASTFUNCTION)
+            {
+                NumberedFunctions[NumberedCommand](); // Call the needed 7 BIT function -- with a function pointer
             }
             ClearText();
             return;
         }
-         // By here, TextIn[0] must be start of a character based command
+        // By here, TextIn[0] must be start of a character based command
 
-         // The very old code below here is gradually and carefully being replaced by new code in multiple functions - it works fine but is not as efficient as the new code
+        // The very old code below here is gradually and carefully being replaced by new code in multiple functions - it works fine but is not as efficient as the new code
 
-        int  i                         = 0;
-        int  j                         = 0;
-        int  p                         = 0;
-        char Setup[]                   = "Setup";
-        char ClickX[]                  = "ClickX";
-        char ClickY[]                  = "ClickY";
-        char Reset[]                   = "Reset";
-        char Front_View[]              = "FrontView";
-        char Sticks_View[]             = "SticksView";
-        char Graph_View[]              = "GraphView";
-        char SetupView[]               = "MainSetup";
-        char DataEnd[]                 = "DataEnd";
-        char Data_View[]               = "DataView";
-        char CalibrateView[]           = "CalibrateView";
-        char TrimView[]                = "TrimView";
-        char TRIMS50[]                 = "TRIMS50";
-        char MIXES_VIEW[]              = "MIXESVIEW"; // first call
-        char Mixes_View[]              = "MixesView";
-        char FM1[]                     = "FM 1";
-        char FM2[]                     = "FM 2";
-        char FM3[]                     = "FM 3";
-        char FM4[]                     = "FM 4";
-        char ReScan[]                  = "ReScan";
-        char MixesView_MixNumber[]     = "MixNumber";
-        char ModelsView_ModelNumber[]  = "ModelNumber";
-        char ColoursView[]             = "ColoursView";
-        char SvT11[]                   = "t11";
-        char CMsg1[]                   = "Move all controls to their full\r\nextent several times,\r\nthen press Next.";
-        char SvB0[]                    = "b0";
-        char CMsg2[]                   = "Next ...";
-        char Cmsg3[]                   = "Centre all channels.\r\nPut edge switches fully back,\r\nor fully forward, then press Finish.";
-        char Cmsg4[]                   = "Finish";
-        char Cmsg5[]                   = "Repeat?";
-        char Cmsg6[]                   = "Calbrate again?";
-        char TypeView[]                = "TypeView";
-        char CopyToAllBanks[]          = "callfm";
-        char RXBAT[]                   = "RXBAT";
-        char r2s[]                     = "r2s";
-        char r3s[]                     = "r3s";
-        char r4s[]                     = "r4s";
-        char r5s[]                     = "r5s";
-        char r6s[]                     = "r6s";
-        char r12s[]                    = "r12s";
-        char r0[]                      = "r0";
-        char r1[]                      = "r1";
-        char SwitchesView[]            = "SwitchesView";
-        char SwitchesView1[]           = "SwitchesView1";
-        char OneSwitchView[]           = "OneSwitchView";
-        char PageOneSwitchView[]       = "page OneSwitchView";
-        char InputsView[]              = "InputsView";
-        char Export[]                  = "Export";
-        char Import[]                  = "Import";
-        char DelFile[]                 = "DelFile";
-        char ModExt[]                  = ".MOD";
-        char FailSAVE[]                = "FailSAVE";
-        char FailSafe[]                = "FailSafe";
-        char fs[16][5]                 = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
-        // Channel name command constants removed - now handled dynamically
-        char HelpView[]                = "HelpView";
-        char SendModel[]               = "SendModel";     
-        char Exrite[]                  = "Exrite";
-        char ExpR[]                    = "Exp";
-        char Smooth[]                  = "Smooth";
-        char Lines[]                   = "Lines";
-        char GOTO[]                    = "GOTO:";
-        char WhichPage[]               = "page                                 "; // excessive spaces for page name
-        char AddMinute[]               = "IncMinute";
-        char Dec_Minute[]              = "DecMinute";
-        char Dec_Hour[]                = "DecHour";
-        char Inc_Hour[]                = "IncHour";
-        char Inc_Year[]                = "IncYear";
-        char Dec_Year[]                = "DecYear";
-        char Inc_Date[]                = "IncDate";
-        char Dec_Date[]                = "DecDate";
-        char Inc_Month[]               = "IncMonth";
-        char Dec_Month[]               = "DecMonth";
-        char DataView_Clear[]          = "Clear";
-        char DataView_AltZero[]        = "AltZero";
-        char Mark[]                    = "Mark";
-        char SetupCol[]                = "SetupCol";
-        char b0_bco[]                  = "b0.bco";
-        char b0_pco[]                  = "b0.pco";
-        char High_pco[]                = "High.pco";
-        char Fm_pco[]                  = "Fm.pco";
-        char FrontView_BackGround[]    = "FrontView.BackGround";
-        char FrontView_ForeGround[]    = "FrontView.ForeGround";
-        char FrontView_Special[]       = "FrontView.Special";
-        char FrontView_Highlight[]     = "FrontView.Highlight";
-        char n0[]                      = "n0";
-        char Expo[]                    = "Expo";
-        char h0[]                      = "h0";     
-        char StCH[]                    = "StCH";
-        char s0[]                      = "s0";
-        char StEDIT[]                  = "StEDIT";
+        int i = 0;
+        int j = 0;
+        int p = 0;
+        char Setup[] = "Setup";
+        char ClickX[] = "ClickX";
+        char ClickY[] = "ClickY";
+        char Reset[] = "Reset";
+        char Front_View[] = "FrontView";
+        char Sticks_View[] = "SticksView";
+        char Graph_View[] = "GraphView";
+        char SetupView[] = "MainSetup";
+        char DataEnd[] = "DataEnd";
+        char Data_View[] = "DataView";
+        char CalibrateView[] = "CalibrateView";
+        char TrimView[] = "TrimView";
+        char TRIMS50[] = "TRIMS50";
+        char MIXES_VIEW[] = "MIXESVIEW"; // first call
+        char Mixes_View[] = "MixesView";
+        char FM1[] = "FM 1";
+        char FM2[] = "FM 2";
+        char FM3[] = "FM 3";
+        char FM4[] = "FM 4";
+        char ReScan[] = "ReScan";
+        char MixesView_MixNumber[] = "MixNumber";
+        char ModelsView_ModelNumber[] = "ModelNumber";
+        char ColoursView[] = "ColoursView";
+        char SvT11[] = "t11";
+        char CMsg1[] = "Move all controls to their full\r\nextent several times,\r\nthen press Next.";
+        char SvB0[] = "b0";
+        char CMsg2[] = "Next ...";
+        char Cmsg3[] = "Centre all channels.\r\nPut edge switches fully back,\r\nor fully forward, then press Finish.";
+        char Cmsg4[] = "Finish";
+        char Cmsg5[] = "Repeat?";
+        char Cmsg6[] = "Calbrate again?";
+        char TypeView[] = "TypeView";
+        char CopyToAllBanks[] = "callfm";
+        char RXBAT[] = "RXBAT";
+        char r2s[] = "r2s";
+        char r3s[] = "r3s";
+        char r4s[] = "r4s";
+        char r5s[] = "r5s";
+        char r6s[] = "r6s";
+        char r12s[] = "r12s";
+        char r0[] = "r0";
+        char r1[] = "r1";
+        char SwitchesView[] = "SwitchesView";
+        char SwitchesView1[] = "SwitchesView1";
+        char OneSwitchView[] = "OneSwitchView";
+        char PageOneSwitchView[] = "page OneSwitchView";
+        char InputsView[] = "InputsView";
+        char Export[] = "Export";
+        char Import[] = "Import";
+        char DelFile[] = "DelFile";
+        char ModExt[] = ".MOD";
+        char FailSAVE[] = "FailSAVE";
+        char FailSafe[] = "FailSafe";
+        char fs[16][5] = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
+        char CH1NAME[] = "CH1NAME=";
+        char CH2NAME[] = "CH2NAME=";
+        char CH3NAME[] = "CH3NAME=";
+        char CH4NAME[] = "CH4NAME=";
+        char CH5NAME[] = "CH5NAME=";
+        char CH6NAME[] = "CH6NAME=";
+        char CH7NAME[] = "CH7NAME=";
+        char CH8NAME[] = "CH8NAME=";
+        char CH9NAME[] = "CH9NAME=";
+        char CH10NAME[] = "CH10NAME=";
+        char CH11NAME[] = "CH11NAME=";
+        char CH12NAME[] = "CH12NAME=";
+        char CH13NAME[] = "CH13NAME=";
+        char CH14NAME[] = "CH14NAME=";
+        char CH15NAME[] = "CH15NAME=";
+        char CH16NAME[] = "CH16NAME=";
+        char HelpView[] = "HelpView";
+        char SendModel[] = "SendModel";
+        char Exrite[] = "Exrite";
+        char ExpR[] = "Exp";
+        char Smooth[] = "Smooth";
+        char Lines[] = "Lines";
+        char GOTO[] = "GOTO:";
+        char WhichPage[] = "page                                 "; // excessive spaces for page name
+        char AddMinute[] = "IncMinute";
+        char Dec_Minute[] = "DecMinute";
+        char Dec_Hour[] = "DecHour";
+        char Inc_Hour[] = "IncHour";
+        char Inc_Year[] = "IncYear";
+        char Dec_Year[] = "DecYear";
+        char Inc_Date[] = "IncDate";
+        char Dec_Date[] = "DecDate";
+        char Inc_Month[] = "IncMonth";
+        char Dec_Month[] = "DecMonth";
+        char DataView_Clear[] = "Clear";
+        char DataView_AltZero[] = "AltZero";
+        char Mark[] = "Mark";
+        char SetupCol[] = "SetupCol";
+        char b0_bco[] = "b0.bco";
+        char b0_pco[] = "b0.pco";
+        char High_pco[] = "High.pco";
+        char Fm_pco[] = "Fm.pco";
+        char FrontView_BackGround[] = "FrontView.BackGround";
+        char FrontView_ForeGround[] = "FrontView.ForeGround";
+        char FrontView_Special[] = "FrontView.Special";
+        char FrontView_Highlight[] = "FrontView.Highlight";
+        char n0[] = "n0";
+        char Expo[] = "Expo";
+        char h0[] = "h0";
+        char StCH[] = "StCH";
+        char s0[] = "s0";
+        char StEDIT[] = "StEDIT";
         char Prompt[60];
-        char del[]               = "Delete ";
-        char overwr[]            = "Overwrite ";
-        char ques[]              = "?";
-        char hhead[]             = "Create backup file for";
-        char fprompt[]           = "Filename?";
-        char ProgressStart[]     = "vis Progress,1";
-        char ProgressEnd[]       = "vis Progress,0";
-        char Progress[]          = "Progress";
-        char FrontView_Hours[]   = "Hours";
-        char FrontView_Mins[]    = "Mins";
-        char FrontView_Secs[]    = "Secs";
-        char StartBackGround[]   = "click Background,0";
-        char NotConnected[]      = "Model isn't connected!";
-        char invisb1[]           = "vis b1,0";   
-        char invisb0[]           = "vis b0,0";  
-        char visb1[]             = "vis b1,1";   
-        char visb0[]             = "vis b0,1";  
-        char LOG[]               = ".LOG";
+        char del[] = "Delete ";
+        char overwr[] = "Overwrite ";
+        char ques[] = "?";
+        char hhead[] = "Create backup file for";
+        char fprompt[] = "Filename?";
+        char ProgressStart[] = "vis Progress,1";
+        char ProgressEnd[] = "vis Progress,0";
+        char Progress[] = "Progress";
+        char FrontView_Hours[] = "Hours";
+        char FrontView_Mins[] = "Mins";
+        char FrontView_Secs[] = "Secs";
+        char StartBackGround[] = "click Background,0";
+        char NotConnected[] = "Model isn't connected!";
+        char invisb1[] = "vis b1,0";
+        char invisb0[] = "vis b0,0";
+        char visb1[] = "vis b1,1";
+        char visb0[] = "vis b0,1";
+        char LOG[] = ".LOG";
 
         // ************************* test many input words from Nextion *****************
 
-        if (InStrng(StCH, TextIn)) {                        // select sub trim channel
-            SubTrimToEdit = GetValue(s0)-1;
+        if (InStrng(StCH, TextIn))
+        { // select sub trim channel
+            SubTrimToEdit = GetValue(s0) - 1;
             SendValue(n0, SubTrims[SubTrimToEdit] - 127);
             SendValue(h0, SubTrims[SubTrimToEdit]);
             ClearText();
             return;
         }
 
-        if (InStrng(StEDIT, TextIn)) {                    // edit sub trim value
+        if (InStrng(StEDIT, TextIn))
+        {                                                 // edit sub trim value
             SubTrims[SubTrimToEdit] = GetValue(n0) + 127; // 127 is mid point in 8 bit value 0 - 254
             ClearText();
             return;
         }
 
-
-
-        if (InStrng(SetupView, TextIn) > 0) { //  goto main TX setup screen
+        if (InStrng(SetupView, TextIn) > 0)
+        { //  goto main TX setup screen
             ClearText();
-            if (CurrentView == CALIBRATEVIEW) ReadOneModel(ModelNumber);  // because it was cleared for calibration
+            if (CurrentView == CALIBRATEVIEW)
+                ReadOneModel(ModelNumber); // because it was cleared for calibration
             SaveAllParameters();
             CurrentView = TXSETUPVIEW;
             SendCommand(pTXSetupView);
             LastTimeRead = 0;
-            CurrentView  = TXSETUPVIEW;
+            CurrentView = TXSETUPVIEW;
             ClearText();
             UpdateModelsNameEveryWhere();
             return;
         }
 
-        if (InStrng(Mark, TextIn) > 0) {
-            GPSMarkHere    = 255;                       // Mark this at RX
+        if (InStrng(Mark, TextIn) > 0)
+        {
+            GPSMarkHere = 255; // Mark this at RX
             GPS_RX_MaxDistance = 0;
-            AddParameterstoQueue(3);                    // 3 is the ID of the MARK HERE parameter
+            AddParameterstoQueue(3); // 3 is the ID of the MARK HERE parameter
             ClearText();
             return;
-         }
+        }
 
-
-        if (InStrng(DataEnd, TextIn) > 0) { //  Exit from Data screen
+        if (InStrng(DataEnd, TextIn) > 0)
+        { //  Exit from Data screen
             SendCommand(pRXSetupView);
             CurrentView = RXSETUPVIEW;
             UpdateModelsNameEveryWhere();
@@ -3298,88 +3632,101 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-
-
-        if (InStrng(DataView_Clear, TextIn) > 0) { //  Clear Data screen
+        if (InStrng(DataView_Clear, TextIn) > 0)
+        { //  Clear Data screen
             ZeroDataScreen();
             ClearText();
             return;
         }
-        if (InStrng(DataView_AltZero, TextIn) > 0) { //  Set zero altitude on data screen
-            
+        if (InStrng(DataView_AltZero, TextIn) > 0)
+        { //  Set zero altitude on data screen
+
             GroundModelAltitude = RXModelAltitude;
-            GPS_RX_GroundAltitude   = GPS_RX_Altitude;
-            GPS_RX_Maxaltitude      = 0;
-            RXMAXModelAltitude  = 0;
+            GPS_RX_GroundAltitude = GPS_RX_Altitude;
+            GPS_RX_Maxaltitude = 0;
+            RXMAXModelAltitude = 0;
             ClearText();
             return;
         }
 
-        if (InStrng(HelpView, TextIn) > 0) { // Display Help screen(s)
+        if (InStrng(HelpView, TextIn) > 0)
+        { // Display Help screen(s)
             SavedCurrentView = CurrentView;
-            CurrentView      = HELP_VIEW;
+            CurrentView = HELP_VIEW;
             SendHelp();
             ClearText();
             return;
         }
-        if (InStrng(Dec_Minute, TextIn) > 0) {
+        if (InStrng(Dec_Minute, TextIn) > 0)
+        {
             DecMinute();
             ClearText();
             return;
         }
-        if (InStrng(AddMinute, TextIn) > 0) {
+        if (InStrng(AddMinute, TextIn) > 0)
+        {
             IncMinute();
             ClearText();
             return;
         }
 
-        if (InStrng(Dec_Hour, TextIn) > 0) {
+        if (InStrng(Dec_Hour, TextIn) > 0)
+        {
             DecHour();
             ClearText();
             return;
         }
-        if (InStrng(Inc_Hour, TextIn) > 0) {
+        if (InStrng(Inc_Hour, TextIn) > 0)
+        {
             IncHour();
             ClearText();
             return;
         }
 
-        if (InStrng(Dec_Year, TextIn) > 0) {
+        if (InStrng(Dec_Year, TextIn) > 0)
+        {
             DecYear();
             ClearText();
             return;
         }
-        if (InStrng(Inc_Year, TextIn) > 0) {
+        if (InStrng(Inc_Year, TextIn) > 0)
+        {
             IncYear();
             ClearText();
             return;
         }
 
-        if (InStrng(Dec_Date, TextIn) > 0) {
+        if (InStrng(Dec_Date, TextIn) > 0)
+        {
             DecDate();
             ClearText();
             return;
         }
-        if (InStrng(Inc_Date, TextIn) > 0) {
+        if (InStrng(Inc_Date, TextIn) > 0)
+        {
             IncDate();
             ClearText();
             return;
         }
 
-        if (InStrng(Dec_Month, TextIn) > 0) {
+        if (InStrng(Dec_Month, TextIn) > 0)
+        {
             DecMonth();
             ClearText();
             return;
         }
-        if (InStrng(Inc_Month, TextIn) > 0) {
+        if (InStrng(Inc_Month, TextIn) > 0)
+        {
             IncMonth();
             ClearText();
             return;
         }
 
-        if (InStrng(GOTO, TextIn) > 0) { // Return from Help screen returns here to relevent config screen
+        if (InStrng(GOTO, TextIn) > 0)
+        { // Return from Help screen returns here to relevent config screen
             i = 5;
-            while (uint8_t(TextIn[i]) && i < 30) {
+            while (uint8_t(TextIn[i]) && i < 30)
+            {
                 WhichPage[i] = TextIn[i];
                 ++i;
                 WhichPage[i] = 0;
@@ -3390,55 +3737,67 @@ FASTRUN void ButtonWasPressed()
             // Look(SavedCurrentView);
 
             if (InStrng(LOG, LogFileName))
-                {
-                    CurrentView = DATAVIEW;
-                    SavedCurrentView = DATAVIEW;
-                    strcpy(WhichPage, pDataView);
-                  //  Look(WhichPage);
-                }
+            {
+                CurrentView = DATAVIEW;
+                SavedCurrentView = DATAVIEW;
+                strcpy(WhichPage, pDataView);
+                //  Look(WhichPage);
+            }
             // Get page name to which to return
-            
+
             SendCommand(WhichPage); // this sends nextion back to last screen
 
             CurrentView = SavedCurrentView;
 
-            if (CurrentView == GRAPHVIEW) {
+            if (CurrentView == GRAPHVIEW)
+            {
                 DisplayCurveAndServoPos();
                 SendValue(CopyToAllBanks, 0);
             }
-            if (CurrentView == SWITCHES_VIEW)       UpdateSwitchesView();
-            if (CurrentView == ONE_SWITCH_VIEW)     UpdateOneSwitchView();
-            if (CurrentView == MODELSVIEW)          SendValue(ModelsView_ModelNumber, ModelNumber);
-            if (CurrentView == REVERSEVIEW)         StartReverseView();
-            if (CurrentView == DATAVIEW)            ForceDataRedisplay();
-            if (CurrentView == PONGVIEW)            StartPong();
-        
-            if (CurrentView == MIXESVIEW) {
-                if (MixNumber == 0) MixNumber = 1;
+            if (CurrentView == SWITCHES_VIEW)
+                UpdateSwitchesView();
+            if (CurrentView == ONE_SWITCH_VIEW)
+                UpdateOneSwitchView();
+            if (CurrentView == MODELSVIEW)
+                SendValue(ModelsView_ModelNumber, ModelNumber);
+            if (CurrentView == REVERSEVIEW)
+                StartReverseView();
+            if (CurrentView == DATAVIEW)
+                ForceDataRedisplay();
+            if (CurrentView == PONGVIEW)
+                StartPong();
+
+            if (CurrentView == MIXESVIEW)
+            {
+                if (MixNumber == 0)
+                    MixNumber = 1;
                 LastMixNumber = 33;                        // just to be differernt
                 SendValue(MixesView_MixNumber, MixNumber); // New load of mix window
                 ShowMixValues();
             }
 
-            if (CurrentView == CALIBRATEVIEW) {
+            if (CurrentView == CALIBRATEVIEW)
+            {
                 Force_ReDisplay();
                 ShowServoPos();
             }
 
-            if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW)) {
+            if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW))
+            {
                 Force_ReDisplay();
                 ShowServoPos();
-                if (CurrentView == FRONTVIEW) {
+                if (CurrentView == FRONTVIEW)
+                {
                     SendValue(FrontView_Secs, Secs);
                     SendValue(FrontView_Mins, Mins);
                     SendValue(FrontView_Hours, Hours);
-                    ForceVoltDisplay = true; 
+                    ForceVoltDisplay = true;
                     LastConnectionQuality = 0;
                 }
             }
 
-          
-            if (CurrentView == LOGVIEW) {
+            if (CurrentView == LOGVIEW)
+            {
                 GotoFrontView(); // otherwise it goes round for ever ... might fix later
             }
 
@@ -3447,14 +3806,18 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(Exrite, TextIn) > 0) { //  *******************
-            if (GetValue(ExpR)) {
+        if (InStrng(Exrite, TextIn) > 0)
+        { //  *******************
+            if (GetValue(ExpR))
+            {
                 InterpolationTypes[Bank][ChanneltoSet - 1] = EXPONENTIALCURVES;
             }
-            if (GetValue(Smooth)) {
+            if (GetValue(Smooth))
+            {
                 InterpolationTypes[Bank][ChanneltoSet - 1] = SMOOTHEDCURVES;
             }
-            if (GetValue(Lines)) {
+            if (GetValue(Lines))
+            {
                 InterpolationTypes[Bank][ChanneltoSet - 1] = STRAIGHTLINES;
             }
             Exponential[Bank][ChanneltoSet - 1] = GetValue(Expo) + 50; // Note: Getting this value from slider was not reliable (could not return 36!)
@@ -3463,10 +3826,12 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(SendModel, TextIn) > 0) {
+        if (InStrng(SendModel, TextIn) > 0)
+        {
             i = strlen(SendModel);
             j = 0;
-            while (uint8_t(TextIn[i]) > 0) {
+            while (uint8_t(TextIn[i]) > 0)
+            {
                 SingleModelFile[j] = TextIn[i];
                 ++j;
                 ++i;
@@ -3476,28 +3841,32 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-            if (InStrng(FailSAVE, TextIn) > 0) {        //  the FAILSAFE setup is sent to receiver ************** FAILSAFE SETUP **************
-               
-                if (!BoundFlag ||!ModelMatched ){
-                    MsgBox(pFailSafe, NotConnected);
-                    ClearText();
-                    SendCommand(ProgressEnd);
-                    return;
-                }
-               
-                SendCommand(ProgressStart);
-                for (int i = 0; i < 16; ++i) {
-                    FailSafeChannel[i] = GetValue(fs[i]);
-                    SendValue(Progress, i * 100 / 16);
-                }
-                SendValue(Progress, 100);          
-                AddParameterstoQueue(1);   // 1 is the ID for the FAILSAFE parameters 
+        if (InStrng(FailSAVE, TextIn) > 0)
+        { //  the FAILSAFE setup is sent to receiver ************** FAILSAFE SETUP **************
+
+            if (!BoundFlag || !ModelMatched)
+            {
+                MsgBox(pFailSafe, NotConnected);
                 ClearText();
                 SendCommand(ProgressEnd);
                 return;
+            }
+
+            SendCommand(ProgressStart);
+            for (int i = 0; i < 16; ++i)
+            {
+                FailSafeChannel[i] = GetValue(fs[i]);
+                SendValue(Progress, i * 100 / 16);
+            }
+            SendValue(Progress, 100);
+            AddParameterstoQueue(1); // 1 is the ID for the FAILSAFE parameters
+            ClearText();
+            SendCommand(ProgressEnd);
+            return;
         }
-        
-        if (InStrng(FailSafe, TextIn) > 0) {
+
+        if (InStrng(FailSafe, TextIn) > 0)
+        {
             SendCommand(pFailSafe);
             CurrentView = FAILSAFE_VIEW;
             UpdateButtonLabels();
@@ -3506,9 +3875,10 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(OneSwitchView, TextIn) > 0) {
+        if (InStrng(OneSwitchView, TextIn) > 0)
+        {
             SwitchEditNumber = GetChannel(); // which switch?
-            CurrentView      = ONE_SWITCH_VIEW;
+            CurrentView = ONE_SWITCH_VIEW;
             SendCommand(PageOneSwitchView);
             UpdateOneSwitchView();
             UpdateModelsNameEveryWhere();
@@ -3516,11 +3886,13 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(SwitchesView1, TextIn) > 0) { //  read switch values from screen (could be 1-4)
+        if (InStrng(SwitchesView1, TextIn) > 0)
+        { //  read switch values from screen (could be 1-4)
             ReadNewSwitchFunction();
         }
 
-        if (InStrng(InputsView, TextIn) > 0) {
+        if (InStrng(InputsView, TextIn) > 0)
+        {
             SendCommand(pInputsView);
             CurrentView = INPUTS_VIEW;
             UpdateButtonLabels();
@@ -3529,32 +3901,142 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        // IMPROVED BY CLAUDE 3.7 CODE FEB 26 2025: Replaced 16 separate if-statements with a single loop
-        // Handle channel name commands (CH1NAME through CH16NAME)
-        bool handled = false;
-        for (int ch = 1; ch <= 16; ch++) {
-            char chNameCmd[10];
-            sprintf(chNameCmd, "CH%dNAME", ch);
-            
-            if (InStrng(chNameCmd, TextIn) > 0) {
-                p = InStrng(chNameCmd, TextIn);
-                i = p + (ch < 10 ? 7 : 8); // Adjust offset based on channel number length
-                DoNewChannelName(ch, i);
-                handled = true;
-                break;
-            }
+        if (InStrng(CH1NAME, TextIn) > 0)
+        {
+            p = InStrng(CH1NAME, TextIn);
+            i = p + 7;
+            DoNewChannelName(1, i);
+            ClearText();
+            return;
         }
-        
-        if (handled) {
+        if (InStrng(CH2NAME, TextIn) > 0)
+        {
+            p = InStrng(CH2NAME, TextIn);
+            i = p + 7;
+            DoNewChannelName(2, i);
+            ClearText();
+            return;
+        }
+        if (InStrng(CH3NAME, TextIn) > 0)
+        {
+            p = InStrng(CH3NAME, TextIn);
+            i = p + 7;
+            DoNewChannelName(3, i);
+            ClearText();
+            return;
+        }
+        if (InStrng(CH4NAME, TextIn) > 0)
+        {
+            p = InStrng(CH4NAME, TextIn);
+            i = p + 7;
+            DoNewChannelName(4, i);
+            ClearText();
+            return;
+        }
+        if (InStrng(CH5NAME, TextIn) > 0)
+        {
+            p = InStrng(CH5NAME, TextIn);
+            i = p + 7;
+            DoNewChannelName(5, i);
+            ClearText();
+            return;
+        }
+        if (InStrng(CH6NAME, TextIn) > 0)
+        {
+            p = InStrng(CH6NAME, TextIn);
+            i = p + 7;
+            DoNewChannelName(6, i);
+            ClearText();
+            return;
+        }
+        if (InStrng(CH7NAME, TextIn) > 0)
+        {
+            p = InStrng(CH7NAME, TextIn);
+            i = p + 7;
+            DoNewChannelName(7, i);
+            ClearText();
+            return;
+        }
+        if (InStrng(CH8NAME, TextIn) > 0)
+        {
+            p = InStrng(CH8NAME, TextIn);
+            i = p + 7;
+            DoNewChannelName(8, i);
+            ClearText();
+            return;
+        }
+        if (InStrng(CH9NAME, TextIn) > 0)
+        {
+            p = InStrng(CH9NAME, TextIn);
+            i = p + 7;
+            DoNewChannelName(9, i);
+            ClearText();
+            return;
+        }
+        if (InStrng(CH10NAME, TextIn) > 0)
+        {
+            p = InStrng(CH10NAME, TextIn);
+            i = p + 8;
+            DoNewChannelName(10, i);
+            ClearText();
+            return;
+        }
+        if (InStrng(CH11NAME, TextIn) > 0)
+        {
+            p = InStrng(CH11NAME, TextIn);
+            i = p + 8;
+            DoNewChannelName(11, i);
+            ClearText();
+            return;
+        }
+        if (InStrng(CH12NAME, TextIn) > 0)
+        {
+            p = InStrng(CH12NAME, TextIn);
+            i = p + 8;
+            DoNewChannelName(12, i);
+            ClearText();
+            return;
+        }
+        if (InStrng(CH13NAME, TextIn) > 0)
+        {
+            p = InStrng(CH13NAME, TextIn);
+            i = p + 8;
+            DoNewChannelName(13, i);
+            ClearText();
+            return;
+        }
+        if (InStrng(CH14NAME, TextIn) > 0)
+        {
+            p = InStrng(CH14NAME, TextIn);
+            i = p + 8;
+            DoNewChannelName(14, i);
+            ClearText();
+            return;
+        }
+        if (InStrng(CH15NAME, TextIn) > 0)
+        {
+            p = InStrng(CH15NAME, TextIn);
+            i = p + 8;
+            DoNewChannelName(15, i);
+            ClearText();
+            return;
+        }
+        if (InStrng(CH16NAME, TextIn) > 0)
+        {
+            p = InStrng(CH16NAME, TextIn);
+            i = p + 8;
+            DoNewChannelName(16, i);
             ClearText();
             return;
         }
 
-        if (InStrng(DelFile, TextIn) > 0) { // Delete a file
+        if (InStrng(DelFile, TextIn) > 0)
+        { // Delete a file
             j = 0;
             p = InStrng(DelFile, TextIn);
             i = p + 6;
-            while (uint8_t(TextIn[i]) > 0) {
+            while (uint8_t(TextIn[i]) > 0)
+            {
                 SingleModelFile[j] = TextIn[i];
                 ++j;
                 ++i;
@@ -3563,11 +4045,12 @@ FASTRUN void ButtonWasPressed()
             strcpy(Prompt, del);
             strcat(Prompt, SingleModelFile);
             strcat(Prompt, ques);
-            if (GetConfirmation(pModelsView, Prompt)) {
+            if (GetConfirmation(pModelsView, Prompt))
+            {
                 SD.remove(SingleModelFile);
-                strcpy (MOD,".MOD");
+                strcpy(MOD, ".MOD");
                 BuildDirectory();
-                strcpy(Mfiles,"Mfiles");
+                strcpy(Mfiles, "Mfiles");
                 LoadFileSelector();
                 --FileNumberInView;
                 ShowFileNumber();
@@ -3577,16 +4060,18 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(SwitchesView, TextIn)) { 
+        if (InStrng(SwitchesView, TextIn))
+        {
             SendCommand(pSwitchesView);
-            UpdateSwitchesView();               // display saved values
+            UpdateSwitchesView(); // display saved values
             CurrentView = SWITCHES_VIEW;
             UpdateModelsNameEveryWhere();
             ClearText();
             return;
         }
 
-        if (InStrng(CalibrateView, TextIn)) { 
+        if (InStrng(CalibrateView, TextIn))
+        {
             SendCommand(pCalibrateView);
             Force_ReDisplay();
             CurrentView = CALIBRATEVIEW;
@@ -3594,35 +4079,42 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(Export, TextIn)) {
+        if (InStrng(Export, TextIn))
+        {
             GetDefaultFilename();
-            if (GetBackupFilename(pModelsView, SingleModelFile, ModelName, hhead, fprompt)) {
+            if (GetBackupFilename(pModelsView, SingleModelFile, ModelName, hhead, fprompt))
+            {
                 FixFileName();
-                if (CheckFileExists(SingleModelFile)) {
+                if (CheckFileExists(SingleModelFile))
+                {
                     strcpy(Prompt, overwr);
                     strcat(Prompt, SingleModelFile);
                     strcat(Prompt, ques);
-                    if (GetConfirmation(pModelsView, Prompt)) {
+                    if (GetConfirmation(pModelsView, Prompt))
+                    {
                         WriteBackup();
                     }
                 }
-                else {
+                else
+                {
                     WriteBackup();
                 }
             }
-            strcpy (MOD,".MOD");
-            BuildDirectory(); 
-            strcpy(Mfiles,"Mfiles");
+            strcpy(MOD, ".MOD");
+            BuildDirectory();
+            strcpy(Mfiles, "Mfiles");
             LoadFileSelector();
             ClearText();
             return;
         }
 
         p = InStrng(Import, TextIn);
-        if (p > 0) {
+        if (p > 0)
+        {
             j = 0;
             i = p + 5;
-            while (TextIn[i] > 0) {
+            while (TextIn[i] > 0)
+            {
                 SingleModelFile[j] = toUpperCase(TextIn[i]);
                 ++j;
                 ++i;
@@ -3631,12 +4123,14 @@ FASTRUN void ButtonWasPressed()
             strcpy(Prompt, overwr);
             strcat(Prompt, ModelName);
             strcat(Prompt, ques);
-            if (GetConfirmation(pModelsView, Prompt)) {
+            if (GetConfirmation(pModelsView, Prompt))
+            {
                 SendCommand(ProgressStart);
                 DelayWithDog(10);
                 SendValue(Progress, 5);
                 DelayWithDog(10);
-                if (InStrng(ModExt, SingleModelFile) == 0) strcat(SingleModelFile, ModExt);
+                if (InStrng(ModExt, SingleModelFile) == 0)
+                    strcat(SingleModelFile, ModExt);
                 SingleModelFlag = true;
                 SendValue(Progress, 10);
                 DelayWithDog(10);
@@ -3654,15 +4148,16 @@ FASTRUN void ButtonWasPressed()
                 SendValue(Progress, 100);
                 DelayWithDog(10);
                 SendCommand(ProgressEnd);
-                if (FileError) ShowFileErrorMsg();
+                if (FileError)
+                    ShowFileErrorMsg();
                 LoadModelSelector();
             }
             ClearText();
             return;
         }
 
-
-        if (InStrng(ColoursView, TextIn) > 0) {
+        if (InStrng(ColoursView, TextIn) > 0)
+        {
             CurrentView = COLOURS_VIEW;
             SendCommand(pColoursView);
             SendCommand(StartBackGround);
@@ -3670,11 +4165,12 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(SetupCol, TextIn) > 0) { // This is  return fr Colours setup
-            HighlightColour  = GetOtherValue(High_pco);
+        if (InStrng(SetupCol, TextIn) > 0)
+        { // This is  return fr Colours setup
+            HighlightColour = GetOtherValue(High_pco);
             ForeGroundColour = GetOtherValue(b0_pco);
             BackGroundColour = GetOtherValue(b0_bco);
-            SpecialColour    = GetOtherValue(Fm_pco);
+            SpecialColour = GetOtherValue(Fm_pco);
             SendValue(FrontView_BackGround, BackGroundColour);
             SendValue(FrontView_ForeGround, ForeGroundColour);
             SendValue(FrontView_Special, SpecialColour);
@@ -3688,7 +4184,8 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(TypeView, TextIn) > 0) {
+        if (InStrng(TypeView, TextIn) > 0)
+        {
             SendCommand(pTypeView);
             SendValue(r2s, 0); // Zero all RX batt cell count
             SendValue(r3s, 0);
@@ -3698,12 +4195,18 @@ FASTRUN void ButtonWasPressed()
             SendValue(r12s, 0);
             SendValue(r0, 0);
             SendValue(r1, 0);
-            if (RXCellCount == 2) SendValue(r2s, 1); // Then update RX batt cell count
-            if (RXCellCount == 3) SendValue(r3s, 1);
-            if (RXCellCount == 4) SendValue(r4s, 1);
-            if (RXCellCount == 5) SendValue(r5s, 1);
-            if (RXCellCount == 6) SendValue(r6s, 1);
-            if (RXCellCount == 12) SendValue(r12s, 1);
+            if (RXCellCount == 2)
+                SendValue(r2s, 1); // Then update RX batt cell count
+            if (RXCellCount == 3)
+                SendValue(r3s, 1);
+            if (RXCellCount == 4)
+                SendValue(r4s, 1);
+            if (RXCellCount == 5)
+                SendValue(r5s, 1);
+            if (RXCellCount == 6)
+                SendValue(r6s, 1);
+            if (RXCellCount == 12)
+                SendValue(r12s, 1);
             if (TXLiPo)
                 SendValue(r1, 1);
             else
@@ -3714,32 +4217,47 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(RXBAT, TextIn) > 0) { // UPdate RX batt cell count
-            if (GetValue(r2s) == 1) RXCellCount = 2;
-            if (GetValue(r3s) == 1) RXCellCount = 3;
-            if (GetValue(r4s) == 1) RXCellCount = 4;
-            if (GetValue(r5s) == 1) RXCellCount = 5;
-            if (GetValue(r6s) == 1) RXCellCount = 6;
-            if (GetValue(r12s) == 1) RXCellCount = 12;
-            if (GetValue(r0) == 1) TXLiPo = false; // TX LIFE
-            if (GetValue(r1) == 1) TXLiPo = true;  // TX LIPO
+        if (InStrng(RXBAT, TextIn) > 0)
+        { // UPdate RX batt cell count
+            if (GetValue(r2s) == 1)
+                RXCellCount = 2;
+            if (GetValue(r3s) == 1)
+                RXCellCount = 3;
+            if (GetValue(r4s) == 1)
+                RXCellCount = 4;
+            if (GetValue(r5s) == 1)
+                RXCellCount = 5;
+            if (GetValue(r6s) == 1)
+                RXCellCount = 6;
+            if (GetValue(r12s) == 1)
+                RXCellCount = 12;
+            if (GetValue(r0) == 1)
+                TXLiPo = false; // TX LIFE
+            if (GetValue(r1) == 1)
+                TXLiPo = true; // TX LIPO
             SaveAllParameters();
             ClearText();
             return;
         }
 
-        if (InStrng(TrimView, TextIn) > 0) { // TrimView just appeared, so update it.
+        if (InStrng(TrimView, TextIn) > 0)
+        { // TrimView just appeared, so update it.
             StartTrimView();
             return;
         }
 
-        if (InStrng(TRIMS50, TextIn) > 0) {
-            for (i = 0; i < 15; ++i) {
+        if (InStrng(TRIMS50, TextIn) > 0)
+        {
+            for (i = 0; i < 15; ++i)
+            {
                 Trims[Bank][i] = 80; // Mid value is 80
             }
-            if (CopyTrimsToAll) {
-                for (i = 0; i < 15; ++i) {
-                    for (int fm = 1; fm < 5; ++fm) {
+            if (CopyTrimsToAll)
+            {
+                for (i = 0; i < 15; ++i)
+                {
+                    for (int fm = 1; fm < 5; ++fm)
+                    {
                         Trims[fm][i] = 80;
                     }
                 }
@@ -3748,9 +4266,10 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(Setup, TextIn) > 0) { // Which channel to setup ... Goes to GraphView
+        if (InStrng(Setup, TextIn) > 0)
+        { // Which channel to setup ... Goes to GraphView
             ChanneltoSet = GetChannel();
-            CurrentView  = GRAPHVIEW;
+            CurrentView = GRAPHVIEW;
             SendCommand(pGraphView); // Set to GraphView
             DisplayCurve();
             updateInterpolationTypes();
@@ -3760,7 +4279,8 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(Front_View, TextIn)) {
+        if (InStrng(Front_View, TextIn))
+        {
             CurrentView = FRONTVIEW;
             ClearText();
             PreviousBank = 250; // sure to be different
@@ -3769,7 +4289,8 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(Sticks_View, TextIn)) {
+        if (InStrng(Sticks_View, TextIn))
+        {
             SendCommand(pSticksView);
             Force_ReDisplay();
             CurrentView = STICKSVIEW;
@@ -3780,7 +4301,6 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-
         if (InStrng(ReScan, TextIn))
         {
             DrawFhssBox();
@@ -3789,11 +4309,13 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(MIXES_VIEW, TextIn)) {      // First call to load screen
+        if (InStrng(MIXES_VIEW, TextIn))
+        { // First call to load screen
             SendCommand(pMixesView);
             CurrentView = MIXESVIEW;
             UpdateModelsNameEveryWhere();
-            if (MixNumber == 0) MixNumber = 1;
+            if (MixNumber == 0)
+                MixNumber = 1;
             LastMixNumber = MixNumber;
             SendValue(MixesView_MixNumber, MixNumber); // New load of mix window
             ShowMixValues();
@@ -3803,24 +4325,27 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-        if (InStrng(Mixes_View, TextIn)) {     // Mix number OR a parameter has changed
+        if (InStrng(Mixes_View, TextIn))
+        { // Mix number OR a parameter has changed
             CurrentView = MIXESVIEW;
             uint8_t ThisMixNumber = MixNumber; // save it
-            MixNumber             = GetValue(MixesView_MixNumber);
-            if (LastMixNumber != MixNumber)    // Did number change?
+            MixNumber = GetValue(MixesView_MixNumber);
+            if (LastMixNumber != MixNumber) // Did number change?
             {
                 SendCommand(invisb1);
                 SendCommand(invisb0);
-                LastMixNumber = MixNumber;      // save new mix number
-                MixNumber     = ThisMixNumber;  // Force back to old number to grab last lot before doing new one
-                ReadMixValues();                // Read them from screen
-                SaveOneModel(ModelNumber);      // Save them to SD card
-                MixNumber = LastMixNumber;      // back to new one
-                ShowMixValues();                // show new lot
+                LastMixNumber = MixNumber; // save new mix number
+                MixNumber = ThisMixNumber; // Force back to old number to grab last lot before doing new one
+                ReadMixValues();           // Read them from screen
+                SaveOneModel(ModelNumber); // Save them to SD card
+                MixNumber = LastMixNumber; // back to new one
+                ShowMixValues();           // show new lot
                 SendCommand(visb1);
                 SendCommand(visb0);
-            } else {
-                ReadMixValues();                // 
+            }
+            else
+            {
+                ReadMixValues(); //
             }
             FixCHNames();
             ClearText();
@@ -3836,7 +4361,7 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(Data_View, TextIn))
         {
-            CurrentView  = DATAVIEW;
+            CurrentView = DATAVIEW;
             LastShowTime = 0;
             ForceDataRedisplay();
             SendCommand(pDataView);
@@ -3846,7 +4371,7 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(FM1, TextIn))
         {
-            Bank         = 1;
+            Bank = 1;
             PreviousBank = 1;
             UpdateModelsNameEveryWhere();
             ClearText();
@@ -3855,7 +4380,7 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(FM2, TextIn))
         {
-            Bank         = 2;
+            Bank = 2;
             PreviousBank = 2;
             UpdateModelsNameEveryWhere();
             ClearText();
@@ -3864,7 +4389,7 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(FM3, TextIn))
         {
-            Bank         = 3;
+            Bank = 3;
             PreviousBank = 3;
             UpdateModelsNameEveryWhere();
             ClearText();
@@ -3873,7 +4398,7 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(FM4, TextIn))
         {
-            Bank         = 4;
+            Bank = 4;
             PreviousBank = 4;
             UpdateModelsNameEveryWhere();
             ClearText();
@@ -3882,26 +4407,30 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(Reset, TextIn)) // Now zeros EXPO only
         {
-            Exponential[Bank][ChanneltoSet - 1]        = DEFAULT_EXPO;
+            Exponential[Bank][ChanneltoSet - 1] = DEFAULT_EXPO;
             InterpolationTypes[Bank][ChanneltoSet - 1] = EXPONENTIALCURVES; // expo = default
             DisplayCurveAndServoPos();
             return;
         }
 
         p = (InStrng(ClickX, TextIn)); // Clicked to move point?
-        if (p > 0) {
+        if (p > 0)
+        {
             XtouchPlace = GetNextNumber(p + 7, TextIn);
             // This drops through to get Y as well before moving the point
         }
         p = (InStrng(ClickY, TextIn)); // Clicked to move point?
-        if (p > 0) {
+        if (p > 0)
+        {
             YtouchPlace = GetNextNumber(p + 7, TextIn);
             MovePoint();
             DisplayCurveAndServoPos();
             return;
         }
-        if (CurrentMode == NORMAL) { 
-            if (strcmp(TextIn, "Calibrate1") == 0) {
+        if (CurrentMode == NORMAL)
+        {
+            if (strcmp(TextIn, "Calibrate1") == 0)
+            {
                 BlueLedOn();
                 SetDefaultValues();
                 ResetSwitchNumbers();
@@ -3917,8 +4446,10 @@ FASTRUN void ButtonWasPressed()
             }
         }
 
-        if (CurrentMode == CALIBRATELIMITS) {
-            if (strcmp(TextIn, "Calibrate1") == 0) {
+        if (CurrentMode == CALIBRATELIMITS)
+        {
+            if (strcmp(TextIn, "Calibrate1") == 0)
+            {
                 CurrentMode = CENTRESTICKS;
                 CurrentView = CALIBRATEVIEW;
                 SendText1(SvT11, Cmsg3);
@@ -3927,8 +4458,10 @@ FASTRUN void ButtonWasPressed()
                 return;
             }
         }
-        if (CurrentMode == CENTRESTICKS) { 
-            if (strcmp(TextIn, "Calibrate1") == 0) {
+        if (CurrentMode == CENTRESTICKS)
+        {
+            if (strcmp(TextIn, "Calibrate1") == 0)
+            {
                 CurrentMode = NORMAL;
                 RedLedOn();
                 SaveTransmitterParameters(); // Save calibrations
@@ -3943,6 +4476,8 @@ FASTRUN void ButtonWasPressed()
     }
     ClearText(); // Let's have cleared text for next one!
 } // end ButtonWasPressed() (... at last!!!)
+
+/************************************************************************************************************/
 
 /************************************************************************************************************/
 
@@ -4611,6 +5146,91 @@ void DoWirelessBuddyListen(){                                // For Slave only
 
 FASTRUN void loop()
 {  
+#ifdef TESTSIGNALMSGS
+    // Use throttle stick position to simulate signal quality
+    // Added by CLAUDE 3.7 CODE FEB 28 2025 - MODIFIED MAR 01 2025
+    static uint32_t lastThrottleCheck = 0;
+    static bool reportedTestMode = false;
+    
+    if (!reportedTestMode) {
+        Look("TEST SIGNAL MODE ACTIVE - Use throttle to simulate signal quality");
+        reportedTestMode = true;
+    }
+    
+    // Only check throttle position every 250ms to be more responsive
+    if (millis() - lastThrottleCheck > 250) {
+        lastThrottleCheck = millis();
+        
+        // Hard-code to channel 2 which is throttle (zero-based index)
+        uint16_t throttleChannel = 2;
+        
+        // Read directly from SendBuffer which contains all processed inputs
+        uint16_t throttlePos = SendBuffer[throttleChannel];
+        
+        // Map throttle position to signal quality level and add debug output
+        char debugMsg[100];
+        sprintf(debugMsg, "Throttle CH%d position: %d (min=%d, max=%d)", 
+                throttleChannel+1, throttlePos, MINMICROS, MAXMICROS);
+        Look(debugMsg);
+        
+        // Calculate threshold positions
+        uint16_t lowThreshold = MINMICROS + (MAXMICROS - MINMICROS)/3;
+        uint16_t midThreshold = MINMICROS + 2*(MAXMICROS - MINMICROS)/3;
+        
+        // Keep track of previous state to detect changes
+        static uint8_t lastState = 255; // Invalid initial value to force sound on first check
+        uint8_t currentState;
+        
+        if (throttlePos < lowThreshold) {
+            // Bottom third of throttle range = Critical
+            Look("Setting CRITICAL signal quality (75% packet loss)");
+            SimulateWeakSignal(0);
+            // Force signal quality display update
+            currentState = 2;
+            PreviousConnectionQualityState = currentState;
+            SignalQualityWarningActive = true;
+        } else if (throttlePos < midThreshold) {
+            // Middle third of throttle range = Warning
+            Look("Setting WARNING signal quality (50% packet loss)");
+            SimulateWeakSignal(1);
+            // Force signal quality display update
+            currentState = 1;
+            PreviousConnectionQualityState = currentState;
+            SignalQualityWarningActive = true;
+        } else {
+            // Top third of throttle range = Good
+            Look("Setting GOOD signal quality (0% packet loss)");
+            SimulateWeakSignal(3);
+            // Force signal quality display update
+            currentState = 0;
+            PreviousConnectionQualityState = currentState;
+            SignalQualityWarningActive = false;
+        }
+        
+        // Play sound if state has changed, but not too frequently
+        static uint32_t lastSoundTime = 0;
+        uint32_t currentTime = millis();
+        
+        // Only play sounds at most every 2 seconds to avoid audio spam
+        if (currentState != lastState && (currentTime - lastSoundTime > 2000)) {
+            lastState = currentState;
+            lastSoundTime = currentTime;
+            
+            // Play the appropriate sound based on the new state
+            if (currentState == 2) {
+                PlaySound(CONNECTION_CRITICAL);
+                Look("Playing CRITICAL signal quality sound");
+            } else if (currentState == 1) {
+                PlaySound(CONNECTION_WARNING);
+                Look("Playing WARNING signal quality sound");
+            } else {
+                PlaySound(CONNECTION_GOOD);
+                Look("Playing GOOD signal quality sound");
+            }
+        }
+    }
+#endif
+    
     ManageTransmitter();   // Do the needed chores ... (if there's time)
     GetNewChannelValues(); // Load SendBuffer with new servo positions very frequently
 
@@ -4660,5 +5280,48 @@ FASTRUN void loop()
             break;
     }
 } // end loop()
+
+/**
+ * Simulates weak signal by artificially dropping packets
+ * 
+ * This function allows testing the connection quality warning system
+ * without having to walk away from the transmitter
+ * 
+ * @param level Packet loss level to simulate:
+ *              0 = Critical (75% packet loss) - will trigger critical warnings
+ *              1 = Warning (50% packet loss) - will trigger warning level
+ *              2 = Borderline (25% packet loss) - just below good quality
+ *              3 = Normal (0% packet loss) - normal operation
+ */
+void SimulateWeakSignal(uint8_t level) {
+    static const uint8_t lossRates[] = {
+        75,  // Critical - 75% packet loss
+        50,  // Warning - 50% packet loss
+        25,  // Borderline - 25% packet loss
+        0    // Normal - 0% packet loss
+    };
+    
+    if (level > 3) level = 3;
+    
+    // Set the simulated packet loss rate
+    SetSimulatedPacketLossRate(lossRates[level]);
+    
+    char msg[60];
+    
+    // Show a message about the current loss rate
+    if (level == 0) {
+        sprintf(msg, "Set to CRITICAL signal simulation (75%% packet loss)");
+        Look(msg);
+    } else if (level == 1) {
+        sprintf(msg, "Set to WARNING signal simulation (50%% packet loss)");
+        Look(msg);
+    } else if (level == 2) {
+        sprintf(msg, "Set to BORDERLINE signal simulation (25%% packet loss)");
+        Look(msg);
+    } else if (level == 3) {
+        sprintf(msg, "Set to NORMAL operation (0%% packet loss)");
+        Look(msg);
+    }
+}
 
 /************************************************************************************************************/

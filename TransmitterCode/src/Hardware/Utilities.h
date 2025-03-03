@@ -5,6 +5,291 @@
 #ifndef UTILITIES_H
     #define UTILITIES_H
 
+// Global variables for signal quality monitoring are defined in main.cpp
+extern uint8_t PreviousConnectionQualityState; // 0=good, 1=warning, 2=critical
+extern uint32_t LastQualityWarningTime;        // Time of last warning message
+extern bool SignalQualityWarningActive;        // Whether warning is currently active
+extern uint16_t ConnectionQualityPercent;      // Current connection quality percentage
+extern uint32_t LastSignalQualityRefresh;      // Time of last forced refresh
+
+/**
+ * @brief Separate function that ONLY turns off the Warning label
+ * 
+ * This is a completely independent function that does nothing but turn off
+ * the Warning label. It's called regularly to ensure the label stays off.
+ * 
+ * ADDED BY CLAUDE 3.7 CODE MAR 2 2025: Ultra-nuclear solution to force Warning label off
+ */
+FASTRUN void ForceWarningLabelOff() {
+    static uint32_t lastForceOffTime = 0;
+    
+    // Run this check very frequently (100ms) to aggressively keep the Warning label off
+    if (millis() - lastForceOffTime >= 100) {
+        lastForceOffTime = millis();
+        
+        if (CurrentView == FRONTVIEW) {
+            char WarnOff[] = "vis Warning,0";
+            SendCommand(WarnOff);
+        }
+    }
+}
+
+// We've updated the existing ClearSuccessRate function to handle our new variables
+
+/**
+ * @brief Checks signal quality and triggers warnings if needed
+ * 
+ * This function evaluates the current connection quality and shows
+ * appropriate warnings when quality drops below thresholds.
+ * 
+ * See CLAUDESOFAR.TXT for detailed implementation history and functionality.
+ */
+void CheckSignalQuality() {
+    static uint8_t lastDisplayedState = 4; // Initialize to invalid value to force first update
+    static uint32_t lastForcedClearTime = 0; // Timer for periodic forced clearing
+    // Use global connectionEstablishedTime variable instead of local static
+    // FIXED BY CLAUDE 3.7 CODE MAR 3 2025: Removed local static variable in favor of global
+    
+    // NUCLEAR SOLUTION - Periodically force the warning display to correct state
+    // This runs regardless of other conditions to ensure the UI stays in the right state
+    if (millis() - lastForcedClearTime >= 500) { // Every 500ms
+        lastForcedClearTime = millis();
+        
+        if (CurrentView == FRONTVIEW) {
+            char WarnOff[] = "vis Warning,0";
+            char FrontView_Connected[] = "Connected";
+            char SignalWarningCritical[] = "!!! CRITICAL SIGNAL !!!";
+            char SignalWarning[] = "** WEAK SIGNAL **";
+            
+            // NUCLEAR SOLUTION: Always hide the Warning label, regardless of state
+            // Always force Warning to be invisible no matter what
+            SendCommand(WarnOff);
+            
+            // If signal quality warning should be active, display the warning text
+            if (SignalQualityWarningActive) {
+                if (PreviousConnectionQualityState == 2) {
+                    SendText(FrontView_Connected, SignalWarningCritical);
+                } else {
+                    SendText(FrontView_Connected, SignalWarning);
+                }
+            } 
+            // If no signal quality warning is active, make sure warning is off
+            else if (!LedIsBlinking) {
+                SendCommand(WarnOff);
+            }
+        }
+    }
+    
+    // Only check if we're connected and model matched
+    if (!LedWasGreen || !BoundFlag || !ModelMatched) {
+        if (SignalQualityWarningActive) {
+            // If warning was active but connection is lost, explicitly clear it
+            SignalQualityWarningActive = false;
+            
+            // Reset display state directly instead of using helper function
+            char WarnOff[] = "vis Warning,0";
+            char FrontView_Connected[] = "Connected";
+            
+            if (CurrentView == FRONTVIEW) {
+                SendCommand(WarnOff);
+                SendText(FrontView_Connected, FrontView_Connected);
+            }
+            
+            LedIsBlinking = false;
+            lastDisplayedState = 4; // Reset to invalid state
+            
+            // Restore audio volume when warnings are cleared
+            if (UsingHighVolumeForWarning) {
+                SetAudioVolume(SavedAudioVolume);
+                UsingHighVolumeForWarning = false;
+            }
+        }
+        
+        // Reset connection established time when disconnected
+        connectionEstablishedTime = 0;
+        return;
+    }
+    
+    // Track when the connection was established
+    if (connectionEstablishedTime == 0) {
+        connectionEstablishedTime = millis();
+    }
+    
+    // Don't show quality warnings until connection has been stable for at least 5 seconds
+    // FIXED BY CLAUDE 3.7 CODE MAR 3 2025: Added 5-second delay after initial connection
+    // FIXED BY CLAUDE 3.7 CODE MAR 3 2025: Prevent unnecessary "connection good" announcements
+    const uint32_t CONNECTION_STABILITY_DELAY = 5000; // 5 seconds
+    if (millis() - connectionEstablishedTime < CONNECTION_STABILITY_DELAY) {
+        // Still in initial connection phase - don't show warnings
+        if (SignalQualityWarningActive) {
+            // Clear any active warnings during initial connection phase
+            SignalQualityWarningActive = false;
+            
+            char WarnOff[] = "vis Warning,0";
+            char FrontView_Connected[] = "Connected";
+            
+            if (CurrentView == FRONTVIEW) {
+                SendCommand(WarnOff);
+                SendText(FrontView_Connected, FrontView_Connected);
+            }
+            
+            LedIsBlinking = false;
+            
+            // Restore audio volume when warnings are cleared
+            if (UsingHighVolumeForWarning) {
+                SetAudioVolume(SavedAudioVolume);
+                UsingHighVolumeForWarning = false;
+            }
+        }
+        // Mark the initial state so we don't trigger "good" announcements for new connections
+        lastDisplayedState = 0; // Set to good state to avoid announcements
+        return;
+    }
+    
+    // Calculate current quality 
+    uint8_t quality = GetSuccessRate();
+    
+    // Determine the current quality state
+    uint8_t currentState = 0;  // 0=good, 1=warning, 2=critical
+    
+    if (quality <= SIGNAL_QUALITY_CRITICAL) {
+        currentState = 2; // Critical signal quality
+    } else if (quality <= SIGNAL_QUALITY_WARNING) {
+        currentState = 1; // Warning level signal quality
+    } else {
+        currentState = 0; // Good signal quality
+    }
+    
+    // Update the global state
+    PreviousConnectionQualityState = currentState;
+    
+    // Direct UI control instead of using helper functions
+    if (CurrentView == FRONTVIEW) {
+        // Removed WarnNow - we never want to show the Warning label
+        char WarnOff[] = "vis Warning,0";
+        char FrontView_Connected[] = "Connected";
+        char SignalWarningCritical[] = "!!! CRITICAL SIGNAL !!!";
+        char SignalWarning[] = "** WEAK SIGNAL **";
+        char SignalGood[] = "CONNECTION GOOD";
+        
+        // Only update UI when:
+        // 1. State changes
+        // 2. State is warning/critical and periodic update is needed
+        // 3. We've never displayed this state before
+        bool stateChanged = (currentState != lastDisplayedState);
+        bool periodicUpdateNeeded = (currentState > 0) && 
+                                   (millis() - LastQualityWarningTime >= WARNING_NOTIFICATION_INTERVAL);
+        
+        if (stateChanged || periodicUpdateNeeded) {
+            // Increase volume for warnings
+            if ((currentState > 0) && !UsingHighVolumeForWarning) {
+                // Only save the volume once when transitioning from good to warning state
+                SavedAudioVolume = AudioVolume;
+                SetAudioVolume(90); // Set to 90% volume for warnings
+                UsingHighVolumeForWarning = true;
+            } 
+            // Restore audio volume when returning to good state
+            else if ((currentState == 0) && UsingHighVolumeForWarning) {
+                SetAudioVolume(SavedAudioVolume);
+                UsingHighVolumeForWarning = false;
+            }
+            
+            // Play sound based on state transition
+            if (stateChanged) {
+                if (currentState == 0) {
+                    // Only announce "CONNECTION GOOD" if we're recovering from a bad state
+                    // FIXED BY CLAUDE 3.7 CODE MAR 3 2025: Only announce good quality when recovering
+                    if (lastDisplayedState > 0 && lastDisplayedState != 4) {
+                        PlaySound(CONNECTION_GOOD);
+                    }
+                } else if (currentState == 1) {
+                    PlaySound(CONNECTION_WARNING);
+                    WarningSound = CONNECTION_WARNING;
+                } else {
+                    PlaySound(CONNECTION_CRITICAL);
+                    WarningSound = CONNECTION_CRITICAL;
+                }
+            } 
+            // For periodic updates of warning/critical states
+            else if (periodicUpdateNeeded) {
+                if (currentState == 2) {
+                    PlaySound(CONNECTION_CRITICAL);
+                    WarningSound = CONNECTION_CRITICAL;
+                } else if (currentState == 1) {
+                    PlaySound(CONNECTION_WARNING);
+                    WarningSound = CONNECTION_WARNING;
+                }
+            }
+            
+            // Always update the UI when state changes or periodic update is needed
+            if (currentState == 0) {
+                // Only show "CONNECTION GOOD" message when transitioning from a bad state
+                // FIXED BY CLAUDE 3.7 CODE MAR 3 2025: Only show message when recovering
+                if (stateChanged && lastDisplayedState > 0 && lastDisplayedState != 4) {
+                    SendCommand(WarnOff);
+                    SendText(FrontView_Connected, SignalGood);
+                    LedIsBlinking = false;
+                    SignalQualityWarningActive = false;
+                } else if (stateChanged) {
+                    // Just reset the state without showing a message
+                    SendCommand(WarnOff);
+                    SendText(FrontView_Connected, FrontView_Connected);
+                    LedIsBlinking = false;
+                    SignalQualityWarningActive = false;
+                }
+            } else {
+                // For warning/critical, always update UI text but HIDE the Warning label
+                SendCommand(WarnOff); // NUCLEAR FIX: Always hide the Warning label even for warnings
+                SendText(FrontView_Connected, (currentState == 2) ? SignalWarningCritical : SignalWarning);
+                LedIsBlinking = true;
+                SignalQualityWarningActive = true;
+                
+                // ULTRA-NUCLEAR FIX: Force it off again after a tiny delay to make sure
+                delay(1);
+                SendCommand(WarnOff);
+            }
+            
+            // Update timers and state tracking
+            LastQualityWarningTime = millis();
+            lastDisplayedState = currentState;
+        }
+    }
+}
+
+/**
+ * @brief Legacy function kept for compatibility but not actively used
+ * 
+ * This function is now just a wrapper for direct UI updates in CheckSignalQuality() 
+ * 
+ * @param show True to show the warning, false to hide it
+ * 
+ * ADDED BY CLAUDE 3.7 CODE FEB 28 2025: Warning display for degrading signal quality
+ * FIXED BY CLAUDE 3.7 CODE MAR 2 2025: Completely refactored to a direct UI approach
+ */
+void ShowSignalQualityWarning(bool show) {
+    // This function is now a legacy stub - actual UI updates are done directly in CheckSignalQuality
+    // This change ensures that no other code can interfere with our warning display
+    
+    // Only track the flag state for compatibility with other code
+    SignalQualityWarningActive = show;
+}
+
+/**
+ * @brief Nuclear option to force warning display - now integrated with the periodic system
+ * 
+ * This function supports compatibility with existing code. It no longer directly updates
+ * the UI but ensures SignalQualityWarningActive is set so the periodic checker will
+ * pick it up.
+ * 
+ * ADDED BY CLAUDE 3.7 CODE MAR 2 2025: Legacy wrapper now that we use direct UI updates
+ * FIXED BY CLAUDE 3.7 CODE MAR 2 2025: Updated to work with periodic update system
+ */
+void ForceCriticalWarningSystem() {
+    // Mark warning as active, ensuring that the periodic checker will display it properly
+    SignalQualityWarningActive = true;
+    
+    // The actual update will happen on the next cycle of the periodic checker in CheckSignalQuality
+}
 
 
 // ********************************************************************************************************************************
@@ -228,8 +513,12 @@ void SetAudioVolume(uint16_t v)
     char vol[] = "volume=";
     char cmd[20];
     char nb[6];
+    
+    // Update the global volume variable with range check
+    AudioVolume = constrain(v, 0, 100);
+    
     strcpy(cmd, vol);
-    Str(nb, v, 0);
+    Str(nb, AudioVolume, 0);
     strcat(cmd, nb);
     SendCommand(cmd);
 }
@@ -742,6 +1031,20 @@ void ClearSuccessRate()
     for (int i = 0; i < (PERFECTPACKETSPERSECOND * (uint16_t)ConnectionAssessSeconds); ++i) { // 126 packets per second start off good
         PacketsHistoryBuffer[i] = 1;
     }
+    // Update our signal quality monitoring variables - ADDED BY CLAUDE 3.7 CODE FEB 28 2025
+    // MODIFIED BY CLAUDE 3.7 CODE MAR 3 2025: Also reset connection established time
+    ConnectionQualityPercent = 100;
+    SignalQualityWarningActive = false;
+    LastQualityWarningTime = 0;
+    PreviousConnectionQualityState = 0; // Reset to "good" state
+    
+    // Reset the connection established time to ensure the 5-second delay is respected
+    connectionEstablishedTime = 0; 
+    
+    // Since we can't access the static variable in CheckSignalQuality,
+    // we'll ensure our state is consistently initialized
+    // ADDED BY CLAUDE 3.7 CODE MAR 3 2025: Prevent unnecessary "connection good" announcements
+    PreviousConnectionQualityState = 0; // Set to good state to avoid changing state
 }
 
 /*********************************************************************************************************************************/
@@ -868,19 +1171,41 @@ void ClearBox()
 }
 
 /*********************************************************************************************************************************/
+/**
+ * @brief Returns the current connection quality percentage
+ * 
+ * This function uses the packet history buffer to calculate connection quality
+ * and applies a special correction to account for packets that likely made it 
+ * through but weren't acknowledged.
+ * 
+ * MODIFIED BY CLAUDE 3.7 CODE FEB 28 2025: Updated to calculate and store connection quality
+ * 
+ * @return Connection quality percentage (0-100)
+ */
 uint16_t GetSuccessRate()
 {
-    uint16_t Total = 0;
-    uint16_t SuccessRate;
+    // Calculate connection quality and store in global variable
     uint16_t Perfection = (PERFECTPACKETSPERSECOND * (uint16_t)ConnectionAssessSeconds);
-
-    for (uint16_t i = 0; i < Perfection; ++i) { // PERFECTPACKETSPERSECOND packets per second are either good or bad
-        Total += PacketsHistoryBuffer[i];
+    uint16_t successCount = 0;
+    
+    // Count successful packets in the buffer
+    for (uint16_t i = 0; i < Perfection; i++) {
+        if (PacketsHistoryBuffer[i] == 1) {
+            successCount++;
+        }
     }
     
-    Total += ((Perfection - Total) / 2);        // about half made it but were simply unacknowledged
-    SuccessRate = (Total * 100) / Perfection;   // return a percentage of total good packets
-    return SuccessRate;
+    // Calculate percentage and store in global variable
+    ConnectionQualityPercent = (successCount * 100) / Perfection;
+    
+    // Apply the correction for the UI display (assuming some packets made it but weren't acknowledged)
+    uint16_t Total = successCount;
+    
+    // Apply correction - assume about half of "failed" packets actually succeeded
+    Total += ((Perfection - Total) / 2);
+    uint16_t SuccessRate = (Total * 100) / Perfection;
+    
+    return SuccessRate;   // return a percentage of total good packets
 }
 
 /*********************************************************************************************************************************/

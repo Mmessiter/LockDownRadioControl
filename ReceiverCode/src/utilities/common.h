@@ -1,5 +1,5 @@
 /** @file ReceiverCode/src/utilities/common.h */
-// Malcolm Messiter 2020 - 2024
+// Malcolm Messiter 2020 - 2025
 #ifndef _SRC_UTILITIES_COMMON_H
 #define _SRC_UTILITIES_COMMON_H
 
@@ -12,8 +12,8 @@
 // IMPROVED BY CLAUDE 3.7 CODE FEB 26 2025: Updated version number to reflect code improvements
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   5
-#define RXVERSION_MINIMUS 0 // February 2025
-#define RXVERSION_EXTRA   'A' // Improved reliability and code quality
+#define RXVERSION_MINIMUS 0 // March 2025
+#define RXVERSION_EXTRA   'B' // Improved reliability and code quality
 
 
 #define HOPTIME           17 // 47     //  17 gives 50Hz FHSS, 47 gives 20Hz FHSS

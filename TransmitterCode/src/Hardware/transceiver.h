@@ -31,6 +31,23 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     Radio1.begin();
     ConfigureRadio();   
 }
+
+/**
+ * Simulate packet loss by selectively dropping packets based on a loss rate
+ * 
+ * ADDED BY CLAUDE 3.7 CODE FEB 28 2025: Allows simulating weak signal conditions
+ * without changing RF power levels (helpful for radios like EByte E01-ML01DP5
+ * that don't support power level adjustment)
+ * 
+ * @param lossRate Percentage of packets to artificially drop (0-100)
+ */
+uint8_t SimulatedPacketLossRate = 0;
+
+FLASHMEM void SetSimulatedPacketLossRate(uint8_t lossRate)
+{
+    // Cap the loss rate at 95% to ensure some packets still get through
+    SimulatedPacketLossRate = (lossRate > 95) ? 95 : lossRate;
+}
 /************************************************************************************************************/
 
 
@@ -366,6 +383,19 @@ FASTRUN void SendData()
         if (BuddyPupilOnPPM) {SendViaPPM(); return;}                                                      // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         Connected = false;                                                                                // Assume failure until an ACK is received.
         FlushFifos();                                                                                     // This flush avoids a lockup that happens when the FIFO gets full.
+        
+        // ADDED BY CLAUDE 3.7 CODE FEB 28 2025: Simulate packet loss for testing
+        // Randomly drop packets based on the configured loss rate
+        if (SimulatedPacketLossRate > 0) {
+            // Generate a random number between 0-99
+            uint8_t randomChance = random(100);
+            
+            // If the random number is less than the loss rate, simulate a failure
+            if (randomChance < SimulatedPacketLossRate) {
+                FailedPacket();
+                return;
+            }
+        }
         
         if (AddExtraParameters) {
             NumberOfChangedChannels = SendExtraParamemters();                                                         
