@@ -25,7 +25,6 @@
 
 // *************************************************************************************
 //               TX VERSION NUMBER   (May 2020 - March 2025 Malcolm Messiter)     *
-// IMPROVED BY CLAUDE 3.7 CODE FEB 28 2025
 //**************************************************************************************
 
 #define TXVERSION_MAJOR 2 // first three *must* match RX but _EXTRA can be different
@@ -102,9 +101,10 @@
 // See CLAUDESOFAR.TXT for implementation details
 //***************************************************************************
 
+//#define TESTSIGNALMSGS 1
 #define SIGNAL_QUALITY_GOOD 90             // Success rate above this percentage is considered good quality
-#define SIGNAL_QUALITY_WARNING 75          // Success rate below this percentage but above SIGNAL_QUALITY_CRITICAL triggers warning
-#define SIGNAL_QUALITY_CRITICAL 50         // Success rate below this percentage is considered critical
+#define SIGNAL_QUALITY_WARNING 60          // Success rate below this percentage but above SIGNAL_QUALITY_CRITICAL triggers warning
+#define SIGNAL_QUALITY_CRITICAL 40         // Success rate below this percentage is considered critical
 #define WARNING_NOTIFICATION_INTERVAL 5000 // Minimum time between warning notifications (ms)
 
 // Global variables for signal quality monitoring - ADDED BY CLAUDE 3.7 CODE FEB 28 2025
@@ -304,19 +304,6 @@ bool UsingHighVolumeForWarning = false;     // Whether we're currently using hig
 #define MMFOUND 28
 #define MMMATCHED 29
 //  #define MMNOTFOUND      30
-
-// ADDED BY CLAUDE 3.7 CODE FEB 28 2025: New audio messages for connection quality
-#define CONNECTION_CRITICAL 78  // Critical connection quality audio alert
-#define CONNECTION_WARNING  79  // Warning connection quality audio alert
-#define CONNECTION_GOOD     80  // Good connection quality audio alert
-
-// Uncomment to enable signal quality testing using throttle stick
-// ADDED BY CLAUDE 3.7 CODE FEB 28 2025
-
-
-//#define TESTSIGNALMSGS 1
-
-
 #define MOTORON 31
 #define MOTOROFF 32
 #define STORAGECHARGE 33
@@ -515,8 +502,6 @@ FASTRUN void ParseAckPayload();
 void FailedPacket();
 void StartInactvityTimeout();
 void ShowServoPos();
-
-// Signal Quality and Warning Systems - ADDED BY CLAUDE 3.7 CODE MAR 4 2025
 void SetAudioVolume(uint16_t v);
 void ForceWarningLabelOff();
 void ClearSuccessRate();
@@ -749,9 +734,7 @@ void ShowLogFileNew(uint16_t LinesCounter);
 uint16_t ReadAFewLines();
 void LogVIEWNew();
 File OpenTheLogFileForReading();
-void ReadTextFile(char *fname, char *htext, int StartLineNumber, uint16_t MaxLines);
 void StartLogFileView();
-// ADDED BY CLAUDE 3.7 CODE FEB 28 2025
 void SimulateWeakSignal(uint8_t level);
 
 #ifdef USE_BTLE
@@ -1166,9 +1149,6 @@ uint32_t LastGapAverage = 0;
 uint16_t LastSbusRepeats = 0;
 uint16_t LastConnectionQuality = 0;
 int LastRXModelAltitude = 0;
-
-// These variables are already defined above (around line 117)
-// Signal quality monitoring duplicates removed by CLAUDE 3.7 CODE FEB 28 2025
 int LastRXModelMaxAltitude = 0;
 float LastRXTemperature = 0;
 uint8_t RadioNumber = 0;
