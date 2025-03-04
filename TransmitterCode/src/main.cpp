@@ -257,7 +257,9 @@ void BlueLedOn()
 
 void GreenLedOn()
 {
-    if (!ModelMatched) return; // no green led for wrong model
+   
+    if (!ModelMatched)
+        return; // no green led for wrong model
     if (!LedWasGreen)
     { 
         LedGreenMoment = millis();
@@ -4946,8 +4948,8 @@ void FASTRUN ManageTransmitter()
     }   
     
     if ((RightNow - LastModelScreenCheck >= 500)) {
+        LastModelScreenCheck = RightNow;
         if (CurrentView == MODELSVIEW) { 
-            LastModelScreenCheck = RightNow;            
             if (CheckModelName()) {
                 LastModelScreenCheck = RightNow; return;                                                       // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
             }
