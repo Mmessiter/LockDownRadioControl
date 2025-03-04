@@ -52,59 +52,59 @@
 // ************************************************************************************
 /*********************************************************************************************************************************/
 
-#define PACEMAKER 5          // 5ms means about 210 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-#define CE_PIN 7             // for SPI to nRF24L01
-#define CSN_PIN 8            // for SPI to nRF24L01
-#define BUDDYPPMPORT 10      // wired Buddybox PPM pin number
-#define LOSTCONTACTCUTOFF 1  // packets to lose before declaring lost contact (only one)
-#define TIMEFORTXMANAGMENT 1 // 3? seems best!  ...  How many ms must remain spare between data packets before daring to undertake more trivial tasks
-#define BINDINGTIME 2000     // 2 seconds to bind ?
-#define CHANNELSUSED 16
-#define UNCOMPRESSEDWORDS 20              // these are all bigger than needed
-#define COMPRESSEDWORDS 20                // these are all bigger than needed
-#define SENDBUFFERSIZE 20                 // these are all bigger than needed
-#define DEFAULTPIPEADDRESS 0xB7BE3E9423LL // Pipe address for startup - any value but MUST match RX
-#define MAXMIXES 32                       // 32 mixes
-#define TICKSPERMINUTE 60000              // millis() = 60000 per minute
-#define PROPOCHANNELS 8                   // Only 4 have knobs / 2 sticks (= 4 hall sensors)
-#define BANKSWITCH 4                      // Default BANK switch
-#define AUTOSWITCH 1                      // Default AUTO switch
-#define BANKSUSED 4                       // Flight modes (AKA Banks)
-#define LOWBATTERY 42                     // Default percent for warning (User definable)
-#define DEFAULTTRIMREPEATSPEED 600
+#define PACEMAKER 5                           // 5ms means about 210 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define CE_PIN 7                              // for SPI to nRF24L01
+#define CSN_PIN 8                             // for SPI to nRF24L01
+#define BUDDYPPMPORT 10                       // wired Buddybox PPM pin number
+#define LOSTCONTACTCUTOFF 1                   // packets to lose before declaring lost contact (only one)
+#define TIMEFORTXMANAGMENT 1                  // 3? seems best!  ...  How many ms must remain spare between data packets before daring to undertake more trivial tasks
+#define BINDINGTIME 2000                      // 2 seconds to bind ?
+#define CHANNELSUSED 16                       // 16 channels in use (0 - 15)  (was 8)  ... 16 is the maximum number of channels that can be used
+#define UNCOMPRESSEDWORDS 20                  // these are all bigger than needed
+#define COMPRESSEDWORDS 20                    // these are all bigger than needed
+#define SENDBUFFERSIZE 20                     // these are all bigger than needed
+#define DEFAULTPIPEADDRESS 0xB7BE3E9423LL     // Pipe address for startup - any value but MUST match RX
+#define MAXMIXES 32                           // 32 mixes
+#define TICKSPERMINUTE 60000                  // millis() = 60000 per minute
+#define PROPOCHANNELS 8                       // Only 4 have knobs / 2 sticks (= 4 hall sensors)
+#define BANKSWITCH 4                          // Default BANK switch
+#define AUTOSWITCH 1                          // Default AUTO switch
+#define BANKSUSED 4                           // Flight modes (AKA Banks)
+#define LOWBATTERY 42                         // Default percent for warning (User definable)
+#define DEFAULTTRIMREPEATSPEED 600            // 600ms between trim repeats
 #define INACTIVITYTIMEOUT 10 * TICKSPERMINUTE // Default time after which to switch off
 #define INACTIVITYMINIMUM 05 * TICKSPERMINUTE // Inactivity timeout minimum is 5 minutes
 #define INACTIVITYMAXIMUM 30 * TICKSPERMINUTE // Inactivity timeout maximum is 30 minutes
 #define DS1307_ADDRESS 0x68                   // I2C address for RTC
-#define MAXLINES 60 // text to load at once for help screens
-#define DEFAULT_EXPO 50          // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
-#define CHARSMAX 250             // Max length for char arrays  (was 120)
-#define DEFAULTLEDBRIGHTNESS 20  // LED brightness
-#define DEFAULTPOWEROFFWARNING 2 // Default time to warn before cutting power
-#define MAXDUALRATE 200
-#define MAXBUFFERSIZE 1024 * 6
-#define MAXMODELNUMBER 91
-#define RED_LED_ON_TIME 2000        // How many ms of no connection before RED led comes on
-#define LOW_VOLTAGE_TIME 10000      // How many ms to endure low voltage before announcing it. (10 seconds)
-#define MAXSHOWCOMMSSESCONDS 6      // Assess average connection quality over most recent 6 seconds continously
-#define SHOWCOMMSDELAY 100          // ms pauses between updated info on NEXTION
-#define WARMUPDELAY 300             // fails at 200 so must be >200 ...
-#define SCREENCHANGEWAIT 10         // allow 10ms for screen to appear
-#define BATTERY_CHECK_INTERVAL 1000 // 2 seconds between battery checks
-#define PARAMETERSENDREPEATS 3      // How many times to send each parameter in case it gets lost
-#define MAXPARAMETERS 7             // Max types of parameters packet to send  ... will increase.
-#define POWERONOFFDELAY 2000        // Delay after power on before power off button is active
-                                    // and delay after power off before power on button is active
+#define MAXLINES 60                           // text to load at once for help screens
+#define DEFAULT_EXPO 50                       // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
+#define CHARSMAX 250                          // Max length for char arrays  (was 120)
+#define DEFAULTLEDBRIGHTNESS 20               // LED brightness
+#define DEFAULTPOWEROFFWARNING 2              // Default time to warn before cutting power
+#define MAXDUALRATE 200                       // 200% is the maximum dual rate
+#define MAXBUFFERSIZE 1024 * 6                // 6KB is the maximum buffer size
+#define MAXMODELNUMBER 91                     // 91 models is the maximum number of models
+#define RED_LED_ON_TIME 2000                  // How many ms of no connection before RED led comes on
+#define LOW_VOLTAGE_TIME 10000                // How many ms to endure low voltage before announcing it. (10 seconds)
+#define MAXSHOWCOMMSSESCONDS 6                // Assess average connection quality over most recent 6 seconds continously
+#define SHOWCOMMSDELAY 100                    // ms pauses between updated info on NEXTION
+#define WARMUPDELAY 300                       // fails at 200 so must be >200 ...
+#define SCREENCHANGEWAIT 10                   // allow 10ms for screen to appear
+#define BATTERY_CHECK_INTERVAL 1000           // 2 seconds between battery checks
+#define PARAMETERSENDREPEATS 3                // How many times to send each parameter in case it gets lost
+#define MAXPARAMETERS 7                       // Max types of parameters packet to send  ... will increase.
+#define POWERONOFFDELAY 2000                  // Delay after power on before power off button is active
+                                              // and delay after power off before power on button is active
 
 // **************************************************************************
 //                        SIGNAL QUALITY MONITORING                          *
 // See CLAUDESOFAR.TXT for implementation details
 //***************************************************************************
 
-//#define TESTSIGNALMSGS 1
+// #define TESTSIGNALMSGS 1
 #define SIGNAL_QUALITY_GOOD 90             // Success rate above this percentage is considered good quality
-#define SIGNAL_QUALITY_WARNING 60          // Success rate below this percentage but above SIGNAL_QUALITY_CRITICAL triggers warning
-#define SIGNAL_QUALITY_CRITICAL 40         // Success rate below this percentage is considered critical
+#define SIGNAL_QUALITY_WARNING 50          // Success rate below this percentage but above SIGNAL_QUALITY_CRITICAL triggers warning
+#define SIGNAL_QUALITY_CRITICAL 35         // Success rate below this percentage is considered critical
 #define WARNING_NOTIFICATION_INTERVAL 5000 // Minimum time between warning notifications (ms)
 
 // Global variables for signal quality monitoring - ADDED BY CLAUDE 3.7 CODE FEB 28 2025
@@ -303,7 +303,7 @@ bool UsingHighVolumeForWarning = false;     // Whether we're currently using hig
 #define BINDNEEDED 27
 #define MMFOUND 28
 #define MMMATCHED 29
-//  #define MMNOTFOUND      30
+//  #define MMNOTFOUND      30 // Spare
 #define MOTORON 31
 #define MOTOROFF 32
 #define STORAGECHARGE 33
