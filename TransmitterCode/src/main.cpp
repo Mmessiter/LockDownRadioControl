@@ -179,6 +179,7 @@
 #include "Hardware/LogFilesList.h"
 #include "Hardware/Help.h"
 #include "Hardware/LogFilesDisplay.h"
+
 #ifdef USE_BTLE
 #include "Hardware/BTLE.h"
 #endif
@@ -3397,6 +3398,7 @@ bool handleClickCommands() {
     return false; // No click command was handled
 }
 
+
 /*********************************************************************************************************************************
  *                          BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)                                            *
  *********************************************************************************************************************************/
@@ -3509,22 +3511,6 @@ FASTRUN void ButtonWasPressed()
         char FailSAVE[] = "FailSAVE";
         char FailSafe[] = "FailSafe";
         char fs[16][5] = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
-        char CH1NAME[] = "CH1NAME=";
-        char CH2NAME[] = "CH2NAME=";
-        char CH3NAME[] = "CH3NAME=";
-        char CH4NAME[] = "CH4NAME=";
-        char CH5NAME[] = "CH5NAME=";
-        char CH6NAME[] = "CH6NAME=";
-        char CH7NAME[] = "CH7NAME=";
-        char CH8NAME[] = "CH8NAME=";
-        char CH9NAME[] = "CH9NAME=";
-        char CH10NAME[] = "CH10NAME=";
-        char CH11NAME[] = "CH11NAME=";
-        char CH12NAME[] = "CH12NAME=";
-        char CH13NAME[] = "CH13NAME=";
-        char CH14NAME[] = "CH14NAME=";
-        char CH15NAME[] = "CH15NAME=";
-        char CH16NAME[] = "CH16NAME=";
         char HelpView[] = "HelpView";
         char SendModel[] = "SendModel";
         char Exrite[] = "Exrite";
@@ -3897,135 +3883,6 @@ FASTRUN void ButtonWasPressed()
             CurrentView = INPUTS_VIEW;
             UpdateButtonLabels();
             UpdateModelsNameEveryWhere();
-            ClearText();
-            return;
-        }
-
-        if (InStrng(CH1NAME, TextIn) > 0)
-        {
-            p = InStrng(CH1NAME, TextIn);
-            i = p + 7;
-            DoNewChannelName(1, i);
-            ClearText();
-            return;
-        }
-        if (InStrng(CH2NAME, TextIn) > 0)
-        {
-            p = InStrng(CH2NAME, TextIn);
-            i = p + 7;
-            DoNewChannelName(2, i);
-            ClearText();
-            return;
-        }
-        if (InStrng(CH3NAME, TextIn) > 0)
-        {
-            p = InStrng(CH3NAME, TextIn);
-            i = p + 7;
-            DoNewChannelName(3, i);
-            ClearText();
-            return;
-        }
-        if (InStrng(CH4NAME, TextIn) > 0)
-        {
-            p = InStrng(CH4NAME, TextIn);
-            i = p + 7;
-            DoNewChannelName(4, i);
-            ClearText();
-            return;
-        }
-        if (InStrng(CH5NAME, TextIn) > 0)
-        {
-            p = InStrng(CH5NAME, TextIn);
-            i = p + 7;
-            DoNewChannelName(5, i);
-            ClearText();
-            return;
-        }
-        if (InStrng(CH6NAME, TextIn) > 0)
-        {
-            p = InStrng(CH6NAME, TextIn);
-            i = p + 7;
-            DoNewChannelName(6, i);
-            ClearText();
-            return;
-        }
-        if (InStrng(CH7NAME, TextIn) > 0)
-        {
-            p = InStrng(CH7NAME, TextIn);
-            i = p + 7;
-            DoNewChannelName(7, i);
-            ClearText();
-            return;
-        }
-        if (InStrng(CH8NAME, TextIn) > 0)
-        {
-            p = InStrng(CH8NAME, TextIn);
-            i = p + 7;
-            DoNewChannelName(8, i);
-            ClearText();
-            return;
-        }
-        if (InStrng(CH9NAME, TextIn) > 0)
-        {
-            p = InStrng(CH9NAME, TextIn);
-            i = p + 7;
-            DoNewChannelName(9, i);
-            ClearText();
-            return;
-        }
-        if (InStrng(CH10NAME, TextIn) > 0)
-        {
-            p = InStrng(CH10NAME, TextIn);
-            i = p + 8;
-            DoNewChannelName(10, i);
-            ClearText();
-            return;
-        }
-        if (InStrng(CH11NAME, TextIn) > 0)
-        {
-            p = InStrng(CH11NAME, TextIn);
-            i = p + 8;
-            DoNewChannelName(11, i);
-            ClearText();
-            return;
-        }
-        if (InStrng(CH12NAME, TextIn) > 0)
-        {
-            p = InStrng(CH12NAME, TextIn);
-            i = p + 8;
-            DoNewChannelName(12, i);
-            ClearText();
-            return;
-        }
-        if (InStrng(CH13NAME, TextIn) > 0)
-        {
-            p = InStrng(CH13NAME, TextIn);
-            i = p + 8;
-            DoNewChannelName(13, i);
-            ClearText();
-            return;
-        }
-        if (InStrng(CH14NAME, TextIn) > 0)
-        {
-            p = InStrng(CH14NAME, TextIn);
-            i = p + 8;
-            DoNewChannelName(14, i);
-            ClearText();
-            return;
-        }
-        if (InStrng(CH15NAME, TextIn) > 0)
-        {
-            p = InStrng(CH15NAME, TextIn);
-            i = p + 8;
-            DoNewChannelName(15, i);
-            ClearText();
-            return;
-        }
-        if (InStrng(CH16NAME, TextIn) > 0)
-        {
-            p = InStrng(CH16NAME, TextIn);
-            i = p + 8;
-            DoNewChannelName(16, i);
             ClearText();
             return;
         }
