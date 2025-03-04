@@ -1,4 +1,4 @@
-# CLAUDE CODE IMPROVEMENTS TO LOCKDOWN RADIO CONTROL - FEBRUARY/MARCH 2025
+# CLAUDE CODE IMPROVEMENTS TO LOCKDOWN RADIO CONTROL - FEBRUARY/MARCH/APRIL 2025
 
 ## Overview
 This document summarizes improvements made to the Lockdown Radio Control codebase with Claude Code's assistance in February and March 2025. It serves as documentation for the changes implemented, focusing on the new signal quality monitoring and warning system.
@@ -124,7 +124,7 @@ We fixed an issue where the system would incorrectly display weak signal warning
 
 #### 1. 1Definitions.h
 - Added new constants:
-  - `SIGNAL_DEGRADATION_DELAY` (3000ms) - Time to suppress warnings after signal drops
+  - `SIGNAL_DEGRADATION_DELAY` (initially 3000ms, increased to 6000ms) - Time to suppress warnings after signal drops
 - Added new global variables:
   - `InSuddenDisconnect` - Tracks if we're in a sudden disconnect state
   - `QualityDropStartTime` - When the sudden quality drop was first detected 
@@ -134,8 +134,9 @@ We fixed an issue where the system would incorrectly display weak signal warning
 - Enhanced `CheckSignalQuality()` to:
   - Track signal quality over time
   - Detect sudden drops in signal quality from good (≥90%) to poor
-  - Suppress warnings for 3 seconds after such drops
+  - Suppress warnings for 6 seconds after such drops (increased from 3 seconds)
   - Distinguish between gradual signal degradation and sudden disconnections
+  - Recognize severe signal drops (≤30%, increased from 5%) as intentional disconnections
 - Improved `ClearSuccessRate()` to properly reset all warning variables
 
 #### 3. main.cpp
@@ -146,7 +147,8 @@ We fixed an issue where the system would incorrectly display weak signal warning
 1. **Smart Disconnection Detection**:
    - Tracks signal quality over time
    - Identifies sudden drop patterns that indicate end-of-flight disconnection
-   - Suppresses warnings for 3 seconds after such drops
+   - Suppresses warnings for 6 seconds after such drops
+   - Recognizes severe signal drops (≤30%) as intentional disconnections
    - Still warns for genuine signal degradation during flight
 
 2. **Improved User Experience**:
@@ -161,6 +163,42 @@ We fixed an issue where the system would incorrectly display weak signal warning
 - Confirmed that both scenarios work correctly:
   - Shows warnings during actual signal degradation in flight
   - Suppresses false warnings when disconnecting at the end of a flight
+
+## LED Brightness Restoration System - April 3, 2025
+
+### Problem Addressed
+Fixed an issue where the status LED would remain at full brightness (255) after a warning condition ended, instead of returning to the user's configured brightness level. This improves the visual feedback system by making the LED behavior more consistent and less distracting.
+
+### Files Modified
+
+#### 1. main.cpp
+- Completely redesigned the `UpdateLED()` function to:
+  - Work properly in both menu settings and warning transitions
+  - Directly update the LED hardware for immediate effect
+  - Handle both red and green LED states correctly
+  - Provide better brightness restoration
+
+#### 2. Utilities.h
+- Modified all locations that set `LedIsBlinking = false` to properly call `UpdateLED()`
+- Improved the `GetLEDBrightness()` function with clearer documentation
+- Enhanced all warning state transitions to ensure proper LED brightness management
+
+### Key Features Implemented
+
+1. **Improved LED Brightness Control**:
+   - Proper restoration of user-configured brightness after warnings
+   - Immediate effect when transitioning between states
+   - Consistent behavior across all conditions
+
+2. **Better Code Organization**:
+   - Clearly documented LED behavior
+   - Explicit brightness management
+   - Consistent handling across all warning state changes
+
+### Testing Results
+- Verified that LED brightness properly returns to configured level after warnings
+- Confirmed that transitions between states are immediate and reliable
+- Ensured that all warning detection features still work properly
 
 ## Next Steps to Consider
 
