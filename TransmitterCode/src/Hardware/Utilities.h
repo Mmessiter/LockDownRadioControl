@@ -104,10 +104,10 @@ void CheckSignalQuality() {
         InSuddenDisconnect = false;
     }
     
-    // Handle the case of complete disconnection (receiver power off)
+    // Handle the case of complete or very severe disconnection (receiver power off)
     // This is a secondary protection for very low quality
-    if (LedWasGreen && currentSuccessRate <= 5) {
-        // This is very likely a receiver power-off
+    if (LedWasGreen && currentSuccessRate <= 30) {  // Increased threshold from 5 to 30
+        // This is very likely a receiver power-off or end-of-flight disconnection
         InSuddenDisconnect = true;
         
         // Force all warnings off immediately
