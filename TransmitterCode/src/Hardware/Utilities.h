@@ -37,21 +37,106 @@ FASTRUN void ForceWarningLabelOff() {
 // We've updated the existing ClearSuccessRate function to handle our new variables
 
 /**
- * @brief Checks signal quality and triggers warnings if needed
+ * @brief Checks signal quality and manages warnings with intelligent delay detection
  * 
- * This function evaluates the current connection quality and shows
- * appropriate warnings when quality drops below thresholds.
+ * This function implements a smart warning system that:
+ * 1. Detects sudden signal quality drops (likely end-of-flight disconnections)
+ * 2. Delays warnings when quality drops suddenly from good to bad
+ * 3. Provides immediate warnings for gradual degradation
  * 
- * See CLAUDESOFAR.TXT for detailed implementation history and functionality.
+ * IMPROVED BY CLAUDE 3.7 CODE MAR 4 2025: Added smart delay for end-of-flight disconnects
  */
 void CheckSignalQuality() {
     static uint8_t lastDisplayedState = 4; // Initialize to invalid value to force first update
     static uint32_t lastForcedClearTime = 0; // Timer for periodic forced clearing
-    // Use global connectionEstablishedTime variable instead of local static
-    // FIXED BY CLAUDE 3.7 CODE MAR 3 2025: Removed local static variable in favor of global
     
-    // NUCLEAR SOLUTION - Periodically force the warning display to correct state
-    // This runs regardless of other conditions to ensure the UI stays in the right state
+    // Get current signal quality
+    uint16_t currentSuccessRate = GetSuccessRate();
+    
+    // =============== DETECT SUDDEN SIGNAL DROPS ===============
+    // Check for sudden drop in signal quality from good to bad
+    // This is the key insight: when signal was good and suddenly drops, it's often
+    // because the model is being disconnected at the end of a flight
+    if (PreviousConnectionQuality >= SIGNAL_QUALITY_GOOD && currentSuccessRate <= SIGNAL_QUALITY_WARNING) {
+        // First time detecting a sudden drop
+        if (QualityDropStartTime == 0) {
+            QualityDropStartTime = millis();
+            
+            // Immediately suppress warnings
+            SignalQualityWarningActive = false;
+            InSuddenDisconnect = true;
+            
+            // Force UI cleanup
+            if (CurrentView == FRONTVIEW) {
+                char WarnOff[] = "vis Warning,0";
+                char FrontView_Connected[] = "Connected";
+                SendCommand(WarnOff);
+                SendText(FrontView_Connected, FrontView_Connected);
+            }
+        }
+        
+        // Continue suppressing warnings during delay period
+        if (millis() - QualityDropStartTime < SIGNAL_DEGRADATION_DELAY) {
+            // Keep warnings suppressed during delay period
+            InSuddenDisconnect = true;
+            SignalQualityWarningActive = false;
+            
+            // Periodically update UI to ensure warnings stay suppressed
+            if (millis() - lastForcedClearTime >= 250) {
+                lastForcedClearTime = millis();
+                
+                if (CurrentView == FRONTVIEW) {
+                    char WarnOff[] = "vis Warning,0";
+                    char FrontView_Connected[] = "Connected";
+                    SendCommand(WarnOff);
+                    SendText(FrontView_Connected, FrontView_Connected);
+                }
+            }
+            
+            // Save current quality for next comparison
+            PreviousConnectionQuality = currentSuccessRate;
+            return;
+        }
+    }
+    // If signal returns to good quality, reset the drop timer
+    else if (currentSuccessRate >= SIGNAL_QUALITY_GOOD) {
+        QualityDropStartTime = 0;
+        InSuddenDisconnect = false;
+    }
+    
+    // Handle the case of complete disconnection (receiver power off)
+    // This is a secondary protection for very low quality
+    if (LedWasGreen && currentSuccessRate <= 5) {
+        // This is very likely a receiver power-off
+        InSuddenDisconnect = true;
+        
+        // Force all warnings off immediately
+        SignalQualityWarningActive = false;
+        LedIsBlinking = false;
+        PreviousConnectionQualityState = 0; // Reset to good state
+        
+        // Restore audio volume if it was increased for warning
+        if (UsingHighVolumeForWarning) {
+            SetAudioVolume(SavedAudioVolume);
+            UsingHighVolumeForWarning = false;
+        }
+        
+        // Hide warnings on display - only visual aspects depend on current view
+        if (CurrentView == FRONTVIEW) {
+            char WarnOff[] = "vis Warning,0";
+            char FrontView_Connected[] = "Connected";
+            SendCommand(WarnOff);
+            SendText(FrontView_Connected, FrontView_Connected);
+        }
+        
+        // Save current quality for next comparison
+        PreviousConnectionQuality = currentSuccessRate;
+        return;
+    }
+    
+    // Save current quality for next comparison
+    PreviousConnectionQuality = currentSuccessRate;
+    
     if (millis() - lastForcedClearTime >= 500) { // Every 500ms
         lastForcedClearTime = millis();
         
@@ -60,9 +145,6 @@ void CheckSignalQuality() {
             char FrontView_Connected[] = "Connected";
             char SignalWarningCritical[] = "!!! CRITICAL SIGNAL !!!";
             char SignalWarning[] = "** WEAK SIGNAL **";
-            
-            // NUCLEAR SOLUTION: Always hide the Warning label, regardless of state
-            // Always force Warning to be invisible no matter what
             SendCommand(WarnOff);
             
             // If signal quality warning should be active, display the warning text
@@ -80,81 +162,84 @@ void CheckSignalQuality() {
         }
     }
     
-    // Only check if we're connected and model matched
-    if (!LedWasGreen || !BoundFlag || !ModelMatched) {
+    // Check for intentional disconnection (power off button pressed)
+    if (!digitalRead(BUTTON_SENSE_PIN)) {
+        // Power button is pressed - this is likely an intentional disconnect
+        // Clear any active warnings immediately
         if (SignalQualityWarningActive) {
-            // If warning was active but connection is lost, explicitly clear it
+            // Always turn off warning state and LED blinking regardless of current view
             SignalQualityWarningActive = false;
-            
-            // Reset display state directly instead of using helper function
-            char WarnOff[] = "vis Warning,0";
-            char FrontView_Connected[] = "Connected";
-            
-            if (CurrentView == FRONTVIEW) {
-                SendCommand(WarnOff);
-                SendText(FrontView_Connected, FrontView_Connected);
-            }
-            
             LedIsBlinking = false;
-            lastDisplayedState = 4; // Reset to invalid state
             
-            // Restore audio volume when warnings are cleared
+            // Restore audio volume regardless of current view
             if (UsingHighVolumeForWarning) {
                 SetAudioVolume(SavedAudioVolume);
                 UsingHighVolumeForWarning = false;
+            }
+            
+            // Update visual elements only when on FRONTVIEW
+            if (CurrentView == FRONTVIEW) {
+                char WarnOff[] = "vis Warning,0";
+                char FrontView_Connected[] = "Connected";
+                SendCommand(WarnOff);
+                SendText(FrontView_Connected, FrontView_Connected);
             }
         }
         
-        // Reset connection established time when disconnected
-        connectionEstablishedTime = 0;
-        return;
+        return; // Skip further checks when intentionally disconnecting
     }
     
-    // Track when the connection was established
-    if (connectionEstablishedTime == 0) {
-        connectionEstablishedTime = millis();
-    }
-    
-    // Don't show quality warnings until connection has been stable for at least 5 seconds
-    // FIXED BY CLAUDE 3.7 CODE MAR 3 2025: Added 5-second delay after initial connection
-    // FIXED BY CLAUDE 3.7 CODE MAR 3 2025: Prevent unnecessary "connection good" announcements
-    const uint32_t CONNECTION_STABILITY_DELAY = 5000; // 5 seconds
-    if (millis() - connectionEstablishedTime < CONNECTION_STABILITY_DELAY) {
-        // Still in initial connection phase - don't show warnings
+    // Only check if we're connected and model matched
+    if (!LedWasGreen || !BoundFlag || !ModelMatched) {
+        // If warning was active but connection is lost, explicitly clear it
         if (SignalQualityWarningActive) {
-            // Clear any active warnings during initial connection phase
+            // Always turn off warnings and LED blinking regardless of current view
             SignalQualityWarningActive = false;
-            
-            char WarnOff[] = "vis Warning,0";
-            char FrontView_Connected[] = "Connected";
-            
-            if (CurrentView == FRONTVIEW) {
-                SendCommand(WarnOff);
-                SendText(FrontView_Connected, FrontView_Connected);
-            }
-            
             LedIsBlinking = false;
+            lastDisplayedState = 4; // Reset to invalid state
             
-            // Restore audio volume when warnings are cleared
+            // Restore audio volume regardless of current view
             if (UsingHighVolumeForWarning) {
                 SetAudioVolume(SavedAudioVolume);
                 UsingHighVolumeForWarning = false;
             }
+            
+            // Update visual elements only when on FRONTVIEW
+            if (CurrentView == FRONTVIEW) {
+                char WarnOff[] = "vis Warning,0";
+                char FrontView_Connected[] = "Connected";
+                SendCommand(WarnOff);
+                SendText(FrontView_Connected, FrontView_Connected);
+            }
         }
-        // Mark the initial state so we don't trigger "good" announcements for new connections
-        lastDisplayedState = 0; // Set to good state to avoid announcements
+        
+        // Reset connection established time and quality drop timer when disconnected
+        connectionEstablishedTime = 0;
+        QualityDropStartTime = 0;
         return;
     }
     
-    // Calculate current quality 
-    uint8_t quality = GetSuccessRate();
+    // Don't show warnings during initial connection period either
+    // Track when the connection was established
+    if (connectionEstablishedTime == 0) {
+        connectionEstablishedTime = millis();
+        // Reset quality drop timer on new connection
+        QualityDropStartTime = 0;
+    }
     
-    // Determine the current quality state
+    // Wait for initial connection stability before showing warnings
+    const uint32_t CONNECTION_STABILITY_DELAY = 5000; // 5 seconds
+    if (millis() - connectionEstablishedTime < CONNECTION_STABILITY_DELAY) {
+        // Don't show warnings during initial connection period
+        return;
+    }
+    
+    // Calculate current quality state (good, warning, critical)
     uint8_t currentState = 0;  // 0=good, 1=warning, 2=critical
     
-    if (quality <= SIGNAL_QUALITY_CRITICAL) {
+    if (currentSuccessRate <= SIGNAL_QUALITY_CRITICAL) {
         currentState = 2; // Critical signal quality
-    } else if (quality <= SIGNAL_QUALITY_WARNING) {
+    } else if (currentSuccessRate <= SIGNAL_QUALITY_WARNING) {
         currentState = 1; // Warning level signal quality
     } else {
         currentState = 0; // Good signal quality
@@ -163,96 +248,97 @@ void CheckSignalQuality() {
     // Update the global state
     PreviousConnectionQualityState = currentState;
     
-    // Direct UI control instead of using helper functions
-    if (CurrentView == FRONTVIEW) {
-        // Removed WarnNow - we never want to show the Warning label
-        char WarnOff[] = "vis Warning,0";
-        char FrontView_Connected[] = "Connected";
-        char SignalWarningCritical[] = "!!! CRITICAL SIGNAL !!!";
-        char SignalWarning[] = "** WEAK SIGNAL **";
-        char SignalGood[] = "CONNECTION GOOD";
+    // Don't show warnings if we're in a sudden disconnect scenario
+    if (InSuddenDisconnect) {
+        return;
+    }
+    
+    char WarnOff[] = "vis Warning,0";
+    char FrontView_Connected[] = "Connected";
+    char SignalWarningCritical[] = "!!! CRITICAL SIGNAL !!!";
+    char SignalWarning[] = "** WEAK SIGNAL **";
+    char SignalGood[] = "CONNECTION GOOD";
+    
+    // Only update UI when:
+    // 1. State changes
+    // 2. State is warning/critical and periodic update is needed
+    bool stateChanged = (currentState != lastDisplayedState);
+    bool periodicUpdateNeeded = (currentState > 0) && 
+                               (millis() - LastQualityWarningTime >= WARNING_NOTIFICATION_INTERVAL);
+    
+    if (stateChanged || periodicUpdateNeeded) {
+        // Increase volume for warnings - do this regardless of current view
+        if ((currentState > 0) && !UsingHighVolumeForWarning) {
+            // Only save the volume once when transitioning from good to warning state
+            SavedAudioVolume = AudioVolume;
+            SetAudioVolume(90); // Set to 90% volume for warnings
+            UsingHighVolumeForWarning = true;
+        } 
+        // Restore audio volume when returning to good state
+        else if ((currentState == 0) && UsingHighVolumeForWarning) {
+            SetAudioVolume(SavedAudioVolume);
+            UsingHighVolumeForWarning = false;
+        }
         
-        // Only update UI when:
-        // 1. State changes
-        // 2. State is warning/critical and periodic update is needed
-        // 3. We've never displayed this state before
-        bool stateChanged = (currentState != lastDisplayedState);
-        bool periodicUpdateNeeded = (currentState > 0) && 
-                                   (millis() - LastQualityWarningTime >= WARNING_NOTIFICATION_INTERVAL);
+        // Play sound based on state transition - do this regardless of current view
+        if (stateChanged) {
+            if (currentState == 0) {
+                // Only announce "CONNECTION GOOD" if we're recovering from a bad state
+                if (lastDisplayedState > 0 && lastDisplayedState != 4) {
+                    PlaySound(CONNECTION_GOOD);
+                }
+            } else if (currentState == 1) {
+                PlaySound(CONNECTION_WARNING);
+                WarningSound = CONNECTION_WARNING;
+            } else {
+                PlaySound(CONNECTION_CRITICAL);
+                WarningSound = CONNECTION_CRITICAL;
+            }
+        } 
+        // For periodic updates of warning/critical states - do this regardless of current view
+        else if (periodicUpdateNeeded) {
+            if (currentState == 2) {
+                PlaySound(CONNECTION_CRITICAL);
+                WarningSound = CONNECTION_CRITICAL;
+            } else if (currentState == 1) {
+                PlaySound(CONNECTION_WARNING);
+                WarningSound = CONNECTION_WARNING;
+            }
+        }
         
-        if (stateChanged || periodicUpdateNeeded) {
-            // Increase volume for warnings
-            if ((currentState > 0) && !UsingHighVolumeForWarning) {
-                // Only save the volume once when transitioning from good to warning state
-                SavedAudioVolume = AudioVolume;
-                SetAudioVolume(90); // Set to 90% volume for warnings
-                UsingHighVolumeForWarning = true;
-            } 
-            // Restore audio volume when returning to good state
-            else if ((currentState == 0) && UsingHighVolumeForWarning) {
-                SetAudioVolume(SavedAudioVolume);
-                UsingHighVolumeForWarning = false;
-            }
-            
-            // Play sound based on state transition
-            if (stateChanged) {
-                if (currentState == 0) {
-                    // Only announce "CONNECTION GOOD" if we're recovering from a bad state
-                    // FIXED BY CLAUDE 3.7 CODE MAR 3 2025: Only announce good quality when recovering
-                    if (lastDisplayedState > 0 && lastDisplayedState != 4) {
-                        PlaySound(CONNECTION_GOOD);
-                    }
-                } else if (currentState == 1) {
-                    PlaySound(CONNECTION_WARNING);
-                    WarningSound = CONNECTION_WARNING;
-                } else {
-                    PlaySound(CONNECTION_CRITICAL);
-                    WarningSound = CONNECTION_CRITICAL;
-                }
-            } 
-            // For periodic updates of warning/critical states
-            else if (periodicUpdateNeeded) {
-                if (currentState == 2) {
-                    PlaySound(CONNECTION_CRITICAL);
-                    WarningSound = CONNECTION_CRITICAL;
-                } else if (currentState == 1) {
-                    PlaySound(CONNECTION_WARNING);
-                    WarningSound = CONNECTION_WARNING;
-                }
-            }
-            
+        // Set LED blinking state regardless of current view
+        if (currentState == 0) {
+            LedIsBlinking = false;
+        } else {
+            LedIsBlinking = true;
+        }
+        
+        // Signal quality warning state tracking happens regardless of current view
+        SignalQualityWarningActive = (currentState > 0);
+        
+        // Update visual UI only when on FRONTVIEW
+        if (CurrentView == FRONTVIEW) {
             // Always update the UI when state changes or periodic update is needed
             if (currentState == 0) {
                 // Only show "CONNECTION GOOD" message when transitioning from a bad state
-                // FIXED BY CLAUDE 3.7 CODE MAR 3 2025: Only show message when recovering
                 if (stateChanged && lastDisplayedState > 0 && lastDisplayedState != 4) {
                     SendCommand(WarnOff);
                     SendText(FrontView_Connected, SignalGood);
-                    LedIsBlinking = false;
-                    SignalQualityWarningActive = false;
                 } else if (stateChanged) {
                     // Just reset the state without showing a message
                     SendCommand(WarnOff);
                     SendText(FrontView_Connected, FrontView_Connected);
-                    LedIsBlinking = false;
-                    SignalQualityWarningActive = false;
                 }
             } else {
                 // For warning/critical, always update UI text but HIDE the Warning label
                 SendCommand(WarnOff); // NUCLEAR FIX: Always hide the Warning label even for warnings
                 SendText(FrontView_Connected, (currentState == 2) ? SignalWarningCritical : SignalWarning);
-                LedIsBlinking = true;
-                SignalQualityWarningActive = true;
-                
-                // ULTRA-NUCLEAR FIX: Force it off again after a tiny delay to make sure
-                delay(1);
-                SendCommand(WarnOff);
             }
-            
-            // Update timers and state tracking
-            LastQualityWarningTime = millis();
-            lastDisplayedState = currentState;
         }
+        
+        // Update timers and state tracking
+        LastQualityWarningTime = millis();
+        lastDisplayedState = currentState;
     }
 }
 
@@ -1026,6 +1112,15 @@ int GetNextNumber(int p1, char text1[CHARSMAX])
 
 /*********************************************************************************************************************************/
 
+/**
+ * @brief Resets connection quality monitoring
+ * 
+ * This function resets all connection quality monitoring variables to their initial state.
+ * It's called when a new connection is established or when the system wants to clear
+ * any existing warning state.
+ * 
+ * IMPROVED BY CLAUDE 3.7 CODE MAR 4 2025: Added reset for warnings on disconnect
+ */
 void ClearSuccessRate()
 {
     for (int i = 0; i < (PERFECTPACKETSPERSECOND * (uint16_t)ConnectionAssessSeconds); ++i) { // 126 packets per second start off good
@@ -1045,6 +1140,29 @@ void ClearSuccessRate()
     // we'll ensure our state is consistently initialized
     // ADDED BY CLAUDE 3.7 CODE MAR 3 2025: Prevent unnecessary "connection good" announcements
     PreviousConnectionQualityState = 0; // Set to good state to avoid changing state
+    
+    // Reset drop timer to handle new disconnections properly
+    QualityDropStartTime = 0;
+    
+    // Reset previous connection quality to ensure fresh comparisons
+    PreviousConnectionQuality = 100;
+    
+    // Ensure sudden disconnect flag is cleared
+    InSuddenDisconnect = false;
+    
+    // Restore audio volume if it was changed for warning
+    if (UsingHighVolumeForWarning) {
+        SetAudioVolume(SavedAudioVolume);
+        UsingHighVolumeForWarning = false;
+    }
+    
+    // Clear visual warning when on FRONTVIEW
+    if (CurrentView == FRONTVIEW) {
+        char WarnOff[] = "vis Warning,0";
+        char FrontView_Connected[] = "Connected";
+        SendCommand(WarnOff);
+        SendText(FrontView_Connected, FrontView_Connected);
+    }
 }
 
 /*********************************************************************************************************************************/
