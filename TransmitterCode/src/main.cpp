@@ -226,21 +226,54 @@ void RedLedOn()
     char InVisible[]           = "vis Quality,0";
     char FrontView_Connected[] = "Connected";
     char WarnOff[]             = "vis Warning,0";
+    LedIsBlinking = false;
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
     if (LedWasGreen) {
-        if (AnnounceConnected & !BuddyPupilOnWireless) PlaySound(DISCONNECTEDMSG);
-        if (UseLog) LogDisConnection(); 
+        // Mark quality drop for sudden signal drop detection
+        // This would be the end of a flight when the receiver is powered off
+        QualityDropStartTime = millis();
+        InSuddenDisconnect = true;
         
+        // Always make sure to suppress disconnect message when signal drops suddenly 
+        // from good to bad (which happens when turning off the receiver)
+        if (AnnounceConnected && !BuddyPupilOnWireless && !InSuddenDisconnect) {
+            // Only play disconnect sound if it's not a sudden disconnect
+            if (PreviousConnectionQuality >= SIGNAL_QUALITY_GOOD) {
+                // Do not play sound for good-to-off transitions
+                // This is likely an end-of-flight disconnection
+            } else {
+                // Only play for gradual disconnections
+                PlaySound(DISCONNECTEDMSG);
+            }
+        }
+        
+        if (UseLog) LogDisConnection(); 
         ClearMostParameters();
+        
+        // Aggressively ensure warnings are cleared from display
         if (CurrentView == FRONTVIEW) {
-            SendText(FrontView_Connected, na);
-            SendCommand(WarnOff);
-            SendCommand(InVisible);
+            for (int i = 0; i < 3; i++) {
+                SendText(FrontView_Connected, na);
+                SendCommand(WarnOff);
+                SendCommand(InVisible);
+                delay(5); // Small delay to ensure commands are processed
+            }
+        }
+        
+        // Reset all signal quality monitoring variables
+        SignalQualityWarningActive = false;
+        PreviousConnectionQualityState = 0; // Reset to good state
+        LastQualityWarningTime = 0;
+        
+        // Restore audio volume to normal
+        if (UsingHighVolumeForWarning) {
+            SetAudioVolume(SavedAudioVolume);
+            UsingHighVolumeForWarning = false;
         }
     }
-     LedWasRed = true;
+    LedWasRed = true;
 }
 
 /*********************************************************************************************************************************/
@@ -4922,6 +4955,8 @@ void FASTRUN ManageTransmitter()
     static uint32_t         LastParameterSent       = 0;
     uint32_t                RightNow                = millis();
     uint32_t                TXPacketElapsed         = RightNow - LastPacketSentTime;
+    char                    Connected[]             = "Connected";
+    char                    nc[]                    = "Not connected";
     
  // SendViaBLE();
 
@@ -4954,6 +4989,10 @@ void FASTRUN ManageTransmitter()
                 LastModelScreenCheck = RightNow; return;                                                       // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
             }
         }
+     if (LedWasRed && CurrentView == FRONTVIEW){
+        SendText(Connected, nc);                                                                               // Send the connected message
+     }
+
     }     
 
     if (RightNow - TransmitterLastManaged >= 50) {        // 50 = 20 times a second

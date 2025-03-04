@@ -103,9 +103,10 @@
 
 // #define TESTSIGNALMSGS 1
 #define SIGNAL_QUALITY_GOOD 90             // Success rate above this percentage is considered good quality
-#define SIGNAL_QUALITY_WARNING 50          // Success rate below this percentage but above SIGNAL_QUALITY_CRITICAL triggers warning
-#define SIGNAL_QUALITY_CRITICAL 35         // Success rate below this percentage is considered critical
+#define SIGNAL_QUALITY_WARNING 75          // Success rate below this percentage but above SIGNAL_QUALITY_CRITICAL triggers warning
+#define SIGNAL_QUALITY_CRITICAL 50         // Success rate below this percentage is considered critical
 #define WARNING_NOTIFICATION_INTERVAL 5000 // Minimum time between warning notifications (ms)
+#define SIGNAL_DEGRADATION_DELAY 6000   // Delay before showing warnings after sudden signal drop (ms)
 
 // Global variables for signal quality monitoring - ADDED BY CLAUDE 3.7 CODE FEB 28 2025
 uint8_t PreviousConnectionQualityState = 0; // 0=good, 1=warning, 2=critical
@@ -116,6 +117,9 @@ uint32_t LastSignalQualityRefresh = 0;      // Time of last forced refresh
 uint32_t connectionEstablishedTime = 0;     // Time when connection was first established
 uint8_t SavedAudioVolume = 0;               // Store user's volume setting during warnings
 bool UsingHighVolumeForWarning = false;     // Whether we're currently using high volume
+bool InSuddenDisconnect = false;            // Indicates sudden loss of connection - ADDED MAR 4 2025
+uint32_t QualityDropStartTime = 0;          // When signal quality first dropped - ADDED MAR 4 2025
+uint16_t PreviousConnectionQuality = 100;   // Previous connection quality percentage - ADDED MAR 4 2025
 
 // **************************************************************************
 //                            FHSS PARAMETERS                               *
