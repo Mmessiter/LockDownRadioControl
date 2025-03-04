@@ -112,7 +112,13 @@ void CheckSignalQuality() {
         
         // Force all warnings off immediately
         SignalQualityWarningActive = false;
-        LedIsBlinking = false;
+        
+        // Stop LED blinking and restore normal brightness
+        if (LedIsBlinking) {
+            LedIsBlinking = false;
+            UpdateLED(); // Force an immediate LED update to restore normal brightness
+        }
+        
         PreviousConnectionQualityState = 0; // Reset to good state
         
         // Restore audio volume if it was increased for warning
@@ -169,7 +175,12 @@ void CheckSignalQuality() {
         if (SignalQualityWarningActive) {
             // Always turn off warning state and LED blinking regardless of current view
             SignalQualityWarningActive = false;
-            LedIsBlinking = false;
+            
+            // Stop LED blinking and restore normal brightness
+            if (LedIsBlinking) {
+                LedIsBlinking = false;
+                UpdateLED(); // Force an immediate LED update to restore normal brightness
+            }
             
             // Restore audio volume regardless of current view
             if (UsingHighVolumeForWarning) {
@@ -195,7 +206,13 @@ void CheckSignalQuality() {
         if (SignalQualityWarningActive) {
             // Always turn off warnings and LED blinking regardless of current view
             SignalQualityWarningActive = false;
-            LedIsBlinking = false;
+            
+            // Stop LED blinking and restore normal brightness
+            if (LedIsBlinking) {
+                LedIsBlinking = false;
+                UpdateLED(); // Force an immediate LED update to restore normal brightness
+            }
+            
             lastDisplayedState = 4; // Reset to invalid state
             
             // Restore audio volume regardless of current view
@@ -308,7 +325,12 @@ void CheckSignalQuality() {
         
         // Set LED blinking state regardless of current view
         if (currentState == 0) {
-            LedIsBlinking = false;
+            // Returning to good state - stop blinking
+            if (LedIsBlinking) {
+                LedIsBlinking = false;
+                // Allow time for the LED brightness change to take effect
+                UpdateLED(); // Force an immediate LED update to restore normal brightness
+            }
         } else {
             LedIsBlinking = true;
         }
@@ -1030,11 +1052,11 @@ uint8_t GetLEDBrightness()
         BlinkOnPhase = 1;
     }
     if (BlinkOnPhase) {
-        if (LedIsBlinking) return 255;
-        return LEDBrightness; // 0 - 254 (= brightness)
+        if (LedIsBlinking) return 255;  // Full brightness during warning
+        return LEDBrightness;           // User-set brightness during normal operation (0-254)
     }
     else {
-        return 0;
+        return 0;  // Off during blink off-phase
     }
 }
 
