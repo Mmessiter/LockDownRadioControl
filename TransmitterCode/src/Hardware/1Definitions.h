@@ -101,7 +101,7 @@
 // See CLAUDESOFAR.TXT for implementation details
 //***************************************************************************
 
-// #define TESTSIGNALMSGS 1
+ //#define TESTSIGNALMSGS 1
 #define SIGNAL_QUALITY_GOOD 90             // Success rate above this percentage is considered good quality
 #define SIGNAL_QUALITY_WARNING 75          // Success rate below this percentage but above SIGNAL_QUALITY_CRITICAL triggers warning
 #define SIGNAL_QUALITY_CRITICAL 50         // Success rate below this percentage is considered critical

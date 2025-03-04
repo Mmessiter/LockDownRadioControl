@@ -1052,11 +1052,15 @@ uint8_t GetLEDBrightness()
         BlinkOnPhase = 1;
     }
     if (BlinkOnPhase) {
-        if (LedIsBlinking) return 255;  // Full brightness during warning
-        return LEDBrightness;           // User-set brightness during normal operation (0-254)
+        if (LedIsBlinking) {
+            // When warning is active, use max brightness for better visibility
+            return 255;  // Full brightness during warning blinking
+        }
+        // Normal operation - use user-set brightness
+        return LEDBrightness;  // User-set brightness (0-254)
     }
     else {
-        return 0;  // Off during blink off-phase
+        return 0;  // LED off during blink off-phase
     }
 }
 

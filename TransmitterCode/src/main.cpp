@@ -2495,11 +2495,29 @@ void RXOptionsViewEnd()
 /******************************************************************************************************************************/
 
 void UpdateLED()
-{ // LED Brightness has changed so this ensures it is redisplayed
-    char n1[]     = "n1";
-    LEDBrightness = GetValue(n1);
-    LEDBrightness = CheckRange(LEDBrightness, 1, 254);
-    LedWasGreen   = false; // Forces a redisplay if brightness has changed
+{ 
+    // This function updates LED brightness and ensures it's refreshed properly
+    // It can be called in two ways:
+    // 1. From menu - gets new brightness value from UI
+    // 2. After stopping warning blink - refreshes LEDs with current brightness
+
+    // Check if this is being called from the menu (where we need to get the value)
+    if (CurrentView == TXSETUPVIEW) {
+        char n1[] = "n1";
+        LEDBrightness = GetValue(n1);
+        LEDBrightness = CheckRange(LEDBrightness, 1, 254);
+    }
+    
+    // Force refresh by altering the LED state flags - this ensures LED will be updated
+    // with proper brightness on next loop
+    LedWasGreen = false;
+    
+    // Directly update the LED with current brightness right now for immediate effect
+    if (LedWasRed) {
+        analogWrite(REDLED, LEDBrightness);
+    } else {
+        analogWrite(GREENLED, LEDBrightness);
+    }
 }
 
 /******************************************************************************************************************************/
