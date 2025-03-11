@@ -1,5 +1,5 @@
 /** @file ReceiverCode/src/utilities/common.h */
-// Malcolm Messiter 2020 - 2024
+// Malcolm Messiter 2020 - 2025
 #ifndef _SRC_UTILITIES_COMMON_H
 #define _SRC_UTILITIES_COMMON_H
 
@@ -11,9 +11,8 @@
 
 #define RXVERSION_MAJOR   2
 #define RXVERSION_MINOR   4
-#define RXVERSION_MINIMUS 7 // 18 Novemeber 2024
-#define RXVERSION_EXTRA   'W' // now with GPS 
-
+#define RXVERSION_MINIMUS 7
+#define RXVERSION_EXTRA 'W' // 11 March 2025
 
 #define HOPTIME           17 // 47     //  17 gives 50Hz FHSS, 47 gives 20Hz FHSS
 #define RECEIVE_TIMEOUT   8  // 5 milliseconds is 'perfect' time between packets    
