@@ -548,9 +548,7 @@ FASTRUN void Reconnect()
         CurrentRadio->startListening();
         delayMicroseconds(STOPLISTENINGDELAY);
         ++Attempts;
-        if (Attempts < MAXTRIESPERTRANSCEIVER) {
-            TryToConnectNow();
-        }
+        TryToConnectNow();
         if (!Connected) {
 
 #ifdef SECOND_TRANSCEIVER
