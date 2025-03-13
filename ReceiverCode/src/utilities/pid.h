@@ -100,9 +100,14 @@ void Kalman_Filter_1d(float KalmanState, float KalmanUncertainty, float KalmanIn
 // This function gets the current attitude of the aircraft
 
 void GetCurrentAttitude(){
-  static uint32_t LoopTimer = micros();
-  if (micros() - LoopTimer < 5000) return;
-  LoopTimer = micros();
+ 
+  static uint32_t LoopTimer;
+
+  if (millis() - LoopTimer < 4)
+    return;
+
+  LoopTimer = millis();
+
   Read_MPU6050();               // Read the gyro and accelerometer
   
   RateRoll  -= RateCalibrationRoll;
@@ -117,11 +122,11 @@ void GetCurrentAttitude(){
   CurrentPitchAngle = Kalman1DOutput[0];
   KalmanUncertaintyAnglePitch = Kalman1DOutput[1];
 
-  // Serial.print("Roll Angle [°] ");
-  // Serial.print(CurrentRollAngle);
-  // Serial.print(" Pitch Angle [°] ");
-  // Serial.println(CurrentPitchAngle);
-  // // Serial.println(RateYaw);
+  Serial.print("Roll Angle [°] ");
+  Serial.println(CurrentRollAngle);
+ // Serial.print(" Pitch Angle [°] ");
+//  Serial.println(CurrentPitchAngle);
+ // Serial.println(RateYaw);
 }
 
 void DoStabilsation(){ 

@@ -870,16 +870,13 @@ void ClearBox()
 /*********************************************************************************************************************************/
 uint16_t GetSuccessRate()
 {
-    uint16_t Total = 0;
+    uint32_t Total = 0;
     uint16_t SuccessRate;
-    uint16_t Perfection = (PERFECTPACKETSPERSECOND * (uint16_t)ConnectionAssessSeconds);
 
-    for (uint16_t i = 0; i < Perfection; ++i) { // PERFECTPACKETSPERSECOND packets per second are either good or bad
+    for (uint16_t i = 0; i < PERFECTPACKETSPERSECOND; ++i)
         Total += PacketsHistoryBuffer[i];
-    }
-    
-    Total += ((Perfection - Total) / 2);        // about half made it but were simply unacknowledged
-    SuccessRate = (Total * 100) / Perfection;   // return a percentage of total good packets
+   
+    SuccessRate = (Total * 100) / PERFECTPACKETSPERSECOND; // return a percentage of total good packets
     return SuccessRate;
 }
 

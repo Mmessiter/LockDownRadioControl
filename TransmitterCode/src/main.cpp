@@ -1,5 +1,5 @@
 /** @file TransmitterCode/src/main.cpp
- * // Malcolm Messiter 2020 - 2024
+ * // Malcolm Messiter 2020 - 2025
  * @brief This is the main file for the transmitter code.
  *
  * @page TransmitterCode....
@@ -3056,37 +3056,6 @@ void (*NumberedFunctions[LASTFUNCTION])() {
    
    // must stop at 126
 }; // This list might become longer but a new one is now started above without the 127 limit
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*********************************************************************************************************************************
  *                          BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)                                            *

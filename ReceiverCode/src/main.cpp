@@ -550,10 +550,12 @@ void BlinkLed()
 // LOOP
 /************************************************************************************************************/
 
-void loop()
-{
+void loop() // without MPU6050 about 30000 interations per second.... EXCEPT Zero when reconnecting!!
+{       // with mpu6050 only about 10000
+
 #ifdef USE_STABILISATION
     if (MPU6050Connected)  DoStabilsation();
+
 #endif
 
     KickTheDog();
