@@ -555,7 +555,6 @@ void loop() // without MPU6050 about 30000 interations per second.... EXCEPT Zer
 
 #ifdef USE_STABILISATION
     if (MPU6050Connected)  DoStabilsation();
-
 #endif
 
     KickTheDog();
