@@ -7,8 +7,8 @@
  *
  * @section rx Features List
  * - WORKS ON TEENSY 4.0
- * - Detects and uses INA219 to read volts 
- * - Detects and uses BMP280 pressure sensor for altitude 
+ * - Detects and uses INA219 to read volts
+ * - Detects and uses BMP280 pressure sensor for altitude
  * - Binding implemented
  * - SBUS implemented
  * - PPM Implemented on the same pin as SBUS (Serial 3 / Pin 14)
@@ -18,11 +18,11 @@
  * - Exponential implemented (at TX end)
  * - Supports one or two tranceivers (nRF24L01+)
  *
- * 
+ *
  * @section rxpinout TEENSY 4.0 PINS
  * | pin number(s) | purpose |
  * |---------------|---------|
- * | 0...8 | PWM SERVOS Channels 1 - 9 |  (Channels 10 - 16 available via SBUS)  
+ * | 0...8 | PWM SERVOS Channels 1 - 9 |  (Channels 10 - 16 available via SBUS)
  * | 9     | SPI CE1  (FOR RADIO1)  | or PWM channel 10 when 11 PWM channels are used
  * | 10    | SPI CSN1 (FOR RADIO1)  | or PWM channel 11 when 11 PWM channels are used
  * | 11    | SPI MOSI (FOR BOTH RADIOS)  |
@@ -50,7 +50,6 @@
 #include <EEPROM.h>
 #include <Wire.h>
 
-
 #include <PulsePosition.h>
 #include <Watchdog_t4.h>
 #include "utilities/SBUS.h" // SBUS library now fixed as early version
@@ -58,31 +57,35 @@
 #include "utilities/radio.h"
 #include "utilities/pid.h"
 #include "utilities/GPS.h"
-
+#include "utilities/kalman.h"
 
 void DelayMillis(uint16_t ms) // This replaces any delay() calls
 {
     uint32_t tt = millis();
-    while (millis() - tt < ms) {
+    while (millis() - tt < ms)
+    {
 #ifdef USE_STABILISATION
-      if (MPU6050Connected) DoStabilsation();
+        if (MPU6050Connected)
+            DoStabilsation();
 #endif
-
     }
-}   
+}
 /************************************************************************************************************/
 
 void LoadFailSafeData() //
 {
-    uint8_t  FS_Offset = FS_EEPROM_OFFSET;
+    uint8_t FS_Offset = FS_EEPROM_OFFSET;
     uint16_t s[CHANNELSUSED];
 
-    for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
+    for (uint8_t i = 0; i < CHANNELSUSED; ++i)
+    {
         s[i] = map(EEPROM.read(i + FS_Offset), 0, 180, MINMICROS, MAXMICROS); // load failsafe values and simulate better resolution
     }
     FS_Offset += CHANNELSUSED;
-    for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
-        if (EEPROM.read(i + FS_Offset)) {
+    for (uint8_t i = 0; i < CHANNELSUSED; ++i)
+    {
+        if (EEPROM.read(i + FS_Offset))
+        {
             ReceivedData[i] = s[i];
         }
     }
@@ -92,43 +95,46 @@ void LoadFailSafeData() //
 #endif
 }
 
-
-
 /************************************************************************************************************/
 
 void KickTheDog()
 {
-    if (millis() - LastDogKick >= KICKRATE) {
+    if (millis() - LastDogKick >= KICKRATE)
+    {
         TeensyWatchDog.feed();
         LastDogKick = millis();
     }
 }
 
-
 /************************************************************************************************************/
 
 bool CheckCrazyValues()
 { // might come when binding
-    for (int i = 0; i < 7; ++i) {
-        if ((ReceivedData[i] < MINMICROS) || (ReceivedData[i] > MAXMICROS)) return false;
+    for (int i = 0; i < 7; ++i)
+    {
+        if ((ReceivedData[i] < MINMICROS) || (ReceivedData[i] > MAXMICROS))
+            return false;
     }
     return true;
 }
 
 /************************************************************************************************************/
-// Function to get PWM value needed for given pulse length in microseconds 
+// Function to get PWM value needed for given pulse length in microseconds
 
-int GetPWMValue(int frequency, int length) {return float(length / (1000000.00 / frequency)) * SERVO_RESOLUTION;} // *** >> DONT EDIT THIS LINE!! << ***
+int GetPWMValue(int frequency, int length) { return float(length / (1000000.00 / frequency)) * SERVO_RESOLUTION; } // *** >> DONT EDIT THIS LINE!! << ***
 
 /************************************************************************************************************/
 void MoveServos()
 {
-    if (!CheckCrazyValues()||(millis() < 7)) { //000?
+    if (!CheckCrazyValues() || (millis() < 7))
+    { // 000?
         TurnLedOff();
-        for (int j = 0; j < SERVOSUSED; ++j) PreviousData[j] = 0; // Force a send when data is good again
+        for (int j = 0; j < SERVOSUSED; ++j)
+            PreviousData[j] = 0; // Force a send when data is good again
         return;
     }
-    else {
+    else
+    {
         TurnLedOn();
     }
 
@@ -138,19 +144,25 @@ void MoveServos()
     }
     else
     { // not SBUS = PPM
-        for (int j = 0; j < PPMChannelCount; ++j) {
+        for (int j = 0; j < PPMChannelCount; ++j)
+        {
             PPMOutput.write(PPMChannelOrder[j], map(ReceivedData[j], MINMICROS, MAXMICROS, 1000, 2000));
         }
     }
-    for (int j = 0; j < SERVOSUSED; ++j) {
-        if (PreviousData[j] != ReceivedData[j]) { // if same as last time, don't send again.
+    for (int j = 0; j < SERVOSUSED; ++j)
+    {
+        if (PreviousData[j] != ReceivedData[j])
+        { // if same as last time, don't send again.
             int S = ReceivedData[j];
-            if (ServoCentrePulse[j] < 1000) {
-                S = map(S, MINMICROS, MAXMICROS, ServoCentrePulse[j] - EXTRAAT760, ServoCentrePulse[j] + EXTRAAT760);   // these lines allow for the fact that some servos don't like 760 - 2240
-            }else{
-                S = map(S, MINMICROS, MAXMICROS, ServoCentrePulse[j] - EXTRAAT1500, ServoCentrePulse[j] + EXTRAAT1500);  // these lines allow for the fact that some servos don't like 760 - 2240
+            if (ServoCentrePulse[j] < 1000)
+            {
+                S = map(S, MINMICROS, MAXMICROS, ServoCentrePulse[j] - EXTRAAT760, ServoCentrePulse[j] + EXTRAAT760); // these lines allow for the fact that some servos don't like 760 - 2240
             }
-            analogWrite(PWMPins[j],GetPWMValue(ServoFrequency[j], S));
+            else
+            {
+                S = map(S, MINMICROS, MAXMICROS, ServoCentrePulse[j] - EXTRAAT1500, ServoCentrePulse[j] + EXTRAAT1500); // these lines allow for the fact that some servos don't like 760 - 2240
+            }
+            analogWrite(PWMPins[j], GetPWMValue(ServoFrequency[j], S));
             PreviousData[j] = ReceivedData[j];
         }
     }
@@ -170,35 +182,35 @@ void FailSafe()
         Connected = false; // I lied earlier - we're not really connected.
     }
     FailSafeSent = true; // Once is enough
-    FailedSafe   = true;
+    FailedSafe = true;
     TurnLedOff();
     MacAddressSentCounter = 0;
 }
 
-
 /************************************************************************************************************/
 void SetServoFrequency()
 {
-     analogWriteResolution(SERVO_RES_BITS);  // 12 Bits for 4096 steps
+    analogWriteResolution(SERVO_RES_BITS); // 12 Bits for 4096 steps
     for (uint8_t i = 0; i < SERVOSUSED; ++i)
-    { 
-        analogWriteFrequency(PWMPins[i], ServoFrequency[i]); 
+    {
+        analogWriteFrequency(PWMPins[i], ServoFrequency[i]);
         // Look1("Channel Frequency: ");
         // Look1(i+1);
         // Look1(" = ");
         // Look(ServoFrequency[i]);
     }
-
 }
 
 /************************************************************************************************************/
 void AttachServos()
 {
     SetServoFrequency();
-    if (UseSBUS) {
+    if (UseSBUS)
+    {
         MySbus.begin(); // AND START SBUS
     }
-    else {
+    else
+    {
         PPMOutput.begin(PPMPORT); // Or PPM on same pin
     }
 }
@@ -207,7 +219,8 @@ void AttachServos()
 
 void TurnLedOn()
 {
-    if (!LedIsOn) {
+    if (!LedIsOn)
+    {
         digitalWrite(LED_RED, HIGH);
         LedIsOn = true;
     }
@@ -217,7 +230,8 @@ void TurnLedOn()
 
 void TurnLedOff()
 {
-    if (LedIsOn) {
+    if (LedIsOn)
+    {
         digitalWrite(LED_RED, LOW);
         LedIsOn = false;
     }
@@ -231,18 +245,20 @@ void BindModel()
 {
     CurrentRadio->stopListening();
     delayMicroseconds(250);
-    BoundFlag    = true;
+    BoundFlag = true;
     ModelMatched = true;
-   
-    if (Blinking) {
-        
+
+    if (Blinking)
+    {
+
         SetNewPipe(); // change to bound pipe <<< ***************************************
-       
+
 #ifdef DB_BIND
         Serial.println("SAVING RECEIVED PIPE:");
 #endif
 
-        for (uint8_t i = 0; i < 5; ++i) {
+        for (uint8_t i = 0; i < 5; ++i)
+        {
             EEPROM.update(i + BIND_EEPROM_OFFSET, TheReceivedPipe[i]);
 
 #ifdef DB_BIND
@@ -258,52 +274,53 @@ void BindModel()
     }
     Blinking = false;
 
-    if (FirstConnection) {
+    if (FirstConnection)
+    {
         AttachServos(); // AND START SBUS / PPM
         FirstConnection = false;
     }
     SaveNewBind = false;
 
-
 #ifdef DB_BIND
-        Serial.println("");
-        Serial.println("DONE BINDING");
+    Serial.println("");
+    Serial.println("DONE BINDING");
 #endif
-
 }
 
 /************************************************************************************************************/
 void ReadSavedPipe() // read only 6 bytes
 {
-    for (uint8_t i = 0; i < 5; ++i) {
+    for (uint8_t i = 0; i < 5; ++i)
+    {
         TheReceivedPipe[i] = EEPROM.read(i + BIND_EEPROM_OFFSET); // uses first 5 bytes only.
     }
     TheReceivedPipe[5] = 0;
 }
 
 /************************************************************************************************************/
-void RebuildFlags(bool* f, uint16_t tb)
+void RebuildFlags(bool *f, uint16_t tb)
 { // Pass arraypointer and the two bytes to be decoded
-    for (uint8_t i = 0; i < 16; ++i) {
-        f[15 - i] = false;                 // false is default
-        if (tb & 1 << i) f[15 - i] = true; // sets true if bit was on
+    for (uint8_t i = 0; i < 16; ++i)
+    {
+        f[15 - i] = false; // false is default
+        if (tb & 1 << i)
+            f[15 - i] = true; // sets true if bit was on
     }
 }
 /************************************************************************************************************/
 
-template<typename any>
-void Look(const any& value) // this is a template function that can print anything but cannot be used to change anything
+template <typename any>
+void Look(const any &value) // this is a template function that can print anything but cannot be used to change anything
 {
     Serial.println(value);
 }
 
 /************************************************************************************************************/
-template<typename any>
-void Look1(const any& value) // this is a template function that can print anything but cannot be used to change anything
+template <typename any>
+void Look1(const any &value) // this is a template function that can print anything but cannot be used to change anything
 {
     Serial.print(value);
 }
-
 
 // ******************************************************************************************************************************************************************
 
@@ -311,27 +328,31 @@ void Look1(const any& value) // this is a template function that can print anyth
 
 void ScanI2c()
 {
-    for (uint8_t i = 1; i < 127; ++i) {
+    for (uint8_t i = 1; i < 127; ++i)
+    {
         Wire.beginTransmission(i);
-        if (Wire.endTransmission() == 0) {
-            if (i == 0x40) {
+        if (Wire.endTransmission() == 0)
+        {
+            if (i == 0x40)
+            {
                 INA219Connected = true;
 #ifdef DB_SENSORS
                 delay(3000);
                 Serial.println("INA219 voltage meter detected!");
 #endif
             }
-            if (i == 0x68) {
+            if (i == 0x68)
+            {
                 MPU6050Connected = true;
 #ifdef DB_SENSORS
                 delay(3000);
-                Serial.println("MPU 6050 detected");  
+                Serial.println("MPU 6050 detected");
 #endif // DB_SENSORS
             }
-            if (i == 0x10) 
+            if (i == 0x10)
             {
-                 GPS_Connected = true;
-                 Serial.println("GPS detected");  
+                GPS_Connected = true;
+                Serial.println("GPS detected");
             }
         }
     }
@@ -342,12 +363,14 @@ void SaveFailSafeData()
     // FailSafe data occupies EEPROM from offset FS_EEPROM_OFFSET
     uint8_t FS_Offset = FS_EEPROM_OFFSET;
 
-    for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
+    for (uint8_t i = 0; i < CHANNELSUSED; ++i)
+    {
         EEPROM.update(i + FS_Offset, (map(ReceivedData[i], MINMICROS, MAXMICROS, 0, 180))); // save servo positions lower res: 8 bits
         DelayMillis(1);
     }
     FS_Offset += CHANNELSUSED;
-    for (uint8_t i = 0; i < CHANNELSUSED; ++i) {
+    for (uint8_t i = 0; i < CHANNELSUSED; ++i)
+    {
         EEPROM.update(i + FS_Offset, FailSafeChannel[i]); // save flags
         DelayMillis(1);
     }
@@ -364,10 +387,12 @@ void WatchDogCallBack()
 }
 /************************************************************************************************************/
 
-void teensyMAC(uint8_t* mac)
+void teensyMAC(uint8_t *mac)
 { // GET UNIQUE TEENSY 4.0 ID
-    for (uint8_t by = 0; by < 2; by++) mac[by] = (HW_OCOTP_MAC1 >> ((1 - by) * 8)) & 0xFF;
-    for (uint8_t by = 0; by < 4; by++) mac[by + 2] = (HW_OCOTP_MAC0 >> ((3 - by) * 8)) & 0xFF;
+    for (uint8_t by = 0; by < 2; by++)
+        mac[by] = (HW_OCOTP_MAC1 >> ((1 - by) * 8)) & 0xFF;
+    for (uint8_t by = 0; by < 4; by++)
+        mac[by + 2] = (HW_OCOTP_MAC0 >> ((3 - by) * 8)) & 0xFF;
 }
 
 /************************************************************************************************************/
@@ -377,27 +402,31 @@ void ReadBindPlug()
     uint32_t tt = millis();
     PipePointer = DefaultPipe;
     CopyCurrentPipe(DefaultPipe, PIPENUMBER);
-    if (!digitalRead(BINDPLUG_PIN)) { // Bind Plug needed to bind!
-        Blinking = true;              // Blinking = binding to new TX
+    if (!digitalRead(BINDPLUG_PIN))
+    {                    // Bind Plug needed to bind!
+        Blinking = true; // Blinking = binding to new TX
 #ifdef DB_BIND
         Serial.println("Bind plug detected.");
 #endif
     }
-    else {
-        Blinking    = false; // Already bound
+    else
+    {
+        Blinking = false; // Already bound
         PipePointer = TheReceivedPipe;
         CopyCurrentPipe(TheReceivedPipe, BOUNDPIPENUMBER);
-        BoundFlag   = true;
+        BoundFlag = true;
         SaveNewBind = false;
-        while (millis() - tt < 500) ReceiveData();
+        while (millis() - tt < 500)
+            ReceiveData();
         BindModel(); // TODO check this...
     }
 }
 
 /************************************************************************************************************/
-void S_or_O(int d1, int d2, int d3)  // This function blinks the LED for S or O in Morse code
+void S_or_O(int d1, int d2, int d3) // This function blinks the LED for S or O in Morse code
 {
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 3; ++i)
+    {
         TurnLedOn();
         delay(d1);
         TurnLedOff();
@@ -406,57 +435,64 @@ void S_or_O(int d1, int d2, int d3)  // This function blinks the LED for S or O 
     delay(d3);
 }
 /************************************************************************************************************/
-void SOS_Led()  // This function blinks the LED for SOS in Morse code
+void SOS_Led() // This function blinks the LED for SOS in Morse code
 {
     uint16_t Blinkrate = 125;
-    S_or_O(Blinkrate, Blinkrate,Blinkrate * 2);               // = S
-    S_or_O(Blinkrate * 3, Blinkrate * 1.5, Blinkrate * 2);    // = O
-    S_or_O(Blinkrate, Blinkrate,Blinkrate * 7);               // = S
+    S_or_O(Blinkrate, Blinkrate, Blinkrate * 2);           // = S
+    S_or_O(Blinkrate * 3, Blinkrate * 1.5, Blinkrate * 2); // = O
+    S_or_O(Blinkrate, Blinkrate, Blinkrate * 7);           // = S
 }
 /************************************************************************************************************/
 
-// This function never returns. It's a fatal error. Stop here and send SOS on LED !!    
-void Abort(){
-   for (uint32_t i = 0; i < 0xFFFFFFFF; ++i) 
-        {
-            Look1(i);
-            Look(" FATAL ERROR - PLUG IN WRONG WAY ROUND!");
-            SOS_Led(); // This is a fatal error Stop here and send SOS!!
-        } 
-    }        
+// This function never returns. It's a fatal error. Stop here and send SOS on LED !!
+void Abort()
+{
+    for (uint32_t i = 0; i < 0xFFFFFFFF; ++i)
+    {
+        Look1(i);
+        Look(" FATAL ERROR - PLUG IN WRONG WAY ROUND!");
+        SOS_Led(); // This is a fatal error Stop here and send SOS!!
+    }
+}
 
 /************************************************************************************************************/
 // This function is called at statup to check that the SBUS pin is not held low (plug in wrong way round)
 
-void TestTheSBUSPin(){
+void TestTheSBUSPin()
+{
     pinMode(SBUSPIN, OUTPUT);
     delay(1);
     digitalWrite(SBUSPIN, HIGH);
     delay(1);
-    if (!digitalRead(SBUSPIN)) 
+    if (!digitalRead(SBUSPIN))
     {
-        while (true) {
+        while (true)
+        {
             Abort();
-        }                                       // This is a fatal error Stop here and send SOS!!
-    }         
-    SBUSPORT.begin(100000);                     // SBUS protocol uses 100000 baud. Re initialise it since we've just used it as an output
+        } // This is a fatal error Stop here and send SOS!!
+    }
+    SBUSPORT.begin(100000); // SBUS protocol uses 100000 baud. Re initialise it since we've just used it as an output
 }
 /************************************************************************************************************/
- // This function is called at statup to check that the no PWM pins are held low (plug in wrong way round)
+// This function is called at statup to check that the no PWM pins are held low (plug in wrong way round)
 
-void TestAllPWMPins(){
-    for (uint8_t i = 0; i < SERVOSUSED; ++i) {
-        pinMode(PWMPins[i], OUTPUT); 
+void TestAllPWMPins()
+{
+    for (uint8_t i = 0; i < SERVOSUSED; ++i)
+    {
+        pinMode(PWMPins[i], OUTPUT);
         delay(1);
         digitalWrite(PWMPins[i], HIGH);
         delay(1);
-        if (!digitalRead(PWMPins[i])) Abort();      // is this PWM pin held low?!?!?!?!?!?!?
+        if (!digitalRead(PWMPins[i]))
+            Abort(); // is this PWM pin held low?!?!?!?!?!?!?
     }
 }
 
 /************************************************************************************************************/
 
-void SetupPINMODES(){
+void SetupPINMODES()
+{
     pinMode(LED_PIN, OUTPUT);
     pinMode(pinCSN1, OUTPUT);
 #ifdef SECOND_TRANSCEIVER
@@ -469,9 +505,11 @@ void SetupPINMODES(){
     digitalWrite(LED_PIN, HIGH);
 }
 // ***************************************************************************************************************************************************
-void SetupRadios(){
+void SetupRadios()
+{
 
-    if (digitalRead(BINDPLUG_PIN)) { // ie no bind plug, so initialise to bound pipe
+    if (digitalRead(BINDPLUG_PIN))
+    { // ie no bind plug, so initialise to bound pipe
         GetOldPipe();
     }
     teensyMAC(MacAddress);
@@ -501,10 +539,11 @@ void SetupRadios(){
 
 /***********************************************************************************************************/
 
-void SetupWatchDog(){
+void SetupWatchDog()
+{
 
-    WatchDogConfig.window   = WATCHDOGMAXRATE; //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
-    WatchDogConfig.timeout  = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
+    WatchDogConfig.window = WATCHDOGMAXRATE;  //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
+    WatchDogConfig.timeout = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
     TeensyWatchDog.begin(WatchDogConfig);
     LastDogKick = millis();
@@ -516,19 +555,24 @@ void SetupWatchDog(){
 FLASHMEM void setup()
 {
     SetupPINMODES();
-    TestTheSBUSPin();                   // Check that the SBUS pin is not held low (plug in wrong way round)
-    TestAllPWMPins();                   // Check that the no PWM pins are held low (plug in wrong way round)
+    TestTheSBUSPin(); // Check that the SBUS pin is not held low (plug in wrong way round)
+    TestAllPWMPins(); // Check that the no PWM pins are held low (plug in wrong way round)
     delay(300);
     Wire.begin();
     delay(300);
-    ScanI2c();                          // Detect what's connected
-    
+    ScanI2c(); // Detect what's connected
+
 #ifdef USE_STABILISATION
-    if (MPU6050Connected) InitialiseTheMPU6050();
+    if (MPU6050Connected)
+    {
+        InitialiseTheMPU6050();
+    }
 #endif
 
-    if (INA219Connected) ina219.begin();
-    if (GPS_Connected) setupGPS();
+    if (INA219Connected)
+        ina219.begin();
+    if (GPS_Connected)
+        setupGPS();
     SetupRadios();
     SetupWatchDog();
     ReadBindPlug();
@@ -540,9 +584,15 @@ FLASHMEM void setup()
 void BlinkLed()
 {
     uint16_t Blinkrate = 222;
-    if (MPU6050Connected)   Blinkrate = 666; // Blink rate is reduced if MPU6050 is connected
-    if ((millis() - BlinkTimer) >= Blinkrate) {
-        BlinkTimer = millis(); if (BlinkValue ^= 1) TurnLedOn(); else TurnLedOff();
+    if (MPU6050Connected)
+        Blinkrate = 666; // Blink rate is reduced if MPU6050 is connected
+    if ((millis() - BlinkTimer) >= Blinkrate)
+    {
+        BlinkTimer = millis();
+        if (BlinkValue ^= 1)
+            TurnLedOn();
+        else
+            TurnLedOff();
     }
 }
 
@@ -551,24 +601,31 @@ void BlinkLed()
 /************************************************************************************************************/
 
 void loop() // without MPU6050 about 30000 interations per second.... EXCEPT Zero when reconnecting!!
-{       // with mpu6050 only about 10000
+{           // with mpu6050 only about 10000
 
 #ifdef USE_STABILISATION
-    if (MPU6050Connected)  DoStabilsation();
+    if (MPU6050Connected)
+        DoStabilsation();
 #endif
 
     KickTheDog();
     ReceiveData();
-    if (Blinking) BlinkLed();
-    if (BoundFlag && Connected && ModelMatched) { // Only move servos if everything is good
-        if (GPS_Connected) ReadGPS();             // heer !! <<<< **********************************
-        if (millis() - SBUSTimer >= SBUSRATE) {   // SBUSRATE rate is also good enough for servo rate
-            SBUSTimer = millis();                 // timer starts before send starts....
-            MoveServos();                         // Actually do something useful at last
+    if (Blinking)
+        BlinkLed();
+    if (BoundFlag && Connected && ModelMatched)
+    { // Only move servos if everything is good
+        if (GPS_Connected)
+            ReadGPS(); // heer !! <<<< **********************************
+        if (millis() - SBUSTimer >= SBUSRATE)
+        {                         // SBUSRATE rate is also good enough for servo rate
+            SBUSTimer = millis(); // timer starts before send starts....
+            MoveServos();         // Actually do something useful at last
         }
     }
-    else {
-    if (!BoundFlag)  {
+    else
+    {
+        if (!BoundFlag)
+        {
             GetNewPipe();
         }
     }
