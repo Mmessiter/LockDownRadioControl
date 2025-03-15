@@ -8,51 +8,9 @@
 
 #ifdef USE_STABILISATION
 
-// This function reads the MPU6050 registers  frequently to get the gyro and accelerometer signals
-void Read_MPU6050(void)
-{
-  Wire.beginTransmission(0x68);
-  Wire.write(0x1A);
-  Wire.write(0x05);
-  Wire.endTransmission();
-  Wire.beginTransmission(0x68);
-  Wire.write(0x1C);
-  Wire.write(0x10);
-  Wire.endTransmission();
-  
-  
-  Wire.beginTransmission(0x68); //
-  Wire.write(0x3B);
-  Wire.endTransmission();
-  Wire.requestFrom(0x68, 6);
-  int16_t AccXLSB = Wire.read() << 8 | Wire.read();
-  int16_t AccYLSB = Wire.read() << 8 | Wire.read();
-  int16_t AccZLSB = Wire.read() << 8 | Wire.read();
- 
-  Wire.beginTransmission(0x68);
-  Wire.write(0x1B);
-  Wire.write(0x8);
-  Wire.endTransmission();
-  Wire.beginTransmission(0x68);
-  Wire.write(0x43);
-  Wire.endTransmission();
- 
-  Wire.requestFrom(0x68, 6);
-  int16_t GyroX = Wire.read() << 8 | Wire.read();
-  int16_t GyroY = Wire.read() << 8 | Wire.read();
-  int16_t GyroZ = Wire.read() << 8 | Wire.read();
-  RawRollRate = (float)GyroX / 65.5;
-  RawPitchRate = (float)GyroY / 65.5;
-  RawYawRate = (float)GyroZ / 65.5;
-  AccX = (float)AccXLSB / 4096;
-  AccY = (float)AccYLSB / 4096;
-  AccZ = (float)AccZLSB / 4096;
-  RawRollAngle = atan(AccY / sqrt(AccX * AccX + AccZ * AccZ)) * 1 / (3.142 / 180);
-  RawPitchAngle = -atan(AccX / sqrt(AccY * AccY + AccZ * AccZ)) * 1 / (3.142 / 180);
-}
 // ******************************************************************************************************************************************************************
 /// @brief // This function reads the MPU6050 registers frequently to get the gyro and accelerometer signals
-void Read_MPU6050FASTER(void)
+void Read_MPU6050(void)
 {
   Wire.beginTransmission(0x68);                                                   // Start the transmission
   Wire.write(0x3B);                                                               // Starting register for Accel data
@@ -119,7 +77,7 @@ void InitialiseTheMPU6050()
 
   for (int i = 0; i < ITERATIONS; ++i)
   {
-    Read_MPU6050FASTER();
+    Read_MPU6050();
     RateCalibrationRoll += RawRollRate;
     RateCalibrationPitch += RawPitchRate;
     RateCalibrationYaw += RawYawRate;
@@ -142,7 +100,7 @@ void GetCurrentAttitude()
   if (millis() - LoopTimer < 4) // 4ms loop time or 250Hz
     return;
   LoopTimer = millis();
-  Read_MPU6050FASTER();
+  Read_MPU6050();
   RawRollRate -= RateCalibrationRoll;   // Correct for gyro calibration
   RawPitchRate -= RateCalibrationPitch; // Correct for gyro calibration
   RawYawRate -= RateCalibrationYaw;     // Correct for gyro calibration
@@ -152,12 +110,33 @@ void GetCurrentAttitude()
   if (counter > 5)
   {
     // Print header once (this line will be ignored by the Serial Plotter's graph)
-    Serial.println("Raw,Filtered");
+    Serial.println("Raw,Filtered,Raw,Filtered,Raw,Filtered");
 
-    // Then stream only numeric data:
+    //  RawYawRate
+    //  filteredYawRate
+    //  RawRollRate
+    //  filteredRollRate
+    //  RawRollAngle
+    //  filteredRoll
+
+    Serial.print(RawPitchAngle);
+    Serial.print(",");
+    Serial.print(filteredPitch);
+    Serial.print(",");
+
     Serial.print(RawRollAngle);
     Serial.print(",");
-    Serial.println(filteredRoll);
+    Serial.print(filteredRoll);
+    Serial.print(",");
+
+    // Serial.print(RawYawRate);
+    // Serial.print(",");
+    // Serial.print(filteredYawRate);
+    // Serial.print(",");
+
+    Serial.println();
+
+
     counter = 0;
   }
 }

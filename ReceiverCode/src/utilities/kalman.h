@@ -9,11 +9,45 @@
 // KALMAN FILTER IMPLEMENTATION
 // ======================================================
 // Kalman filter state variables for Roll, Pitch, Yaw
+/*
 
-// Kalman filter tuning parameters
-const float Q_angle = 0.001;  // Process noise for the angle (smaller = smoother but slower response)
-const float Q_bias = 0.003;   // Process noise for the bias estimate
-const float R_measure = 0.03; // Measurement noise (larger = less trust in accelerometer)
+## Q_angle (Process Noise for the Angle)
+This parameter represents the uncertainty in how the angle changes between measurements. It models the "process noise" in your angle state.
+
+- **Lower values** (e.g., 0.001): Assumes the angle changes very smoothly and predictably. This results in smoother output but slower response to actual changes. The filter will be more resistant to noise but might miss rapid movements.
+- **Higher values** (e.g., 0.1): Assumes larger unpredictable changes in angle are possible. This makes the filter more responsive to new measurements but potentially more susceptible to noise.
+- **Use case impact**: In applications like drone stabilization, too low a value might cause sluggish correction to wind gusts, while too high might make the drone jittery.
+
+## Q_bias (Process Noise for the Bias)
+This models the uncertainty in how the gyroscope bias drifts over time.
+
+- **Lower values**: Assumes the bias is very stable and changes very slowly. This works well with high-quality sensors that have minimal drift.
+- **Higher values**: Assumes the bias might change more significantly between measurements. This is more appropriate for lower-quality sensors or environments with temperature fluctuations that affect bias.
+- **Use case impact**: In a VR headset, properly tuned Q_bias helps maintain accurate orientation tracking during extended use despite sensor warming.
+
+## R_measure (Measurement Noise)
+This represents the uncertainty or noise in your measurements (typically from an accelerometer).
+
+- **Lower values**: Indicates high trust in the raw sensor measurements. The filter will quickly adjust based on new measurements.
+- **Higher values**: Indicates less trust in raw measurements. The filter will rely more on its internal model and predictions.
+- **Use case impact**: In a robot navigating rough terrain, high R_measure might be appropriate when accelerometer readings are affected by vibrations and impacts.
+
+These parameters work together to create an optimal balance. For example, in an IMU-based orientation estimation:
+- Too low Q_angle + low R_measure: Will follow noisy measurements too closely
+- Too high Q_angle + high R_measure: Will be unresponsive to actual changes in orientation
+- Balanced values: Will filter out noise while maintaining responsiveness to real movements
+
+The art of Kalman filter tuning is finding the right combination for your specific application and sensor characteristics.
+
+*/
+// For quadcopters, start with:
+// const float Q_angle = 0.001, Q_bias = 0.003, R_measure = 0.03;
+
+// For helicopters, try:
+// const float Q_angle = 0.001, Q_bias = 0.003, R_measure = 0.05;
+
+// For fixed-wing aircraft, try:
+const float Q_angle = 0.0005, Q_bias = 0.003, R_measure = 0.01;
 
 // Initialize Kalman filters
 void initKalman()
@@ -68,18 +102,17 @@ void kalmanFilter()
     previousTime = currentTime;
     if (dt <= 0 || dt > 0.2)
         dt = 0.01;
-     filteredRoll = updateKalman(kalmanRoll, RawRollAngle, RawRollRate, dt);
-     filteredPitch = updateKalman(kalmanPitch, RawPitchAngle, RawPitchRate, dt);
-     filteredYaw = updateKalman(kalmanYaw, kalmanYaw.angle, RawYawRate, dt); // Note: Using previous estimate as no absolute yaw reference
-     filteredRollRate = RawRollRate - kalmanRoll.bias;
-     filteredPitchRate = RawPitchRate - kalmanPitch.bias;
-     filteredYawRate = RawYawRate - kalmanYaw.bias;
+    filteredRoll = updateKalman(kalmanRoll, RawRollAngle, RawRollRate, dt);
+    filteredPitch = updateKalman(kalmanPitch, RawPitchAngle, RawPitchRate, dt);
+    filteredYaw = updateKalman(kalmanYaw, kalmanYaw.angle, RawYawRate, dt); // Note: Using previous estimate as no absolute yaw reference
+    filteredRollRate = RawRollRate - kalmanRoll.bias;
+    filteredPitchRate = RawPitchRate - kalmanPitch.bias;
+    filteredYawRate = RawYawRate - kalmanYaw.bias;
 }
 // ********************************************************************************************************************
 
 void filterRatesForHelicopter()
 {
-
     // Low-pass filter coefficient (0-1): lower = more filtering
     // For helicopters, use 0.1-0.3 for smooth control without too much delay
 
@@ -96,26 +129,6 @@ void filterRatesForHelicopter()
     lastFilteredPitchRate = filteredPitchRate;
     lastFilteredYawRate = filteredYawRate;
 }
-
-// ======================================================
-// TUNING RECOMMENDATIONS FOR RC AIRCRAFT
-// ======================================================
-/*
-
-Kalman Filter Tuning:
-- Q_angle: Increase for more responsive attitude estimation (0.001-0.01)
-- Q_bias: Adjust based on gyro drift characteristics (0.001-0.005)
-- R_measure: Increase in high-vibration environments (0.03-0.1)
-
-For quadcopters, start with:
-Q_angle = 0.001, Q_bias = 0.003, R_measure = 0.03
-
-For helicopters, try:
-Q_angle = 0.001, Q_bias = 0.003, R_measure = 0.05
-
-For fixed-wing aircraft, try:
-Q_angle = 0.0005, Q_bias = 0.003, R_measure = 0.01
-*/
 
 #endif // KALMAN_H
 #endif // USE_STABILISATION
