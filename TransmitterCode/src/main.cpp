@@ -374,10 +374,16 @@ FASTRUN void ShowServoPos()
         SendValue(ChannelOutput, OutputAmount);                                                                   // output servo position
         StickPosition = map(constrain((InputAmount + 100) / 2, 0, 100), 0, 100, BOXLEFT + 2, BOXRIGHT - BOXLEFT); // map to box size
         StickPosition = constrain(StickPosition, BOXLEFT + 2, (BOXRIGHT - BOXLEFT) - 1);                          // not outside box!
-        if ((abs(StickPosition - SavedLineX) > MinimumDistance)) {                                                // no need to show tiny movements
-            DisplayCurve();                                                                                       // needed to clear last line
-            DrawLine(StickPosition, BOXTOP + 3, StickPosition, (BOXBOTTOM - 3) - BOXTOP, HighlightColour);        // draws line for stick position
-            SavedLineX = StickPosition;                                                                           // Save for next time
+        
+        // Only redraw if the position has changed enough
+        if ((abs(StickPosition - SavedLineX) > MinimumDistance)) {
+            // Simply do a full redraw - this is easiest and most reliable
+            DisplayCurve();
+            
+            // Then draw vertical line for stick position on top
+            DrawLine(StickPosition, BOXTOP + 3, StickPosition, (BOXBOTTOM - 3) - BOXTOP, HighlightColour);
+            
+            SavedLineX = StickPosition;
         }
     }
 }

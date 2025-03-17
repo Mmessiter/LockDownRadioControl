@@ -25,23 +25,27 @@
   - Reduced minimum change threshold from 3 to 1
   - Made line more responsive to small stick movements
 
-## Future Improvement Ideas
+### 4. Optimized vertical line drawing in ShowServoPos()
+- Problem: Redrawing the entire curve for every stick position change was inefficient
+- Solution:
+  - Modified ShowServoPos() to only redraw the curve when the stick position changes significantly
+  - Used a threshold-based approach to determine when to update
+  - Fixed minimum update distance at 1 pixel for smoother response
+  - Achieved better performance while maintaining visual quality
 
-1. Further curve drawing optimizations:
-   - Consider implementing a specialized function to update just the vertical line without redrawing the entire curve
-   - This would allow for even smoother stick position updates
+## Nextion Display Optimization Notes
 
-2. Nextion display usage improvements:
+1. Nextion display usage improvements:
    - Use Nextion's waveform component for more efficient curve display
    - Investigate using Nextion's native widgets rather than drawing raw lines
    - Consider offloading more drawing work to the Nextion display itself
 
-3. Potential performance enhancements:
+2. Potential performance enhancements:
    - Optimize memory usage of buffers (currently using fixed 512-byte buffer)
    - Add compression for transmitting curve data to Nextion display
    - Investigate updating only the changed parts of the UI
 
-4. Code structure improvements:
+3. Code structure improvements:
    - Extract common Nextion command patterns into helper functions
    - Standardize Nextion communication with a consistent batching approach
    - Consider implementing a small screen rendering library
