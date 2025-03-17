@@ -44,21 +44,66 @@ void TopOfLogFileNEW()
 void BottomOfLogFileNEW()
 {
     char Current_Y_Nextion_Label[] = "LogText.val_y";
+    uint16_t totalLines = 0;
+    uint16_t linesRead = 0;
+    
+    // First, we'll find out how big the file is by counting lines
+    // We need to temporarily disable actual display
     ScrollWithoutDisplaying = true;
-    if (!LogFileOpen)
-    {
-        LogFileNumber = OpenTheLogFileForReading();
-        LogFileOpen = true;
+    
+    // Reset to the start of the file
+    StartReadLine = 0;
+    FinalReadStartLine = 0xFFFF;
+    
+    // Close file if it was open
+    CloseLogFile();
+    
+    // Open the file
+    LogFileNumber = OpenTheLogFileForReading();
+    LogFileOpen = true;
+    
+    if (!LogFileOpen) {
+        // Failed to open file
+        ScrollWithoutDisplaying = false;
+        return;
     }
-    while (LogFileOpen)
-    {
+    
+    // Count all lines in the file by reading it completely
+    do {
+        linesRead = ReadAFewLines();
+        totalLines += linesRead;
         StartReadLine += BUFFEREDLINES;
-        ShowLogFileNew(ReadAFewLines());
+    } while (LogFileOpen && linesRead > 0);
+    
+    // Now we know how many lines are in the file, let's calculate where to start reading
+    // to display the last screenful
+    
+    // If the file is small enough to fit on one screen
+    if (totalLines <= MXLINES) {
+        StartReadLine = 0;
+    } else {
+        // Calculate where to start reading to show the last part of the file
+        // We need to leave enough room for one screenful
+        StartReadLine = (totalLines > MXLINES) ? (totalLines - MXLINES) : 0;
+        
+        // Align to BUFFEREDLINES boundaries to ensure we read correctly
+        StartReadLine = (StartReadLine / BUFFEREDLINES) * BUFFEREDLINES;
     }
+    
+    // Close and reopen the file to read from the new position
+    CloseLogFile();
     ScrollWithoutDisplaying = false;
-    ShowLogFileNew(ReadAFewLines());
-    SendOtherValue(Current_Y_Nextion_Label, Max_Y);
-    Previous_Current_Y = Max_Y;
+    LogFileNumber = OpenTheLogFileForReading();
+    LogFileOpen = true;
+    
+    if (LogFileOpen) {
+        // Read and display the final portion of the file
+        ShowLogFileNew(ReadAFewLines());
+        
+        // Set scroll position to the maximum to show the bottom content
+        SendOtherValue(Current_Y_Nextion_Label, Max_Y);
+        Previous_Current_Y = Max_Y;
+    }
 }
 
 // ************************************************************************
