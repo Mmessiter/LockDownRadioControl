@@ -324,7 +324,7 @@ FASTRUN void ShowMotorTimer()
 
 FASTRUN void ShowServoPos()
 {
-    uint8_t  MinimumDistance = 10;              // if the change is small, don't re-display anything - to reduce flashing. :=)!!
+    uint8_t  MinimumDistance = 3;              // if the change is small, don't re-display anything - to reduce flashing. :=)!!
     uint32_t Hertz           = 25;             // Fast
     if (CurrentView == GRAPHVIEW) Hertz = 40;  // Faster update rate for graph (was 200)
     if (millis() - ShowServoTimer < Hertz) return;
@@ -344,14 +344,14 @@ FASTRUN void ShowServoPos()
             if (ChannelOutPut[i] > 3)
                 MinimumDistance = 40; // coarse for pots & switches...
             else
-                MinimumDistance = 10;                                    // ...finer for sticks
+                MinimumDistance = 3;                                    // ...finer for sticks
             if (abs(SendBuffer[i] - ShownBuffer[i]) > MinimumDistance) { // no need to show tiny movements
                 SendValue(Ch_Lables[i], IntoLowerRes(SendBuffer[i]));
                 ShownBuffer[i] = SendBuffer[i];
             }
         }
     }
-    MinimumDistance = 10;
+    MinimumDistance = 6;
     // The second 8 channels are displayed on only two screens
     if ((CurrentView == STICKSVIEW) || (CurrentView == FRONTVIEW)) {
         for (int i = 8; i < 16; ++i) {
@@ -362,7 +362,7 @@ FASTRUN void ShowServoPos()
         }
     }
     if ((CurrentView == GRAPHVIEW)) {
-        MinimumDistance = 1; // More responsive - was 3
+        MinimumDistance = 6; 
         InputDevice     = (InPutStick[ChanneltoSet - 1]);
         if (InputDevice < 8)
             InputAmount = AnalogueReed(InputDevice);
@@ -379,10 +379,8 @@ FASTRUN void ShowServoPos()
         if ((abs(StickPosition - SavedLineX) > MinimumDistance)) {
             // Simply do a full redraw - this is easiest and most reliable
             DisplayCurve();
-            
             // Then draw vertical line for stick position on top
             DrawLine(StickPosition, BOXTOP + 3, StickPosition, (BOXBOTTOM - 3) - BOXTOP, HighlightColour);
-            
             SavedLineX = StickPosition;
         }
     }
@@ -1986,10 +1984,6 @@ FASTRUN void DisplayCurve()
     sprintf(fill_cmd, "cirs %d,%d,%d,%d", 
         selected_x, selected_y, 6, HighlightColour);
     SendCommand(fill_cmd);
-    
-    // Then redraw the grid reference lines in case they were covered
-    DrawLine(xPoints[0], (BOXHEIGHT / 2) + 20, BOXWIDTH, (BOXHEIGHT / 2) + 20, SpecialColour);
-    DrawLine(xPoints[2], BOXTOP, xPoints[2], BOXHEIGHT, SpecialColour);
     
     // Then redraw the selected dot over the highlight in a contrasting color
     sprintf(fill_cmd, "cirs %d,%d,%d,%d", 
