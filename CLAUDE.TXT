@@ -2,12 +2,15 @@
 
 ## Changes Made on March 17, 2025
 
-### 1. Fixed LogFilesDisplay.h BottomOfLogFileNEW() function
+### 1. Fixed LogFilesDisplay.h BottomOfLogFileNEW() function // ***
 - Problem: Inconsistent scrolling to bottom of log files
 - Solution: Implemented two-phase approach
   - First phase: Count total lines in file
   - Second phase: Position at correct spot based on total count
   - Added proper handling for small files that fit on a single screen
+
+   ***NOTE: This fix was flawed so I reverted the code to the earlier version. (MCM)
+
 
 ### 2. Optimized DisplayCurve() function in main.cpp
 - Problem: Slow curve drawing due to many individual serial commands
