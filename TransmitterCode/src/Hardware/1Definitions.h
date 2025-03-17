@@ -52,15 +52,18 @@
 // ************************************************************************************
 /*********************************************************************************************************************************/
 
-// #define VERYHIGHPACKETRATE 200
+#define VERYHIGHPACKETRATE // Comment this out if using stabilisation
 
 #ifdef VERYHIGHPACKETRATE
-// ***** SILLY HIGH DATA RATE MODE *****
-#define PACEMAKER 5                 // WAS 5ms means about 200 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+
+// ***** OVER THE TOP HIGH DATA RATE MODE ***** Only use this version if no stabilisation is used.
+#define PACEMAKER 5                 //  5ms means about 200 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
 #define PERFECTPACKETSPERSECOND 200 // Flat out perfect packets per second
 #define TIMEFORTXMANAGMENT 1        // 3? seems best!  ...  How many ms must remain spare between data packets before daring to undertake more trivial tasks
+
 #else
-// ***** SENSIBLE DATA RATE MODE *****
+
+// ***** MORE SENSIBLE DATA RATE MODE ***** use this rate if Stabilisaton is used.
 #define PACEMAKER 8                 // WAS 5ms means about 200 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
 #define PERFECTPACKETSPERSECOND 125 // Flat out perfect packets per second
 #define TIMEFORTXMANAGMENT 2        // 3? seems best!  ...  How many ms must remain spare between data packets before daring to undertake more trivial tasks
