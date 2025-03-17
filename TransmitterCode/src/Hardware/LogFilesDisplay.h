@@ -41,15 +41,13 @@ void TopOfLogFileNEW()
 /**
  * This function scrolls to the bottom of the log file and displays the most recent log entries.
  */
-void BottomOfLogFileNEW() // this isn't perfect but it works Ok for now ...
+void BottomOfLogFileNEW() // this isn't perfect but it usually works Ok ...
 {
     char Current_Y_Nextion_Label[] = "LogText.val_y";
+    CloseLogFile();
     ScrollWithoutDisplaying = true;
-    if (!LogFileOpen)
-    {
-        LogFileNumber = OpenTheLogFileForReading();
-        LogFileOpen = true;
-    }
+    LogFileNumber = OpenTheLogFileForReading();
+    LogFileOpen = true;
     while (LogFileOpen)
     {
         StartReadLine += BUFFEREDLINES;
@@ -193,16 +191,18 @@ uint16_t BuildLinesArray(char *ReadBuffer, uint16_t BytesRead, uint32_t StartSee
     uint32_t BufferIndex = 0;
     uint16_t ColumnIndex = 0;
 
-    for (int i = 0; i < MXLINES; ++i) for (int j = 0; j < MXLINELENGTH; ++j) LogLines[i][j] = 0;
+    for (int i = 0; i < MXLINES; ++i)
+        for (int j = 0; j < MXLINELENGTH; ++j)
+            LogLines[i][j] = 0;
     StoreThisNewSeekPosition((LinesCounter + StartReadLine), StartSeekPosition);
     while (BufferIndex < BytesRead)
-    {                                         
+    {
         while (ReadBuffer[BufferIndex] == '|') // skip the | and zero the column
         {
             ++BufferIndex;
             ColumnIndex = 0;
             if (LinesCounter < MXLINES - 1)
-                ++LinesCounter; 
+                ++LinesCounter;
             else
                 break;
             StoreThisNewSeekPosition(LinesCounter + StartReadLine, StartSeekPosition + BufferIndex);
@@ -213,9 +213,9 @@ uint16_t BuildLinesArray(char *ReadBuffer, uint16_t BytesRead, uint32_t StartSee
             ++ColumnIndex;
             LogLines[LinesCounter][ColumnIndex] = 0;
             if ((ColumnIndex >= WRAPPOINT) && (LogLines[LinesCounter][ColumnIndex - 1] == 32)) // Were we past the word-wrap point?
-            { 
+            {
                 if (LinesCounter < MXLINES - 1)
-                    ++LinesCounter; 
+                    ++LinesCounter;
                 ColumnIndex = 0;
                 StoreThisNewSeekPosition(LinesCounter + StartReadLine, StartSeekPosition + BufferIndex);
             }
