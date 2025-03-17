@@ -326,7 +326,7 @@ FASTRUN void ShowServoPos()
 {
     uint8_t  MinimumDistance = 10;              // if the change is small, don't re-display anything - to reduce flashing. :=)!!
     uint32_t Hertz           = 25;             // Fast
-    if (CurrentView == GRAPHVIEW) Hertz = 200; // Slower!
+    if (CurrentView == GRAPHVIEW) Hertz = 40;  // Faster update rate for graph (was 200)
     if (millis() - ShowServoTimer < Hertz) return;
     ShowServoTimer = millis();
 
@@ -362,7 +362,7 @@ FASTRUN void ShowServoPos()
         }
     }
     if ((CurrentView == GRAPHVIEW)) {
-        MinimumDistance = 3; // if the change is very small, don't re-display anything - to reduce flashing
+        MinimumDistance = 1; // More responsive - was 3
         InputDevice     = (InPutStick[ChanneltoSet - 1]);
         if (InputDevice < 8)
             InputAmount = AnalogueReed(InputDevice);
@@ -1661,25 +1661,10 @@ FASTRUN void updateInterpolationTypes()
 FASTRUN void DisplayCurve()
 {
     int  p       = 0;
-    char Gn1[]   = "n1";
-    char Gn2[]   = "n2";
-    char Gn3[]   = "n3";
-    char Gn4[]   = "n4";
-    char Gn5[]   = "n5";
-    char b3on[]  = "vis b3,1";
-    char b4on[]  = "vis b4,1";
-    char b7on[]  = "vis b7,1";
-    char b8on[]  = "vis b8,1";
-    char n2on[]  = "vis n2,1";
-    char n4on[]  = "vis n4,1";
-    char b3off[] = "vis b3,0";
-    char b4off[] = "vis b4,0";
-    char b7off[] = "vis b7,0";
-    char b8off[] = "vis b8,0";
-    char n2off[] = "vis n2,0";
-    char n4off[] = "vis n4,0";
-
-    int   Step = 8;
+    char cmdBuffer[512] = ""; // Buffer for commands
+    char tempCmd[80];         // Temporary buffer for individual commands
+    char endMarker[] = "\xFF\xFF\xFF"; // Nextion end marker
+    
     float HalfXRange;
     float TopHalfYRange;
     float BottomHalfYRange;
@@ -1689,142 +1674,323 @@ FASTRUN void DisplayCurve()
     int   yDot2     = 0;
     int   DotSize   = 4;
     int   DotColour = ForeGroundColour;
-    ClearBox();
-    p                                     = constrain(MinDegrees[Bank][ChanneltoSet - 1], 0, 180);
-    MinDegrees[Bank][ChanneltoSet - 1]    = p;
-    p                                     = constrain(MidLowDegrees[Bank][ChanneltoSet - 1], 0, 180);
+    double xPoint, yPoint;
+    
+    // Constrain degrees values
+    p = constrain(MinDegrees[Bank][ChanneltoSet - 1], 0, 180);
+    MinDegrees[Bank][ChanneltoSet - 1] = p;
+    p = constrain(MidLowDegrees[Bank][ChanneltoSet - 1], 0, 180);
     MidLowDegrees[Bank][ChanneltoSet - 1] = p;
-    p                                     = constrain(CentreDegrees[Bank][ChanneltoSet - 1], 0, 180);
+    p = constrain(CentreDegrees[Bank][ChanneltoSet - 1], 0, 180);
     CentreDegrees[Bank][ChanneltoSet - 1] = p;
-    p                                     = constrain(MidHiDegrees[Bank][ChanneltoSet - 1], 0, 180);
-    MidHiDegrees[Bank][ChanneltoSet - 1]  = p;
-    p                                     = constrain(MaxDegrees[Bank][ChanneltoSet - 1], 0, 180);
-    MaxDegrees[Bank][ChanneltoSet - 1]    = p;
+    p = constrain(MidHiDegrees[Bank][ChanneltoSet - 1], 0, 180);
+    MidHiDegrees[Bank][ChanneltoSet - 1] = p;
+    p = constrain(MaxDegrees[Bank][ChanneltoSet - 1], 0, 180);
+    MaxDegrees[Bank][ChanneltoSet - 1] = p;
 
     GetDotPositions();
-    SendValue(Gn1, DegsToPercent(MinDegrees[Bank][ChanneltoSet - 1])); // put numbers at top row
-    SendValue(Gn2, DegsToPercent(MidLowDegrees[Bank][ChanneltoSet - 1]));
-    SendValue(Gn3, DegsToPercent(CentreDegrees[Bank][ChanneltoSet - 1]));
-    SendValue(Gn4, DegsToPercent(MidHiDegrees[Bank][ChanneltoSet - 1]));
-    SendValue(Gn5, DegsToPercent(MaxDegrees[Bank][ChanneltoSet - 1]));
-
-    DrawBox(BOXLEFT, BOXTOP, BOXWIDTH, BOXHEIGHT, HighlightColour);
+    
+    // 1. First batch: Clear box and send top row values
+    
+    // Clear the box
+    sprintf(tempCmd, "fill %d,%d,%d,%d,%d", 20, 20, 388, 375, BackGroundColour);
+    strcat(cmdBuffer, tempCmd);
+    strcat(cmdBuffer, endMarker);
+    
+    // Top row values - sent in a single batch
+    sprintf(tempCmd, "n1.val=%d", DegsToPercent(MinDegrees[Bank][ChanneltoSet - 1]));
+    strcat(cmdBuffer, tempCmd);
+    strcat(cmdBuffer, endMarker);
+    
+    sprintf(tempCmd, "n2.val=%d", DegsToPercent(MidLowDegrees[Bank][ChanneltoSet - 1]));
+    strcat(cmdBuffer, tempCmd);
+    strcat(cmdBuffer, endMarker);
+    
+    sprintf(tempCmd, "n3.val=%d", DegsToPercent(CentreDegrees[Bank][ChanneltoSet - 1]));
+    strcat(cmdBuffer, tempCmd);
+    strcat(cmdBuffer, endMarker);
+    
+    sprintf(tempCmd, "n4.val=%d", DegsToPercent(MidHiDegrees[Bank][ChanneltoSet - 1]));
+    strcat(cmdBuffer, tempCmd);
+    strcat(cmdBuffer, endMarker);
+    
+    sprintf(tempCmd, "n5.val=%d", DegsToPercent(MaxDegrees[Bank][ChanneltoSet - 1]));
+    strcat(cmdBuffer, tempCmd);
+    strcat(cmdBuffer, endMarker);
+    
+    // Send first batch of commands
+    NEXTION.print(cmdBuffer);
+    cmdBuffer[0] = '\0'; // Reset buffer
+    
+    // 2. Second batch: Draw box and reference lines
+    
+    // Draw the box
+    sprintf(tempCmd, "draw %d,%d,%d,%d,%d", BOXLEFT, BOXTOP, BOXWIDTH, BOXHEIGHT, HighlightColour);
+    strcat(cmdBuffer, tempCmd);
+    strcat(cmdBuffer, endMarker);
+    
+    // Horizontal reference line
     xDot1 = xPoints[0];
-    yDot1 = (BOXHEIGHT / 2) + 20; // ?
+    yDot1 = (BOXHEIGHT / 2) + 20;
     xDot2 = BOXWIDTH;
     yDot2 = yDot1;
-    DrawLine(xDot1, yDot1, xDot2, yDot1, SpecialColour);
-
+    sprintf(tempCmd, "line %d,%d,%d,%d,%d", xDot1, yDot1, xDot2, yDot1, SpecialColour);
+    strcat(cmdBuffer, tempCmd);
+    strcat(cmdBuffer, endMarker);
+    
+    // Vertical reference line
     xDot1 = xPoints[2];
     yDot1 = BOXTOP;
     xDot2 = xDot1;
     yDot2 = BOXHEIGHT;
-    DrawLine(xDot1, yDot1, xDot2, yDot2, SpecialColour);
-
-    if (InterpolationTypes[Bank][ChanneltoSet - 1] == STRAIGHTLINES) { // Linear
-        SendCommand(b3on);
-        SendCommand(b4on);
-        SendCommand(b7on);
-        SendCommand(b8on);
-        SendCommand(n2on);
-        SendCommand(n4on);
-        DrawLine(xPoints[0], yPoints[0], xPoints[1], yPoints[1], ForeGroundColour); // this adds the straight version of the curve
-        DrawLine(xPoints[1], yPoints[1], xPoints[2], yPoints[2], ForeGroundColour);
-        DrawLine(xPoints[2], yPoints[2], xPoints[3], yPoints[3], ForeGroundColour);
-        DrawLine(xPoints[3], yPoints[3], xPoints[4], yPoints[4], ForeGroundColour);
+    sprintf(tempCmd, "line %d,%d,%d,%d,%d", xDot1, yDot1, xDot2, yDot2, SpecialColour);
+    strcat(cmdBuffer, tempCmd);
+    strcat(cmdBuffer, endMarker);
+    
+    // 3. Set visibility based on interpolation type
+    if (InterpolationTypes[Bank][ChanneltoSet - 1] == EXPONENTIALCURVES) {
+        // Hide controls for exponential mode
+        strcat(cmdBuffer, "vis b3,0");
+        strcat(cmdBuffer, endMarker);
+        strcat(cmdBuffer, "vis b4,0");
+        strcat(cmdBuffer, endMarker);
+        strcat(cmdBuffer, "vis b7,0");
+        strcat(cmdBuffer, endMarker);
+        strcat(cmdBuffer, "vis b8,0");
+        strcat(cmdBuffer, endMarker);
+        strcat(cmdBuffer, "vis n2,0");
+        strcat(cmdBuffer, endMarker);
+        strcat(cmdBuffer, "vis n4,0");
+        strcat(cmdBuffer, endMarker);
+    } else {
+        // Show controls for other modes
+        strcat(cmdBuffer, "vis b3,1");
+        strcat(cmdBuffer, endMarker);
+        strcat(cmdBuffer, "vis b4,1");
+        strcat(cmdBuffer, endMarker);
+        strcat(cmdBuffer, "vis b7,1");
+        strcat(cmdBuffer, endMarker);
+        strcat(cmdBuffer, "vis b8,1");
+        strcat(cmdBuffer, endMarker);
+        strcat(cmdBuffer, "vis n2,1");
+        strcat(cmdBuffer, endMarker);
+        strcat(cmdBuffer, "vis n4,1");
+        strcat(cmdBuffer, endMarker);
     }
-
-    if (InterpolationTypes[Bank][ChanneltoSet - 1] == SMOOTHEDCURVES) { // CatmullSpline
-
-        SendCommand(b3on);
-        SendCommand(b4on);
-        SendCommand(b7on);
-        SendCommand(b8on);
-        SendCommand(n2on);
-        SendCommand(n4on);
+    
+    // Send the second batch of commands
+    NEXTION.print(cmdBuffer);
+    cmdBuffer[0] = '\0'; // Reset buffer
+    
+    // 4. Draw the curve based on interpolation type
+    
+    if (InterpolationTypes[Bank][ChanneltoSet - 1] == STRAIGHTLINES) { // Linear
+        // Draw just 4 straight lines - already efficient, just batch them
+        sprintf(tempCmd, "line %d,%d,%d,%d,%d", 
+            (int)xPoints[0], (int)yPoints[0], (int)xPoints[1], (int)yPoints[1], ForeGroundColour);
+        strcat(cmdBuffer, tempCmd);
+        strcat(cmdBuffer, endMarker);
+        
+        sprintf(tempCmd, "line %d,%d,%d,%d,%d", 
+            (int)xPoints[1], (int)yPoints[1], (int)xPoints[2], (int)yPoints[2], ForeGroundColour);
+        strcat(cmdBuffer, tempCmd);
+        strcat(cmdBuffer, endMarker);
+        
+        sprintf(tempCmd, "line %d,%d,%d,%d,%d", 
+            (int)xPoints[2], (int)yPoints[2], (int)xPoints[3], (int)yPoints[3], ForeGroundColour);
+        strcat(cmdBuffer, tempCmd);
+        strcat(cmdBuffer, endMarker);
+        
+        sprintf(tempCmd, "line %d,%d,%d,%d,%d", 
+            (int)xPoints[3], (int)yPoints[3], (int)xPoints[4], (int)yPoints[4], ForeGroundColour);
+        strcat(cmdBuffer, tempCmd);
+        strcat(cmdBuffer, endMarker);
+    }
+    else if (InterpolationTypes[Bank][ChanneltoSet - 1] == SMOOTHEDCURVES) { // CatmullSpline
+        // Use adaptive step size for smooth curves
         yDot2 = 0;
-        for (xPoint = xPoints[0]; xPoint <= xPoints[4]; xPoint += Step) {
-            if (Step > xPoints[4] - xPoint) {
-                Step = xPoints[4] - xPoint;
+        // Increase step size to reduce total points
+        int adaptiveStep = 12; // Larger than original 8 to reduce points
+        
+        for (xPoint = xPoints[0]; xPoint <= xPoints[4]; xPoint += adaptiveStep) {
+            if (adaptiveStep > xPoints[4] - xPoint) {
+                adaptiveStep = xPoints[4] - xPoint;
             }
-            if (Step < 1) Step = 1;
+            if (adaptiveStep < 1) adaptiveStep = 1;
+            
             yPoint = Interpolation::CatmullSpline(xPoints, yPoints, PointsCount, xPoint);
-            xDot1  = xPoint;
-            yDot1  = yPoint;
+            xDot1 = xPoint;
+            yDot1 = yPoint;
+            
             if (yDot2 == 0) {
                 xDot2 = xDot1;
                 yDot2 = yDot1;
+                continue; // Skip first point, nothing to draw yet
             }
-            DrawLine(xDot1, yDot1, xDot2, yDot2, ForeGroundColour);
+            
+            sprintf(tempCmd, "line %d,%d,%d,%d,%d", xDot1, yDot1, xDot2, yDot2, ForeGroundColour);
+            strcat(cmdBuffer, tempCmd);
+            strcat(cmdBuffer, endMarker);
+            
+            // Send if buffer getting full
+            if (strlen(cmdBuffer) > 400) {
+                NEXTION.print(cmdBuffer);
+                cmdBuffer[0] = '\0'; // Reset buffer
+            }
+            
             xDot2 = xDot1;
             yDot2 = yDot1;
         }
     }
-
-    if (InterpolationTypes[Bank][ChanneltoSet - 1] == EXPONENTIALCURVES) { // EXPO  ************************************************************************************************
-#define APPROXIMATION 7                                                    // This is the approximation of the screen curve
-        SendCommand(b3off);
-        SendCommand(b4off);
-        SendCommand(b7off);
-        SendCommand(b8off);
-        SendCommand(n2off);
-        SendCommand(n4off);
-        HalfXRange       = xPoints[4] - xPoints[2];
-        TopHalfYRange    = yPoints[4] - yPoints[2];
-        BottomHalfYRange = yPoints[2] - yPoints[0];
-        yDot2            = 0;
-        Step             = APPROXIMATION; // This is the approximation of the screen curve
-
+    else if (InterpolationTypes[Bank][ChanneltoSet - 1] == EXPONENTIALCURVES) { // EXPO
+        // For exponential curves
         CheckInvisiblePoint();
-
-        for (xPoint = 0; xPoint <= HalfXRange; xPoint += Step) { // Simulate a curve with many short lines to speed it up
-            yPoint = MapWithExponential(HalfXRange - xPoint, HalfXRange, 0, 0, BottomHalfYRange, Exponential[Bank][ChanneltoSet - 1]);
-            if (Step > HalfXRange - xPoint) {
-                Step = HalfXRange - xPoint;
+        
+        HalfXRange = xPoints[4] - xPoints[2];
+        TopHalfYRange = yPoints[4] - yPoints[2];
+        BottomHalfYRange = yPoints[2] - yPoints[0];
+        yDot2 = 0;
+        
+        // Use adaptive step size but with fewer points
+        int adaptiveStep = 14; // Increased from APPROXIMATION = 7
+        
+        // Left half of exponential curve
+        for (xPoint = 0; xPoint <= HalfXRange; xPoint += adaptiveStep) {
+            yPoint = MapWithExponential(HalfXRange - xPoint, HalfXRange, 0, 0, BottomHalfYRange, 
+                                        Exponential[Bank][ChanneltoSet - 1]);
+            
+            if (adaptiveStep > HalfXRange - xPoint) {
+                adaptiveStep = HalfXRange - xPoint;
             }
-            if (Step < 1) Step = 1;
+            if (adaptiveStep < 1) adaptiveStep = 1;
+            
             yDot1 = yPoint + yPoints[0];
             xDot1 = xPoint + xPoints[0];
+            
             if (yDot2 == 0) {
                 xDot2 = xDot1;
                 yDot2 = yDot1;
+                continue; // Skip first point, nothing to draw yet
             }
-            DrawLine(xDot1, yDot1, xDot2, yDot2, ForeGroundColour); // Draw short line from this point to previous point
+            
+            sprintf(tempCmd, "line %d,%d,%d,%d,%d", xDot1, yDot1, xDot2, yDot2, ForeGroundColour);
+            strcat(cmdBuffer, tempCmd);
+            strcat(cmdBuffer, endMarker);
+            
+            // Send if buffer getting full
+            if (strlen(cmdBuffer) > 400) {
+                NEXTION.print(cmdBuffer);
+                cmdBuffer[0] = '\0'; // Reset buffer
+            }
+            
             xDot2 = xDot1;
             yDot2 = yDot1;
         }
-        Step  = APPROXIMATION;
+        
+        // Reset for right half of exponential curve
+        adaptiveStep = 14;
         yDot2 = 0;
-        for (xPoint = HalfXRange; xPoint >= 0; xPoint -= Step) { // Simulate a curve with many short lines to speed it up
-            yPoint = MapWithExponential(xPoint, 0, HalfXRange, 0, TopHalfYRange, Exponential[Bank][ChanneltoSet - 1]);
-            if (Step > xPoint) {
-                Step = xPoint;
+        
+        // Right half of exponential curve
+        for (xPoint = HalfXRange; xPoint >= 0; xPoint -= adaptiveStep) {
+            yPoint = MapWithExponential(xPoint, 0, HalfXRange, 0, TopHalfYRange, 
+                                        Exponential[Bank][ChanneltoSet - 1]);
+            
+            if (adaptiveStep > xPoint) {
+                adaptiveStep = xPoint;
             }
-            if (Step < 1) Step = 1;
+            if (adaptiveStep < 1) adaptiveStep = 1;
+            
             yDot1 = yPoint + yPoints[2];
             xDot1 = xPoint + xPoints[2];
+            
             if (yDot2 == 0) {
                 xDot2 = xDot1;
                 yDot2 = yDot1;
+                continue; // Skip first point, nothing to draw yet
             }
-            DrawLine(xDot1, yDot1, xDot2, yDot2, ForeGroundColour); // Draw short line from this point to previous point
+            
+            sprintf(tempCmd, "line %d,%d,%d,%d,%d", xDot1, yDot1, xDot2, yDot2, ForeGroundColour);
+            strcat(cmdBuffer, tempCmd);
+            strcat(cmdBuffer, endMarker);
+            
+            // Send if buffer getting full
+            if (strlen(cmdBuffer) > 400) {
+                NEXTION.print(cmdBuffer);
+                cmdBuffer[0] = '\0'; // Reset buffer
+            }
+            
             xDot2 = xDot1;
             yDot2 = yDot1;
         }
-
-        DrawDot(xPoints[0], yPoints[0], DotSize, DotColour); // This adds 3 dots
-        DrawDot(xPoints[2], yPoints[2], DotSize, DotColour);
-        DrawDot(xPoints[4], yPoints[4], DotSize, DotColour);
     }
-    if (InterpolationTypes[Bank][ChanneltoSet - 1] != EXPONENTIALCURVES) {
-        DrawDot(xPoints[0], yPoints[0], DotSize, DotColour); // This adds 5 dots
-        DrawDot(xPoints[1], yPoints[1], DotSize, DotColour);
-        DrawDot(xPoints[2], yPoints[2], DotSize, DotColour);
-        DrawDot(xPoints[3], yPoints[3], DotSize, DotColour);
-        DrawDot(xPoints[4], yPoints[4], DotSize, DotColour);
+    
+    // Send any remaining curve drawing commands
+    if (strlen(cmdBuffer) > 0) {
+        NEXTION.print(cmdBuffer);
+        cmdBuffer[0] = '\0'; // Reset buffer
     }
-
-    DrawDot(xPoints[CurrentPoint - 1], yPoints[CurrentPoint - 1], DotSize + 5, HighlightColour); // Show selected point
+    
+    // 5. Draw the control points (dots)
+    
+    if (InterpolationTypes[Bank][ChanneltoSet - 1] == EXPONENTIALCURVES) {
+        // Just 3 dots for exponential mode
+        sprintf(tempCmd, "cirs %d,%d,%d,%d", (int)xPoints[0], (int)yPoints[0], DotSize, DotColour);
+        strcat(cmdBuffer, tempCmd);
+        strcat(cmdBuffer, endMarker);
+        
+        sprintf(tempCmd, "cirs %d,%d,%d,%d", (int)xPoints[2], (int)yPoints[2], DotSize, DotColour);
+        strcat(cmdBuffer, tempCmd);
+        strcat(cmdBuffer, endMarker);
+        
+        sprintf(tempCmd, "cirs %d,%d,%d,%d", (int)xPoints[4], (int)yPoints[4], DotSize, DotColour);
+        strcat(cmdBuffer, tempCmd);
+        strcat(cmdBuffer, endMarker);
+    } 
+    else {
+        // 5 dots for other modes
+        for (int i = 0; i < 5; i++) {
+            sprintf(tempCmd, "cirs %d,%d,%d,%d", (int)xPoints[i], (int)yPoints[i], DotSize, DotColour);
+            strcat(cmdBuffer, tempCmd);
+            strcat(cmdBuffer, endMarker);
+        }
+    }
+    
+    // Send the dots batch
+    NEXTION.print(cmdBuffer);
+    cmdBuffer[0] = '\0'; // Reset buffer
+    
+    // Create a special command to highlight the selected point with a filled circle
+    char fill_cmd[100];
+    int selected_x = (int)xPoints[CurrentPoint - 1];
+    int selected_y = (int)yPoints[CurrentPoint - 1];
+    
+    // Create a circular highlight with concentric circles
+    // Draw a large outer circle with white color for visibility on any background
+    sprintf(fill_cmd, "cirs %d,%d,%d,%d", 
+        selected_x, selected_y, 10, White);
+    SendCommand(fill_cmd);
+    
+    // Draw a medium circle with highlight color
+    sprintf(fill_cmd, "cirs %d,%d,%d,%d", 
+        selected_x, selected_y, 8, HighlightColour);
+    SendCommand(fill_cmd);
+    
+    // Draw another inner circle with highlight color
+    sprintf(fill_cmd, "cirs %d,%d,%d,%d", 
+        selected_x, selected_y, 6, HighlightColour);
+    SendCommand(fill_cmd);
+    
+    // Then redraw the grid reference lines in case they were covered
+    DrawLine(xPoints[0], (BOXHEIGHT / 2) + 20, BOXWIDTH, (BOXHEIGHT / 2) + 20, SpecialColour);
+    DrawLine(xPoints[2], BOXTOP, xPoints[2], BOXHEIGHT, SpecialColour);
+    
+    // Then redraw the selected dot over the highlight in a contrasting color
+    sprintf(fill_cmd, "cirs %d,%d,%d,%d", 
+        selected_x, selected_y, DotSize+3, Black);
+    SendCommand(fill_cmd);
+    
+    // Update interpolation types UI
     updateInterpolationTypes();
 }
 
