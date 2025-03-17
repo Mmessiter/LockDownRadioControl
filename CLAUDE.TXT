@@ -33,6 +33,15 @@
   - Fixed minimum update distance at 1 pixel for smoother response
   - Achieved better performance while maintaining visual quality
 
+### 5. Investigated radio frame rate inconsistency
+- Problem: Frame rate occasionally drops from 200 packets/sec then recovers
+- Investigation:
+  - Examined recovery logic timing in transceiver.h
+  - Tested modifications to ReconnectingNow flag, FIFO buffer management, and recovery timing
+  - Found that the original implementation performed better in practice
+  - Concluded that the existing balance of parameters is already well-optimized for this hardware
+  - Testing showed that simplified timing assumptions don't account for complex RF behavior
+
 ## Nextion Display Optimization Notes
 
 1. Nextion display usage improvements:
