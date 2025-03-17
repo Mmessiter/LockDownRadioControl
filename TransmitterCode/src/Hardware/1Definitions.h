@@ -1176,7 +1176,6 @@ char pPopupView[] = "page PopupView";
 char pBlankView[] = "page BlankView";
 char pWaitView[30]; // the saved page where wait was started
 char WaitText[] = "Just a Minute! ... ";
-bool ScrollWithoutDisplaying = false;
 int Previous_Current_Y = 0; // for scrolling log file
 int Max_Y = 666;
 uint32_t NextionReturn = 0;

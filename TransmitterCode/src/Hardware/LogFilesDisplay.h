@@ -45,15 +45,13 @@ void BottomOfLogFileNEW() // this isn't perfect but it usually works Ok ...
 {
     char Current_Y_Nextion_Label[] = "LogText.val_y";
     CloseLogFile();
-    ScrollWithoutDisplaying = true;
     LogFileNumber = OpenTheLogFileForReading();
     LogFileOpen = true;
     while (LogFileOpen)
     {
         StartReadLine += BUFFEREDLINES;
-        ShowLogFileNew(ReadAFewLines());
+        ReadAFewLines();
     }
-    ScrollWithoutDisplaying = false;
     ShowLogFileNew(ReadAFewLines());
     SendOtherValue(Current_Y_Nextion_Label, Max_Y);
     Previous_Current_Y = Max_Y;
@@ -116,8 +114,6 @@ void LogReleasedNEW()
 /****************************************************************************************************************************/
 void ShowLogFileNew(uint16_t LinesCounter)
 {
-    if (ScrollWithoutDisplaying)
-        return;                    // if we are just scrolling to bottom, don't display anything
     char TheText[MAXFILELEN + 10]; // MAX = 5K or so
     char LogTeXt1[] = "LogText";
     char t0[] = "t0";
