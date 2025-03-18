@@ -682,7 +682,8 @@ uint16_t IntoHigherRes(uint8_t LowRes) // This returns the main curve-points at 
 /*********************************************************************************************************************************/
 void ClearText()
 {
-    for (int i = 0; i < CHARSMAX; ++i) {
+    for (int i = 0; i < MAXTEXTIN; ++i)
+    {
         TextIn[i] = 0;
     }
 }

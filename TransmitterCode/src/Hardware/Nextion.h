@@ -101,7 +101,7 @@ void GetTextIn() // heer
         while (NEXTION.available()) {
             TextIn[j] = NEXTION.read();
             KickTheDog();
-            if (j < CHARSMAX) ++j;
+            if (j < MAXTEXTIN) ++j;
             delayMicroseconds(20);
         }
     }
@@ -216,6 +216,7 @@ uint16_t GetText(char* TextBoxName, char* TheText)
         while (TextIn[j + 1] < 0xFF) {
             TheText[j] = TextIn[j + 1];
             ++j;
+            KickTheDog(); // ??
         }
         TheText[j] = 0;
     }

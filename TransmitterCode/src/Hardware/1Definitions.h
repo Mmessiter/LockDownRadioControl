@@ -96,6 +96,7 @@
 
 #define DEFAULT_EXPO 50          // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
 #define CHARSMAX 250             // Max length for char arrays  (was 120)
+#define MAXTEXTIN 1024 * 4       // 4K buffer for incoming text from Nextion            
 #define DEFAULTLEDBRIGHTNESS 20  // LED brightness
 #define DEFAULTPOWEROFFWARNING 2 // Default time to warn before cutting power
 #define MAXDUALRATE 200
@@ -745,7 +746,8 @@ uint8_t SavedCurrentView = FRONTVIEW;
 uint64_t DefaultPipe = DEFAULTPIPEADDRESS;      //          Default Radio pipe address
 uint64_t TeensyMACAddPipe = DEFAULTPIPEADDRESS; //          New Radio pipe address for binding will come from MAC address
 uint64_t BuddyMACAddPipe = DEFAULTPIPEADDRESS;  //          Buddy pipe address
-char TextIn[CHARSMAX + 2];                      //          Spare space
+//char TextIn[CHARSMAX + 2];                      //          Spare space
+char TextIn[MAXTEXTIN + 2];                     //          Spare space
 uint16_t PacketsPerSecond = 0;
 uint8_t PacketsHistoryBuffer[(5 + PERFECTPACKETSPERSECOND) * MAXSHOWCOMMSSESCONDS]; // Here we record some history
 uint32_t TotalLostPackets = 0;
