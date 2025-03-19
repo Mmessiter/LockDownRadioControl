@@ -98,15 +98,33 @@ void EndReverseView()
     uint8_t i;
     char ProgressStart[] = "vis Progress,1";
     char Progress[] = "Progress";
+    bool Altered = false;
+    char chgs[512];
+    char change[] = "change";
+    char cleared[] = "XX:";
+    for (uint16_t i = 0; i < 500; ++i)
+    { // get copy of any changes
+        chgs[i] = TextIn[i + 4];
+        chgs[i + 1] = 0;
+    }
     SendCommand(ProgressStart);
-    ReversedChannelBITS = 0;
     for (i = 0; i < 16; ++i)
     {
         SendValue(Progress, (i * (100 / 16)));
-        if (GetValue(fs[i]))
-            ReversedChannelBITS |= 1 << i; // set a BIT
+        if (InStrng(fs[i], chgs))
+        {
+            Altered = true;
+            if (GetValue(fs[i]))
+                ReversedChannelBITS |= 1 << i; // set a BIT
+            else
+                ReversedChannelBITS &= ~(1 << i); // clear a BIT
+        }
     }
-    SaveOneModel(ModelNumber);
+    SendText(change, cleared);
+    if (Altered)
+    {
+        SaveOneModel(ModelNumber);
+    }
     SendCommand(pRXSetupView);
     CurrentView = RXSETUPVIEW;
     UpdateModelsNameEveryWhere();
