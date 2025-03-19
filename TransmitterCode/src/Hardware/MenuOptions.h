@@ -608,20 +608,49 @@ void InputsViewEnd()
     char InputStick_Labels[16][4] = {"c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10", "c11", "c12", "c13", "c14", "c15", "c16"};
     char OutputStick_Labels[16][4] = {"n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11", "n12", "n13", "n14", "n15", "n16", "n17", "n18", "n19"};
     char InputTrim_labels[4][4] = {"n0", "n1", "n2", "n3"};
+    char changes[260];
+    char changes_label[] = "change";
+    char ChangesCleared[] = "XX:"; // clear the changes label The two Xs are just so that I can see it
+    bool Altered = false;
 
+    for (uint16_t i = 0; i < 250; ++i) // get the changes from the Nextion TextIn
+    {
+        changes[i] = TextIn[i + 4];
+        changes[i + 1] = 0;
+    }
+    // Look(changes); // A string of changed labels sent by nextion screen
     SendCommand(ProgressStart);
-
     for (uint8_t i = 0; i < 16; ++i)
     {
-        InPutStick[i] = CheckRange((GetValue(InputStick_Labels[i]) - 1), 0, 15);
-        ChannelOutPut[i] = CheckRange((GetValue(OutputStick_Labels[i]) - 1), 0, 15);
+        if (InStrng(InputStick_Labels[i], changes)) // if this input stick has changed
+        {
+            InPutStick[i] = CheckRange((GetValue(InputStick_Labels[i]) - 1), 0, 15); // get the value and check it
+            Altered = true;                                                          // set the flag
+        }
+        if (InStrng(OutputStick_Labels[i], changes)) // if this output channel has changed
+        {
+            ChannelOutPut[i] = CheckRange((GetValue(OutputStick_Labels[i]) - 1), 0, 15); // get the value and check it
+            Altered = true;                                                              // set the flag
+        }
         if (i < 4)
-            InputTrim[i] = CheckRange((GetValue(InputTrim_labels[i]) - 1), 0, 15);
-        SendValue(Progress, (((i + 1) * 100) / 16) - 1);
+        {
+            if (InStrng(InputTrim_labels[i], changes)) // if this  trim output has changed
+            {
+                InputTrim[i] = CheckRange((GetValue(InputTrim_labels[i]) - 1), 0, 15); // get the value and check it
+                Altered = true;                                                        // set the flag
+            }
+        }
+        if (Altered)
+            SendValue(Progress, (((i + 1) * 100) / 16) - 1);
     }
-    CheckOutPutChannels();
-    SendValue(Progress, 95);
-    SaveOneModel(ModelNumber);
+
+    if (Altered)
+    {
+        SendValue(Progress, 95);
+        SendText(changes_label, ChangesCleared);
+        CheckOutPutChannels();
+        SaveOneModel(ModelNumber);
+    }
     SendValue(Progress, 100);
     UpdateButtonLabels();
     CurrentView = RXSETUPVIEW;
