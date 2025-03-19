@@ -610,7 +610,7 @@ void InputsViewEnd()
     char InputTrim_labels[4][4] = {"n0", "n1", "n2", "n3"};
     char changes[260];
     char changes_label[] = "change";
-    char ChangesCleared[] = "XX:"; // clear the changes label The two Xs are just so that I can see it
+    char ChangesCleared[] = "XX:"; // clear the changes label The two Xs are just so that I can see it even when blank
     bool Altered = false;
 
     for (uint16_t i = 0; i < 250; ++i) // get the changes from the Nextion TextIn
@@ -618,7 +618,7 @@ void InputsViewEnd()
         changes[i] = TextIn[i + 4];
         changes[i + 1] = 0;
     }
-    // Look(changes); // A string of changed labels sent by nextion screen
+
     SendCommand(ProgressStart);
     for (uint8_t i = 0; i < 16; ++i)
     {
