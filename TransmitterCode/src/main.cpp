@@ -3610,18 +3610,41 @@ void EndServoTypeView()
     char ProgressStart[] = "vis Progress,1";
     char ProgressEnd[] = "vis Progress,0";
     char Progress[] = "Progress";
+    bool Altered = false;
+    char chgs[512];
+    char change[] = "change";
+    char cleared[] = "XX:";
+    for (uint16_t i = 0; i < 500; ++i)
+    { // get copy of any changes
+        chgs[i] = TextIn[i + 4];
+        chgs[i + 1] = 0;
+    }
     SendCommand(ProgressStart);
     for (int i = 0; i < 11; ++i)
     {
-        ServoFrequency[i] = GetValue(n_labels[i]);
-        ServoCentrePulse[i] = GetValue(n_labels[i + 11]);
+        if(InStrng(n_labels[i], chgs))
+        {
+            ServoFrequency[i] = GetValue(n_labels[i]);
+            Altered = true;
+        }
+        if(InStrng(n_labels[i + 11], chgs))
+        {
+            ServoCentrePulse[i] = GetValue(n_labels[i + 11]);
+            Altered = true;
+        }
         SendValue(Progress, (i + 1) * (100 / 11));
     }
     SendValue(Progress, 100);
     SendCommand(ProgressEnd);
+    if (Altered)
+    {
+        SaveOneModel(ModelNumber);
+        SendText(change, cleared);
+        AddParameterstoQueue(6);
+        AddParameterstoQueue(7);
+        SendText(change, cleared);
+    }
     GotoFrontView();
-    AddParameterstoQueue(6);
-    AddParameterstoQueue(7);
 }
 
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
