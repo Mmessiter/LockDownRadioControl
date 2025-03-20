@@ -2904,35 +2904,93 @@ void RXOptionsViewEnd()
     char r0[] = "r0"; // SBUS on
     char n5[] = "n5"; // PPMChannelCount
     char ProgressStart[] = "vis Progress,1";
-    char Progress[] = "Progress";
+    char Progress[] = "Progress"; // heer
+    bool Altered = false;
+    char chgs[512];
+    char change[] = "change";
+    char cleared[] = "XX:";
 
+    for (uint16_t i = 0; i < 500; ++i)
+    { // get copy of any changes
+        chgs[i] = TextIn[i + 4];
+        chgs[i + 1] = 0;
+    }
+    
     SendCommand(ProgressStart);
-    CopyTrimsToAll = GetValue(c1);
-    SendValue(Progress, 5);
-    TrimMultiplier = GetValue(n3);
-    GetText(t10, fbuf);
-    StopFlyingVoltsPerCell = atof(fbuf);
-    SendValue(Progress, 10);
-    SFV = StopFlyingVoltsPerCell * 100; // this makes it a 16 bit value I can save easily
-    SendValue(Progress, 20);
-    MotorChannelZero = map(GetValue(Mvalue), -100, 100, 0, 180); // map to 0 to 180
-    SendValue(Progress, 30);
-    RxVoltageCorrection = GetValue(RxVCorrextion);
-    SendValue(Progress, 40);
-    UseMotorKill = GetValue(UseKill);
-    SendValue(Progress, 50);
-    MotorChannel = GetValue(Mchannel) - 1;
-    SendValue(Progress, 60);
-    TimerDownwards = GetValue(c2);
-    SendValue(Progress, 70);
-    TimerStartTime = GetValue(n4) * 60;
-    SendValue(Progress, 80);
-    PPMdata.UseSBUSFromRX = GetValue(r0);
-    SendValue(Progress, 90);
-    PPMdata.PPMChannelCount = GetValue(n5);
+    if (InStrng(c1, chgs))
+    {
+        Altered = true;
+        CopyTrimsToAll = GetValue(c1);
+        SendValue(Progress, 5);
+    }
+    
+    if (InStrng(n3, chgs))
+    {
+        TrimMultiplier = GetValue(n3);
+        Altered = true;
+    }
+    if (InStrng(t10, chgs))
+    {
+        GetText(t10, fbuf);
+        StopFlyingVoltsPerCell = atof(fbuf);
+        SFV = StopFlyingVoltsPerCell * 100; // this makes it a 16 bit value I can save easily
+        Altered = true;
+        SendValue(Progress, 15);
+    }
+    if (InStrng(Mvalue, chgs))
+    {
+        MotorChannelZero = map(GetValue(Mvalue), -100, 100, 0, 180); // map to 0 to 180
+        Altered = true;
+        SendValue(Progress, 30);
+    }
+    if (InStrng(RxVCorrextion, chgs))
+    {
+        RxVoltageCorrection = GetValue(RxVCorrextion);
+        Altered = true;
+        SendValue(Progress, 40);
+    }
+    if (InStrng(RxVCorrextion, chgs))
+    {
+        UseMotorKill = GetValue(UseKill);
+        Altered = true;
+        SendValue(Progress, 50);
+    }
+    if (InStrng(Mchannel, chgs))
+    {
+        Altered = true;
+        MotorChannel = GetValue(Mchannel) - 1;
+        SendValue(Progress, 60);
+    }
+    if (InStrng(c2, chgs))
+    {
+        TimerDownwards = GetValue(c2);
+        Altered = true;
+        SendValue(Progress, 70);
+    }
+    if (InStrng(n4, chgs))
+    {
+        TimerStartTime = GetValue(n4) * 60;
+        Altered = true;
+        SendValue(Progress, 80);
+    }
+    if (InStrng(r0, chgs))
+    {
+        PPMdata.UseSBUSFromRX = GetValue(r0);
+        Altered = true;
+        SendValue(Progress, 90);
+    }
+    if (InStrng(n5, chgs))
+    {
+        PPMdata.PPMChannelCount = GetValue(n5);
+        Altered = true;
+    }
     SendValue(Progress, 100);
     CurrentView = RXSETUPVIEW;
-    SaveOneModel(ModelNumber);
+    if (Altered)
+    {
+        SaveOneModel(ModelNumber);
+        SendText(change, cleared);
+    }
     UpdateModelsNameEveryWhere();
     AddParameterstoQueue(5); // 5 is the ID for SBUS/PPM at RX selection and PPM channel count
     GotoFrontView();
