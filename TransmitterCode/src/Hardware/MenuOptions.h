@@ -214,7 +214,7 @@ void ShowMixValues() // sends mix values to Nextion screen
     char MixesView_od[] = "od";
     char MixesView_offset[] = "Offset";
 
-    SendValue(MixesView_MixOutput, Mixes[MixNumber][M_MIX_OUTPUTS]); // heer load the ScreenData array with the mix values tomorrow
+    SendValue(MixesView_MixOutput, Mixes[MixNumber][M_MIX_OUTPUTS]); //  load the ScreenData array with the mix values tomorrow
     ScreenData[MIXINPUT] = Mixes[MixNumber][M_MIX_INPUTS];
     SendValue(MixesView_MixInput, Mixes[MixNumber][M_MIX_INPUTS]);
     ScreenData[MIXOUTPUT] = Mixes[MixNumber][M_MIX_INPUTS];
@@ -1075,20 +1075,44 @@ void BuddyChViewEnd()
     char ProgressStart[] = "vis Progress,1";
     char fs[16][5] = {"fs1", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7", "fs8", "fs9", "fs10", "fs11", "fs12", "fs13", "fs14", "fs15", "fs16"};
     char mSwitch[] = "mSwitch";
-
+    bool Altered = false;
+    char chgs[512];
+    char change[] = "change";
+    char cleared[] = "XX:";
+    for (uint16_t i = 0; i < 500; ++i)
+    { // get copy of any changes
+        chgs[i] = TextIn[i + 4];
+        chgs[i + 1] = 0;
+    }
     SendCommand(ProgressStart);
-    BuddyHasAllSwitches = GetValue(mSwitch);
-    BuddyControlled = 0;
-
+    if (InStrng(mSwitch, chgs))
+    {
+        BuddyHasAllSwitches = GetValue(mSwitch);
+        Altered = true;
+    }
     for (int i = 0; i < 16; ++i)
     {
-        BuddyControlled |= GetValue(fs[i]) << i;
+        if (InStrng(fs[i], chgs))
+        {
+            if (GetValue(fs[i]))
+            {
+                BuddyControlled |= 1 << i;
+            }
+            else
+            {
+                BuddyControlled &= ~(1 << i);
+            }
+            Altered = true;
+        }
         SendValue(Progress, i * (100 / 16));
     }
-    SaveOneModel(ModelNumber);
-    CloseModelsFile();
+    if (Altered)
+    {
+        SendText(change, cleared);
+        SaveOneModel(ModelNumber);
+        CloseModelsFile();
+    }
     SendCommand(pBuddyView);
     CurrentView = BUDDYVIEW;
 }
-
 #endif
