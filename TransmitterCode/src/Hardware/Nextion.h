@@ -1,39 +1,29 @@
 #include <Arduino.h>
 #include "Hardware/1Definitions.h"
 #ifndef NEXTION_H
-    #define NEXTION_H
- 
-    
+#define NEXTION_H
+
 /*********************************************************************************************************************************/
 //                        NEXTION functions
 /*********************************************************************************************************************************/
-void GetReturnCode(char* tbox)
-{ // This function reads the return code from the NEXTION display
-    // union{
-    //     uint32_t  rc;
-    //     uint8_t   rcarray[4] = {0,0,0,0};    
-    // }thecode;
-   // int i = 0;
-    while (NEXTION.available()) {
+void GetReturnCode(char *tbox)
+{
+    while (NEXTION.available())
+    {
         delayMicroseconds(70);
-        // uint8_t j = NEXTION.read();
-         NEXTION.read();
-        //  if (j < 0xff){
-        //     thecode.rcarray[i] = j;
-        //     ++i;
-        //  }
-       //NextionReturn = thecode.rc; // get return code for debugging
+        NEXTION.read();
     }
 }
 /*********************************************************************************************************************************/
-void SendText(char* tbox, char* NewWord)
+void SendText(char *tbox, char *NewWord)
 {
-    char txt[]   = ".txt=\"";
+    char txt[] = ".txt=\"";
     char quote[] = "\"";
     char CB[120];
     char TooLong[] = "Too long!";
-    if (strlen(NewWord) > 110) {
-        strcpy(NewWord, TooLong);//
+    if (strlen(NewWord) > 110)
+    {
+        strcpy(NewWord, TooLong); //
     }
     strcpy(CB, tbox);
     strcat(CB, txt);
@@ -44,13 +34,14 @@ void SendText(char* tbox, char* NewWord)
 }
 
 /*********************************************************************************************************************************/
-void SendOtherText(char* tbox, char* NewWord)
+void SendOtherText(char *tbox, char *NewWord)
 {
     char quote[] = "\"";
     char CB[MAXBUFFERSIZE];
     char TooLong[] = "Too long!";
 
-    if (strlen(NewWord) > MAXBUFFERSIZE - 2) {
+    if (strlen(NewWord) > MAXBUFFERSIZE - 2)
+    {
         strcpy(NewWord, TooLong);
     }
     strcpy(CB, tbox);
@@ -61,14 +52,15 @@ void SendOtherText(char* tbox, char* NewWord)
 }
 
 /*********************************************************************************************************************************/
-void SendText1(char* tbox, char* NewWord)
+void SendText1(char *tbox, char *NewWord)
 {
-    char txt[]   = ".txt=\"";
+    char txt[] = ".txt=\"";
     char quote[] = "\"";
     char CB[MAXFILELEN + 10];
     char TooLong[] = "Too long!";
 
-    if (strlen(NewWord) > MAXFILELEN) {
+    if (strlen(NewWord) > MAXFILELEN)
+    {
         strcpy(NewWord, TooLong);
     }
     strcpy(CB, tbox);
@@ -79,7 +71,7 @@ void SendText1(char* tbox, char* NewWord)
     GetReturnCode(tbox);
 }
 /*********************************************************************************************************************************/
-void SendOtherValue(char* nbox, int value)
+void SendOtherValue(char *nbox, int value)
 {
     char Val[] = "=";
     char CB[100];
@@ -96,54 +88,61 @@ void SendOtherValue(char* nbox, int value)
 void GetTextIn() // heer
 {
     delayMicroseconds(20);
-    if (NEXTION.available()) {
+    if (NEXTION.available())
+    {
         int j = 0;
-        while (NEXTION.available()) {
+        while (NEXTION.available())
+        {
             TextIn[j] = NEXTION.read();
             KickTheDog();
-            if (j < MAXTEXTIN) ++j;
+            if (j < MAXTEXTIN)
+                ++j;
             delayMicroseconds(20);
         }
     }
 }
 
-
 /*********************************************************************************************************************************/
-bool GetButtonPress() // heer 
+bool GetButtonPress() // heer
 {
-    if (NEXTION.available()){
+    if (NEXTION.available())
+    {
         GetTextIn();
-        if (ButtonClicks) PlaySound(CLICKONE);
+        if (ButtonClicks)
+            PlaySound(CLICKONE);
         return true;
-    }     
+    }
     return false;
 }
 
-
 /*********************************************************************************************************************************/
-void SendCommand(char* tbox)
+void SendCommand(char *tbox)
 {
     char page[] = "page ";
     char blankview[] = "BlankView";
 
     NEXTION.print(tbox);
-    for (int i = 0; i < 3; ++i) NEXTION.write(0xff);
+    for (int i = 0; i < 3; ++i)
+        NEXTION.write(0xff);
     delayMicroseconds(70);
     GetReturnCode(tbox);
-    if (InStrng(blankview, tbox)) return;                      // Don't wait for blankview
-    if (InStrng(page, tbox)) DelayWithDog(SCREENCHANGEWAIT);   // Allow time for new page to appear
+    if (InStrng(blankview, tbox))
+        return; // Don't wait for blankview
+    if (InStrng(page, tbox))
+        DelayWithDog(SCREENCHANGEWAIT); // Allow time for new page to appear
 }
 /*********************************************************************************************************************************/
 void EndSend()
 {
-    for (u_int8_t pp = 0; pp < 3; ++pp) {
+    for (u_int8_t pp = 0; pp < 3; ++pp)
+    {
         NEXTION.write(0xff); // Send end of Input message //
     }
-    DelayWithDog(55);        // ** A DELAY ** (>=50 ms) was needed if an answer might come! (!! Shorter with Intelligent dislay)
+    DelayWithDog(55); // ** A DELAY ** (>=50 ms) was needed if an answer might come! (!! Shorter with Intelligent dislay)
 }
 
 /*********************************************************************************************************************************/
-void SendValue(char* nbox, int value)
+void SendValue(char *nbox, int value)
 {
     char Val[] = ".val=";
     char CB[100];
@@ -157,12 +156,12 @@ void SendValue(char* nbox, int value)
 }
 
 /*********************************************************************************************************************************/
-uint32_t getvalue(char* nbox)
+uint32_t getvalue(char *nbox)
 {
     uint32_t ValueIn = 0;
-    char     GET[]   = "get ";
-    char     VAL[]   = ".val";
-    char     CB[100];
+    char GET[] = "get ";
+    char VAL[] = ".val";
+    char CB[100];
 
     strcpy(CB, GET);
     strcat(CB, nbox);
@@ -170,13 +169,15 @@ uint32_t getvalue(char* nbox)
     NEXTION.print(CB);
     EndSend();
     GetTextIn();
-    if (TextIn[0] == 'q') {
+    if (TextIn[0] == 'q')
+    {
         ValueIn = TextIn[1]; // Collect and build 32 bit value from 4 bytes
         ValueIn += (TextIn[2] << 8);
         ValueIn += (TextIn[3] << 16);
         ValueIn += (TextIn[4] << 24);
     }
-    else {
+    else
+    {
         ValueIn = 65535; // = THERE WAS AN ERROR !
     }
     return ValueIn;
@@ -184,12 +185,13 @@ uint32_t getvalue(char* nbox)
 
 /*********************************************************************************************************************************/
 
-uint32_t GetValue(char* nbox)
+uint32_t GetValue(char *nbox)
 { // This function calls the function above until it returns no error
-    int      i       = 0;
+    int i = 0;
     uint32_t ValueIn = getvalue(nbox);
 
-    while (ValueIn == 65535 && i < 25) { // if error read again!
+    while (ValueIn == 65535 && i < 25)
+    { // if error read again!
         DelayWithDog(10);
         ValueIn = getvalue(nbox);
         ++i;
@@ -200,11 +202,11 @@ uint32_t GetValue(char* nbox)
 // ***************************************************************************************************************
 // This function gets Nextion textbox Text into a char array pointed to by * TheText. There better be room!
 // It returns the length of array
-uint16_t GetText(char* TextBoxName, char* TheText)
+uint16_t GetText(char *TextBoxName, char *TheText)
 {
-    char    get[]  = "get ";
-    char    _txt[] = ".txt";
-    char    CB[100];
+    char get[] = "get ";
+    char _txt[] = ".txt";
+    char CB[100];
     uint8_t j = 0;
     strcpy(CB, get);
     strcat(CB, TextBoxName);
@@ -212,8 +214,10 @@ uint16_t GetText(char* TextBoxName, char* TheText)
     NEXTION.print(CB);
     EndSend();
     GetTextIn();
-    if (TextIn[0] == 'p') {
-        while (TextIn[j + 1] < 0xFF) {
+    if (TextIn[0] == 'p')
+    {
+        while (TextIn[j + 1] < 0xFF)
+        {
             TheText[j] = TextIn[j + 1];
             ++j;
             KickTheDog(); // ??
@@ -223,17 +227,18 @@ uint16_t GetText(char* TextBoxName, char* TheText)
     return strlen(TheText);
 }
 /*********************************************************************************************************************************/
-int GetOtherValue(char* nbox)
+int GetOtherValue(char *nbox)
 { // don't add .val as other thingy is already there ...
     double ValueIn = 0;
-    char   GET[]   = "get ";
-    char   CB[100];
+    char GET[] = "get ";
+    char CB[100];
     strcpy(CB, GET);
     strcat(CB, nbox);
     NEXTION.print(CB);
     EndSend();
     GetTextIn();
-    if (TextIn[0] == 'q') {
+    if (TextIn[0] == 'q')
+    {
         ValueIn = TextIn[1]; // Collect and build 32 bit value from 4 bytes
         ValueIn += (TextIn[2] << 8);
         ValueIn += (TextIn[3] << 16);

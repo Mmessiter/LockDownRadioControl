@@ -2904,7 +2904,7 @@ void RXOptionsViewEnd()
     char r0[] = "r0"; // SBUS on
     char n5[] = "n5"; // PPMChannelCount
     char ProgressStart[] = "vis Progress,1";
-    char Progress[] = "Progress"; // heer
+    char Progress[] = "Progress"; 
     bool Altered = false;
     char chgs[512];
     char change[] = "change";
@@ -2915,7 +2915,7 @@ void RXOptionsViewEnd()
         chgs[i] = TextIn[i + 4];
         chgs[i + 1] = 0;
     }
-    
+
     SendCommand(ProgressStart);
     if (InStrng(c1, chgs))
     {
@@ -2923,7 +2923,7 @@ void RXOptionsViewEnd()
         CopyTrimsToAll = GetValue(c1);
         SendValue(Progress, 5);
     }
-    
+
     if (InStrng(n3, chgs))
     {
         TrimMultiplier = GetValue(n3);
@@ -3622,12 +3622,12 @@ void EndServoTypeView()
     SendCommand(ProgressStart);
     for (int i = 0; i < 11; ++i)
     {
-        if(InStrng(n_labels[i], chgs))
+        if (InStrng(n_labels[i], chgs))
         {
             ServoFrequency[i] = GetValue(n_labels[i]);
             Altered = true;
         }
-        if(InStrng(n_labels[i + 11], chgs))
+        if (InStrng(n_labels[i + 11], chgs))
         {
             ServoCentrePulse[i] = GetValue(n_labels[i + 11]);
             Altered = true;
