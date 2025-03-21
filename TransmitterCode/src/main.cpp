@@ -2949,7 +2949,7 @@ void RXOptionsViewEnd()
         Altered = true;
         SendValue(Progress, 40);
     }
-    if (InStrng(RxVCorrextion, chgs))
+    if (InStrng(UseKill, chgs))
     {
         UseMotorKill = GetValue(UseKill);
         Altered = true;
