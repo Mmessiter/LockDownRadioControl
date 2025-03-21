@@ -416,7 +416,7 @@ void  PopulateFrontView(){
     char         MsgBuddying[]          = "* Buddy *";
     char         FrontView_Connected[]  = "Connected";
     char         InVisible[]            = "vis Quality,0";
-        
+       
 
         if (ParametersToBeSentPointer == 0) {
             ShowConnectionQuality();
