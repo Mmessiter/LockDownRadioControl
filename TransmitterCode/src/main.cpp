@@ -5106,10 +5106,11 @@ void GetBank() // ... and the other three switches
     { // if BuddyPupilOnWireless is not using switches
         ReadSafetySwitch();
         ReadBuddySwitch();
-        ReadDualRateSwitch();
         ReadBankSwitch();
         ReadAutoAndMotorSwitch();
     }
+
+    ReadDualRateSwitch();
 
     if (SafetyWasOn != SafetyON)
     {
