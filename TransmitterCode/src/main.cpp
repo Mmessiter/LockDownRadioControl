@@ -4923,7 +4923,7 @@ void GetBank() // ... and the other three switches
         ReadAutoAndMotorSwitch();
     }
 
-    ReadDualRateSwitch();
+    ReadDualRateSwitch(); // only actually read hardware switches if not using wireless buddy box or if buddy has all switches
 
     if (SafetyWasOn != SafetyON)
     {
