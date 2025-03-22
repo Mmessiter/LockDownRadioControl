@@ -532,7 +532,7 @@ void PopulateFrontView()
 FASTRUN void ShowComms()
 {
     if (millis() - LastShowTime < SHOWCOMMSDELAY)
-        return; // 10x a second is enough
+        return; // 10x a second is more than enough
     LastShowTime = millis();
 
     if (GPS_RX_FIX)
