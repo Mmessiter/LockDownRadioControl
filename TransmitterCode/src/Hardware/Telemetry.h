@@ -226,12 +226,9 @@ void ShowTrimToAll()
  * @brief Populates the GPS view on the NEXTION data screen with the current GPS data.
  *
  * This function updates the labels on the GPS view screen with the current GPS data. It displays information such as GPS fix status, longitude, latitude, bearing, distance, speed, altitude, and satellite count.
- *
- * @note The function assumes that the GPS data variables (e.g., GPS_RX_FIX, GPS_RX_Satellites, GPS_RX_Longitude, etc.) have been properly initialized before calling this function.
  */
 void PopulateGPSView()
 {
-
     char Vbuf[50];
     char Fix[] = "Fix"; // These are label names in the NEXTION data screen. They are best kept short.
     char Lon[] = "Lon";
@@ -251,47 +248,36 @@ void PopulateGPSView()
     if (GPS_RX_FIX)
     { // if no fix, then leave display as before
         SendText(Fix, yes);
-        if (FirstGPSfix)
-        {
-            FirstGPSfix = false;
-            PlaySound(BEEPCOMPLETE); // todo add new sound
-        }
-    }
-    else
-    {
+        snprintf(Vbuf, 7, "%d", GPS_RX_Satellites);
+        SendText(Sat, Vbuf);
+        snprintf(Vbuf, 7, "%.3f", GPS_RX_ANGLE);
+        SendText(Bear, Vbuf);
+        snprintf(Vbuf, 6, "%.3f", GPS_RX_Altitude);
+        SendText(ALT, Vbuf);
+        snprintf(Vbuf, 7, "%.3f", GPS_RX_DistanceTo);
+        SendText(Dist, Vbuf);
+        snprintf(Vbuf, 6, "%.3f", GPS_RX_CourseTo);
+        SendText(BTo, Vbuf);
+        snprintf(Vbuf, 15, "%.12f", GPS_RX_Longitude);
+        SendText(Lon, Vbuf);
+        snprintf(Vbuf, 15, "%.12f", GPS_RX_Latitude);
+        SendText(Lat, Vbuf);
+        snprintf(Vbuf, 6, "%.3f", GPS_RX_Speed);
+        SendText(Sped, Vbuf);
+        snprintf(Vbuf, 6, "%.3f", GPS_RX_MaxSpeed);
+        SendText(MxS, Vbuf);
+        snprintf(Vbuf, 6, "%.3f", GPS_RX_Maxaltitude); // ?? todo
+        SendText(MALT, Vbuf);
+        snprintf(Vbuf, 6, "%.3f", GPS_RX_MaxDistance); //  ??
+        SendText(Mxd, Vbuf);
+    } else {
         SendText(Fix, no);
-        FirstGPSfix = true;
     }
-    snprintf(Vbuf, 7, "%d", GPS_RX_Satellites);
-    SendText(Sat, Vbuf);
-    snprintf(Vbuf, 7, "%.3f", GPS_RX_ANGLE);
-    SendText(Bear, Vbuf);
-
-    snprintf(Vbuf, 6, "%.3f", GPS_RX_Altitude);
-    SendText(ALT, Vbuf);
-    snprintf(Vbuf, 7, "%.3f", GPS_RX_DistanceTo);
-    SendText(Dist, Vbuf);
-    snprintf(Vbuf, 6, "%.3f", GPS_RX_CourseTo);
-    SendText(BTo, Vbuf);
-    snprintf(Vbuf, 15, "%.12f", GPS_RX_Longitude);
-    SendText(Lon, Vbuf);
-    snprintf(Vbuf, 15, "%.12f", GPS_RX_Latitude);
-    SendText(Lat, Vbuf);
-
-    snprintf(Vbuf, 6, "%.3f", GPS_RX_Speed);
-    SendText(Sped, Vbuf);
-    snprintf(Vbuf, 6, "%.3f", GPS_RX_MaxSpeed);
-    SendText(MxS, Vbuf);
-    snprintf(Vbuf, 6, "%.3f", GPS_RX_Maxaltitude); // ?? todo
-    SendText(MALT, Vbuf);
-    snprintf(Vbuf, 6, "%.3f", GPS_RX_MaxDistance); //  ??
-    SendText(Mxd, Vbuf);
 }
 
 /*********************************************************************************************************************************/
 void PopulateDataView()
 {
-
     char DataView_pps[] = "pps"; // These are label names in the NEXTION data screen. They are best kept short.
     char DataView_lps[] = "lps";
     char DataView_Alt[] = "alt";
@@ -316,7 +302,6 @@ void PopulateDataView()
     char DataView_txv[] = "txv";
     char MeanFrameRate[] = "n0";
     char TimeSinceBoot[] = "n1";
-
     unsigned int TempModelId = 0;
     uint32_t BootedMinutes = millis() / 60000;
 
