@@ -549,6 +549,20 @@ FASTRUN void ShowComms()
     if (millis() - LastShowTime < SHOWCOMMSDELAY)
         return; // 10x a second is enough
     LastShowTime = millis();
+
+    if (GPS_RX_FIX)
+    {
+        if (FirstGPSfix)
+        {
+            FirstGPSfix = false;
+            PlaySound(BEEPCOMPLETE); // todo add new sound
+        }
+    }
+    else
+    {
+        FirstGPSfix = true;
+    }
+
     switch (CurrentView)
     {
     case FRONTVIEW:
