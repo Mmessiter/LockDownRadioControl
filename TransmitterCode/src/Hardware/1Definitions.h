@@ -1160,6 +1160,7 @@ int Previous_Current_Y = 0; // for scrolling log file
 int Max_Y = 666;
 uint32_t NextionReturn = 0;
 bool ReadingaFile = false;
+bool FirstGPSfix = true;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
