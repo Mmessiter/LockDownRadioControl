@@ -36,36 +36,51 @@ void ReadDRSwitch(bool sw1, bool sw2, bool rev) // Dual Rate Switch
     }
 }
 
-/************************************************************************************************************/
-
+// ************************************************************************************************************/
 void ReadDualRatesFromScreen()
 {
+    char Rt[3][6] = {"rate1", "rate2", "rate3"};
+    char CHn[8][3] = {"n2", "n0", "n1", "n3", "n6", "n4", "n5", "n7"};
+    bool Altered = false;
+    char chgs[512];
+    char change[] = "change";
+    char cleared[] = "XX:";
 
-    char rate1[] = "rate1";
-    char rate2[] = "rate2";
-    char rate3[] = "rate3";
-    char ChNumber1[] = "n2";
-    char ChNumber2[] = "n0";
-    char ChNumber3[] = "n1";
-    char ChNumber4[] = "n3";
-    char ChNumber5[] = "n6";
-    char ChNumber6[] = "n4";
-    char ChNumber7[] = "n5";
-    char ChNumber8[] = "n7";
+    for (uint16_t i = 0; i < 500; ++i)
+    { // get copy of any changes
+        chgs[i] = TextIn[i + 4];
+        chgs[i + 1] = 0;
+    }
 
-    Drate1 = GetValue(rate1);
-    Drate2 = GetValue(rate2);
-    Drate3 = GetValue(rate3);
-    DualRateChannels[0] = GetValue(ChNumber1);
-    DualRateChannels[1] = GetValue(ChNumber2);
-    DualRateChannels[2] = GetValue(ChNumber3);
-    DualRateChannels[3] = GetValue(ChNumber4);
-    DualRateChannels[4] = GetValue(ChNumber5);
-    DualRateChannels[5] = GetValue(ChNumber6);
-    DualRateChannels[6] = GetValue(ChNumber7);
-    DualRateChannels[7] = GetValue(ChNumber8);
+    if (InStrng(Rt[0], chgs)) // if any of the rates have changed
+    {
+        Drate1 = GetValue(Rt[0]);
+        Altered = true;
+    }
+    if (InStrng(Rt[1], chgs)) // if any of the rates have changed
+    {
+        Drate2 = GetValue(Rt[1]);
+        Altered = true;
+    }
+    if (InStrng(Rt[2], chgs)) // if any of the rates have changed
+    {
+        Drate3 = GetValue(Rt[2]);
+        Altered = true;
+    }
+    for (uint8_t i = 0; i < 8; i++)
+    {
+        if (InStrng(CHn[i], chgs)) // if any of the channels have changed
+        {
+            DualRateChannels[i] = GetValue(CHn[i]);
+            Altered = true;
+        }
+    }
+    if (Altered) // if any of the rates or channels have changed
+    {
+        SaveOneModel(ModelNumber);
+        SendText(change, cleared);
+    }
 }
-
 /************************************************************************************************************/
 
 void RefreshDualRatesNew()
