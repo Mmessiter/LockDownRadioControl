@@ -339,6 +339,20 @@ void LogAllGPSMaxs()
     LogText(buf, sizeof(buf), false);
 }
 // ************************************************************************
+void LogMotorOnDuration(){
+    char TheText[] = "Motor on for ";
+    char buf[80] = " ";
+    char NB[10];
+    Str(NB, MotorOnSeconds / 60, 0);
+    strcpy(buf, TheText);
+    strcat(buf, NB);
+    strcat(buf, " minutes and ");
+    Str(NB, MotorOnSeconds % 60, 0);
+    strcat(buf, NB);
+    strcat(buf, " seconds");
+    LogText(buf, sizeof(buf), false);
+}
+// ************************************************************************
 /**
  * @brief Logs the disconnection event.
  *
@@ -355,6 +369,7 @@ FASTRUN void LogDisConnection()
     strcat(buf, ModelName);
     LogText(buf, sizeof(buf), true);
     LogConnectedDuration();
+    LogMotorOnDuration();
     LogLongestGap();
     LogTotalLostPackets();
     LogTotalGoodPackets();
@@ -437,6 +452,28 @@ FASTRUN void LogLowBattery()
     LogText(TheText, strlen(TheText), true);
 }
 // ************************************************************************
+void Log_GPS_RX_Altitude()
+{
+    char TheText[] = "GPS Altitude: ";
+    char buf[60] = " ";
+    char NB[10];
+    dtostrf(GPS_RX_Altitude, 2, 2, NB);
+    strcpy(buf, TheText);
+    strcat(buf, NB);
+    LogText(buf, sizeof(buf), false);
+}
+// ************************************************************************
+void Log_GPS_RX_DistanceTo()
+{
+    char TheText[] = "GPS Distance: ";
+    char buf[60] = " ";
+    char NB[10];
+    dtostrf(GPS_RX_DistanceTo, 2, 2, NB);
+    strcpy(buf, TheText);
+    strcat(buf, NB);
+    LogText(buf, sizeof(buf), false);
+}
+// ************************************************************************
 
 FASTRUN void LogThisGap()
 {
@@ -449,6 +486,11 @@ FASTRUN void LogThisGap()
     strcpy(thetext, Ltext);
     strcat(thetext, NB);
     LogText(thetext, 8, true);
+    if (GPS_RX_FIX)
+    {
+        Log_GPS_RX_Altitude();
+        Log_GPS_RX_DistanceTo();
+    }
 }
 // ************************************************************************
 FASTRUN void LogLongestGap()

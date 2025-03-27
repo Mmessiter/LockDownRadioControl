@@ -288,10 +288,10 @@ FASTRUN void ShowMotorTimer()
 
     if ((MotorEnabled && (!LostContactFlag || PPMdata.UseTXModule)))
     {
-        ElapsedSeconds = ((millis() - TimerMillis) / 1000) + PausedSecs;
-        Secs = ElapsedSeconds;
+        MotorOnSeconds = ((millis() - MotorStartTime) / 1000) + PausedSecs;
+        Secs = MotorOnSeconds;
         if (TimerDownwards)
-            Secs = TimerStartTime - ElapsedSeconds;
+            Secs = TimerStartTime - MotorOnSeconds;
         Hours = Secs / 3600;
         Secs %= 3600;
         Mins = Secs / 60;
@@ -313,7 +313,7 @@ FASTRUN void ShowMotorTimer()
 
     if (TimerDownwards)
     {
-        if ((Secs < 11) && !Mins && !ClockSpoken1 && (ElapsedSeconds > 2))
+        if ((Secs < 11) && !Mins && !ClockSpoken1 && (MotorOnSeconds > 2))
         {
             PlaySound(Cdown[CountDownIndex]);
             ++CountDownIndex;
@@ -332,7 +332,7 @@ FASTRUN void ShowMotorTimer()
             LogTimer(Mins);
         if (TimerDownwards)
         {
-            if ((!Mins) && (!Secs) && (ElapsedSeconds > 2))
+            if ((!Mins) && (!Secs) && (MotorOnSeconds > 2))
             {
                 PlaySound(STORAGECHARGE); // = Stop Flyfing!
                 TimesUp = true;
@@ -4966,7 +4966,7 @@ void GetBank() // ... and the other three switches
                 PlaySound(MOTORON); // Tell the pilot motor is on!
             if (UseLog)
                 LogMotor(1);
-            TimerMillis = millis(); // Motor ON timerpause off
+            MotorStartTime = millis(); // Motor ON timerpause off
         }
         else
         {
@@ -4981,7 +4981,7 @@ void GetBank() // ... and the other three switches
                 SendCommand(WarnOff);
                 SendNoData = false; // user turned off motor
             }
-            PausedSecs = ElapsedSeconds; //    Motor OFF timerpause started
+            PausedSecs = MotorOnSeconds; //    Motor OFF timerpause started
         }
         LastSeconds = 0;
         ShowMotorTimer();
