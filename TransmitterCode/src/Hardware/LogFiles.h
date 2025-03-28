@@ -7,7 +7,6 @@
 #ifndef LOGFILES_H
 #define LOGFILES_H
 
-
 /******************************************************************************************************************************/
 void LogAverageFrameRate()
 {
@@ -324,7 +323,7 @@ void LogAllGPSMaxs()
     strcat(buf, NB);
     strcat(buf, " m");
     LogText(buf, sizeof(buf), false);
-    strcpy(buf, "Max Altitude: ");
+    strcpy(buf, "Max Altitude (GPS): ");
     dtostrf(GPS_RX_Maxaltitude, 2, 2, NB);
     strcat(buf, NB);
     strcat(buf, " m");
@@ -340,7 +339,8 @@ void LogAllGPSMaxs()
     LogText(buf, sizeof(buf), false);
 }
 // ************************************************************************
-void LogMotorOnDuration(){
+void LogMotorOnDuration()
+{
     char TheText[] = "Motor on for ";
     char buf[80] = " ";
     char NB[10];
@@ -357,11 +357,9 @@ void LogMotorOnDuration(){
 void Log_RXMAXModelAltitude()
 {
     char TheText[] = "Max (Baro) Model Altitude: ";
-    char buf[80] = " ";
-    char NB[10];
-    dtostrf(RXMAXModelAltitude, 2, 2, NB);
+    char buf[60] = " ";
     strcpy(buf, TheText);
-    strcat(buf, NB);
+    strcat(buf, Maxaltitude);
     LogText(buf, sizeof(buf), false);
 }
 // ************************************************************************
@@ -382,7 +380,10 @@ FASTRUN void LogDisConnection()
     LogText(buf, sizeof(buf), true);
     LogConnectedDuration();
     LogMotorOnDuration();
-    Log_RXMAXModelAltitude();
+    if (RXMAXModelAltitude > 0)
+        Log_RXMAXModelAltitude();
+    if (GPS_RX_FIX)
+        LogAllGPSMaxs();
     LogLongestGap();
     LogTotalLostPackets();
     LogTotalGoodPackets();
@@ -392,8 +393,7 @@ FASTRUN void LogDisConnection()
     LogOverallSuccessRate();
     LogAverageFrameRate();
     LogTimeSinceBoot();
-    if (GPS_RX_FIX)
-        LogAllGPSMaxs();
+   
     LogEndLine();
 }
 // ************************************************************************
@@ -663,7 +663,7 @@ void LogConnectedDuration()
     uint32_t Duration = millis() - LedGreenMoment;
     char TheText[] = "Time connected: ";
     LogTimeSince(TheText, Duration); // how many minutes and seconds since connection
-} 
+}
 /*********************************************************************************************************************************/
 
 #endif
