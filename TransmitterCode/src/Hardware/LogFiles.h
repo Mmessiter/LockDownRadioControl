@@ -7,6 +7,7 @@
 #ifndef LOGFILES_H
 #define LOGFILES_H
 
+
 /******************************************************************************************************************************/
 void LogAverageFrameRate()
 {
@@ -353,6 +354,17 @@ void LogMotorOnDuration(){
     LogText(buf, sizeof(buf), false);
 }
 // ************************************************************************
+void Log_RXMAXModelAltitude()
+{
+    char TheText[] = "Max (Baro) Model Altitude: ";
+    char buf[80] = " ";
+    char NB[10];
+    dtostrf(RXMAXModelAltitude, 2, 2, NB);
+    strcpy(buf, TheText);
+    strcat(buf, NB);
+    LogText(buf, sizeof(buf), false);
+}
+// ************************************************************************
 /**
  * @brief Logs the disconnection event.
  *
@@ -370,6 +382,7 @@ FASTRUN void LogDisConnection()
     LogText(buf, sizeof(buf), true);
     LogConnectedDuration();
     LogMotorOnDuration();
+    Log_RXMAXModelAltitude();
     LogLongestGap();
     LogTotalLostPackets();
     LogTotalGoodPackets();
@@ -650,5 +663,7 @@ void LogConnectedDuration()
     uint32_t Duration = millis() - LedGreenMoment;
     char TheText[] = "Time connected: ";
     LogTimeSince(TheText, Duration); // how many minutes and seconds since connection
-}
+} 
+/*********************************************************************************************************************************/
+
 #endif

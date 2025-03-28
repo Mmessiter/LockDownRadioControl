@@ -12,7 +12,7 @@
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 4
 #define RXVERSION_MINIMUS 7
-#define RXVERSION_EXTRA 'W' // 11 March 2025
+#define RXVERSION_EXTRA 'X' // 28 March 2025
 
 #define HOPTIME 17        // 47     //  17 gives 50Hz FHSS, 47 gives 20Hz FHSS
 #define RECEIVE_TIMEOUT 8 // 5 milliseconds is 'perfect' time between packets
@@ -233,6 +233,7 @@ template <typename any>
 void Look1(const any &value);
 
 Adafruit_INA219 ina219;
+Adafruit_BMP280 bmp;
 
 //                         Channels: 1  2 [3][4] 5  6 {7} 8  9 {10} 11 (Channels 3+4 & 7+10 must have same frquency)
 uint8_t PWMPins[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}; //  if only SERVOSUSED = 9 then last two are ignored
@@ -253,8 +254,8 @@ float BaroTemperature;
 float INA219Volts = 0;
 uint32_t SensorTime = 0;
 uint32_t SensorHubAccessed = 0;
-uint16_t Qnh = 0; // Pressure at sea level here and now (defined at TX)
-uint16_t OldQnh = 0;
+uint16_t Qnh = 1079; // Pressure at sea level here and now (defined at TX)
+uint16_t OldQnh = 1079;
 
 uint8_t SatellitesGPS;
 float LatitudeGPS;
@@ -274,6 +275,7 @@ uint8_t SecsGPS;
 float StoredLatitudeGPS = 51.922291;  // haverfordwest!
 float StoredLongitudeGPS = -5.213110; // haverfordwest!
 bool GPS_Connected = false;
+bool BMP280Connected = false;
 
 bool SensorHubDead = false;
 uint32_t NewConnectionMoment = 0;

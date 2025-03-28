@@ -413,7 +413,7 @@ FASTRUN void SendData()
         {
             SendViaPPM();
             return;
-        }                  // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
+        } // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         Connected = false; // Assume failure until an ACK is received.
         FlushFifos();      // This flush avoids a lockup that happens when the FIFO gets full.
 
@@ -782,7 +782,8 @@ void GetDateFromAckPayload()
 /************************************************************************************************************/
 void GetAltitude()
 {
-    RXModelAltitude = int(GetFromAckPayload()) - GroundModelAltitude;
+    RXModelAltitudeBMP280 = int(GetFromAckPayload()); // actual reading from BMP280
+    RXModelAltitude = RXModelAltitudeBMP280 - GroundModelAltitude; // might be above ground only if GroundModelAltitude isnt zero
     if (RXMAXModelAltitude < RXModelAltitude)
         RXMAXModelAltitude = RXModelAltitude;
     snprintf(Maxaltitude, 5, "%d", RXMAXModelAltitude);

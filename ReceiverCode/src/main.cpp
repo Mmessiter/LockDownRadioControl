@@ -49,6 +49,7 @@
 #include <stdint.h>
 #include <EEPROM.h>
 #include <Wire.h>
+#include <Adafruit_BMP280.h>
 
 #include <PulsePosition.h>
 #include <Watchdog_t4.h>
@@ -336,23 +337,20 @@ void ScanI2c()
             if (i == 0x40)
             {
                 INA219Connected = true;
-#ifdef DB_SENSORS
-                delay(3000);
-                Serial.println("INA219 voltage meter detected!");
-#endif
             }
             if (i == 0x68)
             {
                 MPU6050Connected = true;
-#ifdef DB_SENSORS
-                delay(3000);
-                Serial.println("MPU 6050 detected");
-#endif // DB_SENSORS
             }
             if (i == 0x10)
             {
                 GPS_Connected = true;
-                Serial.println("GPS detected");
+                // Serial.println("GPS detected");
+            }
+            if (i == 0x76)
+            {
+                BMP280Connected = true;
+                Serial.println("BMP280 detected");
             }
         }
     }
@@ -548,7 +546,24 @@ void SetupWatchDog()
     TeensyWatchDog.begin(WatchDogConfig);
     LastDogKick = millis();
 }
-
+// ***************************************************************************************************************************************************
+void Init_BMP280()
+{
+    if (!bmp.begin(0x76))
+    {
+        Serial.println("Could not find a valid BMP280 sensor.");
+        BMP280Connected = false; // This is not a fatal error but we can't use the BMP280
+        return;
+    }
+    else
+    {
+        bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
+                        Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
+                        Adafruit_BMP280::SAMPLING_X16,    /* Pressure oversampling */
+                        Adafruit_BMP280::FILTER_X16,      /* Filtering. */
+                        Adafruit_BMP280::STANDBY_MS_500); /* Standby time. */
+    }
+}
 /************************************************************************************************************/
 // SETUP
 /************************************************************************************************************/
@@ -561,6 +576,10 @@ FLASHMEM void setup()
     Wire.begin();
     delay(300);
     ScanI2c(); // Detect what's connected
+    if (BMP280Connected)
+    {
+        Init_BMP280();
+    }
 
 #ifdef USE_STABILISATION
     if (MPU6050Connected)

@@ -304,6 +304,7 @@ void PopulateDataView()
     char TimeSinceBoot[] = "n1";
     unsigned int TempModelId = 0;
     uint32_t BootedMinutes = millis() / 60000;
+    static int LastGroundModelAltitude = 0;
 
     if (!LastPacketsPerSecond)
     { // these only need displaying once - they will not change
@@ -386,16 +387,17 @@ void PopulateDataView()
         SendValue(DataView_Gc, RX2TotalTime);
     }
 
-    if (RXModelAltitude != LastRXModelAltitude)
-    {
+    if ((RXModelAltitude != LastRXModelAltitude) || (GroundModelAltitude != LastGroundModelAltitude))
+    { 
         LastRXModelAltitude = RXModelAltitude;
         SendText(DataView_Alt, ModelAltitude);
     }
 
-    if (RXMAXModelAltitude != LastRXModelMaxAltitude)
+    if ((RXMAXModelAltitude != LastRXModelMaxAltitude)|| (GroundModelAltitude != LastGroundModelAltitude))
     {
         LastRXModelMaxAltitude = RXMAXModelAltitude;
         SendText(DataView_MaxAlt, Maxaltitude);
+        LastGroundModelAltitude = GroundModelAltitude;
     }
 
     if (RXTemperature != LastRXTemperature)

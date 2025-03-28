@@ -30,7 +30,7 @@
 #define TXVERSION_MAJOR 2 // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 4
 #define TXVERSION_MINIMUS 7
-#define TXVERSION_EXTRA "W 20/03/25"
+#define TXVERSION_EXTRA "X 28/03/25"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -839,6 +839,7 @@ float GPS_RX_CourseTo = 0;
 float GPS_RX_MaxDistance = 0;
 float RXModelVolts = 0;
 int RXModelAltitude = 0;
+int RXModelAltitudeBMP280 = 0;
 int RXMAXModelAltitude = 0;
 int GroundModelAltitude = 0;
 float RXTemperature = 0;

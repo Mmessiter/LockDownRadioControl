@@ -1,5 +1,5 @@
 /** @file ReceiverCode/src/utilities/radio.h */
-// Malcolm Messiter 2020 - 2023
+// Malcolm Messiter 2020 - 2025
 #ifndef _SRC_UTILITIES_RADIO_H
 #define _SRC_UTILITIES_RADIO_H
 
@@ -41,9 +41,8 @@ void UseExtraParameters()
         RebuildFlags(FailSafeChannel, TwoBytes);
         SaveFailSafeData();
         break;
-
     case 2:
-
+        Qnh = Parameters.word[1];
         break;
     case 3:
         if (Parameters.word[2] == 255)
@@ -228,23 +227,37 @@ bool ReadData()
 }
 
 // ******************************************************************************************************************************************************************
-//  Get RX LIPO volts if connected separately (as needed on 'planes with no GPS fitted.)
+void GetBMP280Data()
+{
+    static uint32_t LastTime = 0;
+    if (millis() - LastTime > 2005)
+    {
+        LastTime = millis();
+        bmp.takeForcedMeasurement();
+        BaroTemperature = bmp.readTemperature();
+        BaroAltitude = bmp.readAltitude((float)Qnh);
+    }
+}   
+
+// ******************************************************************************************************************************************************************
+//  Get RX LIPO volts if connected
 void GetRXVolts()
 {
     static uint32_t LastTime = 0;
-    if ((millis() - LastTime > 1000) && (INA219Connected))
+    if ((millis() - LastTime > 1007) && (INA219Connected))
     {
         LastTime = millis();
-        INA219Volts = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected separately (as needed on 'planes with no GPS fitted.)
+        INA219Volts = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected
     }
 }
 // ******************************************************************************************************************************************************************
 
 FASTRUN void ReceiveData()
 {
-    GetRXVolts(); //  Get RX LIPO volts if connected separately (as needed on 'planes with no GPS fitted.)
     if (!ReadData())
     {
+        GetRXVolts(); //  if no data yet, get RX LIPO volts if connected
+        GetBMP280Data(); //  if no data yet, get BMP280 data
 #ifdef USE_STABILISATION
         if (MPU6050Connected) // no new packet yet, so look at the gyro and accelerometer
             DoStabilsation();
@@ -792,6 +805,8 @@ void LoadAckPayload()
     ++AckPayload.Purpose;
     if (INA219Connected)
         MaxAckP = 5;
+    if (BMP280Connected)
+        MaxAckP = 7;
     if (GPS_Connected)
         MaxAckP = 18; // its 14 + GPS
     if (AckPayload.Purpose > MaxAckP)
