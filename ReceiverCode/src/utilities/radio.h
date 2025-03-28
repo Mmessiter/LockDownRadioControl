@@ -41,7 +41,7 @@ void UseExtraParameters()
         SaveFailSafeData();
         break;
     case 2:
-        Qnh = (float) Parameters.word[1];
+        Qnh = (float)Parameters.word[1];
         break;
     case 3:
         if (Parameters.word[2] == 255)
@@ -225,8 +225,6 @@ bool ReadData()
     return Connected;
 }
 
-
-
 /************************************************************************************************************/
 float MetersToFeet(float Meters)
 {
@@ -235,6 +233,8 @@ float MetersToFeet(float Meters)
 // ******************************************************************************************************************************************************************
 void GetBMP280Data()
 {
+    if ((!BMP280Connected) || (millis() < 10000))
+        return;
     static uint32_t LastTime = 0;
     if (millis() - LastTime > 2005)
     {
@@ -243,7 +243,7 @@ void GetBMP280Data()
         BaroTemperature = bmp.readTemperature();
         BaroAltitude = MetersToFeet(bmp.readAltitude(Qnh));
     }
-}   
+}
 
 // ******************************************************************************************************************************************************************
 //  Get RX LIPO volts if connected
@@ -262,7 +262,7 @@ FASTRUN void ReceiveData()
 {
     if (!ReadData())
     {
-        GetRXVolts(); //  if no data yet, get RX LIPO volts if connected
+        GetRXVolts();    //  if no data yet, get RX LIPO volts if connected
         GetBMP280Data(); //  if no data yet, get BMP280 data
 #ifdef USE_STABILISATION
         if (MPU6050Connected) // no new packet yet, so look at the gyro and accelerometer

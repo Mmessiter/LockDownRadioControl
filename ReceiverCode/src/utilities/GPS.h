@@ -63,8 +63,8 @@ float GetDistance(float lat1, float lon1, float lat2, float lon2)
     float dLat = lat2 - lat1;
     float dLon = lon2 - lon1;
     float a = sin(dLat / 2) * sin(dLat / 2) +
-            cos(lat1) * cos(lat2) *
-            sin(dLon / 2) * sin(dLon / 2);
+              cos(lat1) * cos(lat2) *
+                  sin(dLon / 2) * sin(dLon / 2);
     float c = 2 * atan2(sqrt(a), sqrt(1 - a));
     float distance = EARTH_RADIUS * c;
     return distance * 1000; // convert to meters
@@ -96,31 +96,41 @@ void DisplayGPSLocation()
 
 void GetGPSTime()
 {
-    HoursGPS    =   GPS.hour;
-    MinsGPS     =   GPS.minute;
-    SecsGPS     =   GPS.seconds;
-    DayGPS      =   GPS.day;
-    MonthGPS    =   GPS.month;
-    YearGPS     =   GPS.year;
+    HoursGPS = GPS.hour;
+    MinsGPS = GPS.minute;
+    SecsGPS = GPS.seconds;
+    DayGPS = GPS.day;
+    MonthGPS = GPS.month;
+    YearGPS = GPS.year;
 }
-
-// *************************************************************
+// ********************************
+double MetresToYards(double metres)
+{
+    return metres * 1.09361;
+}
+// ************************************************************ 
+float KnotsToMph(float knots)
+{
+    return knots * 1.15078; // Convert knots to mph
+}
+//**************************************************
 
 void GetGPSLocation()
 {
-    LatitudeGPS     = GPS.latitudeDegrees;
-    LongitudeGPS    = GPS.longitudeDegrees;
-    AltitudeGPS     = GPS.altitude;
-    SpeedGPS        = GPS.speed;
-    AngleGPS        = GPS.angle;
-    SatellitesGPS   = GPS.satellites;
-    DistanceGPS     = GetDistance(LatitudeGPS, LongitudeGPS, StoredLatitudeGPS, StoredLongitudeGPS);
-    CourseToGPS     = GetHeading(LatitudeGPS, LongitudeGPS, StoredLatitudeGPS, StoredLongitudeGPS);
+    LatitudeGPS = GPS.latitudeDegrees;
+    LongitudeGPS = GPS.longitudeDegrees;
+    AltitudeGPS = MetersToFeet(GPS.altitude);
+    SpeedGPS = KnotsToMph(GPS.speed);
+    AngleGPS = GPS.angle;
+    SatellitesGPS = GPS.satellites;
+    DistanceGPS = MetresToYards(GetDistance(LatitudeGPS, LongitudeGPS, StoredLatitudeGPS, StoredLongitudeGPS));
+    CourseToGPS = GetHeading(LatitudeGPS, LongitudeGPS, StoredLatitudeGPS, StoredLongitudeGPS);
 }
 
 // *************************************************************
-void MarkHere(){
-    StoredLatitudeGPS  = LatitudeGPS;
+void MarkHere()
+{
+    StoredLatitudeGPS = LatitudeGPS;
     StoredLongitudeGPS = LongitudeGPS;
 }
 
@@ -130,7 +140,9 @@ void ReadGPS()
 {
     static uint32_t timer = millis();
     GPS.read();
-    if (GPS.newNMEAreceived()) if (!GPS.parse(GPS.lastNMEA())) return; // receive and parse ... this also sets the newNMEAreceived() flag to false
+    if (GPS.newNMEAreceived())
+        if (!GPS.parse(GPS.lastNMEA()))
+            return; // receive and parse ... this also sets the newNMEAreceived() flag to false
     if (millis() - timer > 1000)
     {
         timer = millis();

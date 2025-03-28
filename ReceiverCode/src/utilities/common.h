@@ -225,9 +225,10 @@ void SetServoFrequency();
 void kalmanFilter();
 void filterRatesForHelicopter();
 void initKalman();
+float MetersToFeet(float Meters);
 
-template <typename any>
-void Look(const any &value);
+    template <typename any>
+    void Look(const any &value);
 
 template <typename any>
 void Look1(const any &value);
