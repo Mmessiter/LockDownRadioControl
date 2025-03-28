@@ -838,15 +838,15 @@ float GPS_RX_DistanceTo = 0;
 float GPS_RX_CourseTo = 0;
 float GPS_RX_MaxDistance = 0;
 float RXModelVolts = 0;
-int RXModelAltitude = 0;
-int RXModelAltitudeBMP280 = 0;
-int RXMAXModelAltitude = 0;
-int GroundModelAltitude = 0;
+float RXModelAltitude = 0;
+float RXModelAltitudeBMP280 = 0;
+float RXMAXModelAltitude = 0;
+float GroundModelAltitude = 0;
 float RXTemperature = 0;
 float MaxAlt = 0;
 char ModelTempRX[11] = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0};
-char ModelAltitude[11] = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0};
-char Maxaltitude[11] = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0};
+char ModelAltitude[31] = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0};
+char Maxaltitude[31] = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0};
 char ReceiverVersionNumber[20];
 char TransmitterVersionNumber[20];
 char ModelVolts[11] = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0};
@@ -964,7 +964,7 @@ bool BuddyMasterOnWireless = false;
 bool BuddyMasterOnPPM = false;
 
 bool SlaveHasControl = false;
-uint16_t Qnh = 1009; // pressure at sea level here
+float Qnh = 1009; // pressure at sea level here
 uint16_t LastModelLoaded = 0;
 uint16_t LastFileInView = 0;
 uint8_t MinimumGap = 75;

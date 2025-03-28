@@ -5340,7 +5340,6 @@ void AddParameterstoQueue(uint8_t ID) // todo:  This function repeats the same p
 /*********************************************************************************************************************************/
 void SendInitialSetupParams()
 {
-
     AddParameterstoQueue(5); // Sbus / PPM at rx
     AddParameterstoQueue(2); // QNH
     AddParameterstoQueue(6); // Servo Frequencies

@@ -326,8 +326,9 @@ void Look1(const any &value) // this is a template function that can print anyth
 // ******************************************************************************************************************************************************************
 
 // Discover what was connected on I2C
+// can use: INA219, MPU6050, GPS, BMP280.  This is a one off function at startup
 
-void ScanI2c()
+FLASHMEM void ScanI2c()
 {
     for (uint8_t i = 1; i < 127; ++i)
     {
@@ -350,7 +351,7 @@ void ScanI2c()
             if (i == 0x76)
             {
                 BMP280Connected = true;
-                Serial.println("BMP280 detected");
+                //Serial.println("BMP280 detected");
             }
         }
     }

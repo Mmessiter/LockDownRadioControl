@@ -602,7 +602,7 @@ bool LoadAllParameters()
         TxName[j] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
-    Qnh = SDRead16BITS(SDCardAddress);
+    Qnh = (float) SDRead16BITS(SDCardAddress);
     ++SDCardAddress;
     ++SDCardAddress;
     DeltaGMT = SDRead16BITS(SDCardAddress);
@@ -782,7 +782,7 @@ void SaveTransmitterParameters()
         if (TxName[j] == 0) EON = true;
         ++SDCardAddress;
     }
-    SDUpdate16BITS(SDCardAddress, Qnh);
+    SDUpdate16BITS(SDCardAddress,(uint16_t) Qnh);
     ++SDCardAddress;
     ++SDCardAddress;
     SDUpdate16BITS(SDCardAddress, DeltaGMT);

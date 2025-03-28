@@ -249,14 +249,12 @@ bool FailSafeDataLoaded = false;
 uint8_t FS_byte1 = 0; // All 16 failsafe channel flags are in these two bytes
 uint8_t FS_byte2 = 0;
 uint32_t ReconnectedMoment;
-uint16_t BaroAltitude;
+float BaroAltitude;
 float BaroTemperature;
 float INA219Volts = 0;
 uint32_t SensorTime = 0;
 uint32_t SensorHubAccessed = 0;
-uint16_t Qnh = 1079; // Pressure at sea level here and now (defined at TX)
-uint16_t OldQnh = 1079;
-
+float Qnh = 1079.00; // Pressure at sea level here and now (defined at TX)
 uint8_t SatellitesGPS;
 float LatitudeGPS;
 float LongitudeGPS;

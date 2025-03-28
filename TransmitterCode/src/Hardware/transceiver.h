@@ -143,8 +143,10 @@ void LoadParameters()
         Parameters.word[2] = FS_Byte2; // These are failsafe flags
         break;
     case 2: // 2 = QNH
-        Parameters.word[1] = Qnh;
+
+        Parameters.word[1] = (uint16_t)Qnh;
         Parameters.word[2] = 1234;
+
         break;
     case 3: // 3 = GPSMarkHere
         if (GPSMarkHere)
@@ -779,21 +781,37 @@ void GetDateFromAckPayload()
     GPS_RX_MONTH = AckPayload.Byte2;
     GPS_RX_YEAR = AckPayload.Byte3;
 }
+// ************************************************************************************************************/
+void FixInches(int *inches, int *feet)
+{
+    if (*inches >= 12)
+    {
+        *inches = 0;
+        ++*feet;
+    }
+}
+
 /************************************************************************************************************/
 void GetAltitude()
 {
-    RXModelAltitudeBMP280 = int(GetFromAckPayload()); // actual reading from BMP280
+    RXModelAltitudeBMP280 = GetFromAckPayload();                   // actual reading from BMP280
     RXModelAltitude = RXModelAltitudeBMP280 - GroundModelAltitude; // might be above ground only if GroundModelAltitude isnt zero
     if (RXMAXModelAltitude < RXModelAltitude)
         RXMAXModelAltitude = RXModelAltitude;
-    snprintf(Maxaltitude, 5, "%d", RXMAXModelAltitude);
-    snprintf(ModelAltitude, 5, "%d", RXModelAltitude);
+    int feet = (int)RXModelAltitude;
+    int inches = (int)((RXModelAltitude - feet) * 12.0f + 0.5f); // round to nearest inch
+    FixInches(&inches, &feet);
+    snprintf(ModelAltitude, sizeof(ModelAltitude), "%d' %d''", feet, inches);
+    feet = (int)RXMAXModelAltitude;
+    inches = (int)((RXMAXModelAltitude - feet) * 12.0f + 0.5f); // round to nearest inch
+    FixInches(&inches, &feet);
+    snprintf(Maxaltitude, sizeof(ModelAltitude), "%d' %d''", feet, inches);
 }
 /************************************************************************************************************/
 void GetTemperature()
 {
     RXTemperature = GetFromAckPayload();
-    snprintf(ModelTempRX, 5, "%1.2f", RXTemperature);
+    snprintf(ModelTempRX, 9, "%1.1f C.", RXTemperature);
 }
 /************************************************************************************************************/
 FASTRUN uint32_t GetIntFromAckPayload() // This one uses a uint32_t int

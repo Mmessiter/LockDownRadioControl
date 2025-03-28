@@ -31,7 +31,6 @@ uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed
 void UseExtraParameters()
 {
     uint16_t TwoBytes = 0;
-
     switch (Parameters.ID)
     {
     case 1:                            // working!
@@ -42,7 +41,7 @@ void UseExtraParameters()
         SaveFailSafeData();
         break;
     case 2:
-        Qnh = Parameters.word[1];
+        Qnh = (float) Parameters.word[1];
         break;
     case 3:
         if (Parameters.word[2] == 255)
@@ -226,6 +225,13 @@ bool ReadData()
     return Connected;
 }
 
+
+
+/************************************************************************************************************/
+float MetersToFeet(float Meters)
+{
+    return Meters * 3.28084;
+}
 // ******************************************************************************************************************************************************************
 void GetBMP280Data()
 {
@@ -235,7 +241,7 @@ void GetBMP280Data()
         LastTime = millis();
         bmp.takeForcedMeasurement();
         BaroTemperature = bmp.readTemperature();
-        BaroAltitude = bmp.readAltitude((float)Qnh);
+        BaroAltitude = MetersToFeet(bmp.readAltitude(Qnh));
     }
 }   
 
