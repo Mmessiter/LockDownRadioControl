@@ -2661,11 +2661,6 @@ void ZeroDataScreen()
     GapAverage = 0;
     GapCount = 0;
     GapStart = 0;
-    GroundModelAltitude = RXModelAltitudeBMP280;
-    LastRXModelMaxAltitude = 0;
-    LastRXModelAltitude = 0;
-    RXMAXModelAltitude = 0;
-    GPS_RX_Maxaltitude = 0;
     ThisGap = 0;
     GPS_RX_MaxDistance = 0;
     GPS_RX_MaxSpeed = 0;
@@ -3824,13 +3819,15 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
+        
         if (InStrng(DataView_AltZero, TextIn) > 0)
-        { //  Set zero altitude on data screen
-
-            GroundModelAltitude = RXModelAltitude;
+        { //  Set zero altitude on data screen by recording current altitude for subraction later
+            GroundModelAltitude = RXModelAltitudeBMP280;
             GPS_RX_GroundAltitude = GPS_RX_Altitude;
             GPS_RX_Maxaltitude = 0;
             RXMAXModelAltitude = 0;
+            LastRXModelMaxAltitude = 0;
+            LastRXModelAltitude = 0;
             ClearText();
             return;
         }

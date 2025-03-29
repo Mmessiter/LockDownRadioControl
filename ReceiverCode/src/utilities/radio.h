@@ -230,21 +230,41 @@ float MetersToFeet(float Meters)
 {
     return Meters * 3.28084;
 }
+/************************************************************************************************************/
+
+float GetRateOfClimb()
+{
+    if (BaroAltitude == 0)
+        return 0;
+    static uint32_t LastTime = 0;
+    static float LastBaroAltitude = 0;
+    float RateOfClimb = (BaroAltitude - LastBaroAltitude) / ((millis() - LastTime) / 1000.0);
+    LastBaroAltitude = BaroAltitude;
+    LastTime = millis();
+    return RateOfClimb;
+}   
+
 // ******************************************************************************************************************************************************************
 void GetBMP280Data()
 {
     if ((!BMP280Connected) || (millis() < 10000))
         return;
     static uint32_t LastTime = 0;
-    if (millis() - LastTime > 2005)
+    if (millis() - LastTime > 111)
     {
         LastTime = millis();
         bmp.takeForcedMeasurement();
         BaroTemperature = bmp.readTemperature();
         BaroAltitude = MetersToFeet(bmp.readAltitude(Qnh));
+        //  BaroAltitude = bmp.readAltitude(Qnh);
+        //  Look1("BaroTemperature: ");
+        //  Look(BaroTemperature);
+        //  Look1("Rate of Climb: ");   
+        //  Look1(GetRateOfClimb());
+        //  Look(" feet per second.");
+
     }
 }
-
 // ******************************************************************************************************************************************************************
 //  Get RX LIPO volts if connected
 void GetRXVolts()

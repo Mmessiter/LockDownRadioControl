@@ -947,6 +947,7 @@ FASTRUN void ParseAckPayload()
         break;
     case 6:
         GetAltitude();
+       // Look(ModelAltitude);
         break;
     case 7:
         GetTemperature();
