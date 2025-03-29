@@ -250,7 +250,7 @@ void GetBMP280Data()
     if ((!BMP280Connected) || (millis() < 10000))
         return;
     static uint32_t LastTime = 0;
-    if (millis() - LastTime > 372)
+    if (millis() - LastTime > 372) // a bit less than 3 times per second
     {
         LastTime = millis();
         bmp.takeForcedMeasurement();
