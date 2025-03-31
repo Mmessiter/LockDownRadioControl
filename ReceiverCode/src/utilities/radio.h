@@ -123,11 +123,7 @@ void RearrangeTheChannels()
             ++p;
 
         } // if bit is set, set the channel otherwise leave it at the old value
-        // if (p > 4)
-        // {
-        //     Look1("Channels changed: ");
-        //     Look(p);
-        // }
+        
     }
     return;
 }
@@ -617,6 +613,7 @@ FASTRUN void Reconnect()
     uint32_t SearchStartTime = millis();
     uint8_t PreviousRadio = ThisRadio;
     uint8_t Attempts = 0;
+   // static uint32_t LTimer = 0;
 
     if (ThisRadio == 1)
         RX1TotalTime += (millis() - ReconnectedMoment); // keep track of how long on each
@@ -636,8 +633,11 @@ FASTRUN void Reconnect()
         CurrentRadio->flush_rx();
         ReconnectChannel = FHSS_Recovery_Channels[ReconnectIndex];
         ++ReconnectIndex;
-        if (ReconnectIndex >= 3)
+        if (ReconnectIndex >= 3){ // 3 channels in the array -- this rotates much more slowly than the TX so they are very different and must eventually match
             ReconnectIndex = 0;
+           // Look(millis()-LTimer);
+           // LTimer = millis();
+        } // If needed, wrap the channels' array pointer
         CurrentRadio->stopListening();
         delayMicroseconds(STOPLISTENINGDELAY);
         CurrentRadio->setChannel(ReconnectChannel);

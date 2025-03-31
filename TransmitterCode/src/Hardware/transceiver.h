@@ -277,14 +277,19 @@ FASTRUN void TryOtherPipe()
 /************************************************************************************************************/
 void TryToReconnect()
 {
+   // static uint32_t localtimer = 0;
     if (BuddyPupilOnPPM)
         return;
     if (!DontChangePipeAddress)
         TryOtherPipe();
     ++ReconnectionIndex;
     delayMicroseconds(42); // ???
-    if (ReconnectionIndex >= 3)
+    if (ReconnectionIndex >= 3){
+     
         ReconnectionIndex = 0;
+       // Look(millis() - localtimer); // This rotates much faster that the RX so a Hit will happen fast,
+       // localtimer = millis();
+    }
     NextChannel = FHSS_data::Used_Recovery_Channels[ReconnectionIndex];
     HopToNextChannel();
 }
