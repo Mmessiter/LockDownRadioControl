@@ -1,14 +1,11 @@
-This screen shows some information about the quality of the current connection and other data including GPS if one is connected.||
+This screen shows some information about the quality of the current connection and other data.||
 
 Pressing 'Clear' will zero many parameters.||
-Pressing 'Zero Alt' toggles between altitude relative to sea level, and altitude relative to where the model was when 'Zero Alt' was pressed.|
-Pressing 'Mark here' marks the current location, if GPS was acquired. Thereafter 'Meters to mark' etc. will inform you how far away the model is from the mark.
 
-If you are using a two-transceiver receiver, then this screen shows which transceiver is in current use, and how long each was in use so far.
+It will show the current altitude using atmospheric pressure if a BMP280 sensor is fitted. The sensor needs to know the current local QNH (atmospheric pressure at sea level). Enter the QNH under Transmitter setup / Settings / page 3. This information can usually be found on the web site of a nearby airfield, or a decent AI system will often tell you what it is I have found. Altitude derived from atmospheric pressure is usually accurate within a foot or so. It's usually far more accurate than altitude derived from GPS.||
 
-'Gap' on this screen means the number of milliseconds between losing connection and re-establishing a connection. ||
+Pressing 'Zero Alt' sets the current altitude as zero so that height above current height will be displayed. It's best to use this on the ground of course.||
 
-(Note: 100 ms is one tenth of a second.) ||
+If you are using a two-transceiver receiver, then this screen shows which transceiver is in current use, and how long each was in use so far.||
 
-When using FHSS (as this radio-system does) it is likely, especially in the presence of WiFi etc., that the occasional lost packet will occur due to momentary collisions of frequencies. Recovery of connection after this usually takes less than a tenth of a second so it usually goes unnoticed to the pilot. ||
-
+'Longest gap' means the greatest number of milliseconds recorded between losing a data packet and re-establishing a connection. While this number is below about 250 (= a quarter of a second) all should be ok. Normally it's well below 100. If it gets much higher, consider relocating the aerials on the receiver. Dipole antennae are recommended.||
