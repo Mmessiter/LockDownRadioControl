@@ -121,9 +121,13 @@ void RearrangeTheChannels()
         {
             ReceivedData[i] = RawDataIn[p];
             ++p;
-            
+
         } // if bit is set, set the channel otherwise leave it at the old value
-        
+        // if (p > 4)
+        // {
+        //     Look1("Channels changed: ");
+        //     Look(p);
+        // }
     }
     return;
 }
@@ -209,14 +213,14 @@ bool ReadData()
             AckCounter = 0;
             LoadAckPayload();
             CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // send big PAYLOAD EVERY 100th time (2 per second)
-           // Look("LONG ACK");
+                                                                           // Look("LONG ACK");
         }
         else
         {
             LoadShortAckPayload();
             CurrentRadio->writeAckPayload(1, &AckPayload, 2); // send VERY little 99% of the time
             ++AckCounter;
-           // Look("SHORT ACK");
+            // Look("SHORT ACK");
         }
         DelayMillis(1);                                        // 1 ms delay
         CurrentRadio->read(&DataReceived, DynamicPayloadSize); //  ** >> Read new data from master << ** // Get the size of the new data (14)
@@ -245,7 +249,7 @@ float GetRateOfClimb()
     LastBaroAltitude = BaroAltitude;
     LastTime = millis();
     return RateOfClimb;
-}   
+}
 
 // ******************************************************************************************************************************************************************
 void GetBMP280Data()
@@ -262,10 +266,9 @@ void GetBMP280Data()
         //  BaroAltitude = bmp.readAltitude(Qnh);
         //  Look1("BaroTemperature: ");
         //  Look(BaroTemperature);
-        //  Look1("Rate of Climb: ");   
+        //  Look1("Rate of Climb: ");
         //  Look1(GetRateOfClimb());
         //  Look(" feet per second.");
-
     }
 }
 // ******************************************************************************************************************************************************************

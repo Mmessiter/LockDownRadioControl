@@ -361,7 +361,7 @@ void DebugParamsOut()
 }
 /************************************************************************************************************/
 int SendExtraParamemters() // parameters must be loaded before this function is called
-{                          // only the ***low 12 bits*** of each parameter are actually sent
+{                          // only the ***low 12 bits*** of each parameter are actually sent because of compression
     if ((Parameters.ID == 0) || (Parameters.ID > MAXPARAMETERS))
     {
         Look1("Parameter error: ID is ");
@@ -370,27 +370,28 @@ int SendExtraParamemters() // parameters must be loaded before this function is 
     }
     LoadParameters();
     LoadRawDataWithParameters();
-    DataTosend.ChannelBitMask = 0; // zero channels to send with this packet
+    DataTosend.ChannelBitMask = 0; //  zero channels to send with this packet
                                    //  DebugParamsOut();
-    return 11;                     // was 8                                  // 8 is the number of parameters to send
+    return 11;                     //  was 8 is the number of parameters to send
 }
 /************************************************************************************************************/
 uint8_t EncodeTheChangedChannels()
 {
-#define MIN_CHANGE 4                     // Very tiny changes in channel values are ignored. That's most likely only noise...                                                                                                 // ... This reduces the average packet size                                                                                                    // ... Values <= 20 are imperceptible. So 4 is just fine here.
+#define MIN_CHANGE1 4                    // Very tiny changes in channel values are ignored. That's most likely only noise...
+#define MAXCHANNELSATONCE 8              // This reduces the average packet size
     uint8_t NumberOfChangedChannels = 0; // Number of channels that have changed since last packet
     DataTosend.ChannelBitMask = 0;       // Clear the ChannelBitMask 16 BIT WORD (1 bit per channel)
     if (!AddExtraParameters)
-    { // If sending parameters, don't send any channels.
-        for (int i = 0; i < CHANNELSUSED; ++i)
-        {                                                                                                // Check for changed channels and load them into the rawdatabuffer
-            if ((abs(SendBuffer[i] - PreviousBuffer[i]) >= MIN_CHANGE) && (NumberOfChangedChannels <= 4)) // 4 is the maximum number of channel changes that will be sent in one packet ...
-            {                                                                                            // ... any other changes will be sent in the next packet, only 5ms later.
-                RawDataBuffer[NumberOfChangedChannels] = SendBuffer[i];                                  // Load a changed channel into the rawdatabuffer.
-                PrePreviousBuffer[i] = PreviousBuffer[i];                                                // Save previous buffer in case we need to repeat it.
-                PreviousBuffer[i] = SendBuffer[i];                                                       // Save it for next time in case it succeeds this time.
-                DataTosend.ChannelBitMask |= (1 << i);                                                   // Set the current bit in the ChannelBitMask word.
-                ++NumberOfChangedChannels;                                                               // Increment the number of channel changes (rawdatabuffer index pointer).
+    { // If sending parameters, don't send any channels ... yet.
+        for (uint8_t i = 0; i < CHANNELSUSED; ++i)
+        {                                                                                                                 // Check for changed channels and load them into the rawdatabuffer
+            if ((abs(SendBuffer[i] - PreviousBuffer[i]) >= MIN_CHANGE1) && (NumberOfChangedChannels < MAXCHANNELSATONCE)) // MAXCHANNELSATONCE is the maximum number of channel changes that will be sent in one packet ...
+            {                                                                                                             // ... any other changes will be sent in the next packet, only 5ms later.
+                RawDataBuffer[NumberOfChangedChannels] = SendBuffer[i];                                                   // Load a changed channel into the rawdatabuffer.
+                PrePreviousBuffer[i] = PreviousBuffer[i];                                                                 // Save previous buffer in case we need to repeat it.
+                PreviousBuffer[i] = SendBuffer[i];                                                                        // Save it for next time in case it succeeds this time.
+                DataTosend.ChannelBitMask |= (1 << i);                                                                    // Set the current bit in the ChannelBitMask word.
+                ++NumberOfChangedChannels;                                                                                // Increment the number of channel changes (rawdatabuffer index pointer).
             }
         }
     }
@@ -947,7 +948,7 @@ FASTRUN void ParseAckPayload()
         break;
     case 6:
         GetAltitude();
-       // Look(ModelAltitude);
+        // Look(ModelAltitude);
         break;
     case 7:
         GetTemperature();
