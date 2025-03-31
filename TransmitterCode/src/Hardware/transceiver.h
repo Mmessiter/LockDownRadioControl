@@ -381,10 +381,10 @@ uint8_t EncodeTheChangedChannels()
     uint8_t NumberOfChangedChannels = 0; // Number of channels that have changed since last packet
     DataTosend.ChannelBitMask = 0;       // Clear the ChannelBitMask 16 BIT WORD (1 bit per channel)
     if (!AddExtraParameters)
-    { // If sending parameers, don't send any channels.
+    { // If sending parameters, don't send any channels.
         for (int i = 0; i < CHANNELSUSED; ++i)
         {                                                                                                // Check for changed channels and load them into the rawdatabuffer
-            if ((abs(SendBuffer[i] - PreviousBuffer[i]) >= MIN_CHANGE) && (NumberOfChangedChannels < 4)) // 4 is the maximum number of channel changes that will be sent in one packet ...
+            if ((abs(SendBuffer[i] - PreviousBuffer[i]) >= MIN_CHANGE) && (NumberOfChangedChannels <= 4)) // 4 is the maximum number of channel changes that will be sent in one packet ...
             {                                                                                            // ... any other changes will be sent in the next packet, only 5ms later.
                 RawDataBuffer[NumberOfChangedChannels] = SendBuffer[i];                                  // Load a changed channel into the rawdatabuffer.
                 PrePreviousBuffer[i] = PreviousBuffer[i];                                                // Save previous buffer in case we need to repeat it.

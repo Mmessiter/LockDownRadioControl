@@ -121,7 +121,9 @@ void RearrangeTheChannels()
         {
             ReceivedData[i] = RawDataIn[p];
             ++p;
-        } // if bit is set, set the channel
+            
+        } // if bit is set, set the channel otherwise leave it at the old value
+        
     }
     return;
 }
@@ -187,7 +189,6 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is length
 bool ReadData()
 {
     uint8_t MAXSMALLACKS = 5;
-    // uint8_t MAXSMALLACKS = 100;
     static uint8_t AckCounter = 0;
     Connected = false;
     if (CurrentRadio->available(&Pipnum))
@@ -208,12 +209,14 @@ bool ReadData()
             AckCounter = 0;
             LoadAckPayload();
             CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // send big PAYLOAD EVERY 100th time (2 per second)
+           // Look("LONG ACK");
         }
         else
         {
             LoadShortAckPayload();
             CurrentRadio->writeAckPayload(1, &AckPayload, 2); // send VERY little 99% of the time
             ++AckCounter;
+           // Look("SHORT ACK");
         }
         DelayMillis(1);                                        // 1 ms delay
         CurrentRadio->read(&DataReceived, DynamicPayloadSize); //  ** >> Read new data from master << ** // Get the size of the new data (14)
