@@ -575,7 +575,8 @@ FLASHMEM void setup()
     TestAllPWMPins(); // Check that the no PWM pins are held low (plug in wrong way round)
     delay(300);
     Wire.begin();
-    Wire.setClock(10000); // 10kHz I2C clock (not the default 400kHz !!)
+    // set wire to 400kHz
+    Wire.setClock(400000);
     delay(300);
     ScanI2c(); // Detect what's connected
     if (BMP280Connected)

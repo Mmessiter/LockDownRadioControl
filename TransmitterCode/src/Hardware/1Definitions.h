@@ -763,8 +763,8 @@ uint8_t PreviousBank = 1;
 char ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Gear"}, {"AUX1"}, {"AUX2"}, {"AUX3"}, {"AUX4"}, {"AUX5"}, {"AUX6"}, {"AUX7"}, {"AUX8"}, {"AUX9"}, {"AUX10"}, {"AUX11"}};
 uint8_t DualRateInUse = 1;
 uint8_t PreviousDualRateInUse = 1;
-uint16_t PreviousBuffer[CHANNELSUSED + 1];    //     Used to spot any change
-uint16_t PrePreviousBuffer[CHANNELSUSED + 1]; //     Used to spot any change
+uint16_t PreviousBuffer[SENDBUFFERSIZE + 1];  //     Used to spot any change
+uint16_t PrePreviousBuffer[SENDBUFFERSIZE + 1]; //     Used to spot any change
 uint16_t ChannelMax[CHANNELSUSED + 1];        //    output of pots at max
 uint16_t ChannelMidHi[CHANNELSUSED + 1];      //    output of pots at MidHi
 uint16_t ChannelCentre[CHANNELSUSED + 1];     //    output of pots at Centre
@@ -982,7 +982,6 @@ uint8_t Gmonth;    // = tm.Month;  // 1-12
 uint8_t Gyear;     // = tm.Year;   // 0-99
 bool GPSTimeSynched = false;
 short int DeltaGMT = 0;
-uint32_t SwapWaveBandTimer = 0;
 
 uint16_t TrimMultiplier = 5; // By how much to multiply trim
 uint8_t DateFix = 0;

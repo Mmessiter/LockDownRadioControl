@@ -45,7 +45,7 @@ void ShowPacketData(uint32_t ThisPacketLength, uint8_t NumberOfChangedChannels)
     ++PacketsCount1;
 
     static uint32_t timer = 0;
-    if ((millis() - timer) >= 1000)
+    if ((millis() - timer) >= 250)
     {
         timer = millis();
         AveragePacketLength = TotalPacketLength / PacketsCount;
@@ -277,18 +277,19 @@ FASTRUN void TryOtherPipe()
 /************************************************************************************************************/
 void TryToReconnect()
 {
-   // static uint32_t localtimer = 0;
+    // static uint32_t localtimer = 0;
     if (BuddyPupilOnPPM)
         return;
     if (!DontChangePipeAddress)
         TryOtherPipe();
     ++ReconnectionIndex;
     delayMicroseconds(42); // ???
-    if (ReconnectionIndex >= 3){
-     
+    if (ReconnectionIndex >= 3)
+    {
+
         ReconnectionIndex = 0;
-       // Look(millis() - localtimer); // This rotates much faster that the RX so a Hit will happen fast,
-       // localtimer = millis();
+        // Look(millis() - localtimer); // This rotates much faster that the RX so a Hit will happen fast,
+        // localtimer = millis();
     }
     NextChannel = FHSS_data::Used_Recovery_Channels[ReconnectionIndex];
     HopToNextChannel();
@@ -380,10 +381,18 @@ int SendExtraParamemters() // parameters must be loaded before this function is 
     return 11;                     //  was 8 is the number of parameters to send
 }
 /************************************************************************************************************/
+
+// This function sends ONLY the changed channels, which it encodes into 'rawdatabuffer'.
+// DataTosend.ChannelBitMask is a 16 bit word that indicates which channels have changed if any.
+// It returns the number of channels that have changed since the last packet was sent.
+// The rawdatabuffer is then compressed and sent to the receiver.
+// The rawdatabuffer is a 16 bit word array, so each channel is 2 bytes before compression.
+// The compression ratio is 1.5, so the compressed data buffer is 75% of the original size.
+
 uint8_t EncodeTheChangedChannels()
 {
 #define MIN_CHANGE1 4                    // Very tiny changes in channel values are ignored. That's most likely only noise...
-#define MAXCHANNELSATONCE 8              // This reduces the average packet size
+#define MAXCHANNELSATONCE 8              // Not more that 8 channels will be sent in one packet
     uint8_t NumberOfChangedChannels = 0; // Number of channels that have changed since last packet
     DataTosend.ChannelBitMask = 0;       // Clear the ChannelBitMask 16 BIT WORD (1 bit per channel)
     if (!AddExtraParameters)

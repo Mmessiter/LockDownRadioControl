@@ -144,8 +144,8 @@ uint8_t NextChannelNumber = 0;
 uint8_t NextChannel;
 uint8_t ReconnectIndex = 0;
 uint8_t PacketNumber;
-uint16_t RawDataIn[RECEIVEBUFFERSIZE + 1];    //  21 x 16 BIT words
-uint16_t ReceivedData[RECEIVEBUFFERSIZE + 1]; //  21 x 16 BIT words
+uint16_t RawDataIn[RECEIVEBUFFERSIZE + 1];    //  21 x 16 BIT words // lots of spare space
+uint16_t ReceivedData[RECEIVEBUFFERSIZE + 1]; //  21 x 16 BIT words// lots of spare space
 uint16_t PreviousData[RECEIVEBUFFERSIZE + 1]; //** Previously received data (used for servos. Hence not sent if unchanged) */
 uint16_t Interations = 0;
 uint32_t HopStart;

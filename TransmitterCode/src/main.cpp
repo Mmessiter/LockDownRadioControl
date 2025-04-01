@@ -3819,7 +3819,7 @@ FASTRUN void ButtonWasPressed()
             ClearText();
             return;
         }
-        
+
         if (InStrng(DataView_AltZero, TextIn) > 0)
         { //  Set zero altitude on data screen by recording current altitude for subraction later
             GroundModelAltitude = RXModelAltitudeBMP280;
