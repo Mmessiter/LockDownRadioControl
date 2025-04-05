@@ -123,7 +123,6 @@ void RearrangeTheChannels()
             ++p;
 
         } // if bit is set, set the channel otherwise leave it at the old value
-        
     }
     return;
 }
@@ -178,6 +177,10 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is length
     }
     MapToSBUS();                      // Get SBUS data ready
     LastPacketArrivalTime = millis(); // Note the arrival time
+    ++SuccessfulPackets;              // These packets did arrive, but acknowledgement might yet fail
+                                      // Look1("Successful Packets: ");
+                                      // Look(SuccessfulPackets);
+
     if (HopNow)
     {                        // This flag gets set in LoadAckPayload();
         HopToNextChannel();  // Ack payload instructed us to Hop at next opportunity. So hop now ...
@@ -253,7 +256,7 @@ void GetBMP280Data()
     if ((!BMP280Connected) || (millis() < 10000))
         return;
     static uint32_t LastTime = 0;
-    if (millis() - LastTime > 372) // a bit less than 3 times per second
+    if (millis() - LastTime > 500) // 
     {
         LastTime = millis();
         bmp.takeForcedMeasurement();
@@ -613,7 +616,7 @@ FASTRUN void Reconnect()
     uint32_t SearchStartTime = millis();
     uint8_t PreviousRadio = ThisRadio;
     uint8_t Attempts = 0;
-   // static uint32_t LTimer = 0;
+    // static uint32_t LTimer = 0;
 
     if (ThisRadio == 1)
         RX1TotalTime += (millis() - ReconnectedMoment); // keep track of how long on each
@@ -633,10 +636,11 @@ FASTRUN void Reconnect()
         CurrentRadio->flush_rx();
         ReconnectChannel = FHSS_Recovery_Channels[ReconnectIndex];
         ++ReconnectIndex;
-        if (ReconnectIndex >= 3){ // 3 channels in the array -- this rotates much more slowly than the TX so they are very different and must eventually match
+        if (ReconnectIndex >= 3)
+        { // 3 channels in the array -- this rotates much more slowly than the TX so they are very different and must eventually match
             ReconnectIndex = 0;
-           // Look(millis()-LTimer);
-           // LTimer = millis();
+            // Look(millis()-LTimer);
+            // LTimer = millis();
         } // If needed, wrap the channels' array pointer
         CurrentRadio->stopListening();
         delayMicroseconds(STOPLISTENINGDELAY);

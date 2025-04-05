@@ -309,5 +309,6 @@ float Y_GyroOffset = 0;
 float Z_GyroOffset = 0;
 bool GyroOffsetsSet = false;
 uint16_t  BMP280Address = 0x76; // BMP280 I2C address
+uint32_t SuccessfulPackets = 0;
 
 #endif // defined (_SRC_UTILITIES_COMMON_H)
