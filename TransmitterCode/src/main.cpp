@@ -2662,9 +2662,12 @@ void ZeroDataScreen()
     GapCount = 0;
     GapStart = 0;
     ThisGap = 0;
+    RXMAXModelAltitude = 0;
+    RXModelAltitude = 0;
+    GroundModelAltitude = 0;
     GPS_RX_MaxDistance = 0;
     GPS_RX_MaxSpeed = 0;
-    LastShowTime = 0; // for instant redisplay
+    LastShowTime = 0;
     TotalFrameRate = 0;
     FrameRateCounter = 0;
 }
