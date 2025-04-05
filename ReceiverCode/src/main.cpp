@@ -346,12 +346,15 @@ FLASHMEM void ScanI2c()
             if (i == 0x10)
             {
                 GPS_Connected = true;
-                // Serial.println("GPS detected");
             }
-            if (i == 0x76)
+            if (i == BMP280Address) // first look at default address 0x76
             {
                 BMP280Connected = true;
-                //Serial.println("BMP280 detected");
+            }
+            if ((i == 0x77) && (!BMP280Connected)) // look at alternative address 0x77 if not default
+            {
+                BMP280Connected = true;
+                BMP280Address = 0x77; // this is the alternative address
             }
         }
     }
@@ -550,7 +553,7 @@ void SetupWatchDog()
 // ***************************************************************************************************************************************************
 void Init_BMP280()
 {
-    if (!bmp.begin(0x76))
+    if (!bmp.begin(BMP280Address))
     {
         Serial.println("Could not find a valid BMP280 sensor.");
         BMP280Connected = false; // This is not a fatal error but we can't use the BMP280

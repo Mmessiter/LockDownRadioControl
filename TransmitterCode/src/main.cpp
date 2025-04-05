@@ -19,7 +19,7 @@
  * - User defined Channel names
  * - 2.4 Ghz FHSS ISM band licence free in UK and most other countries.
  * - > 2 Km range
- * - Telemetry including GPS, volts, temperature & barometric pressure, using custom I2C sensor hub
+ * - Telemetry including GPS, volts, temperature & barometric pressure.
  * - 64 editable 5-point curves (16 channels x 4 flight modes): straight, smoothed or exponential.
  * - FailSafe on any or all channel(s)
  * - 2.4 GHz RF scan
