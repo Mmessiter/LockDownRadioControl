@@ -204,6 +204,7 @@ FASTRUN void LogText(char *TheText, uint16_t len, bool TimeStamp)
     WriteToLogFile(TheText, len);
     WriteToLogFile(crlf, sizeof(crlf));
     CloseLogFile();
+    strcpy(TheText, "");
 }
 
 // ************************************************************************
@@ -267,7 +268,7 @@ FASTRUN void LogModelNotFound() // Model Memory Log
 
 uint32_t GetOverallSuccessRate()
 {
-    return (TotalGoodPackets * 100) / (TotalGoodPackets + TotalLostPackets);
+    return (RXSuccessfulPackets * 100) / (TotalGoodPackets + TotalLostPackets);
 }
 
 // ************************************************************************
@@ -375,6 +376,8 @@ FASTRUN void LogDisConnection()
 {
     char buf[40] = " ";
     char TheText[] = "Disconnected from ";
+
+
     strcpy(buf, TheText);
     strcat(buf, ModelName);
     LogText(buf, sizeof(buf), true);
@@ -385,15 +388,24 @@ FASTRUN void LogDisConnection()
     if (GPS_RX_FIX)
         LogAllGPSMaxs();
     LogLongestGap();
+    LogAverageGap();
     LogTotalLostPackets();
     LogTotalGoodPackets();
+    LogTotalRXGoodPackets();
+
+    if (TotalGoodPackets > RXSuccessfulPackets)
+    {
+        TotalGoodPackets = RXSuccessfulPackets; // bug fix?!
+    }
+
+    LogLostAcknowledgements();
     LogTotalRXSwaps();
     LogRXVoltsPerCell();
     LogTXVoltsPerCell();
     LogOverallSuccessRate();
     LogAverageFrameRate();
     LogTimeSinceBoot();
-   
+
     LogEndLine();
 }
 // ************************************************************************
@@ -515,6 +527,15 @@ FASTRUN void LogLongestGap()
     LogText(thetext, strlen(thetext), false);
 }
 // ************************************************************************
+FASTRUN void LogAverageGap()
+{
+    char thetext[50];
+    char ms[] = " ms";
+    snprintf(thetext, 45, "Average gap: %lu", (unsigned long)GapAverage);
+    strcat(thetext, ms);
+    LogText(thetext, strlen(thetext), false);
+}
+// ************************************************************************
 FASTRUN void LogBuddyChange()
 {
 
@@ -529,15 +550,31 @@ FASTRUN void LogBuddyChange()
 void LogTotalLostPackets()
 {
     char thetext[50];
-    snprintf(thetext, 45, "Lost data packets:  %lu", (unsigned long)TotalLostPackets);
+    snprintf(thetext, 45, "Unacknowledged data packets:  %lu", (unsigned long)TotalLostPackets); // these are the packets that were not acknowledged
     LogText(thetext, strlen(thetext), false);
 }
 // ************************************************************************
 
 void LogTotalGoodPackets()
 {
-    char thetext[50];
-    snprintf(thetext, 45, "Good data packets: %lu", (unsigned long)TotalGoodPackets);
+    char thetext[56];
+    snprintf(thetext, 55, "Acknowledgements received: %lu", (unsigned long)TotalGoodPackets); // TotalGoodPackets are the acknowledged packets
+    LogText(thetext, strlen(thetext), false);
+}
+
+// ************************************************************************
+
+void LogTotalRXGoodPackets()
+{
+    char thetext[56];
+    snprintf(thetext, 55, "Data packets received at RX: %lu", (unsigned long)RXSuccessfulPackets); // RXSuccessfulPackets are the good packets counted at RX
+    LogText(thetext, strlen(thetext), false);
+}
+// ************************************************************************
+void LogLostAcknowledgements()
+{
+    char thetext[56];
+    snprintf(thetext, 55, "Lost acknowledgements: %lu", (unsigned long)RXSuccessfulPackets - TotalGoodPackets); // Hence RXSuccessfulPackets - TotalGoodPackets are lost
     LogText(thetext, strlen(thetext), false);
 }
 // ************************************************************************

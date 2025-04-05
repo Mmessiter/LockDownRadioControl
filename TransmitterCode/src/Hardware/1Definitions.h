@@ -30,7 +30,7 @@
 #define TXVERSION_MAJOR 2 // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 4
 #define TXVERSION_MINIMUS 7
-#define TXVERSION_EXTRA "X 29/03/25"
+#define TXVERSION_EXTRA "X 05/04/25"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -96,7 +96,7 @@
 
 #define DEFAULT_EXPO 50          // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
 #define CHARSMAX 250             // Max length for char arrays  (was 120)
-#define MAXTEXTIN 1024 * 4       // 4K buffer for incoming text from Nextion            
+#define MAXTEXTIN 1024 * 4       // 4K buffer for incoming text from Nextion
 #define DEFAULTLEDBRIGHTNESS 20  // LED brightness
 #define DEFAULTPOWEROFFWARNING 2 // Default time to warn before cutting power
 #define MAXDUALRATE 200
@@ -698,9 +698,12 @@ uint16_t ReadAFewLines();
 void LogVIEWNew();
 File OpenTheLogFileForReading();
 void StartLogFileView();
-
+void LogTotalRXGoodPackets();
+void LogTotalRXGoodPackets();
+void LogLostAcknowledgements();
+FASTRUN void LogAverageGap();
 #ifdef USE_BTLE
-    void SendViaBLE();
+void SendViaBLE();
 #endif
 // **************************************************************************
 //                            GLOBAL DATA                                   *
@@ -724,8 +727,8 @@ uint8_t SavedCurrentView = FRONTVIEW;
 uint64_t DefaultPipe = DEFAULTPIPEADDRESS;      //          Default Radio pipe address
 uint64_t TeensyMACAddPipe = DEFAULTPIPEADDRESS; //          New Radio pipe address for binding will come from MAC address
 uint64_t BuddyMACAddPipe = DEFAULTPIPEADDRESS;  //          Buddy pipe address
-//char TextIn[CHARSMAX + 2];                      //          Spare space
-char TextIn[MAXTEXTIN + 2];                     //          Spare space
+// char TextIn[CHARSMAX + 2];                      //          Spare space
+char TextIn[MAXTEXTIN + 2]; //          Spare space
 uint16_t PacketsPerSecond = 0;
 uint8_t PacketsHistoryBuffer[(5 + PERFECTPACKETSPERSECOND) * MAXSHOWCOMMSSESCONDS]; // Here we record some history
 uint32_t TotalLostPackets = 0;
@@ -763,13 +766,13 @@ uint8_t PreviousBank = 1;
 char ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Gear"}, {"AUX1"}, {"AUX2"}, {"AUX3"}, {"AUX4"}, {"AUX5"}, {"AUX6"}, {"AUX7"}, {"AUX8"}, {"AUX9"}, {"AUX10"}, {"AUX11"}};
 uint8_t DualRateInUse = 1;
 uint8_t PreviousDualRateInUse = 1;
-uint16_t PreviousBuffer[SENDBUFFERSIZE + 1];  //     Used to spot any change
+uint16_t PreviousBuffer[SENDBUFFERSIZE + 1];    //     Used to spot any change
 uint16_t PrePreviousBuffer[SENDBUFFERSIZE + 1]; //     Used to spot any change
-uint16_t ChannelMax[CHANNELSUSED + 1];        //    output of pots at max
-uint16_t ChannelMidHi[CHANNELSUSED + 1];      //    output of pots at MidHi
-uint16_t ChannelCentre[CHANNELSUSED + 1];     //    output of pots at Centre
-uint16_t ChannelMidLow[CHANNELSUSED + 1];     //    output of pots at MidLow
-uint16_t ChannelMin[CHANNELSUSED + 1];        //    output of pots at min
+uint16_t ChannelMax[CHANNELSUSED + 1];          //    output of pots at max
+uint16_t ChannelMidHi[CHANNELSUSED + 1];        //    output of pots at MidHi
+uint16_t ChannelCentre[CHANNELSUSED + 1];       //    output of pots at Centre
+uint16_t ChannelMidLow[CHANNELSUSED + 1];       //    output of pots at MidLow
+uint16_t ChannelMin[CHANNELSUSED + 1];          //    output of pots at min
 uint16_t ChanneltoSet = 0;
 bool Connected = false;
 uint16_t BuddyControlled = 0; // Flags
@@ -1161,6 +1164,7 @@ int Max_Y = 666;
 uint32_t NextionReturn = 0;
 bool ReadingaFile = false;
 bool FirstGPSfix = true;
+uint32_t RXSuccessfulPackets = 0;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

@@ -311,7 +311,7 @@ void SuccessfulPacket()
     AddExtraParameters = false;
     if (RecentPacketsLost)
     {
-        TotalLostPackets += (RecentPacketsLost / 2); // divide by 2 because acks get lost too
+        TotalLostPackets += RecentPacketsLost; 
         RecentPacketsLost = 0;
         if (!TotalLostPackets)
             TotalLostPackets = 1; // RecentPacketsLost was only 1
@@ -935,7 +935,13 @@ FASTRUN void ParseAckPayload()
     switch (AckPayload.Purpose) // Only look at the low 7 BITS
     {
     case 0:
-        GetRXVersionNumber();
+    if (millis() - LedGreenMoment < 10000)
+        {
+            GetRXVersionNumber();
+        }else{
+            RXSuccessfulPackets = GetFromAckPayload();
+        }
+        
         break;
     case 1:
         SbusRepeats = GetFromAckPayload();

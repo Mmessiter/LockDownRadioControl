@@ -256,7 +256,7 @@ void GetBMP280Data()
     if ((!BMP280Connected) || (millis() < 10000))
         return;
     static uint32_t LastTime = 0;
-    if (millis() - LastTime > 500) // 
+    if (millis() - LastTime > 500) //
     {
         LastTime = millis();
         bmp.takeForcedMeasurement();
@@ -691,6 +691,8 @@ FASTRUN void Reconnect()
     {
         FailedSafe = false;
         NewConnectionMoment = millis();
+        ConnectMoment = millis();
+        SuccessfulPackets = 0; // Reset the packet count
     }
 
 #ifdef DB_RXTIMERS
@@ -850,7 +852,14 @@ void LoadAckPayload()
     switch (AckPayload.Purpose)
     {
     case 0:
-        SendVersionNumberToAckPayload();
+        if (millis() - ConnectMoment < 11000) // 11 seconds to send version number
+        {
+            SendVersionNumberToAckPayload();
+        }
+        else
+        {
+            SendToAckPayload(SuccessfulPackets);  
+        }
         break;
     case 1:
         SendToAckPayload(SbusRepeats);

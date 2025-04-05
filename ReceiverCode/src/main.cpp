@@ -244,6 +244,7 @@ void TurnLedOff()
 
 void BindModel()
 {
+   
     CurrentRadio->stopListening();
     delayMicroseconds(250);
     BoundFlag = true;
@@ -286,6 +287,8 @@ void BindModel()
     Serial.println("");
     Serial.println("DONE BINDING");
 #endif
+    ConnectMoment = millis();
+    SuccessfulPackets = 0; // Reset the packet count
 }
 
 /************************************************************************************************************/
