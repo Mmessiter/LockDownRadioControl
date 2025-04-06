@@ -700,8 +700,8 @@ File OpenTheLogFileForReading();
 void StartLogFileView();
 void LogTotalRXGoodPackets();
 void LogTotalRXGoodPackets();
-void LogLostAcknowledgements();
-FASTRUN void LogAverageGap();
+void LogTotalPacketsAttempted();
+    FASTRUN void LogAverageGap();
 #ifdef USE_BTLE
 void SendViaBLE();
 #endif

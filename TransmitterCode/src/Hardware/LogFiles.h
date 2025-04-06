@@ -389,23 +389,16 @@ FASTRUN void LogDisConnection()
         LogAllGPSMaxs();
     LogLongestGap();
     LogAverageGap();
+    LogAverageFrameRate();
     LogTotalLostPackets();
     LogTotalGoodPackets();
     LogTotalRXGoodPackets();
-
-    if (TotalGoodPackets > RXSuccessfulPackets)
-    {
-        TotalGoodPackets = RXSuccessfulPackets; // bug fix?!
-    }
-
-    LogLostAcknowledgements();
+    LogTotalPacketsAttempted();
     LogTotalRXSwaps();
     LogRXVoltsPerCell();
     LogTXVoltsPerCell();
     LogOverallSuccessRate();
-    LogAverageFrameRate();
     LogTimeSinceBoot();
-
     LogEndLine();
 }
 // ************************************************************************
@@ -571,10 +564,9 @@ void LogTotalRXGoodPackets()
     LogText(thetext, strlen(thetext), false);
 }
 // ************************************************************************
-void LogLostAcknowledgements()
-{
+void LogTotalPacketsAttempted(){
     char thetext[56];
-    snprintf(thetext, 55, "Lost acknowledgements: %lu", (unsigned long)RXSuccessfulPackets - TotalGoodPackets); // Hence RXSuccessfulPackets - TotalGoodPackets are lost
+    snprintf(thetext, 55, "Total packets attempted: %lu", (unsigned long)TotalPacketsAttempted); // TotalPacketsAttempted are the packets sent
     LogText(thetext, strlen(thetext), false);
 }
 // ************************************************************************
