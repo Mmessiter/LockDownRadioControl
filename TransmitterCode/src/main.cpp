@@ -264,6 +264,7 @@ void GreenLedOn()
         ForceVoltDisplay = true; // Force a battery check of the models battery
         SendInitialSetupParams();
         ResetMotorTimer();
+        TotalPacketsAttempted = 0;
         strcpy(LogFileName, ""); // avoid logging to the wrong file
     }
     else
