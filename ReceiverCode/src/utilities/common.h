@@ -12,7 +12,7 @@
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 4
 #define RXVERSION_MINIMUS 7
-#define RXVERSION_EXTRA 'X' // 28 March 2025
+#define RXVERSION_EXTRA 'Y' // 6 April 2025
 
 #define HOPTIME 17        // 47     //  17 gives 50Hz FHSS, 47 gives 20Hz FHSS
 #define RECEIVE_TIMEOUT 8 // 5 milliseconds is 'perfect' time between packets

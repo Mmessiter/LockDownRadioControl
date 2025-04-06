@@ -191,38 +191,15 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is length
 /************************************************************************************************************/
 bool ReadData()
 {
-    uint8_t MAXSMALLACKS = 5;
-    static uint8_t AckCounter = 0;
     Connected = false;
     if (CurrentRadio->available(&Pipnum))
     {
         uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize(); // Get the size of the new data (14)
         CurrentRadio->flush_tx();                                           // This avoids a lockup that happens when the FIFO gets full
-
-        if (DynamicPayloadSize == 16)
-        { // If size = 16 it must be a parameter packet if over 10 bytes  // todo: Send ACK that says "I got a parameter" heer!!
-            // Look1(millis());
-            // Look1(" ");
-            // Look1("DynamicPayloadSize: ");
-            // Look(DynamicPayloadSize);
-            AckCounter = 0; // force small ack
-        }
-        if (AckCounter > MAXSMALLACKS)
-        { // heer
-            AckCounter = 0;
-            LoadAckPayload();
-            CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // send big PAYLOAD EVERY 100th time (2 per second)
-                                                                           // Look("LONG ACK");
-        }
-        else
-        {
-            LoadShortAckPayload();
-            CurrentRadio->writeAckPayload(1, &AckPayload, 2); // send VERY little 99% of the time
-            ++AckCounter;
-            // Look("SHORT ACK");
-        }
-        DelayMillis(1);                                        // 1 ms delay
-        CurrentRadio->read(&DataReceived, DynamicPayloadSize); //  ** >> Read new data from master << ** // Get the size of the new data (14)
+        LoadAckPayload();                                                   // Load the AckPayload with telemetry data
+        CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);      // send big PAYLOAD EVERY time
+        DelayMillis(1);                                                     // 1 ms delay
+        CurrentRadio->read(&DataReceived, DynamicPayloadSize);              //  ** >> Read new data from master << ** // Get the size of the new data (14)
         Connected = true;
         NewData = true;
         if (Connected)
@@ -824,11 +801,11 @@ void SendMacAddress()
 }
 
 /************************************************************************************************************/
-void LoadShortAckPayload()
-{
-    CheckWhetherItsTimeToHop();
-    AckPayload.Byte1 = NextChannelNumber;
-}
+// void LoadShortAckPayload()
+// {
+//     CheckWhetherItsTimeToHop();
+//     AckPayload.Byte1 = NextChannelNumber;
+// }
 /************************************************************************************************************/
 void LoadAckPayload()
 {
@@ -837,28 +814,20 @@ void LoadAckPayload()
         SendMacAddress();
         return;
     }
-    uint8_t MaxAckP = 4;        // 4 if only RX
     AckPayload.Purpose &= 0x7F; // NOTE: The HIGH BIT of "purpose" bit is the HOPNOW flag. It gets set only when it's time to hop.
-
     ++AckPayload.Purpose;
-    if (INA219Connected)
-        MaxAckP = 5;
-    if (BMP280Connected)
-        MaxAckP = 7;
-    if (GPS_Connected)
-        MaxAckP = 18; // its 14 + GPS
-    if (AckPayload.Purpose > MaxAckP)
+    if (AckPayload.Purpose > 18) // number of telemetry items
         AckPayload.Purpose = 0; // wrap after max
     switch (AckPayload.Purpose)
     {
     case 0:
-        if (millis() - ConnectMoment < 11000) // 11 seconds to send version number
+        if (millis() - ConnectMoment < 11000) // first 11 seconds send only version number
         {
             SendVersionNumberToAckPayload();
         }
         else
         {
-            SendIntToAckPayload(SuccessfulPackets);  
+            SendIntToAckPayload(SuccessfulPackets);
         }
         break;
     case 1:
@@ -878,6 +847,8 @@ void LoadAckPayload()
         break;
     case 6:
         SendToAckPayload(BaroAltitude);
+        //Look1("BaroAltitude: ");
+       // Look(BaroAltitude);
         break;
     case 7:
         SendToAckPayload(BaroTemperature);

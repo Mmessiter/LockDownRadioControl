@@ -311,7 +311,7 @@ void SuccessfulPacket()
     AddExtraParameters = false;
     if (RecentPacketsLost)
     {
-        TotalLostPackets += RecentPacketsLost; 
+        TotalLostPackets += RecentPacketsLost;
         RecentPacketsLost = 0;
         if (!TotalLostPackets)
             TotalLostPackets = 1; // RecentPacketsLost was only 1
@@ -321,14 +321,7 @@ void SuccessfulPacket()
     {
         uint8_t PayloadSize = Radio1.getDynamicPayloadSize();
         Radio1.read(&AckPayload, PayloadSize);
-        if (PayloadSize == 6)
-        { // full length ack payload?
-            ParseAckPayload();
-        }
-        else
-        {
-            ParseShortAckPayload(); // no, it's a short one
-        }
+        ParseAckPayload(); // PayloadSize == 6 always now. Short Acks not used anymore.
     }
     if (BoundFlag && (!LedWasGreen || LedIsBlinking) && !UsingDefaultPipeAddress)
     {
@@ -895,22 +888,6 @@ void GetModelsMacAddress()
         }
     }
 }
-
-/************************************************************************************************************/
-FASTRUN void ParseShortAckPayload()
-{
-
-    if (BuddyPupilOnPPM)
-        return;                                      // buddy pupil need none of this
-    FHSS_data::NextChannelNumber = AckPayload.Byte1; // every packet tells of next hop destination
-    if (AckPayload.Purpose & 0x80)
-    {                                                                             // Hi bit is now the **HOP NOW!!** flag
-        NextChannel = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber); // The actual channel number pointed to.
-        HopToNextChannel();
-        AckPayload.Purpose &= 0x7f; // Probably not needed now
-    }
-}
-
 /************************************************************************************************************/
 FASTRUN void ParseAckPayload()
 {
@@ -935,13 +912,15 @@ FASTRUN void ParseAckPayload()
     switch (AckPayload.Purpose) // Only look at the low 7 BITS
     {
     case 0:
-    if (millis() - LedGreenMoment < 5000)
+        if (millis() - LedGreenMoment < 5000)
         {
             GetRXVersionNumber();
-        }else{
+        }
+        else
+        {
             RXSuccessfulPackets = GetIntFromAckPayload();
         }
-        
+
         break;
     case 1:
         SbusRepeats = GetIntFromAckPayload();
