@@ -1165,6 +1165,7 @@ uint32_t NextionReturn = 0;
 bool ReadingaFile = false;
 bool FirstGPSfix = true;
 uint32_t RXSuccessfulPackets = 0;
+uint32_t TotalPacketsAttempted = 0;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

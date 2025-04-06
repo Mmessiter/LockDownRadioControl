@@ -268,7 +268,7 @@ FASTRUN void LogModelNotFound() // Model Memory Log
 
 uint32_t GetOverallSuccessRate()
 {
-    return (RXSuccessfulPackets * 100) / (TotalGoodPackets + TotalLostPackets);
+    return (RXSuccessfulPackets * 100) / (TotalPacketsAttempted + 1); // Avoid division by zero
 }
 
 // ************************************************************************

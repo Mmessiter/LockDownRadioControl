@@ -181,9 +181,10 @@ void ClearMostParameters()
     VersionsCompared = false;
     LogLineNumber = 0;
     RXSuccessfulPackets = 0;
-    TotalLostPackets=0;
-    
-        strcpy(LogFileName, "");
+    TotalLostPackets = 0;
+    TotalPacketsAttempted = 0;
+
+    strcpy(LogFileName, "");
     for (int i = 0; i < CHANNELSUSED; ++i)
     {
         PrePreviousBuffer[i] = 0;

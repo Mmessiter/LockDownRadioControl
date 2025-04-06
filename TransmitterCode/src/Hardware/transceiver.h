@@ -450,6 +450,7 @@ FASTRUN void SendData()
 
         if (BuddyMasterOnWireless)
             SendSpecialPacket(); // Talk to the buddy pupil if we are a master also 200 x per second
+        ++TotalPacketsAttempted;
         if (Radio1.write(&DataTosend, ByteCountToTransmit))
         {
             SuccessfulPacket();
