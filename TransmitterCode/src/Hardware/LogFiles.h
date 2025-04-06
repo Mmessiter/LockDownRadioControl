@@ -266,7 +266,7 @@ FASTRUN void LogModelNotFound() // Model Memory Log
 }
 // ************************************************************************
 
-uint32_t GetOverallSuccessRate()
+uint16_t GetOverallSuccessRate()
 {
     return (RXSuccessfulPackets * 100) / (TotalPacketsAttempted + 1); // Avoid division by zero
 }
@@ -574,9 +574,7 @@ void LogTotalPacketsAttempted(){
 void LogOverallSuccessRate()
 {
     char thetext[50];
-    uint32_t OverallSuccessRate = 0;
-    OverallSuccessRate = GetOverallSuccessRate();
-    snprintf(thetext, 45, "Success rate: %d%%", (uint8_t)OverallSuccessRate);
+    snprintf(thetext, 45, "Success rate: %d%%", GetOverallSuccessRate());
     LogText(thetext, strlen(thetext), false);
 }
 // ************************************************************************

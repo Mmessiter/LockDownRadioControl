@@ -162,7 +162,6 @@
 
 void ClearMostParameters()
 { // called from RED LED ON
-
     RXVoltsDetected = false;
     LedGreenMoment = 0;
     ModelsMacUnion.Val64 = 0;
@@ -214,8 +213,6 @@ void RedLedOn()
             PlaySound(DISCONNECTEDMSG);
         if (UseLog)
             LogDisConnection();
-
-        ClearMostParameters();
         if (CurrentView == FRONTVIEW)
         {
             SendText(FrontView_Connected, na);
@@ -223,6 +220,7 @@ void RedLedOn()
             SendCommand(InVisible);
         }
     }
+    ClearMostParameters();
     LedWasRed = true;
 }
 
