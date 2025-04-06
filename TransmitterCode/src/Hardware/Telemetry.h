@@ -406,10 +406,11 @@ void PopulateDataView()
         SendText(DataView_Temp, ModelTempRX);
     }
 
-    if (RadioNumber != LastRadioNumber)
+    if (RadioNumber != LastRXReceivedPackets)
     {
-        LastRadioNumber = RadioNumber;
-        SendText(DataView_Rx, ThisRadio);
+        LastRXReceivedPackets = RXSuccessfulPackets;
+        snprintf(Vbuf, 7, "%" PRIu32, RXSuccessfulPackets);
+        SendText(DataView_Rx, Vbuf);
     }
 
     if (LastSbusRepeats != SbusRepeats)

@@ -935,25 +935,25 @@ FASTRUN void ParseAckPayload()
     switch (AckPayload.Purpose) // Only look at the low 7 BITS
     {
     case 0:
-    if (millis() - LedGreenMoment < 10000)
+    if (millis() - LedGreenMoment < 5000)
         {
             GetRXVersionNumber();
         }else{
-            RXSuccessfulPackets = GetFromAckPayload();
+            RXSuccessfulPackets = GetIntFromAckPayload();
         }
         
         break;
     case 1:
-        SbusRepeats = GetFromAckPayload();
+        SbusRepeats = GetIntFromAckPayload();
         break;
     case 2:
-        RadioSwaps = GetFromAckPayload();
+        RadioSwaps = GetIntFromAckPayload();
         break;
     case 3:
-        RX1TotalTime = GetFromAckPayload();
+        RX1TotalTime = GetIntFromAckPayload();
         break;
     case 4:
-        RX2TotalTime = GetFromAckPayload();
+        RX2TotalTime = GetIntFromAckPayload();
         break;
     case 5:
         RXModelVolts = GetFromAckPayload();
@@ -1008,7 +1008,7 @@ FASTRUN void ParseAckPayload()
         GPS_RX_CourseTo = GetFromAckPayload();
         break;
     case 16:
-        GPS_RX_Satellites = (uint8_t)GetFromAckPayload();
+        GPS_RX_Satellites = (uint8_t)GetIntFromAckPayload();
         break;
     case 17:
         GetDateFromAckPayload();

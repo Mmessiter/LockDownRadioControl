@@ -1118,7 +1118,7 @@ int LastRXModelAltitude = 0;
 int LastRXModelMaxAltitude = 0;
 float LastRXTemperature = 0;
 uint8_t RadioNumber = 0;
-uint8_t LastRadioNumber = 0;
+uint32_t LastRXReceivedPackets = 0;
 char ParaNames[5][30] = {"(FailSafeChannels)", "(Qnh)", "(GPSMarkHere)", "(ServoCentre & Frequency)", "(SBUS/PPM)"};
 uint16_t ScreenData[50];
 uint16_t AverageFrameRate = 0;

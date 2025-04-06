@@ -858,20 +858,20 @@ void LoadAckPayload()
         }
         else
         {
-            SendToAckPayload(SuccessfulPackets);  
+            SendIntToAckPayload(SuccessfulPackets);  
         }
         break;
     case 1:
-        SendToAckPayload(SbusRepeats);
+        SendIntToAckPayload(SbusRepeats);
         break;
     case 2:
-        SendToAckPayload(RadioSwaps);
+        SendIntToAckPayload(RadioSwaps);
         break;
     case 3:
-        SendToAckPayload(RX1TotalTime / 1000);
+        SendIntToAckPayload(RX1TotalTime / 1000);
         break;
     case 4:
-        SendToAckPayload(RX2TotalTime / 1000);
+        SendIntToAckPayload(RX2TotalTime / 1000);
         break;
     case 5:
         SendToAckPayload(INA219Volts);
@@ -907,7 +907,7 @@ void LoadAckPayload()
         SendToAckPayload(CourseToGPS);
         break;
     case 16:
-        SendToAckPayload(SatellitesGPS);
+        SendIntToAckPayload(SatellitesGPS);
         break;
     case 17:
         SendDateToAckPayload();

@@ -23,7 +23,7 @@ void ForceDataRedisplay(){
     LastRXModelAltitude  = 0;
     LastRXModelMaxAltitude = 0;
     LastRXTemperature    = 0;
-    LastRadioNumber      = 0;
+    LastRXReceivedPackets = 0;
     ForceVoltDisplay     = true; 
     for (int i = 0; i < 5; ++i) {
        for (int j = 0; j < 17; ++j) {
