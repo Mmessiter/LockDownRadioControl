@@ -215,16 +215,16 @@ float MetersToFeet(float Meters)
 }
 /************************************************************************************************************/
 
-float GetRateOfClimb()
+void GetRateOfClimb()
 {
     if (BaroAltitude == 0)
         return 0;
     static uint32_t LastTime = 0;
     static float LastBaroAltitude = 0;
-    float RateOfClimb = (BaroAltitude - LastBaroAltitude) / ((millis() - LastTime) / 1000.0);
+    RateOfClimb = (BaroAltitude - LastBaroAltitude) / ((millis() - LastTime) / 1000.0);
     LastBaroAltitude = BaroAltitude;
     LastTime = millis();
-    return RateOfClimb;
+    return;
 }
 
 // ******************************************************************************************************************************************************************
@@ -233,18 +233,14 @@ void GetBMP280Data()
     if ((!BMP280Connected) || (millis() < 10000))
         return;
     static uint32_t LastTime = 0;
-    if (millis() - LastTime > 500) //
+    if (millis() - LastTime > 500)
     {
         LastTime = millis();
         bmp.takeForcedMeasurement();
         BaroTemperature = bmp.readTemperature();
         BaroAltitude = MetersToFeet(bmp.readAltitude(Qnh));
-        //  BaroAltitude = bmp.readAltitude(Qnh);
-        //  Look1("BaroTemperature: ");
-        //  Look(BaroTemperature);
-        //  Look1("Rate of Climb: ");
-        //  Look1(GetRateOfClimb());
-        //  Look(" feet per second.");
+        BaroAltitude = bmp.readAltitude(Qnh);
+        GetRateOfClimb();
     }
 }
 // ******************************************************************************************************************************************************************
@@ -799,13 +795,6 @@ void SendMacAddress()
         break;
     }
 }
-
-/************************************************************************************************************/
-// void LoadShortAckPayload()
-// {
-//     CheckWhetherItsTimeToHop();
-//     AckPayload.Byte1 = NextChannelNumber;
-// }
 /************************************************************************************************************/
 void LoadAckPayload()
 {
@@ -816,8 +805,8 @@ void LoadAckPayload()
     }
     AckPayload.Purpose &= 0x7F; // NOTE: The HIGH BIT of "purpose" bit is the HOPNOW flag. It gets set only when it's time to hop.
     ++AckPayload.Purpose;
-    if (AckPayload.Purpose > 18) // number of telemetry items
-        AckPayload.Purpose = 0; // wrap after max
+    if (AckPayload.Purpose > 19) // number of telemetry items
+        AckPayload.Purpose = 0;  // wrap after max
     switch (AckPayload.Purpose)
     {
     case 0:
@@ -847,8 +836,8 @@ void LoadAckPayload()
         break;
     case 6:
         SendToAckPayload(BaroAltitude);
-        //Look1("BaroAltitude: ");
-       // Look(BaroAltitude);
+        // Look1("BaroAltitude: ");
+        // Look(BaroAltitude);
         break;
     case 7:
         SendToAckPayload(BaroTemperature);
@@ -885,6 +874,9 @@ void LoadAckPayload()
         break;
     case 18:
         SendTimeToAckPayload();
+        break;
+    case 19:
+        SendToAckPayload(RateOfClimb);
         break;
     default:
         break;

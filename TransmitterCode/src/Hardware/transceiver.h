@@ -1015,6 +1015,11 @@ FASTRUN void ParseAckPayload()
             SynchRTCwithGPSTime();
         }
         break;
+    case 19:
+        RateOfClimb = GetFromAckPayload();
+       // Look1("RateOfClimb: ");
+       // Look(RateOfClimb);
+        break;
     default:
         break;
     }

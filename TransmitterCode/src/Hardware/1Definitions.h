@@ -701,7 +701,7 @@ void StartLogFileView();
 void LogTotalRXGoodPackets();
 void LogTotalRXGoodPackets();
 void LogTotalPacketsAttempted();
-    FASTRUN void LogAverageGap();
+FASTRUN void LogAverageGap();
 #ifdef USE_BTLE
 void SendViaBLE();
 #endif
@@ -1166,12 +1166,13 @@ bool ReadingaFile = false;
 bool FirstGPSfix = true;
 uint32_t RXSuccessfulPackets = 0;
 uint32_t TotalPacketsAttempted = 0;
+float RateOfClimb = 0;
 
-// **********************************************************************************************************************************
-// **********************************  Area & namespace for FHSS data ************************************************************
-// **********************************************************************************************************************************
+    // **********************************************************************************************************************************
+    // **********************************  Area & namespace for FHSS data ************************************************************
+    // **********************************************************************************************************************************
 
-namespace FHSS_data
+    namespace FHSS_data
 {
 
     uint8_t Used_Recovery_Channels[3] = {15, 71, 82}; // channels 15, 71, 82 are used for recovery
