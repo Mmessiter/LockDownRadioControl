@@ -218,7 +218,7 @@ float MetersToFeet(float Meters)
 void GetRateOfClimb()
 {
     if (BaroAltitude == 0)
-        return 0;
+        return;
     static uint32_t LastTime = 0;
     static float LastBaroAltitude = 0;
     RateOfClimb = (BaroAltitude - LastBaroAltitude) / ((millis() - LastTime) / 1000.0);
