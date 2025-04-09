@@ -198,12 +198,12 @@ bool ReadData()
         CurrentRadio->flush_tx();                                           // This avoids a lockup that happens when the FIFO gets full
         LoadAckPayload();                                                   // Load the AckPayload with telemetry data
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);      // send big PAYLOAD EVERY time
-        DelayMillis(1);                                                     // 1 ms delay
+        delayMicroseconds(650 - 481);                                       // delaymicroseconds 481 is needed so read volts!!
+        GetRXVolts();                                                       // Get RX LIPO volts if connected or just wait for 481us
         CurrentRadio->read(&DataReceived, DynamicPayloadSize);              //  ** >> Read new data from master << ** // Get the size of the new data (14)
         Connected = true;
         NewData = true;
-        if (Connected)
-            UseReceivedData(DynamicPayloadSize);
+        UseReceivedData(DynamicPayloadSize);
     }
     return Connected;
 }
@@ -247,12 +247,19 @@ void GetBMP280Data()
 //  Get RX LIPO volts if connected
 void GetRXVolts()
 {
+    // takes 481 us
+   // uint32_t testr = micros();
     static uint32_t LastTime = 0;
     if ((millis() - LastTime > 1007) && (INA219Connected))
     {
         LastTime = millis();
         INA219Volts = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected
     }
+    else
+    {
+        delayMicroseconds(481); // because of the delay in the INA219 library
+    }
+  //  Look(micros() - testr);
 }
 // ******************************************************************************************************************************************************************
 
@@ -260,7 +267,6 @@ FASTRUN void ReceiveData()
 {
     if (!ReadData())
     {
-        GetRXVolts();    //  if no data yet, get RX LIPO volts if connected
         GetBMP280Data(); //  if no data yet, get BMP280 data
 #ifdef USE_STABILISATION
         if (MPU6050Connected) // no new packet yet, so look at the gyro and accelerometer

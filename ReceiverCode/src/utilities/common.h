@@ -227,9 +227,10 @@ void kalmanFilter();
 void filterRatesForHelicopter();
 void initKalman();
 float MetersToFeet(float Meters);
+void GetRXVolts();
 
-    template <typename any>
-    void Look(const any &value);
+template <typename any>
+void Look(const any &value);
 
 template <typename any>
 void Look1(const any &value);
