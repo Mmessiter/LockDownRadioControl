@@ -162,6 +162,7 @@ void ReadMoreParameters()
 /************************************************************************************************************/
 void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is length of incomming data
 {
+
     if (DataReceived.ChannelBitMask)
     {                                                          // Any changed channels?
         Decompress(RawDataIn, DataReceived.CompressedData, 8); // Decompress the most recent data 8 enough? Don't know yet how may channels will be sent
@@ -191,6 +192,7 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is length
 /************************************************************************************************************/
 bool ReadData()
 {
+#define DELAYNEEDED 625 // > 481
     Connected = false;
     if (CurrentRadio->available(&Pipnum))
     {
@@ -198,7 +200,7 @@ bool ReadData()
         CurrentRadio->flush_tx();                                           // This avoids a lockup that happens when the FIFO gets full
         LoadAckPayload();                                                   // Load the AckPayload with telemetry data
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);      // send big PAYLOAD EVERY time
-        delayMicroseconds(650 - 481);                                       // delaymicroseconds 481 is needed so read volts!!
+        delayMicroseconds(DELAYNEEDED - 481);                               // delaymicroseconds 481 is needed so read volts!!
         GetRXVolts();                                                       // Get RX LIPO volts if connected or just wait for 481us
         CurrentRadio->read(&DataReceived, DynamicPayloadSize);              //  ** >> Read new data from master << ** // Get the size of the new data (14)
         Connected = true;
@@ -248,7 +250,7 @@ void GetBMP280Data()
 void GetRXVolts()
 {
     // takes 481 us
-   // uint32_t testr = micros();
+    // uint32_t testr = micros();
     static uint32_t LastTime = 0;
     if ((millis() - LastTime > 1007) && (INA219Connected))
     {
@@ -259,7 +261,7 @@ void GetRXVolts()
     {
         delayMicroseconds(481); // because of the delay in the INA219 library
     }
-  //  Look(micros() - testr);
+    //  Look(micros() - testr);
 }
 // ******************************************************************************************************************************************************************
 
@@ -272,12 +274,16 @@ FASTRUN void ReceiveData()
         if (MPU6050Connected) // no new packet yet, so look at the gyro and accelerometer
             DoStabilsation();
 #endif
+
         if (millis() - SBUSTimer >= SBUSRATE)
         { // No new packet yet - but maybe it's time to dispatch the last?
-            if (BoundFlag && (millis() > 10000) && Connected)
-            {                    // > 10 seconds after binding, we might need to keep sbus happy
-                KeepSbusHappy(); // if it's time - send a SBUS packet. It might be new data.
-                --SbusRepeats;   // It's not really a "repeat".
+
+            if (BoundFlag)
+            {
+                KeepSbusHappy();      // if it's time - send a SBUS packet. Any packet.
+                if (SbusRepeats > 0)
+                    --SbusRepeats; // decrement the number of repeats
+                SBUSTimer = millis(); // reset the timer
             }
         }
         if ((!CurrentRadio->available(&Pipnum)) && (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT))
@@ -826,6 +832,10 @@ void LoadAckPayload()
         }
         break;
     case 1:
+        // if (SbusRepeats > 65000)
+        // {
+        //     SbusRepeats = 0; // reset this counter to avoid overflow
+        // }
         SendIntToAckPayload(SbusRepeats);
         break;
     case 2:

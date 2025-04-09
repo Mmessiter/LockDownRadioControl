@@ -127,6 +127,8 @@ int GetPWMValue(int frequency, int length) { return float(length / (1000000.00 /
 /************************************************************************************************************/
 void MoveServos()
 {
+
+   // static uint32_t STimer = 0; 
     if (!CheckCrazyValues() || (millis() < 7))
     { // 000?
         TurnLedOff();
@@ -142,6 +144,8 @@ void MoveServos()
     if (UseSBUS)
     {
         MySbus.write(SbusChannels); // Send SBUS data
+        // Look(millis() - STimer);
+        // STimer = millis();
     }
     else
     { // not SBUS = PPM
@@ -249,6 +253,7 @@ void BindModel()
     delayMicroseconds(250);
     BoundFlag = true;
     ModelMatched = true;
+    Connected = true; 
 
     if (Blinking)
     {
@@ -420,6 +425,7 @@ void ReadBindPlug()
         PipePointer = TheReceivedPipe;
         CopyCurrentPipe(TheReceivedPipe, BOUNDPIPENUMBER);
         BoundFlag = true;
+        Connected = true;
         SaveNewBind = false;
         while (millis() - tt < 500)
             ReceiveData();

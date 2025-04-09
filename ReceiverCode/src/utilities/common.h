@@ -153,7 +153,7 @@ uint64_t NewPipeMaybe = 0;
 uint64_t PreviousNewPipes[PIPES_TO_COMPARE];
 uint8_t PreviousNewPipesIndex = 0;
 bool FailSafeSent = true;
-uint16_t SbusRepeats = 0;
+uint32_t SbusRepeats = 0;
 uint32_t RX1TotalTime = 0;
 uint32_t RX2TotalTime = 0;
 uint32_t RadioSwaps = 0;
