@@ -111,10 +111,8 @@ void KickTheDog()
 
 bool CheckCrazyValues()
 { // might come when binding
-
-    if (millis() - ReconnectedMoment > 10000)
-        return true; // crazy values are rare after 10 seconds of good connection
-
+    if (millis() - ReconnectedMoment > 10000) // crazy values are rare after 10 seconds of connection
+        return true; 
     for (int i = 0; i < 7; ++i)
     {
         if ((ReceivedData[i] < MINMICROS) || (ReceivedData[i] > MAXMICROS))
@@ -126,7 +124,7 @@ bool CheckCrazyValues()
 /************************************************************************************************************/
 // Function to get PWM value needed for given pulse length in microseconds
 
-int GetPWMValue(int frequency, int length) { return float(length / (1000000.00 / frequency)) * SERVO_RESOLUTION; } // *** >> DONT EDIT THIS LINE!! << ***
+int GetPWMValue(int frequency, int length) { return float(length / (1000000.00 / frequency)) * SERVO_RESOLUTION; } // *** >> DON'T EDIT THIS LINE!! << ***
 
 /************************************************************************************************************/
 void MoveServos()
@@ -204,10 +202,6 @@ void SetServoFrequency()
     for (uint8_t i = 0; i < SERVOSUSED; ++i)
     {
         analogWriteFrequency(PWMPins[i], ServoFrequency[i]);
-        // Look1("Channel Frequency: ");
-        // Look1(i+1);
-        // Look1(" = ");
-        // Look(ServoFrequency[i]);
     }
 }
 
