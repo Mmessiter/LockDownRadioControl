@@ -26,6 +26,7 @@ uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed
 /************************************************************************************************************/
 // This function sends the SBUS data to the receiver.
 // It is called every 10ms to keep the SBUS happy.
+// The data might be new, or it might be the same as before. It doesn't matter much.
 void SendSBUSData()
 {
     static uint32_t LocalTime = millis();

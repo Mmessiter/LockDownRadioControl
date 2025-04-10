@@ -111,6 +111,10 @@ void KickTheDog()
 
 bool CheckCrazyValues()
 { // might come when binding
+
+    if (millis() - ReconnectedMoment > 10000)
+        return true; // crazy values are rare after 10 seconds of good connection
+
     for (int i = 0; i < 7; ++i)
     {
         if ((ReceivedData[i] < MINMICROS) || (ReceivedData[i] > MAXMICROS))
