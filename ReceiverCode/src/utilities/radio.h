@@ -24,6 +24,17 @@ Payload AckPayload;
 uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed etc. (=6)
 
 /************************************************************************************************************/
+// This function sends the SBUS data to the receiver.
+// It is called every 10ms to keep the SBUS happy.
+void SendSBUSData()
+{
+    static uint32_t LocalTime = millis();
+    if (((millis() - LocalTime) < SBUSRATE) || (!BoundFlag) || (!CheckCrazyValues()))
+        return;                 // Don't send SBUS data except when due
+    MySbus.write(SbusChannels); // Send SBUS data
+    LocalTime = millis();       // reset the timer
+}
+/************************************************************************************************************/
 /** Read extra parameters from the transmitter.
  * extra parameters are sent using the last few words bytes in every data packet.
  * the parameter sent is defined by the packet number & the packet number defined the transmitter.
@@ -157,7 +168,6 @@ void ReadMoreParameters()
         Parameters.word[i] = RawDataIn[i]; // 8 words - of 12 useful BITs each
     }
     UseExtraParameters();
-    // DebugParameters();
 }
 /************************************************************************************************************/
 void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is length of incomming data
@@ -176,7 +186,8 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is length
             ReadMoreParameters();
         }
     }
-    MapToSBUS();                      // Get SBUS data ready
+    MapToSBUS(); // Get SBUS data ready
+    SendSBUSData();
     LastPacketArrivalTime = millis(); // Note the arrival time
     ++SuccessfulPackets;              // These packets did arrive, but acknowledgement might yet fail
                                       // Look1("Successful Packets: ");
@@ -192,7 +203,7 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is length
 /************************************************************************************************************/
 bool ReadData()
 {
-#define DELAYNEEDED 625 // > 481
+#define DELAYNEEDED 615 // > 481
     Connected = false;
     if (CurrentRadio->available(&Pipnum))
     {
@@ -203,6 +214,7 @@ bool ReadData()
         delayMicroseconds(DELAYNEEDED - 481);                               // delaymicroseconds 481 is needed so read volts!!
         GetRXVolts();                                                       // Get RX LIPO volts if connected or just wait for 481us
         CurrentRadio->read(&DataReceived, DynamicPayloadSize);              //  ** >> Read new data from master << ** // Get the size of the new data (14)
+        SendSBUSData();
         Connected = true;
         NewData = true;
         UseReceivedData(DynamicPayloadSize);
@@ -274,18 +286,7 @@ FASTRUN void ReceiveData()
         if (MPU6050Connected) // no new packet yet, so look at the gyro and accelerometer
             DoStabilsation();
 #endif
-
-        if (millis() - SBUSTimer >= SBUSRATE)
-        { // No new packet yet - but maybe it's time to dispatch the last?
-
-            if (BoundFlag)
-            {
-                KeepSbusHappy();      // if it's time - send a SBUS packet. Any packet.
-                if (SbusRepeats > 0)
-                    --SbusRepeats; // decrement the number of repeats
-                SBUSTimer = millis(); // reset the timer
-            }
-        }
+        SendSBUSData(); // Send SBUS data if it's time to do so
         if ((!CurrentRadio->available(&Pipnum)) && (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT))
             Reconnect(); // Try to reconnect.
     }
@@ -506,6 +507,7 @@ void TryToConnectNow()
     ATimer = millis();
     while ((!CurrentRadio->available(&Pipnum)) && (millis() - ATimer) < LISTEN_PERIOD)
     {
+        SendSBUSData();
         KickTheDog();
 #ifdef USE_STABILISATION
         if (MPU6050Connected)
@@ -573,27 +575,6 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch)
 
 /************************************************************************************************************/
 
-// This function is called when the system is busy but not receiving - to prevent very short SBUS timeouts (eg DJI).
-
-void KeepSbusHappy()
-{
-    if ((millis() - NewConnectionMoment) < 20000)
-        return; // Let things settle down after connection for 20 seconds or so before using this
-    if (millis() - SBUSTimer >= SBUSRATE)
-    {                         // Does SBUS expect a packet?
-        SBUSTimer = millis(); // Yes...
-        if (!FailSafeSent)    // But don't send after failsafe
-        {
-            ++SbusRepeats;     // Count these repeats out of pure curiosity
-            Connected = true;  // To force re-sending this older data
-            MoveServos();      // This call also sends an SBUS packet
-            Connected = false; // Not in fact connected of course. I lied earlier.
-        }
-    }
-}
-
-/************************************************************************************************************/
-
 FASTRUN void Reconnect()
 { // This is called when contact is lost, to reconnect ASAP
 #define MAXTRIESPERTRANSCEIVER 3
@@ -601,7 +582,6 @@ FASTRUN void Reconnect()
     uint32_t SearchStartTime = millis();
     uint8_t PreviousRadio = ThisRadio;
     uint8_t Attempts = 0;
-    // static uint32_t LTimer = 0;
 
     if (ThisRadio == 1)
         RX1TotalTime += (millis() - ReconnectedMoment); // keep track of how long on each
@@ -613,8 +593,7 @@ FASTRUN void Reconnect()
         if (Blinking)
             BlinkLed();
         KickTheDog();
-        if (BoundFlag)
-            KeepSbusHappy(); // Some SBUS systems timeout FAST, so resend old data to keep it happy
+        SendSBUSData();
         CurrentRadio->stopListening();
         delayMicroseconds(STOPLISTENINGDELAY);
         CurrentRadio->flush_tx();
@@ -622,11 +601,7 @@ FASTRUN void Reconnect()
         ReconnectChannel = FHSS_Recovery_Channels[ReconnectIndex];
         ++ReconnectIndex;
         if (ReconnectIndex >= 3)
-        { // 3 channels in the array -- this rotates much more slowly than the TX so they are very different and must eventually match
             ReconnectIndex = 0;
-            // Look(millis()-LTimer);
-            // LTimer = millis();
-        } // If needed, wrap the channels' array pointer
         CurrentRadio->stopListening();
         delayMicroseconds(STOPLISTENINGDELAY);
         CurrentRadio->setChannel(ReconnectChannel);
@@ -662,7 +637,7 @@ FASTRUN void Reconnect()
     // must have connected by here
     // Look1 ("Reconnected on channel ");
     // Look  (ReconnectChannel);
-
+    BoundFlag = true;
     FailSafeSent = false;
     if (PreviousRadio != ThisRadio)
         ++RadioSwaps;             // Count the radio swaps
@@ -832,11 +807,7 @@ void LoadAckPayload()
         }
         break;
     case 1:
-        // if (SbusRepeats > 65000)
-        // {
-        //     SbusRepeats = 0; // reset this counter to avoid overflow
-        // }
-        SendIntToAckPayload(SbusRepeats);
+        SendIntToAckPayload(0);
         break;
     case 2:
         SendIntToAckPayload(RadioSwaps);

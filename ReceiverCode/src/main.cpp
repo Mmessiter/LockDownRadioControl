@@ -128,9 +128,13 @@ int GetPWMValue(int frequency, int length) { return float(length / (1000000.00 /
 void MoveServos()
 {
 
-   // static uint32_t STimer = 0; 
-    if (!CheckCrazyValues() || (millis() < 7))
-    { // 000?
+    static uint32_t LocalTimer = 0;
+    if ((millis() - LocalTimer) < 10)
+        return;
+    LocalTimer = millis();
+
+    if (!CheckCrazyValues() )
+    { 
         TurnLedOff();
         for (int j = 0; j < SERVOSUSED; ++j)
             PreviousData[j] = 0; // Force a send when data is good again
@@ -141,19 +145,14 @@ void MoveServos()
         TurnLedOn();
     }
 
-    if (UseSBUS)
-    {
-        MySbus.write(SbusChannels); // Send SBUS data
-        // Look(millis() - STimer);
-        // STimer = millis();
-    }
-    else
+    if (!UseSBUS)
     { // not SBUS = PPM
         for (int j = 0; j < PPMChannelCount; ++j)
         {
             PPMOutput.write(PPMChannelOrder[j], map(ReceivedData[j], MINMICROS, MAXMICROS, 1000, 2000));
         }
     }
+
     for (int j = 0; j < SERVOSUSED; ++j)
     {
         if (PreviousData[j] != ReceivedData[j])
@@ -183,8 +182,10 @@ void FailSafe()
         LoadFailSafeData();
         Connected = true; // to force sending this data!
         MapToSBUS();
+        SendSBUSData();
         MoveServos();
-        Connected = false; // I lied earlier - we're not really connected.
+        Connected = false; 
+        BoundFlag = false; 
     }
     FailSafeSent = true; // Once is enough
     FailedSafe = true;
@@ -248,16 +249,14 @@ void TurnLedOff()
 
 void BindModel()
 {
-   
     CurrentRadio->stopListening();
     delayMicroseconds(250);
     BoundFlag = true;
     ModelMatched = true;
-    Connected = true; 
+    Connected = true;
 
     if (Blinking)
     {
-
         SetNewPipe(); // change to bound pipe <<< ***************************************
 
 #ifdef DB_BIND
@@ -641,26 +640,23 @@ void loop() // without MPU6050 about 30000 interations per second.... EXCEPT Zer
     if (MPU6050Connected)
         DoStabilsation();
 #endif
-
     KickTheDog();
     ReceiveData();
     if (Blinking)
+    {
         BlinkLed();
-    if (BoundFlag && Connected && ModelMatched)
-    { // Only move servos if everything is good
+    }
+    if (BoundFlag && ModelMatched)
+    { 
         if (GPS_Connected)
-            ReadGPS(); // heer !! <<<< **********************************
-        if (millis() - SBUSTimer >= SBUSRATE)
-        {                         // SBUSRATE rate is also good enough for servo rate
-            SBUSTimer = millis(); // timer starts before send starts....
-            MoveServos();         // Actually do something useful at last
+        {
+            ReadGPS();
         }
+        SendSBUSData(); // Send the SBUS data
+        MoveServos();   // Actually do something useful at last
     }
     else
     {
-        if (!BoundFlag)
-        {
-            GetNewPipe();
-        }
+        GetNewPipe();
     }
 }

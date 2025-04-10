@@ -153,7 +153,6 @@ uint64_t NewPipeMaybe = 0;
 uint64_t PreviousNewPipes[PIPES_TO_COMPARE];
 uint8_t PreviousNewPipesIndex = 0;
 bool FailSafeSent = true;
-uint32_t SbusRepeats = 0;
 uint32_t RX1TotalTime = 0;
 uint32_t RX2TotalTime = 0;
 uint32_t RadioSwaps = 0;
@@ -228,6 +227,8 @@ void filterRatesForHelicopter();
 void initKalman();
 float MetersToFeet(float Meters);
 void GetRXVolts();
+void SendSBUSData();
+bool CheckCrazyValues();
 
 template <typename any>
 void Look(const any &value);
@@ -246,7 +247,6 @@ PulsePositionOutput PPMOutput; // PPM
 
 bool BoundFlag = false;                  /** indicates if receiver paired with transmitter */
 uint16_t SbusChannels[CHANNELSUSED + 1]; // Just one spare
-uint32_t SBUSTimer = 0;
 bool FailSafeChannel[17];
 bool FailSafeDataLoaded = false;
 uint8_t FS_byte1 = 0; // All 16 failsafe channel flags are in these two bytes
