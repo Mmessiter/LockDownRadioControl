@@ -305,13 +305,14 @@ void CopyCurrentPipe(uint8_t *p, uint8_t pn)
     Pipnum = pn;
 }
 //************************************************************************************************************/
-void SetNewPipe()
+void SetNewPipe() // new pipe from TX
 {
     CurrentRadio->openReadingPipe(Pipnum, PipePointer); //  5 * byte array
 #ifdef DB_BIND
     if (BoundFlag)
         Serial.println("BOUND TO TX'S PIPE");
 #endif
+        BoundFlag = true;
 }
 
 /************************************************************************************************************/
@@ -638,7 +639,7 @@ FASTRUN void Reconnect()
     // must have connected by here
     // Look1 ("Reconnected on channel ");
     // Look  (ReconnectChannel);
-    BoundFlag = true;
+
     FailSafeSent = false;
     if (PreviousRadio != ThisRadio)
         ++RadioSwaps;             // Count the radio swaps
