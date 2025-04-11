@@ -5,24 +5,6 @@
 
 #include "utilities/common.h"
 
-/** AckPayload Stucture for data returned to transmitter. */
-struct Payload
-{
-    /**
-     * This first byte "Purpose" defines what all the other bytes mean, AND ...
-     * the highest BIT of Purpose means ** HOP TO NEXT CHANNEL A.S.A.P. (IF ON) **
-     * the lower 7 BITs then define the meaning of the remainder of the ackpayload bytes
-     **/
-    uint8_t Purpose = 0; // 0  Purpose
-    uint8_t Byte1 = 0;   // 1
-    uint8_t Byte2 = 0;   // 2
-    uint8_t Byte3 = 0;   // 3
-    uint8_t Byte4 = 0;   // 4
-    uint8_t Byte5 = 0;   // 5
-};
-Payload AckPayload;
-uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed etc. (=6)
-
 /************************************************************************************************************/
 // This function sends the SBUS data to the receiver.
 // It is called every 10ms to keep the SBUS happy.
@@ -195,7 +177,7 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is length
                                       // Look(SuccessfulPackets);
 
     if (HopNow)
-    {                        // This flag gets set in LoadAckPayload();
+    {                        // This flag gets set in LoadLongerAckPayload();
         HopToNextChannel();  // Ack payload instructed us to Hop at next opportunity. So hop now ...
         HopNow = false;      // ... and clear the flag,
         HopStart = millis(); // ... and start the timer.
@@ -205,16 +187,33 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is length
 bool ReadData()
 {
 #define DELAYNEEDED 615 // > 481
+    static uint8_t AcknowledgementCounter = 0;
+    uint8_t ShortAcknowledgementMaximum = 100; // 100 packets
     Connected = false;
+
     if (CurrentRadio->available(&Pipnum))
     {
         uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize(); // Get the size of the new data (14)
         CurrentRadio->flush_tx();                                           // This avoids a lockup that happens when the FIFO gets full
-        LoadAckPayload();                                                   // Load the AckPayload with telemetry data
-        CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize);      // send big PAYLOAD EVERY time
-        delayMicroseconds(DELAYNEEDED - 481);                               // delaymicroseconds 481 is needed so read volts!!
-        GetRXVolts();                                                       // Get RX LIPO volts if connected or just wait for 481us
-        CurrentRadio->read(&DataReceived, DynamicPayloadSize);              //  ** >> Read new data from master << ** // Get the size of the new data (14)
+
+        if ((millis()) < 5000) // todo: after failsafe, this is  needed agsain.
+            AcknowledgementCounter = 250; // to force a long ack payload for the first 5 seconds
+
+        if (AcknowledgementCounter < ShortAcknowledgementMaximum)
+        {
+            LoadShortAckPayload();                                             // Load the ShortAckPayload with no telemetry data
+            CurrentRadio->writeAckPayload(1, &ShortPayload, ShortPayloadSize); // send Short PAYLOAD (1 byte)
+            ++AcknowledgementCounter;                                          // increment the counter
+        }
+        else
+        {
+            LoadLongerAckPayload();                                        // Load the AckPayload with telemetry data
+            CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // send Full PAYLOAD (6 bytes)
+            AcknowledgementCounter = 0;                                    // reset the counter
+        }
+        delayMicroseconds(DELAYNEEDED - 481); // delaymicroseconds 481 is needed so read volts!!
+        GetRXVolts();                         // Get RX LIPO volts if connected or just wait for 481us
+        CurrentRadio->read(&DataReceived, DynamicPayloadSize); //  ** >> Read new data from master << ** // Get the size of the new data (14)
         SendSBUSData();
         Connected = true;
         NewData = true;
@@ -312,7 +311,7 @@ void SetNewPipe() // new pipe from TX
     if (BoundFlag)
         Serial.println("BOUND TO TX'S PIPE");
 #endif
-        BoundFlag = true;
+    BoundFlag = true;
 }
 
 /************************************************************************************************************/
@@ -680,6 +679,7 @@ void IncChannelNumber()
         NextChannelNumber = 0;
     } // If needed, wrap the channels' array pointer
     AckPayload.Byte5 = NextChannelNumber;               // Tell the transmitter which element of the array to use next.
+    ShortPayload.TheByte = NextChannelNumber;           //
     NextChannel = *(FHSSChPointer + NextChannelNumber); // Get the actual channel number from the array.
 }
 
@@ -784,8 +784,23 @@ void SendMacAddress()
         break;
     }
 }
+// ************************************************************************************************************/
+// This function loads the ShortAckPayload with the channel number to use next.
+// The transmitter will then use this channel number to send the next packet.
+void LoadShortAckPayload()
+{
+    ShortPayload.TheByte = NextChannelNumber & 0x7F;
+    if ((millis() - HopStart) >= HOPTIME) // Hoptime?
+    {
+        IncChannelNumber();
+        ShortPayload.TheByte |= 0x80; // Set the HOP flag
+        HopNow = true;                // Set local flag and hop when ready BUT NOT BEFORE.
+    }
+    AckPayloadSize = 1; // 1 byte only of data
+}
+
 /************************************************************************************************************/
-void LoadAckPayload()
+void LoadLongerAckPayload()
 {
     if (MacAddressSentCounter < 16)
     {
@@ -794,6 +809,7 @@ void LoadAckPayload()
     }
     AckPayload.Purpose &= 0x7F; // NOTE: The HIGH BIT of "purpose" bit is the HOPNOW flag. It gets set only when it's time to hop.
     ++AckPayload.Purpose;
+    AckPayloadSize = 6;          // 6 bytes of telemetry data
     if (AckPayload.Purpose > 19) // number of telemetry items
         AckPayload.Purpose = 0;  // wrap after max
     switch (AckPayload.Purpose)

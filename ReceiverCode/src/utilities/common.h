@@ -25,12 +25,12 @@
 //  #define DB_FAILSAFE
 //  #define DB_RXTIMERS
 
-//#define USE_STABILISATION 1
+// #define USE_STABILISATION 1
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 #define SECOND_TRANSCEIVER // must be undefined if not using two transceivers
- //  #define USE_11PWM_OUTPUTS           // must be undefined if not using all 11 PWM outputs
+                           //  #define USE_11PWM_OUTPUTS           // must be undefined if not using all 11 PWM outputs
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -162,6 +162,33 @@ bool MPU6050Connected = false; //  Accelerometer and Gyro from MPU6050 ?
 uint8_t ReconnectChannel = 0;
 float RateOfClimb = 0;
 
+/** AckPayload Stucture for data returned to transmitter. */
+struct Payload
+{
+    /**
+     * This first byte "Purpose" defines what all the other bytes mean, AND ...
+     * the highest BIT of Purpose means ** HOP TO NEXT CHANNEL A.S.A.P. (IF ON) **
+     * the lower 7 BITs then define the meaning of the remainder of the ackpayload bytes
+     **/
+    uint8_t Purpose = 0; // 0  Purpose
+    uint8_t Byte1 = 0;   // 1
+    uint8_t Byte2 = 0;   // 2
+    uint8_t Byte3 = 0;   // 3
+    uint8_t Byte4 = 0;   // 4
+    uint8_t Byte5 = 0;   // 5
+};
+Payload AckPayload;
+uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed etc. (=6)
+
+// ************************************************************************************************************/
+struct Shortload
+{
+    uint8_t TheByte = 0; // next channel number and hop flag
+};
+Shortload ShortPayload;
+uint8_t ShortPayloadSize = sizeof(ShortPayload); // Size for later externs if needed etc. (=1)
+// ************************************************************************************************************/
+
 uint8_t FHSS_Recovery_Channels[3] = {15, 71, 82};                                                                               // three possible channels used for Recovery
 uint8_t FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 16, 72, // These are good for UK
                              35, 57, 45, 29, 75, 3, 41, 62, 11, 9, 77, 37, 8, 31, 36, 18, 17, 50, 78, 73, 30, 79, 6, 23, 40,
@@ -178,11 +205,11 @@ uint16_t ServoFrequency[11] = {50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50};     
 float RawRollRate = 0, RawPitchRate = 0, RawYawRate = 0;                         // Raw gyro signals
 float RateCalibrationRoll = 0, RateCalibrationPitch = 0, RateCalibrationYaw = 0; // Gyro calibration values
 float AccX = 0, AccY = 0, AccZ = 0;                                              // Accelerometer signals
-float RawRollAngle = 0, RawPitchAngle = 0;                                             // Roll and pitch angles
+float RawRollAngle = 0, RawPitchAngle = 0;                                       // Roll and pitch angles
 
 // This bit donated by Claude 3.7 ***********************************************************
-float filteredRoll, filteredPitch, filteredYaw;                                  // Kalman filtered angles
-float filteredRollRate,filteredPitchRate,filteredYawRate;                        // Kalman filtered rates
+float filteredRoll, filteredPitch, filteredYaw;             // Kalman filtered angles
+float filteredRollRate, filteredPitchRate, filteredYawRate; // Kalman filtered rates
 uint32_t previousTime = 0;
 struct KalmanState
 {
@@ -205,7 +232,7 @@ void DelayMillis(uint16_t ms);
 void DoStabilsation();
 void UseExtraParameters();
 FASTRUN void Reconnect();
-void LoadAckPayload();
+void LoadLongerAckPayload();
 void Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, uint8_t uncompressed_size);
 void KeepSbusHappy();
 void RebuildFlags(bool *f, uint16_t tb);
@@ -310,7 +337,7 @@ float X_GyroOffset = 0;
 float Y_GyroOffset = 0;
 float Z_GyroOffset = 0;
 bool GyroOffsetsSet = false;
-uint16_t  BMP280Address = 0x76; // BMP280 I2C address
+uint16_t BMP280Address = 0x76; // BMP280 I2C address
 uint32_t SuccessfulPackets = 0;
 uint32_t ConnectMoment = 0;
 

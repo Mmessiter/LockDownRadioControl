@@ -321,7 +321,10 @@ void SuccessfulPacket()
     {
         uint8_t PayloadSize = Radio1.getDynamicPayloadSize();
         Radio1.read(&AckPayload, PayloadSize);
-        ParseAckPayload(); // PayloadSize == 6 always now. Short Acks not used anymore.
+        if (PayloadSize > 1)
+            ParseLongerAckPayload(); 
+        else
+            ParseShortAckPayload();
     }
     if (BoundFlag && (!LedWasGreen || LedIsBlinking) && !UsingDefaultPipeAddress)
     {
@@ -889,8 +892,18 @@ void GetModelsMacAddress()
         }
     }
 }
+// ************************************************************************************************************/
+FASTRUN void ParseShortAckPayload()
+{
+    FHSS_data::NextChannelNumber = AckPayload.Purpose & 0x7f; // every packet tells of next hop destination
+    if (AckPayload.Purpose & 0x80)
+    {
+        NextChannel = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber); // The actual channel number pointed to.
+        HopToNextChannel();
+    }
+}
 /************************************************************************************************************/
-FASTRUN void ParseAckPayload()
+FASTRUN void ParseLongerAckPayload()
 {
     if (BuddyPupilOnPPM)
         return; // buddy pupil need none of this
@@ -1017,8 +1030,8 @@ FASTRUN void ParseAckPayload()
         break;
     case 19:
         RateOfClimb = GetFromAckPayload();
-       // Look1("RateOfClimb: ");
-       // Look(RateOfClimb);
+        // Look1("RateOfClimb: ");
+        // Look(RateOfClimb);
         break;
     default:
         break;
