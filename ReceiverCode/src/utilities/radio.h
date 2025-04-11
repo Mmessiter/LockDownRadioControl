@@ -190,9 +190,7 @@ bool ReadData()
     Connected = false;
     if (CurrentRadio->available(&Pipnum))
     {
-        CurrentRadio->flush_tx();                                           // This avoids a lockup that happens when the FIFO gets full
-        uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize(); // Get the size of the new data (14)
-                                         
+        uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize(); // Get the size of the new data (14)                             
         if ((AcknowledgementCounter < ShortAcknowledgementMaximum) && ((millis() - NewConnectionMoment) > 15000))
         {
             LoadShortAckPayload();                                             // Load the ShortAckPayload with no telemetry data
@@ -213,6 +211,7 @@ bool ReadData()
         Connected = true;
         NewData = true;
         UseReceivedData(DynamicPayloadSize);
+        CurrentRadio->flush_tx(); // This avoids a lockup that happens when the FIFO gets full
     }
     return Connected;
 }

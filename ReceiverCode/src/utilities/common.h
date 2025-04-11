@@ -120,7 +120,7 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 
 #define pinCSN2 20            // NRF2
 #define pinCE2 21             // NRF2
-#define FAILSAFE_TIMEOUT 2000 // two seconds until failsafe
+#define FAILSAFE_TIMEOUT 1000 // 
 #define CSN_ON LOW
 #define CSN_OFF HIGH
 #define CE_ON HIGH
