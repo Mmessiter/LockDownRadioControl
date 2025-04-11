@@ -322,7 +322,7 @@ void SuccessfulPacket()
         uint8_t PayloadSize = Radio1.getDynamicPayloadSize();
         Radio1.read(&AckPayload, PayloadSize);
         if (PayloadSize > 1)
-            ParseLongerAckPayload(); 
+            ParseLongerAckPayload();
         else
             ParseShortAckPayload();
     }
@@ -746,6 +746,8 @@ FASTRUN void BufferTeensyMACAddPipe() // heeer
 /************************************************************************************************************/
 void SendBindingPipe()
 {
+ static uint32_t BindingTimer = 0;
+ 
 
     if (BuddyPupilOnWireless)
         return;
@@ -753,8 +755,12 @@ void SendBindingPipe()
         return;
     if (!BoundFlag || !ModelMatched)
         BindingTimer = millis();
+   
     if ((millis() - BindingTimer) < 1200)
+    {
         BufferTeensyMACAddPipe();
+    }
+
 }
 /*********************************************************************************************************************************/
 void NormaliseTheRadio()

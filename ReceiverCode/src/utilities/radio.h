@@ -188,18 +188,15 @@ bool ReadData()
 {
 #define DELAYNEEDED 615 // > 481
     static uint8_t AcknowledgementCounter = 0;
-    uint8_t ShortAcknowledgementMaximum = 100; // 100 packets
+    uint8_t ShortAcknowledgementMaximum = 20; // 20 packets short, 1 packet long
     Connected = false;
 
     if (CurrentRadio->available(&Pipnum))
     {
-        uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize(); // Get the size of the new data (14)
         CurrentRadio->flush_tx();                                           // This avoids a lockup that happens when the FIFO gets full
-
-        if ((millis()) < 5000) // todo: after failsafe, this is  needed agsain.
-            AcknowledgementCounter = 250; // to force a long ack payload for the first 5 seconds
-
-        if (AcknowledgementCounter < ShortAcknowledgementMaximum)
+        uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize(); // Get the size of the new data (14)
+                                         
+        if ((AcknowledgementCounter < ShortAcknowledgementMaximum) && ((millis() - NewConnectionMoment) > 15000))
         {
             LoadShortAckPayload();                                             // Load the ShortAckPayload with no telemetry data
             CurrentRadio->writeAckPayload(1, &ShortPayload, ShortPayloadSize); // send Short PAYLOAD (1 byte)
@@ -211,6 +208,7 @@ bool ReadData()
             CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // send Full PAYLOAD (6 bytes)
             AcknowledgementCounter = 0;                                    // reset the counter
         }
+
         delayMicroseconds(DELAYNEEDED - 481); // delaymicroseconds 481 is needed so read volts!!
         GetRXVolts();                         // Get RX LIPO volts if connected or just wait for 481us
         CurrentRadio->read(&DataReceived, DynamicPayloadSize); //  ** >> Read new data from master << ** // Get the size of the new data (14)
@@ -654,6 +652,8 @@ FASTRUN void Reconnect()
         NewConnectionMoment = millis();
         ConnectMoment = millis();
         SuccessfulPackets = 0; // Reset the packet count
+        BoundFlag = true;
+
     }
 
 #ifdef DB_RXTIMERS
@@ -802,7 +802,7 @@ void LoadShortAckPayload()
 /************************************************************************************************************/
 void LoadLongerAckPayload()
 {
-    if (MacAddressSentCounter < 16)
+    if (MacAddressSentCounter < 20)
     {
         SendMacAddress();
         return;

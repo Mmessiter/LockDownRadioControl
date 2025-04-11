@@ -29,8 +29,8 @@
 
 #define TXVERSION_MAJOR 2 // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 5
-#define TXVERSION_MINIMUS 0
-#define TXVERSION_EXTRA "A 07/04/25"
+#define TXVERSION_MINIMUS 1
+#define TXVERSION_EXTRA "A 11/04/25"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -1093,7 +1093,6 @@ uint8_t PupilIsAlive = 0;
 uint8_t MasterIsAlive = 0;
 bool VersionsCompared = false;
 uint32_t LedGreenMoment = 0;
-uint32_t BindingTimer = 0;
 bool BeQuiet = false;
 bool ReconnectingNow = true;
 uint32_t LastHopTime = 0; //  Time of last hop

@@ -171,7 +171,7 @@ void ClearMostParameters()
     BoundFlag = false;
     LastShowTime = 0;
     TotalGoodPackets = 0;
-    BindingTimer = 0;
+   // BindingTimer = 0;
     RecentGoodPacketsCount = 0;
     RecentPacketsLost = 0;
     DontChangePipeAddress = false;
