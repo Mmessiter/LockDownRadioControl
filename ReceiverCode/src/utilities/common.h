@@ -340,5 +340,7 @@ bool GyroOffsetsSet = false;
 uint16_t BMP280Address = 0x76; // BMP280 I2C address
 uint32_t SuccessfulPackets = 0;
 uint32_t ConnectMoment = 0;
+int16_t AcknowledgementCounter = 0;
+int16_t ShortAcknowledgementMaximum = 100; // many packets short, 1 packet long
 
 #endif // defined (_SRC_UTILITIES_COMMON_H)

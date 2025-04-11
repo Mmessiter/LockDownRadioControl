@@ -187,10 +187,7 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is length
 bool ReadData()
 {
 #define DELAYNEEDED 615 // > 481
-    static uint8_t AcknowledgementCounter = 0;
-    uint8_t ShortAcknowledgementMaximum = 20; // 20 packets short, 1 packet long
     Connected = false;
-
     if (CurrentRadio->available(&Pipnum))
     {
         CurrentRadio->flush_tx();                                           // This avoids a lockup that happens when the FIFO gets full
@@ -200,17 +197,17 @@ bool ReadData()
         {
             LoadShortAckPayload();                                             // Load the ShortAckPayload with no telemetry data
             CurrentRadio->writeAckPayload(1, &ShortPayload, ShortPayloadSize); // send Short PAYLOAD (1 byte)
-            ++AcknowledgementCounter;                                          // increment the counter
+            ++AcknowledgementCounter;
         }
         else
         {
             LoadLongerAckPayload();                                        // Load the AckPayload with telemetry data
             CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // send Full PAYLOAD (6 bytes)
-            AcknowledgementCounter = 0;                                    // reset the counter
+            AcknowledgementCounter = 0;
         }
 
         delayMicroseconds(DELAYNEEDED - 481); // delaymicroseconds 481 is needed so read volts!!
-        GetRXVolts();                         // Get RX LIPO volts if connected or just wait for 481us
+        GetRXVolts();                         // Get RX LIPO volts if connected (or just wait for 481us)
         CurrentRadio->read(&DataReceived, DynamicPayloadSize); //  ** >> Read new data from master << ** // Get the size of the new data (14)
         SendSBUSData();
         Connected = true;

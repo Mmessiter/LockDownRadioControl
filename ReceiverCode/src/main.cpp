@@ -187,7 +187,8 @@ void FailSafe()
         SendSBUSData();
         MoveServos();
         Connected = false; 
-        BoundFlag = false; 
+        BoundFlag = false;
+        AcknowledgementCounter = 0; // reset the packet count
     }
     FailSafeSent = true; // Once is enough
     FailedSafe = true;
