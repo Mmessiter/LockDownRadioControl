@@ -185,22 +185,14 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is length
 }
 // ************************************************************************************************************/
 void LoadaPayload()
+{
 
 #define FULLDELAYNEEDED 615 // delay required between writing ack payload and reading data
 #define READVOLTSTIME 481   // 481 is the time needed to read the voltage from the INA219
 #define DELAYNEEDED (FULLDELAYNEEDED - READVOLTSTIME)
 
-{
-    // if ((ShortAcknowledgementsCounter < ShortAcknowledgementsMaximum) &&
-    //     (LongAcknowledgementsCounter > LongAcknowledgementsMinimum)) // must send minimum of 1000 long packets at startup
-    // {
-    //     LoadShortAckPayload();                                             // Load the ShortAckPayload with no telemetry data
-    //     CurrentRadio->writeAckPayload(1, &ShortPayload, ShortPayloadSize); // send Short PAYLOAD (1 byte)
-    //     ++ShortAcknowledgementsCounter;
-    //     Look1("ShortAcknowledgementsCounter: ");
-    //     Look(ShortAcknowledgementsCounter);
-    // }
-    // else
+    // if ((ShortAcknowledgementsCounter > ShortAcknowledgementsMaximum) ||
+    //     (LongAcknowledgementsCounter < LongAcknowledgementsMinimum)) // must send minimum of 1000 long packets at startup
     {
         LoadLongerAckPayload();                                        // Load the AckPayload with telemetry data
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // send Full PAYLOAD (6 bytes)
@@ -209,6 +201,14 @@ void LoadaPayload()
         // Look1("LongAcknowledgementsCounter: ");
         // Look(LongAcknowledgementsCounter);
     }
+    // else
+    // {
+    //     LoadShortAckPayload();                                             // Load the ShortAckPayload with no telemetry data
+    //     CurrentRadio->writeAckPayload(1, &ShortPayload, ShortPayloadSize); // send Short PAYLOAD (1 byte)
+    //     ++ShortAcknowledgementsCounter;
+    //     Look1("ShortAcknowledgementsCounter: ");
+    //     Look(ShortAcknowledgementsCounter);
+    // }
     delayMicroseconds(DELAYNEEDED); // delay DELAYNEEDED
     GetRXVolts();                   // Takes 481us
 }
@@ -219,10 +219,11 @@ bool ReadData()
     Connected = false;
     if (CurrentRadio->available(&Pipnum))
     {
+        LoadaPayload();
         uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize(); // Get the size of the new data (14)
         if ((DynamicPayloadSize == 0) || (DynamicPayloadSize > 32))
             return false;
-        LoadaPayload();
+        
         CurrentRadio->read(&DataReceived, DynamicPayloadSize); //  ** >> Read new data from TX
         SendSBUSData();
         Connected = true;
@@ -801,6 +802,11 @@ void SendMacAddress()
 // The transmitter will then use this channel number to send the next packet.
 void LoadShortAckPayload()
 {
+    if (MacAddressSentCounter < 20)
+    {
+        SendMacAddress();
+        return;
+    }
     ShortPayload.TheByte = NextChannelNumber & 0x7F;
     if ((millis() - HopStart) >= HOPTIME) // Hoptime?
     {

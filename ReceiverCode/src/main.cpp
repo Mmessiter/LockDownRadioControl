@@ -110,9 +110,9 @@ void KickTheDog()
 /************************************************************************************************************/
 
 bool CheckCrazyValues()
-{ // might come when binding
+{                                             // might come when binding
     if (millis() - ReconnectedMoment > 10000) // crazy values are rare after 10 seconds of connection
-        return true; 
+        return true;
     for (int i = 0; i < 7; ++i)
     {
         if ((ReceivedData[i] < MINMICROS) || (ReceivedData[i] > MAXMICROS))
@@ -135,8 +135,8 @@ void MoveServos()
         return;
     LocalTimer = millis();
 
-    if (!CheckCrazyValues() )
-    { 
+    if (!CheckCrazyValues())
+    {
         TurnLedOff();
         for (int j = 0; j < SERVOSUSED; ++j)
             PreviousData[j] = 0; // Force a send when data is good again
@@ -186,13 +186,14 @@ void FailSafe()
         MapToSBUS();
         SendSBUSData();
         MoveServos();
-        Connected = false; 
+        Connected = false;
         BoundFlag = false;
         ModelMatched = false;
         ShortAcknowledgementsCounter = 0; // reset the packet count
         LongAcknowledgementsCounter = 0;
         PipeSeen = false;
         pcount = 0;
+        MacAddressSentCounter = 0;
         Look("FailSafe ");
     }
     FailSafeSent = true; // Once is enough
@@ -253,8 +254,8 @@ void TurnLedOff()
 
 void BindModel()
 {
-   //CurrentRadio->stopListening();
-   //delayMicroseconds(250);
+    // CurrentRadio->stopListening();
+    // delayMicroseconds(250);
     BoundFlag = true;
     ModelMatched = true;
     Connected = true;
@@ -651,7 +652,7 @@ void loop() // without MPU6050 about 30000 interations per second.... EXCEPT Zer
         BlinkLed();
     }
     if (BoundFlag && ModelMatched)
-    { 
+    {
         if (GPS_Connected)
         {
             ReadGPS();
