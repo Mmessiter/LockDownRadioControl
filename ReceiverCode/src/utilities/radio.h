@@ -186,36 +186,21 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is length
 // ************************************************************************************************************/
 void LoadaPayload()
 {
-//#define USESHORTPAYLOADS // not useable yet
-
 #define FULLDELAYNEEDED 615 // delay required between writing ack payload and reading data
 #define READVOLTSTIME 481   // 481 is the time needed to read the voltage from the INA219
 #define DELAYNEEDED (FULLDELAYNEEDED - READVOLTSTIME)
-
-#ifdef USESHORTPAYLOADS
-if ((ShortAcknowledgementsCounter > ShortAcknowledgementsMaximum) ||
-    (LongAcknowledgementsCounter < LongAcknowledgementsMinimum)) // must send minimum of 1000 long packets at startup
-#endif
+    if (ShortAcknowledgementsCounter > ShortAcknowledgementsMaximum)
     {
         LoadLongerAckPayload();                                        // Load the AckPayload with telemetry data
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // send Full PAYLOAD (6 bytes)
-#ifdef USESHORTPAYLOADS
         ShortAcknowledgementsCounter = 0;
-        ++LongAcknowledgementsCounter;
-        Look1("LongAcknowledgementsCounter: ");
-        Look(LongAcknowledgementsCounter);
-#endif
     }
-#ifdef USESHORTPAYLOADS
     else
     {
         LoadShortAckPayload();                                             // Load the ShortAckPayload with no telemetry data
         CurrentRadio->writeAckPayload(1, &ShortPayload, ShortPayloadSize); // send Short PAYLOAD (1 byte)
         ++ShortAcknowledgementsCounter;
-        Look1("ShortAcknowledgementsCounter: ");
-        Look(ShortAcknowledgementsCounter);
     }
-#endif
     delayMicroseconds(DELAYNEEDED); // delay DELAYNEEDED
     GetRXVolts();                   // Takes 481us
 }
@@ -229,7 +214,7 @@ bool ReadData()
         uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize(); // Get the size of the new data (14)
         if ((DynamicPayloadSize == 0) || (DynamicPayloadSize > 32))
             return false;
-        LoadaPayload(); // and reads volts
+        LoadaPayload();                                        // and reads volts
         CurrentRadio->read(&DataReceived, DynamicPayloadSize); //  ** >> Read new data from TX
         SendSBUSData();
         Connected = true;

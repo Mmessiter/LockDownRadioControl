@@ -904,6 +904,7 @@ FASTRUN void ParseShortAckPayload()
     FHSS_data::NextChannelNumber = AckPayload.Purpose & 0x7f; // every packet tells of next hop destination
     if (AckPayload.Purpose & 0x80)
     {
+        ModelMatched = true;                                                      // heer! ... assume we are matched or we would not be here! (Should not be needed)
         NextChannel = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber); // The actual channel number pointed to.
         HopToNextChannel();
     }

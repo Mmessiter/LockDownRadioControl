@@ -194,7 +194,6 @@ void FailSafe()
         PipeSeen = false;
         pcount = 0;
         MacAddressSentCounter = 0;
-        Look("FailSafe ");
     }
     FailSafeSent = true; // Once is enough
     FailedSafe = true;

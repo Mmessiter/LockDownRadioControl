@@ -21,7 +21,7 @@
 
 //  #define DB_FHSS
 //  #define DB_SENSORS
-  #define DB_BIND
+ // #define DB_BIND
 //  #define DB_FAILSAFE
 //  #define DB_RXTIMERS
 
@@ -342,7 +342,7 @@ uint32_t SuccessfulPackets = 0;
 uint32_t ConnectMoment = 0;
 int16_t ShortAcknowledgementsCounter = 0;
 int16_t LongAcknowledgementsCounter = 0;   
-int16_t ShortAcknowledgementsMaximum = 50; 
-int16_t LongAcknowledgementsMinimum = 1000;
+int16_t ShortAcknowledgementsMaximum = 100; 
+int16_t LongAcknowledgementsMinimum = 0;
 
 #endif // defined (_SRC_UTILITIES_COMMON_H)
