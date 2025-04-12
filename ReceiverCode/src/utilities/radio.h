@@ -184,26 +184,13 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is length
     }
 }
 // ************************************************************************************************************/
-void LoadaPayload()
+void LoadaPayload() // This function loads the acknowledgement payload It also delays briefly before returning, and during the delay it might read the INA219 to get volts.
 {
 #define FULLDELAYNEEDED 615 // delay required between writing ack payload and reading data
 #define READVOLTSTIME 481   // 481 is the time needed to read the voltage from the INA219
 #define DELAYNEEDED (FULLDELAYNEEDED - READVOLTSTIME)
-    if ((ShortAcknowledgementsCounter > ShortAcknowledgementsMaximum) || (LongAcknowledgementsCounter < LongAcknowledgementsMinimum))
-    {
-        LoadLongerAckPayload();                                        // Load the AckPayload with telemetry data
-        CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // send Full PAYLOAD (6 bytes)
-        ShortAcknowledgementsCounter = 0;
-        ++LongAcknowledgementsCounter;
-        if (LongAcknowledgementsCounter > 65000)
-            LongAcknowledgementsCounter = LongAcknowledgementsMinimum; // Don't let it overflow  
-    }
-    else
-    {
-        LoadShortAckPayload();                                             // Load the ShortAckPayload with no telemetry data
-        CurrentRadio->writeAckPayload(1, &ShortPayload, ShortPayloadSize); // send Short PAYLOAD (1 byte)
-        ++ShortAcknowledgementsCounter;
-    }
+    LoadLongerAckPayload();                                        // Load the AckPayload with telemetry data
+    CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // send Full PAYLOAD (6 bytes)LoadShortAckPayload
     delayMicroseconds(DELAYNEEDED); // delay DELAYNEEDED
     GetRXVolts();                   // Takes 481us
 }
@@ -791,26 +778,6 @@ void SendMacAddress()
         break;
     }
 }
-// ************************************************************************************************************/
-// This function loads the ShortAckPayload with the channel number to use next.
-// The transmitter will then use this channel number to send the next packet.
-void LoadShortAckPayload()
-{
-    if (MacAddressSentCounter < 20)
-    {
-        SendMacAddress();
-        return;
-    }
-    ShortPayload.TheByte = NextChannelNumber & 0x7F;
-    if ((millis() - HopStart) >= HOPTIME) // Hoptime?
-    {
-        IncChannelNumber();
-        ShortPayload.TheByte |= 0x80; // Set the HOP flag
-        HopNow = true;                // Set local flag and hop when ready BUT NOT BEFORE.
-    }
-    AckPayloadSize = 1; // 1 byte only of data
-}
-
 /************************************************************************************************************/
 void LoadLongerAckPayload()
 {

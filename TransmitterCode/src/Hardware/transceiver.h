@@ -321,10 +321,8 @@ void SuccessfulPacket()
     {
         uint8_t PayloadSize = Radio1.getDynamicPayloadSize();
         Radio1.read(&AckPayload, PayloadSize);
-        if (PayloadSize > 1)
-            ParseLongerAckPayload();
-        else
-            ParseShortAckPayload();
+        ParseLongerAckPayload();
+      // using a short payload added complexity without driving an advantage! So it is dropped.
     }
     if (BoundFlag && (!LedWasGreen || LedIsBlinking) && !UsingDefaultPipeAddress)
     {
@@ -898,19 +896,9 @@ void GetModelsMacAddress()
         }
     }
 }
-// ************************************************************************************************************/
-FASTRUN void ParseShortAckPayload()
-{
-    FHSS_data::NextChannelNumber = AckPayload.Purpose & 0x7f; // every packet tells of next hop destination
-    if (AckPayload.Purpose & 0x80)
-    {
-        ModelMatched = true;                                                      // heer! ... assume we are matched or we would not be here! (Should not be needed)
-        NextChannel = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber); // The actual channel number pointed to.
-        HopToNextChannel();
-    }
-}
+
 /************************************************************************************************************/
-FASTRUN void ParseLongerAckPayload()
+FASTRUN void ParseLongerAckPayload() // It's already pretty short!
 {
     if (BuddyPupilOnPPM)
         return; // buddy pupil need none of this
