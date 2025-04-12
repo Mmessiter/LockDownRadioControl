@@ -189,11 +189,14 @@ void LoadaPayload()
 #define FULLDELAYNEEDED 615 // delay required between writing ack payload and reading data
 #define READVOLTSTIME 481   // 481 is the time needed to read the voltage from the INA219
 #define DELAYNEEDED (FULLDELAYNEEDED - READVOLTSTIME)
-    if (ShortAcknowledgementsCounter > ShortAcknowledgementsMaximum)
+    if ((ShortAcknowledgementsCounter > ShortAcknowledgementsMaximum) || (LongAcknowledgementsCounter < LongAcknowledgementsMinimum))
     {
         LoadLongerAckPayload();                                        // Load the AckPayload with telemetry data
         CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // send Full PAYLOAD (6 bytes)
         ShortAcknowledgementsCounter = 0;
+        ++LongAcknowledgementsCounter;
+        if (LongAcknowledgementsCounter > 65000)
+            LongAcknowledgementsCounter = LongAcknowledgementsMinimum; // Don't let it overflow  
     }
     else
     {
