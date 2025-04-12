@@ -22,7 +22,7 @@ void CompareModelsIDs()
                 if (AutoModelSelect) {
                     PlaySound(MMMATCHED);
                     if (UseLog) LogModelMatched();
-                    DelayWithDog(2000);
+                    DelayWithDog(1400); // allow time to say "Matched"
                 }
             }
             ModelMatched = true;        //  It's a match so start flying!

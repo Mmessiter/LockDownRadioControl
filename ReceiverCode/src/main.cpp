@@ -188,7 +188,12 @@ void FailSafe()
         MoveServos();
         Connected = false; 
         BoundFlag = false;
-        AcknowledgementCounter = 0; // reset the packet count
+        ModelMatched = false;
+        ShortAcknowledgementsCounter = 0; // reset the packet count
+        LongAcknowledgementsCounter = 0;
+        PipeSeen = false;
+        pcount = 0;
+        Look("FailSafe ");
     }
     FailSafeSent = true; // Once is enough
     FailedSafe = true;
@@ -248,8 +253,8 @@ void TurnLedOff()
 
 void BindModel()
 {
-    CurrentRadio->stopListening();
-    delayMicroseconds(250);
+   //CurrentRadio->stopListening();
+   //delayMicroseconds(250);
     BoundFlag = true;
     ModelMatched = true;
     Connected = true;

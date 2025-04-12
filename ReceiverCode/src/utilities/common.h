@@ -21,7 +21,7 @@
 
 //  #define DB_FHSS
 //  #define DB_SENSORS
-//  #define DB_BIND
+  #define DB_BIND
 //  #define DB_FAILSAFE
 //  #define DB_RXTIMERS
 
@@ -120,7 +120,7 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 
 #define pinCSN2 20            // NRF2
 #define pinCE2 21             // NRF2
-#define FAILSAFE_TIMEOUT 1000 // 
+#define FAILSAFE_TIMEOUT 2500 // 
 #define CSN_ON LOW
 #define CSN_OFF HIGH
 #define CE_ON HIGH
@@ -340,7 +340,9 @@ bool GyroOffsetsSet = false;
 uint16_t BMP280Address = 0x76; // BMP280 I2C address
 uint32_t SuccessfulPackets = 0;
 uint32_t ConnectMoment = 0;
-int16_t AcknowledgementCounter = 0;
-int16_t ShortAcknowledgementMaximum = 100; // many packets short, 1 packet long
+int16_t ShortAcknowledgementsCounter = 0;
+int16_t LongAcknowledgementsCounter = 0;   
+int16_t ShortAcknowledgementsMaximum = 50; 
+int16_t LongAcknowledgementsMinimum = 1000;
 
 #endif // defined (_SRC_UTILITIES_COMMON_H)

@@ -183,30 +183,47 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is length
         HopStart = millis(); // ... and start the timer.
     }
 }
+// ************************************************************************************************************/
+void LoadaPayload()
+
+#define FULLDELAYNEEDED 615 // delay required between writing ack payload and reading data
+#define READVOLTSTIME 481   // 481 is the time needed to read the voltage from the INA219
+#define DELAYNEEDED (FULLDELAYNEEDED - READVOLTSTIME)
+
+{
+    // if ((ShortAcknowledgementsCounter < ShortAcknowledgementsMaximum) &&
+    //     (LongAcknowledgementsCounter > LongAcknowledgementsMinimum)) // must send minimum of 1000 long packets at startup
+    // {
+    //     LoadShortAckPayload();                                             // Load the ShortAckPayload with no telemetry data
+    //     CurrentRadio->writeAckPayload(1, &ShortPayload, ShortPayloadSize); // send Short PAYLOAD (1 byte)
+    //     ++ShortAcknowledgementsCounter;
+    //     Look1("ShortAcknowledgementsCounter: ");
+    //     Look(ShortAcknowledgementsCounter);
+    // }
+    // else
+    {
+        LoadLongerAckPayload();                                        // Load the AckPayload with telemetry data
+        CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // send Full PAYLOAD (6 bytes)
+        // ShortAcknowledgementsCounter = 0;
+        // ++LongAcknowledgementsCounter;
+        // Look1("LongAcknowledgementsCounter: ");
+        // Look(LongAcknowledgementsCounter);
+    }
+    delayMicroseconds(DELAYNEEDED); // delay DELAYNEEDED
+    GetRXVolts();                   // Takes 481us
+}
+
 /************************************************************************************************************/
 bool ReadData()
 {
-#define DELAYNEEDED 615 // > 481
     Connected = false;
     if (CurrentRadio->available(&Pipnum))
     {
-        uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize(); // Get the size of the new data (14)                             
-        if ((AcknowledgementCounter < ShortAcknowledgementMaximum) && ((millis() - NewConnectionMoment) > 15000))
-        {
-            LoadShortAckPayload();                                             // Load the ShortAckPayload with no telemetry data
-            CurrentRadio->writeAckPayload(1, &ShortPayload, ShortPayloadSize); // send Short PAYLOAD (1 byte)
-            ++AcknowledgementCounter;
-        }
-        else
-        {
-            LoadLongerAckPayload();                                        // Load the AckPayload with telemetry data
-            CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // send Full PAYLOAD (6 bytes)
-            AcknowledgementCounter = 0;
-        }
-
-        delayMicroseconds(DELAYNEEDED - 481); // delaymicroseconds 481 is needed so read volts!!
-        GetRXVolts();                         // Get RX LIPO volts if connected (or just wait for 481us)
-        CurrentRadio->read(&DataReceived, DynamicPayloadSize); //  ** >> Read new data from master << ** // Get the size of the new data (14)
+        uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize(); // Get the size of the new data (14)
+        if ((DynamicPayloadSize == 0) || (DynamicPayloadSize > 32))
+            return false;
+        LoadaPayload();
+        CurrentRadio->read(&DataReceived, DynamicPayloadSize); //  ** >> Read new data from TX
         SendSBUSData();
         Connected = true;
         NewData = true;
@@ -369,7 +386,7 @@ void GetNewPipe() // from TX
         Serial.println("Received TX ID!");
 #endif
         for (int i = 0; i < 5; ++i)
-        {                                                        // heeer
+        {
             TheReceivedPipe[4 - i] = ReceivedData[i + 1] & 0xff; // reversed byte array for our use
 #ifdef DB_BIND
             Serial.print((uint8_t)ReceivedData[i + 1], HEX);
@@ -648,8 +665,7 @@ FASTRUN void Reconnect()
         NewConnectionMoment = millis();
         ConnectMoment = millis();
         SuccessfulPackets = 0; // Reset the packet count
-        BoundFlag = true;
-
+                               // BoundFlag = true;
     }
 
 #ifdef DB_RXTIMERS
