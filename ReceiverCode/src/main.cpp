@@ -181,11 +181,15 @@ void FailSafe()
 {
     if (BoundFlag)
     {
-        LoadFailSafeData();
+        LoadFailSafeData(); // load failsafe values from EEPROM
         Connected = true; // to force sending this data!
         MapToSBUS();
-        SendSBUSData();
-        MoveServos();
+        for (int i = 0; i < 20; i++)
+        {
+            SendSBUSData(); // one at least will be sent!
+            MoveServos();
+            delay(1);
+        }
         Connected = false;
         BoundFlag = false;
         ModelMatched = false;
@@ -198,6 +202,9 @@ void FailSafe()
     FailedSafe = true;
     TurnLedOff();
     MacAddressSentCounter = 0;
+#ifdef DB_FAILSAFE
+   Look("Fail safe activated!");
+#endif
 }
 
 /************************************************************************************************************/
