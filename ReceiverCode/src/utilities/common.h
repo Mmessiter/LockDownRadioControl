@@ -181,13 +181,6 @@ Payload AckPayload;
 uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed etc. (=6)
 
 // ************************************************************************************************************/
-struct Shortload
-{
-    uint8_t TheByte = 0; // next channel number and hop flag
-};
-Shortload ShortPayload;
-uint8_t ShortPayloadSize = sizeof(ShortPayload); // Size for later externs if needed etc. (=1)
-// ************************************************************************************************************/
 
 uint8_t FHSS_Recovery_Channels[3] = {15, 71, 82};                                                                               // three possible channels used for Recovery
 uint8_t FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 16, 72, // These are good for UK
@@ -246,7 +239,7 @@ void FailSafe();
 void TurnLedOff();
 void TurnLedOn();
 void SaveFailSafeData();
-void LoadShortAckPayload();
+
 void IncChannelNumber();
 void SetServoFrequency();
 void kalmanFilter();
@@ -340,9 +333,7 @@ bool GyroOffsetsSet = false;
 uint16_t BMP280Address = 0x76; // BMP280 I2C address
 uint32_t SuccessfulPackets = 0;
 uint32_t ConnectMoment = 0;
-int16_t ShortAcknowledgementsCounter = 0;
 int16_t LongAcknowledgementsCounter = 0;   
-int16_t ShortAcknowledgementsMaximum = 50;  // after this many packets, we send 1 long acknowledgement
 int16_t LongAcknowledgementsMinimum = 200;
 
 #endif // defined (_SRC_UTILITIES_COMMON_H)

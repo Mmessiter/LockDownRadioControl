@@ -85,7 +85,7 @@ void MapToSBUS()
  * Decompresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
  * @param uncompressed_buf[in]
  * @param compressed_buf[out] Must have allocated 3/4 the size of uncompressed_buf
- * @param uncompressed_size Size is in units of uint16_t (aka word or unsigned short)
+ * @param uncompressed_size Size is in units of uint16_t 
  */
 void Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, uint8_t uncompressed_size)
 {
@@ -190,7 +190,7 @@ void LoadaPayload() // This function loads the acknowledgement payload It also d
 #define READVOLTSTIME 481   // 481 is the time needed to read the voltage from the INA219
 #define DELAYNEEDED (FULLDELAYNEEDED - READVOLTSTIME)
     LoadLongerAckPayload();                                        // Load the AckPayload with telemetry data
-    CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // send Full PAYLOAD (6 bytes)LoadShortAckPayload
+    CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // send Full PAYLOAD (6 bytes)
     delayMicroseconds(DELAYNEEDED); // delay DELAYNEEDED
     GetRXVolts();                   // Takes 481us
 }
@@ -673,7 +673,6 @@ void IncChannelNumber()
         NextChannelNumber = 0;
     } // If needed, wrap the channels' array pointer
     AckPayload.Byte5 = NextChannelNumber;               // Tell the transmitter which element of the array to use next.
-    ShortPayload.TheByte = NextChannelNumber;           //
     NextChannel = *(FHSSChPointer + NextChannelNumber); // Get the actual channel number from the array.
 }
 

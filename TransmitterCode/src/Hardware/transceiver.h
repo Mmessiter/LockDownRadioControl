@@ -770,7 +770,7 @@ void NormaliseTheRadio()
 
 /************************************************************************************************************/
 
-FASTRUN float GetFromAckPayload()
+FASTRUN float GetFloatFromAckPayload()
 {
     union
     {
@@ -810,7 +810,7 @@ void FixInches(int *inches, int *feet)
 /************************************************************************************************************/
 void GetAltitude()
 {
-    RXModelAltitudeBMP280 = GetFromAckPayload();                   // actual reading from BMP280
+    RXModelAltitudeBMP280 = GetFloatFromAckPayload();                   // actual reading from BMP280
     RXModelAltitude = RXModelAltitudeBMP280 - GroundModelAltitude; // might be above ground only if GroundModelAltitude isnt zero
     if (RXMAXModelAltitude < RXModelAltitude)
         RXMAXModelAltitude = RXModelAltitude;
@@ -826,7 +826,7 @@ void GetAltitude()
 /************************************************************************************************************/
 void GetTemperature()
 {
-    RXTemperature = GetFromAckPayload();
+    RXTemperature = GetFloatFromAckPayload();
     snprintf(ModelTempRX, 9, "%1.1f C.", RXTemperature);
 }
 /************************************************************************************************************/
@@ -944,7 +944,7 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         RX2TotalTime = GetIntFromAckPayload();
         break;
     case 5:
-        RXModelVolts = GetFromAckPayload();
+        RXModelVolts = GetFloatFromAckPayload();
         RXVoltsDetected = false;
         if (RXModelVolts > 0)
         {
@@ -962,24 +962,24 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         GetTemperature();
         break;
     case 8:
-        GPS_RX_Latitude = GetFromAckPayload();
+        GPS_RX_Latitude = GetFloatFromAckPayload();
         break;
     case 9:
-        GPS_RX_Longitude = GetFromAckPayload();
+        GPS_RX_Longitude = GetFloatFromAckPayload();
         break;
     case 10:
-        GPS_RX_ANGLE = GetFromAckPayload();
+        GPS_RX_ANGLE = GetFloatFromAckPayload();
         break;
     case 11:
-        GPS_RX_Speed = GetFromAckPayload();
+        GPS_RX_Speed = GetFloatFromAckPayload();
         if (GPS_RX_MaxSpeed < GPS_RX_Speed)
             GPS_RX_MaxSpeed = GPS_RX_Speed;
         break;
     case 12:
-        GPS_RX_FIX = GetFromAckPayload();
+        GPS_RX_FIX = GetFloatFromAckPayload();
         break;
     case 13:
-        GPS_RX_Altitude = GetFromAckPayload() - GPS_RX_GroundAltitude;
+        GPS_RX_Altitude = GetFloatFromAckPayload() - GPS_RX_GroundAltitude;
         if (GPS_RX_Altitude < 0)
             GPS_RX_Altitude = 0;
         if (GPS_RX_Maxaltitude < GPS_RX_Altitude)
@@ -988,12 +988,12 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         // Serial.println(GPS_RX_Altitude);
         break;
     case 14:
-        GPS_RX_DistanceTo = GetFromAckPayload(); // now calculated locally
+        GPS_RX_DistanceTo = GetFloatFromAckPayload(); // now calculated locally
         if (GPS_RX_MaxDistance < GPS_RX_DistanceTo)
             GPS_RX_MaxDistance = GPS_RX_DistanceTo;
         break;
     case 15:
-        GPS_RX_CourseTo = GetFromAckPayload();
+        GPS_RX_CourseTo = GetFloatFromAckPayload();
         break;
     case 16:
         GPS_RX_Satellites = (uint8_t)GetIntFromAckPayload();
@@ -1024,7 +1024,7 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         }
         break;
     case 19:
-        RateOfClimb = GetFromAckPayload();
+        RateOfClimb = GetFloatFromAckPayload();
         // Look1("RateOfClimb: ");
         // Look(RateOfClimb);
         break;

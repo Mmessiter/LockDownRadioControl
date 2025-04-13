@@ -189,7 +189,6 @@ void FailSafe()
         Connected = false;
         BoundFlag = false;
         ModelMatched = false;
-        ShortAcknowledgementsCounter = 0; // reset the packet count
         LongAcknowledgementsCounter = 0;
         PipeSeen = false;
         pcount = 0;
