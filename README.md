@@ -2,11 +2,11 @@
 
 ![Image](./Images/TX_and_RX.jpeg "The radio!")
 
-## Introduction
+## Introduction (Please scroll down for BOM and assembly instruction.)
 
 This is a very full featured 16 channel Radio Control system for models of all kinds. I've been developing this project since Lockdown in May 2020.
 
-I and several friends have flown many models with it for about 4 years so far, without any problem.
+I and several friends have flown many models with it for about 5 years so far, without any problem.
 
 It's proven to be as good as, and in some respects better than, popular commercially available radio control systems, as well as the other open source radio control firmware.
 
@@ -30,7 +30,7 @@ This repository contains not only the code for the transmitter, its screen and t
 
 If you would like to make one, I'll be happy to help you. [Email me (Malcolm Messiter mmessiter@gmail.com).](mailto:mmessiter@gmailcom)
 
-Eventually I plan to put building instructions onto this repo. I would have already, but I have been busy writing the code.
+I just added the BOM to this file, and will add instructions very soon ... working on it now!
 
 ## Features
 
