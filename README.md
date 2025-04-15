@@ -75,7 +75,7 @@ Here is a brief summary of the features supported at the time of writing (August
 | **Category**       | **Item**                 | **Details / Notes**              | **Qty** |
 | ------------------ | ------------------------ | -------------------------------- | ------- |
 | Structural         | PETG filament or similar | For the case                     | -       |
-| Structural         | IPEX dipole antenna      | 2.4 GHz                          | 1       |
+| Structural         | IPEX dipole antenna      | 2.4 GHz                          | 2       |
 | Connectors         | Male headers             | Various                          | Several |
 | Connectors         | 3-row male headers       | -                                | Some    |
 | Materials          | Solder                   | -                                | Some    |
