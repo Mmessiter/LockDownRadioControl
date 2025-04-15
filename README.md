@@ -63,3 +63,76 @@ Here is a brief summary of the features supported at the time of writing (August
 - Support for SBUS, PWM (with definable frequency and centre position), and PPM.
 - Support for third party transmitter models (JR type).
 - Context sensitive help screens for all functions.
+
+# Bill of Materials (BOM)
+
+**Project:** LockDownRadioControl
+
+---
+
+## Receiver
+
+| **Category**       | **Item**                 | **Details / Notes**              | **Qty** |
+| ------------------ | ------------------------ | -------------------------------- | ------- |
+| Structural         | PETG filament or similar | For the case                     | -       |
+| Structural         | IPEX dipole antenna      | 2.4 GHz                          | 1       |
+| Connectors         | Male headers             | Various                          | Several |
+| Connectors         | 3-row male headers       | -                                | Some    |
+| Materials          | Solder                   | -                                | Some    |
+| PCB & Modules      | Printed circuit board    | Use Gerber file                  | 1       |
+| PCB & Modules      | Teensy 4.0               | Main microcontroller             | 1       |
+| PCB & Modules      | EByte ML01SP4            | RF module                        | 2       |
+| Power & Regulation | AMS 1117 3.3V regulator  | Linear regulator                 | 1       |
+| Power & Regulation | Pololu S9V11F5 regulator | Better than 7805, pin-compatible | 1       |
+| Passive Components | Tantalum Capacitor       | 47 µF, 1206 SMD                  | 2       |
+| Passive Components | Ceramic Capacitor        | 100 nF, 1206 SMD                 | 2       |
+| Passive Components | LED                      | 1206 SMD, any colour             | 1       |
+| Passive Components | Resistor                 | 100 Ω, 1206 SMD for LED          | 1       |
+| Passive Components | Tantalum Capacitor       | 330 µF, 0E907, SMD               | 1       |
+
+---
+
+## Transmitter
+
+| **Category**       | **Item**                      | **Details / Notes**                   | **Qty** |
+| ------------------ | ----------------------------- | ------------------------------------- | ------- |
+| Structural         | PETG filament or similar      | For the case                          | -       |
+| Structural         | RGB LED                       | 5 mm, common anode                    | 1       |
+| Structural         | Push Button Switch            | 16mm vandal-resistant, momentary SPST | 1       |
+| Structural         | FrSky Trim switches           | From X9D Plus transmitter             | 4       |
+| Structural         | FrSky M9 Gimbal               | Hall sensor                           | 2       |
+| Structural         | Antenna                       | RP-SMA 2.4 GHz                        | 1       |
+| Structural         | Extension Cable               | RP-SMA male to female, 20 cm          | 1       |
+| Structural         | Self-tapping screws           | 3 mm x 2 mm flange and various sizes  | Several |
+| Structural         | M3 bolts with locknuts        | -                                     | Some    |
+| Structural         | Cable ties                    | 2 mm wide                             | Some    |
+| Structural         | Epoxy adhesive                | 5 minute                              | -       |
+| Structural         | Solder                        | -                                     | Some    |
+| PCB & Modules      | Printed circuit board         | Use Gerber file                       | 1       |
+| PCB & Modules      | Teensy 4.1                    | Main microcontroller                  | 1       |
+| PCB & Modules      | Nextion Display               | NX8048P050, 5" capacitive touch       | 1       |
+| PCB & Modules      | ML01DP5                       | RF module                             | 1       |
+| PCB & Modules      | POLOLU-2808 Electronic switch | -                                     | 1       |
+| PCB & Modules      | microSD card                  | 32 GB, FAT32 formatted                | 1       |
+| PCB & Modules      | RTC module                    | I2C, DS1307                           | 1       |
+| Power & Regulation | Voltage Regulator             | Pololu 5V 1A S13V10F5 or 7805         | 2       |
+| Power & Regulation | AMS 1117 3.3V regulator       | -                                     | 1       |
+| Power & Regulation | Micro USB Charger             | 2S balanced                           | 1       |
+| Power & Regulation | LiPo Battery                  | 2S, suitable size                     | 1       |
+| Power & Regulation | Diodes                        | IN5406                                | 2       |
+| Power & Regulation | Diodes                        | IN4001                                | 2       |
+| Passive Components | Electrolytic Capacitor        | 330 µF                                | 1       |
+| Passive Components | Electrolytic Capacitor        | 100 µF                                | 1       |
+| Passive Components | Tantalum Capacitor            | 330 µF, 0E907, SMD                    | 2       |
+| Passive Components | Ceramic Capacitor             | 330 nF, 1206 SMD                      | 2       |
+| Passive Components | Tantalum Capacitor            | 47 µF, 1206 SMD                       | 2       |
+| Passive Components | Ceramic Capacitor             | 100 nF, 1206 SMD                      | 4       |
+| Passive Components | Ceramic Capacitor             | 10 µF, 1206 SMD                       | 1       |
+| Connectors         | Male headers                  | Various                               | Several |
+| Connectors         | Female headers                | Various                               | Several |
+| Connectors         | 3-row male headers            | -                                     | Some    |
+| Connectors         | 2x4 socket header             | Female                                | 1       |
+| Connectors         | Servo cable                   | Three-core                            | Some    |
+| Connectors         | DuPont connectors             | 3- and 4-pin female                   | Several |
+| Controls           | RC switches                   | Three-position                        | 8       |
+| Controls           | Rheostat knobs                | Optional (can replace 4 RC switches)  | Up to 4 |
