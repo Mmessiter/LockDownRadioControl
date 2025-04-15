@@ -28,9 +28,9 @@ The cases for the transmitter and receiver are 3D printed in whatever plastic yo
 
 This repository contains not only the code for the transmitter, its screen and the receiver; but also the Gerber files for the printed circuit boards, the .STL files for the cases etc. and the text files for the help screens (to go onto the SD card.). So there's nothing to stop anyone from buiding one.
 
-If you would like to make one, I'll be happy to help you. [Email me (Malcolm Messiter mmessiter@gmail.com).](mailto:mmessiter@gmailcom)
+If you would like to make one, I'll be happy to help you. [Email me (Malcolm Messiter mmessiter@gmail.com).](mailto:mmessiter@gmail.com)
 
-I just added the BOM to this file, and will add instructions very soon ... working on it now!
+I just added the BOM to this file (scroll down...) and will add instructions very soon ... working on it now!
 
 ## Features
 
