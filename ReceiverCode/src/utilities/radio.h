@@ -576,9 +576,7 @@ FASTRUN void Reconnect()
     uint32_t SearchStartTime = millis();
     uint8_t PreviousRadio = ThisRadio;
     uint8_t Attempts = 0;
-    RX1PlusAddonTime = 0;
-    RX2PlusAddonTime = 0;
-    
+
     if (ThisRadio == 1)
         RX1TotalTime += (millis() - ReconnectedMoment); // keep track of how long on each
     if (ThisRadio == 2)
@@ -813,26 +811,23 @@ void LoadLongerAckPayload()
     case 3:
         if (ThisRadio == 1)
         {
-            RX1PlusAddonTime = RX1TotalTime + (millis() - ReconnectedMoment);
+            SendIntToAckPayload((RX1TotalTime + (millis() - ReconnectedMoment)) / 1000); // addon time since last reconnection
         }
         else
         {
-            RX1PlusAddonTime = RX1TotalTime;
+            SendIntToAckPayload(RX1TotalTime / 1000);
         }
-        SendIntToAckPayload(RX1PlusAddonTime / 1000);
 
         break;
     case 4:
-
         if (ThisRadio == 2)
         {
-            RX2PlusAddonTime = RX2TotalTime + (millis() - ReconnectedMoment);
+            SendIntToAckPayload((RX2TotalTime + (millis() - ReconnectedMoment)) / 1000); // addon time since last reconnection
         }
         else
         {
-            RX2PlusAddonTime = RX2TotalTime;
+            SendIntToAckPayload(RX2TotalTime / 1000);
         }
-        SendIntToAckPayload(RX2PlusAddonTime / 1000);
         break;
     case 5:
         SendToAckPayload(INA219Volts);
