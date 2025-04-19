@@ -15,6 +15,52 @@ void GetReturnCode(char *tbox)
     }
 }
 /*********************************************************************************************************************************/
+void ClearNextionCommand()
+{
+    strcpy(NextionCommand, "");
+}
+/*********************************************************************************************************************************/
+void BuildNextionCommand(char *cmd)
+{
+    if (strlen(NextionCommand) + strlen(cmd) >= MAXNEXTIONCOMMANDLENGTH) // If too long, send what we have and start building again.
+    {
+        SendCommand(NextionCommand);
+        ClearNextionCommand();
+        return;
+    }
+    strcat(NextionCommand, cmd);
+    strcat(NextionCommand, "\xFF\xFF\xFF");
+}
+
+/*********************************************************************************************************************************/
+void BuildValue(char *nbox, int value)
+{ // Same as SendValue only delayed send
+    char Val[] = ".val=";
+    char CB[100];
+    char NB[25];
+    strcpy(CB, nbox);
+    strcat(CB, Val);
+    strcat(CB, Str(NB, value, 0));
+    BuildNextionCommand(CB);
+}
+/*********************************************************************************************************************************/
+void BuildText(char *tbox, char *NewWord) // same as sendtext only delayed send
+{
+    char txt[] = ".txt=\"";
+    char quote[] = "\"";
+    char CB[120];
+    char TooLong[] = "Too long!";
+    if (strlen(NewWord) > 110)
+    {
+        strcpy(NewWord, TooLong); //
+    }
+    strcpy(CB, tbox);
+    strcat(CB, txt);
+    strcat(CB, NewWord);
+    strcat(CB, quote);
+    BuildNextionCommand(CB);
+}
+/*********************************************************************************************************************************/
 void SendText(char *tbox, char *NewWord)
 {
     char txt[] = ".txt=\"";
@@ -140,7 +186,6 @@ void EndSend()
     }
     DelayWithDog(55); // ** A DELAY ** (>=50 ms) was needed if an answer might come! (!! Shorter with Intelligent dislay)
 }
-
 /*********************************************************************************************************************************/
 void SendValue(char *nbox, int value)
 {

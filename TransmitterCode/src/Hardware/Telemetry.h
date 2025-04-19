@@ -270,7 +270,9 @@ void PopulateGPSView()
         SendText(MALT, Vbuf);
         snprintf(Vbuf, 6, "%.3f", GPS_RX_MaxDistance); //  ??
         SendText(Mxd, Vbuf);
-    } else {
+    }
+    else
+    {
         SendText(Fix, no);
     }
 }
@@ -278,6 +280,12 @@ void PopulateGPSView()
 /*********************************************************************************************************************************/
 void PopulateDataView()
 {
+    // This function now concatenates all the required Nextion commands into a single string and sends it once only to save time
+    // Sending each separately consumed too much time!
+    // The maximum string length for the next year is 255. If this would be exceeded, it sends what it has and starts building again.
+    // The string is built in the NextionCommand array, which is 255 bytes long.
+    // The old commands are shown in comments to the right of the new replacements.
+
     char DataView_pps[] = "pps"; // These are label names in the NEXTION data screen. They are best kept short.
     char DataView_lps[] = "lps";
     char DataView_Alt[] = "alt";
@@ -306,24 +314,27 @@ void PopulateDataView()
     uint32_t BootedMinutes = millis() / 60000;
     static int LastGroundModelAltitude = 0;
 
+    ClearNextionCommand();
+
     if (!LastPacketsPerSecond)
     { // these only need displaying once - they will not change
         TempModelId = ModelsMacUnionSaved.Val32[0];
         snprintf(Vbuf, 9, "%X", TempModelId);
         if (TempModelId)
-            SendText(IdStored, Vbuf);
+            BuildText(IdStored, Vbuf); // was SendText(IdStored, Vbuf);
         TempModelId = ModelsMacUnionSaved.Val32[1];
         snprintf(Vbuf, 9, "%X", TempModelId);
         if (TempModelId)
-            SendText(IdStored1, Vbuf);
+
+            BuildText(IdStored1, Vbuf); // was SendText(IdStored1, Vbuf);
         TempModelId = ModelsMacUnion.Val32[0];
         snprintf(Vbuf, 9, "%X", TempModelId);
         if (TempModelId)
-            SendText(IdReceived, Vbuf);
+            BuildText(IdReceived, Vbuf); // was SendText(IdReceived, Vbuf);
         TempModelId = ModelsMacUnion.Val32[1];
         snprintf(Vbuf, 9, "%X", TempModelId);
         if (TempModelId)
-            SendText(IdReceived1, Vbuf);
+            BuildText(IdReceived1, Vbuf); // was SendText(IdReceived1, Vbuf);
         for (int i = 0; i < 5; ++i)
         {
             Vbuf[i] = 0;
@@ -334,7 +345,9 @@ void PopulateDataView()
             strcat(Vbuf, nb2);
             strcat(Vbuf, " ");
         }
-        SendText(MasterID, Vbuf);
+
+        BuildText(MasterID, Vbuf); // was SendText(MasterID, Vbuf);
+
         for (int i = 0; i < 5; ++i)
         {
             Vbuf[i] = 0;
@@ -345,89 +358,92 @@ void PopulateDataView()
             strcat(Vbuf, nb2);
             strcat(Vbuf, " ");
         }
-        SendText(LocalMacID, Vbuf);
-        SendText(DataView_txv, TransmitterVersionNumber);
+        BuildText(LocalMacID, Vbuf);                       // SendText(LocalMacID, Vbuf);
+        BuildText(DataView_txv, TransmitterVersionNumber); // SendText(DataView_txv, TransmitterVersionNumber);
         if (BoundFlag && ModelMatched)
-            SendText(DataView_rxv, ReceiverVersionNumber);
+            BuildText(DataView_rxv, ReceiverVersionNumber); // SendText(DataView_rxv, ReceiverVersionNumber);
     }
 
     if (LastPacketsPerSecond != PacketsPerSecond)
     {
         LastPacketsPerSecond = PacketsPerSecond;
-        SendValue(DataView_pps, PacketsPerSecond);
+        BuildValue(DataView_pps, PacketsPerSecond); // SendValue(DataView_pps, PacketsPerSecond);
     }
     if (LastLostPackets != TotalLostPackets)
     {
         LastLostPackets = TotalLostPackets;
-        SendValue(DataView_lps, TotalLostPackets);
+        BuildValue(DataView_lps, TotalLostPackets); // SendValue(DataView_lps, TotalLostPackets);
     }
     if (LastGapLongest != GapLongest)
     {
         LastGapLongest = GapLongest;
-        SendValue(DataView_Ls, GapLongest);
+        BuildValue(DataView_Ls, GapLongest); // SendValue(DataView_Ls, GapLongest);
     }
     if (LastRadioSwaps != RadioSwaps)
     {
         LastRadioSwaps = RadioSwaps;
-        SendValue(DataView_Ts, RadioSwaps);
+        BuildValue(DataView_Ts, RadioSwaps); // SendValue(DataView_Ts, RadioSwaps);
     }
     if (LastRX1TotalTime != RX1TotalTime)
     {
         LastRX1TotalTime = RX1TotalTime;
-        SendValue(DataView_Sg, RX1TotalTime);
+        BuildValue(DataView_Sg, RX1TotalTime); // SendValue(DataView_Sg, RX1TotalTime);
     }
     if (LastGapAverage != GapAverage)
     {
         LastGapAverage = GapAverage;
-        SendValue(DataView_Ag, GapAverage);
+        BuildValue(DataView_Ag, GapAverage); // SendValue(DataView_Ag, GapAverage);
     }
     if (LastRX2TotalTime != RX2TotalTime)
     {
         LastRX2TotalTime = RX2TotalTime;
-        SendValue(DataView_Gc, RX2TotalTime);
+        BuildValue(DataView_Gc, RX2TotalTime); // SendValue(DataView_Gc, RX2TotalTime);
     }
 
     if ((RXModelAltitude != LastRXModelAltitude) || (GroundModelAltitude != LastGroundModelAltitude))
-    { 
+    {
         LastRXModelAltitude = RXModelAltitude;
-        SendText(DataView_Alt, ModelAltitude);
+        BuildText(DataView_Alt, ModelAltitude); // SendText(DataView_Alt, ModelAltitude);
     }
 
-    if ((RXMAXModelAltitude != LastRXModelMaxAltitude)|| (GroundModelAltitude != LastGroundModelAltitude))
+    if ((RXMAXModelAltitude != LastRXModelMaxAltitude) || (GroundModelAltitude != LastGroundModelAltitude))
     {
         LastRXModelMaxAltitude = RXMAXModelAltitude;
-        SendText(DataView_MaxAlt, Maxaltitude);
+        BuildText(DataView_MaxAlt, Maxaltitude); // SendText(DataView_MaxAlt, Maxaltitude);
         LastGroundModelAltitude = GroundModelAltitude;
     }
 
     if (RXTemperature != LastRXTemperature)
     {
         LastRXTemperature = RXTemperature;
-        SendText(DataView_Temp, ModelTempRX);
+        BuildText(DataView_Temp, ModelTempRX); // SendText(DataView_Temp, ModelTempRX);
     }
 
     if (RadioNumber != LastRXReceivedPackets)
     {
         LastRXReceivedPackets = RXSuccessfulPackets;
         snprintf(Vbuf, 7, "%" PRIu32, RXSuccessfulPackets);
-        SendText(DataView_Rx, Vbuf);
+        BuildText(DataView_Rx, Vbuf); // SendText(DataView_Rx, Vbuf);
     }
 
     if (LastSbusRepeats != SbusRepeats)
     {
         LastSbusRepeats = SbusRepeats;
         snprintf(Vbuf, 7, "%d", (int)SbusRepeats);
-        SendText(Sbs, Vbuf);
+        BuildText(Sbs, Vbuf); // SendText(Sbs, Vbuf);
     }
-    SendValue(TimeSinceBoot, BootedMinutes);
+
+    BuildValue(TimeSinceBoot, BootedMinutes); // SendValue(TimeSinceBoot, BootedMinutes);
     if (BoundFlag && ModelMatched)
     {
-        SendValue(MeanFrameRate, AverageFrameRate);
+        BuildValue(MeanFrameRate, AverageFrameRate); // SendValue(MeanFrameRate, AverageFrameRate);
     }
     else
     {
-        SendValue(MeanFrameRate, 0);
+        BuildValue(MeanFrameRate, 0); // SendValue(MeanFrameRate, 0);
     }
+    SendCommand(NextionCommand);
+    ClearNextionCommand();
 }
 
 /*********************************************************************************************************************************/

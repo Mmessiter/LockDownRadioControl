@@ -93,6 +93,7 @@
 #define DS1307_ADDRESS 0x68                   // I2C address for RTC
 
 #define MAXLINES 60 // text to load at once for help screens
+#define MAXNEXTIONCOMMANDLENGTH 255 //
 
 #define DEFAULT_EXPO 50          // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
 #define CHARSMAX 250             // Max length for char arrays  (was 120)
@@ -1166,12 +1167,13 @@ bool FirstGPSfix = true;
 uint32_t RXSuccessfulPackets = 0;
 uint32_t TotalPacketsAttempted = 0;
 float RateOfClimb = 0;
+char NextionCommand[MAXNEXTIONCOMMANDLENGTH];
 
-    // **********************************************************************************************************************************
-    // **********************************  Area & namespace for FHSS data ************************************************************
-    // **********************************************************************************************************************************
+// **********************************************************************************************************************************
+// **********************************  Area & namespace for FHSS data ************************************************************
+// **********************************************************************************************************************************
 
-    namespace FHSS_data
+namespace FHSS_data
 {
 
     uint8_t Used_Recovery_Channels[3] = {15, 71, 82}; // channels 15, 71, 82 are used for recovery
