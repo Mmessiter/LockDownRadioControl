@@ -92,7 +92,7 @@
 #define INACTIVITYMAXIMUM 30 * TICKSPERMINUTE // Inactivity timeout maximum is 30 minutes
 #define DS1307_ADDRESS 0x68                   // I2C address for RTC
 
-#define MAXLINES 60 // text to load at once for help screens
+#define MAXLINES 60                 // text to load at once for help screens
 #define MAXNEXTIONCOMMANDLENGTH 255 //
 
 #define DEFAULT_EXPO 50          // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
@@ -1112,7 +1112,8 @@ uint16_t LastRadioSwaps = 0;
 uint16_t LastRX1TotalTime = 0;
 uint16_t LastRX2TotalTime = 0;
 uint32_t LastGapAverage = 0;
-uint16_t LastSbusRepeats = 0;
+float LastMaxRateOfClimb = 0;
+float MaxRateOfClimb = 0;
 uint16_t LastConnectionQuality = 0;
 int LastRXModelAltitude = 0;
 int LastRXModelMaxAltitude = 0;

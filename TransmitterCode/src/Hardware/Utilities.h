@@ -19,7 +19,7 @@ void ForceDataRedisplay(){
     LastRX1TotalTime     = 0;
     LastRX2TotalTime     = 0;
     LastGapAverage       = 0;
-    LastSbusRepeats      = 0;
+    LastMaxRateOfClimb   = 0;
     LastRXModelAltitude  = 0;
     LastRXModelMaxAltitude = 0;
     LastRXTemperature    = 0;

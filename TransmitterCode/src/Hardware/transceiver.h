@@ -322,7 +322,7 @@ void SuccessfulPacket()
         uint8_t PayloadSize = Radio1.getDynamicPayloadSize();
         Radio1.read(&AckPayload, PayloadSize);
         ParseLongerAckPayload();
-      // using a short payload added complexity without driving an advantage! So it is dropped.
+        // using a short payload added complexity without driving an advantage! So it is dropped.
     }
     if (BoundFlag && (!LedWasGreen || LedIsBlinking) && !UsingDefaultPipeAddress)
     {
@@ -744,8 +744,7 @@ FASTRUN void BufferTeensyMACAddPipe() // heeer
 /************************************************************************************************************/
 void SendBindingPipe()
 {
- static uint32_t BindingTimer = 0;
- 
+    static uint32_t BindingTimer = 0;
 
     if (BuddyPupilOnWireless)
         return;
@@ -753,12 +752,11 @@ void SendBindingPipe()
         return;
     if (!BoundFlag || !ModelMatched)
         BindingTimer = millis();
-   
+
     if ((millis() - BindingTimer) < 1200)
     {
         BufferTeensyMACAddPipe();
     }
-
 }
 /*********************************************************************************************************************************/
 void NormaliseTheRadio()
@@ -810,7 +808,7 @@ void FixInches(int *inches, int *feet)
 /************************************************************************************************************/
 void GetAltitude()
 {
-    RXModelAltitudeBMP280 = GetFloatFromAckPayload();                   // actual reading from BMP280
+    RXModelAltitudeBMP280 = GetFloatFromAckPayload();              // actual reading from BMP280
     RXModelAltitude = RXModelAltitudeBMP280 - GroundModelAltitude; // might be above ground only if GroundModelAltitude isnt zero
     if (RXMAXModelAltitude < RXModelAltitude)
         RXMAXModelAltitude = RXModelAltitude;
@@ -1018,15 +1016,13 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
             GPSTimeSynched = false; // this is not very accurate because of latency
         if (GPS_RX_FIX && !GPSTimeSynched)
         {
-            // Look("Synching RTC with GPS time");
-            // Look(GPS_RX_SECS - Gsecond);
             SynchRTCwithGPSTime();
         }
         break;
     case 19:
         RateOfClimb = GetFloatFromAckPayload();
-        // Look1("RateOfClimb: ");
-        // Look(RateOfClimb);
+        if (RateOfClimb > MaxRateOfClimb)
+            MaxRateOfClimb = RateOfClimb;
         break;
     default:
         break;

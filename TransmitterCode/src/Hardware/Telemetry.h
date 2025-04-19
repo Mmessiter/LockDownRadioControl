@@ -426,11 +426,11 @@ void PopulateDataView()
         BuildText(DataView_Rx, Vbuf); // SendText(DataView_Rx, Vbuf);
     }
 
-    if (LastSbusRepeats != SbusRepeats)
+    if (LastMaxRateOfClimb != MaxRateOfClimb)
     {
-        LastSbusRepeats = SbusRepeats;
-        snprintf(Vbuf, 7, "%d", (int)SbusRepeats);
-        BuildText(Sbs, Vbuf); // SendText(Sbs, Vbuf);
+        LastMaxRateOfClimb = MaxRateOfClimb;
+        snprintf(Vbuf, 7, "%.2f", MaxRateOfClimb);
+        BuildText(Sbs, Vbuf); 
     }
 
     BuildValue(TimeSinceBoot, BootedMinutes); // SendValue(TimeSinceBoot, BootedMinutes);
