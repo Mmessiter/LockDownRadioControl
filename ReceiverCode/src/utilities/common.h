@@ -12,7 +12,7 @@
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 5
 #define RXVERSION_MINIMUS 1
-#define RXVERSION_EXTRA 'A' // 11 April 2025
+#define RXVERSION_EXTRA 'B' // 19 April 2025
 
 #define HOPTIME 17        // 47     //  17 gives 50Hz FHSS, 47 gives 20Hz FHSS
 #define RECEIVE_TIMEOUT 8 // 5 milliseconds is 'perfect' time between packets
@@ -155,6 +155,8 @@ uint8_t PreviousNewPipesIndex = 0;
 bool FailSafeSent = true;
 uint32_t RX1TotalTime = 0;
 uint32_t RX2TotalTime = 0;
+uint32_t RX1PlusAddonTime = 0;
+uint32_t RX2PlusAddonTime = 0;
 uint32_t RadioSwaps = 0;
 uint32_t LastPacketArrivalTime = 0;
 bool INA219Connected = false;  //  Volts from INA219 ?

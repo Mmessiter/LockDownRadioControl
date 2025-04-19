@@ -99,6 +99,42 @@ FASTRUN void MakeLogFileName()
         strcpy(LogFileName, "NO_CLOCK.LOG");
     }
 }
+
+/************************************************************************************************************/
+
+FASTRUN void LogRXsTotalTimes()
+{
+    // This function logs time spent with RX1 and RX2 in Minutes and seconds
+    // It uses RX1TotalTime and RX2TotalTime which are in seconds even when over 60
+
+    char TheText[] = "RX1 use: ";
+    char buf[40] = " ";
+    char NB[10];
+    char colon[] = " minutes and ";
+    char secs[] = " seconds";
+    uint16_t RX1Mins = RX1TotalTime / 60;
+    uint8_t RX1Secs = RX1TotalTime % 60;
+    uint16_t RX2Mins = RX2TotalTime / 60;
+    uint8_t RX2Secs = RX2TotalTime % 60;
+    // Now RX1
+    Str(NB, RX1Mins, 0);
+    strcpy(buf, TheText);
+    strcat(buf, NB);
+    strcat(buf, colon);
+    Str(NB, RX1Secs, 0);
+    strcat(buf, NB);
+    strcat(buf, secs);
+    LogText(buf, sizeof(buf), false);
+    // Now RX2
+    strcpy(buf, "RX2 use: ");
+    Str(NB, RX2Mins, 0);
+    strcat(buf, NB);
+    strcat(buf, colon);
+    Str(NB, RX2Secs, 0);
+    strcat(buf, NB);
+    strcat(buf, secs);
+    LogText(buf, sizeof(buf), false);
+}
 /************************************************************************************************************/
 FASTRUN void OpenLogFileW()
 {
@@ -377,12 +413,13 @@ FASTRUN void LogDisConnection()
     char buf[40] = " ";
     char TheText[] = "Disconnected from ";
 
-
     strcpy(buf, TheText);
     strcat(buf, ModelName);
     LogText(buf, sizeof(buf), true);
     LogConnectedDuration();
     LogMotorOnDuration();
+    LogTotalRXSwaps();
+    LogRXsTotalTimes();
     if (RXMAXModelAltitude > 0)
         Log_RXMAXModelAltitude();
     if (GPS_RX_FIX)
@@ -394,7 +431,6 @@ FASTRUN void LogDisConnection()
     LogTotalGoodPackets();
     LogTotalRXGoodPackets();
     LogTotalPacketsAttempted();
-    LogTotalRXSwaps();
     LogRXVoltsPerCell();
     LogTXVoltsPerCell();
     LogOverallSuccessRate();
@@ -564,7 +600,8 @@ void LogTotalRXGoodPackets()
     LogText(thetext, strlen(thetext), false);
 }
 // ************************************************************************
-void LogTotalPacketsAttempted(){
+void LogTotalPacketsAttempted()
+{
     char thetext[56];
     snprintf(thetext, 55, "Total packets attempted: %lu", (unsigned long)TotalPacketsAttempted); // TotalPacketsAttempted are the packets sent
     LogText(thetext, strlen(thetext), false);

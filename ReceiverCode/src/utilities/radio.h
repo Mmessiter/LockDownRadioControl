@@ -85,7 +85,7 @@ void MapToSBUS()
  * Decompresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
  * @param uncompressed_buf[in]
  * @param compressed_buf[out] Must have allocated 3/4 the size of uncompressed_buf
- * @param uncompressed_size Size is in units of uint16_t 
+ * @param uncompressed_size Size is in units of uint16_t
  */
 void Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, uint8_t uncompressed_size)
 {
@@ -191,8 +191,8 @@ void LoadaPayload() // This function loads the acknowledgement payload It also d
 #define DELAYNEEDED (FULLDELAYNEEDED - READVOLTSTIME)
     LoadLongerAckPayload();                                        // Load the AckPayload with telemetry data
     CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // send Full PAYLOAD (6 bytes)
-    delayMicroseconds(DELAYNEEDED); // delay DELAYNEEDED
-    GetRXVolts();                   // Takes 481us
+    delayMicroseconds(DELAYNEEDED);                                // delay DELAYNEEDED
+    GetRXVolts();                                                  // Takes 481us
 }
 
 /************************************************************************************************************/
@@ -576,7 +576,9 @@ FASTRUN void Reconnect()
     uint32_t SearchStartTime = millis();
     uint8_t PreviousRadio = ThisRadio;
     uint8_t Attempts = 0;
-
+    RX1PlusAddonTime = 0;
+    RX2PlusAddonTime = 0;
+    
     if (ThisRadio == 1)
         RX1TotalTime += (millis() - ReconnectedMoment); // keep track of how long on each
     if (ThisRadio == 2)
@@ -809,10 +811,28 @@ void LoadLongerAckPayload()
         SendIntToAckPayload(RadioSwaps);
         break;
     case 3:
-        SendIntToAckPayload(RX1TotalTime / 1000);
+        if (ThisRadio == 1)
+        {
+            RX1PlusAddonTime = RX1TotalTime + (millis() - ReconnectedMoment);
+        }
+        else
+        {
+            RX1PlusAddonTime = RX1TotalTime;
+        }
+        SendIntToAckPayload(RX1PlusAddonTime / 1000);
+
         break;
     case 4:
-        SendIntToAckPayload(RX2TotalTime / 1000);
+
+        if (ThisRadio == 2)
+        {
+            RX2PlusAddonTime = RX2TotalTime + (millis() - ReconnectedMoment);
+        }
+        else
+        {
+            RX2PlusAddonTime = RX2TotalTime;
+        }
+        SendIntToAckPayload(RX2PlusAddonTime / 1000);
         break;
     case 5:
         SendToAckPayload(INA219Volts);
