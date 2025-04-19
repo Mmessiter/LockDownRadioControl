@@ -433,16 +433,19 @@ void PopulateDataView()
         BuildText(Sbs, Vbuf); 
     }
 
+    if (LastTimeSinceBoot != BootedMinutes)
+    {
     BuildValue(TimeSinceBoot, BootedMinutes); // SendValue(TimeSinceBoot, BootedMinutes);
+    LastTimeSinceBoot = BootedMinutes;
+    }
     if (BoundFlag && ModelMatched)
-    {
-        BuildValue(MeanFrameRate, AverageFrameRate); // SendValue(MeanFrameRate, AverageFrameRate);
-    }
-    else
-    {
-        BuildValue(MeanFrameRate, 0); // SendValue(MeanFrameRate, 0);
-    }
+        if (AverageFrameRate != LastAverageFrameRate)
+        {
+            BuildValue(MeanFrameRate, AverageFrameRate); // SendValue(MeanFrameRate, AverageFrameRate);
+            LastAverageFrameRate = AverageFrameRate;
+        }
     SendCommand(NextionCommand);
+    //Look(NextionCommand); // This is to see how many were included for optimisation purposes
     ClearNextionCommand();
 }
 
