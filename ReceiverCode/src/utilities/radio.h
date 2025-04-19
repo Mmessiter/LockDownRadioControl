@@ -799,7 +799,7 @@ void LoadLongerAckPayload()
         }
         else
         {
-            SendIntToAckPayload(SuccessfulPackets);
+            SendIntToAckPayload(SuccessfulPackets); // then send the number of successful packets
         }
         break;
     case 1:
@@ -817,7 +817,6 @@ void LoadLongerAckPayload()
         {
             SendIntToAckPayload(RX1TotalTime / 1000);
         }
-
         break;
     case 4:
         if (ThisRadio == 2)
@@ -834,8 +833,6 @@ void LoadLongerAckPayload()
         break;
     case 6:
         SendToAckPayload(BaroAltitude);
-        // Look1("BaroAltitude: ");
-        // Look(BaroAltitude);
         break;
     case 7:
         SendToAckPayload(BaroTemperature);
