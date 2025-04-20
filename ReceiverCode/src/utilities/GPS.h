@@ -2,7 +2,6 @@
 // ** GPS.h **
 #ifndef GPS_H
 #define GPS_H
-
 #include <Adafruit_GPS.h>
 Adafruit_GPS GPS(&Wire);
 
@@ -16,23 +15,6 @@ void setupGPS()
     delay(1000);
     GPS.println(PMTK_Q_RELEASE); // ??
 }
-// *************************************************************
-void DisplayGPSTime()
-{
-    Serial.print("\nTime: ");
-    Serial.print(HoursGPS, DEC);
-    Serial.print(':');
-    Serial.print(MinsGPS, DEC);
-    Serial.print(':');
-    Serial.println(SecsGPS, DEC);
-    Serial.print("Date: ");
-    Serial.print(DayGPS, DEC);
-    Serial.print('/');
-    Serial.print(MonthGPS, DEC);
-    Serial.print("/");
-    Serial.println(YearGPS, DEC);
-}
-
 // *************************************************************
 
 float GetHeading(float lat1, float lon1, float lat2, float lon2)
@@ -62,34 +44,10 @@ float GetDistance(float lat1, float lon1, float lat2, float lon2)
     lon2 = radians(lon2);
     float dLat = lat2 - lat1;
     float dLon = lon2 - lon1;
-    float a = sin(dLat / 2) * sin(dLat / 2) +
-              cos(lat1) * cos(lat2) *
-                  sin(dLon / 2) * sin(dLon / 2);
+    float a = sin(dLat / 2) * sin(dLat / 2) + cos(lat1) * cos(lat2) * sin(dLon / 2) * sin(dLon / 2);
     float c = 2 * atan2(sqrt(a), sqrt(1 - a));
     float distance = EARTH_RADIUS * c;
     return distance * 1000; // convert to meters
-}
-
-// *************************************************************
-
-void DisplayGPSLocation()
-{
-    Serial.print("Latitude: ");
-    Serial.println(LatitudeGPS, 4);
-    Serial.print("Longitude: ");
-    Serial.println(LongitudeGPS, 4);
-    Serial.print("Speed (knots): ");
-    Serial.println(SpeedGPS); //< Current speed over ground in knots
-    Serial.print("Current heading: ");
-    Serial.println(AngleGPS); //< Course in degrees from true north
-    Serial.print("Altitude: ");
-    Serial.println(AltitudeGPS); //< Altitude in meters above MSL
-    Serial.print("Satellites: ");
-    Serial.println(SatellitesGPS); //< Number of satellites in use
-    Serial.print("Distance to mark: ");
-    Serial.println(DistanceGPS, 5);
-    Serial.print("Heading to mark: ");
-    Serial.println(CourseToGPS, 5);
 }
 
 // *************************************************************
@@ -138,31 +96,24 @@ void MarkHere()
 
 void ReadGPS()
 {
-    if (!GPS_Connected)  // If GPS is not connected, do not read
+    if (!GPS_Connected) // If GPS is not connected, do not read
         return;
-    static uint32_t timer = millis();
-    if (millis() - timer > 998)  // read about once per sec
+
+    static uint32_t timer = 0;
+    if (millis() - timer < 998)
+        return; // read about once per sec
+    timer = millis();
+    GPS.read();
+    if (GPS.newNMEAreceived())
     {
-        GPS.read();
-        if (GPS.newNMEAreceived())
-            if (!GPS.parse(GPS.lastNMEA()))
-                return; // receive and parse ... this also sets the newNMEAreceived() flag to false
-        timer = millis();
-        GpsFix = GPS.fix;
-        if (GpsFix)
-        {
-            GetGPSTime();
-            GetGPSLocation();
-            DisplayGPSTime();
-            DisplayGPSLocation();
-        }
-        else
-        {
-            Serial.print("Minutes: ");
-            Serial.print(millis() / 60000);
-            Serial.print(" Satellites: ");
-            Serial.println((int)GPS.satellites);
-        }
+        if (!GPS.parse(GPS.lastNMEA()))
+            return; // receive and parse ... this also sets the newNMEAreceived() flag to false
+    }
+    GpsFix = GPS.fix;
+    if (GpsFix)
+    {
+        GetGPSTime();
+        GetGPSLocation();
     }
 }
 
