@@ -155,28 +155,24 @@ void ReadMoreParameters()
 /************************************************************************************************************/
 void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is length of incomming data
 {
-
-    if (DataReceived.ChannelBitMask)
-    {                                                          // Any changed channels?
+    LastPacketArrivalTime = millis();                          // Note the arrival time
+    if (DataReceived.ChannelBitMask)                           // Any changed channels?
+    {                                                          // yes
         Decompress(RawDataIn, DataReceived.CompressedData, 8); // Decompress the most recent data 8 enough? Don't know yet how may channels will be sent
         RearrangeTheChannels();                                // Rearrange the channels for actual control since only changed ones are sent
     }
     else
     {
-        if (DynamicPayloadSize > 2)
+        if (DynamicPayloadSize > 2)                                 // no changed channels, but params
         {                                                           // parameter packet
             Decompress(RawDataIn, DataReceived.CompressedData, 10); // 10 allows 8 parameter elements per packet
             ReadMoreParameters();
         }
     }
-    MapToSBUS(); // Get SBUS data ready
-    SendSBUSData();
-    LastPacketArrivalTime = millis(); // Note the arrival time
-    ++SuccessfulPackets;              // These packets did arrive, but acknowledgement might yet fail
-                                      // Look1("Successful Packets: ");
-                                      // Look(SuccessfulPackets);
-
-    if (HopNow)
+    MapToSBUS();             // Get SBUS data ready
+    SendSBUSData();          // maybe send SBUS data if its time
+    ++SuccessfulPackets;     // These packets did arrive, but our acknowledgement might yet fail...
+    if (HopNow)              // time to hop?
     {                        // This flag gets set in LoadLongerAckPayload();
         HopToNextChannel();  // Ack payload instructed us to Hop at next opportunity. So hop now ...
         HopNow = false;      // ... and clear the flag,
@@ -204,15 +200,15 @@ bool ReadData()
         uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize(); // Get the size of the new data (14)
         if ((DynamicPayloadSize == 0) || (DynamicPayloadSize > 32))
             return false;
-        LoadaPayload();                                        // and reads volts
-        CurrentRadio->read(&DataReceived, DynamicPayloadSize); //  ** >> Read new data from TX
-        SendSBUSData();
-        Connected = true;
-        NewData = true;
-        UseReceivedData(DynamicPayloadSize);
-        CurrentRadio->flush_tx(); // This avoids a lockup that happens when the FIFO gets full
+        LoadaPayload();                                        // ... and reads INA219 volts
+        CurrentRadio->read(&DataReceived, DynamicPayloadSize); // Get received data from nRF24L01+
+        SendSBUSData();                                        // Maybe send SBUS data if its time
+        Connected = true;                                      // we are connected
+        NewData = true;                                        // we have new data
+        UseReceivedData(DynamicPayloadSize);                   // use the received data
+        CurrentRadio->flush_tx();                              // This avoids a lockup that happens when the FIFO gets full
     }
-    return Connected;
+    return Connected;                                          // inform the caller of success or failure
 }
 
 /************************************************************************************************************/
@@ -240,13 +236,12 @@ void ReadBMP280()
     if ((!BMP280Connected) || (millis() < 10000))
         return;
     static uint32_t LastTime = 0;
-    if (millis() - LastTime > 502)
+    if (millis() - LastTime > 502) // about 2 times per second
     {
         LastTime = millis();
         bmp.takeForcedMeasurement();
         BaroTemperature = bmp.readTemperature();
         BaroAltitude = MetersToFeet(bmp.readAltitude(Qnh));
-     //   BaroAltitude = bmp.readAltitude(Qnh);
         GetRateOfClimb();
     }
 }
@@ -289,11 +284,8 @@ FASTRUN void ReceiveData()
 /************************************************************************************************************/
 void CopyCurrentPipe(uint8_t *p, uint8_t pn)
 {
-
     for (int i = 0; i < 6; ++i)
-    {
         CurrentPipe[i] = p[i];
-    }
     PipePointer = p;
     Pipnum = pn;
 }
@@ -695,7 +687,7 @@ void CheckWhetherItsTimeToHop()
     }
 }
 /************************************************************************************************************/
-void SendToAckPayload(float U)
+void SendFloatToAckPayload(float U)
 { // This one function now works with most float parameters
     union
     {
@@ -830,37 +822,37 @@ void LoadLongerAckPayload()
         }
         break;
     case 5:
-        SendToAckPayload(INA219Volts);
+        SendFloatToAckPayload(INA219Volts);
         break;
     case 6:
-        SendToAckPayload(BaroAltitude);
+        SendFloatToAckPayload(BaroAltitude);
         break;
     case 7:
-        SendToAckPayload(BaroTemperature);
+        SendFloatToAckPayload(BaroTemperature);
         break;
     case 8:
-        SendToAckPayload(LatitudeGPS);
+        SendFloatToAckPayload(LatitudeGPS);
         break;
     case 9:
-        SendToAckPayload(LongitudeGPS);
+        SendFloatToAckPayload(LongitudeGPS);
         break;
     case 10:
-        SendToAckPayload(AngleGPS);
+        SendFloatToAckPayload(AngleGPS);
         break;
     case 11:
-        SendToAckPayload(SpeedGPS);
+        SendFloatToAckPayload(SpeedGPS);
         break;
     case 12:
-        SendToAckPayload(GpsFix);
+        SendFloatToAckPayload(GpsFix);
         break;
     case 13:
-        SendToAckPayload(AltitudeGPS);
+        SendFloatToAckPayload(AltitudeGPS);
         break;
     case 14:
-        SendToAckPayload(DistanceGPS);
+        SendFloatToAckPayload(DistanceGPS);
         break;
     case 15:
-        SendToAckPayload(CourseToGPS);
+        SendFloatToAckPayload(CourseToGPS);
         break;
     case 16:
         SendIntToAckPayload(SatellitesGPS);
@@ -872,7 +864,7 @@ void LoadLongerAckPayload()
         SendTimeToAckPayload();
         break;
     case 19:
-        SendToAckPayload(RateOfClimb);
+        SendFloatToAckPayload(RateOfClimb);
         break;
     default:
         break;

@@ -765,7 +765,6 @@ void NormaliseTheRadio()
     Radio1.setCRCLength(RF24_CRC_16);
     Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait);
 }
-
 /************************************************************************************************************/
 
 FASTRUN float GetFloatFromAckPayload()
@@ -804,7 +803,6 @@ void FixInches(int *inches, int *feet)
         ++*feet;
     }
 }
-
 /************************************************************************************************************/
 void GetAltitude()
 {
@@ -954,7 +952,6 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         break;
     case 6:
         GetAltitude();
-        // Look(ModelAltitude);
         break;
     case 7:
         GetTemperature();
@@ -982,8 +979,6 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
             GPS_RX_Altitude = 0;
         if (GPS_RX_Maxaltitude < GPS_RX_Altitude)
             GPS_RX_Maxaltitude = GPS_RX_Altitude;
-        // Look1("GPS_RX_Altitude: ");
-        // Serial.println(GPS_RX_Altitude);
         break;
     case 14:
         GPS_RX_DistanceTo = GetFloatFromAckPayload(); // now calculated locally
@@ -1032,9 +1027,9 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
 FASTRUN void CheckGapsLength()
 {
     if (GapStart > 0)
-    { // when reconnected, how long was connection lost?
+    { // when reconnected, find out how long was connection lost
         ++GapCount;
-        ThisGap = (millis() - GapStart); // AND in fact RX sends no data for 20 ms after reconnection
+        ThisGap = (millis() - GapStart); 
         if (ThisGap >= MinimumGap && UseLog)
             LogThisGap();
         if (ThisGap > GapLongest)
