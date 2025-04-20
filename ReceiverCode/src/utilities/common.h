@@ -249,6 +249,7 @@ float MetersToFeet(float Meters);
 void GetRXVolts();
 void SendSBUSData();
 bool CheckCrazyValues();
+void ReadGPS();
 
 template <typename any>
 void Look(const any &value);

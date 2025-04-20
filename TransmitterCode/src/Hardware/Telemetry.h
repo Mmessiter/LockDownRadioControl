@@ -429,7 +429,8 @@ void PopulateDataView()
     if (LastMaxRateOfClimb != MaxRateOfClimb)
     {
         LastMaxRateOfClimb = MaxRateOfClimb;
-        snprintf(Vbuf, 7, "%.2f", MaxRateOfClimb);
+        int feet = (int)MaxRateOfClimb + 0.5; // round to nearest integer
+        snprintf(Vbuf, 26, "%d feet / minute", feet);
         BuildText(Sbs, Vbuf); 
     }
 

@@ -658,10 +658,6 @@ void loop() // without MPU6050 about 30000 interations per second.... EXCEPT Zer
     }
     if (BoundFlag && ModelMatched)
     {
-        if (GPS_Connected)
-        {
-            ReadGPS();
-        }
         SendSBUSData(); // Send the SBUS data
         MoveServos();   // Actually do something useful at last
     }

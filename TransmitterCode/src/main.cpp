@@ -2665,6 +2665,7 @@ void ZeroDataScreen()
     GapStart = 0;
     ThisGap = 0;
     RXMAXModelAltitude = 0;
+    MaxRateOfClimb = 0;
     RXModelAltitude = 0;
     GroundModelAltitude = 0;
     GPS_RX_MaxDistance = 0;

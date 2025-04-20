@@ -108,7 +108,7 @@ double MetresToYards(double metres)
 {
     return metres * 1.09361;
 }
-// ************************************************************ 
+// ************************************************************
 float KnotsToMph(float knots)
 {
     return knots * 1.15078; // Convert knots to mph
@@ -138,16 +138,17 @@ void MarkHere()
 
 void ReadGPS()
 {
+    if (!GPS_Connected)  // If GPS is not connected, do not read
+        return;
     static uint32_t timer = millis();
-    GPS.read();
-    if (GPS.newNMEAreceived())
-        if (!GPS.parse(GPS.lastNMEA()))
-            return; // receive and parse ... this also sets the newNMEAreceived() flag to false
-    if (millis() - timer > 1000)
+    if (millis() - timer > 998)  // read about once per sec
     {
+        GPS.read();
+        if (GPS.newNMEAreceived())
+            if (!GPS.parse(GPS.lastNMEA()))
+                return; // receive and parse ... this also sets the newNMEAreceived() flag to false
         timer = millis();
         GpsFix = GPS.fix;
-
         if (GpsFix)
         {
             GetGPSTime();

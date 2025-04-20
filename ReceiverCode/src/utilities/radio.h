@@ -228,25 +228,25 @@ void GetRateOfClimb()
         return;
     static uint32_t LastTime = 0;
     static float LastBaroAltitude = 0;
-    RateOfClimb = (BaroAltitude - LastBaroAltitude) / ((millis() - LastTime) / 1000.0);
+    RateOfClimb = 60 * (BaroAltitude - LastBaroAltitude) / ((millis() - LastTime) / 1000.0);
     LastBaroAltitude = BaroAltitude;
     LastTime = millis();
     return;
 }
 
 // ******************************************************************************************************************************************************************
-void GetBMP280Data()
+void ReadBMP280()
 {
     if ((!BMP280Connected) || (millis() < 10000))
         return;
     static uint32_t LastTime = 0;
-    if (millis() - LastTime > 500)
+    if (millis() - LastTime > 502)
     {
         LastTime = millis();
         bmp.takeForcedMeasurement();
         BaroTemperature = bmp.readTemperature();
         BaroAltitude = MetersToFeet(bmp.readAltitude(Qnh));
-        BaroAltitude = bmp.readAltitude(Qnh);
+     //   BaroAltitude = bmp.readAltitude(Qnh);
         GetRateOfClimb();
     }
 }
@@ -274,7 +274,8 @@ FASTRUN void ReceiveData()
 {
     if (!ReadData())
     {
-        GetBMP280Data(); //  if no data yet, get BMP280 data
+        ReadBMP280(); //  if no data yet, get BMP280 data
+        ReadGPS();    //  if no data yet, get GPS data
 #ifdef USE_STABILISATION
         if (MPU6050Connected) // no new packet yet, so look at the gyro and accelerometer
             DoStabilsation();
