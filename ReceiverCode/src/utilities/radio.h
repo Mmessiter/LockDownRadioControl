@@ -249,8 +249,6 @@ void ReadBMP280()
 //  Get RX LIPO volts if connected
 void GetRXVolts()
 {
-    // takes 481 us
-    // uint32_t testr = micros();
     static uint32_t LastTime = 0;
     if ((millis() - LastTime > 1007) && (INA219Connected))
     {
@@ -261,13 +259,12 @@ void GetRXVolts()
     {
         delayMicroseconds(481); // because of the delay in the INA219 library
     }
-    //  Look(micros() - testr);
 }
 // ******************************************************************************************************************************************************************
 
 FASTRUN void ReceiveData()
 {
-    if (!ReadData())
+    if (!ReadData()) // Get new data if available
     {
         if (millis() - LastPacketArrivalTime < 1) //  if no data yet, allow almost the full 5ms to read these before next packet is due
         {
