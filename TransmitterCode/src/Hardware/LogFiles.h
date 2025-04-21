@@ -349,36 +349,42 @@ FASTRUN void LogEndLine()
     LogText(sp, strlen(sp), false);
 }
 // ************************************************************************
-
 void LogAllGPSMaxs()
 {
-    // This function logs each of the GPS maximums in several separate log entries
-    char buf[160] = " ";
-    char NB[10];
-    strcpy(buf, "Max Distance: ");
+    char buf[160];
+    char NB[16]; // Allow a bit more room for safety
+
+    // Max Distance GPS
+    strcpy(buf, "Max distance from mark: ");
     dtostrf(GPS_RX_MaxDistance, 2, 2, NB);
     strcat(buf, NB);
-    strcat(buf, " m");
-    LogText(buf, sizeof(buf), false);
-    strcpy(buf, "Max Altitude (GPS): ");
+    strcat(buf, " meters");
+    LogText(buf, strlen(buf), false);
+
+    // Max Altitude
+    strcpy(buf, "Max altitude (from GPS): ");
     dtostrf(GPS_RX_Maxaltitude, 2, 2, NB);
     strcat(buf, NB);
-    strcat(buf, " m");
-    LogText(buf, sizeof(buf), false);
+    strcat(buf, " meters");
+    LogText(buf, strlen(buf), false);
+
+    // Max Speed
     strcpy(buf, "Max Speed: ");
     dtostrf(GPS_RX_MaxSpeed, 2, 2, NB);
     strcat(buf, NB);
-    strcat(buf, " knots");
-    LogText(buf, sizeof(buf), false);
-    strcpy(buf, "Number of satelites: ");
-    Str(NB, GPS_RX_Satellites, 0);
+    strcat(buf, " MPH");
+    LogText(buf, strlen(buf), false);
+
+    // Satellites
+    strcpy(buf, "Number of satellites: ");
+    Str(NB, GPS_RX_Satellites, 0); 
     strcat(buf, NB);
-    LogText(buf, sizeof(buf), false);
+    LogText(buf, strlen(buf), false);
 }
 // ************************************************************************
 void LogMotorOnDuration()
 {
-    char TheText[] = "Motor on for ";
+    char TheText[] = "Motor was on for ";
     char buf[80] = " ";
     char NB[10];
     Str(NB, MotorOnSeconds / 60, 0);

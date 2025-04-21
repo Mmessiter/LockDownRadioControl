@@ -245,11 +245,12 @@ void PopulateGPSView()
     char BTo[] = "BTo";
     char Sat[] = "Sat";
 
+    snprintf(Vbuf, 7, "%d", GPS_RX_Satellites);
+    SendText(Sat, Vbuf);
+
     if (GPS_RX_FIX)
     { // if no fix, then leave display as before
         SendText(Fix, yes);
-        snprintf(Vbuf, 7, "%d", GPS_RX_Satellites);
-        SendText(Sat, Vbuf);
         snprintf(Vbuf, 7, "%.3f", GPS_RX_ANGLE);
         SendText(Bear, Vbuf);
         snprintf(Vbuf, 6, "%.3f", GPS_RX_Altitude);
