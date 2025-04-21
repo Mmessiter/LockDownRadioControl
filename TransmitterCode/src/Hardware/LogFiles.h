@@ -358,14 +358,14 @@ void LogAllGPSMaxs()
     strcpy(buf, "Max distance from mark: ");
     dtostrf(GPS_RX_MaxDistance, 2, 2, NB);
     strcat(buf, NB);
-    strcat(buf, " meters");
+    strcat(buf, " yards");
     LogText(buf, strlen(buf), false);
 
     // Max Altitude
     strcpy(buf, "Max altitude (from GPS): ");
     dtostrf(GPS_RX_Maxaltitude, 2, 2, NB);
     strcat(buf, NB);
-    strcat(buf, " meters");
+    strcat(buf, " feet");
     LogText(buf, strlen(buf), false);
 
     // Max Speed
@@ -377,7 +377,7 @@ void LogAllGPSMaxs()
 
     // Satellites
     strcpy(buf, "Number of satellites: ");
-    Str(NB, GPS_RX_Satellites, 0); 
+    Str(NB, GPS_RX_Satellites, 0);
     strcat(buf, NB);
     LogText(buf, strlen(buf), false);
 }
