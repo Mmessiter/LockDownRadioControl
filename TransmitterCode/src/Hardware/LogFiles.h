@@ -215,7 +215,7 @@ FASTRUN bool LogFilePreamble()
  *
  * @param TheText The text to be logged.
  * @param len The length of the text.
- * @param TimeStamp Flag indicating whether to add a timestamp to the log entry.
+ * @param TimeStamp Flag indicating whether to add a new timestamp to the log entry.
  */
 FASTRUN void LogText(char *TheText, uint16_t len, bool TimeStamp)
 
