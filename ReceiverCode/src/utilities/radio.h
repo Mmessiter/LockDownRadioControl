@@ -208,7 +208,7 @@ bool ReadData()
         UseReceivedData(DynamicPayloadSize);                   // use the received data
         CurrentRadio->flush_tx();                              // This avoids a lockup that happens when the FIFO gets full
     }
-    return Connected;                                          // inform the caller of success or failure
+    return Connected; // inform the caller of success or failure
 }
 
 /************************************************************************************************************/
@@ -269,8 +269,12 @@ FASTRUN void ReceiveData()
 {
     if (!ReadData())
     {
-        ReadBMP280(); //  if no data yet, get BMP280 data
-        ReadGPS();    //  if no data yet, get GPS data
+        if (millis() - LastPacketArrivalTime < 1) //  if no data yet, allow almost the full 5ms to read these before next packet is due
+        {
+            ReadBMP280(); 
+            ReadGPS();   
+        }
+
 #ifdef USE_STABILISATION
         if (MPU6050Connected) // no new packet yet, so look at the gyro and accelerometer
             DoStabilsation();
