@@ -703,6 +703,7 @@ void LogTotalRXGoodPackets();
 void LogTotalRXGoodPackets();
 void LogTotalPacketsAttempted();
 FASTRUN void LogAverageGap();
+void CheckMotorReallyIsOff();
 #ifdef USE_BTLE
 void SendViaBLE();
 #endif
@@ -1171,6 +1172,11 @@ uint32_t RXSuccessfulPackets = 0;
 uint32_t TotalPacketsAttempted = 0;
 float RateOfClimb = 0;
 char NextionCommand[MAXNEXTIONCOMMANDLENGTH];
+char WarnNow[] = "vis Warning,1";
+char WarnOff[] = "vis Warning,0";
+char Warning[] = "Warning";
+char err_MotorOn[] = " MOTOR IS ON! ";
+;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

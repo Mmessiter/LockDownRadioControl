@@ -195,6 +195,24 @@ void ClearMostParameters()
         PreMixBuffer[i] = 0;
     }
 }
+// *********************************************************************************************************************************/
+void EnsureMotorIsOff(){
+
+    CheckMotorOff();
+    while (MotorEnabled) // disconnected now so stay here until motor switch really is off!
+    {
+        SendCommand(WarnNow);
+        SendText(Warning, err_MotorOn);
+        SendNoData = true;
+        PlaySound(MOTORON);
+        DelayWithDog(1200);
+        PlaySound(PLSTURNOFF);
+        DelayWithDog(3000);
+        CheckMotorOff();
+    }
+    SendCommand(WarnOff);
+    SendNoData = false;
+}
 
 /*********************************************************************************************************************************/
 
@@ -202,7 +220,7 @@ void RedLedOn()
 {
     char InVisible[] = "vis Quality,0";
     char FrontView_Connected[] = "Connected";
-    char WarnOff[] = "vis Warning,0";
+    
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
@@ -221,6 +239,7 @@ void RedLedOn()
     }
     ClearMostParameters();
     LedWasRed = true;
+    EnsureMotorIsOff(); 
 }
 
 /*********************************************************************************************************************************/
@@ -1070,8 +1089,8 @@ void CheckSDCard()
 {
     char err_404[] = "SD card error!";
     char err_405[] = "or not found!";
-    char WarnNow[] = "vis Warning,1";
-    char Warning[] = "Warning";
+  //  char WarnNow[] = "vis Warning,1";
+   // char Warning[] = "Warning";
     bool SDCARDOK = SD.begin(BUILTIN_SDCARD); // MUST return true or SD card is not working
     if (!SDCARDOK)
     {
@@ -1105,12 +1124,9 @@ FLASHMEM void setup()
     char err_chksm[] = "File checksum?";
     char err_404[] = "SD card error!";
     char FrontView_Connected[] = "Connected";
-    char err_MotorOn[] = " MOTOR IS ON! ";
     char FrontView_Hours[] = "Hours";
     char FrontView_Mins[] = "Mins";
     char FrontView_Secs[] = "Secs";
-    char WarnNow[] = "vis Warning,1";
-    char Warning[] = "Warning";
     char ModelsFile[] = "models.dat";
 
     pinMode(REDLED, OUTPUT);
@@ -1217,15 +1233,10 @@ FLASHMEM void setup()
     UpdateModelsNameEveryWhere();
     ConfigureStickMode();
     WarningTimer = millis();
-    CheckMotorOff();
-
+    EnsureMotorIsOff();
     if (!BuddyPupilOnWireless)
     { // when pupil is buddying wirelessly, these potential errors are ignored
-        if (MotorEnabled)
-        {
-            ErrorState = MOTORISON;
-            SendNoData = true;
-        }
+        
         if (!UseMotorKill)
             ShowMotor(1);
         if (SafetyON)
@@ -1240,13 +1251,6 @@ FLASHMEM void setup()
             if (ErrorState == MODELSFILENOTFOUND)
             {
                 SendText(Warning, err_404);
-            }
-            if (ErrorState == MOTORISON)
-            {
-                SendText(Warning, err_MotorOn);
-                PlaySound(MOTORON);
-                delay(1200);
-                PlaySound(PLSTURNOFF);
             }
         }
     }
@@ -4916,8 +4920,6 @@ void ResetMotorTimer()
 void GetBank() // ... and the other three switches
 {
 
-    char WarnOff[] = "vis Warning,0";
-
     if ((CurrentMode != NORMAL) && (CurrentMode != LISTENMODE))
         return; // not needed if calibrating
 
@@ -4936,6 +4938,7 @@ void GetBank() // ... and the other three switches
         if (SafetyON)
         {
             ShowSafetyIsOn();
+            SendNoData = false; // can send data!
         }
         else
         {
@@ -4962,6 +4965,7 @@ void GetBank() // ... and the other three switches
                     if ((millis() - WarningTimer) > 4000)
                     {
                         PlaySound(PLSTURNOFF);
+                        SendNoData = true; // user turned on motor
                         WarningTimer = millis();
                     }
                 }
@@ -4978,6 +4982,7 @@ void GetBank() // ... and the other three switches
         {
             if (AnnounceBanks)
                 PlaySound(MOTOROFF);
+            SendNoData = false; // can send data!
             if (UseLog)
                 LogMotor(0);
             SendCommand(WarnOff);

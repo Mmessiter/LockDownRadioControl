@@ -1102,6 +1102,7 @@ void DelayWithDog(uint32_t HowLong)
     while ((millis() - ThisMoment) < HowLong)
     {
         KickTheDog();
+        CheckPowerOffButton();
         if (ModelMatched && BoundFlag)
         {
             GetNewChannelValues(); // Get new channel values from tx even during delay
