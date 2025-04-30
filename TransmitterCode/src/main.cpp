@@ -395,7 +395,7 @@ FASTRUN void ShowServoPos()
     }
     if ((CurrentView == GRAPHVIEW))
     {
-        MinimumDistance = 6;
+        MinimumDistance = 4;
         InputDevice = (InPutStick[ChanneltoSet - 1]);
         if (InputDevice < 8)
             InputAmount = AnalogueReed(InputDevice);
