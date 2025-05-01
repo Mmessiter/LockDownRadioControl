@@ -115,7 +115,7 @@ void PupilDetected(bool Detected)
     static uint16_t LostPupilCount = 0;
     char            Mlost[]        = "Buddy not found";
     char            Mfound[]       = "Buddy found!";
-    char            wb[]           = "wb"; // wb is the name of the label on front view
+    char            wb[]           = "wb";                          // wb is the name of the label on front view
     char            YesVisible[]   = "vis wb,1";
     if (Detected) {
         LostPupilCount = 0;
@@ -231,7 +231,7 @@ void DoTheLongerSpecialPacket(){
     }       
  }
 //*************************************************************************************************************************
-void SendSpecialPacket()                                                   
+void SendSpecialPacket()                                                    // Here the master sends a packet to the buddy Hoping to receive in the ack payload All of his channel positions.                                          
 {                                                                           
     static uint32_t LocalTimer = 0;
    
@@ -239,7 +239,7 @@ void SendSpecialPacket()
         if (((millis() - LocalTimer) < 100)) return;    
             LocalTimer = millis();
     }
-    DoTheLongerSpecialPacket();                                    // Send the longer packet (model ID sent) EVERYTIME!
+    DoTheLongerSpecialPacket();                                             // Send the longer packet (model ID sent) EVERYTIME!
     ChangeTXTarget(CurrentChannel,TeensyMACAddPipe,DATARATE);               // Set the TX target back to the receiver in model.
 }
 
@@ -321,8 +321,8 @@ void SendTheSpecialAckPayload(){
         uint8_t ByteCountToTransmit;
         uint8_t NumberOfChangedChannels = EncodeTheChangedChannels1();                                     // Encode the changed channels
         
-        if (NumberOfChangedChannels){                                                                     // Any channels changed? Or parameters to send?
-            ByteCountToTransmit     =  ((float) NumberOfChangedChannels * 1.5f) + 4;                      // Calculate the number of bytes to transmit
+        if (NumberOfChangedChannels){                                                                      // Any channels changed? Or parameters to send?
+            ByteCountToTransmit     =  ((float) NumberOfChangedChannels * 1.5f) + 4;                       // Calculate the number of bytes to transmit
             uint8_t SizeOfUnCompressedData  =   (ByteCountToTransmit / 1.5) ;                                
             Compress(DataTosend.CompressedData, RawDataBuffer, SizeOfUnCompressedData);               
         }else{
@@ -396,25 +396,39 @@ void ParseLongerSpecialPacket(){ // This is called from GetSpecialPacket() funct
 }
 
 //*************************************************************************************************************************
-void GetSpecialPacket(){
+void GetSpecialPacket(){ // Here the buddy receives a packet from the master to which it must respond with its channel positions.
                                                                 
         static uint32_t LocalTimer = 0;
         static uint16_t PacketCounter = 0;
-    
-    if (Radio1.available()) {                                                           // if a packet has arrived
-        SendTheSpecialAckPayload();                                       
-        ParseLongerSpecialPacket();                                                     // Parse the packet
-        MasterDetected(true);                                                           // Master is alive
-        ++PacketCounter;                                                                // Count the packets
+        char ExsBd[] = "Extra buddies!";
+        char wb[] = "wb"; // wb is the name of the label on front view
+        char YesVisible[] = "vis wb,1";
 
-        if (millis() - LocalTimer >= 1000) {                                            // Every second
-            LocalTimer = millis();                                                      // reset the timer
-            PacketsPerSecond = PacketCounter;                                           // save the packets per second for use on the data diplay
-            PacketCounter = 0;                                                          // reset the counter
-        }
-        LastPassivePacketTime = millis();                                               // reset the timer
-   
-    }else{                                                                              // No packet arrived so maybe master's dead? 
+        if (Radio1.available())
+        {                                                                // if a packet has arrived
+            uint8_t DynamicPayloadSize = Radio1.getDynamicPayloadSize(); // get the size of the packet
+            if (DynamicPayloadSize != 24)
+            {  
+                SendText(wb, ExsBd);
+                SendCommand(YesVisible);
+                PlaySound(WHAHWHAHMSG);
+                DelayWithDog(10000);
+                return;
+            }
+
+            SendTheSpecialAckPayload();
+            ParseLongerSpecialPacket(); // Parse the packet
+            MasterDetected(true);       // Master is alive
+            ++PacketCounter;            // Count the packets
+
+            if (millis() - LocalTimer >= 1000)
+            {                                     // Every second
+                LocalTimer = millis();            // reset the timer
+                PacketsPerSecond = PacketCounter; // save the packets per second for use on the data diplay
+                PacketCounter = 0;                // reset the counter
+            }
+            LastPassivePacketTime = millis();                                           // reset the timer
+        }else{                                                                              // No packet arrived so maybe master's dead? 
         if (millis() - LastPassivePacketTime > PACEMAKER) {                             // We expect a packet every PACEMAKER ( = 5 ) milliseconds. If none, a packet was lost.
             Radio1.stopListening(); 
             Radio1.setChannel(QUIETCHANNEL);                                            // Set the recovery channel         
