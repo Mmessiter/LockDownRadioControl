@@ -406,10 +406,9 @@ void GetSpecialPacket(){ // Here the buddy receives a packet from the master to 
 
         if (Radio1.available())
         {                                                                // if a packet has arrived
-            uint8_t DynamicPayloadSize = Radio1.getDynamicPayloadSize(); // get the size of the packet
-            if (DynamicPayloadSize != 24)
+            if (Radio1.getDynamicPayloadSize() != 24) // MUST be 24! Heer
             {  
-                SendText(wb, ExsBd);
+                SendText(wb, ExsBd);                   // If not, declare an error: excess buddies !
                 SendCommand(YesVisible);
                 PlaySound(WHAHWHAHMSG);
                 DelayWithDog(10000);
