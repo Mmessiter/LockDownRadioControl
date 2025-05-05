@@ -481,9 +481,9 @@ void Abort()
 void TestTheSBUSPin()
 {
     pinMode(SBUSPIN, OUTPUT);
-    delay(1);
+    delayMicroseconds(50);
     digitalWrite(SBUSPIN, HIGH);
-    delay(1);
+    delayMicroseconds(50);
     if (!digitalRead(SBUSPIN))
     {
         while (true)
@@ -501,9 +501,9 @@ void TestAllPWMPins()
     for (uint8_t i = 0; i < SERVOSUSED; ++i)
     {
         pinMode(PWMPins[i], OUTPUT);
-        delay(1);
+        delayMicroseconds(50);
         digitalWrite(PWMPins[i], HIGH);
-        delay(1);
+        delayMicroseconds(50);
         if (!digitalRead(PWMPins[i]))
             Abort(); // is this PWM pin held low?!?!?!?!?!?!?
     }
@@ -594,11 +594,7 @@ FLASHMEM void setup()
     SetupPINMODES();
     TestTheSBUSPin(); // Check that the SBUS pin is not held low (plug in wrong way round)
     TestAllPWMPins(); // Check that the no PWM pins are held low (plug in wrong way round)
-    delay(300);
     Wire.begin();
-    // set wire to 400kHz
-    Wire.setClock(400000);
-    delay(300);
     ScanI2c(); // Detect what's connected
     if (BMP280Connected)
     {
