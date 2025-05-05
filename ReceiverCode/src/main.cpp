@@ -136,9 +136,6 @@ void MoveServos()
     if (!CheckCrazyValues())
     {
         TurnLedOff();
-      //  for (int j = 0; j < SERVOSUSED; ++j)
-      //      PreviousData[j] = 0; // Force a send when data is good again
-      //  return;
     }
     else
     {
@@ -152,11 +149,8 @@ void MoveServos()
             PPMOutput.write(PPMChannelOrder[j], map(ReceivedData[j], MINMICROS, MAXMICROS, 1000, 2000));
         }
     }
-
     for (int j = 0; j < SERVOSUSED; ++j)
     {
-       // if (PreviousData[j] != ReceivedData[j])
-       // { // if same as last time, don't send again.
             int S = ReceivedData[j];
             if (ServoCentrePulse[j] < 1000)
             {
@@ -167,12 +161,6 @@ void MoveServos()
                 S = map(S, MINMICROS, MAXMICROS, ServoCentrePulse[j] - EXTRAAT1500, ServoCentrePulse[j] + EXTRAAT1500); // these lines allow for the fact that some servos don't like 760 - 2240
             }
             analogWrite(PWMPins[j], GetPWMValue(ServoFrequency[j], S));
-            // if (j == 2){
-            //     Look1("Servo 3: ");
-            //     Look(GetPWMValue(ServoFrequency[j], S));
-            // }
-           //PreviousData[j] = ReceivedData[j];
-        //}
     }
 }
 

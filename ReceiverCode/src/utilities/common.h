@@ -12,7 +12,7 @@
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 5
 #define RXVERSION_MINIMUS 1
-#define RXVERSION_EXTRA 'B' // 20 April 2025
+#define RXVERSION_EXTRA 'C' // 5 May 2025
 #define HOPTIME 17          // 17 gives 50Hz FHSS, 47 gives 20Hz FHSS
 #define RECEIVE_TIMEOUT 7   // was 8 ... 5 milliseconds is 'perfect' time between packets, but with nRF24L01 auto-retries it might be 7 or 8 sometimes
 
@@ -145,7 +145,6 @@ uint8_t ReconnectIndex = 0;
 uint8_t PacketNumber;
 uint16_t RawDataIn[RECEIVEBUFFERSIZE + 1];    //  21 x 16 BIT words // lots of spare space
 uint16_t ReceivedData[RECEIVEBUFFERSIZE + 1]; //  21 x 16 BIT words// lots of spare space//
-//uint16_t PreviousData[RECEIVEBUFFERSIZE + 1]; //** Previously received data (used for servos. Hence not sent if unchanged) 
 uint16_t Interations = 0;
 uint32_t HopStart;
 uint64_t NewPipeMaybe = 0;
