@@ -28,7 +28,7 @@
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! (if it won't connect, probably one or both is wrong! )******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-   #define SECOND_TRANSCEIVER          // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
+   //#define SECOND_TRANSCEIVER          // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
 //   #define USE_11PWM_OUTPUTS           // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -144,8 +144,8 @@ uint8_t NextChannel;
 uint8_t ReconnectIndex = 0;
 uint8_t PacketNumber;
 uint16_t RawDataIn[RECEIVEBUFFERSIZE + 1];    //  21 x 16 BIT words // lots of spare space
-uint16_t ReceivedData[RECEIVEBUFFERSIZE + 1]; //  21 x 16 BIT words// lots of spare space
-uint16_t PreviousData[RECEIVEBUFFERSIZE + 1]; //** Previously received data (used for servos. Hence not sent if unchanged) */
+uint16_t ReceivedData[RECEIVEBUFFERSIZE + 1]; //  21 x 16 BIT words// lots of spare space//
+//uint16_t PreviousData[RECEIVEBUFFERSIZE + 1]; //** Previously received data (used for servos. Hence not sent if unchanged) 
 uint16_t Interations = 0;
 uint32_t HopStart;
 uint64_t NewPipeMaybe = 0;
