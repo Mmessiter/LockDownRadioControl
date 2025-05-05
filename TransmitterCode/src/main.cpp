@@ -196,7 +196,8 @@ void ClearMostParameters()
     }
 }
 // *********************************************************************************************************************************/
-void EnsureMotorIsOff(){
+void EnsureMotorIsOff()
+{
 
     CheckMotorOff();
     while (MotorEnabled) // disconnected now so stay here until motor switch really is off!
@@ -220,7 +221,7 @@ void RedLedOn()
 {
     char InVisible[] = "vis Quality,0";
     char FrontView_Connected[] = "Connected";
-    
+
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
@@ -239,7 +240,7 @@ void RedLedOn()
     }
     ClearMostParameters();
     LedWasRed = true;
-    EnsureMotorIsOff(); 
+    EnsureMotorIsOff();
 }
 
 /*********************************************************************************************************************************/
@@ -1089,8 +1090,8 @@ void CheckSDCard()
 {
     char err_404[] = "SD card error!";
     char err_405[] = "or not found!";
-  //  char WarnNow[] = "vis Warning,1";
-   // char Warning[] = "Warning";
+    //  char WarnNow[] = "vis Warning,1";
+    // char Warning[] = "Warning";
     bool SDCARDOK = SD.begin(BUILTIN_SDCARD); // MUST return true or SD card is not working
     if (!SDCARDOK)
     {
@@ -1236,7 +1237,7 @@ FLASHMEM void setup()
     EnsureMotorIsOff();
     if (!BuddyPupilOnWireless)
     { // when pupil is buddying wirelessly, these potential errors are ignored
-        
+
         if (!UseMotorKill)
             ShowMotor(1);
         if (SafetyON)
@@ -5253,6 +5254,7 @@ void SimulateCloseDown()
 /************************************************************************************************************/
 void CheckPowerOffButton()
 {
+    static bool CheckingPowerButton = false;
     static bool PowerWarningVisible = false;
     static uint32_t PowerOffTimer = 0;
     static uint8_t TurnOffSecondToGo = PowerOffWarningSeconds;
@@ -5263,6 +5265,11 @@ void CheckPowerOffButton()
     char ShowStillConnected[] = "vis StillConnected,1";
     char StillConnectedBox[] = "StillConnected";
 
+    if (CheckingPowerButton)
+    {
+        return; // already checking power button!
+    }                                                                    
+    CheckingPowerButton = true;                                           // set flag to prevent re-entry
     if ((!digitalRead(BUTTON_SENSE_PIN)) && (millis() > POWERONOFFDELAY)) // no power off for first 10 seconds in case button held down too long
     {                                                                     // power button is pressed!
 
@@ -5305,6 +5312,7 @@ void CheckPowerOffButton()
             PowerWarningVisible = false;
             TurnOffSecondToGo = PowerOffWarningSeconds;
         }
+        CheckingPowerButton = false;
         return;
     }
 
@@ -5326,6 +5334,7 @@ void CheckPowerOffButton()
             PreviousPowerOffTimer = millis();
         }
     }
+    CheckingPowerButton = false;
 }
 /*********************************************************************************************************************************/
 
