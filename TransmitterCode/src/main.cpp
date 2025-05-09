@@ -198,6 +198,8 @@ void ClearMostParameters()
 // *********************************************************************************************************************************/
 void EnsureMotorIsOff()
 {
+    if (!UseMotorKill)
+        return;
 
     CheckMotorOff();
     while (MotorEnabled) // disconnected now so stay here until motor switch really is off!
@@ -944,13 +946,13 @@ void SendColour(char *but, int Colour)
 /*********************************************************************************************************************************/
 void ShowSafetyIsOn()
 {
-    if (AnnounceBanks && !BeQuiet)
+    if (AnnounceBanks && !BeQuiet && UseMotorKill)
     {
         PlaySound(SAFEON);
         if (UseLog)
             LogSafety(1);
     }
-    if (CurrentView == FRONTVIEW)
+    if ((CurrentView == FRONTVIEW) && UseMotorKill)
     {
         char bco[] = "bt0.bco=";
         char bco2[] = "bt0.bco2=";
@@ -966,24 +968,24 @@ void ShowSafetyIsOn()
 /*********************************************************************************************************************************/
 void ShowSafetyIsOff()
 {
-    if (AnnounceBanks && !BeQuiet)
+    if (AnnounceBanks && !BeQuiet && UseMotorKill)
     {
         PlaySound(SAFEOFF);
         if (UseLog)
             LogSafety(0);
     }
-    if (CurrentView == FRONTVIEW)
-    {
-        char bco[] = "bt0.bco=";
-        char bco2[] = "bt0.bco2=";
-        char pco[] = "bt0.pco=";
-        char pco2[] = "bt0.pco2=";
-        SendColour(bco, BackGroundColour);
-        SendColour(bco2, BackGroundColour);
-        SendColour(pco, HighlightColour);
-        SendColour(pco2, HighlightColour);
-        BeQuiet = false;
-    }
+    if ((CurrentView == FRONTVIEW) && UseMotorKill)
+        {
+            char bco[] = "bt0.bco=";
+            char bco2[] = "bt0.bco2=";
+            char pco[] = "bt0.pco=";
+            char pco2[] = "bt0.pco2=";
+            SendColour(bco, BackGroundColour);
+            SendColour(bco2, BackGroundColour);
+            SendColour(pco, HighlightColour);
+            SendColour(pco2, HighlightColour);
+            BeQuiet = false;
+        }
 }
 /*********************************************************************************************************************************/
 
@@ -2576,7 +2578,7 @@ void ShowMotor(int on)
     char bt0[] = "bt0";
     char OnMsg[] = "Motor ON";
     char OffMsg[] = "Motor OFF";
-    if (on == 1)
+    if ((on == 1) || (!UseMotorKill))
         SendText(bt0, OnMsg);
     if (on == 0)
         SendText(bt0, OffMsg);
@@ -5268,7 +5270,7 @@ void CheckPowerOffButton()
     if (CheckingPowerButton)
     {
         return; // already checking power button!
-    }                                                                    
+    }
     CheckingPowerButton = true;                                           // set flag to prevent re-entry
     if ((!digitalRead(BUTTON_SENSE_PIN)) && (millis() > POWERONOFFDELAY)) // no power off for first 10 seconds in case button held down too long
     {                                                                     // power button is pressed!
