@@ -1168,7 +1168,6 @@ void RXOptionsViewStart() // model options screen
     char RxVCorrextion[] = "n2";
     char c1[] = "c1";
     char n3[] = "n3";
-
     char n4[] = "n4"; // TimerDownwards timer minutes
     char c2[] = "c2"; // TimerDownwards timer on off
     char r0[] = "r0"; // SBUS on
@@ -1220,6 +1219,22 @@ void RXOptionsViewEnd()
     { // get copy of any changes
         chgs[i] = TextIn[i + 4];
         chgs[i + 1] = 0;
+    }
+
+    if (BoundFlag && ModelMatched)
+    {
+        strcpy(chgs, ""); // if connected to model, save all in case some are lost
+        strcat(chgs, "c1");
+        strcat(chgs, "n3");
+        strcat(chgs, "n4");
+        strcat(chgs, "c2");
+        strcat(chgs, "r0");
+        strcat(chgs, "n5");
+        strcat(chgs, "c0");
+        strcat(chgs, "n1");
+        strcat(chgs, "n0");
+        strcat(chgs, "t10");
+        strcat(chgs, "n2");
     }
 
     SendCommand(ProgressStart);
