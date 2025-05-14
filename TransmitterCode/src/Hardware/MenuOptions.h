@@ -1221,36 +1221,20 @@ void RXOptionsViewEnd()
         chgs[i + 1] = 0;
     }
 
-    if (BoundFlag && ModelMatched)
-    {
-        strcpy(chgs, ""); // if connected to model, save all in case some are lost
-        strcat(chgs, "c1");
-        strcat(chgs, "n3");
-        strcat(chgs, "n4");
-        strcat(chgs, "c2");
-        strcat(chgs, "r0");
-        strcat(chgs, "n5");
-        strcat(chgs, "c0");
-        strcat(chgs, "n1");
-        strcat(chgs, "n0");
-        strcat(chgs, "t10");
-        strcat(chgs, "n2");
-    }
-
     SendCommand(ProgressStart);
-    if (InStrng(c1, chgs))
+    if (InStrng(c1, chgs) || ModelMatched)
     {
         Altered = true;
         CopyTrimsToAll = GetValue(c1);
         SendValue(Progress, 5);
     }
 
-    if (InStrng(n3, chgs))
+    if (InStrng(n3, chgs) || ModelMatched)
     {
         TrimMultiplier = GetValue(n3);
         Altered = true;
     }
-    if (InStrng(t10, chgs))
+    if (InStrng(t10, chgs) || ModelMatched)
     {
         GetText(t10, fbuf);
         StopFlyingVoltsPerCell = atof(fbuf);
@@ -1258,31 +1242,31 @@ void RXOptionsViewEnd()
         Altered = true;
         SendValue(Progress, 15);
     }
-    if (InStrng(Mvalue, chgs))
+    if (InStrng(Mvalue, chgs) || ModelMatched)
     {
         MotorChannelZero = map(GetValue(Mvalue), -100, 100, 0, 180); // map to 0 to 180
         Altered = true;
         SendValue(Progress, 30);
     }
-    if (InStrng(RxVCorrextion, chgs))
+    if (InStrng(RxVCorrextion, chgs) || ModelMatched)
     {
         RxVoltageCorrection = GetValue(RxVCorrextion);
         Altered = true;
         SendValue(Progress, 40);
     }
-    if (InStrng(UseKill, chgs))
+    if (InStrng(UseKill, chgs) || ModelMatched)
     {
         UseMotorKill = GetValue(UseKill);
         Altered = true;
         SendValue(Progress, 50);
     }
-    if (InStrng(Mchannel, chgs))
+    if (InStrng(Mchannel, chgs) || ModelMatched)
     {
         Altered = true;
         MotorChannel = GetValue(Mchannel) - 1;
         SendValue(Progress, 60);
     }
-    if (InStrng(c2, chgs))
+    if (InStrng(c2, chgs) || ModelMatched)
     {
         TimerDownwards = GetValue(c2);
         Altered = true;
@@ -1294,13 +1278,13 @@ void RXOptionsViewEnd()
         Altered = true;
         SendValue(Progress, 80);
     }
-    if (InStrng(r0, chgs))
+    if (InStrng(r0, chgs) || ModelMatched)
     {
         PPMdata.UseSBUSFromRX = GetValue(r0);
         Altered = true;
         SendValue(Progress, 90);
     }
-    if (InStrng(n5, chgs))
+    if (InStrng(n5, chgs) || ModelMatched)
     {
         PPMdata.PPMChannelCount = GetValue(n5);
         Altered = true;

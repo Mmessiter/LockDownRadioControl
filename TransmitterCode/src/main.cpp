@@ -975,17 +975,17 @@ void ShowSafetyIsOff()
             LogSafety(0);
     }
     if ((CurrentView == FRONTVIEW) && UseMotorKill)
-        {
-            char bco[] = "bt0.bco=";
-            char bco2[] = "bt0.bco2=";
-            char pco[] = "bt0.pco=";
-            char pco2[] = "bt0.pco2=";
-            SendColour(bco, BackGroundColour);
-            SendColour(bco2, BackGroundColour);
-            SendColour(pco, HighlightColour);
-            SendColour(pco2, HighlightColour);
-            BeQuiet = false;
-        }
+    {
+        char bco[] = "bt0.bco=";
+        char bco2[] = "bt0.bco2=";
+        char pco[] = "bt0.pco=";
+        char pco2[] = "bt0.pco2=";
+        SendColour(bco, BackGroundColour);
+        SendColour(bco2, BackGroundColour);
+        SendColour(pco, HighlightColour);
+        SendColour(pco2, HighlightColour);
+        BeQuiet = false;
+    }
 }
 /*********************************************************************************************************************************/
 
@@ -3769,6 +3769,7 @@ FASTRUN void ButtonWasPressed()
         char FrontView_Secs[] = "Secs";
         char StartBackGround[] = "click Background,0";
         char NotConnected[] = "Model isn't connected!";
+        char IsConnected[] = "Not while model connected!";
         char invisb1[] = "vis b1,0";
         char invisb0[] = "vis b0,0";
         char visb1[] = "vis b1,1";
@@ -4089,7 +4090,13 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(InputsView, TextIn) > 0)
         {
-            SendCommand(pInputsView);
+            if (ModelMatched) // not allowed while model is connected
+            {
+                MsgBox(pRXSetupView, IsConnected);
+                ClearText();
+                return;
+            }
+            SendCommand(pInputsView); // heer
             CurrentView = INPUTS_VIEW;
             UpdateButtonLabels();
             UpdateModelsNameEveryWhere();
