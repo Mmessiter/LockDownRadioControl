@@ -30,7 +30,7 @@
 #define TXVERSION_MAJOR 2 // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 5
 #define TXVERSION_MINIMUS 1
-#define TXVERSION_EXTRA "C 05/05/25"
+#define TXVERSION_EXTRA "D 16/05/25"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -348,6 +348,8 @@
 #define NOTFOUND 75 // or 30 !! :-)
 #define WINDOWS1 76
 #define WINDOWS2 77
+#define GOINGUP 78
+#define GOINGDOWN 79
 
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
@@ -1006,7 +1008,7 @@ uint32_t WarningTimer = 0;
 uint32_t ScreenTimeTimer = 0;
 bool ScreenIsOff = false;
 uint8_t Brightness = 100;
-bool ButtonClicks = true;
+bool UseVariometer = false;
 bool PlayFanfare = true;
 bool TrimClicks = true;
 bool SpeakingClock = true;

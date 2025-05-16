@@ -154,8 +154,6 @@ bool GetButtonPress() // heer
     if (NEXTION.available())
     {
         GetTextIn();
-        if (ButtonClicks)
-            PlaySound(CLICKONE);
         return true;
     }
     return false;

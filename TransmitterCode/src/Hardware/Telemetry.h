@@ -432,13 +432,13 @@ void PopulateDataView()
         LastMaxRateOfClimb = MaxRateOfClimb;
         int feet = (int)MaxRateOfClimb + 0.5; // round to nearest integer
         snprintf(Vbuf, 26, "%d feet / minute", feet);
-        BuildText(Sbs, Vbuf); 
+        BuildText(Sbs, Vbuf);
     }
 
     if (LastTimeSinceBoot != BootedMinutes)
     {
-    BuildValue(TimeSinceBoot, BootedMinutes); // SendValue(TimeSinceBoot, BootedMinutes);
-    LastTimeSinceBoot = BootedMinutes;
+        BuildValue(TimeSinceBoot, BootedMinutes); // SendValue(TimeSinceBoot, BootedMinutes);
+        LastTimeSinceBoot = BootedMinutes;
     }
     if (BoundFlag && ModelMatched)
         if (AverageFrameRate != LastAverageFrameRate)
@@ -447,7 +447,7 @@ void PopulateDataView()
             LastAverageFrameRate = AverageFrameRate;
         }
     SendCommand(NextionCommand);
-    //Look(NextionCommand); // This is to see how many were included for optimisation purposes
+    // Look(NextionCommand); // This is to see how many were included for optimisation purposes
     ClearNextionCommand();
 }
 
@@ -588,5 +588,50 @@ FASTRUN void ShowComms()
     }
     // Look(millis() - LastShowTime);    // This is to see how long it takes to run for optimisation purposes
 } // end ShowComms()
+//*********************************************************************************************************************************/
+void DoTheVariometer()
+{
+    static uint32_t LastRateOfClimbCheck = 0;
+    static bool GoingUp = false;
+    static bool GoingDown = false;
+    static uint32_t UpStart = 0;
+    static uint32_t DownStart = 0;
+
+#define MINIMUMRATE 500 // 500 feet per second
+#define NOISEDURATION 1500 // 1.5 seconds
+
+    if (millis() - LastRateOfClimbCheck < 100)
+        return;
+    LastRateOfClimbCheck = millis();
+    if (!UseVariometer || !(BoundFlag && ModelMatched))
+        return;
+
+    if (RateOfClimb > MINIMUMRATE)
+    {
+        if (millis() - UpStart > NOISEDURATION)
+            GoingUp = false;
+
+        if (!GoingUp)
+        {
+            PlaySound(GOINGUP);
+            GoingUp = true;
+            GoingDown = false;
+            UpStart = millis();
+        }
+    }
+    if (RateOfClimb < -MINIMUMRATE)
+    {
+        if (millis() - DownStart > NOISEDURATION)
+            GoingDown = false;
+        if (!GoingDown)
+        {
+            PlaySound(GOINGDOWN);
+            GoingUp = false;
+            GoingDown = true;
+            DownStart = millis();
+        }
+    }
+   // Look(RateOfClimb);
+}
 
 #endif

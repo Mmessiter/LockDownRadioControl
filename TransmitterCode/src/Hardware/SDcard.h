@@ -635,7 +635,7 @@ bool LoadAllParameters()
     ++SDCardAddress;
     TrimClicks = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    ButtonClicks = SDRead8BITS(SDCardAddress);
+    UseVariometer = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     SpeakingClock = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
@@ -810,7 +810,7 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, TrimClicks);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, ButtonClicks);
+    SDUpdate8BITS(SDCardAddress, UseVariometer);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, SpeakingClock);
     ++SDCardAddress;

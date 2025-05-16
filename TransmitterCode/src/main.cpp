@@ -2904,7 +2904,7 @@ void ResetTransmitterSettings()
     Brightness = 100;
     PlayFanfare = false;
     TrimClicks = true;
-    ButtonClicks = false;
+    UseVariometer = false;
     SpeakingClock = true;
     AnnounceBanks = true;
     ResetSwitchNumbers();
@@ -5405,6 +5405,7 @@ void FASTRUN ManageTransmitter()
     }
     CheckPowerOffButton();
     CheckForNextionButtonPress(); // Pretty obvious really ...
+    DoTheVariometer();            // Do the variometer
     if (RightNow - LastTimeRead >= 1000)
     {                         // Only once a second for these..
         SendAllAgain();       // in case of missed packets

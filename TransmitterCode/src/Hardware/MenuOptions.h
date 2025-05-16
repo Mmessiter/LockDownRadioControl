@@ -579,7 +579,7 @@ void StartAudioVisualView()
     char Ex1[] = "Ex1"; // slider
     char c0[] = "c0";
     char c1[] = "c1";
-    char c2[] = "c2";
+    char c2[] = "c2"; // now its variometer
     char c3[] = "c3";
     char c4[] = "c4";
     char c5[] = "c5";
@@ -591,7 +591,7 @@ void StartAudioVisualView()
     SendValue(h0, Brightness);
     SendValue(c0, PlayFanfare);
     SendValue(c1, TrimClicks);
-    SendValue(c2, ButtonClicks);
+    SendValue(c2, UseVariometer);
     SendValue(c3, SpeakingClock);
     SendValue(c4, AnnounceBanks);
     SendValue(c5, AnnounceConnected);
@@ -615,7 +615,7 @@ void EndAudioVisualView()
     Brightness = GetValue(n1);
     PlayFanfare = GetValue(c0);
     TrimClicks = GetValue(c1);
-    ButtonClicks = GetValue(c2);
+    UseVariometer = GetValue(c2);
     SpeakingClock = GetValue(c3);
     AnnounceBanks = GetValue(c4);
     AnnounceConnected = GetValue(c5);
