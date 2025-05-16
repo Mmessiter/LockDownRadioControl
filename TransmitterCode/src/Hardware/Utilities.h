@@ -238,32 +238,16 @@ uint8_t Ascii(char c)
 }
 
 // **************************************************************** Play a sound from RAM *********************************************
-void PlaySound(uint16_t TheSound)
-{ // Plays a sound identified by a number
-
-    // static uint32_t SoundTimer = millis();
-    // static uint16_t LastSound   = 0;
-    // uint32_t m = millis(); // one call to millis() is enough
-    // if (CurrentView != PONGVIEW){
-    //     if (((m - SoundTimer) < 1000) && (m > 5000)  && (TheSound == LastSound)) return; // prevent sound repeats unless in pongview
-    // }
-    // SoundTimer = millis();
-    // LastSound = TheSound;
-
-    char Sound[20];
-    char SoundPrefix[] = "play 0,";
-    char SoundPostfix[] = "0";
-    char NB[6];
-    if (CurrentView == MODELSVIEW)
-    {
-        if (TheSound != CLICKONE)
-            return;
-    }
-    Str(NB, TheSound, 1);
-    strcpy(Sound, SoundPrefix);
-    strcat(Sound, NB);
-    strcat(Sound, SoundPostfix);
-    SendCommand(Sound);
+// ──────────────────────────────────────────────────────────────
+// Play a RAM-resident clip on the Nextion
+// ──────────────────────────────────────────────────────────────
+void PlaySound(uint16_t id) // your original idea,
+{                           // rewritten with snprintf
+    if (CurrentView == MODELSVIEW && id != CLICKONE)
+        return;
+    char cmd[24];
+    snprintf(cmd, sizeof(cmd), "play 0,%u,0", id); // loop = 0 (play once)
+    SendCommand(cmd);                              // appends 0xFF³
 }
 /*********************************************************************************************************************************/
 

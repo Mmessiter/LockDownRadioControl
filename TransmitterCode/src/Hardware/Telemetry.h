@@ -588,8 +588,106 @@ FASTRUN void ShowComms()
     }
     // Look(millis() - LastShowTime);    // This is to see how long it takes to run for optimisation purposes
 } // end ShowComms()
+
+// ***** USER-TUNEABLE CONSTANTS ********************************************************************************************************************************************************************
+
+constexpr float SCALE = 1; // 1 for flight, 0.01 on the test bench
+constexpr int T1_FPM = int(200 * SCALE + 0.5f);
+constexpr int T2_FPM = int(500 * SCALE + 0.5f);
+constexpr int T3_FPM = int(800 * SCALE + 0.5f);
+constexpr int HYS_FPM = int(25 * SCALE + 0.5f);
+constexpr uint16_t WAV_ID[] =                                              // indexes match Zone enum below
+    {0, GOINGUP1, GOINGUP2, GOINGUP3, GOINGDOWN1, GOINGDOWN2, GOINGDOWN3}; // 0 = silence/none
+
+constexpr uint16_t WAV_MS[] =            // ms duration of each WAV
+    {395, 395, 395, 395, 395, 395, 395}; // use real lengths of your files
+// ****************************************************************************
+
+enum Zone : uint8_t
+{
+    Z_NEUTRAL = 0,
+    Z_CLIMB1,
+    Z_CLIMB2,
+    Z_CLIMB3,
+    Z_SINK1,
+    Z_SINK2,
+    Z_SINK3
+};
+
+void DoTheVariometer() // call from loop() as often as you like
+{
+    static Zone lastZone = Z_NEUTRAL;
+    static uint32_t zoneStartMs = 0; // when we began (or re-began) playing
+    static uint32_t lastCheckMs = 0;
+
+    uint32_t now = millis();
+    if (now - lastCheckMs < 80)
+        return; // ~12.5 Hz update cadence
+    lastCheckMs = now;
+
+    // Skip entirely if your usual flight / safety flags say so
+    if (!UseVariometer || !(BoundFlag && ModelMatched))
+        return;
+
+    // ------- 1. Decide which zone we’re in right now -----------------------
+    int roc = RateOfClimb; // ft/min, positive = up
+    Zone zone;
+
+    if (roc > T3_FPM + HYS_FPM)
+        zone = Z_CLIMB3;
+    else if (roc > T2_FPM + HYS_FPM)
+        zone = Z_CLIMB2;
+    else if (roc > T1_FPM + HYS_FPM)
+        zone = Z_CLIMB1;
+    else if (roc < -T3_FPM - HYS_FPM)
+        zone = Z_SINK3;
+    else if (roc < -T2_FPM - HYS_FPM)
+        zone = Z_SINK2;
+    else if (roc < -T1_FPM - HYS_FPM)
+        zone = Z_SINK1;
+    else
+        zone = Z_NEUTRAL;
+
+    // ------- 2. Handle transitions & re-triggers ---------------------------
+    bool needPlay = false;
+
+    if (zone != lastZone) // changed band → play new one
+    {
+        lastZone = zone;
+        zoneStartMs = now;
+        needPlay = (zone != Z_NEUTRAL);
+    }
+    else if (zone != Z_NEUTRAL) // same band → maybe re-arm
+    {
+        uint32_t dur = WAV_MS[zone];
+        if (dur && (now - zoneStartMs >= dur)) // sample finished?
+        {
+            zoneStartMs = now;
+            needPlay = true;
+        }
+    }
+
+    if (needPlay)
+    {
+        // Look1("Playing zone: ");
+        // Look1(zone);
+        // Look1("  ");
+        // Look(WAV_ID[zone]);
+         PlaySound(WAV_ID[zone]); // your existing WAV trigger
+    }
+   // else
+   // {
+        // Look1("Zone now: ");
+        // Look1(zone);
+        // Look1("  ROC: ");
+        // Look(roc);
+  //  }
+
+    //  Look(RateOfClimb);
+}
+
 //*********************************************************************************************************************************/
-void DoTheVariometer()
+void DoTheVariometerOLD()
 {
     static uint32_t LastRateOfClimbCheck = 0;
     static bool GoingUp = false;
@@ -597,7 +695,7 @@ void DoTheVariometer()
     static uint32_t UpStart = 0;
     static uint32_t DownStart = 0;
 
-#define MINIMUMRATE 500 // 500 feet per second
+#define MINIMUMRATE 500    // 500 feet per second
 #define NOISEDURATION 1500 // 1.5 seconds
 
     if (millis() - LastRateOfClimbCheck < 100)
@@ -631,7 +729,7 @@ void DoTheVariometer()
             DownStart = millis();
         }
     }
-   // Look(RateOfClimb);
+    // Look(RateOfClimb);
 }
 
 #endif

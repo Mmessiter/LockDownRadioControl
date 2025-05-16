@@ -350,6 +350,12 @@
 #define WINDOWS2 77
 #define GOINGUP 78
 #define GOINGDOWN 79
+#define GOINGUP1 80
+#define GOINGUP2 81
+#define GOINGUP3 82
+#define GOINGDOWN1 83
+#define GOINGDOWN2 84
+#define GOINGDOWN3 85
 
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
