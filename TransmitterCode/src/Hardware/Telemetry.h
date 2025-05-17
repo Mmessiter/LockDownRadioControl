@@ -588,6 +588,21 @@ FASTRUN void ShowComms()
     }
     // Look(millis() - LastShowTime);    // This is to see how long it takes to run for optimisation purposes
 } // end ShowComms()
+// *********************************************************************************************************************************/
+int GetTestRateOfClimb()
+{
+    // This is a test function to simulate the rate of climb
+    // It will be replaced with the actual rate of climb from the sensor
+    static int testRateOfClimb = 0;
+    static uint32_t lastTestRateOfClimbCheck = 0;
+    if (millis() - lastTestRateOfClimbCheck < 100)
+        return testRateOfClimb;
+    lastTestRateOfClimbCheck = millis();
+    testRateOfClimb += 100; // Simulate a climb of 100 fpm
+    if (testRateOfClimb > 1000)
+        testRateOfClimb = -1000; // Reset to -1000 fpm after reaching 1000 fpm
+    return testRateOfClimb;
+}
 
 // ***** USER-TUNEABLE CONSTANTS ********************************************************************************************************************************************************************
 // Variometer settings
@@ -610,23 +625,32 @@ enum Zone : uint8_t
     Z_SINK2,
     Z_SINK3
 };
-// *********************************************************************************************************************************/
-void DoTheVariometer() // called often from loop()
+// *******************************************************************************************
+// Ultra-snappy variometer – first tone within ~50-100 ms of a climb/sink starting
+// *******************************************************************************************
+void DoTheVariometer() // call freely from loop(), it rate-limits itself
 {
     static Zone lastZone = Z_NEUTRAL;
-    static uint32_t zoneStartMs = 0; // when we began (or re-began) playing
-    static uint32_t lastCheckMs = 0;
+    static uint32_t nextCheckMs = 0; // scheduler for our own 20 Hz cadence
+    static uint32_t lastPlayMs = 0;  // when the current clip began
 
     uint32_t now = millis();
-    if (now - lastCheckMs < 200)
-        return; // ~5 Hz update cadence
-    lastCheckMs = now;
+    if (now < nextCheckMs) // run at 20 Hz (every 50 ms)
+        return;
+    nextCheckMs = now + 50; // -----------------------------
 
-    if (!UseVariometer || !(BoundFlag && ModelMatched) || ((millis() - LedGreenMoment) < 10000) || (Bank != 3)) // ONLY continue if (On, Connected to model,  >10 seconds connection, Bank = 3)
+    // Abort unless: vario ON, model bound, >10 s since bind, bank = 3
+    if (!UseVariometer || !(BoundFlag && ModelMatched) ||
+        (now - LedGreenMoment < 10000) || (Bank != 3))
         return;
 
-    // ------- 1. Decide which zone we’re in right now -----------------------
-    int roc = RateOfClimb; // ft/min, positive = up
+    // ---------- 1. Work out which rate-of-climb “zone” we are in ----------
+    int roc = RateOfClimb; // ft / min, +ve = climb
+
+   // roc = GetTestRateOfClimb(); // this is ONLY the test rate of climb
+   // Look(roc); // this is ONLY the test rate of climb
+   
+   
     Zone zone;
     if (roc > T3_FPM + HYS_FPM)
         zone = Z_CLIMB3;
@@ -643,29 +667,32 @@ void DoTheVariometer() // called often from loop()
     else
         zone = Z_NEUTRAL;
 
-    // ------- 2. Handle transitions & re-triggers ---------------------------
+    // ---------- 2. Should we start (or restart) a sound? ------------------
     bool needPlay = false;
 
-    if (zone != lastZone) // changed band → play new one
-    {
+    if (zone != lastZone)
+    { // BAND CHANGED  → play at once
         lastZone = zone;
-        zoneStartMs = now;
-        needPlay = (zone != Z_NEUTRAL);
+        lastPlayMs = now;
+        needPlay = (zone != Z_NEUTRAL); // silent in neutral
     }
-    else if (zone != Z_NEUTRAL) // same band → maybe re-arm
-    {
-        uint32_t dur = WAV_MS[zone];
-        if (dur && (now - zoneStartMs >= dur)) // sample finished?
+    else if (zone != Z_NEUTRAL)
+    {                                // SAME BAND  → maybe loop
+        uint32_t dur = WAV_MS[zone]; // declared clip length
+        if (dur == 0)
+            dur = 100;                    // fail-safe: assume 100 ms
+        if (now - lastPlayMs >= dur + 20) // 20 ms gap then re-arm
         {
-            zoneStartMs = now;
+            lastPlayMs = now;
             needPlay = true;
         }
     }
+
     if (needPlay)
-        PlaySound(WAV_ID[zone]);
+        PlaySound(WAV_ID[zone]); // PlaySound is pre-emptive
 }
 
-//*********************************************************************************************************************************/
+// *******************************************************************************************
 void DoTheVariometerOLD()
 {
     static uint32_t LastRateOfClimbCheck = 0;

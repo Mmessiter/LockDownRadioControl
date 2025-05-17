@@ -217,32 +217,54 @@ float MetersToFeet(float Meters)
     return Meters * 3.28084;
 }
 /************************************************************************************************************/
-
 void GetRateOfClimb()
 {
-    if (BaroAltitude == 0)
+    const uint32_t now = millis();
+    static uint32_t lastTime = 0;
+    static float lastAltitudeFt = 0.0f; // feet (or metres—keep units consistent)
+    static float FilterRoc = 0;
+
+    if (lastTime == 0)
+    { // first call → just prime history
+        lastTime = now;
+        lastAltitudeFt = BaroAltitude;
+        RateOfClimb = 0;
         return;
-    static uint32_t LastTime = 0;
-    static float LastBaroAltitude = 0;
-    RateOfClimb = 60 * (BaroAltitude - LastBaroAltitude) / ((millis() - LastTime) / 1000.0);
-    LastBaroAltitude = BaroAltitude;
-    LastTime = millis();
-    return;
+    }
+
+    uint32_t dt_ms = now - lastTime;
+    if (dt_ms < 5) // guard against very small Δt
+        return;
+
+    // feet per minute = Δalt (ft) / Δt (min)
+    float dAlt = float(BaroAltitude) - lastAltitudeFt; // float early!
+    float roc = (dAlt * 60000.0f) / float(dt_ms);      // 60000 ms/min
+
+    roc = 0.7f * FilterRoc + 0.3f * roc; // fairly light smoothing
+    FilterRoc = roc;
+    RateOfClimb = static_cast<int32_t>(roc);
+    lastAltitudeFt = float(BaroAltitude);
+    lastTime = now;
 }
 
 // ******************************************************************************************************************************************************************
 void ReadBMP280()
 {
-    if ((!BMP280Connected) || (millis() < 10000))
-        return;
-    static uint32_t LastTime = 0;
-    if (millis() - LastTime > 502) // about 2 times per second
-    {
-        LastTime = millis();
-        bmp.takeForcedMeasurement();
+    if (!BMP280Connected || millis() < 10000)
+        return; // warm-up guard
+
+    static uint32_t lastTime = 0;
+    uint32_t now = millis();
+
+    if (now - lastTime >= 250)
+    { 
+        lastTime = now;
+        // bmp.takeForcedMeasurement();
         BaroTemperature = bmp.readTemperature();
         BaroAltitude = MetersToFeet(bmp.readAltitude(Qnh));
         GetRateOfClimb();
+        Look(RateOfClimb);
+        
     }
 }
 // ******************************************************************************************************************************************************************
@@ -268,8 +290,8 @@ FASTRUN void ReceiveData()
     {
         if (millis() - LastPacketArrivalTime < 1) //  if no data yet, allow almost the full 5ms to read these before next packet is due
         {
-            ReadBMP280(); 
-            ReadGPS();   
+            ReadBMP280();
+            ReadGPS();
         }
 
 #ifdef USE_STABILISATION

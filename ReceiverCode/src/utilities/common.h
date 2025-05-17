@@ -12,7 +12,7 @@
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 5
 #define RXVERSION_MINIMUS 1
-#define RXVERSION_EXTRA 'C' // 5 May 2025
+#define RXVERSION_EXTRA 'D' // 17 May 2025
 #define HOPTIME 17          // 17 gives 50Hz FHSS, 47 gives 20Hz FHSS
 #define RECEIVE_TIMEOUT 7   // was 8 ... 5 milliseconds is 'perfect' time between packets, but with nRF24L01 auto-retries it might be 7 or 8 sometimes
 
@@ -158,7 +158,7 @@ uint32_t LastPacketArrivalTime = 0;
 bool INA219Connected = false;  //  Volts from INA219 ?
 bool MPU6050Connected = false; //  Accelerometer and Gyro from MPU6050 ?
 uint8_t ReconnectChannel = 0;
-float RateOfClimb = 0;
+int32_t RateOfClimb = 0;
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
