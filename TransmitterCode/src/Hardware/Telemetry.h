@@ -635,9 +635,9 @@ void DoTheVariometer() // call freely from loop(), it rate-limits itself
     static uint32_t lastPlayMs = 0;  // when the current clip began
 
     uint32_t now = millis();
-    if (now < nextCheckMs) // run at 20 Hz (every 50 ms)
+    if (now < nextCheckMs) // run at 4 Hz (every 50 ms)
         return;
-    nextCheckMs = now + 50; // -----------------------------
+    nextCheckMs = now + 250; // -----------------------------
 
     // Abort unless: vario ON, model bound, >10 s since bind, bank = 3
     if (!UseVariometer || !(BoundFlag && ModelMatched) ||

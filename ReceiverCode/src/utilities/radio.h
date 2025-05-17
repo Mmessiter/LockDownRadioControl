@@ -263,8 +263,6 @@ void ReadBMP280()
         BaroTemperature = bmp.readTemperature();
         BaroAltitude = MetersToFeet(bmp.readAltitude(Qnh));
         GetRateOfClimb();
-        Look(RateOfClimb);
-        
     }
 }
 // ******************************************************************************************************************************************************************
