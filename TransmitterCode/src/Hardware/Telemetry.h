@@ -590,15 +590,15 @@ FASTRUN void ShowComms()
 } // end ShowComms()
 
 // ***** USER-TUNEABLE CONSTANTS ********************************************************************************************************************************************************************
- // Variometer settings
+// Variometer settings
 // These are the thresholds for the variometer sounds. The values are in feet per minute (fpm). 200, 500, & 800
 constexpr float SCALE = 1; // 1 for flight, 0.01 on the test bench
 constexpr int T1_FPM = int(200 * SCALE + 0.5f);
 constexpr int T2_FPM = int(500 * SCALE + 0.5f);
 constexpr int T3_FPM = int(800 * SCALE + 0.5f);
 constexpr int HYS_FPM = int(25 * SCALE + 0.5f);
-constexpr uint16_t WAV_ID[] =   {0, GOINGUP1, GOINGUP2, GOINGUP3, GOINGDOWN1, GOINGDOWN2, GOINGDOWN3}; 
-constexpr uint16_t WAV_MS[] =   {395, 395, 395, 395, 395, 395, 395}; //  lengths of wave files in ms
+constexpr uint16_t WAV_ID[] = {0, GOINGUP1, GOINGUP2, GOINGUP3, GOINGDOWN1, GOINGDOWN2, GOINGDOWN3};
+constexpr uint16_t WAV_MS[] = {395, 395, 395, 395, 395, 395, 395}; //  lengths of wave files in ms
 // ****************************************************************************
 enum Zone : uint8_t
 {
@@ -611,7 +611,7 @@ enum Zone : uint8_t
     Z_SINK3
 };
 // *********************************************************************************************************************************/
-void DoTheVariometer() // called often from loop() 
+void DoTheVariometer() // called often from loop()
 {
     static Zone lastZone = Z_NEUTRAL;
     static uint32_t zoneStartMs = 0; // when we began (or re-began) playing
@@ -622,7 +622,7 @@ void DoTheVariometer() // called often from loop()
         return; // ~10 Hz update cadence
     lastCheckMs = now;
 
-    if (!UseVariometer || !(BoundFlag && ModelMatched) )
+    if (!UseVariometer || !(BoundFlag && ModelMatched) || ((millis() - LedGreenMoment) < 10000) || (Bank != 3)) // 10 seconds after power on etc... 
         return;
 
     // ------- 1. Decide which zone we’re in right now -----------------------
@@ -662,7 +662,7 @@ void DoTheVariometer() // called often from loop()
         }
     }
     if (needPlay)
-        PlaySound(WAV_ID[zone]); 
+        PlaySound(WAV_ID[zone]);
 }
 
 //*********************************************************************************************************************************/
