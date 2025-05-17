@@ -1016,6 +1016,8 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         break;
     case 19:
         RateOfClimb = GetFloatFromAckPayload();
+        // Look1("Rate of Climb: ");
+        // Look(RateOfClimb);
         if (RateOfClimb > MaxRateOfClimb)
             MaxRateOfClimb = RateOfClimb;
         break;

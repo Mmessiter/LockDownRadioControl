@@ -618,11 +618,11 @@ void DoTheVariometer() // called often from loop()
     static uint32_t lastCheckMs = 0;
 
     uint32_t now = millis();
-    if (now - lastCheckMs < 100)
-        return; // ~10 Hz update cadence
+    if (now - lastCheckMs < 200)
+        return; // ~5 Hz update cadence
     lastCheckMs = now;
 
-    if (!UseVariometer || !(BoundFlag && ModelMatched) || ((millis() - LedGreenMoment) < 10000) || (Bank != 3)) // 10 seconds after power on etc... 
+    if (!UseVariometer || !(BoundFlag && ModelMatched) || ((millis() - LedGreenMoment) < 10000) || (Bank != 3)) // ONLY continue if (On, Connected to model,  >10 seconds connection, Bank = 3)
         return;
 
     // ------- 1. Decide which zone we’re in right now -----------------------
