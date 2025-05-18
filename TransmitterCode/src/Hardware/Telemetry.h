@@ -617,9 +617,15 @@ int GetTestRateOfClimb()
 void DoTheVariometer() // call freely from loop(); it self‑rate‑limits
 {
     uint32_t now = millis();
+    static uint32_t nextCheckMs = 0; // 4 Hz scheduler (every 250 ms)
+
     if (!UseVariometer || !(BoundFlag && ModelMatched) ||
         (now - LedGreenMoment < 10000) || (Bank != 3))
         return;
+
+    if (now < nextCheckMs)
+        return;
+    nextCheckMs = now + 50;
 
     enum Zone : uint8_t
     {
@@ -639,15 +645,13 @@ void DoTheVariometer() // call freely from loop(); it self‑rate‑limits
 
         Z_COUNT // keep this last
     };
-
     static constexpr uint16_t WAV_MS[] =
         {
             0,                            // neutral – stay at 0 to suppress looping in Z_NEUTRAL
             500, 400, 350, 300, 250, 200, // climbs 1‑6  (edit to suit)
             500, 550, 600, 650, 700, 750  // sinks  1‑6  (edit to suit)
         };
-    static_assert(sizeof(WAV_MS) / sizeof(WAV_MS[0]) == 13, "WAV_MS must have 13 entries (neutral + 12)");
-
+   
     // "Base" climb thresholds before scaling (ft/min). Pick your own spread
     static int BASE_T_FPM[6] = {100, 400, 600, 800, 1000, 1200}; // These are the rates of climb / sink Thresholds..... ******* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     static int T1_FPM;
@@ -657,12 +661,10 @@ void DoTheVariometer() // call freely from loop(); it self‑rate‑limits
     static int T5_FPM;
     static int T6_FPM;
     static Zone lastZone = Z_NEUTRAL;
-    static uint32_t nextCheckMs = 0; // 4 Hz scheduler (every 250 ms)
     static uint32_t lastPlayMs = 0;  // when the current clip began
     static bool InitDone = false;    // true after first call
-
     static constexpr float SCALE = 1; // 1 → in‑flight; 0.01 → bench wind‑tube
-
+    
     int HYS_FPM = int(25 * SCALE + 0.5f); // hysteresis band
 
     static constexpr uint16_t WAV_ID[] =
@@ -673,13 +675,6 @@ void DoTheVariometer() // call freely from loop(); it self‑rate‑limits
         };
 
     static_assert(sizeof(WAV_ID) / sizeof(WAV_ID[0]) == 13, "WAV_ID must have 13 entries (neutral + 12)"); // compile time check!
-
-   
-    if (now < nextCheckMs)
-        return;
-    nextCheckMs = now + 50;
-
-    // After this, get on with it! 
 
     // ─── 2.1  Translate current ft/min into a Zone ───────────────────────────
     int roc = RateOfClimb; // +ve = climb, –ve = sink
