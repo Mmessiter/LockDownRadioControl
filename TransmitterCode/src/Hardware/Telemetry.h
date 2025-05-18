@@ -595,12 +595,20 @@ int GetTestRateOfClimb()
     // It will be replaced with the actual rate of climb from the sensor
     static int testRateOfClimb = 0;
     static uint32_t lastTestRateOfClimbCheck = 0;
-    if (millis() - lastTestRateOfClimbCheck < 100)
+    static int16_t RateChange = 100;
+    if (millis() - lastTestRateOfClimbCheck < 4000)
         return testRateOfClimb;
     lastTestRateOfClimbCheck = millis();
-    testRateOfClimb += 100; // Simulate a climb of 100 fpm
-    if (testRateOfClimb > 1000)
-        testRateOfClimb = -1000; // Reset to -1000 fpm after reaching 1000 fpm
+    testRateOfClimb += RateChange; // Simulate a climb of 100 fpm
+
+    if (testRateOfClimb > 1500)
+    {
+        RateChange = -100; // Simulate a sink of 100 fpm
+    }
+    else if (testRateOfClimb < -1500)
+    {
+        RateChange = 100; // Simulate a climb of 100 fpm
+    }
     return testRateOfClimb;
 }
 // *******************************************************************************************
@@ -620,8 +628,8 @@ int GetTestRateOfClimb()
 // — Thresholds —
 constexpr float SCALE = 1; // 1 → in‑flight; 0.01 → bench wind‑tube
 
-// "Base" climb thresholds before scaling (ft/min). Pick your own spread 
-constexpr int BASE_T_FPM[6] = {100, 200, 350, 550, 850, 1200};  // These are the rates of climb / sink Thresholds..... ******* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// "Base" climb thresholds before scaling (ft/min). Pick your own spread
+constexpr int BASE_T_FPM[6] = {100, 400, 600, 800, 1000, 1200}; // These are the rates of climb / sink Thresholds..... ******* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 constexpr int T1_FPM = int(BASE_T_FPM[0] * SCALE + 0.5f);
 constexpr int T2_FPM = int(BASE_T_FPM[1] * SCALE + 0.5f);
@@ -682,11 +690,10 @@ void DoTheVariometer() // call freely from loop(); it self‑rate‑limits
     static uint32_t nextCheckMs = 0; // 4 Hz scheduler (every 250 ms)
     static uint32_t lastPlayMs = 0;  // when the current clip began
 
-
     uint32_t now = millis();
     if (now < nextCheckMs)
         return;
-    nextCheckMs = now + 250;
+    nextCheckMs = now + 50;
 
     // Skip if the pilot doesn’t want beeps yet…
     if (!UseVariometer || !(BoundFlag && ModelMatched) ||
@@ -695,7 +702,9 @@ void DoTheVariometer() // call freely from loop(); it self‑rate‑limits
 
     // ─── 2.1  Translate current ft/min into a Zone ───────────────────────────
     int roc = RateOfClimb; // +ve = climb, –ve = sink
-   // Look(roc); // for debugging
+
+    //  roc = GetTestRateOfClimb();
+    //  Look(roc); // for debugging
 
     Zone zone = Z_NEUTRAL;
 
@@ -740,18 +749,18 @@ void DoTheVariometer() // call freely from loop(); it self‑rate‑limits
     { // Same band → maybe loop
         uint32_t dur = WAV_MS[zone];
         if (dur == 0)
-            dur = 100;                    // emergency default
-        if (now - lastPlayMs >= dur + 20) // 20 ms gap = real‑vario feel
+            dur = 100;                           // emergency default
+        if (now - lastPlayMs >= dur + (dur / 3)) //  gap = real‑vario feel
         {
             lastPlayMs = now;
             needPlay = true;
         }
     }
 
-    if (needPlay){
+    if (needPlay)
+    {
         PlaySound(WAV_ID[zone]);
-            
     }
-   // Look(WAV_ID[zone]);
+    // Look(WAV_ID[zone]);
 }
 #endif

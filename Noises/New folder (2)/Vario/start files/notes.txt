@@ -1,0 +1,42 @@
+Note.         	Frequency (Hz)
+A3            	220.00
+A#3 / Bb3     	233.08
+B3.           	246.94
+C4 (Middle C) 	261.63
+C#4 / Db4.    	277.18
+D4.           	293.66
+D#4 / Eb4	311.13
+E4		329.63
+F4		349.23
+F#4 / Gb4	369.99
+G4		392.00
+G#4 / Ab4	415.30
+A4		440.00
+A#4 / Bb4	466.16
+B4		493.88
+C5		523.25
+C#5 / Db5	554.37
+D5		587.33
+D#5 / Eb5	622.25
+E5		659.25
+F5		698.46
+F#5 / Gb5	739.99
+G5		783.99
+G#5 / Ab5	830.61	
+A5		880.00
+
+File	Secs	name			(Note)
+
+C_UP 	0.5	GOINGUP1		(C5)
+C#UP 	0.4	GOINGUP2		(C#5)
+DUP  	0.35	GOINGUP3		(D5)
+D#UP 	0.3	GOINGUP4		(D#5)
+Eup 	0.25	GOINGUP5		(E5)
+Fup  	0.2	GOINGUP6		(F5)
+
+Bdown 	0.5	GOINGDOWN1		(B4)
+BbDown 	0.55	GOINGDOWN2		(Bb4)
+Adown 	0.6	GOINGDOWN3		(A4)
+G#down 	0.65	GOINGDOWN4		(G#4)
+GDown 	0.7	GOINGDOWN5		(G4)
+f#down 	0.75	GOINGDOWN6		(F#4)
