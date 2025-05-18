@@ -603,139 +603,155 @@ int GetTestRateOfClimb()
         testRateOfClimb = -1000; // Reset to -1000 fpm after reaching 1000 fpm
     return testRateOfClimb;
 }
+// *******************************************************************************************
+// Ultra‑snappy variometer – Teensy 4.1 + Nextion edition
+// Now with SIX climbing and SIX descending zones (total 13 inc. neutral)
+// *******************************************************************************************
 
-// ***** USER-TUNEABLE CONSTANTS ********************************************************************************************************************************************************************
-// Variometer settings
-// These are the thresholds for the variometer sounds. The values are in feet per minute (fpm). 200, 500, & 800
-constexpr float SCALE = 1; // 1 for flight, 0.01 on the test bench
-constexpr int T1_FPM = int(200 * SCALE + 0.5f);
-constexpr int T2_FPM = int(500 * SCALE + 0.5f);
-constexpr int T3_FPM = int(800 * SCALE + 0.5f);
-constexpr int HYS_FPM = int(25 * SCALE + 0.5f);
-constexpr uint16_t WAV_ID[] = {0, GOINGUP1, GOINGUP2, GOINGUP3, GOINGDOWN1, GOINGDOWN2, GOINGDOWN3};
-constexpr uint16_t WAV_MS[] = {395, 395, 395, 395, 395, 395, 395}; //  lengths of wave files in ms
-// ****************************************************************************
+// ──────────────────────────────────────────────────────────────────────────────
+// 0. USER‑TUNEABLE CONSTANTS
+// ──────────────────────────────────────────────────────────────────────────────
+// Change these numbers and identifiers to match your aircraft, test‑bench rig
+// or WAV library. The SCALE trick lets you run *exactly the same firmware* on
+// the bench at 1/100 real sensitivity so you can blow across the pitot tube
+// instead of launching a glider in your workshop.
+// ----------------------------------------------------------------------------
+
+// — Thresholds —
+constexpr float SCALE = 1; // 1 → in‑flight; 0.01 → bench wind‑tube
+
+// "Base" climb thresholds before scaling (ft/min). Pick your own spread 
+constexpr int BASE_T_FPM[6] = {100, 200, 350, 550, 850, 1200};  // These are the rates of climb / sink Thresholds..... ******* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+constexpr int T1_FPM = int(BASE_T_FPM[0] * SCALE + 0.5f);
+constexpr int T2_FPM = int(BASE_T_FPM[1] * SCALE + 0.5f);
+constexpr int T3_FPM = int(BASE_T_FPM[2] * SCALE + 0.5f);
+constexpr int T4_FPM = int(BASE_T_FPM[3] * SCALE + 0.5f);
+constexpr int T5_FPM = int(BASE_T_FPM[4] * SCALE + 0.5f);
+constexpr int T6_FPM = int(BASE_T_FPM[5] * SCALE + 0.5f);
+
+constexpr int HYS_FPM = int(25 * SCALE + 0.5f); // hysteresis band
+
+constexpr uint16_t WAV_ID[] =
+    {
+        0,                                                                     // 0 – neutral (silent)
+        GOINGUP1, GOINGUP2, GOINGUP3, GOINGUP4, GOINGUP5, GOINGUP6,            // 1‑6
+        GOINGDOWN1, GOINGDOWN2, GOINGDOWN3, GOINGDOWN4, GOINGDOWN5, GOINGDOWN6 // 7‑12
+};
+static_assert(sizeof(WAV_ID) / sizeof(WAV_ID[0]) == 13, "WAV_ID must have 13 entries (neutral + 12)");
+
+// Clip lengths (ms).  They *don’t* have to match or even relate to ft/min –
+// whatever makes your ears happy.  Leave neutral at 0 so we never loop there.
+constexpr uint16_t WAV_MS[] =
+    {
+        0,                            // neutral – stay at 0 to suppress looping in Z_NEUTRAL
+        500, 400, 350, 300, 250, 200, // climbs 1‑6  (edit to suit)
+        500, 550, 600, 650, 700, 750  // sinks  1‑6  (edit to suit)
+};
+static_assert(sizeof(WAV_MS) / sizeof(WAV_MS[0]) == 13, "WAV_MS must have 13 entries (neutral + 12)");
+
+// ──────────────────────────────────────────────────────────────────────────────
+// 1. ENUMERATION OF ZONES
+// ──────────────────────────────────────────────────────────────────────────────
 enum Zone : uint8_t
 {
     Z_NEUTRAL = 0,
     Z_CLIMB1,
     Z_CLIMB2,
     Z_CLIMB3,
+    Z_CLIMB4,
+    Z_CLIMB5,
+    Z_CLIMB6,
     Z_SINK1,
     Z_SINK2,
-    Z_SINK3
+    Z_SINK3,
+    Z_SINK4,
+    Z_SINK5,
+    Z_SINK6,
+
+    Z_COUNT // keep this last
 };
-// *******************************************************************************************
-// Ultra-snappy variometer – first tone within ~50-100 ms of a climb/sink starting
-// *******************************************************************************************
-void DoTheVariometer() // call freely from loop(), it rate-limits itself
+
+// ──────────────────────────────────────────────────────────────────────────────
+// 2. VARIOMETER ROUTINE (drop‑in replacement for yesterday’s)
+// ──────────────────────────────────────────────────────────────────────────────
+
+void DoTheVariometer() // call freely from loop(); it self‑rate‑limits
 {
     static Zone lastZone = Z_NEUTRAL;
-    static uint32_t nextCheckMs = 0; // scheduler for our own 20 Hz cadence
+    static uint32_t nextCheckMs = 0; // 4 Hz scheduler (every 250 ms)
     static uint32_t lastPlayMs = 0;  // when the current clip began
 
-    uint32_t now = millis();
-    if (now < nextCheckMs) // run at 4 Hz (every 50 ms)
-        return;
-    nextCheckMs = now + 250; // -----------------------------
 
-    // Abort unless: vario ON, model bound, >10 s since bind, bank = 3
+    uint32_t now = millis();
+    if (now < nextCheckMs)
+        return;
+    nextCheckMs = now + 250;
+
+    // Skip if the pilot doesn’t want beeps yet…
     if (!UseVariometer || !(BoundFlag && ModelMatched) ||
         (now - LedGreenMoment < 10000) || (Bank != 3))
         return;
 
-    // ---------- 1. Work out which rate-of-climb “zone” we are in ----------
-    int roc = RateOfClimb; // ft / min, +ve = climb
+    // ─── 2.1  Translate current ft/min into a Zone ───────────────────────────
+    int roc = RateOfClimb; // +ve = climb, –ve = sink
+   // Look(roc); // for debugging
 
-   // roc = GetTestRateOfClimb(); // this is ONLY the test rate of climb
-   // Look(roc); // this is ONLY the test rate of climb
-   
-   
-    Zone zone;
-    if (roc > T3_FPM + HYS_FPM)
+    Zone zone = Z_NEUTRAL;
+
+    // Climb first (test high to low)…
+    if (roc > T6_FPM + HYS_FPM)
+        zone = Z_CLIMB6;
+    else if (roc > T5_FPM + HYS_FPM)
+        zone = Z_CLIMB5;
+    else if (roc > T4_FPM + HYS_FPM)
+        zone = Z_CLIMB4;
+    else if (roc > T3_FPM + HYS_FPM)
         zone = Z_CLIMB3;
     else if (roc > T2_FPM + HYS_FPM)
         zone = Z_CLIMB2;
     else if (roc > T1_FPM + HYS_FPM)
         zone = Z_CLIMB1;
+
+    // …then sinks (test high magnitude to low)…
+    else if (roc < -T6_FPM - HYS_FPM)
+        zone = Z_SINK6;
+    else if (roc < -T5_FPM - HYS_FPM)
+        zone = Z_SINK5;
+    else if (roc < -T4_FPM - HYS_FPM)
+        zone = Z_SINK4;
     else if (roc < -T3_FPM - HYS_FPM)
         zone = Z_SINK3;
     else if (roc < -T2_FPM - HYS_FPM)
         zone = Z_SINK2;
     else if (roc < -T1_FPM - HYS_FPM)
         zone = Z_SINK1;
-    else
-        zone = Z_NEUTRAL;
 
-    // ---------- 2. Should we start (or restart) a sound? ------------------
+    // ─── 2.2  Decide whether to start (or restart) a clip ────────────────────
     bool needPlay = false;
 
     if (zone != lastZone)
-    { // BAND CHANGED  → play at once
+    { // Band changed → fire instantly
         lastZone = zone;
         lastPlayMs = now;
-        needPlay = (zone != Z_NEUTRAL); // silent in neutral
+        needPlay = (zone != Z_NEUTRAL);
     }
     else if (zone != Z_NEUTRAL)
-    {                                // SAME BAND  → maybe loop
-        uint32_t dur = WAV_MS[zone]; // declared clip length
+    { // Same band → maybe loop
+        uint32_t dur = WAV_MS[zone];
         if (dur == 0)
-            dur = 100;                    // fail-safe: assume 100 ms
-        if (now - lastPlayMs >= dur + 20) // 20 ms gap then re-arm
+            dur = 100;                    // emergency default
+        if (now - lastPlayMs >= dur + 20) // 20 ms gap = real‑vario feel
         {
             lastPlayMs = now;
             needPlay = true;
         }
     }
 
-    if (needPlay)
-        PlaySound(WAV_ID[zone]); // PlaySound is pre-emptive
-}
-
-// *******************************************************************************************
-void DoTheVariometerOLD()
-{
-    static uint32_t LastRateOfClimbCheck = 0;
-    static bool GoingUp = false;
-    static bool GoingDown = false;
-    static uint32_t UpStart = 0;
-    static uint32_t DownStart = 0;
-
-#define MINIMUMRATE 500    // 500 feet per second
-#define NOISEDURATION 1500 // 1.5 seconds
-
-    if (millis() - LastRateOfClimbCheck < 100)
-        return;
-    LastRateOfClimbCheck = millis();
-    if (!UseVariometer || !(BoundFlag && ModelMatched))
-        return;
-
-    if (RateOfClimb > MINIMUMRATE)
-    {
-        if (millis() - UpStart > NOISEDURATION)
-            GoingUp = false;
-
-        if (!GoingUp)
-        {
-            PlaySound(GOINGUP);
-            GoingUp = true;
-            GoingDown = false;
-            UpStart = millis();
-        }
+    if (needPlay){
+        PlaySound(WAV_ID[zone]);
+            
     }
-    if (RateOfClimb < -MINIMUMRATE)
-    {
-        if (millis() - DownStart > NOISEDURATION)
-            GoingDown = false;
-        if (!GoingDown)
-        {
-            PlaySound(GOINGDOWN);
-            GoingUp = false;
-            GoingDown = true;
-            DownStart = millis();
-        }
-    }
-    // Look(RateOfClimb);
+   // Look(WAV_ID[zone]);
 }
-
 #endif

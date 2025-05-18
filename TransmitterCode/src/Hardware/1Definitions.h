@@ -348,14 +348,21 @@
 #define NOTFOUND 75 // or 30 !! :-)
 #define WINDOWS1 76
 #define WINDOWS2 77
-#define GOINGUP 78
-#define GOINGDOWN 79
-#define GOINGUP1 80
-#define GOINGUP2 81
-#define GOINGUP3 82
-#define GOINGDOWN1 83
-#define GOINGDOWN2 84
-#define GOINGDOWN3 85
+
+#define GOINGUP1 78  // new vario sounds ....
+#define GOINGUP2 79
+#define GOINGUP3 80
+#define GOINGUP4 81
+#define GOINGUP5 82
+#define GOINGUP6 83
+
+#define GOINGDOWN1 84
+#define GOINGDOWN2 85
+#define GOINGDOWN3 86
+#define GOINGDOWN4 87
+#define GOINGDOWN5 88
+#define GOINGDOWN6 89
+
 
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
