@@ -595,19 +595,19 @@ int GetTestRateOfClimb()
     // It will be replaced with the actual rate of climb from the sensor
     static int testRateOfClimb = 0;
     static uint32_t lastTestRateOfClimbCheck = 0;
-    static int16_t RateChange = 100;
-    if (millis() - lastTestRateOfClimbCheck < 4000)
+    static int16_t RateChange = 200;
+    if (millis() - lastTestRateOfClimbCheck < 1500)
         return testRateOfClimb;
     lastTestRateOfClimbCheck = millis();
     testRateOfClimb += RateChange; // Simulate a climb of 100 fpm
 
     if (testRateOfClimb > 1500)
     {
-        RateChange = -100; // Simulate a sink of 100 fpm
+        RateChange = -200; // Simulate a sink of 100 fpm
     }
     else if (testRateOfClimb < -1500)
     {
-        RateChange = 100; // Simulate a climb of 100 fpm
+        RateChange = 200; // Simulate a climb of 100 fpm
     }
     return testRateOfClimb;
 }
@@ -615,7 +615,6 @@ int GetTestRateOfClimb()
 // Ultra‑snappy variometer – Teensy 4.1 + Nextion edition
 // Now with SIX climbing and SIX descending zones (total 13 inc. neutral)
 // *******************************************************************************************
-
 // ──────────────────────────────────────────────────────────────────────────────
 // 0. USER‑TUNEABLE CONSTANTS
 // ──────────────────────────────────────────────────────────────────────────────
@@ -624,71 +623,69 @@ int GetTestRateOfClimb()
 // the bench at 1/100 real sensitivity so you can blow across the pitot tube
 // instead of launching a glider in your workshop.
 // ----------------------------------------------------------------------------
-
-// — Thresholds —
-constexpr float SCALE = 1; // 1 → in‑flight; 0.01 → bench wind‑tube
-
-// "Base" climb thresholds before scaling (ft/min). Pick your own spread
-constexpr int BASE_T_FPM[6] = {100, 400, 600, 800, 1000, 1200}; // These are the rates of climb / sink Thresholds..... ******* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-constexpr int T1_FPM = int(BASE_T_FPM[0] * SCALE + 0.5f);
-constexpr int T2_FPM = int(BASE_T_FPM[1] * SCALE + 0.5f);
-constexpr int T3_FPM = int(BASE_T_FPM[2] * SCALE + 0.5f);
-constexpr int T4_FPM = int(BASE_T_FPM[3] * SCALE + 0.5f);
-constexpr int T5_FPM = int(BASE_T_FPM[4] * SCALE + 0.5f);
-constexpr int T6_FPM = int(BASE_T_FPM[5] * SCALE + 0.5f);
-
-constexpr int HYS_FPM = int(25 * SCALE + 0.5f); // hysteresis band
-
-constexpr uint16_t WAV_ID[] =
-    {
-        0,                                                                     // 0 – neutral (silent)
-        GOINGUP1, GOINGUP2, GOINGUP3, GOINGUP4, GOINGUP5, GOINGUP6,            // 1‑6
-        GOINGDOWN1, GOINGDOWN2, GOINGDOWN3, GOINGDOWN4, GOINGDOWN5, GOINGDOWN6 // 7‑12
-};
-static_assert(sizeof(WAV_ID) / sizeof(WAV_ID[0]) == 13, "WAV_ID must have 13 entries (neutral + 12)");
-
-// Clip lengths (ms).  They *don’t* have to match or even relate to ft/min –
-// whatever makes your ears happy.  Leave neutral at 0 so we never loop there.
-constexpr uint16_t WAV_MS[] =
-    {
-        0,                            // neutral – stay at 0 to suppress looping in Z_NEUTRAL
-        500, 400, 350, 300, 250, 200, // climbs 1‑6  (edit to suit)
-        500, 550, 600, 650, 700, 750  // sinks  1‑6  (edit to suit)
-};
-static_assert(sizeof(WAV_MS) / sizeof(WAV_MS[0]) == 13, "WAV_MS must have 13 entries (neutral + 12)");
-
-// ──────────────────────────────────────────────────────────────────────────────
-// 1. ENUMERATION OF ZONES
-// ──────────────────────────────────────────────────────────────────────────────
-enum Zone : uint8_t
-{
-    Z_NEUTRAL = 0,
-    Z_CLIMB1,
-    Z_CLIMB2,
-    Z_CLIMB3,
-    Z_CLIMB4,
-    Z_CLIMB5,
-    Z_CLIMB6,
-    Z_SINK1,
-    Z_SINK2,
-    Z_SINK3,
-    Z_SINK4,
-    Z_SINK5,
-    Z_SINK6,
-
-    Z_COUNT // keep this last
-};
-
 // ──────────────────────────────────────────────────────────────────────────────
 // 2. VARIOMETER ROUTINE (drop‑in replacement for yesterday’s)
 // ──────────────────────────────────────────────────────────────────────────────
 
 void DoTheVariometer() // call freely from loop(); it self‑rate‑limits
 {
+    // Clip lengths (ms).  They *don’t* have to match or even relate to ft/min –
+    // whatever makes your ears happy.  Leave neutral at 0 so we never loop there.
+    // ──────────────────────────────────────────────────────────────────────────────
+    // 1. ENUMERATION OF ZONES
+    // ──────────────────────────────────────────────────────────────────────────────
+    enum Zone : uint8_t
+    {
+        Z_NEUTRAL = 0,
+        Z_CLIMB1,
+        Z_CLIMB2,
+        Z_CLIMB3,
+        Z_CLIMB4,
+        Z_CLIMB5,
+        Z_CLIMB6,
+        Z_SINK1,
+        Z_SINK2,
+        Z_SINK3,
+        Z_SINK4,
+        Z_SINK5,
+        Z_SINK6,
+
+        Z_COUNT // keep this last
+    };
+
+    static constexpr uint16_t WAV_MS[] =
+        {
+            0,                            // neutral – stay at 0 to suppress looping in Z_NEUTRAL
+            500, 400, 350, 300, 250, 200, // climbs 1‑6  (edit to suit)
+            500, 550, 600, 650, 700, 750  // sinks  1‑6  (edit to suit)
+        };
+    static_assert(sizeof(WAV_MS) / sizeof(WAV_MS[0]) == 13, "WAV_MS must have 13 entries (neutral + 12)");
+
+    // "Base" climb thresholds before scaling (ft/min). Pick your own spread
+    static int BASE_T_FPM[6] = {100, 400, 600, 800, 1000, 1200}; // These are the rates of climb / sink Thresholds..... ******* <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    static int T1_FPM;
+    static int T2_FPM;
+    static int T3_FPM;
+    static int T4_FPM;
+    static int T5_FPM;
+    static int T6_FPM;
     static Zone lastZone = Z_NEUTRAL;
     static uint32_t nextCheckMs = 0; // 4 Hz scheduler (every 250 ms)
     static uint32_t lastPlayMs = 0;  // when the current clip began
+    static bool InitDone = false;    // true after first call
+
+    static constexpr float SCALE = 1; // 1 → in‑flight; 0.01 → bench wind‑tube
+
+    int HYS_FPM = int(25 * SCALE + 0.5f); // hysteresis band
+
+    static constexpr uint16_t WAV_ID[] =
+        {
+            0,                                                                     // 0 – neutral (silent)
+            GOINGUP1, GOINGUP2, GOINGUP3, GOINGUP4, GOINGUP5, GOINGUP6,            // 1‑6
+            GOINGDOWN1, GOINGDOWN2, GOINGDOWN3, GOINGDOWN4, GOINGDOWN5, GOINGDOWN6 // 7‑12
+        };
+
+    static_assert(sizeof(WAV_ID) / sizeof(WAV_ID[0]) == 13, "WAV_ID must have 13 entries (neutral + 12)"); // compile time check!
 
     uint32_t now = millis();
     if (now < nextCheckMs)
@@ -703,8 +700,28 @@ void DoTheVariometer() // call freely from loop(); it self‑rate‑limits
     // ─── 2.1  Translate current ft/min into a Zone ───────────────────────────
     int roc = RateOfClimb; // +ve = climb, –ve = sink
 
-    //  roc = GetTestRateOfClimb();
-    //  Look(roc); // for debugging
+    BASE_T_FPM[0] = 50;
+
+    if (!InitDone)
+    {
+        for (int i = 1; i < 6; ++i)
+        {
+            BASE_T_FPM[i] = BASE_T_FPM[i - 1] + 275;
+        }
+        T1_FPM = int(BASE_T_FPM[0] * SCALE + 0.5f);
+        T2_FPM = int(BASE_T_FPM[1] * SCALE + 0.5f);
+        T3_FPM = int(BASE_T_FPM[2] * SCALE + 0.5f);
+        T4_FPM = int(BASE_T_FPM[3] * SCALE + 0.5f);
+        T5_FPM = int(BASE_T_FPM[4] * SCALE + 0.5f);
+        T6_FPM = int(BASE_T_FPM[5] * SCALE + 0.5f);
+        HYS_FPM = int(25 * SCALE + 0.5f); // hysteresis band
+        InitDone = true;                  // set this to true after the first call
+    }
+
+    // *******************************************************************************
+    // roc = GetTestRateOfClimb(); // for debugging
+    // Look(roc); // for debugging
+    // *******************************************************************************
 
     Zone zone = Z_NEUTRAL;
 
