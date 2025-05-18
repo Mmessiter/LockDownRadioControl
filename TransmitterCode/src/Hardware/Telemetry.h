@@ -611,29 +611,16 @@ int GetTestRateOfClimb()
     }
     return testRateOfClimb;
 }
-// *******************************************************************************************
-// Ultra‑snappy variometer – Teensy 4.1 + Nextion edition
-// Now with SIX climbing and SIX descending zones (total 13 inc. neutral)
-// *******************************************************************************************
-// ──────────────────────────────────────────────────────────────────────────────
-// 0. USER‑TUNEABLE CONSTANTS
-// ──────────────────────────────────────────────────────────────────────────────
-// Change these numbers and identifiers to match your aircraft, test‑bench rig
-// or WAV library. The SCALE trick lets you run *exactly the same firmware* on
-// the bench at 1/100 real sensitivity so you can blow across the pitot tube
-// instead of launching a glider in your workshop.
-// ----------------------------------------------------------------------------
-// ──────────────────────────────────────────────────────────────────────────────
-// 2. VARIOMETER ROUTINE (drop‑in replacement for yesterday’s)
-// ──────────────────────────────────────────────────────────────────────────────
+// *********************************************************************************************************************************/
+// This function is called from loop() to play the variometer sounds
 
 void DoTheVariometer() // call freely from loop(); it self‑rate‑limits
 {
-    // Clip lengths (ms).  They *don’t* have to match or even relate to ft/min –
-    // whatever makes your ears happy.  Leave neutral at 0 so we never loop there.
-    // ──────────────────────────────────────────────────────────────────────────────
-    // 1. ENUMERATION OF ZONES
-    // ──────────────────────────────────────────────────────────────────────────────
+    uint32_t now = millis();
+    if (!UseVariometer || !(BoundFlag && ModelMatched) ||
+        (now - LedGreenMoment < 10000) || (Bank != 3))
+        return;
+
     enum Zone : uint8_t
     {
         Z_NEUTRAL = 0,
@@ -687,15 +674,12 @@ void DoTheVariometer() // call freely from loop(); it self‑rate‑limits
 
     static_assert(sizeof(WAV_ID) / sizeof(WAV_ID[0]) == 13, "WAV_ID must have 13 entries (neutral + 12)"); // compile time check!
 
-    uint32_t now = millis();
+   
     if (now < nextCheckMs)
         return;
     nextCheckMs = now + 50;
 
-    // Skip if the pilot doesn’t want beeps yet…
-    if (!UseVariometer || !(BoundFlag && ModelMatched) ||
-        (now - LedGreenMoment < 10000) || (Bank != 3))
-        return;
+    // After this, get on with it! 
 
     // ─── 2.1  Translate current ft/min into a Zone ───────────────────────────
     int roc = RateOfClimb; // +ve = climb, –ve = sink
