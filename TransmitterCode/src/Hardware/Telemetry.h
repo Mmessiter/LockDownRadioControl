@@ -666,6 +666,7 @@ static constexpr uint16_t WAV_ID[Z_COUNT] = {
     GOINGDOWN6, GOINGDOWN7, GOINGDOWN8, GOINGDOWN9, GOINGDOWN10};
 
 static constexpr uint16_t WAV_MS[Z_COUNT] = {
+    // ***** These are actual lengths of the audio clips In milliseconds **************
     0,                       // neutral – no loop
     500, 400, 350, 300, 250, // climbs 1‑5
     200, 175, 150, 125, 100, // climbs 6‑10  (shorter & more urgent)
@@ -705,11 +706,11 @@ void DoTheVariometer()
 
     if (!initDone)
     {
-        int base = 50; // first climb band begins at 50 fpm
+        int base = 100; // first climb band begins at 100 fpm
         for (int i = 0; i < 10; ++i)
         {
             T[i] = int(base * SCALE + 0.5f);
-            base += 200; // spacing between bands (edit!)
+            base += 150; // spacing between bands (edit ... was 200. 150 might be better)
         }
         HYS_FPM = int(25 * SCALE + 0.5f);
         initDone = true;
@@ -722,8 +723,8 @@ void DoTheVariometer()
 
     // roc = GetTestRateOfClimb(); // test function to simulate the rate of climb
     // Look (roc); // for debugging
-    
-     Zone zone = Z_NEUTRAL;
+
+    Zone zone = Z_NEUTRAL;
 
     // climbs (scan highest to lowest)
     if (roc > T[9] + HYS_FPM)
