@@ -363,7 +363,15 @@
 #define GOINGDOWN5 88
 #define GOINGDOWN6 89
 
+#define GOINGUP7 90 // extra!
+#define GOINGUP8 91
+#define GOINGUP9 92
+#define GOINGUP10 93
 
+#define GOINGDOWN7 94
+#define GOINGDOWN8 95
+#define GOINGDOWN9 96
+#define GOINGDOWN10 97
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
 //***************************************************************************
