@@ -2,7 +2,7 @@
 // ************************************************** Receiver code **************************************************
 
 /** @file ReceiverCode/src/main.cpp
- * // Malcolm Messiter 2020 - 2024
+ * // Malcolm Messiter 2020 - 2025
  * @page RXCODE RecieverCode
  *
  * @section rx Features List
@@ -17,6 +17,7 @@
  * - Channels increased to 16. 9 PWM outputs.  SBUS can handle all. PPM Does 8
  * - Exponential implemented (at TX end)
  * - Supports one or two tranceivers (nRF24L01+)
+ * - Variometer added! 
  *
  *
  * @section rxpinout TEENSY 4.0 PINS
