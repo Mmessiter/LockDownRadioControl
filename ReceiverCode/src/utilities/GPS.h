@@ -5,6 +5,8 @@
 #include <Adafruit_GPS.h>
 Adafruit_GPS GPS(&Wire);
 
+
+
 // *************************************************************
 
 void setupGPS()

@@ -8,6 +8,9 @@
 
 #ifdef USE_STABILISATION
 
+
+
+
 // ******************************************************************************************************************************************************************
 /// @brief // This function reads the MPU6050 registers frequently to get the gyro and accelerometer signals
 void Read_MPU6050(void)
