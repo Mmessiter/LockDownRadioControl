@@ -706,7 +706,7 @@ void DoTheVariometer()
 
     if (!initDone)
     {
-        int base = 400; // first climb band begins at 400 fpm
+        int base = 400; // first climb or sink band begins at 400 fpm, so silent means little change.
         for (int i = 0; i < 10; ++i)
         {
             T[i] = int(base * SCALE + 0.5f);
