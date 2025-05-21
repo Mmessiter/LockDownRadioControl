@@ -240,11 +240,14 @@ void GetRateOfClimb()
     float dAlt = float(BaroAltitude) - lastAltitudeFt; // float early!
     float roc = (dAlt * 60000.0f) / float(dt_ms);      // 60000 ms/min
 
-    roc = 0.7f * FilterRoc + 0.3f * roc; // fairly light smoothing
+    roc = 0.7f * FilterRoc + 0.3f * roc; //  light smoothing
     FilterRoc = roc;
     RateOfClimb = static_cast<int32_t>(roc);
     lastAltitudeFt = float(BaroAltitude);
     lastTime = now;
+    // Look1("Rate of Climb: ");
+    // Look(RateOfClimb);
+
 }
 // ************************************************************************************************************/
 void ReadDPS310()
@@ -255,7 +258,7 @@ void ReadDPS310()
     static uint32_t lastTime = 0;
     uint32_t now = millis();
 
-    if (now - lastTime >= 250)
+    if (now - lastTime >= 125) // 8 Hz
     {
         lastTime = now;
         sensors_event_t temp_event, pressure_event;

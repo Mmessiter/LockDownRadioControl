@@ -13,7 +13,7 @@
  * - Binding implemented
  * - SBUS implemented
  * - PPM Implemented on the same pin as SBUS (Serial 3 / Pin 14)
- * - Failsafe implemented 
+ * - Failsafe implemented
  * - RESOLUTION INCREASED TO 12 BITS
  * - Channels increased to 16. 9 or 11 PWM outputs.  SBUS can handle all. PPM Does <= 8
  * - Exponential implemented (at TX end)
@@ -372,10 +372,9 @@ FLASHMEM void ScanI2c()
             if (i == BMP280Address) // first look at default address *** 0x76 ***
             {
                 BMP280Connected = true;
-               // Look1("BMP280 found at address: ");
-               // Serial.println(i, HEX);
+                // Look1("BMP280 found at address: ");
+                // Serial.println(i, HEX);
             }
-            
 
             if (i == 0x77 || i == 0x76)
             {
@@ -595,35 +594,30 @@ void Init_BMP280()
 {
     if (!bmp.begin(BMP280Address))
     {
-        Serial.println("Could not find a valid BMP280 sensor.");
+        Serial.println("Did not find a valid BMP280 sensor.");
         BMP280Connected = false; // This is not a fatal error but we can't use the BMP280
         return;
     }
-    else
-    {
-        bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
-                        Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
-                        Adafruit_BMP280::SAMPLING_X16,    /* Pressure oversampling */
-                        Adafruit_BMP280::FILTER_X16,      /* Filtering. */
-                        Adafruit_BMP280::STANDBY_MS_250); /* Standby time. */
-    }
+    bmp.setSampling(Adafruit_BMP280::MODE_NORMAL,     /* Operating Mode. */
+                    Adafruit_BMP280::SAMPLING_X2,     /* Temp. oversampling */
+                    Adafruit_BMP280::SAMPLING_X16,    /* Pressure oversampling */
+                    Adafruit_BMP280::FILTER_X16,      /* Filtering. */
+                    Adafruit_BMP280::STANDBY_MS_250); /* Standby time. */
 }
 /// *************************************************************************************************************/
 void Init_DPS310()
 {
-    {
-        if (!dps310.begin_I2C())
-        { // You can optionally pass an address here (default is 0x77)
-            Serial.println("Could not find a valid DPS310 sensor.");
-            DPS310Connected = false;
-            return;
-        }
-       // Look("DPS310 initialized!");
-        // Optional: configure oversampling and filtering
-        dps310.configurePressure(DPS310_64HZ, DPS310_32SAMPLES);
-        dps310.configureTemperature(DPS310_64HZ, DPS310_16SAMPLES);
-        DPS310Connected = true;
+    if (!dps310.begin_I2C())
+    { // You can optionally pass an address here (default is 0x77)
+        Serial.println("Did not find a valid DPS310 sensor.");
+        DPS310Connected = false;
+        return;
     }
+    // Look("DPS310 initialized!");
+    // Optional: configure oversampling and filtering
+    dps310.configurePressure(DPS310_8HZ, DPS310_16SAMPLES);
+    dps310.configureTemperature(DPS310_4HZ, DPS310_16SAMPLES);
+    DPS310Connected = true;
 }
 /************************************************************************************************************/
 // SETUP
@@ -634,7 +628,7 @@ FLASHMEM void setup()
     TestTheSBUSPin(); // Check that the SBUS pin is not held low (plug in wrong way round)
     TestAllPWMPins(); // Check that the no PWM pins are held low (plug in wrong way round)
     Wire.begin();
-   // delay(400); // *only* needed if you want to see terminal output
+    // delay(400); // *only* needed if you want to see terminal output
     ScanI2c(); // Detect what's connected
     if (BMP280Connected)
         Init_BMP280();
