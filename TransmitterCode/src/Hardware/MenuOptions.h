@@ -575,6 +575,7 @@ void StartAudioVisualView()
 
     char n0[] = "n0";
     char n1[] = "n1";
+    char n2[] = "n2";
     char h0[] = "h0";
     char Ex1[] = "Ex1"; // slider
     char c0[] = "c0";
@@ -588,6 +589,7 @@ void StartAudioVisualView()
     SendValue(n0, AudioVolume);
     SendValue(Ex1, AudioVolume);
     SendValue(n1, Brightness);
+    SendValue(n2,VariometerBank);
     SendValue(h0, Brightness);
     SendValue(c0, PlayFanfare);
     SendValue(c1, TrimClicks);
@@ -605,6 +607,7 @@ void EndAudioVisualView()
 {
     char n0[] = "n0";
     char n1[] = "n1";
+    char n2[] = "n2";
     char c0[] = "c0";
     char c1[] = "c1";
     char c2[] = "c2";
@@ -613,6 +616,7 @@ void EndAudioVisualView()
     char c5[] = "c5";
     AudioVolume = GetValue(n0);
     Brightness = GetValue(n1);
+    VariometerBank = GetValue(n2);
     PlayFanfare = GetValue(c0);
     TrimClicks = GetValue(c1);
     UseVariometer = GetValue(c2);

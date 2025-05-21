@@ -596,18 +596,18 @@ int GetTestRateOfClimb()
     static int testRateOfClimb = 0;
     static uint32_t lastTestRateOfClimbCheck = 0;
     static int16_t RateChange = 200;
-    if (millis() - lastTestRateOfClimbCheck < 1500)
+    if (millis() - lastTestRateOfClimbCheck < 1200)
         return testRateOfClimb;
     lastTestRateOfClimbCheck = millis();
     testRateOfClimb += RateChange; // Simulate a climb of 100 fpm
 
     if (testRateOfClimb > 2000)
     {
-        RateChange = -200; // Simulate a sink of 100 fpm
+        RateChange = -100; // Simulate a sink of 100 fpm
     }
     else if (testRateOfClimb < -2000)
     {
-        RateChange = 200; // Simulate a climb of 100 fpm
+        RateChange = 100; // Simulate a climb of 100 fpm
     }
     return testRateOfClimb;
 }
@@ -692,9 +692,9 @@ void DoTheVariometer()
     if (now < nextCheckMs)
         return;
     nextCheckMs = now + 50;
-
     if (!UseVariometer || !(BoundFlag && ModelMatched) ||
-        (now - LedGreenMoment < 10000) || (Bank != 3))
+        (now - LedGreenMoment < 10000) ||
+        ((Bank != VariometerBank) && (VariometerBank != 0)))
         return;
 
     //------------------------------------------------------------------
@@ -706,11 +706,11 @@ void DoTheVariometer()
 
     if (!initDone)
     {
-        int base = 100; // first climb band begins at 100 fpm
+        int base = 400; // first climb band begins at 400 fpm
         for (int i = 0; i < 10; ++i)
         {
             T[i] = int(base * SCALE + 0.5f);
-            base += 150; // spacing between bands (edit ... was 200. 150 might be better)
+            base += 125; // spacing between bands (edit ... was 200. 125 might be better)
         }
         HYS_FPM = int(25 * SCALE + 0.5f);
         initDone = true;
@@ -721,8 +721,8 @@ void DoTheVariometer()
     //------------------------------------------------------------------
     int roc = RateOfClimb; // +ve climb, ‑ve sink
 
-    // roc = GetTestRateOfClimb(); // test function to simulate the rate of climb
-    // Look (roc); // for debugging
+    //  roc = GetTestRateOfClimb(); // test function to simulate the rate of climb
+    //  Look (roc); // for debugging
 
     Zone zone = Z_NEUTRAL;
 

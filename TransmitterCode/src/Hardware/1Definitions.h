@@ -1199,7 +1199,8 @@ char WarnNow[] = "vis Warning,1";
 char WarnOff[] = "vis Warning,0";
 char Warning[] = "Warning";
 char err_MotorOn[] = " MOTOR IS ON! ";
-;
+uint8_t VariometerBank = 3;
+
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

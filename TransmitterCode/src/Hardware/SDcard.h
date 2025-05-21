@@ -725,7 +725,7 @@ bool LoadAllParameters()
     ++SDCardAddress;
     SafetySwitch = SDRead8BITS(SDCardAddress); 
     ++SDCardAddress;
-   // spare byte
+    VariometerBank = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     ReadCheckSum32();
     CheckTrimValues();
@@ -893,7 +893,7 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, SafetySwitch); 
     ++SDCardAddress;
-    // spare byte
+    SDUpdate8BITS(SDCardAddress, VariometerBank);
     ++SDCardAddress;
     SaveCheckSum32(); // Save the Transmitter parametres checksm
     CloseModelsFile();
