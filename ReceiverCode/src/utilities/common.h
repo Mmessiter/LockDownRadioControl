@@ -7,6 +7,7 @@
 #include <RF24.h>
 #include <PulsePosition.h>
 #include <Adafruit_INA219.h>
+#include <Adafruit_DPS310.h>
 // #include <MPU6050_tockn.h>
 
 #define RXVERSION_MAJOR 2
@@ -257,6 +258,8 @@ void Look1(const any &value);
 
 Adafruit_INA219 ina219;
 Adafruit_BMP280 bmp;
+Adafruit_DPS310 dps310;
+
 
 //                         Channels: 1  2 [3][4] 5  6 {7} 8  9 {10} 11 (Channels 3+4 & 7+10 must have same frquency)
 uint8_t PWMPins[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}; //  if only SERVOSUSED = 9 then last two are ignored
@@ -334,5 +337,7 @@ uint32_t SuccessfulPackets = 0;
 uint32_t ConnectMoment = 0;
 int16_t LongAcknowledgementsCounter = 0;   
 int16_t LongAcknowledgementsMinimum = 200;
+bool DPS310Connected = false;
+uint16_t DPS310Address = 0x76; // DPS310 I2C address
 
 #endif // defined (_SRC_UTILITIES_COMMON_H)

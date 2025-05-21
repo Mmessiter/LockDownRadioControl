@@ -1097,18 +1097,34 @@ void DelayWithDog(uint32_t HowLong)
     AlreadyKicking = false;
 }
 /************************************************************************************************************/
-template <typename any>
-void Look(const any &value) // this is a template function that can print anything but cannot be used to change anything
+/************************************************************************************************************/
+// For numeric types (int, float, double, etc.)
+template <typename T>
+void Look(const T &value, int format)
+{
+    Serial.println(value, format);
+}
+
+template <typename T>
+void Look1(const T &value, int format)
+{
+    Serial.print(value, format);
+}
+
+// Fallback for types where a format doesn't apply (e.g., String, const char*)
+template <typename T>
+void Look(const T &value)
 {
     Serial.println(value);
 }
 
-/************************************************************************************************************/
-template <typename any>
-void Look1(const any &value) // this is a template function that can print anything but cannot be used to change anything
+template <typename T>
+void Look1(const T &value)
 {
     Serial.print(value);
 }
+
+// ******************************************************************************************************************************************************************
 
 // ********************************************************************************************************************
 void SpeedTest()

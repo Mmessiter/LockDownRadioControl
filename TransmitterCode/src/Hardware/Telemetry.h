@@ -624,7 +624,7 @@ int GetTestRateOfClimb()
 //   • Tweak WAV_MS to match real clip lengths.
 // ----------------------------------------------------------------------------
 
-static constexpr float SCALE = 1.0f;   // 1 → in‑flight; 0.01 → bench wind‑tube
+static constexpr float SCALE = 1;   // 1 → in‑flight; 0.01 → bench wind‑tube
 static constexpr int GAP_FRAC_NUM = 1; // gap = dur * 1 / 3  (≈33 %)
 static constexpr int GAP_FRAC_DEN = 3;
 

@@ -246,7 +246,26 @@ void GetRateOfClimb()
     lastAltitudeFt = float(BaroAltitude);
     lastTime = now;
 }
+// ************************************************************************************************************/
+void ReadDPS310()
+{
+    if (!DPS310Connected || millis() < 10000)
+        return;
 
+    static uint32_t lastTime = 0;
+    uint32_t now = millis();
+
+    if (now - lastTime >= 250)
+    {
+        lastTime = now;
+        sensors_event_t temp_event, pressure_event;
+        dps310.getEvents(&temp_event, &pressure_event);
+        BaroTemperature = temp_event.temperature;
+        float pressure_hPa = pressure_event.pressure;
+        BaroAltitude = MetersToFeet(44330.0 * (1.0 - pow(pressure_hPa / Qnh, 0.1903)));
+        GetRateOfClimb();
+    }
+}
 // ******************************************************************************************************************************************************************
 void ReadBMP280()
 {
@@ -292,6 +311,7 @@ FASTRUN void ReceiveData()
         if (millis() - LastPacketArrivalTime < 1) //  if no data yet, allow almost the full 5ms to read these before next packet is due
         {
             ReadBMP280();
+            ReadDPS310();
             ReadGPS();
         }
 

@@ -8,16 +8,18 @@
  * @section rx Features List
  * - WORKS ON TEENSY 4.0
  * - Detects and uses INA219 to read volts
- * - Detects and uses BMP280 pressure sensor for altitude
+ * - Detects and uses BMP280 pressure sensor for altitude and temperature and rate of climb (use default address 0x76)
+ * - Detects and uses DPS310 pressure sensor for altitude and temperature and rate of climb (use default address 0x77)
  * - Binding implemented
  * - SBUS implemented
  * - PPM Implemented on the same pin as SBUS (Serial 3 / Pin 14)
- * - Failsafe implemented (after two seconds)
+ * - Failsafe implemented 
  * - RESOLUTION INCREASED TO 12 BITS
- * - Channels increased to 16. 9 PWM outputs.  SBUS can handle all. PPM Does 8
+ * - Channels increased to 16. 9 or 11 PWM outputs.  SBUS can handle all. PPM Does <= 8
  * - Exponential implemented (at TX end)
- * - Supports one or two tranceivers (nRF24L01+)
- * - Variometer added! 
+ * - Supports one or two tranceivers (ML01SP4s)
+ * - Variometer added.
+ * - Support for GPS added (Adafruit)
  *
  *
  * @section rxpinout TEENSY 4.0 PINS
@@ -39,7 +41,7 @@
  * | 21    | SPI CE2  (FOR RADIO2) |
  * | 22    | SPI CE1  (FOR RADIO1) when 11 PWM channels are used | Otherwise unused
  * | 23    | SPI CSN1 (FOR RADIO1) when 11 PWM channels are used | Otherwise unused
- * | All exposed pins now used but oututs 34 - 39 are still available as solder pads on the back of the board for extra PWM channels etc
+ * | All exposed pins are now used but oututs 34 - 39 are still available as solder pads on the back of the board for extra PWM channels etc
  * @see ReceiverCode/src/main.cpp
  */
 
@@ -152,16 +154,16 @@ void MoveServos()
     }
     for (int j = 0; j < SERVOSUSED; ++j)
     {
-            int S = ReceivedData[j];
-            if (ServoCentrePulse[j] < 1000)
-            {
-                S = map(S, MINMICROS, MAXMICROS, ServoCentrePulse[j] - EXTRAAT760, ServoCentrePulse[j] + EXTRAAT760); // these lines allow for the fact that some servos don't like 760 - 2240
-            }
-            else
-            {
-                S = map(S, MINMICROS, MAXMICROS, ServoCentrePulse[j] - EXTRAAT1500, ServoCentrePulse[j] + EXTRAAT1500); // these lines allow for the fact that some servos don't like 760 - 2240
-            }
-            analogWrite(PWMPins[j], GetPWMValue(ServoFrequency[j], S));
+        int S = ReceivedData[j];
+        if (ServoCentrePulse[j] < 1000)
+        {
+            S = map(S, MINMICROS, MAXMICROS, ServoCentrePulse[j] - EXTRAAT760, ServoCentrePulse[j] + EXTRAAT760); // these lines allow for the fact that some servos don't like 760 - 2240
+        }
+        else
+        {
+            S = map(S, MINMICROS, MAXMICROS, ServoCentrePulse[j] - EXTRAAT1500, ServoCentrePulse[j] + EXTRAAT1500); // these lines allow for the fact that some servos don't like 760 - 2240
+        }
+        analogWrite(PWMPins[j], GetPWMValue(ServoFrequency[j], S));
     }
 }
 
@@ -173,7 +175,7 @@ void FailSafe()
     if (BoundFlag)
     {
         LoadFailSafeData(); // load failsafe values from EEPROM
-        Connected = true; // to force sending this data!
+        Connected = true;   // to force sending this data!
         MapToSBUS();
         for (int i = 0; i < 20; i++)
         {
@@ -194,7 +196,7 @@ void FailSafe()
     TurnLedOff();
     MacAddressSentCounter = 0;
 #ifdef DB_FAILSAFE
-   Look("Fail safe activated!");
+    Look("Fail safe activated!");
 #endif
 }
 
@@ -317,16 +319,28 @@ void RebuildFlags(bool *f, uint16_t tb)
     }
 }
 /************************************************************************************************************/
+// For numeric types (int, float, double, etc.)
+template <typename T>
+void Look(const T &value, int format)
+{
+    Serial.println(value, format);
+}
 
-template <typename any>
-void Look(const any &value) // this is a template function that can print anything but cannot be used to change anything
+template <typename T>
+void Look1(const T &value, int format)
+{
+    Serial.print(value, format);
+}
+
+// Fallback for types where a format doesn't apply (e.g., String, const char*)
+template <typename T>
+void Look(const T &value)
 {
     Serial.println(value);
 }
 
-/************************************************************************************************************/
-template <typename any>
-void Look1(const any &value) // this is a template function that can print anything but cannot be used to change anything
+template <typename T>
+void Look1(const T &value)
 {
     Serial.print(value);
 }
@@ -334,7 +348,7 @@ void Look1(const any &value) // this is a template function that can print anyth
 // ******************************************************************************************************************************************************************
 
 // Discover what was connected on I2C
-// can use: INA219, MPU6050, GPS, BMP280.  This is a one off function at startup
+// can use: INA219, MPU6050, ADAFRUIT GPS, BMP280, DPS310 (@ default I2c Addresses) This is a one off function at startup
 
 FLASHMEM void ScanI2c()
 {
@@ -355,14 +369,31 @@ FLASHMEM void ScanI2c()
             {
                 GPS_Connected = true;
             }
-            if (i == BMP280Address) // first look at default address 0x76
+            if (i == BMP280Address) // first look at default address *** 0x76 ***
             {
                 BMP280Connected = true;
+               // Look1("BMP280 found at address: ");
+               // Serial.println(i, HEX);
             }
-            if ((i == 0x77) && (!BMP280Connected)) // look at alternative address 0x77 if not default
+            
+
+            if (i == 0x77 || i == 0x76)
             {
-                BMP280Connected = true;
-                BMP280Address = 0x77; // this is the alternative address
+                // DPS310 can be at 0x76 or 0x77, but so can BMP280.
+                // To distinguish, try to read the DPS310 product ID register (0x0D, should return 0x10)
+                Wire.beginTransmission(i);
+                Wire.write(0x0D); // DPS310 Product ID register
+                if (Wire.endTransmission(false) == 0 && Wire.requestFrom(i, (uint8_t)1) == 1)
+                {
+                    if (Wire.read() == 0x10)
+                    {
+                        DPS310Connected = true;
+                        BMP280Connected = false; // If a DPS310 is found, any BMP280 will not be used
+                        DPS310Address = i;
+                        // Look1("DPS310 found at address: ");
+                        // Serial.println(i, HEX);
+                    }
+                }
             }
         }
     }
@@ -577,6 +608,23 @@ void Init_BMP280()
                         Adafruit_BMP280::STANDBY_MS_250); /* Standby time. */
     }
 }
+/// *************************************************************************************************************/
+void Init_DPS310()
+{
+    {
+        if (!dps310.begin_I2C())
+        { // You can optionally pass an address here (default is 0x77)
+            Serial.println("Could not find a valid DPS310 sensor.");
+            DPS310Connected = false;
+            return;
+        }
+       // Look("DPS310 initialized!");
+        // Optional: configure oversampling and filtering
+        dps310.configurePressure(DPS310_64HZ, DPS310_32SAMPLES);
+        dps310.configureTemperature(DPS310_64HZ, DPS310_16SAMPLES);
+        DPS310Connected = true;
+    }
+}
 /************************************************************************************************************/
 // SETUP
 /************************************************************************************************************/
@@ -586,11 +634,12 @@ FLASHMEM void setup()
     TestTheSBUSPin(); // Check that the SBUS pin is not held low (plug in wrong way round)
     TestAllPWMPins(); // Check that the no PWM pins are held low (plug in wrong way round)
     Wire.begin();
+   // delay(400); // *only* needed if you want to see terminal output
     ScanI2c(); // Detect what's connected
     if (BMP280Connected)
-    {
         Init_BMP280();
-    }
+    if (DPS310Connected)
+        Init_DPS310();
 
 #ifdef USE_STABILISATION
     if (MPU6050Connected)
