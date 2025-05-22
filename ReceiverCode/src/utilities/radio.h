@@ -240,7 +240,7 @@ void GetRateOfClimb()
     float dAlt = float(BaroAltitude) - lastAltitudeFt; // float early!
     float roc = (dAlt * 60000.0f) / float(dt_ms);      // 60000 ms/min
 
-    roc = 0.7f * FilterRoc + 0.3f * roc; //  light smoothing
+    roc = 0.9f * FilterRoc + 0.1f * roc; //  light smoothing
     FilterRoc = roc;
     RateOfClimb = static_cast<int32_t>(roc);
     lastAltitudeFt = float(BaroAltitude);
