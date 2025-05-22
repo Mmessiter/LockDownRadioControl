@@ -7,14 +7,14 @@
 #include <SPI.h>
 
 #ifndef SD_CARD_H
-    #define SD_CARD_H
+#define SD_CARD_H
 
 /*********************************************************************************************************************************/
 void SaveCheckSum32()
 { // uses 5 bytes. Last one is indicator of use.
 
     DoingCheckSm = true;
-    SDUpdate32BITS(SDCardAddress, FileCheckSum);//
+    SDUpdate32BITS(SDCardAddress, FileCheckSum); //
     SDCardAddress += 4;
     SDUpdate8BITS(SDCardAddress, 0xFF); // indicator
     SDCardAddress++;
@@ -32,24 +32,29 @@ void ReadCheckSum32()
   // This function sets ErrorState to a non zero value if there'a a file error
 
     bool UseCheckSm = false;
-    DoingCheckSm    = true;
+    DoingCheckSm = true;
     uint32_t ch;
     ch = SDRead32BITS(SDCardAddress);
     SDCardAddress += 4;
-    if (SDRead8BITS(SDCardAddress) == 0xFF) UseCheckSm = true; // if this byte isn't 0xFF then checksum was never written here.
+    if (SDRead8BITS(SDCardAddress) == 0xFF)
+        UseCheckSm = true; // if this byte isn't 0xFF then checksum was never written here.
     ++SDCardAddress;
     DoingCheckSm = false;
-    if (UseCheckSm) {
-        if (ch != FileCheckSum) {
+    if (UseCheckSm)
+    {
+        if (ch != FileCheckSum)
+        {
             ErrorState = CHECKSUMERROR;
         }
 #ifdef DB_CHECKSUM
         Serial.print("Read from file: ");
         Serial.println(ch);
-        if (ch == FileCheckSum) {
+        if (ch == FileCheckSum)
+        {
             Serial.println("FILE CHECKSUM IS GOOD :-) ! ");
         }
-        else {
+        else
+        {
             Serial.print("FILE CHECKSUM WAS ");
             Serial.println(FileCheckSum);
         }
@@ -60,8 +65,10 @@ void ReadCheckSum32()
 /*********************************************************************************************************************************/
 bool CheckDuplicate(uint8_t ch, int8_t j)
 {
-    for (int i = 0; i < j; ++i) {
-        if (ch == ChannelOutPut[i]) return false; // no duplicate output channels allowed
+    for (int i = 0; i < j; ++i)
+    {
+        if (ch == ChannelOutPut[i])
+            return false; // no duplicate output channels allowed
     }
     return true;
 }
@@ -71,37 +78,45 @@ bool CheckDuplicate(uint8_t ch, int8_t j)
 void CheckOutPutChannels() // This function checks for bad or duplicate output channels and resets them if found
 {
     bool resetit = false;
-    for (int i = 0; i < 16; ++i) {
+    for (int i = 0; i < 16; ++i)
+    {
         if ((ChannelOutPut[i] > 15) || (!CheckDuplicate(ChannelOutPut[i], i)))
         {
             resetit = true;
             break;
         }
     }
-    if (resetit) {
-        for (int i = 0; i < 16; ++i) {
+    if (resetit)
+    {
+        for (int i = 0; i < 16; ++i)
+        {
             ChannelOutPut[i] = i;
         }
     }
 }
 
-
 /*********************************************************************************************************************************/
 void CheckServoSpeeds()
 { // for slow servos
 
-bool flag = false;
-    for (int j = 0; j < BANKSUSED + 1; ++j) {
-        for (int i = 0; i < CHANNELSUSED+1; ++i) {
-            if ((ServoSpeed[j][i] > 100) || (!ServoSpeed[j][i])){   // out of range or zero means the list is corrupt and needs resetting
-                flag = true; 
+    bool flag = false;
+    for (int j = 0; j < BANKSUSED + 1; ++j)
+    {
+        for (int i = 0; i < CHANNELSUSED + 1; ++i)
+        {
+            if ((ServoSpeed[j][i] > 100) || (!ServoSpeed[j][i]))
+            { // out of range or zero means the list is corrupt and needs resetting
+                flag = true;
                 break;
             }
         }
     }
-    if (flag) {
-        for (int j = 0; j < BANKSUSED + 1; ++j) {
-            for (int i = 0; i < CHANNELSUSED+1; ++i) {
+    if (flag)
+    {
+        for (int j = 0; j < BANKSUSED + 1; ++j)
+        {
+            for (int i = 0; i < CHANNELSUSED + 1; ++i)
+            {
                 ServoSpeed[j][i] = 100;
             }
         }
@@ -110,18 +125,26 @@ bool flag = false;
 /*********************************************************************************************************************************/
 void CheckBanksInUse()
 {
-    for (int i = 0; i < 4; ++i) {
-        if (BanksInUse[i] > 23) BanksInUse[i] = i;
+    for (int i = 0; i < 4; ++i)
+    {
+        if (BanksInUse[i] > 23)
+            BanksInUse[i] = i;
     }
 }
 /*********************************************************************************************************************************/
 
-void CheckServoType(){
-    for (int i = 0; i < 11; ++i) {
-        if (ServoFrequency[i] > 1000)   ServoFrequency[i] = 50;
-        if (ServoFrequency[i] < 50)     ServoFrequency[i] = 50;
-        if (ServoCentrePulse[i] > 2500) ServoCentrePulse[i] = 1500;
-        if (ServoCentrePulse[i] < 300)  ServoCentrePulse[i] = 760;
+void CheckServoType()
+{
+    for (int i = 0; i < 11; ++i)
+    {
+        if (ServoFrequency[i] > 1000)
+            ServoFrequency[i] = 50;
+        if (ServoFrequency[i] < 50)
+            ServoFrequency[i] = 50;
+        if (ServoCentrePulse[i] > 2500)
+            ServoCentrePulse[i] = 1500;
+        if (ServoCentrePulse[i] < 300)
+            ServoCentrePulse[i] = 760;
     }
 }
 
@@ -133,38 +156,46 @@ bool ReadOneModel(uint32_t Mnum)
 {
     uint16_t j;
     uint16_t i;
-    char     NoModelYet[] = "File error?";
+    char NoModelYet[] = "File error?";
 
-    FileCheckSum    = 0;
-    MixNumber       = 0;
-    if ((ModelNumber > 90) || (ModelNumber <= 0)) ModelNumber = 1;
-    
+    FileCheckSum = 0;
+    MixNumber = 0;
+    if ((ModelNumber > 90) || (ModelNumber <= 0))
+        ModelNumber = 1;
+
     OpenModelsFile();
-    
-    if (!ModelsFileOpen) {
+
+    if (!ModelsFileOpen)
+    {
         DelayWithDog(300);
         OpenModelsFile();
     }
-    
-    if (!ModelsFileOpen) {
+
+    if (!ModelsFileOpen)
+    {
         strcpy(ModelName, NoModelYet); // indicator of error or no model
         return false;
     }
 
     SDCardAddress = TXSIZE;
-    if (SingleModelFlag) SDCardAddress = 0; // MODELOFFSET;   // Changed from 250 to 0
+    if (SingleModelFlag)
+        SDCardAddress = 0; // MODELOFFSET;   // Changed from 250 to 0
     SDCardAddress += ((Mnum - 1) * MODELSIZE);
     StartLocation = SDCardAddress;
-    ModelDefined  = SDRead8BITS(SDCardAddress);
+    ModelDefined = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    if (ModelDefined != 42) return false;
-    for (j = 0; j < 30; ++j) {
+    if (ModelDefined != 42)
+        return false;
+    for (j = 0; j < 30; ++j)
+    {
         ModelName[j] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
 
-    for (i = 0; i < CHANNELSUSED; ++i) {
-        for (j = 1; j <= 4; ++j) {
+    for (i = 0; i < CHANNELSUSED; ++i)
+    {
+        for (j = 1; j <= 4; ++j)
+        {
             MaxDegrees[j][i] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
             MidHiDegrees[j][i] = SDRead8BITS(SDCardAddress);
@@ -177,25 +208,31 @@ bool ReadOneModel(uint32_t Mnum)
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < MAXMIXES; ++j) {
-        for (i = 0; i < CHANNELSUSED + 1; ++i) {
+    for (j = 0; j < MAXMIXES; ++j)
+    {
+        for (i = 0; i < CHANNELSUSED + 1; ++i)
+        {
             Mixes[j][i] = SDRead8BITS(SDCardAddress); // Read mixes
             ++SDCardAddress;
         }
     }
 
-    for (j = 0; j < BANKSUSED + 1; ++j) {
-        for (i = 0; i < CHANNELSUSED + 1; ++i) {
+    for (j = 0; j < BANKSUSED + 1; ++j)
+    {
+        for (i = 0; i < CHANNELSUSED + 1; ++i)
+        {
             Trims[j][i] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < BANKSUSED + 1; ++j) {
-        for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            ServoSpeed[j][i] = SDRead8BITS(SDCardAddress); 
+    for (j = 0; j < BANKSUSED + 1; ++j)
+    {
+        for (i = 0; i < CHANNELSUSED + 1; ++i)
+        {
+            ServoSpeed[j][i] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
         }
-    } 
+    }
     CheckServoSpeeds();
     RXCellCount = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
@@ -204,21 +241,26 @@ bool ReadOneModel(uint32_t Mnum)
     ++SDCardAddress;
     ++SDCardAddress;
     LowBattery = SDRead8BITS(SDCardAddress);
-    if (LowBattery > 100) LowBattery = LOWBATTERY;
-    if (LowBattery < 10) LowBattery = LOWBATTERY;
+    if (LowBattery > 100)
+        LowBattery = LOWBATTERY;
+    if (LowBattery < 10)
+        LowBattery = LOWBATTERY;
     ++SDCardAddress;
     CopyTrimsToAll = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
 
-    for (i = 0; i < CHANNELSUSED; ++i) {
+    for (i = 0; i < CHANNELSUSED; ++i)
+    {
         SubTrims[i] = SDRead8BITS(SDCardAddress);
-        if ((SubTrims[i] < 10) || (SubTrims[i] > 244)) SubTrims[i] = 127; // centre if undefined or zero
+        if ((SubTrims[i] < 10) || (SubTrims[i] > 244))
+            SubTrims[i] = 127; // centre if undefined or zero
         ++SDCardAddress;
     }
     ReversedChannelBITS = SDRead16BITS(SDCardAddress);
     ++SDCardAddress;
     ++SDCardAddress;
-    for (i = 0; i < 4; ++i) {
+    for (i = 0; i < 4; ++i)
+    {
         InputTrim[i] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
@@ -233,64 +275,81 @@ bool ReadOneModel(uint32_t Mnum)
     SavedSticksMode = SDRead8BITS(SDCardAddress); // save sticks mode in case of rf transfer
     ++SDCardAddress;
 
-    for (i = 0; i < CHANNELSUSED; ++i) {
+    for (i = 0; i < CHANNELSUSED; ++i)
+    {
         InPutStick[i] = SDRead8BITS(SDCardAddress);
-        if (InPutStick[i] > 16) InPutStick[i] = i; // reset if nothing was saved!
+        if (InPutStick[i] > 16)
+            InPutStick[i] = i; // reset if nothing was saved!
         ++SDCardAddress;
     }
 
-    for (i = 0; i < 4; ++i) {
+    for (i = 0; i < 4; ++i)
+    {
         DualRateRate[i] = SDRead8BITS(SDCardAddress);
-        if (DualRateRate[i] > 3) DualRateRate[i] = 0;
+        if (DualRateRate[i] > 3)
+            DualRateRate[i] = 0;
         ++SDCardAddress;
-   }
+    }
 
     BuddyHasAllSwitches = SDRead8BITS(SDCardAddress);
-    ++SDCardAddress;  
-    
-    ++SDCardAddress;// spare bytes
+    ++SDCardAddress;
+
+    ++SDCardAddress; // spare bytes
     ++SDCardAddress;
     ++SDCardAddress;
     ++SDCardAddress;
     ++SDCardAddress;
 
-    for (i = 0; i < CHANNELSUSED; ++i) {
+    for (i = 0; i < CHANNELSUSED; ++i)
+    {
         FailSafeChannel[i] = bool(SDRead8BITS(SDCardAddress));
-        if (int(FailSafeChannel[i]) > 1) FailSafeChannel[i] = 0;
+        if (int(FailSafeChannel[i]) > 1)
+            FailSafeChannel[i] = 0;
         ++SDCardAddress;
     }
-    for (i = 0; i < CHANNELSUSED; ++i) {
-        for (j = 0; j < 10; ++j) {
+    for (i = 0; i < CHANNELSUSED; ++i)
+    {
+        for (j = 0; j < 10; ++j)
+        {
             ChannelNames[i][j] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
         }
     }
 
-    for (j = 0; j < BANKSUSED + 1; ++j) {
-        for (i = 0; i < CHANNELSUSED + 1; ++i) {
+    for (j = 0; j < BANKSUSED + 1; ++j)
+    {
+        for (i = 0; i < CHANNELSUSED + 1; ++i)
+        {
             Exponential[j][i] = SDRead8BITS(SDCardAddress);
-            if (Exponential[j][i] >= 201 || Exponential[j][i] == 0) {
+            if (Exponential[j][i] >= 201 || Exponential[j][i] == 0)
+            {
                 Exponential[j][i] = DEFAULT_EXPO;
             }
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < BANKSUSED + 1; ++j) {
-        for (i = 0; i < CHANNELSUSED + 1; ++i) {
+    for (j = 0; j < BANKSUSED + 1; ++j)
+    {
+        for (i = 0; i < CHANNELSUSED + 1; ++i)
+        {
             InterpolationTypes[j][i] = SDRead8BITS(SDCardAddress);
-            if (InterpolationTypes[j][i] < 0 || InterpolationTypes[j][i] > 2) {
+            if (InterpolationTypes[j][i] < 0 || InterpolationTypes[j][i] > 2)
+            {
                 InterpolationTypes[j][i] = EXPONENTIALCURVES;
             }
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < BYTESPERMACRO; ++j) {
-        for (i = 0; i < MAXMACROS; ++i) {
+    for (j = 0; j < BYTESPERMACRO; ++j)
+    {
+        for (i = 0; i < MAXMACROS; ++i)
+        {
             MacrosBuffer[i][j] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
         }
     }
-    for (i = 0; i < 8; ++i) {
+    for (i = 0; i < 8; ++i)
+    {
         ModelsMacUnionSaved.Val8[i] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
@@ -300,41 +359,48 @@ bool ReadOneModel(uint32_t Mnum)
     ++SDCardAddress;
     MotorChannel = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-  
-   // TREX
+
+    // TREX
     ++SDCardAddress;
-  
+
     SFV = SDRead16BITS(SDCardAddress);
     ++SDCardAddress;
     ++SDCardAddress;
     StopFlyingVoltsPerCell = float(SFV) / 100;
-    if (StopFlyingVoltsPerCell < 3 || StopFlyingVoltsPerCell > 4) StopFlyingVoltsPerCell = 3.50; // a useful default stop time?!
+    if (StopFlyingVoltsPerCell < 3 || StopFlyingVoltsPerCell > 4)
+        StopFlyingVoltsPerCell = 3.50; // a useful default stop time?!
     Drate2 = SDRead8BITS(SDCardAddress);
-    if ((Drate2 < 10) || (Drate2 > 200)) Drate2 = 100;
+    if ((Drate2 < 10) || (Drate2 > 200))
+        Drate2 = 100;
     ++SDCardAddress;
     Drate3 = SDRead8BITS(SDCardAddress);
-    if ((Drate3 < 10) || (Drate3 > 200)) Drate3 = 100;
+    if ((Drate3 < 10) || (Drate3 > 200))
+        Drate3 = 100;
     ++SDCardAddress;
     Drate1 = SDRead8BITS(SDCardAddress);
-    if ((Drate1 < 10) || (Drate1 > 200)) Drate1 = 100;
+    if ((Drate1 < 10) || (Drate1 > 200))
+        Drate1 = 100;
     ++SDCardAddress;
-    for (int i = 0; i < 8; ++i) {
+    for (int i = 0; i < 8; ++i)
+    {
         DualRateChannels[i] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
     CheckDualRatesValues();
 
     ++SDCardAddress; // Spare byte
-    ++SDCardAddress;// Spare byte
+    ++SDCardAddress; // Spare byte
 
-    for (i = 0; i < 4; ++i) {
+    for (i = 0; i < 4; ++i)
+    {
         BanksInUse[i] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
     CheckBanksInUse();
-   
-    for (i = 0; i < 12; ++i) {
-      // 12 Spare bytes was 16
+
+    for (i = 0; i < 12; ++i)
+    {
+        // 12 Spare bytes was 16
         ++SDCardAddress;
     }
     ServoCentrePulse[0] = SDRead16BITS(SDCardAddress);
@@ -343,35 +409,39 @@ bool ReadOneModel(uint32_t Mnum)
     ServoFrequency[0] = SDRead16BITS(SDCardAddress);
     ++SDCardAddress;
     ++SDCardAddress;
-   
+
     TimerDownwards = (bool)SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     TimerStartTime = SDRead16BITS(SDCardAddress);
-    if (TimerStartTime > 120 * 60) TimerStartTime = 5 * 60;
+    if (TimerStartTime > 120 * 60)
+        TimerStartTime = 5 * 60;
     ++SDCardAddress;
     ++SDCardAddress;
     PPMdata.UseSBUSFromRX = (bool)SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     PPMdata.PPMChannelCount = SDRead16BITS(SDCardAddress);
-    if ((PPMdata.PPMChannelCount > 16) || (PPMdata.PPMChannelCount < 1)) { // miles out of range PPMChannelCount?
+    if ((PPMdata.PPMChannelCount > 16) || (PPMdata.PPMChannelCount < 1))
+    { // miles out of range PPMChannelCount?
         PPMdata.PPMChannelCount = 8;
     }
     ++SDCardAddress;
     ++SDCardAddress;
 
-    for (i = 0; i < 16; ++i) {
+    for (i = 0; i < 16; ++i)
+    {
         ChannelOutPut[i] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
-    for (int i = 0; i < 11; ++i) {
-        ServoFrequency[i]   =  SDRead16BITS(SDCardAddress);
+    for (int i = 0; i < 11; ++i)
+    {
+        ServoFrequency[i] = SDRead16BITS(SDCardAddress);
         ++SDCardAddress;
         ++SDCardAddress;
-        ServoCentrePulse[i] =  SDRead16BITS(SDCardAddress); 
-        ++SDCardAddress;   
+        ServoCentrePulse[i] = SDRead16BITS(SDCardAddress);
+        ++SDCardAddress;
         ++SDCardAddress;
     }
-    
+
     CheckOutPutChannels();
     CheckServoType();
 
@@ -415,12 +485,12 @@ bool ReadOneModel(uint32_t Mnum)
     return true;
 }
 
-
 /*********************************************************************************************************************************/
 
 void CloseModelsFile()
 {
-    if (ModelsFileOpen) {
+    if (ModelsFileOpen)
+    {
         ModelsFileNumber.close();
         ModelsFileOpen = false;
         delayMicroseconds(500);
@@ -429,13 +499,14 @@ void CloseModelsFile()
 
 /*********************************************************************************************************************************/
 
-bool CheckFileExists(char* fl)
+bool CheckFileExists(char *fl)
 {
     CloseModelsFile();
     bool exists = false;
     File t;
     t = SD.open(fl, FILE_READ);
-    if (t) exists = true;
+    if (t)
+        exists = true;
     t.close();
     return exists;
 }
@@ -459,19 +530,24 @@ void OpenModelsFile()
 
     char ModelsFile[] = "models.dat";
 
-    if (!ModelsFileOpen) {
-        if (SingleModelFlag) {
+    if (!ModelsFileOpen)
+    {
+        if (SingleModelFlag)
+        {
             ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);
             DelayWithDog(100);
         }
-        else {
+        else
+        {
             ModelsFileNumber = SD.open(ModelsFile, FILE_WRITE);
             DelayWithDog(100);
         }
-        if (ModelsFileNumber == 0) {
+        if (ModelsFileNumber == 0)
+        {
             FileError = true;
         }
-        else {
+        else
+        {
             ModelsFileOpen = true;
         }
     }
@@ -480,7 +556,8 @@ void OpenModelsFile()
 
 void BuildCheckSum(int p_address, short int p_value)
 {
-    if (!DoingCheckSm) FileCheckSum += (p_value * (p_address + 1)); // don't include checksum in its own calculation
+    if (!DoingCheckSm)
+        FileCheckSum += (p_value * (p_address + 1)); // don't include checksum in its own calculation
 }
 
 /*********************************************************************************************************************************/
@@ -560,20 +637,23 @@ uint8_t SDRead8BITS(int p_address)
 /******************************************* LOAD ALL PARAMS *********************************************************************/
 /*********************************************************************************************************************************/
 
- // NB This starts with transmitter params and then calls the model params load function
-
+// NB This starts with transmitter params and then calls the model params load function
 
 bool LoadAllParameters()
 {
-    int j        = 0;
-    int i        = 0;
+    int j = 0;
+    int i = 0;
     FileCheckSum = 0;
-    if (!ModelsFileOpen) OpenModelsFile();
-    if (!ModelsFileOpen) return false;
+    if (!ModelsFileOpen)
+        OpenModelsFile();
+    if (!ModelsFileOpen)
+        return false;
     SDCardAddress = 0;
-    if ((SDRead16BITS(SDCardAddress)) != 12345) return false; // not a good file?!
+    if ((SDRead16BITS(SDCardAddress)) != 12345)
+        return false; // not a good file?!
     SDCardAddress += 2;
-    for (i = 0; i < CHANNELSUSED; ++i) {
+    for (i = 0; i < CHANNELSUSED; ++i)
+    {
         ChannelMin[i] = SDRead16BITS(SDCardAddress);
         SDCardAddress += 2;
         ChannelMidLow[i] = SDRead16BITS(SDCardAddress);
@@ -595,33 +675,40 @@ bool LoadAllParameters()
     ++SDCardAddress;
     ++SDCardAddress;
     Inactivity_Timeout = SDRead8BITS(SDCardAddress) * TICKSPERMINUTE;
-    if (Inactivity_Timeout < INACTIVITYMINIMUM) Inactivity_Timeout = INACTIVITYMINIMUM;
-    if (Inactivity_Timeout > INACTIVITYMAXIMUM) Inactivity_Timeout = INACTIVITYMAXIMUM;
+    if (Inactivity_Timeout < INACTIVITYMINIMUM)
+        Inactivity_Timeout = INACTIVITYMINIMUM;
+    if (Inactivity_Timeout > INACTIVITYMAXIMUM)
+        Inactivity_Timeout = INACTIVITYMAXIMUM;
     ++SDCardAddress;
-    for (j = 0; j < 30; ++j) {
+    for (j = 0; j < 30; ++j)
+    {
         TxName[j] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
-    Qnh = (float) SDRead16BITS(SDCardAddress);
+    Qnh = (float)SDRead16BITS(SDCardAddress);
     ++SDCardAddress;
     ++SDCardAddress;
     DeltaGMT = SDRead16BITS(SDCardAddress);
     ++SDCardAddress;
     ++SDCardAddress;
     BackGroundColour = SDRead16BITS(SDCardAddress);
-    if (BackGroundColour == 0) BackGroundColour = 214;
+    if (BackGroundColour == 0)
+        BackGroundColour = 214;
     ++SDCardAddress;
     ++SDCardAddress;
     ForeGroundColour = SDRead16BITS(SDCardAddress);
-    if (ForeGroundColour == 0) ForeGroundColour = 65535;
+    if (ForeGroundColour == 0)
+        ForeGroundColour = 65535;
     ++SDCardAddress;
     ++SDCardAddress;
     SpecialColour = SDRead16BITS(SDCardAddress);
-    if (SpecialColour == 0) SpecialColour = Red;
+    if (SpecialColour == 0)
+        SpecialColour = Red;
     ++SDCardAddress;
     ++SDCardAddress;
     HighlightColour = SDRead16BITS(SDCardAddress);
-    if (HighlightColour == 0) HighlightColour = Yellow;
+    if (HighlightColour == 0)
+        HighlightColour = Yellow;
     ++SDCardAddress;
     ++SDCardAddress;
     SticksMode = SDRead8BITS(SDCardAddress);
@@ -629,7 +716,8 @@ bool LoadAllParameters()
     AudioVolume = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     Brightness = SDRead8BITS(SDCardAddress);
-    if (Brightness < 10) Brightness = 10;
+    if (Brightness < 10)
+        Brightness = 10;
     ++SDCardAddress;
     PlayFanfare = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
@@ -641,9 +729,11 @@ bool LoadAllParameters()
     ++SDCardAddress;
     AnnounceBanks = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    for (i = 0; i < 8; ++i) {
+    for (i = 0; i < 8; ++i)
+    {
         j = SDRead8BITS(SDCardAddress);
-        if ((j >= SWITCH7) && (j <= SWITCH0)) {
+        if ((j >= SWITCH7) && (j <= SWITCH0))
+        {
             SwitchNumber[i] = j;
         }
         ++SDCardAddress;
@@ -659,12 +749,14 @@ bool LoadAllParameters()
     ++SDCardAddress;
     AnnounceConnected = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    for (j = 0; j < 8; ++j) {
+    for (j = 0; j < 8; ++j)
+    {
         TrimNumber[j] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
     TxVoltageCorrection = SDRead16BITS(SDCardAddress);
-    if ((TxVoltageCorrection > 20) || (TxVoltageCorrection < 0)) TxVoltageCorrection = 0;
+    if ((TxVoltageCorrection > 20) || (TxVoltageCorrection < 0))
+        TxVoltageCorrection = 0;
     ++SDCardAddress;
     ++SDCardAddress;
     PowerOffWarningSeconds = SDRead8BITS(SDCardAddress);
@@ -683,22 +775,25 @@ bool LoadAllParameters()
     TXLiPo = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     PPMdata.PPMOrderSelection = SDRead8BITS(SDCardAddress);
-    if ((PPMdata.PPMOrderSelection > 3) || (PPMdata.PPMOrderSelection < 1)) PPMdata.PPMOrderSelection = 2;
+    if ((PPMdata.PPMOrderSelection > 3) || (PPMdata.PPMOrderSelection < 1))
+        PPMdata.PPMOrderSelection = 2;
     ++SDCardAddress;
     PPMdata.PPMChannelsNumber = SDRead8BITS(SDCardAddress);
-    if ((PPMdata.PPMChannelsNumber > 16) || (PPMdata.PPMChannelsNumber < 1)) PPMdata.PPMChannelsNumber = 6;
+    if ((PPMdata.PPMChannelsNumber > 16) || (PPMdata.PPMChannelsNumber < 1))
+        PPMdata.PPMChannelsNumber = 6;
     ++SDCardAddress;
     BuddyPupilOnWireless = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     PPMdata.UseTXModule = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    for (int q = 0; q < 5; ++q) {
+    for (int q = 0; q < 5; ++q)
+    {
         BuddyMacAddress[q] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
     BuddyMasterOnWireless = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-// ************************** READ THE SWITCHES NOW PER TX !*********************************
+    // ************************** READ THE SWITCHES NOW PER TX !*********************************
     BankSwitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     Autoswitch = SDRead8BITS(SDCardAddress);
@@ -723,18 +818,27 @@ bool LoadAllParameters()
     ++SDCardAddress;
     DualRatesSwitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    SafetySwitch = SDRead8BITS(SDCardAddress); 
+    SafetySwitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     VariometerBank = SDRead8BITS(SDCardAddress);
+    VariometerBank = CheckRange(VariometerBank, 0, 3);
+    ++SDCardAddress;
+    VariometerSpacing = SDRead16BITS(SDCardAddress);
+    VariometerSpacing = CheckRange(VariometerSpacing, 50, 1000);
+    ++SDCardAddress;
+    ++SDCardAddress;
+    VariometerThreshold = SDRead16BITS(SDCardAddress);
+    VariometerThreshold = CheckRange(VariometerThreshold, 0, 1000);
+    ++SDCardAddress;
     ++SDCardAddress;
     ReadCheckSum32();
     CheckTrimValues();
     MemoryForTransmtter = SDCardAddress;
-    if ((ModelNumber < 1) || (ModelNumber > 99)) ModelNumber = 1;
+    if ((ModelNumber < 1) || (ModelNumber > 99))
+        ModelNumber = 1;
     ReadOneModel(ModelNumber);
     return true;
 }
-
 
 /*********************************************************************************************************************************/
 /******************************************** SAVE ONLY THE TRANSMITTER PARAMS ****************************************************/
@@ -743,17 +847,19 @@ bool LoadAllParameters()
 void SaveTransmitterParameters()
 {
     bool EON = false;
-    int  j   = 0;
-    int  i   = 0;
-    if (!ModelsFileOpen) OpenModelsFile();
+    int j = 0;
+    int i = 0;
+    if (!ModelsFileOpen)
+        OpenModelsFile();
 
     SDCardAddress = 0;
-    FileCheckSum  = 0;
+    FileCheckSum = 0;
 
     SDUpdate16BITS(SDCardAddress, 12345); // marker that file exists!
 
     SDCardAddress += 2;
-    for (i = 0; i < CHANNELSUSED; ++i) {
+    for (i = 0; i < CHANNELSUSED; ++i)
+    {
         SDUpdate16BITS(SDCardAddress, ChannelMin[i]); // Stick min output of pot
         SDCardAddress += 2;
         SDUpdate16BITS(SDCardAddress, ChannelMidLow[i]); //
@@ -776,13 +882,16 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, (Inactivity_Timeout / TICKSPERMINUTE));
     ++SDCardAddress;
-    for (j = 0; j < 30; ++j) {
-        if (EON) TxName[j] = 0;
+    for (j = 0; j < 30; ++j)
+    {
+        if (EON)
+            TxName[j] = 0;
         SDUpdate8BITS(SDCardAddress, TxName[j]);
-        if (TxName[j] == 0) EON = true;
+        if (TxName[j] == 0)
+            EON = true;
         ++SDCardAddress;
     }
-    SDUpdate16BITS(SDCardAddress,(uint16_t) Qnh);
+    SDUpdate16BITS(SDCardAddress, (uint16_t)Qnh);
     ++SDCardAddress;
     ++SDCardAddress;
     SDUpdate16BITS(SDCardAddress, DeltaGMT);
@@ -816,7 +925,8 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, AnnounceBanks);
     ++SDCardAddress;
-    for (i = 0; i < 8; ++i) {
+    for (i = 0; i < 8; ++i)
+    {
         SDUpdate8BITS(SDCardAddress, SwitchNumber[i]);
         ++SDCardAddress;
     }
@@ -830,7 +940,8 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, AnnounceConnected);
     ++SDCardAddress;
-    for (j = 0; j < 8; ++j) {
+    for (j = 0; j < 8; ++j)
+    {
         SDUpdate8BITS(SDCardAddress, TrimNumber[j]);
         ++SDCardAddress;
     }
@@ -865,7 +976,7 @@ void SaveTransmitterParameters()
     SDUpdate8BITS(SDCardAddress, BuddyMasterOnWireless);
     ++SDCardAddress;
 
-// WRITE THE SWITCHES NOW PER TX ***
+    // WRITE THE SWITCHES NOW PER TX ***
 
     SDUpdate8BITS(SDCardAddress, BankSwitch);
     ++SDCardAddress;
@@ -891,9 +1002,15 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, DualRatesSwitch);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, SafetySwitch); 
+    SDUpdate8BITS(SDCardAddress, SafetySwitch);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, VariometerBank);
+    ++SDCardAddress;
+    SDUpdate16BITS(SDCardAddress, VariometerSpacing);
+    ++SDCardAddress;
+    ++SDCardAddress;
+    SDUpdate16BITS(SDCardAddress, VariometerThreshold);
+    ++SDCardAddress;
     ++SDCardAddress;
     SaveCheckSum32(); // Save the Transmitter parametres checksm
     CloseModelsFile();
@@ -903,15 +1020,14 @@ void SaveTransmitterParameters()
 /****************************************** END OF SAVE TRANSMITTER PARAMS   *****************************************************/
 /*********************************************************************************************************************************/
 
-
-
 /*********************************************************************************************************************************/
 /******************************************  SAVE ALL PARAMS   *******************************************************************/
 /*********************************************************************************************************************************/
 
 void SaveAllParameters()
 {
-    if (!ModelsFileOpen) OpenModelsFile();
+    if (!ModelsFileOpen)
+        OpenModelsFile();
     SaveTransmitterParameters();
     MemoryForTransmtter = SDCardAddress - 2;
     SaveOneModel(ModelNumber);
@@ -935,37 +1051,43 @@ void SaveAllParameters()
 /******************************************  END OF SAVE ALL PARAMS   ************************************************************/
 /*********************************************************************************************************************************/
 
-
 /*********************************************************************************************************************************/
 /******************************************  SAVE MODEL PARAMS   *****************************************************************/
 /*********************************************************************************************************************************/
-
 
 /** MODEL Specific */
 void SaveOneModel(uint32_t mnum)
 {
     uint32_t j;
     uint32_t i;
-    bool     EndOfName = false;
-    FileCheckSum       = 0;
-    if ((mnum < 1) || (mnum > MAXMODELNUMBER)) return; // There is no model zero!
-    if (!ModelsFileOpen) OpenModelsFile();
+    bool EndOfName = false;
+    FileCheckSum = 0;
+    if ((mnum < 1) || (mnum > MAXMODELNUMBER))
+        return; // There is no model zero!
+    if (!ModelsFileOpen)
+        OpenModelsFile();
     SDCardAddress = TXSIZE;                  //  spare bytes for TX stuff
     SDCardAddress += (mnum - 1) * MODELSIZE; //  spare bytes for Model params
-    if (SingleModelFlag) SDCardAddress = 0;
+    if (SingleModelFlag)
+        SDCardAddress = 0;
     StartLocation = SDCardAddress;
-    ModelDefined  = 42;
+    ModelDefined = 42;
     SDUpdate8BITS(SDCardAddress, ModelDefined);
     ++SDCardAddress;
-    for (j = 0; j < 30; ++j) {
-        if (EndOfName) ModelName[j] = 0;
+    for (j = 0; j < 30; ++j)
+    {
+        if (EndOfName)
+            ModelName[j] = 0;
         SDUpdate8BITS(SDCardAddress, ModelName[j]);
-        if (ModelName[j] == 0) EndOfName = true;
+        if (ModelName[j] == 0)
+            EndOfName = true;
         ++SDCardAddress;
     }
 
-    for (i = 0; i < CHANNELSUSED; ++i) {
-        for (j = 1; j <= 4; ++j) {
+    for (i = 0; i < CHANNELSUSED; ++i)
+    {
+        for (j = 1; j <= 4; ++j)
+        {
             SDUpdate8BITS(SDCardAddress, MaxDegrees[j][i]); // Max requested in degrees (180)
             ++SDCardAddress;
             SDUpdate8BITS(SDCardAddress, MidHiDegrees[j][i]); // MidHi requested in degrees (135)
@@ -978,21 +1100,27 @@ void SaveOneModel(uint32_t mnum)
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < MAXMIXES; ++j) {
-        for (i = 0; i < 17; ++i) {
+    for (j = 0; j < MAXMIXES; ++j)
+    {
+        for (i = 0; i < 17; ++i)
+        {
             SDUpdate8BITS(SDCardAddress, Mixes[j][i]); // Save mixes
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < BANKSUSED + 1; ++j) {
-        for (i = 0; i < CHANNELSUSED + 1; ++i) {
+    for (j = 0; j < BANKSUSED + 1; ++j)
+    {
+        for (i = 0; i < CHANNELSUSED + 1; ++i)
+        {
             SDUpdate8BITS(SDCardAddress, Trims[j][i]);
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < BANKSUSED + 1; ++j) {
-        for (i = 0; i < CHANNELSUSED + 1; ++i) {
-            SDUpdate8BITS(SDCardAddress, ServoSpeed[j][i]);  // Save servo speeds
+    for (j = 0; j < BANKSUSED + 1; ++j)
+    {
+        for (i = 0; i < CHANNELSUSED + 1; ++i)
+        {
+            SDUpdate8BITS(SDCardAddress, ServoSpeed[j][i]); // Save servo speeds
             ++SDCardAddress;
         }
     }
@@ -1005,14 +1133,16 @@ void SaveOneModel(uint32_t mnum)
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, CopyTrimsToAll);
     ++SDCardAddress;
-    for (i = 0; i < CHANNELSUSED; ++i) {
+    for (i = 0; i < CHANNELSUSED; ++i)
+    {
         SDUpdate8BITS(SDCardAddress, SubTrims[i]);
         ++SDCardAddress;
     }
     SDUpdate16BITS(SDCardAddress, ReversedChannelBITS);
     ++SDCardAddress;
     ++SDCardAddress;
-    for (i = 0; i < 4; ++i) {
+    for (i = 0; i < 4; ++i)
+    {
         SDUpdate8BITS(SDCardAddress, InputTrim[i]);
         ++SDCardAddress;
     }
@@ -1028,60 +1158,70 @@ void SaveOneModel(uint32_t mnum)
 
     SDCardAddress += 1;
 
-    for (i = 0; i < CHANNELSUSED; ++i) {  
+    for (i = 0; i < CHANNELSUSED; ++i)
+    {
         SDUpdate8BITS(SDCardAddress, InPutStick[i]);
         ++SDCardAddress;
     }
-    
-    for (i = 0; i < 4; ++i) {
-        SDUpdate8BITS(SDCardAddress,DualRateRate[i]);
+
+    for (i = 0; i < 4; ++i)
+    {
+        SDUpdate8BITS(SDCardAddress, DualRateRate[i]);
         ++SDCardAddress;
-   }
-    
-    SDUpdate8BITS(SDCardAddress,BuddyHasAllSwitches);
+    }
+
+    SDUpdate8BITS(SDCardAddress, BuddyHasAllSwitches);
     ++SDCardAddress;
-    
-    
-    
+
     ++SDCardAddress;
     ++SDCardAddress;
     ++SDCardAddress;
     ++SDCardAddress;
     ++SDCardAddress;
-    
+
     // *********************************************************************************
 
-    for (i = 0; i < CHANNELSUSED; ++i) {
+    for (i = 0; i < CHANNELSUSED; ++i)
+    {
         SDUpdate8BITS(SDCardAddress, FailSafeChannel[i]);
         ++SDCardAddress;
     }
-    for (i = 0; i < CHANNELSUSED; ++i) {
-        for (j = 0; j < 10; ++j) {
+    for (i = 0; i < CHANNELSUSED; ++i)
+    {
+        for (j = 0; j < 10; ++j)
+        {
             SDUpdate8BITS(SDCardAddress, ChannelNames[i][j]);
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < BANKSUSED + 1; ++j) {
-        for (i = 0; i < CHANNELSUSED + 1; ++i) {
+    for (j = 0; j < BANKSUSED + 1; ++j)
+    {
+        for (i = 0; i < CHANNELSUSED + 1; ++i)
+        {
             SDUpdate8BITS(SDCardAddress, Exponential[j][i]);
             ++SDCardAddress;
         }
     }
 
-    for (j = 0; j < BANKSUSED + 1; ++j) {
-        for (i = 0; i < CHANNELSUSED + 1; ++i) {
+    for (j = 0; j < BANKSUSED + 1; ++j)
+    {
+        for (i = 0; i < CHANNELSUSED + 1; ++i)
+        {
             SDUpdate8BITS(SDCardAddress, InterpolationTypes[j][i]);
             ++SDCardAddress;
         }
     }
 
-    for (j = 0; j < BYTESPERMACRO; ++j) {
-        for (i = 0; i < MAXMACROS; ++i) {
+    for (j = 0; j < BYTESPERMACRO; ++j)
+    {
+        for (i = 0; i < MAXMACROS; ++i)
+        {
             SDUpdate8BITS(SDCardAddress, MacrosBuffer[i][j]);
             ++SDCardAddress;
         }
     }
-    for (i = 0; i < 8; ++i) {
+    for (i = 0; i < 8; ++i)
+    {
         SDUpdate8BITS(SDCardAddress, ModelsMacUnionSaved.Val8[i]);
         ++SDCardAddress;
     }
@@ -1091,14 +1231,15 @@ void SaveOneModel(uint32_t mnum)
     SDUpdate8BITS(SDCardAddress, MotorChannelZero);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, MotorChannel);
-    if (MotorChannel > 15) MotorChannel = 15;
+    if (MotorChannel > 15)
+        MotorChannel = 15;
     ++SDCardAddress;
-    ++SDCardAddress;// Spare byte
-   
+    ++SDCardAddress; // Spare byte
+
     SDUpdate16BITS(SDCardAddress, SFV);
     ++SDCardAddress;
     ++SDCardAddress;
-   
+
     SDUpdate8BITS(SDCardAddress, Drate2);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, Drate3);
@@ -1106,20 +1247,23 @@ void SaveOneModel(uint32_t mnum)
     SDUpdate8BITS(SDCardAddress, Drate1);
     ++SDCardAddress;
 
-    for (int i = 0; i < 8; ++i) {
+    for (int i = 0; i < 8; ++i)
+    {
         SDUpdate8BITS(SDCardAddress, DualRateChannels[i]);
         ++SDCardAddress;
     }
-    ++SDCardAddress;// Spare byte
-    ++SDCardAddress;// Spare byte
+    ++SDCardAddress; // Spare byte
+    ++SDCardAddress; // Spare byte
 
-    for (i = 0; i < 4; ++i) {
+    for (i = 0; i < 4; ++i)
+    {
         SDUpdate8BITS(SDCardAddress, BanksInUse[i]);
         ++SDCardAddress;
     }
-  
-    for (i = 0; i < 12; ++i) {
-      // 12 Spare bytes was 16
+
+    for (i = 0; i < 12; ++i)
+    {
+        // 12 Spare bytes was 16
         ++SDCardAddress;
     }
     CheckServoType();
@@ -1139,16 +1283,18 @@ void SaveOneModel(uint32_t mnum)
     SDUpdate16BITS(SDCardAddress, PPMdata.PPMChannelCount);
     ++SDCardAddress;
     ++SDCardAddress;
-    for (i = 0; i < 16; ++i) {
+    for (i = 0; i < 16; ++i)
+    {
         SDUpdate8BITS(SDCardAddress, ChannelOutPut[i]);
         ++SDCardAddress;
     }
-    for (int i = 0; i < 11; ++i) {
+    for (int i = 0; i < 11; ++i)
+    {
         SDUpdate16BITS(SDCardAddress, ServoFrequency[i]);
         ++SDCardAddress;
         ++SDCardAddress;
         SDUpdate16BITS(SDCardAddress, ServoCentrePulse[i]);
-        ++SDCardAddress;   
+        ++SDCardAddress;
         ++SDCardAddress;
     }
     SaveCheckSum32(); // Save the Model parametres checksm
@@ -1187,6 +1333,5 @@ void SaveOneModel(uint32_t mnum)
 /*********************************************************************************************************************************/
 /******************************************  END OF SAVE MODEL PARAMS   **********************************************************/
 /*********************************************************************************************************************************/
-
 
 #endif

@@ -2,6 +2,8 @@
 ||
 It also allows the screen brightness to be changed.||
 
-The QR code can be scanned to direct a mobile 'phone or tablet to the GitHub URL where the user manual as well as the latest source code for this system is to be found. The code is open source. This Github location also stores the .STL files for the transmitter case and the Gerber files for the PCBs.||
+The vario can use a BMP280 or a DPS310 pressure sensor. One or the other must be connected. It emits sounds to help the pilot know whether the model is climbing or descending.||
 
-The variometer can be enabled in any bank (1,2,3, or 4). If zero is selected then the variometer is enabled in all banks.
+The vario can be enabled in any bank (1,2,3, or 4). If zero is selected then the vario is enabled in all banks.|
+The vario threshold is the minimum rate of climb or decent needed to trigger a sound.|
+The various spacing is the minimum change in rate of climb or descent needed to move to the next sound.|

@@ -30,7 +30,7 @@
 #define TXVERSION_MAJOR 2 // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 5
 #define TXVERSION_MINIMUS 1
-#define TXVERSION_EXTRA "D 16/05/25"
+#define TXVERSION_EXTRA "D 22/05/25"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -1200,6 +1200,8 @@ char WarnOff[] = "vis Warning,0";
 char Warning[] = "Warning";
 char err_MotorOn[] = " MOTOR IS ON! ";
 uint8_t VariometerBank = 3;
+uint16_t VariometerThreshold = 400; // 400 fpm
+uint16_t VariometerSpacing = 125; // 125 fpm
 
 
 // **********************************************************************************************************************************

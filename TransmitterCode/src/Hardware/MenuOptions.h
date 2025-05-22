@@ -574,8 +574,8 @@ void StartAudioVisualView()
 {
 
     char n0[] = "n0";
-    char n1[] = "n1";
     char n2[] = "n2";
+    char n3[] = "n3";
     char h0[] = "h0";
     char Ex1[] = "Ex1"; // slider
     char c0[] = "c0";
@@ -586,10 +586,13 @@ void StartAudioVisualView()
     char c5[] = "c5";
     CurrentView = AUDIOVIEW;
     SendCommand(pAudioView);
-    SendValue(n0, AudioVolume);
     SendValue(Ex1, AudioVolume);
-    SendValue(n1, Brightness);
-    SendValue(n2,VariometerBank);
+    VariometerBank = CheckRange(VariometerBank, 0, 3);
+    SendValue(n2, VariometerBank);
+    VariometerThreshold = CheckRange(VariometerThreshold, 50, 1000);
+    SendValue(n0, VariometerThreshold);
+    VariometerSpacing = CheckRange(VariometerSpacing, 50, 1000);
+    SendValue(n3, VariometerSpacing);
     SendValue(h0, Brightness);
     SendValue(c0, PlayFanfare);
     SendValue(c1, TrimClicks);
@@ -606,17 +609,21 @@ void StartAudioVisualView()
 void EndAudioVisualView()
 {
     char n0[] = "n0";
-    char n1[] = "n1";
     char n2[] = "n2";
+    char n3[] = "n3";
     char c0[] = "c0";
     char c1[] = "c1";
     char c2[] = "c2";
     char c3[] = "c3";
     char c4[] = "c4";
     char c5[] = "c5";
-    AudioVolume = GetValue(n0);
-    Brightness = GetValue(n1);
+    char Ex1[] = "Ex1"; // slider
+    char h0[] = "h0";
+    AudioVolume = GetValue(Ex1);
+    Brightness = GetValue(h0);
     VariometerBank = GetValue(n2);
+    VariometerThreshold = GetValue(n0);
+    VariometerSpacing = GetValue(n3);
     PlayFanfare = GetValue(c0);
     TrimClicks = GetValue(c1);
     UseVariometer = GetValue(c2);
