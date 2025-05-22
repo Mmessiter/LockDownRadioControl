@@ -621,9 +621,9 @@ void EndAudioVisualView()
     char h0[] = "h0";
     AudioVolume = GetValue(Ex1);
     Brightness = GetValue(h0);
-    VariometerBank = GetValue(n2);
-    VariometerThreshold = GetValue(n0);
-    VariometerSpacing = GetValue(n3);
+    VariometerBank = CheckRange (GetValue(n2), 0, 3);
+    VariometerThreshold = CheckRange (GetValue(n0), 50, 1000);
+    VariometerSpacing = CheckRange (GetValue(n3), 50, 1000);
     PlayFanfare = GetValue(c0);
     TrimClicks = GetValue(c1);
     UseVariometer = GetValue(c2);
