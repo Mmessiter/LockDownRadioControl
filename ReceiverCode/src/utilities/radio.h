@@ -239,15 +239,11 @@ void GetRateOfClimb()
     // feet per minute = Δalt (ft) / Δt (min)
     float dAlt = float(BaroAltitude) - lastAltitudeFt; // float early!
     float roc = (dAlt * 60000.0f) / float(dt_ms);      // 60000 ms/min
-
     roc = 0.8f * FilterRoc + 0.2f * roc; //  light smoothing
     FilterRoc = roc;
     RateOfClimb = static_cast<int32_t>(roc);
     lastAltitudeFt = float(BaroAltitude);
     lastTime = now;
-    // Look1("Rate of Climb: ");
-    // Look(RateOfClimb);
-
 }
 // ************************************************************************************************************/
 void ReadDPS310()
@@ -278,16 +274,12 @@ void ReadBMP280()
     static uint32_t lastTime = 0;
     uint32_t now = millis();
 
-    if (now - lastTime >= 250)
+    if (now - lastTime >= 250) // 4 Hz
     { 
         lastTime = now;
-        // bmp.takeForcedMeasurement();
         BaroTemperature = bmp.readTemperature();
         BaroAltitude = MetersToFeet(bmp.readAltitude(Qnh));
         GetRateOfClimb();
-        
-      //  Look1(" Rate of Climb: ");
-      //  Look(RateOfClimb);
     }
 }
 // ******************************************************************************************************************************************************************
