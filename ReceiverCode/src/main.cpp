@@ -10,6 +10,7 @@
  * - Detects and uses INA219 to read volts
  * - Detects and uses BMP280 pressure sensor for altitude and temperature and rate of climb (use default address 0x76)
  * - Detects and uses DPS310 pressure sensor for altitude and temperature and rate of climb (use default address 0x77)
+ * - (DPS310 is recommended! It's better.)
  * - Binding implemented
  * - SBUS implemented
  * - PPM Implemented on the same pin as SBUS (Serial 3 / Pin 14)
