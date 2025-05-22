@@ -1202,7 +1202,7 @@ char err_MotorOn[] = " MOTOR IS ON! ";
 uint8_t VariometerBank = 3;
 uint16_t VariometerThreshold = 400; // 400 fpm
 uint16_t VariometerSpacing = 125; // 125 fpm
-
+bool Variometer_InitDone = false;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

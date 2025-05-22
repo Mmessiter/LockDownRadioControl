@@ -702,9 +702,9 @@ void DoTheVariometer()
     //------------------------------------------------------------------
     static int16_t T[10];   // climb thresholds (ft/min)
     static int16_t HYS_FPM; // hysteresis band
-    static bool initDone = false;
+ 
 
-    if (!initDone)
+    if (!Variometer_InitDone)
     {
         uint16_t base = VariometerThreshold; // first climb or sink band begins at 400 fpm, so silent means little change.
         for (uint8_t i = 0; i < 10; ++i)
@@ -713,7 +713,7 @@ void DoTheVariometer()
             base += VariometerSpacing; // spacing between bands (edit ... was 200. 125 might be better)
         }
         HYS_FPM = int(25 * SCALE + 0.5f);
-        initDone = true;
+        Variometer_InitDone = true;
     }
 
     //------------------------------------------------------------------

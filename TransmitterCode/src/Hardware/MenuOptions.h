@@ -636,6 +636,7 @@ void EndAudioVisualView()
     LastTimeRead = 0;
     SaveTransmitterParameters();
     UpdateModelsNameEveryWhere();
+    Variometer_InitDone = false; // re-initialise variometer in case settings were changed
     ClearText();
 }
 
