@@ -62,6 +62,7 @@ Here is a brief summary of the features supported at the time of writing (August
 - Digital trims, subtrim, servo reverse, servo speeds, user macros, motor timer, log files, etc., etc...
 - Support for SBUS, PWM (with definable frequency and centre position), and PPM.
 - Support for third party transmitter models (JR type).
+- Variometer function for gliders.
 - Context sensitive help screens for all functions.
 
 # Bill of Materials (BOM)
