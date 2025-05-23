@@ -2,7 +2,7 @@
 
 ![Image](./Images/TX_and_RX.jpeg "The radio!")
 
-## Introduction (Please scroll down for BOM and assembly instruction.)
+## Introduction (Please scroll down for BOM. Assembly instruction coming here later!)
 
 This is a very full featured 16 channel Radio Control system for models of all kinds. I've been developing this project since Lockdown in May 2020.
 
