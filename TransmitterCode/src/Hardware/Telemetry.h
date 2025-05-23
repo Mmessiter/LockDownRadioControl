@@ -720,10 +720,11 @@ void DoTheVariometer()
     // 2.3  Map ft/min → Zone
     //------------------------------------------------------------------
     int roc = RateOfClimb; // +ve climb, ‑ve sink
-
-    //  roc = GetTestRateOfClimb(); // test function to simulate the rate of climb
-    //  Look (roc); // for debugging
-
+#ifdef DB_Variometer
+    roc = GetTestRateOfClimb(); // test function to simulate the rate of climb
+    Look1(roc);                 // for debugging
+    Look1("fpm. zone: ");
+#endif
     Zone zone = Z_NEUTRAL;
 
     // climbs (scan highest to lowest)
@@ -777,7 +778,9 @@ void DoTheVariometer()
     static uint32_t lastPlayMs = 0;
 
     bool needPlay = false;
-
+#ifdef DB_Variometer
+    Look(zone); // for debugging
+#endif
     if (zone != lastZone)
     {
         lastZone = zone;

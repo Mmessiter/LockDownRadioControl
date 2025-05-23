@@ -54,7 +54,7 @@
  * - Slow Servos implemented: Any channel can be slowed by almost any amount for realistic flaps, U/C etc,
  * - PPM or SBUS now possible from reciever - chosen in transmitter.
  * - Support for external third party transmitter modules added (JR type).
- * - Variometer implemented (using BMP280)
+ * - Variometer implemented (using a BMP280 or better still, a DPS310)
  *
  *
  * @section txPinout Teensy 4.1 Pins

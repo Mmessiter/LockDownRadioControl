@@ -638,9 +638,7 @@ FLASHMEM void setup()
 
 #ifdef USE_STABILISATION
     if (MPU6050Connected)
-    {
         InitialiseTheMPU6050();
-    }
 #endif
 
     if (INA219Connected)

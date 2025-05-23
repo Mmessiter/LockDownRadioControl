@@ -589,7 +589,7 @@ void StartAudioVisualView()
     SendValue(Ex1, AudioVolume);
     VariometerBank = CheckRange(VariometerBank, 0, 3);
     SendValue(n2, VariometerBank);
-    VariometerThreshold = CheckRange(VariometerThreshold, 50, 1000);
+    VariometerThreshold = CheckRange(VariometerThreshold, 0, 1000);
     SendValue(n0, VariometerThreshold);
     VariometerSpacing = CheckRange(VariometerSpacing, 50, 1000);
     SendValue(n3, VariometerSpacing);
@@ -622,7 +622,7 @@ void EndAudioVisualView()
     AudioVolume = GetValue(Ex1);
     Brightness = GetValue(h0);
     VariometerBank = CheckRange (GetValue(n2), 0, 3);
-    VariometerThreshold = CheckRange (GetValue(n0), 50, 1000);
+    VariometerThreshold = CheckRange (GetValue(n0), 0, 1000);
     VariometerSpacing = CheckRange (GetValue(n3), 50, 1000);
     PlayFanfare = GetValue(c0);
     TrimClicks = GetValue(c1);

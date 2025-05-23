@@ -46,6 +46,7 @@
 // #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
 // #define DB_GAPS           // Debug Connection Gap assessment
 // #define DB_IDS            // Debug Model IDs (Hitting the 'BACK' button on models' screen will Serial.print these to the terminal)
+// #define DB_Variometer     // Debug Variometer
 
 // ************************************************************************************
 //                                       General                                      *
@@ -349,29 +350,28 @@
 #define WINDOWS1 76
 #define WINDOWS2 77
 
-#define GOINGUP1 78  // new vario sounds ....
+#define GOINGUP1 78 // variometer sounds up...
 #define GOINGUP2 79
 #define GOINGUP3 80
 #define GOINGUP4 81
 #define GOINGUP5 82
 #define GOINGUP6 83
+#define GOINGUP7 84
+#define GOINGUP8 85
+#define GOINGUP9 86
+#define GOINGUP10 87
 
-#define GOINGDOWN1 84
-#define GOINGDOWN2 85
-#define GOINGDOWN3 86
-#define GOINGDOWN4 87
-#define GOINGDOWN5 88
-#define GOINGDOWN6 89
-
-#define GOINGUP7 90 // extra!
-#define GOINGUP8 91
-#define GOINGUP9 92
-#define GOINGUP10 93
-
+#define GOINGDOWN1 88 // variometer sounds down...
+#define GOINGDOWN2 89
+#define GOINGDOWN3 90
+#define GOINGDOWN4 91
+#define GOINGDOWN5 92
+#define GOINGDOWN6 93
 #define GOINGDOWN7 94
 #define GOINGDOWN8 95
 #define GOINGDOWN9 96
 #define GOINGDOWN10 97
+
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
 //***************************************************************************
@@ -507,7 +507,6 @@ void KickTheDog();
 void SendCommand(char *tbox);
 void ReadSwitches();
 void ShowComms();
-void CheckTimer();
 void SendCharArray(char *ch0, char *ch1, char *ch2, char *ch3, char *ch4, char *ch5, char *ch6, char *ch7, char *ch8, char *ch9, char *ch10, char *ch11, char *ch12);
 char *Str(char *s, int n, int comma);
 void GetNewChannelValues();
@@ -545,11 +544,9 @@ void InitRadio(uint64_t Pipe);
 void SetThePipe(uint64_t WhichPipe);
 void DoScanInit();
 void DoScanEnd();
-void PreScan();
 void HopToNextChannel();
 void ScanAllChannels(bool cls);
 void SendData();
-void Procrastinate(uint32_t HowLong);
 void DrawFhssBox();
 void SendText(char *tbox, char *NewWord); // needed a prototype or two here!
 void RestoreBrightness();
@@ -559,11 +556,9 @@ void DisplayCurve();
 void DrawLine(int x1, int y1, int x2, int y2, int c);
 void DrawBox(int x1, int y1, int x2, int y2, int c);
 void FillBox(int x1, int y1, int w, int h, int c);
-void ReadTextFile(char *fname, char *htext, uint8_t StartLineNumber, uint8_t MaxLines);
 void LogConnection();
 void LogDisConnection();
 void CloseLogFile();
-void StartLogFile();
 void LogLongestGap();
 void LogThisModel();
 void Force_ReDisplay();
@@ -574,13 +569,6 @@ void ExecuteMacro();
 void LogTimer(uint32_t Mins);
 FASTRUN void LogText(char *TheText, uint16_t len, bool TimeStamp);
 void LogAverageFrameRate();
-
-template <typename any>
-void Look(const any &value);
-
-template <typename any>
-void Look1(const any &value);
-
 void ShowBank();
 void UpdateModelsNameEveryWhere();
 void ResetAllTrims();
@@ -640,7 +628,6 @@ FASTRUN void LogThisGap();
 void GetRXVersionNumber();
 void GetRXVersionNumber();
 void CompareModelsIDs();
-FASTRUN void ParseShortAckPayload();
 void OpenModelsFile();
 uint8_t SDRead8BITS(int p_address);
 short int SDRead16BITS(int p_address);
@@ -726,7 +713,6 @@ void LogTotalRXGoodPackets();
 void LogTotalRXGoodPackets();
 void LogTotalPacketsAttempted();
 FASTRUN void LogAverageGap();
-void CheckMotorReallyIsOff();
 #ifdef USE_BTLE
 void SendViaBLE();
 #endif
@@ -1201,7 +1187,7 @@ char Warning[] = "Warning";
 char err_MotorOn[] = " MOTOR IS ON! ";
 uint8_t VariometerBank = 3;
 uint16_t VariometerThreshold = 400; // 400 fpm
-uint16_t VariometerSpacing = 125; // 125 fpm
+uint16_t VariometerSpacing = 125;   // 125 fpm
 bool Variometer_InitDone = false;
 
 // **********************************************************************************************************************************
