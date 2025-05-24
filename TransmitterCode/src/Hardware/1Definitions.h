@@ -36,16 +36,16 @@
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
 //**************************************************************************************
 
-// #define DB_NEXTION        // Debug NEXTION//
+// #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
-// #define DB_SWITCHES       // Debug Switches
+// #define DB_SWITCHES       // Debug Switches (Obsolete)
 // #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
 // #define DB_GAPS           // Debug Connection Gap assessment
-// #define DB_IDS            // Debug Model IDs (Hitting the 'BACK' button on models' screen will Serial.print these to the terminal)
+// #define DB_IDS            // Debug Model IDs (Obsolete)
 // #define DB_Variometer     // Debug Variometer
 
 // ************************************************************************************
