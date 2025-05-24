@@ -670,8 +670,8 @@ static constexpr uint16_t WAV_MS[Z_COUNT] = {
     0,                       // neutral – no loop
     500, 400, 350, 300, 250, // climbs 1‑5
     200, 175, 150, 125, 100, // climbs 6‑10  (shorter & more urgent)
-    500, 550, 600, 650, 700, // sinks  1‑5
-    750, 800, 850, 900, 950  // sinks  6‑10
+    500, 450, 400, 350, 300, // sinks  1‑5
+    250, 200, 175, 150, 120  // sinks  6‑10
 };
 
 static_assert(sizeof(WAV_ID) / sizeof(WAV_ID[0]) == Z_COUNT, "WAV_ID size mismatch");
