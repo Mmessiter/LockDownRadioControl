@@ -629,7 +629,8 @@ FLASHMEM void setup()
     TestTheSBUSPin(); // Check that the SBUS pin is not held low (plug in wrong way round)
     TestAllPWMPins(); // Check that the no PWM pins are held low (plug in wrong way round)
     Wire.begin();
-    // delay(400); // *only* needed if you want to see terminal output
+    delay(100); // Wait for I2C to settle
+ // delay(300); // *only* needed if you want to see terminal output
     ScanI2c(); // Detect what's connected
     if (BMP280Connected)
         Init_BMP280();
