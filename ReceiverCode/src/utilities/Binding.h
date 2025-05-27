@@ -32,16 +32,7 @@ bool ValidateNewPipe()
         return true;
     return false;
 }
-//************************************************************************************************************/
-bool PipesMatch(uint8_t *p1, uint8_t *p2)
-{
-    for (int i = 0; i < 6; ++i)
-    {
-        if (p1[i] != p2[i])
-            return false;
-    }
-    return true;
-}
+
 /************************************************************************************************************/
 
 void GetNewPipe() // from TX
@@ -61,35 +52,17 @@ void GetNewPipe() // from TX
     if (ValidateNewPipe()) // was this pipe corrupted?
     {
         for (int i = 0; i < 5; ++i)
-        {
             TheReceivedPipe[4 - i] = ReceivedData[i + 1] & 0xff; // reversed byte array for our use
-        }
         TheReceivedPipe[5] = 0;
-
         if (Blinking)
-        {
             CopyCurrentPipe(TheReceivedPipe, BOUNDPIPENUMBER);
-            SetNewPipe();
-            BindModel();
-            PipeSeen = true;
-        }
         else
-        {
-            if (PipesMatch(TheReceivedPipe, TheSavedPipe)) // A similar pipe might connect so it better be identical
-            {
-                CopyCurrentPipe(TheSavedPipe, BOUNDPIPENUMBER);
-                PipePointer = TheReceivedPipe;
-                BoundFlag = true;
-                Connected = true;
-                SetNewPipe();
-                BindModel();
-                PipeSeen = true;
-            }
-            else
-            {
-                UnbindModel(); // if no match, no connect
-            }
-        }
+            CopyCurrentPipe(TheSavedPipe, BOUNDPIPENUMBER);
+        BoundFlag = true;
+        Connected = true;
+        SetNewPipe();
+        BindModel();
+        PipeSeen = true;
     }
     ++pcount; // inc pipes received
 }
@@ -112,7 +85,7 @@ void CopyCurrentPipe(uint8_t *p, uint8_t pn)
     Pipnum = pn;
 }
 //************************************************************************************************************/
-void SetNewPipe()  
+void SetNewPipe()
 {
     CurrentRadio->openReadingPipe(Pipnum, PipePointer); //  5 * byte array
 }
