@@ -239,7 +239,7 @@ void GetRateOfClimb()
     // feet per minute = Δalt (ft) / Δt (min)
     float dAlt = float(BaroAltitude) - lastAltitudeFt; // float early!
     float roc = (dAlt * 60000.0f) / float(dt_ms);      // 60000 ms/min
-    roc = 0.8f * FilterRoc + 0.2f * roc; //  light smoothing
+    roc = 0.8f * FilterRoc + 0.2f * roc;               //  light smoothing
     FilterRoc = roc;
     RateOfClimb = static_cast<int32_t>(roc);
     lastAltitudeFt = float(BaroAltitude);
@@ -275,7 +275,7 @@ void ReadBMP280()
     uint32_t now = millis();
 
     if (now - lastTime >= 250) // 4 Hz
-    { 
+    {
         lastTime = now;
         BaroTemperature = bmp.readTemperature();
         BaroAltitude = MetersToFeet(bmp.readAltitude(Qnh));
@@ -320,24 +320,6 @@ FASTRUN void ReceiveData()
     }
 }
 
-/************************************************************************************************************/
-void CopyCurrentPipe(uint8_t *p, uint8_t pn)
-{
-    for (int i = 0; i < 6; ++i)
-        CurrentPipe[i] = p[i];
-    PipePointer = p;
-    Pipnum = pn;
-}
-//************************************************************************************************************/
-void SetNewPipe() // new pipe from TX
-{
-    CurrentRadio->openReadingPipe(Pipnum, PipePointer); //  5 * byte array
-#ifdef DB_BIND
-    if (BoundFlag)
-        Serial.println("BOUND TO TX'S PIPE");
-#endif
-    BoundFlag = true;
-}
 
 /************************************************************************************************************/
 
@@ -348,100 +330,6 @@ void SendVersionNumberToAckPayload() // AND which radio transceiver is currently
     AckPayload.Byte3 = RXVERSION_MINOR;
     AckPayload.Byte4 = RXVERSION_MINIMUS;
     AckPayload.Byte5 = toascii(RXVERSION_EXTRA);
-}
-
-/************************************************************************************************************/
-// This function compares the just-received pipe with several of the previous ones
-// if it matches most of them then its probably not corrupted.
-
-bool ValidateNewPipe()
-{
-
-    uint8_t MatchedCounter = 0;
-
-    if (pcount < 2)
-        return false; // ignore first few
-
-    PreviousNewPipes[PreviousNewPipesIndex] = NewPipeMaybe;
-    PreviousNewPipesIndex++;
-    if (PreviousNewPipesIndex > PIPES_TO_COMPARE)
-        PreviousNewPipesIndex = 0;
-
-    for (int i = 0; i < PIPES_TO_COMPARE; ++i)
-    {
-        if (NewPipeMaybe == PreviousNewPipes[i])
-            ++MatchedCounter;
-    }
-
-    if (MatchedCounter >= 2)
-        return true;
-    return false;
-}
-
-/************************************************************************************************************/
-
-void GetNewPipe() // from TX
-{
-    if (!NewData)
-        return;
-    NewData = false;
-    if (PipeSeen)
-        return;
-    NewPipeMaybe = (uint64_t)ReceivedData[0] << 40;
-    NewPipeMaybe += (uint64_t)ReceivedData[1] << 32;
-    NewPipeMaybe += (uint64_t)ReceivedData[2] << 24;
-    NewPipeMaybe += (uint64_t)ReceivedData[3] << 16;
-    NewPipeMaybe += (uint64_t)ReceivedData[4] << 8;
-    NewPipeMaybe += (uint64_t)ReceivedData[5];
-
-    if (ValidateNewPipe()) // was this pipe corrupted?
-    {
-#ifdef DB_BIND
-        Serial.println("Received TX ID!");
-#endif
-        for (int i = 0; i < 5; ++i)
-        {
-            TheReceivedPipe[4 - i] = ReceivedData[i + 1] & 0xff; // reversed byte array for our use
-#ifdef DB_BIND
-            Serial.print((uint8_t)ReceivedData[i + 1], HEX);
-            Serial.print(" ");
-#endif
-        }
-        TheReceivedPipe[5] = 0;
-#ifdef DB_BIND
-        Serial.println(" ");
-#endif
-        CopyCurrentPipe(TheReceivedPipe, BOUNDPIPENUMBER);
-        BindModel();
-        PipeSeen = true;
-    }
-#ifdef DB_BIND
-    Look(pcount);
-#endif
-    ++pcount; // inc pipes received
-}
-
-/************************************************************************************************************/
-
-/**
- * Get pipe address from EEPROM.
- * @note Address data in EEPORM is valid only after a previous power cycle observed
- * a completed binding process .
- */
-FLASHMEM void GetOldPipe()
-{
-    ReadSavedPipe();
-    CopyCurrentPipe(TheReceivedPipe, BOUNDPIPENUMBER);
-
-#ifdef DB_BIND
-    Serial.println("Loaded old PIPE:");
-    for (int i = 0; i < 5; ++i)
-    {
-        Serial.print(TheReceivedPipe[i], HEX);
-        Serial.print(" ");
-    }
-    Serial.println(" ");
-#endif
 }
 
 /************************************************************************************************************/
@@ -598,7 +486,26 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch)
     DelayMillis(1);
 }
 #endif // defined (SECOND_TRANSCEIVER)
+// ************************************************************************************************************/
+void DisplayPipe()
+{
+    static uint32_t now = millis();
 
+    if (millis() - now < 1000)
+    {
+        return;
+    } // don't print too often
+
+    now = millis();
+
+    Serial.print("Listening for pipe: ");
+    for (uint8_t i = 0; i < 5; ++i)
+    {
+        Serial.print(CurrentPipe[i], HEX);
+        Serial.print(" ");
+    }
+    Serial.println("");
+}
 /************************************************************************************************************/
 
 FASTRUN void Reconnect()
@@ -616,6 +523,8 @@ FASTRUN void Reconnect()
 
     while (!Connected)
     {
+      //  DisplayPipe(); // for debugging purposes
+
         if (Blinking)
             BlinkLed();
         KickTheDog();

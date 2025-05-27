@@ -13,7 +13,7 @@
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 5
 #define RXVERSION_MINIMUS 1
-#define RXVERSION_EXTRA 'D' // 17 May 2025
+#define RXVERSION_EXTRA 'E' // 27 May 2025
 #define HOPTIME 17          // 17 gives 50Hz FHSS, 47 gives 20Hz FHSS
 #define RECEIVE_TIMEOUT 7   // was 8 ... 5 milliseconds is 'perfect' time between packets, but with nRF24L01 auto-retries it might be 7 or 8 sometimes
 
@@ -30,7 +30,7 @@
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! (if it won't connect, probably one or both is wrong! )******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
    #define SECOND_TRANSCEIVER          // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
-   #define USE_11PWM_OUTPUTS           // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
+  // #define USE_11PWM_OUTPUTS           // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -249,9 +249,14 @@ void GetRXVolts();
 void SendSBUSData();
 bool CheckCrazyValues();
 void ReadGPS();
+FASTRUN void ReceiveData();
+void CopyCurrentPipe(uint8_t *p, uint8_t pn);
+void SetNewPipe();
+void UnbindModel();
+void AttachServos();
 
-template <typename any>
-void Look(const any &value);
+    template <typename any>
+    void Look(const any &value);
 
 template <typename any>
 void Look1(const any &value);
@@ -306,6 +311,7 @@ bool QNHSent = false;
 uint8_t MacAddress[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
 bool ModelMatched = false;
 uint8_t TheReceivedPipe[6];
+uint8_t TheSavedPipe[6];
 uint8_t TheCurrentPipe[6];
 bool FirstConnection = true;
 bool FailedSafe = true; // Starting up as the same as after failsafe

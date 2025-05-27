@@ -63,6 +63,7 @@
 #include "utilities/pid.h"
 #include "utilities/GPS.h"
 #include "utilities/kalman.h"
+#include "utilities/Binding.h"
 
 void DelayMillis(uint16_t ms) // This replaces any delay() calls
 {
@@ -184,13 +185,7 @@ void FailSafe()
             MoveServos();
             delay(1);
         }
-        Connected = false;
-        BoundFlag = false;
-        ModelMatched = false;
-        LongAcknowledgementsCounter = 0;
-        PipeSeen = false;
-        pcount = 0;
-        MacAddressSentCounter = 0;
+        UnbindModel(); // Unbind the model so that we now only listen to default pipe
     }
     FailSafeSent = true; // Once is enough
     FailedSafe = true;
@@ -245,68 +240,6 @@ void TurnLedOff()
         digitalWrite(LED_RED, LOW);
         LedIsOn = false;
     }
-}
-
-/************************************************************************************************************/
-// This function binds the model using the TX supplied Pipe instead of the default one.
-// If not already saved, this saves it to the eeprom too for next time.
-
-void BindModel()
-{
-    // CurrentRadio->stopListening();
-    // delayMicroseconds(250);
-    BoundFlag = true;
-    ModelMatched = true;
-    Connected = true;
-
-    if (Blinking)
-    {
-        SetNewPipe(); // change to bound pipe <<< ***************************************
-
-#ifdef DB_BIND
-        Serial.println("SAVING RECEIVED PIPE:");
-#endif
-
-        for (uint8_t i = 0; i < 5; ++i)
-        {
-            EEPROM.update(i + BIND_EEPROM_OFFSET, TheReceivedPipe[i]);
-
-#ifdef DB_BIND
-            Serial.print(TheReceivedPipe[i], HEX);
-            Serial.print(" ");
-#endif
-        }
-
-#ifdef DB_BIND
-        Serial.println("");
-        Serial.println("TX PIPE SAVED");
-#endif
-    }
-    Blinking = false;
-
-    if (FirstConnection)
-    {
-        AttachServos(); // AND START SBUS / PPM
-        FirstConnection = false;
-    }
-    SaveNewBind = false;
-
-#ifdef DB_BIND
-    Serial.println("");
-    Serial.println("DONE BINDING");
-#endif
-    ConnectMoment = millis();
-    SuccessfulPackets = 0; // Reset the packet count
-}
-
-/************************************************************************************************************/
-void ReadSavedPipe() // read only 6 bytes
-{
-    for (uint8_t i = 0; i < 5; ++i)
-    {
-        TheReceivedPipe[i] = EEPROM.read(i + BIND_EEPROM_OFFSET); // uses first 5 bytes only.
-    }
-    TheReceivedPipe[5] = 0;
 }
 
 /************************************************************************************************************/
@@ -437,34 +370,6 @@ void teensyMAC(uint8_t *mac)
 }
 
 /************************************************************************************************************/
-
-void ReadBindPlug()
-{
-    uint32_t tt = millis();
-    PipePointer = DefaultPipe;
-    CopyCurrentPipe(DefaultPipe, PIPENUMBER);
-    if (!digitalRead(BINDPLUG_PIN))
-    {                    // Bind Plug needed to bind!
-        Blinking = true; // Blinking = binding to new TX
-#ifdef DB_BIND
-        Serial.println("Bind plug detected.");
-#endif
-    }
-    else
-    {
-        Blinking = false; // Already bound
-        PipePointer = TheReceivedPipe;
-        CopyCurrentPipe(TheReceivedPipe, BOUNDPIPENUMBER);
-        BoundFlag = true;
-        Connected = true;
-        SaveNewBind = false;
-        while (millis() - tt < 500)
-            ReceiveData();
-        BindModel(); // TODO check this...
-    }
-}
-
-/************************************************************************************************************/
 void S_or_O(int d1, int d2, int d3) // This function blinks the LED for S or O in Morse code
 {
     for (int i = 0; i < 3; ++i)
@@ -550,10 +455,10 @@ void SetupPINMODES()
 void SetupRadios()
 {
 
-    if (digitalRead(BINDPLUG_PIN))
-    { // ie no bind plug, so initialise to bound pipe
-        GetOldPipe();
-    }
+  
+    
+     
+    
     teensyMAC(MacAddress);
     PipePointer = DefaultPipe;
     CopyCurrentPipe(DefaultPipe, PIPENUMBER);
@@ -630,7 +535,7 @@ FLASHMEM void setup()
     TestAllPWMPins(); // Check that the no PWM pins are held low (plug in wrong way round)
     Wire.begin();
     delay(100); // Wait for I2C to settle
- // delay(300); // *only* needed if you want to see terminal output
+  // delay(300); // *only* needed if you want to see terminal output
     ScanI2c(); // Detect what's connected
     if (BMP280Connected)
         Init_BMP280();
@@ -682,6 +587,7 @@ void loop() // without MPU6050 about 30000 interations per second.... EXCEPT Zer
 #endif
     KickTheDog();
     ReceiveData();
+  //  DisplayPipe(); // for debugging purposes
     if (Blinking)
     {
         BlinkLed();
