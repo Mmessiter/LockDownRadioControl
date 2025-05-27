@@ -54,12 +54,10 @@ void GetNewPipe() // from TX
         for (int i = 0; i < 5; ++i)
             TheReceivedPipe[4 - i] = ReceivedData[i + 1] & 0xff; // reversed byte array for our use
         TheReceivedPipe[5] = 0;
-        if (Blinking)
-            CopyCurrentPipe(TheReceivedPipe, BOUNDPIPENUMBER);
-        else
-            CopyCurrentPipe(TheSavedPipe, BOUNDPIPENUMBER);
-        BoundFlag = true;
-        Connected = true;
+        if (Blinking) // if binding, then use the received pipe
+            CopyToCurrentPipe(TheReceivedPipe, BOUNDPIPENUMBER);
+        else // if not binding, then use the saved pipe
+            CopyToCurrentPipe(TheSavedPipe, BOUNDPIPENUMBER);
         SetNewPipe();
         BindModel();
         PipeSeen = true;
@@ -71,13 +69,11 @@ void GetNewPipe() // from TX
 void ReadSavedPipe() // read only 6 bytes
 {
     for (uint8_t i = 0; i < 5; ++i)
-    {
         TheSavedPipe[i] = EEPROM.read(i + BIND_EEPROM_OFFSET); // uses first 5 bytes only.
-    }
     TheSavedPipe[5] = 0;
 }
 /************************************************************************************************************/
-void CopyCurrentPipe(uint8_t *p, uint8_t pn)
+void CopyToCurrentPipe(uint8_t *p, uint8_t pn)
 {
     for (int i = 0; i < 6; ++i)
         CurrentPipe[i] = p[i];
@@ -94,16 +90,9 @@ void ReadBindPlug()
 {
     PipePointer = DefaultPipe;
     ReadSavedPipe();
-    CopyCurrentPipe(DefaultPipe, PIPENUMBER);
-    if (!digitalRead(BINDPLUG_PIN))
-    {                    // Bind Plug needed to bind!
-        Blinking = true; // Blinking = binding to new TX
-        SaveNewBind = true;
-    }
-    else
-    {
-        SaveNewBind = false;
-    }
+    CopyToCurrentPipe(DefaultPipe, PIPENUMBER);
+    if (!digitalRead(BINDPLUG_PIN)) // Bind Plug needed to bind!
+        Blinking = true;            // Blinking = binding to new TX
 }
 /************************************************************************************************************/
 // This function binds the model using the TX supplied Pipe instead of the default one.
@@ -116,11 +105,8 @@ void BindModel()
     Connected = true;
     if (Blinking)
     {
-        SetNewPipe(); // change to bound pipe <<< ***************************************
         for (uint8_t i = 0; i < 5; ++i)
-        {
             EEPROM.update(i + BIND_EEPROM_OFFSET, TheReceivedPipe[i]);
-        }
     }
     Blinking = false;
     if (FirstConnection)
@@ -128,7 +114,6 @@ void BindModel()
         AttachServos(); // AND START SBUS / PPM
         FirstConnection = false;
     }
-    SaveNewBind = false;
     ConnectMoment = millis();
     SuccessfulPackets = 0; // Reset the packet count
 }
@@ -143,7 +128,7 @@ void UnbindModel()
     PipeSeen = false;
     pcount = 0;
     MacAddressSentCounter = 0;
-    CopyCurrentPipe(DefaultPipe, BOUNDPIPENUMBER);
+    CopyToCurrentPipe(DefaultPipe, BOUNDPIPENUMBER);
     SetNewPipe(); // set the default pipe
 }
 #endif

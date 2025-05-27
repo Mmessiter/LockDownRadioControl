@@ -408,7 +408,7 @@ FLASHMEM void InitCurrentRadio()
 {
     CurrentRadio->begin();
     ConfigureRadio();
-    SaveNewBind = true;
+   // SaveNewBind = true;
     HopStart = millis();
 }
 
@@ -718,6 +718,43 @@ void SendMacAddress()
         break;
     }
 }
+/************************************************************************************************************/
+
+void teensyMAC(uint8_t *mac)
+{ // GET UNIQUE TEENSY 4.0 ID
+    for (uint8_t by = 0; by < 2; by++)
+        mac[by] = (HW_OCOTP_MAC1 >> ((1 - by) * 8)) & 0xFF;
+    for (uint8_t by = 0; by < 4; by++)
+        mac[by + 2] = (HW_OCOTP_MAC0 >> ((3 - by) * 8)) & 0xFF;
+}
+// ***************************************************************************************************************************************************
+void SetupRadios()
+{
+    teensyMAC(MacAddress);
+    PipePointer = DefaultPipe;
+    CopyToCurrentPipe(DefaultPipe, PIPENUMBER);
+    CurrentRadio = &Radio1;
+#ifdef SECOND_TRANSCEIVER
+    digitalWrite(pinCSN2, CSN_OFF);
+    digitalWrite(pinCE2, CE_OFF);
+#endif
+    digitalWrite(pinCSN1, CSN_ON);
+    digitalWrite(pinCE1, CE_ON);
+    delay(4);
+    InitCurrentRadio();
+    ThisRadio = 1;
+#ifdef SECOND_TRANSCEIVER
+    CurrentRadio = &Radio2;
+    digitalWrite(pinCSN1, CSN_OFF);
+    digitalWrite(pinCE1, CE_OFF);
+    digitalWrite(pinCSN2, CSN_ON);
+    digitalWrite(pinCE2, CE_ON);
+    delay(4);
+    InitCurrentRadio();
+    ThisRadio = 2;
+#endif
+}
+
 /************************************************************************************************************/
 void LoadLongerAckPayload()
 {

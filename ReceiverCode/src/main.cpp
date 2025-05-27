@@ -360,16 +360,6 @@ void WatchDogCallBack()
     // Serial.println("RESETTING ...");
 }
 /************************************************************************************************************/
-
-void teensyMAC(uint8_t *mac)
-{ // GET UNIQUE TEENSY 4.0 ID
-    for (uint8_t by = 0; by < 2; by++)
-        mac[by] = (HW_OCOTP_MAC1 >> ((1 - by) * 8)) & 0xFF;
-    for (uint8_t by = 0; by < 4; by++)
-        mac[by + 2] = (HW_OCOTP_MAC0 >> ((3 - by) * 8)) & 0xFF;
-}
-
-/************************************************************************************************************/
 void S_or_O(int d1, int d2, int d3) // This function blinks the LED for S or O in Morse code
 {
     for (int i = 0; i < 3; ++i)
@@ -451,38 +441,6 @@ void SetupPINMODES()
     pinMode(LED_RED, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
 }
-// ***************************************************************************************************************************************************
-void SetupRadios()
-{
-
-  
-    
-     
-    
-    teensyMAC(MacAddress);
-    PipePointer = DefaultPipe;
-    CopyCurrentPipe(DefaultPipe, PIPENUMBER);
-    CurrentRadio = &Radio1;
-#ifdef SECOND_TRANSCEIVER
-    digitalWrite(pinCSN2, CSN_OFF);
-    digitalWrite(pinCE2, CE_OFF);
-#endif
-    digitalWrite(pinCSN1, CSN_ON);
-    digitalWrite(pinCE1, CE_ON);
-    delay(4);
-    InitCurrentRadio();
-    ThisRadio = 1;
-#ifdef SECOND_TRANSCEIVER
-    CurrentRadio = &Radio2;
-    digitalWrite(pinCSN1, CSN_OFF);
-    digitalWrite(pinCE1, CE_OFF);
-    digitalWrite(pinCSN2, CSN_ON);
-    digitalWrite(pinCE2, CE_ON);
-    delay(4);
-    InitCurrentRadio();
-    ThisRadio = 2;
-#endif
-}
 
 /***********************************************************************************************************/
 
@@ -534,7 +492,7 @@ FLASHMEM void setup()
     TestTheSBUSPin(); // Check that the SBUS pin is not held low (plug in wrong way round)
     TestAllPWMPins(); // Check that the no PWM pins are held low (plug in wrong way round)
     Wire.begin();
-    delay(100); // Wait for I2C to settle
+    delay(200); // Wait for I2C to settle
   // delay(300); // *only* needed if you want to see terminal output
     ScanI2c(); // Detect what's connected
     if (BMP280Connected)

@@ -29,8 +29,8 @@
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! (if it won't connect, probably one or both is wrong! )******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-   #define SECOND_TRANSCEIVER          // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
-  // #define USE_11PWM_OUTPUTS           // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
+#define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
+                           // #define USE_11PWM_OUTPUTS           // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -120,7 +120,7 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 
 #define pinCSN2 20            // NRF2
 #define pinCE2 21             // NRF2
-#define FAILSAFE_TIMEOUT 2500 // 
+#define FAILSAFE_TIMEOUT 2500 //
 #define CSN_ON LOW
 #define CSN_OFF HIGH
 #define CE_ON HIGH
@@ -136,7 +136,7 @@ RF24 Radio2(pinCE2, pinCSN2);
 RF24 *CurrentRadio = &Radio1;
 
 bool Connected = false;
-bool SaveNewBind = true;
+// bool SaveNewBind = true;
 bool HopNow = false;
 uint8_t ThisRadio = 1;
 uint8_t SavedPipeAddress[8];
@@ -226,7 +226,6 @@ void UseExtraParameters();
 FASTRUN void Reconnect();
 void LoadLongerAckPayload();
 void Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, uint8_t uncompressed_size);
-void KeepSbusHappy();
 void RebuildFlags(bool *f, uint16_t tb);
 void MarkHere();
 void KickTheDog();
@@ -238,7 +237,6 @@ void FailSafe();
 void TurnLedOff();
 void TurnLedOn();
 void SaveFailSafeData();
-
 void IncChannelNumber();
 void SetServoFrequency();
 void kalmanFilter();
@@ -250,13 +248,13 @@ void SendSBUSData();
 bool CheckCrazyValues();
 void ReadGPS();
 FASTRUN void ReceiveData();
-void CopyCurrentPipe(uint8_t *p, uint8_t pn);
+void CopyToCurrentPipe(uint8_t *p, uint8_t pn);
 void SetNewPipe();
 void UnbindModel();
 void AttachServos();
 
-    template <typename any>
-    void Look(const any &value);
+template <typename any>
+void Look(const any &value);
 
 template <typename any>
 void Look1(const any &value);
@@ -264,7 +262,6 @@ void Look1(const any &value);
 Adafruit_INA219 ina219;
 Adafruit_BMP280 bmp;
 Adafruit_DPS310 dps310;
-
 
 //                         Channels: 1  2 [3][4] 5  6 {7} 8  9 {10} 11 (Channels 3+4 & 7+10 must have same frquency)
 uint8_t PWMPins[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}; //  if only SERVOSUSED = 9 then last two are ignored
@@ -341,7 +338,7 @@ bool GyroOffsetsSet = false;
 uint16_t BMP280Address = 0x76; // BMP280 I2C address
 uint32_t SuccessfulPackets = 0;
 uint32_t ConnectMoment = 0;
-int16_t LongAcknowledgementsCounter = 0;   
+int16_t LongAcknowledgementsCounter = 0;
 int16_t LongAcknowledgementsMinimum = 200;
 bool DPS310Connected = false;
 uint16_t DPS310Address = 0x76; // DPS310 I2C address
