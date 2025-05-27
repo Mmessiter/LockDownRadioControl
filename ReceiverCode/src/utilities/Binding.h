@@ -49,7 +49,7 @@ void GetNewPipe() // from TX
     NewPipeMaybe += (uint64_t)ReceivedData[4] << 8;
     NewPipeMaybe += (uint64_t)ReceivedData[5];
 
-    if (ValidateNewPipe()) // was this pipe corrupted?
+    if (ValidateNewPipe()) // was this pipe uncorrupted?
     {
         for (int i = 0; i < 5; ++i)
             TheReceivedPipe[4 - i] = ReceivedData[i + 1] & 0xff; // reversed byte array for our use
