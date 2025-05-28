@@ -30,7 +30,7 @@
 #define TXVERSION_MAJOR 2 // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 5
 #define TXVERSION_MINIMUS 1
-#define TXVERSION_EXTRA "D 22/05/25"
+#define TXVERSION_EXTRA "E 28/05/25"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -301,7 +301,7 @@
 #define BINDNEEDED 27
 #define MMFOUND 28
 #define MMMATCHED 29
-//  #define MMNOTFOUND      30
+#define MMNOTFOUND 30  // Model not found or 75!!
 #define MOTORON 31
 #define MOTOROFF 32
 #define STORAGECHARGE 33

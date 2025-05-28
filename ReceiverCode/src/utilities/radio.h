@@ -408,7 +408,6 @@ FLASHMEM void InitCurrentRadio()
 {
     CurrentRadio->begin();
     ConfigureRadio();
-   // SaveNewBind = true;
     HopStart = millis();
 }
 

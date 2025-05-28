@@ -12,9 +12,11 @@ On the Master transmitter, you can select which channels are enabled for the Bud
 
 On that same screen, near the bottom, you can control whether Master or Buddy 'switches' will be used when Buddy is in control. In general it's probably better NOT to give Buddy control of the switches, especially for a beginner. That way the Master can always control motor on/off, safety, Bank and Rates. But if the buddy is more advanced and is perhaps learning to do autorotations with a helicopter, he or she will ideally need to control these switches too when in control. When Master is in control, Master's switches are always used.
 
-The same model memory should be loaded on both transmitters, and the Buddy (pupil) needs to know the ID of the Master transmitter. Both of these are easily achieved by sending the model memory from the Master to the pupil wirelessly. Embedded in the data sent is the needed ID of the sending transmitter. ||
+The same model memory should be loaded on both transmitters, and the Buddy (pupil) needs to know the ID of the Master transmitter. Both of these are easily achieved by sending the model memory from the Master to the pupil wirelessly. Embedded in the data sent is the needed ID of the sending transmitter as well as the ID of the model being sent.|| 
 
-If AMS (automatic model selection) is enabled on both transmitters and both transmitters have saved the ID of the model in use, then BOTH transmitters will automatically select the correct model if either had the wrong model loaded.|| 
+ *** It's very strongly recommended that the Master should save the model ID *BEFORE* sending the model memory to buddy!! *** ||
+
+If AMS (automatic model selection) is enabled on both transmitters and both transmitters have saved the ID of the model in use, then BOTH transmitters will automatically select the correct model if either had the wrong model loaded. || 
 
 When moving the Buddy switch, both transmitters will announce either 'Master' or 'Buddy' in order to make clearer who is in control.||
 
