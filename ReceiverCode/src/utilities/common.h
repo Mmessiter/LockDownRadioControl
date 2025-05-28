@@ -306,7 +306,6 @@ bool SensorHubDead = false;
 uint32_t NewConnectionMoment = 0;
 bool QNHSent = false;
 uint8_t MacAddress[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
-bool ModelMatched = false;
 uint8_t TheReceivedPipe[6];
 uint8_t TheSavedPipe[6];
 uint8_t TheCurrentPipe[6];

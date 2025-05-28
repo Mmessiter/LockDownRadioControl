@@ -488,23 +488,22 @@ void Init_DPS310()
 /************************************************************************************************************/
 FLASHMEM void setup()
 {
+    digitalWrite(LED_PIN, HIGH);
     SetupPINMODES();
     TestTheSBUSPin(); // Check that the SBUS pin is not held low (plug in wrong way round)
     TestAllPWMPins(); // Check that the no PWM pins are held low (plug in wrong way round)
     Wire.begin();
     delay(200); // Wait for I2C to settle
-  // delay(300); // *only* needed if you want to see terminal output
-    ScanI2c(); // Detect what's connected
+ // delay(300); // *only* needed if you want to see terminal output
+    ScanI2c();  // Detect what's connected
     if (BMP280Connected)
         Init_BMP280();
     if (DPS310Connected)
         Init_DPS310();
-
 #ifdef USE_STABILISATION
     if (MPU6050Connected)
         InitialiseTheMPU6050();
 #endif
-
     if (INA219Connected)
         ina219.begin();
     if (GPS_Connected)
@@ -513,7 +512,7 @@ FLASHMEM void setup()
     SetupRadios();
     SetupWatchDog();
     ReadSavedPipe();
-    ReadBindPlug();
+    Blinking = !digitalRead(BINDPLUG_PIN); // Blinking = binding to new TX ... because bind plug is inserted
     digitalWrite(LED_PIN, LOW);
 }
 
@@ -552,7 +551,7 @@ void loop() // without MPU6050 about 30000 interations per second.... EXCEPT Zer
     {
         BlinkLed();
     }
-    if (BoundFlag && ModelMatched)
+    if (BoundFlag)
     {
         SendSBUSData(); // Send the SBUS data
         MoveServos();   // Actually do something useful at last

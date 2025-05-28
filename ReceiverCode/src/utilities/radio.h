@@ -577,10 +577,7 @@ FASTRUN void Reconnect()
         ++RadioSwaps;             // Count the radio swaps
     ReconnectedMoment = millis(); // Save this moment
 
-    if (ModelMatched)
-    {
-        Blinking = false;
-    }
+
     if (FailedSafe)
     {
         FailedSafe = false;

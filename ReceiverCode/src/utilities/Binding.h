@@ -6,7 +6,6 @@
 #include <Arduino.h>
 #include "utilities/common.h"
 #include <EEPROM.h>
-
 /************************************************************************************************************/
 // This function compares the just-received pipe with several of the previous ones
 // if it matches most of them then its probably not corrupted.
@@ -16,7 +15,6 @@ bool ValidateNewPipe()
     uint8_t MatchedCounter = 0;
     if (pcount < 2)
         return false; // ignore first few
-
     PreviousNewPipes[PreviousNewPipesIndex] = NewPipeMaybe;
     PreviousNewPipesIndex++;
     if (PreviousNewPipesIndex > PIPES_TO_COMPARE)
@@ -27,12 +25,10 @@ bool ValidateNewPipe()
         if (NewPipeMaybe == PreviousNewPipes[i])
             ++MatchedCounter;
     }
-
     if (MatchedCounter >= 2)
         return true;
     return false;
 }
-
 /************************************************************************************************************/
 
 void GetNewPipe() // from TX
@@ -66,7 +62,7 @@ void GetNewPipe() // from TX
 }
 
 /************************************************************************************************************/
-void ReadSavedPipe() // read only 6 bytes
+void ReadSavedPipe() // read only 5 bytes
 {
     for (uint8_t i = 0; i < 5; ++i)
         TheSavedPipe[i] = EEPROM.read(i + BIND_EEPROM_OFFSET); // uses first 5 bytes only.
@@ -79,18 +75,14 @@ void CopyToCurrentPipe(uint8_t *p, uint8_t pn)
         CurrentPipe[i] = p[i];
     PipePointer = p;
     Pipnum = pn;
+    
 }
 //************************************************************************************************************/
 void SetNewPipe()
 {
     CurrentRadio->openReadingPipe(Pipnum, PipePointer); //  5 * byte array
 }
-// ************************************************************************************************************/
-void ReadBindPlug()
-{
-    if (!digitalRead(BINDPLUG_PIN)) // Bind Plug needed to bind!
-        Blinking = true;            // Blinking = binding to new TX ... because bind plug is inserted
-}
+
 /************************************************************************************************************/
 // This function binds the model using the TX supplied Pipe instead of the default one.
 // If not already saved, this saves it to the eeprom too for next time.
@@ -98,8 +90,6 @@ void ReadBindPlug()
 void BindModel()
 {
     BoundFlag = true;
-    ModelMatched = true;
-    Connected = true;
     if (Blinking)
     {
         for (uint8_t i = 0; i < 5; ++i)
@@ -118,9 +108,7 @@ void BindModel()
 // ************************************************************************************************************/
 void UnbindModel()
 {
-    Connected = false;
     BoundFlag = false;
-    ModelMatched = false;
     LongAcknowledgementsCounter = 0;
     PipeSeen = false;
     pcount = 0;
