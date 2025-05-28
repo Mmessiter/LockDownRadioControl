@@ -88,11 +88,8 @@ void SetNewPipe()
 // ************************************************************************************************************/
 void ReadBindPlug()
 {
-    PipePointer = DefaultPipe;
-    ReadSavedPipe();
-    CopyToCurrentPipe(DefaultPipe, PIPENUMBER);
     if (!digitalRead(BINDPLUG_PIN)) // Bind Plug needed to bind!
-        Blinking = true;            // Blinking = binding to new TX
+        Blinking = true;            // Blinking = binding to new TX ... because bind plug is inserted
 }
 /************************************************************************************************************/
 // This function binds the model using the TX supplied Pipe instead of the default one.
@@ -107,8 +104,8 @@ void BindModel()
     {
         for (uint8_t i = 0; i < 5; ++i)
             EEPROM.update(i + BIND_EEPROM_OFFSET, TheReceivedPipe[i]);
+        Blinking = false;
     }
-    Blinking = false;
     if (FirstConnection)
     {
         AttachServos(); // AND START SBUS / PPM

@@ -509,8 +509,10 @@ FLASHMEM void setup()
         ina219.begin();
     if (GPS_Connected)
         setupGPS();
+    CopyToCurrentPipe(DefaultPipe, PIPENUMBER);
     SetupRadios();
     SetupWatchDog();
+    ReadSavedPipe();
     ReadBindPlug();
     digitalWrite(LED_PIN, LOW);
 }
