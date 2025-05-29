@@ -26,62 +26,63 @@ void CompareModelsIDs()
         return; //  Don't do this if any of these are ON
     GotoFrontView();
     RestoreBrightness();
-    if (ModelIdentified)
-    {                                                            //  We have both bits of Model ID?
-        if ((ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64)) //  Is it a match for current model?
+    if (!ModelIdentified) //  We have both bits of Model ID?
+        return;
+    if ((ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64)) //  Is it a match for current model?
+    {
+        if (AnnounceConnected) // Yes ...
         {
-            if (AnnounceConnected) // Yes ...
+            if (AutoModelSelect)
             {
-                if (AutoModelSelect)
+                PlaySound(MMMATCHED);
+                if (UseLog)
+                    LogModelMatched();
+                DelayWithDog(1400); // allow time to say "Matched"
+            }
+        }
+        ModelMatched = true; //  It's a match so start flying!
+        return;
+    }
+    else
+    {
+        if (AutoModelSelect) //  It's not a match so search for it if autoselect is on.
+        {
+            for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber) //  Try to match the ID with a saved one
+            {
+                ReadOneModel(ModelNumber);
+                if ((ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64))
                 {
-                    PlaySound(MMMATCHED);
-                    if (UseLog)
-                        LogModelMatched();
-                    DelayWithDog(1400); // allow time to say "Matched"
+                    ModelMatched = true; //  Found it!
+                    break;               //  No need to search further
                 }
             }
-            ModelMatched = true; //  It's a match so start flying!
-            return;
+            if (ModelMatched)
+            {                                 //  Found it!
+                UpdateModelsNameEveryWhere(); //  Use it everywhere.
+                if (AnnounceConnected)
+                {
+                    PlaySound(MMFOUND);
+                    DelayWithDog(1400); // allow time to say "Found"
+                    if (UseLog)
+                        LogModelFound();
+                }
+                SaveAllParameters(); //  Save it
+                GotoFrontView();     //
+            }
+            else
+            {
+                ModelNumber = SavedModelNumber; // on second thoughts, just use the saved one
+                ReadOneModel(ModelNumber);
+                if (UseLog)
+                    LogModelNotFound();
+                PlaySound(NOTFOUND);
+                DelayWithDog(2000);
+                BindNow();
+            }
         }
         else
         {
-            if (AutoModelSelect)
-            { //  It's not a match so search for it.
-                for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber)
-                { //  Try to match the ID with a saved one
-                    ReadOneModel(ModelNumber);
-                    if ((ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64))
-                    {
-                        ModelMatched = true; //  Found it!
-                        break;               //  No need to search further
-                    }
-                }
-                if (ModelMatched)
-                {                                 //  Found it!
-                    UpdateModelsNameEveryWhere(); //  Use it everywhere.
-                    if (AnnounceConnected)
-                    {
-                        PlaySound(MMFOUND);
-                        DelayWithDog(1400); // allow time to say "Found"
-                        if (UseLog)
-                            LogModelFound();
-                    }
-                    SaveAllParameters(); //  Save it
-                    GotoFrontView();     //
-                }
-                else
-                {
-                    ModelNumber = SavedModelNumber; // on second thoughts, just use the saved one
-                    ReadOneModel(ModelNumber);
-                    if (UseLog)
-                        LogModelNotFound();
-                    PlaySound(NOTFOUND);
-                    DelayWithDog(2000);
-                    BindNow();
-                }
-            }
-            if (!AutoModelSelect)
-                BindNow();
+            BindNow();
         }
     }
 }
