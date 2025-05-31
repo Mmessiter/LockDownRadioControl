@@ -252,12 +252,32 @@ void CopyToCurrentPipe(uint8_t *p, uint8_t pn);
 void SetNewPipe();
 void UnbindModel();
 void AttachServos();
+/************************************************************************************************************/
+// For numeric types (int, float, double, etc.)
+template <typename T>
+void Look(const T &value, int format)
+{
+    Serial.println(value, format);
+}
 
-template <typename any>
-void Look(const any &value);
+template <typename T>
+void Look1(const T &value, int format)
+{
+    Serial.print(value, format);
+}
 
-template <typename any>
-void Look1(const any &value);
+// Fallback for types where a format doesn't apply (e.g., String, const char*)
+template <typename T>
+void Look(const T &value)
+{
+    Serial.println(value);
+}
+
+template <typename T>
+void Look1(const T &value)
+{
+    Serial.print(value);
+}
 
 Adafruit_INA219 ina219;
 Adafruit_BMP280 bmp;

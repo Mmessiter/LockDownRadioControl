@@ -115,12 +115,12 @@ void KickTheDog()
 /************************************************************************************************************/
 
 bool CheckCrazyValues()
-{                                             // might come while binding indeed probobly will.
-    if (millis() - ReconnectedMoment > 10000) // crazy values are rare after 10 seconds of connection
-        return true;
-    for (int i = 0; i < 7; ++i)
-    {
-        if ((ReceivedData[i] < MINMICROS) || (ReceivedData[i] > MAXMICROS))
+{                                                                           // might come while binding ... indeed will.
+    if (millis() - ReconnectedMoment > 10000)                               // crazy values are very rare after 10 seconds of connection
+        return true;                                                        // go home happy
+    for (int i = 0; i < 7; ++i)                                             // need only check first few as that's where bind data are (Teensy MAC address etc.)
+    {                                                                       // check ...
+        if ((ReceivedData[i] < MINMICROS) || (ReceivedData[i] > MAXMICROS)) // if any value is outside the range, return false
             return false;
     }
     return true;
@@ -129,7 +129,7 @@ bool CheckCrazyValues()
 /************************************************************************************************************/
 // Function to get PWM value needed for given pulse length in microseconds
 
-int GetPWMValue(int frequency, int length) { return float(length / (1000000.00 / frequency)) * SERVO_RESOLUTION; } // *** >> DON'T EDIT THIS LINE!! << ***
+int GetPWMValue(int frequency, int length) { return float(length / (1000000.00 / frequency)) * SERVO_RESOLUTION; } // *** >> DON'T EDIT THIS LINE ... EVER!! << ***
 
 /************************************************************************************************************/
 void MoveServos()
@@ -148,7 +148,7 @@ void MoveServos()
         TurnLedOn(); // if we have good values, turn the LED on and move the servos and send SBUS data
     }
     if (!UseSBUS) // not SBUS = PPM !
-    { 
+    {
         for (int j = 0; j < PPMChannelCount; ++j)
         {
             PPMOutput.write(PPMChannelOrder[j], map(ReceivedData[j], MINMICROS, MAXMICROS, 1000, 2000));
@@ -255,32 +255,6 @@ void RebuildFlags(bool *f, uint16_t tb)
         if (tb & 1 << i)
             f[15 - i] = true; // sets true if bit was on
     }
-}
-/************************************************************************************************************/
-// For numeric types (int, float, double, etc.)
-template <typename T>
-void Look(const T &value, int format)
-{
-    Serial.println(value, format);
-}
-
-template <typename T>
-void Look1(const T &value, int format)
-{
-    Serial.print(value, format);
-}
-
-// Fallback for types where a format doesn't apply (e.g., String, const char*)
-template <typename T>
-void Look(const T &value)
-{
-    Serial.println(value);
-}
-
-template <typename T>
-void Look1(const T &value)
-{
-    Serial.print(value);
 }
 
 // ******************************************************************************************************************************************************************
