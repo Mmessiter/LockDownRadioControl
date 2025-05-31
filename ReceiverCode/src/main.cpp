@@ -115,7 +115,7 @@ void KickTheDog()
 /************************************************************************************************************/
 
 bool CheckCrazyValues()
-{                                             // might come when binding
+{                                             // might come while binding indeed probobly will.
     if (millis() - ReconnectedMoment > 10000) // crazy values are rare after 10 seconds of connection
         return true;
     for (int i = 0; i < 7; ++i)
@@ -140,12 +140,12 @@ void MoveServos()
     LocalTimer = millis();
     if (!CheckCrazyValues())
     {
-        TurnLedOff();
+        TurnLedOff(); // if we have crazy values, turn the LED off and don't move the servos
         return;
     }
     else
     {
-        TurnLedOn();
+        TurnLedOn(); // if we have good values, turn the LED on and move the servos and send SBUS data
     }
     if (!UseSBUS) // not SBUS = PPM !
     { 
