@@ -141,18 +141,22 @@ void MoveServos()
     if (!CheckCrazyValues())
     {
         TurnLedOff();
+        return;
     }
     else
     {
         TurnLedOn();
     }
-
-    if (!UseSBUS)
-    { // not SBUS = PPM
+    if (!UseSBUS) // not SBUS = PPM !
+    { 
         for (int j = 0; j < PPMChannelCount; ++j)
         {
             PPMOutput.write(PPMChannelOrder[j], map(ReceivedData[j], MINMICROS, MAXMICROS, 1000, 2000));
         }
+    }
+    else
+    {
+        SendSBUSData(); // Send the SBUS data
     }
     for (int j = 0; j < SERVOSUSED; ++j)
     {
@@ -494,7 +498,7 @@ FLASHMEM void setup()
     TestAllPWMPins(); // Check that the no PWM pins are held low (plug in wrong way round)
     Wire.begin();
     delay(200); // Wait for I2C to settle
- // delay(300); // *only* needed if you want to see terminal output
+                // delay(300); // *only* needed if you want to see terminal output
     ScanI2c();  // Detect what's connected
     if (BMP280Connected)
         Init_BMP280();
@@ -546,15 +550,14 @@ void loop() // without MPU6050 about 30000 interations per second.... EXCEPT Zer
 #endif
     KickTheDog();
     ReceiveData();
-  //  DisplayPipe(); // for debugging purposes
+    //  DisplayPipe(); // for debugging purposes
     if (Blinking)
     {
         BlinkLed();
     }
     if (BoundFlag)
     {
-        SendSBUSData(); // Send the SBUS data
-        MoveServos();   // Actually do something useful at last
+        MoveServos(); // Actually do something useful at last
     }
     else
     {
