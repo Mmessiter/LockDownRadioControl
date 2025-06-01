@@ -124,7 +124,6 @@
 
 #include <Arduino.h>
 #include <Watchdog_t4.h>
-#include <TeensyID.h>
 #include <PulsePosition.h>
 #include <RF24.h>
 #include <SD.h>
@@ -1019,6 +1018,19 @@ FLASHMEM void GetTXVersionNumber()
     Str(nbuf, Txv3, 0);
     strcat(TransmitterVersionNumber, nbuf);
     strcat(TransmitterVersionNumber, TXVERSION_EXTRA);
+}
+
+// *********************************************************************************************************************************/
+void teensyMAC(uint8_t *mac) // only works on Teensy 4.1 and 4.0
+{ // there are 2 MAC addresses each 48bit
+    uint32_t m1 = HW_OCOTP_MAC1;
+    uint32_t m2 = HW_OCOTP_MAC0;
+    mac[0] = m1 >> 8;
+    mac[1] = m1 >> 0;
+    mac[2] = m2 >> 24;
+    mac[3] = m2 >> 16;
+    mac[4] = m2 >> 8;
+    mac[5] = m2 >> 0;
 }
 
 /*********************************************************************************************************************************/
