@@ -28,8 +28,8 @@
 
 #define TXVERSION_MAJOR 2 // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 5
-#define TXVERSION_MINIMUS 1
-#define TXVERSION_EXTRA "E 28/05/25"
+#define TXVERSION_MINIMUS 2
+#define TXVERSION_EXTRA "A 02/06/25"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -112,7 +112,8 @@
 #define BATTERY_CHECK_INTERVAL 1000 // 2 seconds between battery checks
 #define PARAMETERSENDREPEATS 3      // How many times to send each parameter in case it gets lost
 #define MAXPARAMETERS 7             // Max types of parameters packet to send  ... will increase.
-#define POWERONOFFDELAY 2000        // Delay after power on before power off button is active
+#define POWERONOFFDELAY 2000        // Delay after power OFF before transmit stops.
+#define POWERONOFFDELAY2 10000      // Delay after power ON before Off is possible....
                                     // and delay after power off before power on button is active
                                     // **************************************************************************
                                     //                            FHSS PARAMETERS                               *
@@ -370,6 +371,14 @@
 #define GOINGDOWN8 95
 #define GOINGDOWN9 96
 #define GOINGDOWN10 97
+
+#define BINDINGENABLED 98 // binding enabled sound
+#define BUDDYMASTERON 99 // Buddy Master on sound
+#define BUDDYPUPILON 100 // Buddy Pupil on sound
+#define EXTRABUDDIES 101 // Extra Buddies found sound
+#define TXNOTBOUND 102 //  TX not bound sound // not yet used
+
+
 
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
@@ -1188,6 +1197,7 @@ uint8_t VariometerBank = 3;
 uint16_t VariometerThreshold = 400; // 400 fpm
 uint16_t VariometerSpacing = 125;   // 125 fpm
 bool Variometer_InitDone = false;
+bool BindingEnabled = false; // This is used to enable binding
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

@@ -259,10 +259,13 @@ void BlueLedOn()
 
 void GreenLedOn()
 {
-    if (!ModelMatched)
+    char NotVisible[] = "vis wb,0";
+    if (!ModelMatched || UsingDefaultPipeAddress)
         return; // no green led for wrong model
     if (!LedWasGreen)
     {
+        SendCommand(NotVisible); // Hide the binding button
+        BindingEnabled = false;  // Disable new binding after successful bind
         LedGreenMoment = millis();
         LastShowTime = 0;
         ShowComms();
@@ -1019,10 +1022,19 @@ FLASHMEM void GetTXVersionNumber()
     strcat(TransmitterVersionNumber, nbuf);
     strcat(TransmitterVersionNumber, TXVERSION_EXTRA);
 }
+/************************************************************************************************************/
+
+FASTRUN void BufferTeensyMACAddPipe()
+{
+    for (int q = 1; q < 6; ++q)
+    {
+        SendBuffer[q] = MacAddress[q];
+    }
+}
 
 // *********************************************************************************************************************************/
 void teensyMAC(uint8_t *mac) // only works on Teensy 4.1 and 4.0
-{ // there are 2 MAC addresses each 48bit
+{                            // there are 2 MAC addresses each 48bit
     uint32_t m1 = HW_OCOTP_MAC1;
     uint32_t m2 = HW_OCOTP_MAC0;
     mac[0] = m1 >> 8;
@@ -1035,29 +1047,20 @@ void teensyMAC(uint8_t *mac) // only works on Teensy 4.1 and 4.0
 
 /*********************************************************************************************************************************/
 // This function gets the unique MAC address of the Teensy 4.1
-// And also fixes it so that it's a suitable Pipe address for the nRF24L01
+// And also fixes it so that it's a more suitable Pipe address for the nRF24L01
 
-void GetTeensyMacAddress()
+void GetTeensyMacAddress() // heer
 {
-
     teensyMAC(MacAddress); // Get MAC address
-
     for (int i = 1; i < 6; ++i)
     {
+        // Look1(MacAddress[i], HEX); // Show MAC address in HEX
+        // Look1(" -> ");
         MacAddress[i] = CheckPipeNibbles(MacAddress[i]); // Fix PIPE if needed !
+                                                         //  MacAddress[i] += 42;                             // test another random pipe address
+                                                         //  Look(MacAddress[i], HEX);                        // Show MAC address in HEX
     }
 
-#ifdef DB_BIND
-    Serial.println("");
-    Serial.println("Local (transmitter) ID sent: ");
-    for (int q = 1; q < 6; ++q)
-    {
-        Serial.print(MacAddress[q], HEX);
-        Serial.print(" ");
-    }
-    Serial.println("");
-    Serial.println("(5 bytes of 6 sent, probably with some modified nibbles or bytes)");
-#endif
     TeensyMACAddPipe = (uint64_t)MacAddress[0] << 40;
     TeensyMACAddPipe += (uint64_t)MacAddress[1] << 32;
     TeensyMACAddPipe += (uint64_t)MacAddress[2] << 24;
@@ -1083,21 +1086,15 @@ void ConvertBuddyPipeTo64BITS()
 
 void WarnUserIfBuddyBoxIsOn() // This function warns the user if the buddy box is on
 {
-#define PAUSEFORMSG 550
-
     if (BuddyPupilOnWireless)
     {
-        PlaySound(BUDDYMSG);
-        DelayWithDog(PAUSEFORMSG);
-        PlaySound(BUDDYMSG);
-        DelayWithDog(PAUSEFORMSG);
+        PlaySound(BUDDYPUPILON);
+        DelayWithDog(1500); // allow sound to finish
     }
     if (BuddyMasterOnWireless)
     {
-        PlaySound(MASTERMSG);
-        DelayWithDog(PAUSEFORMSG);
-        PlaySound(MASTERMSG);
-        DelayWithDog(PAUSEFORMSG);
+        PlaySound(BUDDYMASTERON);
+        DelayWithDog(1500); // allow sound to finish
     }
 }
 // *********************************************************************************************************************************/
@@ -1105,8 +1102,6 @@ void CheckSDCard()
 {
     char err_404[] = "SD card error!";
     char err_405[] = "or not found!";
-    //  char WarnNow[] = "vis Warning,1";
-    // char Warning[] = "Warning";
     bool SDCARDOK = SD.begin(BUILTIN_SDCARD); // MUST return true or SD card is not working
     if (!SDCARDOK)
     {
@@ -4109,7 +4104,7 @@ FASTRUN void ButtonWasPressed()
                 ClearText();
                 return;
             }
-            SendCommand(pInputsView); // heer
+            SendCommand(pInputsView);
             CurrentView = INPUTS_VIEW;
             UpdateButtonLabels();
             UpdateModelsNameEveryWhere();
@@ -5273,6 +5268,31 @@ void SimulateCloseDown()
     digitalWrite(POWER_OFF_PIN, HIGH); // Power off really, eventually ...
 }
 
+// ************************************************************************************************************/
+void CheckWhetherToEnableBinding(bool *CheckingPowerButton)
+{
+    // This function checks whether binding has been enabled for this transmitter. This is done by holding down the power button for more than two seconds at the start up.
+
+    char Mfound[] = "Binding enabled";
+    char wb[] = "wb"; // wb is the name of the label on front view
+    char YesVisible[] = "vis wb,1";
+
+    if (!digitalRead(BUTTON_SENSE_PIN) && ((millis()) < 5000) && (millis() > 2000)) // heer To initiate Binding, hold ON button for over 2 secs
+    {
+        *CheckingPowerButton = false; // reset flag to allow entry
+        if (!BindingEnabled)
+        {
+            PlaySound(BEEPCOMPLETE);   // Play sound to indicate binding enabled
+            delay(150);                // wait for sound to finish
+            PlaySound(BINDINGENABLED); // Play sound to indicate binding enabled
+            SendText(wb, Mfound);      // Show binding enabled
+            SendCommand(YesVisible);   // Show binding enabled
+        }
+        BindingEnabled = true; // Set binding enabled flag
+        return;
+    }
+}
+
 /************************************************************************************************************/
 void CheckPowerOffButton()
 {
@@ -5288,20 +5308,19 @@ void CheckPowerOffButton()
     char StillConnectedBox[] = "StillConnected";
 
     if (CheckingPowerButton)
-    {
-        return; // already checking power button!
-    }
-    CheckingPowerButton = true;                                           // set flag to prevent re-entry
-    if ((!digitalRead(BUTTON_SENSE_PIN)) && (millis() > POWERONOFFDELAY)) // no power off for first 10 seconds in case button held down too long
-    {                                                                     // power button is pressed!
+        return;                 // already checking power button!
+    CheckingPowerButton = true; // set flag to prevent re-entry
 
+    CheckWhetherToEnableBinding(&CheckingPowerButton); // Check if binding is enabled Which is done by holding the start button for more than two seconds
+
+    if ((!digitalRead(BUTTON_SENSE_PIN)) && (millis() > POWERONOFFDELAY2)) // no power off for first 10 seconds in case button held down too long
+    {                                                                      // power button is pressed!
         if (BoundFlag && ModelMatched && CurrentView != FRONTVIEW)
             GotoFrontView();
 
         if (!LedWasGreen && !PPMdata.UseTXModule)
-        {
             SimulateCloseDown(); // if not connected power off immediately
-        }
+
         if (LedWasGreen || PPMdata.UseTXModule)
         {
             if (!PowerOffTimer)
@@ -5533,7 +5552,8 @@ FASTRUN void loop()
             GetBuddyData();    // Only if master
             FixMotorChannel(); // Maybe force it low BEFORE Binding data is added
             ShowServoPos();    // Show servo positions to user
-            SendBindingPipe(); // Only if not bound yet - overwride low throttle setting
+            if (BindingEnabled && !BoundFlag)
+                SendBindingPipe(); // Only if binding and not bound yet - override low throttle setting HEER!!
         }
     }
 

@@ -12,8 +12,8 @@
 
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 5
-#define RXVERSION_MINIMUS 1
-#define RXVERSION_EXTRA 'E' // 27 May 2025
+#define RXVERSION_MINIMUS 2
+#define RXVERSION_EXTRA 'A' // 01 June 2025
 #define HOPTIME 17          // 17 gives 50Hz FHSS, 47 gives 20Hz FHSS
 #define RECEIVE_TIMEOUT 7   // was 8 ... 5 milliseconds is 'perfect' time between packets, but with nRF24L01 auto-retries it might be 7 or 8 sometimes
 
@@ -283,7 +283,7 @@ Adafruit_INA219 ina219;
 Adafruit_BMP280 bmp;
 Adafruit_DPS310 dps310;
 
-//                         Channels: 1  2 [3][4] 5  6 {7} 8  9 {10} 11 (Channels 3+4 & 7+10 must have same frquency)
+//           Channels: 1  2 [3][4] 5  6 {7} 8  9 {10} 11 (Channels 3+4 & 7+10 must have same frquency)
 uint8_t PWMPins[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}; //  if only SERVOSUSED = 9 then last two are ignored
 
 SBUS MySbus(SBUSPORT);         // SBUS
@@ -361,5 +361,6 @@ int16_t LongAcknowledgementsCounter = 0;
 int16_t LongAcknowledgementsMinimum = 200;
 bool DPS310Connected = false;
 uint16_t DPS310Address = 0x76; // DPS310 I2C address
+bool BindPlugInserted = false; // Bind plug inserted or not
 
 #endif // defined (_SRC_UTILITIES_COMMON_H)

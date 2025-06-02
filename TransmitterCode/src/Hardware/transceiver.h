@@ -733,30 +733,13 @@ uint8_t CheckPipeNibbles(uint8_t b)
     }
     return b;
 }
-/************************************************************************************************************/
-FASTRUN void BufferTeensyMACAddPipe() // heeer
-{
-    for (int q = 1; q < 6; ++q)
-    {
-        SendBuffer[q] = MacAddress[q];
-    }
-}
+
 /************************************************************************************************************/
 void SendBindingPipe()
 {
-    static uint32_t BindingTimer = 0;
-
-    if (BuddyPupilOnWireless)
-        return;
-    if (PPMdata.UseTXModule)
-        return;
-    if (!BoundFlag || !ModelMatched)
-        BindingTimer = millis();
-
-    if ((millis() - BindingTimer) < 1200)
-    {
-        BufferTeensyMACAddPipe();
-    }
+    if (BoundFlag || BuddyPupilOnWireless || PPMdata.UseTXModule || !UsingDefaultPipeAddress)
+        return; // No need to send the pipe if we are bound and model matched
+     BufferTeensyMACAddPipe();
 }
 /*********************************************************************************************************************************/
 void NormaliseTheRadio()

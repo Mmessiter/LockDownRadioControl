@@ -484,7 +484,7 @@ void GetSpecialPacket()
         {
             SendText(wb, ExsBd); // If not, declare an error: excess buddies !
             SendCommand(YesVisible);
-            PlaySound(WHAHWHAHMSG);
+            PlaySound(EXTRABUDDIES);
             DelayWithDog(10000);
             return;
         }

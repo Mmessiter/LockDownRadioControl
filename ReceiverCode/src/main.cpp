@@ -114,8 +114,10 @@ void KickTheDog()
 
 /************************************************************************************************************/
 
-bool CheckCrazyValues()
-{                                                                           // might come while binding ... indeed will.
+bool CheckCrazyValues() // might come while binding ... indeed will.
+{   if (!BindPlugInserted)
+        return true;
+                                                          
     if (millis() - ReconnectedMoment > 10000)                               // crazy values are very rare after 10 seconds of connection
         return true;                                                        // go home happy
     for (int i = 0; i < 7; ++i)                                             // need only check first few as that's where bind data are (Teensy MAC address etc.)
@@ -138,6 +140,8 @@ void MoveServos()
     if ((millis() - LocalTimer) < 10)
         return;
     LocalTimer = millis();
+   
+   
     if (!CheckCrazyValues())
     {
         TurnLedOff(); // if we have crazy values, turn the LED off and don't move the servos
@@ -147,6 +151,8 @@ void MoveServos()
     {
         TurnLedOn(); // if we have good values, turn the LED on and move the servos and send SBUS data
     }
+    
+    
     if (!UseSBUS) // not SBUS = PPM !
     {
         for (int j = 0; j < PPMChannelCount; ++j)
@@ -491,6 +497,7 @@ FLASHMEM void setup()
     SetupWatchDog();
     ReadSavedPipe();
     Blinking = !digitalRead(BINDPLUG_PIN); // Blinking = binding to new TX ... because bind plug is inserted
+    BindPlugInserted = Blinking; // Bind plug inserted or not
     digitalWrite(LED_PIN, LOW);
 }
 
