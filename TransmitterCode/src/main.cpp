@@ -1057,7 +1057,7 @@ void GetTeensyMacAddress() // heer
         // Look1(MacAddress[i], HEX); // Show MAC address in HEX
         // Look1(" -> ");
         MacAddress[i] = CheckPipeNibbles(MacAddress[i]); // Fix PIPE if needed !
-                                                         //  MacAddress[i] += 42;                             // test another random pipe address
+                                                          // MacAddress[i] += 42;                             // test another random pipe address
                                                          //  Look(MacAddress[i], HEX);                        // Show MAC address in HEX
     }
 
@@ -5283,7 +5283,7 @@ void CheckWhetherToEnableBinding(bool *CheckingPowerButton)
         if (!BindingEnabled)
         {
             PlaySound(BEEPCOMPLETE);   // Play sound to indicate binding enabled
-            delay(150);                // wait for sound to finish
+            delay(250);                // Wait for sound to finish
             PlaySound(BINDINGENABLED); // Play sound to indicate binding enabled
             SendText(wb, Mfound);      // Show binding enabled
             SendCommand(YesVisible);   // Show binding enabled
@@ -5307,11 +5307,11 @@ void CheckPowerOffButton()
     char ShowStillConnected[] = "vis StillConnected,1";
     char StillConnectedBox[] = "StillConnected";
 
-    if (CheckingPowerButton)
-        return;                 // already checking power button!
+    if ((digitalRead(BUTTON_SENSE_PIN)) || CheckingPowerButton) // already checking power button or button not even pressed!
+        return;
     CheckingPowerButton = true; // set flag to prevent re-entry
-
-    CheckWhetherToEnableBinding(&CheckingPowerButton); // Check if binding is enabled Which is done by holding the start button for more than two seconds
+    if (!BuddyMasterOnWireless && !BuddyPupilOnWireless && !BuddyMasterOnPPM && !BuddyPupilOnPPM)
+        CheckWhetherToEnableBinding(&CheckingPowerButton); // Check if binding is enabled Which is done by holding the start button for more than two seconds
 
     if ((!digitalRead(BUTTON_SENSE_PIN)) && (millis() > POWERONOFFDELAY2)) // no power off for first 10 seconds in case button held down too long
     {                                                                      // power button is pressed!
