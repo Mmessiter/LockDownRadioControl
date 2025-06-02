@@ -23,13 +23,10 @@ bool LoadCorrectModel(uint64_t ModelID)
 {                                            //  Gets Buddy onto same model as master, quietly.
     uint32_t SavedModelNumber = ModelNumber; //  Save the current model number
     static uint64_t FailedID = 0;            //  The ID of the model that failed to be found
+    if (ModelID == FailedID)
+        return false; // If the model failed to load, then don't try again
     ModelMatched = false;
     ModelNumber = 0; //  Start from the first model
-    if (ModelID == FailedID)
-    {
-        PlaySound(MMNOTFOUND); // If the model failed to load, then don't try again
-        return false;
-    } 
     while (!ModelMatched && (ModelNumber < MAXMODELNUMBER - 1)) //  Try to match the ID with a saved one
     {
         ++ModelNumber;
