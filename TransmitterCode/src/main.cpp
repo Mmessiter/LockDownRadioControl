@@ -270,7 +270,16 @@ void GreenLedOn()
         LastShowTime = 0;
         ShowComms();
         if (AnnounceConnected)
+        {
             PlaySound(CONNECTEDMSG);
+            if (Connect_MMmsg) // this is set when Modelmatch is executed during binding.
+            {
+                KickTheDog();             // keep the dog happy
+                delay(1000);              // allow time to say "Connected"
+                PlaySound(Connect_MMmsg); // play the message that was set during ModelMatch  ("Model Found!" or "Model matched!" or "Model not found!")
+                Connect_MMmsg = 0; // reset the message to be played later
+            }
+        }
         if (UseLog)
         {
             LogConnection();
@@ -1057,7 +1066,7 @@ void GetTeensyMacAddress() // heer
         // Look1(MacAddress[i], HEX); // Show MAC address in HEX
         // Look1(" -> ");
         MacAddress[i] = CheckPipeNibbles(MacAddress[i]); // Fix PIPE if needed !
-                                                          // MacAddress[i] += 42;                             // test another random pipe address
+                                                         // MacAddress[i] += 42;                             // test another random pipe address
                                                          //  Look(MacAddress[i], HEX);                        // Show MAC address in HEX
     }
 

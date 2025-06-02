@@ -1198,6 +1198,7 @@ uint16_t VariometerThreshold = 400; // 400 fpm
 uint16_t VariometerSpacing = 125;   // 125 fpm
 bool Variometer_InitDone = false;
 bool BindingEnabled = false; // This is used to enable binding
+uint8_t Connect_MMmsg = 0;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

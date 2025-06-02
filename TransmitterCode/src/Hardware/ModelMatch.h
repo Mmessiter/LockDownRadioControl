@@ -5,7 +5,7 @@
 #ifndef MODEL_MATCH_H
 #define MODEL_MATCH_H
 
-/************************************************************************************************************/
+//****************************************************************************************/
 #define MACS_MATCHED (ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64)
 void CompareModelsIDs()
 {
@@ -37,10 +37,9 @@ void CompareModelsIDs()
     {
         if (AnnounceConnected) // Yes ...
         {
-            PlaySound(MMMATCHED);
-            if (UseLog)
-                LogModelMatched();
-            DelayWithDog(1400); // allow time to say "Matched"
+           Connect_MMmsg = MMMATCHED; // Set the message to be played later
+           if (UseLog)
+               LogModelMatched();
         }
         ModelMatched = true; //  It's a match so start flying!
         return;
@@ -62,8 +61,7 @@ void CompareModelsIDs()
             UpdateModelsNameEveryWhere(); //  Use it everywhere.
             if (AnnounceConnected)
             {
-                PlaySound(MMFOUND);
-                DelayWithDog(1400); // allow time to say "Found"
+                Connect_MMmsg = MMFOUND; // Set the message to be played later
                 if (UseLog)
                     LogModelFound();
             }
@@ -75,8 +73,7 @@ void CompareModelsIDs()
             ReadOneModel(ModelNumber);
             if (UseLog)
                 LogModelNotFound();
-            PlaySound(NOTFOUND);
-            DelayWithDog(2000); // MUST allow time to say "Model not found", otherwise it gets interrupted by "CONNECTED!" announcement
+            Connect_MMmsg = NOTFOUND; // Set the message to be played later
         }
     }
     BindNow(); // Always bind after considering model's MAC ID, whether matched, found, or not found (this last one is needed for New Models).
