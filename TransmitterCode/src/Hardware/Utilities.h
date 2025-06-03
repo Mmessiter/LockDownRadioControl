@@ -1022,6 +1022,16 @@ void ClearBox()
     strcat(cmd, nb);
     SendCommand(cmd);
 }
+// *********************************************************************************************************************************/
+void DelaySimple(uint32_t ms)
+{
+    uint32_t ThisMoment = millis();
+    while (millis() - ThisMoment < ms)
+    {
+        KickTheDog(); // keep the dog happy and its tail wagging so it doesn't bite us!
+        delay(10);    // this is needed to allow the dog to wag its tail!
+    }
+}
 
 /*********************************************************************************************************************************/
 uint16_t GetSuccessRate()

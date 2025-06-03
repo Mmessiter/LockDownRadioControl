@@ -720,6 +720,7 @@ void StartLogFileView();
 void LogTotalRXGoodPackets();
 void LogTotalRXGoodPackets();
 void LogTotalPacketsAttempted();
+void DelaySimple(uint32_t ms);
 FASTRUN void LogAverageGap();
 #ifdef USE_BTLE
 void SendViaBLE();

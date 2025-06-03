@@ -255,16 +255,6 @@ void BlueLedOn()
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, GetLEDBrightness()); // Brightness is a function of maybe blinking
 }
-// *********************************************************************************************************************************/
-void DelaySimple(uint32_t ms)
-{
-    uint32_t ThisMoment = millis();
-    while (millis() - ThisMoment < ms)
-    {
-        KickTheDog(); // keep the dog happy and its tail wagging so it doesn't bite us!
-        delay(10);    // this is needed to allow the dog to wag its tail!
-    }
-}
 
 /*********************************************************************************************************************************/
 
@@ -5288,26 +5278,26 @@ void SimulateCloseDown()
 }
 
 // ************************************************************************************************************/
-void CheckWhetherToEnableBinding(bool *CheckingPowerButton)
+void CheckWhetherToEnableBinding()
 {
-    // This function checks whether binding has been enabled for this transmitter. This is done by holding down the power button for more than two seconds at the start up.
+    // This function checks whether binding is being enabled for this transmitter.
+    // This is done by holding down the power button for two seconds at the start up.
 
     char Mfound[] = "Binding enabled";
     char wb[] = "wb"; // wb is the name of the label on front view
     char YesVisible[] = "vis wb,1";
 
-    if (!digitalRead(BUTTON_SENSE_PIN) && ((millis()) < 5000) && (millis() > 2000)) // heer To initiate Binding, hold ON button for over 2 secs
+    if (!digitalRead(BUTTON_SENSE_PIN) && ((millis()) < 5000) && (millis() > 1250)) // heer To initiate Binding, hold ON button for 2 secs
     {
-        *CheckingPowerButton = false; // reset flag to allow entry
         if (!BindingEnabled)
         {
             PlaySound(BEEPCOMPLETE);   // Play sound to indicate binding enabled
-            delay(250);                // Wait for sound to finish
+            delay(250);                // Wait for chirp to finish
             PlaySound(BINDINGENABLED); // Play sound to indicate binding enabled
             SendText(wb, Mfound);      // Show binding enabled
             SendCommand(YesVisible);   // Show binding enabled
+            BindingEnabled = true;     // Set binding enabled flag
         }
-        BindingEnabled = true; // Set binding enabled flag
         return;
     }
 }
@@ -5330,7 +5320,7 @@ void CheckPowerOffButton()
         return;
     CheckingPowerButton = true; // set flag to prevent re-entry
     if (!BuddyMasterOnWireless && !BuddyPupilOnWireless && !BuddyMasterOnPPM && !BuddyPupilOnPPM)
-        CheckWhetherToEnableBinding(&CheckingPowerButton); // Check if binding is enabled Which is done by holding the start button for more than two seconds
+        CheckWhetherToEnableBinding(); // Check if binding is enabled Which is done by holding the start button for more than two seconds
 
     if ((!digitalRead(BUTTON_SENSE_PIN)) && (millis() > POWERONOFFDELAY2)) // no power off for first 10 seconds in case button held down too long
     {                                                                      // power button is pressed!
