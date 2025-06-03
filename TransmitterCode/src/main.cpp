@@ -255,6 +255,17 @@ void BlueLedOn()
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, GetLEDBrightness()); // Brightness is a function of maybe blinking
 }
+// *********************************************************************************************************************************/
+void DelaySimple(uint32_t ms)
+{
+    uint32_t ThisMoment = millis();
+    while (millis() - ThisMoment < ms)
+    {
+        KickTheDog(); // keep the dog happy and its tail wagging so it doesn't bite us!
+        delay(10);    // this is needed to allow the dog to wag its tail!
+    }
+}
+
 /*********************************************************************************************************************************/
 
 void GreenLedOn()
@@ -274,10 +285,9 @@ void GreenLedOn()
             PlaySound(CONNECTEDMSG);
             if (Connect_MMmsg) // this is set when Modelmatch is executed during binding.
             {
-                KickTheDog();             // keep the dog happy
-                delay(1000);              // allow time to say "Connected"
+                DelaySimple(1000);        // wait a second before playing the message
                 PlaySound(Connect_MMmsg); // play the message that was set during ModelMatch  ("Model Found!" or "Model matched!" or "Model not found!")
-                Connect_MMmsg = 0; // reset the message to be played later
+                Connect_MMmsg = 0;        // reset the message to be played later
             }
         }
         if (UseLog)

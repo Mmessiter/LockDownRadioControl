@@ -33,8 +33,8 @@ bool ValidateNewPipe()
 
 bool TestTheNewPipe() // Check that the set pipe can actually receive data before going further.
 {
-    if (Blinking)       // if binding, then we don't need to test the pipe
-        return true;  
+    if (Blinking) // if binding, then we don't need to test the pipe
+        return true;
     CurrentRadio->stopListening();
     delayMicroseconds(STOPLISTENINGDELAY);
     CurrentRadio->setChannel(FHSS_Recovery_Channels[0]); // one of the three recovery channels is enough here.
@@ -49,7 +49,7 @@ bool TestTheNewPipe() // Check that the set pipe can actually receive data befor
             return true;
         }
         KickTheDog(); // keep the watchdog happy
-        delay(2);    // wait a bit
+        delay(2);     // wait a bit
     }
     return false;
 }
@@ -87,9 +87,9 @@ void GetNewPipe() // from TX
         SetNewPipe();
 
         if (TestTheNewPipe())
-        
-        BindModel();
-
+        {
+            BindModel(); // don't bind if the pipe is not valid
+        }
 
         PipeSeen = true;
     }
