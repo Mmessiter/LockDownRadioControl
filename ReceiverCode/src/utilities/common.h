@@ -49,7 +49,7 @@
 //                            WATCHDOG PARAMETERS                           *
 //***************************************************************************
 
-#define WATCHDOGTIMEOUT 2000 // 2 Seconds before reboot (32ms -> 500 seconds)
+#define WATCHDOGTIMEOUT 3500 // 2 Seconds before reboot (32ms -> 500 seconds)
 #define KICKRATE 500         // Kick twice a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
 #define WATCHDOGMAXRATE 250  // 250 ms secs between kicks is max rate allowed
 

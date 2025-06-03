@@ -29,6 +29,31 @@ bool ValidateNewPipe()
         return true;
     return false;
 }
+// ************************************************************************************************************/
+
+bool TestTheNewPipe() // Check that the set pipe can actually receive data before going further.
+{
+    if (Blinking)       // if binding, then we don't need to test the pipe
+        return true;  
+    CurrentRadio->stopListening();
+    delayMicroseconds(STOPLISTENINGDELAY);
+    CurrentRadio->setChannel(FHSS_Recovery_Channels[0]); // one of the three recovery channels is enough here.
+    delayMicroseconds(STOPLISTENINGDELAY);
+    CurrentRadio->startListening();
+    delayMicroseconds(STOPLISTENINGDELAY);
+    uint32_t LookTime = millis();
+    while (millis() - LookTime < 250)
+    {
+        if (CurrentRadio->available(&Pipnum))
+        {
+            return true;
+        }
+        KickTheDog(); // keep the watchdog happy
+        delay(2);    // wait a bit
+    }
+    return false;
+}
+
 /************************************************************************************************************/
 
 void GetNewPipe() // from TX
@@ -51,11 +76,21 @@ void GetNewPipe() // from TX
             TheReceivedPipe[4 - i] = ReceivedData[i + 1] & 0xff; // reversed byte array for our use
         TheReceivedPipe[5] = 0;
         if (Blinking) // if binding, then use the received pipe
+        {
             CopyToCurrentPipe(TheReceivedPipe, BOUNDPIPENUMBER);
+        }
         else // if not binding, then use the saved pipe
+        {
             CopyToCurrentPipe(TheSavedPipe, BOUNDPIPENUMBER);
+        }
+
         SetNewPipe();
+
+        if (TestTheNewPipe())
+        
         BindModel();
+
+
         PipeSeen = true;
     }
     ++pcount; // inc pipes received
@@ -75,7 +110,6 @@ void CopyToCurrentPipe(uint8_t *p, uint8_t pn)
         CurrentPipe[i] = p[i];
     PipePointer = p;
     Pipnum = pn;
-    
 }
 //************************************************************************************************************/
 void SetNewPipe()
