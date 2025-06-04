@@ -4989,6 +4989,7 @@ void GetBank() // ... and the other three switches
                 MotorEnabled = false;
                 if (!BuddyPupilOnPPM)
                 {
+                    SendNoData = false; // can send data!/// <<<<<<<<<<******** heer
                     if ((millis() - WarningTimer) > 4000)
                     {
                         PlaySound(PLSTURNOFF);
