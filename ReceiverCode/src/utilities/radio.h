@@ -155,7 +155,7 @@ void ReadMoreParameters()
 // ************************************************************************************************************/
 uint8_t GetDecompressedSize(uint8_t DynamicPayloadSize)
 {
-    uint8_t Ds = (((DynamicPayloadSize - 2) * 4) / 3) / 2; // first 2 bytes are ChannelBitMask, the rest is the compressed data (hence the "-2")
+    uint8_t Ds = (((DynamicPayloadSize - 2) * 4) / 3) / 2; // first 2 bytes are ChannelBitMask, the rest is the 3:4 compressed data (hence the "-2")
     while (Ds % 4)                                         // make sure Ds is a multiple of 4
         ++Ds;                                              // increment until it is a multiple of 4
     return Ds;

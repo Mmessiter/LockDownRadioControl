@@ -74,7 +74,7 @@
 struct CD
 {
     uint16_t ChannelBitMask = 0;
-    uint16_t CompressedData[10]; // 40 bytes ... far too big
+    uint16_t CompressedData[10]; // 20 bytes ... far too big
 };
 CD DataReceived;
 

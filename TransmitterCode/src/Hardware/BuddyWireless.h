@@ -178,6 +178,15 @@ void RearrangeTheChannels()
     }
     return;
 }
+// ************************************************************************************************************/
+uint8_t GetDecompressedSize(uint8_t DynamicPayloadSize)
+{
+    uint8_t Ds = (((DynamicPayloadSize - 2) * 4) / 3) / 2; // first 2 bytes are ChannelBitMask, the rest is the 3:4 compressed data (hence the "-2")
+    while (Ds % 4)                                         // make sure Ds is a multiple of 4
+        ++Ds;                                              // increment until it is a multiple of 4
+    return Ds;
+}
+
 //*************************************************************************************************************************
 // Master gets Ack from pupil.
 
@@ -188,9 +197,9 @@ void GetPupilAck()
         SpecialPacketData.ResendAllChannels = false;
         uint8_t DynamicPayloadSize = Radio1.getDynamicPayloadSize(); // if a packet has arrived
         Radio1.read(&DataReceived, DynamicPayloadSize);              // read only bytes sent in the packet
-        if (DataReceived.ChannelBitMask)
-        {                                                          // any channel changes?
-            Decompress(RawDataIn, DataReceived.CompressedData, 8); // yes, decompress the data into RawDataIn array
+        if (DataReceived.ChannelBitMask)                             // any channel changes?
+        {
+            Decompress(RawDataIn, DataReceived.CompressedData, GetDecompressedSize(DynamicPayloadSize)); // yes, decompress the data into RawDataIn array
             RearrangeTheChannels();                                // Rearrange the channels
         }
     }
@@ -379,7 +388,7 @@ void SendTheSpecialAckPayload()
     if (NumberOfChangedChannels)
     {                                                                      // Any channels changed? Or parameters to send?
         ByteCountToTransmit = ((float)NumberOfChangedChannels * 1.5f) + 4; // Calculate the number of bytes to transmit
-        uint8_t SizeOfUnCompressedData = (ByteCountToTransmit / 1.5);
+        uint8_t SizeOfUnCompressedData = static_cast<uint8_t>(ByteCountToTransmit / 1.5f);
         Compress(DataTosend.CompressedData, RawDataBuffer, SizeOfUnCompressedData);
     }
     else
