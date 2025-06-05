@@ -90,7 +90,7 @@ void MapToSBUS()
 void Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, uint8_t uncompressed_size)
 {
     uint8_t p = 0;
-    for (uint8_t l = 0; l < (uncompressed_size * 3 / 4); l += 3)
+    for (uint8_t l = 0; l < (uncompressed_size * 3 / 4) - 2; l += 3)
     {
         uncompressed_buf[p] = compressed_buf[l] >> 4;
         ++p;
@@ -152,24 +152,38 @@ void ReadMoreParameters()
     }
     UseExtraParameters();
 }
-/************************************************************************************************************/
-void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is length of incomming data
+// ************************************************************************************************************/
+uint8_t GetDecompressedSize(uint8_t DynamicPayloadSize)
 {
-    LastPacketArrivalTime = millis();                          // Note the arrival time
-    if (DataReceived.ChannelBitMask)                           // Any changed channels?
-    {                                                          // yes
-        Decompress(RawDataIn, DataReceived.CompressedData, 8); // Decompress the most recent data 8 enough? Don't know yet how may channels will be sent
-        RearrangeTheChannels();                                // Rearrange the channels for actual control since only changed ones are sent
-    }
-    else
+    uint8_t Ds = (((DynamicPayloadSize - 2) * 4) / 3) / 2; // first 2 bytes are ChannelBitMask, the rest is the compressed data (hence the "-2")
+    while (Ds % 4)                                         // make sure Ds is a multiple of 4
+        ++Ds;                                              // increment until it is a multiple of 4
+    return Ds;
+}
+
+/************************************************************************************************************/
+void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is total length of incoming data
+{
+    LastPacketArrivalTime = millis();                     // Note the arrival time
+    uint8_t Ds = GetDecompressedSize(DynamicPayloadSize); // Get the decompressed size of the data
+
+    if (Ds) // not zero?
     {
-        if (DynamicPayloadSize > 2)                                 // no changed channels, but params
-        {                                                           // parameter packet
-            Decompress(RawDataIn, DataReceived.CompressedData, 10); // 10 allows 8 parameter elements per packet
-            ReadMoreParameters();
+        if (DataReceived.ChannelBitMask)                            // Any changed channels?
+        {                                                           // yes
+            Decompress(RawDataIn, DataReceived.CompressedData, Ds); // Decompress the most recent data (8?)
+            RearrangeTheChannels();                                 // Rearrange the channels for actual control since only changed ones are sent
         }
+        else
+        {
+            if (DynamicPayloadSize > 2)                                 // no changed channels, but params
+            {                                                           // parameter packet
+                Decompress(RawDataIn, DataReceived.CompressedData, Ds); // (10?)
+                ReadMoreParameters();
+            }
+        }
+        MapToSBUS(); // Get SBUS data ready
     }
-    MapToSBUS();             // Get SBUS data ready
     SendSBUSData();          // maybe send SBUS data if its time
     ++SuccessfulPackets;     // These packets did arrive, but our acknowledgement might yet fail...
     if (HopNow)              // time to hop?
@@ -319,7 +333,6 @@ FASTRUN void ReceiveData()
             Reconnect(); // Try to reconnect.
     }
 }
-
 
 /************************************************************************************************************/
 
@@ -488,14 +501,10 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch)
 // ************************************************************************************************************/
 void DisplayPipe()
 {
-    static uint32_t now = millis();
-
-    if (millis() - now < 1000)
-    {
+    static uint32_t lastTime = 0;
+    if (millis() - lastTime < 1000)
         return;
-    } // don't print too often
-
-    now = millis();
+    lastTime = millis();
 
     Serial.print("Listening for pipe: ");
     for (uint8_t i = 0; i < 5; ++i)
@@ -522,7 +531,7 @@ FASTRUN void Reconnect()
 
     while (!Connected)
     {
-      //  DisplayPipe(); // for debugging purposes
+        //  DisplayPipe(); // for debugging purposes
 
         if (Blinking)
             BlinkLed();
@@ -571,12 +580,10 @@ FASTRUN void Reconnect()
     // must have connected by here
     // Look1 ("Reconnected on channel ");
     // Look  (ReconnectChannel);
-
+    ReconnectedMoment = millis(); // Save this moment
     FailSafeSent = false;
     if (PreviousRadio != ThisRadio)
-        ++RadioSwaps;             // Count the radio swaps
-    ReconnectedMoment = millis(); // Save this moment
-
+        ++RadioSwaps; // Count the radio swaps
 
     if (FailedSafe)
     {

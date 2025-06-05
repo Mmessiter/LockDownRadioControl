@@ -3786,7 +3786,7 @@ FASTRUN void ButtonWasPressed()
         char FrontView_Secs[] = "Secs";
         char StartBackGround[] = "click Background,0";
         char NotConnected[] = "Model isn't connected!";
-        char IsConnected[] = "Not while model connected!";
+        char IsConnected[] = "Warning: model is connected!";
         char invisb1[] = "vis b1,0";
         char invisb0[] = "vis b0,0";
         char visb1[] = "vis b1,1";
@@ -4107,11 +4107,13 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(InputsView, TextIn) > 0)
         {
-            if (ModelMatched) // not allowed while model is connected
+            if (ModelMatched) //  model is connected warning
             {
-                MsgBox(pRXSetupView, IsConnected);
-                ClearText();
-                return;
+                if (!GetConfirmation(pRXSetupView, IsConnected))
+                {
+                    ClearText();
+                    return;
+                }
             }
             SendCommand(pInputsView);
             CurrentView = INPUTS_VIEW;
