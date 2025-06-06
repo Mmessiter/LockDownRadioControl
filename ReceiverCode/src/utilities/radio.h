@@ -409,6 +409,7 @@ void ConfigureRadio()
     CurrentRadio->setCRCLength(RF24_CRC_16); // could be 8 or disabled
     CurrentRadio->setAutoAck(true);          // we want acks
     CurrentRadio->maskIRQ(1, 1, 1);          // no interrupts - seems NEEDED at the moment
+    //CurrentRadio->setStatusFlags(0);         // disables all IRQs
     CurrentRadio->openReadingPipe(PIPENUMBER, PipePointer);
     CurrentRadio->startListening();
     delayMicroseconds(STOPLISTENINGDELAY);
