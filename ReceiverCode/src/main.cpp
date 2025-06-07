@@ -254,13 +254,9 @@ void TurnLedOff()
 
 /************************************************************************************************************/
 void RebuildFlags(bool *f, uint16_t tb)
-{ // Pass arraypointer and the two bytes to be decoded
+{ // Pass arraypointer and the two bytes to be decoded. Builds the 16 bool flag bytes from 16 BITS
     for (uint8_t i = 0; i < 16; ++i)
-    {
-        f[15 - i] = false; // false is default
-        if (tb & 1 << i)
-            f[15 - i] = true; // sets true if bit was on
-    }
+       f[15 - i] = (tb & (1 << i)); // sets false if bit was off, or true if bit was on... delightfully short, and clear enough in my opinion!
 }
 
 // ******************************************************************************************************************************************************************

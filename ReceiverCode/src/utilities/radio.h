@@ -30,7 +30,7 @@ void UseExtraParameters()
     case 1:                            // working!
         FS_byte1 = Parameters.word[1]; // These 2 bytes are 16 failsafe flags
         FS_byte2 = Parameters.word[2]; // These 2 bytes are 16 failsafe flags
-        TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8);
+        TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8); // because of the shift left 8, adding here is the same as ORing them.
         RebuildFlags(FailSafeChannel, TwoBytes);
         SaveFailSafeData();
         break;
@@ -178,7 +178,7 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is total 
         {
             if (DynamicPayloadSize > 2)                                 // no changed channels, but params
             {                                                           // parameter packet
-                Decompress(RawDataIn, DataReceived.CompressedData, Ds); // (10?)
+                Decompress(RawDataIn, DataReceived.CompressedData, Ds); // Decompress the parameters
                 ReadMoreParameters();
             }
         }
