@@ -245,7 +245,7 @@ void initKalman();
 float MetersToFeet(float Meters);
 void GetRXVolts();
 void SendSBUSData();
-bool CheckCrazyValues();
+bool CheckForCrazyValues();
 void ReadGPS();
 FASTRUN void ReceiveData();
 void CopyToCurrentPipe(uint8_t *p, uint8_t pn);

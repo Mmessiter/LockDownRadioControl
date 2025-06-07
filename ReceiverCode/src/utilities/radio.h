@@ -12,7 +12,7 @@
 void SendSBUSData()
 {
     static uint32_t LocalTime = millis();
-    if (((millis() - LocalTime) < SBUSRATE) || (!BoundFlag) || (!CheckCrazyValues()))
+    if (((millis() - LocalTime) < SBUSRATE) || (!BoundFlag) || (!CheckForCrazyValues()))
         return;                 // Don't send SBUS data except when due
     MySbus.write(SbusChannels); // Send SBUS data
     LocalTime = millis();       // reset the timer
@@ -28,8 +28,8 @@ void UseExtraParameters()
     switch (Parameters.ID)
     {
     case 1:                            // working!
-        FS_byte1 = Parameters.word[1]; // These 2 bytes are 16 failsafe flags
-        FS_byte2 = Parameters.word[2]; // These 2 bytes are 16 failsafe flags
+        FS_byte1 = Parameters.word[1] & 0xff; // These 2 bytes are 16 failsafe flags
+        FS_byte2 = Parameters.word[2] & 0xff; // These 2 bytes are 16 failsafe flags
         TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8); // because of the shift left 8, adding here is the same as ORing them.
         RebuildFlags(FailSafeChannel, TwoBytes);
         SaveFailSafeData();
@@ -59,7 +59,7 @@ void UseExtraParameters()
     case 7:
         for (int i = 0; i < SERVOSUSED; ++i)
             ServoCentrePulse[i] = Parameters.word[i + 1];
-        SetServoFrequency();
+       // SetServoFrequency(); // not needed here, as it was done in case 6
         break;
     default:
         break;
@@ -153,7 +153,7 @@ void ReadMoreParameters()
     UseExtraParameters();
 }
 // ************************************************************************************************************/
-uint8_t GetDecompressedSize(uint8_t DynamicPayloadSize)
+inline uint8_t GetDecompressedSize(uint8_t DynamicPayloadSize)
 {
     uint8_t Ds = (((DynamicPayloadSize - 2) * 4) / 3) / 2; // first 2 bytes are ChannelBitMask, the rest is the 3:4 compressed data (hence the "-2")
     while (Ds % 4)                                         // make sure Ds is a multiple of 4

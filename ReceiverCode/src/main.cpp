@@ -114,7 +114,7 @@ void KickTheDog()
 
 /************************************************************************************************************/
 
-bool CheckCrazyValues() // might come while binding ... indeed will.
+bool CheckForCrazyValues() // might come while binding ... indeed will.
 {   if (!BindPlugInserted)
         return true;
                                                           
@@ -131,7 +131,7 @@ bool CheckCrazyValues() // might come while binding ... indeed will.
 /************************************************************************************************************/
 // Function to get PWM value needed for given pulse length in microseconds
 
-int GetPWMValue(int frequency, int length) { return float(length / (1000000.00 / frequency)) * SERVO_RESOLUTION; } // *** >> DON'T EDIT THIS LINE ... EVER!! << ***
+inline int GetPWMValue(int frequency, int length) { return float(length / (1000000.00 / frequency)) * SERVO_RESOLUTION; } // *** >> DON'T EDIT THIS LINE ... EVER!! << ***
 
 /************************************************************************************************************/
 void MoveServos()
@@ -142,7 +142,7 @@ void MoveServos()
     LocalTimer = millis();
    
    
-    if (!CheckCrazyValues())
+    if (!CheckForCrazyValues())
     {
         TurnLedOff(); // if we have crazy values, turn the LED off and don't move the servos
         return;
@@ -166,16 +166,16 @@ void MoveServos()
     }
     for (int j = 0; j < SERVOSUSED; ++j)
     {
-        int S = ReceivedData[j];
+        int PulseLength = ReceivedData[j];
         if (ServoCentrePulse[j] < 1000)
         {
-            S = map(S, MINMICROS, MAXMICROS, ServoCentrePulse[j] - EXTRAAT760, ServoCentrePulse[j] + EXTRAAT760); // these lines allow for the fact that some servos don't like 760 - 2240
+            PulseLength = map(PulseLength, MINMICROS, MAXMICROS, ServoCentrePulse[j] - EXTRAAT760, ServoCentrePulse[j] + EXTRAAT760); // these lines allow for the fact that some servos don't like 760 - 2240
         }
         else
         {
-            S = map(S, MINMICROS, MAXMICROS, ServoCentrePulse[j] - EXTRAAT1500, ServoCentrePulse[j] + EXTRAAT1500); // these lines allow for the fact that some servos don't like 760 - 2240
+            PulseLength = map(PulseLength, MINMICROS, MAXMICROS, ServoCentrePulse[j] - EXTRAAT1500, ServoCentrePulse[j] + EXTRAAT1500); // these lines allow for the fact that some servos don't like 760 - 2240
         }
-        analogWrite(PWMPins[j], GetPWMValue(ServoFrequency[j], S));
+        analogWrite(PWMPins[j], GetPWMValue(ServoFrequency[j], PulseLength));
     }
 }
 
