@@ -131,10 +131,10 @@ bool CheckForCrazyValues() // might come while binding ... indeed will.
 /************************************************************************************************************/
 // Function to get PWM value needed for given pulse length in microseconds
 
-inline int GetPWMValue(int frequency, int length) { return float(length / (1000000.00 / frequency)) * SERVO_RESOLUTION; } // *** >> DON'T EDIT THIS LINE ... EVER!! << ***
+inline int GetPWMValue(int frequency, int length) { return static_cast<int>((static_cast<float>(length) / (1000000.0f / static_cast<float>(frequency))) * SERVO_RESOLUTION); }
 
 /************************************************************************************************************/
-void MoveServos()
+void    MoveServos()
 {
     static uint32_t LocalTimer = 0;
     if ((millis() - LocalTimer) < 10)
