@@ -266,6 +266,7 @@ void RebuildFlags(bool *f, uint16_t tb)
 
 FLASHMEM void ScanI2c()
 {
+  //  Look("scanning I2C bus for devices ...");
     for (uint8_t i = 1; i < 127; ++i)
     {
         Wire.beginTransmission(i);
@@ -274,6 +275,8 @@ FLASHMEM void ScanI2c()
             if (i == 0x40)
             {
                 INA219Connected = true;
+                // Look1("INA219 found at address: ");
+                // Look(i, HEX);
             }
             if (i == 0x68)
             {
@@ -473,6 +476,7 @@ FLASHMEM void setup()
     TestTheSBUSPin(); // Check that the SBUS pin is not held low (plug in wrong way round)
     TestAllPWMPins(); // Check that the no PWM pins are held low (plug in wrong way round)
     Wire.begin();
+    //delay(400);// *only* needed if you want to see terminal output
     delay(200); // Wait for I2C to settle
                 // delay(300); // *only* needed if you want to see terminal output
     ScanI2c();  // Detect what's connected
@@ -494,6 +498,7 @@ FLASHMEM void setup()
     ReadSavedPipe();
     Blinking = !digitalRead(BINDPLUG_PIN); // Blinking = binding to new TX ... because bind plug is inserted
     BindPlugInserted = Blinking; // Bind plug inserted or not
+    if (BindPlugInserted) delay (200);
     digitalWrite(LED_PIN, LOW);
 }
 
