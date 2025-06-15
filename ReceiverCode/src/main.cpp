@@ -58,7 +58,7 @@
 #include <PulsePosition.h>
 #include <Watchdog_t4.h>
 #include "utilities/SBUS.h" // SBUS library now fixed as early version
-#include "utilities/common.h"
+#include "utilities/1Definitions.h"
 #include "utilities/radio.h"
 #include "utilities/pid.h"
 #include "utilities/GPS.h"
@@ -476,9 +476,9 @@ FLASHMEM void setup()
     TestTheSBUSPin(); // Check that the SBUS pin is not held low (plug in wrong way round)
     TestAllPWMPins(); // Check that the no PWM pins are held low (plug in wrong way round)
     Wire.begin();
-    //delay(400);// *only* needed if you want to see terminal output
+    Wire.setClock(400000); // Or 1000000, etc
+    // delay(400);// *only* needed if you want to see terminal output
     delay(200); // Wait for I2C to settle
-                // delay(300); // *only* needed if you want to see terminal output
     ScanI2c();  // Detect what's connected
     if (BMP280Connected)
         Init_BMP280();

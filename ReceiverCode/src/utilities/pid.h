@@ -4,37 +4,54 @@
 #define _SRC_PID_H
 
 #include <Arduino.h>
-#include "utilities/common.h"
+#include "utilities/1Definitions.h"
 
 #ifdef USE_STABILISATION
 
-
-
-
-// ******************************************************************************************************************************************************************
-/// @brief // This function reads the MPU6050 registers frequently to get the gyro and accelerometer signals
+// ****************************************************************************************************
+/// @brief Reads raw accelerometer and gyroscope data from the MPU6050 and calculates angles
 void Read_MPU6050(void)
 {
-  Wire.beginTransmission(0x68);                                                   // Start the transmission
-  Wire.write(0x3B);                                                               // Starting register for Accel data
-  Wire.endTransmission();                                                         // End the transmission
-  Wire.requestFrom(0x68, 14);                                                     // Request 14 bytes from the MPU-6050
-  int16_t AccXLSB = (Wire.read() << 8) | Wire.read();                             // Combine the two 8-bit registers into one 16-bit number
-  int16_t AccYLSB = (Wire.read() << 8) | Wire.read();                             // Combine the two 8-bit registers into one 16-bit number
-  int16_t AccZLSB = (Wire.read() << 8) | Wire.read();                             // Combine the two 8-bit registers into one 16-bit number
-  Wire.read();                                                                    // Skip the temperature data
-  Wire.read();                                                                    // Skip the temperature data
-  int16_t GyroX = (Wire.read() << 8) | Wire.read();                               // Combine the two 8-bit registers into one 16-bit number
-  int16_t GyroY = (Wire.read() << 8) | Wire.read();                               // Combine the two 8-bit registers into one 16-bit number
-  int16_t GyroZ = (Wire.read() << 8) | Wire.read();                               // Combine the two 8-bit registers into one 16-bit number
-  RawRollRate = (float)GyroX / 65.5;                                              // Convert to degrees per second
-  RawPitchRate = (float)GyroY / 65.5;                                             // Convert to degrees per second
-  RawYawRate = (float)GyroZ / 65.5;                                               // Convert to degrees per second
-  AccX = (float)AccXLSB / 4096;                                                   // Convert to g
-  AccY = (float)AccYLSB / 4096;                                                   // Convert to g
-  AccZ = (float)AccZLSB / 4096;                                                   // Convert to g
-  RawRollAngle = atan(AccY / sqrt(AccX * AccX + AccZ * AccZ)) * (180.0 / M_PI);   // Convert to degrees
-  RawPitchAngle = -atan(AccX / sqrt(AccY * AccY + AccZ * AccZ)) * (180.0 / M_PI); // Convert to degrees
+  constexpr uint8_t MPU6050_ADDR = 0x68;
+  constexpr uint8_t ACCEL_START_REG = 0x3B;
+  constexpr uint8_t READ_LENGTH = 14;
+  constexpr float ACCEL_SCALE = 4096.0f; // LSB/g
+  constexpr float GYRO_SCALE = 65.5f;    // LSB/(°/s)
+  constexpr float RAD_TO_DEGREES = 180.0f / M_PI;
+
+  // Set register pointer to start of burst read
+  Wire.beginTransmission(MPU6050_ADDR);
+  Wire.write(ACCEL_START_REG);
+  Wire.endTransmission(false); // Use repeated start for efficiency
+
+  // Avoid overload ambiguity by explicitly casting to bool
+  if (Wire.requestFrom(MPU6050_ADDR, READ_LENGTH, static_cast<bool>(true)) != READ_LENGTH)
+    return; // Exit if not all bytes are received
+
+  int16_t AccXLSB = (Wire.read() << 8) | Wire.read();
+  int16_t AccYLSB = (Wire.read() << 8) | Wire.read();
+  int16_t AccZLSB = (Wire.read() << 8) | Wire.read(); /// 
+
+  Wire.read(); // Skip temperature high byte
+  Wire.read(); // Skip temperature low byte
+
+  int16_t GyroX = (Wire.read() << 8) | Wire.read();
+  int16_t GyroY = (Wire.read() << 8) | Wire.read();
+  int16_t GyroZ = (Wire.read() << 8) | Wire.read();
+
+  // Convert raw gyro data to degrees per second
+  RawRollRate = static_cast<float>(GyroX) / GYRO_SCALE;
+  RawPitchRate = static_cast<float>(GyroY) / GYRO_SCALE;
+  RawYawRate = static_cast<float>(GyroZ) / GYRO_SCALE;
+
+  // Convert raw accelerometer data to g
+  AccX = static_cast<float>(AccXLSB) / ACCEL_SCALE;
+  AccY = static_cast<float>(AccYLSB) / ACCEL_SCALE;
+  AccZ = static_cast<float>(AccZLSB) / ACCEL_SCALE;
+
+  // Estimate roll and pitch angles from accelerometer data
+  RawRollAngle = atan2(AccY, sqrt(AccX * AccX + AccZ * AccZ)) * RAD_TO_DEGREES;
+  RawPitchAngle = -atan2(AccX, sqrt(AccY * AccY + AccZ * AccZ)) * RAD_TO_DEGREES;
 }
 // ******************************************************************************************************************************************************************
 void BlinkFast()
@@ -49,34 +66,36 @@ void BlinkFast()
     TurnLedOn();
 }
 // ******************************************************************************************************************************************************************
-
-// This function initialises the MPU6050 and calibrates the gyro
-
+// Initializes and calibrates the MPU6050 — assumes Wire.begin() already called
 void InitialiseTheMPU6050()
 {
-#define ITERATIONS 1000 // make bigger for better calibration after tests
-  Wire.setClock(400000);
-  Wire.begin();
-  delay(250);
+  constexpr int ITERATIONS = 1000;
+
+  delay(250); // Let sensor stabilize
+
   Wire.beginTransmission(0x68);
-  Wire.write(0x6B);
-  Wire.write(0x00);
+  Wire.write(0x6B); // PWR_MGMT_1
+  Wire.write(0x00); // Wake up
   Wire.endTransmission();
 
   Wire.beginTransmission(0x68);
-  Wire.write(0x1B); // GYRO_CONFIG register
-  Wire.write(0x08); // 0x08 for ±500°/s, 0x10 for ±1000°/s
+  Wire.write(0x1B); // GYRO_CONFIG
+  Wire.write(0x08); // ±500°/s
   Wire.endTransmission();
 
   Wire.beginTransmission(0x68);
-  Wire.write(0x1C); // ACCEL_CONFIG register
-  Wire.write(0x08); // 0x08 for ±4g
+  Wire.write(0x1C); // ACCEL_CONFIG
+  Wire.write(0x08); // ±4g
   Wire.endTransmission();
 
   Wire.beginTransmission(0x68);
-  Wire.write(0x1A); // CONFIG register
-  Wire.write(0x03); // ~43Hz bandwidth for both gyro and accel
+  Wire.write(0x1A); // CONFIG
+  Wire.write(0x03); // Low-pass filter ~43Hz
   Wire.endTransmission();
+
+  RateCalibrationRoll = 0;
+  RateCalibrationPitch = 0;
+  RateCalibrationYaw = 0;
 
   for (int i = 0; i < ITERATIONS; ++i)
   {
@@ -87,12 +106,13 @@ void InitialiseTheMPU6050()
     delay(1);
     BlinkFast();
   }
+
   RateCalibrationRoll /= ITERATIONS;
   RateCalibrationPitch /= ITERATIONS;
   RateCalibrationYaw /= ITERATIONS;
+
   initKalman();
 }
-
 // ******************************************************************************************************************************************************************
 // This function gets the current attitude of the aircraft
 
@@ -109,18 +129,11 @@ void GetCurrentAttitude()
   RawYawRate -= RateCalibrationYaw;     // Correct for gyro calibration
   kalmanFilter();
   filterRatesForHelicopter();
-  ++counter;
-  if (counter > 5)
+  // The following lines are for the Serial Plotter
+  if (++counter > 6)
   {
     // Print header once (this line will be ignored by the Serial Plotter's graph)
-    Serial.println("Raw,Filtered,Raw,Filtered,Raw,Filtered");
-
-    //  RawYawRate
-    //  filteredYawRate
-    //  RawRollRate
-    //  filteredRollRate
-    //  RawRollAngle
-    //  filteredRoll
+    Serial.println("RawPitch,FilteredPitch,RawRoll,FilteredRoll,RawYaw,FilteredYaw");
 
     Serial.print(RawPitchAngle);
     Serial.print(",");
@@ -136,10 +149,7 @@ void GetCurrentAttitude()
     // Serial.print(",");
     // Serial.print(filteredYawRate);
     // Serial.print(",");
-
     Serial.println();
-
-
     counter = 0;
   }
 }

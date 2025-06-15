@@ -4,7 +4,7 @@
 #ifndef _SRC_BINDING_H
 #define _SRC_BINDING_H
 #include <Arduino.h>
-#include "utilities/common.h"
+#include "utilities/1Definitions.h"
 #include <EEPROM.h>
 /************************************************************************************************************/
 // This function compares the just-received pipe with several of the previous ones

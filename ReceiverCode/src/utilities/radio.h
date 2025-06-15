@@ -3,7 +3,7 @@
 #ifndef _SRC_UTILITIES_RADIO_H
 #define _SRC_UTILITIES_RADIO_H
 
-#include "utilities/common.h"
+#include "utilities/1Definitions.h"
 
 /************************************************************************************************************/
 // This function sends the SBUS data to the receiver.

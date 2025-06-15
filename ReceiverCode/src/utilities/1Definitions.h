@@ -1,14 +1,10 @@
-/** @file ReceiverCode/src/utilities/common.h */
+/** @file ReceiverCode/src/utilities/1Definitions.h */
 // Malcolm Messiter 2020 - 2025 ...
-#ifndef _SRC_UTILITIES_COMMON_H
-#define _SRC_UTILITIES_COMMON_H
+#ifndef _SRC_UTILITIES_1DEFINITIONS_H
+#define _SRC_UTILITIES_1DEFINITIONS_H
 
 #include <Arduino.h>
-#include <RF24.h>
-#include <PulsePosition.h>
-#include <Adafruit_INA219.h>
 #include <Adafruit_DPS310.h>
-// #include <MPU6050_tockn.h>
 
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 5
@@ -25,12 +21,14 @@
 //  #define DB_FAILSAFE
 //  #define DB_RXTIMERS
 
-// #define USE_STABILISATION 1
+
+
+  //#define USE_STABILISATION 1
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! (if it won't connect, probably one or both is wrong! )******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
  #define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
- //#define USE_11PWM_OUTPUTS           // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
+ #define USE_11PWM_OUTPUTS           // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -363,4 +361,4 @@ bool DPS310Connected = false;
 uint16_t DPS310Address = 0x76; // DPS310 I2C address
 bool BindPlugInserted = false; // Bind plug inserted or not
 
-#endif // defined (_SRC_UTILITIES_COMMON_H)
+#endif // defined (_SRC_UTILITIES_1DEFINITIONS_H)
