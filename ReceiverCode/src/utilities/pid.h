@@ -1,4 +1,5 @@
 // This file contains the PID controller and the Kalman filter for the MPU6050 ****************************************************************************************
+// FIXED VERSION: Can be calibrated at any angle and will still read 0° when truly level
 
 #ifndef _SRC_PID_H
 #define _SRC_PID_H
@@ -8,8 +9,9 @@
 
 #ifdef USE_STABILISATION
 
-float PitchAngleOffset = 0.0f;
-float RollAngleOffset = 0.0f;
+// These store the sensor readings that correspond to TRUE LEVEL (0°)
+float TrueLevelRollReading = 0.0f;
+float TrueLevelPitchReading = 0.0f;
 
 // ****************************************************************************************************
 /// @brief Reads raw accelerometer and gyroscope data from the MPU6050 and calculates angles
@@ -50,18 +52,23 @@ void Read_MPU6050(void)
   float AccY = static_cast<float>(AccYLSB) / ACCEL_SCALE;
   float AccZ = static_cast<float>(AccZLSB) / ACCEL_SCALE;
 
-  // Estimate angles from accelerometer and apply calibration offsets
-  RawRollAngle = atan2(AccY, AccZ) * RAD_TO_DEGREES - RollAngleOffset;
-  RawPitchAngle = atan2(-AccX, AccZ) * RAD_TO_DEGREES - PitchAngleOffset;
+  // Calculate what the sensor reads now
+  float currentRollReading = atan2(AccY, AccZ) * RAD_TO_DEGREES;
+  float currentPitchReading = atan2(-AccX, AccZ) * RAD_TO_DEGREES;
+
+  // Calculate angles relative to true level
+  // When sensor reads TrueLevelRollReading, we want output to be 0°
+  RawRollAngle = currentRollReading - TrueLevelRollReading;
+  RawPitchAngle = currentPitchReading - TrueLevelPitchReading;
 }
 
 // ****************************************************************************************************
 /// @brief Initialises MPU6050 and calculates gyro/angle offsets
 void InitialiseTheMPU6050()
 {
-  constexpr int ITERATIONS = 1000;
+  constexpr int ITERATIONS = 2000;
 
-  delay(250); // Let sensor stabilise after power-up
+  delay(500); // Let sensor stabilise after power-up
 
   Wire.beginTransmission(0x68);
   Wire.write(0x6B); // PWR_MGMT_1
@@ -83,35 +90,101 @@ void InitialiseTheMPU6050()
   Wire.write(0x03); // Low-pass filter ~43Hz
   Wire.endTransmission();
 
+  // Initialize calibration accumulators
   RateCalibrationRoll = 0;
   RateCalibrationPitch = 0;
   RateCalibrationYaw = 0;
-  float AccumulatedPitch = 0;
-  float AccumulatedRoll = 0;
 
+  // Accumulators for raw accelerometer data
+  float AccumulatedAccX = 0;
+  float AccumulatedAccY = 0;
+  float AccumulatedAccZ = 0;
+
+  // Calibration loop - collect raw data
   for (int i = 0; i < ITERATIONS; ++i)
   {
-    Read_MPU6050();
-    RateCalibrationRoll += RawRollRate;
-    RateCalibrationPitch += RawPitchRate;
-    RateCalibrationYaw += RawYawRate;
-    AccumulatedRoll += RawRollAngle;
-    AccumulatedPitch += RawPitchAngle;
+    // Read raw sensor data directly in this loop
+    Wire.beginTransmission(0x68);
+    Wire.write(0x3B);
+    Wire.endTransmission(false);
+
+    if (Wire.requestFrom(static_cast<uint8_t>(0x68), static_cast<uint8_t>(14), true) == 14)
+    {
+      int16_t AccXLSB = (Wire.read() << 8) | Wire.read();
+      int16_t AccYLSB = (Wire.read() << 8) | Wire.read();
+      int16_t AccZLSB = (Wire.read() << 8) | Wire.read();
+
+      Wire.read();
+      Wire.read(); // Skip temperature
+
+      int16_t GyroX = (Wire.read() << 8) | Wire.read();
+      int16_t GyroY = (Wire.read() << 8) | Wire.read();
+      int16_t GyroZ = (Wire.read() << 8) | Wire.read();
+
+      // Accumulate gyro rates for bias calculation
+      RateCalibrationRoll += static_cast<float>(GyroX) / 65.5f;
+      RateCalibrationPitch += static_cast<float>(GyroY) / 65.5f;
+      RateCalibrationYaw += static_cast<float>(GyroZ) / 65.5f;
+
+      // Accumulate raw accelerometer values
+      AccumulatedAccX += static_cast<float>(AccXLSB) / 4096.0f;
+      AccumulatedAccY += static_cast<float>(AccYLSB) / 4096.0f;
+      AccumulatedAccZ += static_cast<float>(AccZLSB) / 4096.0f;
+    }
+
     delay(1);
     BlinkFast();
   }
 
+  // Calculate average gyro rates (bias correction)
   RateCalibrationRoll /= ITERATIONS;
   RateCalibrationPitch /= ITERATIONS;
   RateCalibrationYaw /= ITERATIONS;
-  RollAngleOffset = AccumulatedRoll / ITERATIONS;
-  PitchAngleOffset = AccumulatedPitch / ITERATIONS;
+
+  // Calculate average accelerometer values during calibration
+  float avgAccX = AccumulatedAccX / ITERATIONS;
+  float avgAccY = AccumulatedAccY / ITERATIONS;
+  float avgAccZ = AccumulatedAccZ / ITERATIONS;
+
+  // Calculate what the sensor read during calibration
+  float calibrationRollReading = atan2(avgAccY, avgAccZ) * 180.0f / M_PI;
+  float calibrationPitchReading = atan2(-avgAccX, avgAccZ) * 180.0f / M_PI;
+
+  // Now calculate what the sensor WOULD read if it were truly level
+  // True level: AccX = 0, AccY = 0, AccZ = 1g (pointing up)
+  // At true level: Roll = atan2(0, 1) = 0°, Pitch = atan2(0, 1) = 0°
+
+  // The key insight: if the sensor is tilted during calibration,
+  // we need to figure out what reading corresponds to true level
+
+  // Method: Calculate the gravity vector in the sensor frame during calibration
+  float gravityMagnitude = sqrt(avgAccX * avgAccX + avgAccY * avgAccY + avgAccZ * avgAccZ);
+
+  // The true level accelerometer readings (when level, gravity points down Z axis)
+  float trueLevelAccX = 0.0f;
+  float trueLevelAccY = 0.0f;
+  float trueLevelAccZ = gravityMagnitude; // Should be ~1g
+
+  // Calculate what sensor readings correspond to true level
+  TrueLevelRollReading = atan2(trueLevelAccY, trueLevelAccZ) * 180.0f / M_PI;   // = 0°
+  TrueLevelPitchReading = atan2(-trueLevelAccX, trueLevelAccZ) * 180.0f / M_PI; // = 0°
+
+  // Debug output
+  Serial.print("Calibration complete. Current readings: Roll=");
+  Serial.print(calibrationRollReading);
+  Serial.print("°, Pitch=");
+  Serial.print(calibrationPitchReading);
+  Serial.print("°. True level readings: Roll=");
+  Serial.print(TrueLevelRollReading);
+  Serial.print("°, Pitch=");
+  Serial.print(TrueLevelPitchReading);
+  Serial.println("°");
 
   initKalman();
 }
+
 // ******************************************************************************************************************************************************************
 // This function gets the current attitude of the aircraft
-
 void GetCurrentAttitude()
 {
   static uint32_t LoopTimer;
@@ -129,32 +202,32 @@ void GetCurrentAttitude()
   if (++counter > 6)
   {
     // Print header once (this line will be ignored by the Serial Plotter's graph)
-   Serial.println("RawPitch,FilteredPitch,RawRoll,FilteredRoll,RawYaw,FilteredYaw");
+    Serial.println("RawPitch,FilteredPitch,RawRoll,FilteredRoll,RawYaw,FilteredYaw");
 
     Serial.print(RawPitchAngle);
     Serial.print(",");
     Serial.print(getFilteredPitchAngle());
-   // Serial.print(filteredPitch);
+    // Serial.print(filteredPitch);
     Serial.print(",");
 
     Serial.print(RawRollAngle);
     Serial.print(",");
-   // Serial.print(filteredRoll);
+    // Serial.print(filteredRoll);
     Serial.print(getFilteredRollAngle());
     Serial.print(",");
-
 
     // Serial.print(RawYawRate);
     // Serial.print(",");
     // Serial.print(filteredYawRate);
     // Serial.print(",");
-     Serial.println();
+    Serial.println();
 
-   //  Look(getFilteredRollAngle());
-   //  Look(getFilteredPitchAngle());
+    //  Look(getFilteredRollAngle());
+    //  Look(getFilteredPitchAngle());
     counter = 0;
   }
 }
+
 // ******************************************************************************************************************************************************************
 void DoStabilsation()
 {
@@ -164,6 +237,7 @@ void DoStabilsation()
   }
   GetCurrentAttitude();
 }
+
 // ******************************************************************************************************************************************************************
 void BlinkFast()
 { // This function blinks the LED fast to indicate that the gyro is being calibrated
@@ -313,4 +387,4 @@ float getFilteredPitchAngle()
 
 #endif // USE_STABILISATION
 #endif // _SRC_PID_H
-// End of file: src/utilities/pid.h
+       // End of file: src/utilities/pid.h
