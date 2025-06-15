@@ -62,7 +62,6 @@
 #include "utilities/radio.h"
 #include "utilities/pid.h"
 #include "utilities/GPS.h"
-#include "utilities/kalman.h"
 #include "utilities/Binding.h"
 
 void DelayMillis(uint16_t ms) // This replaces any delay() calls
