@@ -20,7 +20,7 @@
 //  #define DB_BIND
 //  #define DB_FAILSAFE
 //  #define DB_RXTIMERS
- // #define USE_STABILISATION 1
+  #define USE_STABILISATION 1
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! (if it won't connect, probably one or both is wrong! )******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 

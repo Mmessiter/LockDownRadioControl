@@ -5,50 +5,11 @@
 #ifndef KALMAN_H
 #define KALMAN_H
 
-// ======================================================
-// KALMAN FILTER IMPLEMENTATION
-// ======================================================
-// TUNING PARAMETERS
-/*
-  ===============================================
-  KALMAN FILTER — QUICK MISBEHAVIOUR TUNING GUIDE
-  ===============================================
-
-  Symptoms & Suggested Fixes:
-
-  ▸ Feels sluggish, slow to respond
-      → Increase Q_angle slightly
-
-  ▸ Filter is shaky or jittery during vibration
-      → Increase R_measure
-
-  ▸ Filter reacts too sharply or is twitchy
-      → Decrease Q_angle, or increase R_measure
-
-  ▸ Filter drifts slowly over time
-      → Increase Q_bias
-
-  ▸ Output looks clean but servos flutter or overreact
-      → Enable or increase USE_ANGLE_SMOOTHING
-      → Increase R_measure
-
-  ▸ Filter becomes unstable or erratic during flight
-      → Ensure dt is clamped to safe range
-      → Lower Q_angle and increase R_measure
-
-  NOTES:
-  - Q_angle governs how quickly the filter responds to changes (responsiveness vs. smoothness)
-  - Q_bias affects long-term gyro stability (drift correction)
-  - R_measure controls how much trust we place in the accelerometer (noise rejection)
-*/
-
 float Q_angle = 0.01f;
 float Q_bias = 0.003f;
 float R_measure = 0.03f;
 #define USE_ANGLE_SMOOTHING
 
-// ===================================================================================
-// Kalman Filter State Initialisation
 // ===================================================================================
 void initKalman()
 {

@@ -8,11 +8,6 @@
 
 #ifdef USE_STABILISATION
 
-// // Global calibration offsets
-// float RateCalibrationRoll = 0.0f;
-// float RateCalibrationPitch = 0.0f;
-// float RateCalibrationYaw = 0.0f;
-
 float PitchAngleOffset = 0.0f;
 float RollAngleOffset = 0.0f;
 
@@ -138,14 +133,14 @@ void GetCurrentAttitude()
 
     Serial.print(RawPitchAngle);
     Serial.print(",");
-    //Serial.print(getFilteredPitchAngle());
-    Serial.print(filteredPitch);
+    Serial.print(getFilteredPitchAngle());
+   // Serial.print(filteredPitch);
     Serial.print(",");
 
     Serial.print(RawRollAngle);
     Serial.print(",");
-    Serial.print(filteredRoll);
-   // Serial.print(getFilteredRollAngle());
+   // Serial.print(filteredRoll);
+    Serial.print(getFilteredRollAngle());
     Serial.print(",");
 
 
