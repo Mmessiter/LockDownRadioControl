@@ -40,38 +40,23 @@
   - Q_angle governs how quickly the filter responds to changes (responsiveness vs. smoothness)
   - Q_bias affects long-term gyro stability (drift correction)
   - R_measure controls how much trust we place in the accelerometer (noise rejection)
-
 */
 
-// Q_angle: Trust in the system model (gyro integration)
-// - Higher value = more responsive to fast attitude changes (less lag), but may introduce wobble from noise
-// - Lower value = smoother output, but slower to respond to real motion
-// - If the aircraft feels slow to respond or delayed after you move it, try increasing this
-float Q_angle = 0.0003f;
-// float Q_angle = 1.5f;
-// Q_bias: How quickly we allow the filter to believe that the gyro's zero has drifted
-// - Higher value = allows bias to change quickly (useful if the gyro drifts a lot)
-// - Lower value = assumes gyro bias is stable
-// - Rarely needs adjustment unless your gyro warms up and drifts — in that case, increase slightly
-float Q_bias = 0.002f;
-
-// R_measure: Trust in the accelerometer
-// - Higher value = assumes the accelerometer is noisy → more filtering, smoother output
-// - Lower value = assumes accelerometer is clean → more responsive, but more susceptible to vibration
-// - If you see wobbles or flutter from vibration, increase this
-// - If you want snappier correction and your model is smooth, decrease this a little
-float R_measure = 0.07f;
-
-// USE_ANGLE_SMOOTHING: Pre-smooth accel-based roll and pitch angles before feeding them into Kalman
-// - Helps reduce high-frequency noise in noisy sensors or vibrating airframes
-// - If disabled, the Kalman sees more raw "jumps" in angle from accel
-// - Leave enabled for helicopters, foamies, and anything not butter-smooth!
+float Q_angle = 0.01f;
+float Q_bias = 0.003f;
+float R_measure = 0.03f;
 #define USE_ANGLE_SMOOTHING
+
 // ===================================================================================
 // Kalman Filter State Initialisation
 // ===================================================================================
 void initKalman()
 {
+    static bool kalmanInitialised = false;
+    if (kalmanInitialised)
+        return;
+    kalmanInitialised = true;
+
     kalmanRoll.angle = RawRollAngle;
     kalmanRoll.P[0][0] = 1;
     kalmanRoll.P[0][1] = 0;
@@ -96,26 +81,28 @@ void initKalman()
 // ===================================================================================
 // Kalman Update Function
 // ===================================================================================
-float updateKalman(KalmanState &state, float newAngle, float newRate, float dt)
+float updateKalman(KalmanState &state, float accelAngle, float gyroRate, float dt)
 {
-    // Predict step
-    state.angle += dt * (newRate - state.bias);
+    // Predict step (integrate gyro)
+    state.angle += dt * (gyroRate - state.bias);
 
     state.P[0][0] += dt * (dt * state.P[1][1] - state.P[0][1] - state.P[1][0] + Q_angle);
     state.P[0][1] -= dt * state.P[1][1];
     state.P[1][0] -= dt * state.P[1][1];
     state.P[1][1] += Q_bias * dt;
 
-    // Update step
-    float S = state.P[0][0] + R_measure;
-    float K[2];
-    K[0] = state.P[0][0] / S;
-    K[1] = state.P[1][0] / S;
+    // Innovation
+    float y = accelAngle - state.angle;
 
-    float y = newAngle - state.angle;
+    // Kalman gain
+    float S = state.P[0][0] + R_measure;
+    float K[2] = {state.P[0][0] / S, state.P[1][0] / S};
+
+    // Correction
     state.angle += K[0] * y;
     state.bias += K[1] * y;
 
+    // Update covariance
     float P00_temp = state.P[0][0];
     float P01_temp = state.P[0][1];
 
@@ -133,31 +120,26 @@ float updateKalman(KalmanState &state, float newAngle, float newRate, float dt)
 void kalmanFilter()
 {
     unsigned long currentTime = micros();
-    float dt = (currentTime - previousTime) / 1e6f; // convert to seconds
+    float dt = (currentTime - previousTime) / 1e6f;
     previousTime = currentTime;
-
     if (dt <= 0 || dt > 0.05f)
-        dt = 0.01f; // Clamp dt to avoid large jumps
+        dt = 0.01f;
 
 #ifdef USE_ANGLE_SMOOTHING
-    static float smoothedRollAngle = 0;
-    static float smoothedPitchAngle = 0;
-    const float accelAlpha = 0.05f; // More smoothing now
-
-    smoothedRollAngle = (1 - accelAlpha) * smoothedRollAngle + accelAlpha * RawRollAngle;
-    smoothedPitchAngle = (1 - accelAlpha) * smoothedPitchAngle + accelAlpha * RawPitchAngle;
-
-    filteredRoll = updateKalman(kalmanRoll, smoothedRollAngle, RawRollRate, dt);
-    filteredPitch = updateKalman(kalmanPitch, smoothedPitchAngle, RawPitchRate, dt);
+    static float smoothedRoll = 0;
+    static float smoothedPitch = 0;
+    const float alpha = 0.05f;
+    smoothedRoll = (1 - alpha) * smoothedRoll + alpha * RawRollAngle;
+    smoothedPitch = (1 - alpha) * smoothedPitch + alpha * RawPitchAngle;
 #else
-    filteredRoll = updateKalman(kalmanRoll, RawRollAngle, RawRollRate, dt);
-    filteredPitch = updateKalman(kalmanPitch, RawPitchAngle, RawPitchRate, dt);
+    float smoothedRoll = RawRollAngle;
+    float smoothedPitch = RawPitchAngle;
 #endif
 
-    // Yaw: no external reference, just integrate
-    filteredYaw = updateKalman(kalmanYaw, kalmanYaw.angle, RawYawRate, dt);
+    filteredRoll = updateKalman(kalmanRoll, smoothedRoll, RawRollRate, dt);
+    filteredPitch = updateKalman(kalmanPitch, smoothedPitch, RawPitchRate, dt);
+    filteredYaw = updateKalman(kalmanYaw, 0, RawYawRate, dt);
 
-    // Corrected gyro rates
     filteredRollRate = RawRollRate - kalmanRoll.bias;
     filteredPitchRate = RawPitchRate - kalmanPitch.bias;
     filteredYawRate = RawYawRate - kalmanYaw.bias;
@@ -168,19 +150,32 @@ void kalmanFilter()
 // ===================================================================================
 void filterRatesForHelicopter()
 {
-    static float lastFilteredRollRate = 0;
-    static float lastFilteredPitchRate = 0;
-    static float lastFilteredYawRate = 0;
+    static float lastRollRate = 0, lastPitchRate = 0, lastYawRate = 0;
+    const float beta = 0.2f;
+    filteredRollRate = (1 - beta) * lastRollRate + beta * filteredRollRate;
+    filteredPitchRate = (1 - beta) * lastPitchRate + beta * filteredPitchRate;
+    filteredYawRate = (1 - beta) * lastYawRate + beta * filteredYawRate;
+    lastRollRate = filteredRollRate;
+    lastPitchRate = filteredPitchRate;
+    lastYawRate = filteredYawRate;
+}
 
-    const float beta = 0.2f; // good balance for helicopter control
+// ===================================================================================
+// Helper Functions for Angle Tracking
+// ===================================================================================
+bool IsInverted()
+{
+    return (getFilteredRollAngle() < -135.0f || getFilteredRollAngle() > 135.0f);
+}
 
-    filteredRollRate = (1 - beta) * lastFilteredRollRate + beta * (RawRollRate - kalmanRoll.bias);
-    filteredPitchRate = (1 - beta) * lastFilteredPitchRate + beta * (RawPitchRate - kalmanPitch.bias);
-    filteredYawRate = (1 - beta) * lastFilteredYawRate + beta * (RawYawRate - kalmanYaw.bias);
+float getFilteredRollAngle()
+{
+    return kalmanRoll.angle;
+}
 
-    lastFilteredRollRate = filteredRollRate;
-    lastFilteredPitchRate = filteredPitchRate;
-    lastFilteredYawRate = filteredYawRate;
+float getFilteredPitchAngle()
+{
+    return kalmanPitch.angle;
 }
 
 #endif // KALMAN_H

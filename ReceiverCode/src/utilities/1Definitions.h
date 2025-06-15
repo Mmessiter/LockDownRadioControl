@@ -20,10 +20,7 @@
 //  #define DB_BIND
 //  #define DB_FAILSAFE
 //  #define DB_RXTIMERS
-
-
-
-  //#define USE_STABILISATION 1
+ // #define USE_STABILISATION 1
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! (if it won't connect, probably one or both is wrong! )******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -144,6 +141,7 @@ uint8_t ReconnectIndex = 0;
 uint8_t PacketNumber;
 uint16_t RawDataIn[RECEIVEBUFFERSIZE + 1];    //  21 x 16 BIT words // lots of spare space
 uint16_t ReceivedData[RECEIVEBUFFERSIZE + 1]; //  21 x 16 BIT words// lots of spare space//
+int16_t StabilisationCorrection[RECEIVEBUFFERSIZE + 1] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 uint16_t Interations = 0;
 uint32_t HopStart;
 uint64_t NewPipeMaybe = 0;
@@ -250,10 +248,13 @@ void CopyToCurrentPipe(uint8_t *p, uint8_t pn);
 void SetNewPipe();
 void UnbindModel();
 void AttachServos();
-/************************************************************************************************************/
-// For numeric types (int, float, double, etc.)
-template <typename T>
-void Look(const T &value, int format)
+float getFilteredRollAngle();
+float getFilteredPitchAngle();
+void BlinkFast();
+    /************************************************************************************************************/
+    // For numeric types (int, float, double, etc.)
+    template <typename T>
+    void Look(const T &value, int format)
 {
     Serial.println(value, format);
 }

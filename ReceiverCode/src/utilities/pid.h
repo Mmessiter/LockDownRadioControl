@@ -8,6 +8,14 @@
 
 #ifdef USE_STABILISATION
 
+// // Global calibration offsets
+// float RateCalibrationRoll = 0.0f;
+// float RateCalibrationPitch = 0.0f;
+// float RateCalibrationYaw = 0.0f;
+
+float PitchAngleOffset = 0.0f;
+float RollAngleOffset = 0.0f;
+
 // ****************************************************************************************************
 /// @brief Reads raw accelerometer and gyroscope data from the MPU6050 and calculates angles
 void Read_MPU6050(void)
@@ -19,18 +27,16 @@ void Read_MPU6050(void)
   constexpr float GYRO_SCALE = 65.5f;    // LSB/(°/s)
   constexpr float RAD_TO_DEGREES = 180.0f / M_PI;
 
-  // Set register pointer to start of burst read
   Wire.beginTransmission(MPU6050_ADDR);
   Wire.write(ACCEL_START_REG);
-  Wire.endTransmission(false); // Use repeated start for efficiency
+  Wire.endTransmission(false); // Use repeated start
 
-  // Avoid overload ambiguity by explicitly casting to bool
   if (Wire.requestFrom(MPU6050_ADDR, READ_LENGTH, static_cast<bool>(true)) != READ_LENGTH)
-    return; // Exit if not all bytes are received
+    return;
 
   int16_t AccXLSB = (Wire.read() << 8) | Wire.read();
   int16_t AccYLSB = (Wire.read() << 8) | Wire.read();
-  int16_t AccZLSB = (Wire.read() << 8) | Wire.read(); /// 
+  int16_t AccZLSB = (Wire.read() << 8) | Wire.read();
 
   Wire.read(); // Skip temperature high byte
   Wire.read(); // Skip temperature low byte
@@ -40,38 +46,27 @@ void Read_MPU6050(void)
   int16_t GyroZ = (Wire.read() << 8) | Wire.read();
 
   // Convert raw gyro data to degrees per second
-  RawRollRate = static_cast<float>(GyroX) / GYRO_SCALE;
-  RawPitchRate = static_cast<float>(GyroY) / GYRO_SCALE;
-  RawYawRate = static_cast<float>(GyroZ) / GYRO_SCALE;
+  RawRollRate = static_cast<float>(GyroX) / GYRO_SCALE - RateCalibrationRoll;
+  RawPitchRate = static_cast<float>(GyroY) / GYRO_SCALE - RateCalibrationPitch;
+  RawYawRate = static_cast<float>(GyroZ) / GYRO_SCALE - RateCalibrationYaw;
 
   // Convert raw accelerometer data to g
-  AccX = static_cast<float>(AccXLSB) / ACCEL_SCALE;
-  AccY = static_cast<float>(AccYLSB) / ACCEL_SCALE;
-  AccZ = static_cast<float>(AccZLSB) / ACCEL_SCALE;
+  float AccX = static_cast<float>(AccXLSB) / ACCEL_SCALE;
+  float AccY = static_cast<float>(AccYLSB) / ACCEL_SCALE;
+  float AccZ = static_cast<float>(AccZLSB) / ACCEL_SCALE;
 
-  // Estimate roll and pitch angles from accelerometer data
-  RawRollAngle = atan2(AccY, sqrt(AccX * AccX + AccZ * AccZ)) * RAD_TO_DEGREES;
-  RawPitchAngle = -atan2(AccX, sqrt(AccY * AccY + AccZ * AccZ)) * RAD_TO_DEGREES;
+  // Estimate angles from accelerometer and apply calibration offsets
+  RawRollAngle = atan2(AccY, AccZ) * RAD_TO_DEGREES - RollAngleOffset;
+  RawPitchAngle = atan2(-AccX, AccZ) * RAD_TO_DEGREES - PitchAngleOffset;
 }
-// ******************************************************************************************************************************************************************
-void BlinkFast()
-{ // This function blinks the LED fast to indicate that the gyro is being calibrated
-  static uint32_t BlinkTimer = millis();
-  if (millis() - BlinkTimer < 80)
-    return; // Blink only for 80ms
-  BlinkTimer = millis();
-  if (LedIsOn)
-    TurnLedOff();
-  else
-    TurnLedOn();
-}
-// ******************************************************************************************************************************************************************
-// Initializes and calibrates the MPU6050 — assumes Wire.begin() already called
+
+// ****************************************************************************************************
+/// @brief Initialises MPU6050 and calculates gyro/angle offsets
 void InitialiseTheMPU6050()
 {
   constexpr int ITERATIONS = 1000;
 
-  delay(250); // Let sensor stabilize
+  delay(250); // Let sensor stabilise after power-up
 
   Wire.beginTransmission(0x68);
   Wire.write(0x6B); // PWR_MGMT_1
@@ -96,6 +91,8 @@ void InitialiseTheMPU6050()
   RateCalibrationRoll = 0;
   RateCalibrationPitch = 0;
   RateCalibrationYaw = 0;
+  float AccumulatedPitch = 0;
+  float AccumulatedRoll = 0;
 
   for (int i = 0; i < ITERATIONS; ++i)
   {
@@ -103,6 +100,8 @@ void InitialiseTheMPU6050()
     RateCalibrationRoll += RawRollRate;
     RateCalibrationPitch += RawPitchRate;
     RateCalibrationYaw += RawYawRate;
+    AccumulatedRoll += RawRollAngle;
+    AccumulatedPitch += RawPitchAngle;
     delay(1);
     BlinkFast();
   }
@@ -110,6 +109,8 @@ void InitialiseTheMPU6050()
   RateCalibrationRoll /= ITERATIONS;
   RateCalibrationPitch /= ITERATIONS;
   RateCalibrationYaw /= ITERATIONS;
+  RollAngleOffset = AccumulatedRoll / ITERATIONS;
+  PitchAngleOffset = AccumulatedPitch / ITERATIONS;
 
   initKalman();
 }
@@ -133,23 +134,29 @@ void GetCurrentAttitude()
   if (++counter > 6)
   {
     // Print header once (this line will be ignored by the Serial Plotter's graph)
-    Serial.println("RawPitch,FilteredPitch,RawRoll,FilteredRoll,RawYaw,FilteredYaw");
+   Serial.println("RawPitch,FilteredPitch,RawRoll,FilteredRoll,RawYaw,FilteredYaw");
 
     Serial.print(RawPitchAngle);
     Serial.print(",");
+    //Serial.print(getFilteredPitchAngle());
     Serial.print(filteredPitch);
     Serial.print(",");
 
     Serial.print(RawRollAngle);
     Serial.print(",");
     Serial.print(filteredRoll);
+   // Serial.print(getFilteredRollAngle());
     Serial.print(",");
+
 
     // Serial.print(RawYawRate);
     // Serial.print(",");
     // Serial.print(filteredYawRate);
     // Serial.print(",");
-    Serial.println();
+     Serial.println();
+
+   //  Look(getFilteredRollAngle());
+   //  Look(getFilteredPitchAngle());
     counter = 0;
   }
 }
@@ -161,6 +168,18 @@ void DoStabilsation()
     return;
   }
   GetCurrentAttitude();
+}
+// ******************************************************************************************************************************************************************
+void BlinkFast()
+{ // This function blinks the LED fast to indicate that the gyro is being calibrated
+  static uint32_t BlinkTimer = millis();
+  if (millis() - BlinkTimer < 80)
+    return; // Blink only for 80ms
+  BlinkTimer = millis();
+  if (LedIsOn)
+    TurnLedOff();
+  else
+    TurnLedOn();
 }
 #endif // USE_STABILISATION
 #endif // _SRC_PID_H

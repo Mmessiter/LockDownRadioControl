@@ -27,9 +27,9 @@ void UseExtraParameters()
     uint16_t TwoBytes = 0;
     switch (Parameters.ID)
     {
-    case 1:                            // working!
-        FS_byte1 = Parameters.word[1] & 0xff; // These 2 bytes are 16 failsafe flags
-        FS_byte2 = Parameters.word[2] & 0xff; // These 2 bytes are 16 failsafe flags
+    case 1:                                                      // working!
+        FS_byte1 = Parameters.word[1] & 0xff;                    // These 2 bytes are 16 failsafe flags
+        FS_byte2 = Parameters.word[2] & 0xff;                    // These 2 bytes are 16 failsafe flags
         TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8); // because of the shift left 8, adding here is the same as ORing them.
         RebuildFlags(FailSafeChannel, TwoBytes);
         SaveFailSafeData();
@@ -59,7 +59,7 @@ void UseExtraParameters()
     case 7:
         for (int i = 0; i < SERVOSUSED; ++i)
             ServoCentrePulse[i] = Parameters.word[i + 1];
-       // SetServoFrequency(); // not needed here, as it was done in case 6
+        // SetServoFrequency(); // not needed here, as it was done in case 6
         break;
     default:
         break;
@@ -76,7 +76,7 @@ void MapToSBUS()
     {
         for (int j = 0; j < CHANNELSUSED; ++j)
         {
-            SbusChannels[j] = static_cast<uint16_t>(map(ReceivedData[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX));
+            SbusChannels[j] = static_cast<uint16_t>(map(ReceivedData[j] + StabilisationCorrection[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX));
         }
     }
 }
@@ -182,6 +182,7 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is total 
                 ReadMoreParameters();
             }
         }
+
         MapToSBUS(); // Get SBUS data ready
     }
     SendSBUSData();          // maybe send SBUS data if its time
@@ -409,7 +410,7 @@ void ConfigureRadio()
     CurrentRadio->setCRCLength(RF24_CRC_16); // could be 8 or disabled
     CurrentRadio->setAutoAck(true);          // we want acks
     CurrentRadio->maskIRQ(1, 1, 1);          // no interrupts - seems NEEDED at the moment
-    //CurrentRadio->setStatusFlags(0);         // disables all IRQs
+    // CurrentRadio->setStatusFlags(0);         // disables all IRQs
     CurrentRadio->openReadingPipe(PIPENUMBER, PipePointer);
     CurrentRadio->startListening();
     delayMicroseconds(STOPLISTENINGDELAY);
