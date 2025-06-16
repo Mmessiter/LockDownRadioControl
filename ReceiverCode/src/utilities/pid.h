@@ -62,7 +62,7 @@ void Read_MPU6050(void)
 }
 
 // ****************************************************************************************************
-/// @brief Initialises MPU6050 and calculates gyro/angle offsets
+// @brief Initialises MPU6050 and calculates gyro/angle offsets
 void InitialiseTheMPU6050()
 {
   constexpr int ITERATIONS = 2000;
@@ -149,7 +149,10 @@ void InitialiseTheMPU6050()
   CalibrationRollReading = atan2(avgAccY, sqrt(avgAccX * avgAccX + avgAccZ * avgAccZ)) * 180.0f / M_PI;
   CalibrationPitchReading = atan2(-avgAccX, sqrt(avgAccY * avgAccY + avgAccZ * avgAccZ)) * 180.0f / M_PI;
 
-  // Debug output
+ //CalibrationRollReading = 0; /// Roll calibration reading
+ //CalibrationPitchReading = 0; /// Pitch calibration reading
+
+      // Debug output
   Serial.print("Calibration complete. Gyro biases: Roll=");
   Serial.print(RateCalibrationRoll);
   Serial.print("°/s, Pitch=");
