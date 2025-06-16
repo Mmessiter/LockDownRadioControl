@@ -166,8 +166,23 @@ void InitialiseTheMPU6050()
 
   initKalman();
 }
+// ******************************************************************************************************************************************************************
+// This function is used to time the loop and print the loop rate to the Serial Monitor for debugging purposes only
+void TimeTheLoop()
+{
+  static uint32_t previousTime = 0;
+  static uint16_t Counter = 0;
+  if (millis() - previousTime > 1000)
+  {
+    Serial.print("Loop rate: ");
+    Serial.print(Counter);
+    Serial.println(" Hz");
+    Counter = 0;
+    previousTime = millis();
+  }
+  ++Counter;
+}
 
-// [Rest of the original code remains exactly the same...]
 // ******************************************************************************************************************************************************************
 // This function gets the current attitude of the aircraft
 void GetCurrentAttitude()
@@ -175,11 +190,12 @@ void GetCurrentAttitude()
   static uint32_t LoopTimer;
   uint32_t Now = millis();
   static uint8_t counter = 0;
-  if (Now - LoopTimer == 0) // 1ms loop time or 1000Hz !!!!!!!!!!!!!!!!!
+  if (Now - LoopTimer  < 2 ) // 2ms loop time or 500 Hz !!!!!!!!!!!!!!!!!
   {
     return;
-  } // If the loop is called too fast, skip this iteration
+  }
   LoopTimer = Now;
+  //TimeTheLoop(); // Print loop rate to Serial Monitor
   Read_MPU6050();
   RawRollRate -= RateCalibrationRoll;   // Correct for gyro calibration
   RawPitchRate -= RateCalibrationPitch; // Correct for gyro calibration
