@@ -1,5 +1,5 @@
-// This file contains the PID controller and the Kalman filter for the MPU6050 ****************************************************************************************
-// FIXED VERSION: Can be calibrated at any angle and will still read 0° when truly level
+// This file contains the PID controller and the Kalman filter for the MPU6050
+// FIXED VERSION: Can be calibrated at any angle and will use that as the zero reference
 
 #ifndef _SRC_PID_H
 #define _SRC_PID_H
@@ -9,9 +9,9 @@
 
 #ifdef USE_STABILISATION
 
-// These store the sensor readings that correspond to TRUE LEVEL (0°)
-float TrueLevelRollReading = 0.0f;
-float TrueLevelPitchReading = 0.0f;
+// These store the sensor readings that correspond to the CALIBRATION ORIENTATION (0°)
+float CalibrationRollReading = 0.0f;
+float CalibrationPitchReading = 0.0f;
 
 // ****************************************************************************************************
 /// @brief Reads raw accelerometer and gyroscope data from the MPU6050 and calculates angles
@@ -43,23 +43,22 @@ void Read_MPU6050(void)
   int16_t GyroZ = (Wire.read() << 8) | Wire.read();
 
   // Convert raw gyro data to degrees per second
-  RawRollRate = static_cast<float>(GyroX) / GYRO_SCALE - RateCalibrationRoll;
-  RawPitchRate = static_cast<float>(GyroY) / GYRO_SCALE - RateCalibrationPitch;
-  RawYawRate = static_cast<float>(GyroZ) / GYRO_SCALE - RateCalibrationYaw;
+  RawRollRate = static_cast<float>(GyroX) / GYRO_SCALE;
+  RawPitchRate = static_cast<float>(GyroY) / GYRO_SCALE;
+  RawYawRate = static_cast<float>(GyroZ) / GYRO_SCALE;
 
   // Convert raw accelerometer data to g
   float AccX = static_cast<float>(AccXLSB) / ACCEL_SCALE;
   float AccY = static_cast<float>(AccYLSB) / ACCEL_SCALE;
   float AccZ = static_cast<float>(AccZLSB) / ACCEL_SCALE;
 
-  // Calculate what the sensor reads now
-  float currentRollReading = atan2(AccY, AccZ) * RAD_TO_DEGREES;
-  float currentPitchReading = atan2(-AccX, AccZ) * RAD_TO_DEGREES;
+  // Calculate current angles using improved formula
+  float currentRollReading = atan2(AccY, sqrt(AccX * AccX + AccZ * AccZ)) * RAD_TO_DEGREES;
+  float currentPitchReading = atan2(-AccX, sqrt(AccY * AccY + AccZ * AccZ)) * RAD_TO_DEGREES;
 
-  // Calculate angles relative to true level
-  // When sensor reads TrueLevelRollReading, we want output to be 0°
-  RawRollAngle = currentRollReading - TrueLevelRollReading;
-  RawPitchAngle = currentPitchReading - TrueLevelPitchReading;
+  // Calculate angles relative to calibration orientation
+  RawRollAngle = currentRollReading - CalibrationRollReading;
+  RawPitchAngle = currentPitchReading - CalibrationPitchReading;
 }
 
 // ****************************************************************************************************
@@ -91,9 +90,9 @@ void InitialiseTheMPU6050()
   Wire.endTransmission();
 
   // Initialize calibration accumulators
-  RateCalibrationRoll = 0;
-  RateCalibrationPitch = 0;
-  RateCalibrationYaw = 0;
+  float rollRateSum = 0;
+  float pitchRateSum = 0;
+  float yawRateSum = 0;
 
   // Accumulators for raw accelerometer data
   float AccumulatedAccX = 0;
@@ -122,9 +121,9 @@ void InitialiseTheMPU6050()
       int16_t GyroZ = (Wire.read() << 8) | Wire.read();
 
       // Accumulate gyro rates for bias calculation
-      RateCalibrationRoll += static_cast<float>(GyroX) / 65.5f;
-      RateCalibrationPitch += static_cast<float>(GyroY) / 65.5f;
-      RateCalibrationYaw += static_cast<float>(GyroZ) / 65.5f;
+      rollRateSum += static_cast<float>(GyroX) / 65.5f;
+      pitchRateSum += static_cast<float>(GyroY) / 65.5f;
+      yawRateSum += static_cast<float>(GyroZ) / 65.5f;
 
       // Accumulate raw accelerometer values
       AccumulatedAccX += static_cast<float>(AccXLSB) / 4096.0f;
@@ -137,52 +136,38 @@ void InitialiseTheMPU6050()
   }
 
   // Calculate average gyro rates (bias correction)
-  RateCalibrationRoll /= ITERATIONS;
-  RateCalibrationPitch /= ITERATIONS;
-  RateCalibrationYaw /= ITERATIONS;
+  RateCalibrationRoll = rollRateSum / ITERATIONS;
+  RateCalibrationPitch = pitchRateSum / ITERATIONS;
+  RateCalibrationYaw = yawRateSum / ITERATIONS;
 
   // Calculate average accelerometer values during calibration
   float avgAccX = AccumulatedAccX / ITERATIONS;
   float avgAccY = AccumulatedAccY / ITERATIONS;
   float avgAccZ = AccumulatedAccZ / ITERATIONS;
 
-  // Calculate what the sensor read during calibration
-  float calibrationRollReading = atan2(avgAccY, avgAccZ) * 180.0f / M_PI;
-  float calibrationPitchReading = atan2(-avgAccX, avgAccZ) * 180.0f / M_PI;
-
-  // Now calculate what the sensor WOULD read if it were truly level
-  // True level: AccX = 0, AccY = 0, AccZ = 1g (pointing up)
-  // At true level: Roll = atan2(0, 1) = 0°, Pitch = atan2(0, 1) = 0°
-
-  // The key insight: if the sensor is tilted during calibration,
-  // we need to figure out what reading corresponds to true level
-
-  // Method: Calculate the gravity vector in the sensor frame during calibration
-  float gravityMagnitude = sqrt(avgAccX * avgAccX + avgAccY * avgAccY + avgAccZ * avgAccZ);
-
-  // The true level accelerometer readings (when level, gravity points down Z axis)
-  float trueLevelAccX = 0.0f;
-  float trueLevelAccY = 0.0f;
-  float trueLevelAccZ = gravityMagnitude; // Should be ~1g
-
-  // Calculate what sensor readings correspond to true level
-  TrueLevelRollReading = atan2(trueLevelAccY, trueLevelAccZ) * 180.0f / M_PI;   // = 0°
-  TrueLevelPitchReading = atan2(-trueLevelAccX, trueLevelAccZ) * 180.0f / M_PI; // = 0°
+  // Calculate the orientation during calibration (this becomes our zero reference)
+  CalibrationRollReading = atan2(avgAccY, sqrt(avgAccX * avgAccX + avgAccZ * avgAccZ)) * 180.0f / M_PI;
+  CalibrationPitchReading = atan2(-avgAccX, sqrt(avgAccY * avgAccY + avgAccZ * avgAccZ)) * 180.0f / M_PI;
 
   // Debug output
-  Serial.print("Calibration complete. Current readings: Roll=");
-  Serial.print(calibrationRollReading);
+  Serial.print("Calibration complete. Gyro biases: Roll=");
+  Serial.print(RateCalibrationRoll);
+  Serial.print("°/s, Pitch=");
+  Serial.print(RateCalibrationPitch);
+  Serial.print("°/s, Yaw=");
+  Serial.print(RateCalibrationYaw);
+  Serial.println("°/s");
+
+  Serial.print("Calibration orientation: Roll=");
+  Serial.print(CalibrationRollReading);
   Serial.print("°, Pitch=");
-  Serial.print(calibrationPitchReading);
-  Serial.print("°. True level readings: Roll=");
-  Serial.print(TrueLevelRollReading);
-  Serial.print("°, Pitch=");
-  Serial.print(TrueLevelPitchReading);
-  Serial.println("°");
+  Serial.print(CalibrationPitchReading);
+  Serial.println("° (this is now 0°)");
 
   initKalman();
 }
 
+// [Rest of the original code remains exactly the same...]
 // ******************************************************************************************************************************************************************
 // This function gets the current attitude of the aircraft
 void GetCurrentAttitude()
@@ -202,18 +187,18 @@ void GetCurrentAttitude()
   if (++counter > 6)
   {
     // Print header once (this line will be ignored by the Serial Plotter's graph)
-    Serial.println("RawPitch,FilteredPitch,RawRoll,FilteredRoll,RawYaw,FilteredYaw");
+    Serial.println("RawPitch,FilteredPitch,RawRoll,FilteredRoll,RawYaw,FilteredYaw"); // heer
 
-    Serial.print(RawPitchAngle);
+    Serial.print(RawPitchRate);
     Serial.print(",");
-    Serial.print(getFilteredPitchAngle());
-    // Serial.print(filteredPitch);
+   // Serial.print(getFilteredPitchAngle());
+    Serial.print(filteredPitchRate);
     Serial.print(",");
 
-    Serial.print(RawRollAngle);
+    Serial.print(RawRollRate);
     Serial.print(",");
-    // Serial.print(filteredRoll);
-    Serial.print(getFilteredRollAngle());
+    Serial.print(filteredRollRate);
+   // Serial.print(getFilteredRollAngle());
     Serial.print(",");
 
     // Serial.print(RawYawRate);
@@ -358,7 +343,8 @@ void kalmanFilter()
 void filterRatesForHelicopter()
 {
   static float lastRollRate = 0, lastPitchRate = 0, lastYawRate = 0;
-  const float beta = 0.2f;
+  //const float beta = 0.2f; // not enough filtering
+  const float beta = 0.05f; // Adjust this value for more or less filtering
   filteredRollRate = (1 - beta) * lastRollRate + beta * filteredRollRate;
   filteredPitchRate = (1 - beta) * lastPitchRate + beta * filteredPitchRate;
   filteredYawRate = (1 - beta) * lastYawRate + beta * filteredYawRate;
