@@ -173,10 +173,13 @@ void InitialiseTheMPU6050()
 void GetCurrentAttitude()
 {
   static uint32_t LoopTimer;
+  uint32_t Now = millis();
   static uint8_t counter = 0;
-  if (millis() - LoopTimer < 4) // 4ms loop time or 250Hz
+  if (Now - LoopTimer == 0) // 1ms loop time or 1000Hz !!!!!!!!!!!!!!!!!
+  {
     return;
-  LoopTimer = millis();
+  } // If the loop is called too fast, skip this iteration
+  LoopTimer = Now;
   Read_MPU6050();
   RawRollRate -= RateCalibrationRoll;   // Correct for gyro calibration
   RawPitchRate -= RateCalibrationPitch; // Correct for gyro calibration
@@ -191,14 +194,14 @@ void GetCurrentAttitude()
 
     Serial.print(RawPitchRate);
     Serial.print(",");
-   // Serial.print(getFilteredPitchAngle());
+    // Serial.print(getFilteredPitchAngle());
     Serial.print(filteredPitchRate);
     Serial.print(",");
 
     Serial.print(RawRollRate);
     Serial.print(",");
     Serial.print(filteredRollRate);
-   // Serial.print(getFilteredRollAngle());
+    // Serial.print(getFilteredRollAngle());
     Serial.print(",");
 
     // Serial.print(RawYawRate);
@@ -343,8 +346,8 @@ void kalmanFilter()
 void filterRatesForHelicopter()
 {
   static float lastRollRate = 0, lastPitchRate = 0, lastYawRate = 0;
-  //const float beta = 0.2f; // not enough filtering
-  const float beta = 0.05f; // Adjust this value for more or less filtering
+  // const float beta = 0.2f; // not enough filtering
+  const float beta = 0.01f; // very aggressive filtering
   filteredRollRate = (1 - beta) * lastRollRate + beta * filteredRollRate;
   filteredPitchRate = (1 - beta) * lastPitchRate + beta * filteredPitchRate;
   filteredYawRate = (1 - beta) * lastYawRate + beta * filteredYawRate;
