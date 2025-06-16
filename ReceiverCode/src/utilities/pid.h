@@ -188,7 +188,7 @@ void TimeTheLoop()
 void GetCurrentAttitude()
 {
   static uint32_t LoopTimer;
-  uint32_t Now = millis();
+  uint32_t Now = millis(); // Get the current time in milliseconds with a single call to save time.
   static uint8_t counter = 0;
   if (Now - LoopTimer  < 2 ) // 2ms loop time or 500 Hz !!!!!!!!!!!!!!!!!
   {
@@ -203,21 +203,21 @@ void GetCurrentAttitude()
   kalmanFilter();
   filterRatesForHelicopter();
   // The following lines are for the Serial Plotter
-  if (++counter > 6)
+  if (++counter > 12)
   {
     // Print header once (this line will be ignored by the Serial Plotter's graph)
     Serial.println("RawPitch,FilteredPitch,RawRoll,FilteredRoll,RawYaw,FilteredYaw"); // heer
 
-    Serial.print(RawPitchRate);
+    Serial.print(RawPitchAngle);
     Serial.print(",");
-    // Serial.print(getFilteredPitchAngle());
-    Serial.print(filteredPitchRate);
+     Serial.print(getFilteredPitchAngle());
+    //Serial.print(filteredPitchRate);
     Serial.print(",");
 
-    Serial.print(RawRollRate);
+    Serial.print(RawRollAngle);
     Serial.print(",");
-    Serial.print(filteredRollRate);
-    // Serial.print(getFilteredRollAngle());
+    //Serial.print(filteredRollRate);
+     Serial.print(getFilteredRollAngle());
     Serial.print(",");
 
     // Serial.print(RawYawRate);
