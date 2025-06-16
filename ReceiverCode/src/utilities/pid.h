@@ -1,7 +1,5 @@
-
-
 // This file contains the PID controller and the Kalman filter for the MPU6050
-// UPDATED VERSION: Can be calibrated at any angle and will use that as the zero reference
+// FIXED VERSION: Can be calibrated at any angle and will use that as the zero reference
 
 #ifndef _SRC_PID_H
 #define _SRC_PID_H
@@ -11,10 +9,9 @@
 
 #ifdef USE_STABILISATION
 
-// Store the reference gravity vector at calibration
-float CalibX = 0.0f;
-float CalibY = 0.0f;
-float CalibZ = 0.0f;
+// These store the sensor readings that correspond to the CALIBRATION ORIENTATION (0°)
+float CalibrationRollReading = 0.0f;
+float CalibrationPitchReading = 0.0f;
 
 // ****************************************************************************************************
 /// @brief Reads raw accelerometer and gyroscope data from the MPU6050 and calculates angles
@@ -23,49 +20,45 @@ void Read_MPU6050(void)
   constexpr uint8_t MPU6050_ADDR = 0x68;
   constexpr uint8_t ACCEL_START_REG = 0x3B;
   constexpr uint8_t READ_LENGTH = 14;
-  constexpr float ACCEL_SCALE = 4096.0f;
-  constexpr float GYRO_SCALE = 65.5f;
+  constexpr float ACCEL_SCALE = 4096.0f; // LSB/g
+  constexpr float GYRO_SCALE = 65.5f;    // LSB/(°/s)
   constexpr float RAD_TO_DEGREES = 180.0f / M_PI;
 
   Wire.beginTransmission(MPU6050_ADDR);
   Wire.write(ACCEL_START_REG);
-  Wire.endTransmission(false);
+  Wire.endTransmission(false); // Use repeated start
 
-  if (Wire.requestFrom((uint8_t)MPU6050_ADDR, (uint8_t)READ_LENGTH, true) != READ_LENGTH)
+  if (Wire.requestFrom(MPU6050_ADDR, READ_LENGTH, static_cast<bool>(true)) != READ_LENGTH)
     return;
 
   int16_t AccXLSB = (Wire.read() << 8) | Wire.read();
   int16_t AccYLSB = (Wire.read() << 8) | Wire.read();
   int16_t AccZLSB = (Wire.read() << 8) | Wire.read();
 
-  Wire.read();
-  Wire.read(); // skip temp
+  Wire.read(); // Skip temperature high byte
+  Wire.read(); // Skip temperature low byte
 
   int16_t GyroX = (Wire.read() << 8) | Wire.read();
   int16_t GyroY = (Wire.read() << 8) | Wire.read();
   int16_t GyroZ = (Wire.read() << 8) | Wire.read();
 
+  // Convert raw gyro data to degrees per second
   RawRollRate = static_cast<float>(GyroX) / GYRO_SCALE;
   RawPitchRate = static_cast<float>(GyroY) / GYRO_SCALE;
   RawYawRate = static_cast<float>(GyroZ) / GYRO_SCALE;
 
+  // Convert raw accelerometer data to g
   float AccX = static_cast<float>(AccXLSB) / ACCEL_SCALE;
   float AccY = static_cast<float>(AccYLSB) / ACCEL_SCALE;
   float AccZ = static_cast<float>(AccZLSB) / ACCEL_SCALE;
 
-  // Use dot products to calculate roll and pitch relative to calibration vector
-  float normRef = sqrt(CalibX * CalibX + CalibY * CalibY + CalibZ * CalibZ);
-  float normNow = sqrt(AccX * AccX + AccY * AccY + AccZ * AccZ);
+  // Calculate current angles using improved formula
+  float currentRollReading = atan2(AccY, sqrt(AccX * AccX + AccZ * AccZ)) * RAD_TO_DEGREES;
+  float currentPitchReading = atan2(-AccX, sqrt(AccY * AccY + AccZ * AccZ)) * RAD_TO_DEGREES;
 
-  float dot = (CalibX * AccX + CalibY * AccY + CalibZ * AccZ) / (normRef * normNow);
-  dot = constrain(dot, -1.0f, 1.0f);
-  float angleDiff = acos(dot) * RAD_TO_DEGREES;
-
-  float crossX = CalibY * AccZ - CalibZ * AccY;
-  float crossY = CalibZ * AccX - CalibX * AccZ;
-
-  RawRollAngle = angleDiff * (crossX > 0 ? 1 : -1);
-  RawPitchAngle = angleDiff * (crossY > 0 ? 1 : -1);
+  // Calculate angles relative to calibration orientation
+  RawRollAngle = currentRollReading - CalibrationRollReading;
+  RawPitchAngle = currentPitchReading - CalibrationPitchReading;
 }
 
 // ****************************************************************************************************
@@ -73,90 +66,106 @@ void Read_MPU6050(void)
 void InitialiseTheMPU6050()
 {
   constexpr int ITERATIONS = 2000;
-  constexpr uint8_t MPU_ADDR = 0x68;
-  constexpr uint8_t BYTES_TO_READ = 14;
 
-  delay(500);
+  delay(500); // Let sensor stabilise after power-up
 
-  Wire.beginTransmission(MPU_ADDR);
-  Wire.write(0x6B);
-  Wire.write(0x00);
-  Wire.endTransmission();
-  Wire.beginTransmission(MPU_ADDR);
-  Wire.write(0x1B);
-  Wire.write(0x08);
-  Wire.endTransmission();
-  Wire.beginTransmission(MPU_ADDR);
-  Wire.write(0x1C);
-  Wire.write(0x08);
-  Wire.endTransmission();
-  Wire.beginTransmission(MPU_ADDR);
-  Wire.write(0x1A);
-  Wire.write(0x03);
+  Wire.beginTransmission(0x68);
+  Wire.write(0x6B); // PWR_MGMT_1
+  Wire.write(0x00); // Wake up
   Wire.endTransmission();
 
-  float rollRateSum = 0, pitchRateSum = 0, yawRateSum = 0;
-  float AccumX = 0, AccumY = 0, AccumZ = 0;
+  Wire.beginTransmission(0x68);
+  Wire.write(0x1B); // GYRO_CONFIG
+  Wire.write(0x08); // ±500°/s
+  Wire.endTransmission();
 
+  Wire.beginTransmission(0x68);
+  Wire.write(0x1C); // ACCEL_CONFIG
+  Wire.write(0x08); // ±4g
+  Wire.endTransmission();
+
+  Wire.beginTransmission(0x68);
+  Wire.write(0x1A); // CONFIG
+  Wire.write(0x03); // Low-pass filter ~43Hz
+  Wire.endTransmission();
+
+  // Initialize calibration accumulators
+  float rollRateSum = 0;
+  float pitchRateSum = 0;
+  float yawRateSum = 0;
+
+  // Accumulators for raw accelerometer data
+  float AccumulatedAccX = 0;
+  float AccumulatedAccY = 0;
+  float AccumulatedAccZ = 0;
+
+  // Calibration loop - collect raw data
   for (int i = 0; i < ITERATIONS; ++i)
   {
-    Wire.beginTransmission(MPU_ADDR);
+    // Read raw sensor data directly in this loop
+    Wire.beginTransmission(0x68);
     Wire.write(0x3B);
     Wire.endTransmission(false);
-    if (Wire.requestFrom((uint8_t)MPU_ADDR, (uint8_t)BYTES_TO_READ, true) == BYTES_TO_READ)
+
+    if (Wire.requestFrom(static_cast<uint8_t>(0x68), static_cast<uint8_t>(14), true) == 14)
     {
-      int16_t ax = (Wire.read() << 8) | Wire.read();
-      int16_t ay = (Wire.read() << 8) | Wire.read();
-      int16_t az = (Wire.read() << 8) | Wire.read();
-      Wire.read();
-      Wire.read();
-      int16_t gx = (Wire.read() << 8) | Wire.read();
-      int16_t gy = (Wire.read() << 8) | Wire.read();
-      int16_t gz = (Wire.read() << 8) | Wire.read();
+      int16_t AccXLSB = (Wire.read() << 8) | Wire.read();
+      int16_t AccYLSB = (Wire.read() << 8) | Wire.read();
+      int16_t AccZLSB = (Wire.read() << 8) | Wire.read();
 
-      rollRateSum += gx / 65.5f;
-      pitchRateSum += gy / 65.5f;
-      yawRateSum += gz / 65.5f;
+      Wire.read();
+      Wire.read(); // Skip temperature
 
-      AccumX += ax / 4096.0f;
-      AccumY += ay / 4096.0f;
-      AccumZ += az / 4096.0f;
+      int16_t GyroX = (Wire.read() << 8) | Wire.read();
+      int16_t GyroY = (Wire.read() << 8) | Wire.read();
+      int16_t GyroZ = (Wire.read() << 8) | Wire.read();
+
+      // Accumulate gyro rates for bias calculation
+      rollRateSum += static_cast<float>(GyroX) / 65.5f;
+      pitchRateSum += static_cast<float>(GyroY) / 65.5f;
+      yawRateSum += static_cast<float>(GyroZ) / 65.5f;
+
+      // Accumulate raw accelerometer values
+      AccumulatedAccX += static_cast<float>(AccXLSB) / 4096.0f;
+      AccumulatedAccY += static_cast<float>(AccYLSB) / 4096.0f;
+      AccumulatedAccZ += static_cast<float>(AccZLSB) / 4096.0f;
     }
+
     delay(1);
     BlinkFast();
   }
 
+  // Calculate average gyro rates (bias correction)
   RateCalibrationRoll = rollRateSum / ITERATIONS;
   RateCalibrationPitch = pitchRateSum / ITERATIONS;
   RateCalibrationYaw = yawRateSum / ITERATIONS;
 
-  CalibX = AccumX / ITERATIONS;
-  CalibY = AccumY / ITERATIONS;
-  CalibZ = AccumZ / ITERATIONS;
+  // Calculate average accelerometer values during calibration
+  float avgAccX = AccumulatedAccX / ITERATIONS;
+  float avgAccY = AccumulatedAccY / ITERATIONS;
+  float avgAccZ = AccumulatedAccZ / ITERATIONS;
 
-  Read_MPU6050();
+  // Calculate the orientation during calibration (this becomes our zero reference)
+  CalibrationRollReading = atan2(avgAccY, sqrt(avgAccX * avgAccX + avgAccZ * avgAccZ)) * 180.0f / M_PI;
+  CalibrationPitchReading = atan2(-avgAccX, sqrt(avgAccY * avgAccY + avgAccZ * avgAccZ)) * 180.0f / M_PI;
 
+  // Debug output
   Serial.print("Calibration complete. Gyro biases: Roll=");
   Serial.print(RateCalibrationRoll);
-  Serial.print(", Pitch=");
+  Serial.print("°/s, Pitch=");
   Serial.print(RateCalibrationPitch);
-  Serial.print(", Yaw=");
-  Serial.println(RateCalibrationYaw);
-  Serial.print("Calibrated gravity vector: ");
-  Serial.print(CalibX);
-  Serial.print(", ");
-  Serial.print(CalibY);
-  Serial.print(", ");
-  Serial.println(CalibZ);
-  Serial.print("Initial roll/pitch: ");
-  Serial.print(RawRollAngle);
-  Serial.print(", ");
-  Serial.println(RawPitchAngle);
+  Serial.print("°/s, Yaw=");
+  Serial.print(RateCalibrationYaw);
+  Serial.println("°/s");
+
+  Serial.print("Calibration orientation: Roll=");
+  Serial.print(CalibrationRollReading);
+  Serial.print("°, Pitch=");
+  Serial.print(CalibrationPitchReading);
+  Serial.println("° (this is now 0°)");
 
   initKalman();
 }
-
-
 // ******************************************************************************************************************************************************************
 // This function is used to time the loop and print the loop rate to the Serial Monitor for debugging purposes only
 void TimeTheLoop()
@@ -181,12 +190,12 @@ void GetCurrentAttitude()
   static uint32_t LoopTimer;
   uint32_t Now = millis(); // Get the current time in milliseconds with a single call to save time.
   static uint8_t counter = 0;
-  if (Now - LoopTimer  < 2 ) // 2ms loop time or 500 Hz !!!!!!!!!!!!!!!!!
+  if (Now - LoopTimer < 2) // 2ms loop time or 500 Hz !!!!!!!!!!!!!!!!!
   {
     return;
   }
   LoopTimer = Now;
-  //TimeTheLoop(); // Print loop rate to Serial Monitor
+  // TimeTheLoop(); // Print loop rate to Serial Monitor
   Read_MPU6050();
   RawRollRate -= RateCalibrationRoll;   // Correct for gyro calibration
   RawPitchRate -= RateCalibrationPitch; // Correct for gyro calibration
@@ -201,14 +210,14 @@ void GetCurrentAttitude()
 
     Serial.print(RawPitchAngle);
     Serial.print(",");
-     Serial.print(getFilteredPitchAngle());
-    //Serial.print(filteredPitchRate);
+    Serial.print(getFilteredPitchAngle());
+    // Serial.print(filteredPitchRate);
     Serial.print(",");
 
     Serial.print(RawRollAngle);
     Serial.print(",");
-    //Serial.print(filteredRollRate);
-     Serial.print(getFilteredRollAngle());
+    // Serial.print(filteredRollRate);
+    Serial.print(getFilteredRollAngle());
     Serial.print(",");
 
     // Serial.print(RawYawRate);
