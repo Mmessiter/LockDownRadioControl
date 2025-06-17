@@ -51,18 +51,19 @@
 #include <RF24.h>
 #include <Adafruit_INA219.h>
 #include <stdint.h>
-#include <EEPROM.h>
 #include <Wire.h>
 #include <Adafruit_BMP280.h>
-
+#include "utilities/SBUS.h" // SBUS library now fixed as early version
 #include <PulsePosition.h>
 #include <Watchdog_t4.h>
-#include "utilities/SBUS.h" // SBUS library now fixed as early version
+
 #include "utilities/1Definitions.h"
+
 #include "utilities/radio.h"
 #include "utilities/pid.h"
 #include "utilities/GPS.h"
 #include "utilities/Binding.h"
+#include "utilities/eeprom.h"
 
 void DelayMillis(uint16_t ms) // This replaces any delay() calls
 {
@@ -75,30 +76,7 @@ void DelayMillis(uint16_t ms) // This replaces any delay() calls
 #endif
     }
 }
-/************************************************************************************************************/
 
-void LoadFailSafeData() //
-{
-    uint8_t FS_Offset = FS_EEPROM_OFFSET;
-    uint16_t s[CHANNELSUSED];
-
-    for (uint8_t i = 0; i < CHANNELSUSED; ++i)
-    {
-        s[i] = map(EEPROM.read(i + FS_Offset), 0, 180, MINMICROS, MAXMICROS); // load failsafe values and simulate better resolution
-    }
-    FS_Offset += CHANNELSUSED;
-    for (uint8_t i = 0; i < CHANNELSUSED; ++i)
-    {
-        if (EEPROM.read(i + FS_Offset))
-        {
-            ReceivedData[i] = s[i];
-        }
-    }
-    FailSafeDataLoaded = true;
-#ifdef DB_FAILSAFE
-    Serial.println("Fail safe settings are loaded!");
-#endif
-}
 
 /************************************************************************************************************/
 
@@ -185,7 +163,7 @@ void FailSafe()
 {
     if (BoundFlag)
     {
-        LoadFailSafeData(); // load failsafe values from EEPROM
+        LoadFailSafeDataFromEEPROM(); // load failsafe values from EEPROM
         Connected = true;   // to force sending this data!
         MapToSBUS();
         for (int i = 0; i < 20; i++)
@@ -313,27 +291,7 @@ FLASHMEM void ScanI2c()
         }
     }
 }
-/************************************************************************************************************/
-void SaveFailSafeData()
-{
-    // FailSafe data occupies EEPROM from offset FS_EEPROM_OFFSET
-    uint8_t FS_Offset = FS_EEPROM_OFFSET;
 
-    for (uint8_t i = 0; i < CHANNELSUSED; ++i)
-    {
-        EEPROM.update(i + FS_Offset, (map(ReceivedData[i], MINMICROS, MAXMICROS, 0, 180))); // save servo positions lower res: 8 bits
-        DelayMillis(1);
-    }
-    FS_Offset += CHANNELSUSED;
-    for (uint8_t i = 0; i < CHANNELSUSED; ++i)
-    {
-        EEPROM.update(i + FS_Offset, FailSafeChannel[i]); // save flags
-        DelayMillis(1);
-    }
-#ifdef DB_FAILSAFE
-    Serial.println("Fail safe settings are saved!");
-#endif
-}
 
 /************************************************************************************************************/
 
@@ -494,7 +452,7 @@ FLASHMEM void setup()
     CopyToCurrentPipe(DefaultPipe, PIPENUMBER);
     SetupRadios();
     SetupWatchDog();
-    ReadSavedPipe();
+    LoadSavedPipeFromEEPROM();
     Blinking = !digitalRead(BINDPLUG_PIN); // Blinking = binding to new TX ... because bind plug is inserted
     BindPlugInserted = Blinking; // Bind plug inserted or not
     if (BindPlugInserted) delay (200);

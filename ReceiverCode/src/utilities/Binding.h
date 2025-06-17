@@ -5,7 +5,7 @@
 #define _SRC_BINDING_H
 #include <Arduino.h>
 #include "utilities/1Definitions.h"
-#include <EEPROM.h>
+
 /************************************************************************************************************/
 // This function compares the just-received pipe with several of the previous ones
 // if it matches most of them then its probably not corrupted.
@@ -97,13 +97,6 @@ void GetNewPipe() // from TX
 }
 
 /************************************************************************************************************/
-void ReadSavedPipe() // read only 5 bytes
-{
-    for (uint8_t i = 0; i < 5; ++i)
-        TheSavedPipe[i] = EEPROM.read(i + BIND_EEPROM_OFFSET); // uses first 5 bytes only.
-    TheSavedPipe[5] = 0;
-}
-/************************************************************************************************************/
 void CopyToCurrentPipe(uint8_t *p, uint8_t pn)
 {
     for (int i = 0; i < 6; ++i)
@@ -126,8 +119,7 @@ void BindModel()
     BoundFlag = true;
     if (Blinking)
     {
-        for (uint8_t i = 0; i < 5; ++i)
-            EEPROM.update(i + BIND_EEPROM_OFFSET, TheReceivedPipe[i]);
+        SavePipeToEEPROM();
         Blinking = false;
     }
     if (FirstConnection)

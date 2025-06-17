@@ -121,8 +121,7 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define CSN_OFF HIGH
 #define CE_ON HIGH
 #define CE_OFF LOW
-#define BIND_EEPROM_OFFSET 0                    // use 8 bytes from here
-#define FS_EEPROM_OFFSET BIND_EEPROM_OFFSET + 8 // use 16 bytes from here
+
 #define PIPES_TO_COMPARE 8
 
 // ****************************************************************************************************************************************
@@ -211,6 +210,10 @@ KalmanState kalmanRoll = {0};
 KalmanState kalmanPitch = {0};
 KalmanState kalmanYaw = {0};
 
+// These store the sensor readings that correspond to the CALIBRATION ORIENTATION (0°)
+float CalibrationRollReading = 0.0f;
+float CalibrationPitchReading = 0.0f;
+
 /************************************************************************************************************/
 
 char ParaNames[7][30] = {"(FailSafeChannels)", "(Qnh)", "(GPSMarkHere)", "(ServoCentre & Frequency)", "(SBUS/PPM)", "(Servo frequencies)", "(Servo centre pulses)"};
@@ -227,13 +230,13 @@ void RebuildFlags(bool *f, uint16_t tb);
 void MarkHere();
 void KickTheDog();
 void BindModel();
-void ReadSavedPipe(); // read only 6 bytes
+void LoadSavedPipeFromEEPROM(); // read only 6 bytes
 void MoveServos();
 void BlinkLed();
 void FailSafe();
 void TurnLedOff();
 void TurnLedOn();
-void SaveFailSafeData();
+void SaveFailSafeDataToEEPROM();
 void IncChannelNumber();
 void SetServoFrequency();
 void kalmanFilter();
@@ -252,10 +255,13 @@ void AttachServos();
 float getFilteredRollAngle();
 float getFilteredPitchAngle();
 void BlinkFast();
-    /************************************************************************************************************/
-    // For numeric types (int, float, double, etc.)
-    template <typename T>
-    void Look(const T &value, int format)
+void LoadFailSafeDataFromEEPROM();
+void SaveFailSafeDataToEEPROM();
+void SavePipeToEEPROM();
+/************************************************************************************************************/
+// For numeric types (int, float, double, etc.)
+template <typename T>
+void Look(const T &value, int format)
 {
     Serial.println(value, format);
 }

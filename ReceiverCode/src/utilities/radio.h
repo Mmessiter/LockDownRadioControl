@@ -32,7 +32,7 @@ void UseExtraParameters()
         FS_byte2 = Parameters.word[2] & 0xff;                    // These 2 bytes are 16 failsafe flags
         TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8); // because of the shift left 8, adding here is the same as ORing them.
         RebuildFlags(FailSafeChannel, TwoBytes);
-        SaveFailSafeData();
+        SaveFailSafeDataToEEPROM();
         break;
     case 2:
         Qnh = (float)Parameters.word[1];

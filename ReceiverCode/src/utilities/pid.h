@@ -9,9 +9,6 @@
 
 #ifdef USE_STABILISATION
 
-// These store the sensor readings that correspond to the CALIBRATION ORIENTATION (0°)
-float CalibrationRollReading = 0.0f;
-float CalibrationPitchReading = 0.0f;
 
 // ****************************************************************************************************
 /// @brief Reads raw accelerometer and gyroscope data from the MPU6050 and calculates angles
@@ -149,8 +146,7 @@ void InitialiseTheMPU6050()
   CalibrationRollReading = atan2(avgAccY, sqrt(avgAccX * avgAccX + avgAccZ * avgAccZ)) * 180.0f / M_PI;
   CalibrationPitchReading = atan2(-avgAccX, sqrt(avgAccY * avgAccY + avgAccZ * avgAccZ)) * 180.0f / M_PI;
 
- //CalibrationRollReading = 0; /// Roll calibration reading
- //CalibrationPitchReading = 0; /// Pitch calibration reading
+ 
 
       // Debug output
   Serial.print("Calibration complete. Gyro biases: Roll=");
@@ -166,6 +162,8 @@ void InitialiseTheMPU6050()
   Serial.print("°, Pitch=");
   Serial.print(CalibrationPitchReading);
   Serial.println("° (this is now 0°)");
+
+  //SaveMPU6050CalibrationData(); // Save calibration data to EEPROM
 
   initKalman();
 }
