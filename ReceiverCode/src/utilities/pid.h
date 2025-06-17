@@ -49,8 +49,10 @@ void Read_MPU6050(void)
   float AccZ = static_cast<float>(AccZLSB) / ACCEL_SCALE;
 
   // Calculate current angles using improved formula
-  float currentRollReading = atan2(AccY, sqrt(AccX * AccX + AccZ * AccZ)) * RAD_TO_DEGREES;
-  float currentPitchReading = atan2(-AccX, sqrt(AccY * AccY + AccZ * AccZ)) * RAD_TO_DEGREES;
+  // float currentRollReading = atan2(AccY, sqrt(AccX * AccX + AccZ * AccZ)) * RAD_TO_DEGREES; // won't go past 90
+  float currentRollReading = atan2(AccY, AccZ) * RAD_TO_DEGREES;
+  // float currentPitchReading = atan2(-AccX, sqrt(AccY * AccY + AccZ * AccZ)) * RAD_TO_DEGREES;  // won't go past 90
+  float currentPitchReading = atan2(-AccX, AccZ) * RAD_TO_DEGREES;
 
   // Calculate angles relative to calibration orientation
   RawRollAngle = currentRollReading - CalibrationRollReading;
