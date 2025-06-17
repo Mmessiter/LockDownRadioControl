@@ -258,6 +258,8 @@ void BlinkFast();
 void LoadFailSafeDataFromEEPROM();
 void SaveFailSafeDataToEEPROM();
 void SavePipeToEEPROM();
+bool LoadMPU6050CalibrationDataFromEEPROM();
+void SaveMPU6050CalibrationDataToEEPROM();
 /************************************************************************************************************/
 // For numeric types (int, float, double, etc.)
 template <typename T>

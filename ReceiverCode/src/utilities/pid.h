@@ -9,7 +9,6 @@
 
 #ifdef USE_STABILISATION
 
-
 // ****************************************************************************************************
 /// @brief Reads raw accelerometer and gyroscope data from the MPU6050 and calculates angles
 void Read_MPU6050(void)
@@ -59,33 +58,9 @@ void Read_MPU6050(void)
 }
 
 // ****************************************************************************************************
-// @brief Initialises MPU6050 and calculates gyro/angle offsets
-void InitialiseTheMPU6050()
+void PerformMPU6050Calibration() // Calibrate and save result
 {
   constexpr int ITERATIONS = 2000;
-
-  delay(500); // Let sensor stabilise after power-up
-
-  Wire.beginTransmission(0x68);
-  Wire.write(0x6B); // PWR_MGMT_1
-  Wire.write(0x00); // Wake up
-  Wire.endTransmission();
-
-  Wire.beginTransmission(0x68);
-  Wire.write(0x1B); // GYRO_CONFIG
-  Wire.write(0x08); // ±500°/s
-  Wire.endTransmission();
-
-  Wire.beginTransmission(0x68);
-  Wire.write(0x1C); // ACCEL_CONFIG
-  Wire.write(0x08); // ±4g
-  Wire.endTransmission();
-
-  Wire.beginTransmission(0x68);
-  Wire.write(0x1A); // CONFIG
-  Wire.write(0x03); // Low-pass filter ~43Hz
-  Wire.endTransmission();
-
   // Initialize calibration accumulators
   float rollRateSum = 0;
   float pitchRateSum = 0;
@@ -96,7 +71,7 @@ void InitialiseTheMPU6050()
   float AccumulatedAccY = 0;
   float AccumulatedAccZ = 0;
 
-  // Calibration loop - collect raw data
+  // Calibration loop - sensor must be flat. Calibration is needed because no calibration data was found on the EEPROM
   for (int i = 0; i < ITERATIONS; ++i)
   {
     // Read raw sensor data directly in this loop
@@ -127,11 +102,9 @@ void InitialiseTheMPU6050()
       AccumulatedAccY += static_cast<float>(AccYLSB) / 4096.0f;
       AccumulatedAccZ += static_cast<float>(AccZLSB) / 4096.0f;
     }
-
     delay(1);
     BlinkFast();
   }
-
   // Calculate average gyro rates (bias correction)
   RateCalibrationRoll = rollRateSum / ITERATIONS;
   RateCalibrationPitch = pitchRateSum / ITERATIONS;
@@ -146,25 +119,58 @@ void InitialiseTheMPU6050()
   CalibrationRollReading = atan2(avgAccY, sqrt(avgAccX * avgAccX + avgAccZ * avgAccZ)) * 180.0f / M_PI;
   CalibrationPitchReading = atan2(-avgAccX, sqrt(avgAccY * avgAccY + avgAccZ * avgAccZ)) * 180.0f / M_PI;
 
- 
+  SaveMPU6050CalibrationDataToEEPROM(); // Save calibration data to EEPROM
+  // Debug output
+  // Serial.print("Calibration complete. Gyro biases: Roll=");
+  // Serial.print(RateCalibrationRoll);
+  // Serial.print("°/s, Pitch=");
+  // Serial.print(RateCalibrationPitch);
+  // Serial.print("°/s, Yaw=");
+  // Serial.print(RateCalibrationYaw);
+  // Serial.println("°/s");
 
-      // Debug output
-  Serial.print("Calibration complete. Gyro biases: Roll=");
-  Serial.print(RateCalibrationRoll);
-  Serial.print("°/s, Pitch=");
-  Serial.print(RateCalibrationPitch);
-  Serial.print("°/s, Yaw=");
-  Serial.print(RateCalibrationYaw);
-  Serial.println("°/s");
+  // Serial.print("Calibration orientation: Roll=");
+  // Serial.print(CalibrationRollReading);
+  // Serial.print("°, Pitch=");
+  // Serial.print(CalibrationPitchReading);
+  // Serial.println("° (this is now 0°)");
+}
+// ****************************************************************************************************
+// This initialisation function wakes up the sensor and sets various parameters:
+// Gyro: ±500°/s | Accel: ±4g | Low-pass filter ~43Hz
+// Then it looks to see if calibration data had been previously saved in the EEPROM.
+// If it had not, then the sensor is calibrated and the results saved in the EEPROM for next time.
+// NOTA BENE: Calibration *MUST* be performed with the model precisely horizontal.
 
-  Serial.print("Calibration orientation: Roll=");
-  Serial.print(CalibrationRollReading);
-  Serial.print("°, Pitch=");
-  Serial.print(CalibrationPitchReading);
-  Serial.println("° (this is now 0°)");
+void InitialiseTheMPU6050()
+{
+  delay(250); // Let sensor stabilise after power-up
+  // wake up the sensor
+  Wire.beginTransmission(0x68);
+  Wire.write(0x6B);
+  Wire.write(0x00);
+  Wire.endTransmission();
 
-  //SaveMPU6050CalibrationData(); // Save calibration data to EEPROM
+  // Configure Gyro ±500°/s
+  Wire.beginTransmission(0x68);
+  Wire.write(0x1B);
+  Wire.write(0x08);
+  Wire.endTransmission();
 
+  // configure accelerometer ±4g
+  Wire.beginTransmission(0x68);
+  Wire.write(0x1C);
+  Wire.write(0x08);
+  Wire.endTransmission();
+
+  // configure low pass filter  ~43Hz
+  Wire.beginTransmission(0x68);
+  Wire.write(0x1A);
+  Wire.write(0x03);
+  Wire.endTransmission();
+
+  if (!LoadMPU6050CalibrationDataFromEEPROM()) // If we do not have saved calibrations, we must calibrate!
+    PerformMPU6050Calibration();               // Calibrate and save result
   initKalman();
 }
 // ******************************************************************************************************************************************************************
