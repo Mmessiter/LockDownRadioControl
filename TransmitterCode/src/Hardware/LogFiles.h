@@ -573,13 +573,15 @@ FASTRUN void LogAverageGap()
 // ************************************************************************
 FASTRUN void LogBuddyChange()
 {
-
     char OnText[] = "Buddy ON";
     char OffText[] = "Buddy OFF";
-    if (BuddyON)
+    char NudgeText[] = "Buddy Nudge";
+    if (BuddyState == BUDDY_ON)
         LogText(OnText, strlen(OnText), true);
-    else
+    if (BuddyState == BUDDY_OFF)
         LogText(OffText, strlen(OffText), true);
+    if (BuddyState == BUDDY_NUDGE)
+        LogText(NudgeText, strlen(NudgeText), true);
 }
 // ************************************************************************
 void LogTotalLostPackets()

@@ -9,32 +9,6 @@
 #ifndef RATES_H
 #define RATES_H
 
-/************************************************************************************************************/
-
-void ReadDRSwitch(bool sw1, bool sw2, bool rev) // Dual Rate Switch
-{
-    if ((sw1 == false) && (sw2 == false))
-    {
-        DualRateInUse = 2;
-    }
-    else
-    {
-        if (rev)
-        {
-            if (sw1)
-                DualRateInUse = 1;
-            if (sw2)
-                DualRateInUse = 3;
-        }
-        else
-        {
-            if (sw1)
-                DualRateInUse = 3;
-            if (sw2)
-                DualRateInUse = 1;
-        }
-    }
-}
 
 // ************************************************************************************************************/
 void ReadDualRatesFromScreen()
@@ -87,57 +61,6 @@ void RefreshDualRatesNew()
 {
     ReadDualRatesFromScreen();
     DisplayDualRateValues();
-}
-/************************************************************************************************************/
-void ReadDualRateSwitch()
-{
-    if ((!BuddyPupilOnWireless) || (BuddyHasAllSwitches)) // only read hardware switches if not using wireless buddy box or if buddy has all switches
-    {
-        DualRateInUse = 4; // default to 100%
-        if (DualRatesSwitch == 4)
-            ReadDRSwitch(Switch[2], Switch[3], SWITCH4Reversed);
-        if (DualRatesSwitch == 3)
-            ReadDRSwitch(Switch[0], Switch[1], SWITCH3Reversed);
-        if (DualRatesSwitch == 2)
-            ReadDRSwitch(Switch[4], Switch[5], SWITCH2Reversed);
-        if (DualRatesSwitch == 1)
-            ReadDRSwitch(Switch[6], Switch[7], SWITCH1Reversed);
-        if (DualRateRate[Bank - 1] > 0)
-            DualRateInUse = DualRateRate[Bank - 1]; // if using a forced rate !
-    }
-    if (DualRateInUse == 1)
-        DualRateValue = Drate1;
-    if (DualRateInUse == 2)
-        DualRateValue = Drate2;
-    if (DualRateInUse == 3)
-        DualRateValue = Drate3;
-    if (DualRateInUse == 4)
-        DualRateValue = 100; // Switch not in use, so use 100%
-
-    if (PreviousDualRateInUse != DualRateInUse)
-    {
-        PreviousDualRateInUse = DualRateInUse;
-        LogNewRateInUse();
-        LastShowTime = 0;
-        LastTimeRead = 0;
-        if (AnnounceBanks)
-        {
-            switch (DualRateInUse)
-            {
-            case 1:
-                PlaySound(RATE1);
-                break;
-            case 2:
-                PlaySound(RATE2);
-                break;
-            case 3:
-                PlaySound(RATE3);
-                break;
-            default:
-                break;
-            }
-        }
-    }
 }
 
 /******************************************************************************************************************************/

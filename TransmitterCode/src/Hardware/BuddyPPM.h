@@ -16,7 +16,7 @@
 
 void GetSlaveChannelValuesPPM() // MASTER code
 {
-    if (BuddyON) {
+    if (BuddyState == BUDDY_ON) {
 
         if (PPMdata.PPMInputBuddy.available() == CHANNELSUSED) {
             for (int j = 0; j < CHANNELSUSED; ++j) {                // While slave has control, his stick data replaces all ours
@@ -26,10 +26,11 @@ void GetSlaveChannelValuesPPM() // MASTER code
                     BuddyBuffer[j]  = PpmIn;//
                 }
             }
-            if (!SlaveHasControl) { // Buddy is now On
+            if (CurrentBuddyState != SLAVE_HAS_CONTROL)
+            { // Buddy is now On
                 PlaySound(BUDDYMSG);
                 LastShowTime    = 0;
-                SlaveHasControl = true;
+                CurrentBuddyState = SLAVE_HAS_CONTROL;
             }
         }
         else {
@@ -39,10 +40,10 @@ void GetSlaveChannelValuesPPM() // MASTER code
         }
     }
     else { // Buddy is now Off
-        if (SlaveHasControl) {
+        if (CurrentBuddyState != MASTER_HAS_CONTROL) {
             PlaySound(MASTERMSG);
             LastShowTime    = 0;
-            SlaveHasControl = false;
+            CurrentBuddyState = MASTER_HAS_CONTROL;
         }
     }
 }

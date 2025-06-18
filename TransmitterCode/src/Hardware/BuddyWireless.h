@@ -10,6 +10,10 @@
 #define LOSTCONTACTTHRESHOLD 100 // 100 fails in a row and we declare the buddy or master dead (0.5 seconds)
 #define ENCRYPT_KEY 0xFEADFEADBB // The encryption key is used for the Pipe address between the transmitters
 
+#define MASTER_HAS_CONTROL 0 // possible values for CurrentBuddyState
+#define SLAVE_HAS_CONTROL 1
+#define MASTER_CAN_NUDGE 2
+
 // ********* BIT MAPPED SWITCH POSITIONS ENCODING IN CONTROL BYTE FROM MASTER TO PUPIL ************************************
 //     BIT 0 is the BUDDY'S SWITCHES ENABLED
 //     BIT 1 and 2 are the RATE - 1
@@ -26,7 +30,7 @@ bool LoadCorrectModel(uint64_t ModelID)
     if (ModelID == FailedID)
         return false; // If the model failed to load, then don't try again
     ModelMatched = false;
-    ModelNumber = 0; //  Start from the first model
+    ModelNumber = 0;                                            //  Start from the first model
     while (!ModelMatched && (ModelNumber < MAXMODELNUMBER - 1)) //  Try to match the ID with a saved one
     {
         ++ModelNumber;
@@ -56,35 +60,84 @@ bool LoadCorrectModel(uint64_t ModelID)
         return false;                   //  Failed to match the model
     }
 }
+
+//*************************************************************************************************************************
+
+void GetTheChannelData()
+{
+    for (int j = 0; j < CHANNELSUSED; ++j)
+    { // While slave has control, his stick data replaces some of ours
+        if (BuddyControlled & (1 << j))
+            SendBuffer[j] = BuddyBuffer[j]; // Test if this channel is buddy controlled. If not leave it unchanged otherwise replace it with the buddy's value
+    }
+    if (!BuddyHasAllSwitches && !MotorEnabled)
+    {
+        SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.
+    }
+}
+// ********************************************************************************************************************************************
+
+void GetTheChannelDataToMixWithOurs()
+// This function takes the buddy's stick data, and mixes in ours —
+// allowing the MASTER to subtly assist the BUDDY on any channel except 2 (e.g., motor or collective pitch).
+{
+    for (int j = 0; j < CHANNELSUSED; ++j)
+    {
+        if (BuddyControlled & (1 << j)) // Buddy has control of this channel
+        {
+            if (j != 2) // Avoid nudging motor or heli pitch control!
+            {
+                int16_t m = map(PreMixBuffer[j], MINMICROS, MAXMICROS, -HALFMICROSRANGE, HALFMICROSRANGE);
+                SendBuffer[j] = constrain(BuddyBuffer[j] + m, MINMICROS, MAXMICROS);
+            }
+            else
+            {
+                SendBuffer[j] = BuddyBuffer[j]; // no nudge allowed on pitch or throttle. 
+            }
+        }
+    }
+
+    if (!BuddyHasAllSwitches && !MotorEnabled)
+    {
+        SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero);
+    }
+}
+
 //*************************************************************************************************************************
 void GetSlaveChannelValuesWireless()
 { // Very Like the PPM function only a bit simpler
 
     if (PupilIsAlive == 2)
-        BuddyON = false; // If pupil is dead, then Buddy is off
-    if (BuddyON)
+        BuddyState = BUDDY_OFF; // If pupil is dead, then Buddy is off
+
+    if (BuddyState == BUDDY_ON)
     {
-        for (int j = 0; j < CHANNELSUSED; ++j)
-        { // While slave has control, his stick data replaces some of ours
-            if (BuddyControlled & (1 << j))
-                SendBuffer[j] = BuddyBuffer[j]; // Test if this channel is buddy controlled. If not leave it unchanged otherwise replace it with the buddy's value
-        }
-        if (!BuddyHasAllSwitches && !MotorEnabled)
-        {
-            SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.
-        }
-        if (!SlaveHasControl)
+        GetTheChannelData();
+        if (CurrentBuddyState != SLAVE_HAS_CONTROL)
         {                        // Buddy has turned On
             PlaySound(BUDDYMSG); // Announce the Buddy is now in control
-            SlaveHasControl = true;
+            CurrentBuddyState = SLAVE_HAS_CONTROL;
         }
     }
-    else
+
+    if (BuddyState == BUDDY_NUDGE)
     {
-        if (SlaveHasControl)
+        GetTheChannelDataToMixWithOurs(); //
+        if (CurrentBuddyState != MASTER_CAN_NUDGE)
+        {
+            PlaySound(BEEPMIDDLE);
+            DelayWithDog(250);
+            PlaySound(BUDDYMSG);
+            CurrentBuddyState = MASTER_CAN_NUDGE;
+        }
+    }
+
+    if (BuddyState == BUDDY_OFF)
+    {
+        if (CurrentBuddyState != MASTER_HAS_CONTROL)
         {                         // Buddy has turned Off
             PlaySound(MASTERMSG); // Announce the Master is now in control
-            SlaveHasControl = false;
+            CurrentBuddyState = MASTER_HAS_CONTROL;
         }
     }
 }
@@ -200,7 +253,7 @@ void GetPupilAck()
         if (DataReceived.ChannelBitMask)                             // any channel changes?
         {
             Decompress(RawDataIn, DataReceived.CompressedData, GetDecompressedSize(DynamicPayloadSize)); // yes, decompress the data into RawDataIn array
-            RearrangeTheChannels();                                // Rearrange the channels
+            RearrangeTheChannels();                                                                      // Rearrange the channels
         }
     }
     else
@@ -261,7 +314,7 @@ void DoTheLongerSpecialPacket()
 
 void GetCommandbytes(uint8_t *C, uint8_t *C1)
 { // we have two bytes to send to the buddy.
-    if (BuddyON)
+    if (BuddyState > BUDDY_OFF)
     {
         *C = 'B'; // Send B to indicate Buddy is ON
     }

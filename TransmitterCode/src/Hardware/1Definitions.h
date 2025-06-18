@@ -378,7 +378,17 @@
 #define EXTRABUDDIES 101 // Extra Buddies found sound
 #define TXNOTBOUND 102 //  TX not bound sound // not yet used
 
+// **************************************************************************
+//               Three BUDDY states now possible                            *
+//***************************************************************************
 
+#define BUDDY_OFF 0         // Master has control 
+#define BUDDY_NUDGE 1       // Master can Nudge but buddy has mostly control.
+#define BUDDY_ON 2          // Buddy has control
+
+#define MASTER_HAS_CONTROL 0 // possible values for CurrentBuddyState
+#define SLAVE_HAS_CONTROL 1
+#define MASTER_CAN_NUDGE 2
 
 // **************************************************************************
 //               SDCARD MODEL MEMORY CONSTANTS                              *
@@ -721,6 +731,7 @@ void LogTotalRXGoodPackets();
 void LogTotalRXGoodPackets();
 void LogTotalPacketsAttempted();
 void DelaySimple(uint32_t ms);
+void ReadDRSwitch(bool sw1, bool sw2, bool rev);
 FASTRUN void LogAverageGap();
 #ifdef USE_BTLE
 void SendViaBLE();
@@ -733,6 +744,36 @@ RF24 Radio1(CE_PIN, CSN_PIN);
 #ifdef USE_BTLE
 BTLE btle(&Radio1);
 #endif
+
+/************************************************************************************************************/
+/************************************************************************************************************/
+// For numeric types (int, float, double, etc.)
+template <typename T>
+void Look(const T &value, int format)
+{
+    Serial.println(value, format);
+}
+
+template <typename T>
+void Look1(const T &value, int format)
+{
+    Serial.print(value, format);
+}
+
+// Fallback for types where a format doesn't apply (e.g., String, const char*)
+template <typename T>
+void Look(const T &value)
+{
+    Serial.println(value);
+}
+
+template <typename T>
+void Look1(const T &value)
+{
+    Serial.print(value);
+}
+
+// ******************************************************************************************************************************************************************
 
 WDT_T4<WDT3> TeensyWatchDog;
 WDT_timings_t WatchDogConfig;
@@ -986,7 +1027,7 @@ bool BuddyPupilOnPPM = false;
 bool BuddyMasterOnWireless = false;
 bool BuddyMasterOnPPM = false;
 
-bool SlaveHasControl = false;
+uint8_t CurrentBuddyState = 0;
 float Qnh = 1009; // pressure at sea level here
 uint16_t LastModelLoaded = 0;
 uint16_t LastFileInView = 0;
@@ -1073,7 +1114,7 @@ uint8_t MotorChannel = 2;
 uint8_t MotorChannelZero = 30;
 bool UseMotorKill = true;
 bool SafetyON = false;
-bool BuddyON = false;
+uint8_t BuddyState = BUDDY_OFF;  // three possible states now. BUDDY_OFF, BUDDY_NUDGE, BUDDY_ON
 bool SafetyWasOn = false;
 u_int8_t WarningSound = BATTERYISLOW;
 float StopFlyingVoltsPerCell = 0;
