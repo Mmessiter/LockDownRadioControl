@@ -418,13 +418,7 @@ FASTRUN void SendData()
 
     if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker)
     {
-
         LastPacketSentTime = millis();
-        if (BuddyPupilOnPPM)
-        {
-            SendViaPPM();
-            return;
-        } // If buddying (SLAVE) by wire, send SBUS data down wire only and transmit nothing.
         Connected = false; // Assume failure until an ACK is received.
         FlushFifos();      // This flush avoids a lockup that happens when the FIFO gets full.
 

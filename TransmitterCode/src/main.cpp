@@ -143,7 +143,6 @@
 #include "Hardware/ModelMatch.h"
 #include "Hardware/Nextion.h"
 #include "Hardware/ModelExchange.h"
-#include "Hardware/BuddyPPM.h"
 #include "Hardware/BuddyWireless.h"
 #include "Hardware/SDcard.h"
 #include "Hardware/Telemetry.h"
@@ -5247,8 +5246,6 @@ void FixMotorChannel()
 /************************************************************************************************************/
 void GetBuddyData() // For Master only
 {
-    if (BuddyMasterOnPPM)
-        GetSlaveChannelValuesPPM(); // Get buddy PPM data and maybe use it.
     if (BuddyMasterOnWireless)
         GetSlaveChannelValuesWireless(); // Get buddy Wireless data and maybe use it.
 }
