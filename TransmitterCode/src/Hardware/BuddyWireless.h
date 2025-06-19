@@ -112,12 +112,13 @@ void GetSlaveChannelValuesWireless()
 
     if (BuddyState == BUDDY_ON)
     {
-        GetTheChannelData();
+         GetTheChannelData();
         if (CurrentBuddyState != SLAVE_HAS_CONTROL)
         {                        // Buddy has turned On
             PlaySound(BUDDYMSG); // Announce the Buddy is now in control
             CurrentBuddyState = SLAVE_HAS_CONTROL;
         }
+        return;
     }
 
     if (BuddyState == BUDDY_NUDGE)
@@ -128,6 +129,7 @@ void GetSlaveChannelValuesWireless()
             PlaySound(NUDGE_MSG);
             CurrentBuddyState = MASTER_CAN_NUDGE;
         }
+        return;
     }
 
     if (BuddyState == BUDDY_OFF)
@@ -137,6 +139,7 @@ void GetSlaveChannelValuesWireless()
             PlaySound(MASTERMSG); // Announce the Master is now in control
             CurrentBuddyState = MASTER_HAS_CONTROL;
         }
+        return;
     }
 }
 //*************************************************************************************************************************

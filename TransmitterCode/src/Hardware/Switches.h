@@ -100,7 +100,7 @@ void ReadBuddySwitch()
     if (BuddyMasterOnWireless)
     {
         BuddyState = BUDDY_OFF; // default = MASTER
-        static bool BuddyWasOn = BUDDY_OFF;
+       // static bool BuddyWasOn = BUDDY_OFF;
 
         if ((Buddy_Switch_Mode == M_M_B) || (Buddy_Switch_Mode == M_N_B)) 
         {
@@ -138,11 +138,11 @@ void ReadBuddySwitch()
                 BuddyState = BUDDY_NUDGE;
         }
 
-        if (BuddyState != BuddyWasOn)
-        {
-            BuddyWasOn = BuddyState;
-            LogBuddyChange();
-        }
+        // if (BuddyState != BuddyWasOn)
+        // {
+        //     BuddyWasOn = BuddyState;
+        //     LogBuddyChange();
+        // }
     }
 }
 /************************************************************************************************************/
