@@ -377,10 +377,14 @@
 #define BUDDYPUPILON 100 // Buddy Pupil on sound
 #define EXTRABUDDIES 101 // Extra Buddies found sound
 #define TXNOTBOUND 102 //  TX not bound sound // not yet used
+#define NUDGE_MSG 103 // buddy is in nudge mode.
 
 // **************************************************************************
 //               Three BUDDY states now possible                            *
 //***************************************************************************
+#define M_M_B 0 // master, master, buddy
+#define M_N_B 1 // master, Lodge, buddy
+#define M_M_N 2 // master, master, nudge
 
 #define BUDDY_OFF 0         // Master has control 
 #define BUDDY_NUDGE 1       // Master can Nudge but buddy has mostly control.
@@ -1018,7 +1022,7 @@ char ThisRadio[6] = "0 ";
 uint8_t LastRadio = 0;
 uint8_t NextChannel = 0;
 
-bool WirelessBuddy = false; // use RF for buddy
+bool WirelessBuddy = false; 
 
 bool BuddyPupilOnWireless = false;
 bool WasBuddyPupilOnWireless = false;
@@ -1241,6 +1245,7 @@ uint16_t VariometerSpacing = 125;   // 125 fpm
 bool Variometer_InitDone = false;
 bool BindingEnabled = false; // This is used to enable binding
 uint8_t Connect_MMmsg = 0;
+uint8_t Buddy_Switch_Mode = 0;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

@@ -125,9 +125,7 @@ void GetSlaveChannelValuesWireless()
         GetTheChannelDataToMixWithOurs(); //
         if (CurrentBuddyState != MASTER_CAN_NUDGE)
         {
-            PlaySound(BEEPMIDDLE);
-            DelayWithDog(250);
-            PlaySound(BUDDYMSG);
+            PlaySound(NUDGE_MSG);
             CurrentBuddyState = MASTER_CAN_NUDGE;
         }
     }

@@ -831,6 +831,8 @@ bool LoadAllParameters()
     VariometerThreshold = CheckRange(VariometerThreshold, 0, 1000);
     ++SDCardAddress;
     ++SDCardAddress;
+    Buddy_Switch_Mode = SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
     ReadCheckSum32();
     CheckTrimValues();
     MemoryForTransmtter = SDCardAddress;
@@ -1011,6 +1013,8 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate16BITS(SDCardAddress, VariometerThreshold);
     ++SDCardAddress;
+    ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress,Buddy_Switch_Mode);
     ++SDCardAddress;
     SaveCheckSum32(); // Save the Transmitter parametres checksm
     CloseModelsFile();

@@ -97,28 +97,46 @@ uint8_t CheckSwitch(uint8_t swt)
 /************************************************************************************************************/
 void ReadBuddySwitch()
 {
-    if (BuddyMasterOnPPM || BuddyMasterOnWireless)
+    if (BuddyMasterOnWireless)
     {
-        BuddyState = BUDDY_OFF;
+        BuddyState = BUDDY_OFF; // default = MASTER
         static bool BuddyWasOn = BUDDY_OFF;
 
-        if ((BuddySwitch == 1) && (Switch[7] == SWITCH1Reversed)) // heer
-            BuddyState = BUDDY_ON;
-        if ((BuddySwitch == 2) && (Switch[5] == SWITCH2Reversed))
-            BuddyState = BUDDY_ON;
-        if ((BuddySwitch == 3) && (Switch[1] == SWITCH3Reversed))
-            BuddyState = BUDDY_ON;
-        if ((BuddySwitch == 4) && (Switch[2] == SWITCH4Reversed))
-            BuddyState = BUDDY_ON;
+        if ((Buddy_Switch_Mode == M_M_B) || (Buddy_Switch_Mode == M_N_B)) 
+        {
+            if ((BuddySwitch == 1) && (Switch[7] == SWITCH1Reversed)) // Switch is at top
+                BuddyState = BUDDY_ON;
+            if ((BuddySwitch == 2) && (Switch[5] == SWITCH2Reversed))
+                BuddyState = BUDDY_ON;
+            if ((BuddySwitch == 3) && (Switch[1] == SWITCH3Reversed))
+                BuddyState = BUDDY_ON;
+            if ((BuddySwitch == 4) && (Switch[2] == SWITCH4Reversed))
+                BuddyState = BUDDY_ON;
+        }
 
-        if ((BuddySwitch == 1) && !(Switch[6] || Switch[7]))
-            BuddyState = BUDDY_NUDGE;
-        if ((BuddySwitch == 2) && !(Switch[4] || Switch[5]))
-            BuddyState = BUDDY_NUDGE;
-        if ((BuddySwitch == 3) && !(Switch[0] || Switch[1])) 
-            BuddyState = BUDDY_NUDGE;
-        if ((BuddySwitch == 4) && !(Switch[2] || Switch[3])) 
-            BuddyState = BUDDY_NUDGE;
+        if ((Buddy_Switch_Mode == M_M_N))
+        {
+            if ((BuddySwitch == 1) && (Switch[7] == SWITCH1Reversed)) // Switch is also at top
+                BuddyState = BUDDY_NUDGE;
+            if ((BuddySwitch == 2) && (Switch[5] == SWITCH2Reversed))
+                BuddyState = BUDDY_NUDGE;
+            if ((BuddySwitch == 3) && (Switch[1] == SWITCH3Reversed))
+                BuddyState = BUDDY_NUDGE;
+            if ((BuddySwitch == 4) && (Switch[2] == SWITCH4Reversed))
+                BuddyState = BUDDY_NUDGE;
+        }
+
+        if (Buddy_Switch_Mode == M_N_B)
+        {
+            if ((BuddySwitch == 1) && !(Switch[6] || Switch[7])) // Switch is at middle
+                BuddyState = BUDDY_NUDGE;
+            if ((BuddySwitch == 2) && !(Switch[4] || Switch[5]))
+                BuddyState = BUDDY_NUDGE;
+            if ((BuddySwitch == 3) && !(Switch[0] || Switch[1]))
+                BuddyState = BUDDY_NUDGE;
+            if ((BuddySwitch == 4) && !(Switch[2] || Switch[3]))
+                BuddyState = BUDDY_NUDGE;
+        }
 
         if (BuddyState != BuddyWasOn)
         {

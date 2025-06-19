@@ -621,9 +621,9 @@ void EndAudioVisualView()
     char h0[] = "h0";
     AudioVolume = GetValue(Ex1);
     Brightness = GetValue(h0);
-    VariometerBank = CheckRange (GetValue(n2), 0, 3);
-    VariometerThreshold = CheckRange (GetValue(n0), 0, 1000);
-    VariometerSpacing = CheckRange (GetValue(n3), 50, 1000);
+    VariometerBank = CheckRange(GetValue(n2), 0, 3);
+    VariometerThreshold = CheckRange(GetValue(n0), 0, 1000);
+    VariometerSpacing = CheckRange(GetValue(n3), 50, 1000);
     PlayFanfare = GetValue(c0);
     TrimClicks = GetValue(c1);
     UseVariometer = GetValue(c2);
@@ -730,14 +730,73 @@ void StartBuddyView()
 {
     char BuddyM[] = "BuddyM";
     char BuddyP[] = "BuddyP";
-    char BuddyWireless[] = "wireless";
     char pBuddyView[] = "page BuddyView";
-    SendCommand(pBuddyView);
+    char VisCommand[512];   // Large enough to hold the full command string
+    char InVisCommand[512]; // Large enough to hold the full command string
+
+    char mmb[] = "mmb";
+    char mnb[] = "mnb";
+    char mmn[] = "mmn";
+
+    const char *visCommands[] = {
+        "vis t1,1",
+        "vis t2,1",
+        "vis t3,1",
+        "vis t6,1",
+        "vis t7,1",
+        "vis b0,1",
+        "vis mmb,1",
+        "vis mnb,1",
+        "vis mmn,1"};
+
+    const char *invisCommands[] = {
+        "vis t1,0",
+        "vis t2,0",
+        "vis t3,0",
+        "vis t6,0",
+        "vis t7,0",
+        "vis b0,0",
+        "vis mmb,0",
+        "vis mnb,0",
+        "vis mmn,0"};
+
+    VisCommand[0] = '\0';   // Start with an empty string
+    InVisCommand[0] = '\0'; // Start with an empty string
+
+    for (uint8_t i = 0; i < 9; ++i)
+    {
+        strcat(VisCommand, visCommands[i]);
+        strcat(VisCommand, "\xFF\xFF\xFF"); // Append three 0xFF bytes
+        strcat(InVisCommand, invisCommands[i]);
+        strcat(InVisCommand, "\xFF\xFF\xFF"); // Append three 0xFF bytes
+    }
+
+    SendCommand(pBuddyView); // load the Buddy screen.
     CurrentView = BUDDYVIEW;
-    WirelessBuddy = true; // default to wireless
-    SendValue(BuddyM, BuddyMasterOnPPM || BuddyMasterOnWireless);
-    SendValue(BuddyP, BuddyPupilOnPPM || BuddyPupilOnWireless);
-    SendValue(BuddyWireless, WirelessBuddy);
+    SendValue(BuddyM, BuddyMasterOnWireless);
+    SendValue(BuddyP, BuddyPupilOnWireless);
+
+    if (Buddy_Switch_Mode == M_M_B)
+        SendValue(mmb, 1);
+    else
+        SendValue(mmb, 0);
+
+    if (Buddy_Switch_Mode == M_N_B)
+        SendValue(mnb, 1);
+    else
+        SendValue(mnb, 0);
+
+    if (Buddy_Switch_Mode == M_M_N)
+        SendValue(mmn, 1);
+    else
+        SendValue(mmn, 0);
+
+    if (BuddyMasterOnWireless)
+        SendCommand(VisCommand); // Master options become visible if Master is ON.
+    else
+        SendCommand(InVisCommand); // master options are invisible if Master is NOT ON.
+
+   
 }
 
 /*********************************************************************************************************************************/
@@ -746,59 +805,28 @@ void EndBuddyView()
 {
     char BuddyM[] = "BuddyM";
     char BuddyP[] = "BuddyP";
-    bool Pupil = false;
-    bool Master = false;
-    char BuddyWireless[] = "wireless";
+    char mmb[] = "mmb";
+    char mnb[] = "mnb";
+    char mmn[] = "mmn";
 
-    Pupil = GetValue(BuddyP);                // Pupil ?
-    Master = GetValue(BuddyM);               // Master ?
-    WirelessBuddy = GetValue(BuddyWireless); // wireless ?
-    if (Pupil)
-    {
-        if (WirelessBuddy) // wireless switch on?
-        {
-            BuddyPupilOnWireless = true;
-            BuddyPupilOnPPM = false;
-        }
-        if (!WirelessBuddy)
-        {
-            BuddyPupilOnWireless = false;
-            BuddyPupilOnPPM = true;
-        }
-    }
-    if (!Pupil)
-    {
-        BuddyPupilOnWireless = false;
-        BuddyPupilOnPPM = false;
-    }
+    BuddyPupilOnWireless = GetValue(BuddyP);
+    BuddyMasterOnWireless = GetValue(BuddyM);
 
-    if (Master)
-    {
-        if (WirelessBuddy)
-        { // wireless switch on?
-            BuddyMasterOnWireless = true;
-            BuddyMasterOnPPM = false;
-        }
-        if (!WirelessBuddy)
-        { // wireless switch off?
-            BuddyMasterOnWireless = false;
-            BuddyMasterOnPPM = true;
-        }
-    }
-    if (!Master)
-    {
-        BuddyMasterOnWireless = false;
-        BuddyMasterOnPPM = false;
-    }
+    if (BuddyPupilOnWireless || BuddyMasterOnWireless)
+        WirelessBuddy = true;
+
+    if (GetValue(mmb))
+        Buddy_Switch_Mode = M_M_B;
+    if (GetValue(mnb))
+        Buddy_Switch_Mode = M_N_B;
+    if (GetValue(mmn))
+        Buddy_Switch_Mode = M_M_N;
+
     SaveAllParameters();
     SendCommand(pRXSetupView);
     CurrentView = RXSETUPVIEW;
     UpdateModelsNameEveryWhere();
-    RationaliseBuddy();
-    if (BuddyPupilOnWireless)
-    {
-        GotoFrontView();
-    }
+    GotoFrontView();
 }
 
 /******************************************************************************************************************************/

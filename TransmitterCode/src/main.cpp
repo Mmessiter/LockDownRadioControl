@@ -1242,33 +1242,18 @@ void RationaliseBuddy()
     PupilIsAlive = 0;
     MasterIsAlive = 0;
     CurrentMode = NORMAL;
+    WirelessBuddy = true;
+
+    if (!BuddyPupilOnWireless && !BuddyMasterOnWireless)
+        WirelessBuddy = false;
 
     if (WasBuddyPupilOnWireless && !BuddyPupilOnWireless)
     { // Pupil has just gone off buddy mode
-        if (!PPMdata.UseTXModule)
-            ConfigureRadio(); // Very like InitRadio but without Radio1.begin() !
-
+        ConfigureRadio(); // Very like InitRadio but without Radio1.begin() !
         WasBuddyPupilOnWireless = false;
         DontChangePipeAddress = false;
     }
-
-    if (BuddyPupilOnWireless && BuddyMasterOnWireless)
-    {
-        BuddyPupilOnWireless = false;
-        BuddyMasterOnWireless = false;
-        WirelessBuddy = false;
-    }
-
-    if (!WirelessBuddy)
-    {
-        BuddyPupilOnWireless = false;
-        BuddyMasterOnWireless = false;
-    }
-
-    if (!BuddyPupilOnWireless && !BuddyMasterOnWireless)
-    {
-        WirelessBuddy = false;
-    }
+    
     if (BuddyPupilOnWireless)
     {
         CurrentMode = LISTENMODE; // set the mode to listen only
