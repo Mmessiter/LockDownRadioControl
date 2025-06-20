@@ -48,8 +48,7 @@ void UseExtraParameters()
 
         break;
     case 5:
-        UseSBUS = (bool)Parameters.word[1]; // if false means PPM
-        PPMChannelCount = Parameters.word[2];
+        UseSBUS = true; // ALWAYS!
         break;
     case 6:
         for (int i = 0; i < SERVOSUSED; ++i)

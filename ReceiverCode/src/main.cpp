@@ -13,10 +13,9 @@
  * - (DPS310 is recommended! It's better.)
  * - Binding implemented
  * - SBUS implemented
- * - PPM Implemented on the same pin as SBUS (Serial 3 / Pin 14)
  * - Failsafe implemented
  * - RESOLUTION INCREASED TO 12 BITS
- * - Channels increased to 16. 9 or 11 PWM outputs.  SBUS can handle all. PPM Does <= 8
+ * - Channels increased to 16. 9 or 11 PWM outputs.  SBUS can handle all.
  * - Exponential implemented (at TX end)
  * - Supports one or two tranceivers (ML01SP4s)
  * - Variometer added.
@@ -32,7 +31,7 @@
  * | 11    | SPI MOSI (FOR BOTH RADIOS)  |
  * | 12    | SPI MISO (FOR BOTH RADIOS)  |
  * | 13    | SPI SCK  (FOR BOTH RADIOS)  |
- * | 14    | SBUS *OR PPM* output (Serial TX3) |
+ * | 14    | SBUS (Serial TX3) |
  * | 15    | Don't use if using SBUS. The driver takes it (RX3) |
  * | 16    | RED LED  - This LED is ON when connected, OFF when disconnected and blinking when binding
  * | 17 << | BIND PLUG (held LOW means plug is in)
@@ -54,7 +53,6 @@
 #include <Wire.h>
 #include <Adafruit_BMP280.h>
 #include "utilities/SBUS.h" // SBUS library now fixed as early version
-#include <PulsePosition.h>
 #include <Watchdog_t4.h>
 
 #include "utilities/1Definitions.h"
@@ -129,18 +127,7 @@ void    MoveServos()
         TurnLedOn(); // if we have good values, turn the LED on and move the servos and send SBUS data
     }
     
-    
-    if (!UseSBUS) // not SBUS = PPM !
-    {
-        for (int j = 0; j < PPMChannelCount; ++j)
-        {
-            PPMOutput.write(PPMChannelOrder[j], map(ReceivedData[j], MINMICROS, MAXMICROS, 1000, 2000));
-        }
-    }
-    else
-    {
-        SendSBUSData(); // Send the SBUS data
-    }
+    SendSBUSData(); // Send the SBUS data
     for (int j = 0; j < SERVOSUSED; ++j)
     {
         int PulseLength = ReceivedData[j];
@@ -197,14 +184,7 @@ void SetServoFrequency()
 void AttachServos()
 {
     SetServoFrequency();
-    if (UseSBUS)
-    {
-        MySbus.begin(); // AND START SBUS
-    }
-    else
-    {
-        PPMOutput.begin(PPMPORT); // Or PPM on same pin
-    }
+    MySbus.begin(); // AND START SBUS
 }
 
 /************************************************************************************************************/

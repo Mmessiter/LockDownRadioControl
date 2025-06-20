@@ -124,7 +124,7 @@ void BindModel()
     }
     if (FirstConnection)
     {
-        AttachServos(); // AND START SBUS / PPM
+        AttachServos(); // AND START SBUS 
         FirstConnection = false;
     }
     ConnectMoment = millis();

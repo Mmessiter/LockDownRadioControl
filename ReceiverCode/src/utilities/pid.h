@@ -199,7 +199,7 @@ void GetCurrentAttitude()
   static uint32_t LoopTimer;
   uint32_t Now = millis(); // Get the current time in milliseconds with a single call to save time.
   static uint8_t counter = 0;
-  if (Now - LoopTimer < 2) // 2ms loop time or 500 Hz !!!!!!!!!!!!!!!!!
+  if (Now - LoopTimer < 2) // 2ms loop time or 500 Hz
   {
     return;
   }

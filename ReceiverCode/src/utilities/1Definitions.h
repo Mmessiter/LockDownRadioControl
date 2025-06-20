@@ -9,7 +9,7 @@
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 5
 #define RXVERSION_MINIMUS 2
-#define RXVERSION_EXTRA 'A' // 01 June 2025
+#define RXVERSION_EXTRA 'B' // 20 June 2025
 #define HOPTIME 17          // 17 gives 50Hz FHSS, 47 gives 20Hz FHSS
 #define RECEIVE_TIMEOUT 7   // was 8 ... 5 milliseconds is 'perfect' time between packets, but with nRF24L01 auto-retries it might be 7 or 8 sometimes
 
@@ -21,7 +21,7 @@
 //  #define DB_FAILSAFE
 //  #define DB_RXTIMERS
 
-  #define USE_STABILISATION 1
+  //#define USE_STABILISATION 1
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! (if it won't connect, probably one or both is wrong! )******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -95,8 +95,7 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 
 #define SBUSRATE 10      // SBUS frame every 10 milliseconds
 #define SBUSPORT Serial3 // = 14
-#define SBUSPIN 14       // same as PPM pin
-#define PPMPORT 14       // same as SBUS
+#define SBUSPIN 14       //
 #define RECONNECTGAP 25  // Send no data to servos for 25 ms after a reconnect (10 was not quite enough)
 #define MINMICROS 500
 #define MAXMICROS 2500
@@ -293,10 +292,7 @@ Adafruit_DPS310 dps310;
 
 //           Channels: 1  2 [3][4] 5  6 {7} 8  9 {10} 11 (Channels 3+4 & 7+10 must have same frquency)
 uint8_t PWMPins[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}; //  if only SERVOSUSED = 9 then last two are ignored
-
 SBUS MySbus(SBUSPORT);         // SBUS
-PulsePositionOutput PPMOutput; // PPM
-
 bool BoundFlag = false;                  /** indicates if receiver paired with transmitter */
 uint16_t SbusChannels[CHANNELSUSED + 1]; // Just one spare
 bool FailSafeChannel[17];
