@@ -92,7 +92,7 @@ void GetTheChannelDataToMixWithOurs()
             }
             else
             {
-                SendBuffer[j] = BuddyBuffer[j]; // no nudge allowed on pitch or throttle. 
+                SendBuffer[j] = BuddyBuffer[j]; // no nudge allowed on pitch or throttle.
             }
         }
     }
@@ -105,13 +105,13 @@ void GetTheChannelDataToMixWithOurs()
 
 //*************************************************************************************************************************
 void GetSlaveChannelValuesWireless()
-{ 
+{
     if (PupilIsAlive == 2)
         BuddyState = BUDDY_OFF; // If pupil is dead, then Buddy is off
 
     if (BuddyState == BUDDY_ON)
     {
-         GetTheChannelData();
+        GetTheChannelData();
         if (CurrentBuddyState != SLAVE_HAS_CONTROL)
         {                        // Buddy has turned On
             PlaySound(BUDDYMSG); // Announce the Buddy is now in control
@@ -314,14 +314,19 @@ void DoTheLongerSpecialPacket()
 
 void GetCommandbytes(uint8_t *C, uint8_t *C1)
 { // we have two bytes to send to the buddy.
-    if (BuddyState > BUDDY_OFF)
+    if (BuddyState == BUDDY_OFF)
     {
-        *C = 'B'; // Send B to indicate Buddy is ON
+        *C = 'M'; // Send B to indicate Buddy is ON
     }
-    else
+    if (BuddyState == BUDDY_ON)
     {
-        *C = 'M'; // Send M to indicate Master is ON
+        *C = 'B'; // Send M to indicate Master is ON
     }
+    if (BuddyState == BUDDY_NUDGE)
+    {
+        *C = 'N'; // Send M to indicate Master is ON
+    }
+
     if (BuddyHasAllSwitches)
     {
         *C1 = 1; // Buddy has all the switches
@@ -417,23 +422,28 @@ void SendTheSpecialAckPayload()
 
 void TestTheCommandByte(uint8_t C, uint8_t C1)
 {
+    static uint8_t Last_C = 42;
 
-    if (C == 'B')
-    { // Buddy is now in control
-        if (MasterIsInControl)
-        {                              // If the Master is not in control
+    if (C != Last_C)
+    {
+        if (C == 'B')
+        {                              
             MasterIsInControl = false; // Buddy is now in control
             PlaySound(BUDDYMSG);       // Announce the Buddy is now in control
         }
-    }
-    if (C == 'M')
-    { // Master is now in control
-        if (!MasterIsInControl)
-        {
+        if (C == 'M')
+        {                            
             MasterIsInControl = true; // Master is now in control
             PlaySound(MASTERMSG);     // Announce the Master is now in control
         }
+        if (C == 'N')
+        {
+            MasterIsInControl = false; // Master is not in control but can nudge
+            PlaySound(NUDGE_MSG);      // Announce the Nudge mode
+        }
     }
+    Last_C = C;
+   
     if (C1 & 1)
     { // Buddy has all the switches
         BuddyHasAllSwitches = true;
