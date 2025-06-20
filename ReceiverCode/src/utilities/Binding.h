@@ -111,7 +111,7 @@ void SetNewPipe()
 }
 
 //************************************************************************************************************/
-void DisplayAPipe(const uint8_t *pipe)
+void DisplayAPipe(const uint8_t *pipe) // for debug
 {
     char buffer[44];
     snprintf(buffer, 44, "Pipe: %02X %02X %02X %02X %02X",pipe[0], pipe[1], pipe[2], pipe[3], pipe[4]);
