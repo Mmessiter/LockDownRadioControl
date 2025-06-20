@@ -96,14 +96,7 @@ void SystemPage1End()
         SendValue(Progress, 90);
     }
     FixDeltaGMTSign();
-    if (BuddyPupilOnPPM)
-    {
-        Connected = false;
-        LostContactFlag = true;
-        PacketsPerSecond = 0;
-        RecentGoodPacketsCount = 0; //
-        BlueLedOn();
-    }
+   
     if (Altered)
     {
         SaveTransmitterParameters();
@@ -339,11 +332,11 @@ void StartWifiScan()
         if (!GetConfirmation(pTXSetupView, prompt))
             return;
     }
-    if (PPMdata.UseTXModule)
-    {
-        InitRadio(DefaultPipe); // because scan fails if radio isn't initialised
-        ConfigureRadio();
-    }
+    // if (PPMdata.UseTXModule)
+    // {
+    //     InitRadio(DefaultPipe); // because scan fails if radio isn't initialised
+    //     ConfigureRadio();
+    // }
     SendCommand(pFhssView);
     DrawFhssBox();
     DoScanInit();
@@ -495,58 +488,58 @@ void ReceiveLotsofData()
 
 /******************************************************************************************************************************/
 
-void TXModuleViewEnd()
-{
-    char GoBack[] = "page TXModuleView";
-    char c1[] = "c1"; // Use module
-    char n3[] = "n3"; // number of channels
-    char r0[] = "r0";
-    char r1[] = "r1";
-    char r2[] = "r2";
-    char prompt[] = "Power off transmitter?";
-    bool oldUseTxModule = PPMdata.UseTXModule;
-    char ProgressStart[] = "vis Progress,1";
-    char Progress[] = "Progress";
+// void TXModuleViewEnd()
+// {
+//     char GoBack[] = "page TXModuleView";
+//     char c1[] = "c1"; // Use module
+//     char n3[] = "n3"; // number of channels
+//     char r0[] = "r0";
+//     char r1[] = "r1";
+//     char r2[] = "r2";
+//     char prompt[] = "Power off transmitter?";
+//    // bool oldUseTxModule = PPMdata.UseTXModule;
+//     char ProgressStart[] = "vis Progress,1";
+//     char Progress[] = "Progress";
 
-    SendCommand(ProgressStart);
-    SendValue(Progress, 10);
-    PPMdata.UseTXModule = GetValue(c1);
-    if (PPMdata.UseTXModule != oldUseTxModule)
-    {
-        if (!GetConfirmation(GoBack, prompt))
-        {
-            PPMdata.UseTXModule = oldUseTxModule;
-            SendValue(c1, PPMdata.UseTXModule);
-            return;
-        }
-    }
-    SendValue(Progress, 30);
-    DelayWithDog(100);
-    PPMdata.PPMChannelsNumber = GetValue(n3);
-    SendValue(Progress, 51);
-    if (GetValue(r0))
-        PPMdata.PPMOrderSelection = 1;
-    SendValue(Progress, 63);
-    DelayWithDog(10);
-    if (GetValue(r1))
-        PPMdata.PPMOrderSelection = 2;
-    SendValue(Progress, 88);
-    DelayWithDog(10);
-    if (GetValue(r2))
-        PPMdata.PPMOrderSelection = 3;
-    SelectChannelOrder();
-    SendValue(Progress, 99);
-    DelayWithDog(10);
-    SaveTransmitterParameters();
-    DelayWithDog(10);
-    SendCommand(pTXSetupView);
-    CurrentView = TXSETUPVIEW;
-    DelayWithDog(10);
-    if (PPMdata.UseTXModule != oldUseTxModule)
-    {
-        digitalWrite(POWER_OFF_PIN, HIGH);
-    }
-}
+//     SendCommand(ProgressStart);
+//     SendValue(Progress, 10);
+//     PPMdata.UseTXModule = GetValue(c1);
+//     if (PPMdata.UseTXModule != oldUseTxModule)
+//     {
+//         if (!GetConfirmation(GoBack, prompt))
+//         {
+//             PPMdata.UseTXModule = oldUseTxModule;
+//             SendValue(c1, PPMdata.UseTXModule);
+//             return;
+//         }
+//     }
+//     SendValue(Progress, 30);
+//     DelayWithDog(100);
+//     PPMdata.PPMChannelsNumber = GetValue(n3);
+//     SendValue(Progress, 51);
+//     if (GetValue(r0))
+//         PPMdata.PPMOrderSelection = 1;
+//     SendValue(Progress, 63);
+//     DelayWithDog(10);
+//     if (GetValue(r1))
+//         PPMdata.PPMOrderSelection = 2;
+//     SendValue(Progress, 88);
+//     DelayWithDog(10);
+//     if (GetValue(r2))
+//         PPMdata.PPMOrderSelection = 3;
+//     SelectChannelOrder();
+//     SendValue(Progress, 99);
+//     DelayWithDog(10);
+//     SaveTransmitterParameters();
+//     DelayWithDog(10);
+//     SendCommand(pTXSetupView);
+//     CurrentView = TXSETUPVIEW;
+//     DelayWithDog(10);
+//     if (PPMdata.UseTXModule != oldUseTxModule)
+//     {
+//         digitalWrite(POWER_OFF_PIN, HIGH);
+//     }
+// }
 
 /******************************************************************************************************************************/
 
@@ -766,9 +759,9 @@ void StartBuddyView()
     for (uint8_t i = 0; i < 9; ++i)
     {
         strcat(VisCommand, visCommands[i]);
-        strcat(VisCommand, "\xFF\xFF\xFF"); // Append three 0xFF bytes
+        strcat(VisCommand, "\xFF\xFF\xFF"); 
         strcat(InVisCommand, invisCommands[i]);
-        strcat(InVisCommand, "\xFF\xFF\xFF"); // Append three 0xFF bytes
+        strcat(InVisCommand, "\xFF\xFF\xFF"); 
     }
 
     SendCommand(pBuddyView); // load the Buddy screen.
@@ -811,9 +804,7 @@ void EndBuddyView()
 
     BuddyPupilOnWireless = GetValue(BuddyP);
     BuddyMasterOnWireless = GetValue(BuddyM);
-
-    if (BuddyPupilOnWireless || BuddyMasterOnWireless)
-        WirelessBuddy = true;
+    WirelessBuddy = (BuddyPupilOnWireless || BuddyMasterOnWireless);
 
     if (GetValue(mmb))
         Buddy_Switch_Mode = M_M_B;
@@ -823,9 +814,8 @@ void EndBuddyView()
         Buddy_Switch_Mode = M_M_N;
 
     SaveAllParameters();
-    SendCommand(pRXSetupView);
-    CurrentView = RXSETUPVIEW;
     UpdateModelsNameEveryWhere();
+    RationaliseBuddy();
     GotoFrontView();
 }
 
@@ -1022,51 +1012,51 @@ void ResetClock()
 
 /******************************************************************************************************************************/
 
-void TXModuleViewStart()
-{
+// void TXModuleViewStart()
+// {
 
-    char msg[] = "Please disconnect from model first!";
-    if (ModelMatched)
-    {
-        MsgBox(pTXSetupView, msg);
-        return;
-    }
-    CurrentView = TXMODULEVIEW;
+//     char msg[] = "Please disconnect from model first!";
+//     if (ModelMatched)
+//     {
+//         MsgBox(pTXSetupView, msg);
+//         return;
+//     }
+//     CurrentView = TXMODULEVIEW;
 
-    char c1[] = "c1"; // Use module
-    char n3[] = "n3"; // number of channels
-    char r0[] = "r0";
-    char r1[] = "r1";
-    char r2[] = "r2";
+//     char c1[] = "c1"; // Use module
+//     char n3[] = "n3"; // number of channels
+//     char r0[] = "r0";
+//     char r1[] = "r1";
+//     char r2[] = "r2";
 
-    SendCommand(pTXModule);
-    SendValue(c1, PPMdata.UseTXModule);
-    SendValue(n3, PPMdata.PPMChannelsNumber);
-    if (PPMdata.PPMOrderSelection == 1)
-    {
-        SendValue(r0, 1);
-    }
-    else
-    {
-        SendValue(r0, 0);
-    }
-    if (PPMdata.PPMOrderSelection == 2)
-    {
-        SendValue(r1, 1);
-    }
-    else
-    {
-        SendValue(r1, 0);
-    }
-    if (PPMdata.PPMOrderSelection == 3)
-    {
-        SendValue(r2, 1);
-    }
-    else
-    {
-        SendValue(r2, 0);
-    }
-}
+//     SendCommand(pTXModule);
+//   //  SendValue(c1, PPMdata.UseTXModule);
+//   //  SendValue(n3, PPMdata.PPMChannelsNumber);
+//     if (PPMdata.PPMOrderSelection == 1)
+//     {
+//         SendValue(r0, 1);
+//     }
+//     else
+//     {
+//         SendValue(r0, 0);
+//     }
+//     if (PPMdata.PPMOrderSelection == 2)
+//     {
+//         SendValue(r1, 1);
+//     }
+//     else
+//     {
+//         SendValue(r1, 0);
+//     }
+//     if (PPMdata.PPMOrderSelection == 3)
+//     {
+//         SendValue(r2, 1);
+//     }
+//     else
+//     {
+//         SendValue(r2, 0);
+//     }
+// }
 
 /******************************************************************************************************************************/
 
@@ -1210,9 +1200,7 @@ void RXOptionsViewStart() // model options screen
     char n3[] = "n3";
     char n4[] = "n4"; // TimerDownwards timer minutes
     char c2[] = "c2"; // TimerDownwards timer on off
-    char r0[] = "r0"; // SBUS on
-    char r1[] = "r1"; // PPM on
-    char n5[] = "n5"; // PPMChannelCount
+  
 
     SendCommand(pRXSetup1);
     SendValue(c1, CopyTrimsToAll);
@@ -1225,9 +1213,7 @@ void RXOptionsViewStart() // model options screen
     SendValue(RxVCorrextion, RxVoltageCorrection);
     SendValue(c2, TimerDownwards);
     SendValue(n4, TimerStartTime / 60);
-    SendValue(r0, PPMdata.UseSBUSFromRX);
-    SendValue(r1, !PPMdata.UseSBUSFromRX);
-    SendValue(n5, PPMdata.PPMChannelCount);
+
     CurrentView = RXSETUPVIEW1;
     UpdateModelsNameEveryWhere();
 }
@@ -1246,8 +1232,7 @@ void RXOptionsViewEnd()
     char n3[] = "n3";
     char n4[] = "n4"; // TimerDownwards timer minutes
     char c2[] = "c2"; // TimerDownwards timer on off
-    char r0[] = "r0"; // SBUS on
-    char n5[] = "n5"; // PPMChannelCount
+
     char ProgressStart[] = "vis Progress,1";
     char Progress[] = "Progress";
     bool Altered = false;
@@ -1318,17 +1303,7 @@ void RXOptionsViewEnd()
         Altered = true;
         SendValue(Progress, 80);
     }
-    if (InStrng(r0, chgs) || ModelMatched)
-    {
-        PPMdata.UseSBUSFromRX = GetValue(r0);
-        Altered = true;
-        SendValue(Progress, 90);
-    }
-    if (InStrng(n5, chgs) || ModelMatched)
-    {
-        PPMdata.PPMChannelCount = GetValue(n5);
-        Altered = true;
-    }
+    
     SendValue(Progress, 100);
     CurrentView = RXSETUPVIEW;
     if (Altered)

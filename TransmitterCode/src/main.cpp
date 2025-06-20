@@ -52,7 +52,6 @@
  * - Safety switch implemtented (Stops accidental motor starting)
  * - Rates (three rates) implemented
  * - Slow Servos implemented: Any channel can be slowed by almost any amount for realistic flaps, U/C etc,
- * - PPM or SBUS now possible from reciever - chosen in transmitter.
  * - Support for external third party transmitter modules added (JR type).
  * - Variometer implemented (using a BMP280 or better still, a DPS310)
  *
@@ -68,11 +67,11 @@
  * | 3  LED     | GREEN |
  * | 4  LED     | BLUE |
  * | 5  (POLOLU)| 2808 ALL POWER OFF SIGNAL (When high)|
- **| 6  (PPM)   | PPM IN or OUT NEW PCB TX MODULE
+ **| 6  (...)   | <<<< *SPARE* (PPM IN or OUT NEW PCB TX MODULE <<<<<<<<<<<<<<<
  * | 7  (CE)    | nRF24l01 (CE)   // RX2
  * | 8  (CSN)   | nRF24l01 (CSN)  // TX2
- **| 9  SPARE   | <<<< *SPARE* !
- **| 10 (PPM)   | Wired Buddy PPM IN or OUT (Could become a SPARE if PPM Buddy is not used)
+ **| 9  (...)   | <<<< *SPARE* !
+ **| 10 (...)   | <<<< *SPARE* ! (WAS : Wired Buddy PPM IN or OUT (Could become a SPARE if PPM Buddy is not used)
  **| 11 (MOSI)  | nRF24l01 (MOSI) |
  **| 12 (MISO)  | nRF24l01 (MISO) |
  **| 13 (SCK)   | nRF24l01 (SCK) |
@@ -322,7 +321,7 @@ FASTRUN void ShowMotorTimer()
 
     uint8_t Cdown[10] = {TEN, NINE, EIGHT, SEVEN, SIX, FIVE, FOUR, THREE, TWO, ONE};
 
-    if ((MotorEnabled && (!LostContactFlag || PPMdata.UseTXModule)))
+    if ((MotorEnabled && (!LostContactFlag)))
     {
         MotorOnSeconds = ((millis() - MotorStartTime) / 1000) + PausedSecs;
         Secs = MotorOnSeconds;
@@ -1013,7 +1012,7 @@ void teensyMAC(uint8_t *mac) // only works on Teensy 4.1 and 4.0
 // This function gets the unique MAC address of the Teensy 4.1
 // And also fixes it so that it's a more suitable Pipe address for the nRF24L01
 
-void GetTeensyMacAddress() // 
+void GetTeensyMacAddress() //
 {
     teensyMAC(MacAddress); // Get MAC address
     for (int i = 1; i < 6; ++i)
@@ -1145,33 +1144,7 @@ FLASHMEM void setup()
         ina219.begin();
     InitSwitchesAndTrims();
 
-    if (PPMdata.UseTXModule)
-    {
-        PPMdata.PPMOutputModule.begin(PPMPORT);
-        SelectChannelOrder();
-        if (BuddyMasterOnWireless)
-        {
-            InitRadio(DefaultPipe);
-            ConfigureRadio();
-            SetUpTargetForBuddy();
-        }
-    }
-    else
-    {
-        InitRadio(DefaultPipe);
-    }
-
-    if (BuddyMasterOnPPM)
-    {
-        PPMdata.PPMInputBuddy.begin(BUDDYPPMPORT);
-    }
-    else
-    {
-        if (!PPMdata.UseTXModule && BuddyPupilOnPPM)
-        {
-            PPMdata.PPMOutputBuddy.begin(BUDDYPPMPORT);
-        }
-    }
+    InitRadio(DefaultPipe);
 
     delay(WARMUPDELAY);                                // Allow Nextion time to warm up
     SendValue(FrontView_BackGround, BackGroundColour); // Get colours ready
@@ -1229,8 +1202,6 @@ FLASHMEM void setup()
             }
         }
     }
-    if (!PPMdata.UseTXModule)
-        ConfigureRadio();
     RationaliseBuddy();
     WarnUserIfBuddyBoxIsOn();
     ClearMostParameters();
@@ -1247,12 +1218,12 @@ void RationaliseBuddy()
         WirelessBuddy = false;
 
     if (WasBuddyPupilOnWireless && !BuddyPupilOnWireless)
-    { // Pupil has just gone off buddy mode
+    {                     // Pupil has just gone off buddy mode
         ConfigureRadio(); // Very like InitRadio but without Radio1.begin() !
         WasBuddyPupilOnWireless = false;
         DontChangePipeAddress = false;
     }
-    
+
     if (BuddyPupilOnWireless)
     {
         CurrentMode = LISTENMODE; // set the mode to listen only
@@ -2843,9 +2814,6 @@ void ResetTransmitterSettings()
         return;
     SendCommand(ProgressStart);
     SendValue(Progress, 2);
-
-    BuddyPupilOnPPM = false;
-    BuddyMasterOnPPM = false;
     ModelNumber = 1;
     ScreenTimeout = 120;
     Inactivity_Timeout = INACTIVITYTIMEOUT;
@@ -2878,7 +2846,6 @@ void ResetTransmitterSettings()
     MotorChannel = 2; // = 3 really
     MotorChannelZero = 0;
     TimerDownwards = false;
-    PPMdata.UseTXModule = false;
     char ProgressEnd[] = "vis Progress,0";
 
     SetDS1307ToCompilerTime();
@@ -3352,18 +3319,6 @@ void CheckAllModelIds()
 
 /******************************************************************************************************************************/
 
-void SelectChannelOrder()
-{
-    if (PPMdata.PPMOrderSelection == 1)
-        PPMdata.PPMChannelOrder = PPMdata.PPMChannelOrder1;
-    if (PPMdata.PPMOrderSelection == 2)
-        PPMdata.PPMChannelOrder = PPMdata.PPMChannelOrder2;
-    if (PPMdata.PPMOrderSelection == 3)
-        PPMdata.PPMChannelOrder = PPMdata.PPMChannelOrder3;
-}
-
-/******************************************************************************************************************************/
-
 void StartServosTypeView() // Frequency and centre pulse width
 {
     char n_labels[22][5] = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n16"}, {"n18"}, {"n20"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}, {"n17"}, {"n19"}, {"n21"}};
@@ -3530,8 +3485,8 @@ void (*NumberedFunctions[LASTFUNCTION])(){
     CheckAllModelIds,         // 63
     Blank,                    // 64  // spare ****************************************************
     ReceiveModelFile,         // 65
-    TXModuleViewStart,        // 66
-    TXModuleViewEnd,          // 67
+    Blank,                    // 66  // spare ****************************************************
+    Blank,                    // 67  // spare ****************************************************
     DeleteModelID,            // 68
     StartPong,                // 69
     StoreModelID,             // 70
@@ -4654,7 +4609,6 @@ uint16_t MakeTwobytes(bool *f)
     return tb;
 }
 
-
 /************************************************************************************************************/
 
 void CheckMotorOff()
@@ -4684,8 +4638,6 @@ void CheckMotorOff()
         MotorEnabled = false;
     MotorWasEnabled = MotorEnabled;
 }
-
-
 
 /************************************************************************************************************/
 void ResetMotorTimer()
@@ -4757,15 +4709,12 @@ void GetBank() // ... and the other three switches
             if (LedWasRed)
             {
                 MotorEnabled = false;
-                if (!BuddyPupilOnPPM)
+                SendNoData = false;
+                if ((millis() - WarningTimer) > 4000)
                 {
-                    SendNoData = false; 
-                    if ((millis() - WarningTimer) > 4000)
-                    {
-                        PlaySound(PLSTURNOFF);
-                        SendNoData = true; // user turned on motor
-                        WarningTimer = millis();
-                    }
+                    PlaySound(PLSTURNOFF);
+                    SendNoData = true; // user turned on motor
+                    WarningTimer = millis();
                 }
                 return;
             }
@@ -4846,7 +4795,6 @@ void swap(uint8_t *a, uint8_t *b)
     *a = *b;
     *b = c;
 }
-
 
 /************************************************************************************************************/
 
@@ -5040,7 +4988,7 @@ void CheckPowerOffButton()
     if ((digitalRead(BUTTON_SENSE_PIN)) || CheckingPowerButton) // already checking power button or button not even pressed!
         return;
     CheckingPowerButton = true; // set flag to prevent re-entry
-    if (!BuddyMasterOnWireless && !BuddyPupilOnWireless && !BuddyMasterOnPPM && !BuddyPupilOnPPM)
+    if (!BuddyMasterOnWireless && !BuddyPupilOnWireless)
         CheckWhetherToEnableBinding(); // Check if binding is enabled Which is done by holding the start button for more than two seconds
 
     if ((!digitalRead(BUTTON_SENSE_PIN)) && (millis() > POWERONOFFDELAY2)) // no power off for first 10 seconds in case button held down too long
@@ -5048,10 +4996,10 @@ void CheckPowerOffButton()
         if (BoundFlag && ModelMatched && CurrentView != FRONTVIEW)
             GotoFrontView();
 
-        if (!LedWasGreen && !PPMdata.UseTXModule)
+        if (!LedWasGreen)
             SimulateCloseDown(); // if not connected power off immediately
 
-        if (LedWasGreen || PPMdata.UseTXModule)
+        if (LedWasGreen)
         {
             if (!PowerOffTimer)
             {
@@ -5128,7 +5076,7 @@ void AddParameterstoQueue(uint8_t ID) // todo:  This function repeats the same p
 /*********************************************************************************************************************************/
 void SendInitialSetupParams()
 {
-    AddParameterstoQueue(5); // Sbus / PPM at rx
+    AddParameterstoQueue(5); // Sbus / (... was or PPM at rx)
     AddParameterstoQueue(2); // QNH
     AddParameterstoQueue(6); // Servo Frequencies
     AddParameterstoQueue(7); // Servo Pulse Widths
@@ -5213,27 +5161,6 @@ void FASTRUN ManageTransmitter()
         TransmitterLastManaged = millis();
     }
 }
-/**********************************************************************************************************/
-
-void SendPPM()
-{ // Send a frame of PPM to Third party TX module
-    if (millis() - PPMdata.LastPPMFrame >= 10)
-    {
-        PPMdata.LastPPMFrame = millis();
-        for (int j = 0; j < PPMdata.PPMChannelsNumber; ++j)
-        {
-            PPMdata.PPMOutputModule.write(*(PPMdata.PPMChannelOrder + j), SendBuffer[j]);
-        }
-    }
-    if (BuddyMasterOnWireless)
-    {
-        if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker)
-        { //
-            LastPacketSentTime = millis();
-            SendSpecialPacketFromPPMModule(); // Send to buddy using Nrf24L01
-        }
-    }
-}
 
 /************************************************************************************************************/
 void FixMotorChannel()
@@ -5270,33 +5197,17 @@ FASTRUN void loop()
     {
         if (UseMacros)
             ExecuteMacro(); // Modify it if macro is running
-        if (BuddyPupilOnPPM)
-        {
-            NewCompressNeeded = false; // Fake it as Buddy does not send compressed data
-            ShowServoPos();
-        }
-        else
-        {                      // Skip these next lines when buddying as a slave
-            GetBuddyData();    // Only if master
-            FixMotorChannel(); // Maybe force it low BEFORE Binding data is added
-            ShowServoPos();    // Show servo positions to user
-            if (BindingEnabled && !BoundFlag)
-                SendBindingPipe(); // Only if binding and not bound yet - override low throttle setting 
-        }
+        GetBuddyData();     // Only if master
+        FixMotorChannel();  // Maybe force it low BEFORE Binding data is added
+        ShowServoPos();     // Show servo positions to user
+        if (BindingEnabled && !BoundFlag)
+            SendBindingPipe(); // Only if binding and not bound yet - override low throttle setting
     }
 
     switch (CurrentMode)
     {
-    case NORMAL: // 0
-        if (!PPMdata.UseTXModule)
-        {
-            SendData(); // local TX
-        }
-        else
-        {
-            SendPPM();
-            NewCompressNeeded = false;
-        }
+    case NORMAL:    // 0
+        SendData(); // local TX
         break;
     case CALIBRATELIMITS: // 1
         CalibrateSticks();

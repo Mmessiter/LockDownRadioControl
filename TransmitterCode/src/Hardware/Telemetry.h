@@ -460,10 +460,7 @@ void ShowConnectionQuality()
     char Quality[] = "Quality";
     char FrontView_Connected[] = "Connected"; // this is both the label name and the text to be displayed :=)
     char Visible[] = "vis Quality,1";
-    char TXModuleMSG[] = "** Using TX module **";
     uint16_t ConnectionQuality = GetSuccessRate();
-    if (PPMdata.UseTXModule)
-        SendText(FrontView_Connected, TXModuleMSG);
     if (!LedWasGreen)
         return;
     if (!LastConnectionQuality)
@@ -523,7 +520,7 @@ void PopulateFrontView()
         ShowCurrentRate();
     }
 
-    if (BuddyPupilOnPPM || BuddyPupilOnWireless)
+    if (BuddyPupilOnWireless)
     {
         SendText(FrontView_Connected, MsgBuddying);
     }

@@ -105,8 +105,7 @@ void GetTheChannelDataToMixWithOurs()
 
 //*************************************************************************************************************************
 void GetSlaveChannelValuesWireless()
-{ // Very Like the PPM function only a bit simpler
-
+{ 
     if (PupilIsAlive == 2)
         BuddyState = BUDDY_OFF; // If pupil is dead, then Buddy is off
 
@@ -348,53 +347,6 @@ void SendSpecialPacket() // Here the master sends a packet to the buddy Hoping t
     }
     DoTheLongerSpecialPacket();                                 // Send the longer packet (model ID sent) EVERYTIME!
     ChangeTXTarget(CurrentChannel, TeensyMACAddPipe, DATARATE); // Set the TX target back to the receiver in model.
-}
-
-//*************************************************************************************************************************
-void SendSpecialPacketFromPPMModule() // Here the (PPM!) MASTER sends to PUPIL tx. This is called about 200 times a second.
-{                                     // Master Sends M or B to indicate whether Buddy is on or off, and the ID of the model which should be loaded.
-                                      // The Pupil's Ack Payload contains the pupil's control data (in BuddyBuffer[]) which is compressed and must be decompressed before use.
-                                      // This function is called from SendData() function which is called from the main loop.
-                                      // GetSlaveChannelValuesWireless() then uses the BuddyBuffer data to replace some or all of the Master's control data.
-                                      // Because the datarate is 2 meg the exchange is very fast.
-                                      // This uses the nRF24L01 while the model is connected via TX module. Only the Buddy is using the nRF24L01 here
-    static uint32_t LocalTimer = 0;
-    static bool NeedToRecover = false;
-    static uint8_t ChannelSentLastTime = 0; // The old channel number
-    static uint8_t Index = 82;              // The current channel number
-
-    if (PupilIsAlive != 1)
-    { // Don't send too often if buddy was not found
-        if (((millis() - LocalTimer) < 20))
-            return;
-        LocalTimer = millis();
-    }
-
-    SpecialPacketData.ModelID = ModelsMacUnionSaved.Val64; // Send the model ID so that pupil can check it
-    GetCommandbytes(&SpecialPacketData.Command[0], &SpecialPacketData.Command[1]);
-
-    ChannelSentLastTime = SpecialPacketData.Channel; // Use the old channel number because Buddy hasn't yet hopped
-    --Index;
-    if (Index < 1)
-        Index = 82;                                              // use the same array but in reverse order
-    SpecialPacketData.Channel = FHSS_data::FHSS_Channels[Index]; // Set the  new channel number for next time
-    if (NeedToRecover)
-        SpecialPacketData.Channel = QUIETCHANNEL; // If contact lost, then use the recovery channel to recover
-    Radio1.stopListening();
-    delayMicroseconds(STOPLISTENINGDELAY);
-    Radio1.setChannel(ChannelSentLastTime);
-    delayMicroseconds(STOPLISTENINGDELAY);
-    if (Radio1.write(&SpecialPacketData, sizeof SpecialPacketData))
-    {                          // Send the packet
-        GetPupilAck();         // Get ack from pupil WITH HIS CONTROL DATA!!
-        PupilDetected(true);   // Pupil is alive
-        NeedToRecover = false; // No need to recover
-    }
-    else
-    {
-        PupilDetected(false); // Pupil is dead
-        NeedToRecover = true; // Need to recover
-    }
 }
 
 //*************************************************************************************************************************

@@ -120,9 +120,6 @@ void SendModelFile()
     Serial.print(Fsize);
     Serial.println(" bytes.");
     #endif
-    if (PPMdata.UseTXModule) {
-        InitRadio(DefaultPipe);
-    }
     ConfigureRadio(); //  Start from known state
     Radio1.setChannel(FILECHANNEL);
     Radio1.setPALevel(FILEPALEVEL, true);
@@ -250,9 +247,7 @@ void ReceiveModelFile()
     ShowFileTransferWindow();
     SendText(ModelsView_filename, Waiting);
     SendText(t0, RXheader);
-    if (PPMdata.UseTXModule) {
-        InitRadio(DefaultPipe);
-    }
+    
     ConfigureRadio(); //  Start from known state
 
     RXPipe = FILEPIPEADDRESS;

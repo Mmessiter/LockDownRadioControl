@@ -160,8 +160,8 @@ void LoadParameters()
     case 4: // 4 = NOT USED YET
         break;
     case 5:                                         // 5 = SBUS/PPM
-        Parameters.word[1] = PPMdata.UseSBUSFromRX; // 1 - 0
-        Parameters.word[2] = PPMdata.PPMChannelCount;
+        Parameters.word[1] = 1; //PPMdata.UseSBUSFromRX; // 1 - 0
+        Parameters.word[2] = 0;
         break;
     case 6: // 6 = Servo Frequencies
         for (int i = 0; i < 11; ++i)
@@ -278,8 +278,6 @@ FASTRUN void TryOtherPipe()
 void TryToReconnect()
 {
     // static uint32_t localtimer = 0;
-    if (BuddyPupilOnPPM)
-        return;
     if (!DontChangePipeAddress)
         TryOtherPipe();
     ++ReconnectionIndex;
@@ -731,7 +729,7 @@ uint8_t CheckPipeNibbles(uint8_t b)
 /************************************************************************************************************/
 void SendBindingPipe()
 {
-    if (BoundFlag || BuddyPupilOnWireless || PPMdata.UseTXModule || !UsingDefaultPipeAddress)
+    if (BoundFlag || BuddyPupilOnWireless || !UsingDefaultPipeAddress)
         return; // No need to send the pipe if we are bound and model matched
      BufferTeensyMACAddPipe();
 }
@@ -873,8 +871,6 @@ void GetModelsMacAddress()
 /************************************************************************************************************/
 FASTRUN void ParseLongerAckPayload() // It's already pretty short!
 {
-    if (BuddyPupilOnPPM)
-        return; // buddy pupil need none of this
 
     FHSS_data::NextChannelNumber = AckPayload.Byte5; // every packet tells of next hop destination
 

@@ -71,7 +71,6 @@
 
 #define CE_PIN 7                          // for SPI to nRF24L01
 #define CSN_PIN 8                         // for SPI to nRF24L01
-#define BUDDYPPMPORT 10                   // wired Buddybox PPM pin number
 #define LOSTCONTACTCUTOFF 1               // packets to lose before declaring lost contact (only one)
 #define BINDINGTIME 2000                  // 2 seconds to bind ?
 #define CHANNELSUSED 16                   // 16 channels in use
@@ -265,7 +264,6 @@
 #define BLUELED 4
 #define POWER_OFF_PIN 5
 #define BUTTON_SENSE_PIN 33
-#define PPMPORT 6
 
 // **************************************************************************
 //               Sounds                             *
@@ -455,14 +453,6 @@
 #define BYTESPERMACRO 6 // 6 bytes each
 
 // **************************************************************************
-//                            PPM PARAMETERS   (FOR BUDDY BOXING)          *
-//***************************************************************************
-
-#define PPMBUDDYFRAMERATE 10 // PPM new frame every 10 milliseconds
-#define RANGEMAX 2047        // = Frsky at 150 %
-#define RANGEMIN 0           // = Frsky at 0 %
-
-// **************************************************************************
 //                          NEXTION SERIAL CONNECTION                       *
 //***************************************************************************
 
@@ -539,7 +529,6 @@ FASTRUN void ParseLongerAckPayload();
 void FailedPacket();
 void StartInactvityTimeout();
 void ShowServoPos();
-void SendViaPPM();
 void ZeroDataScreen();
 void RedLedOn();
 void ReEnableScanButton();
@@ -683,7 +672,6 @@ void TrimsToSubtrim();
 void SendAllAgain();
 void LogBuddyChange();
 void SetUpTargetForBuddy();
-void SendSpecialPacketFromPPMModule();
 FASTRUN uint16_t ReadThreePositionSwitch(uint8_t l); // This returns the input only
 void UpdateSpeedScreen();
 void SetNewDualRate();
@@ -806,7 +794,7 @@ char na[] = "";
 uint8_t ServoSpeed[BANKSUSED + 1][CHANNELSUSED + 1]; //    Speed of servo movement
 uint16_t CurrentPosition[SENDBUFFERSIZE + 1];        //    Position from which a slow servo started (0 = not started yet)
 uint16_t SendBuffer[SENDBUFFERSIZE + 1];             //    Data to send to rx (16 words)
-uint16_t BuddyBuffer[SENDBUFFERSIZE + 1];            //    Data from wireless or PPM buddy (16 words)
+uint16_t BuddyBuffer[SENDBUFFERSIZE + 1];            //    Data from wireless buddy (16 words)
 uint16_t ShownBuffer[SENDBUFFERSIZE + 1];            //    Data shown before
 uint16_t RawDataBuffer[SENDBUFFERSIZE + 1];          //    Data as actually sent
 uint16_t InputsBuffer[CHANNELSUSED + 1];             //    Data from pots
@@ -927,10 +915,8 @@ bool SingleModelFlag = false;
 bool ModelsFileOpen = false;
 bool USE_INA219 = false;
 bool BoundFlag = false;
-
 bool Switch[8];
 bool TrimSwitch[8];
-
 uint8_t BankSwitch = BANKSWITCH;
 uint8_t Autoswitch = Autoswitch;
 uint8_t SafetySwitch = 0;
@@ -948,7 +934,6 @@ bool SWITCH1Reversed = false;
 bool SWITCH2Reversed = false;
 bool SWITCH3Reversed = false;
 bool SWITCH4Reversed = false;
-
 uint16_t StartLocation = 0;
 bool ValueSent = false;
 uint8_t SwitchEditNumber = 0; // number of switch being edited
@@ -1021,16 +1006,10 @@ bool LedWasRed = false;
 char ThisRadio[6] = "0 ";
 uint8_t LastRadio = 0;
 uint8_t NextChannel = 0;
-
 bool WirelessBuddy = false; 
-
 bool BuddyPupilOnWireless = false;
 bool WasBuddyPupilOnWireless = false;
-bool BuddyPupilOnPPM = false;
-
 bool BuddyMasterOnWireless = false;
-bool BuddyMasterOnPPM = false;
-
 uint8_t CurrentBuddyState = 0;
 float Qnh = 1009; // pressure at sea level here
 uint16_t LastModelLoaded = 0;
@@ -1305,35 +1284,6 @@ bool MasterIsInControl = true;
 bool NeedToRecover = false;
 uint8_t ChannelSentLastTime = 0; // The old channel number
 uint8_t Index = 82;
-
-// *****************************************************************************************************************
-
-// **********************************************************************************************************************************
-// **********************************  Area & struct for PPM & TX MODULE ************************************************************
-// **********************************************************************************************************************************
-
-struct PPMArea
-{
-    PulsePositionOutput PPMOutputModule; // PPM for TX Modules
-    PulsePositionOutput PPMOutputBuddy;  // PPM for buddy boxing
-    PulsePositionInput PPMInputBuddy;    // PPM for buddy boxing
-    bool UseSBUSFromRX = true;           // at receiver. false = PPM
-    uint16_t PPMChannelCount = 8;        // for our RX - NOT TX module
-
-    //   A  E  T  R       // TRANSLATION HAPPENS *BACKWARDS* !
-    uint8_t PPMChannelOrder1[16] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
-    //   T  A  E  R
-    uint8_t PPMChannelOrder2[16] = {2, 3, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
-    //   E  T  A  R
-    uint8_t PPMChannelOrder3[16] = {3, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
-
-    uint8_t *PPMChannelOrder = PPMChannelOrder2; // This will point to needed channel order
-    uint32_t LastPPMFrame = 0;
-    uint8_t PPMOrderSelection = 2;
-    uint8_t PPMChannelsNumber = 6;
-    bool UseTXModule = false;
-};
-PPMArea PPMdata;
 
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 

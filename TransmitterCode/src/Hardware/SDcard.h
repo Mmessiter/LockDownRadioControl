@@ -417,13 +417,7 @@ bool ReadOneModel(uint32_t Mnum)
         TimerStartTime = 5 * 60;
     ++SDCardAddress;
     ++SDCardAddress;
-    PPMdata.UseSBUSFromRX = (bool)SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    PPMdata.PPMChannelCount = SDRead16BITS(SDCardAddress);
-    if ((PPMdata.PPMChannelCount > 16) || (PPMdata.PPMChannelCount < 1))
-    { // miles out of range PPMChannelCount?
-        PPMdata.PPMChannelCount = 8;
-    }
     ++SDCardAddress;
     ++SDCardAddress;
 
@@ -665,9 +659,7 @@ bool LoadAllParameters()
         ChannelMax[i] = SDRead16BITS(SDCardAddress);
         SDCardAddress += 2;
     }
-    BuddyPupilOnPPM = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    BuddyMasterOnPPM = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     ModelNumber = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
@@ -774,17 +766,10 @@ bool LoadAllParameters()
     ++SDCardAddress;
     TXLiPo = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    PPMdata.PPMOrderSelection = SDRead8BITS(SDCardAddress);
-    if ((PPMdata.PPMOrderSelection > 3) || (PPMdata.PPMOrderSelection < 1))
-        PPMdata.PPMOrderSelection = 2;
     ++SDCardAddress;
-    PPMdata.PPMChannelsNumber = SDRead8BITS(SDCardAddress);
-    if ((PPMdata.PPMChannelsNumber > 16) || (PPMdata.PPMChannelsNumber < 1))
-        PPMdata.PPMChannelsNumber = 6;
     ++SDCardAddress;
     BuddyPupilOnWireless = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    PPMdata.UseTXModule = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     for (int q = 0; q < 5; ++q)
     {
@@ -873,9 +858,7 @@ void SaveTransmitterParameters()
         SDUpdate16BITS(SDCardAddress, ChannelMax[i]); // Stick max output of pot
         SDCardAddress += 2;
     }
-    SDUpdate8BITS(SDCardAddress, BuddyPupilOnPPM);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, BuddyMasterOnPPM);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, ModelNumber);
     ++SDCardAddress;
@@ -962,13 +945,10 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, TXLiPo);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, PPMdata.PPMOrderSelection);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, PPMdata.PPMChannelsNumber);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, BuddyPupilOnWireless);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, PPMdata.UseTXModule);
     ++SDCardAddress;
     for (i = 0; i < 5; ++i)
     {
@@ -1282,9 +1262,7 @@ void SaveOneModel(uint32_t mnum)
     SDUpdate16BITS(SDCardAddress, TimerStartTime);
     ++SDCardAddress;
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, PPMdata.UseSBUSFromRX);
     ++SDCardAddress;
-    SDUpdate16BITS(SDCardAddress, PPMdata.PPMChannelCount);
     ++SDCardAddress;
     ++SDCardAddress;
     for (i = 0; i < 16; ++i)
