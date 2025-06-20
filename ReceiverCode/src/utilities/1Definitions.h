@@ -5,6 +5,7 @@
 
 #include <Arduino.h>
 #include <Adafruit_DPS310.h>
+#include <EEPROM.h>
 
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 5
@@ -26,7 +27,7 @@
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! (if it won't connect, probably one or both is wrong! )******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
  #define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
- #define USE_11PWM_OUTPUTS           // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
+// #define USE_11PWM_OUTPUTS           // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -48,6 +49,15 @@
 #define WATCHDOGTIMEOUT 3500 // 2 Seconds before reboot (32ms -> 500 seconds)
 #define KICKRATE 500         // Kick twice a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
 #define WATCHDOGMAXRATE 250  // 250 ms secs between kicks is max rate allowed
+// **************************************************************************
+//                            EEPROM PARAMETERS                           *
+//***************************************************************************
+
+#define BIND_EEPROM_OFFSET 0                                     // use 8 bytes from here (in fact 5 bytes only, but we reserve 8 bytes for future use)
+#define FS_EEPROM_OFFSET BIND_EEPROM_OFFSET + 8                  // use 16 bytes from here
+#define MPU6050_EEPROM_OFFSET FS_EEPROM_OFFSET + 16              // use *21* bytes from here (for the MPU6050 calibration data)
+#define THE_NEXT_USE_OF_EEPROM_OFFSET MPU6050_EEPROM_OFFSET + 21 // For future use ...
+#define MPU6050_CALIBRATIONS_SAVED 42                            // this flag indicates whether calibrations were saved.
 
 //**************************************************************************************************************************
 

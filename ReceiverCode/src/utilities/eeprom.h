@@ -32,14 +32,8 @@
 #ifndef _SRC_EEPROM_H
 #define _SRC_EEPROM_H
 #include <Arduino.h>
-#include <EEPROM.h>
-#include "utilities/1Definitions.h"
 
-#define BIND_EEPROM_OFFSET 0                                     // use 8 bytes from here (in fact 5 bytes only, but we reserve 8 bytes for future use)
-#define FS_EEPROM_OFFSET BIND_EEPROM_OFFSET + 8                  // use 16 bytes from here
-#define MPU6050_EEPROM_OFFSET FS_EEPROM_OFFSET + 16              // use *21* bytes from here (for the MPU6050 calibration data)
-#define THE_NEXT_USE_OF_EEPROM_OFFSET MPU6050_EEPROM_OFFSET + 21 // For future use ...
-#define MPU6050_CALIBRATIONS_SAVED 42                            // this flag indicates whether calibrations were saved.
+#include "utilities/1Definitions.h"
 
 /************************************************************************************************************/
 
@@ -96,15 +90,7 @@ void LoadSavedPipeFromEEPROM() // read only 5 bytes
         TheSavedPipe[i] = EEPROM.read(i + BIND_EEPROM_OFFSET); // uses first 5 bytes only.
     TheSavedPipe[5] = 0;
 }
-// /************************************************************************************************************/
-void SavePipeToEEPROM() // // Save 5 bytes: the MAC address of the transmitter's Teensy 4.1
-{
-    for (uint8_t i = 0; i < 5; ++i)
-    {
-        EEPROM.update(i + BIND_EEPROM_OFFSET, TheSavedPipe[i]);
-        DelayMillis(1);
-    }
-}
+
 
 // **************************************************************************************************************
 void SaveOneCalibrationToEEPROM(uint8_t *ExtraOffset, float TheValue)

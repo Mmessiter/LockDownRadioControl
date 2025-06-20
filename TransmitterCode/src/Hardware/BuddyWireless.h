@@ -420,37 +420,32 @@ void SendTheSpecialAckPayload()
 //     BIT 7 is SPARE
 //*************************************************************************************************************************
 
-void TestTheCommandByte(uint8_t C, uint8_t C1)
+void TestTheCommandByte(uint8_t C, uint8_t C1) // two bytes really
 {
-    static uint8_t Last_C = 42;
+    static uint8_t Last_C = 42; // simply not M or B or N
 
-    if (C != Last_C)
+    if (C != Last_C) // if the C command has changed ...
     {
+        Last_C = C; // save new C, and ...
         if (C == 'B')
-        {                              
+        {
             MasterIsInControl = false; // Buddy is now in control
-            PlaySound(BUDDYMSG);       // Announce the Buddy is now in control
+            PlaySound(BUDDYMSG);       // Announce Buddy is now in control
         }
         if (C == 'M')
-        {                            
+        {
             MasterIsInControl = true; // Master is now in control
-            PlaySound(MASTERMSG);     // Announce the Master is now in control
+            PlaySound(MASTERMSG);     // Announce Master is now in control
         }
         if (C == 'N')
         {
             MasterIsInControl = false; // Master is not in control but can nudge
-            PlaySound(NUDGE_MSG);      // Announce the Nudge mode
+            PlaySound(NUDGE_MSG);      // Announce Nudge mode
         }
     }
-    Last_C = C;
-   
-    if (C1 & 1)
-    { // Buddy has all the switches
-        BuddyHasAllSwitches = true;
-    }
-    else
+    BuddyHasAllSwitches = (C1 & 1); // the 0th BIT of C1 is switch control
+    if (!BuddyHasAllSwitches)       // If Buddy does not have switch control, he must get these from Master
     {
-        BuddyHasAllSwitches = false;         // Buddy has none of the switches
         DualRateInUse = ((C1 >> 1) & 3) + 1; // Get the dual rate bits
         Bank = ((C1 >> 3) & 3) + 1;          // Get the bank bits
         MotorEnabled = (C1 >> 5) & 1;        // Get the motor bit

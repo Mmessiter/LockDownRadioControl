@@ -109,7 +109,16 @@ void SetNewPipe()
 {
     CurrentRadio->openReadingPipe(Pipnum, PipePointer); //  5 * byte array
 }
-
+// /************************************************************************************************************/
+void SavePipeToEEPROM() // // Save 5 bytes: the MAC address of the transmitter's Teensy 4.1
+{
+    for (uint8_t i = 0; i < 5; ++i)
+    {
+        EEPROM.update(i + BIND_EEPROM_OFFSET, TheSavedPipe[i]);
+        Look("SAVING");
+        DelayMillis(1);
+    }
+}
 /************************************************************************************************************/
 // This function binds the model using the TX supplied Pipe instead of the default one.
 // If not already saved, this saves it to the eeprom too for next time.
