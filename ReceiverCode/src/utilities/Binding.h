@@ -109,13 +109,22 @@ void SetNewPipe()
 {
     CurrentRadio->openReadingPipe(Pipnum, PipePointer); //  5 * byte array
 }
-// /************************************************************************************************************/
-void SavePipeToEEPROM() // // Save 5 bytes: the MAC address of the transmitter's Teensy 4.1
+
+//************************************************************************************************************/
+void DisplayAPipe(const uint8_t *pipe)
 {
+    char buffer[44];
+    snprintf(buffer, 44, "Pipe: %02X %02X %02X %02X %02X",pipe[0], pipe[1], pipe[2], pipe[3], pipe[4]);
+    Look(buffer);
+}
+
+//************************************************************************************************************/
+void SavePipeToEEPROM()
+{
+   // DisplayAPipe(TheReceivedPipe); // Show the received pipe being saved
     for (uint8_t i = 0; i < 5; ++i)
     {
-        EEPROM.update(i + BIND_EEPROM_OFFSET, TheSavedPipe[i]);
-        Look("SAVING");
+        EEPROM.update(i + BIND_EEPROM_OFFSET, TheReceivedPipe[i]);
         DelayMillis(1);
     }
 }
