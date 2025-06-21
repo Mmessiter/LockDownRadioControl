@@ -723,7 +723,8 @@ void LogTotalRXGoodPackets();
 void LogTotalRXGoodPackets();
 void LogTotalPacketsAttempted();
 void DelaySimple(uint32_t ms);
-void ReadDRSwitch(bool sw1, bool sw2, bool rev);
+//void ReadDRSwitch(bool sw1, bool sw2, bool rev);
+uint8_t GetSwitchPosition(uint8_t Sw_Number);
 FASTRUN void LogAverageGap();
 #ifdef USE_BTLE
 void SendViaBLE();
