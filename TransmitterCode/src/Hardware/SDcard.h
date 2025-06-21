@@ -791,13 +791,13 @@ bool LoadAllParameters()
     ++SDCardAddress;
     Channel12Switch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    SWITCH1Reversed = bool(SDRead8BITS(SDCardAddress));
+    SwitchReversed[0] = bool(SDRead8BITS(SDCardAddress));
     ++SDCardAddress;
-    SWITCH2Reversed = bool(SDRead8BITS(SDCardAddress));
+    SwitchReversed[1] = bool(SDRead8BITS(SDCardAddress));
     ++SDCardAddress;
-    SWITCH3Reversed = bool(SDRead8BITS(SDCardAddress));
+    SwitchReversed[2] = bool(SDRead8BITS(SDCardAddress));
     ++SDCardAddress;
-    SWITCH4Reversed = bool(SDRead8BITS(SDCardAddress));
+    SwitchReversed[3] = bool(SDRead8BITS(SDCardAddress));
     ++SDCardAddress;
     BuddySwitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
@@ -816,8 +816,13 @@ bool LoadAllParameters()
     VariometerThreshold = CheckRange(VariometerThreshold, 0, 1000);
     ++SDCardAddress;
     ++SDCardAddress;
-    Buddy_Switch_Mode = SDRead8BITS(SDCardAddress);
+    Buddy_Low_Position = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
+    Buddy_Mid_Position = SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
+    Buddy_Hi_Position = SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
+
     ReadCheckSum32();
     CheckTrimValues();
     MemoryForTransmtter = SDCardAddress;
@@ -826,6 +831,10 @@ bool LoadAllParameters()
     ReadOneModel(ModelNumber);
     return true;
 }
+
+// uint8_t Buddy_Low_Position = 0;
+// uint8_t Buddy_Mid_Position = 1;
+// uint8_t Buddy_Hi_Position = 2;
 
 /*********************************************************************************************************************************/
 /******************************************** SAVE ONLY THE TRANSMITTER PARAMS ****************************************************/
@@ -972,13 +981,13 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, Channel12Switch);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, SWITCH1Reversed);
+    SDUpdate8BITS(SDCardAddress, SwitchReversed[0]);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, SWITCH2Reversed);
+    SDUpdate8BITS(SDCardAddress, SwitchReversed[1]);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, SWITCH3Reversed);
+    SDUpdate8BITS(SDCardAddress, SwitchReversed[2]);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, SWITCH4Reversed);
+    SDUpdate8BITS(SDCardAddress, SwitchReversed[3]);
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, BuddySwitch);
     ++SDCardAddress;
@@ -994,8 +1003,13 @@ void SaveTransmitterParameters()
     SDUpdate16BITS(SDCardAddress, VariometerThreshold);
     ++SDCardAddress;
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress,Buddy_Switch_Mode);
+    SDUpdate8BITS(SDCardAddress, Buddy_Low_Position);
     ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, Buddy_Mid_Position);
+    ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, Buddy_Hi_Position);
+    ++SDCardAddress;
+
     SaveCheckSum32(); // Save the Transmitter parametres checksm
     CloseModelsFile();
 }

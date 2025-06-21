@@ -96,7 +96,7 @@ void SystemPage1End()
         SendValue(Progress, 90);
     }
     FixDeltaGMTSign();
-   
+
     if (Altered)
     {
         SaveTransmitterParameters();
@@ -716,20 +716,18 @@ void InputsViewEnd()
     LastTimeRead = 0;
     ClearText();
 }
-
 /*********************************************************************************************************************************/
-
 void StartBuddyView()
 {
     char BuddyM[] = "BuddyM";
     char BuddyP[] = "BuddyP";
     char pBuddyView[] = "page BuddyView";
+    char cb0[] = "cb0";
+    char cb1[] = "cb1";
+    char cb2[] = "cb2";
+
     char VisCommand[512];   // Large enough to hold the full command string
     char InVisCommand[512]; // Large enough to hold the full command string
-
-    char mmb[] = "mmb";
-    char mnb[] = "mnb";
-    char mmn[] = "mmn";
 
     const char *visCommands[] = {
         "vis t1,1",
@@ -738,9 +736,9 @@ void StartBuddyView()
         "vis t6,1",
         "vis t7,1",
         "vis b0,1",
-        "vis mmb,1",
-        "vis mnb,1",
-        "vis mmn,1"};
+        "vis cb0,1",
+        "vis cb1,1",
+        "vis cb2,1"};
 
     const char *invisCommands[] = {
         "vis t1,0",
@@ -749,9 +747,9 @@ void StartBuddyView()
         "vis t6,0",
         "vis t7,0",
         "vis b0,0",
-        "vis mmb,0",
-        "vis mnb,0",
-        "vis mmn,0"};
+        "vis cb0,0",
+        "vis cb1,0",
+        "vis cb2,0"};
 
     VisCommand[0] = '\0';   // Start with an empty string
     InVisCommand[0] = '\0'; // Start with an empty string
@@ -759,60 +757,42 @@ void StartBuddyView()
     for (uint8_t i = 0; i < 9; ++i)
     {
         strcat(VisCommand, visCommands[i]);
-        strcat(VisCommand, "\xFF\xFF\xFF"); 
+        strcat(VisCommand, "\xFF\xFF\xFF");
         strcat(InVisCommand, invisCommands[i]);
-        strcat(InVisCommand, "\xFF\xFF\xFF"); 
+        strcat(InVisCommand, "\xFF\xFF\xFF");
     }
 
     SendCommand(pBuddyView); // load the Buddy screen.
     CurrentView = BUDDYVIEW;
+
     SendValue(BuddyM, BuddyMasterOnWireless);
     SendValue(BuddyP, BuddyPupilOnWireless);
-
-    if (Buddy_Switch_Mode == M_M_B)
-        SendValue(mmb, 1);
-    else
-        SendValue(mmb, 0);
-
-    if (Buddy_Switch_Mode == M_N_B)
-        SendValue(mnb, 1);
-    else
-        SendValue(mnb, 0);
-
-    if (Buddy_Switch_Mode == M_M_N)
-        SendValue(mmn, 1);
-    else
-        SendValue(mmn, 0);
+    SendValue(cb0, Buddy_Low_Position);
+    SendValue(cb1, Buddy_Mid_Position);
+    SendValue(cb2, Buddy_Hi_Position);
 
     if (BuddyMasterOnWireless)
         SendCommand(VisCommand); // Master options become visible if Master is ON.
     else
         SendCommand(InVisCommand); // master options are invisible if Master is NOT ON.
-
-   
 }
 
-/*********************************************************************************************************************************/
+/******************************************************************************************************************************/
 
 void EndBuddyView()
 {
     char BuddyM[] = "BuddyM";
     char BuddyP[] = "BuddyP";
-    char mmb[] = "mmb";
-    char mnb[] = "mnb";
-    char mmn[] = "mmn";
+    char cb0[] = "cb0";
+    char cb1[] = "cb1";
+    char cb2[] = "cb2";
 
     BuddyPupilOnWireless = GetValue(BuddyP);
     BuddyMasterOnWireless = GetValue(BuddyM);
     WirelessBuddy = (BuddyPupilOnWireless || BuddyMasterOnWireless);
-
-    if (GetValue(mmb))
-        Buddy_Switch_Mode = M_M_B;
-    if (GetValue(mnb))
-        Buddy_Switch_Mode = M_N_B;
-    if (GetValue(mmn))
-        Buddy_Switch_Mode = M_M_N;
-
+    Buddy_Low_Position = (GetValue(cb0)); // here we read what to do at each switch position
+    Buddy_Mid_Position = (GetValue(cb1));
+    Buddy_Hi_Position = (GetValue(cb2));
     SaveAllParameters();
     UpdateModelsNameEveryWhere();
     RationaliseBuddy();
@@ -1200,7 +1180,6 @@ void RXOptionsViewStart() // model options screen
     char n3[] = "n3";
     char n4[] = "n4"; // TimerDownwards timer minutes
     char c2[] = "c2"; // TimerDownwards timer on off
-  
 
     SendCommand(pRXSetup1);
     SendValue(c1, CopyTrimsToAll);
@@ -1303,7 +1282,7 @@ void RXOptionsViewEnd()
         Altered = true;
         SendValue(Progress, 80);
     }
-    
+
     SendValue(Progress, 100);
     CurrentView = RXSETUPVIEW;
     if (Altered)

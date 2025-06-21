@@ -1393,45 +1393,15 @@ void ShowSwitchNameWithReversed(char *Sw, uint8_t n, char *text)
 { // this removes the R from switch name if it's not reversed
 
     char NotReversed[30] = " ";
-
-    if (SWITCH1Reversed && n == 1)
-    {
-        SendText(Sw, text);
-        return;
-    }
-    if (SWITCH2Reversed && n == 2)
-    {
-        SendText(Sw, text);
-        return;
-    }
-    if (SWITCH3Reversed && n == 3)
-    {
-        SendText(Sw, text);
-        return;
-    }
-    if (SWITCH4Reversed && n == 4)
+    if (n >= 1 && n <= 4 && SwitchReversed[n - 1])
     {
         SendText(Sw, text);
         return;
     }
     for (uint8_t i = 0; i < strlen(text) - 1; ++i)
         NotReversed[i] = text[i];
-    if (!SWITCH1Reversed && n == 1)
-    {
-        SendText(Sw, NotReversed);
-        return;
-    }
-    if (!SWITCH2Reversed && n == 2)
-    {
-        SendText(Sw, NotReversed);
-        return;
-    }
-    if (!SWITCH3Reversed && n == 3)
-    {
-        SendText(Sw, NotReversed);
-        return;
-    }
-    if (!SWITCH4Reversed && n == 4)
+
+    if (n >= 1 && n <= 4 && !SwitchReversed[n - 1])
     {
         SendText(Sw, NotReversed);
         return;
@@ -2549,25 +2519,10 @@ void DoOneSwitchView(uint8_t n) // n is 1-4  = number for switch to edit
 
     SendValue(OneSwitchViewc_revd, 0);
 
-    switch (n)
-    {
-    case 1:
-        if (SWITCH1Reversed)
-            SendValue(OneSwitchViewc_revd, 1);
-        break;
-    case 2:
-        if (SWITCH2Reversed)
-            SendValue(OneSwitchViewc_revd, 1);
-        break;
-    case 3:
-        if (SWITCH3Reversed)
-            SendValue(OneSwitchViewc_revd, 1);
-        break;
-    case 4:
-        if (SWITCH4Reversed)
-            SendValue(OneSwitchViewc_revd, 1);
-        break;
-    }
+    if (n >= 1 && n <= 4 && SwitchReversed[n - 1]) // shows the Reversed check box on the one switch screen
+        SendValue(OneSwitchViewc_revd, 1);
+    else
+        SendValue(OneSwitchViewc_revd, 0); // ... or not
 
     for (int i = 0; i < 4; ++i)
     { // show channel names
@@ -2723,51 +2678,14 @@ void ReadNewSwitchFunction()
     }
 
     SendValue(Progress, 90);
-    if (SwitchEditNumber == 1)
+
+    if (SwitchEditNumber >= 1 && SwitchEditNumber <= 4)
     {
-        if (GetValue(OneSwitchViewc_revd))
-        {
-            SWITCH1Reversed = true;
-        }
-        else
-        {
-            SWITCH1Reversed = false;
-        }
+        SwitchReversed[SwitchEditNumber - 1] = GetValue(OneSwitchViewc_revd);
+        if (SwitchEditNumber == 2)
+            SendValue(Progress, 95);
     }
-    if (SwitchEditNumber == 2)
-    {
-        if (GetValue(OneSwitchViewc_revd))
-        {
-            SWITCH2Reversed = true;
-        }
-        else
-        {
-            SWITCH2Reversed = false;
-        }
-        SendValue(Progress, 95);
-    }
-    if (SwitchEditNumber == 3)
-    {
-        if (GetValue(OneSwitchViewc_revd))
-        {
-            SWITCH3Reversed = true;
-        }
-        else
-        {
-            SWITCH3Reversed = false;
-        }
-    }
-    if (SwitchEditNumber == 4)
-    {
-        if (GetValue(OneSwitchViewc_revd))
-        {
-            SWITCH4Reversed = true;
-        }
-        else
-        {
-            SWITCH4Reversed = false;
-        }
-    }
+
     SendValue(Progress, 100);
     SaveOneModel(ModelNumber);
     SendCommand(PageSwitchView); // change to all switches screen
@@ -2870,10 +2788,8 @@ void ResetTransmitterSettings()
     Channel10Switch = 0;
     Channel11Switch = 0;
     Channel12Switch = 0;
-    SWITCH1Reversed = false;
-    SWITCH2Reversed = false;
-    SWITCH3Reversed = true;
-    SWITCH4Reversed = true;
+    for (int i = 0; i < 4; ++i)
+        SwitchReversed[i] = false;
 
     SendValue(Progress, 100);
     ModelNumber = 1;
@@ -4616,26 +4532,34 @@ void CheckMotorOff()
 
     if (!UseMotorKill)
         return;
+
     ReadSwitches();
     MotorEnabled = false;
-    if (Autoswitch == 1 && Switch[7] == SWITCH1Reversed)
-        MotorEnabled = true;
-    if (Autoswitch == 2 && Switch[5] == SWITCH2Reversed)
-        MotorEnabled = true;
-    if (Autoswitch == 3 && Switch[0] == SWITCH3Reversed)
-        MotorEnabled = true;
-    if (Autoswitch == 4 && Switch[2] == SWITCH4Reversed)
-        MotorEnabled = true;
-    if (SafetySwitch == 1 && Switch[7] == SWITCH1Reversed)
-        SafetyON = true;
-    if (SafetySwitch == 2 && Switch[5] == SWITCH2Reversed)
-        SafetyON = true;
-    if (SafetySwitch == 3 && Switch[0] == SWITCH3Reversed)
-        SafetyON = true;
-    if (SafetySwitch == 4 && Switch[2] == SWITCH4Reversed)
-        SafetyON = true;
+    SafetyON = false;
+
+    static const uint8_t Pins[4] = {7, 5, 0, 2};
+
+    // Handle AutoSwitch
+    if (Autoswitch >= 1 && Autoswitch <= 4)
+    {
+        uint8_t pin = Pins[Autoswitch - 1];
+        bool reversed = SwitchReversed[Autoswitch - 1];
+        if (Switch[pin] == reversed)
+            MotorEnabled = true;
+    }
+
+    // Handle SafetySwitch
+    if (SafetySwitch >= 1 && SafetySwitch <= 4)
+    {
+        uint8_t pin = Pins[SafetySwitch - 1];
+        bool reversed = SwitchReversed[SafetySwitch - 1];
+        if (Switch[pin] == reversed)
+            SafetyON = true;
+    }
+
     if (SafetyON)
         MotorEnabled = false;
+
     MotorWasEnabled = MotorEnabled;
 }
 

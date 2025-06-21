@@ -46,13 +46,13 @@ FASTRUN void ReadSwitches() // and indeed read digital trims if these are fitted
 void ReadSafetySwitch()
 {
     SafetyON = false;
-    if ((SafetySwitch == 1) && (Switch[7] == SWITCH1Reversed))
+    if ((SafetySwitch == 1) && (Switch[7] == SwitchReversed[0]))
         SafetyON = true;
-    if ((SafetySwitch == 2) && (Switch[5] == SWITCH2Reversed))
+    if ((SafetySwitch == 2) && (Switch[5] == SwitchReversed[1]))
         SafetyON = true;
-    if ((SafetySwitch == 3) && (Switch[1] == SWITCH3Reversed))
+    if ((SafetySwitch == 3) && (Switch[1] == SwitchReversed[2]))
         SafetyON = true;
-    if ((SafetySwitch == 4) && (Switch[2] == SWITCH4Reversed))
+    if ((SafetySwitch == 4) && (Switch[2] == SwitchReversed[3]))
         SafetyON = true;
 }
 
@@ -85,59 +85,72 @@ uint8_t CheckSwitch(uint8_t swt)
 {
     uint8_t rtv = 90;
     if (swt == 1)
-        rtv = ReadCHSwitch(Switch[7], Switch[6], SWITCH1Reversed);
+        rtv = ReadCHSwitch(Switch[7], Switch[6], SwitchReversed[0]);
     if (swt == 2)
-        rtv = ReadCHSwitch(Switch[5], Switch[4], SWITCH2Reversed);
+        rtv = ReadCHSwitch(Switch[5], Switch[4], SwitchReversed[1]);
     if (swt == 3)
-        rtv = ReadCHSwitch(Switch[0], Switch[1], SWITCH3Reversed);
+        rtv = ReadCHSwitch(Switch[0], Switch[1], SwitchReversed[2]);
     if (swt == 4)
-        rtv = ReadCHSwitch(Switch[2], Switch[3], SWITCH4Reversed);
+        rtv = ReadCHSwitch(Switch[2], Switch[3], SwitchReversed[3]);
     return rtv;
 }
+
+/************************************************************************************************************/
+
+void ViewSwitches() // shows state of all 8 switches' pin numbers (DEBUG TESTS ONLY)
+{
+    for (uint8_t i = 0; i < 8; i++)
+    {
+        Look1("Switch");
+        Look1(i);
+        Look1(": ");
+        Look(Switch[i]);
+    }
+    Look("");
+}
+
+/************************************************************************************************************/
+uint8_t GetSwitchPosition(uint8_t Sw_Number) // returns 1,2, or 3 for any of the four switches and handles reversed too. :-)
+{
+    static const uint8_t Pin[4][2] = {
+        {7, 6},  // Switch 1
+        {5, 4},  // Switch 2
+        {1, 0},  // Switch 3
+        {3, 2}}; // Switch 4
+
+    if (Sw_Number < 1 || Sw_Number > 4)
+        return 0; // or some error code
+
+    uint8_t top = Pin[Sw_Number - 1][0];
+    uint8_t bottom = Pin[Sw_Number - 1][1];
+
+    if (SwitchReversed[Sw_Number - 1])
+        swap(&top, &bottom);
+
+    if (Switch[top])
+        return 3; // top
+    else if (!Switch[bottom])
+        return 2; // middle
+    else
+        return 1; // bottom
+}
+
 /************************************************************************************************************/
 void ReadBuddySwitch()
 {
     if (BuddyMasterOnWireless)
     {
-        BuddyState = BUDDY_OFF; // default = MASTER
         static uint8_t LastBuddyState = BUDDY_OFF;
+        uint8_t Pos = GetSwitchPosition(BuddySwitch);
+        if (Pos == 1)
+            BuddyState = Buddy_Low_Position;
 
-        if ((Buddy_Switch_Mode == M_M_B) || (Buddy_Switch_Mode == M_N_B)) 
-        {
-            if ((BuddySwitch == 1) && (Switch[7] == SWITCH1Reversed)) // Switch is at top
-                BuddyState = BUDDY_ON;
-            if ((BuddySwitch == 2) && (Switch[5] == SWITCH2Reversed))
-                BuddyState = BUDDY_ON;
-            if ((BuddySwitch == 3) && (Switch[1] == SWITCH3Reversed))
-                BuddyState = BUDDY_ON;
-            if ((BuddySwitch == 4) && (Switch[2] == SWITCH4Reversed))
-                BuddyState = BUDDY_ON;
-        }
+        if (Pos == 2)
+            BuddyState = Buddy_Mid_Position;
 
-        if ((Buddy_Switch_Mode == M_M_N))
-        {
-            if ((BuddySwitch == 1) && (Switch[7] == SWITCH1Reversed)) // Switch is also at top
-                BuddyState = BUDDY_NUDGE;
-            if ((BuddySwitch == 2) && (Switch[5] == SWITCH2Reversed))
-                BuddyState = BUDDY_NUDGE;
-            if ((BuddySwitch == 3) && (Switch[1] == SWITCH3Reversed))
-                BuddyState = BUDDY_NUDGE;
-            if ((BuddySwitch == 4) && (Switch[2] == SWITCH4Reversed))
-                BuddyState = BUDDY_NUDGE;
-        }
-
-        if (Buddy_Switch_Mode == M_N_B)
-        {
-            if ((BuddySwitch == 1) && !(Switch[6] || Switch[7])) // Switch is at middle
-                BuddyState = BUDDY_NUDGE;
-            if ((BuddySwitch == 2) && !(Switch[4] || Switch[5]))
-                BuddyState = BUDDY_NUDGE;
-            if ((BuddySwitch == 3) && !(Switch[0] || Switch[1]))
-                BuddyState = BUDDY_NUDGE;
-            if ((BuddySwitch == 4) && !(Switch[2] || Switch[3]))
-                BuddyState = BUDDY_NUDGE;
-        }
-
+        if (Pos == 3)
+            BuddyState = Buddy_Hi_Position;
+        
         if (BuddyState != LastBuddyState)
         {
             LastBuddyState = BuddyState;
@@ -145,6 +158,62 @@ void ReadBuddySwitch()
         }
     }
 }
+
+/************************************************************************************************************/
+// void ReadBuddySwitchOLD()
+// {
+
+//     //  ViewSwitches();
+//     // Look(GetSwitchPosition(3));
+
+//     if (BuddyMasterOnWireless)
+//     {
+//         BuddyState = BUDDY_OFF; // default = MASTER
+//         static uint8_t LastBuddyState = BUDDY_OFF;
+
+//         if ((Buddy_Switch_Mode == M_M_B) || (Buddy_Switch_Mode == M_N_B))
+//         {
+//             if ((BuddySwitch == 1) && (Switch[7] == SwitchReversed[0])) // Switch is at top
+//                 BuddyState = BUDDY_ON;
+//             if ((BuddySwitch == 2) && (Switch[5] == SwitchReversed[1]))
+//                 BuddyState = BUDDY_ON;
+//             if ((BuddySwitch == 3) && (Switch[1] == SwitchReversed[2]))
+//                 BuddyState = BUDDY_ON;
+//             if ((BuddySwitch == 4) && (Switch[2] == SwitchReversed[3]))
+//                 BuddyState = BUDDY_ON;
+//         }
+
+//         if ((Buddy_Switch_Mode == M_M_N))
+//         {
+//             if ((BuddySwitch == 1) && (Switch[7] == SwitchReversed[0])) // Switch is also at top
+//                 BuddyState = BUDDY_NUDGE;
+//             if ((BuddySwitch == 2) && (Switch[5] == SwitchReversed[1]))
+//                 BuddyState = BUDDY_NUDGE;
+//             if ((BuddySwitch == 3) && (Switch[1] == SwitchReversed[2]))
+//                 BuddyState = BUDDY_NUDGE;
+//             if ((BuddySwitch == 4) && (Switch[2] == SwitchReversed[3]))
+//                 BuddyState = BUDDY_NUDGE;
+//         }
+
+//         if (Buddy_Switch_Mode == M_N_B)
+//         {
+//             if ((BuddySwitch == 1) && !(Switch[6] || Switch[7])) // Switch is at middle
+//                 BuddyState = BUDDY_NUDGE;
+//             if ((BuddySwitch == 2) && !(Switch[4] || Switch[5]))
+//                 BuddyState = BUDDY_NUDGE;
+//             if ((BuddySwitch == 3) && !(Switch[0] || Switch[1]))
+//                 BuddyState = BUDDY_NUDGE;
+//             if ((BuddySwitch == 4) && !(Switch[2] || Switch[3]))
+//                 BuddyState = BUDDY_NUDGE;
+//         }
+
+//         if (BuddyState != LastBuddyState)
+//         {
+//             LastBuddyState = BuddyState;
+//             LogBuddyChange();
+//         }
+//     }
+// }
 /************************************************************************************************************/
 
 void ReadBankSwitch1(bool sw1, bool sw2, bool rev) // Bank Switch
@@ -176,20 +245,20 @@ void ReadBankSwitch1(bool sw1, bool sw2, bool rev) // Bank Switch
 void ReadBankSwitch()
 {
     if (BankSwitch == 4)
-        ReadBankSwitch1(Switch[2], Switch[3], SWITCH4Reversed);
+        ReadBankSwitch1(Switch[2], Switch[3], SwitchReversed[3]);
     if (BankSwitch == 3)
-        ReadBankSwitch1(Switch[0], Switch[1], SWITCH3Reversed);
+        ReadBankSwitch1(Switch[0], Switch[1], SwitchReversed[2]);
     if (BankSwitch == 2)
-        ReadBankSwitch1(Switch[4], Switch[5], SWITCH2Reversed);
+        ReadBankSwitch1(Switch[4], Switch[5], SwitchReversed[1]);
     if (BankSwitch == 1)
-        ReadBankSwitch1(Switch[6], Switch[7], SWITCH1Reversed);
+        ReadBankSwitch1(Switch[6], Switch[7], SwitchReversed[0]);
 }
 /************************************************************************************************************/
 void ReadAutoAndMotorSwitch()
 {
 
     MotorEnabled = !UseMotorKill; //  If not using motor switch then motor is always enabled.
-    if (SWITCH1Reversed)
+    if (SwitchReversed[0])
     {
         if ((Autoswitch == 1) && (!Switch[6]))
             MotorEnabled = true;
@@ -199,7 +268,7 @@ void ReadAutoAndMotorSwitch()
         if ((Autoswitch == 1) && (!Switch[7]))
             MotorEnabled = true;
     }
-    if (SWITCH2Reversed)
+    if (SwitchReversed[1])
     {
         if ((Autoswitch == 2) && (!Switch[4]))
             MotorEnabled = true;
@@ -209,7 +278,7 @@ void ReadAutoAndMotorSwitch()
         if ((Autoswitch == 2) && (!Switch[5]))
             MotorEnabled = true;
     }
-    if (SWITCH3Reversed)
+    if (SwitchReversed[2])
     {
         if ((Autoswitch == 3) && (!Switch[0]))
             MotorEnabled = true;
@@ -219,7 +288,7 @@ void ReadAutoAndMotorSwitch()
         if ((Autoswitch == 3) && (!Switch[1]))
             MotorEnabled = true;
     }
-    if (SWITCH4Reversed)
+    if (SwitchReversed[3])
     {
         if ((Autoswitch == 4) && (!Switch[2]))
             MotorEnabled = true;
@@ -248,13 +317,13 @@ void ReadDualRateSwitch()
     {
         DualRateInUse = 4; // default to 100%
         if (DualRatesSwitch == 4)
-            ReadDRSwitch(Switch[2], Switch[3], SWITCH4Reversed);
+            ReadDRSwitch(Switch[2], Switch[3], SwitchReversed[3]);
         if (DualRatesSwitch == 3)
-            ReadDRSwitch(Switch[0], Switch[1], SWITCH3Reversed);
+            ReadDRSwitch(Switch[0], Switch[1], SwitchReversed[2]);
         if (DualRatesSwitch == 2)
-            ReadDRSwitch(Switch[4], Switch[5], SWITCH2Reversed);
+            ReadDRSwitch(Switch[4], Switch[5], SwitchReversed[1]);
         if (DualRatesSwitch == 1)
-            ReadDRSwitch(Switch[6], Switch[7], SWITCH1Reversed);
+            ReadDRSwitch(Switch[6], Switch[7], SwitchReversed[0]);
         if (DualRateRate[Bank - 1] > 0)
             DualRateInUse = DualRateRate[Bank - 1]; // if using a forced rate !
     }

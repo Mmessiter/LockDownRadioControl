@@ -299,7 +299,7 @@
 #define BINDNEEDED 27
 #define MMFOUND 28
 #define MMMATCHED 29
-#define MMNOTFOUND 30  // Model not found or 75!!
+#define MMNOTFOUND 30 // Model not found or 75!!
 #define MOTORON 31
 #define MOTOROFF 32
 #define STORAGECHARGE 33
@@ -371,11 +371,11 @@
 #define GOINGDOWN10 97
 
 #define BINDINGENABLED 98 // binding enabled sound
-#define BUDDYMASTERON 99 // Buddy Master on sound
-#define BUDDYPUPILON 100 // Buddy Pupil on sound
-#define EXTRABUDDIES 101 // Extra Buddies found sound
-#define TXNOTBOUND 102 //  TX not bound sound // not yet used
-#define NUDGE_MSG 103 // buddy is in nudge mode.
+#define BUDDYMASTERON 99  // Buddy Master on sound
+#define BUDDYPUPILON 100  // Buddy Pupil on sound
+#define EXTRABUDDIES 101  // Extra Buddies found sound
+#define TXNOTBOUND 102    //  TX not bound sound // not yet used
+#define NUDGE_MSG 103     // buddy is in nudge mode.
 
 // **************************************************************************
 //               Three BUDDY states now possible                            *
@@ -384,9 +384,9 @@
 #define M_N_B 1 // master, Lodge, buddy
 #define M_M_N 2 // master, master, nudge
 
-#define BUDDY_OFF 0         // Master has control 
-#define BUDDY_NUDGE 1       // Master can Nudge but buddy has mostly control.
-#define BUDDY_ON 2          // Buddy has control
+#define BUDDY_OFF 0   // Master has control
+#define BUDDY_NUDGE 1 // Master can Nudge but buddy has mostly control.
+#define BUDDY_ON 2    // Buddy has control
 
 #define MASTER_HAS_CONTROL 0 // possible values for CurrentBuddyState
 #define SLAVE_HAS_CONTROL 1
@@ -739,7 +739,7 @@ BTLE btle(&Radio1);
 
 /************************************************************************************************************/
 /************************************************************************************************************/
-// For numeric types (int, float, double, etc.)
+// // For numeric types (int, float, double, etc.)
 template <typename T>
 void Look(const T &value, int format)
 {
@@ -930,10 +930,13 @@ uint8_t Channel9SwitchValue = 0;
 uint8_t Channel10SwitchValue = 0;
 uint8_t Channel11SwitchValue = 0;
 uint8_t Channel12SwitchValue = 0;
-bool SWITCH1Reversed = false;
-bool SWITCH2Reversed = false;
-bool SWITCH3Reversed = false;
-bool SWITCH4Reversed = false;
+
+bool SwitchReversed[4] = {
+    false,
+    false,
+    false,
+    false};
+
 uint16_t StartLocation = 0;
 bool ValueSent = false;
 uint8_t SwitchEditNumber = 0; // number of switch being edited
@@ -1006,7 +1009,7 @@ bool LedWasRed = false;
 char ThisRadio[6] = "0 ";
 uint8_t LastRadio = 0;
 uint8_t NextChannel = 0;
-bool WirelessBuddy = false; 
+bool WirelessBuddy = false;
 bool BuddyPupilOnWireless = false;
 bool WasBuddyPupilOnWireless = false;
 bool BuddyMasterOnWireless = false;
@@ -1097,7 +1100,7 @@ uint8_t MotorChannel = 2;
 uint8_t MotorChannelZero = 30;
 bool UseMotorKill = true;
 bool SafetyON = false;
-uint8_t BuddyState = BUDDY_OFF;  // three possible states now. BUDDY_OFF, BUDDY_NUDGE, BUDDY_ON
+uint8_t BuddyState = BUDDY_OFF; // three possible states now. BUDDY_OFF, BUDDY_NUDGE, BUDDY_ON
 bool SafetyWasOn = false;
 u_int8_t WarningSound = BATTERYISLOW;
 float StopFlyingVoltsPerCell = 0;
@@ -1224,7 +1227,9 @@ uint16_t VariometerSpacing = 125;   // 125 fpm
 bool Variometer_InitDone = false;
 bool BindingEnabled = false; // This is used to enable binding
 uint8_t Connect_MMmsg = 0;
-uint8_t Buddy_Switch_Mode = 0;
+uint8_t Buddy_Low_Position = 0;
+uint8_t Buddy_Mid_Position = 1;
+uint8_t Buddy_Hi_Position = 2;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
