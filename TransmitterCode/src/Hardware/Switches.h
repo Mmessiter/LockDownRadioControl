@@ -46,9 +46,9 @@ FASTRUN void ReadSwitches() // and indeed read digital trims if these are fitted
 void ReadSafetySwitch()
 {
     if (GetSwitchPosition(SafetySwitch) == 3)
-        SafetyON = true;
-    else
         SafetyON = false;
+    else
+        SafetyON = true;
 }
 
 /************************************************************************************************************/
