@@ -101,7 +101,7 @@ void ViewSwitches() // shows state of all 8 switches' pin numbers (DEBUG TESTS O
 }
 
 /************************************************************************************************************/
-uint8_t GetSwitchPosition(uint8_t Sw_Number) // returns 1,2, or 3 for any of the four switches and handles reversed too. :-)
+uint8_t GetSwitchPosition(uint8_t ThisSwitchNumber) // returns 1,2, or 3 for any of the four switches and handles reversed too. :-)
 {
     static const uint8_t Pin[4][2] = {
         {7, 6},  // Switch 1
@@ -109,13 +109,13 @@ uint8_t GetSwitchPosition(uint8_t Sw_Number) // returns 1,2, or 3 for any of the
         {1, 0},  // Switch 3
         {3, 2}}; // Switch 4
 
-    if (Sw_Number < 1 || Sw_Number > 4)
+    if (ThisSwitchNumber < 1 || ThisSwitchNumber > 4)
         return 0; // or some error code
 
-    uint8_t top = Pin[Sw_Number - 1][0];
-    uint8_t bottom = Pin[Sw_Number - 1][1];
+    uint8_t top = Pin[ThisSwitchNumber - 1][0];
+    uint8_t bottom = Pin[ThisSwitchNumber - 1][1];
 
-    if (SwitchReversed[Sw_Number - 1])
+    if (SwitchReversed[ThisSwitchNumber - 1])
         swap(&top, &bottom);
 
     if (Switch[top])
