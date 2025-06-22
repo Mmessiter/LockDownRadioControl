@@ -45,12 +45,8 @@ FASTRUN void ReadSwitches() // and indeed read digital trims if these are fitted
 
 void ReadSafetySwitch()
 {
-    if (GetSwitchPosition(SafetySwitch) == 3)
-        SafetyON = false;
-    else
-        SafetyON = true;
+    SafetyON = (SafetySwitch && GetSwitchPosition(SafetySwitch) != 3);// if the switch is not defined or is in position three safety is off
 }
-
 /************************************************************************************************************/
 
 uint8_t ReadCHSwitch(bool sw1, bool sw2, bool rev) //
