@@ -488,61 +488,6 @@ void ReceiveLotsofData()
 
 /******************************************************************************************************************************/
 
-// void TXModuleViewEnd()
-// {
-//     char GoBack[] = "page TXModuleView";
-//     char c1[] = "c1"; // Use module
-//     char n3[] = "n3"; // number of channels
-//     char r0[] = "r0";
-//     char r1[] = "r1";
-//     char r2[] = "r2";
-//     char prompt[] = "Power off transmitter?";
-//    // bool oldUseTxModule = PPMdata.UseTXModule;
-//     char ProgressStart[] = "vis Progress,1";
-//     char Progress[] = "Progress";
-
-//     SendCommand(ProgressStart);
-//     SendValue(Progress, 10);
-//     PPMdata.UseTXModule = GetValue(c1);
-//     if (PPMdata.UseTXModule != oldUseTxModule)
-//     {
-//         if (!GetConfirmation(GoBack, prompt))
-//         {
-//             PPMdata.UseTXModule = oldUseTxModule;
-//             SendValue(c1, PPMdata.UseTXModule);
-//             return;
-//         }
-//     }
-//     SendValue(Progress, 30);
-//     DelayWithDog(100);
-//     PPMdata.PPMChannelsNumber = GetValue(n3);
-//     SendValue(Progress, 51);
-//     if (GetValue(r0))
-//         PPMdata.PPMOrderSelection = 1;
-//     SendValue(Progress, 63);
-//     DelayWithDog(10);
-//     if (GetValue(r1))
-//         PPMdata.PPMOrderSelection = 2;
-//     SendValue(Progress, 88);
-//     DelayWithDog(10);
-//     if (GetValue(r2))
-//         PPMdata.PPMOrderSelection = 3;
-//     SelectChannelOrder();
-//     SendValue(Progress, 99);
-//     DelayWithDog(10);
-//     SaveTransmitterParameters();
-//     DelayWithDog(10);
-//     SendCommand(pTXSetupView);
-//     CurrentView = TXSETUPVIEW;
-//     DelayWithDog(10);
-//     if (PPMdata.UseTXModule != oldUseTxModule)
-//     {
-//         digitalWrite(POWER_OFF_PIN, HIGH);
-//     }
-// }
-
-/******************************************************************************************************************************/
-
 void SaveSwitches()
 {
     SaveTransmitterParameters();
@@ -995,54 +940,6 @@ void ResetClock()
         MsgBox(pOptionView2, Done);
     }
 }
-
-/******************************************************************************************************************************/
-
-// void TXModuleViewStart()
-// {
-
-//     char msg[] = "Please disconnect from model first!";
-//     if (ModelMatched)
-//     {
-//         MsgBox(pTXSetupView, msg);
-//         return;
-//     }
-//     CurrentView = TXMODULEVIEW;
-
-//     char c1[] = "c1"; // Use module
-//     char n3[] = "n3"; // number of channels
-//     char r0[] = "r0";
-//     char r1[] = "r1";
-//     char r2[] = "r2";
-
-//     SendCommand(pTXModule);
-//   //  SendValue(c1, PPMdata.UseTXModule);
-//   //  SendValue(n3, PPMdata.PPMChannelsNumber);
-//     if (PPMdata.PPMOrderSelection == 1)
-//     {
-//         SendValue(r0, 1);
-//     }
-//     else
-//     {
-//         SendValue(r0, 0);
-//     }
-//     if (PPMdata.PPMOrderSelection == 2)
-//     {
-//         SendValue(r1, 1);
-//     }
-//     else
-//     {
-//         SendValue(r1, 0);
-//     }
-//     if (PPMdata.PPMOrderSelection == 3)
-//     {
-//         SendValue(r2, 1);
-//     }
-//     else
-//     {
-//         SendValue(r2, 0);
-//     }
-// }
 
 /******************************************************************************************************************************/
 
