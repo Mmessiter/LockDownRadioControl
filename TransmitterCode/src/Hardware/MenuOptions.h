@@ -786,13 +786,19 @@ void EndBuddyView()
     char cb0[] = "cb0";
     char cb1[] = "cb1";
     char cb2[] = "cb2";
+    char Prompt[] = "Are Master's switch positions OK?";
 
     BuddyPupilOnWireless = GetValue(BuddyP);
     BuddyMasterOnWireless = GetValue(BuddyM);
-    WirelessBuddy = (BuddyPupilOnWireless || BuddyMasterOnWireless);
-    Buddy_Low_Position = (GetValue(cb0)); // here we read what to do at each switch position
-    Buddy_Mid_Position = (GetValue(cb1));
-    Buddy_Hi_Position = (GetValue(cb2));
+    WirelessBuddy = BuddyPupilOnWireless || BuddyMasterOnWireless;
+    Buddy_Low_Position = GetValue(cb0); // here we read what to do at each switch position
+    Buddy_Mid_Position = GetValue(cb1);
+    Buddy_Hi_Position = GetValue(cb2);
+
+    if (BuddyMasterOnWireless && (!Buddy_Mid_Position && !Buddy_Hi_Position)){ // Bottom can be master but -- maybe not both top two.
+        if (!GetConfirmation(pBuddyView, Prompt))
+        return;
+    }
     SaveAllParameters();
     UpdateModelsNameEveryWhere();
     RationaliseBuddy();
