@@ -56,7 +56,6 @@
  * - Variometer implemented (using a BMP280 or better still, a DPS310)
  *
  *
- * @section txPinout Teensy 4.1 Pins
  * | Teensy 4.1 Pins | Connections |
  * |-----------------|-------------|
  * | GND        | GND |
@@ -67,25 +66,25 @@
  * | 3  LED     | GREEN |
  * | 4  LED     | BLUE |
  * | 5  (POLOLU)| 2808 ALL POWER OFF SIGNAL (When high)|
- **| 6  (...)   | <<<< *SPARE* (PPM IN or OUT NEW PCB TX MODULE <<<<<<<<<<<<<<<
+ **| 6  SPARE   | <<<< *SPARE* (PPM IN or OUT NEW PCB TX MODULE <<<<<<<<<<<<<<<
  * | 7  (CE)    | nRF24l01 (CE)   // RX2
  * | 8  (CSN)   | nRF24l01 (CSN)  // TX2
- **| 9  (...)   | <<<< *SPARE* !
- **| 10 (...)   | <<<< *SPARE* ! (WAS : Wired Buddy PPM IN or OUT (Could become a SPARE if PPM Buddy is not used)
- **| 11 (MOSI)  | nRF24l01 (MOSI) |
- **| 12 (MISO)  | nRF24l01 (MISO) |
- **| 13 (SCK)   | nRF24l01 (SCK) |
- **| 14 (A0)    | Joystick POT CH1 |
- **| 15 (A1)    | Joystick POT CH2 |
+ **| 9  SPARE   | <<<< *SPARE* !
+ **| 10 SPARE   | <<<< *SPARE* ! (WAS : Wired Buddy PPM IN or OUT (Could become a SPARE if PPM Buddy is not used)
+ * | 11 (MOSI)  | nRF24l01 (MOSI) |
+ * | 12 (MISO)  | nRF24l01 (MISO) |
+ * | 13 (SCK)   | nRF24l01 (SCK) |
+ * | 14 (A0)    | Joystick POT CH1 |
+ * | 15 (A1)    | Joystick POT CH2 |
  * | 16 (A2)    | Joystick POT CH3 |
  * | 17 (A3)    | Joystick POT CH4 |
- **| 18 (I2C)   | I2C bus  SDA |
- **| 19 (I2C)   | I2C bus  SCL |
+ * | 18 (I2C)   | I2C bus  SDA |
+ * | 19 (I2C)   | I2C bus  SCL |
  * | 20 (A6)    | POT KNOB CH5 |// TX5
  * | 21 (A7)    | POT KNOB CH6 |// RX5
  * | 22 (A8)    | POT KNOB CH7 |
  * | 23 (A9)    | POT KNOB CH8 |
- * | 24         | Spare         // TX6 ********  Usable as serial
+ **| 24         | Spare         // TX6 ********  Usable as serial
  * | 25         | Switch 1 |    // RX6 ********  Usable as serial (but only while Switch 1 is centred)
  * | 26         | Switch 1 |
  * | 27         | Switch 2 |
@@ -117,7 +116,10 @@
  * | 52<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (SPARE)
  * | 53<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (SPARE)
  * | 54<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (SPARE)
- * @see TransmitterCode/src/main.cpp
+ * 
+ * 
+ *  Spare GPIO PINS: 6,9,10,24 <<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ * 
  */
 // ************************************************** TRANSMITTER CODE **************************************************
 
