@@ -133,6 +133,8 @@ void ReadBuddySwitch()
 void ReadBankSwitch()
 {
     Bank = GetSwitchPosition(BankSwitch);
+    if(!Bank)
+        Bank = 1; // If no bank switch was defined, use Bank 1 by default
 }
 
 /************************************************************************************************************/
