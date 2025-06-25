@@ -66,7 +66,7 @@
  * | 3  LED     | GREEN |
  * | 4  LED     | BLUE |
  * | 5  (POLOLU)| 2808 ALL POWER OFF SIGNAL (When high)|
- **| 6  SPARE   | <<<< *SPARE* (PPM IN or OUT NEW PCB TX MODULE <<<<<<<<<<<<<<<
+ **| 6  SPARE   | <<<< *SPARE* (was PPM TX MODULE <<<<<<<<<<<<<<<
  * | 7  (CE)    | nRF24l01 (CE)   // RX2
  * | 8  (CSN)   | nRF24l01 (CSN)  // TX2
  **| 9  SPARE   | <<<< *SPARE* !
@@ -84,10 +84,10 @@
  * | 21 (A7)    | POT KNOB CH6 |// RX5
  * | 22 (A8)    | POT KNOB CH7 |
  * | 23 (A9)    | POT KNOB CH8 |
- **| 24         | Spare         // TX6 ********  Usable as serial
- * | 25         | Switch 1 |    // RX6 ********  Usable as serial (but only while Switch 1 is centred)
- * | 26         | Switch 1 |
- * | 27         | Switch 2 |
+ **| 24 (A10)   | Spare         // TX6 ********  Usable as serial
+ * | 25 (A11)   | Switch 1 |    // RX6 ********  Usable as serial (but only while Switch 1 is centred)
+ * | 26 (A12)   | Switch 1 |
+ * | 27 (A13)   | Switch 2 |
  * | 28         | Switch 2 |    // RX7
  * | 29         | Switch 3 |    // TX7
  * | 30         | Switch 3 |
@@ -98,10 +98,10 @@
  * | 35         |TRIM (CH1b)|   // TX8  ********  Usable as serial while hardware trims are not used  (Best option)
  * | 36         |TRIM (CH2a)|
  * | 37         |TRIM (CH2b)|
- * | 38         |TRIM (CH3a)|
- * | 39         |TRIM (CH3b)|
- * | 40         |TRIM (CH4a)|
- * | 41         |TRIM (CH4b)|
+ * | 38 (A14)   |TRIM (CH3a)|
+ * | 39 (A15)   |TRIM (CH3b)|
+ * | 40 (A16)   |TRIM (CH4a)|
+ * | 41 (A17)   |TRIM (CH4b)|
  * | 42         Built-in SD card
  * | 43         Built-in SD card
  * | 44         Built-in SD card
@@ -116,10 +116,10 @@
  * | 52<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (SPARE)
  * | 53<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (SPARE)
  * | 54<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< (SPARE)
- * 
- * 
- *  Spare GPIO PINS: 6,9,10,24 <<<<<<<<<<<<<<<<<<<<<<<<<<<<
- * 
+ *
+ *
+ *  (11 spare GPIO PINS: 6,9,10,24,49,50,51,52,53,54 )
+ *
  */
 // ************************************************** TRANSMITTER CODE **************************************************
 
@@ -155,6 +155,8 @@
 #include "Hardware/Help.h"
 #include "Hardware/LogFilesDisplay.h"
 #include "Hardware/Switches.h"
+#include "Hardware/Stabilisation.h"
+#include "Hardware/ADC-master/ADC.h"
 #ifdef USE_BTLE
 #include "Hardware/BTLE.h"
 #endif
@@ -663,7 +665,7 @@ void CalibrateSticks() // This discovers end of travel place for sticks etc.
     uint16_t p;
     for (uint8_t i = 0; i < PROPOCHANNELS; ++i)
     {
-        p = analogRead(AnalogueInput[i]);
+        p = adc->analogRead(AnalogueInput[i]);
         if (ChannelMax[i] < p)
             ChannelMax[i] = p;
         if (ChannelMin[i] > p)
@@ -1087,7 +1089,15 @@ void CheckSDCard()
         digitalWrite(POWER_OFF_PIN, HIGH); // turn off power now!
     }
 }
+/*********************************************************************************************************************************/
 
+void initADC() // heer
+{
+    adc->setResolution(12);  // 8, 10, 12 or 16 bits
+    adc->setAveraging(4);    // 0, 4, 8, 16 or 32.
+    adc->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED);
+    adc->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED);
+}
 /*********************************************************************************************************************************/
 // SETUP
 /*********************************************************************************************************************************/
@@ -1204,6 +1214,10 @@ FLASHMEM void setup()
             }
         }
     }
+#ifdef USE_STABILISATION
+    init_gains_pin();
+#endif
+    initADC();
     RationaliseBuddy();
     WarnUserIfBuddyBoxIsOn();
     ClearMostParameters();
@@ -1579,7 +1593,8 @@ void ShowFileErrorMsg()
 
 int AnalogueReed(uint8_t InputChannel)
 {
-    int value = analogRead(AnalogueInput[InputChannel]);
+    // int value = analogRead(AnalogueInput[InputChannel]);
+    int value = adc->analogRead(AnalogueInput[InputChannel]); // heer ADC
     if (SticksMode == 2)
     {
         if ((InputChannel == 0) || (InputChannel == 2))
@@ -5085,6 +5100,9 @@ void FASTRUN ManageTransmitter()
         CheckHardwareTrims();
         GetBank(); // Check switch positions 20 times a secon
         TransmitterLastManaged = millis();
+#ifdef USE_STABILISATION
+        ReadGainsKnob();
+#endif
     }
 }
 

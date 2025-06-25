@@ -17,6 +17,7 @@
 #include <Adafruit_INA219.h>
 #include <DS1307RTC.h>
 #include <InterpolationLib.h>
+#include "Hardware/ADC-master/ADC.h"
 
 #ifdef USE_BTLE
 #include <BTLE.h>
@@ -50,6 +51,8 @@
 // ************************************************************************************
 //                                       General                                      *
 // ************************************************************************************
+
+//#define USE_STABILISATION
 /*********************************************************************************************************************************/
 
 #define VERYHIGHPACKETRATE // Comment this out if using stabilisation
@@ -514,7 +517,8 @@
 //                            Function Prototypes                           *
 //***************************************************************************
 
-void GetSlaveChannelValues();
+
+ADC *adc = new ADC();
 void KickTheDog();
 void SendCommand(char *tbox);
 void ReadSwitches();
@@ -531,8 +535,6 @@ void StartInactvityTimeout();
 void ShowServoPos();
 void ZeroDataScreen();
 void RedLedOn();
-void ReEnableScanButton();
-void LogUKRules();
 int InStrng(char *text1, char *text2);
 void ReadCheckSum32();
 void ResetTransmitterSettings();
@@ -723,7 +725,8 @@ void LogTotalRXGoodPackets();
 void LogTotalRXGoodPackets();
 void LogTotalPacketsAttempted();
 void DelaySimple(uint32_t ms);
-//void ReadDRSwitch(bool sw1, bool sw2, bool rev);
+void init_gains_pin();
+void ReadGainsKnob();
 uint8_t GetSwitchPosition(uint8_t Sw_Number);
 FASTRUN void LogAverageGap();
 #ifdef USE_BTLE
