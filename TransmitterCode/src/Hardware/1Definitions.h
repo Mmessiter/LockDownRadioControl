@@ -934,16 +934,6 @@ uint8_t DualRatesSwitch = 0;
 uint8_t TopChannelSwitch[4] = {0, 0, 0, 0};
 uint8_t TopChannelSwitchValue[4] = {0, 0, 0, 0};
 
-uint8_t Channel9Switch = 0;
-uint8_t Channel10Switch = 0;
-uint8_t Channel11Switch = 0;
-uint8_t Channel12Switch = 0;
-
-uint8_t Channel9SwitchValue = 0;
-uint8_t Channel10SwitchValue = 0;
-uint8_t Channel11SwitchValue = 0;
-uint8_t Channel12SwitchValue = 0;
-
 bool SwitchReversed[4] = {
     false,
     false,

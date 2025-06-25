@@ -1092,8 +1092,8 @@ void CheckSDCard()
 
 void initADC() // heer
 {
-    adc->setResolution(12);  // 8, 10, 12 or 16 bits
-    adc->setAveraging(4);    // 0, 4, 8, 16 or 32.
+    adc->setResolution(12); // 8, 10, 12 or 16 bits
+    adc->setAveraging(4);   // 0, 4, 8, 16 or 32.
     adc->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED);
     adc->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED);
 }
@@ -1469,22 +1469,22 @@ void DoOneSwitch(char *Sw, uint8_t n)
         ShowSwitchNameWithReversed(Sw, n, Banks123);
         return;
     }
-    if (Channel9Switch == n)
+    if (TopChannelSwitch[Ch9_SW] == n)
     {
         ShowSwitchNameWithReversed(Sw, n, c9);
         return;
     }
-    if (Channel10Switch == n)
+    if (TopChannelSwitch[Ch10_SW] == n)
     {
         ShowSwitchNameWithReversed(Sw, n, c10);
         return;
     }
-    if (Channel11Switch == n)
+    if (TopChannelSwitch[Ch11_SW] == n)
     {
         ShowSwitchNameWithReversed(Sw, n, c11);
         return;
     }
-    if (Channel12Switch == n)
+    if (TopChannelSwitch[Ch12_SW] == n)
     {
         ShowSwitchNameWithReversed(Sw, n, c12);
         return;
@@ -2515,13 +2515,13 @@ void DoOneSwitchView(uint8_t n) // n is 1-4  = number for switch to edit
         SendValue(Rlabels[1], 1); // No duplicates allowed!
     if ((Autoswitch == n) && (!ValueSent))
         SendValue(Rlabels[2], 1); // No duplicates allowed!
-    if ((Channel9Switch == n) && (!ValueSent))
+    if ((TopChannelSwitch[Ch9_SW] == n) && (!ValueSent))
         SendValue(Rlabels[3], 1); // No duplicates allowed!
-    if ((Channel10Switch == n) && (!ValueSent))
+    if ((TopChannelSwitch[Ch10_SW] == n) && (!ValueSent))
         SendValue(Rlabels[4], 1); // No duplicates allowed!
-    if ((Channel11Switch == n) && (!ValueSent))
+    if ((TopChannelSwitch[Ch11_SW] == n) && (!ValueSent))
         SendValue(Rlabels[5], 1); // No duplicates allowed!
-    if ((Channel12Switch == n) && (!ValueSent))
+    if ((TopChannelSwitch[Ch12_SW] == n) && (!ValueSent))
         SendValue(Rlabels[6], 1); // No duplicates allowed!
     if ((SafetySwitch == n) && (!ValueSent))
         SendValue(Rlabels[7], 1); // No duplicates allowed!
@@ -2625,42 +2625,42 @@ void ReadNewSwitchFunction()
     SendValue(Progress, 25);
     if (GetValue(OneSwitchView_r3))
     {
-        Channel9Switch = SwitchEditNumber;
+        TopChannelSwitch[Ch9_SW] = SwitchEditNumber;
     }
     else
     {
-        if (Channel9Switch == SwitchEditNumber)
-            Channel9Switch = 0;
+        if (TopChannelSwitch[Ch9_SW] == SwitchEditNumber)
+            TopChannelSwitch[Ch9_SW] = 0;
     }
     SendValue(Progress, 30);
     if (GetValue(OneSwitchView_r4))
     {
-        Channel10Switch = SwitchEditNumber;
+        TopChannelSwitch[Ch10_SW] = SwitchEditNumber;
     }
     else
     {
-        if (Channel10Switch == SwitchEditNumber)
-            Channel10Switch = 0;
+        if (TopChannelSwitch[Ch10_SW] == SwitchEditNumber)
+            TopChannelSwitch[Ch10_SW] = 0;
     }
     SendValue(Progress, 40);
     if (GetValue(OneSwitchView_r5))
     {
-        Channel11Switch = SwitchEditNumber;
+        TopChannelSwitch[Ch11_SW] = SwitchEditNumber;
     }
     else
     {
-        if (Channel11Switch == SwitchEditNumber)
-            Channel11Switch = 0;
+        if (TopChannelSwitch[Ch11_SW] == SwitchEditNumber)
+            TopChannelSwitch[Ch11_SW] = 0;
     }
     SendValue(Progress, 50);
     if (GetValue(OneSwitchView_r6))
     {
-        Channel12Switch = SwitchEditNumber;
+        TopChannelSwitch[Ch12_SW] = SwitchEditNumber;
     }
     else
     {
-        if (Channel12Switch == SwitchEditNumber)
-            Channel12Switch = 0;
+        if (TopChannelSwitch[Ch12_SW] == SwitchEditNumber)
+            TopChannelSwitch[Ch12_SW] = 0;
     }
     SendValue(Progress, 60);
     if (GetValue(OneSwitchView_r7))
@@ -2800,10 +2800,10 @@ void ResetTransmitterSettings()
     SafetySwitch = 2;
     BuddySwitch = 3;
     BankSwitch = 4;
-    Channel9Switch = 0;
-    Channel10Switch = 0;
-    Channel11Switch = 0;
-    Channel12Switch = 0;
+    TopChannelSwitch[Ch9_SW] = 0;
+    TopChannelSwitch[Ch10_SW] = 0;
+    TopChannelSwitch[Ch11_SW] = 0;
+    TopChannelSwitch[Ch12_SW] = 0;
     for (int i = 0; i < 4; ++i)
         SwitchReversed[i] = false;
 
@@ -4686,8 +4686,6 @@ void GetBank() // ... and the other three switches
     }
 
     ReadChannelSwitches9to12();
-   
-
 
     if (Bank != PreviousBank)
     {

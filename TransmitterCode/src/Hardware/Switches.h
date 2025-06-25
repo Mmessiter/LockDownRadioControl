@@ -45,7 +45,7 @@ FASTRUN void ReadSwitches() // and indeed read digital trims if these are fitted
 
 void ReadSafetySwitch()
 {
-    SafetyON = (SafetySwitch && GetSwitchPosition(SafetySwitch) != 3);// if the switch is not defined or is in position three safety is off
+    SafetyON = (SafetySwitch && GetSwitchPosition(SafetySwitch) != 3); // if the switch is not defined or is in position three safety is off
 }
 /************************************************************************************************************/
 
@@ -87,11 +87,12 @@ uint8_t CheckSwitch(uint8_t swt)
 }
 /************************************************************************************************************/
 
-void ReadChannelSwitches9to12(){
-    Channel9SwitchValue = CheckSwitch(Channel9Switch);
-    Channel10SwitchValue = CheckSwitch(Channel10Switch);
-    Channel11SwitchValue = CheckSwitch(Channel11Switch);
-    Channel12SwitchValue = CheckSwitch(Channel12Switch);
+void ReadChannelSwitches9to12()
+{
+    TopChannelSwitchValue[Ch9_SW] = CheckSwitch(TopChannelSwitch[Ch9_SW]);
+    TopChannelSwitchValue[Ch10_SW] = CheckSwitch(TopChannelSwitch[Ch10_SW]);
+    TopChannelSwitchValue[Ch11_SW] = CheckSwitch(TopChannelSwitch[Ch11_SW]);
+    TopChannelSwitchValue[Ch12_SW] = CheckSwitch(TopChannelSwitch[Ch12_SW]);
 }
 
 /************************************************************************************************************/
@@ -253,35 +254,35 @@ FASTRUN uint16_t ReadThreePositionSwitch(uint8_t l) // This returns the input on
     switch (l)
     {
     case 8:
-        if (Channel9SwitchValue == 0)
+        if (TopChannelSwitchValue[Ch9_SW] == 0)
             k = ChannelMin[l];
-        if (Channel9SwitchValue == 90)
+        if (TopChannelSwitchValue[Ch9_SW] == 90)
             k = ChannelCentre[l];
-        if (Channel9SwitchValue == 180)
+        if (TopChannelSwitchValue[Ch9_SW] == 180)
             k = ChannelMax[l];
         break;
     case 9:
-        if (Channel10SwitchValue == 0)
+        if (TopChannelSwitchValue[Ch10_SW] == 0)
             k = ChannelMin[l];
-        if (Channel10SwitchValue == 90)
+        if (TopChannelSwitchValue[Ch10_SW] == 90)
             k = ChannelCentre[l];
-        if (Channel10SwitchValue == 180)
+        if (TopChannelSwitchValue[Ch10_SW] == 180)
             k = ChannelMax[l];
         break;
     case 10:
-        if (Channel11SwitchValue == 0)
+        if (TopChannelSwitchValue[Ch11_SW] == 0)
             k = ChannelMin[l];
-        if (Channel11SwitchValue == 90)
+        if (TopChannelSwitchValue[Ch11_SW] == 90)
             k = ChannelCentre[l];
-        if (Channel11SwitchValue == 180)
+        if (TopChannelSwitchValue[Ch11_SW] == 180)
             k = ChannelMax[l];
         break;
     case 11:
-        if (Channel12SwitchValue == 0)
+        if (TopChannelSwitchValue[Ch12_SW] == 0)
             k = ChannelMin[l];
-        if (Channel12SwitchValue == 90)
+        if (TopChannelSwitchValue[Ch12_SW] == 90)
             k = ChannelCentre[l];
-        if (Channel12SwitchValue == 180)
+        if (TopChannelSwitchValue[Ch12_SW] == 180)
             k = ChannelMax[l];
         break;
     default:
