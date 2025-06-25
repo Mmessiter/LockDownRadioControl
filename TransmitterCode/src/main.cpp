@@ -84,8 +84,7 @@
  * | 21 (A7)    | POT KNOB CH6 |// RX5
  * | 22 (A8)    | POT KNOB CH7 |
  * | 23 (A9)    | POT KNOB CH8 |
- **| 24 (A10)   | Spare         // TX6 ********  Usable as serial
- * | 25 (A11)   | Switch 1 |    // RX6 ********  Usable as serial (but only while Switch 1 is centred)
+ **| 24 (A10)   | Spare  ADC!
  * | 26 (A12)   | Switch 1 |
  * | 27 (A13)   | Switch 2 |
  * | 28         | Switch 2 |    // RX7
@@ -4685,10 +4684,11 @@ void GetBank() // ... and the other three switches
         LastSeconds = 0;
         ShowMotorTimer();
     }
-    Channel9SwitchValue = CheckSwitch(Channel9Switch);
-    Channel10SwitchValue = CheckSwitch(Channel10Switch);
-    Channel11SwitchValue = CheckSwitch(Channel11Switch);
-    Channel12SwitchValue = CheckSwitch(Channel12Switch);
+
+    ReadChannelSwitches9to12();
+   
+
+
     if (Bank != PreviousBank)
     {
         if ((CurrentView == FRONTVIEW) || (CurrentView == TRIM_VIEW))

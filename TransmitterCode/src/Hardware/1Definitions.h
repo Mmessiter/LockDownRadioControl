@@ -52,7 +52,7 @@
 //                                       General                                      *
 // ************************************************************************************
 
-//#define USE_STABILISATION
+// #define USE_STABILISATION
 /*********************************************************************************************************************************/
 
 #define VERYHIGHPACKETRATE // Comment this out if using stabilisation
@@ -383,9 +383,6 @@
 // **************************************************************************
 //               Three BUDDY states now possible                            *
 //***************************************************************************
-#define M_M_B 0 // master, master, buddy
-#define M_N_B 1 // master, Lodge, buddy
-#define M_M_N 2 // master, master, nudge
 
 #define BUDDY_OFF 0   // Master has control
 #define BUDDY_NUDGE 1 // Master can Nudge but buddy has mostly control.
@@ -517,7 +514,6 @@
 //                            Function Prototypes                           *
 //***************************************************************************
 
-
 ADC *adc = new ADC();
 void KickTheDog();
 void SendCommand(char *tbox);
@@ -597,7 +593,6 @@ void GotoModelsView();
 void SaveCurrentModel();
 bool CheckModelName();
 int AnalogueReed(uint8_t InputChannel);
-void SelectChannelOrder();
 void DelayWithDog(uint32_t HowLong);
 void SaveTransmitterParameters();
 void PlayPong();
@@ -729,6 +724,7 @@ void init_gains_pin();
 void ReadGainsKnob();
 uint8_t GetSwitchPosition(uint8_t Sw_Number);
 FASTRUN void LogAverageGap();
+void ReadChannelSwitches9to12();
 #ifdef USE_BTLE
 void SendViaBLE();
 #endif
@@ -784,8 +780,7 @@ uint8_t SavedCurrentView = FRONTVIEW;
 uint64_t DefaultPipe = DEFAULTPIPEADDRESS;      //          Default Radio pipe address
 uint64_t TeensyMACAddPipe = DEFAULTPIPEADDRESS; //          New Radio pipe address for binding will come from MAC address
 uint64_t BuddyMACAddPipe = DEFAULTPIPEADDRESS;  //          Buddy pipe address
-// char TextIn[CHARSMAX + 2];                      //          Spare space
-char TextIn[MAXTEXTIN + 2]; //          Spare space
+char TextIn[MAXTEXTIN + 2];                     //          Spare space
 uint16_t PacketsPerSecond = 0;
 uint8_t PacketsHistoryBuffer[(5 + PERFECTPACKETSPERSECOND) * MAXSHOWCOMMSSESCONDS]; // Here we record some history
 uint32_t TotalLostPackets = 0;
@@ -843,7 +838,7 @@ uint16_t ClickX;
 uint16_t ClickY;
 uint8_t SticksMode = 2;
 uint8_t SavedSticksMode = 2;
-uint16_t AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9};                 // 8 PROPO Channels for transmission   // fix order for mode 2
+uint16_t AnalogueInput[PROPOCHANNELS] = {A0, A1, A2, A3, A6, A7, A8, A9};                 // default definition of first 8 PROPO Channels inputs // must fix the order for mode 2
 uint8_t TrimNumber[8] = {TRIM1A, TRIM1B, TRIM2A, TRIM2B, TRIM3A, TRIM3B, TRIM4A, TRIM4B}; // These too can get swapped over later
 uint8_t CurrentMode = NORMAL;
 uint32_t MotorStartTime = 0;
@@ -926,10 +921,24 @@ uint8_t Autoswitch = Autoswitch;
 uint8_t SafetySwitch = 0;
 uint8_t BuddySwitch = 0;
 uint8_t DualRatesSwitch = 0;
+
+// **************************************************************************
+//                Top Channel numbers                                   *
+// **************************************************************************
+
+#define Ch9_SW 0
+#define Ch10_SW 1
+#define Ch11_SW 2
+#define Ch12_SW 3
+
+uint8_t TopChannelSwitch[4] = {0, 0, 0, 0};
+uint8_t TopChannelSwitchValue[4] = {0, 0, 0, 0};
+
 uint8_t Channel9Switch = 0;
 uint8_t Channel10Switch = 0;
 uint8_t Channel11Switch = 0;
 uint8_t Channel12Switch = 0;
+
 uint8_t Channel9SwitchValue = 0;
 uint8_t Channel10SwitchValue = 0;
 uint8_t Channel11SwitchValue = 0;

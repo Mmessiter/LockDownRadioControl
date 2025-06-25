@@ -85,6 +85,14 @@ uint8_t CheckSwitch(uint8_t swt)
         rtv = ReadCHSwitch(Switch[2], Switch[3], SwitchReversed[3]);
     return rtv;
 }
+/************************************************************************************************************/
+
+void ReadChannelSwitches9to12(){
+    Channel9SwitchValue = CheckSwitch(Channel9Switch);
+    Channel10SwitchValue = CheckSwitch(Channel10Switch);
+    Channel11SwitchValue = CheckSwitch(Channel11Switch);
+    Channel12SwitchValue = CheckSwitch(Channel12Switch);
+}
 
 /************************************************************************************************************/
 
