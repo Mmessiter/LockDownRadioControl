@@ -216,20 +216,19 @@ void ReadDualRateSwitch()
 
 /*********************************************************************************************************************************/
 
-FASTRUN uint16_t ReadThreePositionSwitch(uint8_t l)
+FASTRUN uint16_t ReadThreePositionSwitch(uint8_t InputDevice)
 {
 
-    if (l >= 8 && l <= 11)
+    if (InputDevice >= 8 && InputDevice <= 11)
     {
-        uint8_t switchIndex = l - 8; // Because Ch9_SW = 0
+        uint8_t switchIndex = InputDevice - 8; // Because Ch9_SW = 0
         uint16_t value = TopChannelSwitchValue[switchIndex];
-
         if (value == 0)
-            return ChannelMin[l];
+            return ChannelMin[InputDevice];
         else if (value == 90)
-            return ChannelCentre[l];
+            return ChannelCentre[InputDevice];
         else if (value == 180)
-            return ChannelMax[l];
+            return ChannelMax[InputDevice];
     }
 
     return 1500; // Default for channels 12+

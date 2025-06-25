@@ -435,7 +435,7 @@ FASTRUN void ShowServoPos()
         InputDevice = (InPutStick[ChanneltoSet - 1]);
         if (InputDevice < 8)
             InputAmount = AnalogueReed(InputDevice);
-        else
+        else 
             InputAmount = ReadThreePositionSwitch(InputDevice);                                                   // not analogue
         InputAmount = map(InputAmount, ChannelCentre[InputDevice], ChannelMax[InputDevice], 0, 100);              // input stick position
         OutputAmount = map(SendBuffer[InputDevice], MINMICROS, MAXMICROS, -100, 100);                             // output servo position
@@ -607,7 +607,7 @@ void GetAllInputs()
         {
             InputsBuffer[OutputChannel] = AnalogueReed(InPutStick[OutputChannel]); // Get values from sticks' pots (taking into account mode 1 and mode 2!)
         }
-        else
+        else 
         {
             InputsBuffer[OutputChannel] = ReadThreePositionSwitch(OutputChannel); // Get values from switches
         }
