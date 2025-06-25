@@ -47,52 +47,17 @@ void ReadSafetySwitch()
 {
     SafetyON = (SafetySwitch && GetSwitchPosition(SafetySwitch) != 3); // if the switch is not defined or is in position three safety is off
 }
-/************************************************************************************************************/
 
-uint8_t ReadCHSwitch(bool sw1, bool sw2, bool rev) //
-{
-    uint8_t ttmp = 90;
-    if (sw1 == false && sw2 == false)
-        ttmp = 90;
-    if (rev)
-    {
-        if (sw1)
-            ttmp = 0;
-        if (sw2)
-            ttmp = 180;
-    }
-    else
-    {
-        if (sw1)
-            ttmp = 180;
-        if (sw2)
-            ttmp = 0;
-    }
-    return ttmp;
-}
 /************************************************************************************************************/
-
-uint8_t CheckSwitch(uint8_t swt)
-{
-    uint8_t rtv = 90;
-    if (swt == 1)
-        rtv = ReadCHSwitch(Switch[7], Switch[6], SwitchReversed[0]);
-    if (swt == 2)
-        rtv = ReadCHSwitch(Switch[5], Switch[4], SwitchReversed[1]);
-    if (swt == 3)
-        rtv = ReadCHSwitch(Switch[0], Switch[1], SwitchReversed[2]);
-    if (swt == 4)
-        rtv = ReadCHSwitch(Switch[2], Switch[3], SwitchReversed[3]);
-    return rtv;
-}
-/************************************************************************************************************/
-
+// if one or more of the top switches is defined as a channel 9 10 11 or 12, this function reads that switch as channel value: three positions only of course.
 void ReadChannelSwitches9to12()
 {
-    TopChannelSwitchValue[Ch9_SW] = CheckSwitch(TopChannelSwitch[Ch9_SW]);
-    TopChannelSwitchValue[Ch10_SW] = CheckSwitch(TopChannelSwitch[Ch10_SW]);
-    TopChannelSwitchValue[Ch11_SW] = CheckSwitch(TopChannelSwitch[Ch11_SW]);
-    TopChannelSwitchValue[Ch12_SW] = CheckSwitch(TopChannelSwitch[Ch12_SW]);
+    uint8_t Values[3] = {0, 90, 180};
+    for (uint8_t ChSwith = Ch9_SW; ChSwith <= Ch12_SW; ChSwith++)
+    {
+        if (TopChannelSwitch[ChSwith])                                                                   // if this switch is defined.... 1 2 3 or 4 ...
+            TopChannelSwitchValue[ChSwith] = Values[(GetSwitchPosition(TopChannelSwitch[ChSwith])) - 1]; // get its position
+    }
 }
 
 /************************************************************************************************************/
@@ -248,50 +213,26 @@ void ReadDualRateSwitch()
 }
 
 /*********************************************************************************************************************************/
-FASTRUN uint16_t ReadThreePositionSwitch(uint8_t l) // This returns the input only
-{
-    uint16_t k = 0;
-    switch (l)
-    {
-    case 8:
-        if (TopChannelSwitchValue[Ch9_SW] == 0)
-            k = ChannelMin[l];
-        if (TopChannelSwitchValue[Ch9_SW] == 90)
-            k = ChannelCentre[l];
-        if (TopChannelSwitchValue[Ch9_SW] == 180)
-            k = ChannelMax[l];
-        break;
-    case 9:
-        if (TopChannelSwitchValue[Ch10_SW] == 0)
-            k = ChannelMin[l];
-        if (TopChannelSwitchValue[Ch10_SW] == 90)
-            k = ChannelCentre[l];
-        if (TopChannelSwitchValue[Ch10_SW] == 180)
-            k = ChannelMax[l];
-        break;
-    case 10:
-        if (TopChannelSwitchValue[Ch11_SW] == 0)
-            k = ChannelMin[l];
-        if (TopChannelSwitchValue[Ch11_SW] == 90)
-            k = ChannelCentre[l];
-        if (TopChannelSwitchValue[Ch11_SW] == 180)
-            k = ChannelMax[l];
-        break;
-    case 11:
-        if (TopChannelSwitchValue[Ch12_SW] == 0)
-            k = ChannelMin[l];
-        if (TopChannelSwitchValue[Ch12_SW] == 90)
-            k = ChannelCentre[l];
-        if (TopChannelSwitchValue[Ch12_SW] == 180)
-            k = ChannelMax[l];
-        break;
-    default:
-        k = 1500; // Centre is default for channels 13,14,15 & 16 because no input is possible
-        break;
-    }
-    return k;
-}
 
+FASTRUN uint16_t ReadThreePositionSwitch(uint8_t l)
+{
+   
+    if (l >= 8 && l <= 11)
+    {
+        uint8_t switchIndex = l - 8; // Because Ch9_SW = 0
+        uint16_t value = TopChannelSwitchValue[switchIndex];
+
+        if (value == 0)
+            return ChannelMin[l];
+        else if (value == 90)
+            return ChannelCentre[l];
+        else if (value == 180)
+            return ChannelMax[l];
+    }
+
+    return 1500; // Default for channels 12+
+}
+ 
 /************************************************************************************************************/
 void CalibrateEdgeSwitches()
 { // This function avoids the need to rotate the four edge switches if installed backwards
