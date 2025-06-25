@@ -9,7 +9,7 @@
 
 /************************************************************************************************************/
 
-FASTRUN void ReadSwitches() // and indeed read digital trims if these are fitted
+FASTRUN void ReadTheSwitchesAndTrims() // and indeed read digital trims if these are fitted
 {
     byte flag = 0;
     static uint8_t PreviousTrim = 255;
@@ -216,7 +216,7 @@ void ReadDualRateSwitch()
 
 FASTRUN uint16_t ReadThreePositionSwitch(uint8_t l)
 {
-   
+
     if (l >= 8 && l <= 11)
     {
         uint8_t switchIndex = l - 8; // Because Ch9_SW = 0
@@ -232,7 +232,7 @@ FASTRUN uint16_t ReadThreePositionSwitch(uint8_t l)
 
     return 1500; // Default for channels 12+
 }
- 
+
 /************************************************************************************************************/
 void CalibrateEdgeSwitches()
 { // This function avoids the need to rotate the four edge switches if installed backwards

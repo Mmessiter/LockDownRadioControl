@@ -436,7 +436,7 @@ FASTRUN void ShowServoPos()
         if (InputDevice < 8)
             InputAmount = AnalogueReed(InputDevice);
         else
-        InputAmount = ReadThreePositionSwitch(InputDevice);                                                       // not analogue
+            InputAmount = ReadThreePositionSwitch(InputDevice);                                                   // not analogue
         InputAmount = map(InputAmount, ChannelCentre[InputDevice], ChannelMax[InputDevice], 0, 100);              // input stick position
         OutputAmount = map(SendBuffer[InputDevice], MINMICROS, MAXMICROS, -100, 100);                             // output servo position
         SendValue(ChannelInput, InputAmount);                                                                     // input stick position
@@ -4549,7 +4549,7 @@ void CheckMotorOff()
     if (!UseMotorKill)
         return;
 
-    ReadSwitches();
+    ReadTheSwitchesAndTrims();
     MotorEnabled = false;
     SafetyON = false;
 
@@ -5094,7 +5094,7 @@ void FASTRUN ManageTransmitter()
 
     if (RightNow - TransmitterLastManaged >= 50)
     { // 50 = 20 times a second
-        ReadSwitches();
+        ReadTheSwitchesAndTrims();
         CheckHardwareTrims();
         GetBank(); // Check switch positions 20 times a secon
         TransmitterLastManaged = millis();

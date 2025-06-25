@@ -517,7 +517,7 @@
 ADC *adc = new ADC();
 void KickTheDog();
 void SendCommand(char *tbox);
-void ReadSwitches();
+void ReadTheSwitchesAndTrims();
 void ShowComms();
 void SendCharArray(char *ch0, char *ch1, char *ch2, char *ch3, char *ch4, char *ch5, char *ch6, char *ch7, char *ch8, char *ch9, char *ch10, char *ch11, char *ch12);
 char *Str(char *s, int n, int comma);
