@@ -639,8 +639,8 @@ void ReduceLimits()
 { // Get things setup for sticks calibration
     for (uint8_t i = 0; i < CHANNELSUSED; ++i)
     {
-        ChannelMax[i] = 512;
-        ChannelMin[i] = 512;
+        ChannelMax[i] = MAXRESOLUTION / 2;
+        ChannelMin[i] = MAXRESOLUTION / 2;
     }
     for (uint8_t i = 0; i < CHANNELSUSED; ++i)
     {
@@ -804,10 +804,10 @@ FLASHMEM void InitMaxMin()
 {
     for (int i = 0; i < CHANNELSUSED; ++i)
     {
-        ChannelMax[i] = 1024;
-        ChannelMidHi[i] = 512 + 256;
-        ChannelCentre[i] = 512;
-        ChannelMidLow[i] = 256;
+        ChannelMax[i] = MAXRESOLUTION;
+        ChannelMidHi[i] = MAXRESOLUTION * 3 / 4;
+        ChannelCentre[i] = MAXRESOLUTION / 2;
+        ChannelMidLow[i] = MAXRESOLUTION / 4;
         ChannelMin[i] = 0;
     }
 }
@@ -1092,6 +1092,7 @@ void CheckSDCard()
 
 void initADC() // heer
 {
+    //#define MAXRESOLUTION 4095  // 12 BIT
     adc->setResolution(12); // 8, 10, 12 or 16 bits
     adc->setAveraging(4);   // 0, 4, 8, 16 or 32.
     adc->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED);
