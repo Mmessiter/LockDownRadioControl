@@ -52,7 +52,7 @@
 //                                       General                                      *
 // ************************************************************************************
 
-// #define USE_STABILISATION
+ //#define USE_STABILISATION
 /*********************************************************************************************************************************/
 
 #define VERYHIGHPACKETRATE // Comment this out if using stabilisation
@@ -923,7 +923,7 @@ uint8_t BuddySwitch = 0;
 uint8_t DualRatesSwitch = 0;
 
 // **************************************************************************
-//                Top Channel numbers                                   *
+//                Top switch Channel numbers                                   *
 // **************************************************************************
 
 #define Ch9_SW 0

@@ -435,7 +435,7 @@ FASTRUN void ShowServoPos()
         InputDevice = (InPutStick[ChanneltoSet - 1]);
         if (InputDevice < 8)
             InputAmount = AnalogueReed(InputDevice);
-        else 
+        else
             InputAmount = ReadThreePositionSwitch(InputDevice);                                                   // not analogue
         InputAmount = map(InputAmount, ChannelCentre[InputDevice], ChannelMax[InputDevice], 0, 100);              // input stick position
         OutputAmount = map(SendBuffer[InputDevice], MINMICROS, MAXMICROS, -100, 100);                             // output servo position
@@ -607,7 +607,7 @@ void GetAllInputs()
         {
             InputsBuffer[OutputChannel] = AnalogueReed(InPutStick[OutputChannel]); // Get values from sticks' pots (taking into account mode 1 and mode 2!)
         }
-        else 
+        else
         {
             InputsBuffer[OutputChannel] = ReadThreePositionSwitch(OutputChannel); // Get values from switches
         }
@@ -5126,12 +5126,25 @@ void DoWirelessBuddyListen()
     ShowServoPos();
     GetSpecialPacket(); // Get the special packet and send our control data in the ask payload
 }
+
+// a utility for timing
+void DoTimer(bool Start)
+{
+    static uint32_t tt = 0;
+
+    if (Start)
+        tt = micros();
+    else
+        Look(micros() - tt);
+}
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
 
 FASTRUN void loop()
 {
+    // DoTimer(0);
+    // DoTimer(1);
     ManageTransmitter();   // Do the needed chores ... (if there's time)
     GetNewChannelValues(); // Load SendBuffer with new servo positions very frequently
 
