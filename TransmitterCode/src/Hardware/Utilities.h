@@ -26,7 +26,7 @@ void ForceDataRedisplay()
     LastRXTemperature = 0;
     LastRXReceivedPackets = 0;
     LastAverageFrameRate = 0;
-        ForceVoltDisplay = true;
+    ForceVoltDisplay = true;
     for (int i = 0; i < 5; ++i)
     {
         for (int j = 0; j < 17; ++j)
@@ -252,7 +252,7 @@ void PlaySound(uint16_t id) // your original idea,
 /*********************************************************************************************************************************/
 
 // This function converts an int to a char[] array, then adds a comma, a dot, or nothing at the end.
-// It builds the char[] array at a pointer (*s) Where there MUST be enough space for all characters plus a zero terminator.
+// It builds the char[] array at a pointer (*s) Where there MUST be enough space for all characters plus a zero terminator. (MAX 14)
 // It dates for a very early time when I didn't know about standard library functions!
 // But it works just fine, so it says in.
 
@@ -859,37 +859,20 @@ void SendCharArray(char *ch0, char *ch1, char *ch2, char *ch3, char *ch4, char *
     SendCommand(ch0);
 }
 
-/*********************************************************************************************************************************/
-
+// /*********************************************************************************************************************************/
 int GetNextNumber(int p1, char text1[CHARSMAX])
 {
-    char text2[CHARSMAX];
-    int j = 0;
     int i = p1 - 1;
-    while (isDigit(text1[i]) && i < CHARSMAX)
-    {
-        text2[j] = text1[i];
-        ++i;
-        ++j;
-        text2[j] = 0;
-    }
-    i = j; // = strlen only simpler
-    if (i == 3)
-    {
-        j = (text2[0] - 48) * 100;
-        j += (text2[1] - 48) * 10;
-        j += (text2[2] - 48);
-    }
-    if (i == 2)
-    {
-        j = (text2[0] - 48) * 10;
-        j += (text2[1] - 48);
-    }
-    if (i == 1)
-        j = (text2[0] - 48);
-    return j;
-}
+    int result = 0;
 
+    while (i < CHARSMAX && isdigit(text1[i]))
+    {
+        result = result * 10 + (text1[i] - '0');
+        ++i;
+    }
+
+    return result;
+}
 /*********************************************************************************************************************************/
 
 void ClearSuccessRate()

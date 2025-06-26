@@ -118,16 +118,6 @@ void DisplayAPipe(const uint8_t *pipe) // for debug
     Look(buffer);
 }
 
-//************************************************************************************************************/
-void SavePipeToEEPROM()
-{
-   // DisplayAPipe(TheReceivedPipe); // Show the received pipe being saved
-    for (uint8_t i = 0; i < 5; ++i)
-    {
-        EEPROM.update(i + BIND_EEPROM_OFFSET, TheReceivedPipe[i]);
-        DelayMillis(1);
-    }
-}
 /************************************************************************************************************/
 // This function binds the model using the TX supplied Pipe instead of the default one.
 // If not already saved, this saves it to the eeprom too for next time.

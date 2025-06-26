@@ -84,6 +84,8 @@ void SaveFailSafeDataToEEPROM()
 }
 
 /************************************************************************************************************/
+// MAC addresses use 6 bytes, but Pipes only use 5 bytes
+
 void LoadSavedPipeFromEEPROM() // read only 5 bytes
 {
     for (uint8_t i = 0; i < 5; ++i)
@@ -91,6 +93,16 @@ void LoadSavedPipeFromEEPROM() // read only 5 bytes
     TheSavedPipe[5] = 0;
 }
 
+//************************************************************************************************************/
+void SavePipeToEEPROM()
+{
+    // DisplayAPipe(TheReceivedPipe); // Show the received pipe being saved
+    for (uint8_t i = 0; i < 5; ++i)
+    {
+        EEPROM.update(i + BIND_EEPROM_OFFSET, TheReceivedPipe[i]);
+        DelayMillis(1);
+    }
+}
 
 // **************************************************************************************************************
 void SaveOneCalibrationToEEPROM(uint8_t *ExtraOffset, float TheValue)

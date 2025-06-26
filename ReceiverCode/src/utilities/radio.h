@@ -79,26 +79,44 @@ void MapToSBUS()
         }
     }
 }
-/************************************************************************************************************/
-/*
- * Decompresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
- * @param uncompressed_buf[in]
- * @param compressed_buf[out] Must have allocated 3/4 the size of uncompressed_buf
- * @param uncompressed_size Size is in units of uint16_t
- */
+// /************************************************************************************************************/
+// /*
+//  * Decompresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
+//  * @param uncompressed_buf[in]
+//  * @param compressed_buf[out] Must have allocated 3/4 the size of uncompressed_buf
+//  * @param uncompressed_size Size is in units of uint16_t
+//  */
+// void Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, uint8_t uncompressed_size)
+// {
+//     uint8_t p = 0;
+//     for (uint8_t l = 0; l < (uncompressed_size * 3 / 4) - 2; l += 3)
+//     {
+//         uncompressed_buf[p] = compressed_buf[l] >> 4;
+//         ++p;
+//         uncompressed_buf[p] = (compressed_buf[l] & 0xf) << 8 | compressed_buf[l + 1] >> 8;
+//         ++p;
+//         uncompressed_buf[p] = (compressed_buf[l + 1] & 0xff) << 4 | compressed_buf[l + 2] >> 12;
+//         ++p;
+//         uncompressed_buf[p] = compressed_buf[l + 2] & 0xfff;
+//         ++p;
+//     }
+// }
+
 void Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, uint8_t uncompressed_size)
 {
     uint8_t p = 0;
-    for (uint8_t l = 0; l < (uncompressed_size * 3 / 4) - 2; l += 3)
+    uint8_t compressed_size = (uncompressed_size * 3) / 4;
+
+    for (uint8_t i = 0; i < compressed_size; i += 3)
     {
-        uncompressed_buf[p] = compressed_buf[l] >> 4;
-        ++p;
-        uncompressed_buf[p] = (compressed_buf[l] & 0xf) << 8 | compressed_buf[l + 1] >> 8;
-        ++p;
-        uncompressed_buf[p] = (compressed_buf[l + 1] & 0xff) << 4 | compressed_buf[l + 2] >> 12;
-        ++p;
-        uncompressed_buf[p] = compressed_buf[l + 2] & 0xfff;
-        ++p;
+        uint16_t w0 = compressed_buf[i];
+        uint16_t w1 = compressed_buf[i + 1];
+        uint16_t w2 = compressed_buf[i + 2];
+
+        uncompressed_buf[p++] = w0 >> 4;
+        uncompressed_buf[p++] = ((w0 & 0x0F) << 8) | (w1 >> 8);
+        uncompressed_buf[p++] = ((w1 & 0xFF) << 4) | (w2 >> 12);
+        uncompressed_buf[p++] = w2 & 0x0FFF;
     }
 }
 
@@ -516,98 +534,175 @@ void DisplayPipe()
     Serial.println("");
 }
 /************************************************************************************************************/
-
 FASTRUN void Reconnect()
-{ // This is called when contact is lost, to reconnect ASAP
+{
 #define MAXTRIESPERTRANSCEIVER 3
 
-    uint32_t SearchStartTime = millis();
-    uint8_t PreviousRadio = ThisRadio;
-    uint8_t Attempts = 0;
+    const uint32_t start = millis();
+    uint8_t prevRadio = ThisRadio;
+    uint8_t attempts = 0;
 
+    uint32_t now = millis();
     if (ThisRadio == 1)
-        RX1TotalTime += (millis() - ReconnectedMoment); // keep track of how long on each
-    if (ThisRadio == 2)
-        RX2TotalTime += (millis() - ReconnectedMoment);
+        RX1TotalTime += (now - ReconnectedMoment);
+    else if (ThisRadio == 2)
+        RX2TotalTime += (now - ReconnectedMoment);
 
     while (!Connected)
     {
-        //  DisplayPipe(); // for debugging purposes
-
         if (Blinking)
             BlinkLed();
+
         KickTheDog();
         SendSBUSData();
+
+        // Flush and prepare
         CurrentRadio->stopListening();
         delayMicroseconds(STOPLISTENINGDELAY);
         CurrentRadio->flush_tx();
         CurrentRadio->flush_rx();
+
+        // Switch to next recovery channel
         ReconnectChannel = FHSS_Recovery_Channels[ReconnectIndex];
-        ++ReconnectIndex;
-        if (ReconnectIndex >= 3)
-            ReconnectIndex = 0;
-        CurrentRadio->stopListening();
-        delayMicroseconds(STOPLISTENINGDELAY);
+        ReconnectIndex = (ReconnectIndex + 1) % 3;
+
         CurrentRadio->setChannel(ReconnectChannel);
         CurrentRadio->startListening();
         delayMicroseconds(STOPLISTENINGDELAY);
-        ++Attempts;
+
+        ++attempts;
         TryToConnectNow();
+
         if (!Connected)
         {
-
 #ifdef SECOND_TRANSCEIVER
-            if (Attempts >= MAXTRIESPERTRANSCEIVER)
+            if (attempts >= MAXTRIESPERTRANSCEIVER)
             {
                 TryTheOtherTransceiver(ReconnectChannel);
-                Attempts = 0;
+                attempts = 0;
             }
 #else
-            if (Attempts >= 3)
+            if (attempts >= 3)
             {
-                ProdRadio(ReconnectChannel); // This avoids a lockup of the nRF24L01+ !
-                Attempts = 0;
+                ProdRadio(ReconnectChannel);
+                attempts = 0;
             }
 #endif
-            if ((millis() - SearchStartTime) > FAILSAFE_TIMEOUT)
+            if ((millis() - start) > FAILSAFE_TIMEOUT && !FailSafeSent)
             {
-                if (!FailSafeSent)
-                    FailSafe();
+                FailSafe();
             }
         }
     }
 
-    // cannot pass here if not connected
-    // must have connected by here
-    // Look1 ("Reconnected on channel ");
-    // Look  (ReconnectChannel);
-    ReconnectedMoment = millis(); // Save this moment
+    // Successful reconnection
+    ReconnectedMoment = millis();
     FailSafeSent = false;
-    if (PreviousRadio != ThisRadio)
-        ++RadioSwaps; // Count the radio swaps
+
+    if (prevRadio != ThisRadio)
+        ++RadioSwaps;
 
     if (FailedSafe)
     {
         FailedSafe = false;
-        NewConnectionMoment = millis();
-        ConnectMoment = millis();
-        SuccessfulPackets = 0; // Reset the packet count
-                               // BoundFlag = true;
+        uint32_t m = millis();
+        NewConnectionMoment = m;
+        ConnectMoment = m;
+        SuccessfulPackets = 0;
     }
-
-#ifdef DB_RXTIMERS
-    Serial.print("Transceiver1 use so far: ");
-    Serial.print(RX1TotalTime / 1000);
-    Serial.println(" seconds");
-    Serial.print("Transceiver2 use so far: ");
-    Serial.print(RX2TotalTime / 1000);
-    Serial.println(" seconds");
-    Serial.print("Now connected on transceiver number: ");
-    Serial.print(ThisRadio);
-    Serial.println(" ...");
-    Serial.println("");
-#endif
 }
+// // **************************
+// FASTRUN void ReconnectOLD()
+// { // This is called when contact is lost, to reconnect ASAP
+// #define MAXTRIESPERTRANSCEIVER 3
+
+//     uint32_t SearchStartTime = millis();
+//     uint8_t PreviousRadio = ThisRadio;
+//     uint8_t Attempts = 0;
+
+//     if (ThisRadio == 1)
+//         RX1TotalTime += (millis() - ReconnectedMoment); // keep track of how long on each
+//     if (ThisRadio == 2)
+//         RX2TotalTime += (millis() - ReconnectedMoment);
+
+//     while (!Connected)
+//     {
+//         //  DisplayPipe(); // for debugging purposes
+
+//         if (Blinking)
+//             BlinkLed();
+//         KickTheDog();
+//         SendSBUSData();
+//         CurrentRadio->stopListening();
+//         delayMicroseconds(STOPLISTENINGDELAY);
+//         CurrentRadio->flush_tx();
+//         CurrentRadio->flush_rx();
+//         ReconnectChannel = FHSS_Recovery_Channels[ReconnectIndex];
+//         ++ReconnectIndex;
+//         if (ReconnectIndex >= 3)
+//             ReconnectIndex = 0;
+//         CurrentRadio->stopListening();
+//         delayMicroseconds(STOPLISTENINGDELAY);
+//         CurrentRadio->setChannel(ReconnectChannel);
+//         CurrentRadio->startListening();
+//         delayMicroseconds(STOPLISTENINGDELAY);
+//         ++Attempts;
+//         TryToConnectNow();
+//         if (!Connected)
+//         {
+
+// #ifdef SECOND_TRANSCEIVER
+//             if (Attempts >= MAXTRIESPERTRANSCEIVER)
+//             {
+//                 TryTheOtherTransceiver(ReconnectChannel);
+//                 Attempts = 0;
+//             }
+// #else
+//             if (Attempts >= 3)
+//             {
+//                 ProdRadio(ReconnectChannel); // This avoids a lockup of the nRF24L01+ !
+//                 Attempts = 0;
+//             }
+// #endif
+//             if ((millis() - SearchStartTime) > FAILSAFE_TIMEOUT)
+//             {
+//                 if (!FailSafeSent)
+//                     FailSafe();
+//             }
+//         }
+//     }
+
+//     // cannot pass here if not connected
+//     // must have connected by here
+//     // Look1 ("Reconnected on channel ");
+//     // Look  (ReconnectChannel);
+//     ReconnectedMoment = millis(); // Save this moment
+//     FailSafeSent = false;
+//     if (PreviousRadio != ThisRadio)
+//         ++RadioSwaps; // Count the radio swaps
+
+//     if (FailedSafe)
+//     {
+//         FailedSafe = false;
+//         NewConnectionMoment = millis();
+//         ConnectMoment = millis();
+//         SuccessfulPackets = 0; // Reset the packet count
+//                                // BoundFlag = true;
+//     }
+
+// #ifdef DB_RXTIMERS
+//     Serial.print("Transceiver1 use so far: ");
+//     Serial.print(RX1TotalTime / 1000);
+//     Serial.println(" seconds");
+//     Serial.print("Transceiver2 use so far: ");
+//     Serial.print(RX2TotalTime / 1000);
+//     Serial.println(" seconds");
+//     Serial.print("Now connected on transceiver number: ");
+//     Serial.print(ThisRadio);
+//     Serial.println(" ...");
+//     Serial.println("");
+// #endif
+// }
 /************************************************************************************************************/
 
 void IncChannelNumber()
