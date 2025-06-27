@@ -49,9 +49,7 @@ void Read_MPU6050(void)
   float AccZ = static_cast<float>(AccZLSB) / ACCEL_SCALE;
 
   // Calculate current angles using improved formula
-  // float currentRollReading = atan2(AccY, sqrt(AccX * AccX + AccZ * AccZ)) * RAD_TO_DEGREES; // won't go past 90
   float currentRollReading = atan2(AccY, AccZ) * RAD_TO_DEGREES;
-  // float currentPitchReading = atan2(-AccX, sqrt(AccY * AccY + AccZ * AccZ)) * RAD_TO_DEGREES;  // won't go past 90
   float currentPitchReading = atan2(-AccX, AccZ) * RAD_TO_DEGREES;
 
   // Calculate angles relative to calibration orientation
@@ -122,6 +120,7 @@ void PerformMPU6050Calibration() // Calibrate and save result
   CalibrationPitchReading = atan2(-avgAccX, sqrt(avgAccY * avgAccY + avgAccZ * avgAccZ)) * 180.0f / M_PI;
 
   SaveMPU6050CalibrationDataToEEPROM(); // Save calibration data to EEPROM
+  
   // Debug output
   // Serial.print("Calibration complete. Gyro biases: Roll=");
   // Serial.print(RateCalibrationRoll);
@@ -371,7 +370,6 @@ void kalmanFilter()
 void filterRatesForHelicopter()
 {
   static float lastRollRate = 0, lastPitchRate = 0, lastYawRate = 0;
-  // const float beta = 0.2f; // not enough filtering
   const float beta = 0.01f; // very aggressive filtering
   filteredRollRate = (1 - beta) * lastRollRate + beta * filteredRollRate;
   filteredPitchRate = (1 - beta) * lastPitchRate + beta * filteredPitchRate;

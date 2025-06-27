@@ -156,6 +156,7 @@
 #include "Hardware/Switches.h"
 #include "Hardware/Stabilisation.h"
 #include "Hardware/ADC-master/ADC.h"
+#include "Hardware/Parameters.h"
 #ifdef USE_BTLE
 #include "Hardware/BTLE.h"
 #endif
@@ -1092,7 +1093,7 @@ void CheckSDCard()
 
 void initADC() // heer
 {
-    //#define MAXRESOLUTION 4095  // 12 BIT
+    // #define MAXRESOLUTION 4095  // 12 BIT
     adc->setResolution(12); // 8, 10, 12 or 16 bits
     adc->setAveraging(4);   // 0, 4, 8, 16 or 32.
     adc->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED);
@@ -1114,6 +1115,7 @@ FLASHMEM void setup()
     char FrontView_Mins[] = "Mins";
     char FrontView_Secs[] = "Secs";
     char ModelsFile[] = "models.dat";
+    char LoadingVis[] = "vis t0,1";
 
     pinMode(REDLED, OUTPUT);
     pinMode(GREENLED, OUTPUT);
@@ -1122,6 +1124,7 @@ FLASHMEM void setup()
     digitalWrite(POWER_OFF_PIN, LOW); // default is LOW anyway. HIGH to turn off
     BlueLedOn();
     NEXTION.begin(921600); // BAUD rate also set in display code THIS IS THE MAX (was 115200)
+    
     InitMaxMin();
     InitCentreDegrees();
     ResetSubTrims();
@@ -1132,9 +1135,11 @@ FLASHMEM void setup()
     WatchDogConfig.timeout = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
 
+    
     CheckSDCard(); // Check if SD card is present and working and initialise it
 
     TeensyWatchDog.begin(WatchDogConfig);
+ 
     delay(300); // <<********************* MUST ALLOW DOG TO INITIALISE
     DelayWithDog(WARMUPDELAY);
     if (CheckFileExists(ModelsFile))
@@ -1148,6 +1153,10 @@ FLASHMEM void setup()
     {
         ErrorState = MODELSFILENOTFOUND; // if no file ... or no SD
     }
+    RestoreBrightness();
+   
+    SendCommand(LoadingVis); // ... Make the "Loading ..." message visible as early as possible.
+
     GetTeensyMacAddress();
     ConvertBuddyPipeTo64BITS();
     Wire.begin();
@@ -1164,7 +1173,7 @@ FLASHMEM void setup()
     SendValue(FrontView_Special, SpecialColour);
     SendValue(FrontView_Highlight, HighlightColour);
     CurrentView = 254;
-    GotoFrontView();
+
     SetAudioVolume(AudioVolume);
     if (PlayFanfare)
     {
@@ -1182,7 +1191,7 @@ FLASHMEM void setup()
     StartInactvityTimeout();
     GetTXVersionNumber();
     ScreenTimeTimer = millis();
-    RestoreBrightness();
+    
     if (UseLog)
     {
         LogPowerOn();
@@ -1221,6 +1230,8 @@ FLASHMEM void setup()
     RationaliseBuddy();
     WarnUserIfBuddyBoxIsOn();
     ClearMostParameters();
+    DelayWithDog(1000);
+    GotoFrontView();
 }
 // **************************************************************************************************************************************************************
 void RationaliseBuddy()
@@ -3319,28 +3330,30 @@ void EndServoTypeView()
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!  ( Use "NUMBER<<8" )
-#define LASTFUNCTION1 17 // One more than final one
+#define LASTFUNCTION1 21 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])(){
-    Blank,                // 0 Cannot be used
-    DeleteModel,          // 1
-    StartAudioVisualView, // 2
-    EndAudioVisualView,   // 3
-    StartTXSetupView,     // 4
-    InputsViewEnd,        // 5
-    SystemPage1End,       // 6
-    SystemPage1Start,     // 7
-    StartWifiScan,        // 8
-    EndWifiScan,          // 9
-    StartServosTypeView,  // 10
-    EndServoTypeView,     // 11
-    LoadNewLogFile,       // 12
-    DeleteThisLogFile,    // 13
-                          // LogReleased,                // 14   // old version
-    LogReleasedNEW,       // 14   // new version
-    LogTouched,           // 15   // this does nothing, yet ...
-    RefreshDualRatesNew   // 16
-
+    Blank,                    // 0 Cannot be used
+    DeleteModel,              // 1
+    StartAudioVisualView,     // 2
+    EndAudioVisualView,       // 3
+    StartTXSetupView,         // 4
+    InputsViewEnd,            // 5
+    SystemPage1End,           // 6
+    SystemPage1Start,         // 7
+    StartWifiScan,            // 8
+    EndWifiScan,              // 9
+    StartServosTypeView,      // 10
+    EndServoTypeView,         // 11
+    LoadNewLogFile,           // 12
+    DeleteThisLogFile,        // 13
+    LogReleasedNEW,           // 14   // new version
+    LogTouched,               // 15   // this does nothing, yet ...
+    RefreshDualRatesNew,      // 16
+    StabilisationScreenStart, // 17
+    StabilisationScreenEnd,   // 18
+    GyroApply,                // 19
+    CalibrateMPU6050          // 20
 };
 
 // This list migth become MUCH longer as it limit is 24 bits big
@@ -4995,48 +5008,6 @@ void CheckPowerOffButton()
     }
     CheckingPowerButton = false;
 }
-/*********************************************************************************************************************************/
-
-void AddParameterstoQueue(uint8_t ID) // todo:  This function repeats the same parameter 12 times.  Should not be necessary.
-{
-
-    for (int i = 0; i < PARAMETERSENDREPEATS; ++i)
-    {
-        if (ParametersToBeSentPointer < 78)
-        {
-            ++ParametersToBeSentPointer;
-            ParametersToBeSent[ParametersToBeSentPointer] = ID;
-        }
-    }
-    // Look1("Queued: ");
-    // Look1(ID);
-    // Look1(" ");
-    // Look(ParaNames[ID-1]);
-}
-/*********************************************************************************************************************************/
-void SendInitialSetupParams()
-{
-    AddParameterstoQueue(5); // Sbus / (... was or PPM at rx)
-    AddParameterstoQueue(2); // QNH
-    AddParameterstoQueue(6); // Servo Frequencies
-    AddParameterstoQueue(7); // Servo Pulse Widths
-}
-/************************************************************************************************************/
-void SendOutstandingParameters()
-{ // Send any QUEUED parameters that have not been sent yet at the rate of one per second max
-
-    if (BoundFlag && ModelMatched && LedWasGreen)
-    {
-        Parameters.ID = ParametersToBeSent[ParametersToBeSentPointer];
-        --ParametersToBeSentPointer;
-        AddExtraParameters = true;
-        // Look1("Sent: ");
-        // Look1(Parameters.ID);
-        // Look1(" ");
-        // Look(ParaNames[Parameters.ID-1]);
-    }
-}
-
 /************************************************************************************************************/
 void FASTRUN ManageTransmitter()
 {

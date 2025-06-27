@@ -112,7 +112,7 @@
 #define WARMUPDELAY 300             // fails at 200 so must be >200 ...
 #define SCREENCHANGEWAIT 10         // allow 10ms for screen to appear
 #define BATTERY_CHECK_INTERVAL 1000 // 2 seconds between battery checks
-#define PARAMETERSENDREPEATS 3      // How many times to send each parameter in case it gets lost
+
 #define MAXPARAMETERS 7             // Max types of parameters packet to send  ... will increase.
 #define POWERONOFFDELAY 2000        // Delay after power OFF before transmit stops.
 #define POWERONOFFDELAY2 10000      // Delay after power ON before Off is possible....
@@ -725,6 +725,11 @@ void ReadGainsKnob();
 uint8_t GetSwitchPosition(uint8_t Sw_Number);
 FASTRUN void LogAverageGap();
 void ReadChannelSwitches9to12();
+void StabilisationScreenStart();
+void StabilisationScreenEnd();
+void GyroApply();
+void CalibrateMPU6050();
+int SendExtraParamemters();
 #ifdef USE_BTLE
 void SendViaBLE();
 #endif
@@ -974,6 +979,7 @@ struct CD2
     uint16_t word[12] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 };
 CD2 Parameters;
+uint8_t SizeOfParameters = sizeof(Parameters);
 
 struct CD_buddy
 {
@@ -986,7 +992,7 @@ CD_buddy DataReceived;
 
 uint16_t SizeOfDataTosend = sizeof(DataTosend);
 uint8_t SizeOfCompressedData = sizeof(DataTosend.CompressedData);
-uint8_t SizeOfParameters = sizeof(Parameters);
+
 uint32_t Inactivity_Timeout = INACTIVITYTIMEOUT;
 uint32_t Inactivity_Start = 0;
 tmElements_t tm;
@@ -1171,7 +1177,7 @@ int LastRXModelMaxAltitude = 0;
 float LastRXTemperature = 0;
 uint8_t RadioNumber = 0;
 uint32_t LastRXReceivedPackets = 0;
-char ParaNames[5][30] = {"(FailSafeChannels)", "(Qnh)", "(GPSMarkHere)", "(ServoCentre & Frequency)", "(SBUS/PPM)"};
+char ParaNames[7][30] = {"FailSafeChannels", "Qnh", "GPSMarkHere", "(Spare 4)", "(Spare 5)", "Servo Frequencies", "Servo Pulse Widths"};
 uint16_t ScreenData[50];
 uint16_t AverageFrameRate = 0;
 uint64_t TotalFrameRate = 0;
@@ -1210,6 +1216,7 @@ char pGPSView[] = "page GPSView";
 char pPopupView[] = "page PopupView";
 char pBlankView[] = "page BlankView";
 char pWaitView[30]; // the saved page where wait was started
+char pPIDView[] = "page PIDView";
 char WaitText[] = "Just a Minute! ... ";
 int Previous_Current_Y = 0; // for scrolling log file
 int Max_Y = 666;
