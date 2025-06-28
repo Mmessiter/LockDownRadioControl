@@ -176,6 +176,7 @@ bool INA219Connected = false;  //  Volts from INA219 ?
 bool MPU6050Connected = false; //  Accelerometer and Gyro from MPU6050 ?
 uint8_t ReconnectChannel = 0;
 int32_t RateOfClimb = 0;
+char ParaNames[7][30] = {"FailSafeChannels", "Qnh", "GPSMarkHere", "(Spare 4)", "(Spare 5)", "Servo Frequencies", "Servo Pulse Widths"};
 
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -249,8 +250,6 @@ bool UseRateLFP = false;
 bool UseSerialDebug = false;
 
 /************************************************************************************************************/
-
-char ParaNames[7][30] = {"(FailSafeChannels)", "(Qnh)", "(GPSMarkHere)", "(ServoCentre & Frequency)", "(SBUS/PPM)", "(Servo frequencies)", "(Servo centre pulses)"};
 
 void HopToNextChannel();
 void DoStabilsation();

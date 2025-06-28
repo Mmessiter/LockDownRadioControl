@@ -25,6 +25,10 @@ void SendSBUSData()
 void ReadExtraParameters()
 {
     uint16_t TwoBytes = 0;
+    // Look(ParaNames[Parameters.ID-1]); // Look at the ID of the parameters packet
+    // for (int i = 1; i < 12; ++i) // Read the parameters
+    //    Look(Parameters.word[i]);
+
     switch (Parameters.ID)
     {
     case FAILSAFE_SETTINGS:                                      // 1 working!
@@ -34,17 +38,17 @@ void ReadExtraParameters()
         RebuildFlags(FailSafeChannel, TwoBytes);
         SaveFailSafeDataToEEPROM();
         break;
-    case QNH_SETTING: // 2 
+    case QNH_SETTING: // 2
         Qnh = (float)Parameters.word[1];
         break;
-    case GPS_MARK_LOCATION: // 3 
+    case GPS_MARK_LOCATION: // 3
         if (Parameters.word[2] == 255)
         { // Mark this location
             MarkHere();
             Parameters.word[2] = 0; // ... Once only
         }
         break;
-    case DUMMY4: // 4 
+    case DUMMY4: // 4
         // Look(Parameters.word[1]);
         // Look(Parameters.word[2]);
         break;
@@ -52,12 +56,12 @@ void ReadExtraParameters()
         // Look(Parameters.word[1]);
         // Look(Parameters.word[2]);
         break;
-    case SERVO_FREQUENCIES: // 6 
+    case SERVO_FREQUENCIES: // 6
         for (int i = 0; i < SERVOSUSED; ++i)
             ServoFrequency[i] = Parameters.word[i + 1];
         SetServoFrequency();
         break;
-    case SERVO_PULSE_WIDTHS: // 7 
+    case SERVO_PULSE_WIDTHS: // 7
         for (int i = 0; i < SERVOSUSED; ++i)
             ServoCentrePulse[i] = Parameters.word[i + 1];
         break;
