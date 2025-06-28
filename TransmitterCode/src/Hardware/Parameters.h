@@ -3,8 +3,6 @@
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
 
-#define PARAMETERSENDREPEATS 3 // How many times to send each parameter in case it gets lost
-
 /*********************************************************************************************************************************/
 
 void AddParameterstoQueue(uint8_t ID) // todo:  This function repeats the same parameter 3 times.  Should not be necessary.
@@ -23,16 +21,20 @@ void AddParameterstoQueue(uint8_t ID) // todo:  This function repeats the same p
     // Look1(" ");
     // Look(ParaNames[ID - 1]);
 }
+
 /*********************************************************************************************************************************/
 void SendInitialSetupParams()
 {
-    AddParameterstoQueue(2); // QNH
-    AddParameterstoQueue(6); // Servo Frequencies
-    AddParameterstoQueue(7); // Servo Pulse Widths
+    AddParameterstoQueue(QNH_SETTING);        // QNH 2
+    AddParameterstoQueue(SERVO_FREQUENCIES);  // Servo Frequencies 6
+    AddParameterstoQueue(SERVO_PULSE_WIDTHS); // Servo Pulse Widths 7
+    AddParameterstoQueue(DUMMY4);
+    AddParameterstoQueue(DUMMY5);
 }
+
 /************************************************************************************************************/
 void SendOutstandingParameters()
-{ // Send any QUEUED parameters that have not been sent yet at the rate of one per second max
+{ // Send any QUEUED parameters that have not been sent yet
 
     if (BoundFlag && ModelMatched && LedWasGreen)
     {
@@ -60,20 +62,20 @@ void LoadParameters()
 
     switch (Parameters.ID)
     {                                             // ID is the parameter number. Each has 8 elements
-    case 1:                                       // 1 = FailSafeChannels
+    case FAILSAFE_SETTINGS:                       // 1 = FailSafeChannels
         Twobytes = MakeTwobytes(FailSafeChannel); // 16 bool values compressed to 16 bits
         FS_Byte1 = uint8_t(Twobytes >> 8);        // Send as two bytes
         FS_Byte2 = uint8_t(Twobytes & 0x00FF);
         Parameters.word[1] = FS_Byte1; // These are failsafe flags
         Parameters.word[2] = FS_Byte2; // These are failsafe flags
         break;
-    case 2: // 2 = QNH
+    case QNH_SETTING: // 2 = QNH
 
         Parameters.word[1] = (uint16_t)Qnh;
         Parameters.word[2] = 1234;
 
         break;
-    case 3: // 3 = GPSMarkHere
+    case GPS_MARK_LOCATION: // 3 = GPSMarkHere
         if (GPSMarkHere)
         {
             Parameters.word[1] = 0;
@@ -82,16 +84,19 @@ void LoadParameters()
             GPS_RX_MaxDistance = 0;
         }
         break;
-    case 4: // 4 = NOT USED YET
+    case DUMMY4: // 4 = NOT USED YET
+        Parameters.word[1] = 44;
+        Parameters.word[2] = 444;
         break;
-    case 5:
-        // 5 = NOT USED YET
+    case DUMMY5:
+        Parameters.word[1] = 55;
+        Parameters.word[2] = 555;
         break;
-    case 6: // 6 = Servo Frequencies
+    case SERVO_FREQUENCIES: // 6 = Servo Frequencies
         for (int i = 0; i < 11; ++i)
             Parameters.word[i + 1] = ServoFrequency[i];
         break;
-    case 7: // 7 = Servo Pulse Widths
+    case SERVO_PULSE_WIDTHS: // 7 = Servo Pulse Widths
         for (int i = 0; i < 11; ++i)
             Parameters.word[i + 1] = ServoCentrePulse[i];
         break;
@@ -103,18 +108,18 @@ void LoadParameters()
 /************************************************************************************************************/
 
 void DebugParamsOut()
- {
-//     Look1("Parameter ID: ");
-//     Look1(Parameters.ID);
-//     Look1(" ");
-//     Look(ParaNames[Parameters.ID - 1]);
-//     for (int i = 1; i < 12; ++i)
-//     {
-//         Look1("  Word[");
-//         Look1(i);
-//         Look1("]: ");
-//         Look(Parameters.word[i]);
-//     }
+{
+    Look1("Parameter ID: ");
+    Look1(Parameters.ID);
+    Look1(" ");
+    Look(ParaNames[Parameters.ID - 1]);
+    for (int i = 1; i < 12; ++i)
+    {
+        Look1("  Word[");
+        Look1(i);
+        Look1("]: ");
+        Look(Parameters.word[i]);
+    }
 }
 
 /************************************************************************************************************/
@@ -128,18 +133,33 @@ void LoadRawDataWithParameters()
     }
 }
 /************************************************************************************************************/
-int SendExtraParamemters() // parameters must be loaded before this function is called
-{                          // only the ***low 12 bits*** of each parameter are actually sent because of compression
-   // if ((Parameters.ID == 0) || (Parameters.ID > MAXPARAMETERS))
+int GetExtraParameters() // This gets extra parameters ready for sending and returns the number that will be sent.
+{                        // only the ***low 12 bits*** of each parameter are actually sent because of compression
+    // if ((Parameters.ID == 0) || (Parameters.ID > MAXPARAMETERS))
     // {
     //     Look1("Parameter error: ID is ");
     //     Look(Parameters.ID);
     //     return 8;
-   // }
+    // }
     LoadParameters();
     LoadRawDataWithParameters();
     DataTosend.ChannelBitMask = 0; //  zero channels to send with this packet
-    DebugParamsOut();
+   // DebugParamsOut();
+    // Look(ParaNames[Parameters.ID - 1]);
     return 11; //  was 8 is the number of parameters to send
+}
+
+/*********************************************************************************************************************************/
+
+void ShowSendingParameters()
+{
+    char FrontView_Connected[] = "Connected"; // this is the name of the Nextion screen's text box
+    char msg[60] = "";
+    strcpy(msg, ParaNames[Parameters.ID - 1]);
+    strcat(msg, " -> RX");
+    if (!LedWasGreen)
+        return;
+    if (ParametersToBeSentPointer)
+        SendText(FrontView_Connected, msg);
 }
 #endif

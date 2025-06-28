@@ -161,7 +161,6 @@ FASTRUN void Compress(uint16_t *compressed_buf, uint16_t *uncompressed_buf, uint
     }
 }
 
-
 /************************************************************************************************************/
 void RecordsPacketSuccess(uint8_t s)
 { // or failure according to s which is 1 or 0
@@ -317,7 +316,6 @@ void SuccessfulPacket()
     LostContactFlag = false;
 }
 
-
 /************************************************************************************************************/
 
 // This function sends ONLY the changed channels, which it encodes into 'rawdatabuffer'.
@@ -368,7 +366,7 @@ FASTRUN void SendData()
 
         if (AddExtraParameters)
         {
-            NumberOfChangedChannels = SendExtraParamemters();
+            NumberOfChangedChannels = GetExtraParameters();
         }
         else
         {
@@ -677,7 +675,7 @@ void SendBindingPipe()
 {
     if (BoundFlag || BuddyPupilOnWireless || !UsingDefaultPipeAddress)
         return; // No need to send the pipe if we are bound and model matched
-     BufferTeensyMACAddPipe();
+    BufferTeensyMACAddPipe();
 }
 /*********************************************************************************************************************************/
 void NormaliseTheRadio()
@@ -950,7 +948,7 @@ FASTRUN void CheckGapsLength()
     if (GapStart > 0)
     { // when reconnected, find out how long was connection lost
         ++GapCount;
-        ThisGap = (millis() - GapStart); 
+        ThisGap = (millis() - GapStart);
         if (ThisGap >= MinimumGap && UseLog)
             LogThisGap();
         if (ThisGap > GapLongest)

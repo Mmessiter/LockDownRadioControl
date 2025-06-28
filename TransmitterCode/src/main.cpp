@@ -1124,7 +1124,7 @@ FLASHMEM void setup()
     digitalWrite(POWER_OFF_PIN, LOW); // default is LOW anyway. HIGH to turn off
     BlueLedOn();
     NEXTION.begin(921600); // BAUD rate also set in display code THIS IS THE MAX (was 115200)
-    
+
     InitMaxMin();
     InitCentreDegrees();
     ResetSubTrims();
@@ -1135,11 +1135,10 @@ FLASHMEM void setup()
     WatchDogConfig.timeout = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
 
-    
     CheckSDCard(); // Check if SD card is present and working and initialise it
 
     TeensyWatchDog.begin(WatchDogConfig);
- 
+
     delay(300); // <<********************* MUST ALLOW DOG TO INITIALISE
     DelayWithDog(WARMUPDELAY);
     if (CheckFileExists(ModelsFile))
@@ -1154,7 +1153,7 @@ FLASHMEM void setup()
         ErrorState = MODELSFILENOTFOUND; // if no file ... or no SD
     }
     RestoreBrightness();
-   
+
     SendCommand(LoadingVis); // ... Make the "Loading ..." message visible as early as possible.
 
     GetTeensyMacAddress();
@@ -1191,7 +1190,7 @@ FLASHMEM void setup()
     StartInactvityTimeout();
     GetTXVersionNumber();
     ScreenTimeTimer = millis();
-    
+
     if (UseLog)
     {
         LogPowerOn();
@@ -3261,72 +3260,6 @@ void CheckAllModelIds()
     ReadOneModel(ModelNumber);
 }
 
-/******************************************************************************************************************************/
-
-void StartServosTypeView() // Frequency and centre pulse width
-{
-    char n_labels[22][5] = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n16"}, {"n18"}, {"n20"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}, {"n17"}, {"n19"}, {"n21"}};
-    char ch_labels[11][5] = {{"ch1"}, {"ch2"}, {"ch3"}, {"ch4"}, {"ch5"}, {"ch6"}, {"ch7"}, {"ch8"}, {"t13"}, {"t14"}, {"t16"}}; // 11
-    char GoServoTypesView[] = "page ServosTypeView";
-
-    SendCommand(GoServoTypesView);
-
-    for (int i = 0; i < 11; ++i)
-    {
-        SendValue(n_labels[i], ServoFrequency[i]);
-        SendValue(n_labels[i + 11], ServoCentrePulse[i]);
-        SendText(ch_labels[i], ChannelNames[i]);
-    }
-    CurrentView = SERVOTYPESVIEW;
-    UpdateModelsNameEveryWhere();
-}
-
-/******************************************************************************************************************************/
-
-void EndServoTypeView()
-{ // Frequency and centre pulse width
-
-    char n_labels[22][5] = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n16"}, {"n18"}, {"n20"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}, {"n17"}, {"n19"}, {"n21"}};
-    char ProgressStart[] = "vis Progress,1";
-    char ProgressEnd[] = "vis Progress,0";
-    char Progress[] = "Progress";
-    bool Altered = false;
-    char chgs[512];
-    char change[] = "change";
-    char cleared[] = "XX:";
-    for (uint16_t i = 0; i < 500; ++i)
-    { // get copy of any changes
-        chgs[i] = TextIn[i + 4];
-        chgs[i + 1] = 0;
-    }
-    SendCommand(ProgressStart);
-    for (int i = 0; i < 11; ++i)
-    {
-        if (InStrng(n_labels[i], chgs))
-        {
-            ServoFrequency[i] = GetValue(n_labels[i]);
-            Altered = true;
-        }
-        if (InStrng(n_labels[i + 11], chgs))
-        {
-            ServoCentrePulse[i] = GetValue(n_labels[i + 11]);
-            Altered = true;
-        }
-        SendValue(Progress, (i + 1) * (100 / 11));
-    }
-    SendValue(Progress, 100);
-    SendCommand(ProgressEnd);
-    if (Altered)
-    {
-        SaveOneModel(ModelNumber);
-        SendText(change, cleared);
-        AddParameterstoQueue(6);
-        AddParameterstoQueue(7);
-        SendText(change, cleared);
-    }
-    GotoFrontView();
-}
-
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!  ( Use "NUMBER<<8" )
@@ -3671,7 +3604,7 @@ FASTRUN void ButtonWasPressed()
         {
             GPSMarkHere = 255; // Mark this at RX
             GPS_RX_MaxDistance = 0;
-            AddParameterstoQueue(3); // 3 is the ID of the MARK HERE parameter
+            AddParameterstoQueue(GPS_MARK_LOCATION); // 3 is the ID of the MARK HERE parameter
             ClearText();
             return;
         }
@@ -3914,7 +3847,7 @@ FASTRUN void ButtonWasPressed()
                 SendValue(Progress, i * 100 / 16);
             }
             SendValue(Progress, 100);
-            AddParameterstoQueue(1); // 1 is the ID for the FAILSAFE parameters
+            AddParameterstoQueue(FAILSAFE_SETTINGS); // 1 is the ID for the FAILSAFE parameters
             ClearText();
             SendCommand(ProgressEnd);
             return;
@@ -5047,8 +4980,12 @@ void FASTRUN ManageTransmitter()
     if (RightNow - LastParameterSent >= 20)
     { // Send queued parameters
         if (ParametersToBeSentPointer)
+        {
             SendOutstandingParameters();
-        LastParameterSent = RightNow;
+            LastParameterSent = RightNow;
+            if (CurrentView == FRONTVIEW)
+                ShowSendingParameters();
+        }
     }
 
     if ((RightNow - LastModelScreenCheck >= 500))

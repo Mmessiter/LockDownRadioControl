@@ -477,16 +477,6 @@ void ShowConnectionQuality()
 
 /*********************************************************************************************************************************/
 
-void ShowSendingParameters()
-{
-    char FrontView_Connected[] = "Connected";
-    char SendingParameters[] = "Sending parameters to RX";
-    if (!LedWasGreen)
-        return;
-    SendText(FrontView_Connected, SendingParameters);
-}
-/*********************************************************************************************************************************/
-
 void PopulateFrontView()
 {
 
@@ -504,6 +494,7 @@ void PopulateFrontView()
     {
         ShowSendingParameters();
     }
+    
     if ((LastAutoModelSelect != AutoModelSelect) || (!ModelsMacUnionSaved.Val64))
     {
         LastAutoModelSelect = AutoModelSelect;

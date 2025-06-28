@@ -22,7 +22,7 @@ void SendSBUSData()
  * extra parameters are sent using the last few words bytes in every data packet.
  * the parameter sent is defined by the packet number & the packet number defined the transmitter.
  */
-void UseExtraParameters()
+void ReadExtraParameters()
 {
     uint16_t TwoBytes = 0;
     switch (Parameters.ID)
@@ -45,10 +45,12 @@ void UseExtraParameters()
         }
         break;
     case 4:
-
+        // Look(Parameters.word[1]);
+        // Look(Parameters.word[2]);
         break;
     case 5:
-        UseSBUS = true; // ALWAYS!
+        // Look(Parameters.word[1]);
+        // Look(Parameters.word[2]);
         break;
     case 6:
         for (int i = 0; i < SERVOSUSED; ++i)
@@ -167,7 +169,8 @@ void ReadMoreParameters()
     {
         Parameters.word[i] = RawDataIn[i]; // 8 words - of 12 useful BITs each
     }
-    UseExtraParameters();
+    ReadExtraParameters();
+   // Look(Parameters.ID);
 }
 // ************************************************************************************************************/
 inline uint8_t GetDecompressedSize(uint8_t DynamicPayloadSize)

@@ -740,9 +740,10 @@ void EndBuddyView()
     Buddy_Mid_Position = GetValue(cb1);
     Buddy_Hi_Position = GetValue(cb2);
 
-    if (BuddyMasterOnWireless && (!Buddy_Mid_Position && !Buddy_Hi_Position)){ // Bottom can be master but -- maybe not both top two.
+    if (BuddyMasterOnWireless && (!Buddy_Mid_Position && !Buddy_Hi_Position))
+    { // Bottom can be master but -- maybe not both top two.
         if (!GetConfirmation(pBuddyView, Prompt))
-        return;
+            return;
     }
     SaveAllParameters();
     UpdateModelsNameEveryWhere();
@@ -1200,29 +1201,175 @@ void RXOptionsViewEnd()
 
 /******************************************************************************************************************************/
 
-void StabilisationScreenStart(){
-    
-    SendCommand(pPIDView);
-    Look("Start");
+void StartServosTypeView() // Frequency and centre pulse width
+{
+    char n_labels[22][5] = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n16"}, {"n18"}, {"n20"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}, {"n17"}, {"n19"}, {"n21"}};
+    char ch_labels[11][5] = {{"ch1"}, {"ch2"}, {"ch3"}, {"ch4"}, {"ch5"}, {"ch6"}, {"ch7"}, {"ch8"}, {"t13"}, {"t14"}, {"t16"}}; // 11
+    char GoServoTypesView[] = "page ServosTypeView";
+
+    SendCommand(GoServoTypesView);
+
+    for (int i = 0; i < 11; ++i)
+    {
+        SendValue(n_labels[i], ServoFrequency[i]);
+        SendValue(n_labels[i + 11], ServoCentrePulse[i]);
+        SendText(ch_labels[i], ChannelNames[i]);
+    }
+    CurrentView = SERVOTYPESVIEW;
+    UpdateModelsNameEveryWhere();
 }
 
 /******************************************************************************************************************************/
 
-void CalibrateMPU6050(){
+void EndServoTypeView()
+{ // Frequency and centre pulse width
 
-    Look("Calibrate");
+    char n_labels[22][5] = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n16"}, {"n18"}, {"n20"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}, {"n17"}, {"n19"}, {"n21"}};
+    char ProgressStart[] = "vis Progress,1";
+    char ProgressEnd[] = "vis Progress,0";
+    char Progress[] = "Progress";
+    bool Altered = false;
+    char chgs[512];
+    char change[] = "change";
+    char cleared[] = "XX:";
+    for (uint16_t i = 0; i < 500; ++i)
+    { // get copy of any changes
+        chgs[i] = TextIn[i + 4];
+        chgs[i + 1] = 0;
+    }
+    SendCommand(ProgressStart);
+    for (int i = 0; i < 11; ++i)
+    {
+        if (InStrng(n_labels[i], chgs))
+        {
+            ServoFrequency[i] = GetValue(n_labels[i]);
+            Altered = true;
+        }
+        if (InStrng(n_labels[i + 11], chgs))
+        {
+            ServoCentrePulse[i] = GetValue(n_labels[i + 11]);
+            Altered = true;
+        }
+        SendValue(Progress, (i + 1) * (100 / 11));
+    }
+    SendValue(Progress, 100);
+    SendCommand(ProgressEnd);
+    if (Altered)
+    {
+        SaveOneModel(ModelNumber);
+        SendText(change, cleared);
+        AddParameterstoQueue(SERVO_FREQUENCIES);  // SERVO_FREQUENCIES
+        AddParameterstoQueue(SERVO_PULSE_WIDTHS); // SERVO_PULSE_WIDTHS
+        SendText(change, cleared);
+    }
+    GotoFrontView();
 }
-    /******************************************************************************************************************************/
-    void GyroApply()
+
+
+/******************************************************************************************************************************/
+
+void StabilisationScreenStart()
 {
-    Look("Apply");
+    char sw0[] = "sw0"; // Stabilisation on off
+    char sw4[] = "sw4"; // Self-levelling on off
+    char sw3[] = "sw3"; // Use Kalman filter
+    char sw2[] = "sw2"; // Use rate LFP
+    char sw1[] = "sw1"; // Use serial debug
+    char t9[] = "t9";   // PID P
+    char t14[] = "t14"; // PID I
+    char t15[] = "t15"; // PID D
+    char t16[] = "t16"; // PID Q_angle
+    char t17[] = "t17"; // PID Q_bias
+    char t18[] = "t18"; // PID R_measure
+    char t19[] = "t19"; // alpha
+    char t20[] = "t20"; // beta
+
+    char temp[10];
+
+    SendCommand(pPIDView); // load the PID screen
+    CurrentView = PIDVIEW;
+
+    dtostrf(PID_P, 1, 3, temp);
+    SendText(t9, temp);
+    dtostrf(PID_I, 1, 3, temp);
+    SendText(t14, temp);
+    dtostrf(PID_D, 1, 3, temp);
+    SendText(t15, temp);
+    dtostrf(Kalman_Q_angle, 1, 3, temp);
+    SendText(t16, temp);
+    dtostrf(Kalman_Q_bias, 1, 3, temp);
+    SendText(t17, temp);
+    dtostrf(Kalman_R_measure, 1, 3, temp);
+    SendText(t18, temp);
+    dtostrf(alpha, 1, 3, temp);
+    SendText(t19, temp);
+    dtostrf(beta, 1, 3, temp);
+    SendText(t20, temp);
+    SendValue(sw0, StabilisationOn);
+    SendValue(sw4, SelfLevellingOn);
+    SendValue(sw3, UseKalmanFilter);
+    SendValue(sw2, UseRateLFP);
+    SendValue(sw1, UseSerialDebug);
+
 }
 
 /******************************************************************************************************************************/
 
 void StabilisationScreenEnd()
 {
-    Look("End");
+    // we need to get the values from the Nextion display
+    char sw0[] = "sw0"; // Stabilisation on off
+    char sw4[] = "sw4"; // Self-levelling on off        
+    char sw3[] = "sw3"; // Use Kalman filter
+    char sw2[] = "sw2"; // Use rate LFP
+    char sw1[] = "sw1"; // Use serial debug
+    char t9[] = "t9";   // PID P
+    char t14[] = "t14"; // PID I
+    char t15[] = "t15"; // PID D
+    char t16[] = "t16"; // PID Q_angle
+    char t17[] = "t17"; // PID Q_bias
+    char t18[] = "t18"; // PID R_measure
+    char t19[] = "t19"; // alpha
+    char t20[] = "t20"; // beta
+    char temp[10];
+
+
+    GetText(t9, temp);
+    PID_P = atof(temp);
+    GetText(t14, temp);
+    PID_I = atof(temp);
+    GetText(t15, temp);
+    PID_D = atof(temp);
+    GetText(t16, temp);
+    Kalman_Q_angle = atof(temp);
+    GetText(t17, temp);
+    Kalman_Q_bias = atof(temp);
+    GetText(t18, temp);
+    Kalman_R_measure = atof(temp);
+    GetText(t19, temp);
+    alpha = atof(temp);
+    GetText(t20, temp);
+    beta = atof(temp);
+    StabilisationOn = GetValue(sw0);
+    SelfLevellingOn = GetValue(sw4);
+    UseKalmanFilter = GetValue(sw3);
+    UseRateLFP = GetValue(sw2);
+    UseSerialDebug = GetValue(sw1);
+    SaveOneModel(ModelNumber); // save the values to the model. ...  later!!
     SendCommand(pRXSetupView);
+    CurrentView = RXSETUPVIEW;
 }
+/******************************************************************************************************************************/
+
+void CalibrateMPU6050()
+{
+
+    Look("Calibrate");
+}
+/******************************************************************************************************************************/
+void GyroApply()
+{
+    Look("Apply");
+}
+
 #endif

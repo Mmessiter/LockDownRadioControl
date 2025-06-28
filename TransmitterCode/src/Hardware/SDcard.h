@@ -435,6 +435,33 @@ bool ReadOneModel(uint32_t Mnum)
         ++SDCardAddress;
         ++SDCardAddress;
     }
+    PID_P = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    PID_I = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    PID_D = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    Kalman_Q_angle = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    Kalman_Q_bias = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    Kalman_R_measure = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    alpha = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    beta = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    StabilisationOn = (bool)SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
+    SelfLevellingOn = (bool)SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
+    UseKalmanFilter = (bool)SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
+    UseRateLFP = (bool)SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
+    UseSerialDebug = (bool)SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
+
 
     CheckOutPutChannels();
     CheckServoType();
@@ -554,6 +581,44 @@ void BuildCheckSum(int p_address, short int p_value)
         FileCheckSum += (p_value * (p_address + 1)); // don't include checksum in its own calculation
 }
 
+/*********************************************************************************************************************************/
+void SDUpdateFLOAT(int p_address, float p_value)
+{
+    union
+    {
+        float f;
+        uint8_t b[4];
+        uint32_t u32;
+    } converter;
+    converter.f = p_value;
+    BuildCheckSum(p_address, converter.u32);
+    ModelsFileNumber.seek(p_address);
+    ShortDelay();
+    for (int i = 0; i < 4; ++i)
+    {
+        ModelsFileNumber.write(converter.b[i]);
+        ShortDelay();
+    }
+}
+//*********************************************************************************************************************************/
+float SDReadFLOAT(int p_address)
+{
+    union
+    {
+        float f;
+        uint8_t b[4];
+        uint32_t u32;
+    } converter;
+    ModelsFileNumber.seek(p_address);
+    ShortDelay();
+    for (int i = 0; i < 4; ++i)
+    {
+        converter.b[i] = ModelsFileNumber.read();
+        ShortDelay();
+    }
+    BuildCheckSum(p_address, converter.u32);
+    return converter.f;
+}
 /*********************************************************************************************************************************/
 
 void SDUpdate32BITS(int p_address, uint32_t p_value)
@@ -1293,6 +1358,32 @@ void SaveOneModel(uint32_t mnum)
         ++SDCardAddress;
         ++SDCardAddress;
     }
+    SDUpdateFLOAT(SDCardAddress, PID_P);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, PID_I);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, PID_D);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, Kalman_Q_angle);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, Kalman_Q_bias);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, Kalman_R_measure);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, alpha);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, beta);
+    SDCardAddress += 4;
+    SDUpdate8BITS(SDCardAddress, StabilisationOn);
+    ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, SelfLevellingOn);
+    ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, UseKalmanFilter);
+    ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, UseRateLFP);
+    ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, UseSerialDebug);
+    ++SDCardAddress;
     SaveCheckSum32(); // Save the Model parametres checksm
 
     // ********************** Add more

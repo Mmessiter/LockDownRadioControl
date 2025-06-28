@@ -52,7 +52,7 @@
 //                                       General                                      *
 // ************************************************************************************
 
- //#define USE_STABILISATION
+// #define USE_STABILISATION
 /*********************************************************************************************************************************/
 
 #define VERYHIGHPACKETRATE // Comment this out if using stabilisation
@@ -113,13 +113,13 @@
 #define SCREENCHANGEWAIT 10         // allow 10ms for screen to appear
 #define BATTERY_CHECK_INTERVAL 1000 // 2 seconds between battery checks
 
-#define MAXPARAMETERS 7             // Max types of parameters packet to send  ... will increase.
-#define POWERONOFFDELAY 2000        // Delay after power OFF before transmit stops.
-#define POWERONOFFDELAY2 10000      // Delay after power ON before Off is possible....
-                                    // and delay after power off before power on button is active
-                                    // **************************************************************************
-                                    //                            FHSS PARAMETERS                               *
-                                    //***************************************************************************
+#define MAXPARAMETERS 7        // Max types of parameters packet to send  ... will increase.
+#define POWERONOFFDELAY 2000   // Delay after power OFF before transmit stops.
+#define POWERONOFFDELAY2 10000 // Delay after power ON before Off is possible....
+                               // and delay after power off before power on button is active
+                               // **************************************************************************
+                               //                            FHSS PARAMETERS                               *
+                               //***************************************************************************
 
 #define DATARATE RF24_250KBPS   // RF24_250KBPS or RF24_1MBPS or RF24_2MBPS
 #define FASTDATARATE RF24_1MBPS // 2 MBPS = RF24_2MBPS; 1 MBPS = RF24_1MBPS >> THIS IS FOR BUDDY ONLY <<
@@ -168,6 +168,19 @@
 #define Purple 39070
 #define Orange 64512
 #define White 65535
+
+// **************************************************************************
+//                      Parameters to sent to RX IDs                        *
+// **************************************************************************
+
+#define PARAMETERSENDREPEATS 3 // How many times to send each parameter in case it gets lost
+#define FAILSAFE_SETTINGS 1    // Parameter IDs ....
+#define QNH_SETTING 2
+#define GPS_MARK_LOCATION 3
+#define DUMMY4 4
+#define DUMMY5 5
+#define SERVO_FREQUENCIES 6
+#define SERVO_PULSE_WIDTHS 7
 
 // **************************************************************************
 //                               Mixes                                      *
@@ -231,6 +244,7 @@
 #define TYPEVIEW 40
 #define SERVOTYPESVIEW 41
 #define LOGFILESLISTVIEW 42
+#define PIDVIEW 43
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -729,7 +743,10 @@ void StabilisationScreenStart();
 void StabilisationScreenEnd();
 void GyroApply();
 void CalibrateMPU6050();
-int SendExtraParamemters();
+int GetExtraParameters();
+void ShowSendingParameters();
+float SDReadFLOAT(int p_address);
+void SDUpdateFLOAT(int p_address, float p_value);
 #ifdef USE_BTLE
 void SendViaBLE();
 #endif
@@ -1241,6 +1258,20 @@ uint8_t Buddy_Low_Position = 0;
 uint8_t Buddy_Mid_Position = 1;
 uint8_t Buddy_Hi_Position = 2;
 
+float PID_P = 2.0f;
+float PID_I = 0.1f;
+float PID_D = 0.01f;
+float Kalman_Q_angle = 0.001f;
+float Kalman_Q_bias = 0.003f;
+float Kalman_R_measure = 0.03f;
+float alpha = 0.05f;
+float beta = 0.05f;
+bool StabilisationOn = false;
+bool SelfLevellingOn = false;
+bool UseKalmanFilter = false;
+bool UseRateLFP = false;
+bool UseSerialDebug = false;
+
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
 // **********************************************************************************************************************************
@@ -1261,6 +1292,8 @@ namespace FHSS_data
     uint8_t PaceMaker = PACEMAKER;   // now variables are used
     uint8_t RetryCount = RETRYCOUNT; // now variables are used
     uint8_t RetryWait = RETRYWAIT;   // now variables are used
+
+    
 
 } // namespace FHSS_data
 

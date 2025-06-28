@@ -22,11 +22,11 @@
 //  #define DB_FAILSAFE
 //  #define DB_RXTIMERS
 
-//#define USE_STABILISATION 
-// >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! (if it won't connect, probably one or both is wrong! )******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ #define USE_STABILISATION
+//  >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! (if it won't connect, probably one or both is wrong! )******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
- #define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
- #define USE_11PWM_OUTPUTS           // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
+#define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
+#define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -149,7 +149,7 @@ uint8_t ReconnectIndex = 0;
 uint8_t PacketNumber;
 uint16_t RawDataIn[RECEIVEBUFFERSIZE + 1];    //  21 x 16 BIT words // lots of spare space
 uint16_t ReceivedData[RECEIVEBUFFERSIZE + 1]; //  21 x 16 BIT words// lots of spare space//
-int16_t StabilisationCorrection[RECEIVEBUFFERSIZE + 1] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+int16_t StabilisationCorrection[RECEIVEBUFFERSIZE + 1] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 uint16_t Interations = 0;
 uint32_t HopStart;
 uint64_t NewPipeMaybe = 0;
@@ -230,7 +230,7 @@ void HopToNextChannel();
 void DoStabilsation();
 void DelayMillis(uint16_t ms);
 void DoStabilsation();
-void UseExtraParameters();
+void ReadExtraParameters();
 FASTRUN void Reconnect();
 void LoadLongerAckPayload();
 void Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, uint8_t uncompressed_size);
@@ -301,9 +301,9 @@ Adafruit_DPS310 dps310;
 
 //           Channels: 1  2 [3][4] 5  6 {7} 8  9 {10} 11 (Channels 3+4 & 7+10 must have same frquency)
 uint8_t PWMPins[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}; //  if only SERVOSUSED = 9 then last two are ignored
-SBUS MySbus(SBUSPORT);         // SBUS
-bool BoundFlag = false;                  /** indicates if receiver paired with transmitter */
-uint16_t SbusChannels[CHANNELSUSED + 1]; // Just one spare
+SBUS MySbus(SBUSPORT);                                    // SBUS
+bool BoundFlag = false;                                   /** indicates if receiver paired with transmitter */
+uint16_t SbusChannels[CHANNELSUSED + 1];                  // Just one spare
 bool FailSafeChannel[17];
 bool FailSafeDataLoaded = false;
 uint8_t FS_byte1 = 0; // All 16 failsafe channel flags are in these two bytes
@@ -346,7 +346,6 @@ bool FirstConnection = true;
 bool FailedSafe = true; // Starting up as the same as after failsafe
 uint8_t PPMChannelOrder[CHANNELSUSED] = {2, 3, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 uint8_t PPMChannelCount = 8;
-bool UseSBUS = true;
 bool NewData = false;
 uint16_t pcount = 0; // how many pipes so far received from TX
 bool Blinking = false;
