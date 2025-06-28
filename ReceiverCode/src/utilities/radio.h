@@ -27,40 +27,39 @@ void ReadExtraParameters()
     uint16_t TwoBytes = 0;
     switch (Parameters.ID)
     {
-    case 1:                                                      // working!
+    case FAILSAFE_SETTINGS:                                      // 1 working!
         FS_byte1 = Parameters.word[1] & 0xff;                    // These 2 bytes are 16 failsafe flags
         FS_byte2 = Parameters.word[2] & 0xff;                    // These 2 bytes are 16 failsafe flags
         TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8); // because of the shift left 8, adding here is the same as ORing them.
         RebuildFlags(FailSafeChannel, TwoBytes);
         SaveFailSafeDataToEEPROM();
         break;
-    case 2:
+    case QNH_SETTING: // 2 
         Qnh = (float)Parameters.word[1];
         break;
-    case 3:
+    case GPS_MARK_LOCATION: // 3 
         if (Parameters.word[2] == 255)
         { // Mark this location
             MarkHere();
             Parameters.word[2] = 0; // ... Once only
         }
         break;
-    case 4:
+    case DUMMY4: // 4 
         // Look(Parameters.word[1]);
         // Look(Parameters.word[2]);
         break;
-    case 5:
+    case DUMMY5: // 5 !
         // Look(Parameters.word[1]);
         // Look(Parameters.word[2]);
         break;
-    case 6:
+    case SERVO_FREQUENCIES: // 6 
         for (int i = 0; i < SERVOSUSED; ++i)
             ServoFrequency[i] = Parameters.word[i + 1];
         SetServoFrequency();
         break;
-    case 7:
+    case SERVO_PULSE_WIDTHS: // 7 
         for (int i = 0; i < SERVOSUSED; ++i)
             ServoCentrePulse[i] = Parameters.word[i + 1];
-        // SetServoFrequency(); // not needed here, as it was done in case 6
         break;
     default:
         break;
@@ -170,7 +169,7 @@ void ReadMoreParameters()
         Parameters.word[i] = RawDataIn[i]; // 8 words - of 12 useful BITs each
     }
     ReadExtraParameters();
-   // Look(Parameters.ID);
+    // Look(Parameters.ID);
 }
 // ************************************************************************************************************/
 inline uint8_t GetDecompressedSize(uint8_t DynamicPayloadSize)

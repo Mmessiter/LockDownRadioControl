@@ -263,11 +263,22 @@ void BlinkFast()
     TurnLedOn();
 }
 
-float Q_angle = 0.01f;
-float Q_bias = 0.003f;
-float R_measure = 0.03f;
+
 #define USE_ANGLE_SMOOTHING
 
+// float PID_P = 2.0f;
+// float PID_I = 0.1f;
+// float PID_D = 0.01f;
+// float Kalman_Q_angle = 0.001f;
+// float Kalman_Q_bias = 0.003f;
+// float Kalman_R_measure = 0.03f;
+// float alpha = 0.05f;
+// float beta = 0.05f;
+// bool StabilisationOn = false;
+// bool SelfLevellingOn = false;
+// bool UseKalmanFilter = false;
+// bool UseRateLFP = false;
+// bool UseSerialDebug = false
 // ===================================================================================
 void initKalman()
 {
@@ -305,16 +316,16 @@ float updateKalman(KalmanState &state, float accelAngle, float gyroRate, float d
   // Predict step (integrate gyro)
   state.angle += dt * (gyroRate - state.bias);
 
-  state.P[0][0] += dt * (dt * state.P[1][1] - state.P[0][1] - state.P[1][0] + Q_angle);
+  state.P[0][0] += dt * (dt * state.P[1][1] - state.P[0][1] - state.P[1][0] + Kalman_Q_angle);
   state.P[0][1] -= dt * state.P[1][1];
   state.P[1][0] -= dt * state.P[1][1];
-  state.P[1][1] += Q_bias * dt;
+  state.P[1][1] += Kalman_Q_bias * dt;
 
   // Innovation
   float y = accelAngle - state.angle;
 
   // Kalman gain
-  float S = state.P[0][0] + R_measure;
+  float S = state.P[0][0] + Kalman_R_measure;
   float K[2] = {state.P[0][0] / S, state.P[1][0] / S};
 
   // Correction
@@ -347,7 +358,7 @@ void kalmanFilter()
 #ifdef USE_ANGLE_SMOOTHING
   static float smoothedRoll = 0;
   static float smoothedPitch = 0;
-  const float alpha = 0.05f;
+ 
   smoothedRoll = (1 - alpha) * smoothedRoll + alpha * RawRollAngle;
   smoothedPitch = (1 - alpha) * smoothedPitch + alpha * RawPitchAngle;
 #else
@@ -370,7 +381,6 @@ void kalmanFilter()
 void filterRatesForHelicopter()
 {
   static float lastRollRate = 0, lastPitchRate = 0, lastYawRate = 0;
-  const float beta = 0.01f; // very aggressive filtering
   filteredRollRate = (1 - beta) * lastRollRate + beta * filteredRollRate;
   filteredPitchRate = (1 - beta) * lastPitchRate + beta * filteredPitchRate;
   filteredYawRate = (1 - beta) * lastYawRate + beta * filteredYawRate;

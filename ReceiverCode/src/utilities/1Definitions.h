@@ -132,6 +132,18 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 
 #define PIPES_TO_COMPARE 8
 
+// **************************************************************************
+//                             Parameters' IDs                              *
+// **************************************************************************
+
+#define FAILSAFE_SETTINGS 1 // Parameters' IDs ....
+#define QNH_SETTING 2
+#define GPS_MARK_LOCATION 3
+#define DUMMY4 4
+#define DUMMY5 5
+#define SERVO_FREQUENCIES 6
+#define SERVO_PULSE_WIDTHS 7
+
 // ****************************************************************************************************************************************
 
 RF24 Radio1(pinCE1, pinCSN1);
@@ -221,6 +233,20 @@ KalmanState kalmanYaw = {0};
 // These store the sensor readings that correspond to the CALIBRATION ORIENTATION (0°)
 float CalibrationRollReading = 0.0f;
 float CalibrationPitchReading = 0.0f;
+
+float PID_P = 2.0f;
+float PID_I = 0.1f;
+float PID_D = 0.01f;
+float Kalman_Q_angle = 0.001f;
+float Kalman_Q_bias = 0.003f;
+float Kalman_R_measure = 0.03f;
+float alpha = 0.05f;
+float beta = 0.05f;
+bool StabilisationOn = false;
+bool SelfLevellingOn = false;
+bool UseKalmanFilter = false;
+bool UseRateLFP = false;
+bool UseSerialDebug = false;
 
 /************************************************************************************************************/
 
