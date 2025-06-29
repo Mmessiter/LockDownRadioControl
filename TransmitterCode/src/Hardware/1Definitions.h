@@ -113,13 +113,13 @@
 #define SCREENCHANGEWAIT 10         // allow 10ms for screen to appear
 #define BATTERY_CHECK_INTERVAL 1000 // 2 seconds between battery checks
 
-#define MAXPARAMETERS 7        // Max types of parameters packet to send  ... will increase.
-#define POWERONOFFDELAY 2000   // Delay after power OFF before transmit stops.
-#define POWERONOFFDELAY2 10000 // Delay after power ON before Off is possible....
-                               // and delay after power off before power on button is active
-                               // **************************************************************************
-                               //                            FHSS PARAMETERS                               *
-                               //***************************************************************************
+#define MAXPARAMETERS 7       // Max types of parameters packet to send  ... will increase.
+#define POWERONOFFDELAY 1000  // Delay after power OFF before transmit stops.
+#define POWERONOFFDELAY2 4000 // Delay after power ON before Off is possible....
+                              // and delay after power off before power on button is active
+                              // **************************************************************************
+                              //                            FHSS PARAMETERS                               *
+                              //***************************************************************************
 
 #define DATARATE RF24_250KBPS   // RF24_250KBPS or RF24_1MBPS or RF24_2MBPS
 #define FASTDATARATE RF24_1MBPS // 2 MBPS = RF24_2MBPS; 1 MBPS = RF24_1MBPS >> THIS IS FOR BUDDY ONLY <<
@@ -1292,8 +1292,6 @@ namespace FHSS_data
     uint8_t PaceMaker = PACEMAKER;   // now variables are used
     uint8_t RetryCount = RETRYCOUNT; // now variables are used
     uint8_t RetryWait = RETRYWAIT;   // now variables are used
-
-    
 
 } // namespace FHSS_data
 

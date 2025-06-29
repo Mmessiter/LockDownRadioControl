@@ -916,7 +916,7 @@ void SendColour(char *but, int Colour)
 /*********************************************************************************************************************************/
 void ShowSafetyIsOn()
 {
-    if (AnnounceBanks && !BeQuiet && UseMotorKill)
+    if (AnnounceBanks && !BeQuiet && UseMotorKill && millis()>10000)
     {
         PlaySound(SAFEON);
         if (UseLog)
@@ -1124,7 +1124,6 @@ FLASHMEM void setup()
     digitalWrite(POWER_OFF_PIN, LOW); // default is LOW anyway. HIGH to turn off
     BlueLedOn();
     NEXTION.begin(921600); // BAUD rate also set in display code THIS IS THE MAX (was 115200)
-
     InitMaxMin();
     InitCentreDegrees();
     ResetSubTrims();
@@ -1134,11 +1133,8 @@ FLASHMEM void setup()
     WatchDogConfig.window = WATCHDOGMAXRATE;  //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
     WatchDogConfig.timeout = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
-
     CheckSDCard(); // Check if SD card is present and working and initialise it
-
     TeensyWatchDog.begin(WatchDogConfig);
-
     delay(300); // <<********************* MUST ALLOW DOG TO INITIALISE
     DelayWithDog(WARMUPDELAY);
     if (CheckFileExists(ModelsFile))
@@ -1153,9 +1149,7 @@ FLASHMEM void setup()
         ErrorState = MODELSFILENOTFOUND; // if no file ... or no SD
     }
     RestoreBrightness();
-
     SendCommand(LoadingVis); // ... Make the "Loading ..." message visible as early as possible.
-
     GetTeensyMacAddress();
     ConvertBuddyPipeTo64BITS();
     Wire.begin();
@@ -1163,9 +1157,7 @@ FLASHMEM void setup()
     if (USE_INA219)
         ina219.begin();
     InitSwitchesAndTrims();
-
     InitRadio(DefaultPipe);
-
     delay(WARMUPDELAY);                                // Allow Nextion time to warm up
     SendValue(FrontView_BackGround, BackGroundColour); // Get colours ready
     SendValue(FrontView_ForeGround, ForeGroundColour);
@@ -1175,10 +1167,7 @@ FLASHMEM void setup()
 
     SetAudioVolume(AudioVolume);
     if (PlayFanfare)
-    {
         PlaySound(WINDOWS1);
-        DelayWithDog(3000); // Fanfare takes about 4 seconds
-    }
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
@@ -1190,7 +1179,6 @@ FLASHMEM void setup()
     StartInactvityTimeout();
     GetTXVersionNumber();
     ScreenTimeTimer = millis();
-
     if (UseLog)
     {
         LogPowerOn();
@@ -1229,7 +1217,7 @@ FLASHMEM void setup()
     RationaliseBuddy();
     WarnUserIfBuddyBoxIsOn();
     ClearMostParameters();
-    DelayWithDog(1000);
+    DelayWithDog(1000); 
     GotoFrontView();
 }
 // **************************************************************************************************************************************************************
@@ -4808,28 +4796,41 @@ bool CheckModelName()
 }
 
 /************************************************************************************************************/
-void SimulateCloseDown()
-{ // Because real closedown occurs only after button is released, this function simulates it.
-    char ScreenOff[] = "dim=0";
+void Close_TX_Down()
+{ 
     char NotInUse[] = "Not in use";
+    char ClosingDown[] = "Closing down ...";
+    char Saving[] = "Saving ";
+    char msg1[80];
+    char t0[] = "t0";
+    char msgvis[] = "vis t0,1";
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, 0);
-    DelayWithDog(70);
-    SendCommand(ScreenOff); // turn off screen
-    DelayWithDog(70);
-    SendCommand(pBlankView); // Set to BlankView
+    RestoreBrightness();
+    SendCommand(pBlankView);   // Set to BlankView
+    SendCommand(msgvis);       // Make it visible
+    if (PlayFanfare)
+    {
+        PlaySound(WINDOWS2);
+    } // Play the fanfare
     if (strcmp(ModelName, NotInUse) != 0)
+    { // If model is in use
+        strcpy(msg1, Saving);
+        strcat(msg1, ModelName); // Build up the message
+        SendText(t0, msg1); // Show 'Saving <model> ' on screen
         SaveAllParameters(); // Save the model if it's not 'Not in use'
+        DelayWithDog(500); // Wait for 0.5 seconds to allow the message to be displayed
+    }
+    SendText(t0, ClosingDown); // Show 'Closing down ...' on screen
     if (UseLog)
     {
         strcpy(LogFileName, ""); // avoid logging to the wrong file
         LogPowerOff();
     } // log the event
-    if (PlayFanfare)
-        PlaySound(WINDOWS2);           // Play the fanfare
     DelayWithDog(POWERONOFFDELAY);     // 2 seconds delay in case button held down too long
-    digitalWrite(POWER_OFF_PIN, HIGH); // Power off really, eventually ...
+    digitalWrite(POWER_OFF_PIN, HIGH); // Power off the transmitter
+    delay(100);                        // Wait for a short time to ensure power off
 }
 
 // ************************************************************************************************************/
@@ -4883,7 +4884,7 @@ void CheckPowerOffButton()
             GotoFrontView();
 
         if (!LedWasGreen)
-            SimulateCloseDown(); // if not connected power off immediately
+            Close_TX_Down(); // if not connected power off immediately
 
         if (LedWasGreen)
         {
@@ -4931,7 +4932,7 @@ void CheckPowerOffButton()
             SendText(StillConnectedBox, PowerMsg);
             if (TurnOffSecondToGo <= 0)
             { // Time's up!
-                SimulateCloseDown();
+                Close_TX_Down();
             }
             --TurnOffSecondToGo;
             if (TrimClicks)
