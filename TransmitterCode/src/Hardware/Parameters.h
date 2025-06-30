@@ -206,62 +206,46 @@ void LoadHeliDefaults()
 {
     if (GetConfirmation(pPIDView, (char *)"Load heli defaults?!"))
     {
+        ActiveSettings = &RateSettings;    // set the active settings to the rate settings
         *ActiveSettings = HeliRate;        // overwrite currently active settings
-        RateSettings = HeliRate;           // set the rate settings to the defaults
-        SelfLevelSettings = HeliLevelling; // set levelling rate settings to the defaults
+        SelfLevelSettings = HeliLevelling; // set levelling rate settings to the heli defaults
         SelfLevellingOn = false;           // defaults are always without self-levelling
         DisplayStabilisationScreenData();
-        // MsgBox(pPIDView, (char *)"Heli defaults loaded."); // show the message box with the text
     }
-    // else
-    // {
-    //     MsgBox(pPIDView, (char *)"Heli defaults NOT loaded."); // show the message box with the text
-    // }
 }
 //************************************************************************************************************/
 void LoadPlaneDefaults()
 {
     if (GetConfirmation(pPIDView, (char *)"Load plane defaults?!"))
     {
+        ActiveSettings = &RateSettings;     // set the active settings to the rate settings
         *ActiveSettings = PlaneRate;        // overwrite currently active settings
-        RateSettings = PlaneRate;           // set the rate settings to the defaults
-        SelfLevelSettings = PlaneLevelling; // set levelling rate settings to the defaults
+        SelfLevelSettings = PlaneLevelling; // set levelling rate settings to the plane defaults
         SelfLevellingOn = false;            // defaults are always without self-levelling
         DisplayStabilisationScreenData();
-        // MsgBox(pPIDView, (char *)"Plane defaults loaded."); // show the message box with the text
     }
-    // else
-    // {
-    //     MsgBox(pPIDView, (char *)"Plane defaults NOT loaded."); // show the message box with the text
-    // }
 }
 // ************************************************************************************************************/
 void SaveHeliDefaults()
 {
     if (GetConfirmation((char *)"page PIDView", (char *)"Save heli defaults?"))
     {
+        ActiveSettings = &RateSettings;    // set the active settings to the rate settings
+        ReadStabilisationParameters();     // in case the values were changed on the screen
         HeliRate = *ActiveSettings;        // save the current rate settings
         HeliLevelling = SelfLevelSettings; // save the current levelling settings
-        // MsgBox(pPIDView, (char *)"Heli defaults saved.");        // show the message box with the text
-    }
-    // else
-    // {
-    //     MsgBox(pPIDView, (char *)"Heli defaults NOT saved."); // show the message box with the text
-    // }
+        }
 }
 // ************************************************************************************************************/
 void SavePlaneDefaults()
 {
     if (GetConfirmation(pPIDView, (char *)"Save plane defaults?"))
     {
+        ActiveSettings = &RateSettings;     // set the active settings to the rate settings
+        ReadStabilisationParameters();      // in case the values were changed on the screen
         PlaneRate = *ActiveSettings;        // save the current rate settings
         PlaneLevelling = SelfLevelSettings; // save the current levelling settings
-        // MsgBox(pPIDView, (char *)"Plane defaults saved."); // show the message box with the text
     }
-    // else
-    // {
-    //     MsgBox(pPIDView, (char *)"Plane defaults NOT saved."); // show the message box with the text
-    // }
 }
 // ************************************************************************************************************/
 void FactoryDefaults()
@@ -277,11 +261,6 @@ void FactoryDefaults()
         ActiveSettings = &RateSettings; // set the active settings to the rate settings
         SelfLevellingOn = false;        // defaults are always without self-levelling
         DisplayStabilisationScreenData();
-        // MsgBox(pPIDView, (char *)"Factory defaults loaded."); // show the message box with the text
     }
-    // else
-    // {
-    //     MsgBox(pPIDView, (char *)"Factory defaults NOT loaded."); // show the message box with the text
-    // }
 }
 #endif
