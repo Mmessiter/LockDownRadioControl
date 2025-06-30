@@ -22,14 +22,22 @@ void AddParameterstoQueue(uint8_t ID) // todo:  This function repeats the same p
     // Look(ParaNames[ID - 1]);
 }
 
+//************************************************************************************************************/
+void SendStabilationParameters()
+{                                             // Send the parameters that are used for stabilisation
+    AddParameterstoQueue(BOOLEANS);           // BOOLEANS 9
+    AddParameterstoQueue(ALPHA_BETA);         // ALPHA_BETA 8
+    AddParameterstoQueue(PID_VALUES);         // PID Values 4
+    AddParameterstoQueue(KALMAN_VALUES);      // KALMAN Values 5
+}
 /*********************************************************************************************************************************/
 void SendInitialSetupParams()
 {
-    AddParameterstoQueue(QNH_SETTING);        // QNH 2
-    AddParameterstoQueue(SERVO_FREQUENCIES);  // Servo Frequencies 6
+    SendStabilationParameters();              // Send the parameters that are used for stabilisation
     AddParameterstoQueue(SERVO_PULSE_WIDTHS); // Servo Pulse Widths 7
-    AddParameterstoQueue(DUMMY4);
-    AddParameterstoQueue(DUMMY5);
+    AddParameterstoQueue(SERVO_FREQUENCIES);  // Servo Frequencies 6
+    AddParameterstoQueue(QNH_SETTING);        // QNH 2
+    AddParameterstoQueue(FAILSAFE_SETTINGS);  // FailSafeChannels 1
 }
 
 /************************************************************************************************************/
@@ -48,8 +56,22 @@ void SendOutstandingParameters()
     }
 }
 
+// /************************************************************************************************************/
+void EncodeFloat(float f, uint16_t *word1, uint16_t *word2, uint16_t *word3, uint16_t *word4)
+{ // Encode a float into 4 x 8 bit bytes ignoring the high byte of each 16 BIT word
+    union
+    {
+        float f = 0.0f; // union allows us to access the float as an array of 4 8 bit integers
+        uint8_t i[4];
+    } u;
+    u.f = f;                   // union allows us to access the float as a 4 8 bit integers
+    *word1 = uint16_t(u.i[0]); // first 8 bits (The high byte is zeroed in every case because of the compression)
+    *word2 = uint16_t(u.i[1]); // second 8 bits
+    *word3 = uint16_t(u.i[2]); // third 8 bits
+    *word4 = uint16_t(u.i[3]); // fourth 8 bits
+}
 /************************************************************************************************************/
-// NB ONLY THE LOW 12 BITS ARE ACTUALLY SENT! (Because of the compression)
+// NB ONLY THE LOW 12 BITS ARE ACTUALLY SENT! (Because of the compression) so don't use the high bits!
 
 void LoadParameters()
 {
@@ -70,10 +92,8 @@ void LoadParameters()
         Parameters.word[2] = FS_Byte2; // These are failsafe flags
         break;
     case QNH_SETTING: // 2 = QNH
-
         Parameters.word[1] = (uint16_t)Qnh;
         Parameters.word[2] = 1234;
-
         break;
     case GPS_MARK_LOCATION: // 3 = GPSMarkHere
         if (GPSMarkHere)
@@ -84,13 +104,15 @@ void LoadParameters()
             GPS_RX_MaxDistance = 0;
         }
         break;
-    case DUMMY4: // 4 = NOT USED YET
-        Parameters.word[1] = 44;
-        Parameters.word[2] = 444;
+    case PID_VALUES: // 4 = PID Values
+        EncodeFloat(PID_P, &Parameters.word[0], &Parameters.word[1], &Parameters.word[2], &Parameters.word[3]);
+        EncodeFloat(PID_I, &Parameters.word[4], &Parameters.word[5], &Parameters.word[6], &Parameters.word[7]);
+        EncodeFloat(PID_D, &Parameters.word[8], &Parameters.word[9], &Parameters.word[10], &Parameters.word[11]);
         break;
-    case DUMMY5:
-        Parameters.word[1] = 55;
-        Parameters.word[2] = 555;
+    case KALMAN_VALUES: // 5 = Kalman Filter Values
+        EncodeFloat(Kalman_Q_angle, &Parameters.word[0], &Parameters.word[1], &Parameters.word[2], &Parameters.word[3]);
+        EncodeFloat(Kalman_Q_bias, &Parameters.word[4], &Parameters.word[5], &Parameters.word[6], &Parameters.word[7]);
+        EncodeFloat(Kalman_R_measure, &Parameters.word[8], &Parameters.word[9], &Parameters.word[10], &Parameters.word[11]);
         break;
     case SERVO_FREQUENCIES: // 6 = Servo Frequencies
         for (int i = 0; i < 11; ++i)
@@ -99,6 +121,17 @@ void LoadParameters()
     case SERVO_PULSE_WIDTHS: // 7 = Servo Pulse Widths
         for (int i = 0; i < 11; ++i)
             Parameters.word[i + 1] = ServoCentrePulse[i];
+        break;
+    case ALPHA_BETA: // 8 = Alpha and Beta
+        EncodeFloat(alpha, &Parameters.word[0], &Parameters.word[1], &Parameters.word[2], &Parameters.word[3]);
+        EncodeFloat(beta, &Parameters.word[4], &Parameters.word[5], &Parameters.word[6], &Parameters.word[7]);
+        break;
+    case BOOLEANS:                                             // 9 = Booleans
+        Parameters.word[1] = (uint16_t)StabilisationOn & 0x01; // Stabilisation On
+        Parameters.word[2] = (uint16_t)SelfLevellingOn & 0x01; // Self Levelling On
+        Parameters.word[3] = (uint16_t)UseKalmanFilter & 0x01; // Use Kalman Filter
+        Parameters.word[4] = (uint16_t)UseRateLFP & 0x01;      // Use Rate LFP
+        Parameters.word[5] = (uint16_t)UseSerialDebug & 0x01;  // Use Serial Debug
         break;
     default:
         break;
@@ -113,7 +146,7 @@ void DebugParamsOut()
     Look1(Parameters.ID);
     Look1(" ");
     Look(ParaNames[Parameters.ID - 1]);
-    for (int i = 1; i < 12; ++i)
+    for (int i = 0; i < 12; ++i)
     {
         Look1("  Word[");
         Look1(i);
@@ -144,7 +177,7 @@ int GetExtraParameters() // This gets extra parameters ready for sending and ret
     LoadParameters();
     LoadRawDataWithParameters();
     DataTosend.ChannelBitMask = 0; //  zero channels to send with this packet
-   // DebugParamsOut();
+                                    DebugParamsOut();
     // Look(ParaNames[Parameters.ID - 1]);
     return 11; //  was 8 is the number of parameters to send
 }
@@ -161,5 +194,6 @@ void ShowSendingParameters()
         return;
     if (ParametersToBeSentPointer)
         SendText(FrontView_Connected, msg);
+    DelayWithDog(100); // only to make these visible
 }
 #endif

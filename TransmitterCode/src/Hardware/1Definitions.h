@@ -173,14 +173,16 @@
 //                      Parameters to sent to RX IDs                        *
 // **************************************************************************
 
-#define PARAMETERSENDREPEATS 3 // How many times to send each parameter in case it gets lost
+#define PARAMETERSENDREPEATS 1 // How many times to send each parameter in case it gets lost
 #define FAILSAFE_SETTINGS 1    // Parameter IDs ....
 #define QNH_SETTING 2
 #define GPS_MARK_LOCATION 3
-#define DUMMY4 4
-#define DUMMY5 5
+#define PID_VALUES 4
+#define KALMAN_VALUES 5
 #define SERVO_FREQUENCIES 6
 #define SERVO_PULSE_WIDTHS 7
+#define ALPHA_BETA 8
+#define BOOLEANS 9
 
 // **************************************************************************
 //                               Mixes                                      *
@@ -747,6 +749,7 @@ int GetExtraParameters();
 void ShowSendingParameters();
 float SDReadFLOAT(int p_address);
 void SDUpdateFLOAT(int p_address, float p_value);
+void SendStabilationParameters();
 #ifdef USE_BTLE
 void SendViaBLE();
 #endif
@@ -1194,7 +1197,18 @@ int LastRXModelMaxAltitude = 0;
 float LastRXTemperature = 0;
 uint8_t RadioNumber = 0;
 uint32_t LastRXReceivedPackets = 0;
-char ParaNames[7][30] = {"FailSafeChannels", "Qnh", "GPSMarkHere", "(Spare 4)", "(Spare 5)", "Servo Frequencies", "Servo Pulse Widths"};
+
+char ParaNames[9][30] = {
+    "FailSafe positions",
+    "QNH",
+    "Mark Location",
+    "PID Values",
+    "Kalman Values",
+    "Servo Frequencies",
+    "Servo Pulse Widths",
+    "Alpha & beta Values",
+    "Booleans",
+};
 uint16_t ScreenData[50];
 uint16_t AverageFrameRate = 0;
 uint64_t TotalFrameRate = 0;

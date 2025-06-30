@@ -17,6 +17,29 @@ void SendSBUSData()
     MySbus.write(SbusChannels); // Send SBUS data
     LocalTime = millis();       // reset the timer
 }
+
+// ************************************************************************/
+// this part is for copying to the receiver code tomorrow.
+float DecodeFloat(uint16_t word1, uint16_t word2, uint16_t word3, uint16_t word4)
+{
+    union
+    {
+        float f;
+        uint8_t b[4];
+    } u;
+    u.b[0] = uint8_t(word1);
+    u.b[1] = uint8_t(word2);
+    u.b[2] = uint8_t(word3);
+    u.b[3] = uint8_t(word4);
+    return u.f;
+}
+///************************************************************************************************************/
+void ShowValues(const char *name, float value)// // Show values in the serial monitor for debugging purposes
+{
+    Look1(name);
+    Look1(": ");
+    Look(value, 3); // 3 decimal places
+}
 /************************************************************************************************************/
 /** Read extra parameters from the transmitter.
  * extra parameters are sent using the last few words bytes in every data packet.
@@ -27,11 +50,11 @@ void ReadExtraParameters()
     uint16_t TwoBytes = 0;
     // Look(ParaNames[Parameters.ID-1]); // Look at the ID of the parameters packet
     // for (int i = 1; i < 12; ++i) // Read the parameters
-    //    Look(Parameters.word[i]);
+    // Look(Parameters.word[i]);
 
     switch (Parameters.ID)
     {
-    case FAILSAFE_SETTINGS:                                      // 1 working!
+    case FAILSAFE_SETTINGS:                                      // 1
         FS_byte1 = Parameters.word[1] & 0xff;                    // These 2 bytes are 16 failsafe flags
         FS_byte2 = Parameters.word[2] & 0xff;                    // These 2 bytes are 16 failsafe flags
         TwoBytes = uint16_t(FS_byte2) + uint16_t(FS_byte1 << 8); // because of the shift left 8, adding here is the same as ORing them.
@@ -48,13 +71,21 @@ void ReadExtraParameters()
             Parameters.word[2] = 0; // ... Once only
         }
         break;
-    case DUMMY4: // 4
-        // Look(Parameters.word[1]);
-        // Look(Parameters.word[2]);
+    case PID_VALUES: // 4
+        PID_P = DecodeFloat(Parameters.word[0], Parameters.word[1], Parameters.word[2], Parameters.word[3]);
+        PID_I = DecodeFloat(Parameters.word[4], Parameters.word[5], Parameters.word[6], Parameters.word[7]);
+        PID_D = DecodeFloat(Parameters.word[8], Parameters.word[9], Parameters.word[10], Parameters.word[11]);
+        ShowValues("PID P", PID_P);
+        ShowValues("PID I", PID_I);
+        ShowValues("PID D", PID_D);
         break;
-    case DUMMY5: // 5 !
-        // Look(Parameters.word[1]);
-        // Look(Parameters.word[2]);
+    case KALMAN_VALUES: // 5
+        Kalman_Q_angle = DecodeFloat(Parameters.word[0], Parameters.word[1], Parameters.word[2], Parameters.word[3]);
+        Kalman_Q_bias = DecodeFloat(Parameters.word[4], Parameters.word[5], Parameters.word[6], Parameters.word[7]);
+        Kalman_R_measure = DecodeFloat(Parameters.word[8], Parameters.word[9], Parameters.word[10], Parameters.word[11]);
+        ShowValues("Kalman Q_angle", Kalman_Q_angle);
+        ShowValues("Kalman Q_bias", Kalman_Q_bias);
+        ShowValues("Kalman R_measure", Kalman_R_measure);
         break;
     case SERVO_FREQUENCIES: // 6
         for (int i = 0; i < SERVOSUSED; ++i)
@@ -64,6 +95,29 @@ void ReadExtraParameters()
     case SERVO_PULSE_WIDTHS: // 7
         for (int i = 0; i < SERVOSUSED; ++i)
             ServoCentrePulse[i] = Parameters.word[i + 1];
+        break;
+    case ALPHA_BETA: // 8
+        alpha = DecodeFloat(Parameters.word[0], Parameters.word[1], Parameters.word[2], Parameters.word[3]);
+        beta = DecodeFloat(Parameters.word[4], Parameters.word[5], Parameters.word[6], Parameters.word[7]);
+        ShowValues("Alpha", alpha);
+        ShowValues("Beta", beta);
+        break;
+    case BOOLEANS: // 9
+        StabilisationOn = (bool)(Parameters.word[1] & 0x01);
+        SelfLevellingOn = (bool)(Parameters.word[2] & 0x01);
+        UseKalmanFilter = (bool)(Parameters.word[3] & 0x01);
+        UseRateLFP = (bool)(Parameters.word[4] & 0x01);
+        UseSerialDebug = (bool)(Parameters.word[5] & 0x01);
+        Look1("StabilisationOn: ");
+        Look(StabilisationOn);
+        Look1("SelfLevellingOn: ");
+        Look(SelfLevellingOn);
+        Look1("UseKalmanFilter: ");
+        Look(UseKalmanFilter);
+        Look1("UseRateLFP: ");
+        Look(UseRateLFP);
+        Look1("UseSerialDebug: ");
+        Look(UseSerialDebug);
         break;
     default:
         break;
@@ -84,28 +138,6 @@ void MapToSBUS()
         }
     }
 }
-// /************************************************************************************************************/
-// /*
-//  * Decompresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
-//  * @param uncompressed_buf[in]
-//  * @param compressed_buf[out] Must have allocated 3/4 the size of uncompressed_buf
-//  * @param uncompressed_size Size is in units of uint16_t
-//  */
-// void Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, uint8_t uncompressed_size)
-// {
-//     uint8_t p = 0;
-//     for (uint8_t l = 0; l < (uncompressed_size * 3 / 4) - 2; l += 3)
-//     {
-//         uncompressed_buf[p] = compressed_buf[l] >> 4;
-//         ++p;
-//         uncompressed_buf[p] = (compressed_buf[l] & 0xf) << 8 | compressed_buf[l + 1] >> 8;
-//         ++p;
-//         uncompressed_buf[p] = (compressed_buf[l + 1] & 0xff) << 4 | compressed_buf[l + 2] >> 12;
-//         ++p;
-//         uncompressed_buf[p] = compressed_buf[l + 2] & 0xfff;
-//         ++p;
-//     }
-// }
 
 void Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, uint8_t uncompressed_size)
 {

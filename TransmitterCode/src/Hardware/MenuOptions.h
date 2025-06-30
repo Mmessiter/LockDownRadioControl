@@ -1332,8 +1332,6 @@ void StabilisationScreenEnd()
     char t19[] = "t19"; // alpha
     char t20[] = "t20"; // beta
     char temp[10];
-
-
     GetText(t9, temp);
     PID_P = atof(temp);
     GetText(t14, temp);
@@ -1355,9 +1353,10 @@ void StabilisationScreenEnd()
     UseKalmanFilter = GetValue(sw3);
     UseRateLFP = GetValue(sw2);
     UseSerialDebug = GetValue(sw1);
-    SaveOneModel(ModelNumber); // save the values to the model. ...  later!!
-    SendCommand(pRXSetupView);
-    CurrentView = RXSETUPVIEW;
+    SendCommand(pFrontView);
+    SaveOneModel(ModelNumber); // save the values to the model.
+    SendStabilationParameters();
+    CurrentView = FRONTVIEW;
 }
 /******************************************************************************************************************************/
 

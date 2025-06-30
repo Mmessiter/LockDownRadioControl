@@ -40,7 +40,7 @@
 #define EXTRAAT760 350 // high frequency servos
 #define MAXAT760 760 + EXTRAAT760
 #define MINAT760 760 - EXTRAAT760
-#define MAXPARAMETERS 7 // Max number of parameters types to expect
+#define MAXPARAMETERS 9 // Max number of parameters types to expect
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
 //***************************************************************************
@@ -136,13 +136,15 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 //                             Parameters' IDs                              *
 // **************************************************************************
 
-#define FAILSAFE_SETTINGS 1 // Parameters' IDs ....
+#define FAILSAFE_SETTINGS 1 // Parameter IDs ....
 #define QNH_SETTING 2
 #define GPS_MARK_LOCATION 3
-#define DUMMY4 4
-#define DUMMY5 5
+#define PID_VALUES 4
+#define KALMAN_VALUES 5
 #define SERVO_FREQUENCIES 6
 #define SERVO_PULSE_WIDTHS 7
+#define ALPHA_BETA 8
+#define BOOLEANS 9
 
 // ****************************************************************************************************************************************
 
@@ -176,8 +178,18 @@ bool INA219Connected = false;  //  Volts from INA219 ?
 bool MPU6050Connected = false; //  Accelerometer and Gyro from MPU6050 ?
 uint8_t ReconnectChannel = 0;
 int32_t RateOfClimb = 0;
-char ParaNames[7][30] = {"FailSafeChannels", "Qnh", "GPSMarkHere", "(Spare 4)", "(Spare 5)", "Servo Frequencies", "Servo Pulse Widths"};
 
+char ParaNames[9][30] = {
+    "FailSafe positions",
+    "QNH",
+    "Mark Location",
+    "PID Values",
+    "Kalman Values",
+    "Servo Frequencies",
+    "Servo Pulse Widths",
+    "Alpha & beta Values",
+    "Booleans",
+};
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
 {
