@@ -435,33 +435,62 @@ bool ReadOneModel(uint32_t Mnum)
         ++SDCardAddress;
         ++SDCardAddress;
     }
-    PID_P = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    PID_I = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    PID_D = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    Kalman_Q_angle = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    Kalman_Q_bias = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    Kalman_R_measure = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    alpha = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    beta = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    StabilisationOn = (bool)SDRead8BITS(SDCardAddress);
+
+    // Stabiliasation and Self Levelling *****************
+
+    StabilisationOn = (bool)SDRead8BITS(SDCardAddress); // 3
     ++SDCardAddress;
     SelfLevellingOn = (bool)SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    UseKalmanFilter = (bool)SDRead8BITS(SDCardAddress);
+    SavedActiveSettings = ActiveSettings; // save current settings pointer
+    ActiveSettings = &RateSettings;
+    ActiveSettings->PID_P = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    ActiveSettings->PID_I = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    ActiveSettings->PID_D = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    ActiveSettings->Kalman_Q_angle = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    ActiveSettings->Kalman_Q_bias = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    ActiveSettings->Kalman_R_measure = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    ActiveSettings->alpha = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    ActiveSettings->beta = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    ActiveSettings->UseKalmanFilter = (bool)SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    UseRateLFP = (bool)SDRead8BITS(SDCardAddress);
+    ActiveSettings->UseRateLFP = (bool)SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    UseSerialDebug = (bool)SDRead8BITS(SDCardAddress);
+    ActiveSettings->UseSerialDebug = (bool)SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
 
+    ActiveSettings = &SelfLevelSettings;
+    ActiveSettings->PID_P = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    ActiveSettings->PID_I = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    ActiveSettings->PID_D = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    ActiveSettings->Kalman_Q_angle = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    ActiveSettings->Kalman_Q_bias = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    ActiveSettings->Kalman_R_measure = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    ActiveSettings->alpha = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    ActiveSettings->beta = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    ActiveSettings->UseKalmanFilter = (bool)SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
+    ActiveSettings->UseRateLFP = (bool)SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
+    ActiveSettings->UseSerialDebug = (bool)SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
+    ActiveSettings = SavedActiveSettings;
 
     CheckOutPutChannels();
     CheckServoType();
@@ -1358,32 +1387,64 @@ void SaveOneModel(uint32_t mnum)
         ++SDCardAddress;
         ++SDCardAddress;
     }
-    SDUpdateFLOAT(SDCardAddress, PID_P);
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, PID_I);
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, PID_D);
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, Kalman_Q_angle);
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, Kalman_Q_bias);
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, Kalman_R_measure);
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, alpha);
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, beta);
-    SDCardAddress += 4;
-    SDUpdate8BITS(SDCardAddress, StabilisationOn);
+
+    // Stabilisation and Self Levelling *****************
+
+    SDUpdate8BITS(SDCardAddress, StabilisationOn); // 1
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, SelfLevellingOn);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, UseKalmanFilter);
+    SavedActiveSettings = ActiveSettings; // save state of active settings
+   
+    ActiveSettings = &RateSettings;       // heer
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_P);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_I);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_D);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Kalman_Q_angle);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Kalman_Q_bias);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Kalman_R_measure);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->alpha);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->beta);
+    SDCardAddress += 4;
+    SDUpdate8BITS(SDCardAddress, ActiveSettings->UseKalmanFilter);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, UseRateLFP);
+    SDUpdate8BITS(SDCardAddress, ActiveSettings->UseRateLFP);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, UseSerialDebug);
+    SDUpdate8BITS(SDCardAddress, ActiveSettings->UseSerialDebug);
     ++SDCardAddress;
+
+    ActiveSettings = &SelfLevelSettings;
+
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_P);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_I);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_D);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Kalman_Q_angle);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Kalman_Q_bias);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Kalman_R_measure);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->alpha);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->beta);
+    SDCardAddress += 4;
+    SDUpdate8BITS(SDCardAddress, ActiveSettings->UseKalmanFilter);
+    ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, ActiveSettings->UseRateLFP);
+    ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, ActiveSettings->UseSerialDebug);
+    ++SDCardAddress;
+    ActiveSettings = SavedActiveSettings; // restore active settings
     SaveCheckSum32(); // Save the Model parametres checksm
 
     // ********************** Add more

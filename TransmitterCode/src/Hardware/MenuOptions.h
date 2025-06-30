@@ -1264,11 +1264,8 @@ void EndServoTypeView()
     }
     GotoFrontView();
 }
-
-
-/******************************************************************************************************************************/
-
-void StabilisationScreenStart()
+// ******************************************************************************************************************************/
+void DisplayStabilisationScreenData()
 {
     char sw0[] = "sw0"; // Stabilisation on off
     char sw4[] = "sw4"; // Self-levelling on off
@@ -1283,43 +1280,48 @@ void StabilisationScreenStart()
     char t18[] = "t18"; // PID R_measure
     char t19[] = "t19"; // alpha
     char t20[] = "t20"; // beta
-
     char temp[10];
-
-    SendCommand(pPIDView); // load the PID screen
-    CurrentView = PIDVIEW;
-
-    dtostrf(PID_P, 1, 3, temp);
+    if (SelfLevellingOn)
+        ActiveSettings = &SelfLevelSettings;
+    else
+        ActiveSettings = &RateSettings;
+    Look("");
+    dtostrf(ActiveSettings->PID_P, 1, 3, temp);
     SendText(t9, temp);
-    dtostrf(PID_I, 1, 3, temp);
+    dtostrf(ActiveSettings->PID_I, 1, 3, temp);
     SendText(t14, temp);
-    dtostrf(PID_D, 1, 3, temp);
+    dtostrf(ActiveSettings->PID_D, 1, 3, temp);
     SendText(t15, temp);
-    dtostrf(Kalman_Q_angle, 1, 3, temp);
+    dtostrf(ActiveSettings->Kalman_Q_angle, 1, 3, temp);
     SendText(t16, temp);
-    dtostrf(Kalman_Q_bias, 1, 3, temp);
+    dtostrf(ActiveSettings->Kalman_Q_bias, 1, 3, temp);
     SendText(t17, temp);
-    dtostrf(Kalman_R_measure, 1, 3, temp);
+    dtostrf(ActiveSettings->Kalman_R_measure, 1, 3, temp);
     SendText(t18, temp);
-    dtostrf(alpha, 1, 3, temp);
+    dtostrf(ActiveSettings->alpha, 1, 3, temp);
     SendText(t19, temp);
-    dtostrf(beta, 1, 3, temp);
+    dtostrf(ActiveSettings->beta, 1, 3, temp);
     SendText(t20, temp);
     SendValue(sw0, StabilisationOn);
+    SendValue(sw3, ActiveSettings->UseKalmanFilter);
+    SendValue(sw2, ActiveSettings->UseRateLFP);
+    SendValue(sw1, ActiveSettings->UseSerialDebug);
     SendValue(sw4, SelfLevellingOn);
-    SendValue(sw3, UseKalmanFilter);
-    SendValue(sw2, UseRateLFP);
-    SendValue(sw1, UseSerialDebug);
-
 }
-
 /******************************************************************************************************************************/
 
-void StabilisationScreenEnd()
+void StabilisationScreenStart()
+{
+    SendCommand(pPIDView); // load the PID screen
+    CurrentView = PIDVIEW;
+    DisplayStabilisationScreenData();
+}
+// ******************************************************************************************************************************/
+void ReadStabilisationParameters()
 {
     // we need to get the values from the Nextion display
     char sw0[] = "sw0"; // Stabilisation on off
-    char sw4[] = "sw4"; // Self-levelling on off        
+    char sw4[] = "sw4"; // Self-levelling on off
     char sw3[] = "sw3"; // Use Kalman filter
     char sw2[] = "sw2"; // Use rate LFP
     char sw1[] = "sw1"; // Use serial debug
@@ -1332,37 +1334,51 @@ void StabilisationScreenEnd()
     char t19[] = "t19"; // alpha
     char t20[] = "t20"; // beta
     char temp[10];
+    if (SelfLevellingOn)
+        ActiveSettings = &SelfLevelSettings;
+    else
+        ActiveSettings = &RateSettings;
     GetText(t9, temp);
-    PID_P = atof(temp);
+    ActiveSettings->PID_P = atof(temp);
     GetText(t14, temp);
-    PID_I = atof(temp);
+    ActiveSettings->PID_I = atof(temp);
     GetText(t15, temp);
-    PID_D = atof(temp);
+    ActiveSettings->PID_D = atof(temp);
     GetText(t16, temp);
-    Kalman_Q_angle = atof(temp);
+    ActiveSettings->Kalman_Q_angle = atof(temp);
     GetText(t17, temp);
-    Kalman_Q_bias = atof(temp);
+    ActiveSettings->Kalman_Q_bias = atof(temp);
     GetText(t18, temp);
-    Kalman_R_measure = atof(temp);
+    ActiveSettings->Kalman_R_measure = atof(temp);
     GetText(t19, temp);
-    alpha = atof(temp);
+    ActiveSettings->alpha = atof(temp);
     GetText(t20, temp);
-    beta = atof(temp);
+    ActiveSettings->beta = atof(temp);
     StabilisationOn = GetValue(sw0);
+    ActiveSettings->UseKalmanFilter = GetValue(sw3);
+    ActiveSettings->UseRateLFP = GetValue(sw2);
+    ActiveSettings->UseSerialDebug = GetValue(sw1);
     SelfLevellingOn = GetValue(sw4);
-    UseKalmanFilter = GetValue(sw3);
-    UseRateLFP = GetValue(sw2);
-    UseSerialDebug = GetValue(sw1);
-    SendCommand(pFrontView);
+    if (SelfLevellingOn)
+        ActiveSettings = &SelfLevelSettings;
+    else
+        ActiveSettings = &RateSettings;
+}
+
+/******************************************************************************************************************************/
+
+void StabilisationScreenEnd()
+{
+    ReadStabilisationParameters();
+    SendCommand(pRXSetupView);
     SaveOneModel(ModelNumber); // save the values to the model.
     SendStabilationParameters();
-    CurrentView = FRONTVIEW;
+    CurrentView = RXSETUPVIEW;
 }
 /******************************************************************************************************************************/
 
 void CalibrateMPU6050()
 {
-
     Look("Calibrate");
 }
 /******************************************************************************************************************************/

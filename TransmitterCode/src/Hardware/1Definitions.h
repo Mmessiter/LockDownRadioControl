@@ -1272,19 +1272,54 @@ uint8_t Buddy_Low_Position = 0;
 uint8_t Buddy_Mid_Position = 1;
 uint8_t Buddy_Hi_Position = 2;
 
-float PID_P = 2.0f;
-float PID_I = 0.1f;
-float PID_D = 0.01f;
-float Kalman_Q_angle = 0.001f;
-float Kalman_Q_bias = 0.003f;
-float Kalman_R_measure = 0.03f;
-float alpha = 0.05f;
-float beta = 0.05f;
 bool StabilisationOn = false;
 bool SelfLevellingOn = false;
-bool UseKalmanFilter = false;
-bool UseRateLFP = false;
-bool UseSerialDebug = false;
+
+
+struct StabilisationSettings
+{
+    float PID_P;
+    float PID_I;
+    float PID_D;
+    float Kalman_Q_angle;
+    float Kalman_Q_bias;
+    float Kalman_R_measure;
+    float alpha;
+    float beta;
+    bool UseKalmanFilter;
+    bool UseRateLFP;
+    bool UseSerialDebug;
+};
+
+StabilisationSettings RateSettings = {
+    0.05f,  // PID_P
+    0.00f,  // PID_I
+    0.002f, // PID_D
+    0.001f, // Kalman_Q_angle
+    0.003f, // Kalman_Q_bias
+    0.03f,  // Kalman_R_measure
+    0.05f,  // alpha
+    0.05f,  // beta
+    false,  // UseKalmanFilter
+    true,   // UseRateLFP
+    false   // UseSerialDebug
+};
+
+StabilisationSettings SelfLevelSettings = {
+    2.0f,   // PID_P
+    0.1f,   // PID_I
+    0.01f,  // PID_D
+    0.001f, // Kalman_Q_angle
+    0.003f, // Kalman_Q_bias
+    0.03f,  // Kalman_R_measure
+    0.05f,  // alpha
+    0.05f,  // beta
+    false,  // UseKalmanFilter
+    false,  // UseRateLFP
+    false   // UseSerialDebug
+};
+StabilisationSettings *ActiveSettings = &RateSettings;
+StabilisationSettings *SavedActiveSettings = ActiveSettings;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

@@ -24,11 +24,11 @@ void AddParameterstoQueue(uint8_t ID) // todo:  This function repeats the same p
 
 //************************************************************************************************************/
 void SendStabilationParameters()
-{                                             // Send the parameters that are used for stabilisation
-    AddParameterstoQueue(BOOLEANS);           // BOOLEANS 9
-    AddParameterstoQueue(ALPHA_BETA);         // ALPHA_BETA 8
-    AddParameterstoQueue(PID_VALUES);         // PID Values 4
-    AddParameterstoQueue(KALMAN_VALUES);      // KALMAN Values 5
+{                                        // Send the parameters that are used for stabilisation
+    AddParameterstoQueue(BOOLEANS);      // BOOLEANS 9
+    AddParameterstoQueue(ALPHA_BETA);    // ALPHA_BETA 8
+    AddParameterstoQueue(PID_VALUES);    // PID Values 4
+    AddParameterstoQueue(KALMAN_VALUES); // KALMAN Values 5
 }
 /*********************************************************************************************************************************/
 void SendInitialSetupParams()
@@ -105,14 +105,14 @@ void LoadParameters()
         }
         break;
     case PID_VALUES: // 4 = PID Values
-        EncodeFloat(PID_P, &Parameters.word[0], &Parameters.word[1], &Parameters.word[2], &Parameters.word[3]);
-        EncodeFloat(PID_I, &Parameters.word[4], &Parameters.word[5], &Parameters.word[6], &Parameters.word[7]);
-        EncodeFloat(PID_D, &Parameters.word[8], &Parameters.word[9], &Parameters.word[10], &Parameters.word[11]);
+        EncodeFloat(ActiveSettings->PID_P, &Parameters.word[0], &Parameters.word[1], &Parameters.word[2], &Parameters.word[3]);
+        EncodeFloat(ActiveSettings->PID_I, &Parameters.word[4], &Parameters.word[5], &Parameters.word[6], &Parameters.word[7]);
+        EncodeFloat(ActiveSettings->PID_D, &Parameters.word[8], &Parameters.word[9], &Parameters.word[10], &Parameters.word[11]);
         break;
     case KALMAN_VALUES: // 5 = Kalman Filter Values
-        EncodeFloat(Kalman_Q_angle, &Parameters.word[0], &Parameters.word[1], &Parameters.word[2], &Parameters.word[3]);
-        EncodeFloat(Kalman_Q_bias, &Parameters.word[4], &Parameters.word[5], &Parameters.word[6], &Parameters.word[7]);
-        EncodeFloat(Kalman_R_measure, &Parameters.word[8], &Parameters.word[9], &Parameters.word[10], &Parameters.word[11]);
+        EncodeFloat(ActiveSettings->Kalman_Q_angle, &Parameters.word[0], &Parameters.word[1], &Parameters.word[2], &Parameters.word[3]);
+        EncodeFloat(ActiveSettings->Kalman_Q_bias, &Parameters.word[4], &Parameters.word[5], &Parameters.word[6], &Parameters.word[7]);
+        EncodeFloat(ActiveSettings->Kalman_R_measure, &Parameters.word[8], &Parameters.word[9], &Parameters.word[10], &Parameters.word[11]);
         break;
     case SERVO_FREQUENCIES: // 6 = Servo Frequencies
         for (int i = 0; i < 11; ++i)
@@ -123,15 +123,15 @@ void LoadParameters()
             Parameters.word[i + 1] = ServoCentrePulse[i];
         break;
     case ALPHA_BETA: // 8 = Alpha and Beta
-        EncodeFloat(alpha, &Parameters.word[0], &Parameters.word[1], &Parameters.word[2], &Parameters.word[3]);
-        EncodeFloat(beta, &Parameters.word[4], &Parameters.word[5], &Parameters.word[6], &Parameters.word[7]);
+        EncodeFloat(ActiveSettings->alpha, &Parameters.word[0], &Parameters.word[1], &Parameters.word[2], &Parameters.word[3]);
+        EncodeFloat(ActiveSettings->beta, &Parameters.word[4], &Parameters.word[5], &Parameters.word[6], &Parameters.word[7]);
         break;
-    case BOOLEANS:                                             // 9 = Booleans
-        Parameters.word[1] = (uint16_t)StabilisationOn & 0x01; // Stabilisation On
-        Parameters.word[2] = (uint16_t)SelfLevellingOn & 0x01; // Self Levelling On
-        Parameters.word[3] = (uint16_t)UseKalmanFilter & 0x01; // Use Kalman Filter
-        Parameters.word[4] = (uint16_t)UseRateLFP & 0x01;      // Use Rate LFP
-        Parameters.word[5] = (uint16_t)UseSerialDebug & 0x01;  // Use Serial Debug
+    case BOOLEANS:                                                             // 9 = Booleans
+        Parameters.word[1] = (uint16_t)StabilisationOn & 0x01;                 // Stabilisation On
+        Parameters.word[2] = (uint16_t)SelfLevellingOn & 0x01;                 // Self Levelling On
+        Parameters.word[3] = (uint16_t)ActiveSettings->UseKalmanFilter & 0x01; // Use Kalman Filter
+        Parameters.word[4] = (uint16_t)ActiveSettings->UseRateLFP & 0x01;      // Use Rate LFP
+        Parameters.word[5] = (uint16_t)ActiveSettings->UseSerialDebug & 0x01;  // Use Serial Debug
         break;
     default:
         break;
@@ -177,7 +177,7 @@ int GetExtraParameters() // This gets extra parameters ready for sending and ret
     LoadParameters();
     LoadRawDataWithParameters();
     DataTosend.ChannelBitMask = 0; //  zero channels to send with this packet
-                                    DebugParamsOut();
+                                   //  DebugParamsOut();
     // Look(ParaNames[Parameters.ID - 1]);
     return 11; //  was 8 is the number of parameters to send
 }
@@ -187,13 +187,18 @@ int GetExtraParameters() // This gets extra parameters ready for sending and ret
 void ShowSendingParameters()
 {
     char FrontView_Connected[] = "Connected"; // this is the name of the Nextion screen's text box
-    char msg[60] = "";
-    strcpy(msg, ParaNames[Parameters.ID - 1]);
-    strcat(msg, " -> RX");
+    char msg[]= "Sending Parameters ...";
     if (!LedWasGreen)
         return;
-    if (ParametersToBeSentPointer)
-        SendText(FrontView_Connected, msg);
-    DelayWithDog(100); // only to make these visible
+    SendText(FrontView_Connected, msg); // show that we are sending parameters
+}
+// ************************************************************************************************************/
+// This function is called when the Self Levelling button is pressed on the Nextion screen.
+void SelfLevellingChange()
+{
+    PlaySound(BEEPMIDDLE); // play a sound to indicate the button was pressed
+    ReadStabilisationParameters();
+    DisplayStabilisationScreenData();
+    PlaySound(BEEPCOMPLETE); // play a sound to indicate the button was pressed
 }
 #endif
