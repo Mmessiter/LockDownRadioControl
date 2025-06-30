@@ -75,17 +75,17 @@ void ReadExtraParameters()
         PID_P = DecodeFloat(Parameters.word[0], Parameters.word[1], Parameters.word[2], Parameters.word[3]);
         PID_I = DecodeFloat(Parameters.word[4], Parameters.word[5], Parameters.word[6], Parameters.word[7]);
         PID_D = DecodeFloat(Parameters.word[8], Parameters.word[9], Parameters.word[10], Parameters.word[11]);
-        // ShowValues("PID P", PID_P);
-        // ShowValues("PID I", PID_I);
-        // ShowValues("PID D", PID_D);
+        ShowValues("PID P", PID_P);
+        ShowValues("PID I", PID_I);
+        ShowValues("PID D", PID_D);
         break;
     case KALMAN_VALUES: // 5
         Kalman_Q_angle = DecodeFloat(Parameters.word[0], Parameters.word[1], Parameters.word[2], Parameters.word[3]);
         Kalman_Q_bias = DecodeFloat(Parameters.word[4], Parameters.word[5], Parameters.word[6], Parameters.word[7]);
         Kalman_R_measure = DecodeFloat(Parameters.word[8], Parameters.word[9], Parameters.word[10], Parameters.word[11]);
-        // ShowValues("Kalman Q_angle", Kalman_Q_angle);
-        // ShowValues("Kalman Q_bias", Kalman_Q_bias);
-        // ShowValues("Kalman R_measure", Kalman_R_measure);
+        ShowValues("Kalman Q_angle", Kalman_Q_angle);
+        ShowValues("Kalman Q_bias", Kalman_Q_bias);
+        ShowValues("Kalman R_measure", Kalman_R_measure);
         break;
     case SERVO_FREQUENCIES: // 6
         for (int i = 0; i < SERVOSUSED; ++i)
@@ -99,25 +99,23 @@ void ReadExtraParameters()
     case ALPHA_BETA: // 8
         alpha = DecodeFloat(Parameters.word[0], Parameters.word[1], Parameters.word[2], Parameters.word[3]);
         beta = DecodeFloat(Parameters.word[4], Parameters.word[5], Parameters.word[6], Parameters.word[7]);
-        // ShowValues("Alpha", alpha);
-        // ShowValues("Beta", beta);
+        ShowValues("Alpha", alpha);
+        ShowValues("Beta", beta);
         break;
     case BOOLEANS: // 9
         StabilisationOn = (bool)(Parameters.word[1] & 0x01);
         SelfLevellingOn = (bool)(Parameters.word[2] & 0x01);
         UseKalmanFilter = (bool)(Parameters.word[3] & 0x01);
         UseRateLFP = (bool)(Parameters.word[4] & 0x01);
-        UseSerialDebug = (bool)(Parameters.word[5] & 0x01);
-        // Look1("StabilisationOn: ");
-        // Look(StabilisationOn);
-        // Look1("SelfLevellingOn: ");
-        // Look(SelfLevellingOn);
-        // Look1("UseKalmanFilter: ");
-        // Look(UseKalmanFilter);
-        // Look1("UseRateLFP: ");
-        // Look(UseRateLFP);
-        // Look1("UseSerialDebug: ");
-        // Look(UseSerialDebug);
+        Look1("StabilisationOn: ");
+        Look(StabilisationOn);
+        Look1("SelfLevellingOn: ");
+        Look(SelfLevellingOn);
+        Look1("UseKalmanFilter: ");
+        Look(UseKalmanFilter);
+        Look1("UseRateLFP: ");
+        Look(UseRateLFP);
+        
         break;
     default:
         break;

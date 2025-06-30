@@ -131,7 +131,7 @@ void LoadParameters()
         Parameters.word[2] = (uint16_t)SelfLevellingOn & 0x01;                 // Self Levelling On
         Parameters.word[3] = (uint16_t)ActiveSettings->UseKalmanFilter & 0x01; // Use Kalman Filter
         Parameters.word[4] = (uint16_t)ActiveSettings->UseRateLFP & 0x01;      // Use Rate LFP
-        Parameters.word[5] = (uint16_t)ActiveSettings->UseSerialDebug & 0x01;  // Use Serial Debug
+                                                                               // Parameters.word[5] = (uint16_t)ActiveSettings->UseSerialDebug & 0x01;  // Use Serial Debug
         break;
     default:
         break;
@@ -187,7 +187,7 @@ int GetExtraParameters() // This gets extra parameters ready for sending and ret
 void ShowSendingParameters()
 {
     char FrontView_Connected[] = "Connected"; // this is the name of the Nextion screen's text box
-    char msg[]= "Sending Parameters ...";
+    char msg[] = "Sending Parameters ...";
     if (!LedWasGreen)
         return;
     SendText(FrontView_Connected, msg); // show that we are sending parameters
@@ -196,9 +196,92 @@ void ShowSendingParameters()
 // This function is called when the Self Levelling button is pressed on the Nextion screen.
 void SelfLevellingChange()
 {
-    PlaySound(BEEPMIDDLE); // play a sound to indicate the button was pressed
-    ReadStabilisationParameters();
-    DisplayStabilisationScreenData();
-    PlaySound(BEEPCOMPLETE); // play a sound to indicate the button was pressed
+    PlaySound(BEEPMIDDLE);            // play a sound to indicate the button was pressed
+    ReadStabilisationParameters();    // in case the values were changed on the screen
+    DisplayStabilisationScreenData(); // show the new values on the screen (having changed the SelfLevellingOn value)
+    PlaySound(BEEPCOMPLETE);          // play a sound to indicate the thing finished
+}
+//************************************************************************************************************/
+void LoadHeliDefaults()
+{
+    if (GetConfirmation(pPIDView, (char *)"Load heli defaults?!"))
+    {
+        *ActiveSettings = HeliRate;        // overwrite currently active settings
+        RateSettings = HeliRate;           // set the rate settings to the defaults
+        SelfLevelSettings = HeliLevelling; // set levelling rate settings to the defaults
+        SelfLevellingOn = false;           // defaults are always without self-levelling
+        DisplayStabilisationScreenData();
+        // MsgBox(pPIDView, (char *)"Heli defaults loaded."); // show the message box with the text
+    }
+    // else
+    // {
+    //     MsgBox(pPIDView, (char *)"Heli defaults NOT loaded."); // show the message box with the text
+    // }
+}
+//************************************************************************************************************/
+void LoadPlaneDefaults()
+{
+    if (GetConfirmation(pPIDView, (char *)"Load plane defaults?!"))
+    {
+        *ActiveSettings = PlaneRate;        // overwrite currently active settings
+        RateSettings = PlaneRate;           // set the rate settings to the defaults
+        SelfLevelSettings = PlaneLevelling; // set levelling rate settings to the defaults
+        SelfLevellingOn = false;            // defaults are always without self-levelling
+        DisplayStabilisationScreenData();
+        // MsgBox(pPIDView, (char *)"Plane defaults loaded."); // show the message box with the text
+    }
+    // else
+    // {
+    //     MsgBox(pPIDView, (char *)"Plane defaults NOT loaded."); // show the message box with the text
+    // }
+}
+// ************************************************************************************************************/
+void SaveHeliDefaults()
+{
+    if (GetConfirmation((char *)"page PIDView", (char *)"Save heli defaults?"))
+    {
+        HeliRate = *ActiveSettings;        // save the current rate settings
+        HeliLevelling = SelfLevelSettings; // save the current levelling settings
+        // MsgBox(pPIDView, (char *)"Heli defaults saved.");        // show the message box with the text
+    }
+    // else
+    // {
+    //     MsgBox(pPIDView, (char *)"Heli defaults NOT saved."); // show the message box with the text
+    // }
+}
+// ************************************************************************************************************/
+void SavePlaneDefaults()
+{
+    if (GetConfirmation(pPIDView, (char *)"Save plane defaults?"))
+    {
+        PlaneRate = *ActiveSettings;        // save the current rate settings
+        PlaneLevelling = SelfLevelSettings; // save the current levelling settings
+        // MsgBox(pPIDView, (char *)"Plane defaults saved."); // show the message box with the text
+    }
+    // else
+    // {
+    //     MsgBox(pPIDView, (char *)"Plane defaults NOT saved."); // show the message box with the text
+    // }
+}
+// ************************************************************************************************************/
+void FactoryDefaults()
+{
+    if (GetConfirmation(pPIDView, (char *)"Re-Load factory defaults?!"))
+    {
+        PlaneRate = FactoryPlaneRate;
+        PlaneLevelling = FactoryPlaneLevelling;
+        HeliRate = FactoryHeliRate;
+        HeliLevelling = FactoryHeliLevelling;
+        RateSettings = PlaneRate;
+        SelfLevelSettings = PlaneLevelling;
+        ActiveSettings = &RateSettings; // set the active settings to the rate settings
+        SelfLevellingOn = false;        // defaults are always without self-levelling
+        DisplayStabilisationScreenData();
+        // MsgBox(pPIDView, (char *)"Factory defaults loaded."); // show the message box with the text
+    }
+    // else
+    // {
+    //     MsgBox(pPIDView, (char *)"Factory defaults NOT loaded."); // show the message box with the text
+    // }
 }
 #endif

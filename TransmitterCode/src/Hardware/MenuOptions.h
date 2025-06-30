@@ -1271,7 +1271,6 @@ void DisplayStabilisationScreenData()
     char sw4[] = "sw4"; // Self-levelling on off
     char sw3[] = "sw3"; // Use Kalman filter
     char sw2[] = "sw2"; // Use rate LFP
-    char sw1[] = "sw1"; // Use serial debug
     char t9[] = "t9";   // PID P
     char t14[] = "t14"; // PID I
     char t15[] = "t15"; // PID D
@@ -1305,7 +1304,6 @@ void DisplayStabilisationScreenData()
     SendValue(sw0, StabilisationOn);
     SendValue(sw3, ActiveSettings->UseKalmanFilter);
     SendValue(sw2, ActiveSettings->UseRateLFP);
-    SendValue(sw1, ActiveSettings->UseSerialDebug);
     SendValue(sw4, SelfLevellingOn);
 }
 /******************************************************************************************************************************/
@@ -1324,7 +1322,6 @@ void ReadStabilisationParameters()
     char sw4[] = "sw4"; // Self-levelling on off
     char sw3[] = "sw3"; // Use Kalman filter
     char sw2[] = "sw2"; // Use rate LFP
-    char sw1[] = "sw1"; // Use serial debug
     char t9[] = "t9";   // PID P
     char t14[] = "t14"; // PID I
     char t15[] = "t15"; // PID D
@@ -1357,7 +1354,6 @@ void ReadStabilisationParameters()
     StabilisationOn = GetValue(sw0);
     ActiveSettings->UseKalmanFilter = GetValue(sw3);
     ActiveSettings->UseRateLFP = GetValue(sw2);
-    ActiveSettings->UseSerialDebug = GetValue(sw1);
     SelfLevellingOn = GetValue(sw4);
     if (SelfLevellingOn)
         ActiveSettings = &SelfLevelSettings;
@@ -1384,7 +1380,10 @@ void CalibrateMPU6050()
 /******************************************************************************************************************************/
 void GyroApply()
 {
-    Look("Apply");
+    ReadStabilisationParameters();
+    SendStabilationParameters();
+    PlaySound(BEEPCOMPLETE);
+   
 }
 
 #endif
