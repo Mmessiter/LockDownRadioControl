@@ -1,0 +1,8 @@
+# Force GitHub to recognize C++ as the main language
+*.ino linguist-language=C++
+*.cpp linguist-language=C++
+*.h linguist-language=C++
+
+# Ignore misleading HTML files when detecting the primary language
+*.html linguist-detectable=false
+*.htm linguist-detectable=false
