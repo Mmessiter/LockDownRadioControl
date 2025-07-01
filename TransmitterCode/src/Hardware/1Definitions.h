@@ -113,7 +113,7 @@
 #define SCREENCHANGEWAIT 10         // allow 10ms for screen to appear
 #define BATTERY_CHECK_INTERVAL 1000 // 2 seconds between battery checks
 
-#define MAXPARAMETERS 7       // Max types of parameters packet to send  ... will increase.
+#define MAXPARAMETERS 10       // Max types of parameters packet to send  ... will increase.
 #define POWERONOFFDELAY 1000  // Delay after power OFF before transmit stops.
 #define POWERONOFFDELAY2 4000 // Delay after power ON before Off is possible....
                               // and delay after power off before power on button is active
@@ -997,8 +997,6 @@ struct CD
 };
 CD DataTosend;
 
-bool AddExtraParameters = false;
-
 struct CD2
 {
     uint16_t ID = 0;
@@ -1280,6 +1278,7 @@ uint8_t Buddy_Hi_Position = 2;
 
 bool StabilisationOn = false;
 bool SelfLevellingOn = false;
+bool ParamPause = false;
 
 struct StabilisationSettings
 {

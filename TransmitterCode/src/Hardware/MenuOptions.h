@@ -332,11 +332,7 @@ void StartWifiScan()
         if (!GetConfirmation(pTXSetupView, prompt))
             return;
     }
-    // if (PPMdata.UseTXModule)
-    // {
-    //     InitRadio(DefaultPipe); // because scan fails if radio isn't initialised
-    //     ConfigureRadio();
-    // }
+ 
     SendCommand(pFhssView);
     DrawFhssBox();
     DoScanInit();
@@ -857,7 +853,7 @@ void OptionView3End() //
 
     SaveTransmitterParameters();
     CloseModelsFile();
-    AddParameterstoQueue(2); // 2 is the ID for sending QNH value to RX
+    AddParameterstoQueue(QNH_SETTING); // 2 is the ID for sending QNH value to RX
     CurrentView = TXSETUPVIEW;
     SendCommand(pTXSetupView);
     UpdateModelsNameEveryWhere();
@@ -1195,7 +1191,6 @@ void RXOptionsViewEnd()
         SendText(change, cleared);
     }
     UpdateModelsNameEveryWhere();
-    AddParameterstoQueue(5); // 5 is the ID for SBUS/PPM at RX selection and PPM channel count
     GotoFrontView();
 }
 

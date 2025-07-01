@@ -5,20 +5,19 @@
 
 /*********************************************************************************************************************************/
 
-void AddParameterstoQueue(uint8_t ID) // todo:  This function repeats the same parameter 3 times.  Should not be necessary.
+void AddParameterstoQueue(uint8_t ID)
 {
-
     for (int i = 0; i < PARAMETERSENDREPEATS; ++i)
     {
         if (ParametersToBeSentPointer < 78)
         {
             ++ParametersToBeSentPointer;
-            ParametersToBeSent[ParametersToBeSentPointer] = ID;
+            ParametersToBeSent[ParametersToBeSentPointer] = ID; // heer
         }
     }
     // Look1("Queued: ");
     // Look1(ID);
-    // Look1(" ");
+    // Look1(" ");f
     // Look(ParaNames[ID - 1]);
 }
 
@@ -29,6 +28,7 @@ void SendStabilationParameters()
     AddParameterstoQueue(ALPHA_BETA);    // ALPHA_BETA 8
     AddParameterstoQueue(PID_VALUES);    // PID Values 4
     AddParameterstoQueue(KALMAN_VALUES); // KALMAN Values 5
+                                         // AddParameterstoQueue(KALMAN_VALUES); // KALMAN Values 5 // heer
 }
 /*********************************************************************************************************************************/
 void SendInitialSetupParams()
@@ -46,9 +46,9 @@ void SendOutstandingParameters()
 
     if (BoundFlag && ModelMatched && LedWasGreen)
     {
-        Parameters.ID = ParametersToBeSent[ParametersToBeSentPointer];
+        Parameters.ID = ParametersToBeSent[ParametersToBeSentPointer]; // heer
         --ParametersToBeSentPointer;
-        AddExtraParameters = true;
+
         // Look1("Sent: ");
         // Look1(Parameters.ID);
         // Look1(" ");
@@ -168,18 +168,19 @@ void LoadRawDataWithParameters()
 /************************************************************************************************************/
 int GetExtraParameters() // This gets extra parameters ready for sending and returns the number that will be sent.
 {                        // only the ***low 12 bits*** of each parameter are actually sent because of compression
-    // if ((Parameters.ID == 0) || (Parameters.ID > MAXPARAMETERS))
-    // {
-    //     Look1("Parameter error: ID is ");
-    //     Look(Parameters.ID);
-    //     return 8;
-    // }
+    if ((Parameters.ID == 0) || (Parameters.ID > MAXPARAMETERS))
+    {
+       // Look1("Parameter error: ID is ");
+       // Look(Parameters.ID);
+        return 8;
+    }
     LoadParameters();
     LoadRawDataWithParameters();
     DataTosend.ChannelBitMask = 0; //  zero channels to send with this packet
-                                   //  DebugParamsOut();
-    // Look(ParaNames[Parameters.ID - 1]);
-    return 11; //  was 8 is the number of parameters to send
+                                   // DebugParamsOut();
+   // Look(ParaNames[Parameters.ID - 1]);
+    // Look(ParametersToBeSentPointer);
+    return 8; //  was 8 is the number of parameters to send // heer
 }
 
 /*********************************************************************************************************************************/
@@ -234,7 +235,7 @@ void SaveHeliDefaults()
         ReadStabilisationParameters();     // in case the values were changed on the screen
         HeliRate = *ActiveSettings;        // save the current rate settings
         HeliLevelling = SelfLevelSettings; // save the current levelling settings
-        }
+    }
 }
 // ************************************************************************************************************/
 void SavePlaneDefaults()
@@ -258,8 +259,8 @@ void FactoryDefaults()
         HeliRate = FactoryHeliRate;
         HeliLevelling = FactoryHeliLevelling;
         RateSettings = PlaneRate;
-        SelfLevelSettings = PlaneLevelling; 
-        SelfLevellingOn = false;        // defaults are always without self-levelling
+        SelfLevelSettings = PlaneLevelling;
+        SelfLevellingOn = false; // defaults are always without self-levelling
         DisplayStabilisationScreenData();
     }
 }

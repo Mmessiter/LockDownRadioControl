@@ -199,7 +199,7 @@ void CheckGap()
 /************************************************************************************************************/
 void CheckDataRepeat()
 {
-    if (!AddExtraParameters)
+    if (!ParametersToBeSentPointer || ParamPause)
     {
         for (int i = 0; i < CHANNELSUSED; ++i)
             PreviousBuffer[i] = PrePreviousBuffer[i]; // force last update repeat if not sending parameters
@@ -291,7 +291,6 @@ void SuccessfulPacket()
     RecordsPacketSuccess(1);
     ++RecentGoodPacketsCount;
     ++PacketNumber;
-    AddExtraParameters = false;
     if (RecentPacketsLost)
     {
         TotalLostPackets += RecentPacketsLost;
@@ -331,7 +330,7 @@ uint8_t EncodeTheChangedChannels()
 #define MAXCHANNELSATONCE 8              // Not more that 8 channels will be sent in one packet
     uint8_t NumberOfChangedChannels = 0; // Number of channels that have changed since last packet
     DataTosend.ChannelBitMask = 0;       // Clear the ChannelBitMask 16 BIT WORD (1 bit per channel)
-    if (!AddExtraParameters)
+    if (!ParametersToBeSentPointer || ParamPause)
     { // If sending parameters, don't send any channels ... yet.
         for (uint8_t i = 0; i < CHANNELSUSED; ++i)
         {                                                                                                                 // Check for changed channels and load them into the rawdatabuffer
@@ -364,7 +363,7 @@ FASTRUN void SendData()
         Connected = false; // Assume failure until an ACK is received.
         FlushFifos();      // This flush avoids a lockup that happens when the FIFO gets full.
 
-        if (AddExtraParameters)
+        if (ParametersToBeSentPointer && !ParamPause)
         {
             NumberOfChangedChannels = GetExtraParameters();
         }

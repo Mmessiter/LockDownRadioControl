@@ -178,7 +178,6 @@ void ClearMostParameters()
     RecentPacketsLost = 0;
     DontChangePipeAddress = false;
     UsingDefaultPipeAddress = true;
-    AddExtraParameters = false;
     VersionsCompared = false;
     LogLineNumber = 0;
     RXSuccessfulPackets = 0;
@@ -916,7 +915,7 @@ void SendColour(char *but, int Colour)
 /*********************************************************************************************************************************/
 void ShowSafetyIsOn()
 {
-    if (AnnounceBanks && !BeQuiet && UseMotorKill && millis()>10000)
+    if (AnnounceBanks && !BeQuiet && UseMotorKill && millis() > 10000)
     {
         PlaySound(SAFEON);
         if (UseLog)
@@ -1217,7 +1216,7 @@ FLASHMEM void setup()
     RationaliseBuddy();
     WarnUserIfBuddyBoxIsOn();
     ClearMostParameters();
-    DelayWithDog(1000); 
+    DelayWithDog(1000);
     GotoFrontView();
 }
 // **************************************************************************************************************************************************************
@@ -1374,7 +1373,7 @@ void BuildDirectory()
         if (!entry || ExportedFileCounter > MAXBACKUPFILES)
             break;
         strcpy(Entry1, entry.name());
-        if ((InStrng(MOD, Entry1) > 0) && (!InStrng((char*)"._",Entry1)))
+        if ((InStrng(MOD, Entry1) > 0) && (!InStrng((char *)"._", Entry1)))
         {
             strcpy(fn, entry.name());
             for (i = 0; i < 12; ++i)
@@ -3280,7 +3279,7 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     LoadPlaneDefaults,        // 23
     SavePlaneDefaults,        // 24
     SaveHeliDefaults,         // 25
-    FactoryDefaults,         // 26
+    FactoryDefaults,          // 26
 };
 
 // This list migth become MUCH longer as it limit is 24 bits big
@@ -4803,7 +4802,7 @@ bool CheckModelName()
 
 /************************************************************************************************************/
 void Close_TX_Down()
-{ 
+{
     char NotInUse[] = "Not in use";
     char ClosingDown[] = "Closing down ...";
     char Saving[] = "Saving ";
@@ -4814,8 +4813,8 @@ void Close_TX_Down()
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, 0);
     RestoreBrightness();
-    SendCommand(pBlankView);   // Set to BlankView
-    SendCommand(msgvis);       // Make it visible
+    SendCommand(pBlankView); // Set to BlankView
+    SendCommand(msgvis);     // Make it visible
     if (PlayFanfare)
     {
         PlaySound(WINDOWS2);
@@ -4824,9 +4823,9 @@ void Close_TX_Down()
     { // If model is in use
         strcpy(msg1, Saving);
         strcat(msg1, ModelName); // Build up the message
-        SendText(t0, msg1); // Show 'Saving <model> ' on screen
-        SaveAllParameters(); // Save the model if it's not 'Not in use'
-        DelayWithDog(500); // Wait for 0.5 seconds to allow the message to be displayed
+        SendText(t0, msg1);      // Show 'Saving <model> ' on screen
+        SaveAllParameters();     // Save the model if it's not 'Not in use'
+        DelayWithDog(500);       // Wait for 0.5 seconds to allow the message to be displayed
     }
     SendText(t0, ClosingDown); // Show 'Closing down ...' on screen
     if (UseLog)
@@ -4948,6 +4947,7 @@ void CheckPowerOffButton()
     }
     CheckingPowerButton = false;
 }
+
 /************************************************************************************************************/
 void FASTRUN ManageTransmitter()
 {
@@ -4983,15 +4983,19 @@ void FASTRUN ManageTransmitter()
         LastTimeRead = millis(); // Reset this timer
         return;                  // That's enough housekeeping for this time around
     }
-
-    if (RightNow - LastParameterSent >= 20)
-    { // Send queued parameters
-        if (ParametersToBeSentPointer)
+    if (ParametersToBeSentPointer) // Send queued parameters if any
+    {
+        if (RightNow - LastParameterSent >= 50)
         {
+            ParamPause = false; // Reset pause flag to allow the parameters to be sent
             SendOutstandingParameters();
             LastParameterSent = RightNow;
             if (CurrentView == FRONTVIEW)
                 ShowSendingParameters();
+        }
+        else if (RightNow - LastParameterSent >= 15) // it would just keep sending parameters so we must pause it for a while
+        {
+            ParamPause = true; // Pause sending parameters briefly so we can send data to control the model ! :-)
         }
     }
 
