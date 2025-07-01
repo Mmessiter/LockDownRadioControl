@@ -252,13 +252,13 @@ void FactoryDefaults()
 {
     if (GetConfirmation(pPIDView, (char *)"Re-Load factory defaults?!"))
     {
+        ActiveSettings = &RateSettings; // set the active settings to the rate settings
         PlaneRate = FactoryPlaneRate;
         PlaneLevelling = FactoryPlaneLevelling;
         HeliRate = FactoryHeliRate;
         HeliLevelling = FactoryHeliLevelling;
         RateSettings = PlaneRate;
-        SelfLevelSettings = PlaneLevelling;
-        ActiveSettings = &RateSettings; // set the active settings to the rate settings
+        SelfLevelSettings = PlaneLevelling; 
         SelfLevellingOn = false;        // defaults are always without self-levelling
         DisplayStabilisationScreenData();
     }

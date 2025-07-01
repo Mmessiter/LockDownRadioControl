@@ -1281,7 +1281,6 @@ uint8_t Buddy_Hi_Position = 2;
 bool StabilisationOn = false;
 bool SelfLevellingOn = false;
 
-
 struct StabilisationSettings
 {
     float PID_P;
@@ -1306,7 +1305,7 @@ StabilisationSettings RateSettings = {
     0.03f,  // Kalman_R_measure
     0.05f,  // alpha
     0.05f,  // beta
-    false,  // UseKalmanFilter
+    true,   // UseKalmanFilter
     true,   // UseRateLFP
     false   // UseSerialDebug
 };
@@ -1320,7 +1319,7 @@ StabilisationSettings SelfLevelSettings = {
     0.03f,  // Kalman_R_measure
     0.05f,  // alpha
     0.05f,  // beta
-    false,  // UseKalmanFilter
+    true,   // UseKalmanFilter
     false,  // UseRateLFP
     false   // UseSerialDebug
 };
@@ -1337,10 +1336,9 @@ StabilisationSettings HeliRate = {
     0.03f,
     0.04f,
     0.04f,
-    false,
+    true, // Kalman ON to start
     true,
-    false
-};
+    false};
 
 StabilisationSettings HeliLevelling = {
     3.0f,  // PID_P
@@ -1351,10 +1349,9 @@ StabilisationSettings HeliLevelling = {
     0.03f,
     0.04f,
     0.04f,
+    true, // Kalman ON to start
     false,
-    false,
-    false
-};
+    false};
 
 StabilisationSettings PlaneRate = {
     0.05f,  // PID_P
@@ -1365,7 +1362,7 @@ StabilisationSettings PlaneRate = {
     0.03f,  // Kalman_R_measure
     0.05f,  // alpha
     0.05f,  // beta
-    false,  // UseKalmanFilter
+    true,   // UseKalmanFilter
     true,   // UseRateLFP
     false   // UseSerialDebug
 };
@@ -1379,10 +1376,9 @@ StabilisationSettings PlaneLevelling = {
     0.03f,
     0.05f,
     0.05f,
-    false, // Kalman off to start
+    true,  // Kalman ON to start
     false, // UseRateLFP off
-    false
-};
+    false};
 // ************************************************************************************************************/
 //Factory defaults for stabilisation settings
 
@@ -1395,7 +1391,7 @@ StabilisationSettings FactoryHeliRate = {
     0.03f,
     0.04f,
     0.04f,
-    false,
+    true, // Kalman ON to start
     true,
     false};
 
@@ -1408,7 +1404,7 @@ StabilisationSettings FactoryHeliLevelling = {
     0.03f,
     0.04f,
     0.04f,
-    false,
+    true, // Kalman ON to start
     false,
     false};
 
@@ -1421,7 +1417,7 @@ StabilisationSettings FactoryPlaneRate = {
     0.03f,  // Kalman_R_measure
     0.05f,  // alpha
     0.05f,  // beta
-    false,  // UseKalmanFilter
+    true,   // UseKalmanFilter
     true,   // UseRateLFP
     false   // UseSerialDebug
 };
@@ -1435,7 +1431,7 @@ StabilisationSettings FactoryPlaneLevelling = {
     0.03f,
     0.05f,
     0.05f,
-    false, // Kalman off to start
+    true,  // Kalman ON to start
     false, // UseRateLFP off
     false};
 

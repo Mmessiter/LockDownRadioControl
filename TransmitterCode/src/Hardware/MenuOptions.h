@@ -1284,7 +1284,6 @@ void DisplayStabilisationScreenData()
         ActiveSettings = &SelfLevelSettings;
     else
         ActiveSettings = &RateSettings;
-    Look("");
     dtostrf(ActiveSettings->PID_P, 1, 3, temp);
     SendText(t9, temp);
     dtostrf(ActiveSettings->PID_I, 1, 3, temp);
@@ -1331,34 +1330,52 @@ void ReadStabilisationParameters()
     char t19[] = "t19"; // alpha
     char t20[] = "t20"; // beta
     char temp[10];
+
+    char ProgressStart[] = "vis Progress,1"; // heer
+    char ProgressEnd[] = "vis Progress,0";
+    char Progress[] = "Progress";
+
+    SendCommand(ProgressStart);
+    
     if (SelfLevellingOn)
         ActiveSettings = &SelfLevelSettings;
     else
         ActiveSettings = &RateSettings;
     GetText(t9, temp);
+    SendValue(Progress, 10);
     ActiveSettings->PID_P = atof(temp);
     GetText(t14, temp);
+    SendValue(Progress, 20);
     ActiveSettings->PID_I = atof(temp);
     GetText(t15, temp);
+    SendValue(Progress, 30);
     ActiveSettings->PID_D = atof(temp);
     GetText(t16, temp);
+    SendValue(Progress, 40);
     ActiveSettings->Kalman_Q_angle = atof(temp);
     GetText(t17, temp);
+    SendValue(Progress, 50);
     ActiveSettings->Kalman_Q_bias = atof(temp);
     GetText(t18, temp);
+    SendValue(Progress, 60);
     ActiveSettings->Kalman_R_measure = atof(temp);
     GetText(t19, temp);
+    SendValue(Progress, 70);
     ActiveSettings->alpha = atof(temp);
     GetText(t20, temp);
+    SendValue(Progress, 80);
     ActiveSettings->beta = atof(temp);
     StabilisationOn = GetValue(sw0);
+    SendValue(Progress, 90);
     ActiveSettings->UseKalmanFilter = GetValue(sw3);
+    SendValue(Progress, 100);
     ActiveSettings->UseRateLFP = GetValue(sw2);
     SelfLevellingOn = GetValue(sw4);
     if (SelfLevellingOn)
         ActiveSettings = &SelfLevelSettings;
     else
         ActiveSettings = &RateSettings;
+    SendCommand(ProgressEnd);
 }
 
 /******************************************************************************************************************************/
@@ -1380,9 +1397,10 @@ void CalibrateMPU6050()
 /******************************************************************************************************************************/
 void GyroApply()
 {
+    PlaySound(BEEPMIDDLE); // play a sound to indicate the button was pressed
     ReadStabilisationParameters();
     SendStabilationParameters();
-    PlaySound(BEEPCOMPLETE);
+    PlaySound(BEEPCOMPLETE); // play a sound to indicate the parameters were sent
    
 }
 
