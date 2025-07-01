@@ -1374,7 +1374,7 @@ void BuildDirectory()
         if (!entry || ExportedFileCounter > MAXBACKUPFILES)
             break;
         strcpy(Entry1, entry.name());
-        if (InStrng(MOD, Entry1) > 0)
+        if ((InStrng(MOD, Entry1) > 0) && (!InStrng((char*)"._",Entry1)))
         {
             strcpy(fn, entry.name());
             for (i = 0; i < 12; ++i)
