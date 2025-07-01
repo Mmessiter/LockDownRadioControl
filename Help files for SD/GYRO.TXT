@@ -1,0 +1,36 @@
+PID Settings (affect responsiveness):||
+
+PID_P - Proportional gain.|
+- Too low: response feels sluggish.|
+- Too high: model may oscillate.|
+PID_I - Integral gain.|
+- Helps correct steady-state drift or imbalance.|
+- Increase slightly if the model tends to lean or drift in one direction.||
+PID_D - Derivative gain.|
+- Smooths rapid movements.|
+- Increase to calm fast corrections; reduce if response feels delayed.||
+Kalman on: Enables the Kalman filter.||
+Q_angle - Trust in accelerometer angle.|
+- Higher = trust accelerometer more.|
+- Lower = trust gyro more.|
+- If angle drifts slowly over time, increase this. If jittery, reduce.||
+Q_bias - Trust in gyro drift estimate.|
+- Controls how quickly gyro bias is corrected.|
+- If model slowly veers off over time, increase this.|
+- If noisy or jumpy, reduce.||
+R_measure - Trust in accelerometer measurement.|
+- Higher = assume more sensor noise.|
+- Lower = rely more on accelerometer.|
+- If angle is noisy, increase this. If slow to level, reduce.||
+alpha - Smooths angle measurements.|
+- 0.00 = no smoothing, 1.00 = very slow changes.|
+- Raise if pitch/roll angles appear jittery.||
+beta - Smooths gyro rates.|
+- Filters the rate-of-rotation data.|
+- Increase if the model overreacts to small inputs or noise.||
+LPF - Low-pass filter toggle.|
+- Turns on/off additional rate filtering.|
+- Useful for helicopters to tame aggressive behaviour.||
+Calibrate MPU6050 now! - Starts sensor calibration.|
+- Place the model *still and exactly horizontal* .|
+- Do not move it during calibration.|

@@ -208,13 +208,24 @@ void GetCurrentAttitude()
   RawRollRate -= RateCalibrationRoll;   // Correct for gyro calibration
   RawPitchRate -= RateCalibrationPitch; // Correct for gyro calibration
   RawYawRate -= RateCalibrationYaw;     // Correct for gyro calibration
-  kalmanFilter();
+
+  if (UseKalmanFilter){
+    kalmanFilter(); // heer
+  }else{
+    filteredRollRate = RawRollRate;
+    filteredPitchRate = RawPitchRate;
+    filteredYawRate = RawYawRate; 
+    filteredRoll = RawRollAngle;
+    filteredPitch = RawPitchAngle;    
+  }
+  
   filterRatesForHelicopter();
+  
   // The following lines are for the Serial Plotter
   if (++counter > 12)
   {
     // Print header once (this line will be ignored by the Serial Plotter's graph)
-    Serial.println("RawPitch,FilteredPitch,RawRoll,FilteredRoll,RawYaw,FilteredYaw"); // heer
+    Serial.println("RawPitch,FilteredPitch,RawRoll,FilteredRoll,RawYaw,FilteredYaw"); // 
 
     Serial.print(RawPitchAngle);
     Serial.print(",");
