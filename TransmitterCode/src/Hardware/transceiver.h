@@ -369,7 +369,6 @@ FASTRUN void SendData()
             --ParametersToBeSentPointer;
             if (!ParametersToBeSentPointer){
                 ParamPause = true; // Pause sending parameters until next time
-                PlaySound(BEEPCOMPLETE); // Play a sound to indicate that parameters have been sent
             }
         }
         else

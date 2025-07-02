@@ -7,7 +7,6 @@
 
 void AddParameterstoQueue(uint8_t ID)
 {
-
     if (!ModelMatched || !BoundFlag)
         return;
     for (int i = 0; i < PARAMETER_SEND_REPEATS; ++i)
@@ -22,6 +21,17 @@ void AddParameterstoQueue(uint8_t ID)
     // Look1(ID);
     // Look1(" ");
     // Look(ParaNames[ID - 1]);
+}
+
+//************************************************************************************************************/
+void SwitchStabilisation(bool OnOff) // This function switches stabilisation on or off by bank selected
+{                                    // Switch stabilisation on or off
+    char sw0[] = "sw0";              // Switch 0 is used for stabilisation on/off
+    StabilisationOn = OnOff;
+    AddParameterstoQueue(BOOLEANS);
+    AddParameterstoQueue(BOOLEANS); // just to make sure it gets sent
+    if (CurrentView == PIDVIEW)
+        SendValue(sw0, StabilisationOn); // Send the value to the PID view
 }
 
 //************************************************************************************************************/
@@ -41,7 +51,6 @@ void SendInitialSetupParams()
     AddParameterstoQueue(QNH_SETTING);        // QNH 2
     AddParameterstoQueue(FAILSAFE_SETTINGS);  // FailSafeChannels 1
 }
-
 /************************************************************************************************************/
 void SendOutstandingParameters()
 { // Send any QUEUED parameters that have not been sent yet
@@ -49,7 +58,6 @@ void SendOutstandingParameters()
     if (BoundFlag && ModelMatched && LedWasGreen)
     {
         Parameters.ID = ParametersToBeSent[ParametersToBeSentPointer]; // heer
-
         // Look1("Sent: ");
         // Look1(Parameters.ID);
         // Look1(" ");
@@ -178,7 +186,7 @@ int GetExtraParameters() // This gets extra parameters ready for sending and ret
     LoadParameters();
     LoadRawDataWithParameters();
     DataTosend.ChannelBitMask = 0; //  zero channels to send with this packet
-    // DebugParamsOut(); // long
+   // DebugParamsOut();              // long
     // Look(ParaNames[Parameters.ID - 1]); // brief
 
     return 8; //  was 8 is the number of parameters to send // heer
@@ -190,7 +198,7 @@ void ShowSendingParameters()
 {
     char FrontView_Connected[] = "Connected"; // this is the name of the Nextion screen's text box
     char msg[] = "Sending Parameters ...";
-    if (!LedWasGreen)
+    if (!LedWasGreen || millis() > 5000) // if the LED is not green or it has been more than 5 seconds since turning on.
         return;
     SendText(FrontView_Connected, msg); // show that we are sending parameters
 }

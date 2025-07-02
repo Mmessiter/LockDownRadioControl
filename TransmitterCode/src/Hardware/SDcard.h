@@ -417,6 +417,8 @@ bool ReadOneModel(uint32_t Mnum)
         TimerStartTime = 5 * 60;
     ++SDCardAddress;
     ++SDCardAddress;
+    StabilisedBank = SDRead8BITS(SDCardAddress);
+
     ++SDCardAddress;
     ++SDCardAddress;
     ++SDCardAddress;
@@ -1370,6 +1372,7 @@ void SaveOneModel(uint32_t mnum)
     SDUpdate16BITS(SDCardAddress, TimerStartTime);
     ++SDCardAddress;
     ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, StabilisedBank);
     ++SDCardAddress;
     ++SDCardAddress;
     ++SDCardAddress;

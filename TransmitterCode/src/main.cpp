@@ -4629,6 +4629,16 @@ void GetBank() // ... and the other three switches
 
     if (Bank != PreviousBank)
     {
+
+        if (Bank == StabilisedBank || StabilisedBank == 0)
+        {
+            SwitchStabilisation(true); // Turn on stabilisation if bank changed
+        }
+        else
+        {
+            SwitchStabilisation(false); // Turn off stabilisation if bank changed
+        }
+
         if ((CurrentView == FRONTVIEW) || (CurrentView == TRIM_VIEW))
         {
             for (int pp = 0; pp < 4; ++pp)
@@ -4956,8 +4966,6 @@ void ActuallySendParameters(uint32_t RightNow)
         ParamPause = false; // Reset pause flag to allow the parameters to be sent
         SendOutstandingParameters();
         LastParameterSent = RightNow;
-        if (CurrentView == FRONTVIEW)
-            ShowSendingParameters();
     }
     else if (RightNow - LastParameterSent >= PARAMETER_SEND_DURATION) // it would just keep sending parameters so we must pause it for a while
     {
