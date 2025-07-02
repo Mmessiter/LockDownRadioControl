@@ -9,7 +9,7 @@ void AddParameterstoQueue(uint8_t ID)
 {
     for (int i = 0; i < PARAMETERSENDREPEATS; ++i)
     {
-        if (ParametersToBeSentPointer < 78)
+        if (ParametersToBeSentPointer < MAXPARAMQUEUESIZE)
         {
             ++ParametersToBeSentPointer;
             ParametersToBeSent[ParametersToBeSentPointer] = ID; // heer
@@ -17,7 +17,7 @@ void AddParameterstoQueue(uint8_t ID)
     }
     // Look1("Queued: ");
     // Look1(ID);
-    // Look1(" ");f
+    // Look1(" ");
     // Look(ParaNames[ID - 1]);
 }
 
@@ -28,7 +28,6 @@ void SendStabilationParameters()
     AddParameterstoQueue(ALPHA_BETA);    // ALPHA_BETA 8
     AddParameterstoQueue(PID_VALUES);    // PID Values 4
     AddParameterstoQueue(KALMAN_VALUES); // KALMAN Values 5
-                                         // AddParameterstoQueue(KALMAN_VALUES); // KALMAN Values 5 // heer
 }
 /*********************************************************************************************************************************/
 void SendInitialSetupParams()
@@ -47,7 +46,7 @@ void SendOutstandingParameters()
     if (BoundFlag && ModelMatched && LedWasGreen)
     {
         Parameters.ID = ParametersToBeSent[ParametersToBeSentPointer]; // heer
-        --ParametersToBeSentPointer;
+        
 
         // Look1("Sent: ");
         // Look1(Parameters.ID);
@@ -177,9 +176,9 @@ int GetExtraParameters() // This gets extra parameters ready for sending and ret
     LoadParameters();
     LoadRawDataWithParameters();
     DataTosend.ChannelBitMask = 0; //  zero channels to send with this packet
-                                   // DebugParamsOut();
-   // Look(ParaNames[Parameters.ID - 1]);
-    // Look(ParametersToBeSentPointer);
+    // DebugParamsOut(); // long
+    // Look(ParaNames[Parameters.ID - 1]); // brief
+
     return 8; //  was 8 is the number of parameters to send // heer
 }
 
@@ -197,10 +196,8 @@ void ShowSendingParameters()
 // This function is called when the Self Levelling button is pressed on the Nextion screen.
 void SelfLevellingChange()
 {
-    PlaySound(BEEPMIDDLE);            // play a sound to indicate the button was pressed
     ReadStabilisationParameters();    // in case the values were changed on the screen
     DisplayStabilisationScreenData(); // show the new values on the screen (having changed the SelfLevellingOn value)
-    PlaySound(BEEPCOMPLETE);          // play a sound to indicate the thing finished
 }
 //************************************************************************************************************/
 void LoadHeliDefaults()

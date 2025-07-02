@@ -113,7 +113,7 @@
 #define SCREENCHANGEWAIT 10         // allow 10ms for screen to appear
 #define BATTERY_CHECK_INTERVAL 1000 // 2 seconds between battery checks
 
-#define MAXPARAMETERS 10       // Max types of parameters packet to send  ... will increase.
+#define MAXPARAMETERS 10      // Max types of parameters packet to send  ... will increase.
 #define POWERONOFFDELAY 1000  // Delay after power OFF before transmit stops.
 #define POWERONOFFDELAY2 4000 // Delay after power ON before Off is possible....
                               // and delay after power off before power on button is active
@@ -173,8 +173,18 @@
 //                      Parameters to sent to RX IDs                        *
 // **************************************************************************
 
-#define PARAMETERSENDREPEATS 3 // How many times to send each parameter in case it gets lost
-#define FAILSAFE_SETTINGS 1    // Parameter IDs ....
+// When servo frequencies, servo centre points, PID values, failsafe data, QNH settings, 
+// Kalman parameters (etc.) are sent to the RX, they are sent for only 5 ms in each 100 ms period.
+// This is to allow the TX and RX to exchange control data too - during the remaining 95 ms. 
+// It therefore takes a few seconds to send all the parameters, 
+// but it is necessary to allow control data to be sent too.
+
+#define PARAMETERSENDREPEATS 4  // How many times to repeat each parameter in case it gets lost
+#define PARAMETERFREQUENCY 100  // How many ms between sending parameters
+#define PARAMETERSENDDURATION 5 // How many ms to actually send parameters before allowing control data to be sent instead
+#define MAXPARAMQUEUESIZE 250   // Max number of parameters to allow in the queue at one time
+
+#define FAILSAFE_SETTINGS 1 // Parameter IDs ....
 #define QNH_SETTING 2
 #define GPS_MARK_LOCATION 3
 #define PID_VALUES 4
@@ -756,8 +766,7 @@ void SaveHeliDefaults();
 void SavePlaneDefaults();
 void FactoryDefaults();
 #ifdef USE_BTLE
-    void
-    SendViaBLE();
+void SendViaBLE();
 #endif
 // **************************************************************************
 //                            GLOBAL DATA                                   *
@@ -1176,7 +1185,7 @@ uint32_t LedGreenMoment = 0;
 bool BeQuiet = false;
 bool ReconnectingNow = true;
 uint32_t LastHopTime = 0; //  Time of last hop
-uint16_t ParametersToBeSent[80];
+uint16_t ParametersToBeSent[MAXPARAMQUEUESIZE + 1];
 uint8_t ParametersToBeSentPointer = 0;
 bool UsingDefaultPipeAddress = true;
 bool DontChangePipeAddress = false;
@@ -1379,7 +1388,7 @@ StabilisationSettings PlaneLevelling = {
     false, // UseRateLFP off
     false};
 // ************************************************************************************************************/
-//Factory defaults for stabilisation settings
+// Factory defaults for stabilisation settings
 
 StabilisationSettings FactoryHeliRate = {
     0.10f,  // PID_P

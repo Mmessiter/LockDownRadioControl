@@ -366,10 +366,16 @@ FASTRUN void SendData()
         if (ParametersToBeSentPointer && !ParamPause)
         {
             NumberOfChangedChannels = GetExtraParameters();
+            --ParametersToBeSentPointer;
+            if (!ParametersToBeSentPointer){
+                ParamPause = true; // Pause sending parameters until next time
+                PlaySound(BEEPCOMPLETE); // Play a sound to indicate that parameters have been sent
+            }
         }
         else
         {
             NumberOfChangedChannels = EncodeTheChangedChannels(); // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels.
+           
         }
 
         if (NumberOfChangedChannels)

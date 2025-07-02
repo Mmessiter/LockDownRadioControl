@@ -4947,13 +4947,40 @@ void CheckPowerOffButton()
     }
     CheckingPowerButton = false;
 }
-
+/************************************************************************************************************/
+void ActuallySendParameters(uint32_t RightNow)
+{
+    static uint32_t LastParameterSent = 0;
+    if (RightNow - LastParameterSent >= PARAMETERFREQUENCY)
+    {
+        ParamPause = false; // Reset pause flag to allow the parameters to be sent
+        SendOutstandingParameters();
+        LastParameterSent = RightNow;
+        if (CurrentView == FRONTVIEW)
+            ShowSendingParameters();
+    }
+    else if (RightNow - LastParameterSent >= PARAMETERSENDDURATION) // it would just keep sending parameters so we must pause it for a while
+    {
+        ParamPause = true; // Pause sending parameters briefly so we can send data to control the model ! :-)
+    }
+}
+// /************************************************************************************************************/
+// This function checks if the model name has changed in ModelsView
+void CheckModelsScreen(uint32_t RightNow)
+{
+    static uint32_t LastModelScreenCheck = 0;
+    if (RightNow - LastModelScreenCheck < 500)
+        return; // Only check once every 500 ms
+    LastModelScreenCheck = RightNow;
+    if (CheckModelName())
+        LastModelScreenCheck = RightNow;
+}
 /************************************************************************************************************/
 void FASTRUN ManageTransmitter()
 {
-    static uint32_t LastModelScreenCheck = 0;
+
     static uint32_t TransmitterLastManaged = 0;
-    static uint32_t LastParameterSent = 0;
+
     uint32_t RightNow = millis();
     uint32_t TXPacketElapsed = RightNow - LastPacketSentTime;
 
@@ -4983,34 +5010,10 @@ void FASTRUN ManageTransmitter()
         LastTimeRead = millis(); // Reset this timer
         return;                  // That's enough housekeeping for this time around
     }
-    if (ParametersToBeSentPointer) // Send queued parameters if any
-    {
-        if (RightNow - LastParameterSent >= 50)
-        {
-            ParamPause = false; // Reset pause flag to allow the parameters to be sent
-            SendOutstandingParameters();
-            LastParameterSent = RightNow;
-            if (CurrentView == FRONTVIEW)
-                ShowSendingParameters();
-        }
-        else if (RightNow - LastParameterSent >= 15) // it would just keep sending parameters so we must pause it for a while
-        {
-            ParamPause = true; // Pause sending parameters briefly so we can send data to control the model ! :-)
-        }
-    }
-
-    if ((RightNow - LastModelScreenCheck >= 500))
-    {
-        if (CurrentView == MODELSVIEW)
-        {
-            LastModelScreenCheck = RightNow;
-            if (CheckModelName())
-            {
-                LastModelScreenCheck = RightNow;
-                return; // In ModelsView, this function checks correct name is displayed. It returns true if it has changed
-            }
-        }
-    }
+    if (ParametersToBeSentPointer)        // Any parameters to be sent?
+        ActuallySendParameters(RightNow); // yes, send them
+    if (CurrentView == MODELSVIEW)
+        CheckModelsScreen(RightNow);
 
     if (RightNow - TransmitterLastManaged >= 50)
     { // 50 = 20 times a second

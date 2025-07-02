@@ -850,12 +850,12 @@ void OptionView3End() //
         MinimumGap = 10;
     UseLog = GetValue(sw0);
     LogRXSwaps = GetValue(sw1);
-
     SaveTransmitterParameters();
     CloseModelsFile();
-    AddParameterstoQueue(QNH_SETTING); // 2 is the ID for sending QNH value to RX
-    CurrentView = TXSETUPVIEW;
+    AddParameterstoQueue(QNH_SETTING); // 2 
+    AddParameterstoQueue(QNH_SETTING); // repeat it to ensure that it really is sent
     SendCommand(pTXSetupView);
+    CurrentView = TXSETUPVIEW;
     UpdateModelsNameEveryWhere();
 }
 
@@ -1395,8 +1395,6 @@ void GyroApply()
     PlaySound(BEEPMIDDLE); // play a sound to indicate the button was pressed
     ReadStabilisationParameters();
     SendStabilationParameters();
-    PlaySound(BEEPCOMPLETE); // play a sound to indicate the parameters were sent
-   
 }
 
 #endif
