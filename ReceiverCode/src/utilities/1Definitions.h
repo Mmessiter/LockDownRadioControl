@@ -9,8 +9,8 @@
 
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 5
-#define RXVERSION_MINIMUS 2
-#define RXVERSION_EXTRA 'C' // 22 June 2025
+#define RXVERSION_MINIMUS 3
+#define RXVERSION_EXTRA 'A' // 02 July 2025
 #define HOPTIME 17          // 17 gives 50Hz FHSS, 47 gives 20Hz FHSS
 #define RECEIVE_TIMEOUT 7   // was 8 ... 5 milliseconds is 'perfect' time between packets, but with nRF24L01 auto-retries it might be 7 or 8 sometimes
 

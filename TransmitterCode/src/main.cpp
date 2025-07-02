@@ -4951,7 +4951,7 @@ void CheckPowerOffButton()
 void ActuallySendParameters(uint32_t RightNow)
 {
     static uint32_t LastParameterSent = 0;
-    if (RightNow - LastParameterSent >= PARAMETERFREQUENCY)
+    if (RightNow - LastParameterSent >= PARAMETER_SEND_FREQUENCY)
     {
         ParamPause = false; // Reset pause flag to allow the parameters to be sent
         SendOutstandingParameters();
@@ -4959,7 +4959,7 @@ void ActuallySendParameters(uint32_t RightNow)
         if (CurrentView == FRONTVIEW)
             ShowSendingParameters();
     }
-    else if (RightNow - LastParameterSent >= PARAMETERSENDDURATION) // it would just keep sending parameters so we must pause it for a while
+    else if (RightNow - LastParameterSent >= PARAMETER_SEND_DURATION) // it would just keep sending parameters so we must pause it for a while
     {
         ParamPause = true; // Pause sending parameters briefly so we can send data to control the model ! :-)
     }

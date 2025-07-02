@@ -29,8 +29,8 @@
 
 #define TXVERSION_MAJOR 2 // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 5
-#define TXVERSION_MINIMUS 2
-#define TXVERSION_EXTRA "C 22/06/25"
+#define TXVERSION_MINIMUS 3
+#define TXVERSION_EXTRA "A 02/07/25"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -173,18 +173,20 @@
 //                      Parameters to sent to RX IDs                        *
 // **************************************************************************
 
-// When servo frequencies, servo centre points, PID values, failsafe data, QNH settings, 
+// When servo frequencies, servo centre points, PID values, failsafe data, QNH settings,
 // Kalman parameters (etc.) are sent to the RX, they are sent for only 5 ms in each 100 ms period.
-// This is to allow the TX and RX to exchange control data too - during the remaining 95 ms. 
-// It therefore takes a few seconds to send all the parameters, 
+// This is to allow the TX and RX to exchange control data too - during the remaining 95 ms.
+// It therefore takes a few seconds to send all the parameters,
 // but it is necessary to allow control data to be sent too.
+// Parameter transmission timing and redundancy
 
-#define PARAMETERSENDREPEATS 4  // How many times to repeat each parameter in case it gets lost
-#define PARAMETERFREQUENCY 100  // How many ms between sending parameters
-#define PARAMETERSENDDURATION 5 // How many ms to actually send parameters before allowing control data to be sent instead
-#define MAXPARAMQUEUESIZE 250   // Max number of parameters to allow in the queue at one time
+#define PARAMETER_SEND_REPEATS 4     // Each parameter is repeated this many times (in case of packet loss)
+#define PARAMETER_SEND_FREQUENCY 100 // ms between parameter send slots
+#define PARAMETER_SEND_DURATION 5    // ms duration for parameter sending (remainder used for control)
+#define PARAMETER_QUEUE_MAXIMUM 250  // Maximum queued parameters allowed at once
 
-#define FAILSAFE_SETTINGS 1 // Parameter IDs ....
+// Parameter ID definitions
+#define FAILSAFE_SETTINGS 1
 #define QNH_SETTING 2
 #define GPS_MARK_LOCATION 3
 #define PID_VALUES 4
@@ -1185,7 +1187,7 @@ uint32_t LedGreenMoment = 0;
 bool BeQuiet = false;
 bool ReconnectingNow = true;
 uint32_t LastHopTime = 0; //  Time of last hop
-uint16_t ParametersToBeSent[MAXPARAMQUEUESIZE + 1];
+uint16_t ParametersToBeSent[PARAMETER_QUEUE_MAXIMUM + 1];
 uint8_t ParametersToBeSentPointer = 0;
 bool UsingDefaultPipeAddress = true;
 bool DontChangePipeAddress = false;

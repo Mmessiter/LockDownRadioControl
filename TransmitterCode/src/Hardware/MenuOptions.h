@@ -1392,6 +1392,11 @@ void CalibrateMPU6050()
 /******************************************************************************************************************************/
 void GyroApply()
 {
+    if (!ModelMatched || !BoundFlag)
+        {
+            MsgBox(pPIDView, (char *)"Model not connected!");
+            return;
+        }
     PlaySound(BEEPMIDDLE); // play a sound to indicate the button was pressed
     ReadStabilisationParameters();
     SendStabilationParameters();

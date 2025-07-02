@@ -7,9 +7,12 @@
 
 void AddParameterstoQueue(uint8_t ID)
 {
-    for (int i = 0; i < PARAMETERSENDREPEATS; ++i)
+
+    if (!ModelMatched || !BoundFlag)
+        return;
+    for (int i = 0; i < PARAMETER_SEND_REPEATS; ++i)
     {
-        if (ParametersToBeSentPointer < MAXPARAMQUEUESIZE)
+        if (ParametersToBeSentPointer < PARAMETER_QUEUE_MAXIMUM)
         {
             ++ParametersToBeSentPointer;
             ParametersToBeSent[ParametersToBeSentPointer] = ID; // heer
@@ -46,7 +49,6 @@ void SendOutstandingParameters()
     if (BoundFlag && ModelMatched && LedWasGreen)
     {
         Parameters.ID = ParametersToBeSent[ParametersToBeSentPointer]; // heer
-        
 
         // Look1("Sent: ");
         // Look1(Parameters.ID);
@@ -169,8 +171,8 @@ int GetExtraParameters() // This gets extra parameters ready for sending and ret
 {                        // only the ***low 12 bits*** of each parameter are actually sent because of compression
     if ((Parameters.ID == 0) || (Parameters.ID > MAXPARAMETERS))
     {
-       // Look1("Parameter error: ID is ");
-       // Look(Parameters.ID);
+        // Look1("Parameter error: ID is ");
+        // Look(Parameters.ID);
         return 8;
     }
     LoadParameters();
