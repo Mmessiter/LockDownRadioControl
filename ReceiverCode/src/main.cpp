@@ -58,10 +58,11 @@
 #include "utilities/1Definitions.h"
 
 #include "utilities/radio.h"
-#include "utilities/pid.h"
+#include "utilities/Stabilisation.h"
 #include "utilities/GPS.h"
 #include "utilities/Binding.h"
 #include "utilities/eeprom.h"
+#include "utilities/Parameters.h"
 
 void DelayMillis(uint16_t ms) // This replaces any delay() calls
 {

@@ -1,8 +1,8 @@
 // This file contains the PID controller and the Kalman filter for the MPU6050
 // FIXED VERSION: Can be calibrated at any angle and will use that as the zero reference
 
-#ifndef _SRC_PID_H
-#define _SRC_PID_H
+#ifndef STABILISATION_CODE
+#define STABILISATION_CODE
 
 #include <Arduino.h>
 #include "utilities/1Definitions.h"
@@ -120,7 +120,7 @@ void PerformMPU6050Calibration() // Calibrate and save result
   CalibrationPitchReading = atan2(-avgAccX, sqrt(avgAccY * avgAccY + avgAccZ * avgAccZ)) * 180.0f / M_PI;
 
   SaveMPU6050CalibrationDataToEEPROM(); // Save calibration data to EEPROM
-  
+
   // Debug output
   // Serial.print("Calibration complete. Gyro biases: Roll=");
   // Serial.print(RateCalibrationRoll);
@@ -170,8 +170,10 @@ void InitialiseTheMPU6050()
   Wire.write(0x03);
   Wire.endTransmission();
 
+  //ForceCalibration = true;
   if (!LoadMPU6050CalibrationDataFromEEPROM()) // If we do not have saved calibrations, we must calibrate!
-    PerformMPU6050Calibration();               // Calibrate and save result
+    PerformMPU6050Calibration();                                   // Calibrate and save result
+  //ForceCalibration = false;                                        // Reset the force calibration flag
   initKalman();
 }
 // ******************************************************************************************************************************************************************
@@ -189,6 +191,41 @@ void TimeTheLoop()
     previousTime = millis();
   }
   ++Counter;
+}
+// ******************************************************************************************************************************************************************
+// This function filters the roll, pitch and yaw rates for helicopters using a low-pass filter
+void PlotRates()
+{
+  // Print header once (this line will be ignored by the Serial Plotter's graph)
+  Serial.println("RawRollRate,FilteredRollRate,RawPitchRate,FilteredPitchRate,RawYawRate,FilteredYawRate");
+
+  Serial.print(RawRollRate);
+  Serial.print(",");
+  Serial.print(filteredRollRate);
+  Serial.print(",");
+  Serial.print(RawPitchRate);
+  Serial.print(",");
+  Serial.print(filteredPitchRate);
+  Serial.print(",");
+  Serial.print(RawYawRate);
+  Serial.print(",");
+  Serial.println(filteredYawRate);
+}
+// ******************************************************************************************************************************************************************
+void PlotAttitude()
+{
+  // Print header once (this line will be ignored by the Serial Plotter's graph)
+  Serial.println("RawPitch,FilteredPitch,RawRoll,FilteredRoll,RawYaw,FilteredYaw"); //
+
+  Serial.print(RawPitchAngle);
+  Serial.print(",");
+  Serial.print(filteredPitch);
+  Serial.print(",");
+  Serial.print(RawRollAngle);
+  Serial.print(",");
+  Serial.print(filteredRoll);
+  Serial.print(",");
+  Serial.println();
 }
 
 // ******************************************************************************************************************************************************************
@@ -209,44 +246,28 @@ void GetCurrentAttitude()
   RawPitchRate -= RateCalibrationPitch; // Correct for gyro calibration
   RawYawRate -= RateCalibrationYaw;     // Correct for gyro calibration
 
-  if (UseKalmanFilter){
+  if (UseKalmanFilter)
+  {
     kalmanFilter(); // heer
-  }else{
+  }
+  else
+  {
     filteredRollRate = RawRollRate;
     filteredPitchRate = RawPitchRate;
-    filteredYawRate = RawYawRate; 
+    filteredYawRate = RawYawRate;
     filteredRoll = RawRollAngle;
-    filteredPitch = RawPitchAngle;    
+    filteredPitch = RawPitchAngle;
   }
-  
-  filterRatesForHelicopter();
-  
-  // The following lines are for the Serial Plotter
+  if (UseRateLFP)
+  {
+    filterRatesForHelicopter();
+  }
+
+
   if (++counter > 12)
   {
-    // Print header once (this line will be ignored by the Serial Plotter's graph)
-    Serial.println("RawPitch,FilteredPitch,RawRoll,FilteredRoll,RawYaw,FilteredYaw"); // 
-
-    Serial.print(RawPitchAngle);
-    Serial.print(",");
-    Serial.print(getFilteredPitchAngle());
-    // Serial.print(filteredPitchRate);
-    Serial.print(",");
-
-    Serial.print(RawRollAngle);
-    Serial.print(",");
-    // Serial.print(filteredRollRate);
-    Serial.print(getFilteredRollAngle());
-    Serial.print(",");
-
-    // Serial.print(RawYawRate);
-    // Serial.print(",");
-    // Serial.print(filteredYawRate);
-    // Serial.print(",");
-    Serial.println();
-
-    //  Look(getFilteredRollAngle());
-    //  Look(getFilteredPitchAngle());
+    PlotRates();
+    //PlotAttitude(); // Print the attitude to the Serial Plotter
     counter = 0;
   }
 }
@@ -273,7 +294,6 @@ void BlinkFast()
   else
     TurnLedOn();
 }
-
 
 #define USE_ANGLE_SMOOTHING
 
@@ -369,7 +389,7 @@ void kalmanFilter()
 #ifdef USE_ANGLE_SMOOTHING
   static float smoothedRoll = 0;
   static float smoothedPitch = 0;
- 
+
   smoothedRoll = (1 - alpha) * smoothedRoll + alpha * RawRollAngle;
   smoothedPitch = (1 - alpha) * smoothedPitch + alpha * RawPitchAngle;
 #else

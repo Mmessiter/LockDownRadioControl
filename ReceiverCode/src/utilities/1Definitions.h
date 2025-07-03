@@ -178,6 +178,7 @@ bool INA219Connected = false;  //  Volts from INA219 ?
 bool MPU6050Connected = false; //  Accelerometer and Gyro from MPU6050 ?
 uint8_t ReconnectChannel = 0;
 int32_t RateOfClimb = 0;
+bool ForceCalibration = false; // Force calibration of MPU6050
 
 char ParaNames[9][30] = {
     "FailSafe positions",
