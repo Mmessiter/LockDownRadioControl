@@ -236,7 +236,7 @@ void LoadPlaneDefaults()
 // ************************************************************************************************************/
 void SaveHeliDefaults()
 {
-    if (GetConfirmation((char *)"page PIDView", (char *)"Save heli defaults?"))
+    if (GetConfirmation(pPIDView, (char *)"Save heli defaults?"))
     {
         ActiveSettings = &RateSettings;    // set the active settings to the rate settings
         ReadStabilisationParameters();     // in case the values were changed on the screen

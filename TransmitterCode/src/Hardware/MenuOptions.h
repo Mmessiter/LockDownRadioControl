@@ -1333,14 +1333,15 @@ void ReadStabilisationParameters()
     char t18[] = "t18"; // PID R_measure
     char t19[] = "t19"; // alpha
     char t20[] = "t20"; // beta
-    char temp[10];
+    char temp[16];
 
     char ProgressStart[] = "vis Progress,1"; // heer
     char ProgressEnd[] = "vis Progress,0";
     char Progress[] = "Progress";
 
     SendCommand(ProgressStart);
-    
+
+    SelfLevellingOn = GetValue(sw4);
     if (SelfLevellingOn)
         ActiveSettings = &SelfLevelSettings;
     else
@@ -1374,11 +1375,6 @@ void ReadStabilisationParameters()
     ActiveSettings->UseKalmanFilter = GetValue(sw3);
     SendValue(Progress, 100);
     ActiveSettings->UseRateLFP = GetValue(sw2);
-    SelfLevellingOn = GetValue(sw4);
-    if (SelfLevellingOn)
-        ActiveSettings = &SelfLevelSettings;
-    else
-        ActiveSettings = &RateSettings;
     SendCommand(ProgressEnd);
 }
 
