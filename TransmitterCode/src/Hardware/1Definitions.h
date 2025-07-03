@@ -762,11 +762,8 @@ void ShowSendingParameters();
 float SDReadFLOAT(int p_address);
 void SDUpdateFLOAT(int p_address, float p_value);
 void SendStabilationParameters();
-void LoadHeliDefaults();
-void LoadPlaneDefaults();
-void SaveHeliDefaults();
-void SavePlaneDefaults();
-void FactoryDefaults();
+void FactoryDefaultsPlane();
+void FactoryDefaultsHeli();
 #ifdef USE_BTLE
 void SendViaBLE();
 #endif
@@ -1338,58 +1335,58 @@ StabilisationSettings *ActiveSettings = &RateSettings;
 
 StabilisationSettings *SavedActiveSettings = ActiveSettings;
 
-StabilisationSettings HeliRate = {
-    0.10f,  // PID_P
-    0.00f,  // PID_I
-    0.004f, // PID_D
-    0.001f,
-    0.003f,
-    0.03f,
-    0.04f,
-    0.04f,
-    true, // Kalman ON to start
-    true,
-    false};
+// StabilisationSettings HeliRate = {
+//     0.10f,  // PID_P
+//     0.00f,  // PID_I
+//     0.004f, // PID_D
+//     0.001f,
+//     0.003f,
+//     0.03f,
+//     0.04f,
+//     0.04f,
+//     true, // Kalman ON to start
+//     true,
+//     false};
 
-StabilisationSettings HeliLevelling = {
-    3.0f,  // PID_P
-    0.08f, // PID_I
-    0.03f, // PID_D
-    0.001f,
-    0.003f,
-    0.03f,
-    0.04f,
-    0.04f,
-    true, // Kalman ON to start
-    false,
-    false};
+// StabilisationSettings HeliLevelling = {
+//     3.0f,  // PID_P
+//     0.08f, // PID_I
+//     0.03f, // PID_D
+//     0.001f,
+//     0.003f,
+//     0.03f,
+//     0.04f,
+//     0.04f,
+//     true, // Kalman ON to start
+//     false,
+//     false};
 
-StabilisationSettings PlaneRate = {
-    0.05f,  // PID_P
-    0.00f,  // PID_I
-    0.002f, // PID_D
-    0.001f, // Kalman_Q_angle
-    0.003f, // Kalman_Q_bias
-    0.03f,  // Kalman_R_measure
-    0.05f,  // alpha
-    0.05f,  // beta
-    true,   // UseKalmanFilter
-    true,   // UseRateLFP
-    false   // UseSerialDebug
-};
+// StabilisationSettings PlaneRate = {
+//     0.05f,  // PID_P
+//     0.00f,  // PID_I
+//     0.002f, // PID_D
+//     0.001f, // Kalman_Q_angle
+//     0.003f, // Kalman_Q_bias
+//     0.03f,  // Kalman_R_measure
+//     0.05f,  // alpha
+//     0.05f,  // beta
+//     true,   // UseKalmanFilter
+//     true,   // UseRateLFP
+//     false   // UseSerialDebug
+// };
 
-StabilisationSettings PlaneLevelling = {
-    2.0f,  // PID_P
-    0.05f, // PID_I
-    0.02f, // PID_D
-    0.001f,
-    0.003f,
-    0.03f,
-    0.05f,
-    0.05f,
-    true,  // Kalman ON to start
-    false, // UseRateLFP off
-    false};
+// StabilisationSettings PlaneLevelling = {
+//     2.0f,  // PID_P
+//     0.05f, // PID_I
+//     0.02f, // PID_D
+//     0.001f,
+//     0.003f,
+//     0.03f,
+//     0.05f,
+//     0.05f,
+//     true,  // Kalman ON to start
+//     false, // UseRateLFP off
+//     false};
 // ************************************************************************************************************/
 // Factory defaults for stabilisation settings
 

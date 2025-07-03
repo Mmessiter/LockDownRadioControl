@@ -186,7 +186,7 @@ int GetExtraParameters() // This gets extra parameters ready for sending and ret
     LoadParameters();
     LoadRawDataWithParameters();
     DataTosend.ChannelBitMask = 0; //  zero channels to send with this packet
-   // DebugParamsOut();              // long
+                                   // DebugParamsOut();              // long
     // Look(ParaNames[Parameters.ID - 1]); // brief
 
     return 8; //  was 8 is the number of parameters to send // heer
@@ -210,65 +210,30 @@ void SelfLevellingChange()
     DisplayStabilisationScreenData(); // show the new values on the screen (having changed the SelfLevellingOn value)
 }
 //************************************************************************************************************/
-void LoadHeliDefaults()
+void FactoryDefaultsPlane()
 {
-    if (GetConfirmation(pPIDView, (char *)"Load heli defaults?!"))
-    {
-        ActiveSettings = &RateSettings;    // set the active settings to the rate settings
-        *ActiveSettings = HeliRate;        // overwrite currently active settings
-        SelfLevelSettings = HeliLevelling; // set levelling rate settings to the heli defaults
-        SelfLevellingOn = false;           // defaults are always without self-levelling
-        DisplayStabilisationScreenData();
-    }
-}
-//************************************************************************************************************/
-void LoadPlaneDefaults()
-{
-    if (GetConfirmation(pPIDView, (char *)"Load plane defaults?!"))
-    {
-        ActiveSettings = &RateSettings;     // set the active settings to the rate settings
-        *ActiveSettings = PlaneRate;        // overwrite currently active settings
-        SelfLevelSettings = PlaneLevelling; // set levelling rate settings to the plane defaults
-        SelfLevellingOn = false;            // defaults are always without self-levelling
-        DisplayStabilisationScreenData();
-    }
-}
-// ************************************************************************************************************/
-void SaveHeliDefaults()
-{
-    if (GetConfirmation(pPIDView, (char *)"Save heli defaults?"))
-    {
-        ActiveSettings = &RateSettings;    // set the active settings to the rate settings
-        ReadStabilisationParameters();     // in case the values were changed on the screen
-        HeliRate = *ActiveSettings;        // save the current rate settings
-        HeliLevelling = SelfLevelSettings; // save the current levelling settings
-    }
-}
-// ************************************************************************************************************/
-void SavePlaneDefaults()
-{
-    if (GetConfirmation(pPIDView, (char *)"Save plane defaults?"))
-    {
-        ActiveSettings = &RateSettings;     // set the active settings to the rate settings
-        ReadStabilisationParameters();      // in case the values were changed on the screen
-        PlaneRate = *ActiveSettings;        // save the current rate settings
-        PlaneLevelling = SelfLevelSettings; // save the current levelling settings
-    }
-}
-// ************************************************************************************************************/
-void FactoryDefaults()
-{
-    if (GetConfirmation(pPIDView, (char *)"Re-Load factory defaults?!"))
+    if (GetConfirmation(pPIDView, (char *)"Re-Load factory plane defaults?!"))
     {
         ActiveSettings = &RateSettings; // set the active settings to the rate settings
-        PlaneRate = FactoryPlaneRate;
-        PlaneLevelling = FactoryPlaneLevelling;
-        HeliRate = FactoryHeliRate;
-        HeliLevelling = FactoryHeliLevelling;
-        RateSettings = PlaneRate;
-        SelfLevelSettings = PlaneLevelling;
+        RateSettings = FactoryPlaneRate;
+        SelfLevelSettings = FactoryPlaneLevelling;
         SelfLevellingOn = false; // defaults are always without self-levelling
         DisplayStabilisationScreenData();
     }
 }
+
+//************************************************************************************************************/
+
+void FactoryDefaultsHeli()
+{
+    if (GetConfirmation(pPIDView, (char *)"Re-Load factory heli defaults?!"))
+    {
+        ActiveSettings = &RateSettings; // set the active settings to the rate settings
+        RateSettings = FactoryHeliRate;
+        SelfLevelSettings = FactoryHeliLevelling;
+        SelfLevellingOn = false; // defaults are always without self-levelling
+        DisplayStabilisationScreenData();
+    }
+}
+
 #endif

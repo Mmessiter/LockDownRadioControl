@@ -3250,7 +3250,7 @@ void CheckAllModelIds()
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!  ( Use "NUMBER<<8" )
-#define LASTFUNCTION1 27 // One more than final one
+#define LASTFUNCTION1 24 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])(){
     Blank,                    // 0 Cannot be used
@@ -3275,11 +3275,8 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     GyroApply,                // 19
     CalibrateMPU6050,         // 20
     SelfLevellingChange,      // 21
-    LoadHeliDefaults,         // 22
-    LoadPlaneDefaults,        // 23
-    SavePlaneDefaults,        // 24
-    SaveHeliDefaults,         // 25
-    FactoryDefaults,          // 26
+    FactoryDefaultsPlane,     // 22
+    FactoryDefaultsHeli,      // 23
 };
 
 // This list migth become MUCH longer as it limit is 24 bits big
