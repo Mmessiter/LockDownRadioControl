@@ -157,8 +157,8 @@ bool LoadMPU6050CalibrationDataFromEEPROM()
 void SaveMPU6050CalibrationDataToEEPROM()
 {
     uint8_t ExtraOffset = 1;
-    Look1("offset =");
-    Look1(MPU6050_EEPROM_OFFSET);
+   // Look1("offset =");
+   //  Look1(MPU6050_EEPROM_OFFSET);
     EEPROM.update(MPU6050_EEPROM_OFFSET, MPU6050_CALIBRATIONS_SAVED); // this number indicates that a valid calibration was probably written
     SaveOneCalibrationToEEPROM(&ExtraOffset, RateCalibrationRoll);
     SaveOneCalibrationToEEPROM(&ExtraOffset, RateCalibrationPitch);

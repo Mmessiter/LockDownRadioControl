@@ -101,9 +101,12 @@ void PerformMPU6050Calibration() // Calibrate and save result
       AccumulatedAccX += static_cast<float>(AccXLSB) / 4096.0f;
       AccumulatedAccY += static_cast<float>(AccYLSB) / 4096.0f;
       AccumulatedAccZ += static_cast<float>(AccZLSB) / 4096.0f;
+     
     }
     BlinkFast();
     KickTheDog();
+   // ReceiveData();
+   // Look(ReceivedData[0]); // Print the first received data value for debugging it WORKS!!!!
     delay(1); // Delay to allow sensor to stabilize
   }
   // Calculate average gyro rates (bias correction)
