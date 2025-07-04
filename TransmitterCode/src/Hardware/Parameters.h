@@ -24,24 +24,30 @@ void AddParameterstoQueue(uint8_t ID)
 }
 
 //************************************************************************************************************/
+
 void SwitchStabilisation(bool OnOff) // This function switches stabilisation on or off by bank selected
-{                                    // Switch stabilisation on or off
-    char sw0[] = "sw0";              // Switch 0 is used for stabilisation on/off
+{
+#ifdef USE_STABILISATION // Switch stabilisation on or off
+    char sw0[] = "sw0";  // Switch 0 is used for stabilisation on/off
     StabilisationOn = OnOff;
     AddParameterstoQueue(BOOLEANS);
     AddParameterstoQueue(BOOLEANS); // just to make sure it gets sent
     if (CurrentView == PIDVIEW)
         SendValue(sw0, StabilisationOn); // Send the value to the PID view
+#endif
 }
 
 //************************************************************************************************************/
-void SendStabilationParameters()
-{                                        // Send the parameters that are used for stabilisation
+void SendStabilationParameters() // This function sends the parameters that are used for stabilisation
+{
+#ifdef USE_STABILISATION                 // Send the parameters that are used for stabilisation
     AddParameterstoQueue(BOOLEANS);      // BOOLEANS 9
     AddParameterstoQueue(ALPHA_BETA);    // ALPHA_BETA 8
     AddParameterstoQueue(PID_VALUES);    // PID Values 4
     AddParameterstoQueue(KALMAN_VALUES); // KALMAN Values 5
+#endif
 }
+
 /*********************************************************************************************************************************/
 void SendInitialSetupParams()
 {
@@ -66,6 +72,7 @@ void SendOutstandingParameters()
 }
 
 // /************************************************************************************************************/
+#ifdef USE_STABILISATION // Switch stabilisation on or off
 void EncodeFloat(float f, uint16_t *word1, uint16_t *word2, uint16_t *word3, uint16_t *word4)
 { // Encode a float into 4 x 8 bit bytes ignoring the high byte of each 16 BIT word
     union
@@ -79,6 +86,7 @@ void EncodeFloat(float f, uint16_t *word1, uint16_t *word2, uint16_t *word3, uin
     *word3 = uint16_t(u.i[2]); // third 8 bits
     *word4 = uint16_t(u.i[3]); // fourth 8 bits
 }
+#endif // USE_STABILISATION
 /************************************************************************************************************/
 // NB ONLY THE LOW 12 BITS ARE ACTUALLY SENT! (Because of the compression) so don't use the high bits!
 
@@ -87,9 +95,6 @@ void LoadParameters()
     uint16_t Twobytes = 0;
     uint8_t FS_Byte1;
     uint8_t FS_Byte2;
-
-  //  for (int i = 0; i < 12; ++i)
-   //     Parameters.word[i] = 0; // clear the parameters
 
     switch (Parameters.ID)
     {                                             // ID is the parameter number. Each has 8 elements
@@ -113,6 +118,7 @@ void LoadParameters()
             GPS_RX_MaxDistance = 0;
         }
         break;
+#ifdef USE_STABILISATION
     case PID_VALUES: // 4 = PID Values
         EncodeFloat(ActiveSettings->PID_P, &Parameters.word[0], &Parameters.word[1], &Parameters.word[2], &Parameters.word[3]);
         EncodeFloat(ActiveSettings->PID_I, &Parameters.word[4], &Parameters.word[5], &Parameters.word[6], &Parameters.word[7]);
@@ -145,6 +151,7 @@ void LoadParameters()
         Parameters.word[1] = 42;
         Parameters.word[2] = 42;
         break;
+#endif // USE_STABILISATION
     default:
         break;
     }
@@ -182,9 +189,9 @@ int GetExtraParameters() // This gets extra parameters ready for sending and ret
 {                        // only the ***low 12 bits*** of each parameter are actually sent because of compression
     if ((Parameters.ID == 0) || (Parameters.ID > PARAMETERS_MAX_ID))
     {
-         Look1("Parameter error: ID is ");
-         Look(Parameters.ID);
-         return 8;
+        Look1("Parameter error: ID is ");
+        Look(Parameters.ID);
+        return 8;
     }
     LoadParameters();
     LoadRawDataWithParameters();
@@ -211,8 +218,10 @@ void ShowSendingParameters()
 // This function is called when the Self Levelling button is pressed on the Nextion screen.
 void SelfLevellingChange()
 {
+#ifdef USE_STABILISATION              // Switch stabilisation on or off
     ReadStabilisationParameters();    // in case the values were changed on the screen
     DisplayStabilisationScreenData(); // show the new values on the screen (having changed the SelfLevellingOn value)
+#endif                                // USE_STABILISATION
 }
 //************************************************************************************************************/
 void FactoryDefaultsPlane()

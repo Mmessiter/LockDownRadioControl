@@ -33,10 +33,6 @@ void ShowValues(const char *name, float value) // // Show values in the serial m
 void ReadExtraParameters()
 {
     uint16_t TwoBytes = 0;
-    // Look(ParaNames[Parameters.ID-1]); // Look at the ID of the parameters packet
-    // for (int i = 1; i < 12; ++i) // Read the parameters
-    // Look(Parameters.word[i]);
-
     switch (Parameters.ID)
     {
     case FAILSAFE_SETTINGS:                                      // 1
@@ -56,6 +52,7 @@ void ReadExtraParameters()
             Parameters.word[2] = 0; // ... Once only
         }
         break;
+#ifdef USE_STABILISATION
     case PID_VALUES: // 4
         PID_P = DecodeFloat(Parameters.word[0], Parameters.word[1], Parameters.word[2], Parameters.word[3]);
         PID_I = DecodeFloat(Parameters.word[4], Parameters.word[5], Parameters.word[6], Parameters.word[7]);
@@ -101,13 +98,15 @@ void ReadExtraParameters()
         Look1("UseRateLFP: ");
         Look(UseRateLFP);
         break;
-    case RECALIBRATE_MPU6050: // 10
+    case RECALIBRATE_MPU6050:                                         // 10
         if ((Parameters.word[1] == 42) && (Parameters.word[2] == 42)) // these two just to confirm
             PerformMPU6050Calibration();
-        default:
-            break;
-        }
-        return;
+#endif // ifdef USE_STABILISATION
+        break;
+    default:
+        break;
     }
+    return;
+}
 
 #endif

@@ -4626,7 +4626,7 @@ void GetBank() // ... and the other three switches
 
     if (Bank != PreviousBank)
     {
-
+#ifdef USE_STABILISATION // Switch stabilisation on or off
         if (Bank == StabilisedBank || StabilisedBank == 0)
         {
             SwitchStabilisation(true); // Turn on stabilisation if bank changed
@@ -4635,7 +4635,7 @@ void GetBank() // ... and the other three switches
         {
             SwitchStabilisation(false); // Turn off stabilisation if bank changed
         }
-
+#endif // USE_STABILISATION
         if ((CurrentView == FRONTVIEW) || (CurrentView == TRIM_VIEW))
         {
             for (int pp = 0; pp < 4; ++pp)

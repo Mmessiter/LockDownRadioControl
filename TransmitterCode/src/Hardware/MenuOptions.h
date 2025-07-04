@@ -1314,11 +1314,15 @@ void DisplayStabilisationScreenData()
 
 void StabilisationScreenStart()
 {
+#ifdef USE_STABILISATION
     char t10[] = "t10";    // Model name
     SendCommand(pPIDView); // load the PID scre
     CurrentView = PIDVIEW;
     DisplayStabilisationScreenData();
     SendText(t10, ModelName); // display the model name
+#else
+    MsgBox(pRXSetupView, (char *)"Stabilisation is off in this build!");
+#endif
 }
 // ******************************************************************************************************************************/
 void ReadStabilisationParameters()
@@ -1392,9 +1396,12 @@ void StabilisationScreenEnd()
 {
 
     ReadStabilisationParameters();
-    SendCommand(pRXSetupView);
     SaveOneModel(ModelNumber); // save the values to the model.
-    SendStabilationParameters();
+    SendCommand(pRXSetupView);
+    if (ModelMatched && BoundFlag)
+    {
+        SendStabilationParameters();
+    }
     CurrentView = RXSETUPVIEW;
 }
 /******************************************************************************************************************************/
