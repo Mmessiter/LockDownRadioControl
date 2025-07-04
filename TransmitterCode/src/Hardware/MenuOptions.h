@@ -332,7 +332,7 @@ void StartWifiScan()
         if (!GetConfirmation(pTXSetupView, prompt))
             return;
     }
- 
+
     SendCommand(pFhssView);
     DrawFhssBox();
     DoScanInit();
@@ -852,7 +852,7 @@ void OptionView3End() //
     LogRXSwaps = GetValue(sw1);
     SaveTransmitterParameters();
     CloseModelsFile();
-    AddParameterstoQueue(QNH_SETTING); // 2 
+    AddParameterstoQueue(QNH_SETTING); // 2
     AddParameterstoQueue(QNH_SETTING); // repeat it to ensure that it really is sent
     SendCommand(pTXSetupView);
     CurrentView = TXSETUPVIEW;
@@ -1283,6 +1283,7 @@ void DisplayStabilisationScreenData()
     char t18[] = "t18"; // PID R_measure
     char t19[] = "t19"; // alpha
     char t20[] = "t20"; // beta
+
     char temp[10];
     if (SelfLevellingOn)
         ActiveSettings = &SelfLevelSettings;
@@ -1313,14 +1314,18 @@ void DisplayStabilisationScreenData()
 
 void StabilisationScreenStart()
 {
-    SendCommand(pPIDView); // load the PID screen
+    char t10[] = "t10";    // Model name
+    SendCommand(pPIDView); // load the PID scre
     CurrentView = PIDVIEW;
     DisplayStabilisationScreenData();
+    SendText(t10, ModelName); // display the model name
 }
 // ******************************************************************************************************************************/
 void ReadStabilisationParameters()
 {
     // we need to get the values from the Nextion display
+    char Invis[] = "vis t10,0";
+    char vis[] = "vis t10,1";
     char sw0[] = "sw0"; // Stabilisation on off
     char sw4[] = "sw4"; // Self-levelling on off
     char sw3[] = "sw3"; // Use Kalman filter
@@ -1338,6 +1343,8 @@ void ReadStabilisationParameters()
     char ProgressStart[] = "vis Progress,1"; // heer
     char ProgressEnd[] = "vis Progress,0";
     char Progress[] = "Progress";
+
+    SendCommand(Invis); // hide the model name
 
     SendCommand(ProgressStart);
 
@@ -1376,12 +1383,14 @@ void ReadStabilisationParameters()
     SendValue(Progress, 100);
     ActiveSettings->UseRateLFP = GetValue(sw2);
     SendCommand(ProgressEnd);
+    SendCommand(vis); // show the model name again
 }
 
 /******************************************************************************************************************************/
 
 void StabilisationScreenEnd()
 {
+
     ReadStabilisationParameters();
     SendCommand(pRXSetupView);
     SaveOneModel(ModelNumber); // save the values to the model.
@@ -1392,16 +1401,27 @@ void StabilisationScreenEnd()
 
 void CalibrateMPU6050()
 {
-    Look("Calibrate");
+    if (!ModelMatched || !BoundFlag)
+    {
+        MsgBox(pPIDView, (char *)"Model not connected!");
+        return;
+    }
+    if (GetConfirmation(pPIDView, (char *)"Recalibrate MPU6050 NOW?"))
+    {
+        MsgBox(pPIDView, (char *)"Level model ...");
+        AddParameterstoQueue(RECALIBRATE_MPU6050);
+    }
+    else
+        return;
 }
 /******************************************************************************************************************************/
 void GyroApply()
 {
     if (!ModelMatched || !BoundFlag)
-        {
-            MsgBox(pPIDView, (char *)"Model not connected!");
-            return;
-        }
+    {
+        MsgBox(pPIDView, (char *)"Model not connected!");
+        return;
+    }
     PlaySound(BEEPMIDDLE); // play a sound to indicate the button was pressed
     ReadStabilisationParameters();
     SendStabilationParameters();

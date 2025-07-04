@@ -87,18 +87,17 @@ void DebugParameters()
 void ReadMoreParameters()
 {
     Parameters.ID = RawDataIn[0]; // NumberOfChangedChannels points past the end of the changed channels
-    if ((Parameters.ID == 0) || (Parameters.ID > MAXPARAMETERS))
+    if ((Parameters.ID == 0) || (Parameters.ID > PARAMETERS_MAX_ID))
     {
         Look1("Invalid ID: ");
         Look(Parameters.ID);
         return; // not a valid ID
     }
-    for (int i = 1; i < 12; ++i)
+    for (int i = 0; i < 12; ++i)
     {
         Parameters.word[i] = RawDataIn[i]; // 8 words - of 12 useful BITs each
     }
     ReadExtraParameters();
-    // Look(Parameters.ID);
 }
 // ************************************************************************************************************/
 inline uint8_t GetDecompressedSize(uint8_t DynamicPayloadSize)
@@ -130,7 +129,6 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is total 
                 ReadMoreParameters();
             }
         }
-
         MapToSBUS(); // Get SBUS data ready
     }
     SendSBUSData();          // maybe send SBUS data if its time

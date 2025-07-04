@@ -113,7 +113,6 @@
 #define SCREENCHANGEWAIT 10         // allow 10ms for screen to appear
 #define BATTERY_CHECK_INTERVAL 1000 // 2 seconds between battery checks
 
-#define MAXPARAMETERS 10      // Max types of parameters packet to send  ... will increase.
 #define POWERONOFFDELAY 1000  // Delay after power OFF before transmit stops.
 #define POWERONOFFDELAY2 4000 // Delay after power ON before Off is possible....
                               // and delay after power off before power on button is active
@@ -185,7 +184,7 @@
 #define PARAMETER_SEND_DURATION 5    // ms duration for parameter sending (remainder used for control)
 #define PARAMETER_QUEUE_MAXIMUM 250  // Maximum queued parameters allowed at once
 
-// Parameter ID definitions
+// Parameter ID definitions. Most are used for PID stabilisation, but some are used for other purposes.
 #define FAILSAFE_SETTINGS 1
 #define QNH_SETTING 2
 #define GPS_MARK_LOCATION 3
@@ -195,6 +194,8 @@
 #define SERVO_PULSE_WIDTHS 7
 #define ALPHA_BETA 8
 #define BOOLEANS 9
+#define RECALIBRATE_MPU6050 10
+#define PARAMETERS_MAX_ID 11 // Max types of parameters packet to send  ... will increase.
 
 // **************************************************************************
 //                               Mixes                                      *
@@ -1211,7 +1212,7 @@ uint8_t RadioNumber = 0;
 uint32_t LastRXReceivedPackets = 0;
 uint8_t StabilisedBank = 3;
 
-char ParaNames[9][30] = {
+char ParaNames[11][30] = {
     "FailSafe positions",
     "QNH",
     "Mark Location",
@@ -1221,6 +1222,7 @@ char ParaNames[9][30] = {
     "Servo Pulse Widths",
     "Alpha & beta Values",
     "Booleans",
+    "Re-calibtrate MPU",
 };
 uint16_t ScreenData[50];
 uint16_t AverageFrameRate = 0;
@@ -1301,7 +1303,6 @@ struct StabilisationSettings
     float beta;
     bool UseKalmanFilter;
     bool UseRateLFP;
-    bool UseSerialDebug;
 };
 
 StabilisationSettings RateSettings = {
@@ -1315,7 +1316,6 @@ StabilisationSettings RateSettings = {
     0.05f,  // beta
     true,   // UseKalmanFilter
     true,   // UseRateLFP
-    false   // UseSerialDebug
 };
 
 StabilisationSettings SelfLevelSettings = {
@@ -1329,64 +1329,10 @@ StabilisationSettings SelfLevelSettings = {
     0.05f,  // beta
     true,   // UseKalmanFilter
     false,  // UseRateLFP
-    false   // UseSerialDebug
 };
 StabilisationSettings *ActiveSettings = &RateSettings;
-
 StabilisationSettings *SavedActiveSettings = ActiveSettings;
 
-// StabilisationSettings HeliRate = {
-//     0.10f,  // PID_P
-//     0.00f,  // PID_I
-//     0.004f, // PID_D
-//     0.001f,
-//     0.003f,
-//     0.03f,
-//     0.04f,
-//     0.04f,
-//     true, // Kalman ON to start
-//     true,
-//     false};
-
-// StabilisationSettings HeliLevelling = {
-//     3.0f,  // PID_P
-//     0.08f, // PID_I
-//     0.03f, // PID_D
-//     0.001f,
-//     0.003f,
-//     0.03f,
-//     0.04f,
-//     0.04f,
-//     true, // Kalman ON to start
-//     false,
-//     false};
-
-// StabilisationSettings PlaneRate = {
-//     0.05f,  // PID_P
-//     0.00f,  // PID_I
-//     0.002f, // PID_D
-//     0.001f, // Kalman_Q_angle
-//     0.003f, // Kalman_Q_bias
-//     0.03f,  // Kalman_R_measure
-//     0.05f,  // alpha
-//     0.05f,  // beta
-//     true,   // UseKalmanFilter
-//     true,   // UseRateLFP
-//     false   // UseSerialDebug
-// };
-
-// StabilisationSettings PlaneLevelling = {
-//     2.0f,  // PID_P
-//     0.05f, // PID_I
-//     0.02f, // PID_D
-//     0.001f,
-//     0.003f,
-//     0.03f,
-//     0.05f,
-//     0.05f,
-//     true,  // Kalman ON to start
-//     false, // UseRateLFP off
-//     false};
 // ************************************************************************************************************/
 // Factory defaults for stabilisation settings
 
@@ -1401,7 +1347,7 @@ StabilisationSettings FactoryHeliRate = {
     0.04f,
     true, // Kalman ON to start
     true,
-    false};
+};
 
 StabilisationSettings FactoryHeliLevelling = {
     3.0f,  // PID_P
@@ -1414,7 +1360,7 @@ StabilisationSettings FactoryHeliLevelling = {
     0.04f,
     true, // Kalman ON to start
     false,
-    false};
+};
 
 StabilisationSettings FactoryPlaneRate = {
     0.05f,  // PID_P
@@ -1427,7 +1373,6 @@ StabilisationSettings FactoryPlaneRate = {
     0.05f,  // beta
     true,   // UseKalmanFilter
     true,   // UseRateLFP
-    false   // UseSerialDebug
 };
 
 StabilisationSettings FactoryPlaneLevelling = {
@@ -1441,7 +1386,7 @@ StabilisationSettings FactoryPlaneLevelling = {
     0.05f,
     true,  // Kalman ON to start
     false, // UseRateLFP off
-    false};
+};
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

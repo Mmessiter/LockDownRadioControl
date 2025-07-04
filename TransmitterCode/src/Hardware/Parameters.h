@@ -88,8 +88,8 @@ void LoadParameters()
     uint8_t FS_Byte1;
     uint8_t FS_Byte2;
 
-    for (int i = 0; i < 12; ++i)
-        Parameters.word[i] = 0; // clear the parameters
+  //  for (int i = 0; i < 12; ++i)
+   //     Parameters.word[i] = 0; // clear the parameters
 
     switch (Parameters.ID)
     {                                             // ID is the parameter number. Each has 8 elements
@@ -140,7 +140,10 @@ void LoadParameters()
         Parameters.word[2] = (uint16_t)SelfLevellingOn & 0x01;                 // Self Levelling On
         Parameters.word[3] = (uint16_t)ActiveSettings->UseKalmanFilter & 0x01; // Use Kalman Filter
         Parameters.word[4] = (uint16_t)ActiveSettings->UseRateLFP & 0x01;      // Use Rate LFP
-                                                                               // Parameters.word[5] = (uint16_t)ActiveSettings->UseSerialDebug & 0x01;  // Use Serial Debug
+        break;
+    case RECALIBRATE_MPU6050: // 10 = Recalibrate MPU6050
+        Parameters.word[1] = 42;
+        Parameters.word[2] = 42;
         break;
     default:
         break;
@@ -177,19 +180,21 @@ void LoadRawDataWithParameters()
 /************************************************************************************************************/
 int GetExtraParameters() // This gets extra parameters ready for sending and returns the number that will be sent.
 {                        // only the ***low 12 bits*** of each parameter are actually sent because of compression
-    if ((Parameters.ID == 0) || (Parameters.ID > MAXPARAMETERS))
+    if ((Parameters.ID == 0) || (Parameters.ID > PARAMETERS_MAX_ID))
     {
-        // Look1("Parameter error: ID is ");
-        // Look(Parameters.ID);
-        return 8;
+         Look1("Parameter error: ID is ");
+         Look(Parameters.ID);
+         return 8;
     }
     LoadParameters();
     LoadRawDataWithParameters();
-    //DataTosend.ChannelBitMask = 0; //  zero channels to send with this packet
-                                    DebugParamsOut();              // long
-    //Look(ParaNames[Parameters.ID - 1]);  brief
+    // DataTosend.ChannelBitMask = 0; //  zero channels to send with this packet
+    //  DebugParamsOut();              // long
+    Look1(Parameters.ID);
+    Look1(" ");
+    Look(ParaNames[Parameters.ID - 1]); // brief
 
-    return 8; //  was 8 is the number of parameters to send // heer
+    return 12; //  was 8 - is the extent of this parameter
 }
 
 /*********************************************************************************************************************************/
@@ -198,7 +203,7 @@ void ShowSendingParameters()
 {
     char FrontView_Connected[] = "Connected"; // this is the name of the Nextion screen's text box
     char msg[] = "Sending Parameters ...";
-    if (!LedWasGreen || millis() > 5000) // if the LED is not green or it has been more than 5 seconds since turning on.
+    if (!LedWasGreen || (millis() - LedGreenMoment) > 5000) // if no connection or connection isn't new any more then return
         return;
     SendText(FrontView_Connected, msg); // show that we are sending parameters
 }

@@ -466,8 +466,8 @@ bool ReadOneModel(uint32_t Mnum)
     ++SDCardAddress;
     ActiveSettings->UseRateLFP = (bool)SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    ActiveSettings->UseSerialDebug = (bool)SDRead8BITS(SDCardAddress);
-    ++SDCardAddress;
+  //  ActiveSettings->UseSerialDebug = (bool)SDRead8BITS(SDCardAddress);
+  //  ++SDCardAddress;
 
     ActiveSettings = &SelfLevelSettings;
     ActiveSettings->PID_P = SDReadFLOAT(SDCardAddress);
@@ -490,8 +490,8 @@ bool ReadOneModel(uint32_t Mnum)
     ++SDCardAddress;
     ActiveSettings->UseRateLFP = (bool)SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    ActiveSettings->UseSerialDebug = (bool)SDRead8BITS(SDCardAddress);
-    ++SDCardAddress;
+  //  ActiveSettings->UseSerialDebug = (bool)SDRead8BITS(SDCardAddress);
+  //  ++SDCardAddress;
     ActiveSettings = SavedActiveSettings;
 
     CheckOutPutChannels();
@@ -1420,8 +1420,8 @@ void SaveOneModel(uint32_t mnum)
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, ActiveSettings->UseRateLFP);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, ActiveSettings->UseSerialDebug);
-    ++SDCardAddress;
+   // SDUpdate8BITS(SDCardAddress, ActiveSettings->UseSerialDebug);
+   // ++SDCardAddress;
 
     ActiveSettings = &SelfLevelSettings;
 
@@ -1445,8 +1445,8 @@ void SaveOneModel(uint32_t mnum)
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, ActiveSettings->UseRateLFP);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, ActiveSettings->UseSerialDebug);
-    ++SDCardAddress;
+  //  SDUpdate8BITS(SDCardAddress, ActiveSettings->UseSerialDebug);
+  //  ++SDCardAddress;
     ActiveSettings = SavedActiveSettings; // restore active settings
     SaveCheckSum32(); // Save the Model parametres checksm
 

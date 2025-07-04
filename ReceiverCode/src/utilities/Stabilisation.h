@@ -266,7 +266,7 @@ void GetCurrentAttitude()
 
   if (++counter > 12)
   {
-    PlotRates();
+   // PlotRates();
     //PlotAttitude(); // Print the attitude to the Serial Plotter
     counter = 0;
   }

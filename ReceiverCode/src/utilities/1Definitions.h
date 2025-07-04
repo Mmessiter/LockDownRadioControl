@@ -22,7 +22,7 @@
 //  #define DB_FAILSAFE
 //  #define DB_RXTIMERS
 
- #define USE_STABILISATION
+#define USE_STABILISATION
 //  >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! (if it won't connect, probably one or both is wrong! )******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 #define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
@@ -40,7 +40,7 @@
 #define EXTRAAT760 350 // high frequency servos
 #define MAXAT760 760 + EXTRAAT760
 #define MINAT760 760 - EXTRAAT760
-#define MAXPARAMETERS 9 // Max number of parameters types to expect
+
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
 //***************************************************************************
@@ -136,7 +136,8 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 //                             Parameters' IDs                              *
 // **************************************************************************
 
-#define FAILSAFE_SETTINGS 1 // Parameter IDs ....
+// Parameter ID definitions. Most are used for PID stabilisation, but some are used for other purposes.
+#define FAILSAFE_SETTINGS 1
 #define QNH_SETTING 2
 #define GPS_MARK_LOCATION 3
 #define PID_VALUES 4
@@ -145,6 +146,8 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define SERVO_PULSE_WIDTHS 7
 #define ALPHA_BETA 8
 #define BOOLEANS 9
+#define RECALIBRATE_MPU6050 10
+#define PARAMETERS_MAX_ID 11 // Max types of parameters packet to send  ... will increase.
 
 // ****************************************************************************************************************************************
 
@@ -180,7 +183,7 @@ uint8_t ReconnectChannel = 0;
 int32_t RateOfClimb = 0;
 bool ForceCalibration = false; // Force calibration of MPU6050
 
-char ParaNames[9][30] = {
+char ParaNames[11][30] = {
     "FailSafe positions",
     "QNH",
     "Mark Location",
@@ -190,6 +193,7 @@ char ParaNames[9][30] = {
     "Servo Pulse Widths",
     "Alpha & beta Values",
     "Booleans",
+    "Re-calibtrate MPU",
 };
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload
@@ -260,7 +264,6 @@ bool StabilisationOn = false;
 bool SelfLevellingOn = false;
 bool UseKalmanFilter = false;
 bool UseRateLFP = false;
-
 
 /************************************************************************************************************/
 
