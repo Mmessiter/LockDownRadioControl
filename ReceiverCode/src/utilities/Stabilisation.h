@@ -70,7 +70,7 @@ void PerformMPU6050Calibration() // Calibrate and save result
   float AccumulatedAccX = 0;
   float AccumulatedAccY = 0;
   float AccumulatedAccZ = 0;
-
+  KickTheDog();
   // Calibration loop - sensor must be flat. Calibration is needed because no calibration data was found on the EEPROM
   for (int i = 0; i < ITERATIONS; ++i)
   {
@@ -102,8 +102,9 @@ void PerformMPU6050Calibration() // Calibrate and save result
       AccumulatedAccY += static_cast<float>(AccYLSB) / 4096.0f;
       AccumulatedAccZ += static_cast<float>(AccZLSB) / 4096.0f;
     }
-    delay(1);
     BlinkFast();
+    KickTheDog();
+    delay(1); // Delay to allow sensor to stabilize
   }
   // Calculate average gyro rates (bias correction)
   RateCalibrationRoll = rollRateSum / ITERATIONS;
@@ -118,23 +119,19 @@ void PerformMPU6050Calibration() // Calibrate and save result
   // Calculate the orientation during calibration (this becomes our zero reference)
   CalibrationRollReading = atan2(avgAccY, sqrt(avgAccX * avgAccX + avgAccZ * avgAccZ)) * 180.0f / M_PI;
   CalibrationPitchReading = atan2(-avgAccX, sqrt(avgAccY * avgAccY + avgAccZ * avgAccZ)) * 180.0f / M_PI;
-
-  SaveMPU6050CalibrationDataToEEPROM(); // Save calibration data to EEPROM
-
-  // Debug output
-  // Serial.print("Calibration complete. Gyro biases: Roll=");
-  // Serial.print(RateCalibrationRoll);
-  // Serial.print("°/s, Pitch=");
-  // Serial.print(RateCalibrationPitch);
-  // Serial.print("°/s, Yaw=");
-  // Serial.print(RateCalibrationYaw);
-  // Serial.println("°/s");
-
-  // Serial.print("Calibration orientation: Roll=");
-  // Serial.print(CalibrationRollReading);
-  // Serial.print("°, Pitch=");
-  // Serial.print(CalibrationPitchReading);
-  // Serial.println("° (this is now 0°)");
+  SaveMPU6050CalibrationDataToEEPROM();       // Save calibration data to EEPROM
+  delay(100);                                 // Brief pause to ensure EEPROM flash write completes before re-read
+  if (LoadMPU6050CalibrationDataFromEEPROM()) // check by reading it back.
+  {
+    TurnLedOff(); // Turn off the LED after calibration. This indicates success.
+    while (true)
+      delay(50); // reboot by rather seriously upsetting the watchdog
+  }
+  else //  read failed so we have an error
+  {
+    TurnLedOn();                                               // Turn on the LED to indicate an error
+    Look("ERROR: Failed to save calibration data to EEPROM."); // only useful when debugging at the computer
+  }
 }
 // ****************************************************************************************************
 // This initialisation function wakes up the sensor and sets various parameters:
@@ -169,11 +166,12 @@ void InitialiseTheMPU6050()
   Wire.write(0x1A);
   Wire.write(0x03);
   Wire.endTransmission();
- //delay (500); // Wait for the sensor to settle after configuration
-  if (!LoadMPU6050CalibrationDataFromEEPROM()){
-    PerformMPU6050Calibration();                                   // Calibrate and save result
+  // delay (500); // Wait for the sensor to settle after configuration
+  if (!LoadMPU6050CalibrationDataFromEEPROM())
+  {
+    PerformMPU6050Calibration(); // Calibrate and save result
   } // If we do not have saved calibrations, we must calibrate!
- 
+
   initKalman();
 }
 // ******************************************************************************************************************************************************************
@@ -264,7 +262,7 @@ void GetCurrentAttitude()
   }
   if (++counter > 12)
   {
-   // PlotRates();
+    // PlotRates();
     PlotAttitude(); // Print the attitude to the Serial Plotter
     counter = 0;
   }
