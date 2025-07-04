@@ -169,11 +169,11 @@ void InitialiseTheMPU6050()
   Wire.write(0x1A);
   Wire.write(0x03);
   Wire.endTransmission();
-
-  //ForceCalibration = true;
-  if (!LoadMPU6050CalibrationDataFromEEPROM()) // If we do not have saved calibrations, we must calibrate!
+ //delay (500); // Wait for the sensor to settle after configuration
+  if (!LoadMPU6050CalibrationDataFromEEPROM()){
     PerformMPU6050Calibration();                                   // Calibrate and save result
-  //ForceCalibration = false;                                        // Reset the force calibration flag
+  } // If we do not have saved calibrations, we must calibrate!
+ 
   initKalman();
 }
 // ******************************************************************************************************************************************************************
@@ -262,12 +262,10 @@ void GetCurrentAttitude()
   {
     filterRatesForHelicopter();
   }
-
-
   if (++counter > 12)
   {
    // PlotRates();
-    //PlotAttitude(); // Print the attitude to the Serial Plotter
+    PlotAttitude(); // Print the attitude to the Serial Plotter
     counter = 0;
   }
 }
@@ -309,7 +307,7 @@ void BlinkFast()
 // bool SelfLevellingOn = false;
 // bool UseKalmanFilter = false;
 // bool UseRateLFP = false;
-// bool UseSerialDebug = false
+
 // ===================================================================================
 void initKalman()
 {
@@ -380,7 +378,7 @@ float updateKalman(KalmanState &state, float accelAngle, float gyroRate, float d
 // ===================================================================================
 void kalmanFilter()
 {
-  unsigned long currentTime = micros();
+  uint32_t currentTime = micros();
   float dt = (currentTime - previousTime) / 1e6f;
   previousTime = currentTime;
   if (dt <= 0 || dt > 0.05f)

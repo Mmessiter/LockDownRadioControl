@@ -52,11 +52,13 @@
 //                            EEPROM PARAMETERS                           *
 //***************************************************************************
 
-#define BIND_EEPROM_OFFSET 0                                     // use 8 bytes from here (in fact 5 bytes only, but we reserve 8 bytes for future use)
-#define FS_EEPROM_OFFSET BIND_EEPROM_OFFSET + 8                  // use 16 bytes from here
-#define MPU6050_EEPROM_OFFSET FS_EEPROM_OFFSET + 16              // use *21* bytes from here (for the MPU6050 calibration data)
+#define BIND_EEPROM_OFFSET 0                              // use 8 bytes from here (in fact 5 bytes only, but we reserve 8 bytes for future use)
+#define FAILSAFE_EEPROM_OFFSET BIND_EEPROM_OFFSET + 8     // use 16 bytes from here
+#define MPU6050_EEPROM_OFFSET FAILSAFE_EEPROM_OFFSET + 38 // was 16 !! use *21* bytes from here (for the MPU6050 calibration data)
+#define MPU6050_CALIBRATIONS_SAVED 44
+
 #define THE_NEXT_USE_OF_EEPROM_OFFSET MPU6050_EEPROM_OFFSET + 21 // For future use ...
-#define MPU6050_CALIBRATIONS_SAVED 42                            // this flag indicates whether calibrations were saved.
+                                                                 // this flag indicates whether calibrations were saved.
 
 //**************************************************************************************************************************
 

@@ -103,12 +103,7 @@ void ReadExtraParameters()
         break;
     case RECALIBRATE_MPU6050: // 10
         if ((Parameters.word[1] == 42) && (Parameters.word[2] == 42)) // these two just to confirm
-        {
-            Look("Recalibrate MPU6050: ");
-            Look(Parameters.word[1]);
-            Look(Parameters.word[2]);
-        }
-
+            PerformMPU6050Calibration();
         default:
             break;
         }

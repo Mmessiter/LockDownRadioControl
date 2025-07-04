@@ -39,7 +39,7 @@
 
 void LoadFailSafeDataFromEEPROM() //
 {
-    uint8_t FS_Offset = FS_EEPROM_OFFSET;
+    uint8_t FS_Offset = FAILSAFE_EEPROM_OFFSET;
     uint16_t s[CHANNELSUSED];
 
     for (uint8_t i = 0; i < CHANNELSUSED; ++i)
@@ -64,8 +64,8 @@ void LoadFailSafeDataFromEEPROM() //
 /************************************************************************************************************/
 void SaveFailSafeDataToEEPROM()
 {
-    // FailSafe data occupies EEPROM from offset FS_EEPROM_OFFSET
-    uint8_t FS_Offset = FS_EEPROM_OFFSET;
+    // FailSafe data occupies EEPROM from offset FAILSAFE_EEPROM_OFFSET
+    uint8_t FS_Offset = FAILSAFE_EEPROM_OFFSET;
 
     for (uint8_t i = 0; i < CHANNELSUSED; ++i)
     {
@@ -137,8 +137,15 @@ float LoadOneCalibrationFromEEPROM(uint8_t *ExtraOffset)
 bool LoadMPU6050CalibrationDataFromEEPROM()
 {
     uint8_t ExtraOffset = 1;
-    if (EEPROM.read(MPU6050_EEPROM_OFFSET) != MPU6050_CALIBRATIONS_SAVED) // do we have valid calibration data?
+    uint8_t t = EEPROM.read(MPU6050_EEPROM_OFFSET); // read the first byte to see if we have valid calibration data
+    if (t != MPU6050_CALIBRATIONS_SAVED)
+    {
+        Look1("ERROR. t =");
+        Look1(t);
+        Look1("offset =");
+        Look1(MPU6050_EEPROM_OFFSET);
         return false;
+    }
     RateCalibrationRoll = LoadOneCalibrationFromEEPROM(&ExtraOffset);
     RateCalibrationPitch = LoadOneCalibrationFromEEPROM(&ExtraOffset);
     RateCalibrationYaw = LoadOneCalibrationFromEEPROM(&ExtraOffset);
@@ -150,6 +157,8 @@ bool LoadMPU6050CalibrationDataFromEEPROM()
 void SaveMPU6050CalibrationDataToEEPROM()
 {
     uint8_t ExtraOffset = 1;
+    Look1("offset =");
+    Look1(MPU6050_EEPROM_OFFSET);
     EEPROM.update(MPU6050_EEPROM_OFFSET, MPU6050_CALIBRATIONS_SAVED); // this number indicates that a valid calibration was probably written
     SaveOneCalibrationToEEPROM(&ExtraOffset, RateCalibrationRoll);
     SaveOneCalibrationToEEPROM(&ExtraOffset, RateCalibrationPitch);
