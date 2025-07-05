@@ -1,40 +1,8 @@
-/**
- * EEPROM Management – Overview
- * ----------------------------
- * This module manages persistent data storage for the receiver via the internal EEPROM.
- * The layout is structured, extensible, and uses EEPROM.update() to minimize flash wear.
- *
- * Current EEPROM Layout:
- *   0   -  7  : Transmitter binding address (5 bytes used, 3 bytes reserved)
- *   8   - 23  : Failsafe settings
- *              - 8 bytes: one per channel (mapped 0–180)
- *              - 8 bytes: channel enable flags (non-zero = active)
- *   24  - 45  : MPU6050 calibration block
- *              - Byte 24: magic byte (42) to confirm validity
- *              - 5 floats = 20 bytes (for calibration values)
- *   46  - ... : Reserved for future use (see THE_NEXT_USE_OF_EEPROM_OFFSET)
- *
- * Functions Provided:
- *   - Save/Load transmitter MAC (5 bytes)
- *   - Save/Load failsafe settings
- *   - Save/Load MPU6050 calibration data (with validation marker)
- *   - Utility functions for float serialization to EEPROM
- *
- * Notes:
- *   - All writes are throttled with DelayMillis(1) for EEPROM safety.
- *   - Float values are stored using a union-based method for byte-level control.
- *   - Calibration block is versionable by changing the magic number (currently 42).
- *
- * Author: Malcolm Messiter
- * Years active: 2020–2025
- */
-
 #ifndef _SRC_EEPROM_H
 #define _SRC_EEPROM_H
 #include <Arduino.h>
-
 #include "utilities/1Definitions.h"
-
+#include <EEPROM.h>
 /************************************************************************************************************/
 
 void LoadFailSafeDataFromEEPROM() //
@@ -133,37 +101,43 @@ float LoadOneCalibrationFromEEPROM(uint8_t *ExtraOffset)
     *ExtraOffset += 4;
     return ThisUnion.Val32;
 }
+
+
 //************************************************************************************************************/
 bool LoadMPU6050CalibrationDataFromEEPROM()
 {
     uint8_t ExtraOffset = 1;
-    uint8_t t = EEPROM.read(MPU6050_EEPROM_OFFSET); // read the first byte to see if we have valid calibration data
-    if (t != MPU6050_CALIBRATIONS_SAVED)
-    {
-        Look1("ERROR. t =");
-        Look1(t);
-        Look1("offset =");
-        Look1(MPU6050_EEPROM_OFFSET);
-        return false;
-    }
+
+    uint8_t VerificationNumber = EEPROM.read(MPU6050_EEPROM_OFFSET); // read the first byte to see if we have valid calibration data
+
     RateCalibrationRoll = LoadOneCalibrationFromEEPROM(&ExtraOffset);
     RateCalibrationPitch = LoadOneCalibrationFromEEPROM(&ExtraOffset);
     RateCalibrationYaw = LoadOneCalibrationFromEEPROM(&ExtraOffset);
     CalibrationRollReading = LoadOneCalibrationFromEEPROM(&ExtraOffset);
     CalibrationPitchReading = LoadOneCalibrationFromEEPROM(&ExtraOffset);
-    return true;
+    Aileron_Centre = (uint32_t) LoadOneCalibrationFromEEPROM(&ExtraOffset);
+    Elevator_Centre = (uint32_t) LoadOneCalibrationFromEEPROM(&ExtraOffset);
+    Rudder_Centre = (uint32_t) LoadOneCalibrationFromEEPROM(&ExtraOffset);
+    Throttle_Centre = (uint32_t) LoadOneCalibrationFromEEPROM(&ExtraOffset);
+
+    if (VerificationNumber != MPU6050_CALIBRATIONS_SAVED)
+        return false;
+    else
+        return true;
 }
 //************************************************************************************************************/
 void SaveMPU6050CalibrationDataToEEPROM()
 {
     uint8_t ExtraOffset = 1;
-   // Look1("offset =");
-   //  Look1(MPU6050_EEPROM_OFFSET);
     EEPROM.update(MPU6050_EEPROM_OFFSET, MPU6050_CALIBRATIONS_SAVED); // this number indicates that a valid calibration was probably written
     SaveOneCalibrationToEEPROM(&ExtraOffset, RateCalibrationRoll);
     SaveOneCalibrationToEEPROM(&ExtraOffset, RateCalibrationPitch);
     SaveOneCalibrationToEEPROM(&ExtraOffset, RateCalibrationYaw);
     SaveOneCalibrationToEEPROM(&ExtraOffset, CalibrationRollReading);
     SaveOneCalibrationToEEPROM(&ExtraOffset, CalibrationPitchReading);
+    SaveOneCalibrationToEEPROM(&ExtraOffset, (float)Aileron_Centre);
+    SaveOneCalibrationToEEPROM(&ExtraOffset, (float)Elevator_Centre);
+    SaveOneCalibrationToEEPROM(&ExtraOffset, (float)Rudder_Centre);
+    SaveOneCalibrationToEEPROM(&ExtraOffset, (float)Throttle_Centre);
 }
 #endif

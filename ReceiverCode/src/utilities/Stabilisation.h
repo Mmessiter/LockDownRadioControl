@@ -70,6 +70,9 @@ void PerformMPU6050Calibration() // Calibrate and save result
   float AccumulatedAccX = 0;
   float AccumulatedAccY = 0;
   float AccumulatedAccZ = 0;
+
+  uint32_t Aileron_Sum = 0, Elevator_Sum = 0, Rudder_Sum = 0, Throttle_Sum = 0;
+
   KickTheDog();
   // Calibration loop - sensor must be flat. Calibration is needed because no calibration data was found on the EEPROM
   for (int i = 0; i < ITERATIONS; ++i)
@@ -101,24 +104,25 @@ void PerformMPU6050Calibration() // Calibrate and save result
       AccumulatedAccX += static_cast<float>(AccXLSB) / 4096.0f;
       AccumulatedAccY += static_cast<float>(AccYLSB) / 4096.0f;
       AccumulatedAccZ += static_cast<float>(AccZLSB) / 4096.0f;
+
+      ReceiveData();
+      Aileron_Sum += ReceivedData[0];  // Aileron
+      Elevator_Sum += ReceivedData[1]; // Elevator
+      Throttle_Sum += ReceivedData[2]; // Throttle
+      Rudder_Sum += ReceivedData[3];   // Rudder
     }
     BlinkFast();
     KickTheDog();
-    ReceiveData();
-    Look1("Aileron: ");
-    Look(ReceivedData[0]); 
-    Look1("Elevator: "); 
-    Look(ReceivedData[1]);
-    Look1("Rudder: ");
-    Look(ReceivedData[3]);
-    Look1("Throttle: ");
-    Look(ReceivedData[2]);
-
   }
   // Calculate average gyro rates (bias correction)
   RateCalibrationRoll = rollRateSum / ITERATIONS;
   RateCalibrationPitch = pitchRateSum / ITERATIONS;
   RateCalibrationYaw = yawRateSum / ITERATIONS;
+
+  Aileron_Centre = Aileron_Sum / ITERATIONS; // Calculate average control surface positions
+  Elevator_Centre = Elevator_Sum / ITERATIONS;
+  Rudder_Centre = Rudder_Sum / ITERATIONS;
+  Throttle_Centre = Throttle_Sum / ITERATIONS;
 
   // Calculate average accelerometer values during calibration
   float avgAccX = AccumulatedAccX / ITERATIONS;
@@ -129,7 +133,7 @@ void PerformMPU6050Calibration() // Calibrate and save result
   CalibrationRollReading = atan2(avgAccY, sqrt(avgAccX * avgAccX + avgAccZ * avgAccZ)) * 180.0f / M_PI;
   CalibrationPitchReading = atan2(-avgAccX, sqrt(avgAccY * avgAccY + avgAccZ * avgAccZ)) * 180.0f / M_PI;
   SaveMPU6050CalibrationDataToEEPROM();       // Save calibration data to EEPROM
-  delay(100);                                 // Brief pause to ensure EEPROM flash write completes before re-read
+  delay(1000);                                // Brief pause to ensure EEPROM flash write completes before re-read
   if (LoadMPU6050CalibrationDataFromEEPROM()) // check by reading it back.
   {
     TurnLedOff(); // Turn off the LED after calibration. This indicates success.
@@ -143,6 +147,19 @@ void PerformMPU6050Calibration() // Calibrate and save result
     CalibrationStatus = CALIBRATION_STATUS_FAILED;
   }
 }
+// ****************************************************************************************************
+void DebugCentres()
+{
+  Look1("Aileron_Centre: ");
+  Look(Aileron_Centre);
+  Look1(" Elevator_Centre: ");
+  Look(Elevator_Centre);
+  Look1(" Rudder_Centre: ");
+  Look(Rudder_Centre);
+  Look1(" Throttle_Centre: ");
+  Look(Throttle_Centre);
+}
+
 // ****************************************************************************************************
 // This initialisation function wakes up the sensor and sets various parameters:
 // Gyro: ±500°/s | Accel: ±4g | Low-pass filter ~43Hz
@@ -176,16 +193,16 @@ void InitialiseTheMPU6050()
   Wire.write(0x1A);
   Wire.write(0x03);
   Wire.endTransmission();
-   delay (1000); // Wait for the sensor to settle after configuration
-  if (LoadMPU6050CalibrationDataFromEEPROM())
+
+  delay(100);
+  if (!LoadMPU6050CalibrationDataFromEEPROM())
   {
-    Look("Calibration OK.");
-    CalibrationStatus = CALIBRATION_STATUS_SUCCEEDED;
+    CalibrationStatus = CALIBRATION_STATUS_FAILED;
   }
   else
   {
-    Look("Error: Calibration needed.");
-    CalibrationStatus = CALIBRATION_STATUS_FAILED;
+    CalibrationStatus = CALIBRATION_STATUS_SUCCEEDED;
+   // DebugCentres();
   }
 
   initKalman();
@@ -275,10 +292,10 @@ void GetCurrentAttitude()
   {
     filterRatesForHelicopter();
   }
-  if (++counter > 12)
+  if (++counter > 6)
   {
-     // PlotRates();
-   // PlotAttitude(); // Print the attitude to the Serial Plotter
+    // PlotRates();
+    // PlotAttitude(); // Print the attitude to the Serial Plotter
     counter = 0;
   }
 }
@@ -307,19 +324,6 @@ void BlinkFast()
 }
 
 #define USE_ANGLE_SMOOTHING
-
-// float PID_P = 2.0f;
-// float PID_I = 0.1f;
-// float PID_D = 0.01f;
-// float Kalman_Q_angle = 0.001f;
-// float Kalman_Q_bias = 0.003f;
-// float Kalman_R_measure = 0.03f;
-// float alpha = 0.05f;
-// float beta = 0.05f;
-// bool StabilisationOn = false;
-// bool SelfLevellingOn = false;
-// bool UseKalmanFilter = false;
-// bool UseRateLFP = false;
 
 // ===================================================================================
 void initKalman()

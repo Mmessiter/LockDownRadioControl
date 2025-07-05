@@ -819,7 +819,7 @@ void GetModelsMacAddress()
 /************************************************************************************************************/
 FASTRUN void ParseLongerAckPayload() // It's already pretty short!
 {
-    uint8_t cs = 0; // calibration status as received in the payload
+    uint8_t cs = 0;                                 // calibration status as received in the payload
     static bool CalibrationMessageBoxNeeded = true; // Show a message box only once
 
     FHSS_data::NextChannelNumber = AckPayload.Byte5; // every packet tells of next hop destination
@@ -948,12 +948,15 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         if (cs == CALBRATION_STATUS_IDLE)
         {
             CalibrationMessageBoxNeeded = true; // ready to show next message box - only once
-            break; // nothing to do, just idle
+            break;                              // nothing to do, just idle
         }
         if (cs == CALBRATION_STATUS_SUCCEEDED && CalibrationMessageBoxNeeded)
         {
             CalibrationMessageBoxNeeded = false;
-            MsgBox(pPIDView, (char *)"Calibration succeeded"); // Show a message box
+            if (CurrentView == PIDVIEW) // Show a message box only if we are in PID view
+            {
+                MsgBox(pPIDView, (char *)"Calibration succeeded");
+            } 
             break;
         }
         if (cs == CALBRATION_STATUS_FAILED && CalibrationMessageBoxNeeded)

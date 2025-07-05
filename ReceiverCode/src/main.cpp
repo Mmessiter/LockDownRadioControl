@@ -76,7 +76,6 @@ void DelayMillis(uint16_t ms) // This replaces any delay() calls
     }
 }
 
-
 /************************************************************************************************************/
 
 void KickTheDog()
@@ -91,9 +90,10 @@ void KickTheDog()
 /************************************************************************************************************/
 
 bool CheckForCrazyValues() // might come while binding ... indeed will.
-{   if (!BindPlugInserted)
+{
+    if (!BindPlugInserted)
         return true;
-                                                          
+
     if (millis() - ReconnectedMoment > 10000)                               // crazy values are very rare after 10 seconds of connection
         return true;                                                        // go home happy
     for (int i = 0; i < 7; ++i)                                             // need only check first few as that's where bind data are (Teensy MAC address etc.)
@@ -110,14 +110,13 @@ bool CheckForCrazyValues() // might come while binding ... indeed will.
 inline int GetPWMValue(int frequency, int length) { return static_cast<int>((static_cast<float>(length) / (1000000.0f / static_cast<float>(frequency))) * SERVO_RESOLUTION); }
 
 /************************************************************************************************************/
-void    MoveServos()
+void MoveServos()
 {
     static uint32_t LocalTimer = 0;
     if ((millis() - LocalTimer) < 10)
         return;
     LocalTimer = millis();
-   
-   
+
     if (!CheckForCrazyValues())
     {
         TurnLedOff(); // if we have crazy values, turn the LED off and don't move the servos
@@ -127,7 +126,7 @@ void    MoveServos()
     {
         TurnLedOn(); // if we have good values, turn the LED on and move the servos and send SBUS data
     }
-    
+
     SendSBUSData(); // Send the SBUS data
     for (int j = 0; j < SERVOSUSED; ++j)
     {
@@ -152,7 +151,7 @@ void FailSafe()
     if (BoundFlag)
     {
         LoadFailSafeDataFromEEPROM(); // load failsafe values from EEPROM
-        Connected = true;   // to force sending this data!
+        Connected = true;             // to force sending this data!
         MapToSBUS();
         for (int i = 0; i < 20; i++)
         {
@@ -214,7 +213,7 @@ void TurnLedOff()
 void RebuildFlags(bool *f, uint16_t tb)
 { // Pass arraypointer and the two bytes to be decoded. Builds the 16 bool flag bytes from 16 BITS
     for (uint8_t i = 0; i < 16; ++i)
-       f[15 - i] = (tb & (1 << i)); // sets false if bit was off, or true if bit was on... delightfully short, and clear enough in my opinion!
+        f[15 - i] = (tb & (1 << i)); // sets false if bit was off, or true if bit was on... delightfully short, and clear enough in my opinion!
 }
 
 // ******************************************************************************************************************************************************************
@@ -224,7 +223,7 @@ void RebuildFlags(bool *f, uint16_t tb)
 
 FLASHMEM void ScanI2c()
 {
-  //  Look("scanning I2C bus for devices ...");
+    //  Look("scanning I2C bus for devices ...");
     for (uint8_t i = 1; i < 127; ++i)
     {
         Wire.beginTransmission(i);
@@ -272,7 +271,6 @@ FLASHMEM void ScanI2c()
         }
     }
 }
-
 
 /************************************************************************************************************/
 
@@ -415,17 +413,19 @@ FLASHMEM void setup()
     TestAllPWMPins(); // Check that the no PWM pins are held low (plug in wrong way round)
     Wire.begin();
     Wire.setClock(400000); // Or 1000000, etc
-    // delay(400);// *only* needed if you want to see terminal output
+    //delay(400);// *only* needed if you want to see terminal output
     delay(200); // Wait for I2C to settle
     ScanI2c();  // Detect what's connected
     if (BMP280Connected)
         Init_BMP280();
     if (DPS310Connected)
         Init_DPS310();
+
 #ifdef USE_STABILISATION
     if (MPU6050Connected)
         InitialiseTheMPU6050();
 #endif
+
     if (INA219Connected)
         ina219.begin();
     if (GPS_Connected)
@@ -435,8 +435,9 @@ FLASHMEM void setup()
     SetupWatchDog();
     LoadSavedPipeFromEEPROM();
     Blinking = !digitalRead(BINDPLUG_PIN); // Blinking = binding to new TX ... because bind plug is inserted
-    BindPlugInserted = Blinking; // Bind plug inserted or not
-    if (BindPlugInserted) delay (200);
+    BindPlugInserted = Blinking;           // Bind plug inserted or not
+    if (BindPlugInserted)
+        delay(200);
     digitalWrite(LED_PIN, LOW);
 }
 

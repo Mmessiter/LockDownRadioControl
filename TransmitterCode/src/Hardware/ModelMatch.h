@@ -24,7 +24,8 @@ void CompareModelsIDs()
     uint8_t SavedModelNumber = ModelNumber;
     if ((BuddyPupilOnWireless) || (BuddyState == BUDDY_ON) || (ModelMatched && MACS_MATCHED))
         return; //  Don't do this if any of these are ON
-    GotoFrontView();
+    if (CurrentView != PIDVIEW)
+        GotoFrontView();
     RestoreBrightness();
     if (!AutoModelSelect)
     {
@@ -37,9 +38,9 @@ void CompareModelsIDs()
     {
         if (AnnounceConnected) // Yes ...
         {
-           Connect_MMmsg = MMMATCHED; // Set the message to be played later
-           if (UseLog)
-               LogModelMatched();
+            Connect_MMmsg = MMMATCHED; // Set the message to be played later
+            if (UseLog)
+                LogModelMatched();
         }
         ModelMatched = true; //  It's a match so start flying!
         return;
