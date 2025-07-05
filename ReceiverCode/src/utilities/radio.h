@@ -539,7 +539,7 @@ FASTRUN void Reconnect()
         ConnectMoment = m;
         SuccessfulPackets = 0;
     }
-} 
+}
 /************************************************************************************************************/
 
 void IncChannelNumber()
@@ -701,9 +701,9 @@ void LoadLongerAckPayload()
     }
     AckPayload.Purpose &= 0x7F; // NOTE: The HIGH BIT of "purpose" bit is the HOPNOW flag. It gets set only when it's time to hop.
     ++AckPayload.Purpose;
-    AckPayloadSize = 6;          // 6 bytes of telemetry data
+    AckPayloadSize = 6;                            // 6 bytes of telemetry data
     if (AckPayload.Purpose > MAX_TELEMETERY_ITEMS) // max number of telemetry items
-        AckPayload.Purpose = 0;  // wrap after max
+        AckPayload.Purpose = 0;                    // wrap after max
     switch (AckPayload.Purpose)
     {
     case 0:
@@ -787,18 +787,21 @@ void LoadLongerAckPayload()
     case 19:
         SendFloatToAckPayload(RateOfClimb);
         break;
+#ifdef USE_STABILISATION
     case 20:
-    static int8_t CalibrationStatusSentCounter = 0;
-    
-    if (CalibrationStatus != CALIBRATION_STATUS_IDLE) // not idle so warn the transmitter and increment the counter
-        ++CalibrationStatusSentCounter;
+        static int8_t CalibrationStatusSentCounter = 0;
 
-    if (CalibrationStatusSentCounter > 10){
-        CalibrationStatus = CALIBRATION_STATUS_IDLE; // reset after 10 sends
-        CalibrationStatusSentCounter = 0; // reset the counter for next time
-    }
+        if (CalibrationStatus != CALIBRATION_STATUS_IDLE) // not idle so warn the transmitter and increment the counter
+            ++CalibrationStatusSentCounter;
+
+        if (CalibrationStatusSentCounter > 10)
+        {
+            CalibrationStatus = CALIBRATION_STATUS_IDLE; // reset after 10 sends
+            CalibrationStatusSentCounter = 0;            // reset the counter for next time
+        }
         SendIntToAckPayload(uint16_t(CalibrationStatus)); // send the current calibration status
         break;
+#endif // USE_STABILISATION
     default:
         break;
     }

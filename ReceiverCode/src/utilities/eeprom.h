@@ -30,7 +30,7 @@ void LoadFailSafeDataFromEEPROM() //
 }
 
 /************************************************************************************************************/
-void SaveFailSafeDataToEEPROM()
+void SaveFailSafeDataToEEPROM() // uses 32 bytes in EEPROM
 {
     // FailSafe data occupies EEPROM from offset FAILSAFE_EEPROM_OFFSET
     uint8_t FS_Offset = FAILSAFE_EEPROM_OFFSET;

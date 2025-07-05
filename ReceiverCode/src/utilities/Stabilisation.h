@@ -119,7 +119,8 @@ void PerformMPU6050Calibration() // Calibrate and save result
   RateCalibrationPitch = pitchRateSum / ITERATIONS;
   RateCalibrationYaw = yawRateSum / ITERATIONS;
 
-  Aileron_Centre = Aileron_Sum / ITERATIONS; // Calculate average control surface positions
+  // Calculate average control surface positions
+  Aileron_Centre = Aileron_Sum / ITERATIONS; 
   Elevator_Centre = Elevator_Sum / ITERATIONS;
   Rudder_Centre = Rudder_Sum / ITERATIONS;
   Throttle_Centre = Throttle_Sum / ITERATIONS;
