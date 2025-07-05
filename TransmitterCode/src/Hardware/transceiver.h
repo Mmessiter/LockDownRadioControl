@@ -367,14 +367,14 @@ FASTRUN void SendData()
         {
             NumberOfChangedChannels = GetExtraParameters();
             --ParametersToBeSentPointer;
-            if (!ParametersToBeSentPointer){
+            if (!ParametersToBeSentPointer)
+            {
                 ParamPause = true; // Pause sending parameters until next time
             }
         }
         else
         {
             NumberOfChangedChannels = EncodeTheChangedChannels(); // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels.
-           
         }
 
         if (NumberOfChangedChannels)
@@ -819,9 +819,10 @@ void GetModelsMacAddress()
 /************************************************************************************************************/
 FASTRUN void ParseLongerAckPayload() // It's already pretty short!
 {
+    uint8_t cs = 0; // calibration status as received in the payload
+    static bool CalibrationMessageBoxNeeded = true; // Show a message box only once
 
     FHSS_data::NextChannelNumber = AckPayload.Byte5; // every packet tells of next hop destination
-
     if (AckPayload.Purpose & 0x80)
     {                                                                             // Hi bit is now the **HOP NOW!!** flag
         NextChannel = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber); // The actual channel number pointed to.
@@ -942,6 +943,27 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         if (RateOfClimb > MaxRateOfClimb)
             MaxRateOfClimb = RateOfClimb;
         break;
+    case 20:
+        cs = GetIntFromAckPayload(); // calibration status
+        if (cs == CALBRATION_STATUS_IDLE)
+        {
+            CalibrationMessageBoxNeeded = true; // ready to show next message box - only once
+            break; // nothing to do, just idle
+        }
+        if (cs == CALBRATION_STATUS_SUCCEEDED && CalibrationMessageBoxNeeded)
+        {
+            CalibrationMessageBoxNeeded = false;
+            MsgBox(pPIDView, (char *)"Calibration succeeded"); // Show a message box
+            break;
+        }
+        if (cs == CALBRATION_STATUS_FAILED && CalibrationMessageBoxNeeded)
+        {
+            CalibrationMessageBoxNeeded = false;
+            MsgBox(pPIDView, (char *)"Calibration failed"); // Show a message box
+            break;
+        }
+        break;
+
     default:
         break;
     }

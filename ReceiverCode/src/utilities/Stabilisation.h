@@ -101,13 +101,19 @@ void PerformMPU6050Calibration() // Calibrate and save result
       AccumulatedAccX += static_cast<float>(AccXLSB) / 4096.0f;
       AccumulatedAccY += static_cast<float>(AccYLSB) / 4096.0f;
       AccumulatedAccZ += static_cast<float>(AccZLSB) / 4096.0f;
-     
     }
     BlinkFast();
     KickTheDog();
-   // ReceiveData();
-   // Look(ReceivedData[0]); // Print the first received data value for debugging it WORKS!!!!
-    delay(1); // Delay to allow sensor to stabilize
+    ReceiveData();
+    Look1("Aileron: ");
+    Look(ReceivedData[0]); 
+    Look1("Elevator: "); 
+    Look(ReceivedData[1]);
+    Look1("Rudder: ");
+    Look(ReceivedData[3]);
+    Look1("Throttle: ");
+    Look(ReceivedData[2]);
+
   }
   // Calculate average gyro rates (bias correction)
   RateCalibrationRoll = rollRateSum / ITERATIONS;
@@ -134,6 +140,7 @@ void PerformMPU6050Calibration() // Calibrate and save result
   {
     TurnLedOn();                                               // Turn on the LED to indicate an error
     Look("ERROR: Failed to save calibration data to EEPROM."); // only useful when debugging at the computer
+    CalibrationStatus = CALIBRATION_STATUS_FAILED;
   }
 }
 // ****************************************************************************************************
@@ -169,11 +176,17 @@ void InitialiseTheMPU6050()
   Wire.write(0x1A);
   Wire.write(0x03);
   Wire.endTransmission();
-  // delay (500); // Wait for the sensor to settle after configuration
-  if (!LoadMPU6050CalibrationDataFromEEPROM())
+   delay (1000); // Wait for the sensor to settle after configuration
+  if (LoadMPU6050CalibrationDataFromEEPROM())
   {
-    PerformMPU6050Calibration(); // Calibrate and save result
-  } // If we do not have saved calibrations, we must calibrate!
+    Look("Calibration OK.");
+    CalibrationStatus = CALIBRATION_STATUS_SUCCEEDED;
+  }
+  else
+  {
+    Look("Error: Calibration needed.");
+    CalibrationStatus = CALIBRATION_STATUS_FAILED;
+  }
 
   initKalman();
 }
@@ -185,9 +198,9 @@ void TimeTheLoop()
   static uint16_t Counter = 0;
   if (millis() - previousTime > 1000)
   {
-    Serial.print("Loop rate: ");
-    Serial.print(Counter);
-    Serial.println(" Hz");
+    Look1("Loop rate: ");
+    Look1(Counter);
+    Look(" Hz");
     Counter = 0;
     previousTime = millis();
   }
@@ -198,35 +211,34 @@ void TimeTheLoop()
 void PlotRates()
 {
   // Print header once (this line will be ignored by the Serial Plotter's graph)
-  Serial.println("RawRollRate,FilteredRollRate,RawPitchRate,FilteredPitchRate,RawYawRate,FilteredYawRate");
+  Look("RawRollRate,FilteredRollRate,RawPitchRate,FilteredPitchRate,RawYawRate,FilteredYawRate");
 
-  Serial.print(RawRollRate);
-  Serial.print(",");
-  Serial.print(filteredRollRate);
-  Serial.print(",");
-  Serial.print(RawPitchRate);
-  Serial.print(",");
-  Serial.print(filteredPitchRate);
-  Serial.print(",");
-  Serial.print(RawYawRate);
-  Serial.print(",");
-  Serial.println(filteredYawRate);
+  Look1(RawRollRate);
+  Look1(",");
+  Look1(filteredRollRate);
+  Look1(",");
+  Look1(RawPitchRate);
+  Look1(",");
+  Look1(filteredPitchRate);
+  Look1(",");
+  Look1(RawYawRate);
+  Look1(",");
+  Look(filteredYawRate);
 }
 // ******************************************************************************************************************************************************************
 void PlotAttitude()
 {
   // Print header once (this line will be ignored by the Serial Plotter's graph)
-  Serial.println("RawPitch,FilteredPitch,RawRoll,FilteredRoll,RawYaw,FilteredYaw"); //
+  Look("RawPitch,FilteredPitch,RawRoll,FilteredRoll,RawYaw,FilteredYaw"); //
 
-  Serial.print(RawPitchAngle);
-  Serial.print(",");
-  Serial.print(filteredPitch);
-  Serial.print(",");
-  Serial.print(RawRollAngle);
-  Serial.print(",");
-  Serial.print(filteredRoll);
-  Serial.print(",");
-  Serial.println();
+  Look1(RawPitchAngle);
+  Look1(",");
+  Look1(filteredPitch);
+  Look1(",");
+  Look1(RawRollAngle);
+  Look1(",");
+  Look1(filteredRoll);
+  Look(",");
 }
 
 // ******************************************************************************************************************************************************************
@@ -265,8 +277,8 @@ void GetCurrentAttitude()
   }
   if (++counter > 12)
   {
-    // PlotRates();
-    PlotAttitude(); // Print the attitude to the Serial Plotter
+     // PlotRates();
+   // PlotAttitude(); // Print the attitude to the Serial Plotter
     counter = 0;
   }
 }

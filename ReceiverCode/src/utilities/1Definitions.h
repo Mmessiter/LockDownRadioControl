@@ -52,17 +52,15 @@
 //                            EEPROM PARAMETERS                           *
 //***************************************************************************
 
+#define CALIBRATION_STATUS_IDLE 0 // Idle status
+#define CALIBRATION_STATUS_SUCCEEDED 1 // Calibration succeeded
+#define CALIBRATION_STATUS_FAILED 2    // Calibration failed
 #define BIND_EEPROM_OFFSET 0                              // use 8 bytes from here (in fact 5 bytes only, but we reserve 8 bytes for future use)
 #define FAILSAFE_EEPROM_OFFSET BIND_EEPROM_OFFSET + 8     // use 16 bytes from here
-#define MPU6050_EEPROM_OFFSET FAILSAFE_EEPROM_OFFSET + 38 // was 16 !! use *21* bytes from here (for the MPU6050 calibration data)
-#define MPU6050_CALIBRATIONS_SAVED 44
-
+#define MPU6050_EEPROM_OFFSET FAILSAFE_EEPROM_OFFSET + 16 // was 16 !! use *21* bytes from here (for the MPU6050 calibration data)
+#define MPU6050_CALIBRATIONS_SAVED 43                     // 42 failed!! ... magic number to indicate that the MPU6050 calibration data has been saved in the EEPROM
 #define THE_NEXT_USE_OF_EEPROM_OFFSET MPU6050_EEPROM_OFFSET + 21 // For future use ...
                                                                  // this flag indicates whether calibrations were saved.
-
-//**************************************************************************************************************************
-
-#define SENSOR_HUB_I2C_ADDRESS 8
 
 // ********************* >>> Reconnect params <<< ***************************************
 
@@ -74,7 +72,7 @@
 #define DATARATE RF24_250KBPS // RF24_250KBPS, RF24_1MBPS, RF24_2MBPS
 #define PIPENUMBER 1
 #define BOUNDPIPENUMBER 1
-
+#define MAX_TELEMETERY_ITEMS 20 // Max number of telemetry items to send... 1 per packet
 #define CHANNELSUSED 16
 #define RECEIVEBUFFERSIZE 20
 
@@ -417,5 +415,6 @@ int16_t LongAcknowledgementsMinimum = 200;
 bool DPS310Connected = false;
 uint16_t DPS310Address = 0x76; // DPS310 I2C address
 bool BindPlugInserted = false; // Bind plug inserted or not
+uint8_t CalibrationStatus = CALIBRATION_STATUS_IDLE;                                                        // Set to true if calibration fails
 
 #endif // defined (_SRC_UTILITIES_1DEFINITIONS_H)

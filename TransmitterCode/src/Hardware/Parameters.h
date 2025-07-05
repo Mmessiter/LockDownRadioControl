@@ -197,9 +197,9 @@ int GetExtraParameters() // This gets extra parameters ready for sending and ret
     LoadRawDataWithParameters();
     // DataTosend.ChannelBitMask = 0; //  zero channels to send with this packet
     //  DebugParamsOut();              // long
-    Look1(Parameters.ID);
-    Look1(" ");
-    Look(ParaNames[Parameters.ID - 1]); // brief
+    // Look1(Parameters.ID);
+    // Look1(" ");
+    // Look(ParaNames[Parameters.ID - 1]); // brief
 
     return 12; //  was 8 - is the extent of this parameter
 }

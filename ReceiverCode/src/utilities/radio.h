@@ -539,99 +539,7 @@ FASTRUN void Reconnect()
         ConnectMoment = m;
         SuccessfulPackets = 0;
     }
-}
-// // **************************
-// FASTRUN void ReconnectOLD()
-// { // This is called when contact is lost, to reconnect ASAP
-// #define MAXTRIESPERTRANSCEIVER 3
-
-//     uint32_t SearchStartTime = millis();
-//     uint8_t PreviousRadio = ThisRadio;
-//     uint8_t Attempts = 0;
-
-//     if (ThisRadio == 1)
-//         RX1TotalTime += (millis() - ReconnectedMoment); // keep track of how long on each
-//     if (ThisRadio == 2)
-//         RX2TotalTime += (millis() - ReconnectedMoment);
-
-//     while (!Connected)
-//     {
-//         //  DisplayPipe(); // for debugging purposes
-
-//         if (Blinking)
-//             BlinkLed();
-//         KickTheDog();
-//         SendSBUSData();
-//         CurrentRadio->stopListening();
-//         delayMicroseconds(STOPLISTENINGDELAY);
-//         CurrentRadio->flush_tx();
-//         CurrentRadio->flush_rx();
-//         ReconnectChannel = FHSS_Recovery_Channels[ReconnectIndex];
-//         ++ReconnectIndex;
-//         if (ReconnectIndex >= 3)
-//             ReconnectIndex = 0;
-//         CurrentRadio->stopListening();
-//         delayMicroseconds(STOPLISTENINGDELAY);
-//         CurrentRadio->setChannel(ReconnectChannel);
-//         CurrentRadio->startListening();
-//         delayMicroseconds(STOPLISTENINGDELAY);
-//         ++Attempts;
-//         TryToConnectNow();
-//         if (!Connected)
-//         {
-
-// #ifdef SECOND_TRANSCEIVER
-//             if (Attempts >= MAXTRIESPERTRANSCEIVER)
-//             {
-//                 TryTheOtherTransceiver(ReconnectChannel);
-//                 Attempts = 0;
-//             }
-// #else
-//             if (Attempts >= 3)
-//             {
-//                 ProdRadio(ReconnectChannel); // This avoids a lockup of the nRF24L01+ !
-//                 Attempts = 0;
-//             }
-// #endif
-//             if ((millis() - SearchStartTime) > FAILSAFE_TIMEOUT)
-//             {
-//                 if (!FailSafeSent)
-//                     FailSafe();
-//             }
-//         }
-//     }
-
-//     // cannot pass here if not connected
-//     // must have connected by here
-//     // Look1 ("Reconnected on channel ");
-//     // Look  (ReconnectChannel);
-//     ReconnectedMoment = millis(); // Save this moment
-//     FailSafeSent = false;
-//     if (PreviousRadio != ThisRadio)
-//         ++RadioSwaps; // Count the radio swaps
-
-//     if (FailedSafe)
-//     {
-//         FailedSafe = false;
-//         NewConnectionMoment = millis();
-//         ConnectMoment = millis();
-//         SuccessfulPackets = 0; // Reset the packet count
-//                                // BoundFlag = true;
-//     }
-
-// #ifdef DB_RXTIMERS
-//     Serial.print("Transceiver1 use so far: ");
-//     Serial.print(RX1TotalTime / 1000);
-//     Serial.println(" seconds");
-//     Serial.print("Transceiver2 use so far: ");
-//     Serial.print(RX2TotalTime / 1000);
-//     Serial.println(" seconds");
-//     Serial.print("Now connected on transceiver number: ");
-//     Serial.print(ThisRadio);
-//     Serial.println(" ...");
-//     Serial.println("");
-// #endif
-// }
+} 
 /************************************************************************************************************/
 
 void IncChannelNumber()
@@ -794,7 +702,7 @@ void LoadLongerAckPayload()
     AckPayload.Purpose &= 0x7F; // NOTE: The HIGH BIT of "purpose" bit is the HOPNOW flag. It gets set only when it's time to hop.
     ++AckPayload.Purpose;
     AckPayloadSize = 6;          // 6 bytes of telemetry data
-    if (AckPayload.Purpose > 19) // number of telemetry items
+    if (AckPayload.Purpose > MAX_TELEMETERY_ITEMS) // max number of telemetry items
         AckPayload.Purpose = 0;  // wrap after max
     switch (AckPayload.Purpose)
     {
@@ -878,6 +786,18 @@ void LoadLongerAckPayload()
         break;
     case 19:
         SendFloatToAckPayload(RateOfClimb);
+        break;
+    case 20:
+    static int8_t CalibrationStatusSentCounter = 0;
+    
+    if (CalibrationStatus != CALIBRATION_STATUS_IDLE) // not idle so warn the transmitter and increment the counter
+        ++CalibrationStatusSentCounter;
+
+    if (CalibrationStatusSentCounter > 10){
+        CalibrationStatus = CALIBRATION_STATUS_IDLE; // reset after 10 sends
+        CalibrationStatusSentCounter = 0; // reset the counter for next time
+    }
+        SendIntToAckPayload(uint16_t(CalibrationStatus)); // send the current calibration status
         break;
     default:
         break;

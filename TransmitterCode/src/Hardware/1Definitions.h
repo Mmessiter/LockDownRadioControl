@@ -52,7 +52,11 @@
 //                                       General                                      *
 // ************************************************************************************
 
- #define USE_STABILISATION
+#define USE_STABILISATION
+#define CALBRATION_STATUS_IDLE 0      // Idle status
+#define CALBRATION_STATUS_SUCCEEDED 1 // Calibration succeeded
+#define CALBRATION_STATUS_FAILED 2    // Calibration failed
+
 /*********************************************************************************************************************************/
 
 #define VERYHIGHPACKETRATE // Comment this out if using stabilisation
