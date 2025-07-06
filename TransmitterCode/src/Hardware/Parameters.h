@@ -178,11 +178,12 @@ int GetExtraParameters() // This gets extra parameters ready for sending and ret
     {
         Look1("Parameter error: ID is ");
         Look(Parameters.ID);
-        return 2;
+        DataTosend.ChannelBitMask = 0; //  zero channels to send with this packet CRITICAL!!!
+        return 8;
     }
     LoadParameters();
     LoadRawDataWithParameters();
-    //  DataTosend.ChannelBitMask = 0; //  zero channels to send with this packet
+    DataTosend.ChannelBitMask = 0; //  zero channels to send with this packet CRITICAL!!!
     //  DebugParamsOut();              // long
     //  Look1(Parameters.ID);
     //  Look1(" ");
