@@ -41,7 +41,7 @@
  * | 21    | SPI CE2  (FOR RADIO2) |
  * | 22    | SPI CE1  (FOR RADIO1) when 11 PWM channels are used | Otherwise unused
  * | 23    | SPI CSN1 (FOR RADIO1) when 11 PWM channels are used | Otherwise unused
- * | All exposed pins are now used but oututs 34 - 39 are still available as solder pads on the back of the board for extra PWM channels etc
+ * | All exposed pins are now used but GPIOs 34 - 39 are still available as solder pads on the back of the board for extra PWM channels etc
  * @see ReceiverCode/src/main.cpp
  */
 

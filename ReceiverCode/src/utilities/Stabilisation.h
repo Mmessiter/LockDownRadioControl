@@ -1,5 +1,4 @@
 // This file contains the PID controller and the Kalman filter for the MPU6050
-// FIXED VERSION: Can be calibrated at any angle and will use that as the zero reference
 
 #ifndef STABILISATION_CODE
 #define STABILISATION_CODE
@@ -120,7 +119,7 @@ void PerformMPU6050Calibration() // Calibrate and save result
   RateCalibrationYaw = yawRateSum / ITERATIONS;
 
   // Calculate average control surface positions
-  Aileron_Centre = Aileron_Sum / ITERATIONS; 
+  Aileron_Centre = Aileron_Sum / ITERATIONS;
   Elevator_Centre = Elevator_Sum / ITERATIONS;
   Rudder_Centre = Rudder_Sum / ITERATIONS;
   Throttle_Centre = Throttle_Sum / ITERATIONS;
@@ -203,7 +202,7 @@ void InitialiseTheMPU6050()
   else
   {
     CalibrationStatus = CALIBRATION_STATUS_SUCCEEDED;
-   // DebugCentres();
+    // DebugCentres();
   }
 
   initKalman();
@@ -260,7 +259,7 @@ void PlotAttitude()
 }
 
 // ******************************************************************************************************************************************************************
-// This function gets the current attitude of the aircraft
+// This function gets the current attitude of the aircraft by reading the MPU6050 sensor data and applying the Kalman  and low pass filters if enabled.
 void GetCurrentAttitude()
 {
   static uint32_t LoopTimer;
@@ -293,22 +292,28 @@ void GetCurrentAttitude()
   {
     filterRatesForHelicopter();
   }
+
+  // This is used to print the attitude to the Serial Plotter only for debugging purposes
   if (++counter > 6)
   {
     // PlotRates();
-     PlotAttitude(); // Print the attitude to the Serial Plotter
+    PlotAttitude(); // Print the attitude to the Serial Plotter
     counter = 0;
   }
 }
-
 // ******************************************************************************************************************************************************************
-void DoStabilsation()
+// This function modifies the control rates based on the PID controller.
+void ModifyControlRatesWithPID()
 {
-  if (!MPU6050Connected)
-  {
-    return;
-  }
+  // The PID will be implemented here.
+}
+// ******************************************************************************************************************************************************************
+void DoStabilsation() // This is the main entry point for the stabilisation code
+{
+  if (!MPU6050Connected) // Check if the MPU6050 is connected
+    return;              // If not, skip stabilisation
   GetCurrentAttitude();
+  ModifyControlRatesWithPID();
 }
 
 // ******************************************************************************************************************************************************************
@@ -456,4 +461,3 @@ float getFilteredPitchAngle()
 
 #endif // USE_STABILISATION
 #endif // _SRC_PID_H
-       // End of file: src/utilities/pid.h
