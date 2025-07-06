@@ -171,25 +171,25 @@ void LoadRawDataWithParameters()
 }
 /************************************************************************************************************/
 int GetExtraParameters() // This gets extra parameters ready for sending and returns the number that will be sent.
-{                        // only the >>LOW 12 BITS<< of each parameter are actually sent because of compression which loses the highest 4 bits
+{                        // Only the >>LOW 12 BITS<< of each parameter are actually sent because of compression which loses the highest 4 bits
 
     Parameters.ID = ParametersToBeSent[ParametersToBeSentPointer]; 
     if ((Parameters.ID == 0) || (Parameters.ID > PARAMETERS_MAX_ID))
     {
         Look1("Parameter error: ID is ");
         Look(Parameters.ID);
-        DataTosend.ChannelBitMask = 0; //  zero channels to send with this packet CRITICAL!!!
+        DataTosend.ChannelBitMask = 0; //  This flag stops these data being seen as channel data at the RX!
         return 8;
     }
     LoadParameters();
     LoadRawDataWithParameters();
-    DataTosend.ChannelBitMask = 0; //  zero channels to send with this packet CRITICAL!!!
+    DataTosend.ChannelBitMask = 0; //  This flag stops these data being seen as channel data at the RX!
     //  DebugParamsOut();              // long
     //  Look1(Parameters.ID);
     //  Look1(" ");
     //  Look(ParaNames[Parameters.ID - 1]); // brief
 
-    return 12; //  was 8 - is the extent of this parameter
+    return 12; //  was 8 - this is the extent of this parameter
 }
 
 /*********************************************************************************************************************************/
