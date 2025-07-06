@@ -4961,7 +4961,6 @@ void ActuallySendParameters(uint32_t RightNow)
     if (RightNow - LastParameterSent >= PARAMETER_SEND_FREQUENCY)
     {
         ParamPause = false; // Reset pause flag to allow the parameters to be sent
-        SendOutstandingParameters();
         LastParameterSent = RightNow;
     }
     else if (RightNow - LastParameterSent >= PARAMETER_SEND_DURATION) // it would just keep sending parameters so we must pause it for a while

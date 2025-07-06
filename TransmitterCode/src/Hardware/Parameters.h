@@ -5,9 +5,9 @@
 
 /*********************************************************************************************************************************/
 
-void AddParameterstoQueue(uint8_t ID)
+void AddParameterstoQueue(uint8_t ID) // this queue is essentially a LIFO stack
 {
-    if (!ModelMatched || !BoundFlag)
+    if (!ModelMatched || !BoundFlag || ID == 0)
         return;
     for (int i = 0; i < PARAMETER_SEND_REPEATS; ++i)
     {
@@ -31,7 +31,7 @@ void SwitchStabilisation(bool OnOff) // This function switches stabilisation on 
     char sw0[] = "sw0";  // Switch 0 is used for stabilisation on/off
     StabilisationOn = OnOff;
     AddParameterstoQueue(BOOLEANS);
-    AddParameterstoQueue(BOOLEANS); // just to make sure it gets sent
+    AddParameterstoQueue(BOOLEANS); // just to make sure it really gets sent
     if (CurrentView == PIDVIEW)
         SendValue(sw0, StabilisationOn); // Send the value to the PID view
 #endif
@@ -49,28 +49,13 @@ void SendStabilationParameters() // This function sends the parameters that are 
 }
 
 /*********************************************************************************************************************************/
-void SendInitialSetupParams()
-{
-    SendStabilationParameters();              // Send the parameters that are used for stabilisation
+void SendInitialSetupParams() // This function sends the initial setup parameters.
+{ // Failsafe and stabilisation parameters are NOT sent here because they are sent separately
+    SendStabilationParameters();              // Send the parameters that are used for stabilisation ... if its enabled
     AddParameterstoQueue(SERVO_PULSE_WIDTHS); // Servo Pulse Widths 7
     AddParameterstoQueue(SERVO_FREQUENCIES);  // Servo Frequencies 6
     AddParameterstoQueue(QNH_SETTING);        // QNH 2
-    AddParameterstoQueue(FAILSAFE_SETTINGS);  // FailSafeChannels 1
 }
-/************************************************************************************************************/
-void SendOutstandingParameters()
-{ // Send any QUEUED parameters that have not been sent yet
-
-    if (BoundFlag && ModelMatched && LedWasGreen)
-    {
-        Parameters.ID = ParametersToBeSent[ParametersToBeSentPointer]; // heer
-        // Look1("Sent: ");
-        // Look1(Parameters.ID);
-        // Look1(" ");
-        // Look(ParaNames[Parameters.ID - 1]);
-    }
-}
-
 // /************************************************************************************************************/
 #ifdef USE_STABILISATION // Switch stabilisation on or off
 void EncodeFloat(float f, uint16_t *word1, uint16_t *word2, uint16_t *word3, uint16_t *word4)
@@ -186,20 +171,22 @@ void LoadRawDataWithParameters()
 }
 /************************************************************************************************************/
 int GetExtraParameters() // This gets extra parameters ready for sending and returns the number that will be sent.
-{                        // only the ***low 12 bits*** of each parameter are actually sent because of compression
+{                        // only the >>LOW 12 BITS<< of each parameter are actually sent because of compression which loses the highest 4 bits
+
+    Parameters.ID = ParametersToBeSent[ParametersToBeSentPointer]; 
     if ((Parameters.ID == 0) || (Parameters.ID > PARAMETERS_MAX_ID))
     {
         Look1("Parameter error: ID is ");
         Look(Parameters.ID);
-        return 8;
+        return 2;
     }
     LoadParameters();
     LoadRawDataWithParameters();
-    // DataTosend.ChannelBitMask = 0; //  zero channels to send with this packet
+    //  DataTosend.ChannelBitMask = 0; //  zero channels to send with this packet
     //  DebugParamsOut();              // long
-    // Look1(Parameters.ID);
-    // Look1(" ");
-    // Look(ParaNames[Parameters.ID - 1]); // brief
+    //  Look1(Parameters.ID);
+    //  Look1(" ");
+    //  Look(ParaNames[Parameters.ID - 1]); // brief
 
     return 12; //  was 8 - is the extent of this parameter
 }

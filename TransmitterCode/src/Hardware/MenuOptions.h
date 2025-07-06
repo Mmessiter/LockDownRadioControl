@@ -1413,9 +1413,8 @@ void CalibrateMPU6050()
         MsgBox(pPIDView, (char *)"Model not connected!");
         return;
     }
-    if (GetConfirmation(pPIDView, (char *)"Recalibrate MPU6050 NOW?"))
+    if (GetConfirmation(pPIDView, (char *)"Recalibrate Gyro?"))
     {
-        MsgBox(pPIDView, (char *)"Level model ...");
         AddParameterstoQueue(RECALIBRATE_MPU6050);
     }
     else
@@ -1429,7 +1428,6 @@ void GyroApply()
         MsgBox(pPIDView, (char *)"Model not connected!");
         return;
     }
-    PlaySound(BEEPMIDDLE); // play a sound to indicate the button was pressed
     ReadStabilisationParameters();
     SendStabilationParameters();
 }

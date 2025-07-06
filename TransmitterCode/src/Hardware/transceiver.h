@@ -368,9 +368,7 @@ FASTRUN void SendData()
             NumberOfChangedChannels = GetExtraParameters();
             --ParametersToBeSentPointer;
             if (!ParametersToBeSentPointer)
-            {
                 ParamPause = true; // Pause sending parameters until next time
-            }
         }
         else
         {
@@ -956,7 +954,7 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
             if (CurrentView == PIDVIEW) // Show a message box only if we are in PID view
             {
                 MsgBox(pPIDView, (char *)"Calibration succeeded");
-            } 
+            }
             break;
         }
         if (cs == CALBRATION_STATUS_FAILED && CalibrationMessageBoxNeeded)
