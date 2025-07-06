@@ -178,12 +178,12 @@ int GetExtraParameters() // This gets extra parameters ready for sending and ret
     {
         Look1("Parameter error: ID is ");
         Look(Parameters.ID);
-        DataTosend.ChannelBitMask = 0; //  This flag stops these data being seen as channel data at the RX!
+        DataTosend.ChannelBitMask = 0; // IMPORTANT! This flag stops these data being seen as channel data at the RX!
         return 8;
     }
     LoadParameters();
     LoadRawDataWithParameters();
-    DataTosend.ChannelBitMask = 0; //  This flag stops these data being seen as channel data at the RX!
+    DataTosend.ChannelBitMask = 0; // IMPORTANT! This flag stops these data being seen as channel data at the RX!
     //  DebugParamsOut();              // long
     //  Look1(Parameters.ID);
     //  Look1(" ");
