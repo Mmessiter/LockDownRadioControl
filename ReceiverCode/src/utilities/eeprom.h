@@ -115,10 +115,10 @@ bool LoadMPU6050CalibrationDataFromEEPROM()
     RateCalibrationYaw = LoadOneCalibrationFromEEPROM(&ExtraOffset);
     CalibrationRollReading = LoadOneCalibrationFromEEPROM(&ExtraOffset);
     CalibrationPitchReading = LoadOneCalibrationFromEEPROM(&ExtraOffset);
-    Aileron_Centre = (uint32_t) LoadOneCalibrationFromEEPROM(&ExtraOffset);
-    Elevator_Centre = (uint32_t) LoadOneCalibrationFromEEPROM(&ExtraOffset);
-    Rudder_Centre = (uint32_t) LoadOneCalibrationFromEEPROM(&ExtraOffset);
-    Throttle_Centre = (uint32_t) LoadOneCalibrationFromEEPROM(&ExtraOffset);
+    Aileron_Centre = static_cast<uint32_t>(LoadOneCalibrationFromEEPROM(&ExtraOffset));
+    Elevator_Centre = static_cast<uint32_t>(LoadOneCalibrationFromEEPROM(&ExtraOffset));
+    Rudder_Centre = static_cast<uint32_t>(LoadOneCalibrationFromEEPROM(&ExtraOffset));
+    Throttle_Centre = static_cast<uint32_t>(LoadOneCalibrationFromEEPROM(&ExtraOffset));
 
     if (VerificationNumber != MPU6050_CALIBRATIONS_SAVED)
         return false;
@@ -135,9 +135,9 @@ void SaveMPU6050CalibrationDataToEEPROM()
     SaveOneCalibrationToEEPROM(&ExtraOffset, RateCalibrationYaw);
     SaveOneCalibrationToEEPROM(&ExtraOffset, CalibrationRollReading);
     SaveOneCalibrationToEEPROM(&ExtraOffset, CalibrationPitchReading);
-    SaveOneCalibrationToEEPROM(&ExtraOffset, (float)Aileron_Centre);
-    SaveOneCalibrationToEEPROM(&ExtraOffset, (float)Elevator_Centre);
-    SaveOneCalibrationToEEPROM(&ExtraOffset, (float)Rudder_Centre);
-    SaveOneCalibrationToEEPROM(&ExtraOffset, (float)Throttle_Centre);
+    SaveOneCalibrationToEEPROM(&ExtraOffset, static_cast<float>(Aileron_Centre));
+    SaveOneCalibrationToEEPROM(&ExtraOffset, static_cast<float>(Elevator_Centre));
+    SaveOneCalibrationToEEPROM(&ExtraOffset, static_cast<float>(Rudder_Centre));
+    SaveOneCalibrationToEEPROM(&ExtraOffset, static_cast<float>(Throttle_Centre));
 }
 #endif
