@@ -252,4 +252,18 @@ void FactoryDefaultsHeli()
     }
 }
 
+/************************************************************************************************************/
+void ActuallySendParameters(uint32_t RightNow)
+{
+    static uint32_t LastParameterSent = 0;
+    if (RightNow - LastParameterSent >= PARAMETER_SEND_FREQUENCY)
+    {
+        ParamPause = false; // Reset pause flag to allow the parameters to be sent
+        LastParameterSent = RightNow;
+    }
+    else if (RightNow - LastParameterSent >= PARAMETER_SEND_DURATION) // it would just keep sending parameters so we must pause it for a while
+    {
+        ParamPause = true; // Pause sending parameters briefly so we can send data to control the model ! :-)
+    }
+}
 #endif

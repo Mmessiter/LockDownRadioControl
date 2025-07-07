@@ -4542,10 +4542,109 @@ void ResetMotorTimer()
     }
 }
 
+// ************************************************************************************************************/
+void MotorEnabledHasChanged()
+{
+    if (MotorEnabled)
+    {
+        if (LedWasRed)
+        {
+            MotorEnabled = false;
+            SendNoData = false;
+            if ((millis() - WarningTimer) > 4000)
+            {
+                PlaySound(PLSTURNOFF);
+                SendNoData = true; // user turned on motor
+                WarningTimer = millis();
+            }
+            return;
+        }
+        ShowMotor(1);
+        if (AnnounceBanks)
+            PlaySound(MOTORON); // Tell the pilot motor is on!
+        if (UseLog)
+            LogMotor(1);
+        MotorStartTime = millis(); // Motor ON timerpause off
+    }
+    else
+    {
+        if (AnnounceBanks)
+            PlaySound(MOTOROFF);
+        SendNoData = false; // can send data!
+        if (UseLog)
+            LogMotor(0);
+        SendCommand(WarnOff);
+        ShowMotor(0); // Tell the pilot motor is off
+        if (SendNoData)
+        {
+            SendCommand(WarnOff);
+            SendNoData = false; // user turned off motor
+        }
+        PausedSecs = MotorOnSeconds; //    Motor OFF timerpause started
+    }
+    LastSeconds = 0;
+    ShowMotorTimer();
+}
+//************************************************************************************************************/
+void SafetySwitchChanged()
+{
+    if (SafetyON)
+    {
+        ShowSafetyIsOn();
+        SendNoData = false; // can send data!
+    }
+    else
+    {
+        ShowSafetyIsOff();
+    }
+    SafetyWasOn = SafetyON;
+}
+
+//************************************************************************************************************/
+// This function is called when the bank has changed
+void BankHasChanged()
+{
+#ifdef USE_STABILISATION // Switch stabilisation on or off by bank switch
+    CheckStabilisationAndSelf_levelling();
+#endif // USE_STABILISATION
+
+    if ((CurrentView == FRONTVIEW) || (CurrentView == TRIM_VIEW))
+    {
+        for (int pp = 0; pp < 4; ++pp)
+            LastTrim[Bank][pp] = 0; // force a trimview update
+        UpdateTrimView();
+    }
+    if (UseLog)
+        LogNewBank();
+    if (MotorEnabled == MotorWasEnabled)
+    { // When turning off motor, don't sound bank too.
+        if (AnnounceBanks)
+            SoundBank();
+    }
+    if (CurrentView == FRONTVIEW)
+    {
+        ShowBank();
+    }
+    else
+    {
+        UpdateModelsNameEveryWhere();
+    }
+    if (CurrentView == GRAPHVIEW)
+        DisplayCurveAndServoPos();
+    if (CurrentView == SLOWSERVOVIEW)
+    {
+        ReadSpeedsScreen(PreviousBank - 1);
+        UpdateSpeedScreen();
+    }
+    if (CurrentView == DUALRATESVIEW)
+    {
+        DisplayNewDualRateBank();
+    }
+}
+
 /************************************************************************************************************/
 void GetBank() // ... and the other three switches
 {
-
     if ((CurrentMode != NORMAL) && (CurrentMode != LISTENMODE))
         return; // not needed if calibrating
 
@@ -4560,212 +4659,25 @@ void GetBank() // ... and the other three switches
     ReadDualRateSwitch(); // only actually read hardware switches if not using wireless buddy box or if buddy has all switches
 
     if (SafetyWasOn != SafetyON)
-    {
-        if (SafetyON)
-        {
-            ShowSafetyIsOn();
-            SendNoData = false; // can send data!
-        }
-        else
-        {
-            ShowSafetyIsOff();
-        }
-
-        SafetyWasOn = SafetyON;
-    }
-
+        SafetySwitchChanged();
     if (SafetyON)
-    {
         MotorEnabled = false;
-    }
-
     if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill))
-    { // MotorEnabled changed ?
-        if (MotorEnabled)
-        {
-            if (LedWasRed)
-            {
-                MotorEnabled = false;
-                SendNoData = false;
-                if ((millis() - WarningTimer) > 4000)
-                {
-                    PlaySound(PLSTURNOFF);
-                    SendNoData = true; // user turned on motor
-                    WarningTimer = millis();
-                }
-                return;
-            }
-            ShowMotor(1);
-            if (AnnounceBanks)
-                PlaySound(MOTORON); // Tell the pilot motor is on!
-            if (UseLog)
-                LogMotor(1);
-            MotorStartTime = millis(); // Motor ON timerpause off
-        }
-        else
-        {
-            if (AnnounceBanks)
-                PlaySound(MOTOROFF);
-            SendNoData = false; // can send data!
-            if (UseLog)
-                LogMotor(0);
-            SendCommand(WarnOff);
-            ShowMotor(0); // Tell the pilot motor is off
-            if (SendNoData)
-            {
-                SendCommand(WarnOff);
-                SendNoData = false; // user turned off motor
-            }
-            PausedSecs = MotorOnSeconds; //    Motor OFF timerpause started
-        }
-        LastSeconds = 0;
-        ShowMotorTimer();
-    }
-
+        MotorEnabledHasChanged();
     ReadChannelSwitches9to12();
-
-    if (Bank != PreviousBank)
-    {
-
-#ifdef USE_STABILISATION // Switch stabilisation on or off
-
-        static bool PreviousStabilisedState;
-        static bool PreviousLevelledState;
-
-        if (Bank == StabilisedBank || StabilisedBank == 0)
-        {
-            {                                 // turn on stabilisation
-                if (!PreviousStabilisedState) // unless already on
-                {
-                    PreviousStabilisedState = true;
-                    SwitchStabilisation(PreviousStabilisedState);
-                }
-                {
-                    PreviousStabilisedState = true;
-                    SwitchStabilisation(PreviousStabilisedState);
-                }
-            }
-        }
-        else
-        {
-            if (PreviousStabilisedState) // turn off stabilisation if it was on
-            {
-                PreviousStabilisedState = false;
-                SwitchStabilisation(PreviousStabilisedState);
-            }
-        }
-
-        if (Bank == LevelledBank || LevelledBank == 0)
-        {                               // turn on levelling
-            if (!PreviousLevelledState) // unless already on
-            {
-                PreviousLevelledState = true;
-                SwitchLevelling(PreviousLevelledState);
-            }
-        }
-        else
-        {                              // turn off levelling if it was on
-            if (PreviousLevelledState) 
-            {
-                PreviousLevelledState = false;
-                SwitchLevelling(PreviousLevelledState);
-            }
-        }
-
-#endif // USE_STABILISATION
-
-        if ((CurrentView == FRONTVIEW) || (CurrentView == TRIM_VIEW))
-        {
-            for (int pp = 0; pp < 4; ++pp)
-                LastTrim[Bank][pp] = 0; // force a trimview update
-            UpdateTrimView();
-        }
-        if (UseLog)
-            LogNewBank();
-        if (MotorEnabled == MotorWasEnabled)
-        { // When turning off motor, don't sound bank too.
-            if (AnnounceBanks)
-                SoundBank();
-        }
-        if (CurrentView == FRONTVIEW)
-        {
-            ShowBank();
-        }
-        else
-        {
-            UpdateModelsNameEveryWhere();
-        }
-        if (CurrentView == GRAPHVIEW)
-            DisplayCurveAndServoPos();
-        if (CurrentView == SLOWSERVOVIEW)
-        {
-            ReadSpeedsScreen(PreviousBank - 1);
-            UpdateSpeedScreen();
-        }
-        if (CurrentView == DUALRATESVIEW)
-        {
-            DisplayNewDualRateBank();
-        }
-    }
+    if (Bank != PreviousBank) /// BANK HAS CHANGED ******************************************************************
+        BankHasChanged();
     MotorWasEnabled = MotorEnabled; // Remember motor state
     PreviousBank = Bank;            // Remember BANK
 }
 
-/************************************************************************************************************/
-void swap(uint8_t *a, uint8_t *b)
-{ // Just swap over two bytes, a & b :-)
-    uint8_t c;
-    c = *a;
-    *a = *b;
-    *b = c;
-}
 
-/************************************************************************************************************/
 
-void WarnUserOfVersionsMismatch()
-{
-    char TXVersionNumber[] = "Version mismatch!\r\n\r\nTX = ";
-    char RXVersionNumber[] = "\r\nRX = ";
-    char TheFix[] = "\r\nPlease update TX and/or RX \r\nto the same version.";
-    char Prompt[150];
-    char FrontView[] = "page FrontView";
-    strcpy(Prompt, TXVersionNumber);
-    strcat(Prompt, TransmitterVersionNumber);
-    strcat(Prompt, RXVersionNumber);
-    strcat(Prompt, ReceiverVersionNumber);
-    strcat(Prompt, TheFix); // Build up the prompt
-    PlaySound(WHAHWHAHMSG); // Play warning sound
-    MsgBox(FrontView, Prompt);
-    ForceDataRedisplay(); // force redisplay of data on FrontView
-    CurrentView = 255;    // force redisplay of data on FrontView
-    GotoFrontView();
-}
-
-/************************************************************************************************************/
-
-void CompareVersionNumbers()
-{ // Warn  user if TX and RX versions don't match - but ignore final letter
-
-    if (VersionsCompared)
-        return;
-    if ((strlen(ReceiverVersionNumber) > 11) || (ReceiverVersionNumber[1] != '.'))
-        return; // Too long etc for a version number. Probably binding data !
-    VersionsCompared = true;
-    for (int i = 0; i < 5; ++i)
-    {
-        if (ReceiverVersionNumber[i] != TransmitterVersionNumber[i])
-        { // Compare the two version numbers, but not the letter
-            WarnUserOfVersionsMismatch();
-            return;
-        }
-    }
-}
 
 /************************************************************************************************************/
 
 void GotoFrontView()
 {
-
     char fms[4][4] = {{"fm1"}, {"fm2"}, {"fm3"}, {"fm4"}};
     char FrontView_Connected[] = "Connected";
     PupilIsAlive = 0;
@@ -4991,20 +4903,6 @@ void CheckPowerOffButton()
         }
     }
     CheckingPowerButton = false;
-}
-/************************************************************************************************************/
-void ActuallySendParameters(uint32_t RightNow)
-{
-    static uint32_t LastParameterSent = 0;
-    if (RightNow - LastParameterSent >= PARAMETER_SEND_FREQUENCY)
-    {
-        ParamPause = false; // Reset pause flag to allow the parameters to be sent
-        LastParameterSent = RightNow;
-    }
-    else if (RightNow - LastParameterSent >= PARAMETER_SEND_DURATION) // it would just keep sending parameters so we must pause it for a while
-    {
-        ParamPause = true; // Pause sending parameters briefly so we can send data to control the model ! :-)
-    }
 }
 // /************************************************************************************************************/
 // This function checks if the model name has changed in ModelsView

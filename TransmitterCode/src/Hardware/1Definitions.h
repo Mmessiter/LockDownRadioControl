@@ -771,6 +771,9 @@ void SendStabilationParameters();
 void FactoryDefaultsPlane();
 void FactoryDefaultsHeli();
 void GetBank();
+void CheckStabilisationAndSelf_levelling();
+void SwitchLevelling(bool OnOff);
+void SwitchStabilisation(bool OnOff);
 #ifdef USE_BTLE
 void SendViaBLE();
 #endif
