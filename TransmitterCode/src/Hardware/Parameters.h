@@ -25,6 +25,20 @@ void AddParameterstoQueue(uint8_t ID) // this queue is essentially a LIFO stack
 
 //************************************************************************************************************/
 
+void SwitchLevelling(bool OnOff) // This function switches levelling on or off by bank selected
+{
+#ifdef USE_STABILISATION // Switch levelling on or off
+    char sw4[] = "sw4";  // Switch 4 is used for levelling on/off
+    SelfLevellingOn = OnOff;
+    AddParameterstoQueue(BOOLEANS);
+    AddParameterstoQueue(BOOLEANS); // just to make sure it really gets sent
+    if (CurrentView == PIDVIEW)
+        SendValue(sw4, SelfLevellingOn); // Send the value to the PID view
+#endif
+}
+
+//************************************************************************************************************/
+
 void SwitchStabilisation(bool OnOff) // This function switches stabilisation on or off by bank selected
 {
 #ifdef USE_STABILISATION // Switch stabilisation on or off
@@ -130,7 +144,7 @@ void LoadParameters()
         Parameters.word[1] = (uint16_t)StabilisationOn & 0x01;                 // Stabilisation On
         Parameters.word[2] = (uint16_t)SelfLevellingOn & 0x01;                 // Self Levelling On
         Parameters.word[3] = (uint16_t)ActiveSettings->UseKalmanFilter & 0x01; // Use Kalman Filter
-        Parameters.word[4] = (uint16_t)ActiveSettings->UseRateLPF & 0x01;      // Use Rate LFP
+        Parameters.word[4] = (uint16_t)ActiveSettings->UseRateLPF & 0x01;      // Use Rate LPF
         break;
     case RECALIBRATE_MPU6050: // 10 = Recalibrate MPU6050
         Parameters.word[1] = 42;

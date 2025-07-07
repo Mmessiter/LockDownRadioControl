@@ -4626,16 +4626,54 @@ void GetBank() // ... and the other three switches
 
     if (Bank != PreviousBank)
     {
+
 #ifdef USE_STABILISATION // Switch stabilisation on or off
+
+        static bool PreviousStabilisedState;
+        static bool PreviousLevelledState;
+
         if (Bank == StabilisedBank || StabilisedBank == 0)
         {
-            SwitchStabilisation(true); // Turn on stabilisation if bank changed
+            {                                 // turn on stabilisation
+                if (!PreviousStabilisedState) // unless already on
+                {
+                    PreviousStabilisedState = true;
+                    SwitchStabilisation(PreviousStabilisedState);
+                }
+                {
+                    PreviousStabilisedState = true;
+                    SwitchStabilisation(PreviousStabilisedState);
+                }
+            }
         }
         else
         {
-            SwitchStabilisation(false); // Turn off stabilisation if bank changed
+            if (PreviousStabilisedState) // turn off stabilisation if it was on
+            {
+                PreviousStabilisedState = false;
+                SwitchStabilisation(PreviousStabilisedState);
+            }
         }
+
+        if (Bank == LevelledBank || LevelledBank == 0)
+        {                               // turn on levelling
+            if (!PreviousLevelledState) // unless already on
+            {
+                PreviousLevelledState = true;
+                SwitchLevelling(PreviousLevelledState);
+            }
+        }
+        else
+        {                              // turn off levelling if it was on
+            if (PreviousLevelledState) 
+            {
+                PreviousLevelledState = false;
+                SwitchLevelling(PreviousLevelledState);
+            }
+        }
+
 #endif // USE_STABILISATION
+
         if ((CurrentView == FRONTVIEW) || (CurrentView == TRIM_VIEW))
         {
             for (int pp = 0; pp < 4; ++pp)

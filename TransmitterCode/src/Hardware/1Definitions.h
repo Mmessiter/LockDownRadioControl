@@ -770,6 +770,7 @@ void SDUpdateFLOAT(int p_address, float p_value);
 void SendStabilationParameters();
 void FactoryDefaultsPlane();
 void FactoryDefaultsHeli();
+void GetBank();
 #ifdef USE_BTLE
 void SendViaBLE();
 #endif
@@ -1216,6 +1217,7 @@ float LastRXTemperature = 0;
 uint8_t RadioNumber = 0;
 uint32_t LastRXReceivedPackets = 0;
 uint8_t StabilisedBank = 3;
+uint8_t LevelledBank = 3; // 3
 
 char ParaNames[11][30] = {
     "FailSafe positions",

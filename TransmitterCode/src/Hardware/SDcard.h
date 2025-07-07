@@ -418,8 +418,8 @@ bool ReadOneModel(uint32_t Mnum)
     ++SDCardAddress;
     ++SDCardAddress;
     StabilisedBank = SDRead8BITS(SDCardAddress);
-
     ++SDCardAddress;
+    LevelledBank = SDRead8BITS(SDCardAddress); 
     ++SDCardAddress;
     ++SDCardAddress;
 
@@ -1374,6 +1374,7 @@ void SaveOneModel(uint32_t mnum)
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, StabilisedBank);
     ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, LevelledBank);
     ++SDCardAddress;
     ++SDCardAddress;
     for (i = 0; i < 16; ++i)

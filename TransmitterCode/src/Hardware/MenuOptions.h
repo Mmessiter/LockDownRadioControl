@@ -1081,6 +1081,7 @@ void RXOptionsViewStart() // model options screen
     char n4[] = "n4"; // TimerDownwards timer minutes
     char c2[] = "c2"; // TimerDownwards timer on off
     char n5[] = "n5"; // Banks to stabilize
+    char n6[] = "n6"; // Levelled bank
 
     SendCommand(pRXSetup1);
     SendValue(c1, CopyTrimsToAll);
@@ -1094,6 +1095,7 @@ void RXOptionsViewStart() // model options screen
     SendValue(c2, TimerDownwards);
     SendValue(n4, TimerStartTime / 60);
     SendValue(n5, StabilisedBank);
+    SendValue(n6, LevelledBank);
 
     CurrentView = RXSETUPVIEW1;
     UpdateModelsNameEveryWhere();
@@ -1114,6 +1116,7 @@ void RXOptionsViewEnd()
     char n4[] = "n4"; // TimerDownwards timer minutes
     char c2[] = "c2"; // TimerDownwards timer on off
     char n5[] = "n5"; // Banks to stabilize
+    char n6[] = "n6"; // Levelled bank
 
     char ProgressStart[] = "vis Progress,1";
     char Progress[] = "Progress";
@@ -1191,11 +1194,19 @@ void RXOptionsViewEnd()
         Altered = true;
         SendValue(Progress, 80);
     }
+    if (InStrng(n6, chgs) || ModelMatched)
+    {
+        LevelledBank = GetValue(n6);
+        Altered = true;
+        SendValue(Progress, 90);
+    }
 
     SendValue(Progress, 100);
     CurrentView = RXSETUPVIEW;
     if (Altered)
     {
+        PreviousBank = 42;
+        GetBank();
         SaveOneModel(ModelNumber);
         SendText(change, cleared);
     }
