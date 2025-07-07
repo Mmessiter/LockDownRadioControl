@@ -263,7 +263,7 @@ float beta = 0.05f;
 bool StabilisationOn = false;
 bool SelfLevellingOn = false;
 bool UseKalmanFilter = false;
-bool UseRateLFP = false;
+bool UseRateLPF = false;
 
 /************************************************************************************************************/
 

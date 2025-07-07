@@ -133,7 +133,7 @@ void PerformMPU6050Calibration() // Calibrate and save result
   CalibrationRollReading = atan2(avgAccY, sqrt(avgAccX * avgAccX + avgAccZ * avgAccZ)) * 180.0f / M_PI;
   CalibrationPitchReading = atan2(-avgAccX, sqrt(avgAccY * avgAccY + avgAccZ * avgAccZ)) * 180.0f / M_PI;
   SaveMPU6050CalibrationDataToEEPROM();       // Save calibration data to EEPROM
-  delay(1000);                                // Brief pause to ensure EEPROM flash write completes before re-read
+  delay(100);                                 // Brief pause to ensure EEPROM flash write completes before re-read
   if (LoadMPU6050CalibrationDataFromEEPROM()) // check by reading it back.
   {
     TurnLedOff(); // Turn off the LED after calibration. This indicates success.
@@ -288,7 +288,7 @@ void GetCurrentAttitude()
     filteredRoll = RawRollAngle;
     filteredPitch = RawPitchAngle;
   }
-  if (UseRateLFP)
+  if (UseRateLPF)
   {
     filterRatesForHelicopter();
   }
@@ -297,7 +297,7 @@ void GetCurrentAttitude()
   if (++counter > 6)
   {
     // PlotRates();
-    PlotAttitude(); // Print the attitude to the Serial Plotter
+    // PlotAttitude(); // Print the attitude to the Serial Plotter
     counter = 0;
   }
 }

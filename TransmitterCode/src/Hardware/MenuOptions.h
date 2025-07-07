@@ -1307,7 +1307,7 @@ void DisplayStabilisationScreenData()
     SendText(t20, temp);
     SendValue(sw0, StabilisationOn);
     SendValue(sw3, ActiveSettings->UseKalmanFilter);
-    SendValue(sw2, ActiveSettings->UseRateLFP);
+    SendValue(sw2, ActiveSettings->UseRateLPF);
     SendValue(sw4, SelfLevellingOn);
 }
 /******************************************************************************************************************************/
@@ -1385,7 +1385,7 @@ void ReadStabilisationParameters()
     SendValue(Progress, 90);
     ActiveSettings->UseKalmanFilter = GetValue(sw3);
     SendValue(Progress, 100);
-    ActiveSettings->UseRateLFP = GetValue(sw2);
+    ActiveSettings->UseRateLPF = GetValue(sw2);
     SendCommand(ProgressEnd);
     SendCommand(vis); // show the model name again
 }

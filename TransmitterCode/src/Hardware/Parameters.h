@@ -49,8 +49,8 @@ void SendStabilationParameters() // This function sends the parameters that are 
 }
 
 /*********************************************************************************************************************************/
-void SendInitialSetupParams() // This function sends the initial setup parameters.
-{ // Failsafe and stabilisation parameters are NOT sent here because they are sent separately
+void SendInitialSetupParams()                 // This function sends the initial setup parameters.
+{                                             // Failsafe and stabilisation parameters are NOT sent here because they are sent separately
     SendStabilationParameters();              // Send the parameters that are used for stabilisation ... if its enabled
     AddParameterstoQueue(SERVO_PULSE_WIDTHS); // Servo Pulse Widths 7
     AddParameterstoQueue(SERVO_FREQUENCIES);  // Servo Frequencies 6
@@ -130,7 +130,7 @@ void LoadParameters()
         Parameters.word[1] = (uint16_t)StabilisationOn & 0x01;                 // Stabilisation On
         Parameters.word[2] = (uint16_t)SelfLevellingOn & 0x01;                 // Self Levelling On
         Parameters.word[3] = (uint16_t)ActiveSettings->UseKalmanFilter & 0x01; // Use Kalman Filter
-        Parameters.word[4] = (uint16_t)ActiveSettings->UseRateLFP & 0x01;      // Use Rate LFP
+        Parameters.word[4] = (uint16_t)ActiveSettings->UseRateLPF & 0x01;      // Use Rate LFP
         break;
     case RECALIBRATE_MPU6050: // 10 = Recalibrate MPU6050
         Parameters.word[1] = 42;
@@ -173,7 +173,7 @@ void LoadRawDataWithParameters()
 int GetExtraParameters() // This gets extra parameters ready for sending and returns the number that will be sent.
 {                        // Only the >>LOW 12 BITS<< of each parameter are actually sent because of compression which loses the highest 4 bits
 
-    Parameters.ID = ParametersToBeSent[ParametersToBeSentPointer]; 
+    Parameters.ID = ParametersToBeSent[ParametersToBeSentPointer];
     if ((Parameters.ID == 0) || (Parameters.ID > PARAMETERS_MAX_ID))
     {
         Look1("Parameter error: ID is ");
