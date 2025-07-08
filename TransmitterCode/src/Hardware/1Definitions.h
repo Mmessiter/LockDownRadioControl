@@ -1327,20 +1327,20 @@ struct StabilisationSettings
 };
 
 StabilisationSettings RateSettings = {
-    0.05f,  // PID_P
-    0.00f,  // PID_I
-    0.002f, // PID_D
-    0.05f,  // Tail_PID_P
-    0.00f,  // Tail_PID_I
-    0.002f, // Tail_PID_D
-    0.001f, // Kalman_Q_angle
-    0.003f, // Kalman_Q_bias
-    0.03f,  // Kalman_R_measure
-    0.05f,  // alpha
-    0.05f,  // beta
-    true,   // UseKalmanFilter
-    true,   // UseRateLPF
-    PID_MARKER_VALUE,
+    0.05f,            // PID_P
+    0.00f,            // PID_I
+    0.002f,           // PID_D
+    0.05f,            // Tail_PID_P
+    0.00f,            // Tail_PID_I
+    0.002f,           // Tail_PID_D
+    0.001f,           // Kalman_Q_angle
+    0.003f,           // Kalman_Q_bias
+    0.03f,            // Kalman_R_measure
+    0.05f,            // alpha
+    0.05f,            // beta
+    true,             // UseKalmanFilter
+    true,             // UseRateLPF
+    PID_MARKER_VALUE, // Marker
 };
 
 StabilisationSettings SelfLevelSettings = {
@@ -1366,36 +1366,36 @@ StabilisationSettings *SavedActiveSettings = ActiveSettings;
 // Factory defaults for stabilisation settings
 
 StabilisationSettings FactoryHeliRate = {
-    0.10f,  // PID_P
-    0.00f,  // PID_I
-    0.004f, // PID_D
-    0.10f,  // Tail_PID_P
-    0.00f,  // Tail_PID_I
-    0.004f, // Tail_PID_D
-    0.001f,
-    0.003f,
-    0.03f,
-    0.04f,
-    0.04f,
-    true, // Kalman ON to start
-    true,
+    0.10f,            // PID_P
+    0.00f,            // PID_I
+    0.004f,           // PID_D
+    0.10f,            // Tail_PID_P
+    0.00f,            // Tail_PID_I
+    0.004f,           // Tail_PID_D
+    0.001f,           // Kalman_Q_angle
+    0.003f,           // Kalman_Q_bias
+    0.03f,            // Kalman_R_measure
+    0.04f,            // alpha
+    0.04f,            // beta
+    true,             // UseKalmanFilter
+    true,             // UseRateLPF
     PID_MARKER_VALUE, // Marker
 };
 
 StabilisationSettings FactoryHeliLevelling = {
-    3.0f,  // PID_P
-    0.08f, // PID_I
-    0.03f, // PID_D
-    3.0f,  // Tail_PID_P
-    0.08f, // Tail_PID_I
-    0.03f, // Tail_PID_D
-    0.001f,
-    0.003f,
-    0.03f,
-    0.04f,
-    0.04f,
-    true, // Kalman ON to start
-    false,
+    3.0f,             // PID_P
+    0.08f,            // PID_I
+    0.03f,            // PID_D
+    3.0f,             // Tail_PID_P
+    0.08f,            // Tail_PID_I
+    0.03f,            // Tail_PID_D
+    0.001f,           // Kalman_Q_angle
+    0.003f,           // Kalman_Q_bias
+    0.03f,            // Kalman_R_measure
+    0.04f,            // alpha
+    0.04f,            // beta
+    true,             // UseKalmanFilter
+    false,            // UseRateLPF
     PID_MARKER_VALUE, // Marker
 };
 
@@ -1417,19 +1417,19 @@ StabilisationSettings FactoryPlaneRate = {
 };
 
 StabilisationSettings FactoryPlaneLevelling = {
-    2.0f,  // PID_P
-    0.05f, // PID_I
-    0.02f, // PID_D
-    2.0f,  // Tail_PID_P
-    0.05f, // Tail_PID_I
-    0.02f, // Tail_PID_D
-    0.001f,
-    0.003f,
-    0.03f,
-    0.05f,
-    0.05f,
-    true,             // Kalman ON to start
-    false,            // UseRateLPF off
+    2.0f,             // PID_P
+    0.05f,            // PID_I
+    0.02f,            // PID_D
+    2.0f,             // Tail_PID_P
+    0.05f,            // Tail_PID_I
+    0.02f,            // Tail_PID_D
+    0.001f,           // Kalman_Q_angle
+    0.003f,           // Kalman_Q_bias
+    0.03f,            // Kalman_R_measure
+    0.05f,            // alpha
+    0.05f,            // beta
+    true,             // UseKalmanFilter
+    false,            // UseRateLPF 
     PID_MARKER_VALUE, // Marker
 };
 
