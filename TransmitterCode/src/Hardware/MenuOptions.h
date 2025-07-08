@@ -43,7 +43,7 @@ void SystemPage1End()
     char Bwn[] = "Bwn";
     char n0[] = "n0";
     char ScreenViewTimeout[] = "Sto"; // needed for display info
-    char Pto[] = "Pto";               // heer
+    char Pto[] = "Pto";
     bool Altered = false;
     char chgs[512];
     char change[] = "change";
@@ -201,7 +201,7 @@ void FixCHNames() // channel names on Mix screen now with Bank name and enabled 
     SendText(MixesView_chS, ChannelNames[ScreenData[SLAVECHANNEL] - 1]);  // show slave channel
     if (ScreenData[BANK] > 0)
     {
-        SendText(BankNameLable, BankTexts[BanksInUse[ScreenData[BANK] - 1]]); // Show bank name
+        SendText(BankNameLable, BankNames[BanksInUse[ScreenData[BANK] - 1]]); // Show bank name
     }
     else
     {
@@ -1280,32 +1280,22 @@ void EndServoTypeView()
     GotoFrontView();
 }
 // ******************************************************************************************************************************/
-void DisplayStabilisationScreenData()
+void DisplayKalmanScreenData()
 {
-    char sw0[] = "sw0"; // Stabilisation on off
-    char sw4[] = "sw4"; // Self-levelling on off
-    char sw3[] = "sw3"; // Use Kalman filter
-    char sw2[] = "sw2"; // Use rate LFP
-    char t9[] = "t9";   // PID P
-    char t14[] = "t14"; // PID I
-    char t15[] = "t15"; // PID D
     char t16[] = "t16"; // PID Q_angle
     char t17[] = "t17"; // PID Q_bias
     char t18[] = "t18"; // PID R_measure
     char t19[] = "t19"; // alpha
     char t20[] = "t20"; // beta
+    char sw3[] = "sw3"; // Use Kalman filter
+    char sw2[] = "sw2"; // Use rate LFP
 
     char temp[10];
     if (SelfLevellingOn)
         ActiveSettings = &SelfLevelSettings;
     else
         ActiveSettings = &RateSettings;
-    dtostrf(ActiveSettings->PID_P, 1, 3, temp);
-    SendText(t9, temp);
-    dtostrf(ActiveSettings->PID_I, 1, 3, temp);
-    SendText(t14, temp);
-    dtostrf(ActiveSettings->PID_D, 1, 3, temp);
-    SendText(t15, temp);
+
     dtostrf(ActiveSettings->Kalman_Q_angle, 1, 3, temp);
     SendText(t16, temp);
     dtostrf(ActiveSettings->Kalman_Q_bias, 1, 3, temp);
@@ -1316,75 +1306,80 @@ void DisplayStabilisationScreenData()
     SendText(t19, temp);
     dtostrf(ActiveSettings->beta, 1, 3, temp);
     SendText(t20, temp);
-    SendValue(sw0, StabilisationOn);
     SendValue(sw3, ActiveSettings->UseKalmanFilter);
     SendValue(sw2, ActiveSettings->UseRateLPF);
-    SendValue(sw4, SelfLevellingOn);
 }
-/******************************************************************************************************************************/
 
-void StabilisationScreenStart()
-{
-#ifdef USE_STABILISATION
-    char t10[] = "t10";    // Model name
-    SendCommand(pPIDView); // load the PID scre
-    CurrentView = PIDVIEW;
-    DisplayStabilisationScreenData();
-    SendText(t10, ModelName); // display the model name
-#else
-    MsgBox(pRXSetupView, (char *)"Stabilisation is off in this build!");
-#endif
-}
 // ******************************************************************************************************************************/
-void ReadStabilisationParameters()
+void DisplayPIDScreenData()
 {
-    // we need to get the values from the Nextion display
-    char Invis[] = "vis t10,0";
-    char vis[] = "vis t10,1";
     char sw0[] = "sw0"; // Stabilisation on off
     char sw4[] = "sw4"; // Self-levelling on off
-    char sw3[] = "sw3"; // Use Kalman filter
-    char sw2[] = "sw2"; // Use rate LFP
     char t9[] = "t9";   // PID P
     char t14[] = "t14"; // PID I
     char t15[] = "t15"; // PID D
-    char t16[] = "t16"; // PID Q_angle
-    char t17[] = "t17"; // PID Q_bias
-    char t18[] = "t18"; // PID R_measure
-    char t19[] = "t19"; // alpha
-    char t20[] = "t20"; // beta
-    char temp[16];
+    char t17[] = "t17"; // Bank
+    char t4[] = "t4";   // PID Tail
+    char t5[] = "t5";   //
+    char t6[] = "t6";   //
+    char temp[10];
 
-    char ProgressStart[] = "vis Progress,1"; // heer
-    char ProgressEnd[] = "vis Progress,0";
-    char Progress[] = "Progress";
+    // Look1("Showing: "); // debug check the self-levelling status
+    // Look(SelfLevellingOn);
+    // Look1("");
 
-    SendCommand(Invis); // hide the model name
-
-    SendCommand(ProgressStart);
-
-    SelfLevellingOn = GetValue(sw4);
     if (SelfLevellingOn)
         ActiveSettings = &SelfLevelSettings;
     else
         ActiveSettings = &RateSettings;
-    GetText(t9, temp);
-    SendValue(Progress, 10);
-    ActiveSettings->PID_P = atof(temp);
-    GetText(t14, temp);
-    SendValue(Progress, 20);
-    ActiveSettings->PID_I = atof(temp);
-    GetText(t15, temp);
-    SendValue(Progress, 30);
-    ActiveSettings->PID_D = atof(temp);
+
+    dtostrf(ActiveSettings->PID_P, 1, 3, temp);
+    SendText(t9, temp);
+    dtostrf(ActiveSettings->PID_I, 1, 3, temp);
+    SendText(t14, temp);
+    dtostrf(ActiveSettings->PID_D, 1, 3, temp);
+    SendText(t15, temp);
+    dtostrf(ActiveSettings->Tail_PID_P, 1, 3, temp);
+    SendText(t4, temp);
+    dtostrf(ActiveSettings->Tail_PID_I, 1, 3, temp);
+    SendText(t5, temp);
+    dtostrf(ActiveSettings->Tail_PID_D, 1, 3, temp);
+    SendText(t6, temp);
+    SendValue(sw0, StabilisationOn);
+    SendValue(sw4, SelfLevellingOn);
+    SendText(t17, BankNames[BanksInUse[Bank - 1]]); // display the bank name
+}
+// ******************************************************************************************************************************/
+void ReadKalmanSettings()
+{
+    // we need to get the values from the Nextion display
+    char Invis[] = "vis t10,0";
+    char vis[] = "vis t10,1";
+    char sw3[] = "sw3"; // Use Kalman filter
+    char sw2[] = "sw2"; // Use rate LFP
+    char t16[] = "t16"; //  Q_angle
+    char t17[] = "t17"; //  Q_bias
+    char t18[] = "t18"; //  R_measure
+    char t19[] = "t19"; // alpha
+    char t20[] = "t20"; // beta
+    char temp[16];
+    char ProgressStart[] = "vis Progress,1";
+    char ProgressEnd[] = "vis Progress,0";
+    char Progress[] = "Progress";
+    SendCommand(Invis); // hide the model name
+    SendCommand(ProgressStart);
+    if (SelfLevellingOn)
+        ActiveSettings = &SelfLevelSettings;
+    else
+        ActiveSettings = &RateSettings;
     GetText(t16, temp);
-    SendValue(Progress, 40);
+    SendValue(Progress, 10);
     ActiveSettings->Kalman_Q_angle = atof(temp);
     GetText(t17, temp);
-    SendValue(Progress, 50);
+    SendValue(Progress, 20);
     ActiveSettings->Kalman_Q_bias = atof(temp);
     GetText(t18, temp);
-    SendValue(Progress, 60);
+    SendValue(Progress, 50);
     ActiveSettings->Kalman_R_measure = atof(temp);
     GetText(t19, temp);
     SendValue(Progress, 70);
@@ -1392,7 +1387,6 @@ void ReadStabilisationParameters()
     GetText(t20, temp);
     SendValue(Progress, 80);
     ActiveSettings->beta = atof(temp);
-    StabilisationOn = GetValue(sw0);
     SendValue(Progress, 90);
     ActiveSettings->UseKalmanFilter = GetValue(sw3);
     SendValue(Progress, 100);
@@ -1400,13 +1394,103 @@ void ReadStabilisationParameters()
     SendCommand(ProgressEnd);
     SendCommand(vis); // show the model name again
 }
+/******************************************************************************************************************************/
+void KalmanScreenStart()
+{
+#ifdef USE_STABILISATION
+    char t10[] = "t10";       // Model name
+    ReadPIDScreenData();      // display the PID screen data
+    SendCommand(pKalmanView); // load the Kalman scre
+    CurrentView = KALMANVIEW;
+    DisplayKalmanScreenData();
+    SendText(t10, ModelName); // display the model name
+
+#endif
+}
+// ******************************************************************************************************************************/
+void KalmanScreenEnd()
+{
+    ReadKalmanSettings();
+    SaveOneModel(ModelNumber); // save the values to the model.
+    SendCommand(pPIDView);
+    CurrentView = PIDVIEW;
+    DisplayPIDScreenData(); // display the PID screen data
+    if (ModelMatched && BoundFlag)
+    {
+        SendStabilationParameters();
+    }
+}
+
+// ******************************************************************************************************************************/
+void PIDScreenStart()
+{
+#ifdef USE_STABILISATION
+    char t10[] = "t10";    // Model name
+    SendCommand(pPIDView); // load the PID scre
+    CurrentView = PIDVIEW;
+    DisplayPIDScreenData();
+    SendText(t10, ModelName); // display the model name
+#else
+    MsgBox(pRXSetupView, (char *)"Stabilisation is off in this build!");
+#endif
+}
+// ******************************************************************************************************************************/
+void ReadPIDScreenData()
+{
+    // we need to get the values from the Nextion display
+    char Invis[] = "vis t10,0";
+    char vis[] = "vis t10,1";
+    char sw0[] = "sw0"; // Stabilisation on off
+    char t9[] = "t9";   // PID P
+    char t14[] = "t14"; // PID I
+    char t15[] = "t15"; // PID D
+    char t4[] = "t4";   // PID Tail P
+    char t5[] = "t5";   // PID Tail I
+    char t6[] = "t6";   // PID Tail D
+    char temp[16];
+    char ProgressStart[] = "vis Progress,1";
+    char ProgressEnd[] = "vis Progress,0";
+    char Progress[] = "Progress";
+
+    SendCommand(Invis); // hide the model name
+    SendCommand(ProgressStart);
+    StabilisationOn = GetValue(sw0);
+    // Look1("Reading : ");
+    // Look(SelfLevellingOn); // Debug check the SelfLevellingOn flag
+
+    if (SelfLevellingOn)
+        ActiveSettings = &SelfLevelSettings;
+    else
+        ActiveSettings = &RateSettings;
+
+    SendValue(Progress, 10);
+    GetText(t9, temp);
+    ActiveSettings->PID_P = atof(temp);
+    SendValue(Progress, 20);
+    GetText(t14, temp);
+    ActiveSettings->PID_I = atof(temp);
+    SendValue(Progress, 30);
+    GetText(t15, temp);
+    ActiveSettings->PID_D = atof(temp);
+    SendValue(Progress, 40);
+    GetText(t4, temp);
+    ActiveSettings->Tail_PID_P = atof(temp);
+    SendValue(Progress, 50);
+    GetText(t5, temp);
+    ActiveSettings->Tail_PID_I = atof(temp);
+    SendValue(Progress, 65);
+    GetText(t6, temp);
+    ActiveSettings->Tail_PID_D = atof(temp);
+    SendValue(Progress, 100);
+    SendCommand(ProgressEnd);
+    SendCommand(vis); // show the model name again
+}
 
 /******************************************************************************************************************************/
 
-void StabilisationScreenEnd()
+void PIDScreenEnd()
 {
-
-    ReadStabilisationParameters();
+    ReadPIDScreenData();
     SaveOneModel(ModelNumber); // save the values to the model.
     SendCommand(pRXSetupView);
     if (ModelMatched && BoundFlag)
@@ -1439,7 +1523,7 @@ void GyroApply()
         MsgBox(pPIDView, (char *)"Model not connected!");
         return;
     }
-    ReadStabilisationParameters();
+    ReadPIDScreenData();
     SendStabilationParameters();
 }
 

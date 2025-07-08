@@ -265,6 +265,7 @@
 #define SERVOTYPESVIEW 41
 #define LOGFILESLISTVIEW 42
 #define PIDVIEW 43
+#define KALMANVIEW 44
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -759,8 +760,8 @@ void ReadGainsKnob();
 uint8_t GetSwitchPosition(uint8_t Sw_Number);
 FASTRUN void LogAverageGap();
 void ReadChannelSwitches9to12();
-void StabilisationScreenStart();
-void StabilisationScreenEnd();
+void PIDScreenStart();
+void PIDScreenEnd();
 void GyroApply();
 void CalibrateMPU6050();
 int GetExtraParameters();
@@ -774,6 +775,9 @@ void GetBank();
 void CheckStabilisationAndSelf_levelling();
 void SwitchLevelling(bool OnOff);
 void SwitchStabilisation(bool OnOff);
+void KalmanScreenStart();
+void KalmanScreenEnd();
+void ReadPIDScreenData();
 #ifdef USE_BTLE
 void SendViaBLE();
 #endif
@@ -859,7 +863,7 @@ uint32_t LastPacketSentTime = 0;
 uint8_t Bank = 1;
 // User defined bank names zone
 // ************************************** 0                  1                 2                  3                4          5           6           7          8                9        10          11       12        13             14            15          16          17      18        19           20         21     22           23         24         25          26           27        ***
-char BankTexts[28][14] = {{"Flight mode 1"}, {"Flight mode 2"}, {"Flight mode 3"}, {"Flight mode 4"}, {"Bank 1"}, {"Bank 2"}, {"Bank 3"}, {"Bank 4"}, {"Aerobatics"}, {"Auto"}, {"Cruise"}, {"Flaps"}, {"Hover"}, {"Idle up 1"}, {"Idle up 2"}, {"Landing"}, {"Launch"}, {"Normal"}, {"Speed"}, {"Takeoff"}, {"Thermal"}, {"Hold"}, {"3D"}, {"Brakes"}, {"Stunt 1"}, {"Stunt 2"}, {"Gear up"}, {"Gear down"}};
+char BankNames[28][14] = {{"Flight mode 1"}, {"Flight mode 2"}, {"Flight mode 3"}, {"Flight mode 4"}, {"Bank 1"}, {"Bank 2"}, {"Bank 3"}, {"Bank 4"}, {"Aerobatics"}, {"Auto"}, {"Cruise"}, {"Flaps"}, {"Hover"}, {"Idle up 1"}, {"Idle up 2"}, {"Landing"}, {"Launch"}, {"Normal"}, {"Speed"}, {"Takeoff"}, {"Thermal"}, {"Hold"}, {"3D"}, {"Brakes"}, {"Stunt 1"}, {"Stunt 2"}, {"Gear up"}, {"Gear down"}};
 uint8_t BankSounds[28] = {BFM1, BFM2, BFM3, BFM4, BANKONE, BANKTWO, BANKTHREE, BANKFOUR, AEROBATICS, AUTO, CRUISE, FLAPS, HOVER, IDLE1, IDLE2, LANDING, LAUNCH, NORMALB, SPEED, TAKEOFF, THERMAL, THRHOLD, THREEDEE, AIRBRAKES, STUNT1, STUNT2, WHEELSDOWN, WHEELSUP};
 uint8_t BanksInUse[4] = {0, 1, 2, 3};
 uint8_t PreviousBank = 1;
@@ -1273,6 +1277,7 @@ char pPopupView[] = "page PopupView";
 char pBlankView[] = "page BlankView";
 char pWaitView[30]; // the saved page where wait was started
 char pPIDView[] = "page PIDView";
+char pKalmanView[] = "page KalmanView";
 char WaitText[] = "Just a Minute! ... ";
 int Previous_Current_Y = 0; // for scrolling log file
 int Max_Y = 666;
@@ -1301,11 +1306,16 @@ bool StabilisationOn = false;
 bool SelfLevellingOn = false;
 bool ParamPause = false;
 
+#define PID_MARKER_VALUE 253 // Marker value for settings
+
 struct StabilisationSettings
 {
     float PID_P;
     float PID_I;
     float PID_D;
+    float Tail_PID_P;
+    float Tail_PID_I;
+    float Tail_PID_D;
     float Kalman_Q_angle;
     float Kalman_Q_bias;
     float Kalman_R_measure;
@@ -1313,12 +1323,16 @@ struct StabilisationSettings
     float beta;
     bool UseKalmanFilter;
     bool UseRateLPF;
+    uint8_t Marker = PID_MARKER_VALUE;
 };
 
 StabilisationSettings RateSettings = {
     0.05f,  // PID_P
     0.00f,  // PID_I
     0.002f, // PID_D
+    0.05f,  // Tail_PID_P
+    0.00f,  // Tail_PID_I
+    0.002f, // Tail_PID_D
     0.001f, // Kalman_Q_angle
     0.003f, // Kalman_Q_bias
     0.03f,  // Kalman_R_measure
@@ -1326,19 +1340,24 @@ StabilisationSettings RateSettings = {
     0.05f,  // beta
     true,   // UseKalmanFilter
     true,   // UseRateLPF
+    PID_MARKER_VALUE,
 };
 
 StabilisationSettings SelfLevelSettings = {
-    2.0f,   // PID_P
-    0.1f,   // PID_I
-    0.01f,  // PID_D
-    0.001f, // Kalman_Q_angle
-    0.003f, // Kalman_Q_bias
-    0.03f,  // Kalman_R_measure
-    0.05f,  // alpha
-    0.05f,  // beta
-    true,   // UseKalmanFilter
-    false,  // UseRateLPF
+    2.0f,             // PID_P
+    0.1f,             // PID_I
+    0.01f,            // PID_D
+    2.0f,             // Tail_PID_P
+    0.1f,             // Tail_PID_I
+    0.01f,            // Tail_PID_D
+    0.001f,           // Kalman_Q_angle
+    0.003f,           // Kalman_Q_bias
+    0.03f,            // Kalman_R_measure
+    0.05f,            // alpha
+    0.05f,            // beta
+    true,             // UseKalmanFilter
+    false,            // UseRateLPF
+    PID_MARKER_VALUE, // Marker
 };
 StabilisationSettings *ActiveSettings = &RateSettings;
 StabilisationSettings *SavedActiveSettings = ActiveSettings;
@@ -1350,6 +1369,9 @@ StabilisationSettings FactoryHeliRate = {
     0.10f,  // PID_P
     0.00f,  // PID_I
     0.004f, // PID_D
+    0.10f,  // Tail_PID_P
+    0.00f,  // Tail_PID_I
+    0.004f, // Tail_PID_D
     0.001f,
     0.003f,
     0.03f,
@@ -1357,12 +1379,16 @@ StabilisationSettings FactoryHeliRate = {
     0.04f,
     true, // Kalman ON to start
     true,
+    PID_MARKER_VALUE, // Marker
 };
 
 StabilisationSettings FactoryHeliLevelling = {
     3.0f,  // PID_P
     0.08f, // PID_I
     0.03f, // PID_D
+    3.0f,  // Tail_PID_P
+    0.08f, // Tail_PID_I
+    0.03f, // Tail_PID_D
     0.001f,
     0.003f,
     0.03f,
@@ -1370,32 +1396,41 @@ StabilisationSettings FactoryHeliLevelling = {
     0.04f,
     true, // Kalman ON to start
     false,
+    PID_MARKER_VALUE, // Marker
 };
 
 StabilisationSettings FactoryPlaneRate = {
-    0.05f,  // PID_P
-    0.00f,  // PID_I
-    0.002f, // PID_D
-    0.001f, // Kalman_Q_angle
-    0.003f, // Kalman_Q_bias
-    0.03f,  // Kalman_R_measure
-    0.05f,  // alpha
-    0.05f,  // beta
-    true,   // UseKalmanFilter
-    true,   // UseRateLPF
+    0.05f,            // PID_P
+    0.00f,            // PID_I
+    0.002f,           // PID_D
+    0.05f,            // Tail_PID_P
+    0.00f,            // Tail_PID_I
+    0.002f,           // Tail_PID_D
+    0.001f,           // Kalman_Q_angle
+    0.003f,           // Kalman_Q_bias
+    0.03f,            // Kalman_R_measure
+    0.05f,            // alpha
+    0.05f,            // beta
+    true,             // UseKalmanFilter
+    true,             // UseRateLPF
+    PID_MARKER_VALUE, // Marker
 };
 
 StabilisationSettings FactoryPlaneLevelling = {
     2.0f,  // PID_P
     0.05f, // PID_I
     0.02f, // PID_D
+    2.0f,  // Tail_PID_P
+    0.05f, // Tail_PID_I
+    0.02f, // Tail_PID_D
     0.001f,
     0.003f,
     0.03f,
     0.05f,
     0.05f,
-    true,  // Kalman ON to start
-    false, // UseRateLPF off
+    true,             // Kalman ON to start
+    false,            // UseRateLPF off
+    PID_MARKER_VALUE, // Marker
 };
 
 // **********************************************************************************************************************************

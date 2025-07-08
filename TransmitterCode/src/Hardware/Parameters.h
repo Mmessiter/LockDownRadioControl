@@ -220,10 +220,11 @@ void ShowSendingParameters()
 // This function is called when the Self Levelling button is pressed on the Nextion screen.
 void SelfLevellingChange()
 {
-#ifdef USE_STABILISATION              // Switch stabilisation on or off
-    ReadStabilisationParameters();    // in case the values were changed on the screen
-    DisplayStabilisationScreenData(); // show the new values on the screen (having changed the SelfLevellingOn value)
-#endif                                // USE_STABILISATION
+#ifdef USE_STABILISATION                // Switch stabilisation on or off
+    ReadPIDScreenData();                // in case the values were changed on the screen
+    SelfLevellingOn = !SelfLevellingOn; // toggle the self-levelling on/off state
+    DisplayPIDScreenData();             // show the new values on the screen (having changed the SelfLevellingOn value)
+#endif                                  // USE_STABILISATION
 }
 //************************************************************************************************************/
 void FactoryDefaultsPlane()
@@ -233,8 +234,9 @@ void FactoryDefaultsPlane()
         ActiveSettings = &RateSettings; // set the active settings to the rate settings
         RateSettings = FactoryPlaneRate;
         SelfLevelSettings = FactoryPlaneLevelling;
-        SelfLevellingOn = false; // defaults are always without self-levelling
-        DisplayStabilisationScreenData();
+        SelfLevellingOn = false;                   // defaults are always without self-levelling
+        SendValue((char *)"sw4", SelfLevellingOn); // heer
+        DisplayPIDScreenData();
     }
 }
 
@@ -247,8 +249,9 @@ void FactoryDefaultsHeli()
         ActiveSettings = &RateSettings; // set the active settings to the rate settings
         RateSettings = FactoryHeliRate;
         SelfLevelSettings = FactoryHeliLevelling;
-        SelfLevellingOn = false; // defaults are always without self-levelling
-        DisplayStabilisationScreenData();
+        SelfLevellingOn = false;                   // defaults are always without self-levelling
+        SendValue((char *)"sw4", SelfLevellingOn); // heer
+        DisplayPIDScreenData();
     }
 }
 

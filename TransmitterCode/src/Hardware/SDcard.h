@@ -147,12 +147,23 @@ void CheckServoType()
             ServoCentrePulse[i] = 760;
     }
 }
+///*********************************************************************************************************************************/
+void CheckStabilistionParameters(){
 
-/************************************************************************************************************************************************/
-/**********************************  READ A MODEL ***********************************************************************************************/
-/************************************************************************************************************************************************/
+    if (ActiveSettings->Marker != PID_MARKER_VALUE){
+        ActiveSettings = &RateSettings; // set the active settings to the rate settings
+        RateSettings = FactoryPlaneRate;
+        SelfLevelSettings = FactoryPlaneLevelling;
+        SelfLevellingOn = false; // defaults are always without self-levelling
+        MsgBox(pFrontView, (char*)"PIDs etc. -> defaults!");
+    } 
+}
 
-bool ReadOneModel(uint32_t Mnum)
+    /************************************************************************************************************************************************/
+    /**********************************  READ A MODEL ***********************************************************************************************/
+    /************************************************************************************************************************************************/
+
+    bool ReadOneModel(uint32_t Mnum)
 {
     uint16_t j;
     uint16_t i;
@@ -452,8 +463,15 @@ bool ReadOneModel(uint32_t Mnum)
     ActiveSettings->PID_I = SDReadFLOAT(SDCardAddress);
     SDCardAddress += 4;
     ActiveSettings->PID_D = SDReadFLOAT(SDCardAddress);
-   
     SDCardAddress += 4;
+
+    ActiveSettings->Tail_PID_P = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    ActiveSettings->Tail_PID_I = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    ActiveSettings->Tail_PID_D = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    
     ActiveSettings->Kalman_Q_angle = SDReadFLOAT(SDCardAddress);
     SDCardAddress += 4;
     ActiveSettings->Kalman_Q_bias = SDReadFLOAT(SDCardAddress);
@@ -468,8 +486,10 @@ bool ReadOneModel(uint32_t Mnum)
     ++SDCardAddress;
     ActiveSettings->UseRateLPF = (bool)SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
+    ActiveSettings->Marker = SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
 
-    ActiveSettings = &SelfLevelSettings;
+        ActiveSettings = &SelfLevelSettings;
 
     ActiveSettings->PID_P = SDReadFLOAT(SDCardAddress); //heer 2
     SDCardAddress += 4;
@@ -478,6 +498,13 @@ bool ReadOneModel(uint32_t Mnum)
     ActiveSettings->PID_D = SDReadFLOAT(SDCardAddress);
     SDCardAddress += 4;
 
+    ActiveSettings->Tail_PID_P = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    ActiveSettings->Tail_PID_I = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+    ActiveSettings->Tail_PID_D = SDReadFLOAT(SDCardAddress);
+    SDCardAddress += 4;
+
     ActiveSettings->Kalman_Q_angle = SDReadFLOAT(SDCardAddress);
     SDCardAddress += 4;
     ActiveSettings->Kalman_Q_bias = SDReadFLOAT(SDCardAddress);
@@ -492,11 +519,14 @@ bool ReadOneModel(uint32_t Mnum)
     ++SDCardAddress;
     ActiveSettings->UseRateLPF = (bool)SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
+    ActiveSettings->Marker = SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
 
     ActiveSettings = SavedActiveSettings;
 
     CheckOutPutChannels();
     CheckServoType();
+    CheckStabilistionParameters();
 
     // **************************************
 
@@ -1401,13 +1431,20 @@ void SaveOneModel(uint32_t mnum)
     ++SDCardAddress;
     SavedActiveSettings = ActiveSettings; // save state of active settings
 
-    ActiveSettings = &RateSettings; // heer
+    ActiveSettings = &RateSettings; 
 
     SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_P); // heer 3
     SDCardAddress += 4;
     SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_I);
     SDCardAddress += 4;
     SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_D);
+    SDCardAddress += 4;
+
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_P); 
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_I);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_D);
     SDCardAddress += 4;
 
     SDUpdateFLOAT(SDCardAddress, ActiveSettings->Kalman_Q_angle);
@@ -1424,8 +1461,8 @@ void SaveOneModel(uint32_t mnum)
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, ActiveSettings->UseRateLPF);
     ++SDCardAddress;
-    // SDUpdate8BITS(SDCardAddress, ActiveSettings->UseSerialDebug);
-    // ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, ActiveSettings->Marker);
+    ++SDCardAddress;
 
     ActiveSettings = &SelfLevelSettings;
 
@@ -1435,6 +1472,13 @@ void SaveOneModel(uint32_t mnum)
     SDCardAddress += 4;
     SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_D);
     SDCardAddress += 4;
+    
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_P);
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_I);       
+    SDCardAddress += 4;
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_D);
+    SDCardAddress += 4;
 
     SDUpdateFLOAT(SDCardAddress, ActiveSettings->Kalman_Q_angle);
     SDCardAddress += 4;
@@ -1450,8 +1494,9 @@ void SaveOneModel(uint32_t mnum)
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, ActiveSettings->UseRateLPF);
     ++SDCardAddress;
-    //  SDUpdate8BITS(SDCardAddress, ActiveSettings->UseSerialDebug);
-    //  ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, ActiveSettings->Marker);
+    ++SDCardAddress;
+
     ActiveSettings = SavedActiveSettings; // restore active settings
     SaveCheckSum32();                     // Save the Model parametres checksm
 

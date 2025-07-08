@@ -775,12 +775,12 @@ void UpdateModelsNameEveryWhere()
         }
     }
     if (CurrentView == STICKSVIEW)
-        SendText(SticksView_t1, BankTexts[BanksInUse[Bank - 1]]);
+        SendText(SticksView_t1, BankNames[BanksInUse[Bank - 1]]);
     if (CurrentView == GRAPHVIEW)
-        SendText(GraphView_fmode, BankTexts[BanksInUse[Bank - 1]]);
+        SendText(GraphView_fmode, BankNames[BanksInUse[Bank - 1]]);
     if (CurrentView == TRIM_VIEW)
     {
-        SendText(TrimView_Bank, BankTexts[BanksInUse[Bank - 1]]);
+        SendText(TrimView_Bank, BankNames[BanksInUse[Bank - 1]]);
         UpdateTrimView();
     }
 }
@@ -2972,7 +2972,7 @@ void UpdateSpeedScreen()
     {
         SendValue(ns[i], ServoSpeed[Bank - 1][i]);
     }
-    SendText(t14, BankTexts[BanksInUse[Bank - 1]]);
+    SendText(t14, BankNames[BanksInUse[Bank - 1]]);
 }
 
 /******************************************************************************************************************************/
@@ -3250,33 +3250,35 @@ void CheckAllModelIds()
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!  ( Use "NUMBER<<8" )
-#define LASTFUNCTION1 24 // One more than final one
+#define LASTFUNCTION1 26 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])(){
-    Blank,                    // 0 Cannot be used
-    DeleteModel,              // 1
-    StartAudioVisualView,     // 2
-    EndAudioVisualView,       // 3
-    StartTXSetupView,         // 4
-    InputsViewEnd,            // 5
-    SystemPage1End,           // 6
-    SystemPage1Start,         // 7
-    StartWifiScan,            // 8
-    EndWifiScan,              // 9
-    StartServosTypeView,      // 10
-    EndServoTypeView,         // 11
-    LoadNewLogFile,           // 12
-    DeleteThisLogFile,        // 13
-    LogReleasedNEW,           // 14   // new version
-    LogTouched,               // 15   // this does nothing, yet ...
-    RefreshDualRatesNew,      // 16
-    StabilisationScreenStart, // 17
-    StabilisationScreenEnd,   // 18
-    GyroApply,                // 19
-    CalibrateMPU6050,         // 20
-    SelfLevellingChange,      // 21
-    FactoryDefaultsPlane,     // 22
-    FactoryDefaultsHeli,      // 23
+    Blank,                // 0 Cannot be used
+    DeleteModel,          // 1
+    StartAudioVisualView, // 2
+    EndAudioVisualView,   // 3
+    StartTXSetupView,     // 4
+    InputsViewEnd,        // 5
+    SystemPage1End,       // 6
+    SystemPage1Start,     // 7
+    StartWifiScan,        // 8
+    EndWifiScan,          // 9
+    StartServosTypeView,  // 10
+    EndServoTypeView,     // 11
+    LoadNewLogFile,       // 12
+    DeleteThisLogFile,    // 13
+    LogReleasedNEW,       // 14   // new version
+    LogTouched,           // 15   // this does nothing, yet ...
+    RefreshDualRatesNew,  // 16
+    PIDScreenStart,       // 17
+    PIDScreenEnd,         // 18
+    GyroApply,            // 19
+    CalibrateMPU6050,     // 20
+    SelfLevellingChange,  // 21
+    FactoryDefaultsPlane, // 22
+    FactoryDefaultsHeli,  // 23
+    KalmanScreenEnd,      // 24
+    KalmanScreenStart,    // 25
 };
 
 // This list migth become MUCH longer as it limit is 24 bits big
@@ -4640,6 +4642,10 @@ void BankHasChanged()
     {
         DisplayNewDualRateBank();
     }
+    if (CurrentView == PIDVIEW)
+    {
+        DisplayPIDScreenData();
+    }
 }
 
 /************************************************************************************************************/
@@ -4670,9 +4676,6 @@ void GetBank() // ... and the other three switches
     MotorWasEnabled = MotorEnabled; // Remember motor state
     PreviousBank = Bank;            // Remember BANK
 }
-
-
-
 
 /************************************************************************************************************/
 
@@ -4712,7 +4715,7 @@ void GotoFrontView()
     }
     for (int i = 0; i < 4; ++i)
     {
-        SendText(fms[i], BankTexts[BanksInUse[i]]);
+        SendText(fms[i], BankNames[BanksInUse[i]]);
     }
     ForceDataRedisplay();
     ShowAMS();

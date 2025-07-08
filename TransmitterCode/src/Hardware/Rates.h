@@ -9,7 +9,6 @@
 #ifndef RATES_H
 #define RATES_H
 
-
 // ************************************************************************************************************/
 void ReadDualRatesFromScreen()
 {
@@ -82,7 +81,7 @@ void SetNewDualRate()
         SendValue(rate, 0);
     }
     strcpy(buf, quote);
-    strcat(buf, BankTexts[BanksInUse[Bank - 1]]);
+    strcat(buf, BankNames[BanksInUse[Bank - 1]]);
     strcat(buf, quote);
     strcat(buf, join);
     if (DualRateRate[Bank - 1])
@@ -167,7 +166,7 @@ void DisplayNewDualRateBank()
     char rate[] = "rate";
     char t1[] = "t1";
     SendValue(rate, DualRateRate[Bank - 1]);
-    SendText(t1, BankTexts[BanksInUse[Bank - 1]]); // display bank name in Rates view
+    SendText(t1, BankNames[BanksInUse[Bank - 1]]); // display bank name in Rates view
     CheckSelectedRatesMode();
 }
 

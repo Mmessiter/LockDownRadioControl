@@ -450,7 +450,7 @@ FASTRUN void LogNewBank()
     char bk[] = "Bank";
     char thetext[40];
 
-    strcpy(Ltext, BankTexts[BanksInUse[Bank - 1]]); // Get the bank name text
+    strcpy(Ltext, BankNames[BanksInUse[Bank - 1]]); // Get the bank name text
     if (!InStrng(bk, Ltext))                        // If not already there, add the bank number
     {
         char colon[] = " (Bank ";
