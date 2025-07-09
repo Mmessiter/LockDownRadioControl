@@ -32,6 +32,8 @@ If you would like to make one, I'll be happy to help you. [Email me (Malcolm Mes
 
 I just added the BOM to this file (scroll down...)
 
+Recently I have removed all PPM functions because no one uses them any more. This has freed up some memory and some GPIO pins on the MCU. These can now be used in future developments.
+
 I have just added 'nudge mode' the the wireless buddy feature and a variometer for gliders so the transmitter can now emit an audible signal to indicate when the model is ascending or decending, to help with finding thermals.
 
 Right now I am adding PID stabilisation. It's currently still under developement and I'll add a note here when it's done, tested, and ready to fly!
