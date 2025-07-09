@@ -30,7 +30,11 @@ This repository contains not only the code for the transmitter, its screen and t
 
 If you would like to make one, I'll be happy to help you. [Email me (Malcolm Messiter mmessiter@gmail.com).](mailto:mmessiter@gmail.com)
 
-I just added the BOM to this file (scroll down...) and will add instructions very soon ... working on it now!
+I just added the BOM to this file (scroll down...)
+
+I have just added 'nudge mode' the the wireless buddy feature and a variometer for gliders so the transmitter can now emit an audible signal to indicate when the model is ascending or decending, to help with finding thermals.
+
+Right now I am adding PID stabilisation. It's currently still under developement and I'll add a note here when it's done, tested, and ready to fly!
 
 ## Features
 
@@ -49,7 +53,7 @@ Here is a brief summary of the features supported at the time of writing (August
 - 200 Hz frame rate (for exceptionally low latency.)
 - 12 BIT servo resolution.
 - Very small data packet size, to reduce FHSS frequency collisions.
-- Wireless Buddy Box for training beginners.
+- Wireless Buddy Box, now with 'nudge' mode', for training beginners.
 - "AMS" (**A**utomatic **M**odel **S**election) loads correct model memory automatically on connection to model.
 - **Buddy** transmitter also automatically loads the same model memory as **Master** has loaded.
 - Wireless model memory sharing. This allows copying model memories to another transmitter **without** removing any SD cards.

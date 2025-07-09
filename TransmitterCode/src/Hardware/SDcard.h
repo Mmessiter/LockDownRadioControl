@@ -100,7 +100,7 @@ void CheckServoSpeeds()
 { // for slow servos
 
     bool flag = false;
-    for (int j = 0; j < BANKSUSED + 1; ++j)
+    for (int j = 0; j < BANKS_USED + 1; ++j)
     {
         for (int i = 0; i < CHANNELSUSED + 1; ++i)
         {
@@ -113,7 +113,7 @@ void CheckServoSpeeds()
     }
     if (flag)
     {
-        for (int j = 0; j < BANKSUSED + 1; ++j)
+        for (int j = 0; j < BANKS_USED + 1; ++j)
         {
             for (int i = 0; i < CHANNELSUSED + 1; ++i)
             {
@@ -148,22 +148,24 @@ void CheckServoType()
     }
 }
 ///*********************************************************************************************************************************/
-void CheckStabilistionParameters(){
+void CheckStabilistionParameters()
+{
 
-    if (ActiveSettings->Marker != PID_MARKER_VALUE){
+    if (ActiveSettings->Marker != PID_MARKER_VALUE)
+    {
         ActiveSettings = &RateSettings; // set the active settings to the rate settings
         RateSettings = FactoryPlaneRate;
         SelfLevelSettings = FactoryPlaneLevelling;
         SelfLevellingOn = false; // defaults are always without self-levelling
-        MsgBox(pFrontView, (char*)"PIDs etc. -> defaults!");
-    } 
+                                 // MsgBox(pFrontView, (char*)"PIDs etc. -> defaults!");
+    }
 }
 
-    /************************************************************************************************************************************************/
-    /**********************************  READ A MODEL ***********************************************************************************************/
-    /************************************************************************************************************************************************/
+/************************************************************************************************************************************************/
+/**********************************  READ A MODEL ***********************************************************************************************/
+/************************************************************************************************************************************************/
 
-    bool ReadOneModel(uint32_t Mnum)
+bool ReadOneModel(uint32_t Mnum)
 {
     uint16_t j;
     uint16_t i;
@@ -228,7 +230,7 @@ void CheckStabilistionParameters(){
         }
     }
 
-    for (j = 0; j < BANKSUSED + 1; ++j)
+    for (j = 0; j < BANKS_USED + 1; ++j)
     {
         for (i = 0; i < CHANNELSUSED + 1; ++i)
         {
@@ -236,7 +238,7 @@ void CheckStabilistionParameters(){
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < BANKSUSED + 1; ++j)
+    for (j = 0; j < BANKS_USED + 1; ++j)
     {
         for (i = 0; i < CHANNELSUSED + 1; ++i)
         {
@@ -327,7 +329,7 @@ void CheckStabilistionParameters(){
         }
     }
 
-    for (j = 0; j < BANKSUSED + 1; ++j)
+    for (j = 0; j < BANKS_USED + 1; ++j)
     {
         for (i = 0; i < CHANNELSUSED + 1; ++i)
         {
@@ -339,7 +341,7 @@ void CheckStabilistionParameters(){
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < BANKSUSED + 1; ++j)
+    for (j = 0; j < BANKS_USED + 1; ++j)
     {
         for (i = 0; i < CHANNELSUSED + 1; ++i)
         {
@@ -430,7 +432,7 @@ void CheckStabilistionParameters(){
     ++SDCardAddress;
     StabilisedBank = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    LevelledBank = SDRead8BITS(SDCardAddress); 
+    LevelledBank = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     ++SDCardAddress;
 
@@ -457,7 +459,7 @@ void CheckStabilistionParameters(){
     ++SDCardAddress;
     SavedActiveSettings = ActiveSettings; // save current settings pointer
     ActiveSettings = &RateSettings;
-   
+
     ActiveSettings->PID_P = SDReadFLOAT(SDCardAddress); // heer 1
     SDCardAddress += 4;
     ActiveSettings->PID_I = SDReadFLOAT(SDCardAddress);
@@ -471,7 +473,7 @@ void CheckStabilistionParameters(){
     SDCardAddress += 4;
     ActiveSettings->Tail_PID_D = SDReadFLOAT(SDCardAddress);
     SDCardAddress += 4;
-    
+
     ActiveSettings->Kalman_Q_angle = SDReadFLOAT(SDCardAddress);
     SDCardAddress += 4;
     ActiveSettings->Kalman_Q_bias = SDReadFLOAT(SDCardAddress);
@@ -489,9 +491,9 @@ void CheckStabilistionParameters(){
     ActiveSettings->Marker = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
 
-        ActiveSettings = &SelfLevelSettings;
+    ActiveSettings = &SelfLevelSettings;
 
-    ActiveSettings->PID_P = SDReadFLOAT(SDCardAddress); //heer 2
+    ActiveSettings->PID_P = SDReadFLOAT(SDCardAddress); // heer 2
     SDCardAddress += 4;
     ActiveSettings->PID_I = SDReadFLOAT(SDCardAddress);
     SDCardAddress += 4;
@@ -1233,7 +1235,7 @@ void SaveOneModel(uint32_t mnum)
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < BANKSUSED + 1; ++j)
+    for (j = 0; j < BANKS_USED + 1; ++j)
     {
         for (i = 0; i < CHANNELSUSED + 1; ++i)
         {
@@ -1241,7 +1243,7 @@ void SaveOneModel(uint32_t mnum)
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < BANKSUSED + 1; ++j)
+    for (j = 0; j < BANKS_USED + 1; ++j)
     {
         for (i = 0; i < CHANNELSUSED + 1; ++i)
         {
@@ -1319,7 +1321,7 @@ void SaveOneModel(uint32_t mnum)
             ++SDCardAddress;
         }
     }
-    for (j = 0; j < BANKSUSED + 1; ++j)
+    for (j = 0; j < BANKS_USED + 1; ++j)
     {
         for (i = 0; i < CHANNELSUSED + 1; ++i)
         {
@@ -1328,7 +1330,7 @@ void SaveOneModel(uint32_t mnum)
         }
     }
 
-    for (j = 0; j < BANKSUSED + 1; ++j)
+    for (j = 0; j < BANKS_USED + 1; ++j)
     {
         for (i = 0; i < CHANNELSUSED + 1; ++i)
         {
@@ -1431,7 +1433,7 @@ void SaveOneModel(uint32_t mnum)
     ++SDCardAddress;
     SavedActiveSettings = ActiveSettings; // save state of active settings
 
-    ActiveSettings = &RateSettings; 
+    ActiveSettings = &RateSettings;
 
     SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_P); // heer 3
     SDCardAddress += 4;
@@ -1440,7 +1442,7 @@ void SaveOneModel(uint32_t mnum)
     SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_D);
     SDCardAddress += 4;
 
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_P); 
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_P);
     SDCardAddress += 4;
     SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_I);
     SDCardAddress += 4;
@@ -1472,10 +1474,10 @@ void SaveOneModel(uint32_t mnum)
     SDCardAddress += 4;
     SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_D);
     SDCardAddress += 4;
-    
+
     SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_P);
     SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_I);       
+    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_I);
     SDCardAddress += 4;
     SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_D);
     SDCardAddress += 4;

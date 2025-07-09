@@ -1649,8 +1649,8 @@ void SetDefaultValues()
         }
     }
 
-    for (j = 0; j < BANKSUSED + 1; ++j)
-    { // must have fudged this somewhere.... 5?!
+    for (j = 0; j < BANKS_USED + 1; ++j)
+    { // must have fudged this somewhere.... Probably 1-5 instead of 0-4
         for (i = 0; i < CHANNELSUSED; ++i)
         {
             Trims[j][i] = 80; // MIDPOINT is 80 !
@@ -1676,14 +1676,14 @@ void SetDefaultValues()
             ChannelNames[i][j] = DefaultChannelNames[i][j];
         }
     }
-    for (j = 1; j <= BANKSUSED; ++j)
+    for (j = 1; j <= BANKS_USED; ++j)
     {
         for (i = 0; i < CHANNELSUSED; ++i)
         {
             Exponential[j][i] = DEFAULT_EXPO; // 0% (50) expo = default
         }
     }
-    for (j = 0; j < BANKSUSED; ++j)
+    for (j = 0; j < BANKS_USED; ++j)
     {
         for (i = 0; i < CHANNELSUSED; ++i)
         {

@@ -91,7 +91,7 @@
 #define PROPOCHANNELS 8                   // Only 4 have knobs / 2 sticks (= 4 hall sensors)
 #define BANKSWITCH 4                      // Default BANK switch
 #define AUTOSWITCH 1                      // Default AUTO switch
-#define BANKSUSED 4                       // Flight modes (AKA Banks)
+#define BANKS_USED 4                      // Flight modes (AKA Banks)
 #define LOWBATTERY 42                     // Default percent for warning (User definable)
 #define DEFAULTTRIMREPEATSPEED 600
 #define INACTIVITYTIMEOUT 10 * TICKSPERMINUTE // Default time after which to switch off
@@ -822,10 +822,10 @@ void Look1(const T &value)
 
 WDT_T4<WDT3> TeensyWatchDog;
 WDT_timings_t WatchDogConfig;
-uint8_t Mixes[MAXMIXES + 1][17];                      // 17 possible elements per mix. NOTHING to do with channels count!!!
-int Trims[BANKSUSED + 1][CHANNELSUSED + 1];           // Trims to store
-uint8_t Exponential[BANKSUSED + 1][CHANNELSUSED + 1]; // Exponential
-uint8_t InterpolationTypes[BANKSUSED + 1][CHANNELSUSED + 1];
+uint8_t Mixes[MAXMIXES + 1][17];                       // 17 possible elements per mix. NOTHING to do with channels count!!!
+int Trims[BANKS_USED + 1][CHANNELSUSED + 1];           // Trims to store
+uint8_t Exponential[BANKS_USED + 1][CHANNELSUSED + 1]; // Exponential
+uint8_t InterpolationTypes[BANKS_USED + 1][CHANNELSUSED + 1];
 uint8_t LastMixNumber = 1;
 uint8_t MixNumber = 0;
 uint8_t CurrentView = FRONTVIEW;
@@ -843,21 +843,21 @@ uint8_t GPSMarkHere = 0;
 uint16_t TrimRepeatSpeed = 600;
 char na[] = "";
 
-uint8_t ServoSpeed[BANKSUSED + 1][CHANNELSUSED + 1]; //    Speed of servo movement
-uint16_t CurrentPosition[SENDBUFFERSIZE + 1];        //    Position from which a slow servo started (0 = not started yet)
-uint16_t SendBuffer[SENDBUFFERSIZE + 1];             //    Data to send to rx (16 words)
-uint16_t BuddyBuffer[SENDBUFFERSIZE + 1];            //    Data from wireless buddy (16 words)
-uint16_t ShownBuffer[SENDBUFFERSIZE + 1];            //    Data shown before
-uint16_t RawDataBuffer[SENDBUFFERSIZE + 1];          //    Data as actually sent
-uint16_t InputsBuffer[CHANNELSUSED + 1];             //    Data from pots
-uint16_t LastBuffer[CHANNELSUSED + 1];               //    Used to spot any change
-uint16_t PreMixBuffer[CHANNELSUSED + 1];             //    Data collected from sticks
-uint8_t MaxDegrees[5][CHANNELSUSED + 1];             //    Max degrees (180)
-uint8_t MidHiDegrees[5][CHANNELSUSED + 1];           //    MidHi degrees (135)
-uint8_t CentreDegrees[5][CHANNELSUSED + 1];          //    Middle degrees (90)
-uint8_t MidLowDegrees[5][CHANNELSUSED + 1];          //    MidLow Degrees (45)
-uint8_t MinDegrees[5][CHANNELSUSED + 1];             //    Min Degrees (0)
-uint8_t SubTrims[CHANNELSUSED + 1];                  //    Subtrims
+uint8_t ServoSpeed[BANKS_USED + 1][CHANNELSUSED + 1]; //    Speed of servo movement
+uint16_t CurrentPosition[SENDBUFFERSIZE + 1];         //    Position from which a slow servo started (0 = not started yet)
+uint16_t SendBuffer[SENDBUFFERSIZE + 1];              //    Data to send to rx (16 words)
+uint16_t BuddyBuffer[SENDBUFFERSIZE + 1];             //    Data from wireless buddy (16 words)
+uint16_t ShownBuffer[SENDBUFFERSIZE + 1];             //    Data shown before
+uint16_t RawDataBuffer[SENDBUFFERSIZE + 1];           //    Data as actually sent
+uint16_t InputsBuffer[CHANNELSUSED + 1];              //    Data from pots
+uint16_t LastBuffer[CHANNELSUSED + 1];                //    Used to spot any change
+uint16_t PreMixBuffer[CHANNELSUSED + 1];              //    Data collected from sticks
+uint8_t MaxDegrees[5][CHANNELSUSED + 1];              //    Max degrees (180)
+uint8_t MidHiDegrees[5][CHANNELSUSED + 1];            //    MidHi degrees (135)
+uint8_t CentreDegrees[5][CHANNELSUSED + 1];           //    Middle degrees (90)
+uint8_t MidLowDegrees[5][CHANNELSUSED + 1];           //    MidLow Degrees (45)
+uint8_t MinDegrees[5][CHANNELSUSED + 1];              //    Min Degrees (0)
+uint8_t SubTrims[CHANNELSUSED + 1];                   //    Subtrims
 uint8_t SubTrimToEdit = 1;
 uint32_t LastPacketSentTime = 0;
 uint8_t Bank = 1;
@@ -1306,33 +1306,51 @@ bool StabilisationOn = false;
 bool SelfLevellingOn = false;
 bool ParamPause = false;
 
-#define PID_MARKER_VALUE 253 // Marker value for settings
+#define PID_MARKER_VALUE 253 // Marker value for settings.
+// (If this value is not present, then settings are junk and will be reset to defaults)
 
 struct StabilisationSettings
 {
-    float PID_P;
-    float PID_I;
-    float PID_D;
-    float Tail_PID_P;
-    float Tail_PID_I;
-    float Tail_PID_D;
-    float Kalman_Q_angle;
-    float Kalman_Q_bias;
-    float Kalman_R_measure;
-    float alpha;
-    float beta;
-    bool UseKalmanFilter;
-    bool UseRateLPF;
-    uint8_t Marker = PID_MARKER_VALUE;
+    float PID_P;      // PID_P
+    float PID_I;      // PID_I
+    float PID_D;      // PID_D
+    float Tail_PID_P; // Tail_PID_P
+    float Tail_PID_I; // Tail_PID_I
+    float Tail_PID_D; // Tail_PID_D
+
+    // float PID_P[BANKS_USED];      // PID_P
+    // float PID_I[BANKS_USED];      // PID_I
+    // float PID_D[BANKS_USED];      // PID_D
+    // float Tail_PID_P[BANKS_USED]; // Tail_PID_P
+    // float Tail_PID_I[BANKS_USED]; // Tail_PID_I
+    // float Tail_PID_D[BANKS_USED]; // Tail_PID_D
+
+    float Kalman_Q_angle;              // Kalman_Q_angle
+    float Kalman_Q_bias;               // Kalman_Q_bias
+    float Kalman_R_measure;            // Kalman_R_measure
+    float alpha;                       // alpha
+    float beta;                        // beta
+    bool UseKalmanFilter;              // UseKalmanFilter
+    bool UseRateLPF;                   // UseRateLPF
+    uint8_t Marker = PID_MARKER_VALUE; // Marker to identify settings
 };
 
 StabilisationSettings RateSettings = {
-    0.05f,            // PID_P
-    0.00f,            // PID_I
-    0.002f,           // PID_D
-    0.05f,            // Tail_PID_P
-    0.00f,            // Tail_PID_I
-    0.002f,           // Tail_PID_D
+    // {0.05f, 0.05f, 0.05f, 0.05f}, // PID_P
+    // {0.00f, 0.00f, 0.00f, 0.00f}, // PID_I
+    // {0.002f, 0.002f, 0.002f, 0.002f}, // PID_D
+
+    // {0.05f, 0.05f, 0.05f, 0.05f}, // Tail_PID_P
+    // {0.00f, 0.00f, 0.00f, 0.00f}, // Tail_PID_I
+    // {0.002f, 0.002f, 0.002f, 0.002f}, // Tail_PID_D
+
+    0.05f,  // PID_P
+    0.00f,  // PID_I
+    0.002f, // PID_D
+    0.05f,  // Tail_PID_P
+    0.00f,  // Tail_PID_I
+    0.002f, // Tail_PID_D
+
     0.001f,           // Kalman_Q_angle
     0.003f,           // Kalman_Q_bias
     0.03f,            // Kalman_R_measure
@@ -1344,12 +1362,21 @@ StabilisationSettings RateSettings = {
 };
 
 StabilisationSettings SelfLevelSettings = {
-    2.0f,             // PID_P
-    0.1f,             // PID_I
-    0.01f,            // PID_D
-    2.0f,             // Tail_PID_P
-    0.1f,             // Tail_PID_I
-    0.01f,            // Tail_PID_D
+
+    2.0f,  // PID_P
+    0.1f,  // PID_I
+    0.01f, // PID_D
+    2.0f,  // Tail_PID_P
+    0.1f,  // Tail_PID_I
+    0.01f, // Tail_PID_D
+
+    // {2.0f, 2.0f, 2.0f, 2.0f} // PID_P
+    // {0.1f, 0.1f, 0.1f, 0.1f} // PID_I
+    // {0.01f, 0.01f, 0.01f, 0.01f} // PID_D
+    // {2.0f, 2.0f, 2.0f, 2.0f} // Tail_PID_P
+    // {0.1f, 0.1f, 0.1f, 0.1f} // Tail_PID_I
+    // {0.01f, 0.01f, 0.01f, 0.01f} // Tail_PID_D
+
     0.001f,           // Kalman_Q_angle
     0.003f,           // Kalman_Q_bias
     0.03f,            // Kalman_R_measure
@@ -1366,12 +1393,20 @@ StabilisationSettings *SavedActiveSettings = ActiveSettings;
 // Factory defaults for stabilisation settings
 
 StabilisationSettings FactoryHeliRate = {
-    0.10f,            // PID_P
-    0.00f,            // PID_I
-    0.004f,           // PID_D
-    0.10f,            // Tail_PID_P
-    0.00f,            // Tail_PID_I
-    0.004f,           // Tail_PID_D
+    0.10f,  // PID_P
+    0.00f,  // PID_I
+    0.004f, // PID_D
+    0.10f,  // Tail_PID_P
+    0.00f,  // Tail_PID_I
+    0.004f, // Tail_PID_D
+
+    // {0.10f, 0.10f, 0.10f, 0.10f,} // PID_P
+    // {0.00f, 0.00f, 0.00f, 0.00f,} // PID_I
+    // {0.004f, 0.004f, 0.004f, 0.004f,} // PID_D
+    // {0.10f, 0.10f, 0.10f, 0.10f,} // Tail_PID_P
+    // {0.00f, 0.00f, 0.00f, 0.00f,} // Tail_PID_I
+    // {0.004f, 0.004f, 0.004f, 0.004f,} // Tail_PID_D
+
     0.001f,           // Kalman_Q_angle
     0.003f,           // Kalman_Q_bias
     0.03f,            // Kalman_R_measure
@@ -1383,12 +1418,20 @@ StabilisationSettings FactoryHeliRate = {
 };
 
 StabilisationSettings FactoryHeliLevelling = {
-    3.0f,             // PID_P
-    0.08f,            // PID_I
-    0.03f,            // PID_D
-    3.0f,             // Tail_PID_P
-    0.08f,            // Tail_PID_I
-    0.03f,            // Tail_PID_D
+    3.0f,  // PID_P
+    0.08f, // PID_I
+    0.03f, // PID_D
+    3.0f,  // Tail_PID_P
+    0.08f, // Tail_PID_I
+    0.03f, // Tail_PID_D
+
+    // {3.0f, 3.0f, 3.0f, 3.0f,} // PID_P
+    // {0.08f, 0.08f, 0.08f, 0.08f,} // PID_I
+    // {0.03f, 0.03f, 0.03f, 0.03f,} // PID_D
+    // {3.0f, 3.0f, 3.0f, 3.0f,} // Tail_PID_P
+    // {0.08f, 0.08f, 0.08f, 0.08f,} // Tail_PID_I
+    // {0.03f, 0.03f, 0.03f, 0.03f,} // Tail_PID_D
+
     0.001f,           // Kalman_Q_angle
     0.003f,           // Kalman_Q_bias
     0.03f,            // Kalman_R_measure
@@ -1400,12 +1443,20 @@ StabilisationSettings FactoryHeliLevelling = {
 };
 
 StabilisationSettings FactoryPlaneRate = {
-    0.05f,            // PID_P
-    0.00f,            // PID_I
-    0.002f,           // PID_D
-    0.05f,            // Tail_PID_P
-    0.00f,            // Tail_PID_I
-    0.002f,           // Tail_PID_D
+    0.05f,  // PID_P
+    0.00f,  // PID_I
+    0.002f, // PID_D
+    0.05f,  // Tail_PID_P
+    0.00f,  // Tail_PID_I
+    0.002f, // Tail_PID_D
+
+    // {0.05f, 0.05f, 0.05f, 0.05f,} // PID_P
+    // {0.00f, 0.00f, 0.00f, 0.00f,} // PID_I
+    // {0.002f, 0.002f, 0.002f, 0.002f,} // PID_D
+    // {0.05f, 0.05f, 0.05f, 0.05f,} // Tail_PID_P
+    // {0.00f, 0.00f, 0.00f, 0.00f,} // Tail_PID_I
+    // {0.002f, 0.002f, 0.002f, 0.002f,} // Tail_PID_D
+
     0.001f,           // Kalman_Q_angle
     0.003f,           // Kalman_Q_bias
     0.03f,            // Kalman_R_measure
@@ -1417,19 +1468,27 @@ StabilisationSettings FactoryPlaneRate = {
 };
 
 StabilisationSettings FactoryPlaneLevelling = {
-    2.0f,             // PID_P
-    0.05f,            // PID_I
-    0.02f,            // PID_D
-    2.0f,             // Tail_PID_P
-    0.05f,            // Tail_PID_I
-    0.02f,            // Tail_PID_D
+    2.0f,  // PID_P
+    0.05f, // PID_I
+    0.02f, // PID_D
+    2.0f,  // Tail_PID_P
+    0.05f, // Tail_PID_I
+    0.02f, // Tail_PID_D
+
+    // {2.0f, 2.0f, 2.0f, 2.0f,} // PID_P
+    // {0.05f, 0.05f, 0.05f, 0.05f,} // PID_I
+    // {0.02f, 0.02f, 0.02f, 0.02f,} // PID_D
+    // {2.0f, 2.0f, 2.0f, 2.0f,} // Tail_PID_P
+    // {0.05f, 0.05f, 0.05f, 0.05f,} // Tail_PID_I
+    // {0.02f, 0.02f, 0.02f, 0.02f,} // Tail_PID_D
+
     0.001f,           // Kalman_Q_angle
     0.003f,           // Kalman_Q_bias
     0.03f,            // Kalman_R_measure
     0.05f,            // alpha
     0.05f,            // beta
     true,             // UseKalmanFilter
-    false,            // UseRateLPF 
+    false,            // UseRateLPF
     PID_MARKER_VALUE, // Marker
 };
 
