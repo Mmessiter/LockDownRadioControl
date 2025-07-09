@@ -66,7 +66,7 @@ Here is a brief summary of the features supported at the time of writing (August
 - Failsafe.
 - 8 user definable switches. (and four of these can be knobs for continious variation of a channel).
 - Digital trims, subtrim, servo reverse, servo speeds, user macros, motor timer, log files, etc., etc...
-- Support for SBUS, PWM (with definable frequency and centre position), and PPM.
+- Receiver supports SBUS and PWM (with definable frequency and centre position).
 - Support for third party transmitter models (JR type).
 - Variometer function for gliders.
 - Context sensitive help screens for all functions.
