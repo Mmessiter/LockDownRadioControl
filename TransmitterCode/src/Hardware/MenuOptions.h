@@ -1333,17 +1333,17 @@ void DisplayPIDScreenData()
     else
         ActiveSettings = &RateSettings;
 
-    dtostrf(ActiveSettings->PID_P, 1, 3, temp);
+    dtostrf(ActiveSettings->PID_P[Bank - 1], 1, 3, temp); 
     SendText(t9, temp);
-    dtostrf(ActiveSettings->PID_I, 1, 3, temp);
+    dtostrf(ActiveSettings->PID_I[Bank - 1], 1, 3, temp); 
     SendText(t14, temp);
-    dtostrf(ActiveSettings->PID_D, 1, 3, temp);
+    dtostrf(ActiveSettings->PID_D[Bank - 1], 1, 3, temp); 
     SendText(t15, temp);
-    dtostrf(ActiveSettings->Tail_PID_P, 1, 3, temp);
+    dtostrf(ActiveSettings->Tail_PID_P[Bank - 1], 1, 3, temp); 
     SendText(t4, temp);
-    dtostrf(ActiveSettings->Tail_PID_I, 1, 3, temp);
+    dtostrf(ActiveSettings->Tail_PID_I[Bank - 1], 1, 3, temp); 
     SendText(t5, temp);
-    dtostrf(ActiveSettings->Tail_PID_D, 1, 3, temp);
+    dtostrf(ActiveSettings->Tail_PID_D[Bank - 1], 1, 3, temp); 
     SendText(t6, temp);
     SendValue(sw0, StabilisationOn);
     SendValue(sw4, SelfLevellingOn);
@@ -1465,22 +1465,22 @@ void ReadPIDScreenData()
 
     SendValue(Progress, 10);
     GetText(t9, temp);
-    ActiveSettings->PID_P = atof(temp);
+    ActiveSettings->PID_P[Bank - 1] = atof(temp);
     SendValue(Progress, 20);
     GetText(t14, temp);
-    ActiveSettings->PID_I = atof(temp);
+    ActiveSettings->PID_I[Bank - 1] = atof(temp);
     SendValue(Progress, 30);
     GetText(t15, temp);
-    ActiveSettings->PID_D = atof(temp);
+    ActiveSettings->PID_D[Bank - 1] = atof(temp);
     SendValue(Progress, 40);
     GetText(t4, temp);
-    ActiveSettings->Tail_PID_P = atof(temp);
+    ActiveSettings->Tail_PID_P[Bank - 1] = atof(temp);
     SendValue(Progress, 50);
     GetText(t5, temp);
-    ActiveSettings->Tail_PID_I = atof(temp);
+    ActiveSettings->Tail_PID_I[Bank - 1] = atof(temp);
     SendValue(Progress, 65);
     GetText(t6, temp);
-    ActiveSettings->Tail_PID_D = atof(temp);
+    ActiveSettings->Tail_PID_D[Bank - 1] = atof(temp);
     SendValue(Progress, 100);
     SendCommand(ProgressEnd);
     SendCommand(vis); // show the model name again

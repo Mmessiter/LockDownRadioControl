@@ -200,7 +200,9 @@
 #define ALPHA_BETA 8
 #define BOOLEANS 9
 #define RECALIBRATE_MPU6050 10
-#define PARAMETERS_MAX_ID 11 // Max types of parameters packet to send  ... will increase.
+#define TAIL_PID_VALUES 11
+
+#define PARAMETERS_MAX_ID 12 // Max types of parameters packet to send  ... will increase.
 
 // **************************************************************************
 //                               Mixes                                      *
@@ -1311,20 +1313,12 @@ bool ParamPause = false;
 
 struct StabilisationSettings
 {
-    float PID_P;      // PID_P
-    float PID_I;      // PID_I
-    float PID_D;      // PID_D
-    float Tail_PID_P; // Tail_PID_P
-    float Tail_PID_I; // Tail_PID_I
-    float Tail_PID_D; // Tail_PID_D
-
-    // float PID_P[BANKS_USED];      // PID_P
-    // float PID_I[BANKS_USED];      // PID_I
-    // float PID_D[BANKS_USED];      // PID_D
-    // float Tail_PID_P[BANKS_USED]; // Tail_PID_P
-    // float Tail_PID_I[BANKS_USED]; // Tail_PID_I
-    // float Tail_PID_D[BANKS_USED]; // Tail_PID_D
-
+    float PID_P[BANKS_USED];
+    float PID_I[BANKS_USED];
+    float PID_D[BANKS_USED];
+    float Tail_PID_P[BANKS_USED];
+    float Tail_PID_I[BANKS_USED];
+    float Tail_PID_D[BANKS_USED];
     float Kalman_Q_angle;              // Kalman_Q_angle
     float Kalman_Q_bias;               // Kalman_Q_bias
     float Kalman_R_measure;            // Kalman_R_measure
@@ -1336,55 +1330,38 @@ struct StabilisationSettings
 };
 
 StabilisationSettings RateSettings = {
-    // {0.05f, 0.05f, 0.05f, 0.05f}, // PID_P
-    // {0.00f, 0.00f, 0.00f, 0.00f}, // PID_I
-    // {0.002f, 0.002f, 0.002f, 0.002f}, // PID_D
-
-    // {0.05f, 0.05f, 0.05f, 0.05f}, // Tail_PID_P
-    // {0.00f, 0.00f, 0.00f, 0.00f}, // Tail_PID_I
-    // {0.002f, 0.002f, 0.002f, 0.002f}, // Tail_PID_D
-
-    0.05f,  // PID_P
-    0.00f,  // PID_I
-    0.002f, // PID_D
-    0.05f,  // Tail_PID_P
-    0.00f,  // Tail_PID_I
-    0.002f, // Tail_PID_D
-
-    0.001f,           // Kalman_Q_angle
-    0.003f,           // Kalman_Q_bias
-    0.03f,            // Kalman_R_measure
-    0.05f,            // alpha
-    0.05f,            // beta
-    true,             // UseKalmanFilter
-    true,             // UseRateLPF
-    PID_MARKER_VALUE, // Marker
+    {0.05f, 0.05f, 0.05f, 0.05f},     // PID_P
+    {0.00f, 0.00f, 0.00f, 0.00f},     // PID_I
+    {0.002f, 0.002f, 0.002f, 0.002f}, // PID_D
+    {0.05f, 0.05f, 0.05f, 0.05f},     // Tail_PID_P
+    {0.00f, 0.00f, 0.00f, 0.00f},     // Tail_PID_I
+    {0.002f, 0.002f, 0.002f, 0.002f}, // Tail_PID_D
+    0.001f,                           // Kalman_Q_angle
+    0.003f,                           // Kalman_Q_bias
+    0.03f,                            // Kalman_R_measure
+    0.05f,                            // alpha
+    0.05f,                            // beta
+    true,                             // UseKalmanFilter
+    true,                             // UseRateLPF
+    PID_MARKER_VALUE,                 // Marker
 };
 
 StabilisationSettings SelfLevelSettings = {
 
-    2.0f,  // PID_P
-    0.1f,  // PID_I
-    0.01f, // PID_D
-    2.0f,  // Tail_PID_P
-    0.1f,  // Tail_PID_I
-    0.01f, // Tail_PID_D
-
-    // {2.0f, 2.0f, 2.0f, 2.0f} // PID_P
-    // {0.1f, 0.1f, 0.1f, 0.1f} // PID_I
-    // {0.01f, 0.01f, 0.01f, 0.01f} // PID_D
-    // {2.0f, 2.0f, 2.0f, 2.0f} // Tail_PID_P
-    // {0.1f, 0.1f, 0.1f, 0.1f} // Tail_PID_I
-    // {0.01f, 0.01f, 0.01f, 0.01f} // Tail_PID_D
-
-    0.001f,           // Kalman_Q_angle
-    0.003f,           // Kalman_Q_bias
-    0.03f,            // Kalman_R_measure
-    0.05f,            // alpha
-    0.05f,            // beta
-    true,             // UseKalmanFilter
-    false,            // UseRateLPF
-    PID_MARKER_VALUE, // Marker
+    {2.0f, 2.0f, 2.0f, 2.0f},     // PID_P
+    {0.1f, 0.1f, 0.1f, 0.1f},     // PID_I
+    {0.01f, 0.01f, 0.01f, 0.01f}, // PID_D
+    {2.0f, 2.0f, 2.0f, 2.0f},     // Tail_PID_P
+    {0.1f, 0.1f, 0.1f, 0.1f},     // Tail_PID_I
+    {0.01f, 0.01f, 0.01f, 0.01f}, // Tail_PID_D
+    0.001f,                       // Kalman_Q_angle
+    0.003f,                       // Kalman_Q_bias
+    0.03f,                        // Kalman_R_measure
+    0.05f,                        // alpha
+    0.05f,                        // beta
+    true,                         // UseKalmanFilter
+    false,                        // UseRateLPF
+    PID_MARKER_VALUE,             // Marker
 };
 StabilisationSettings *ActiveSettings = &RateSettings;
 StabilisationSettings *SavedActiveSettings = ActiveSettings;
@@ -1393,94 +1370,67 @@ StabilisationSettings *SavedActiveSettings = ActiveSettings;
 // Factory defaults for stabilisation settings
 
 StabilisationSettings FactoryHeliRate = {
-    0.10f,  // PID_P
-    0.00f,  // PID_I
-    0.004f, // PID_D
-    0.10f,  // Tail_PID_P
-    0.00f,  // Tail_PID_I
-    0.004f, // Tail_PID_D
 
-    // {0.10f, 0.10f, 0.10f, 0.10f,} // PID_P
-    // {0.00f, 0.00f, 0.00f, 0.00f,} // PID_I
-    // {0.004f, 0.004f, 0.004f, 0.004f,} // PID_D
-    // {0.10f, 0.10f, 0.10f, 0.10f,} // Tail_PID_P
-    // {0.00f, 0.00f, 0.00f, 0.00f,} // Tail_PID_I
-    // {0.004f, 0.004f, 0.004f, 0.004f,} // Tail_PID_D
-
-    0.001f,           // Kalman_Q_angle
-    0.003f,           // Kalman_Q_bias
-    0.03f,            // Kalman_R_measure
-    0.04f,            // alpha
-    0.04f,            // beta
-    true,             // UseKalmanFilter
-    true,             // UseRateLPF
-    PID_MARKER_VALUE, // Marker
+    {0.10f, 0.10f, 0.10f, 0.10f},     // PID_P
+    {0.00f, 0.00f, 0.00f, 0.00f},     // PID_I
+    {0.004f, 0.004f, 0.004f, 0.004f}, // PID_D
+    {0.10f, 0.10f, 0.10f, 0.10f},     // Tail_PID_P
+    {0.00f, 0.00f, 0.00f, 0.00f},     // Tail_PID_I
+    {0.004f, 0.004f, 0.004f, 0.004f}, // Tail_PID_D
+    0.001f,                           // Kalman_Q_angle
+    0.003f,                           // Kalman_Q_bias
+    0.03f,                            // Kalman_R_measure
+    0.04f,                            // alpha
+    0.04f,                            // beta
+    true,                             // UseKalmanFilter
+    true,                             // UseRateLPF
+    PID_MARKER_VALUE,                 // Marker
 };
 
 StabilisationSettings FactoryHeliLevelling = {
-    3.0f,  // PID_P
-    0.08f, // PID_I
-    0.03f, // PID_D
-    3.0f,  // Tail_PID_P
-    0.08f, // Tail_PID_I
-    0.03f, // Tail_PID_D
 
-    // {3.0f, 3.0f, 3.0f, 3.0f,} // PID_P
-    // {0.08f, 0.08f, 0.08f, 0.08f,} // PID_I
-    // {0.03f, 0.03f, 0.03f, 0.03f,} // PID_D
-    // {3.0f, 3.0f, 3.0f, 3.0f,} // Tail_PID_P
-    // {0.08f, 0.08f, 0.08f, 0.08f,} // Tail_PID_I
-    // {0.03f, 0.03f, 0.03f, 0.03f,} // Tail_PID_D
-
-    0.001f,           // Kalman_Q_angle
-    0.003f,           // Kalman_Q_bias
-    0.03f,            // Kalman_R_measure
-    0.04f,            // alpha
-    0.04f,            // beta
-    true,             // UseKalmanFilter
-    false,            // UseRateLPF
-    PID_MARKER_VALUE, // Marker
+    {3.0f, 3.0f, 3.0f, 3.0f},     // PID_P
+    {0.08f, 0.08f, 0.08f, 0.08f}, // PID_I
+    {0.03f, 0.03f, 0.03f, 0.03f}, // PID_D
+    {3.0f, 3.0f, 3.0f, 3.0f},     // Tail_PID_P
+    {0.08f, 0.08f, 0.08f, 0.08f}, // Tail_PID_I
+    {0.03f, 0.03f, 0.03f, 0.03f}, // Tail_PID_D
+    0.001f,                       // Kalman_Q_angle
+    0.003f,                       // Kalman_Q_bias
+    0.03f,                        // Kalman_R_measure
+    0.04f,                        // alpha
+    0.04f,                        // beta
+    true,                         // UseKalmanFilter
+    false,                        // UseRateLPF
+    PID_MARKER_VALUE,             // Marker
 };
 
 StabilisationSettings FactoryPlaneRate = {
-    0.05f,  // PID_P
-    0.00f,  // PID_I
-    0.002f, // PID_D
-    0.05f,  // Tail_PID_P
-    0.00f,  // Tail_PID_I
-    0.002f, // Tail_PID_D
 
-    // {0.05f, 0.05f, 0.05f, 0.05f,} // PID_P
-    // {0.00f, 0.00f, 0.00f, 0.00f,} // PID_I
-    // {0.002f, 0.002f, 0.002f, 0.002f,} // PID_D
-    // {0.05f, 0.05f, 0.05f, 0.05f,} // Tail_PID_P
-    // {0.00f, 0.00f, 0.00f, 0.00f,} // Tail_PID_I
-    // {0.002f, 0.002f, 0.002f, 0.002f,} // Tail_PID_D
-
-    0.001f,           // Kalman_Q_angle
-    0.003f,           // Kalman_Q_bias
-    0.03f,            // Kalman_R_measure
-    0.05f,            // alpha
-    0.05f,            // beta
-    true,             // UseKalmanFilter
-    true,             // UseRateLPF
-    PID_MARKER_VALUE, // Marker
+    {0.05f, 0.05f, 0.05f, 0.05f},     // PID_P
+    {0.00f, 0.00f, 0.00f, 0.00f},     // PID_I
+    {0.002f, 0.002f, 0.002f, 0.002f}, // PID_D
+    {0.05f, 0.05f, 0.05f, 0.05f},     // Tail_PID_P
+    {0.00f, 0.00f, 0.00f, 0.00f},     // Tail_PID_I
+    {0.002f, 0.002f, 0.002f, 0.002f}, // Tail_PID_D
+    0.001f,                           // Kalman_Q_angle
+    0.003f,                           // Kalman_Q_bias
+    0.03f,                            // Kalman_R_measure
+    0.05f,                            // alpha
+    0.05f,                            // beta
+    true,                             // UseKalmanFilter
+    true,                             // UseRateLPF
+    PID_MARKER_VALUE,                 // Marker
 };
 
 StabilisationSettings FactoryPlaneLevelling = {
-    2.0f,  // PID_P
-    0.05f, // PID_I
-    0.02f, // PID_D
-    2.0f,  // Tail_PID_P
-    0.05f, // Tail_PID_I
-    0.02f, // Tail_PID_D
 
-    // {2.0f, 2.0f, 2.0f, 2.0f,} // PID_P
-    // {0.05f, 0.05f, 0.05f, 0.05f,} // PID_I
-    // {0.02f, 0.02f, 0.02f, 0.02f,} // PID_D
-    // {2.0f, 2.0f, 2.0f, 2.0f,} // Tail_PID_P
-    // {0.05f, 0.05f, 0.05f, 0.05f,} // Tail_PID_I
-    // {0.02f, 0.02f, 0.02f, 0.02f,} // Tail_PID_D
+    {2.0f, 2.0f, 2.0f, 2.0f},     // PID_P
+    {0.05f, 0.05f, 0.05f, 0.05f}, // PID_I
+    {0.02f, 0.02f, 0.02f, 0.02f}, // PID_D
+    {2.0f, 2.0f, 2.0f, 2.0f},     // Tail_PID_P
+    {0.05f, 0.05f, 0.05f, 0.05f}, // Tail_PID_I
+    {0.02f, 0.02f, 0.02f, 0.02f}, // Tail_PID_D
 
     0.001f,           // Kalman_Q_angle
     0.003f,           // Kalman_Q_bias

@@ -459,21 +459,21 @@ bool ReadOneModel(uint32_t Mnum)
     ++SDCardAddress;
     SavedActiveSettings = ActiveSettings; // save current settings pointer
     ActiveSettings = &RateSettings;
-
-    ActiveSettings->PID_P = SDReadFLOAT(SDCardAddress); // heer 1
-    SDCardAddress += 4;
-    ActiveSettings->PID_I = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    ActiveSettings->PID_D = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-
-    ActiveSettings->Tail_PID_P = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    ActiveSettings->Tail_PID_I = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    ActiveSettings->Tail_PID_D = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-
+    for (uint8_t i = 0; i < BANKS_USED; ++i)
+    {
+        ActiveSettings->PID_P[i] = SDReadFLOAT(SDCardAddress); 
+        SDCardAddress += 4;
+        ActiveSettings->PID_I[i] = SDReadFLOAT(SDCardAddress);
+        SDCardAddress += 4;
+        ActiveSettings->PID_D[i] = SDReadFLOAT(SDCardAddress);
+        SDCardAddress += 4;
+        ActiveSettings->Tail_PID_P[i] = SDReadFLOAT(SDCardAddress);
+        SDCardAddress += 4;
+        ActiveSettings->Tail_PID_I[i] = SDReadFLOAT(SDCardAddress);
+        SDCardAddress += 4;
+        ActiveSettings->Tail_PID_D[i] = SDReadFLOAT(SDCardAddress);
+        SDCardAddress += 4;
+    }
     ActiveSettings->Kalman_Q_angle = SDReadFLOAT(SDCardAddress);
     SDCardAddress += 4;
     ActiveSettings->Kalman_Q_bias = SDReadFLOAT(SDCardAddress);
@@ -493,19 +493,21 @@ bool ReadOneModel(uint32_t Mnum)
 
     ActiveSettings = &SelfLevelSettings;
 
-    ActiveSettings->PID_P = SDReadFLOAT(SDCardAddress); // heer 2
-    SDCardAddress += 4;
-    ActiveSettings->PID_I = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    ActiveSettings->PID_D = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-
-    ActiveSettings->Tail_PID_P = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    ActiveSettings->Tail_PID_I = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    ActiveSettings->Tail_PID_D = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
+    for (uint8_t i = 0; i < BANKS_USED; ++i)
+    {
+        ActiveSettings->PID_P[i] = SDReadFLOAT(SDCardAddress); 
+        SDCardAddress += 4;
+        ActiveSettings->PID_I[i] = SDReadFLOAT(SDCardAddress);
+        SDCardAddress += 4;
+        ActiveSettings->PID_D[i] = SDReadFLOAT(SDCardAddress);
+        SDCardAddress += 4;
+        ActiveSettings->Tail_PID_P[i] = SDReadFLOAT(SDCardAddress);
+        SDCardAddress += 4;
+        ActiveSettings->Tail_PID_I[i] = SDReadFLOAT(SDCardAddress);
+        SDCardAddress += 4;
+        ActiveSettings->Tail_PID_D[i] = SDReadFLOAT(SDCardAddress);
+        SDCardAddress += 4;
+    }
 
     ActiveSettings->Kalman_Q_angle = SDReadFLOAT(SDCardAddress);
     SDCardAddress += 4;
@@ -1435,20 +1437,22 @@ void SaveOneModel(uint32_t mnum)
 
     ActiveSettings = &RateSettings;
 
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_P); // heer 3
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_I);
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_D);
-    SDCardAddress += 4;
-
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_P);
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_I);
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_D);
-    SDCardAddress += 4;
-
+    
+    for (uint8_t i = 0; i < BANKS_USED; ++i)
+    {
+        SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_P[i]);
+        SDCardAddress += 4;
+        SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_I[i]); 
+        SDCardAddress += 4;
+        SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_D[i]); 
+        SDCardAddress += 4;
+        SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_P[i]); 
+        SDCardAddress += 4;
+        SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_I[i]); 
+        SDCardAddress += 4;
+        SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_D[i]); 
+        SDCardAddress += 4;
+    }
     SDUpdateFLOAT(SDCardAddress, ActiveSettings->Kalman_Q_angle);
     SDCardAddress += 4;
     SDUpdateFLOAT(SDCardAddress, ActiveSettings->Kalman_Q_bias);
@@ -1468,20 +1472,21 @@ void SaveOneModel(uint32_t mnum)
 
     ActiveSettings = &SelfLevelSettings;
 
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_P); // heer 4
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_I);
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_D);
-    SDCardAddress += 4;
-
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_P);
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_I);
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_D);
-    SDCardAddress += 4;
-
+    for (uint8_t i = 0; i < BANKS_USED; ++i)
+    {
+        SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_P[i]); 
+        SDCardAddress += 4;
+        SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_I[i]); 
+        SDCardAddress += 4;
+        SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_D[i]); 
+        SDCardAddress += 4;
+        SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_P[i]); 
+        SDCardAddress += 4;
+        SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_I[i]); 
+        SDCardAddress += 4;
+        SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_D[i]); 
+        SDCardAddress += 4;
+    }
     SDUpdateFLOAT(SDCardAddress, ActiveSettings->Kalman_Q_angle);
     SDCardAddress += 4;
     SDUpdateFLOAT(SDCardAddress, ActiveSettings->Kalman_Q_bias);

@@ -54,11 +54,12 @@ void SwitchStabilisation(bool OnOff) // This function switches stabilisation on 
 //************************************************************************************************************/
 void SendStabilationParameters() // This function sends the parameters that are used for stabilisation
 {
-#ifdef USE_STABILISATION                 // Send the parameters that are used for stabilisation
-    AddParameterstoQueue(BOOLEANS);      // BOOLEANS 9
-    AddParameterstoQueue(ALPHA_BETA);    // ALPHA_BETA 8
-    AddParameterstoQueue(PID_VALUES);    // PID Values 4
-    AddParameterstoQueue(KALMAN_VALUES); // KALMAN Values 5
+#ifdef USE_STABILISATION                   // Send the parameters that are used for stabilisation
+    AddParameterstoQueue(BOOLEANS);        // BOOLEANS 9
+    AddParameterstoQueue(ALPHA_BETA);      // ALPHA_BETA 8
+    AddParameterstoQueue(PID_VALUES);      // PID Values 4
+    AddParameterstoQueue(TAIL_PID_VALUES); // TAIL PID Values 11
+    AddParameterstoQueue(KALMAN_VALUES);   // KALMAN Values 5
 #endif
 }
 
@@ -119,9 +120,9 @@ void LoadParameters()
         break;
 #ifdef USE_STABILISATION
     case PID_VALUES: // 4 = PID Values
-        EncodeFloat(ActiveSettings->PID_P, &Parameters.word[0], &Parameters.word[1], &Parameters.word[2], &Parameters.word[3]);
-        EncodeFloat(ActiveSettings->PID_I, &Parameters.word[4], &Parameters.word[5], &Parameters.word[6], &Parameters.word[7]);
-        EncodeFloat(ActiveSettings->PID_D, &Parameters.word[8], &Parameters.word[9], &Parameters.word[10], &Parameters.word[11]);
+        EncodeFloat(ActiveSettings->PID_P[Bank - 1], &Parameters.word[0], &Parameters.word[1], &Parameters.word[2], &Parameters.word[3]);
+        EncodeFloat(ActiveSettings->PID_I[Bank - 1], &Parameters.word[4], &Parameters.word[5], &Parameters.word[6], &Parameters.word[7]);
+        EncodeFloat(ActiveSettings->PID_D[Bank - 1], &Parameters.word[8], &Parameters.word[9], &Parameters.word[10], &Parameters.word[11]);
         break;
     case KALMAN_VALUES: // 5 = Kalman Filter Values
         EncodeFloat(ActiveSettings->Kalman_Q_angle, &Parameters.word[0], &Parameters.word[1], &Parameters.word[2], &Parameters.word[3]);
@@ -150,6 +151,12 @@ void LoadParameters()
         Parameters.word[1] = 42;
         Parameters.word[2] = 42;
         break;
+    case TAIL_PID_VALUES: // 11 = Tail PID Values
+        EncodeFloat(ActiveSettings->Tail_PID_P[Bank - 1], &Parameters.word[0], &Parameters.word[1], &Parameters.word[2], &Parameters.word[3]);
+        EncodeFloat(ActiveSettings->Tail_PID_I[Bank - 1], &Parameters.word[4], &Parameters.word[5], &Parameters.word[6], &Parameters.word[7]);
+        EncodeFloat(ActiveSettings->Tail_PID_D[Bank - 1], &Parameters.word[8], &Parameters.word[9], &Parameters.word[10], &Parameters.word[11]);
+        break;
+
 #endif // USE_STABILISATION
     default:
         break;
