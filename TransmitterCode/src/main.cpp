@@ -4610,7 +4610,7 @@ void BankHasChanged()
     char sw4[] = "sw4";       // Self-levelling on off
 
 #ifdef USE_STABILISATION // Switch stabilisation on or off by bank switch
-    if (CurrentView != PIDVIEW)
+    if (CurrentView != PIDVIEW) // this will be called below
         CheckStabilisationAndSelf_levelling();
 #endif // USE_STABILISATION
 
@@ -4649,7 +4649,7 @@ void BankHasChanged()
     if (CurrentView == PIDVIEW)
     {
         Bank = PreviousBank;
-        SelfLevellingOn = GetValue(sw4); // NB
+        SelfLevellingOn = GetValue(sw4); 
         ReadPIDScreenData();             // Read PID data from the previous bank
         Bank = SavedBank;                // restore bank
         CheckStabilisationAndSelf_levelling();
