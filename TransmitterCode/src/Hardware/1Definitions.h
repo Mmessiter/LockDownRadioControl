@@ -780,6 +780,7 @@ void SwitchStabilisation(bool OnOff);
 void KalmanScreenStart();
 void KalmanScreenEnd();
 void ReadPIDScreenData();
+void DisplayPIDScreenData();
 #ifdef USE_BTLE
 void SendViaBLE();
 #endif

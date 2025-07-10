@@ -28,10 +28,17 @@ void AddParameterstoQueue(uint8_t ID) // this queue is essentially a LIFO stack
 void SwitchLevelling(bool OnOff) // This function switches levelling on or off by bank selected
 {
 #ifdef USE_STABILISATION // Switch levelling on or off
-    char sw4[] = "sw4";  // Switch 4 is used for levelling on/off
+
+    static bool PreviousSelfLevellingOn; // This is the previous state of the levelling
+    char sw4[] = "sw4";                  // Switch 4 is used for levelling on/off
     SelfLevellingOn = OnOff;
-    AddParameterstoQueue(BOOLEANS);
-    AddParameterstoQueue(BOOLEANS); // just to make sure it really gets sent
+
+    if (SelfLevellingOn != PreviousSelfLevellingOn) // if the state hasn't changed then just return
+    {
+        AddParameterstoQueue(BOOLEANS);
+        AddParameterstoQueue(BOOLEANS); // just to make sure it really gets sent
+        PreviousSelfLevellingOn = SelfLevellingOn;
+    }
     if (CurrentView == PIDVIEW)
         SendValue(sw4, SelfLevellingOn); // Send the value to the PID view
 #endif
@@ -41,14 +48,27 @@ void SwitchLevelling(bool OnOff) // This function switches levelling on or off b
 
 void SwitchStabilisation(bool OnOff) // This function switches stabilisation on or off by bank selected
 {
-#ifdef USE_STABILISATION // Switch stabilisation on or off
-    char sw0[] = "sw0";  // Switch 0 is used for stabilisation on/off
+#ifdef USE_STABILISATION                 // Switch stabilisation on or off
+    static bool PreviousStabilisationOn; // This is the state of the stabilisation switch
+    char sw0[] = "sw0";                  // Switch 0 is used for stabilisation on/off
     StabilisationOn = OnOff;
-    AddParameterstoQueue(BOOLEANS);
-    AddParameterstoQueue(BOOLEANS); // just to make sure it really gets sent
+    if (PreviousStabilisationOn != StabilisationOn) // if the state hasn't changed then just return
+    {
+        AddParameterstoQueue(BOOLEANS);
+        AddParameterstoQueue(BOOLEANS);            // just to make sure it really gets sent
+        PreviousStabilisationOn = StabilisationOn; // remember the state of the stabilisation switch
+
+    }
     if (CurrentView == PIDVIEW)
         SendValue(sw0, StabilisationOn); // Send the value to the PID view
 #endif
+}
+// *******************************************************************************************************************************/
+// This function is called from main.cpp to check the state of the stabilisation and self-
+void CheckStabilisationAndSelf_levelling()
+{
+    SwitchStabilisation(Bank == StabilisedBank || StabilisedBank == 0);
+    SwitchLevelling(Bank == LevelledBank || LevelledBank == 0);
 }
 
 //************************************************************************************************************/

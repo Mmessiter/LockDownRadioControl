@@ -4606,11 +4606,12 @@ void SafetySwitchChanged()
 // This function is called when the bank has changed
 void BankHasChanged()
 {
-
-  uint8_t SavedBank = Bank; // we might need it
+    uint8_t SavedBank = Bank; // we might need it
+    char sw4[] = "sw4";       // Self-levelling on off
 
 #ifdef USE_STABILISATION // Switch stabilisation on or off by bank switch
-    CheckStabilisationAndSelf_levelling();
+    if (CurrentView != PIDVIEW)
+        CheckStabilisationAndSelf_levelling();
 #endif // USE_STABILISATION
 
     if ((CurrentView == FRONTVIEW) || (CurrentView == TRIM_VIEW))
@@ -4648,8 +4649,10 @@ void BankHasChanged()
     if (CurrentView == PIDVIEW)
     {
         Bank = PreviousBank;
-        ReadPIDScreenData(); // Read PID data from the previous bank
-        Bank = SavedBank; // restore bank
+        SelfLevellingOn = GetValue(sw4); // NB
+        ReadPIDScreenData();             // Read PID data from the previous bank
+        Bank = SavedBank;                // restore bank
+        CheckStabilisationAndSelf_levelling();
         DisplayPIDScreenData();
     }
 }

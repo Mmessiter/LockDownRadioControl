@@ -1311,45 +1311,6 @@ void DisplayKalmanScreenData()
 }
 
 // ******************************************************************************************************************************/
-void DisplayPIDScreenData()
-{
-    char sw0[] = "sw0"; // Stabilisation on off
-    char sw4[] = "sw4"; // Self-levelling on off
-    char t9[] = "t9";   // PID P
-    char t14[] = "t14"; // PID I
-    char t15[] = "t15"; // PID D
-    char t17[] = "t17"; // Bank
-    char t4[] = "t4";   // PID Tail
-    char t5[] = "t5";   //
-    char t6[] = "t6";   //
-    char temp[10];
-
-    // Look1("Showing: "); // debug check the self-levelling status
-    // Look(SelfLevellingOn);
-    // Look1("");
-
-    if (SelfLevellingOn)
-        ActiveSettings = &SelfLevelSettings;
-    else
-        ActiveSettings = &RateSettings;
-
-    dtostrf(ActiveSettings->PID_P[Bank - 1], 1, 3, temp); 
-    SendText(t9, temp);
-    dtostrf(ActiveSettings->PID_I[Bank - 1], 1, 3, temp); 
-    SendText(t14, temp);
-    dtostrf(ActiveSettings->PID_D[Bank - 1], 1, 3, temp); 
-    SendText(t15, temp);
-    dtostrf(ActiveSettings->Tail_PID_P[Bank - 1], 1, 3, temp); 
-    SendText(t4, temp);
-    dtostrf(ActiveSettings->Tail_PID_I[Bank - 1], 1, 3, temp); 
-    SendText(t5, temp);
-    dtostrf(ActiveSettings->Tail_PID_D[Bank - 1], 1, 3, temp); 
-    SendText(t6, temp);
-    SendValue(sw0, StabilisationOn);
-    SendValue(sw4, SelfLevellingOn);
-    SendText(t17, BankNames[BanksInUse[Bank - 1]]); // display the bank name
-}
-// ******************************************************************************************************************************/
 void ReadKalmanSettings()
 {
     // we need to get the values from the Nextion display
@@ -1435,7 +1396,7 @@ void PIDScreenStart()
 #endif
 }
 // ******************************************************************************************************************************/
-void ReadPIDScreenData()
+void ReadPIDScreenData() // does not read self levelling!
 {
     // we need to get the values from the Nextion display
     char Invis[] = "vis t10,0";
@@ -1454,7 +1415,10 @@ void ReadPIDScreenData()
 
     SendCommand(Invis); // hide the model name
     SendCommand(ProgressStart);
+
     StabilisationOn = GetValue(sw0);
+  // SelfLevellingOn = GetValue(sw4); // NB
+    
     // Look1("Reading : ");
     // Look(SelfLevellingOn); // Debug check the SelfLevellingOn flag
 
@@ -1484,6 +1448,46 @@ void ReadPIDScreenData()
     SendValue(Progress, 100);
     SendCommand(ProgressEnd);
     SendCommand(vis); // show the model name again
+}
+
+// ******************************************************************************************************************************/
+void DisplayPIDScreenData()
+{
+    char sw0[] = "sw0"; // Stabilisation on off
+    char sw4[] = "sw4"; // Self-levelling on off
+    char t9[] = "t9";   // PID P
+    char t14[] = "t14"; // PID I
+    char t15[] = "t15"; // PID D
+    char t17[] = "t17"; // Bank
+    char t4[] = "t4";   // PID Tail
+    char t5[] = "t5";   //
+    char t6[] = "t6";   //
+    char temp[10];
+
+    // Look1("Showing: "); // debug check the self-levelling status
+    // Look(SelfLevellingOn);
+    // Look1("");
+
+    if (SelfLevellingOn)
+        ActiveSettings = &SelfLevelSettings;
+    else
+        ActiveSettings = &RateSettings;
+
+    dtostrf(ActiveSettings->PID_P[Bank - 1], 1, 3, temp);
+    SendText(t9, temp);
+    dtostrf(ActiveSettings->PID_I[Bank - 1], 1, 3, temp);
+    SendText(t14, temp);
+    dtostrf(ActiveSettings->PID_D[Bank - 1], 1, 3, temp);
+    SendText(t15, temp);
+    dtostrf(ActiveSettings->Tail_PID_P[Bank - 1], 1, 3, temp);
+    SendText(t4, temp);
+    dtostrf(ActiveSettings->Tail_PID_I[Bank - 1], 1, 3, temp);
+    SendText(t5, temp);
+    dtostrf(ActiveSettings->Tail_PID_D[Bank - 1], 1, 3, temp);
+    SendText(t6, temp);
+    SendValue(sw0, StabilisationOn);
+    SendValue(sw4, SelfLevellingOn);
+    SendText(t17, BankNames[BanksInUse[Bank - 1]]); // display the bank name
 }
 
 /******************************************************************************************************************************/
