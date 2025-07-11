@@ -5,6 +5,12 @@
 #include "utilities/1Definitions.h"
 
 // ************************************************************************/
+/**
+ * This function decodes a float value from four 16-bit words.
+ * Only the lower 8 bits of each word are used.
+ * Each word is cast to a uint8_t and placed into a union representing the bytes of a float.
+ * This reconstructs the original float value which was sent as four bytes.
+ */
 float DecodeFloat(uint16_t word1, uint16_t word2, uint16_t word3, uint16_t word4)
 {
     union

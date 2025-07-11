@@ -1224,7 +1224,7 @@ FLASHMEM void setup()
     RationaliseBuddy();
     WarnUserIfBuddyBoxIsOn();
     ClearMostParameters();
-    DelayWithDog(2000);
+   // DelayWithDog(750); // not needed
     GotoFrontView();
 }
 // **************************************************************************************************************************************************************

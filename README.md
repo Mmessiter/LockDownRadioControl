@@ -42,7 +42,7 @@ Right now I am adding PID stabilisation. It's currently still under developement
 
 New features are added from time to time, especially when requested by users and other club flyers.
 
-Here is a brief summary of the features supported at the time of writing (August 2024): -
+Here is a brief summary of the features supported at the time of writing (July 2025): -
 
 - 16 Channels.
 - 4 flight modes, each with its own curve for output.
