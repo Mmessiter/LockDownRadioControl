@@ -22,11 +22,12 @@
 //  #define DB_FAILSAFE
 //  #define DB_RXTIMERS
 
-#define USE_STABILISATION
- // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! (if it won't connect, probably one or both is wrong! )******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-#define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
-#define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
+ // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE THREE !!! (if it won't connect, probably one or both is wrong! )******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+ #define USE_STABILISATION
+//#define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
+//#define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
 
 // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
@@ -184,17 +185,18 @@ uint8_t ReconnectChannel = 0;
 int32_t RateOfClimb = 0;
 bool ForceCalibration = false; // Force calibration of MPU6050
 
-char ParaNames[11][30] = {
-    "FailSafe positions",
-    "QNH",
-    "Mark Location",
-    "PID Values",
-    "Kalman Values",
-    "Servo Frequencies",
-    "Servo Pulse Widths",
-    "Alpha & beta Values",
-    "Booleans",
-    "Re-calibtrate MPU",
+char ParaNames[12][30] = {
+    "FailSafe positions",  // 1
+    "QNH",                 // 2
+    "Mark Location",       // 3
+    "PID Values",          // 4
+    "Kalman Values",       // 5
+    "Servo Frequencies",   // 6
+    "Servo Pulse Widths",  // 7
+    "Alpha & beta Values", // 8
+    "Booleans",            // 9
+    "Re-calibtrate MPU",   // 10
+    "Tail PID Values"      // 11
 };
 /** AckPayload Stucture for data returned to transmitter. */
 struct Payload

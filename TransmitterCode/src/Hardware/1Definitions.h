@@ -122,7 +122,7 @@
 #define POWERONOFFDELAY2 4000 // Delay after power ON before Off is possible....
                               // and delay after power off before power on button is active
                               // **************************************************************************
-                              //                            FHSS PARAMETERS                               *
+                              //                            FHSS BITS                                     *
                               //***************************************************************************
 
 #define DATARATE RF24_250KBPS   // RF24_250KBPS or RF24_1MBPS or RF24_2MBPS
@@ -186,7 +186,7 @@
 
 #define PAUSE_BEFORE_PARAMETER_SEND 3000 // ms pause before sending parameters (to allow RX to prepare)
 #define PARAMETER_SEND_REPEATS 4         // Each parameter is repeated this many times (in case of packet loss)
-#define PARAMETER_SEND_FREQUENCY 25      // ms between parameter send slots (was 100)
+#define PARAMETER_SEND_FREQUENCY 50      // ms between parameter send slots (was 100)
 #define PARAMETER_SEND_DURATION 5        // ms duration for parameter sending (remainder used for control)
 #define PARAMETER_QUEUE_MAXIMUM 250      // Maximum queued parameters allowed at once
 
@@ -497,7 +497,7 @@
 #define NEXTION Serial1 // NEXTION is connected to Serial1
 
 // **************************************************************************
-//                            WATCHDOG PARAMETERS                           *
+//                            WATCHDOG                            *
 //***************************************************************************
 
 #define WATCHDOGTIMEOUT 2500 // 2.5 Seconds before reboot (32ms -> 500 seconds)
@@ -685,7 +685,6 @@ void CheckSavedTrimValues();
 void CheckMacrosBuffer();
 void FixMotorChannel();
 void SendInitialSetupParams();
-void SendOutstandingParameters();
 void AddParameterstoQueue(uint8_t ID);
 void SetDefaultValues();
 FASTRUN void LogThisRX();
@@ -911,8 +910,8 @@ uint32_t ModelNumber = 1;
 uint32_t SavedModelNumber = 1;
 uint32_t PreviousModelNumber = 1;
 uint8_t ModelDefined = 0;
-uint16_t MemoryForTransmtter = 0;                                                                          // SD space for transmitter parameters
-uint16_t OneModelMemory = 0;                                                                               // SD space for every model's parameters
+uint16_t MemoryForTransmtter = 0;                                                                          // SD space for transmitter 
+uint16_t OneModelMemory = 0;                                                                               // SD space for every model
 uint32_t SDCardAddress = 0;                                                                                // Address on SD card (offset from zero)
 uint8_t SwitchNumber[8] = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7};        // These can get swapped over later
 uint8_t DefaultSwitchNumber[8] = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7}; // Default values
@@ -1233,17 +1232,17 @@ uint8_t StabilisedBank = 3;
 uint8_t LevelledBank = 3; // 3
 
 char ParaNames[11][30] = {
-    "FailSafe positions",
-    "QNH",
-    "Mark Location",
-    "PID Values",
-    "Kalman Values",
-    "Servo Frequencies",
-    "Servo Pulse Widths",
-    "Alpha & beta Values",
-    "Booleans",
-    "Re-calibtrate MPU",
-    "Tail PID Values" // 11
+    "FailSafe positions",//1
+    "QNH",//2
+    "Mark Location",//3
+    "PID Values",//4
+    "Kalman Values",//5
+    "Servo Frequencies",//6
+    "Servo Pulse Widths",//7
+    "Alpha & beta Values",//8
+    "Booleans",//9
+    "Re-calibtrate MPU",//10
+    "Tail PID Values"//11
 };
 uint16_t ScreenData[50];
 uint16_t AverageFrameRate = 0;

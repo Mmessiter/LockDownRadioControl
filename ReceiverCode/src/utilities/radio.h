@@ -113,7 +113,7 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is total 
 {
     LastPacketArrivalTime = millis();                     // Note the arrival time
     uint8_t Ds = GetDecompressedSize(DynamicPayloadSize); // Get the decompressed size of the data
-    if (Ds) // not zero?
+    if (Ds)                                               // not zero?
     {
         if (DataReceived.ChannelBitMask)                            // Any changed channels?
         {                                                           // yes
