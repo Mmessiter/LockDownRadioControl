@@ -35,8 +35,7 @@ void SwitchLevelling(bool OnOff) // This function switches levelling on or off b
 
     if (SelfLevellingOn != PreviousSelfLevellingOn) // if the state hasn't changed then just return
     {
-        AddParameterstoQueue(BOOLEANS);
-        AddParameterstoQueue(BOOLEANS); // just to make sure it really gets sent
+        SendStabilationParameters();
         PreviousSelfLevellingOn = SelfLevellingOn;
     }
     if (CurrentView == PIDVIEW)
@@ -54,10 +53,8 @@ void SwitchStabilisation(bool OnOff) // This function switches stabilisation on 
     StabilisationOn = OnOff;
     if (PreviousStabilisationOn != StabilisationOn) // if the state hasn't changed then just return
     {
-        AddParameterstoQueue(BOOLEANS);
-        AddParameterstoQueue(BOOLEANS);            // just to make sure it really gets sent
+        SendStabilationParameters();
         PreviousStabilisationOn = StabilisationOn; // remember the state of the stabilisation switch
-
     }
     if (CurrentView == PIDVIEW)
         SendValue(sw0, StabilisationOn); // Send the value to the PID view
@@ -138,6 +135,16 @@ void LoadParameters()
             GPS_RX_MaxDistance = 0;
         }
         break;
+
+    case SERVO_FREQUENCIES: // 6 = Servo Frequencies
+        for (int i = 0; i < 11; ++i)
+            Parameters.word[i + 1] = ServoFrequency[i];
+        break;
+    case SERVO_PULSE_WIDTHS: // 7 = Servo Pulse Widths
+        for (int i = 0; i < 11; ++i)
+            Parameters.word[i + 1] = ServoCentrePulse[i];
+        break;
+
 #ifdef USE_STABILISATION
     case PID_VALUES: // 4 = PID Values
         EncodeFloat(ActiveSettings->PID_P[Bank - 1], &Parameters.word[0], &Parameters.word[1], &Parameters.word[2], &Parameters.word[3]);
@@ -148,14 +155,6 @@ void LoadParameters()
         EncodeFloat(ActiveSettings->Kalman_Q_angle, &Parameters.word[0], &Parameters.word[1], &Parameters.word[2], &Parameters.word[3]);
         EncodeFloat(ActiveSettings->Kalman_Q_bias, &Parameters.word[4], &Parameters.word[5], &Parameters.word[6], &Parameters.word[7]);
         EncodeFloat(ActiveSettings->Kalman_R_measure, &Parameters.word[8], &Parameters.word[9], &Parameters.word[10], &Parameters.word[11]);
-        break;
-    case SERVO_FREQUENCIES: // 6 = Servo Frequencies
-        for (int i = 0; i < 11; ++i)
-            Parameters.word[i + 1] = ServoFrequency[i];
-        break;
-    case SERVO_PULSE_WIDTHS: // 7 = Servo Pulse Widths
-        for (int i = 0; i < 11; ++i)
-            Parameters.word[i + 1] = ServoCentrePulse[i];
         break;
     case ALPHA_BETA: // 8 = Alpha and Beta
         EncodeFloat(ActiveSettings->alpha, &Parameters.word[0], &Parameters.word[1], &Parameters.word[2], &Parameters.word[3]);
@@ -225,7 +224,7 @@ int GetExtraParameters() // This gets extra parameters ready for sending and ret
     LoadParameters();
     LoadRawDataWithParameters();
     DataTosend.ChannelBitMask = 0; // IMPORTANT! This flag stops these data being seen as channel data at the RX!
-    //  DebugParamsOut();              // long
+    // DebugParamsOut();              // long
     //  Look1(Parameters.ID);
     //  Look1(" ");
     //  Look(ParaNames[Parameters.ID - 1]); // brief

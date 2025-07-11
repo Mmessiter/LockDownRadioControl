@@ -185,7 +185,7 @@
 // Parameter transmission timing and redundancy
 
 #define PARAMETER_SEND_REPEATS 4     // Each parameter is repeated this many times (in case of packet loss)
-#define PARAMETER_SEND_FREQUENCY 100 // ms between parameter send slots
+#define PARAMETER_SEND_FREQUENCY 25  // ms between parameter send slots (was 100)
 #define PARAMETER_SEND_DURATION 5    // ms duration for parameter sending (remainder used for control)
 #define PARAMETER_QUEUE_MAXIMUM 250  // Maximum queued parameters allowed at once
 
@@ -1240,6 +1240,7 @@ char ParaNames[11][30] = {
     "Alpha & beta Values",
     "Booleans",
     "Re-calibtrate MPU",
+    "Tail PID Values" // 11
 };
 uint16_t ScreenData[50];
 uint16_t AverageFrameRate = 0;
