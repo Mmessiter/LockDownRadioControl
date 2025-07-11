@@ -64,8 +64,10 @@ void SwitchStabilisation(bool OnOff) // This function switches stabilisation on 
 // This function is called from main.cpp to check the state of the stabilisation and self-
 void CheckStabilisationAndSelf_levelling()
 {
+#ifdef USE_STABILISATION
     SwitchStabilisation(Bank == StabilisedBank || StabilisedBank == 0);
     SwitchLevelling(Bank == LevelledBank || LevelledBank == 0);
+#endif
 }
 
 //************************************************************************************************************/
@@ -224,10 +226,10 @@ int GetExtraParameters() // This gets extra parameters ready for sending and ret
     LoadParameters();
     LoadRawDataWithParameters();
     DataTosend.ChannelBitMask = 0; // IMPORTANT! This flag stops these data being seen as channel data at the RX!
-    // DebugParamsOut();              // long
-    //  Look1(Parameters.ID);
-    //  Look1(" ");
-    //  Look(ParaNames[Parameters.ID - 1]); // brief
+                                   // DebugParamsOut();              // long
+    Look1(Parameters.ID);
+    Look1(" ");
+    Look(ParaNames[Parameters.ID - 1]); // brief
 
     return 12; //  was 8 - this is the extent of this parameter
 }
@@ -253,7 +255,9 @@ void SelfLevellingChange()
 #endif                                  // USE_STABILISATION
 }
 //************************************************************************************************************/
-void KFactoryDefaultsPlane(){
+void KFactoryDefaultsPlane()
+{
+#ifdef USE_STABILISATION
     if (GetConfirmation(pKalmanView, (char *)"Re-Load factory plane defaults?!"))
     {
         ActiveSettings = &RateSettings; // set the active settings to the rate settings
@@ -263,10 +267,12 @@ void KFactoryDefaultsPlane(){
         SendValue((char *)"sw4", SelfLevellingOn); // heer
         DisplayKalmanScreenData();
     }
+#endif // USE_STABILISATION
 }
 //************************************************************************************************************/
 void FactoryDefaultsPlane()
 {
+#ifdef USE_STABILISATION
     if (GetConfirmation(pPIDView, (char *)"Re-Load factory plane defaults?!"))
     {
         ActiveSettings = &RateSettings; // set the active settings to the rate settings
@@ -276,9 +282,12 @@ void FactoryDefaultsPlane()
         SendValue((char *)"sw4", SelfLevellingOn); // heer
         DisplayPIDScreenData();
     }
+#endif // USE_STABILISATION
 }
 // /************************************************************************************************************/
-void KFactoryDefaultsHeli(){
+void KFactoryDefaultsHeli()
+{
+#ifdef USE_STABILISATION
     if (GetConfirmation(pKalmanView, (char *)"Re-Load factory heli defaults?!"))
     {
         ActiveSettings = &RateSettings; // set the active settings to the rate settings
@@ -288,11 +297,13 @@ void KFactoryDefaultsHeli(){
         SendValue((char *)"sw4", SelfLevellingOn); // heer
         DisplayKalmanScreenData();
     }
+#endif // USE_STABILISATION
 }
-    //************************************************************************************************************/
+//************************************************************************************************************/
 
-    void FactoryDefaultsHeli()
+void FactoryDefaultsHeli()
 {
+#ifdef USE_STABILISATION
     if (GetConfirmation(pPIDView, (char *)"Re-Load factory heli defaults?!"))
     {
         ActiveSettings = &RateSettings; // set the active settings to the rate settings
@@ -302,12 +313,21 @@ void KFactoryDefaultsHeli(){
         SendValue((char *)"sw4", SelfLevellingOn); // heer
         DisplayPIDScreenData();
     }
+#endif // USE_STABILISATION
 }
 
 /************************************************************************************************************/
 void ActuallySendParameters(uint32_t RightNow)
 {
     static uint32_t LastParameterSent = 0;
+
+    if (RightNow - LedGreenMoment < PAUSE_BEFORE_PARAMETER_SEND) // wait a little before sending parameters to allow the RX to Bind
+    {
+       // Look(LedGreenMoment);
+        return;
+    }
+
+    ShowSendingParameters();
     if (RightNow - LastParameterSent >= PARAMETER_SEND_FREQUENCY)
     {
         ParamPause = false; // Reset pause flag to allow the parameters to be sent
@@ -316,6 +336,7 @@ void ActuallySendParameters(uint32_t RightNow)
     else if (RightNow - LastParameterSent >= PARAMETER_SEND_DURATION) // it would just keep sending parameters so we must pause it for a while
     {
         ParamPause = true; // Pause sending parameters briefly so we can send data to control the model ! :-)
+        LastConnectionQuality = 0;
     }
 }
 #endif

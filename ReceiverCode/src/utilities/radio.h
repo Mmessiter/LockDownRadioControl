@@ -113,7 +113,6 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is total 
 {
     LastPacketArrivalTime = millis();                     // Note the arrival time
     uint8_t Ds = GetDecompressedSize(DynamicPayloadSize); // Get the decompressed size of the data
-
     if (Ds) // not zero?
     {
         if (DataReceived.ChannelBitMask)                            // Any changed channels?
@@ -447,21 +446,21 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch)
 }
 #endif // defined (SECOND_TRANSCEIVER)
 // ************************************************************************************************************/
-void DisplayPipe()
-{
-    static uint32_t lastTime = 0;
-    if (millis() - lastTime < 1000)
-        return;
-    lastTime = millis();
+// void DisplayPipe()
+// {
+//     static uint32_t lastTime = 0;
+//     if (millis() - lastTime < 1000)
+//         return;
+//     lastTime = millis();
 
-    Serial.print("Listening for pipe: ");
-    for (uint8_t i = 0; i < 5; ++i)
-    {
-        Serial.print(CurrentPipe[i], HEX);
-        Serial.print(" ");
-    }
-    Serial.println("");
-}
+//     Serial.print("Listening for pipe: ");
+//     for (uint8_t i = 0; i < 5; ++i)
+//     {
+//         Serial.print(CurrentPipe[i], HEX);
+//         Serial.print(" ");
+//     }
+//     Serial.println("");
+// }
 /************************************************************************************************************/
 FASTRUN void Reconnect()
 {
@@ -511,9 +510,10 @@ FASTRUN void Reconnect()
                 attempts = 0;
             }
 #else
-            if (attempts >= 3)
+            if (attempts >= MAXTRIESPERTRANSCEIVER)
             {
                 ProdRadio(ReconnectChannel);
+                DelayMillis(1);
                 attempts = 0;
             }
 #endif
@@ -685,10 +685,10 @@ void SetupRadios()
     digitalWrite(pinCE1, CE_OFF);
     digitalWrite(pinCSN2, CSN_ON);
     digitalWrite(pinCE2, CE_ON);
-    delay(4);
     InitCurrentRadio();
     ThisRadio = 2;
 #endif
+    delay(4);
 }
 
 /************************************************************************************************************/

@@ -413,7 +413,7 @@ FLASHMEM void setup()
     TestAllPWMPins(); // Check that the no PWM pins are held low (plug in wrong way round)
     Wire.begin();
     Wire.setClock(400000); // Or 1000000, etc
-    //delay(400);// *only* needed if you want to see terminal output
+   // delay(400);// *only* needed if you want to see terminal output
     delay(200); // Wait for I2C to settle
     ScanI2c();  // Detect what's connected
     if (BMP280Connected)

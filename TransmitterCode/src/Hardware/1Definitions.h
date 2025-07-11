@@ -184,10 +184,11 @@
 // but it is necessary to allow control data to be sent too.
 // Parameter transmission timing and redundancy
 
-#define PARAMETER_SEND_REPEATS 4     // Each parameter is repeated this many times (in case of packet loss)
-#define PARAMETER_SEND_FREQUENCY 25  // ms between parameter send slots (was 100)
-#define PARAMETER_SEND_DURATION 5    // ms duration for parameter sending (remainder used for control)
-#define PARAMETER_QUEUE_MAXIMUM 250  // Maximum queued parameters allowed at once
+#define PAUSE_BEFORE_PARAMETER_SEND 3000 // ms pause before sending parameters (to allow RX to prepare)
+#define PARAMETER_SEND_REPEATS 4         // Each parameter is repeated this many times (in case of packet loss)
+#define PARAMETER_SEND_FREQUENCY 25      // ms between parameter send slots (was 100)
+#define PARAMETER_SEND_DURATION 5        // ms duration for parameter sending (remainder used for control)
+#define PARAMETER_QUEUE_MAXIMUM 250      // Maximum queued parameters allowed at once
 
 // Parameter ID definitions. Most are used for PID stabilisation, but some are used for other purposes.
 #define FAILSAFE_SETTINGS 1
@@ -1310,7 +1311,7 @@ uint8_t Buddy_Hi_Position = 2;
 
 bool StabilisationOn = false;
 bool SelfLevellingOn = false;
-bool ParamPause = false;
+bool ParamPause = true;
 
 #define PID_MARKER_VALUE 253 // Marker value for settings.
 // (If this value is not present, then settings are junk and will be reset to defaults)

@@ -463,13 +463,10 @@ void ShowConnectionQuality()
     uint16_t ConnectionQuality = GetSuccessRate();
     if (!LedWasGreen)
         return;
-    if (!LastConnectionQuality)
+    if (ConnectionQuality != LastConnectionQuality)
     {
         SendText(FrontView_Connected, FrontView_Connected);
         SendCommand(Visible);
-    } // once only!
-    if (ConnectionQuality != LastConnectionQuality)
-    {
         LastConnectionQuality = ConnectionQuality;
         SendValue(Quality, ConnectionQuality);
     } // only if changed
@@ -486,14 +483,14 @@ void PopulateFrontView()
     char FrontView_Connected[] = "Connected";
     char InVisible[] = "vis Quality,0";
 
-    if (ParametersToBeSentPointer == 0)
+    if ((ParametersToBeSentPointer == 0) || (millis() - LedGreenMoment < PAUSE_BEFORE_PARAMETER_SEND))
     {
         ShowConnectionQuality();
-    }
-    else
-    {
+   }
+   else 
+   {
         ShowSendingParameters();
-    }
+   }
     
     if ((LastAutoModelSelect != AutoModelSelect) || (!ModelsMacUnionSaved.Val64))
     {
