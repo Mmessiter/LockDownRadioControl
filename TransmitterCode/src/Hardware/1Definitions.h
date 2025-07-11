@@ -781,6 +781,8 @@ void KalmanScreenStart();
 void KalmanScreenEnd();
 void ReadPIDScreenData();
 void DisplayPIDScreenData();
+void KFactoryDefaultsPlane();
+void KFactoryDefaultsHeli();
 #ifdef USE_BTLE
 void SendViaBLE();
 #endif

@@ -147,7 +147,8 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define ALPHA_BETA 8
 #define BOOLEANS 9
 #define RECALIBRATE_MPU6050 10
-#define PARAMETERS_MAX_ID 11 // Max types of parameters packet to send  ... will increase.
+#define TAIL_PID_VALUES 11 // Tail PID values for helicopters, etc.
+#define PARAMETERS_MAX_ID 12 // Max types of parameters packet to send  ... will increase.
 
 // ****************************************************************************************************************************************
 
@@ -255,6 +256,9 @@ float CalibrationPitchReading = 0.0f;
 float PID_P = 2.0f;
 float PID_I = 0.1f;
 float PID_D = 0.01f;
+float TAIL_PID_P = 2.0f;
+float TAIL_PID_I = 0.1f;
+float TAIL_PID_D = 0.01f;
 float Kalman_Q_angle = 0.001f;
 float Kalman_Q_bias = 0.003f;
 float Kalman_R_measure = 0.03f;

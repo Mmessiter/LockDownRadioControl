@@ -101,6 +101,15 @@ void ReadExtraParameters()
     case RECALIBRATE_MPU6050:                                         // 10
         if ((Parameters.word[1] == 42) && (Parameters.word[2] == 42)) // these two just to confirm
             PerformMPU6050Calibration();
+        break;
+    case TAIL_PID_VALUES: // 11 - Tail PID values for helicopters, etc.
+        TAIL_PID_P = DecodeFloat(Parameters.word[0], Parameters.word[1], Parameters.word[2], Parameters.word[3]);
+        TAIL_PID_I = DecodeFloat(Parameters.word[4], Parameters.word[5], Parameters.word[6], Parameters.word[7]);
+        TAIL_PID_D = DecodeFloat(Parameters.word[8], Parameters.word[9], Parameters.word[10], Parameters.word[11]);
+        ShowValues("Tail PID P", TAIL_PID_P);
+        ShowValues("Tail PID I", TAIL_PID_I);
+        ShowValues("Tail PID D", TAIL_PID_D);
+        break;
 
 #endif // ifdef USE_STABILISATION
         break;

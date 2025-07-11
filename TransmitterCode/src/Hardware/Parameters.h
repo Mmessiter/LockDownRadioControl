@@ -253,6 +253,18 @@ void SelfLevellingChange()
 #endif                                  // USE_STABILISATION
 }
 //************************************************************************************************************/
+void KFactoryDefaultsPlane(){
+    if (GetConfirmation(pKalmanView, (char *)"Re-Load factory plane defaults?!"))
+    {
+        ActiveSettings = &RateSettings; // set the active settings to the rate settings
+        RateSettings = FactoryPlaneRate;
+        SelfLevelSettings = FactoryPlaneLevelling;
+        SelfLevellingOn = false;                   // defaults are always without self-levelling
+        SendValue((char *)"sw4", SelfLevellingOn); // heer
+        DisplayKalmanScreenData();
+    }
+}
+//************************************************************************************************************/
 void FactoryDefaultsPlane()
 {
     if (GetConfirmation(pPIDView, (char *)"Re-Load factory plane defaults?!"))
@@ -265,10 +277,21 @@ void FactoryDefaultsPlane()
         DisplayPIDScreenData();
     }
 }
+// /************************************************************************************************************/
+void KFactoryDefaultsHeli(){
+    if (GetConfirmation(pKalmanView, (char *)"Re-Load factory heli defaults?!"))
+    {
+        ActiveSettings = &RateSettings; // set the active settings to the rate settings
+        RateSettings = FactoryHeliRate;
+        SelfLevelSettings = FactoryHeliLevelling;
+        SelfLevellingOn = false;                   // defaults are always without self-levelling
+        SendValue((char *)"sw4", SelfLevellingOn); // heer
+        DisplayKalmanScreenData();
+    }
+}
+    //************************************************************************************************************/
 
-//************************************************************************************************************/
-
-void FactoryDefaultsHeli()
+    void FactoryDefaultsHeli()
 {
     if (GetConfirmation(pPIDView, (char *)"Re-Load factory heli defaults?!"))
     {

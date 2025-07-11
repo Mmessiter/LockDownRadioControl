@@ -296,8 +296,8 @@ void GetCurrentAttitude()
   // This is used to print the attitude to the Serial Plotter only for debugging purposes
   if (++counter > 6)
   {
-    // PlotRates();
-    // PlotAttitude(); // Print the attitude to the Serial Plotter
+     PlotRates();
+   //  PlotAttitude(); // Print the attitude to the Serial Plotter
     counter = 0;
   }
 }

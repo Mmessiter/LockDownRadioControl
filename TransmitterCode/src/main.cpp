@@ -3258,35 +3258,37 @@ void CheckAllModelIds()
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!  ( Use "NUMBER<<8" )
-#define LASTFUNCTION1 26 // One more than final one
+#define LASTFUNCTION1 28 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])(){
-    Blank,                // 0 Cannot be used
-    DeleteModel,          // 1
-    StartAudioVisualView, // 2
-    EndAudioVisualView,   // 3
-    StartTXSetupView,     // 4
-    InputsViewEnd,        // 5
-    SystemPage1End,       // 6
-    SystemPage1Start,     // 7
-    StartWifiScan,        // 8
-    EndWifiScan,          // 9
-    StartServosTypeView,  // 10
-    EndServoTypeView,     // 11
-    LoadNewLogFile,       // 12
-    DeleteThisLogFile,    // 13
-    LogReleasedNEW,       // 14   // new version
-    LogTouched,           // 15   // this does nothing, yet ...
-    RefreshDualRatesNew,  // 16
-    PIDScreenStart,       // 17
-    PIDScreenEnd,         // 18
-    GyroApply,            // 19
-    CalibrateMPU6050,     // 20
-    SelfLevellingChange,  // 21
-    FactoryDefaultsPlane, // 22
-    FactoryDefaultsHeli,  // 23
-    KalmanScreenEnd,      // 24
-    KalmanScreenStart,    // 25
+    Blank,                 // 0 Cannot be used
+    DeleteModel,           // 1
+    StartAudioVisualView,  // 2
+    EndAudioVisualView,    // 3
+    StartTXSetupView,      // 4
+    InputsViewEnd,         // 5
+    SystemPage1End,        // 6
+    SystemPage1Start,      // 7
+    StartWifiScan,         // 8
+    EndWifiScan,           // 9
+    StartServosTypeView,   // 10
+    EndServoTypeView,      // 11
+    LoadNewLogFile,        // 12
+    DeleteThisLogFile,     // 13
+    LogReleasedNEW,        // 14   // new version
+    LogTouched,            // 15   // this does nothing, yet ...
+    RefreshDualRatesNew,   // 16
+    PIDScreenStart,        // 17
+    PIDScreenEnd,          // 18
+    GyroApply,             // 19
+    CalibrateMPU6050,      // 20
+    SelfLevellingChange,   // 21
+    FactoryDefaultsPlane,  // 22
+    FactoryDefaultsHeli,   // 23
+    KalmanScreenEnd,       // 24
+    KalmanScreenStart,     // 25
+    KFactoryDefaultsPlane, // 26
+    KFactoryDefaultsHeli,  // 27
 };
 
 // This list migth become MUCH longer as it limit is 24 bits big
@@ -4617,7 +4619,7 @@ void BankHasChanged()
     uint8_t SavedBank = Bank; // we might need it
     char sw4[] = "sw4";       // Self-levelling on off
 
-#ifdef USE_STABILISATION // Switch stabilisation on or off by bank switch
+#ifdef USE_STABILISATION        // Switch stabilisation on or off by bank switch
     if (CurrentView != PIDVIEW) // this will be called below
         CheckStabilisationAndSelf_levelling();
 #endif // USE_STABILISATION
@@ -4657,9 +4659,9 @@ void BankHasChanged()
     if (CurrentView == PIDVIEW)
     {
         Bank = PreviousBank;
-        SelfLevellingOn = GetValue(sw4); 
-        ReadPIDScreenData();             // Read PID data from the previous bank
-        Bank = SavedBank;                // restore bank
+        SelfLevellingOn = GetValue(sw4);
+        ReadPIDScreenData(); // Read PID data from the previous bank
+        Bank = SavedBank;    // restore bank
         CheckStabilisationAndSelf_levelling();
         DisplayPIDScreenData();
     }
