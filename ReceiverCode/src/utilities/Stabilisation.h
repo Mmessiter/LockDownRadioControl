@@ -54,6 +54,10 @@ void Read_MPU6050(void)
   // Calculate angles relative to calibration orientation
   RawRollAngle = currentRollReading - CalibrationRollReading;
   RawPitchAngle = currentPitchReading - CalibrationPitchReading;
+
+  RawRollRate -= RateCalibrationRoll;   // Correct for gyro calibration
+  RawPitchRate -= RateCalibrationPitch; // Correct for gyro calibration
+  RawYawRate -= RateCalibrationYaw;     // Correct for gyro calibration
 }
 
 // ****************************************************************************************************
@@ -260,23 +264,23 @@ void PlotAttitude()
 
 // ******************************************************************************************************************************************************************
 // This function gets the current attitude of the aircraft by reading the MPU6050 sensor data and applying the Kalman  and low pass filters if enabled.
+#define AVERAGE_READINGS 8 // Number of readings to average for smoother output
 void GetCurrentAttitude()
 {
+  if (!BoundFlag) // If the model is not bound, skip stabilisation
+    return;
   static uint32_t LoopTimer;
-  uint32_t Now = millis(); // Get the current time in milliseconds with a single call to save time.
   static uint8_t counter = 0;
+  uint32_t Now = millis(); // Get the current time in microseconds with a single call to save time.
   if (Now - LoopTimer < 2) // 2ms loop time or 500 Hz
   {
     return;
   }
   LoopTimer = Now;
-  // TimeTheLoop(); // Print loop rate to Serial Monitor
+   //TimeTheLoop(); // Print loop rate to Serial Monitor
   Read_MPU6050();
-  RawRollRate -= RateCalibrationRoll;   // Correct for gyro calibration
-  RawPitchRate -= RateCalibrationPitch; // Correct for gyro calibration
-  RawYawRate -= RateCalibrationYaw;     // Correct for gyro calibration
-
-  if (UseKalmanFilter)
+  
+      if (UseKalmanFilter)
   {
     kalmanFilter(); // heer
   }
@@ -296,8 +300,8 @@ void GetCurrentAttitude()
   // This is used to print the attitude to the Serial Plotter only for debugging purposes
   if (++counter > 6)
   {
-     PlotRates();
-   //  PlotAttitude(); // Print the attitude to the Serial Plotter
+    // PlotRates();
+     PlotAttitude(); // Print the attitude to the Serial Plotter
     counter = 0;
   }
 }

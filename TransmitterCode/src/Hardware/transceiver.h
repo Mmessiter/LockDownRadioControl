@@ -168,7 +168,7 @@ void RecordsPacketSuccess(uint8_t s)
     ReconnectingNow = false;
     PacketsHistoryBuffer[PacketsHistoryIndex] = s;
     ++PacketsHistoryIndex;
-    if (PacketsHistoryIndex >= PERFECTPACKETSPERSECOND)
+    if (PacketsHistoryIndex >= PACKET_HISTORY_WINDOW)
         PacketsHistoryIndex = 0; // wrap around
 
     if (s)

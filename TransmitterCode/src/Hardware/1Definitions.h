@@ -52,7 +52,7 @@
 //                                       General                                      *
 // ************************************************************************************
 
-#define USE_STABILISATION
+//#define USE_STABILISATION
 #define CALBRATION_STATUS_IDLE 0      // Idle status
 #define CALBRATION_STATUS_SUCCEEDED 1 // Calibration succeeded
 #define CALBRATION_STATUS_FAILED 2    // Calibration failed
@@ -62,20 +62,15 @@
 #define VERYHIGHPACKETRATE // Comment this out if using stabilisation
 
 #ifdef VERYHIGHPACKETRATE
-
 // ***** OVER THE TOP HIGH DATA RATE MODE ***** Only use this version if no stabilisation is used.
-#define PACEMAKER 5                 //  5ms means about 200 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-#define PERFECTPACKETSPERSECOND 200 // Flat out perfect packets per second
-#define TIMEFORTXMANAGMENT 1        // 1 is plenty. takes only 1ms or so
-
-#else                               // not VERYHIGHPACKETRATE
-
+#define PACEMAKER 5                       // 5ms means about 200 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define PACKET_HISTORY_WINDOW 200         // Flat out perfect packets per second
+#else                                     // not VERYHIGHPACKETRATE
 // ***** MORE SENSIBLE DATA RATE MODE ***** use this rate if Stabilisaton is used.
-#define PACEMAKER 8                 // WAS 5ms means about 200 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-#define PERFECTPACKETSPERSECOND 125 // Flat out perfect packets per second
-#define TIMEFORTXMANAGMENT 2        // 3? seems best!  ...  How many ms must remain spare between data packets before daring to undertake more trivial tasks
-#endif                              // VERYHIGHPACKETRATE
-
+#define PACEMAKER 7                       // means about 125 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define PACKET_HISTORY_WINDOW 100         // Flat out perfect packets per second
+#endif                                    // VERYHIGHPACKETRATE
+#define TIMEFORTXMANAGMENT 1              // 1 is plenty. takes only 1ms or so
 #define MAXRESOLUTION 4095                // 12 BIT ADC Resolution
 #define CE_PIN 7                          // for SPI to nRF24L01
 #define CSN_PIN 8                         // for SPI to nRF24L01
@@ -110,9 +105,9 @@
 #define MAXDUALRATE 200
 #define MAXBUFFERSIZE 1024 * 6
 #define MAXMODELNUMBER 91
-#define RED_LED_ON_TIME 2000        // How many ms of no connection before RED led comes on
-#define LOW_VOLTAGE_TIME 10000      // How many ms to endure low voltage before announcing it. (10 seconds)
-#define MAXSHOWCOMMSSESCONDS 6      // Assess average connection quality over most recent 6 seconds continously
+#define RED_LED_ON_TIME 2000   // How many ms of no connection before RED led comes on
+#define LOW_VOLTAGE_TIME 10000 // How many ms to endure low voltage before announcing it. (10 seconds)
+
 #define SHOWCOMMSDELAY 100          // ms pauses between updated info on NEXTION
 #define WARMUPDELAY 300             // fails at 200 so must be >200 ...
 #define SCREENCHANGEWAIT 10         // allow 10ms for screen to appear
@@ -840,7 +835,7 @@ uint64_t TeensyMACAddPipe = DEFAULTPIPEADDRESS; //          New Radio pipe addre
 uint64_t BuddyMACAddPipe = DEFAULTPIPEADDRESS;  //          Buddy pipe address
 char TextIn[MAXTEXTIN + 2];                     //          Spare space
 uint16_t PacketsPerSecond = 0;
-uint8_t PacketsHistoryBuffer[(5 + PERFECTPACKETSPERSECOND) * MAXSHOWCOMMSSESCONDS]; // Here we record some history
+uint8_t PacketsHistoryBuffer[PACKET_HISTORY_WINDOW + 1]; // Here we record some history
 uint32_t TotalLostPackets = 0;
 uint32_t TotalGoodPackets = 0;
 uint16_t PacketNumber = 0;
@@ -910,7 +905,7 @@ uint32_t ModelNumber = 1;
 uint32_t SavedModelNumber = 1;
 uint32_t PreviousModelNumber = 1;
 uint8_t ModelDefined = 0;
-uint16_t MemoryForTransmtter = 0;                                                                          // SD space for transmitter 
+uint16_t MemoryForTransmtter = 0;                                                                          // SD space for transmitter
 uint16_t OneModelMemory = 0;                                                                               // SD space for every model
 uint32_t SDCardAddress = 0;                                                                                // Address on SD card (offset from zero)
 uint8_t SwitchNumber[8] = {SWITCH0, SWITCH1, SWITCH2, SWITCH3, SWITCH4, SWITCH5, SWITCH6, SWITCH7};        // These can get swapped over later
@@ -1232,17 +1227,17 @@ uint8_t StabilisedBank = 3;
 uint8_t LevelledBank = 3; // 3
 
 char ParaNames[11][30] = {
-    "FailSafe positions",//1
-    "QNH",//2
-    "Mark Location",//3
-    "PID Values",//4
-    "Kalman Values",//5
-    "Servo Frequencies",//6
-    "Servo Pulse Widths",//7
-    "Alpha & beta Values",//8
-    "Booleans",//9
-    "Re-calibtrate MPU",//10
-    "Tail PID Values"//11
+    "FailSafe positions",  // 1
+    "QNH",                 // 2
+    "Mark Location",       // 3
+    "PID Values",          // 4
+    "Kalman Values",       // 5
+    "Servo Frequencies",   // 6
+    "Servo Pulse Widths",  // 7
+    "Alpha & beta Values", // 8
+    "Booleans",            // 9
+    "Re-calibtrate MPU",   // 10
+    "Tail PID Values"      // 11
 };
 uint16_t ScreenData[50];
 uint16_t AverageFrameRate = 0;

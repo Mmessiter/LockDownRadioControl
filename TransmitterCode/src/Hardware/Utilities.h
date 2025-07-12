@@ -877,7 +877,7 @@ int GetNextNumber(int p1, char text1[CHARSMAX])
 
 void ClearSuccessRate()
 {
-    for (int i = 0; i < (PERFECTPACKETSPERSECOND * (uint16_t)ConnectionAssessSeconds); ++i)
+    for (int i = 0; i < (PACKET_HISTORY_WINDOW * (uint16_t)ConnectionAssessSeconds); ++i)
     { // 126 packets per second start off good
         PacketsHistoryBuffer[i] = 1;
     }
@@ -1019,16 +1019,14 @@ void DelaySimple(uint32_t ms)
 /*********************************************************************************************************************************/
 uint16_t GetSuccessRate()
 {
-    uint32_t Total = 0;
+    uint32_t Total = 0; // Accumulates number of successful packets
     uint16_t SuccessRate;
+    for (uint16_t i = 0; i < PACKET_HISTORY_WINDOW; ++i)
+        Total += PacketsHistoryBuffer[i]; // Sum successes from ring buffer
 
-    for (uint16_t i = 0; i < PERFECTPACKETSPERSECOND; ++i)
-        Total += PacketsHistoryBuffer[i];
-
-    SuccessRate = (Total * 100) / PERFECTPACKETSPERSECOND; // return a percentage of total good packets
+    SuccessRate = (Total * 100) / PACKET_HISTORY_WINDOW; // Percentage of successful packets
     return SuccessRate;
 }
-
 /*********************************************************************************************************************************/
 //                  My new version of the the traditional "map()" function -- but here with exponential added.
 /*********************************************************************************************************************************/
