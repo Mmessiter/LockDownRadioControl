@@ -10,24 +10,23 @@
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 5
 #define RXVERSION_MINIMUS 3
-#define RXVERSION_EXTRA 'A' // 02 July 2025
-#define HOPTIME 17          // 17 gives 50Hz FHSS, 47 gives 20Hz FHSS
-#define RECEIVE_TIMEOUT 7   // was 8 ... 5 milliseconds is 'perfect' time between packets, but with nRF24L01 auto-retries it might be 7 or 8 sometimes
+#define RXVERSION_EXTRA 'A' // 14 July 2025 ... Vive la France!
+#define HOPTIME 15          // gives about 48Hz FHSS, 47 gives 20Hz FHSS
+#define RECEIVE_TIMEOUT 7   // was 8
 
 // **************************************************************************
 
-//  #define DB_FHSS
+// #define DB_FHSS
 //  #define DB_SENSORS
 //  #define DB_BIND
 //  #define DB_FAILSAFE
 //  #define DB_RXTIMERS
 
-
 // Stabiilisation will use a separate module which will have all PWM outputs for all servos.
 // #define USE_STABILISATION // <<< *** must be UNDEFINED FOR NOW ... until its finished.
 
 // >>>>>>>>>>>>>>>>>******* DON'T FORGET TO SET THESE TWO !!! (if it won't connect, probably one or both is wrong! )******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
+//
 #define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
 #define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
 
@@ -150,7 +149,7 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define ALPHA_BETA 8
 #define BOOLEANS 9
 #define RECALIBRATE_MPU6050 10
-#define TAIL_PID_VALUES 11 // Tail PID values for helicopters, etc.
+#define TAIL_PID_VALUES 11   // Tail PID values for helicopters, etc.
 #define PARAMETERS_MAX_ID 12 // Max types of parameters packet to send  ... will increase.
 
 // ****************************************************************************************************************************************
@@ -353,7 +352,7 @@ Adafruit_DPS310 dps310;
 #ifndef USE_STABILISATION
 //           Channels: 1  2 [3][4] 5  6 {7} 8  9 {10} 11 (Channels 3+4 & 7+10 must have same frquency)
 uint8_t PWMPins[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}; //  if only SERVOSUSED = 9 then last two are ignored
-#endif // USE_STABILISATION
+#endif                                                    // USE_STABILISATION
 SBUS MySbus(SBUSPORT);                                    // SBUS
 bool BoundFlag = false;                                   /** indicates if receiver paired with transmitter */
 uint16_t SbusChannels[CHANNELSUSED + 1];                  // Just one spare
