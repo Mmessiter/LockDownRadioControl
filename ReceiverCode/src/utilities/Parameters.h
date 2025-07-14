@@ -76,9 +76,11 @@ void ReadExtraParameters()
         ShowValues("Kalman R_measure", Kalman_R_measure);
         break;
     case SERVO_FREQUENCIES: // 6
+#ifndef USE_STABILISATION
         for (int i = 0; i < SERVOSUSED; ++i)
             ServoFrequency[i] = Parameters.word[i + 1];
         SetServoFrequency();
+#endif
         break;
     case SERVO_PULSE_WIDTHS: // 7
         for (int i = 0; i < SERVOSUSED; ++i)

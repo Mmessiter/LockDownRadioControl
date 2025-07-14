@@ -32,9 +32,9 @@
  * | 12    | SPI MISO (FOR BOTH RADIOS)  |
  * | 13    | SPI SCK  (FOR BOTH RADIOS)  |
  * | 14    | SBUS (Serial TX3) |
- * | 15    | Don't use if using SBUS. The driver takes it (RX3) |
- * | 16    | RED LED  - This LED is ON when connected, OFF when disconnected and blinking when binding
- * | 17 << | BIND PLUG (held LOW means plug is in)
+ * | 15    | Can't be used. The SBUS driver takes it over as its RX3 |
+ * | 16    | RED LED - This LED is ON when connected, OFF when disconnected and blinking when binding
+ * | 17 << | BIND PLUG (held LOW means plug is in and Binding is on.)
  * | 18    | I2C SDA (FOR I2C) | *** --- >> BLUE WIRE   = 18 !! << --- ***
  * | 19    | I2C SCK (FOR I2C) | *** --- >> YELLOW WIRE = 19 !! << --- ***
  * | 20    | SPI CSN2 (FOR RADIO2) |
@@ -128,6 +128,8 @@ void MoveServos()
     }
 
     SendSBUSData(); // Send the SBUS data
+
+#ifndef USE_STABILISATION // No PWM outputs if using stabilisation
     for (int j = 0; j < SERVOSUSED; ++j)
     {
         int PulseLength = ReceivedData[j];
@@ -141,6 +143,7 @@ void MoveServos()
         }
         analogWrite(PWMPins[j], GetPWMValue(ServoFrequency[j], PulseLength));
     }
+#endif
 }
 
 /************************************************************************************************************/
@@ -171,6 +174,7 @@ void FailSafe()
 }
 
 /************************************************************************************************************/
+#ifndef USE_STABILISATION
 void SetServoFrequency()
 {
     analogWriteResolution(SERVO_RES_BITS); // 12 Bits for 4096 steps
@@ -179,11 +183,14 @@ void SetServoFrequency()
         analogWriteFrequency(PWMPins[i], ServoFrequency[i]);
     }
 }
+#endif // USE_STABILISATION
 
 /************************************************************************************************************/
 void AttachServos()
 {
+#ifndef USE_STABILISATION
     SetServoFrequency();
+#endif              // USE_STABILISATION
     MySbus.begin(); // AND START SBUS
 }
 
@@ -332,6 +339,7 @@ void TestTheSBUSPin()
 /************************************************************************************************************/
 // This function is called at statup to check that the no PWM pins are held low (plug in wrong way round)
 
+#ifndef USE_STABILISATION
 void TestAllPWMPins()
 {
     for (uint8_t i = 0; i < SERVOSUSED; ++i)
@@ -344,7 +352,7 @@ void TestAllPWMPins()
             Abort(); // is this PWM pin held low?!?!?!?!?!?!?
     }
 }
-
+#endif
 /************************************************************************************************************/
 
 void SetupPINMODES()
@@ -410,12 +418,14 @@ FLASHMEM void setup()
     digitalWrite(LED_PIN, HIGH);
     SetupPINMODES();
     TestTheSBUSPin(); // Check that the SBUS pin is not held low (plug in wrong way round)
+#ifndef USE_STABILISATION
     TestAllPWMPins(); // Check that the no PWM pins are held low (plug in wrong way round)
+#endif
     Wire.begin();
     Wire.setClock(400000); // Or 1000000, etc
-   // delay(400);// *only* needed if you want to see terminal output
-    delay(200); // Wait for I2C to settle
-    ScanI2c();  // Detect what's connected
+                           // delay(400);// *only* needed if you want to see terminal output
+    delay(200);            // Wait for I2C to settle
+    ScanI2c();             // Detect what's connected
     if (BMP280Connected)
         Init_BMP280();
     if (DPS310Connected)

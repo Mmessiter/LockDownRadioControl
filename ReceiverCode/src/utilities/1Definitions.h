@@ -23,13 +23,15 @@
 //  #define DB_RXTIMERS
 
 
- // >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE THREE !!! (if it won't connect, probably one or both is wrong! )******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// Stabiilisation will use a separate module which will have all PWM outputs for all servos.
+// #define USE_STABILISATION // <<< *** must be UNDEFINED FOR NOW ... until its finished.
 
-//#define USE_STABILISATION // must be UNDEFINED FOR NOW ... do not fly with this enabled as it's not finished yet
-//#define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
-//#define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
+// >>>>>>>>>>>>>>>>>******* DON'T FORGET TO SET THESE TWO !!! (if it won't connect, probably one or both is wrong! )******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-// >>>>>>>>>>>>>>>>               ******* DON'T FORGET TO SET THESE TWO !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+#define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
+#define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
+
+// **************************************************************************
 
 #define SERVO_RES_BITS 12
 #define SERVO_RESOLUTION 4096
@@ -46,7 +48,7 @@
 //                            WATCHDOG PARAMETERS                           *
 //***************************************************************************
 
-#define WATCHDOGTIMEOUT 3500 // 2 Seconds before reboot (32ms -> 500 seconds)
+#define WATCHDOGTIMEOUT 3500 // 2 Seconds before reboot (250ms -> 3500 ms)
 #define KICKRATE 500         // Kick twice a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
 #define WATCHDOGMAXRATE 250  // 250 ms secs between kicks is max rate allowed
 // **************************************************************************
@@ -293,7 +295,9 @@ void TurnLedOff();
 void TurnLedOn();
 void SaveFailSafeDataToEEPROM();
 void IncChannelNumber();
+#ifndef USE_STABILISATION
 void SetServoFrequency();
+#endif
 void kalmanFilter();
 void filterRatesForHelicopter();
 void initKalman();
@@ -346,8 +350,10 @@ Adafruit_INA219 ina219;
 Adafruit_BMP280 bmp;
 Adafruit_DPS310 dps310;
 
+#ifndef USE_STABILISATION
 //           Channels: 1  2 [3][4] 5  6 {7} 8  9 {10} 11 (Channels 3+4 & 7+10 must have same frquency)
 uint8_t PWMPins[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}; //  if only SERVOSUSED = 9 then last two are ignored
+#endif // USE_STABILISATION
 SBUS MySbus(SBUSPORT);                                    // SBUS
 bool BoundFlag = false;                                   /** indicates if receiver paired with transmitter */
 uint16_t SbusChannels[CHANNELSUSED + 1];                  // Just one spare
@@ -381,8 +387,6 @@ float StoredLatitudeGPS = 51.922291;  // haverfordwest!
 float StoredLongitudeGPS = -5.213110; // haverfordwest!
 bool GPS_Connected = false;
 bool BMP280Connected = false;
-
-bool SensorHubDead = false;
 uint32_t NewConnectionMoment = 0;
 bool QNHSent = false;
 uint8_t MacAddress[9] = {0, 0, 0, 0, 0, 0, 0, 0, 0};
@@ -391,8 +395,6 @@ uint8_t TheSavedPipe[6];
 uint8_t TheCurrentPipe[6];
 bool FirstConnection = true;
 bool FailedSafe = true; // Starting up as the same as after failsafe
-uint8_t PPMChannelOrder[CHANNELSUSED] = {2, 3, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
-uint8_t PPMChannelCount = 8;
 bool NewData = false;
 uint16_t pcount = 0; // how many pipes so far received from TX
 bool Blinking = false;
