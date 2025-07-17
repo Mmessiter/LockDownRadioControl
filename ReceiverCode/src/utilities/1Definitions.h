@@ -27,8 +27,8 @@
 
 // >>>>>>>>>>>>>>>>>******* DON'T FORGET TO SET THESE TWO !!! (if it won't connect, probably one or both is wrong! )******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 //
-// #define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
-// #define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
+ #define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
+ //#define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
 
 // **************************************************************************
 
@@ -107,7 +107,6 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define SBUSRATE 10      // SBUS frame every 10 milliseconds
 #define SBUSPORT Serial3 // = 14
 #define SBUSPIN 14       //
-#define RECONNECTGAP 25  // Send no data to servos for 25 ms after a reconnect (10 was not quite enough)
 #define MINMICROS 500
 #define MAXMICROS 2500
 #define LED_PIN LED_BUILTIN
@@ -159,7 +158,6 @@ RF24 Radio2(pinCE2, pinCSN2);
 RF24 *CurrentRadio = &Radio1;
 
 bool Connected = false;
-// bool SaveNewBind = true;
 bool HopNow = false;
 uint8_t ThisRadio = 1;
 uint8_t SavedPipeAddress[8];
