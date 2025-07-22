@@ -126,10 +126,9 @@ void MoveServos()
     {
         TurnLedOn(); // if we have good values, turn the LED on and move the servos and send SBUS data
     }
-
+#ifndef USE_STABILISATION
     SendSBUSData(); // Send the SBUS data
-
-#ifndef USE_STABILISATION // No PWM outputs if using stabilisation
+#endif
     for (int j = 0; j < SERVOSUSED; ++j)
     {
         int PulseLength = ReceivedData[j];
@@ -143,7 +142,6 @@ void MoveServos()
         }
         analogWrite(PWMPins[j], GetPWMValue(ServoFrequency[j], PulseLength));
     }
-#endif
 }
 
 /************************************************************************************************************/
@@ -172,9 +170,7 @@ void FailSafe()
     Look("Fail safe activated!");
 #endif
 }
-
 /************************************************************************************************************/
-#ifndef USE_STABILISATION
 void SetServoFrequency()
 {
     analogWriteResolution(SERVO_RES_BITS); // 12 Bits for 4096 steps
@@ -183,14 +179,10 @@ void SetServoFrequency()
         analogWriteFrequency(PWMPins[i], ServoFrequency[i]);
     }
 }
-#endif // USE_STABILISATION
-
 /************************************************************************************************************/
 void AttachServos()
 {
-#ifndef USE_STABILISATION
     SetServoFrequency();
-#endif              // USE_STABILISATION
     MySbus.begin(); // AND START SBUS
 }
 
@@ -339,7 +331,6 @@ void TestTheSBUSPin()
 /************************************************************************************************************/
 // This function is called at statup to check that the no PWM pins are held low (plug in wrong way round)
 
-#ifndef USE_STABILISATION
 void TestAllPWMPins()
 {
     for (uint8_t i = 0; i < SERVOSUSED; ++i)
@@ -352,7 +343,7 @@ void TestAllPWMPins()
             Abort(); // is this PWM pin held low?!?!?!?!?!?!?
     }
 }
-#endif
+
 /************************************************************************************************************/
 
 void SetupPINMODES()
@@ -418,9 +409,7 @@ FLASHMEM void setup()
     digitalWrite(LED_PIN, HIGH);
     SetupPINMODES();
     TestTheSBUSPin(); // Check that the SBUS pin is not held low (plug in wrong way round)
-#ifndef USE_STABILISATION
     TestAllPWMPins(); // Check that the no PWM pins are held low (plug in wrong way round)
-#endif
     Wire.begin();
     Wire.setClock(400000); // Or 1000000, etc
                            // delay(400);// *only* needed if you want to see terminal output

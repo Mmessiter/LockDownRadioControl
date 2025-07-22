@@ -23,6 +23,7 @@ void SendSBUSData()
 /** Map servo channels' data from ReceivedData buffer into SbusChannels buffer */
 void MapToSBUS()
 {
+#ifndef USE_STABILISATION
     if (Connected)
     {
         for (int j = 0; j < CHANNELSUSED; ++j)
@@ -30,8 +31,10 @@ void MapToSBUS()
             SbusChannels[j] = static_cast<uint16_t>(map(ReceivedData[j] + StabilisationCorrection[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX));
         }
     }
+#endif
 }
 
+//************************************************************************************************************/
 void Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, uint8_t uncompressed_size)
 {
     uint8_t p = 0;

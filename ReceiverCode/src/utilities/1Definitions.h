@@ -27,8 +27,8 @@
 
 // >>>>>>>>>>>>>>>>>******* DON'T FORGET TO SET THESE TWO !!! (if it won't connect, probably one or both is wrong! )******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 //
- #define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
- //#define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
+#define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
+                           // #define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
 
 // **************************************************************************
 
@@ -75,7 +75,7 @@
 #define PIPENUMBER 1
 #define BOUNDPIPENUMBER 1
 #define MAX_TELEMETERY_ITEMS 20 // Max number of telemetry items to send... 1 per packet
-#define CHANNELSUSED 16
+#define CHANNELSUSED 16         // Number of channels used
 #define RECEIVEBUFFERSIZE 20
 
 struct CD
