@@ -456,21 +456,34 @@ void BlinkLed()
             TurnLedOff();
     }
 }
+//************************************************************************************************************/
 
+void TimeTheMainLoop()
+{
+    static uint32_t LastTime = 0;
+    if (millis() - LastTime >= 1000)
+    {
+        Look1("Interations per second: ");
+        Look(Interations);
+        LastTime = millis();
+        Interations = 0; // reset interations every second
+    }
+    ++Interations; // count interations per second
+}
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
 
-void loop() // without MPU6050 about 30000 interations per second.... EXCEPT Zero when reconnecting!!
+void loop() // without MPU6050 about 33100 interations per second.... EXCEPT Zero when reconnecting!!
 {           // with mpu6050 only about 10000
 
+    //TimeTheMainLoop();
 #ifdef USE_STABILISATION
     if (MPU6050Connected)
         DoStabilsation();
 #endif
     KickTheDog();
     ReceiveData();
-    //  DisplayPipe(); // for debugging purposes
     if (Blinking)
     {
         BlinkLed();
