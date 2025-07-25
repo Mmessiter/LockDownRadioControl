@@ -298,35 +298,25 @@ void SendVersionNumberToAckPayload() // AND which radio transceiver is currently
 /*
  * Print out some FHSS information about the channel hopping implementation
  */
-
 #ifdef DB_FHSS
 void ShowHopDurationEtc()
 {
     static uint32_t LastTimeCalled = 0;
     static uint16_t hps = 0;
     static uint16_t HopsPerSecond = 0;
-    static uint32_t PacketStartTime = 0;
-
+    ++hps;
     if (millis() - LastTimeCalled >= 1000)
     {
         HopsPerSecond = hps;
         hps = 0;
         LastTimeCalled = millis();
     }
-    ++hps;
-
     float freq = 2.4 + (float)NextChannel / 1000;
-    Serial.print("Hop duration: ");
-    Serial.print(millis() - PacketStartTime);
-    Serial.print("ms ");
-    if ((millis() - PacketStartTime) < 100)
-        Serial.print(" ");
-    Serial.print(" Next frequency: ");
+    Serial.print("Frequency: ");
     Serial.print(freq, 3);
-    Serial.print("  Hops per second: ");
+    Serial.print("  Hopping Hz: ");
     Serial.print(HopsPerSecond);
     Serial.println("");
-    PacketStartTime = millis();
 }
 #endif
 
