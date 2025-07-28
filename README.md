@@ -39,6 +39,13 @@ This is especially useful in wireless buddy box sessions, ensuring Master and Bu
 LDRC supports seamless wireless buddy boxing _with no extra modules or dongles_. Control handover is instantaneous, thanks to the fast microcontroller processing over 800 data packets per second.  
 When the master needs to take over to save the model, there’s no hesitation — and that can prevent a crash.
 
+---
+### (5) Data screen 
+
+This screen reveals current and average data packet rate, lost packet count and lots of other data that other systems hide.
+
+---
+
 ## Introduction (Please scroll down for BOM. Assembly instruction coming here later!)
 
 This is a very full featured 16 channel Radio Control system for models of all kinds. I've been developing this project since Lockdown in May 2020.
