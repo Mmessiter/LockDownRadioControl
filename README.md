@@ -2,6 +2,43 @@
 
 ![Image](./Images/TX_and_RX.jpeg "The radio!")
 
+## Why would anyone choose to use LockDownRadioControl (LDRC) instead of EdgeTX or a commercial system?
+
+**LockDownRadioControl (LDRC)** is a purpose-built, open-source radio system designed for simplicity, speed, and reliability. It’s ideal for users who want a system that “just works” — no tinkering, no steep learning curve, and no unnecessary options. Whether you’re an experienced pilot or just starting out, LDRC offers a streamlined alternative to EdgeTX and commercial transmitters.
+
+---
+
+### (0) Simplicity
+
+LDRC isn’t trying to be compatible with every protocol under the sun. It avoids bloat by skipping rarely-used features and focusing on what’s needed to fly — cleanly and reliably. As a result, it’s easy to understand and quick to use.  
+(Of course, it does support SBUS and PWM — for flight controllers and servos.)
+
+---
+
+### (1) Automatic Model Selection (AMS)
+
+LDRC doesn’t just warn you if you’re trying to connect to the wrong model — it _automatically loads the correct one_. You don’t need to go hunting through menus every time you change aircraft.
+
+---
+
+### (2) Onboard Model Memory Backups
+
+Backups are stored directly in the transmitter. You can quickly create or restore a backup, making it easy to experiment with changes — and undo them if needed.
+
+---
+
+### (3) Wireless Model Memory Exchange
+
+Model memories can be copied between transmitters over the RF link — no wires, no SD card juggling, no PC software. The model ID is included automatically, so AMS continues to work correctly on the new transmitter.  
+This is especially useful in wireless buddy box sessions, ensuring Master and Buddy share the same setup.
+
+---
+
+### (4) Wireless Buddy Boxing — No Extra Hardware
+
+LDRC supports seamless wireless buddy boxing _with no extra modules or dongles_. Control handover is instantaneous, thanks to the fast microcontroller processing over 800 data packets per second.  
+When the master needs to take over to save the model, there’s no hesitation — and that can prevent a crash.
+
 ## Introduction (Please scroll down for BOM. Assembly instruction coming here later!)
 
 This is a very full featured 16 channel Radio Control system for models of all kinds. I've been developing this project since Lockdown in May 2020.
