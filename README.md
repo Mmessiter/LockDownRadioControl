@@ -2,9 +2,9 @@
 
 ![Image](./Images/TX_and_RX.jpeg "The radio!")
 
-## Why would anyone choose to use LockDownRadioControl (LDRC) instead of EdgeTX or a commercial system?
+## Why would anyone choose to use LockDownRadioControl (LDRC) instead of EdgeTX or a commercial system? Here are a few reasons:
 
-**LockDownRadioControl (LDRC)** is a purpose-built, open-source radio system designed for simplicity, speed, and reliability. It’s ideal for users who want a system that “just works” — no tinkering, no steep learning curve, and no unnecessary options. Whether you’re an experienced pilot or just starting out, LDRC offers a streamlined alternative to EdgeTX and commercial transmitters.
+**LockDownRadioControl (LDRC)** is an open-source radio system designed for simplicity, speed, and reliability. It’s ideal for users who want a system that “just works” — no tinkering, no steep learning curve, and no unnecessary options. Whether you’re an experienced pilot or just starting out, LDRC offers a streamlined alternative to EdgeTX and commercial transmitters.
 
 ---
 
@@ -38,6 +38,13 @@ This is especially useful in wireless buddy box sessions, ensuring Master and Bu
 
 LDRC supports seamless wireless buddy boxing _with no extra modules or dongles_. Control handover is instantaneous, thanks to the fast microcontroller processing over 800 data packets per second.  
 When the master needs to take over to save the model, there’s no hesitation — and that can prevent a crash.
+
+---
+### (5) Data screen 
+
+This screen reveals current and average data packet rate, total lost packets counter, maximum and average reconnection times after lost packet, transceiver swaps count, and lots of other critical information that other systems hide.
+
+---
 
 ## Introduction (Please scroll down for BOM. Assembly instruction coming here later!)
 
