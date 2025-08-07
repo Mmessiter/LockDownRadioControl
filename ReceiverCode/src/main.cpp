@@ -104,8 +104,9 @@ bool CheckForCrazyValues() // might come while binding ... indeed will.
 
 /************************************************************************************************************/
 // Function to get PWM value needed for given pulse length in microseconds
-
+#ifdef USE_PWM
 inline int GetPWMValue(int frequency, int length) { return static_cast<int>((static_cast<float>(length) / (1000000.0f / static_cast<float>(frequency))) * SERVO_RESOLUTION); }
+#endif
 
 /************************************************************************************************************/
 void MoveServos()
@@ -124,7 +125,12 @@ void MoveServos()
     {
         TurnLedOn(); // if we have good values, turn the LED on and move the servos and send SBUS data
     }
+
+#ifdef USE_SBUS
     SendSBUSData(); // Send the SBUS data
+#endif
+
+#ifdef USE_PWM
     for (int j = 0; j < SERVOSUSED; ++j)
     {
         int PulseLength = ReceivedData[j];
@@ -138,6 +144,7 @@ void MoveServos()
         }
         analogWrite(PWMPins[j], GetPWMValue(ServoFrequency[j], PulseLength));
     }
+#endif // USE_PWM
 }
 
 /************************************************************************************************************/
@@ -149,10 +156,14 @@ void FailSafe()
     {
         LoadFailSafeDataFromEEPROM(); // load failsafe values from EEPROM
         Connected = true;             // to force sending this data!
+#ifdef USE_SBUS
         MapToSBUS();
+#endif // USE_SBUS
         for (int i = 0; i < 20; i++)
         {
+#ifdef USE_SBUS
             SendSBUSData(); // one at least will be sent!
+#endif                      // USE_SBUS
             MoveServos();
             delay(1);
         }
@@ -167,6 +178,7 @@ void FailSafe()
 #endif
 }
 /************************************************************************************************************/
+#ifdef USE_PWM
 void SetServoFrequency()
 {
     analogWriteResolution(SERVO_RES_BITS); // 12 Bits for 4096 steps
@@ -175,11 +187,17 @@ void SetServoFrequency()
         analogWriteFrequency(PWMPins[i], ServoFrequency[i]);
     }
 }
+#endif // USE_PWM
 /************************************************************************************************************/
 void AttachServos()
 {
+#ifdef USE_PWM
     SetServoFrequency();
+#endif // USE_PWM
+
+#ifdef USE_SBUS
     MySbus.begin(); // AND START SBUS
+#endif              // USE_SBUS
 }
 
 /************************************************************************************************************/
@@ -329,6 +347,7 @@ void TestTheSBUSPin()
 
 void TestAllPWMPins()
 {
+#ifdef USE_PWM
     for (uint8_t i = 0; i < SERVOSUSED; ++i)
     {
         pinMode(PWMPins[i], OUTPUT);
@@ -338,6 +357,7 @@ void TestAllPWMPins()
         if (!digitalRead(PWMPins[i]))
             Abort(); // is this PWM pin held low?!?!?!?!?!?!?
     }
+#endif
 }
 
 /************************************************************************************************************/
@@ -397,6 +417,8 @@ void Init_DPS310()
     dps310.configureTemperature(DPS310_4HZ, DPS310_16SAMPLES);
     DPS310Connected = true;
 }
+
+
 /************************************************************************************************************/
 // SETUP
 /************************************************************************************************************/
@@ -427,6 +449,11 @@ FLASHMEM void setup()
     BindPlugInserted = Blinking;           // Bind plug inserted or not
     if (BindPlugInserted)
         delay(200);
+
+#ifdef USE_NEXUS
+    MSP_SERIAL.begin(115200); // Nexus serial port for telemetry
+#endif                        // USE_NEXUS
+
     digitalWrite(LED_PIN, LOW);
 }
 
@@ -460,6 +487,22 @@ void TimeTheMainLoop()
     }
     ++Interations; // count interations per second
 }
+// ************************************************************************************************************/
+#ifdef USE_NEXUS
+void CheckMSPSerial()
+{
+    while (MSP_SERIAL.available())
+    {
+        uint8_t b = MSP_SERIAL.read();
+        Serial.print("0x");
+        if (b < 0x10)
+            Serial.print("0");
+        Serial.print(b, HEX);
+        Serial.print(" ");
+    }
+}
+#endif
+
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
@@ -467,8 +510,10 @@ void TimeTheMainLoop()
 void loop() // without MPU6050 about 33100 interations per second.... EXCEPT Zero when reconnecting!!
 {           // with mpu6050 only about 10000
 
-    //TimeTheMainLoop();
-
+    // TimeTheMainLoop();
+#ifdef USE_NEXUS
+    CheckMSPSerial();
+#endif
     KickTheDog();
     ReceiveData();
     if (Blinking)

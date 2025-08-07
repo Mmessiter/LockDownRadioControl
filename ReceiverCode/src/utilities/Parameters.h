@@ -58,6 +58,7 @@ void ReadExtraParameters()
             Parameters.word[2] = 0; // ... Once only
         }
         break;
+#ifdef USE_PWM
     case SERVO_FREQUENCIES: // 6
         for (int i = 0; i < SERVOSUSED; ++i)
             ServoFrequency[i] = Parameters.word[i + 1];
@@ -67,6 +68,8 @@ void ReadExtraParameters()
         for (int i = 0; i < SERVOSUSED; ++i)
             ServoCentrePulse[i] = Parameters.word[i + 1];
         break;
+#endif
+
     default:
         break;
     }

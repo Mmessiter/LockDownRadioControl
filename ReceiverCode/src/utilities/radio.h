@@ -5,6 +5,7 @@
 
 #include "utilities/1Definitions.h"
 
+#ifdef USE_SBUS
 /************************************************************************************************************/
 // This function sends the SBUS data to the receiver.
 // It is called every 10ms to keep the SBUS happy.
@@ -31,7 +32,7 @@ void MapToSBUS()
         }
     }
 }
-
+#endif
 //************************************************************************************************************/
 void Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, uint8_t uncompressed_size)
 {
@@ -129,9 +130,13 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is total 
                 ReadMoreParameters();
             }
         }
+#ifdef USE_SBUS
         MapToSBUS(); // Get SBUS data ready
+#endif
     }
-    SendSBUSData();          // maybe send SBUS data if its time
+#ifdef USE_SBUS
+    SendSBUSData(); // maybe send SBUS data if its time
+#endif
     ++SuccessfulPackets;     // These packets did arrive, but our acknowledgement might yet fail...
     if (HopNow)              // time to hop?
     {                        // This flag gets set in LoadLongerAckPayload();
@@ -163,11 +168,13 @@ bool ReadData()
             return false;
         LoadaPayload();                                        // ... and reads INA219 volts
         CurrentRadio->read(&DataReceived, DynamicPayloadSize); // Get received data from nRF24L01+
-        SendSBUSData();                                        // Maybe send SBUS data if its time
-        Connected = true;                                      // we are connected
-        NewData = true;                                        // we have new data
-        UseReceivedData(DynamicPayloadSize);                   // use the received data
-        CurrentRadio->flush_tx();                              // This avoids a lockup that happens when the FIFO gets full
+#ifdef USE_SBUS
+        SendSBUSData(); // Maybe send SBUS data if its time
+#endif
+        Connected = true;                    // we are connected
+        NewData = true;                      // we have new data
+        UseReceivedData(DynamicPayloadSize); // use the received data
+        CurrentRadio->flush_tx();            // This avoids a lockup that happens when the FIFO gets full
     }
     return Connected; // inform the caller of success or failure
 }
@@ -270,7 +277,9 @@ FASTRUN void ReceiveData()
             ReadDPS310();
             ReadGPS();
         }
+#ifdef USE_SBUS
         SendSBUSData(); // Send SBUS data if it's time to do so
+#endif                  // USE_SBUS
         if ((!CurrentRadio->available(&Pipnum)) && (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT))
             Reconnect(); // Try to reconnect.
     }
@@ -366,7 +375,9 @@ void TryToConnectNow()
     ATimer = millis();
     while ((!CurrentRadio->available(&Pipnum)) && (millis() - ATimer) < LISTEN_PERIOD)
     {
+#ifdef USE_SBUS
         SendSBUSData();
+#endif // USE_SBUS
         KickTheDog();
     }
     Connected = CurrentRadio->available(&Pipnum);
@@ -464,8 +475,9 @@ FASTRUN void Reconnect()
             BlinkLed();
 
         KickTheDog();
+#ifdef USE_SBUS
         SendSBUSData();
-
+#endif
         // Flush and prepare
         CurrentRadio->stopListening();
         delayMicroseconds(STOPLISTENINGDELAY);

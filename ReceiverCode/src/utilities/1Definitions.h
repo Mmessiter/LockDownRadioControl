@@ -16,21 +16,24 @@
 
 // **************************************************************************
 
- // #define DB_FHSS
+//  #define DB_FHSS
 //  #define DB_SENSORS
 //  #define DB_BIND
 //  #define DB_FAILSAFE
 //  #define DB_RXTIMERS
 
-// Stabiilisation will use a separate module which will have all PWM outputs for all servos.
-// #define USE_STABILISATION // <<< *** must be UNDEFINED FOR NOW ... until its finished.
-
 // >>>>>>>>>>>>>>>>>******* DON'T FORGET TO SET THESE TWO !!! (if it won't connect, probably one or both is wrong! )******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 //
 #define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
-//#define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
-#define USE_NEXUS // must be UNDEFINED ( = commented out) if NOT using Nexus but DEFINED if using Nexus!
+// #define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
 
+// #define USE_NEXUS // if DEFINED then USE_PWM must be UNDEFINED ( = commented out) and USE_SBUS must be DEFINED ( = uncommented) to use the Nexus transceiver
+// #define USE_PWM
+#define USE_SBUS
+
+#ifdef USE_NEXUS
+#define MSP_SERIAL Serial2
+#endif // USE_NEXUS
 // **************************************************************************
 
 #define SERVO_RES_BITS 12
@@ -138,7 +141,7 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 //                             Parameters' IDs                              *
 // **************************************************************************
 
-// Parameter ID definitions. 
+// Parameter ID definitions.
 #define FAILSAFE_SETTINGS 1
 #define QNH_SETTING 2
 #define GPS_MARK_LOCATION 3
@@ -222,7 +225,6 @@ bool PipeSeen = false;
 uint16_t ServoCentrePulse[11] = {1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500}; // 11 channels for servo centre pulse
 uint16_t ServoFrequency[11] = {50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50};                         // 11 channels for servo frequency
 
-
 /************************************************************************************************************/
 
 void HopToNextChannel();
@@ -243,15 +245,15 @@ void TurnLedOff();
 void TurnLedOn();
 void SaveFailSafeDataToEEPROM();
 void IncChannelNumber();
-#ifndef USE_STABILISATION
+#ifdef USE_PWM
 void SetServoFrequency();
 #endif
-void kalmanFilter();
-void filterRatesForHelicopter();
-void initKalman();
+
 float MetersToFeet(float Meters);
 void GetRXVolts();
+#ifdef USE_SBUS
 void SendSBUSData();
+#endif
 bool CheckForCrazyValues();
 void ReadGPS();
 FASTRUN void ReceiveData();
@@ -298,13 +300,17 @@ Adafruit_INA219 ina219;
 Adafruit_BMP280 bmp;
 Adafruit_DPS310 dps310;
 
-#ifndef USE_STABILISATION
+#ifdef USE_PWM
 //           Channels: 1  2 [3][4] 5  6 {7} 8  9 {10} 11 (Channels 3+4 & 7+10 must have same frquency)
 uint8_t PWMPins[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}; // if only SERVOSUSED = 9 then last two are ignored
-#endif                                                    // USE_STABILISATION
-SBUS MySbus(SBUSPORT);                                    // SBUS
-bool BoundFlag = false;                                   /** indicates if receiver paired with transmitter */
-uint16_t SbusChannels[CHANNELSUSED + 1];                  // Just one spare
+#endif
+
+#ifdef USE_SBUS
+SBUS MySbus(SBUSPORT); // SBUS
+#endif
+
+bool BoundFlag = false;                  /** indicates if receiver paired with transmitter */
+uint16_t SbusChannels[CHANNELSUSED + 1]; // Just one spare
 bool FailSafeChannel[17];
 bool FailSafeDataLoaded = false;
 uint8_t FS_byte1 = 0; // All 16 failsafe channel flags are in these two bytes
