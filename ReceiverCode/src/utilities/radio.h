@@ -23,15 +23,13 @@ void SendSBUSData()
 /** Map servo channels' data from ReceivedData buffer into SbusChannels buffer */
 void MapToSBUS()
 {
-#ifndef USE_STABILISATION
     if (Connected)
     {
         for (int j = 0; j < CHANNELSUSED; ++j)
         {
-            SbusChannels[j] = static_cast<uint16_t>(map(ReceivedData[j] + StabilisationCorrection[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX));
+            SbusChannels[j] = static_cast<uint16_t>(map(ReceivedData[j], MINMICROS, MAXMICROS, RANGEMIN, RANGEMAX));
         }
     }
-#endif
 }
 
 //************************************************************************************************************/
@@ -272,11 +270,6 @@ FASTRUN void ReceiveData()
             ReadDPS310();
             ReadGPS();
         }
-
-#ifdef USE_STABILISATION
-        if (MPU6050Connected) // no new packet yet, so look at the gyro and accelerometer
-            DoStabilsation();
-#endif
         SendSBUSData(); // Send SBUS data if it's time to do so
         if ((!CurrentRadio->available(&Pipnum)) && (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT))
             Reconnect(); // Try to reconnect.
@@ -375,10 +368,6 @@ void TryToConnectNow()
     {
         SendSBUSData();
         KickTheDog();
-#ifdef USE_STABILISATION
-        if (MPU6050Connected)
-            DoStabilsation();
-#endif
     }
     Connected = CurrentRadio->available(&Pipnum);
 }
@@ -780,21 +769,7 @@ void LoadLongerAckPayload()
     case 19:
         SendFloatToAckPayload(RateOfClimb);
         break;
-#ifdef USE_STABILISATION
-    case 20:
-        static int8_t CalibrationStatusSentCounter = 0;
 
-        if (CalibrationStatus != CALIBRATION_STATUS_IDLE) // not idle so warn the transmitter and increment the counter
-            ++CalibrationStatusSentCounter;
-
-        if (CalibrationStatusSentCounter > 10)
-        {
-            CalibrationStatus = CALIBRATION_STATUS_IDLE; // reset after 10 sends
-            CalibrationStatusSentCounter = 0;            // reset the counter for next time
-        }
-        SendIntToAckPayload(uint16_t(CalibrationStatus)); // send the current calibration status
-        break;
-#endif // USE_STABILISATION
     default:
         break;
     }

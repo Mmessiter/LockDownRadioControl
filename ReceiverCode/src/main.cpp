@@ -25,7 +25,9 @@
  * @section rxpinout TEENSY 4.0 PINS
  * | pin number(s) | purpose |
  * |---------------|---------|
- * | 0...8 | PWM SERVOS Channels 1 - 9 |  (Channels 10 - 16 available via SBUS)
+ * | 0...6 | PWM SERVOS Channels 1 - 7 |  (Channels 10 - 16 available via SBUS)
+ * | 7     | PWM Servo Channel 8 | or RX2 for telemetry if using NEXUS
+ * | 8     | PWM Servo Channel 9 | not used if using NEXUS
  * | 9     | SPI CE1  (FOR RADIO1)  | or PWM channel 10 when 11 PWM channels are used
  * | 10    | SPI CSN1 (FOR RADIO1)  | or PWM channel 11 when 11 PWM channels are used
  * | 11    | SPI MOSI (FOR BOTH RADIOS)  |
@@ -58,7 +60,6 @@
 #include "utilities/1Definitions.h"
 
 #include "utilities/radio.h"
-#include "utilities/Stabilisation.h"
 #include "utilities/GPS.h"
 #include "utilities/Binding.h"
 #include "utilities/eeprom.h"
@@ -69,10 +70,7 @@ void DelayMillis(uint16_t ms) // This replaces any delay() calls
     uint32_t tt = millis();
     while (millis() - tt < ms)
     {
-#ifdef USE_STABILISATION
-        if (MPU6050Connected)
-            DoStabilsation();
-#endif
+        KickTheDog();
     }
 }
 
@@ -126,9 +124,7 @@ void MoveServos()
     {
         TurnLedOn(); // if we have good values, turn the LED on and move the servos and send SBUS data
     }
-#ifndef USE_STABILISATION
     SendSBUSData(); // Send the SBUS data
-#endif
     for (int j = 0; j < SERVOSUSED; ++j)
     {
         int PulseLength = ReceivedData[j];
@@ -419,12 +415,6 @@ FLASHMEM void setup()
         Init_BMP280();
     if (DPS310Connected)
         Init_DPS310();
-
-#ifdef USE_STABILISATION
-    if (MPU6050Connected)
-        InitialiseTheMPU6050();
-#endif
-
     if (INA219Connected)
         ina219.begin();
     if (GPS_Connected)
@@ -478,10 +468,7 @@ void loop() // without MPU6050 about 33100 interations per second.... EXCEPT Zer
 {           // with mpu6050 only about 10000
 
     //TimeTheMainLoop();
-#ifdef USE_STABILISATION
-    if (MPU6050Connected)
-        DoStabilsation();
-#endif
+
     KickTheDog();
     ReceiveData();
     if (Blinking)

@@ -11,7 +11,7 @@
 #define RXVERSION_MINOR 5
 #define RXVERSION_MINIMUS 4
 #define RXVERSION_EXTRA 'A' // 14 July 2025
-#define HOPTIME 15         // gives about 48Hz FHSS, 47 gives 20Hz FHSS
+#define HOPTIME 15          // gives about 48Hz FHSS, 47 gives 20Hz FHSS
 #define RECEIVE_TIMEOUT 7   // was 8
 
 // **************************************************************************
@@ -27,8 +27,9 @@
 
 // >>>>>>>>>>>>>>>>>******* DON'T FORGET TO SET THESE TWO !!! (if it won't connect, probably one or both is wrong! )******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 //
-   #define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
- #define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
+#define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
+//#define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
+#define USE_NEXUS // must be UNDEFINED ( = commented out) if NOT using Nexus but DEFINED if using Nexus!
 
 // **************************************************************************
 
@@ -137,18 +138,12 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 //                             Parameters' IDs                              *
 // **************************************************************************
 
-// Parameter ID definitions. Most are used for PID stabilisation, but some are used for other purposes.
+// Parameter ID definitions. 
 #define FAILSAFE_SETTINGS 1
 #define QNH_SETTING 2
 #define GPS_MARK_LOCATION 3
-#define PID_VALUES 4
-#define KALMAN_VALUES 5
 #define SERVO_FREQUENCIES 6
 #define SERVO_PULSE_WIDTHS 7
-#define ALPHA_BETA 8
-#define BOOLEANS 9
-#define RECALIBRATE_MPU6050 10
-#define TAIL_PID_VALUES 11   // Tail PID values for helicopters, etc.
 #define PARAMETERS_MAX_ID 12 // Max types of parameters packet to send  ... will increase.
 
 // ****************************************************************************************************************************************
@@ -167,7 +162,6 @@ uint8_t ReconnectIndex = 0;
 uint8_t PacketNumber;
 uint16_t RawDataIn[RECEIVEBUFFERSIZE + 1];    //  21 x 16 BIT words // lots of spare space
 uint16_t ReceivedData[RECEIVEBUFFERSIZE + 1]; //  21 x 16 BIT words// lots of spare space//
-int16_t StabilisationCorrection[RECEIVEBUFFERSIZE + 1] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 uint16_t Interations = 0;
 uint32_t HopStart;
 uint64_t NewPipeMaybe = 0;
@@ -228,54 +222,11 @@ bool PipeSeen = false;
 uint16_t ServoCentrePulse[11] = {1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500}; // 11 channels for servo centre pulse
 uint16_t ServoFrequency[11] = {50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50};                         // 11 channels for servo frequency
 
-// ********************************************************************************************************************
-
-float RawRollRate = 0, RawPitchRate = 0, RawYawRate = 0;                         // Raw gyro signals
-float RateCalibrationRoll = 0, RateCalibrationPitch = 0, RateCalibrationYaw = 0; // Gyro calibration values
-float AccX = 0, AccY = 0, AccZ = 0;                                              // Accelerometer signals
-float RawRollAngle = 0, RawPitchAngle = 0;                                       // Roll and pitch angles
-
-// This bit donated by Claude 3.7 ***********************************************************
-float filteredRoll, filteredPitch, filteredYaw;             // Kalman filtered angles
-float filteredRollRate, filteredPitchRate, filteredYawRate; // Kalman filtered rates
-uint32_t previousTime = 0;
-struct KalmanState
-{
-    float angle;   // The current angle estimate
-    float bias;    // The current bias estimate (gyro drift)
-    float P[2][2]; // Error covariance matrix
-};
-
-KalmanState kalmanRoll = {0};
-KalmanState kalmanPitch = {0};
-KalmanState kalmanYaw = {0};
-
-// These store the sensor readings that correspond to the CALIBRATION ORIENTATION (0°)
-float CalibrationRollReading = 0.0f;
-float CalibrationPitchReading = 0.0f;
-
-float PID_P = 2.0f;
-float PID_I = 0.1f;
-float PID_D = 0.01f;
-float TAIL_PID_P = 2.0f;
-float TAIL_PID_I = 0.1f;
-float TAIL_PID_D = 0.01f;
-float Kalman_Q_angle = 0.001f;
-float Kalman_Q_bias = 0.003f;
-float Kalman_R_measure = 0.03f;
-float alpha = 0.05f;
-float beta = 0.05f;
-bool StabilisationOn = false;
-bool SelfLevellingOn = false;
-bool UseKalmanFilter = false;
-bool UseRateLPF = false;
 
 /************************************************************************************************************/
 
 void HopToNextChannel();
-void DoStabilsation();
 void DelayMillis(uint16_t ms);
-void DoStabilsation();
 void ReadExtraParameters();
 FASTRUN void Reconnect();
 void LoadLongerAckPayload();

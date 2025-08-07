@@ -58,68 +58,14 @@ void ReadExtraParameters()
             Parameters.word[2] = 0; // ... Once only
         }
         break;
-#ifdef USE_STABILISATION
-    case PID_VALUES: // 4
-        PID_P = DecodeFloat(Parameters.word[0], Parameters.word[1], Parameters.word[2], Parameters.word[3]);
-        PID_I = DecodeFloat(Parameters.word[4], Parameters.word[5], Parameters.word[6], Parameters.word[7]);
-        PID_D = DecodeFloat(Parameters.word[8], Parameters.word[9], Parameters.word[10], Parameters.word[11]);
-        ShowValues("PID P", PID_P);
-        ShowValues("PID I", PID_I);
-        ShowValues("PID D", PID_D);
-        break;
-    case KALMAN_VALUES: // 5
-        Kalman_Q_angle = DecodeFloat(Parameters.word[0], Parameters.word[1], Parameters.word[2], Parameters.word[3]);
-        Kalman_Q_bias = DecodeFloat(Parameters.word[4], Parameters.word[5], Parameters.word[6], Parameters.word[7]);
-        Kalman_R_measure = DecodeFloat(Parameters.word[8], Parameters.word[9], Parameters.word[10], Parameters.word[11]);
-        ShowValues("Kalman Q_angle", Kalman_Q_angle);
-        ShowValues("Kalman Q_bias", Kalman_Q_bias);
-        ShowValues("Kalman R_measure", Kalman_R_measure);
-        break;
     case SERVO_FREQUENCIES: // 6
-#ifndef USE_STABILISATION
         for (int i = 0; i < SERVOSUSED; ++i)
             ServoFrequency[i] = Parameters.word[i + 1];
         SetServoFrequency();
-#endif
         break;
     case SERVO_PULSE_WIDTHS: // 7
         for (int i = 0; i < SERVOSUSED; ++i)
             ServoCentrePulse[i] = Parameters.word[i + 1];
-        break;
-    case ALPHA_BETA: // 8
-        alpha = DecodeFloat(Parameters.word[0], Parameters.word[1], Parameters.word[2], Parameters.word[3]);
-        beta = DecodeFloat(Parameters.word[4], Parameters.word[5], Parameters.word[6], Parameters.word[7]);
-        ShowValues("Alpha", alpha);
-        ShowValues("Beta", beta);
-        break;
-    case BOOLEANS: // 9
-        StabilisationOn = (bool)(Parameters.word[1] & 0x01);
-        SelfLevellingOn = (bool)(Parameters.word[2] & 0x01);
-        UseKalmanFilter = (bool)(Parameters.word[3] & 0x01);
-        UseRateLPF = (bool)(Parameters.word[4] & 0x01);
-        Look1("StabilisationOn: ");
-        Look(StabilisationOn ? "Yes" : "No");
-        Look1("SelfLevellingOn: ");
-        Look(SelfLevellingOn ? "Yes" : "No");
-        Look1("UseKalmanFilter: ");
-        Look(UseKalmanFilter ? "Yes" : "No");
-        Look1("UseRateLPF: ");
-        Look(UseRateLPF ? "Yes" : "No");
-        break;
-    case RECALIBRATE_MPU6050:                                         // 10
-        if ((Parameters.word[1] == 42) && (Parameters.word[2] == 42)) // these two just to confirm
-            PerformMPU6050Calibration();
-        break;
-    case TAIL_PID_VALUES: // 11 - Tail PID values for helicopters, etc.
-        TAIL_PID_P = DecodeFloat(Parameters.word[0], Parameters.word[1], Parameters.word[2], Parameters.word[3]);
-        TAIL_PID_I = DecodeFloat(Parameters.word[4], Parameters.word[5], Parameters.word[6], Parameters.word[7]);
-        TAIL_PID_D = DecodeFloat(Parameters.word[8], Parameters.word[9], Parameters.word[10], Parameters.word[11]);
-        ShowValues("Tail PID P", TAIL_PID_P);
-        ShowValues("Tail PID I", TAIL_PID_I);
-        ShowValues("Tail PID D", TAIL_PID_D);
-        break;
-
-#endif // ifdef USE_STABILISATION
         break;
     default:
         break;
