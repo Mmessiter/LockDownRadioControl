@@ -418,7 +418,6 @@ void Init_DPS310()
     DPS310Connected = true;
 }
 
-
 /************************************************************************************************************/
 // SETUP
 /************************************************************************************************************/
@@ -451,8 +450,8 @@ FLASHMEM void setup()
         delay(200);
 
 #ifdef USE_NEXUS
-    MSP_SERIAL.begin(115200); // Nexus serial port for telemetry
-#endif                        // USE_NEXUS
+    NEXUS_SERIAL_TELEMETRY.begin(115200); // Nexus serial port for telemetry
+#endif                                    // USE_NEXUS
 
     digitalWrite(LED_PIN, LOW);
 }
@@ -491,15 +490,18 @@ void TimeTheMainLoop()
 #ifdef USE_NEXUS
 void CheckMSPSerial()
 {
-    while (MSP_SERIAL.available())
+    while (NEXUS_SERIAL_TELEMETRY.available())
     {
-        uint8_t b = MSP_SERIAL.read();
-        Serial.print("0x");
-        if (b < 0x10)
-            Serial.print("0");
-        Serial.print(b, HEX);
-        Serial.print(" ");
+        uint8_t b = NEXUS_SERIAL_TELEMETRY.read();
+        Look(b);
+       
+        // Serial.print("0x");
+        // if (b < 0x10)
+        //     Serial.print("0");
+        // Serial.print(b, HEX);
+        // Serial.print(" ");
     }
+    // Look("test");
 }
 #endif
 
