@@ -507,14 +507,12 @@ void requestRPM()
     // Checksum
     NEXUS_SERIAL_TELEMETRY.write(checksum);
 }
-
 // *************************************************************************************************************
 // Parse a complete MSP frame from a raw byte buffer and return HEAD RPM (rounded).
 // Returns 0 if no valid MSP_MOTOR_TELEMETRY (0x8B) frame is found.
 uint16_t GetRPM(const uint8_t *data, uint8_t n)
 {
     const uint8_t CMD = 0x8B; // MSP_MOTOR_TELEMETRY
-    const float GEAR = 10.3f; // your ratio
 
     for (uint8_t i = 0; i + 6 < n; ++i)
     {
@@ -552,9 +550,8 @@ uint16_t GetRPM(const uint8_t *data, uint8_t n)
 
         uint16_t motor_rpm = (uint16_t)payload[1] | ((uint16_t)payload[2] << 8);
 
-        // If you later discover this is electrical RPM, divide by pole_pairs first.
-        // uint16_t poles = 10; // if needed: float mech = motor_rpm / float(poles/2);
-        float head = float(motor_rpm) / GEAR;
+        // Calculate head RPM
+        float head = float(motor_rpm) / Ratio;
 
         if (head < 0.0f)
             head = 0.0f;
@@ -564,29 +561,13 @@ uint16_t GetRPM(const uint8_t *data, uint8_t n)
     }
     return 0;
 }
-// uint16_t GetRPM(uint8_t *datain, uint8_t p)
-// {
-//     float ratio = 10.3f;
-//     union
-//     {
-//         uint8_t bytes[2];
-//         uint16_t rpm = 0;
-//     } u;
 
-//     if (p >= 8)
-//     {
-//         u.bytes[0] = datain[6];
-//         u.bytes[1] = datain[7];
-//         u.rpm /= ratio; // Convert to RPM (assuming 10.3 is the scaling factor used by Nexus)
-//     }
-//     return u.rpm;
-// }
 // ************************************************************************************************************/
 
 void CheckMSPSerial()
 {
     static uint32_t Localtimer = millis();
-    if (millis() - Localtimer < 50)
+    if (millis() - Localtimer < 250)
         return;
     Localtimer = millis();
     uint8_t data_in[60];
@@ -597,10 +578,10 @@ void CheckMSPSerial()
        if (p < sizeof(data_in)) // safeguard against overflow
            data_in[p++] = b;
     }
-    uint16_t rpm = GetRPM(&data_in[0], p); // Process the received data
+    RotorRPM = GetRPM(&data_in[0], p);     // Process the received data
     requestRPM();                          // Request RPM data from Nexus
     Look1("RPM: ");
-    Look(rpm);
+    Look(RotorRPM);
 }
 #endif
 
