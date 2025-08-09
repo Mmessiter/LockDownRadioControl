@@ -1308,6 +1308,8 @@ bool StabilisationOn = false;
 bool SelfLevellingOn = false;
 bool ParamPause = true;
 
+uint32_t RotorRPM = 0;
+
 #define PID_MARKER_VALUE 253 // Marker value for settings.
 // (If this value is not present, then settings are junk and will be reset to defaults)
 

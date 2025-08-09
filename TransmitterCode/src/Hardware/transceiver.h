@@ -817,8 +817,9 @@ void GetModelsMacAddress()
 /************************************************************************************************************/
 FASTRUN void ParseLongerAckPayload() // It's already pretty short!
 {
-    uint8_t cs = 0;                                 // calibration status as received in the payload
-    static bool CalibrationMessageBoxNeeded = true; // Show a message box only once
+    static bool First_RPM_Data = true;
+    static uint32_t lastrpm = 0;
+    char rpm_vis[] = "vis rpm,1";
 
     FHSS_data::NextChannelNumber = AckPayload.Byte5; // every packet tells of next hop destination
     if (AckPayload.Purpose & 0x80)
@@ -936,32 +937,24 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         break;
     case 19:
         RateOfClimb = GetFloatFromAckPayload();
-        // Look1("Rate of Climb: ");
-        // Look(RateOfClimb);
         if (RateOfClimb > MaxRateOfClimb)
             MaxRateOfClimb = RateOfClimb;
         break;
     case 20:
-        cs = GetIntFromAckPayload(); // calibration status
-        if (cs == CALBRATION_STATUS_IDLE)
-        {
-            CalibrationMessageBoxNeeded = true; // ready to show next message box - only once
-            break;                              // nothing to do, just idle
-        }
-        if (cs == CALBRATION_STATUS_SUCCEEDED && CalibrationMessageBoxNeeded)
-        {
-            CalibrationMessageBoxNeeded = false;
-            if (CurrentView == PIDVIEW) // Show a message box only if we are in PID view
-            {
-                MsgBox(pPIDView, (char *)"Calibration succeeded");
-            }
+        if (CurrentView != FRONTVIEW)
             break;
-        }
-        if (cs == CALBRATION_STATUS_FAILED && CalibrationMessageBoxNeeded)
+        if (First_RPM_Data)
         {
-            CalibrationMessageBoxNeeded = false;
-            MsgBox(pPIDView, (char *)"Calibration failed"); // Show a message box
-            break;
+            First_RPM_Data = false; // This is the first time we get RPM data
+            SendCommand(rpm_vis);
+        }
+        RotorRPM = GetIntFromAckPayload();
+        Look1("Rotor RPM: ");
+        Look(RotorRPM);
+       if (lastrpm != RotorRPM)
+        {
+            lastrpm = RotorRPM;
+            SendValue((char *)"rpm", RotorRPM);
         }
         break;
 
