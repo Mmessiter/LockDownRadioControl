@@ -430,7 +430,7 @@ FLASHMEM void setup()
     Wire.begin();
     Wire.setClock(400000); // Or 1000000, etc
                            // delay(400);// *only* needed if you want to see terminal output
-    delay(800);            // Wait for I2C to settle
+    delay(300);            // Wait for I2C to settle
     ScanI2c();             // Detect what's connected
     if (BMP280Connected)
         Init_BMP280();
@@ -451,7 +451,7 @@ FLASHMEM void setup()
 
 #ifdef USE_NEXUS
     NEXUS_SERIAL_TELEMETRY.begin(115200); // Nexus serial port for telemetry
-    Look("Nexus serial port for telemetry started at 115200 baud");
+   // Look("Nexus serial port for telemetry started at 115200 baud");
 #endif // USE_NEXUS
 
     digitalWrite(LED_PIN, LOW);
@@ -494,17 +494,13 @@ void requestRPM()
 {
 #define MSP_MOTOR_TELEMETRY 139 // Motor telemetry data
     uint8_t checksum = 0;
-    // MSP Header: $M<
     NEXUS_SERIAL_TELEMETRY.write('$');
     NEXUS_SERIAL_TELEMETRY.write('M');
     NEXUS_SERIAL_TELEMETRY.write('<');
-    // Data size (0 - no payload data)
     NEXUS_SERIAL_TELEMETRY.write(0);
     checksum ^= 0;
-    // Command:
     NEXUS_SERIAL_TELEMETRY.write(MSP_MOTOR_TELEMETRY);
     checksum ^= MSP_MOTOR_TELEMETRY;
-    // Checksum
     NEXUS_SERIAL_TELEMETRY.write(checksum);
 }
 // *************************************************************************************************************
@@ -517,48 +513,32 @@ uint16_t GetRPM(const uint8_t *data, uint8_t n)
 
     for (uint8_t i = 0; i + 6 < n; ++i)
     {
-        // Look for header: '$' 'M' '>'
         if (data[i] != '$' || data[i + 1] != 'M' || data[i + 2] != '>')
             continue;
-
         uint8_t size = data[i + 3];
         uint8_t cmd = data[i + 4];
-
-        // Do we have the whole frame in the buffer?
-        uint16_t frame_end = i + 5 + size; // index of checksum byte
+        uint16_t frame_end = i + 5 + size; 
         if (frame_end >= n)
-            break; // incomplete frame in buffer
-
-        // Verify checksum (XOR of size, cmd, payload)
+            break; 
         uint8_t ck = size ^ cmd;
         for (uint8_t k = 0; k < size; ++k)
             ck ^= data[i + 5 + k];
         if (ck != data[frame_end])
-        { // bad frame -> skip
             continue;
-        }
-
-        // Right command?
         if (cmd != CMD)
             continue;
-
-        // Payload layout: [0]=motorCount, [1..2]=rpm (u16 LE) for motor #0
         if (size < 3)
-            continue; // need count + 1 u16
+            continue; 
         const uint8_t *payload = &data[i + 5];
         if (payload[0] < 1)
-            continue; // no motors
-
+            continue; 
         uint16_t motor_rpm = (uint16_t)payload[1] | ((uint16_t)payload[2] << 8);
-
-        // Calculate head RPM
         float head = float(motor_rpm) / Ratio;
-
         if (head < 0.0f)
             head = 0.0f;
         if (head > 65535.0f)
             head = 65535.0f;
-        return (uint16_t)(head + 0.5f); // rounded head RPM
+        return (uint16_t)(head + 0.5f); 
     }
     return 0xffff;
 }
@@ -583,18 +563,16 @@ void CheckMSPSerial()
     if (temp != 0xffff)                     // Check if valid RPM was received (RPM of 65536 is very unlikely)
         RotorRPM = temp;                    // Process the received data
     requestRPM();                           // Request RPM data from Nexus (which we will read next time...)
-    Look1("RPM: ");
-    Look(RotorRPM);
+    // Look1("RPM: ");
+    // Look(RotorRPM);
 }
 #endif
 
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
-
-void loop() // without MPU6050 about 33100 interations per second.... EXCEPT Zero when reconnecting!!
-{           // with mpu6050 only about 10000
-
+void loop() 
+{           
     // TimeTheMainLoop();
 #ifdef USE_NEXUS
     CheckMSPSerial();

@@ -781,6 +781,11 @@ void LoadLongerAckPayload()
     case 19:
         SendFloatToAckPayload(RateOfClimb);
         break;
+    case 20:
+        SendIntToAckPayload(RotorRPM);
+       // Look1("Rotor RPM: ");
+       // Look(RotorRPM);
+        break;
 
     default:
         break;

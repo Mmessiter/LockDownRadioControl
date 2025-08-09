@@ -76,7 +76,7 @@
 #define DATARATE RF24_250KBPS // RF24_250KBPS, RF24_1MBPS, RF24_2MBPS
 #define PIPENUMBER 1
 #define BOUNDPIPENUMBER 1
-#define MAX_TELEMETERY_ITEMS 20 // Max number of telemetry items to send... 1 per packet
+#define MAX_TELEMETERY_ITEMS 21 // Max number of telemetry items to send... 1 per packet
 #define CHANNELSUSED 16         // Number of channels used
 #define RECEIVEBUFFERSIZE 20
 
