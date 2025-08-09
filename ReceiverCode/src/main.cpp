@@ -509,7 +509,8 @@ void requestRPM()
 }
 // *************************************************************************************************************
 // Parse a complete MSP frame from a raw byte buffer and return HEAD RPM (rounded).
-// Returns 0 if no valid MSP_MOTOR_TELEMETRY (0x8B) frame is found.
+// Returns 0xffff if no valid MSP_MOTOR_TELEMETRY (0x8B) frame is found.
+
 uint16_t GetRPM(const uint8_t *data, uint8_t n)
 {
     const uint8_t CMD = 0x8B; // MSP_MOTOR_TELEMETRY
@@ -559,7 +560,7 @@ uint16_t GetRPM(const uint8_t *data, uint8_t n)
             head = 65535.0f;
         return (uint16_t)(head + 0.5f); // rounded head RPM
     }
-    return 0;
+    return 0xffff;
 }
 
 // ************************************************************************************************************/
@@ -575,13 +576,17 @@ void CheckMSPSerial()
     while (NEXUS_SERIAL_TELEMETRY.available())
     {
         uint8_t b = NEXUS_SERIAL_TELEMETRY.read();
-       if (p < sizeof(data_in)) // safeguard against overflow
-           data_in[p++] = b;
+        if (p < sizeof(data_in)) // safeguard against overflow
+            data_in[p++] = b;
     }
-    RotorRPM = GetRPM(&data_in[0], p);     // Process the received data
-    requestRPM();                          // Request RPM data from Nexus
-    Look1("RPM: ");
-    Look(RotorRPM);
+    uint16_t temp = GetRPM(&data_in[0], p); // Process the received data
+    if (temp != 0xffff)                     // Check if valid RPM was received
+    {
+        RotorRPM = temp; // Process the received data
+    }
+    requestRPM(); // Request RPM data from Nexus
+  //  Look1("RPM: ");
+  //  Look(RotorRPM);
 }
 #endif
 
