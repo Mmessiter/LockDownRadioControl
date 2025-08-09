@@ -579,14 +579,12 @@ void CheckMSPSerial()
         if (p < sizeof(data_in)) // safeguard against overflow
             data_in[p++] = b;
     }
-    uint16_t temp = GetRPM(&data_in[0], p); // Process the received data
-    if (temp != 0xffff)                     // Check if valid RPM was received
-    {
-        RotorRPM = temp; // Process the received data
-    }
-    requestRPM(); // Request RPM data from Nexus
-  //  Look1("RPM: ");
-  //  Look(RotorRPM);
+    uint16_t temp = GetRPM(&data_in[0], p); // Process the received data which we requested last time
+    if (temp != 0xffff)                     // Check if valid RPM was received (RPM of 65536 is very unlikely)
+        RotorRPM = temp;                    // Process the received data
+    requestRPM();                           // Request RPM data from Nexus (which we will read next time...)
+    Look1("RPM: ");
+    Look(RotorRPM);
 }
 #endif
 
