@@ -839,9 +839,6 @@ bool rpmShouldUpdate(uint16_t rpm_new)
 /************************************************************************************************************/
 FASTRUN void ParseLongerAckPayload() // It's already pretty short!
 {
-
-    //  static uint32_t lastrpm = 0;
-
     FHSS_data::NextChannelNumber = AckPayload.Byte5; // every packet tells of next hop destination
     if (AckPayload.Purpose & 0x80)
     {                                                                             // Hi bit is now the **HOP NOW!!** flag
@@ -972,7 +969,7 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         }
         RotorRPM = GetIntFromAckPayload(); // Get the current RPM value from the payload
         if (rpmShouldUpdate(RotorRPM))
-            SendValue((char *)"rpm", RotorRPM); // Send the updated RPM value to Nextion Frontscreen
+            SendValue((char *)"rpm", RotorRPM); // Send the updated RPM value to Nextion Frontscreen only if it has changed sufficiently
         break;
 
     default:

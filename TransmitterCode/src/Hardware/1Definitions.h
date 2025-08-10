@@ -758,10 +758,7 @@ void ReadGainsKnob();
 uint8_t GetSwitchPosition(uint8_t Sw_Number);
 FASTRUN void LogAverageGap();
 void ReadChannelSwitches9to12();
-void PIDScreenStart();
-void PIDScreenEnd();
-void GyroApply();
-void CalibrateMPU6050();
+
 int GetExtraParameters();
 void ShowSendingParameters();
 float SDReadFLOAT(int p_address);
@@ -1304,145 +1301,9 @@ uint8_t Buddy_Low_Position = 0;
 uint8_t Buddy_Mid_Position = 1;
 uint8_t Buddy_Hi_Position = 2;
 
-bool StabilisationOn = false;
-bool SelfLevellingOn = false;
 bool ParamPause = true;
 bool First_RPM_Data = true;
 uint32_t RotorRPM = 0;
-
-#define PID_MARKER_VALUE 253 // Marker value for settings.
-// (If this value is not present, then settings are junk and will be reset to defaults)
-
-struct StabilisationSettings
-{
-    float PID_P[BANKS_USED];
-    float PID_I[BANKS_USED];
-    float PID_D[BANKS_USED];
-    float Tail_PID_P[BANKS_USED];
-    float Tail_PID_I[BANKS_USED];
-    float Tail_PID_D[BANKS_USED];
-    float Kalman_Q_angle;              // Kalman_Q_angle
-    float Kalman_Q_bias;               // Kalman_Q_bias
-    float Kalman_R_measure;            // Kalman_R_measure
-    float alpha;                       // alpha
-    float beta;                        // beta
-    bool UseKalmanFilter;              // UseKalmanFilter
-    bool UseRateLPF;                   // UseRateLPF
-    uint8_t Marker = PID_MARKER_VALUE; // Marker to identify settings
-};
-
-StabilisationSettings RateSettings = {
-    {0.05f, 0.05f, 0.05f, 0.05f},     // PID_P
-    {0.00f, 0.00f, 0.00f, 0.00f},     // PID_I
-    {0.002f, 0.002f, 0.002f, 0.002f}, // PID_D
-    {0.05f, 0.05f, 0.05f, 0.05f},     // Tail_PID_P
-    {0.00f, 0.00f, 0.00f, 0.00f},     // Tail_PID_I
-    {0.002f, 0.002f, 0.002f, 0.002f}, // Tail_PID_D
-    0.001f,                           // Kalman_Q_angle
-    0.003f,                           // Kalman_Q_bias
-    0.03f,                            // Kalman_R_measure
-    0.05f,                            // alpha
-    0.05f,                            // beta
-    true,                             // UseKalmanFilter
-    true,                             // UseRateLPF
-    PID_MARKER_VALUE,                 // Marker
-};
-
-StabilisationSettings SelfLevelSettings = {
-
-    {2.0f, 2.0f, 2.0f, 2.0f},     // PID_P
-    {0.1f, 0.1f, 0.1f, 0.1f},     // PID_I
-    {0.01f, 0.01f, 0.01f, 0.01f}, // PID_D
-    {2.0f, 2.0f, 2.0f, 2.0f},     // Tail_PID_P
-    {0.1f, 0.1f, 0.1f, 0.1f},     // Tail_PID_I
-    {0.01f, 0.01f, 0.01f, 0.01f}, // Tail_PID_D
-    0.001f,                       // Kalman_Q_angle
-    0.003f,                       // Kalman_Q_bias
-    0.03f,                        // Kalman_R_measure
-    0.05f,                        // alpha
-    0.05f,                        // beta
-    true,                         // UseKalmanFilter
-    false,                        // UseRateLPF
-    PID_MARKER_VALUE,             // Marker
-};
-StabilisationSettings *ActiveSettings = &RateSettings;
-StabilisationSettings *SavedActiveSettings = ActiveSettings;
-
-// ************************************************************************************************************/
-// Factory defaults for stabilisation settings
-
-StabilisationSettings FactoryHeliRate = {
-
-    {0.10f, 0.10f, 0.10f, 0.10f},     // PID_P
-    {0.00f, 0.00f, 0.00f, 0.00f},     // PID_I
-    {0.004f, 0.004f, 0.004f, 0.004f}, // PID_D
-    {0.10f, 0.10f, 0.10f, 0.10f},     // Tail_PID_P
-    {0.00f, 0.00f, 0.00f, 0.00f},     // Tail_PID_I
-    {0.004f, 0.004f, 0.004f, 0.004f}, // Tail_PID_D
-    0.001f,                           // Kalman_Q_angle
-    0.003f,                           // Kalman_Q_bias
-    0.03f,                            // Kalman_R_measure
-    0.04f,                            // alpha
-    0.04f,                            // beta
-    true,                             // UseKalmanFilter
-    true,                             // UseRateLPF
-    PID_MARKER_VALUE,                 // Marker
-};
-
-StabilisationSettings FactoryHeliLevelling = {
-
-    {3.0f, 3.0f, 3.0f, 3.0f},     // PID_P
-    {0.08f, 0.08f, 0.08f, 0.08f}, // PID_I
-    {0.03f, 0.03f, 0.03f, 0.03f}, // PID_D
-    {3.0f, 3.0f, 3.0f, 3.0f},     // Tail_PID_P
-    {0.08f, 0.08f, 0.08f, 0.08f}, // Tail_PID_I
-    {0.03f, 0.03f, 0.03f, 0.03f}, // Tail_PID_D
-    0.001f,                       // Kalman_Q_angle
-    0.003f,                       // Kalman_Q_bias
-    0.03f,                        // Kalman_R_measure
-    0.04f,                        // alpha
-    0.04f,                        // beta
-    true,                         // UseKalmanFilter
-    false,                        // UseRateLPF
-    PID_MARKER_VALUE,             // Marker
-};
-
-StabilisationSettings FactoryPlaneRate = {
-
-    {0.05f, 0.05f, 0.05f, 0.05f},     // PID_P
-    {0.00f, 0.00f, 0.00f, 0.00f},     // PID_I
-    {0.002f, 0.002f, 0.002f, 0.002f}, // PID_D
-    {0.05f, 0.05f, 0.05f, 0.05f},     // Tail_PID_P
-    {0.00f, 0.00f, 0.00f, 0.00f},     // Tail_PID_I
-    {0.002f, 0.002f, 0.002f, 0.002f}, // Tail_PID_D
-    0.001f,                           // Kalman_Q_angle
-    0.003f,                           // Kalman_Q_bias
-    0.03f,                            // Kalman_R_measure
-    0.05f,                            // alpha
-    0.05f,                            // beta
-    true,                             // UseKalmanFilter
-    true,                             // UseRateLPF
-    PID_MARKER_VALUE,                 // Marker
-};
-
-StabilisationSettings FactoryPlaneLevelling = {
-
-    {2.0f, 2.0f, 2.0f, 2.0f},     // PID_P
-    {0.05f, 0.05f, 0.05f, 0.05f}, // PID_I
-    {0.02f, 0.02f, 0.02f, 0.02f}, // PID_D
-    {2.0f, 2.0f, 2.0f, 2.0f},     // Tail_PID_P
-    {0.05f, 0.05f, 0.05f, 0.05f}, // Tail_PID_I
-    {0.02f, 0.02f, 0.02f, 0.02f}, // Tail_PID_D
-
-    0.001f,           // Kalman_Q_angle
-    0.003f,           // Kalman_Q_bias
-    0.03f,            // Kalman_R_measure
-    0.05f,            // alpha
-    0.05f,            // beta
-    true,             // UseKalmanFilter
-    false,            // UseRateLPF
-    PID_MARKER_VALUE, // Marker
-};
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
@@ -1450,7 +1311,6 @@ StabilisationSettings FactoryPlaneLevelling = {
 
 namespace FHSS_data
 {
-
     uint8_t Used_Recovery_Channels[3] = {15, 71, 82}; // channels 15, 71, 82 are used for recovery
 
     uint8_t FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 16, 72, // UK array

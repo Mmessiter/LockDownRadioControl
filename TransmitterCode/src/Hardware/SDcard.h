@@ -148,18 +148,18 @@ void CheckServoType()
     }
 }
 ///*********************************************************************************************************************************/
-void CheckStabilistionParameters()
-{
+// void CheckStabilistionParameters()
+// {
 
-    if (ActiveSettings->Marker != PID_MARKER_VALUE)
-    {
-        ActiveSettings = &RateSettings; // set the active settings to the rate settings
-        RateSettings = FactoryPlaneRate;
-        SelfLevelSettings = FactoryPlaneLevelling;
-        SelfLevellingOn = false; // defaults are always without self-levelling
-                                 // MsgBox(pFrontView, (char*)"PIDs etc. -> defaults!");
-    }
-}
+//     if (ActiveSettings->Marker != PID_MARKER_VALUE)
+//     {
+//         ActiveSettings = &RateSettings; // set the active settings to the rate settings
+//         RateSettings = FactoryPlaneRate;
+//         SelfLevelSettings = FactoryPlaneLevelling;
+//         SelfLevellingOn = false; // defaults are always without self-levelling
+//                                  // MsgBox(pFrontView, (char*)"PIDs etc. -> defaults!");
+//     }
+// }
 
 /************************************************************************************************************************************************/
 /**********************************  READ A MODEL ***********************************************************************************************/
@@ -450,90 +450,9 @@ bool ReadOneModel(uint32_t Mnum)
         ++SDCardAddress;
         ++SDCardAddress;
     }
-
-    // Stabiliasation and Self Levelling *****************
-
-    StabilisationOn = (bool)SDRead8BITS(SDCardAddress); // 3
-    ++SDCardAddress;
-    SelfLevellingOn = (bool)SDRead8BITS(SDCardAddress);
-    ++SDCardAddress;
-    SavedActiveSettings = ActiveSettings; // save current settings pointer
-    ActiveSettings = &RateSettings;
-    for (uint8_t i = 0; i < BANKS_USED; ++i)
-    {
-        ActiveSettings->PID_P[i] = SDReadFLOAT(SDCardAddress); 
-        SDCardAddress += 4;
-        ActiveSettings->PID_I[i] = SDReadFLOAT(SDCardAddress);
-        SDCardAddress += 4;
-        ActiveSettings->PID_D[i] = SDReadFLOAT(SDCardAddress);
-        SDCardAddress += 4;
-        ActiveSettings->Tail_PID_P[i] = SDReadFLOAT(SDCardAddress);
-        SDCardAddress += 4;
-        ActiveSettings->Tail_PID_I[i] = SDReadFLOAT(SDCardAddress);
-        SDCardAddress += 4;
-        ActiveSettings->Tail_PID_D[i] = SDReadFLOAT(SDCardAddress);
-        SDCardAddress += 4;
-    }
-    ActiveSettings->Kalman_Q_angle = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    ActiveSettings->Kalman_Q_bias = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    ActiveSettings->Kalman_R_measure = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    ActiveSettings->alpha = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    ActiveSettings->beta = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    ActiveSettings->UseKalmanFilter = (bool)SDRead8BITS(SDCardAddress);
-    ++SDCardAddress;
-    ActiveSettings->UseRateLPF = (bool)SDRead8BITS(SDCardAddress);
-    ++SDCardAddress;
-    ActiveSettings->Marker = SDRead8BITS(SDCardAddress);
-    ++SDCardAddress;
-
-    ActiveSettings = &SelfLevelSettings;
-
-    for (uint8_t i = 0; i < BANKS_USED; ++i)
-    {
-        ActiveSettings->PID_P[i] = SDReadFLOAT(SDCardAddress); 
-        SDCardAddress += 4;
-        ActiveSettings->PID_I[i] = SDReadFLOAT(SDCardAddress);
-        SDCardAddress += 4;
-        ActiveSettings->PID_D[i] = SDReadFLOAT(SDCardAddress);
-        SDCardAddress += 4;
-        ActiveSettings->Tail_PID_P[i] = SDReadFLOAT(SDCardAddress);
-        SDCardAddress += 4;
-        ActiveSettings->Tail_PID_I[i] = SDReadFLOAT(SDCardAddress);
-        SDCardAddress += 4;
-        ActiveSettings->Tail_PID_D[i] = SDReadFLOAT(SDCardAddress);
-        SDCardAddress += 4;
-    }
-
-    ActiveSettings->Kalman_Q_angle = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    ActiveSettings->Kalman_Q_bias = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    ActiveSettings->Kalman_R_measure = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    ActiveSettings->alpha = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    ActiveSettings->beta = SDReadFLOAT(SDCardAddress);
-    SDCardAddress += 4;
-    ActiveSettings->UseKalmanFilter = (bool)SDRead8BITS(SDCardAddress);
-    ++SDCardAddress;
-    ActiveSettings->UseRateLPF = (bool)SDRead8BITS(SDCardAddress);
-    ++SDCardAddress;
-    ActiveSettings->Marker = SDRead8BITS(SDCardAddress);
-    ++SDCardAddress;
-
-    ActiveSettings = SavedActiveSettings;
-
     CheckOutPutChannels();
     CheckServoType();
-    CheckStabilistionParameters();
-
     // **************************************
-
     ReadCheckSum32();
     OneModelMemory = SDCardAddress - StartLocation;
 
@@ -1427,84 +1346,6 @@ void SaveOneModel(uint32_t mnum)
         ++SDCardAddress;
     }
 
-    // Stabilisation and Self Levelling *****************
-
-    SDUpdate8BITS(SDCardAddress, StabilisationOn); // 1
-    ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, SelfLevellingOn);
-    ++SDCardAddress;
-    SavedActiveSettings = ActiveSettings; // save state of active settings
-
-    ActiveSettings = &RateSettings;
-
-    
-    for (uint8_t i = 0; i < BANKS_USED; ++i)
-    {
-        SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_P[i]);
-        SDCardAddress += 4;
-        SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_I[i]); 
-        SDCardAddress += 4;
-        SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_D[i]); 
-        SDCardAddress += 4;
-        SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_P[i]); 
-        SDCardAddress += 4;
-        SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_I[i]); 
-        SDCardAddress += 4;
-        SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_D[i]); 
-        SDCardAddress += 4;
-    }
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Kalman_Q_angle);
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Kalman_Q_bias);
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Kalman_R_measure);
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->alpha);
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->beta);
-    SDCardAddress += 4;
-    SDUpdate8BITS(SDCardAddress, ActiveSettings->UseKalmanFilter);
-    ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, ActiveSettings->UseRateLPF);
-    ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, ActiveSettings->Marker);
-    ++SDCardAddress;
-
-    ActiveSettings = &SelfLevelSettings;
-
-    for (uint8_t i = 0; i < BANKS_USED; ++i)
-    {
-        SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_P[i]); 
-        SDCardAddress += 4;
-        SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_I[i]); 
-        SDCardAddress += 4;
-        SDUpdateFLOAT(SDCardAddress, ActiveSettings->PID_D[i]); 
-        SDCardAddress += 4;
-        SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_P[i]); 
-        SDCardAddress += 4;
-        SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_I[i]); 
-        SDCardAddress += 4;
-        SDUpdateFLOAT(SDCardAddress, ActiveSettings->Tail_PID_D[i]); 
-        SDCardAddress += 4;
-    }
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Kalman_Q_angle);
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Kalman_Q_bias);
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->Kalman_R_measure);
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->alpha);
-    SDCardAddress += 4;
-    SDUpdateFLOAT(SDCardAddress, ActiveSettings->beta);
-    SDCardAddress += 4;
-    SDUpdate8BITS(SDCardAddress, ActiveSettings->UseKalmanFilter);
-    ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, ActiveSettings->UseRateLPF);
-    ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, ActiveSettings->Marker);
-    ++SDCardAddress;
-
-    ActiveSettings = SavedActiveSettings; // restore active settings
     SaveCheckSum32();                     // Save the Model parametres checksm
 
     // ********************** Add more
