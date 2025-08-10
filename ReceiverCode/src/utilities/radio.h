@@ -781,11 +781,11 @@ void LoadLongerAckPayload()
     case 19:
         SendFloatToAckPayload(RateOfClimb);
         break;
+#ifdef USE_NEXUS
     case 20:
         SendIntToAckPayload(RotorRPM);
-       // Look1("Rotor RPM: ");
-       // Look(RotorRPM);
         break;
+#endif // USE_NEXUS
 
     default:
         break;

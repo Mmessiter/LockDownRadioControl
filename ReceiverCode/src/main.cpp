@@ -451,7 +451,6 @@ FLASHMEM void setup()
 
 #ifdef USE_NEXUS
     NEXUS_SERIAL_TELEMETRY.begin(115200); // Nexus serial port for telemetry
-   // Look("Nexus serial port for telemetry started at 115200 baud");
 #endif // USE_NEXUS
 
     digitalWrite(LED_PIN, LOW);
@@ -548,7 +547,7 @@ uint16_t GetRPM(const uint8_t *data, uint8_t n)
 void CheckMSPSerial()
 {
     static uint32_t Localtimer = millis();
-    if (millis() - Localtimer < 250)
+    if (millis() - Localtimer < 100) // 10 x per second
         return;
     Localtimer = millis();
     uint8_t data_in[60];
@@ -563,8 +562,6 @@ void CheckMSPSerial()
     if (temp != 0xffff)                     // Check if valid RPM was received (RPM of 65536 is very unlikely)
         RotorRPM = temp;                    // Process the received data
     requestRPM();                           // Request RPM data from Nexus (which we will read next time...)
-    // Look1("RPM: ");
-    // Look(RotorRPM);
 }
 #endif
 

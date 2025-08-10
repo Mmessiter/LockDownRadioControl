@@ -943,18 +943,17 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
     case 20:
         if (CurrentView != FRONTVIEW)
             break;
-        if (First_RPM_Data)
+        if (First_RPM_Data) // If this is the first time we get RPM data
         {
-            First_RPM_Data = false; // This is the first time we get RPM data
-            SendCommand(rpm_vis);
+            First_RPM_Data = false;
+            SendCommand(rpm_vis);                           // This will make the RPM display visible
+            SendText((char *)"Owner", (char *)"Rotor RPM"); // Change the owner text so user knows it's RPM data
         }
-        RotorRPM = GetIntFromAckPayload();
-        Look1("Rotor RPM: ");
-        Look(RotorRPM);
-       if (lastrpm != RotorRPM)
+        RotorRPM = GetIntFromAckPayload(); // Get the current RPM value from the payload
+        if (lastrpm != RotorRPM)           // Check if the RPM value has changed
         {
-            lastrpm = RotorRPM;
-            SendValue((char *)"rpm", RotorRPM);
+            lastrpm = RotorRPM;                 // Update the last RPM value so unnecessary updates are avoided
+            SendValue((char *)"rpm", RotorRPM); // Send the updated RPM value to Nextion Frontscreen
         }
         break;
 
