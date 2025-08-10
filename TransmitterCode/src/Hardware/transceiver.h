@@ -813,13 +813,34 @@ void GetModelsMacAddress()
         }
     }
 }
+// ******************************************************************************************
+// Returns true if we should refresh the display with `rpm_new`.
+// - deadband: ignore ±2 RPM jitter (tweak to 3–5 if you like)
+// - hysteresis: once we cross the band, we update and recenter
+// - maxAgeMs: force an update occasionally even if inside the band
+bool rpmShouldUpdate(uint16_t rpm_new)
+{
+    static uint16_t shown = 0;
+    static uint32_t lastUpdate = 0;
+    const uint16_t deadband = 2;    // try 2..5
+    const uint32_t maxAgeMs = 1000; // force update at least 1 Hz
 
+    uint32_t now = millis();
+    int diff = int(rpm_new) - int(shown);
+
+    if (abs(diff) > deadband || (now - lastUpdate) > maxAgeMs)
+    {
+        shown = rpm_new;
+        lastUpdate = now;
+        return true;
+    }
+    return false;
+}
 /************************************************************************************************************/
 FASTRUN void ParseLongerAckPayload() // It's already pretty short!
 {
-    static bool First_RPM_Data = true;
-    static uint32_t lastrpm = 0;
-    char rpm_vis[] = "vis rpm,1";
+
+    //  static uint32_t lastrpm = 0;
 
     FHSS_data::NextChannelNumber = AckPayload.Byte5; // every packet tells of next hop destination
     if (AckPayload.Purpose & 0x80)
@@ -946,15 +967,12 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         if (First_RPM_Data) // If this is the first time we get RPM data
         {
             First_RPM_Data = false;
-            SendCommand(rpm_vis);                           // This will make the RPM display visible
+            SendCommand((char *)"vis rpm,1");               // This will make the RPM display visible
             SendText((char *)"Owner", (char *)"Rotor RPM"); // Change the owner text so user knows it's RPM data
         }
         RotorRPM = GetIntFromAckPayload(); // Get the current RPM value from the payload
-        if (lastrpm != RotorRPM)           // Check if the RPM value has changed
-        {
-            lastrpm = RotorRPM;                 // Update the last RPM value so unnecessary updates are avoided
+        if (rpmShouldUpdate(RotorRPM))
             SendValue((char *)"rpm", RotorRPM); // Send the updated RPM value to Nextion Frontscreen
-        }
         break;
 
     default:

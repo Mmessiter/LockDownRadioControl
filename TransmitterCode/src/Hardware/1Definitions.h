@@ -1307,7 +1307,7 @@ uint8_t Buddy_Hi_Position = 2;
 bool StabilisationOn = false;
 bool SelfLevellingOn = false;
 bool ParamPause = true;
-
+bool First_RPM_Data = true;
 uint32_t RotorRPM = 0;
 
 #define PID_MARKER_VALUE 253 // Marker value for settings.

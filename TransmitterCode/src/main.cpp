@@ -4742,6 +4742,7 @@ void GotoFrontView()
     if (BuddyPupilOnWireless)
         StartBuddyListen();
     CurrentView = FRONTVIEW;
+    First_RPM_Data = true;
     RestoreBrightness();
 }
 
