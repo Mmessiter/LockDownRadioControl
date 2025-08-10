@@ -242,6 +242,10 @@ void RedLedOn()
             SendCommand(InVisible);
         }
     }
+
+    SendCommand((char *)"vis rpm,0");  // This will make the RPM display visible
+    SendText((char *)"Owner", TxName); // Put owner name back
+    First_RPM_Data = true;// ready to start RPM data ... 
     ClearMostParameters();
     LedWasRed = true;
     EnsureMotorIsOff();
@@ -1224,7 +1228,7 @@ FLASHMEM void setup()
     RationaliseBuddy();
     WarnUserIfBuddyBoxIsOn();
     ClearMostParameters();
-   // DelayWithDog(750); // not needed
+    // DelayWithDog(750); // not needed
     GotoFrontView();
 }
 // **************************************************************************************************************************************************************
@@ -3288,7 +3292,7 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     Blank,                // 24
     Blank,                // 25
     Blank,                // 26
-    Blank                // 27
+    Blank                 // 27
 };
 
 // This list migth become MUCH longer as it limit is 24 bits big
@@ -4616,7 +4620,7 @@ void SafetySwitchChanged()
 // This function is called when the bank has changed
 void BankHasChanged()
 {
-   
+
     if ((CurrentView == FRONTVIEW) || (CurrentView == TRIM_VIEW))
     {
         for (int pp = 0; pp < 4; ++pp)
@@ -4649,7 +4653,6 @@ void BankHasChanged()
     {
         DisplayNewDualRateBank();
     }
-    
 }
 
 /************************************************************************************************************/
