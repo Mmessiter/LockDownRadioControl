@@ -962,7 +962,7 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         if (CurrentView != FRONTVIEW)
             break;
         RotorRPM = GetIntFromAckPayload(); // Get the current RPM value from the payload
-        if (RotorRPM == 0xffff)
+        if (RotorRPM == 0xffff) // this means no valid RPM data is available
             break;
         if (First_RPM_Data) // If this is the first time we get RPM data
         {
