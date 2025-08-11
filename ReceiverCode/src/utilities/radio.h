@@ -698,6 +698,7 @@ void LoadLongerAckPayload()
     AckPayloadSize = 6;                            // 6 bytes of telemetry data
     if (AckPayload.Purpose > MAX_TELEMETERY_ITEMS) // max number of telemetry items
         AckPayload.Purpose = 0;                    // wrap after max
+
     switch (AckPayload.Purpose)
     {
     case 0:
@@ -781,9 +782,11 @@ void LoadLongerAckPayload()
     case 19:
         SendFloatToAckPayload(RateOfClimb);
         break;
-#ifdef USE_NEXUS
     case 20:
+#ifdef USE_NEXUS
         SendIntToAckPayload(RotorRPM);
+#else
+        SendIntToAckPayload(0xffff); // Not using Nexus ... this is the flag
         break;
 #endif // USE_NEXUS
 
