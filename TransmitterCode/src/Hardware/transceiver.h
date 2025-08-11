@@ -959,6 +959,7 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
             MaxRateOfClimb = RateOfClimb;
         break;
     case 20:
+        Look("TESTST!!");
         if (CurrentView != FRONTVIEW)
             break;
         if (First_RPM_Data) // If this is the first time we get RPM data
