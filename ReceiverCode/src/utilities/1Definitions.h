@@ -22,18 +22,18 @@
 //  #define DB_FAILSAFE
 //  #define DB_RXTIMERS
 
-// >>>>>>>>>>>>>>>>>******* DON'T FORGET TO SET THESE TWO !!! (if it won't connect, probably one or both is wrong! )******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// >>>>>>>>>>>>>>>>>******* DON'T FORGET TO SET THESE LOT !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 //
 #define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
-#define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
+//#define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
 
-// #define USE_NEXUS // if DEFINED then USE_PWM must be UNDEFINED ( = commented out) and USE_SBUS must be DEFINED ( = uncommented) to use the Nexus transceiver
+ #define USE_NEXUS // if DEFINED then USE_PWM must be UNDEFINED ( = commented out) and USE_SBUS must be DEFINED ( = uncommented) to use the Nexus transceiver
 // #define USE_PWM
+
 #define USE_SBUS
 
-#define NEXUS_SERIAL_TELEMETRY Serial1
 // **************************************************************************
-
+#define NEXUS_SERIAL_TELEMETRY Serial1
 #define SERVO_RES_BITS 12
 #define SERVO_RESOLUTION 4096
 
@@ -145,6 +145,7 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define GPS_MARK_LOCATION 3
 #define SERVO_FREQUENCIES 6
 #define SERVO_PULSE_WIDTHS 7
+#define GEAR_RATIO 8
 #define PARAMETERS_MAX_ID 12 // Max types of parameters packet to send  ... will increase.
 
 // ****************************************************************************************************************************************
@@ -178,7 +179,7 @@ bool MPU6050Connected = false; //  Accelerometer and Gyro from MPU6050 ?
 uint8_t ReconnectChannel = 0;
 int32_t RateOfClimb = 0;
 uint32_t RotorRPM = 0;
-float Ratio = 10.3;
+float Ratio = 0;
 bool ForceCalibration = false; // Force calibration of MPU6050
 
 char ParaNames[12][30] = {

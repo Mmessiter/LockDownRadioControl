@@ -23,89 +23,28 @@ void AddParameterstoQueue(uint8_t ID) // this queue is essentially a LIFO stack
     // Look(ParaNames[ID - 1]);
 }
 
-//************************************************************************************************************/
-
-void SwitchLevelling(bool OnOff) // This function switches levelling on or off by bank selected
-{
-#ifdef USE_STABILISATION // Switch levelling on or off
-
-    static bool PreviousSelfLevellingOn; // This is the previous state of the levelling
-    char sw4[] = "sw4";                  // Switch 4 is used for levelling on/off
-    SelfLevellingOn = OnOff;
-
-    if (SelfLevellingOn != PreviousSelfLevellingOn) // if the state hasn't changed then just return
-    {
-        SendStabilationParameters();
-        PreviousSelfLevellingOn = SelfLevellingOn;
-    }
-    if (CurrentView == PIDVIEW)
-        SendValue(sw4, SelfLevellingOn); // Send the value to the PID view
-#endif
-}
-
-//************************************************************************************************************/
-
-void SwitchStabilisation(bool OnOff) // This function switches stabilisation on or off by bank selected
-{
-#ifdef USE_STABILISATION                 // Switch stabilisation on or off
-    static bool PreviousStabilisationOn; // This is the state of the stabilisation switch
-    char sw0[] = "sw0";                  // Switch 0 is used for stabilisation on/off
-    StabilisationOn = OnOff;
-    if (PreviousStabilisationOn != StabilisationOn) // if the state hasn't changed then just return
-    {
-        SendStabilationParameters();
-        PreviousStabilisationOn = StabilisationOn; // remember the state of the stabilisation switch
-    }
-    if (CurrentView == PIDVIEW)
-        SendValue(sw0, StabilisationOn); // Send the value to the PID view
-#endif
-}
-// *******************************************************************************************************************************/
-// This function is called from main.cpp to check the state of the stabilisation and self-
-void CheckStabilisationAndSelf_levelling()
-{
-#ifdef USE_STABILISATION
-    SwitchStabilisation(Bank == StabilisedBank || StabilisedBank == 0);
-    SwitchLevelling(Bank == LevelledBank || LevelledBank == 0);
-#endif
-}
-
-//************************************************************************************************************/
-void SendStabilationParameters() // This function sends the parameters that are used for stabilisation
-{
-#ifdef USE_STABILISATION                   // Send the parameters that are used for stabilisation
-    AddParameterstoQueue(BOOLEANS);        // BOOLEANS 9
-    AddParameterstoQueue(ALPHA_BETA);      // ALPHA_BETA 8
-    AddParameterstoQueue(PID_VALUES);      // PID Values 4
-    AddParameterstoQueue(TAIL_PID_VALUES); // TAIL PID Values 11
-    AddParameterstoQueue(KALMAN_VALUES);   // KALMAN Values 5
-#endif
-}
-
 /*********************************************************************************************************************************/
 void SendInitialSetupParams()                 // This function sends the initial setup parameters.
 {                                             // Failsafe and stabilisation parameters are NOT sent here because they are sent separately
-    SendStabilationParameters();              // Send the parameters that are used for stabilisation ... if its enabled
     AddParameterstoQueue(SERVO_PULSE_WIDTHS); // Servo Pulse Widths 7
     AddParameterstoQueue(SERVO_FREQUENCIES);  // Servo Frequencies 6
     AddParameterstoQueue(QNH_SETTING);        // QNH 2
+    AddParameterstoQueue(GEAR_RATIO);         // Gear Ratio 8
 }
-// /************************************************************************************************************/
-#ifdef USE_STABILISATION // Switch stabilisation on or off
-void EncodeFloat(float f, uint16_t *word1, uint16_t *word2, uint16_t *word3, uint16_t *word4)
-{ // Encode a float into 4 x 8 bit bytes ignoring the high byte of each 16 BIT word
+// ****************************************************************************
+void EncodeAFloat(float value)
+{
+    // Encode a float value into the first four words of the parameter structure (we cannot use the high 4 bits)
     union
     {
-        float f = 0.0f; // union allows us to access the float as an array of 4 8 bit integers
-        uint8_t i[4];
-    } u;
-    u.f = f;                   // union allows us to access the float as a 4 8 bit integers
-    *word1 = uint16_t(u.i[0]); // first 8 bits (The high byte is zeroed in every case because of the compression)
-    *word2 = uint16_t(u.i[1]); // second 8 bits
-    *word3 = uint16_t(u.i[2]); // third 8 bits
-    *word4 = uint16_t(u.i[3]); // fourth 8 bits
+        float f = 0.0f;
+        byte b[4];
+    } floatUnion;
+    floatUnion.f = value;
+    for (int i = 0; i < 4; ++i)
+        Parameters.word[i + 1] = (uint16_t)(floatUnion.b[i]);
 }
-#endif // USE_STABILISATION
+
 /************************************************************************************************************/
 // NB ONLY THE LOW 12 BITS ARE ACTUALLY SENT! (Because of the compression) so don't use the high bits!
 
@@ -137,7 +76,6 @@ void LoadParameters()
             GPS_RX_MaxDistance = 0;
         }
         break;
-
     case SERVO_FREQUENCIES: // 6 = Servo Frequencies
         for (int i = 0; i < 11; ++i)
             Parameters.word[i + 1] = ServoFrequency[i];
@@ -146,39 +84,10 @@ void LoadParameters()
         for (int i = 0; i < 11; ++i)
             Parameters.word[i + 1] = ServoCentrePulse[i];
         break;
-
-#ifdef USE_STABILISATION
-    case PID_VALUES: // 4 = PID Values
-        EncodeFloat(ActiveSettings->PID_P[Bank - 1], &Parameters.word[0], &Parameters.word[1], &Parameters.word[2], &Parameters.word[3]);
-        EncodeFloat(ActiveSettings->PID_I[Bank - 1], &Parameters.word[4], &Parameters.word[5], &Parameters.word[6], &Parameters.word[7]);
-        EncodeFloat(ActiveSettings->PID_D[Bank - 1], &Parameters.word[8], &Parameters.word[9], &Parameters.word[10], &Parameters.word[11]);
-        break;
-    case KALMAN_VALUES: // 5 = Kalman Filter Values
-        EncodeFloat(ActiveSettings->Kalman_Q_angle, &Parameters.word[0], &Parameters.word[1], &Parameters.word[2], &Parameters.word[3]);
-        EncodeFloat(ActiveSettings->Kalman_Q_bias, &Parameters.word[4], &Parameters.word[5], &Parameters.word[6], &Parameters.word[7]);
-        EncodeFloat(ActiveSettings->Kalman_R_measure, &Parameters.word[8], &Parameters.word[9], &Parameters.word[10], &Parameters.word[11]);
-        break;
-    case ALPHA_BETA: // 8 = Alpha and Beta
-        EncodeFloat(ActiveSettings->alpha, &Parameters.word[0], &Parameters.word[1], &Parameters.word[2], &Parameters.word[3]);
-        EncodeFloat(ActiveSettings->beta, &Parameters.word[4], &Parameters.word[5], &Parameters.word[6], &Parameters.word[7]);
-        break;
-    case BOOLEANS:                                                             // 9 = Booleans
-        Parameters.word[1] = (uint16_t)StabilisationOn & 0x01;                 // Stabilisation On
-        Parameters.word[2] = (uint16_t)SelfLevellingOn & 0x01;                 // Self Levelling On
-        Parameters.word[3] = (uint16_t)ActiveSettings->UseKalmanFilter & 0x01; // Use Kalman Filter
-        Parameters.word[4] = (uint16_t)ActiveSettings->UseRateLPF & 0x01;      // Use Rate LPF
-        break;
-    case RECALIBRATE_MPU6050: // 10 = Recalibrate MPU6050
-        Parameters.word[1] = 42;
-        Parameters.word[2] = 42;
-        break;
-    case TAIL_PID_VALUES: // 11 = Tail PID Values
-        EncodeFloat(ActiveSettings->Tail_PID_P[Bank - 1], &Parameters.word[0], &Parameters.word[1], &Parameters.word[2], &Parameters.word[3]);
-        EncodeFloat(ActiveSettings->Tail_PID_I[Bank - 1], &Parameters.word[4], &Parameters.word[5], &Parameters.word[6], &Parameters.word[7]);
-        EncodeFloat(ActiveSettings->Tail_PID_D[Bank - 1], &Parameters.word[8], &Parameters.word[9], &Parameters.word[10], &Parameters.word[11]);
+    case GEAR_RATIO: // 8 = Gear Ratio
+        EncodeAFloat(GearRatio);
         break;
 
-#endif // USE_STABILISATION
     default:
         break;
     }
@@ -226,10 +135,10 @@ int GetExtraParameters() // This gets extra parameters ready for sending and ret
     LoadParameters();
     LoadRawDataWithParameters();
     DataTosend.ChannelBitMask = 0; // IMPORTANT! This flag stops these data being seen as channel data at the RX!
-                                   // DebugParamsOut();              // long
-    Look1(Parameters.ID);
-    Look1(" ");
-    Look(ParaNames[Parameters.ID - 1]); // brief
+   // DebugParamsOut();              // long
+    // Look1(Parameters.ID);
+    // Look1(" ");
+    //  Look(ParaNames[Parameters.ID - 1]); // brief
 
     return 12; //  was 8 - this is the extent of this parameter
 }
@@ -323,7 +232,7 @@ void ActuallySendParameters(uint32_t RightNow)
 
     if (RightNow - LedGreenMoment < PAUSE_BEFORE_PARAMETER_SEND) // wait a little before sending parameters to allow the RX to Bind
     {
-       // Look(LedGreenMoment);
+        // Look(LedGreenMoment);
         return;
     }
 

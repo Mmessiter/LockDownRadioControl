@@ -194,12 +194,8 @@
 #define KALMAN_VALUES 5
 #define SERVO_FREQUENCIES 6
 #define SERVO_PULSE_WIDTHS 7
-#define ALPHA_BETA 8
-#define BOOLEANS 9
-#define RECALIBRATE_MPU6050 10
-#define TAIL_PID_VALUES 11
-
-#define PARAMETERS_MAX_ID 12 // Max types of parameters packet to send  ... will increase.
+#define GEAR_RATIO 8 // Gear Ratio for RPM calculation
+#define PARAMETERS_MAX_ID 9 // Max types of parameters packet to send  ... will increase.
 
 // **************************************************************************
 //                               Mixes                                      *
@@ -1221,10 +1217,10 @@ int LastRXModelMaxAltitude = 0;
 float LastRXTemperature = 0;
 uint8_t RadioNumber = 0;
 uint32_t LastRXReceivedPackets = 0;
-uint8_t StabilisedBank = 3;
-uint8_t LevelledBank = 3; // 3
+// uint8_t StabilisedBank = 3;
+// uint8_t LevelledBank = 3; // 3
 
-char ParaNames[11][30] = {
+char ParaNames[9][30] = {
     "FailSafe positions",  // 1
     "QNH",                 // 2
     "Mark Location",       // 3
@@ -1232,10 +1228,7 @@ char ParaNames[11][30] = {
     "Kalman Values",       // 5
     "Servo Frequencies",   // 6
     "Servo Pulse Widths",  // 7
-    "Alpha & beta Values", // 8
-    "Booleans",            // 9
-    "Re-calibtrate MPU",   // 10
-    "Tail PID Values"      // 11
+    "Gear Ratio",          // 8
 };
 uint16_t ScreenData[50];
 uint16_t AverageFrameRate = 0;
@@ -1304,6 +1297,7 @@ uint8_t Buddy_Hi_Position = 2;
 bool ParamPause = true;
 bool First_RPM_Data = true;
 uint32_t RotorRPM = 0;
+float GearRatio = 10.3;
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

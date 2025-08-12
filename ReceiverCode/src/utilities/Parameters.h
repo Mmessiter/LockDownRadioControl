@@ -11,7 +11,7 @@
  * Each word is cast to a uint8_t and placed into a union representing the bytes of a float.
  * This reconstructs the original float value which was sent as four bytes.
  */
-float DecodeFloat(uint16_t word1, uint16_t word2, uint16_t word3, uint16_t word4)
+float DecodeAFloat(uint16_t word1, uint16_t word2, uint16_t word3, uint16_t word4)
 {
     union
     {
@@ -69,7 +69,9 @@ void ReadExtraParameters()
             ServoCentrePulse[i] = Parameters.word[i + 1];
         break;
 #endif
-
+    case GEAR_RATIO: // 8
+        Ratio = DecodeAFloat(Parameters.word[1], Parameters.word[2], Parameters.word[3], Parameters.word[4]);
+        break;
     default:
         break;
     }

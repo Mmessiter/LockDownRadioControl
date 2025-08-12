@@ -306,11 +306,12 @@ bool ReadOneModel(uint32_t Mnum)
 
     BuddyHasAllSwitches = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-
-    ++SDCardAddress; // spare bytes
+    GearRatio = SDReadFLOAT(SDCardAddress);
+    ++SDCardAddress; 
     ++SDCardAddress;
     ++SDCardAddress;
     ++SDCardAddress;
+// spare
     ++SDCardAddress;
 
     for (i = 0; i < CHANNELSUSED; ++i)
@@ -430,11 +431,11 @@ bool ReadOneModel(uint32_t Mnum)
         TimerStartTime = 5 * 60;
     ++SDCardAddress;
     ++SDCardAddress;
-    StabilisedBank = SDRead8BITS(SDCardAddress);
-    ++SDCardAddress;
-    LevelledBank = SDRead8BITS(SDCardAddress);
-    ++SDCardAddress;
-    ++SDCardAddress;
+  //  StabilisedBank = SDRead8BITS(SDCardAddress);
+    ++SDCardAddress; // spare
+  //  LevelledBank = SDRead8BITS(SDCardAddress);
+    ++SDCardAddress; // spare
+    ++SDCardAddress; // spare
 
     for (i = 0; i < 16; ++i)
     {
@@ -1221,10 +1222,14 @@ void SaveOneModel(uint32_t mnum)
     SDUpdate8BITS(SDCardAddress, BuddyHasAllSwitches);
     ++SDCardAddress;
 
+    SDUpdateFLOAT(SDCardAddress, GearRatio);
+
     ++SDCardAddress;
     ++SDCardAddress;
     ++SDCardAddress;
     ++SDCardAddress;
+
+// spare one
     ++SDCardAddress;
 
     // *********************************************************************************
@@ -1326,11 +1331,11 @@ void SaveOneModel(uint32_t mnum)
     SDUpdate16BITS(SDCardAddress, TimerStartTime);
     ++SDCardAddress;
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, StabilisedBank);
-    ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, LevelledBank);
-    ++SDCardAddress;
-    ++SDCardAddress;
+  //  SDUpdate8BITS(SDCardAddress, StabilisedBank);
+    ++SDCardAddress; // spare
+  //  SDUpdate8BITS(SDCardAddress, LevelledBank);
+    ++SDCardAddress; //spare
+    ++SDCardAddress; // spare
     for (i = 0; i < 16; ++i)
     {
         SDUpdate8BITS(SDCardAddress, ChannelOutPut[i]);

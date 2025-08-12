@@ -1074,14 +1074,13 @@ void RXOptionsViewStart() // model options screen
     char Mchannel[] = "n1";
     char Mvalue[] = "n0";
     char t10[] = "t10";
+    char t12[] = "t12"; // gear ratio
     char Vbuf[15];
     char RxVCorrextion[] = "n2";
     char c1[] = "c1";
     char n3[] = "n3";
     char n4[] = "n4"; // TimerDownwards timer minutes
     char c2[] = "c2"; // TimerDownwards timer on off
-    char n5[] = "n5"; // Banks to stabilize
-    char n6[] = "n6"; // Levelled bank
 
     SendCommand(pRXSetup1);
     SendValue(c1, CopyTrimsToAll);
@@ -1094,9 +1093,9 @@ void RXOptionsViewStart() // model options screen
     SendValue(RxVCorrextion, RxVoltageCorrection);
     SendValue(c2, TimerDownwards);
     SendValue(n4, TimerStartTime / 60);
-    SendValue(n5, StabilisedBank);
-    SendValue(n6, LevelledBank);
 
+    snprintf(Vbuf, 5, "%1.2f", GearRatio);
+    SendText(t12, Vbuf);
     CurrentView = RXSETUPVIEW1;
     UpdateModelsNameEveryWhere();
 }
@@ -1109,14 +1108,14 @@ void RXOptionsViewEnd()
     char Mchannel[] = "n1";
     char Mvalue[] = "n0";
     char t10[] = "t10";
+    char t12[] = "t12";
     char fbuf[16];
     char RxVCorrextion[] = "n2";
     char c1[] = "c1";
     char n3[] = "n3";
     char n4[] = "n4"; // TimerDownwards timer minutes
     char c2[] = "c2"; // TimerDownwards timer on off
-    char n5[] = "n5"; // Banks to stabilize
-    char n6[] = "n6"; // Levelled bank
+    
 
     char ProgressStart[] = "vis Progress,1";
     char Progress[] = "Progress";
@@ -1152,6 +1151,15 @@ void RXOptionsViewEnd()
         Altered = true;
         SendValue(Progress, 15);
     }
+
+    if (InStrng(t12, chgs) || ModelMatched) // gear ratio
+    {
+        GetText(t12, fbuf);
+        GearRatio = atof(fbuf);
+        Altered = true;
+        SendValue(Progress, 18);
+    }
+
     if (InStrng(Mvalue, chgs) || ModelMatched)
     {
         MotorChannelZero = map(GetValue(Mvalue), -100, 100, 0, 180); // map to 0 to 180
@@ -1188,18 +1196,7 @@ void RXOptionsViewEnd()
         Altered = true;
         SendValue(Progress, 80);
     }
-    if (InStrng(n5, chgs) || ModelMatched)
-    {
-        StabilisedBank = GetValue(n5);
-        Altered = true;
-        SendValue(Progress, 80);
-    }
-    if (InStrng(n6, chgs) || ModelMatched)
-    {
-        LevelledBank = GetValue(n6);
-        Altered = true;
-        SendValue(Progress, 90);
-    }
+ 
 
     SendValue(Progress, 100);
     CurrentView = RXSETUPVIEW;
@@ -1212,6 +1209,8 @@ void RXOptionsViewEnd()
     }
     UpdateModelsNameEveryWhere();
     GotoFrontView();
+    DelayWithDog(200);
+    SendInitialSetupParams();
 }
 
 /******************************************************************************************************************************/
@@ -1280,4 +1279,4 @@ void EndServoTypeView()
     GotoFrontView();
 }
 
- #endif
+#endif
