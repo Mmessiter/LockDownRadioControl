@@ -271,7 +271,7 @@ void ReceiveModelFile()
     RXTimer              = millis();                        // Start timer
     while (!Radio1.available()) {                           // Await the sender....
         delay(1);
-        if (GetButtonPress()) {                            // user can abandon the transfer wait by hitting a button now
+        if (GetButtonPress()) {                             // user can abandon the transfer wait by hitting a button now
             GotoModelsView();
             ClearText();
             NormaliseTheRadio();
@@ -280,10 +280,12 @@ void ReceiveModelFile()
             return;
         }
         KickTheDog(); // Watchdog
-        if ((millis() - RXTimer) / 1000 >= FILETIMEOUT) {
+        if ((millis() - RXTimer) / 1000 >= FILETIMEOUT) { // 30 seconds have elapsed and no file was received
             SendText(ModelsView_filename, TimeoutMsg);
             NormaliseTheRadio();
-            
+            PlaySound(WHAHWHAHMSG);
+            DelayWithDog(2000);
+            GotoModelsView();
             return; // Give up waiting
         }
         else
