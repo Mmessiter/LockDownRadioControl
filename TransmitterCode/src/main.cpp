@@ -245,7 +245,7 @@ void RedLedOn()
 
     SendCommand((char *)"vis rpm,0");  // This will make the RPM display visible
     SendText((char *)"Owner", TxName); // Put owner name back
-    First_RPM_Data = true;// ready to start RPM data ... 
+    First_RPM_Data = true;             // ready to start RPM data ...
     ClearMostParameters();
     LedWasRed = true;
     EnsureMotorIsOff();
@@ -1094,7 +1094,7 @@ void CheckSDCard()
 }
 /*********************************************************************************************************************************/
 
-void initADC() // heer
+void initADC() //
 {
     // #define MAXRESOLUTION 4095  // 12 BIT
     adc->setResolution(12); // 8, 10, 12 or 16 bits
@@ -1602,8 +1602,8 @@ void ShowFileErrorMsg()
 
 int AnalogueReed(uint8_t InputChannel)
 {
-    // int value = analogRead(AnalogueInput[InputChannel]);
-    int value = adc->analogRead(AnalogueInput[InputChannel]); // heer ADC
+
+    int value = adc->analogRead(AnalogueInput[InputChannel]); //
     if (SticksMode == 2)
     {
         if ((InputChannel == 0) || (InputChannel == 2))
@@ -3831,9 +3831,17 @@ FASTRUN void ButtonWasPressed()
                 ++i;
                 SingleModelFile[j] = 0;
             }
-            SendModelFile();
-            ClearText();
-            return;
+            if (!GetConfirmation(pModelsView, (char *)"Is backup file up to date?\r\nPress 'OK' to continue, \r\n'Cancel' to update backup."))
+            {
+                strcpy(TextIn, "Export"); // further down in this function, "Export" will be detected and thus backup the selected model.
+            }
+            else // OK was pressed
+            {
+                SendModelFile();
+                ClearText();
+                return;
+            }
+          
         }
         if (InStrng(FailSAVE, TextIn) > 0)
         { //  the FAILSAFE setup is sent to receiver ************** FAILSAFE SETUP **************
@@ -4081,7 +4089,7 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(Export, TextIn))
+        if (InStrng(Export, TextIn)) // HEER
         {
             GetDefaultFilename();
             if (GetBackupFilename(pModelsView, SingleModelFile, ModelName, hhead, fprompt))

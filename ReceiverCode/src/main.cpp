@@ -509,7 +509,7 @@ void requestRPM()
 uint16_t GetRPM(const uint8_t *data, uint8_t n)
 {
     const uint8_t CMD = 0x8B; // MSP_MOTOR_TELEMETRY
-
+    if (!Ratio) Ratio = 10.3f; // Default ratio if not set
     for (uint8_t i = 0; i + 6 < n; ++i)
     {
         if (data[i] != '$' || data[i + 1] != 'M' || data[i + 2] != '>')
