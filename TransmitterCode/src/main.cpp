@@ -3345,7 +3345,7 @@ void (*NumberedFunctions[LASTFUNCTION])(){
     RXOptionsViewStart,       // 38
     RXOptionsViewEnd,         // 39
     ResetTransmitterSettings, // 40
-    BindNow,                  // 41 Not CALLED FrOM Here now
+    Blank,                    // 41 Not CALLED FrOM Here now
     PointUp,                  // 42
     PointDown,                // 43
     PointSelect,              // 44
@@ -3572,6 +3572,7 @@ FASTRUN void ButtonWasPressed()
         char visb1[] = "vis b1,1";
         char visb0[] = "vis b0,1";
         char LOG[] = ".LOG";
+        char PromtBeforeSendingModelFile[100];
 
         // ************************* test many input words from Nextion *****************
 
@@ -3831,9 +3832,16 @@ FASTRUN void ButtonWasPressed()
                 ++i;
                 SingleModelFile[j] = 0;
             }
-            if (!GetConfirmation(pModelsView, (char *)"Is backup file up to date?\r\nPress 'OK' to continue, \r\n'Cancel' to update backup."))
+            
+            strcpy(PromtBeforeSendingModelFile, "Is '");
+            strcat(PromtBeforeSendingModelFile, SingleModelFile);
+            strcat(PromtBeforeSendingModelFile, "' up to date?\r\nPress 'OK' to send it now, \r\n(otherwise press 'Cancel').");
+
+            if (!GetConfirmation(pModelsView, PromtBeforeSendingModelFile))
             {
-                strcpy(TextIn, "Export"); // further down in this function, "Export" will be detected and thus backup the selected model.
+                ClearText();
+                return;
+       
             }
             else // OK was pressed
             {
@@ -3841,8 +3849,7 @@ FASTRUN void ButtonWasPressed()
                 ClearText();
                 return;
             }
-          
-        }
+                }
         if (InStrng(FailSAVE, TextIn) > 0)
         { //  the FAILSAFE setup is sent to receiver ************** FAILSAFE SETUP **************
 
