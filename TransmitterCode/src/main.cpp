@@ -370,8 +370,10 @@ FASTRUN void ShowMotorTimer()
         {
             PlaySound(Recording[Mins - 1]);
         }
-        if (Mins)
-            LogTimer(Mins);
+        if (Mins){
+            if (UseLog)
+                LogTimer(Mins);
+        }
         if (TimerDownwards)
         {
             if ((!Mins) && (!Secs) && (MotorOnSeconds > 2))
