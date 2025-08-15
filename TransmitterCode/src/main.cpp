@@ -371,8 +371,10 @@ FASTRUN void ShowMotorTimer()
             PlaySound(Recording[Mins - 1]);
         }
         if (Mins){
-            if (UseLog)
+            if (UseLog){
                 LogTimer(Mins);
+                LogRPM(RotorRPM);
+            }
         }
         if (TimerDownwards)
         {

@@ -38,7 +38,21 @@ void LogTimer(uint32_t Mins)
     LogText(buf, sizeof(buf), true);
     LogRXVoltsPerCell();
 }
-
+// ******************************************************************************************************************************/
+// This function logs the RPM of the rotor if it is greater than 0
+void LogRPM(uint32_t RPM)
+{
+    if (RPM)
+    {
+        char TheText[] = "Main rotor RPM: ";
+        char buf[40] = " ";
+        char NB[10];
+        Str(NB, RPM, 0);
+        strcpy(buf, TheText);
+        strcat(buf, NB);
+        LogText(buf, sizeof(buf), false);
+    }
+}
 /************************************************************************************************************/
 FASTRUN void CreateTimeStamp(char *DateAndTime)
 {

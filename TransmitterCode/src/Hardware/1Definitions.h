@@ -759,21 +759,14 @@ int GetExtraParameters();
 void ShowSendingParameters();
 float SDReadFLOAT(int p_address);
 void SDUpdateFLOAT(int p_address, float p_value);
-void SendStabilationParameters();
 void FactoryDefaultsPlane();
 void FactoryDefaultsHeli();
 void GetBank();
-void CheckStabilisationAndSelf_levelling();
-void SwitchLevelling(bool OnOff);
-void SwitchStabilisation(bool OnOff);
-void KalmanScreenStart();
-void KalmanScreenEnd();
-void ReadPIDScreenData();
-void DisplayPIDScreenData();
 void KFactoryDefaultsPlane();
 void KFactoryDefaultsHeli();
+void LogRPM(uint32_t RPM);
 #ifdef USE_BTLE
-void SendViaBLE();
+    void SendViaBLE();
 #endif
 // **************************************************************************
 //                            GLOBAL DATA                                   *
