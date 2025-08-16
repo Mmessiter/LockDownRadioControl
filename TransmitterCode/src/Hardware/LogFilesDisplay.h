@@ -1,8 +1,10 @@
 // *************************************** LOGFILESDISPLAY.h  *****************************************
 
-// This is the code for the LOG FILES DISPLAY screen.
+// This is the code for the LOG FILES DISPLAY screen AND the help screens.
 // It reads the log file a screenful at a time and displays it on the Nextion screen.
 // It also allows scrolling up and down the entire log file by reading only the needed bit of it and displaying it.
+// The text files it reads have CR LFs that we ignore here, and we use | as line ending marker.
+// Here we also implement word wrap that adds complexity when counting lines.
 
 #include <Arduino.h>
 #include "Hardware/1Definitions.h"
