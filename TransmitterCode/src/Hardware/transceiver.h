@@ -324,13 +324,13 @@ FASTRUN uint8_t EncodeTheChangedChannels()
 #define MIN_CHANGE1 4                            // Very tiny changes in channel values are ignored. That's most likely only noise...
 #define MAXCHANNELSATONCE 8                      // Not more that 8 channels will be sent in one packet
     uint8_t NumberOfChangedChannels = 0;         // Number of channels that have changed or timed out since last packet
-    static uint32_t LastSendTime[CHANNELSUSED] = // Last moment when we sent each packet
+    static uint32_t LastSendTime[CHANNELSUSED] = // Place to store the last moment when we sent each packet
         {
             0, 0, 0, 0,
             0, 0, 0, 0,
             0, 0, 0, 0,
             0, 0, 0, 0};
-    const uint8_t Channel_Priority[CHANNELSUSED] = // Because of fast 200 Hz update rate, first 6 channels are sent VERY often even if they haven't changed
+    const uint8_t Channel_Priority[CHANNELSUSED] = // At the current 200 Hz packet rate, the first 6 channels are repeated at >=20Hz even if unchanged.
         {                                          // first 6 channels (Ail/Ele/Col/Rud)+2 more, have the highest priority
          50, 50, 50, 50,
          50, 50, 150, 150,
@@ -340,10 +340,10 @@ FASTRUN uint8_t EncodeTheChangedChannels()
     if (ParametersToBeSentPointer || !ParamPause) // If we are sending parameters, don't send any channels.
         return 0;
 
-    uint32_t RightNow = millis();  // carpe diem
-    DataTosend.ChannelBitMask = 0; // Clear the ChannelBitMask 16 BIT WORD (1 bit per channel)
-    for (uint8_t i = 0; i < CHANNELSUSED; ++i)
-    {                                                                   // Check for changed channels and load them into the rawdatabuffer
+    uint32_t RightNow = millis();              // carpe diem
+    DataTosend.ChannelBitMask = 0;             // Clear the ChannelBitMask 16 BIT WORD (1 bit per channel)
+    for (uint8_t i = 0; i < CHANNELSUSED; ++i) // Check for changed channels and load them into the rawdatabuffer
+    {
         if (((abs(SendBuffer[i] - PreviousBuffer[i]) >= MIN_CHANGE1) || // Check if the channel has changed significantly
              (LastSendTime[i] + Channel_Priority[i] < RightNow)) &&     // Check if the packet has timed out, irrespective of any change
             (NumberOfChangedChannels <= MAXCHANNELSATONCE))             // MAXCHANNELSATONCE is the maximum number of channel changes that are allowed in one packet ...
