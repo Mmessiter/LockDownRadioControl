@@ -315,15 +315,19 @@ void SuccessfulPacket()
 }
 // **********************************************************************************************************
 
-// My new version with per-packet timeouts
+// My new version with per-channel timeouts
 
 uint8_t EncodeTheChangedChannels()
 {
-#define MIN_CHANGE1 4                                                                    // Very tiny changes in channel values are ignored. That's most likely only noise...
-#define MAXCHANNELSATONCE 8                                                              // Not more that 8 channels will be sent in one packet
-#define PACKET_MAX_TIME 150                                                              // Time after which packet must be resent in case it was lost
-    uint8_t NumberOfChangedChannels = 0;                                                 // Number of channels that have changed since last packet
-    static uint32_t LastSendTime[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // Last time we sent each packet
+#define MIN_CHANGE1 4                                                                              // Very tiny changes in channel values are ignored. That's most likely only noise...
+#define MAXCHANNELSATONCE 8                                                                        // Not more that 8 channels will be sent in one packet                                                                        // Time after which packet must be resent in case it was lost
+    uint8_t NumberOfChangedChannels = 0;                                                           // Number of channels that have changed since last packet
+    static uint32_t LastSendTime[CHANNELSUSED] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // Last time we sent each packet
+    const uint8_t Channel_Priority[CHANNELSUSED] = {
+        50, 50, 50, 50, // first 6 channels (Ail/Ele/Col/Rud)+2 more, have the highest priority
+        50, 50, 150, 150,
+        150, 150, 150, 150,
+        150, 150, 150, 150}; // Prioritise channels in this order
     uint32_t RightNow = millis();
     DataTosend.ChannelBitMask = 0;                // Clear the ChannelBitMask 16 BIT WORD (1 bit per channel)
     if (!ParametersToBeSentPointer || ParamPause) // If sending parameters, don't send any channels.
@@ -331,7 +335,7 @@ uint8_t EncodeTheChangedChannels()
         for (uint8_t i = 0; i < CHANNELSUSED; ++i)
         {                                                                   // Check for changed channels and load them into the rawdatabuffer
             if (((abs(SendBuffer[i] - PreviousBuffer[i]) >= MIN_CHANGE1) || // Check if the channel has changed significantly
-                 (LastSendTime[i] + PACKET_MAX_TIME < RightNow)) &&         // Check if the packet has timed out, irrespective of any change
+                 (LastSendTime[i] + Channel_Priority[i] < RightNow)) &&     // Check if the packet has timed out, irrespective of any change
                 (NumberOfChangedChannels < MAXCHANNELSATONCE))              // MAXCHANNELSATONCE is the maximum number of channel changes that are allowed in one packet ...
             {                                                               // ... any other changes will be sent in the next packet, only 5ms later.
                 RawDataBuffer[NumberOfChangedChannels] = SendBuffer[i];     // Load a changed channel into the rawdatabuffer.
