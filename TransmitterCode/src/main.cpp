@@ -187,7 +187,6 @@ void ClearMostParameters()
     strcpy(LogFileName, "");
     for (int i = 0; i < CHANNELSUSED; ++i)
     {
-        PrePreviousBuffer[i] = 0;
         PreviousBuffer[i] = 0;
         SendBuffer[i] = 0;
         BuddyBuffer[i] = 0;
@@ -4966,7 +4965,6 @@ void FASTRUN ManageTransmitter()
     DoTheVariometer();            // Do the variometer
     if (RightNow - LastTimeRead >= 1000)
     {                         // Only once a second for these..
-        SendAllAgain();       // in case of missed packets
         GetFrameRate();       // Get the frame rate
         CheckScreenTime();    // Check if screen needs to be turned off
         CheckBatteryStates(); // Check battery states

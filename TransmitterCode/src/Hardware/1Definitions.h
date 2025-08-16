@@ -24,13 +24,13 @@
 #endif
 
 // *************************************************************************************
-//               TX VERSION NUMBER   (May 2020 - March 2025 Malcolm Messiter)       *
+//               TX VERSION NUMBER   (May 2020 - August 2025 Malcolm Messiter)       *
 //**************************************************************************************
 
 #define TXVERSION_MAJOR 2 // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 5
 #define TXVERSION_MINIMUS 4
-#define TXVERSION_EXTRA "A 15/07/25"
+#define TXVERSION_EXTRA "B 16/08/25"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -695,7 +695,6 @@ bool MayBeAddZero(uint8_t nn);
 void SendText1(char *tbox, char *NewWord);
 void ForceDataRedisplay();
 void TrimsToSubtrim();
-void SendAllAgain();
 void LogBuddyChange();
 void SetUpTargetForBuddy();
 FASTRUN uint16_t ReadThreePositionSwitch(uint8_t l); // This returns the input only
@@ -859,7 +858,6 @@ char ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, 
 uint8_t DualRateInUse = 1;
 uint8_t PreviousDualRateInUse = 1;
 uint16_t PreviousBuffer[SENDBUFFERSIZE + 1];    //     Used to spot any change
-uint16_t PrePreviousBuffer[SENDBUFFERSIZE + 1]; //     Used to spot any change
 uint16_t ChannelMax[CHANNELSUSED + 1];          //    output of pots at max
 uint16_t ChannelMidHi[CHANNELSUSED + 1];        //    output of pots at MidHi
 uint16_t ChannelCentre[CHANNELSUSED + 1];       //    output of pots at Centre

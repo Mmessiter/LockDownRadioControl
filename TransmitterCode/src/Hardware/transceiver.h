@@ -45,13 +45,13 @@ void ShowPacketData(uint32_t ThisPacketLength, uint8_t NumberOfChangedChannels)
     ++PacketsCount1;
 
     static uint32_t timer = 0;
-    if ((millis() - timer) >= 250)
+    if ((millis() - timer) >= 100)
     {
         timer = millis();
         AveragePacketLength = TotalPacketLength / PacketsCount;
         Look1("Packet length (bytes): ");
         Look1(ThisPacketLength);
-        Look1("\tNumber of changed channels: ");
+        Look1("\tNumber of sent channels: ");
         Look1(NumberOfChangedChannels);
         Look1("\tAverage packet length (bytes): ");
         Look1(AveragePacketLength);
@@ -175,14 +175,14 @@ void RecordsPacketSuccess(uint8_t s)
         ++TotalGoodPackets;
 }
 /************************************************************************************************************/
-void SendAllAgain()
-{
-    for (int i = 0; i < CHANNELSUSED; ++i)
-    {
-        PrePreviousBuffer[i] = 0;
-        PreviousBuffer[i] = PrePreviousBuffer[i];
-    }
-}
+// void SendAllAgain()
+// {
+//     for (int i = 0; i < CHANNELSUSED; ++i)
+//     {
+//         PrePreviousBuffer[i] = 0;
+//         PreviousBuffer[i] = PrePreviousBuffer[i];
+//     }
+// }
 /************************************************************************************************************/
 void CheckGap()
 {
@@ -197,14 +197,14 @@ void CheckGap()
     }
 }
 /************************************************************************************************************/
-void CheckDataRepeat()
-{
-    if (!ParametersToBeSentPointer || ParamPause)
-    {
-        for (int i = 0; i < CHANNELSUSED; ++i)
-            PreviousBuffer[i] = PrePreviousBuffer[i]; // force last update repeat if not sending parameters
-    }
-}
+// void CheckDataRepeat()
+// {
+//     if (!ParametersToBeSentPointer || ParamPause)
+//     {
+//         for (int i = 0; i < CHANNELSUSED; ++i)
+//             PreviousBuffer[i] = PrePreviousBuffer[i]; // force last update repeat if not sending parameters
+//     }
+// }
 /************************************************************************************************************/
 void CheckLostContact()
 {
@@ -231,7 +231,6 @@ FASTRUN void FailedPacket()
     ReconnectingNow = true;
     LastPacketSentTime = 0; // Force a new packet to be sent immediately
     CheckGap();
-    CheckDataRepeat();
     CheckLostContact();
     CheckInactivityTimeout();
 }
@@ -314,38 +313,113 @@ void SuccessfulPacket()
     StartInactvityTimeout();
     LostContactFlag = false;
 }
+// **********************************************************************************************************
 
-/************************************************************************************************************/
-
-// This function sends ONLY the changed channels, which it encodes into 'rawdatabuffer'.
-// DataTosend.ChannelBitMask is a 16 bit word that indicates which channels have changed if any.
-// It returns the number of channels that have changed since the last packet was sent.
-// The rawdatabuffer is then compressed and sent to the receiver.
-// The rawdatabuffer is a 16 bit word array, so each channel is 2 bytes before compression.
-// The compression ratio is 1.5, so the compressed data buffer is 75% of the original size.
+// My new version with per-packet timeouts
 
 uint8_t EncodeTheChangedChannels()
 {
-#define MIN_CHANGE1 4                    // Very tiny changes in channel values are ignored. That's most likely only noise...
-#define MAXCHANNELSATONCE 8              // Not more that 8 channels will be sent in one packet
-    uint8_t NumberOfChangedChannels = 0; // Number of channels that have changed since last packet
-    DataTosend.ChannelBitMask = 0;       // Clear the ChannelBitMask 16 BIT WORD (1 bit per channel)
-    if (!ParametersToBeSentPointer || ParamPause)
-    { // If sending parameters, don't send any channels ... yet.
+#define MIN_CHANGE1 4                                                                    // Very tiny changes in channel values are ignored. That's most likely only noise...
+#define MAXCHANNELSATONCE 8                                                              // Not more that 8 channels will be sent in one packet
+#define PACKET_MAX_TIME 150                                                              // Time after which packet must be resent in case it was lost
+    uint8_t NumberOfChangedChannels = 0;                                                 // Number of channels that have changed since last packet
+    static uint32_t LastSendTime[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // Last time we sent each packet
+    uint32_t RightNow = millis();
+    DataTosend.ChannelBitMask = 0;                // Clear the ChannelBitMask 16 BIT WORD (1 bit per channel)
+    if (!ParametersToBeSentPointer || ParamPause) // If sending parameters, don't send any channels.
+    {
         for (uint8_t i = 0; i < CHANNELSUSED; ++i)
-        {                                                                                                                 // Check for changed channels and load them into the rawdatabuffer
-            if ((abs(SendBuffer[i] - PreviousBuffer[i]) >= MIN_CHANGE1) && (NumberOfChangedChannels < MAXCHANNELSATONCE)) // MAXCHANNELSATONCE is the maximum number of channel changes that will be sent in one packet ...
-            {                                                                                                             // ... any other changes will be sent in the next packet, only 5ms later.
-                RawDataBuffer[NumberOfChangedChannels] = SendBuffer[i];                                                   // Load a changed channel into the rawdatabuffer.
-                PrePreviousBuffer[i] = PreviousBuffer[i];                                                                 // Save previous buffer in case we need to repeat it.
-                PreviousBuffer[i] = SendBuffer[i];                                                                        // Save it for next time in case it succeeds this time.
-                DataTosend.ChannelBitMask |= (1 << i);                                                                    // Set the current bit in the ChannelBitMask word.
-                ++NumberOfChangedChannels;                                                                                // Increment the number of channel changes (rawdatabuffer index pointer).
+        {                                                                   // Check for changed channels and load them into the rawdatabuffer
+            if (((abs(SendBuffer[i] - PreviousBuffer[i]) >= MIN_CHANGE1) || // Check if the channel has changed significantly
+                 (LastSendTime[i] + PACKET_MAX_TIME < RightNow)) &&         // Check if the packet has timed out, irrespective of any change
+                (NumberOfChangedChannels < MAXCHANNELSATONCE))              // MAXCHANNELSATONCE is the maximum number of channel changes that are allowed in one packet ...
+            {                                                               // ... any other changes will be sent in the next packet, only 5ms later.
+                RawDataBuffer[NumberOfChangedChannels] = SendBuffer[i];     // Load a changed channel into the rawdatabuffer.
+                PreviousBuffer[i] = SendBuffer[i];                          // Save the current value as the previous value so that we can detect changes.
+                LastSendTime[i] = RightNow;                                 // Save the time we sent this channel
+                DataTosend.ChannelBitMask |= (1 << i);                      // Set the current bit in the ChannelBitMask word.
+                ++NumberOfChangedChannels;                                  // Increment the number of channel changes (rawdatabuffer index pointer).
             }
         }
     }
     return NumberOfChangedChannels; // Return the number of channels that have changed
 }
+
+// ********************************************************************************************************************
+// uint8_t EncodeTheChangedChannels() // ChatGPT5's version
+// {
+//     static constexpr int16_t MIN_CHANGE1 = 4;
+//     static constexpr uint8_t MAX_AT_ONCE = 8;
+//     static constexpr uint8_t PRIMARY_COUNT = 4; // 0..3 = Ail/Ele/Col/Rud
+//     static constexpr uint32_t RESEND_PRIMARY_MS = 50;
+//     static constexpr uint32_t RESEND_OTHER_MS = 150;
+
+//     if (ParametersToBeSentPointer && !ParamPause)
+//         return 0;
+
+//     static uint32_t lastSend[CHANNELSUSED] = {0};
+//     static uint8_t rrOtherStart = 0;
+
+//     const uint32_t now = millis();
+
+//     uint8_t chosen[MAX_AT_ONCE];
+//     uint8_t nChosen = 0;
+
+//     auto consider = [&](uint8_t i, uint32_t resend_ms)
+//     {
+//         if (nChosen >= MAX_AT_ONCE)
+//             return;
+//         const int16_t cur = SendBuffer[i];
+//         const int16_t d = (int16_t)(cur - PreviousBuffer[i]);
+//         const bool changed = (d >= MIN_CHANGE1) || (d <= -MIN_CHANGE1);
+//         const bool stale = (uint32_t)(now - lastSend[i]) >= resend_ms;
+//         if (changed || stale)
+//             chosen[nChosen++] = i;
+//     };
+
+//     // 1) Primaries first
+//     for (uint8_t i = 0; i < PRIMARY_COUNT && i < CHANNELSUSED; ++i)
+//         consider(i, RESEND_PRIMARY_MS);
+
+//     // 2) Others round-robin
+//     if (CHANNELSUSED > PRIMARY_COUNT && nChosen < MAX_AT_ONCE)
+//     {
+//         const uint8_t others = CHANNELSUSED - PRIMARY_COUNT;
+//         for (uint8_t k = 0; k < others && nChosen < MAX_AT_ONCE; ++k)
+//         {
+//             const uint8_t i = PRIMARY_COUNT + (uint8_t)(rrOtherStart + k) % others;
+//             consider(i, RESEND_OTHER_MS);
+//         }
+//         rrOtherStart = (uint8_t)((rrOtherStart + 1) % others);
+//     }
+
+//     // 3) Sort chosen indices ascending to match RX unpacking order
+//     for (uint8_t a = 1; a < nChosen; ++a)
+//     {
+//         uint8_t key = chosen[a], j = a;
+//         while (j && chosen[j - 1] > key)
+//         {
+//             chosen[j] = chosen[j - 1];
+//             --j;
+//         }
+//         chosen[j] = key;
+//     }
+
+//     // 4) Pack in ascending order
+//     uint16_t mask = 0;
+//     for (uint8_t p = 0; p < nChosen; ++p)
+//     {
+//         const uint8_t i = chosen[p];
+//         const int16_t cur = SendBuffer[i];
+//         RawDataBuffer[p] = cur;
+//         PreviousBuffer[i] = cur;
+//         lastSend[i] = now;
+//         mask |= (uint16_t)(1u << i); // assumes <=16 channels
+//     }
+
+//     DataTosend.ChannelBitMask = mask;
+//     return nChosen;
+// }
 /************************************************************************************************************/
 /********************************* Function to send data to receiver ****************************************/
 /************************************************************************************************************/
@@ -962,7 +1036,7 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         if (CurrentView != FRONTVIEW)
             break;
         RotorRPM = GetIntFromAckPayload(); // Get the current RPM value from the payload
-        if (RotorRPM == 0xffff) // this means no valid RPM data is available
+        if (RotorRPM == 0xffff)            // this means no valid RPM data is available
             break;
         if (First_RPM_Data) // If this is the first time we get RPM data
         {
