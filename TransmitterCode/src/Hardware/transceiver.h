@@ -327,7 +327,7 @@ uint8_t EncodeTheChangedChannels()
         50, 50, 50, 50, // first 6 channels (Ail/Ele/Col/Rud)+2 more, have the highest priority
         50, 50, 150, 150,
         150, 150, 150, 150,
-        150, 150, 150, 150}; // Prioritise channels in this order
+        150, 150, 150, 150}; 
     uint32_t RightNow = millis();
     DataTosend.ChannelBitMask = 0;                // Clear the ChannelBitMask 16 BIT WORD (1 bit per channel)
     if (!ParametersToBeSentPointer || ParamPause) // If sending parameters, don't send any channels.
@@ -348,82 +348,6 @@ uint8_t EncodeTheChangedChannels()
     }
     return NumberOfChangedChannels; // Return the number of channels that have changed
 }
-
-// ********************************************************************************************************************
-// uint8_t EncodeTheChangedChannels() // ChatGPT5's version
-// {
-//     static constexpr int16_t MIN_CHANGE1 = 4;
-//     static constexpr uint8_t MAX_AT_ONCE = 8;
-//     static constexpr uint8_t PRIMARY_COUNT = 4; // 0..3 = Ail/Ele/Col/Rud
-//     static constexpr uint32_t RESEND_PRIMARY_MS = 50;
-//     static constexpr uint32_t RESEND_OTHER_MS = 150;
-
-//     if (ParametersToBeSentPointer && !ParamPause)
-//         return 0;
-
-//     static uint32_t lastSend[CHANNELSUSED] = {0};
-//     static uint8_t rrOtherStart = 0;
-
-//     const uint32_t now = millis();
-
-//     uint8_t chosen[MAX_AT_ONCE];
-//     uint8_t nChosen = 0;
-
-//     auto consider = [&](uint8_t i, uint32_t resend_ms)
-//     {
-//         if (nChosen >= MAX_AT_ONCE)
-//             return;
-//         const int16_t cur = SendBuffer[i];
-//         const int16_t d = (int16_t)(cur - PreviousBuffer[i]);
-//         const bool changed = (d >= MIN_CHANGE1) || (d <= -MIN_CHANGE1);
-//         const bool stale = (uint32_t)(now - lastSend[i]) >= resend_ms;
-//         if (changed || stale)
-//             chosen[nChosen++] = i;
-//     };
-
-//     // 1) Primaries first
-//     for (uint8_t i = 0; i < PRIMARY_COUNT && i < CHANNELSUSED; ++i)
-//         consider(i, RESEND_PRIMARY_MS);
-
-//     // 2) Others round-robin
-//     if (CHANNELSUSED > PRIMARY_COUNT && nChosen < MAX_AT_ONCE)
-//     {
-//         const uint8_t others = CHANNELSUSED - PRIMARY_COUNT;
-//         for (uint8_t k = 0; k < others && nChosen < MAX_AT_ONCE; ++k)
-//         {
-//             const uint8_t i = PRIMARY_COUNT + (uint8_t)(rrOtherStart + k) % others;
-//             consider(i, RESEND_OTHER_MS);
-//         }
-//         rrOtherStart = (uint8_t)((rrOtherStart + 1) % others);
-//     }
-
-//     // 3) Sort chosen indices ascending to match RX unpacking order
-//     for (uint8_t a = 1; a < nChosen; ++a)
-//     {
-//         uint8_t key = chosen[a], j = a;
-//         while (j && chosen[j - 1] > key)
-//         {
-//             chosen[j] = chosen[j - 1];
-//             --j;
-//         }
-//         chosen[j] = key;
-//     }
-
-//     // 4) Pack in ascending order
-//     uint16_t mask = 0;
-//     for (uint8_t p = 0; p < nChosen; ++p)
-//     {
-//         const uint8_t i = chosen[p];
-//         const int16_t cur = SendBuffer[i];
-//         RawDataBuffer[p] = cur;
-//         PreviousBuffer[i] = cur;
-//         lastSend[i] = now;
-//         mask |= (uint16_t)(1u << i); // assumes <=16 channels
-//     }
-
-//     DataTosend.ChannelBitMask = mask;
-//     return nChosen;
-// }
 /************************************************************************************************************/
 /********************************* Function to send data to receiver ****************************************/
 /************************************************************************************************************/
