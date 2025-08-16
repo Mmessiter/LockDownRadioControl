@@ -315,38 +315,47 @@ void SuccessfulPacket()
 }
 // **********************************************************************************************************
 
-// My new version with per-channel timeouts
+// This function encodes the changed or timed-out channels. Only these are sent to receiver, compressed because the low 12 BITS only are needed.
+// If the receiver doesn't get a particular channel, it just uses the last known value.
+// This revised version has per-channel 'repeat-even-if-no-change' priorities (coz a changed packet might get lost ...)
 
-uint8_t EncodeTheChangedChannels()
+FASTRUN uint8_t EncodeTheChangedChannels()
 {
-#define MIN_CHANGE1 4                                                                              // Very tiny changes in channel values are ignored. That's most likely only noise...
-#define MAXCHANNELSATONCE 8                                                                        // Not more that 8 channels will be sent in one packet                                                                        // Time after which packet must be resent in case it was lost
-    uint8_t NumberOfChangedChannels = 0;                                                           // Number of channels that have changed since last packet
-    static uint32_t LastSendTime[CHANNELSUSED] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // Last time we sent each packet
-    const uint8_t Channel_Priority[CHANNELSUSED] = {
-        50, 50, 50, 50, // first 6 channels (Ail/Ele/Col/Rud)+2 more, have the highest priority
-        50, 50, 150, 150,
-        150, 150, 150, 150,
-        150, 150, 150, 150}; 
-    uint32_t RightNow = millis();
-    DataTosend.ChannelBitMask = 0;                // Clear the ChannelBitMask 16 BIT WORD (1 bit per channel)
-    if (!ParametersToBeSentPointer || ParamPause) // If sending parameters, don't send any channels.
-    {
-        for (uint8_t i = 0; i < CHANNELSUSED; ++i)
-        {                                                                   // Check for changed channels and load them into the rawdatabuffer
-            if (((abs(SendBuffer[i] - PreviousBuffer[i]) >= MIN_CHANGE1) || // Check if the channel has changed significantly
-                 (LastSendTime[i] + Channel_Priority[i] < RightNow)) &&     // Check if the packet has timed out, irrespective of any change
-                (NumberOfChangedChannels < MAXCHANNELSATONCE))              // MAXCHANNELSATONCE is the maximum number of channel changes that are allowed in one packet ...
-            {                                                               // ... any other changes will be sent in the next packet, only 5ms later.
-                RawDataBuffer[NumberOfChangedChannels] = SendBuffer[i];     // Load a changed channel into the rawdatabuffer.
-                PreviousBuffer[i] = SendBuffer[i];                          // Save the current value as the previous value so that we can detect changes.
-                LastSendTime[i] = RightNow;                                 // Save the time we sent this channel
-                DataTosend.ChannelBitMask |= (1 << i);                      // Set the current bit in the ChannelBitMask word.
-                ++NumberOfChangedChannels;                                  // Increment the number of channel changes (rawdatabuffer index pointer).
-            }
+#define MIN_CHANGE1 4                            // Very tiny changes in channel values are ignored. That's most likely only noise...
+#define MAXCHANNELSATONCE 8                      // Not more that 8 channels will be sent in one packet
+    uint8_t NumberOfChangedChannels = 0;         // Number of channels that have changed or timed out since last packet
+    static uint32_t LastSendTime[CHANNELSUSED] = // Last moment when we sent each packet
+        {
+            0, 0, 0, 0,
+            0, 0, 0, 0,
+            0, 0, 0, 0,
+            0, 0, 0, 0};
+    const uint8_t Channel_Priority[CHANNELSUSED] = // Because of fast 200 Hz update rate, first 6 channels are sent VERY often even if they haven't changed
+        {                                          // first 6 channels (Ail/Ele/Col/Rud)+2 more, have the highest priority
+         50, 50, 50, 50,
+         50, 50, 150, 150,
+         150, 150, 150, 150,
+         150, 150, 150, 150};
+
+    if (ParametersToBeSentPointer || !ParamPause) // If we are sending parameters, don't send any channels.
+        return 0;
+
+    uint32_t RightNow = millis();  // carpe diem
+    DataTosend.ChannelBitMask = 0; // Clear the ChannelBitMask 16 BIT WORD (1 bit per channel)
+    for (uint8_t i = 0; i < CHANNELSUSED; ++i)
+    {                                                                   // Check for changed channels and load them into the rawdatabuffer
+        if (((abs(SendBuffer[i] - PreviousBuffer[i]) >= MIN_CHANGE1) || // Check if the channel has changed significantly
+             (LastSendTime[i] + Channel_Priority[i] < RightNow)) &&     // Check if the packet has timed out, irrespective of any change
+            (NumberOfChangedChannels <= MAXCHANNELSATONCE))             // MAXCHANNELSATONCE is the maximum number of channel changes that are allowed in one packet ...
+        {                                                               // ... any other changes will be sent in the next packet, only 5ms later.
+            RawDataBuffer[NumberOfChangedChannels] = SendBuffer[i];     // Load a changed channel into the rawdatabuffer.
+            PreviousBuffer[i] = SendBuffer[i];                          // Save the current value as the previous value so that we can detect changes.
+            LastSendTime[i] = RightNow;                                 // Save the time we sent this channel
+            DataTosend.ChannelBitMask |= (1 << i);                      // Set the current bit in the ChannelBitMask word.
+            ++NumberOfChangedChannels;                                  // Increment the number of channel changes (rawdatabuffer index pointer).
         }
     }
-    return NumberOfChangedChannels; // Return the number of channels that have changed
+    return NumberOfChangedChannels; // Return the number of channels that have changed or timed out
 }
 /************************************************************************************************************/
 /********************************* Function to send data to receiver ****************************************/
