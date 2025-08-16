@@ -247,7 +247,6 @@ void GetPupilAck()
 {
     if (Radio1.available())
     {
-        SpecialPacketData.ResendAllChannels = false;
         uint8_t DynamicPayloadSize = Radio1.getDynamicPayloadSize(); // if a packet has arrived
         Radio1.read(&DataReceived, DynamicPayloadSize);              // read only bytes sent in the packet
         if (DataReceived.ChannelBitMask)                             // any channel changes?
@@ -255,10 +254,6 @@ void GetPupilAck()
             Decompress(RawDataIn, DataReceived.CompressedData, GetDecompressedSize(DynamicPayloadSize)); // yes, decompress the data into RawDataIn array
             RearrangeTheChannels();                                                                      // Rearrange the channels
         }
-    }
-    else
-    {
-        SpecialPacketData.ResendAllChannels = true; // If no ack, then please resend all channels
     }
 }
 
@@ -299,7 +294,6 @@ void DoTheLongerSpecialPacket()
     {
         PupilDetected(false);                       // Pupil is dead
         NeedToRecover = true;                       // Need to recover
-        SpecialPacketData.ResendAllChannels = true; // Please resend all channels
     }
 }
 
@@ -365,36 +359,12 @@ void SetUpTargetForBuddy() // Once only because the model is connected via modul
     delayMicroseconds(SELECTTARGETDELAY);
 }
 
-/************************************************************************************************************/
-uint8_t EncodeTheChangedChannels1()
-{
-#define MIN_CHANGE 4                           // Very tiny changes in channel values are ignored. That's most likely only noise...                                                                                                 // ... This reduces the average packet size                                                                                                    // ... Values <= 20 are imperceptible. So 4 is just fine here.
-    uint8_t NumberOfChangedChannels = 0;       // Number of channels that have changed since last packet
-    if ((SpecialPacketData.ResendAllChannels)) // If no ack, then please resend all channels
-    {
-        for (int i = 0; i < CHANNELSUSED; ++i)
-            PreviousBuffer[i] = 0; // Clear the PreviousBuffer when all channels are to be resent
-        SpecialPacketData.ResendAllChannels = false;
-    }
-    DataTosend.ChannelBitMask = 0; // Clear the ChannelBitMask 16 BIT WORD (1 bit per channel)
-    for (int i = 0; i < CHANNELSUSED; ++i)
-    {                                                                                                // Check for changed channels and load them into the rawdatabuffer
-        if ((abs(SendBuffer[i] - PreviousBuffer[i]) >= MIN_CHANGE) && (NumberOfChangedChannels < 4)) // 4 is the maximum number of channel changes that will be sent in one packet ...
-        {                                                                                            // ... any other changes will be sent in the next packet, only 5ms later.
-            RawDataBuffer[NumberOfChangedChannels] = SendBuffer[i];                                  // Load a changed channel into the rawdatabuffer.
-            PreviousBuffer[i] = SendBuffer[i];                                                       // Save it for next time in case it succeeds this time.
-            DataTosend.ChannelBitMask |= (1 << i);                                                   // Set the current bit in the ChannelBitMask word.
-            ++NumberOfChangedChannels;                                                               // Increment the number of channel changes (rawdatabuffer index pointer).
-        }
-    }
-    return NumberOfChangedChannels;
-}
 // ************************************************************************************************************
 void SendTheSpecialAckPayload()
 {
 
     uint8_t ByteCountToTransmit;
-    uint8_t NumberOfChangedChannels = EncodeTheChangedChannels1(); // Encode the changed channels
+    uint8_t NumberOfChangedChannels = EncodeTheChangedChannels(); // Encode the changed channels (re-use other function!)
 
     if (NumberOfChangedChannels)
     {                                                                      // Any channels changed? Or parameters to send?
@@ -452,7 +422,6 @@ void TestTheCommandByte(uint8_t C, uint8_t C1) // two bytes really
         SafetyON = (C1 >> 6) & 1;            // Get the safety bit
     }
 }
-
 // ************************************************************************************************************
 
 void SetNewListenChannel(uint8_t Channel)

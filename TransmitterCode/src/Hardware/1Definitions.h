@@ -1338,7 +1338,6 @@ struct spd // Special Packet Data for Wireless Buddy functions
     uint8_t Command[2];
     uint64_t ModelID;
     uint8_t Channel = QUIETCHANNEL;
-    bool ResendAllChannels = true;
 };
 spd SpecialPacketData; // longer version
 
