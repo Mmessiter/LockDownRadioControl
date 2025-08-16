@@ -337,7 +337,7 @@ FASTRUN uint8_t EncodeTheChangedChannels()
          150, 150, 150, 150,
          150, 150, 150, 150};
 
-    if (ParametersToBeSentPointer || !ParamPause) // If we are sending parameters, don't send any channels.
+    if (ParametersToBeSentPointer && !ParamPause) // If we are sending parameters, don't send any channels.
         return 0;
 
     uint32_t RightNow = millis();              // carpe diem
@@ -346,7 +346,7 @@ FASTRUN uint8_t EncodeTheChangedChannels()
     {
         if (((abs(SendBuffer[i] - PreviousBuffer[i]) >= MIN_CHANGE1) || // Check if the channel has changed significantly
              (LastSendTime[i] + Channel_Priority[i] < RightNow)) &&     // Check if the packet has timed out, irrespective of any change
-            (NumberOfChangedChannels <= MAXCHANNELSATONCE))             // MAXCHANNELSATONCE is the maximum number of channel changes that are allowed in one packet ...
+            (NumberOfChangedChannels < MAXCHANNELSATONCE))              // MAXCHANNELSATONCE is the maximum number of channel changes that are allowed in one packet ...
         {                                                               // ... any other changes will be sent in the next packet, only 5ms later.
             RawDataBuffer[NumberOfChangedChannels] = SendBuffer[i];     // Load a changed channel into the rawdatabuffer.
             PreviousBuffer[i] = SendBuffer[i];                          // Save the current value as the previous value so that we can detect changes.
