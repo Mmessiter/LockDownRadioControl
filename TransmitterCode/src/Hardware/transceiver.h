@@ -321,8 +321,8 @@ void SuccessfulPacket()
 
 FASTRUN uint8_t EncodeTheChangedChannels()
 {
-#define MIN_CHANGE1 4                            // Very tiny changes in channel values are ignored. That's most likely only noise...
-#define MAXCHANNELSATONCE 8                      // Not more that 8 channels will be sent in one packet
+    const uint8_t Smallest_Change = 4;           // Very tiny changes in channel values are ignored. That's most likely only noise...
+    const uint8_t MaximumChannelsPerPacket = 8;  // Not more that 8 channels will be sent in one packet
     uint8_t NumberOfChangedChannels = 0;         // Number of channels that have changed or timed out since last packet
     static uint32_t LastSendTime[CHANNELSUSED] = // Place to store the last moment when we sent each packet
         {
@@ -344,15 +344,15 @@ FASTRUN uint8_t EncodeTheChangedChannels()
     DataTosend.ChannelBitMask = 0;             // Clear the ChannelBitMask 16 BIT WORD (1 bit per channel)
     for (uint8_t i = 0; i < CHANNELSUSED; ++i) // Check for changed channels and load them into the rawdatabuffer
     {
-        if (((abs(SendBuffer[i] - PreviousBuffer[i]) >= MIN_CHANGE1) || // Check if the channel has changed significantly
-             (LastSendTime[i] + Channel_Priority[i] < RightNow)) &&     // Check if the packet has timed out, irrespective of any change
-            (NumberOfChangedChannels < MAXCHANNELSATONCE))              // MAXCHANNELSATONCE is the maximum number of channel changes that are allowed in one packet ...
-        {                                                               // ... any other changes will be sent in the next packet, only 5ms later.
-            RawDataBuffer[NumberOfChangedChannels] = SendBuffer[i];     // Load a changed channel into the rawdatabuffer.
-            PreviousBuffer[i] = SendBuffer[i];                          // Save the current value as the previous value so that we can detect changes.
-            LastSendTime[i] = RightNow;                                 // Save the time we sent this channel
-            DataTosend.ChannelBitMask |= (1 << i);                      // Set the current bit in the ChannelBitMask word.
-            ++NumberOfChangedChannels;                                  // Increment the number of channel changes (rawdatabuffer index pointer).
+        if ((abs(SendBuffer[i] - PreviousBuffer[i]) >= Smallest_Change) || (LastSendTime[i] + Channel_Priority[i] < RightNow)) // Check if the channel has changed significantly
+        {
+            RawDataBuffer[NumberOfChangedChannels] = SendBuffer[i];  // Load a changed channel into the rawdatabuffer.
+            PreviousBuffer[i] = SendBuffer[i];                       // Save the current value as the previous value so that we can detect changes.
+            LastSendTime[i] = RightNow;                              // Save the time we sent this channel
+            DataTosend.ChannelBitMask |= (1 << i);                   // Set the current bit in the ChannelBitMask word.
+            ++NumberOfChangedChannels;                               // Increment the number of channel changes (rawdatabuffer index pointer).
+            if (NumberOfChangedChannels >= MaximumChannelsPerPacket) // If we have reached the maximum number of channels to send
+                break;                                               // Stop checking for more changes
         }
     }
     return NumberOfChangedChannels; // Return the number of channels that have changed or timed out
