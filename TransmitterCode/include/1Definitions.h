@@ -17,7 +17,7 @@
 #include <Adafruit_INA219.h>
 #include <DS1307RTC.h>
 #include <InterpolationLib.h>
-#include "Hardware/ADC-master/ADC.h"
+#include "ADC-master/ADC.h"
 
 #ifdef USE_BTLE
 #include <BTLE.h>

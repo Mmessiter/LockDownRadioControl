@@ -7,7 +7,7 @@
 // Here we also implement word wrap that adds complexity when counting lines.
 
 #include <Arduino.h>
-#include "Hardware/1Definitions.h"
+#include "1Definitions.h"
 #ifndef LOGFILESDISPLAY_H
 #define LOGFILESDISPLAY_H
 /******************************************************************************************************************************/

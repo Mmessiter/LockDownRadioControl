@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "Hardware/1Definitions.h"
+#include "1Definitions.h"
 #ifndef PARAMETERS_H
 #define PARAMETERS_H
 

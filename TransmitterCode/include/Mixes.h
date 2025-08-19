@@ -1,6 +1,6 @@
 // *************************************** Mixes.h  *****************************************
 #include <Arduino.h>
-#include "Hardware/1Definitions.h"
+#include "1Definitions.h"
 
 #ifndef MIXES_H
     #define MIXES_H

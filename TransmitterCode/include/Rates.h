@@ -2,7 +2,7 @@
 // This file contains  the functions for reading and writing to the SD card for MODEL MEMORIES and TRANSMITTER PARAMETERS
 
 #include <Arduino.h>
-#include "Hardware/1Definitions.h"
+#include "1Definitions.h"
 #include <SD.h>
 #include <SPI.h>
 

@@ -3,7 +3,7 @@
 // This is the code for reading the switch positions and dealing with them
 
 #include <Arduino.h>
-#include "Hardware/1Definitions.h"
+#include "1Definitions.h"
 #ifndef SWITCHES_H
 #define SWITCHES_H
 

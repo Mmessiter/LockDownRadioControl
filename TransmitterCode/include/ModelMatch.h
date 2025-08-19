@@ -1,7 +1,7 @@
 // This file is used to compare the model ID with the saved model ID. If the model ID is not found, it will NOT display a warning message.
 
 #include <Arduino.h>
-#include "Hardware/1Definitions.h"
+#include "1Definitions.h"
 #ifndef MODEL_MATCH_H
 #define MODEL_MATCH_H
 

@@ -133,33 +133,32 @@
 #include <DS1307RTC.h>
 #include <InterpolationLib.h>
 
-#include "Hardware/1Definitions.h" // must be here! (not higher or lower);
+#include "1Definitions.h" // must be here! (not higher or lower);
 
-#include "Hardware/Utilities.h"
-#include "Hardware/transceiver.h"
-#include "Hardware/Pong.h"
-#include "Hardware/macros.h"
-#include "Hardware/Trims.h"
-#include "Hardware/ModelMatch.h"
-#include "Hardware/Nextion.h"
-#include "Hardware/ModelExchange.h"
-#include "Hardware/BuddyWireless.h"
-#include "Hardware/SDcard.h"
-#include "Hardware/Telemetry.h"
-#include "Hardware/LogFiles.h"
-#include "Hardware/Rates.h"
-#include "Hardware/Mixes.h"
-#include "Hardware/MenuOptions.h"
-#include "Hardware/LogFilesList.h"
-#include "Hardware/Help.h"
-#include "Hardware/LogFilesDisplay.h"
-#include "Hardware/Switches.h"
-#include "Hardware/Stabilisation.h"
-#include "Hardware/ADC-master/ADC.h"
-#include "Hardware/Parameters.h"
+#include "Utilities.h"
+#include "transceiver.h"
+#include "Pong.h"
+#include "macros.h"
+#include "Trims.h"
+#include "ModelMatch.h"
+#include "Nextion.h"
+#include "ModelExchange.h"
+#include "BuddyWireless.h"
+#include "SDcard.h"
+#include "Telemetry.h"
+#include "LogFiles.h"
+#include "Rates.h"
+#include "Mixes.h"
+#include "MenuOptions.h"
+#include "LogFilesList.h"
+#include "Help.h"
+#include "LogFilesDisplay.h"
+#include "Switches.h"
+#include "ADC-master/ADC.h"
+#include "Parameters.h"
 
 #ifdef USE_BTLE
-#include "Hardware/BTLE.h"
+#include "BTLE.h"
 #endif
 
 /*********************************************************************************************************************************/

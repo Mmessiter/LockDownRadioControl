@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include <SD.h>
 #include <RF24.h>
-#include "Hardware/1Definitions.h"
+#include "1Definitions.h"
 
 #ifndef MODELEXCHANGE_H
 #define MODELEXCHANGE_H

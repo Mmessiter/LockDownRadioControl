@@ -3,7 +3,7 @@
 // This is the code to write log data to a logfile
 
 #include <Arduino.h>
-#include "Hardware/1Definitions.h"
+#include "1Definitions.h"
 #ifndef LOGFILES_H
 #define LOGFILES_H
 

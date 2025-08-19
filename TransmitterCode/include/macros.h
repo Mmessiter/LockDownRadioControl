@@ -1,6 +1,6 @@
 // *************************************** Macros.h  *****************************************
 #include <Arduino.h>
-#include "Hardware/1Definitions.h"
+#include "1Definitions.h"
 
 #ifndef MACROS_H
     #define MACROS_H

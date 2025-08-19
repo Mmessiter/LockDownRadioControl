@@ -3,7 +3,7 @@
 #ifndef HELP_H
 #define HELP_H
 #include <Arduino.h>
-#include "Hardware/1Definitions.h"
+#include "1Definitions.h"
 // ******************************************************************************************************************************/
 void SendHelp(){ // load new help file
     uint8_t  i = 0;

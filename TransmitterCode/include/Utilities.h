@@ -1,7 +1,7 @@
 // *********************************************** utilities.h for Transmitter code *******************************************
 
 #include <Arduino.h>
-#include "Hardware/1Definitions.h"
+#include "1Definitions.h"
 #ifndef UTILITIES_H
 #define UTILITIES_H
 

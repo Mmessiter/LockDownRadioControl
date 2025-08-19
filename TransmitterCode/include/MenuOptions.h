@@ -1,6 +1,6 @@
 // *************************************** MenuOptions.h  *****************************************
 #include <Arduino.h>
-#include "Hardware/1Definitions.h"
+#include "1Definitions.h"
 
 #ifndef MENUOPTIONS_H
 #define MENUOPTIONS_H

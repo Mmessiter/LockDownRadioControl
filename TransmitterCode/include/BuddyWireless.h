@@ -3,7 +3,7 @@
 // This is the code for the wireless buddy system. Its functions are called from the main loop, and from the SendData() function.
 
 #include <Arduino.h>
-#include "Hardware/1Definitions.h"
+#include "1Definitions.h"
 #ifndef BUDDYWIRELESS_H
 #define BUDDYWIRELESS_H
 

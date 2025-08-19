@@ -3,7 +3,7 @@
 #ifndef LOGFILESLIST_H
 #define LOGFILESLIST_H
 #include <Arduino.h>
-#include "Hardware/1Definitions.h"
+#include "1Definitions.h"
 
 /******************************************************************************************************************************/
 

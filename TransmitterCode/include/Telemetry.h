@@ -1,7 +1,7 @@
 // *********************************************** Telemetry.h for Transmitter code *******************************************
 
 #include <Arduino.h>
-#include "Hardware/1Definitions.h"
+#include "1Definitions.h"
 #ifndef TELEMETRY_H
 #define TELEMETRY_H
 
