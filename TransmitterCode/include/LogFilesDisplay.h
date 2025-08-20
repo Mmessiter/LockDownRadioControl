@@ -26,7 +26,7 @@
 
 char LogLines[MXLINES + 1][MXLINELENGTH + 1];
 uint32_t SeekPosition[MAXSEEKPOSITIONS];
-short StartReadLine = 0;
+int16_t StartReadLine = 0;
 uint32_t ThisSeekPosition = 0;
 uint16_t FinalReadStartLine = 0xFFFF;
 
@@ -76,7 +76,6 @@ void LogReleasedNEW()
 
     if (Direction == GOING_DOWN)
     {
-
         if (Current_Y > (Max_Y * SCROLLTRIGGER))
         {
             StartReadLine += BUFFEREDLINES;
@@ -95,15 +94,12 @@ void LogReleasedNEW()
         {
             if (!StartReadLine)
                 return;
-            if (StartReadLine <= BUFFEREDLINES * 4) // if we are almost at the top of the file (or at the top) go there!
+            Current_Y += (BUFFEREDLINES * FONTPOINTS);
+            StartReadLine -= BUFFEREDLINES;
+            if (StartReadLine < 0)
             {
                 StartReadLine = 0;
                 Current_Y = 0;
-            }
-            else
-            {
-                Current_Y += (BUFFEREDLINES * FONTPOINTS);
-                StartReadLine -= BUFFEREDLINES;
             }
             ShowLogFileNew(ReadAFewLines());
             SendOtherValue(Current_Y_Nextion_Label, Current_Y);

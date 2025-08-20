@@ -18,7 +18,7 @@ void LogAverageFrameRate()
     strcpy(buf, TheText);
     strcat(buf, NB);
     strcat(buf, fps);
-    LogText(buf, sizeof(buf), false);
+    LogText(buf, strlen(buf), false);
 }
 
 /******************************************************************************************************************************/
@@ -35,7 +35,7 @@ void LogTimer(uint32_t Mins)
     strcat(buf, " minute");
     if (Mins > 1)
         strcat(buf, "s");
-    LogText(buf, sizeof(buf), true);
+    LogText(buf, strlen(buf), true);
     LogRXVoltsPerCell();
 }
 // ******************************************************************************************************************************/
@@ -50,7 +50,7 @@ void LogRPM(uint32_t RPM)
         Str(NB, RPM, 0);
         strcpy(buf, TheText);
         strcat(buf, NB);
-        LogText(buf, sizeof(buf), false);
+        LogText(buf, strlen(buf), false);
     }
 }
 /************************************************************************************************************/
@@ -138,7 +138,7 @@ FASTRUN void LogRXsTotalTimes()
     Str(NB, RX1Secs, 0);
     strcat(buf, NB);
     strcat(buf, secs);
-    LogText(buf, sizeof(buf), false);
+    LogText(buf, strlen(buf), false);
     // Now RX2
     strcpy(buf, "RX2 use: ");
     Str(NB, RX2Mins, 0);
@@ -147,7 +147,7 @@ FASTRUN void LogRXsTotalTimes()
     Str(NB, RX2Secs, 0);
     strcat(buf, NB);
     strcat(buf, secs);
-    LogText(buf, sizeof(buf), false);
+    LogText(buf, strlen(buf), false);
 }
 /************************************************************************************************************/
 FASTRUN void OpenLogFileW()
@@ -215,8 +215,8 @@ FASTRUN bool LogFilePreamble()
     if (strcmp(dbuf, LastTimeStamp) == 0)
         return false; // Don't log the same time twice
     strcpy(LastTimeStamp, dbuf);
-    WriteToLogFile(dbuf, 9); // Add time stamp 9 bytes long
-    WriteToLogFile(Divider, 3);
+    WriteToLogFile(dbuf, strlen(dbuf)); // Add time stamp 9 bytes long
+    WriteToLogFile(Divider, strlen(Divider));
     return true;
 }
 
@@ -252,7 +252,7 @@ FASTRUN void LogText(char *TheText, uint16_t len, bool TimeStamp)
         WriteToLogFile(Tab, strlen(Tab));
     }
     WriteToLogFile(TheText, len);
-    WriteToLogFile(crlf, sizeof(crlf));
+    WriteToLogFile(crlf, strlen(crlf));
     CloseLogFile();
     strcpy(TheText, "");
 }
@@ -269,7 +269,7 @@ FASTRUN void LogMinGap()
     strcpy(buf, TheText);
     strcat(buf, NB);
     strcat(buf, ms);
-    LogText(buf, sizeof(buf), false);
+    LogText(buf, strlen(buf), false);
 }
 // ************************************************************************
 FASTRUN void LogConnection()
@@ -278,7 +278,7 @@ FASTRUN void LogConnection()
     char buf[40] = " ";
     strcpy(buf, TheText);
     strcat(buf, ModelName);
-    LogText(buf, sizeof(buf), true);
+    LogText(buf, strlen(buf), true);
     LogMinGap();
     LogRXVoltsPerCell();
     LogTXVoltsPerCell();
@@ -292,7 +292,7 @@ void MMLog(char *TheText)
     char buf[40] = " ";
     strcpy(buf, TheText);
     strcat(buf, ModelName);
-    LogText(buf, sizeof(buf), false);
+    LogText(buf, strlen(buf), false);
 }
 // ************************************************************************
 
@@ -333,7 +333,7 @@ void LogTXVoltsPerCell()
     dtostrf(TXVoltsPerCell, 2, 2, NB);
     strcpy(buf, TheText);
     strcat(buf, NB);
-    LogText(buf, sizeof(buf), false);
+    LogText(buf, strlen(buf), false);
 }
 // ************************************************************************
 
@@ -347,13 +347,13 @@ void LogRXVoltsPerCell()
     dtostrf(RXVoltsPerCell, 2, 2, NB);
     strcpy(buf, TheText);
     strcat(buf, NB);
-    LogText(buf, sizeof(buf), false);
+    LogText(buf, strlen(buf), false);
 }
 // ************************************************************************
 void LogStopFlyingMsg()
 {
     char TheText[] = "'Stop flying' warning issued!";
-    LogText(TheText, sizeof(TheText), true);
+    LogText(TheText, strlen(TheText), true);
 }
 // ************************************************************************
 
@@ -408,7 +408,7 @@ void LogMotorOnDuration()
     Str(NB, MotorOnSeconds % 60, 0);
     strcat(buf, NB);
     strcat(buf, " seconds");
-    LogText(buf, sizeof(buf), false);
+    LogText(buf, strlen(buf), false);
 }
 // ************************************************************************
 void Log_RXMAXModelAltitude()
@@ -417,7 +417,7 @@ void Log_RXMAXModelAltitude()
     char buf[60] = " ";
     strcpy(buf, TheText);
     strcat(buf, Maxaltitude);
-    LogText(buf, sizeof(buf), false);
+    LogText(buf, strlen(buf), false);
 }
 // ************************************************************************
 /**
@@ -435,7 +435,7 @@ FASTRUN void LogDisConnection()
 
     strcpy(buf, TheText);
     strcat(buf, ModelName);
-    LogText(buf, sizeof(buf), true);
+    LogText(buf, strlen(buf), true);
     LogConnectedDuration();
     LogMotorOnDuration();
     LogTotalRXSwaps();
@@ -534,7 +534,7 @@ void Log_GPS_RX_Altitude()
     dtostrf(GPS_RX_Altitude, 2, 2, NB);
     strcpy(buf, TheText);
     strcat(buf, NB);
-    LogText(buf, sizeof(buf), false);
+    LogText(buf, strlen(buf), false);
 }
 // ************************************************************************
 void Log_GPS_RX_DistanceTo()
@@ -545,7 +545,7 @@ void Log_GPS_RX_DistanceTo()
     dtostrf(GPS_RX_DistanceTo, 2, 2, NB);
     strcpy(buf, TheText);
     strcat(buf, NB);
-    LogText(buf, sizeof(buf), false);
+    LogText(buf, strlen(buf), false);
 }
 // ************************************************************************
 
@@ -671,7 +671,7 @@ void LogNewRateInUse()
     Str(NB, DualRateInUse, 0);
     strcpy(buf, TheText);
     strcat(buf, NB);
-    LogText(buf, sizeof(buf), true);
+    LogText(buf, strlen(buf), true);
 }
 
 // ************************************************************************
@@ -711,7 +711,7 @@ void LogTotalRXSwaps()
     Str(NB, RadioSwaps, 0);
     strcpy(buf, TheText);
     strcat(buf, NB);
-    LogText(buf, sizeof(buf), false);
+    LogText(buf, strlen(buf), false);
 }
 
 /******************************************************************************************************************************/
@@ -735,7 +735,7 @@ void LogTimeSince(char *TheText, uint32_t Time)
     strcat(buf, " second");
     if ((Time % 60000) / 1000 > 1)
         strcat(buf, "s");
-    LogText(buf, sizeof(buf), false);
+    LogText(buf, strlen(buf), false);
 }
 /******************************************************************************************************************************/
 void LogTimeSinceBoot()
