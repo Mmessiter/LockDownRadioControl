@@ -340,7 +340,7 @@ FASTRUN uint8_t EncodeTheChangedChannels()
     if (ParametersToBeSentPointer && !ParamPause) // If we are sending parameters, don't send any channels.
         return 0;
 
-    uint32_t RightNow = millis();                           // carpe diem
+    uint32_t RightNow = millis();                           // Carpe diem
     DataTosend.ChannelBitMask ^= DataTosend.ChannelBitMask; // Clear the ChannelBitMask 16 BIT WORD (1 bit per channel)
     for (uint8_t i = 0; i < CHANNELSUSED; ++i)              // Check for changed channels and load them into the rawdatabuffer
     {

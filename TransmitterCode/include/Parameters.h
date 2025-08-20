@@ -48,7 +48,7 @@ void EncodeAFloat(float value)
 /************************************************************************************************************/
 // NB ONLY THE LOW 12 BITS ARE ACTUALLY SENT! (Because of the compression) so don't use the high bits!
 
-void LoadParameters()
+void LoadOneParameter() // todo: return length of this parameter (avoid using MAX 12 always)
 {
     uint16_t Twobytes = 0;
     uint8_t FS_Byte1;
@@ -132,7 +132,7 @@ int GetExtraParameters() // This gets extra parameters ready for sending and ret
         DataTosend.ChannelBitMask = 0; // IMPORTANT! This flag stops these data being seen as channel data at the RX!
         return 8;
     }
-    LoadParameters();
+    LoadOneParameter();
     LoadRawDataWithParameters();
     DataTosend.ChannelBitMask = 0; // IMPORTANT! This flag stops these data being seen as channel data at the RX!
    // DebugParamsOut();              // long
@@ -140,7 +140,7 @@ int GetExtraParameters() // This gets extra parameters ready for sending and ret
     // Look1(" ");
     //  Look(ParaNames[Parameters.ID - 1]); // brief
 
-    return 12; //  was 8 - this is the extent of this parameter
+    return 12; //  was 8 - this is the max extent of a parameter
 }
 
 /*********************************************************************************************************************************/
