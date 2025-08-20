@@ -125,7 +125,6 @@
 #include <Arduino.h>
 #include <Watchdog_t4.h>
 #include <PulsePosition.h>
-//#include <MTP_Teensy.h>
 #include <RF24.h>
 #include <SD.h>
 #include <SPI.h>
@@ -3286,7 +3285,7 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     LogReleasedNEW,       // 14   // new version
     LogTouched,           // 15   // this does nothing, yet ...
     RefreshDualRatesNew,  // 16
-    Blank,                // 17
+    Blank,                // 17 // MTP sd access
     Blank,                // 18
     Blank,                // 19
     Blank,                // 20
