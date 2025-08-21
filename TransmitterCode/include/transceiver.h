@@ -261,17 +261,13 @@ FASTRUN void TryOtherPipe()
 /************************************************************************************************************/
 void TryToReconnect()
 {
-    // static uint32_t localtimer = 0;
     if (!DontChangePipeAddress)
         TryOtherPipe();
     ++ReconnectionIndex;
-    delayMicroseconds(42); // ???
     if (ReconnectionIndex >= 3)
     {
-
         ReconnectionIndex = 0;
-        // Look(millis() - localtimer); // This rotates much faster that the RX so a Hit will happen fast,
-        // localtimer = millis();
+        delayMicroseconds(1500 + (rand() % 500) - 250); // ~1.5 ms base pause with ±250 us jitter
     }
     NextChannel = FHSS_data::Used_Recovery_Channels[ReconnectionIndex];
     HopToNextChannel();

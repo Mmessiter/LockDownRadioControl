@@ -10,7 +10,7 @@
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 5
 #define RXVERSION_MINIMUS 4
-#define RXVERSION_EXTRA 'A' // 14 July 2025
+#define RXVERSION_EXTRA 'C' // 21 August 2025
 #define HOPTIME 15          // gives about 48Hz FHSS, 47 gives 20Hz FHSS
 #define RECEIVE_TIMEOUT 7   // was 8
 
@@ -24,14 +24,14 @@
 
 // >>>>>>>>>>>>>>>>>******* DON'T FORGET TO SET THIS LOT !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
- //#define USE_NEXUS // if DEFINED then USE_PWM must be UNDEFINED ( = commented out) and USE_SBUS must be DEFINED ( = uncommented) to use the Nexus transceiver
+// #define USE_NEXUS // if DEFINED then USE_PWM must be UNDEFINED ( = commented out) and USE_SBUS must be DEFINED ( = uncommented) to use the Nexus transceiver
 
 #define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
 #define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
 #define USE_SBUS
 
 #ifndef USE_NEXUS
-// #define USE_PWM
+#define USE_PWM
 #endif // USE_NEXUS
 
 // **************************************************************************
@@ -70,8 +70,8 @@
 
 // ********************* >>> Reconnect params <<< ***************************************
 
-#define LISTEN_PERIOD 14      //  was 14 (How many ms to listen for TX in Reconnect())
-#define STOPLISTENINGDELAY 30 //  microseconds to wait after stopListening() in Reconnect()
+#define LISTEN_PERIOD 7      //  was 14 (How many ms to listen for TX in Reconnect())
+#define STOPLISTENINGDELAY 100 // was 30 microseconds to wait after stopListening() in Reconnect()
 
 // *************************************************************************************
 

@@ -30,7 +30,7 @@
 #define TXVERSION_MAJOR 2 // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 5
 #define TXVERSION_MINIMUS 4
-#define TXVERSION_EXTRA "B 16/08/25"
+#define TXVERSION_EXTRA "C 21/08/25"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -127,7 +127,7 @@
 #define RETRYCOUNT 2          // was 2. Auto retries inside nRF24L01. MAX is 15. Fails below 2.
 #define RETRYWAIT 1           // was 1. 250us = Wait between retries (RetryWait+1 * 250us))
 #define QUIETCHANNEL 5        // This was found to be the least busy channel in the 2.4GHz band in my house
-#define STOPLISTENINGDELAY 30 // 30 seems close to ideal <<<<< *********
+#define STOPLISTENINGDELAY 100 //30 // 30 seems close to ideal <<<<< *********
 #define SELECTTARGETDELAY 100
 
 // **************************************************************************
