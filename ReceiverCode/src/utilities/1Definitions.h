@@ -24,10 +24,10 @@
 
 // >>>>>>>>>>>>>>>>>******* DON'T FORGET TO SET THIS LOT !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-// #define USE_NEXUS // if DEFINED then USE_PWM must be UNDEFINED ( = commented out) and USE_SBUS must be DEFINED ( = uncommented) to use the Nexus transceiver
+#define USE_NEXUS // if DEFINED then USE_PWM must be UNDEFINED ( = commented out) and USE_SBUS must be DEFINED ( = uncommented) to use the Nexus transceiver
 
 #define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
-#define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
+//#define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
 #define USE_SBUS
 
 #ifndef USE_NEXUS
@@ -58,15 +58,8 @@
 //                            EEPROM PARAMETERS                           *
 //***************************************************************************
 
-#define CALIBRATION_STATUS_IDLE 0                                // Idle status
-#define CALIBRATION_STATUS_SUCCEEDED 1                           // Calibration succeeded
-#define CALIBRATION_STATUS_FAILED 2                              // Calibration failed
 #define BIND_EEPROM_OFFSET 0                                     // use 8 bytes from here (in fact 5 bytes only, but we reserve 8 bytes for future use)
 #define FAILSAFE_EEPROM_OFFSET BIND_EEPROM_OFFSET + 8            // use 32 bytes from here. Not 16 as had been rumoured ...
-#define MPU6050_EEPROM_OFFSET FAILSAFE_EEPROM_OFFSET + 34        // uses 54 bytes from here (for the MPU6050 and stick centres calibration data)
-#define MPU6050_CALIBRATIONS_SAVED 42                            // This is just a 'magic' number to indicate that calibration data was saved.
-#define THE_NEXT_USE_OF_EEPROM_OFFSET MPU6050_EEPROM_OFFSET + 54 // For future use ...
-                                                                 // this flag indicates whether calibrations were saved.
 
 // ********************* >>> Reconnect params <<< ***************************************
 
@@ -380,7 +373,6 @@ int16_t LongAcknowledgementsMinimum = 200;
 bool DPS310Connected = false;
 uint16_t DPS310Address = 0x76; // DPS310 I2C address
 bool BindPlugInserted = false; // Bind plug inserted or not
-uint8_t CalibrationStatus = CALIBRATION_STATUS_IDLE;
 uint8_t VerificationNumber = 0;
 uint32_t Aileron_Centre = 0, Elevator_Centre = 0, Rudder_Centre = 0, Throttle_Centre = 0;
 
