@@ -12,8 +12,8 @@
 #define LOGFILESDISPLAY_H
 /******************************************************************************************************************************/
 // Later, might put these into definitions.h ( ... Much later!)
-#define READBUFFERSIZE 2048       // Buffer to read in
-#define BUFFEREDLINES 10          // 15 might be too much
+#define READBUFFERSIZE 1024       // was 2048. Buffer to read in
+#define BUFFEREDLINES 5           // 15 might be too much
 #define MXLINES BUFFEREDLINES * 4 // must be an integer and about 4 * BUFFEREDLINES
 #define SCROLLTRIGGER 0.75        // was 0.75  ... and apparently still is!
 #define MXLINELENGTH 110
@@ -175,6 +175,24 @@ void StoreThisNewSeekPosition(uint16_t ThisPosition, uint32_t ThisValue)
         SeekPosition[ThisPosition] = ThisValue;
 }
 
+// ****************************************************************************************
+bool WrapNow(uint16_t ColumnIndex, uint8_t LastChar)
+{
+    if (ColumnIndex >= WRAPPOINT)
+    {
+        if (LastChar == 32) // if last char is a space, we can wrap now
+            return true;
+        if (LastChar == '-') // if last char is a hyphen, we can wrap now
+            return true;
+        if (LastChar == '.') // if last char is a period, we can wrap now
+            return true;
+        if (LastChar == '=') // if last char is an equals sign, we can wrap now
+            return true;
+        if (LastChar == ',') // if last char is a comma, we can wrap now
+            return true;
+    }
+    return false;
+}
 /******************************************************************************************************************/
 // This function reads the log file buffer and builds an array of lines.
 // It also stores the seek positions so scrolling up is possible.
@@ -206,7 +224,8 @@ uint16_t BuildLinesArray(char *ReadBuffer, uint16_t BytesRead, uint32_t StartSee
             LogLines[LinesCounter][ColumnIndex] = ReadBuffer[BufferIndex]; // get one character
             ++ColumnIndex;
             LogLines[LinesCounter][ColumnIndex] = 0;
-            if ((ColumnIndex >= WRAPPOINT) && (LogLines[LinesCounter][ColumnIndex - 1] == 32)) // Were we past the word-wrap point?
+
+            if (WrapNow(ColumnIndex, LogLines[LinesCounter][ColumnIndex - 1]))
             {
                 if (LinesCounter < MXLINES - 1)
                     ++LinesCounter;
@@ -223,6 +242,7 @@ uint16_t BuildLinesArray(char *ReadBuffer, uint16_t BytesRead, uint32_t StartSee
 uint16_t ReadAFewLines()
 {
     char ReadBuffer[READBUFFERSIZE];
+    char EndMarker[] = "||* END OF FILE *||";
 
     if (!StartReadLine)
     {
@@ -239,32 +259,33 @@ uint16_t ReadAFewLines()
     LogFileNumber.seek(ThisSeekPosition);                                // seek to the position
     uint16_t BytesRead = LogFileNumber.read(ReadBuffer, READBUFFERSIZE); // read in the buffer
 
-    if (BytesRead < READBUFFERSIZE)
+    if (BytesRead < READBUFFERSIZE - strlen(EndMarker)) // if we read less than the buffer size, we are at the end of the file
     {
+        ReadBuffer[BytesRead] = 0; // null-terminate the buffer
         CloseLogFile();
         FinalReadStartLine = StartReadLine;
+        strcat(ReadBuffer, EndMarker);
+        BytesRead += (strlen(EndMarker));
     }
-    // Look1("This Seek Position: ");
-    // Look(StartReadLine);
     return BuildLinesArray(ReadBuffer, BytesRead, ThisSeekPosition); // build the lines array and return the number of lines
 }
 /******************************************************************************************************************************/
 
-void StartLogFileView()
+void StartLogFileView() // This is the entry point
 {
     strcpy(LogFileName, "");
     LogVIEWNew();
 }
 /******************************************************************************************************************************/
 
-void LogVIEWNew() // Start log screen
+void LogVIEWNew() // Start log screen 
 {
-    char Current_Y_Nextion_Label[] = "LogText.val_y";
+    char Current_Y_Nextion_Label[] = "LogText.val_y"; // the Y position of the log text on the Nextion screen
     char fnf[] = "File not found: ";
-    char LogText[] = "LogText";
+    char LogText[] = "LogText"; // the label on the Nextion screen
     char fbuffer[40];
 
-    SendCommand(pLogView);
+    SendCommand(pLogView); // Show the right view
     FinalReadStartLine = 0xFFFF;
     CurrentView = LOGVIEW;
     ClearFilesList();
@@ -281,7 +302,7 @@ void LogVIEWNew() // Start log screen
     else
     {
         LogFileOpen = false;
-        ShowLogFileNew(0);
+        ShowLogFileNew(6);
         strcpy(fbuffer, fnf);
         strcat(fbuffer, LogFileName);
         SendText(LogText, fbuffer);

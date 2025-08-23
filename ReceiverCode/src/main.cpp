@@ -64,6 +64,7 @@
 #include "utilities/Binding.h"
 #include "utilities/eeprom.h"
 #include "utilities/Parameters.h"
+#include "utilities/Governer.h"
 
 void DelayMillis(uint16_t ms) // This replaces any delay() calls
 {
