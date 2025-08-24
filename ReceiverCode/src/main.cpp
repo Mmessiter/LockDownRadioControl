@@ -64,7 +64,7 @@
 #include "utilities/Binding.h"
 #include "utilities/eeprom.h"
 #include "utilities/Parameters.h"
-#include "utilities/Governer.h"
+#include "utilities/Governor.h"
 
 void DelayMillis(uint16_t ms) // This replaces any delay() calls
 {
@@ -452,7 +452,7 @@ FLASHMEM void setup()
 
 #ifdef USE_NEXUS
     NEXUS_SERIAL_TELEMETRY.begin(115200); // Nexus serial port for telemetry
-#endif // USE_NEXUS
+#endif                                    // USE_NEXUS
 
     digitalWrite(LED_PIN, LOW);
 }
@@ -510,16 +510,17 @@ void requestRPM()
 uint16_t GetRPM(const uint8_t *data, uint8_t n)
 {
     const uint8_t CMD = 0x8B; // MSP_MOTOR_TELEMETRY
-    if (!Ratio) Ratio = 10.3f; // Default ratio if not set
+    if (!Ratio)
+        Ratio = 10.3f; // Default ratio if not set
     for (uint8_t i = 0; i + 6 < n; ++i)
     {
         if (data[i] != '$' || data[i + 1] != 'M' || data[i + 2] != '>')
             continue;
         uint8_t size = data[i + 3];
         uint8_t cmd = data[i + 4];
-        uint16_t frame_end = i + 5 + size; 
+        uint16_t frame_end = i + 5 + size;
         if (frame_end >= n)
-            break; 
+            break;
         uint8_t ck = size ^ cmd;
         for (uint8_t k = 0; k < size; ++k)
             ck ^= data[i + 5 + k];
@@ -528,17 +529,17 @@ uint16_t GetRPM(const uint8_t *data, uint8_t n)
         if (cmd != CMD)
             continue;
         if (size < 3)
-            continue; 
+            continue;
         const uint8_t *payload = &data[i + 5];
         if (payload[0] < 1)
-            continue; 
+            continue;
         uint16_t motor_rpm = (uint16_t)payload[1] | ((uint16_t)payload[2] << 8);
         float head = float(motor_rpm) / Ratio;
         if (head < 0.0f)
             head = 0.0f;
         if (head > 65535.0f)
             head = 65535.0f;
-        return (uint16_t)(head + 0.5f); 
+        return (uint16_t)(head + 0.5f);
     }
     return 0xffff;
 }
@@ -563,20 +564,24 @@ void CheckMSPSerial()
     if (temp != 0xffff)                     // Check if valid RPM was received (RPM of 65536 is very unlikely)
         RotorRPM = temp;                    // Process the received data
     requestRPM();                           // Request RPM data from Nexus (which we will read next time...)
+    if (GovernorEnabled && RotorRPM > 1000) // Update governor if enabled and RPM is high enough; at just 10hz!
+        UpdateGovernor();                
 }
 #endif
 
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
-void loop() 
-{           
+void loop()
+{
     // TimeTheMainLoop();
-#ifdef USE_NEXUS
-    CheckMSPSerial();
-#endif
     KickTheDog();
     ReceiveData();
+#ifdef USE_NEXUS
+    CheckMSPSerial();
+    if (GovernorEnabled && GovernedThrottle > 0) // Update the throttle channel if governor is enabled and has a valid governed throttle
+        ReceivedData[ThrottleChannel - 1] = GovernedThrottle;
+#endif
     if (Blinking)
     {
         BlinkLed();

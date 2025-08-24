@@ -27,7 +27,7 @@
 #define USE_NEXUS // if DEFINED then USE_PWM must be UNDEFINED ( = commented out) and USE_SBUS must be DEFINED ( = uncommented) to use the Nexus transceiver
 
 #define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
-//#define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
+// #define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
 #define USE_SBUS
 
 #ifndef USE_NEXUS
@@ -58,12 +58,12 @@
 //                            EEPROM PARAMETERS                           *
 //***************************************************************************
 
-#define BIND_EEPROM_OFFSET 0                                     // use 8 bytes from here (in fact 5 bytes only, but we reserve 8 bytes for future use)
-#define FAILSAFE_EEPROM_OFFSET BIND_EEPROM_OFFSET + 8            // use 32 bytes from here. Not 16 as had been rumoured ...
+#define BIND_EEPROM_OFFSET 0                          // use 8 bytes from here (in fact 5 bytes only, but we reserve 8 bytes for future use)
+#define FAILSAFE_EEPROM_OFFSET BIND_EEPROM_OFFSET + 8 // use 32 bytes from here. Not 16 as had been rumoured ...
 
 // ********************* >>> Reconnect params <<< ***************************************
 
-#define LISTEN_PERIOD 9      //  was 14 (How many ms to listen for TX in Reconnect())
+#define LISTEN_PERIOD 9        //  was 14 (How many ms to listen for TX in Reconnect())
 #define STOPLISTENINGDELAY 100 // was 30 microseconds to wait after stopListening() in Reconnect()
 
 // *************************************************************************************
@@ -257,14 +257,10 @@ void CopyToCurrentPipe(uint8_t *p, uint8_t pn);
 void SetNewPipe();
 void UnbindModel();
 void AttachServos();
-float getFilteredRollAngle();
-float getFilteredPitchAngle();
-void BlinkFast();
 void LoadFailSafeDataFromEEPROM();
 void SaveFailSafeDataToEEPROM();
 void SavePipeToEEPROM();
-bool LoadMPU6050CalibrationDataFromEEPROM();
-void SaveMPU6050CalibrationDataToEEPROM();
+
 /************************************************************************************************************/
 // For numeric types (int, float, double, etc.)
 template <typename T>
@@ -373,7 +369,5 @@ int16_t LongAcknowledgementsMinimum = 200;
 bool DPS310Connected = false;
 uint16_t DPS310Address = 0x76; // DPS310 I2C address
 bool BindPlugInserted = false; // Bind plug inserted or not
-uint8_t VerificationNumber = 0;
-uint32_t Aileron_Centre = 0, Elevator_Centre = 0, Rudder_Centre = 0, Throttle_Centre = 0;
 
 #endif // defined (_SRC_UTILITIES_1DEFINITIONS_H)
