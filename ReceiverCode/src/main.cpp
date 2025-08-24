@@ -64,7 +64,6 @@
 #include "utilities/Binding.h"
 #include "utilities/eeprom.h"
 #include "utilities/Parameters.h"
-#include "utilities/Governor.h"
 
 void DelayMillis(uint16_t ms) // This replaces any delay() calls
 {
@@ -563,9 +562,7 @@ void CheckMSPSerial()
     uint16_t temp = GetRPM(&data_in[0], p); // Process the received data which we requested last time
     if (temp != 0xffff)                     // Check if valid RPM was received (RPM of 65536 is very unlikely)
         RotorRPM = temp;                    // Process the received data
-    requestRPM();                           // Request RPM data from Nexus (which we will read next time...)
-    if (GovernorEnabled && RotorRPM > 1000) // Update governor if enabled and RPM is high enough; at just 10hz!
-        UpdateGovernor();                
+    requestRPM();                           // Request RPM data from Nexus (which we will read next time...)                
 }
 #endif
 
@@ -578,9 +575,7 @@ void loop()
     KickTheDog();
     ReceiveData();
 #ifdef USE_NEXUS
-    CheckMSPSerial();
-    if (GovernorEnabled && GovernedThrottle > 0) // Update the throttle channel if governor is enabled and has a valid governed throttle
-        ReceivedData[ThrottleChannel - 1] = GovernedThrottle;
+    CheckMSPSerial(); // this is to read the RPM value
 #endif
     if (Blinking)
     {
