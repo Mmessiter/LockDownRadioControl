@@ -379,7 +379,7 @@ FASTRUN void ShowMotorTimer()
         {
             if ((!Mins) && (!Secs) && (MotorOnSeconds > 2))
             {
-                PlaySound(STORAGECHARGE); // = Stop Flyfing!
+                PlaySound(STORAGECHARGE); // = Stop Flying!
                 TimesUp = true;
                 CountDownIndex = 0;
             }
