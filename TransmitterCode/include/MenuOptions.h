@@ -729,10 +729,17 @@ void EndBuddyView()
     char cb2[] = "cb2";
     char Prompt[] = "Are Master's switch positions OK?";
 
+
+
     BuddyPupilOnWireless = GetValue(BuddyP);
     BuddyMasterOnWireless = GetValue(BuddyM);
     WirelessBuddy = BuddyPupilOnWireless || BuddyMasterOnWireless;
-    Buddy_Low_Position = GetValue(cb0); // here we read what to do at each switch position
+    if (WirelessBuddy)
+        FHSS_data::PaceMaker = 5;           // only 200 HZ for Buddy
+        else
+        FHSS_data::PaceMaker = PACEMAKER;   // flat out speed without buddy
+
+    Buddy_Low_Position = GetValue(cb0);     // here we read what to do at each switch position
     Buddy_Mid_Position = GetValue(cb1);
     Buddy_Hi_Position = GetValue(cb2);
 

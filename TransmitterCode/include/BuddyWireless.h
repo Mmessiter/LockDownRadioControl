@@ -292,8 +292,8 @@ void DoTheLongerSpecialPacket()
     }
     else
     {
-        PupilDetected(false);                       // Pupil is dead
-        NeedToRecover = true;                       // Need to recover
+        PupilDetected(false); // Pupil is dead
+        NeedToRecover = true; // Need to recover
     }
 }
 
@@ -518,6 +518,7 @@ void StartBuddyListen()
     BlueLedOn();                           // turn on the blue led
     CurrentMode = LISTENMODE;              // set the mode to listen
     WasBuddyPupilOnWireless = true;        // flag to indicate that the buddy was on wireless
+    FHSS_data::PaceMaker = 5;              // only 200Hz
 }
 //************************************************************************************************************************
 #endif

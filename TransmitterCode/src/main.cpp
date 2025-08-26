@@ -1063,11 +1063,13 @@ void WarnUserIfBuddyBoxIsOn() // This function warns the user if the buddy box i
     {
         PlaySound(BUDDYPUPILON);
         DelayWithDog(1500); // allow sound to finish
+        FHSS_data::PaceMaker = 5; // only 200Hz
     }
     if (BuddyMasterOnWireless)
     {
         PlaySound(BUDDYMASTERON);
         DelayWithDog(1500); // allow sound to finish
+        FHSS_data::PaceMaker = 5; // only 200Hz
     }
 }
 // *********************************************************************************************************************************/
@@ -1233,6 +1235,7 @@ FLASHMEM void setup()
     ClearMostParameters();
     // DelayWithDog(750); // not needed
     GotoFrontView();
+    FHSS_data::PaceMaker = PACEMAKER;
 }
 // **************************************************************************************************************************************************************
 void RationaliseBuddy()
@@ -2592,6 +2595,7 @@ void ZeroDataScreen()
     LastShowTime = 0;
     TotalFrameRate = 0;
     FrameRateCounter = 0;
+    PacketsPerSecond = 0;
 }
 /***************************************************** ReadNewSwitchFunction ****************************************************************************/
 
@@ -4956,7 +4960,7 @@ void FASTRUN ManageTransmitter()
     // SendViaBLE();
 
     KickTheDog(); // Watchdog ... ALWAYS!
-    if ((PACEMAKER - TXPacketElapsed < TIMEFORTXMANAGMENT) && ModelMatched)
+    if ((FHSS_data::PaceMaker - TXPacketElapsed < TIMEFORTXMANAGMENT) && ModelMatched)
     {
         return; // If it's almost time to send data, then do not start some other task which might easily take longer.
     }

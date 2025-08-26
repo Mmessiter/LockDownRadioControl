@@ -64,8 +64,8 @@
 
 #ifdef VERYHIGHPACKETRATE
 // ***** OVER THE TOP HIGH DATA RATE MODE ***** Only use this version if no stabilisation is used.
-#define PACEMAKER 5                       // 5ms means about 200 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-#define PACKET_HISTORY_WINDOW 200         // Flat out perfect packets per second
+#define PACEMAKER 2                       // 2 ms = 500 Hz! 5ms means about 200 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define PACKET_HISTORY_WINDOW 200         // For success rate calculation
 #else                                     // not VERYHIGHPACKETRATE
 // ***** MORE SENSIBLE DATA RATE MODE ***** use this rate if Stabilisaton is used.
 #define PACEMAKER 7                       // means about 125 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
@@ -1281,7 +1281,7 @@ bool ParamPause = true;
 bool First_RPM_Data = true;
 uint32_t RotorRPM = 0;
 float GearRatio = 10.3;
-
+bool PreviousPacketFailed = false;
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
 // **********************************************************************************************************************************

@@ -174,15 +174,7 @@ void RecordsPacketSuccess(uint8_t s)
     if (s)
         ++TotalGoodPackets;
 }
-/************************************************************************************************************/
-// void SendAllAgain()
-// {
-//     for (int i = 0; i < CHANNELSUSED; ++i)
-//     {
-//         PrePreviousBuffer[i] = 0;
-//         PreviousBuffer[i] = PrePreviousBuffer[i];
-//     }
-// }
+
 /************************************************************************************************************/
 void CheckGap()
 {
@@ -196,15 +188,7 @@ void CheckGap()
             RedLedOn(); // Put on red led - receiver must be off
     }
 }
-/************************************************************************************************************/
-// void CheckDataRepeat()
-// {
-//     if (!ParametersToBeSentPointer || ParamPause)
-//     {
-//         for (int i = 0; i < CHANNELSUSED; ++i)
-//             PreviousBuffer[i] = PrePreviousBuffer[i]; // force last update repeat if not sending parameters
-//     }
-// }
+
 /************************************************************************************************************/
 void CheckLostContact()
 {
@@ -233,6 +217,7 @@ FASTRUN void FailedPacket()
     CheckGap();
     CheckLostContact();
     CheckInactivityTimeout();
+    PreviousPacketFailed = true;
 }
 /************************************************************************************************************/
 FASTRUN void TryOtherPipe()
@@ -308,6 +293,7 @@ void SuccessfulPacket()
     }
     StartInactvityTimeout();
     LostContactFlag = false;
+    PreviousPacketFailed = false;
 }
 // **********************************************************************************************************
 
@@ -364,7 +350,7 @@ FASTRUN void SendData()
     if (SendNoData)
         return;
 
-    if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker)
+    if (((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) || PreviousPacketFailed)
     {
         LastPacketSentTime = millis();
         Connected = false; // Assume failure until an ACK is received.
