@@ -40,7 +40,8 @@ LDRC supports seamless wireless buddy boxing _with no extra modules or dongles_.
 When the master needs to take over to save the model, there’s no hesitation — and that can prevent a crash.
 
 ---
-### (5) Data screen 
+
+### (5) Data screen
 
 This screen reveals current and average data packet rate, total lost packets counter, maximum and average reconnection times after lost packet, transceiver swaps count, and lots of other critical information that other systems hide.
 
@@ -96,7 +97,7 @@ Here is a brief summary of the features supported at the time of writing (July 2
 - 'Dual rates' (... except there are actually _three_ rates.)
 - Model memory backup and restore using internal SD card.
 - 50 Hz FHSS using 82 separate frequencies on the 2.4 GHz ISM waveband.
-- 200 Hz frame rate (for exceptionally low latency.)
+- 500 Hz frame rate (for exceptionally low latency.)
 - 12 BIT servo resolution.
 - Very small data packet size, to reduce FHSS frequency collisions.
 - Wireless Buddy Box, now with 'nudge' mode', for training beginners.
