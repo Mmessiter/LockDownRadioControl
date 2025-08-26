@@ -217,7 +217,7 @@ FASTRUN void FailedPacket()
     CheckGap();
     CheckLostContact();
     CheckInactivityTimeout();
-    if (!PreviousPacketFailed)
+    //if (!PreviousPacketFailed)
     PreviousPacketFailed = true;
 }
 /************************************************************************************************************/
@@ -294,7 +294,7 @@ void SuccessfulPacket()
     }
     StartInactvityTimeout();
     LostContactFlag = false;
-    PreviousPacketFailed = false;
+    PreviousPacketFailed = false; // Remember that the last packet was successful
 }
 // **********************************************************************************************************
 
