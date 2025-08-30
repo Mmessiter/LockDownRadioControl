@@ -42,7 +42,7 @@ void LogTimer(uint32_t Mins)
 // This function logs the RPM of the rotor if it is greater than 0
 void LogRPM(uint32_t RPM)
 {
-    if (RPM)
+    if ((RPM) && (RPM < 60000)) // no rpm might give 0xffff
     {
         char TheText[] = "Main rotor RPM: ";
         char buf[40] = " ";
