@@ -157,23 +157,21 @@ void LoadaPayload() // This function loads the acknowledgement payload It also d
     GetRXVolts();                                                  // Takes 481us
 }
 
+// ***************************************************************************************************************
+inline void AdjustTimeout() // Adjust the receive timeout based on packet rate
+{
+    if (millis() - LastPacketArrivalTime <= 3) // if so must be 500 hz
+        ReceiveTimeout = 4;                    // shorter timeout for 500 Hz
+    else
+        ReceiveTimeout = 6; // longer timeout for 200 Hz
+}
 /************************************************************************************************************/
 bool ReadData()
 {
-    static uint32_t Lpt = 0;
     Connected = false;
     if (CurrentRadio->available(&Pipnum))
     {
-        Lpt = millis(); // Get this current time
-        if (Lpt - LastPacketArrivalTime < 4) // 500 hz?
-        {
-            ReceiveTimeout = 4; // adjust timeout for packet rate
-        }
-        else
-        {
-            ReceiveTimeout = 6; // 200 Hz
-        }
-       // Look(ReceiveTimeout);
+        AdjustTimeout();                                                    // adjust timeout for packet rate
         uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize(); // Get the size of the new data (14)
         if ((DynamicPayloadSize == 0) || (DynamicPayloadSize > 32))
             return false;
@@ -292,9 +290,9 @@ FASTRUN void ReceiveData()
         }
 #ifdef USE_SBUS
         SendSBUSData(); // Send SBUS data if it's time to do so
-#endif                 
+#endif
         if ((!CurrentRadio->available(&Pipnum)) && (ThisWait >= ReceiveTimeout)) // 6ms at 200Hz, 3-4ms at 500Hz
-            Reconnect(); // Try to reconnect.
+            Reconnect();                                                         // Try to reconnect.
     }
 }
 
@@ -594,10 +592,6 @@ FASTRUN void Reconnect()
 }
 
 // *****
-
-
-
-
 
 /************************************************************************************************************/
 FASTRUN void ReconnectOLD()
