@@ -30,19 +30,17 @@ FLASHMEM void InitRadio(uint64_t Pipe)
     ConfigureRadio();
 }
 /************************************************************************************************************/
-
+#ifdef DB_PACKETDATA
 // ***********************************************************************************************************
 void ShowPacketData(uint32_t ThisPacketLength, uint8_t NumberOfChangedChannels)
 { // Just for debugging
 
     static uint32_t TotalPacketLength = 0;
     static uint32_t PacketsCount = 0;
-    static uint32_t PacketsCount1 = 0;
     uint32_t AveragePacketLength = 0;
 
     TotalPacketLength += ThisPacketLength;
     ++PacketsCount;
-    ++PacketsCount1;
 
     static uint32_t timer = 0;
     if ((millis() - timer) >= 100)
@@ -60,12 +58,13 @@ void ShowPacketData(uint32_t ThisPacketLength, uint8_t NumberOfChangedChannels)
         Look1("\tTotal data sent so far (k): ");
         Look1(TotalPacketLength / 1024);
         Look1("\tPackets per second: ");
-        Look1(PacketsCount1);
+        Look1(PacketsCount * 10);
         Look1("\tTotal lost packets: ");
         Look(TotalLostPackets);
-        PacketsCount1 = 0;
+        PacketsCount = 0;
     }
 }
+#endif
 /************************************************************************************************************/
 //                                       Most Radio Functions
 /************************************************************************************************************/
@@ -217,7 +216,7 @@ FASTRUN void FailedPacket()
     CheckGap();
     CheckLostContact();
     CheckInactivityTimeout();
-    //if (!PreviousPacketFailed)
+    // if (!PreviousPacketFailed)
     PreviousPacketFailed = true;
 }
 /************************************************************************************************************/
@@ -392,8 +391,9 @@ FASTRUN void SendData()
         {
             FailedPacket();
         } // Send the data packet complete with ChannelBitMask and compressed data
-
-        // ShowPacketData(ByteCountToTransmit, NumberOfChangedChannels);                                  // Just for debugging
+#ifdef DB_PACKETDATA
+        ShowPacketData(ByteCountToTransmit, NumberOfChangedChannels); // Just for debugging
+#endif
     }
 }
 /***********************************************************************************************************/

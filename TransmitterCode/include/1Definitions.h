@@ -47,6 +47,7 @@
 // #define DB_GAPS           // Debug Connection Gap assessment
 // #define DB_IDS            // Debug Model IDs (Obsolete)
 // #define DB_Variometer     // Debug Variometer
+// #define DB_PACKETDATA     // Debug Packet Data
 
 // ************************************************************************************
 //                                       General                                      *
