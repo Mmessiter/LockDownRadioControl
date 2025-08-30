@@ -10,9 +10,9 @@
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 5
 #define RXVERSION_MINIMUS 4
-#define RXVERSION_EXTRA 'C' // 21 August 2025
+#define RXVERSION_EXTRA 'D' // 30 August 2025
 #define HOPTIME 15          // gives about 48Hz FHSS, 47 gives 20Hz FHSS
-#define RECEIVE_TIMEOUT 6   // was 7
+#define RECEIVE_TIMEOUT 6   // 6 at 200 Hz  can be 3 or 4 at 500 Hz
 
 // **************************************************************************
 
@@ -369,5 +369,6 @@ int16_t LongAcknowledgementsMinimum = 200;
 bool DPS310Connected = false;
 uint16_t DPS310Address = 0x76; // DPS310 I2C address
 bool BindPlugInserted = false; // Bind plug inserted or not
+uint8_t ReceiveTimeout = RECEIVE_TIMEOUT;
 
 #endif // defined (_SRC_UTILITIES_1DEFINITIONS_H)

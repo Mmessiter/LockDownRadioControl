@@ -160,9 +160,20 @@ void LoadaPayload() // This function loads the acknowledgement payload It also d
 /************************************************************************************************************/
 bool ReadData()
 {
+    static uint32_t Lpt = 0;
     Connected = false;
     if (CurrentRadio->available(&Pipnum))
     {
+        Lpt = millis(); // Get this current time
+        if (Lpt - LastPacketArrivalTime < 4) // 500 hz?
+        {
+            ReceiveTimeout = 4; // adjust timeout for packet rate
+        }
+        else
+        {
+            ReceiveTimeout = 6; // 200 Hz
+        }
+       // Look(ReceiveTimeout);
         uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize(); // Get the size of the new data (14)
         if ((DynamicPayloadSize == 0) || (DynamicPayloadSize > 32))
             return false;
@@ -269,9 +280,11 @@ void GetRXVolts()
 
 FASTRUN void ReceiveData()
 {
+    uint16_t ThisWait = millis() - LastPacketArrivalTime;
+
     if (!ReadData()) // Get new data if available
     {
-        if (millis() - LastPacketArrivalTime < 1) //  if no data yet, allow almost the full 5ms to read these before next packet is due
+        if (ThisWait < 1) //  if no data yet, allow almost the full 5ms to read these before next packet is due
         {
             ReadBMP280();
             ReadDPS310();
@@ -279,8 +292,8 @@ FASTRUN void ReceiveData()
         }
 #ifdef USE_SBUS
         SendSBUSData(); // Send SBUS data if it's time to do so
-#endif                  // USE_SBUS
-        if ((!CurrentRadio->available(&Pipnum)) && (millis() - LastPacketArrivalTime >= RECEIVE_TIMEOUT))
+#endif                 
+        if ((!CurrentRadio->available(&Pipnum)) && (ThisWait >= ReceiveTimeout)) // 6ms at 200Hz, 3-4ms at 500Hz
             Reconnect(); // Try to reconnect.
     }
 }
