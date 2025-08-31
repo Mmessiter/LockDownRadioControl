@@ -457,19 +457,23 @@ void PopulateDataView()
 
 void ShowConnectionQuality()
 {
+    static uint16_t lastparam = 0;
+    uint16_t ThisParam = ParametersToBeSentPointer;
+
     char Quality[] = "Quality";
     char FrontView_Connected[] = "Connected"; // this is both the label name and the text to be displayed :=)
     char Visible[] = "vis Quality,1";
     uint16_t ConnectionQuality = GetSuccessRate();
     if (!LedWasGreen)
         return;
-    if (ConnectionQuality != LastConnectionQuality)
+    if ((ConnectionQuality != LastConnectionQuality) || (lastparam != ThisParam && !ParametersToBeSentPointer))
     {
         SendText(FrontView_Connected, FrontView_Connected);
         SendCommand(Visible);
         LastConnectionQuality = ConnectionQuality;
         SendValue(Quality, ConnectionQuality);
     } // only if changed
+    lastparam = ThisParam;
 }
 
 /*********************************************************************************************************************************/

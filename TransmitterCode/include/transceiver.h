@@ -69,28 +69,6 @@ void ShowPacketData(uint32_t ThisPacketLength, uint8_t NumberOfChangedChannels)
 //                                       Most Radio Functions
 /************************************************************************************************************/
 
-/************************************************************************************************************/
-/*
- * Decompresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
- * @param uncompressed_buf[in]
- * @param compressed_buf[out] Must have allocated 3/4 the size of uncompressed_buf
- * @param uncompressed_size Size is in units of uint16_t (aka word or unsigned short)
- */
-// void Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, uint8_t uncompressed_size)
-// {
-//     uint8_t p = 0;
-//     for (uint8_t l = 0; l < (uncompressed_size * 3 / 4); l += 3)
-//     {
-//         uncompressed_buf[p] = compressed_buf[l] >> 4;
-//         ++p;
-//         uncompressed_buf[p] = (compressed_buf[l] & 0xf) << 8 | compressed_buf[l + 1] >> 8;
-//         ++p;
-//         uncompressed_buf[p] = (compressed_buf[l + 1] & 0xff) << 4 | compressed_buf[l + 2] >> 12;
-//         ++p;
-//         uncompressed_buf[p] = compressed_buf[l + 2] & 0xfff;
-//         ++p;
-//     }
-// }
 void Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, uint8_t uncompressed_size)
 {
     uint8_t p = 0;
@@ -109,34 +87,7 @@ void Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, uint8_t un
     }
 }
 
-// /************************************************************************************************************/
 
-// // This functions performs lossless compression on the data sent to receiver, to keep it below 32 bytes
-// // and minimise latency. The receiver de-compresses of course.
-
-// /* Compresses uint16_t* buffer values (each with 12 bit resolution - the lower 12 bits).
-//  * @param compressed_buf[out] Must have allocated 3/4 the size of uncompressed_buf
-//  * @param uncompressed_buf[in]
-//  * @param uncompressed_size Size is in units of uint16_t (aka word or unsigned short). This *must* be divisible by 4.
-//  */
-// FASTRUN void Compress(uint16_t *compressed_buf, uint16_t *uncompressed_buf, uint8_t uncompressed_size)
-// {
-//     if (NewCompressNeeded)
-//     { // no need to recompress old data
-//         NewCompressNeeded = false;
-//         uint8_t p = 0;
-//         for (int l = 0; l < (uncompressed_size * 3 / 4); l += 3)
-//         {
-//             compressed_buf[l] = uncompressed_buf[p] << 4 | uncompressed_buf[p + 1] >> 8;
-//             ++p;
-//             compressed_buf[l + 1] = uncompressed_buf[p] << 8 | uncompressed_buf[p + 1] >> 4;
-//             ++p;
-//             compressed_buf[l + 2] = uncompressed_buf[p] << 12 | uncompressed_buf[p + 1];
-//             ++p;
-//             ++p;
-//         }
-//     }
-// }
 FASTRUN void Compress(uint16_t *compressed_buf, uint16_t *uncompressed_buf, uint8_t uncompressed_size)
 {
     if (!NewCompressNeeded)
