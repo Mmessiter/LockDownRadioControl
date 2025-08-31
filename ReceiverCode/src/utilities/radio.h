@@ -160,10 +160,23 @@ void LoadaPayload() // This function loads the acknowledgement payload It also d
 // ***************************************************************************************************************
 inline void AdjustTimeout() // Adjust the receive timeout based on packet rate
 {
-    if (millis() - LastPacketArrivalTime <= 3) // if so must be 500 hz
-        ReceiveTimeout = 4;                    // shorter timeout for 500 Hz
+    static uint32_t LastTime = 0;
+    uint32_t Now = millis();
+    if (Now - LastTime < 500) // if less than 500 ms since last call, don't adjust
+    {
+        return;
+    }                                     // not too often!
+    LastTime = Now;                       // remember the time of this call
+    if (Now - LastPacketArrivalTime <= 3) // if so must be 500 hz
+    {
+        ReceiveTimeout = 4; // shorter timeout for 500 Hz
+        Listen_Period = 8;  // 8 ms listen period for 500 Hz  (during re-connection)
+    }
     else
+    {
         ReceiveTimeout = 6; // longer timeout for 200 Hz
+        Listen_Period = 11; // 11 ms listen period for 200 Hz (during re-connection)
+    }
 }
 /************************************************************************************************************/
 bool ReadData()
@@ -384,7 +397,7 @@ void TryToConnectNow()
     uint32_t ATimer;
     CurrentRadio->startListening();
     ATimer = millis();
-    while ((!CurrentRadio->available(&Pipnum)) && (millis() - ATimer) < LISTEN_PERIOD)
+    while ((!CurrentRadio->available(&Pipnum)) && (millis() - ATimer) < Listen_Period)
     {
 #ifdef USE_SBUS
         SendSBUSData();

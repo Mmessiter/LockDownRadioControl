@@ -63,7 +63,7 @@
 
 // ********************* >>> Reconnect params <<< ***************************************
 
-#define LISTEN_PERIOD 11       //  was 14 (How many ms to listen for TX in Reconnect())
+#define LISTEN_PERIOD 11       //  11 at 200 Hz, 7 at 500 Hz
 #define STOPLISTENINGDELAY 100 // was 30 microseconds to wait after stopListening() in Reconnect()
 
 // *************************************************************************************
@@ -370,5 +370,6 @@ bool DPS310Connected = false;
 uint16_t DPS310Address = 0x76; // DPS310 I2C address
 bool BindPlugInserted = false; // Bind plug inserted or not
 uint8_t ReceiveTimeout = RECEIVE_TIMEOUT;
+uint8_t Listen_Period = LISTEN_PERIOD;
 
 #endif // defined (_SRC_UTILITIES_1DEFINITIONS_H)
