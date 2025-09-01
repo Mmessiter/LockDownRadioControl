@@ -87,7 +87,6 @@ void Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, uint8_t un
     }
 }
 
-
 FASTRUN void Compress(uint16_t *compressed_buf, uint16_t *uncompressed_buf, uint8_t uncompressed_size)
 {
     if (!NewCompressNeeded)
@@ -195,8 +194,11 @@ FASTRUN void TryOtherPipe()
 }
 
 /************************************************************************************************************/
-void TryToReconnect()
+void TryToReconnect() // takes about 14 ms to try all three
 {
+    // static uint8_t AttemptCount = 0;
+    // static uint32_t LastAttemptTime = 0;
+
     if (!DontChangePipeAddress)
         TryOtherPipe();
     ++ReconnectionIndex;
@@ -207,6 +209,14 @@ void TryToReconnect()
     }
     NextChannel = FHSS_data::Used_Recovery_Channels[ReconnectionIndex];
     HopToNextChannel();
+
+    // ++AttemptCount;
+    // if (AttemptCount > 2)
+    // {
+    //     AttemptCount = 0;
+    //     Look(millis() - LastAttemptTime);
+    //     LastAttemptTime = millis();
+    // }
 }
 /************************************************************************************************************/
 void FlushFifos()
@@ -297,16 +307,15 @@ FASTRUN uint8_t EncodeTheChangedChannels()
 FASTRUN void SendData()
 {
     uint8_t NumberOfChangedChannels = 0;
-    uint8_t ByteCountToTransmit;
+    static uint8_t ByteCountToTransmit = 2;
     if (SendNoData)
         return;
 
     if (((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) || PreviousPacketFailed)
     {
-        LastPacketSentTime = millis();
         Connected = false; // Assume failure until an ACK is received.
         FlushFifos();      // This flush avoids a lockup that happens when the FIFO gets full.
-
+        LastPacketSentTime = millis();
         if (ParametersToBeSentPointer && !ParamPause)
         {
             NumberOfChangedChannels = GetExtraParameters();
@@ -318,7 +327,6 @@ FASTRUN void SendData()
         {
             NumberOfChangedChannels = EncodeTheChangedChannels(); // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels.
         }
-
         if (NumberOfChangedChannels)
         {                                                                      // Any channels changed? Or parameters to send?
             ByteCountToTransmit = ((float)NumberOfChangedChannels * 1.5f) + 4; // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 word because int rounds downwards.

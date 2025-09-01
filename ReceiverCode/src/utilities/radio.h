@@ -170,12 +170,10 @@ inline void AdjustTimeout() // Adjust the receive timeout based on packet rate
     if (Now - LastPacketArrivalTime <= 3) // if so must be 500 hz
     {
         ReceiveTimeout = 4; // shorter timeout for 500 Hz
-        Listen_Period = 8;  // 8 ms listen period for 500 Hz  (during re-connection)
     }
     else
     {
         ReceiveTimeout = 6; // longer timeout for 200 Hz
-        Listen_Period = 11; // 11 ms listen period for 200 Hz (during re-connection)
     }
 }
 /************************************************************************************************************/
@@ -397,7 +395,7 @@ void TryToConnectNow()
     uint32_t ATimer;
     CurrentRadio->startListening();
     ATimer = millis();
-    while ((!CurrentRadio->available(&Pipnum)) && (millis() - ATimer) < Listen_Period)
+    while ((!CurrentRadio->available(&Pipnum)) && (millis() - ATimer) < LISTEN_PERIOD) // LISTEN_PERIOD = 14 ...  just long enough to test all three
     {
 #ifdef USE_SBUS
         SendSBUSData();
