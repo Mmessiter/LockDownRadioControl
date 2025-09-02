@@ -490,8 +490,8 @@ void GetSpecialPacket()
     }
     else
     { // No packet arrived so maybe master's dead?
-        if (millis() - LastPassivePacketTime > PACEMAKER)
-        { // We expect a packet every PACEMAKER ( = 5 ) milliseconds. If none, a packet was lost.
+        if (millis() - LastPassivePacketTime > 5) // THIS MUST NOT BE FASTER! (was FHSS_data::PaceMaker!!)
+        {
             Radio1.stopListening();
             Radio1.setChannel(QUIETCHANNEL); // Set the recovery channel
             Radio1.startListening();
@@ -518,7 +518,7 @@ void StartBuddyListen()
     BlueLedOn();                           // turn on the blue led
     CurrentMode = LISTENMODE;              // set the mode to listen
     WasBuddyPupilOnWireless = true;        // flag to indicate that the buddy was on wireless
-    FHSS_data::PaceMaker = 5;              // only 200Hz
+    FHSS_data::PaceMaker = PACEMAKER1;     // only 200Hz
 }
 //************************************************************************************************************************
 #endif

@@ -1063,13 +1063,13 @@ void WarnUserIfBuddyBoxIsOn() // This function warns the user if the buddy box i
     {
         PlaySound(BUDDYPUPILON);
         DelayWithDog(1500); // allow sound to finish
-        FHSS_data::PaceMaker = 5; // only 200Hz
+        FHSS_data::PaceMaker = PACEMAKER1; // only 200Hz
     }
     if (BuddyMasterOnWireless)
     {
         PlaySound(BUDDYMASTERON);
         DelayWithDog(1500); // allow sound to finish
-        FHSS_data::PaceMaker = 5; // only 200Hz
+        FHSS_data::PaceMaker = PACEMAKER1; // only 200Hz
     }
 }
 // *********************************************************************************************************************************/
@@ -1230,12 +1230,12 @@ FLASHMEM void setup()
     init_gains_pin();
 #endif
     initADC();
+    FHSS_data::PaceMaker = PACEMAKER;
     RationaliseBuddy();
     WarnUserIfBuddyBoxIsOn();
     ClearMostParameters();
-    // DelayWithDog(750); // not needed
     GotoFrontView();
-    FHSS_data::PaceMaker = PACEMAKER;
+   
 }
 // **************************************************************************************************************************************************************
 void RationaliseBuddy()
@@ -1263,6 +1263,11 @@ void RationaliseBuddy()
         Connected = false;
         StartBuddyListen();
     }
+    if (BuddyMasterOnWireless)
+    {
+        FHSS_data::PaceMaker = PACEMAKER1;
+    }
+
 }
 /*********************************************************************************************************************************/
 void GetFrameRate()

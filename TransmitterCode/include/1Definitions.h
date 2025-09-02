@@ -60,18 +60,10 @@
 #define CALBRATION_STATUS_FAILED 2    // Calibration failed
 
 /*********************************************************************************************************************************/
+#define PACEMAKER 2  // 2 ms = 500 Hz! 5ms means about 200 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define PACEMAKER1 5 // 5 ms = 500 Hz! 5ms means about 200 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
 
-#define VERYHIGHPACKETRATE // Comment this out if using stabilisation
-
-#ifdef VERYHIGHPACKETRATE
-// ***** OVER THE TOP HIGH DATA RATE MODE ***** Only use this version if no stabilisation is used.
-#define PACEMAKER 2                       // 2 ms = 500 Hz! 5ms means about 200 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-#define PACKET_HISTORY_WINDOW 200         // For success rate calculation
-#else                                     // not VERYHIGHPACKETRATE
-// ***** MORE SENSIBLE DATA RATE MODE ***** use this rate if Stabilisaton is used.
-#define PACEMAKER 7                       // means about 125 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-#define PACKET_HISTORY_WINDOW 100         // Flat out perfect packets per second
-#endif                                    // VERYHIGHPACKETRATE
+#define PACKET_HISTORY_WINDOW 200         // For success rate calculation   
 #define TIMEFORTXMANAGMENT 1              // 1 is plenty. takes only 1ms or so
 #define MAXRESOLUTION 4095                // 12 BIT ADC Resolution
 #define CE_PIN 7                          // for SPI to nRF24L01
