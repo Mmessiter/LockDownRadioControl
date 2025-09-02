@@ -53,16 +53,9 @@
 //                                       General                                      *
 // ************************************************************************************
 
-// #define USE_STABILISATION // must be UNDEFINED FOR NOW ... do not fly with this enabled as it's not finished yet
-
-#define CALBRATION_STATUS_IDLE 0      // Idle status
-#define CALBRATION_STATUS_SUCCEEDED 1 // Calibration succeeded
-#define CALBRATION_STATUS_FAILED 2    // Calibration failed
-
 /*********************************************************************************************************************************/
-#define PACEMAKER 2  // 2 ms = 500 Hz! 5ms means about 200 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-#define PACEMAKER1 5 // 5 ms = 500 Hz! 5ms means about 200 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-
+#define PACEMAKER 2   // 2 ms = 500 Hz! 5ms means about 200 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define PACEMAKER1  5 // 5ms means about 200 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
 #define PACKET_HISTORY_WINDOW 200         // For success rate calculation   
 #define TIMEFORTXMANAGMENT 1              // 1 is plenty. takes only 1ms or so
 #define MAXRESOLUTION 4095                // 12 BIT ADC Resolution
@@ -1320,9 +1313,10 @@ const uint8_t AckPayloadSize = sizeof(AckPayload); // i.e. 6
 
 struct spd // Special Packet Data for Wireless Buddy functions
 {
-    uint8_t Command[2];
+    uint8_t  Command[2];
     uint64_t ModelID;
-    uint8_t Channel = QUIETCHANNEL;
+    uint8_t  MasterPaceMaker; //heer
+    uint8_t  Channel = QUIETCHANNEL;
 };
 spd SpecialPacketData; // longer version
 

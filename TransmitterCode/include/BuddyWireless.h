@@ -279,6 +279,7 @@ void DoTheLongerSpecialPacket()
     if (Index < 1)
         Index = 82;                                              // use the same array but in reverse order
     SpecialPacketData.Channel = FHSS_data::FHSS_Channels[Index]; // Set the  new channel number for next time
+    SpecialPacketData.MasterPaceMaker = FHSS_data::PaceMaker;    // only 200Hz
     if (NeedToRecover)
         SpecialPacketData.Channel = QUIETCHANNEL; // If contact lost, then use the recovery channel to recover
 
@@ -433,7 +434,6 @@ void SetNewListenChannel(uint8_t Channel)
 // ************************************************************************************************************
 void ParseLongerSpecialPacket()
 { // This is called from GetSpecialPacket() function just below
-
     static uint64_t LastModelID = 0;
     Radio1.read(&SpecialPacketData, sizeof SpecialPacketData);                      // read the packet if its still there
     TestTheCommandByte(SpecialPacketData.Command[0], SpecialPacketData.Command[1]); // Test the command byte
@@ -451,6 +451,7 @@ void ParseLongerSpecialPacket()
             }
         }
     }
+    
     SetNewListenChannel(SpecialPacketData.Channel); // Set the frequency channel
 }
 
@@ -460,8 +461,8 @@ void GetSpecialPacket()
 
     static uint32_t LocalTimer = 0;
     static uint16_t PacketCounter = 0;
-    char ExsBd[] = "Extra buddies!";
-    char wb[] = "wb"; // wb is the name of the label on front view
+    char ExsBd[] = "Extra buddies!"; // only one buddy at a time is ok.
+    char wb[] = "wb";                // wb is the name of the label on front view
     char YesVisible[] = "vis wb,1";
 
     if (Radio1.available())
@@ -474,7 +475,6 @@ void GetSpecialPacket()
             DelayWithDog(10000);
             return;
         }
-
         SendTheSpecialAckPayload();
         ParseLongerSpecialPacket(); // Parse the packet
         MasterDetected(true);       // Master is alive
@@ -489,8 +489,8 @@ void GetSpecialPacket()
         LastPassivePacketTime = millis(); // reset the timer
     }
     else
-    { // No packet arrived so maybe master's dead?
-        if (millis() - LastPassivePacketTime > 5) // THIS MUST NOT BE FASTER! (was FHSS_data::PaceMaker!!)
+    {                                             // No packet arrived so maybe master's dead?
+        if (millis() - LastPassivePacketTime > SpecialPacketData.MasterPaceMaker) // heer!!!
         {
             Radio1.stopListening();
             Radio1.setChannel(QUIETCHANNEL); // Set the recovery channel
@@ -518,7 +518,6 @@ void StartBuddyListen()
     BlueLedOn();                           // turn on the blue led
     CurrentMode = LISTENMODE;              // set the mode to listen
     WasBuddyPupilOnWireless = true;        // flag to indicate that the buddy was on wireless
-    FHSS_data::PaceMaker = PACEMAKER1;     // only 200Hz
 }
 //************************************************************************************************************************
 #endif
