@@ -156,24 +156,60 @@ void LoadaPayload() // This function loads the acknowledgement payload It also d
     delayMicroseconds(DELAYNEEDED);                                // delay DELAYNEEDED
     GetRXVolts();                                                  // Takes 481us
 }
+//**************** */
+int packetIntervalMs()
+{
+    static unsigned long first_time = 0;
+    static unsigned long last_time = 0;
+    static unsigned long sum_intervals = 0;
+    static int count = 0;
+    static bool initialized = false;
+
+    unsigned long now = millis();
+
+    if (!initialized)
+    {
+        first_time = now;
+        last_time = now;
+        initialized = true;
+        return 0;
+    }
+
+    unsigned long diff = now - last_time;
+    last_time = now;
+
+    if (diff > 0)
+    { // avoid zero intervals
+        sum_intervals += diff;
+        count++;
+    }
+
+    if ((now - first_time) >= 1000)
+    {
+        int average = (count > 0) ? (sum_intervals / count) : 0;
+
+        // reset for next window
+        first_time = now;
+        sum_intervals = 0;
+        count = 0;
+
+        return average;
+    }
+
+    return 0;
+}
 
 // ***************************************************************************************************************
 inline void AdjustTimeout() // Adjust the receive timeout based on packet rate
 {
-    static uint32_t LastTime = 0;
-    uint32_t Now = millis();
-    if (Now - LastTime < 500) // if less than 500 ms since last call, don't adjust
+    static uint8_t RT = 10; // default 10ms
+    uint8_t t = packetIntervalMs();
+    if (t)
     {
-        return;
-    }                                     // not too often!
-    LastTime = Now;                       // remember the time of this call
-    if (Now - LastPacketArrivalTime <= 3) // if so must be 500 hz
-    {
-        ReceiveTimeout = 4; // shorter timeout for 500 Hz
-    }
-    else
-    {
-        ReceiveTimeout = 6; // longer timeout for 200 Hz
+        ReceiveTimeout = t + 1;
+        RT = ReceiveTimeout;
+    } else{
+        ReceiveTimeout = RT; 
     }
 }
 /************************************************************************************************************/

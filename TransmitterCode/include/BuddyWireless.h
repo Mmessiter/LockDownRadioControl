@@ -451,7 +451,7 @@ void ParseLongerSpecialPacket()
             }
         }
     }
-    
+
     SetNewListenChannel(SpecialPacketData.Channel); // Set the frequency channel
 }
 
@@ -489,8 +489,8 @@ void GetSpecialPacket()
         LastPassivePacketTime = millis(); // reset the timer
     }
     else
-    {                                             // No packet arrived so maybe master's dead?
-        if (millis() - LastPassivePacketTime > SpecialPacketData.MasterPaceMaker) // heer!!!
+    {                                                                                   // No packet arrived so maybe master's dead?
+        if (millis() - LastPassivePacketTime > ((uint32_t) SpecialPacketData.MasterPaceMaker)) // heer!!!
         {
             Radio1.stopListening();
             Radio1.setChannel(QUIETCHANNEL); // Set the recovery channel
