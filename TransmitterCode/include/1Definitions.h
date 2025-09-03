@@ -53,10 +53,9 @@
 //                                       General                                      *
 // ************************************************************************************
 
-/*********************************************************************************************************************************/
-#define PACEMAKER 2   // 2 ms = 500 Hz! 5ms means about 200 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-#define PACEMAKER1  5 // 5ms means about 200 packets per second. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-#define PACKET_HISTORY_WINDOW 200         // For success rate calculation   
+#define PACEMAKER 2                       // 2 ms = 500 Hz. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define PACEMAKER_BUDDY 5                 // 5 ms = 200 Hz. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define PACKET_HISTORY_WINDOW 200         // For success rate calculation
 #define TIMEFORTXMANAGMENT 1              // 1 is plenty. takes only 1ms or so
 #define MAXRESOLUTION 4095                // 12 BIT ADC Resolution
 #define CE_PIN 7                          // for SPI to nRF24L01
@@ -110,10 +109,10 @@
 #define DATARATE RF24_250KBPS   // RF24_250KBPS or RF24_1MBPS or RF24_2MBPS
 #define FASTDATARATE RF24_1MBPS // 2 MBPS = RF24_2MBPS; 1 MBPS = RF24_1MBPS >> THIS IS FOR BUDDY ONLY <<
 
-#define RETRYCOUNT 2          // was 2. Auto retries inside nRF24L01. MAX is 15. Fails below 2.
-#define RETRYWAIT 1           // was 1. 250us = Wait between retries (RetryWait+1 * 250us))
-#define QUIETCHANNEL 5        // This was found to be the least busy channel in the 2.4GHz band in my house
-#define STOPLISTENINGDELAY 100 //30 // 30 seems close to ideal <<<<< *********
+#define RETRYCOUNT 2           // was 2. Auto retries inside nRF24L01. MAX is 15. Fails below 2.
+#define RETRYWAIT 1            // was 1. 250us = Wait between retries (RetryWait+1 * 250us))
+#define QUIETCHANNEL 5         // This was found to be the least busy channel in the 2.4GHz band in my house
+#define STOPLISTENINGDELAY 100 // 30 // 30 seems close to ideal <<<<< *********
 #define SELECTTARGETDELAY 100
 
 // **************************************************************************
@@ -180,7 +179,7 @@
 #define KALMAN_VALUES 5
 #define SERVO_FREQUENCIES 6
 #define SERVO_PULSE_WIDTHS 7
-#define GEAR_RATIO 8 // Gear Ratio for RPM calculation
+#define GEAR_RATIO 8        // Gear Ratio for RPM calculation
 #define PARAMETERS_MAX_ID 9 // Max types of parameters packet to send  ... will increase.
 
 // **************************************************************************
@@ -743,7 +742,7 @@ void SDUpdateFLOAT(int p_address, float p_value);
 void GetBank();
 void LogRPM(uint32_t RPM);
 #ifdef USE_BTLE
-    void SendViaBLE();
+void SendViaBLE();
 #endif
 // **************************************************************************
 //                            GLOBAL DATA                                   *
@@ -835,12 +834,12 @@ uint8_t PreviousBank = 1;
 char ChannelNames[CHANNELSUSED][11] = {{"Aileron"}, {"Elevator"}, {"Throttle"}, {"Rudder"}, {"Gear"}, {"AUX1"}, {"AUX2"}, {"AUX3"}, {"AUX4"}, {"AUX5"}, {"AUX6"}, {"AUX7"}, {"AUX8"}, {"AUX9"}, {"AUX10"}, {"AUX11"}};
 uint8_t DualRateInUse = 1;
 uint8_t PreviousDualRateInUse = 1;
-uint16_t PreviousBuffer[SENDBUFFERSIZE + 1];    //     Used to spot any change
-uint16_t ChannelMax[CHANNELSUSED + 1];          //    output of pots at max
-uint16_t ChannelMidHi[CHANNELSUSED + 1];        //    output of pots at MidHi
-uint16_t ChannelCentre[CHANNELSUSED + 1];       //    output of pots at Centre
-uint16_t ChannelMidLow[CHANNELSUSED + 1];       //    output of pots at MidLow
-uint16_t ChannelMin[CHANNELSUSED + 1];          //    output of pots at min
+uint16_t PreviousBuffer[SENDBUFFERSIZE + 1]; //     Used to spot any change
+uint16_t ChannelMax[CHANNELSUSED + 1];       //    output of pots at max
+uint16_t ChannelMidHi[CHANNELSUSED + 1];     //    output of pots at MidHi
+uint16_t ChannelCentre[CHANNELSUSED + 1];    //    output of pots at Centre
+uint16_t ChannelMidLow[CHANNELSUSED + 1];    //    output of pots at MidLow
+uint16_t ChannelMin[CHANNELSUSED + 1];       //    output of pots at min
 uint16_t ChanneltoSet = 0;
 bool Connected = false;
 uint16_t BuddyControlled = 0; // Flags
@@ -1190,14 +1189,14 @@ uint32_t LastRXReceivedPackets = 0;
 // uint8_t LevelledBank = 3; // 3
 
 char ParaNames[9][30] = {
-    "FailSafe positions",  // 1
-    "QNH",                 // 2
-    "Mark Location",       // 3
-    "PID Values",          // 4
-    "Kalman Values",       // 5
-    "Servo Frequencies",   // 6
-    "Servo Pulse Widths",  // 7
-    "Gear Ratio",          // 8
+    "FailSafe positions", // 1
+    "QNH",                // 2
+    "Mark Location",      // 3
+    "PID Values",         // 4
+    "Kalman Values",      // 5
+    "Servo Frequencies",  // 6
+    "Servo Pulse Widths", // 7
+    "Gear Ratio",         // 8
 };
 uint16_t ScreenData[50];
 uint16_t AverageFrameRate = 0;
@@ -1313,10 +1312,10 @@ const uint8_t AckPayloadSize = sizeof(AckPayload); // i.e. 6
 
 struct spd // Special Packet Data for Wireless Buddy functions
 {
-    uint8_t  Command[2];
+    uint8_t Command[2];
     uint64_t ModelID;
-    uint8_t  MasterPaceMaker; //heer
-    uint8_t  Channel = QUIETCHANNEL;
+    uint8_t MasterPaceMaker; // heer
+    uint8_t Channel = QUIETCHANNEL;
 };
 spd SpecialPacketData; // longer version
 

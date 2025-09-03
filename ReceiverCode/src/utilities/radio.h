@@ -156,60 +156,39 @@ void LoadaPayload() // This function loads the acknowledgement payload It also d
     delayMicroseconds(DELAYNEEDED);                                // delay DELAYNEEDED
     GetRXVolts();                                                  // Takes 481us
 }
-//**************** */
-int packetIntervalMs()
+// ************************************************************************************************************/
+uint8_t TimeThePackets()
 {
-    static unsigned long first_time = 0;
-    static unsigned long last_time = 0;
-    static unsigned long sum_intervals = 0;
-    static int count = 0;
-    static bool initialized = false;
-
-    unsigned long now = millis();
-
-    if (!initialized)
+    constexpr uint32_t PERIOD = 2000;    // Count for 2 seconds
+    static uint32_t lastTime = millis(); // remember last time
+    static uint32_t counter = 0;         // counter for packets
+    uint32_t now = millis();             // carpe diem
+    if (now - lastTime < PERIOD)         // Time up yet ?
     {
-        first_time = now;
-        last_time = now;
-        initialized = true;
+        ++counter;
+        return 0; // not yet
+    }
+    if (!counter) // no packets?
         return 0;
-    }
-
-    unsigned long diff = now - last_time;
-    last_time = now;
-
-    if (diff > 0)
-    { // avoid zero intervals
-        sum_intervals += diff;
-        count++;
-    }
-
-    if ((now - first_time) >= 1000)
-    {
-        int average = (count > 0) ? (sum_intervals / count) : 0;
-
-        // reset for next window
-        first_time = now;
-        sum_intervals = 0;
-        count = 0;
-
-        return average;
-    }
-
-    return 0;
+    uint8_t Result = PERIOD / counter; // derive result
+    lastTime = now;                    // remember when we did
+    counter = 0;                       // Zero the counter
+    return Result;
 }
-
 // ***************************************************************************************************************
 inline void AdjustTimeout() // Adjust the receive timeout based on packet rate
 {
     static uint8_t RT = 10; // default 10ms
-    uint8_t t = packetIntervalMs();
+    uint8_t t = TimeThePackets();
     if (t)
     {
-        ReceiveTimeout = t + 1;
+        ReceiveTimeout = t + 4;  // add four to handle auto retries etc.
         RT = ReceiveTimeout;
-    } else{
-        ReceiveTimeout = RT; 
+       // Look(RT);
+    }
+    else
+    {
+        ReceiveTimeout = RT;
     }
 }
 /************************************************************************************************************/

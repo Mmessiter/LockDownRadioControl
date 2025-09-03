@@ -369,8 +369,10 @@ FASTRUN void ShowMotorTimer()
         {
             PlaySound(Recording[Mins - 1]);
         }
-        if (Mins){
-            if (UseLog){
+        if (Mins)
+        {
+            if (UseLog)
+            {
                 LogTimer(Mins);
                 LogRPM(RotorRPM);
             }
@@ -1062,14 +1064,14 @@ void WarnUserIfBuddyBoxIsOn() // This function warns the user if the buddy box i
     if (BuddyPupilOnWireless)
     {
         PlaySound(BUDDYPUPILON);
-        DelayWithDog(1500); // allow sound to finish
-        FHSS_data::PaceMaker = PACEMAKER1; // only 200Hz
+        DelayWithDog(1500);                     // allow sound to finish
+        FHSS_data::PaceMaker = PACEMAKER_BUDDY; // only 200Hz
     }
     if (BuddyMasterOnWireless)
     {
         PlaySound(BUDDYMASTERON);
-        DelayWithDog(1500); // allow sound to finish
-        FHSS_data::PaceMaker = PACEMAKER1; // only 200Hz
+        DelayWithDog(1500);                     // allow sound to finish
+        FHSS_data::PaceMaker = PACEMAKER_BUDDY; // only 200Hz
     }
 }
 // *********************************************************************************************************************************/
@@ -1235,7 +1237,6 @@ FLASHMEM void setup()
     WarnUserIfBuddyBoxIsOn();
     ClearMostParameters();
     GotoFrontView();
-   
 }
 // **************************************************************************************************************************************************************
 void RationaliseBuddy()
@@ -1265,9 +1266,8 @@ void RationaliseBuddy()
     }
     if (BuddyMasterOnWireless)
     {
-        FHSS_data::PaceMaker = PACEMAKER1;
+        FHSS_data::PaceMaker = PACEMAKER_BUDDY;
     }
-
 }
 /*********************************************************************************************************************************/
 void GetFrameRate()
@@ -3844,7 +3844,7 @@ FASTRUN void ButtonWasPressed()
                 ++i;
                 SingleModelFile[j] = 0;
             }
-            
+
             strcpy(PromtBeforeSendingModelFile, "Is '");
             strcat(PromtBeforeSendingModelFile, SingleModelFile);
             strcat(PromtBeforeSendingModelFile, "' up to date?\r\nPress 'OK' to send it now, \r\n(otherwise press 'Cancel').");
@@ -3853,7 +3853,6 @@ FASTRUN void ButtonWasPressed()
             {
                 ClearText();
                 return;
-       
             }
             else // OK was pressed
             {
@@ -3861,7 +3860,7 @@ FASTRUN void ButtonWasPressed()
                 ClearText();
                 return;
             }
-                }
+        }
         if (InStrng(FailSAVE, TextIn) > 0)
         { //  the FAILSAFE setup is sent to receiver ************** FAILSAFE SETUP **************
 
