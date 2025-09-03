@@ -146,7 +146,7 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is total 
     }
 }
 // ************************************************************************************************************/
-void LoadaPayload() // This function loads the acknowledgement payload It also delays briefly before returning, and during the delay it might read the INA219 to get volts.
+void SendAckWithPayload() // This function loads the acknowledgement payload It also delays briefly before returning, and during the delay it might read the INA219 to get volts.
 {
 #define FULLDELAYNEEDED 615 // delay required between writing ack payload and reading data
 #define READVOLTSTIME 481   // 481 is the time needed to read the voltage from the INA219
@@ -170,9 +170,10 @@ uint8_t TimeThePackets()
     }
     if (!counter) // no packets?
         return 0;
-    uint8_t Result = PERIOD / counter; // derive result
-    lastTime = now;                    // remember when we did
-    counter = 0;                       // Zero the counter
+    uint8_t Result = (uint8_t)(PERIOD / counter); // derive result
+    // Look(counter);
+    lastTime = now; // remember when we did
+    counter = 0;    // Zero the counter
     return Result;
 }
 // ***************************************************************************************************************
@@ -182,9 +183,9 @@ inline void AdjustTimeout() // Adjust the receive timeout based on packet rate
     uint8_t t = TimeThePackets();
     if (t)
     {
-        ReceiveTimeout = t + 4;  // add four to handle auto retries etc.
+        ReceiveTimeout = t + 4; // add four to handle auto retries etc.
         RT = ReceiveTimeout;
-      //  Look(RT);
+        // Look(RT);
     }
     else
     {
@@ -201,7 +202,7 @@ bool ReadData()
         uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize(); // Get the size of the new data (14)
         if ((DynamicPayloadSize == 0) || (DynamicPayloadSize > 32))
             return false;
-        LoadaPayload();                                        // ... and reads INA219 volts
+        SendAckWithPayload();                                  // ... and reads INA219 volts
         CurrentRadio->read(&DataReceived, DynamicPayloadSize); // Get received data from nRF24L01+
 #ifdef USE_SBUS
         SendSBUSData(); // Maybe send SBUS data if its time
