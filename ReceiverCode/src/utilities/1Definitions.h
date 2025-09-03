@@ -11,7 +11,7 @@
 #define RXVERSION_MINOR 5
 #define RXVERSION_MINIMUS 4
 #define RXVERSION_EXTRA 'D' // 3 September 2025
-#define HOPTIME 17          // gives about 51Hz FHSS
+#define HOPTIME 8           // gives about 100Hz FHSS
 #define RECEIVE_TIMEOUT 10  // This get adjusted according to frame rate 
 
 // **************************************************************************
