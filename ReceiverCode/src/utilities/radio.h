@@ -159,7 +159,7 @@ void LoadaPayload() // This function loads the acknowledgement payload It also d
 // ************************************************************************************************************/
 uint8_t TimeThePackets()
 {
-    constexpr uint32_t PERIOD = 2000;    // Count for 2 seconds
+    constexpr uint32_t PERIOD = 500;     // Count for 1/2 second
     static uint32_t lastTime = millis(); // remember last time
     static uint32_t counter = 0;         // counter for packets
     uint32_t now = millis();             // carpe diem
@@ -184,7 +184,7 @@ inline void AdjustTimeout() // Adjust the receive timeout based on packet rate
     {
         ReceiveTimeout = t + 4;  // add four to handle auto retries etc.
         RT = ReceiveTimeout;
-       // Look(RT);
+      //  Look(RT);
     }
     else
     {
