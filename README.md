@@ -97,7 +97,7 @@ Here is a brief summary of the features supported at the time of writing (July 2
 - 'Dual rates' (... except there are actually _three_ rates.)
 - Model memory backup and restore using internal SD card.
 - 500 Hz frame rate (400 Hz when wireless buddying)
-- 50 Hz FHSS using 82 separate frequencies on the 2.4 GHz ISM waveband.
+- 100 Hz FHSS using 82 separate frequencies on the 2.4 GHz ISM waveband.
 - 12 BIT servo resolution.
 - Very small data packet size, to reduce FHSS frequency collisions.
 - Wireless Buddy Box, now with 'nudge' mode', for training beginners.
