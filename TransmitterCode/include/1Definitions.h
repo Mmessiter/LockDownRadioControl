@@ -60,7 +60,7 @@
 #define MAXRESOLUTION 4095                // 12 BIT ADC Resolution
 #define CE_PIN 7                          // for SPI to nRF24L01
 #define CSN_PIN 8                         // for SPI to nRF24L01
-#define LOSTCONTACTCUTOFF 1               // packets to lose before declaring lost contact (only one)
+//#define LOSTCONTACTCUTOFF 1               // packets to lose before declaring lost contact (only one)
 #define BINDINGTIME 2000                  // 2 seconds to bind ?
 #define CHANNELSUSED 16                   // 16 channels in use
 #define UNCOMPRESSEDWORDS 20              // these are all bigger than needed

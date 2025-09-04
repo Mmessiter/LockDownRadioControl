@@ -139,14 +139,14 @@ void CheckGap()
 }
 
 /************************************************************************************************************/
-void CheckLostContact()
-{
-    if (RecentPacketsLost >= LOSTCONTACTCUTOFF)
-    { // If we have lost contact
-        LostContactFlag = true;
-        TryToReconnect();
-    }
-}
+// void CheckLostContact()
+// {
+//     if (RecentPacketsLost >= LOSTCONTACTCUTOFF)
+//     { // If we have lost contact
+//         LostContactFlag = true;
+//         TryToReconnect();
+//     }
+// }
 /************************************************************************************************************/
 void CheckInactivityTimeout()
 {
@@ -164,9 +164,9 @@ FASTRUN void FailedPacket()
     ReconnectingNow = true;
     LastPacketSentTime = 0; // Force a new packet to be sent immediately
     CheckGap();
-    CheckLostContact();
+    //CheckLostContact();
+    TryToReconnect();
     CheckInactivityTimeout();
-    // if (!PreviousPacketFailed)
     PreviousPacketFailed = true;
 }
 /************************************************************************************************************/
