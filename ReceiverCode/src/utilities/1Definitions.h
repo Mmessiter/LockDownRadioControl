@@ -12,8 +12,6 @@
 #define RXVERSION_MINIMUS 4
 #define RXVERSION_EXTRA 'D' // 3 September 2025
 #define HOPTIME 8           // gives about 100Hz FHSS
-#define RECEIVE_TIMEOUT 10  // This get adjusted according to frame rate 
-
 // **************************************************************************
 
 //  #define DB_FHSS
@@ -24,12 +22,11 @@
 
 // >>>>>>>>>>>>>>>>>******* DON'T FORGET TO SET THIS LOT !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-//#define USE_NEXUS // if DEFINED then USE_PWM will be UNDEFINED ( = commented out) and USE_SBUS must be DEFINED ( = uncommented) to use the Nexus transceiver
+// #define USE_NEXUS // if DEFINED then USE_PWM will be UNDEFINED ( = commented out) and USE_SBUS must be DEFINED ( = uncommented) to use the Nexus transceiver
 
-#define SECOND_TRANSCEIVER  // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
-#define USE_11PWM_OUTPUTS   // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
+#define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
+#define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
 #define USE_SBUS
-
 #ifndef USE_NEXUS
 #define USE_PWM
 #endif // USE_NEXUS
@@ -38,19 +35,15 @@
 #define NEXUS_SERIAL_TELEMETRY Serial1
 #define SERVO_RES_BITS 12
 #define SERVO_RESOLUTION 4096
-
 #define EXTRAAT1500 1000
 #define MINMICROS 500 // normal servos
 #define MAXMICROS 2500
-
 #define EXTRAAT760 350 // high frequency servos
 #define MAXAT760 760 + EXTRAAT760
 #define MINAT760 760 - EXTRAAT760
-
 // **************************************************************************
 //                            WATCHDOG PARAMETERS                           *
 //***************************************************************************
-
 #define WATCHDOGTIMEOUT 3500 // 2 Seconds before reboot (250ms -> 3500 ms)
 #define KICKRATE 500         // Kick twice a second (must be between WATCHDOGMAXRATE and WATCHDOGTIMEOUT)
 #define WATCHDOGMAXRATE 250  // 250 ms secs between kicks is max rate allowed
@@ -63,7 +56,7 @@
 
 // ********************* >>> Reconnect params <<< ***************************************
 
-#define LISTEN_PERIOD 14       
+#define LISTEN_PERIOD 14
 #define STOPLISTENINGDELAY 100 // was 30 microseconds to wait after stopListening() in Reconnect()
 
 // *************************************************************************************
@@ -355,12 +348,7 @@ uint8_t *PipePointer;
 uint8_t Pipnum = PIPENUMBER;
 uint8_t DefaultPipe[6] = {0x23, 0x94, 0x3e, 0xbe, 0xb7, 0x00};
 uint8_t CurrentPipe[6];
-uint8_t Randomized_Recovery_Channels_Counter = 0;
 uint32_t HopMoment = 0;
-float X_GyroOffset = 0;
-float Y_GyroOffset = 0;
-float Z_GyroOffset = 0;
-bool GyroOffsetsSet = false;
 uint16_t BMP280Address = 0x76; // BMP280 I2C address
 uint32_t SuccessfulPackets = 0;
 uint32_t ConnectMoment = 0;
@@ -369,7 +357,6 @@ int16_t LongAcknowledgementsMinimum = 200;
 bool DPS310Connected = false;
 uint16_t DPS310Address = 0x76; // DPS310 I2C address
 bool BindPlugInserted = false; // Bind plug inserted or not
-uint8_t ReceiveTimeout = RECEIVE_TIMEOUT;
-
+uint8_t ReceiveTimeout = 10;   // this gets adjusted later
 
 #endif // defined (_SRC_UTILITIES_1DEFINITIONS_H)
