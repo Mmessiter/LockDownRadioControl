@@ -164,7 +164,6 @@ FASTRUN void FailedPacket()
     ReconnectingNow = true;
     LastPacketSentTime = 0; // Force a new packet to be sent immediately
     CheckGap();
-    //CheckLostContact();
     TryToReconnect();
     CheckInactivityTimeout();
     PreviousPacketFailed = true;
@@ -196,9 +195,6 @@ FASTRUN void TryOtherPipe()
 /************************************************************************************************************/
 void TryToReconnect() // takes about 14 ms to try all three
 {
-    // static uint8_t AttemptCount = 0;
-    // static uint32_t LastAttemptTime = 0;
-
     if (!DontChangePipeAddress)
         TryOtherPipe();
     ++ReconnectionIndex;
@@ -208,15 +204,7 @@ void TryToReconnect() // takes about 14 ms to try all three
         delayMicroseconds(1500 + (rand() % 500) - 250); // ~1.5 ms base pause with ±250 us jitter
     }
     NextChannel = FHSS_data::Used_Recovery_Channels[ReconnectionIndex];
-    HopToNextChannel();
-
-    // ++AttemptCount;
-    // if (AttemptCount > 2)
-    // {
-    //     AttemptCount = 0;
-    //     Look(millis() - LastAttemptTime);
-    //     LastAttemptTime = millis();
-    // }
+    HopToNextChannel(); 
 }
 /************************************************************************************************************/
 void FlushFifos()
