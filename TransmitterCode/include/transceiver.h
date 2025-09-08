@@ -195,11 +195,10 @@ FASTRUN void TryOtherPipe()
 /************************************************************************************************************/
 void TryToReconnect() 
 {
-    bool Reconnected = false;
     uint8_t Iterations = 0;
     if (!DontChangePipeAddress)
         TryOtherPipe();
-    while (!Reconnected && Iterations < 6)
+    while (Iterations < 9)
     {
         ++ReconnectionIndex;
         if (ReconnectionIndex >= 3)
@@ -217,10 +216,12 @@ void TryToReconnect()
         if (Radio1.write(&Ping, 2))
         {
             SuccessfulPacket();
-            Reconnected = true;
+        //    Look(Iterations);
             return;
         }
     }
+   // Look1("F: ");
+   // Look(Iterations);
 }
 /************************************************************************************************************/
 void FlushFifos()
