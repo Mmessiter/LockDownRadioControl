@@ -193,18 +193,34 @@ FASTRUN void TryOtherPipe()
 }
 
 /************************************************************************************************************/
-void TryToReconnect() // takes about 14 ms to try all three
+void TryToReconnect() 
 {
+    bool Reconnected = false;
+    uint8_t Iterations = 0;
     if (!DontChangePipeAddress)
         TryOtherPipe();
-    ++ReconnectionIndex;
-    if (ReconnectionIndex >= 3)
+    while (!Reconnected && Iterations < 6)
     {
-        ReconnectionIndex = 0;
-        delayMicroseconds(1500 + (rand() % 500) - 250); // ~1.5 ms base pause with ±250 us jitter
+        ++ReconnectionIndex;
+        if (ReconnectionIndex >= 3)
+        {
+            ReconnectionIndex = 0;
+            delayMicroseconds(1500 + (rand() % 500) - 250); // ~1.5 ms base pause with ±250 us jitter
+        }
+        NextChannel = FHSS_data::Used_Recovery_Channels[ReconnectionIndex];
+        HopToNextChannel();
+        if (!LedWasGreen)
+            return;
+        KickTheDog();
+        uint16_t Ping = 0;
+        ++Iterations;
+        if (Radio1.write(&Ping, 2))
+        {
+            SuccessfulPacket();
+            Reconnected = true;
+            return;
+        }
     }
-    NextChannel = FHSS_data::Used_Recovery_Channels[ReconnectionIndex];
-    HopToNextChannel(); 
 }
 /************************************************************************************************************/
 void FlushFifos()

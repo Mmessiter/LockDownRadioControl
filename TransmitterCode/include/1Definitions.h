@@ -741,6 +741,7 @@ float SDReadFLOAT(int p_address);
 void SDUpdateFLOAT(int p_address, float p_value);
 void GetBank();
 void LogRPM(uint32_t RPM);
+void SuccessfulPacket();
 #ifdef USE_BTLE
 void SendViaBLE();
 #endif
