@@ -196,31 +196,33 @@ FASTRUN void TryOtherPipe()
 void TryToReconnect() 
 {
     uint8_t Iterations = 0;
+    uint16_t Ping = 0;
+    const uint8_t max_iterations = 9;
     if (!DontChangePipeAddress)
         TryOtherPipe();
-    while (Iterations < 9)
+    while (Iterations <= max_iterations)
     {
         ++ReconnectionIndex;
         if (ReconnectionIndex >= 3)
         {
             ReconnectionIndex = 0;
+            KickTheDog();
             delayMicroseconds(1500 + (rand() % 500) - 250); // ~1.5 ms base pause with ±250 us jitter
         }
         NextChannel = FHSS_data::Used_Recovery_Channels[ReconnectionIndex];
         HopToNextChannel();
         if (!LedWasGreen)
             return;
-        KickTheDog();
-        uint16_t Ping = 0;
         ++Iterations;
         if (Radio1.write(&Ping, 2))
         {
             SuccessfulPacket();
-        //    Look(Iterations);
+            // Look1("Yes! ");
+            // Look(Iterations);
             return;
         }
     }
-   // Look1("F: ");
+   // Look1("No! ");
    // Look(Iterations);
 }
 /************************************************************************************************************/
