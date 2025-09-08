@@ -52,8 +52,8 @@
 //                                       General                                      *
 // ************************************************************************************
 
-#define PACEMAKER 2                           // 2 ms = 500 Hz. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-#define PACEMAKER_BUDDY 5                     // 5 ms = 200 Hz. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define PACEMAKER 2                           // (SOLO RATE) 2 ms = 500 Hz. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define PACEMAKER_BUDDY 5                     // (BUDDY RATE) 5 ms = 200 Hz. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
 #define PACKET_HISTORY_WINDOW 200             // For success rate calculation
 #define TIMEFORTXMANAGMENT 1                  // 1 is plenty. takes only 1ms or so
 #define MAXRESOLUTION 4095                    // 12 BIT ADC Resolution
@@ -236,8 +236,6 @@
 #define TYPEVIEW 40
 #define SERVOTYPESVIEW 41
 #define LOGFILESLISTVIEW 42
-#define PIDVIEW 43
-#define KALMANVIEW 44
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *

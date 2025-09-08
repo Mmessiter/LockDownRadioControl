@@ -24,8 +24,8 @@ void CompareModelsIDs()
     uint8_t SavedModelNumber = ModelNumber;
     if ((BuddyPupilOnWireless) || (BuddyState == BUDDY_ON) || (ModelMatched && MACS_MATCHED))
         return; //  Don't do this if any of these are ON
-    if (CurrentView != PIDVIEW)
-        GotoFrontView();
+
+    GotoFrontView();
     RestoreBrightness();
     if (!AutoModelSelect)
     {
