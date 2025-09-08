@@ -48,71 +48,65 @@
 // #define DB_IDS            // Debug Model IDs (Obsolete)
 // #define DB_Variometer     // Debug Variometer
 // #define DB_PACKETDATA     // Debug Packet Data
+// #define DB_Reconnect      // Debug reconnections
 
 // ************************************************************************************
 //                                       General                                      *
 // ************************************************************************************
 
-#define PACEMAKER 2                       // 2 ms = 500 Hz. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-#define PACEMAKER_BUDDY 5                 // 5 ms = 200 Hz. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
-#define PACKET_HISTORY_WINDOW 200         // For success rate calculation
-#define TIMEFORTXMANAGMENT 1              // 1 is plenty. takes only 1ms or so
-#define MAXRESOLUTION 4095                // 12 BIT ADC Resolution
-#define CE_PIN 7                          // for SPI to nRF24L01
-#define CSN_PIN 8                         // for SPI to nRF24L01
-//#define LOSTCONTACTCUTOFF 1               // packets to lose before declaring lost contact (only one)
-#define BINDINGTIME 2000                  // 2 seconds to bind ?
-#define CHANNELSUSED 16                   // 16 channels in use
-#define UNCOMPRESSEDWORDS 20              // these are all bigger than needed
-#define COMPRESSEDWORDS 20                // these are all bigger than needed
-#define SENDBUFFERSIZE 20                 // these are all bigger than needed
-#define DEFAULTPIPEADDRESS 0xB7BE3E9423LL // Pipe address for startup - any value but MUST match RX
-#define MAXMIXES 32                       // 32 mixes
-#define TICKSPERMINUTE 60000              // millis() = 60000 per minute
-#define PROPOCHANNELS 8                   // Only 4 have knobs / 2 sticks (= 4 hall sensors)
-#define BANKSWITCH 4                      // Default BANK switch
-#define AUTOSWITCH 1                      // Default AUTO switch
-#define BANKS_USED 4                      // Flight modes (AKA Banks)
-#define LOWBATTERY 42                     // Default percent for warning (User definable)
-#define DEFAULTTRIMREPEATSPEED 600
+#define PACEMAKER 2                           // 2 ms = 500 Hz. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define PACEMAKER_BUDDY 5                     // 5 ms = 200 Hz. MINIMUM ms between sent packets of data. These brief pauses allow the receiver to poll its i2c Sensor hub, and TX to ShowComms();
+#define PACKET_HISTORY_WINDOW 200             // For success rate calculation
+#define TIMEFORTXMANAGMENT 1                  // 1 is plenty. takes only 1ms or so
+#define MAXRESOLUTION 4095                    // 12 BIT ADC Resolution
+#define CE_PIN 7                              // for SPI to nRF24L01
+#define CSN_PIN 8                             // for SPI to nRF24L01
+#define BINDINGTIME 2000                      // 2 seconds to bind ?
+#define CHANNELSUSED 16                       // 16 channels in use
+#define UNCOMPRESSEDWORDS 20                  // these are all bigger than needed
+#define COMPRESSEDWORDS 20                    // these are all bigger than needed
+#define SENDBUFFERSIZE 20                     // these are all bigger than needed
+#define DEFAULTPIPEADDRESS 0xB7BE3E9423LL     // Pipe address for startup - any value but MUST match RX
+#define MAXMIXES 32                           // 32 mixes
+#define TICKSPERMINUTE 60000                  // millis() = 60000 per minute
+#define PROPOCHANNELS 8                       // Only 4 have knobs / 2 sticks (= 4 hall sensors)
+#define BANKSWITCH 4                          // Default BANK switch
+#define AUTOSWITCH 1                          // Default AUTO switch
+#define BANKS_USED 4                          // Flight modes (AKA Banks)
+#define LOWBATTERY 42                         // Default percent for warning (User definable)
+#define DEFAULTTRIMREPEATSPEED 600            //
 #define INACTIVITYTIMEOUT 10 * TICKSPERMINUTE // Default time after which to switch off
 #define INACTIVITYMINIMUM 05 * TICKSPERMINUTE // Inactivity timeout minimum is 5 minutes
 #define INACTIVITYMAXIMUM 30 * TICKSPERMINUTE // Inactivity timeout maximum is 30 minutes
 #define DS1307_ADDRESS 0x68                   // I2C address for RTC
-
-#define MAXLINES 60                 // text to load at once for help screens
-#define MAXNEXTIONCOMMANDLENGTH 255 //
-
-#define DEFAULT_EXPO 50          // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
-#define CHARSMAX 250             // Max length for char arrays  (was 120)
-#define MAXTEXTIN 1024 * 4       // 4K buffer for incoming text from Nextion
-#define DEFAULTLEDBRIGHTNESS 20  // LED brightness
-#define DEFAULTPOWEROFFWARNING 2 // Default time to warn before cutting power
-#define MAXDUALRATE 200
-#define MAXBUFFERSIZE 1024 * 6
-#define MAXMODELNUMBER 91
-#define RED_LED_ON_TIME 2000   // How many ms of no connection before RED led comes on
-#define LOW_VOLTAGE_TIME 10000 // How many ms to endure low voltage before announcing it. (10 seconds)
-
-#define SHOWCOMMSDELAY 100          // ms pauses between updated info on NEXTION
-#define WARMUPDELAY 300             // fails at 200 so must be >200 ...
-#define SCREENCHANGEWAIT 10         // allow 10ms for screen to appear
-#define BATTERY_CHECK_INTERVAL 1000 // 2 seconds between battery checks
-
-#define POWERONOFFDELAY 1000  // Delay after power OFF before transmit stops.
-#define POWERONOFFDELAY2 4000 // Delay after power ON before Off is possible....
-                              // and delay after power off before power on button is active
-                              // **************************************************************************
-                              //                            FHSS BITS                                     *
-                              //***************************************************************************
-
-#define DATARATE RF24_250KBPS   // RF24_250KBPS or RF24_1MBPS or RF24_2MBPS
-#define FASTDATARATE RF24_1MBPS // 2 MBPS = RF24_2MBPS; 1 MBPS = RF24_1MBPS >> THIS IS FOR BUDDY ONLY <<
-
-#define RETRYCOUNT 2           // was 2. Auto retries inside nRF24L01. MAX is 15. Fails below 2.
-#define RETRYWAIT 1            // was 1. 250us = Wait between retries (RetryWait+1 * 250us))
-#define QUIETCHANNEL 5         // This was found to be the least busy channel in the 2.4GHz band in my house
-#define STOPLISTENINGDELAY 100 // 30 // 30 seems close to ideal <<<<< *********
+#define MAXLINES 60                           // text to load at once for help screens
+#define MAXNEXTIONCOMMANDLENGTH 255           //
+#define DEFAULT_EXPO 50                       // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
+#define CHARSMAX 250                          // Max length for char arrays  (was 120)
+#define MAXTEXTIN 1024 * 4                    // 4K buffer for incoming text from Nextion
+#define DEFAULTLEDBRIGHTNESS 20               // LED brightness
+#define DEFAULTPOWEROFFWARNING 2              // Default time to warn before cutting power
+#define MAXDUALRATE 200                       //
+#define MAXBUFFERSIZE 1024 * 6                //
+#define MAXMODELNUMBER 91                     //
+#define RED_LED_ON_TIME 2000                  // How many ms of no connection before RED led comes on
+#define LOW_VOLTAGE_TIME 10000                // How many ms to endure low voltage before announcing it. (10 seconds)
+#define SHOWCOMMSDELAY 100                    // ms pauses between updated info on NEXTION
+#define WARMUPDELAY 300                       // fails at 200 so must be >200 ...
+#define SCREENCHANGEWAIT 10                   // allow 10ms for screen to appear
+#define BATTERY_CHECK_INTERVAL 1000           // 2 seconds between battery checks
+#define POWERONOFFDELAY 1000                  // Delay after power OFF before transmit stops.
+#define POWERONOFFDELAY2 4000                 // Delay after power ON before Off is possible....
+                                              // and delay after power off before power on button is active
+                                              // **************************************************************************
+                                              //                            FHSS BITS                                     *
+                                              //***************************************************************************
+#define DATARATE RF24_250KBPS                 // RF24_250KBPS or RF24_1MBPS or RF24_2MBPS
+#define FASTDATARATE RF24_1MBPS               // 2 MBPS = RF24_2MBPS; 1 MBPS = RF24_1MBPS >> THIS IS FOR BUDDY ONLY <<
+#define RETRYCOUNT 2                          // was 2. Auto retries inside nRF24L01. MAX is 15. Fails below 2.
+#define RETRYWAIT 1                           // was 1. 250us = Wait between retries (RetryWait+1 * 250us))
+#define QUIETCHANNEL 5                        // This was found to be the least busy channel in the 2.4GHz band in my house
+#define STOPLISTENINGDELAY 100                // 30 // 30 seems close to ideal <<<<< *********
 #define SELECTTARGETDELAY 100
 
 // **************************************************************************
@@ -1136,13 +1130,11 @@ uint8_t Drate3 = 50;
 
 uint8_t DualRateChannels[8] = {1, 2, 4, 0, 0, 0, 0, 0};
 uint8_t DualRateRate[5];
-
 uint8_t DualRateValue = 100;
 uint16_t CurveDots[5];
 char Confirmed[2];
 char NewFileBuffer[MAXFILELEN];
 uint16_t NewFileBufferPointer = 0;
-uint8_t ReconnectionIndex = 0;
 bool TimerDownwards = false;
 uint16_t TimerStartTime = 5 * 60;
 bool TimesUp = false;

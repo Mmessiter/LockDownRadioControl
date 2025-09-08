@@ -193,11 +193,17 @@ FASTRUN void TryOtherPipe()
 }
 
 /************************************************************************************************************/
-void TryToReconnect() 
+void TryToReconnect() /* This function attempt to reconnect by very fast pings. And it has speeded up reconnection a lot.
+                         It will attempt up to nine times and then revert to the main loop method in order that
+                         other functions are also serviced. */
 {
+#ifdef DB_Reconnect
+    uint32_t starttime = millis();
+#endif
     uint8_t Iterations = 0;
     uint16_t Ping = 0;
     const uint8_t max_iterations = 9;
+    static uint8_t ReconnectionIndex = 0;
     if (!DontChangePipeAddress)
         TryOtherPipe();
     while (Iterations <= max_iterations)
@@ -217,13 +223,21 @@ void TryToReconnect()
         if (Radio1.write(&Ping, 2))
         {
             SuccessfulPacket();
-            // Look1("Yes! ");
-            // Look(Iterations);
+#ifdef DB_Reconnect
+            Look1("YES! Iterations: ");
+            Look(Iterations);
+            Look1("Time taken: ");
+            Look(millis() - starttime);
+#endif
             return;
         }
     }
-   // Look1("No! ");
-   // Look(Iterations);
+#ifdef DB_Reconnect
+    Look1("No! Iterations: ");
+    Look(Iterations);
+    Look1("Time taken: ");
+    Look(millis() - starttime);
+#endif
 }
 /************************************************************************************************************/
 void FlushFifos()
