@@ -42,10 +42,8 @@
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
-// #define DB_SWITCHES       // Debug Switches (Obsolete)
 // #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
 // #define DB_GAPS           // Debug Connection Gap assessment
-// #define DB_IDS            // Debug Model IDs (Obsolete)
 // #define DB_Variometer     // Debug Variometer
 // #define DB_PACKETDATA     // Debug Packet Data
 // #define DB_Reconnect      // Debug reconnections
