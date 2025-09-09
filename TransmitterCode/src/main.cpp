@@ -157,7 +157,6 @@
 #include "ADC-master/ADC.h"
 #include "Parameters.h"
 
-
 /*********************************************************************************************************************************/
 
 void ClearMostParameters()
@@ -288,8 +287,7 @@ void GreenLedOn()
         }
         ModelMatched = true;
         BoundFlag = true;
-        ZeroDataScreen(); // new connection = new data
-        ClearSuccessRate();
+
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0);
         analogWrite(GREENLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
@@ -3637,6 +3635,7 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(DataView_Clear, TextIn) > 0)
         { //  Clear Data screen
             ZeroDataScreen();
+            ClearSuccessRate();
             ClearText();
             return;
         }
@@ -4104,7 +4103,7 @@ FASTRUN void ButtonWasPressed()
             return;
         }
 
-        if (InStrng(Export, TextIn)) // HEER
+        if (InStrng(Export, TextIn))
         {
             GetDefaultFilename();
             if (GetBackupFilename(pModelsView, SingleModelFile, ModelName, hhead, fprompt))
@@ -4958,8 +4957,6 @@ void FASTRUN ManageTransmitter()
     uint32_t RightNow = millis();
     uint32_t TXPacketElapsed = RightNow - LastPacketSentTime;
 
-    // SendViaBLE();
-
     KickTheDog(); // Watchdog ... ALWAYS!
     if ((FHSS_data::PaceMaker - TXPacketElapsed < TIMEFORTXMANAGMENT) && ModelMatched)
     {
@@ -4969,7 +4966,11 @@ void FASTRUN ManageTransmitter()
     CheckForNextionButtonPress(); // Pretty obvious really ...
     DoTheVariometer();            // Do the variometer
     if (RightNow - LastTimeRead >= 1000)
-    {                         // Only once a second for these..
+    { // Only once a second for these..
+        if (((millis() - LedGreenMoment) <= 4500) && ((millis() - LedGreenMoment) >= 2500))
+        {
+            ZeroDataScreen(); // this will clear the long gaps that might occur while binding.
+        }
         GetFrameRate();       // Get the frame rate
         CheckScreenTime();    // Check if screen needs to be turned off
         CheckBatteryStates(); // Check battery states
