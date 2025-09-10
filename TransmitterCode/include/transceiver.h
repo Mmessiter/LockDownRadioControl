@@ -166,7 +166,6 @@ FASTRUN void FailedPacket()
     CheckGap();
     TryToReconnect();
     CheckInactivityTimeout();
-    PreviousPacketFailed = true;
 }
 /************************************************************************************************************/
 FASTRUN void TryOtherPipe()
@@ -275,7 +274,6 @@ void SuccessfulPacket()
     }
     StartInactvityTimeout();
     LostContactFlag = false;
-    PreviousPacketFailed = false; // Remember that the last packet was successful
 }
 // **********************************************************************************************************
 
@@ -332,7 +330,7 @@ FASTRUN void SendData()
     if (SendNoData)
         return;
 
-    if (((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker) || PreviousPacketFailed)
+    if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker)
     {
         Connected = false; // Assume failure until an ACK is received.
         FlushFifos();      // This flush avoids a lockup that happens when the FIFO gets full.
