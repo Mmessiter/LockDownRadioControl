@@ -12,8 +12,8 @@
 #define LOGFILESDISPLAY_H
 /******************************************************************************************************************************/
 // Later, might put these into definitions.h ( ... Much later!)
-#define READBUFFERSIZE 1024       // was 2048. Buffer to read in
-#define BUFFEREDLINES 5           // 15 might be too much
+#define READBUFFERSIZE 1024 * 2   // Buffer to read in
+#define BUFFEREDLINES 12          // 15 might be too much?
 #define MXLINES BUFFEREDLINES * 4 // must be an integer and about 4 * BUFFEREDLINES
 #define SCROLLTRIGGER 0.75        // was 0.75  ... and apparently still is!
 #define MXLINELENGTH 110
@@ -259,13 +259,14 @@ uint16_t ReadAFewLines()
     LogFileNumber.seek(ThisSeekPosition);                                // seek to the position
     uint16_t BytesRead = LogFileNumber.read(ReadBuffer, READBUFFERSIZE); // read in the buffer
 
-    if (BytesRead < READBUFFERSIZE - strlen(EndMarker)) // if we read less than the buffer size, we are at the end of the file
+    if (BytesRead < READBUFFERSIZE) // if we read less than the buffer size, we are at the end of the file
     {
         ReadBuffer[BytesRead] = 0; // null-terminate the buffer
         CloseLogFile();
         FinalReadStartLine = StartReadLine;
         strcat(ReadBuffer, EndMarker);
         BytesRead += (strlen(EndMarker));
+        ReadBuffer[BytesRead] = 0; // null-terminate the buffer
     }
     return BuildLinesArray(ReadBuffer, BytesRead, ThisSeekPosition); // build the lines array and return the number of lines
 }
@@ -278,7 +279,7 @@ void StartLogFileView() // This is the entry point
 }
 /******************************************************************************************************************************/
 
-void LogVIEWNew() // Start log screen 
+void LogVIEWNew() // Start log screen
 {
     char Current_Y_Nextion_Label[] = "LogText.val_y"; // the Y position of the log text on the Nextion screen
     char fnf[] = "File not found: ";
