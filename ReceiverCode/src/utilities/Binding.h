@@ -12,9 +12,11 @@
 
 bool ValidateNewPipe()
 {
+    // return true;
     uint8_t MatchedCounter = 0;
     if (pcount < 2)
         return false; // ignore first few
+
     PreviousNewPipes[PreviousNewPipesIndex] = NewPipeMaybe;
     PreviousNewPipesIndex++;
     if (PreviousNewPipesIndex > PIPES_TO_COMPARE)
@@ -25,7 +27,7 @@ bool ValidateNewPipe()
         if (NewPipeMaybe == PreviousNewPipes[i])
             ++MatchedCounter;
     }
-    if (MatchedCounter >= 2)
+    if (MatchedCounter > 2)
         return true;
     return false;
 }
@@ -35,21 +37,29 @@ bool TestTheNewPipe() // Check that the set pipe can actually receive data befor
 {
     if (Blinking) // if binding, then we don't need to test the pipe
         return true;
-    CurrentRadio->stopListening();
-    delayMicroseconds(STOPLISTENINGDELAY);
-    CurrentRadio->setChannel(FHSS_Recovery_Channels[0]); // one of the three recovery channels is enough here.
-    delayMicroseconds(STOPLISTENINGDELAY);
-    CurrentRadio->startListening();
-    delayMicroseconds(STOPLISTENINGDELAY);
+    uint8_t idx = 1;
+
     uint32_t LookTime = millis();
-    while (millis() - LookTime < 250)
+    while (millis() - LookTime < 350)
     {
+        CurrentRadio->stopListening();
+        delayMicroseconds(STOPLISTENINGDELAY);
+        CurrentRadio->setChannel(FHSS_Recovery_Channels[idx]);
+        delayMicroseconds(STOPLISTENINGDELAY);
+        CurrentRadio->startListening();
+        delayMicroseconds(STOPLISTENINGDELAY);
         if (CurrentRadio->available(&Pipnum))
         {
             return true;
         }
+        else
+        {
+            ++idx;
+            if (idx > 3)
+                idx = 0;
+        }
         KickTheDog(); // keep the watchdog happy
-        delay(2);     // wait a bit
+        delay(1);     // wait a bit
     }
     return false;
 }
@@ -60,6 +70,7 @@ void GetNewPipe() // from TX
 {
     if (!NewData)
         return;
+
     NewData = false;
     if (PipeSeen)
         return;
@@ -83,14 +94,15 @@ void GetNewPipe() // from TX
         {
             CopyToCurrentPipe(TheSavedPipe, BOUNDPIPENUMBER);
         }
-
         SetNewPipe();
-
+        delay(5);
+        CurrentRadio->flush_tx();
+        CurrentRadio->flush_rx();
+        delay(5);
         if (TestTheNewPipe())
         {
             BindModel(); // don't bind if the pipe is not valid
         }
-
         PipeSeen = true;
     }
     ++pcount; // inc pipes received
@@ -114,7 +126,7 @@ void SetNewPipe()
 void DisplayAPipe(const uint8_t *pipe) // for debug
 {
     char buffer[44];
-    snprintf(buffer, 44, "Pipe: %02X %02X %02X %02X %02X",pipe[0], pipe[1], pipe[2], pipe[3], pipe[4]);
+    snprintf(buffer, 44, "Pipe: %02X %02X %02X %02X %02X", pipe[0], pipe[1], pipe[2], pipe[3], pipe[4]);
     Look(buffer);
 }
 
@@ -125,6 +137,7 @@ void DisplayAPipe(const uint8_t *pipe) // for debug
 void BindModel()
 {
     BoundFlag = true;
+
     if (Blinking)
     {
         SavePipeToEEPROM();
@@ -132,7 +145,7 @@ void BindModel()
     }
     if (FirstConnection)
     {
-        AttachServos(); // AND START SBUS 
+        AttachServos(); // AND START SBUS
         FirstConnection = false;
     }
     ConnectMoment = millis();

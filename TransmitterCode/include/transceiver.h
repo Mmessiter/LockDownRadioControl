@@ -193,7 +193,7 @@ void TryToReconnect() /* This function attempt to reconnect by very fast pings. 
     uint8_t Iterations = 0;
     uint16_t Ping = 0;
     const uint8_t max_iterations = 9;
-    static uint8_t ReconnectionIndex = 0;
+    uint8_t ReconnectionIndex = 0;
     if (!DontChangePipeAddress)
         TryOtherPipe();
     while (Iterations <= max_iterations)

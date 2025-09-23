@@ -116,6 +116,8 @@ void MoveServos()
         return;
     LocalTimer = millis();
 
+ 
+
     if (!CheckForCrazyValues())
     {
         TurnLedOff(); // if we have crazy values, turn the LED off and don't move the servos
@@ -574,6 +576,7 @@ void loop()
     // TimeTheMainLoop();
     KickTheDog();
     ReceiveData();
+    
 #ifdef USE_NEXUS
     CheckMSPSerial(); // this is to read the RPM value
 #endif

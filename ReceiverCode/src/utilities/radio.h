@@ -12,7 +12,9 @@
 // The data might be new, or it might be the same as before. It doesn't matter much.
 void SendSBUSData()
 {
+  
     static uint32_t LocalTime = millis();
+   
     if (((millis() - LocalTime) < SBUSRATE) || (!BoundFlag) || (!CheckForCrazyValues()))
         return;                 // Don't send SBUS data except when due
     MySbus.write(SbusChannels); // Send SBUS data
@@ -196,8 +198,10 @@ inline void AdjustTimeout() // Adjust the receive timeout based on packet rate
 bool ReadData()
 {
     Connected = false;
+   
     if (CurrentRadio->available(&Pipnum))
     {
+      
         AdjustTimeout();                                                    // adjust timeout for packet rate
         uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize(); // Get the size of the new data (14)
         if ((DynamicPayloadSize == 0) || (DynamicPayloadSize > 32))
