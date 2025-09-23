@@ -2596,6 +2596,12 @@ void ZeroDataScreen()
     TotalFrameRate = 0;
     FrameRateCounter = 0;
     PacketsPerSecond = 0;
+    MaxBin = 100;
+    for (int i = 0; i < 11; ++i)
+    {
+        GapSets[i] = 0;
+        PrevGapSets[i] = 0xffff;
+    }
 }
 /***************************************************** ReadNewSwitchFunction ****************************************************************************/
 
@@ -3289,7 +3295,7 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     LogReleasedNEW,       // 14   // new version
     LogTouched,           // 15   // this does nothing, yet ...
     RefreshDualRatesNew,  // 16
-    Blank,                // 17 // MTP sd access
+    StartGapsView,        // 17
     Blank,                // 18
     Blank,                // 19
     Blank,                // 20
@@ -4961,6 +4967,11 @@ void FASTRUN ManageTransmitter()
     if ((FHSS_data::PaceMaker - TXPacketElapsed < TIMEFORTXMANAGMENT) && ModelMatched)
     {
         return; // If it's almost time to send data, then do not start some other task which might easily take longer.
+    }
+    if (ThisGap)
+    {
+        ProcessRecentCommsGap();
+        return;
     }
     CheckPowerOffButton();
     CheckForNextionButtonPress(); // Pretty obvious really ...

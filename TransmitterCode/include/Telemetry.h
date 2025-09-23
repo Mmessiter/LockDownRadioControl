@@ -135,7 +135,7 @@ void CheckBatteryStates()
             WarnTimer = millis();
             if (ModelMatched && Connected)
             {
-                PlaySound(WarningSound); // Issue audible warning 
+                PlaySound(WarningSound); // Issue audible warning
                 LogStopFlyingMsg();      // Log the stop flying message
                 LogRXVoltsPerCell();     // Log the RX volts per cell
                 LedIsBlinking = true;
@@ -490,12 +490,12 @@ void PopulateFrontView()
     if ((ParametersToBeSentPointer == 0) || (millis() - LedGreenMoment < PAUSE_BEFORE_PARAMETER_SEND))
     {
         ShowConnectionQuality();
-   }
-   else 
-   {
+    }
+    else
+    {
         ShowSendingParameters();
-   }
-    
+    }
+
     if ((LastAutoModelSelect != AutoModelSelect) || (!ModelsMacUnionSaved.Val64))
     {
         LastAutoModelSelect = AutoModelSelect;
@@ -572,6 +572,9 @@ FASTRUN void ShowComms()
     case GPSVIEW:
         PopulateGPSView(); // This is the GPS screen
         break;
+    case GAPSVIEW:
+        PopulateGapsView();
+        break;
     default:
         break;
     }
@@ -613,7 +616,7 @@ int GetTestRateOfClimb()
 //   • Tweak WAV_MS to match real clip lengths.
 // ----------------------------------------------------------------------------
 
-static constexpr float SCALE = 1;   // 1 → in‑flight; 0.01 → bench wind‑tube
+static constexpr float SCALE = 1;      // 1 → in‑flight; 0.01 → bench wind‑tube
 static constexpr int GAP_FRAC_NUM = 1; // gap = dur * 1 / 3  (≈33 %)
 static constexpr int GAP_FRAC_DEN = 3;
 
@@ -691,7 +694,6 @@ void DoTheVariometer()
     //------------------------------------------------------------------
     static int16_t T[10];   // climb thresholds (ft/min)
     static int16_t HYS_FPM; // hysteresis band
- 
 
     if (!Variometer_InitDone)
     {
@@ -791,5 +793,49 @@ void DoTheVariometer()
 
     if (needPlay)
         PlaySound(WAV_ID[zone]);
+}
+
+// **********************************************************************************************************
+void PopulateGapsView()
+{
+    char Js[11][4] = {
+        // scrambled because they're not in order on the screen!
+        "j0",
+        "j10",
+        "j11",
+        "j6",
+        "j5",
+        "j4",
+        "j3",
+        "j9",
+        "j2",
+        "j8",
+        "j7",
+    };
+    char Ns[11][4] = {"n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10"};
+    for (int i = 0; i < 11; ++i)
+    {
+        if (GapSets[i] != PrevGapSets[i])
+        {
+            SendValue(Ns[i], GapSets[i]);
+            uint32_t n = GapSets[i];
+            if (n > MaxBin)
+                MaxBin = n;
+            n = MapWithExponential(n, 0, MaxBin, 0, 100, -15);
+            SendValue(Js[i], n);
+            PrevGapSets[i] = GapSets[i];
+        }
+    }
+}
+// **********************************************************************************************************
+void StartGapsView()
+{
+    static bool FirstCall = true;
+    SendCommand(pGapsView);
+    CurrentView = GAPSVIEW;
+    if (FirstCall)
+        InitializeCommsGapScreen();
+    FirstCall = false;
+    PopulateGapsView();
 }
 #endif

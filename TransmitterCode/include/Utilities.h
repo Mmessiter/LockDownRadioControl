@@ -337,6 +337,25 @@ void Reboot()
 }
 
 /*********************************************************************************************************************************/
+void InitializeCommsGapScreen()
+{
+    char tBox[11][4] = {
+        "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10", "t11"};
+
+    char txt[12];
+
+    // First 10 bins: "< threshold"
+    for (int i = 1; i < 11; ++i)
+    {
+        sprintf(txt, "< %u", GapThesholds[i]);
+        SendText(tBox[i - 1], txt);
+    }
+
+    // Final bin: "≥ last"
+    sprintf(txt, "> %u", GapThesholds[10]);
+    SendText(tBox[10], txt);
+}
+/*********************************************************************************************************************************/
 void KickTheDog()
 {
     static uint32_t LastDogKick = 0;

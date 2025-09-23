@@ -476,152 +476,24 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch)
     DelayMillis(1);
 }
 #endif // defined (SECOND_TRANSCEIVER)
-// ************************************************************************************************************/
-// void DisplayPipe()
-// {
-//     static uint32_t lastTime = 0;
-//     if (millis() - lastTime < 1000)
-//         return;
-//     lastTime = millis();
+//************************************************************************************************************/
+void DisplayPipe()
+{
+    static uint32_t lastTime = 0;
+    if (millis() - lastTime < 1000)
+        return;
+    lastTime = millis();
 
-//     Serial.print("Listening for pipe: ");
-//     for (uint8_t i = 0; i < 5; ++i)
-//     {
-//         Serial.print(CurrentPipe[i], HEX);
-//         Serial.print(" ");
-//     }
-//     Serial.println("");
-// }
-
-// *****
-
+    Serial.print("Listening for pipe: ");
+    for (uint8_t i = 0; i < 5; ++i)
+    {
+        Serial.print(CurrentPipe[i], HEX);
+        Serial.print(" ");
+    }
+    Serial.println("");
+}
 /************************************************************************************************************/
 FASTRUN void Reconnect()
-{
-    constexpr uint8_t MAX_TRIES_PER_TRANSCEIVER = 3;
-
-    const uint32_t start = millis();
-    uint32_t now = start;
-    const uint32_t failsafe_deadline = start + FAILSAFE_TIMEOUT;
-
-    uint8_t prevRadio = ThisRadio;
-    uint8_t attempts = 0;
-
-    // Account for time spent on whichever radio we were using before entering the loop
-    if (ThisRadio == 1)
-        RX1TotalTime += (now - ReconnectedMoment);
-    else if (ThisRadio == 2)
-        RX2TotalTime += (now - ReconnectedMoment);
-
-    // ─────────────────────────────────────────────────────────────
-    // Lambda #1: helper to hop to the next recovery channel
-    // - Defined *inside* Reconnect() so it can see/use local vars directly
-    // - Captures by reference [&], meaning it can read/write ReconnectIndex, etc.
-    // - Compiler inlines it: no runtime cost, just neater code.
-    auto switch_to_recovery_channel = [&]()
-    {
-        // Cycle 0→1→2→0 without % (division is slow on Cortex-M7)
-        uint8_t idx = ReconnectIndex + 1u;
-        if (idx >= 3u)
-            idx = 0u;
-        ReconnectIndex = idx;
-        ReconnectChannel = FHSS_Recovery_Channels[idx];
-        CurrentRadio->setChannel(ReconnectChannel);
-    };
-
-    // ─────────────────────────────────────────────────────────────
-    // Lambda #2: helper to run housekeeping that must be serviced
-    // regularly while we're trying to reconnect.
-    auto service_housekeeping = [&]()
-    {
-        if (Blinking)
-            BlinkLed();
-        KickTheDog();
-#ifdef USE_SBUS
-        SendSBUSData();
-#endif
-    };
-
-    // Prime receiver before the loop
-    CurrentRadio->stopListening();
-    delayMicroseconds(STOPLISTENINGDELAY);
-    CurrentRadio->flush_tx();
-    CurrentRadio->flush_rx();
-
-    ReconnectChannel = FHSS_Recovery_Channels[ReconnectIndex];
-    CurrentRadio->setChannel(ReconnectChannel);
-    CurrentRadio->startListening();
-    delayMicroseconds(STOPLISTENINGDELAY);
-
-    while (!Connected)
-    {
-        service_housekeeping();
-
-        ++attempts;
-        TryToConnectNow();
-        if (Connected)
-            break;
-
-        // Switch transceiver or kick radio after too many tries
-#ifdef SECOND_TRANSCEIVER
-        if (attempts >= MAX_TRIES_PER_TRANSCEIVER)
-        {
-            TryTheOtherTransceiver(ReconnectChannel);
-            attempts = 0;
-        }
-#else
-        if (attempts >= MAX_TRIES_PER_TRANSCEIVER)
-        {
-            ProdRadio(ReconnectChannel);
-            DelayMillis(1); // small breather for the RF chip
-            attempts = 0;
-        }
-#endif
-
-        // Failsafe check against precomputed deadline
-        now = millis();
-        if (!FailSafeSent && (int32_t)(now - failsafe_deadline) >= 0)
-        {
-            FailSafe();
-        }
-
-        // Prepare next hop only if still not connected
-        if (!Connected)
-        {
-            CurrentRadio->stopListening();
-            delayMicroseconds(STOPLISTENINGDELAY);
-            CurrentRadio->flush_tx();
-            CurrentRadio->flush_rx();
-
-            switch_to_recovery_channel();
-
-            CurrentRadio->startListening();
-            delayMicroseconds(STOPLISTENINGDELAY);
-        }
-    }
-
-    // ─────────────────────────────────────────────────────────────
-    // Successful reconnection bookkeeping
-    const uint32_t m = millis();
-    ReconnectedMoment = m;
-    FailSafeSent = false;
-
-    if (prevRadio != ThisRadio)
-        ++RadioSwaps;
-
-    if (FailedSafe)
-    {
-        FailedSafe = false;
-        NewConnectionMoment = m;
-        ConnectMoment = m;
-        SuccessfulPackets = 0;
-    }
-}
-
-// *****
-
-/************************************************************************************************************/
-FASTRUN void ReconnectOLD()
 {
 #define MAXTRIESPERTRANSCEIVER 3
 
@@ -634,7 +506,7 @@ FASTRUN void ReconnectOLD()
         RX1TotalTime += (now - ReconnectedMoment);
     else if (ThisRadio == 2)
         RX2TotalTime += (now - ReconnectedMoment);
-
+    ReconnectIndex = 2; // *** The best number for starting te search !!!!
     while (!Connected)
     {
         if (Blinking)
@@ -650,16 +522,16 @@ FASTRUN void ReconnectOLD()
         CurrentRadio->flush_tx();
         CurrentRadio->flush_rx();
 
-        // Switch to next recovery channel
         ReconnectChannel = FHSS_Recovery_Channels[ReconnectIndex];
-        ReconnectIndex = (ReconnectIndex + 1) % 3;
-
         CurrentRadio->setChannel(ReconnectChannel);
         CurrentRadio->startListening();
         delayMicroseconds(STOPLISTENINGDELAY);
 
         ++attempts;
         TryToConnectNow();
+        // Switch to next recovery channel
+        ReconnectIndex = (ReconnectIndex + 1) % 3;
+       // Look(FHSS_Recovery_Channels[ReconnectIndex]);
 
         if (!Connected)
         {
@@ -683,7 +555,6 @@ FASTRUN void ReconnectOLD()
             }
         }
     }
-
     // Successful reconnection
     ReconnectedMoment = millis();
     FailSafeSent = false;

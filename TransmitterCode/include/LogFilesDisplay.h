@@ -12,10 +12,10 @@
 #define LOGFILESDISPLAY_H
 /******************************************************************************************************************************/
 // Later, might put these into definitions.h ( ... Much later!)
-#define READBUFFERSIZE 1024 * 2   // Buffer to read in
-#define BUFFEREDLINES 12          // 15 might be too much?
-#define MXLINES BUFFEREDLINES * 4 // must be an integer and about 4 * BUFFEREDLINES
-#define SCROLLTRIGGER 0.75        // was 0.75  ... and apparently still is!
+#define READBUFFERSIZE (1024 + 512) // (EDIT THESE NUMBERS WITH GREAT CAUTION!!!!)
+#define BUFFEREDLINES 10            // (EDIT THESE NUMBERS WITH GREAT CAUTION!!!!)
+#define MXLINES BUFFEREDLINES * 4   // (EDIT THESE NUMBERS WITH GREAT CAUTION!!!!)
+#define SCROLLTRIGGER 0.75          // (EDIT THESE NUMBERS WITH GREAT CAUTION!!!!)
 #define MXLINELENGTH 110
 #define WRAPPOINT 66          // where to word-wrap
 #define MAXSEEKPOSITIONS 5000 // hope it's enough

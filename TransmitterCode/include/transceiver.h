@@ -139,15 +139,6 @@ void CheckGap()
 }
 
 /************************************************************************************************************/
-// void CheckLostContact()
-// {
-//     if (RecentPacketsLost >= LOSTCONTACTCUTOFF)
-//     { // If we have lost contact
-//         LostContactFlag = true;
-//         TryToReconnect();
-//     }
-// }
-/************************************************************************************************************/
 void CheckInactivityTimeout()
 {
     int SecondsRemaining = (Inactivity_Timeout / 1000) - (millis() - Inactivity_Start) / 1000;
@@ -248,7 +239,7 @@ void FlushFifos()
 /************************************************************************************************************/
 void SuccessfulPacket()
 {
-    CheckGapsLength();
+    StoreNewCommsGap();
     RecordsPacketSuccess(1);
     ++RecentGoodPacketsCount;
     ++PacketNumber;
@@ -950,30 +941,40 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         break;
     }
 }
+
 /************************************************************************************************************/
-FASTRUN void CheckGapsLength()
+FASTRUN void StoreNewCommsGap() // Store a gap on recovery, but don't process it immediately
 {
     if (GapStart > 0)
-    { // when reconnected, find out how long was connection lost
-        ++GapCount;
+    {
         ThisGap = (millis() - GapStart);
-        if (ThisGap >= MinimumGap && UseLog)
-            LogThisGap();
-        if (ThisGap > GapLongest)
-            GapLongest = ThisGap;
-        GapSum += ThisGap;
         GapStart = 0;
-        GapAverage = GapSum / GapCount;
-#ifdef DB_GAPS
-        Serial.print("GapCount: ");
-        Serial.println(GapCount);
-        Serial.print("GapAverage: ");
-        Serial.println(GapAverage);
-        Serial.print("GapLongest: ");
-        Serial.println(GapLongest);
-        Serial.println(" ");
-#endif
     }
+}
+
+/************************************************************************************************************/
+
+FASTRUN void ProcessRecentCommsGap() // When we know there is time, process a recent gap.
+{
+    ++GapCount;
+    int i = 0;
+    for (i = 0; i < 10; ++i)
+    {
+        if (ThisGap < GapThesholds[i + 1]) // no need to check if (ThisGap >= GapThesholds[i]) since it must be true
+        {
+            ++GapSets[i];
+            break;
+        }
+    }
+    if (i == 10)
+        ++GapSets[i];
+    GapSum += ThisGap;
+    GapAverage = GapSum / GapCount;
+    if (ThisGap >= MinimumGap && UseLog)
+        LogThisGap();
+    if (ThisGap > GapLongest)
+        GapLongest = ThisGap;
+    ThisGap = 0;
 }
 
 #endif

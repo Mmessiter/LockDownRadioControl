@@ -30,7 +30,7 @@
 #define TXVERSION_MAJOR 2 // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 5
 #define TXVERSION_MINIMUS 4
-#define TXVERSION_EXTRA "D 03/09/25"
+#define TXVERSION_EXTRA "E 23/09/25"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -43,7 +43,6 @@
 // #define DB_SENSORS        // Debug Sensors
 // #define DB_BIND           // Debug Binding
 // #define DB_MODEL_EXCHANGE // Debug MODEL EXCHANGE (by RF link)
-// #define DB_GAPS           // Debug Connection Gap assessment
 // #define DB_Variometer     // Debug Variometer
 // #define DB_PACKETDATA     // Debug Packet Data
 // #define DB_Reconnect      // Debug reconnections
@@ -236,6 +235,7 @@
 #define TYPEVIEW 40
 #define SERVOTYPESVIEW 41
 #define LOGFILESLISTVIEW 42
+#define GAPSVIEW 43
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -528,7 +528,7 @@ void SendCharArray(char *ch0, char *ch1, char *ch2, char *ch3, char *ch4, char *
 char *Str(char *s, int n, int comma);
 void GetNewChannelValues();
 void GreenLedOn();
-void CheckGapsLength();
+void StoreNewCommsGap();
 FASTRUN void ParseLongerAckPayload();
 void FailedPacket();
 void StartInactvityTimeout();
@@ -732,9 +732,11 @@ void SDUpdateFLOAT(int p_address, float p_value);
 void GetBank();
 void LogRPM(uint32_t RPM);
 void SuccessfulPacket();
-#ifdef USE_BTLE
-void SendViaBLE();
-#endif
+void StartGapsView();
+void PopulateGapsView();
+void ProcessRecentCommsGap();
+void InitializeCommsGapScreen();
+
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************
@@ -1221,10 +1223,8 @@ char pLogView[] = "page LogView";
 char pGPSView[] = "page GPSView";
 char pPopupView[] = "page PopupView";
 char pBlankView[] = "page BlankView";
-char pWaitView[30]; // the saved page where wait was started
-char pPIDView[] = "page PIDView";
-char pKalmanView[] = "page KalmanView";
-char WaitText[] = "Just a Minute! ... ";
+char pGapsView[] = "page GapsView";
+
 int Previous_Current_Y = 0; // for scrolling log file
 int Max_Y = 666;
 uint32_t NextionReturn = 0;
@@ -1252,7 +1252,11 @@ bool ParamPause = true;
 bool First_RPM_Data = true;
 uint32_t RotorRPM = 0;
 float GearRatio = 10.3;
-//bool PreviousPacketFailed = false;
+uint32_t GapSets[11] = {0};
+const uint16_t GapThesholds[11] =   {0, 4, 8, 10, 12, 15, 25, 50, 100, 250, 500};
+uint32_t MaxBin = 100;
+uint32_t PrevGapSets[11] = {0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff};
+
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
 // **********************************************************************************************************************************
