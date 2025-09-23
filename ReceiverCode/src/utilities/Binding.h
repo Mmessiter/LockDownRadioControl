@@ -12,7 +12,6 @@
 
 bool ValidateNewPipe()
 {
-    // return true;
     uint8_t MatchedCounter = 0;
     if (pcount < 2)
         return false; // ignore first few
@@ -55,7 +54,7 @@ bool TestTheNewPipe() // Check that the set pipe can actually receive data befor
         else
         {
             ++idx;
-            if (idx > 3)
+            if (idx >= 3)
                 idx = 0;
         }
         KickTheDog(); // keep the watchdog happy
