@@ -202,19 +202,14 @@ void TryToReconnect() /* This function attempt to reconnect by very fast pings. 
         ++ReconnectionIndex;
         if (ReconnectionIndex >= 3)
         {
-            ReconnectionIndex = 0;
-            KickTheDog();
-            delayMicroseconds(1500 + (rand() % 500) - 250); // ~1.5 ms base pause with ±250 us jitter
+          ReconnectionIndex = 0;
+          KickTheDog();
+         // Look(millis() - TimerTest);
+         // TimerTest = millis();
         }
         NextChannel = FHSS_data::Used_Recovery_Channels[ReconnectionIndex];
 
-        // if (!ReconnectionIndex){
-
-        //     Look(millis() - TimerTest);
-        //     TimerTest = millis();
-        // }
-
-            HopToNextChannel();
+        HopToNextChannel();
         if (!LedWasGreen)
             return;
         ++Iterations;
