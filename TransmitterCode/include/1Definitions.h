@@ -873,6 +873,7 @@ bool LostContactFlag = true;
 uint32_t RecentPacketsLost = 0;
 uint32_t GapSum = 0;
 uint32_t GapLongest = 0;
+uint32_t GapShortest = 1000;
 uint32_t GapStart = 0;
 uint32_t ThisGap = 0;
 uint32_t GapAverage = 0;

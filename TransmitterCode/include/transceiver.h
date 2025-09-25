@@ -974,6 +974,8 @@ FASTRUN void ProcessRecentCommsGap() // When we know there is time, process a re
         LogThisGap();
     if (ThisGap > GapLongest)
         GapLongest = ThisGap;
+    if (ThisGap < GapShortest)
+        GapShortest = ThisGap;
     ThisGap = 0;
 }
 

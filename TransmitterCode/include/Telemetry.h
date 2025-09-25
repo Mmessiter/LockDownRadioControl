@@ -378,7 +378,7 @@ void PopulateDataView()
     if (LastGapLongest != GapLongest)
     {
         LastGapLongest = GapLongest;
-        BuildValue(DataView_Ls, GapLongest); // SendValue(DataView_Ls, GapLongest);
+        BuildValue(DataView_Ls, GapLongest); // SendValue(DataView_Ls, GapLongest); heer
     }
     if (LastRadioSwaps != RadioSwaps)
     {
@@ -826,6 +826,9 @@ void PopulateGapsView()
             PrevGapSets[i] = GapSets[i];
         }
     }
+    SendValue((char *) "n13", GapLongest);
+    SendValue((char *) "n12", GapAverage);
+    SendValue((char *) "n11", GapShortest);
 }
 // **********************************************************************************************************
 void StartGapsView()
