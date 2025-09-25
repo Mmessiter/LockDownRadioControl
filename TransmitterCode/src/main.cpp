@@ -2597,6 +2597,7 @@ void ZeroDataScreen()
     FrameRateCounter = 0;
     PacketsPerSecond = 0;
     MaxBin = 100;
+    GapShortest = 1000;
     for (int i = 0; i < 11; ++i)
     {
         GapSets[i] = 0;

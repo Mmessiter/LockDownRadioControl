@@ -826,9 +826,10 @@ void PopulateGapsView()
             PrevGapSets[i] = GapSets[i];
         }
     }
-    SendValue((char *) "n13", GapLongest);
-    SendValue((char *) "n12", GapAverage);
-    SendValue((char *) "n11", GapShortest);
+    SendValue((char *)"n13", GapLongest);
+    SendValue((char *)"n12", GapAverage);
+    if (GapShortest < 1000)
+        SendValue((char *)"n11", GapShortest);
 }
 // **********************************************************************************************************
 void StartGapsView()
