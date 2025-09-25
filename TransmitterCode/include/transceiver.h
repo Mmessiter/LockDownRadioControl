@@ -191,6 +191,7 @@ void TryToReconnect() /* This function attempt to reconnect by very fast pings. 
     uint32_t starttime = millis();
 #endif
     uint8_t Iterations = 0;
+   // static uint32_t TimerTest = 0;
     uint16_t Ping = 0;
     const uint8_t max_iterations = 9;
     uint8_t ReconnectionIndex = 0;
@@ -206,7 +207,14 @@ void TryToReconnect() /* This function attempt to reconnect by very fast pings. 
             delayMicroseconds(1500 + (rand() % 500) - 250); // ~1.5 ms base pause with ±250 us jitter
         }
         NextChannel = FHSS_data::Used_Recovery_Channels[ReconnectionIndex];
-        HopToNextChannel();
+
+        // if (!ReconnectionIndex){
+
+        //     Look(millis() - TimerTest);
+        //     TimerTest = millis();
+        // }
+
+            HopToNextChannel();
         if (!LedWasGreen)
             return;
         ++Iterations;
