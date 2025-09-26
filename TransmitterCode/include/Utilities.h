@@ -341,17 +341,23 @@ void InitializeCommsGapScreen()
 {
     char tBox[11][4] = {
         "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10", "t11"};
-
     char txt[12];
-
-    // First 10 bins: "< threshold"
     for (int i = 1; i < 11; ++i)
     {
         sprintf(txt, "< %u", GapThesholds[i]);
         SendText(tBox[i - 1], txt);
     }
-
-    // Final bin: "≥ last"
+    SendCommand((char *)"vis n0,0"); // hide the 0 count§");
+    SendCommand((char *)"vis n1,0");
+    SendCommand((char *)"vis n2,0");
+    SendCommand((char *)"vis n3,0");
+    SendCommand((char *)"vis n4,0");
+    SendCommand((char *)"vis n5,0");
+    SendCommand((char *)"vis n6,0");
+    SendCommand((char *)"vis n7,0");
+    SendCommand((char *)"vis n8,0");
+    SendCommand((char *)"vis n9,0");
+    SendCommand((char *)"vis n10,0");
     sprintf(txt, "> %u", GapThesholds[10]);
     SendText(tBox[10], txt);
 }

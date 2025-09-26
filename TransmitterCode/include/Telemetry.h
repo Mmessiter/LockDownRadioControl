@@ -794,12 +794,22 @@ void DoTheVariometer()
     if (needPlay)
         PlaySound(WAV_ID[zone]);
 }
-
+// **********************************************************************************************************
+void CalculateGapPercentages()
+{
+    if (!GapCount)
+        return;
+    for (int i = 0; i < 11; ++i)
+        GapPercentages[i] = (GapSets[i] * 100.0f) / GapCount;
+}
 // **********************************************************************************************************
 void PopulateGapsView()
 {
+
+    char PerCents[11][6] = {"t13", "t15", "t17", "t18", "t19", "t20", "t21", "t22", "t23", "t24", "t25"};
+    char visible[11][12] = {"vis n0,1", "vis n1,1", "vis n2,1", "vis n3,1", "vis n4,1", "vis n5,1", "vis n6,1", "vis n7,1", "vis n8,1", "vis n9,1", "vis n10,1"};
+    char invisible[11][12] = {"vis n0,0", "vis n1,0", "vis n2,0", "vis n3,0", "vis n4,0", "vis n5,0", "vis n6,0", "vis n7,0", "vis n8,0", "vis n9,0", "vis n10,0"};
     char Js[11][4] = {
-        // scrambled because they're not in order on the screen!
         "j0",
         "j10",
         "j11",
@@ -813,11 +823,17 @@ void PopulateGapsView()
         "j7",
     };
     char Ns[11][4] = {"n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10"};
+    char PercentText[6];
+    CalculateGapPercentages();
     for (int i = 0; i < 11; ++i)
     {
         if (GapSets[i] != PrevGapSets[i])
         {
             SendValue(Ns[i], GapSets[i]);
+            if (GapSets[i])
+                SendCommand(visible[i]);
+            else
+                SendCommand(invisible[i]);
             uint32_t n = GapSets[i];
             if (n > MaxBin)
                 MaxBin = n;
@@ -825,9 +841,20 @@ void PopulateGapsView()
             SendValue(Js[i], n);
             PrevGapSets[i] = GapSets[i];
         }
+        if (GapPercentages[i])
+        {
+            Str(PercentText, GapPercentages[i], 0);
+            strcat(PercentText, "%");
+            SendText(PerCents[i], PercentText);
+        }
+        else
+        {
+            SendText(PerCents[i], (char *)" ");
+        }
     }
     SendValue((char *)"n13", GapLongest);
     SendValue((char *)"n12", GapAverage);
+
     if (GapShortest < 1000)
         SendValue((char *)"n11", GapShortest);
 }

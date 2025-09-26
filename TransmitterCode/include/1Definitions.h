@@ -871,13 +871,7 @@ uint8_t RXCellCount = 2;
 bool JustHoppedFlag = true;
 bool LostContactFlag = true;
 uint32_t RecentPacketsLost = 0;
-uint32_t GapSum = 0;
-uint32_t GapLongest = 0;
-uint32_t GapShortest = 1000;
-uint32_t GapStart = 0;
-uint32_t ThisGap = 0;
-uint32_t GapAverage = 0;
-uint32_t GapCount = 0;
+
 // *********************************** RX GPS ***************************************
 float GPS_RX_Latitude = 0;
 float GPS_RX_Longitude = 0;
@@ -1252,8 +1246,17 @@ uint8_t Buddy_Hi_Position = 2;
 bool ParamPause = true;
 bool First_RPM_Data = true;
 uint32_t RotorRPM = 0;
+
+uint32_t GapSum = 0;
+uint32_t GapLongest = 0;
+uint32_t GapShortest = 1000;
+uint32_t GapStart = 0;
+uint32_t ThisGap = 0;
+uint32_t GapAverage = 0;
+uint32_t GapCount = 0;
 float GearRatio = 10.3;
 uint32_t GapSets[11] = {0};
+uint8_t GapPercentages[11] = {0};
 const uint16_t GapThesholds[11] =   {0, 4, 8, 10, 12, 15, 25, 50, 100, 250, 500};
 uint32_t MaxBin = 100;
 uint32_t PrevGapSets[11] = {0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff};
