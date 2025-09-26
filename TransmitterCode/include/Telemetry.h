@@ -841,22 +841,29 @@ void PopulateGapsView()
             SendValue(Js[i], n);
             PrevGapSets[i] = GapSets[i];
         }
-        if (GapPercentages[i])
+        if (GapSets[i])
         {
-            Str(PercentText, GapPercentages[i], 0);
-            strcat(PercentText, "%");
-            SendText(PerCents[i], PercentText);
+            if (!GapPercentages[i])
+            {
+                SendText(PerCents[i], (char *)"< 1%");
+            }
+            else
+            {
+                Str(PercentText, GapPercentages[i], 0);
+                strcat(PercentText, "%");
+                SendText(PerCents[i], PercentText);
+            }
         }
         else
         {
             SendText(PerCents[i], (char *)" ");
         }
-    }
-    SendValue((char *)"n13", GapLongest);
-    SendValue((char *)"n12", GapAverage);
+        SendValue((char *)"n13", GapLongest);
+        SendValue((char *)"n12", GapAverage);
 
-    if (GapShortest < 1000)
-        SendValue((char *)"n11", GapShortest);
+        if (GapShortest < 1000)
+            SendValue((char *)"n11", GapShortest);
+    }
 }
 // **********************************************************************************************************
 void StartGapsView()
