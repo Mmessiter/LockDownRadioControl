@@ -182,6 +182,7 @@ FASTRUN void TryOtherPipe()
     }
 }
 //************************************************************************************************************/
+// This function sends a simple ping packet to the receiver. It is used to reassure the receiver that the transmitter is still present
 void SimplePing()
 {
     uint16_t Ping = 0;
@@ -189,7 +190,7 @@ void SimplePing()
     {
         if (Radio1.write(&Ping, 2))
         {
-            SuccessfulPacket();
+            SuccessfulPacket(); // Get an ack payload that might change the frequency for next hop
         }
     }
 }
