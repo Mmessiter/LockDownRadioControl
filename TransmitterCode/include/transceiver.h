@@ -181,6 +181,18 @@ FASTRUN void TryOtherPipe()
         }
     }
 }
+//************************************************************************************************************/
+void SimplePing()
+{
+    uint16_t Ping = 0;
+    if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker)
+    {
+        if (Radio1.write(&Ping, 2))
+        {
+            SuccessfulPacket();
+        }
+    }
+}
 
 /************************************************************************************************************/
 void TryToReconnect() /* This function attempt to reconnect by very fast pings. And it has speeded up reconnection a lot.

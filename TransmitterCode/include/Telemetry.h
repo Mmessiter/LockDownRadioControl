@@ -799,15 +799,17 @@ void CalculateGapPercentages()
 {
     if (!GapCount)
         return;
-    for (int i = 0; i < 11; ++i)
+    for (int i = 0; i < 11; ++i){
         GapPercentages[i] = (GapSets[i] * 100.0f) / GapCount;
-}
+        SimplePing();
+    }
+    }
 // **********************************************************************************************************
 void PopulateGapsView()
 {
     char PerCents[11][6] = {"t13", "t15", "t17", "t18", "t19", "t20", "t21", "t22", "t23", "t24", "t25"};
     char visible[11][12] = {"vis n0,1", "vis n1,1", "vis n2,1", "vis n3,1", "vis n4,1", "vis n5,1", "vis n6,1", "vis n7,1", "vis n8,1", "vis n9,1", "vis n10,1"};
-    // char invisible[11][12] = {"vis n0,0", "vis n1,0", "vis n2,0", "vis n3,0", "vis n4,0", "vis n5,0", "vis n6,0", "vis n7,0", "vis n8,0", "vis n9,0", "vis n10,0"};
+    char invisible[11][12] = {"vis n0,0", "vis n1,0", "vis n2,0", "vis n3,0", "vis n4,0", "vis n5,0", "vis n6,0", "vis n7,0", "vis n8,0", "vis n9,0", "vis n10,0"};
     
     char Js[11][4] = {
         "j0",
@@ -828,14 +830,14 @@ void PopulateGapsView()
     ClearNextionCommand();
     for (int i = 0; i < 11; ++i)
     {
+        SimplePing();
         if (GapSets[i] != PrevGapSets[i])
         {
             BuildValue(Ns[i], GapSets[i]);
             if (GapSets[i])
                 BuildNextionCommand(visible[i]);
-          //  else
-          //      BuildNextionCommand(invisible[i]);
-          
+            else
+                BuildNextionCommand(invisible[i]);
             uint32_t n = GapSets[i];
             if (n > MaxBin)
                 MaxBin = n;
@@ -866,9 +868,12 @@ void PopulateGapsView()
         if (GapShortest < 1000)
             BuildValue((char *)"n11", GapShortest);
     }
+    SimplePing();
     SendCommand(NextionCommand);
+    SimplePing();
     // Look(NextionCommand); // This is to see how many were included for optimisation purposes
     ClearNextionCommand();
+    SimplePing();
 }
 // **********************************************************************************************************
 void StartGapsView()
