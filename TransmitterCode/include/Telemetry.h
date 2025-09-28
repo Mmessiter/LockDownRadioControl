@@ -49,7 +49,7 @@ FASTRUN bool CheckTXVolts()
             SendText(t17, nbuf);
         }
     }
-
+    SimplePing();
     return TXWarningFlag;
 }
 
@@ -117,6 +117,7 @@ FASTRUN bool CheckRXVolts()
             SendText(RXPC, spaces);
         }
     }
+    SimplePing();
     return RXWarningFlag;
 }
 
@@ -150,6 +151,7 @@ void CheckBatteryStates()
             SendCommand(WarnOff);
         LedIsBlinking = false;
     }
+    SimplePing();
 }
 
 /*********************************************************************************************************************************/
@@ -178,6 +180,7 @@ void ShowCurrentRate()
     default:
         break;
     }
+    SimplePing();
 }
 
 /*********************************************************************************************************************************/
@@ -201,6 +204,7 @@ void ShowAMS()
     {
         SendText(ams, AmsOffMsg);
     }
+    SimplePing();
 }
 
 /*********************************************************************************************************************************/
@@ -218,6 +222,7 @@ void ShowTrimToAll()
     {
         SendText(trall, CopyTrimsToNoneMSG);
     }
+    SimplePing();
 }
 
 /*********************************************************************************************************************************/
@@ -259,6 +264,7 @@ void PopulateGPSView()
         SendText(Dist, Vbuf);
         snprintf(Vbuf, 6, "%.3f", GPS_RX_CourseTo);
         SendText(BTo, Vbuf);
+        SimplePing();
         snprintf(Vbuf, 15, "%.12f", GPS_RX_Longitude);
         SendText(Lon, Vbuf);
         snprintf(Vbuf, 15, "%.12f", GPS_RX_Latitude);
@@ -446,6 +452,7 @@ void PopulateDataView()
             BuildValue(MeanFrameRate, AverageFrameRate); // SendValue(MeanFrameRate, AverageFrameRate);
             LastAverageFrameRate = AverageFrameRate;
         }
+    SimplePing();
     SendCommand(NextionCommand);
     // Look(NextionCommand); // This is to see how many were included for optimisation purposes
     ClearNextionCommand();
@@ -468,6 +475,7 @@ void ShowConnectionQuality()
         return;
     if ((ConnectionQuality != LastConnectionQuality) || (lastparam != ThisParam && !ParametersToBeSentPointer))
     {
+        SimplePing();
         SendText(FrontView_Connected, FrontView_Connected);
         SendCommand(Visible);
         LastConnectionQuality = ConnectionQuality;

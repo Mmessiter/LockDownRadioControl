@@ -186,11 +186,13 @@ FASTRUN void TryOtherPipe()
 void SimplePing()
 {
     uint16_t Ping = 0;
-    if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker)
+    uint32_t u = millis();
+    if ((u - LastPacketSentTime) >= FHSS_data::PaceMaker)
     {
         if (Radio1.write(&Ping, 2))
         {
             SuccessfulPacket(); // Get an ack payload that might change the frequency for next hop
+            LastPacketSentTime = u;
         }
     }
 }
