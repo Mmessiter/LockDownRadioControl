@@ -116,8 +116,6 @@ void MoveServos()
         return;
     LocalTimer = millis();
 
- 
-
     if (!CheckForCrazyValues())
     {
         TurnLedOff(); // if we have crazy values, turn the LED off and don't move the servos
@@ -564,7 +562,7 @@ void CheckMSPSerial()
     uint16_t temp = GetRPM(&data_in[0], p); // Process the received data which we requested last time
     if (temp != 0xffff)                     // Check if valid RPM was received (RPM of 65536 is very unlikely)
         RotorRPM = temp;                    // Process the received data
-    requestRPM();                           // Request RPM data from Nexus (which we will read next time...)                
+    requestRPM();                           // Request RPM data from Nexus (which we will read next time...)
 }
 #endif
 
@@ -576,7 +574,7 @@ void loop()
     // TimeTheMainLoop();
     KickTheDog();
     ReceiveData();
-    
+
 #ifdef USE_NEXUS
     CheckMSPSerial(); // this is to read the RPM value
 #endif
