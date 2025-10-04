@@ -1120,11 +1120,6 @@ FLASHMEM void setup()
     char FrontView_Mins[] = "Mins";
     char FrontView_Secs[] = "Secs";
     char ModelsFile[] = "models.dat";
-    char LoadingVis[] = "vis t0,1";
-    char Loading[] = "Loading ";
-    char dotdotdot[] = " ...";
-    char msg1[50];
-    char t0[] = "t0";
 
     pinMode(REDLED, OUTPUT);
     pinMode(GREENLED, OUTPUT);
@@ -1158,11 +1153,8 @@ FLASHMEM void setup()
         ErrorState = MODELSFILENOTFOUND; // if no file ... or no SD
     }
     RestoreBrightness();
-    SendCommand(LoadingVis); // ... Make the "Loading ..." message visible as early as possible.
-    strcpy(msg1, Loading);
-    strcat(msg1, ModelName); // Build up the message
-    strcat(msg1, dotdotdot); // Add "..." to the end
-    SendText(t0, msg1);      // Show 'Saving <model> ' on screen
+    SendCommand(pSplashView); // show splash screen **************************
+    CurrentView = SPLASHVIEW; // while loading ...
     GetTeensyMacAddress();
     ConvertBuddyPipeTo64BITS();
     Wire.begin();
@@ -1231,6 +1223,7 @@ FLASHMEM void setup()
     RationaliseBuddy();
     WarnUserIfBuddyBoxIsOn();
     ClearMostParameters();
+    DelayWithDog(4000);
     GotoFrontView();
 }
 // **************************************************************************************************************************************************************

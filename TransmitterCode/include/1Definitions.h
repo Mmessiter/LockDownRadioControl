@@ -236,6 +236,7 @@
 #define SERVOTYPESVIEW 41
 #define LOGFILESLISTVIEW 42
 #define GAPSVIEW 43
+#define SPLASHVIEW 44
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -1220,6 +1221,8 @@ char pGPSView[] = "page GPSView";
 char pPopupView[] = "page PopupView";
 char pBlankView[] = "page BlankView";
 char pGapsView[] = "page GapsView";
+char pSplashView[] = "page SplashView";
+
 
 int Previous_Current_Y = 0; // for scrolling log file
 int Max_Y = 666;
