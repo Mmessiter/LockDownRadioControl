@@ -156,6 +156,7 @@
 #include "Switches.h"
 #include "ADC-master/ADC.h"
 #include "Parameters.h"
+#include "ShowBMPfile.h"
 
 /*********************************************************************************************************************************/
 
@@ -1153,9 +1154,21 @@ FLASHMEM void setup()
         ErrorState = MODELSFILENOTFOUND; // if no file ... or no SD
     }
     RestoreBrightness();
+    
+    // SendCommand(pBlankView);
+    // SendText((char *) "t0", (char *) "TESTING...");
+    // if (displayBMP565_Fast((char *) "1.bmp", 80, 80)){
+    //     Look("OK");
+    // }else{
+    //     Look("FAILED");
+    // }
+    // DelayWithDog(2000);
+
     SendCommand(pSplashView); // show splash screen **************************
     CurrentView = SPLASHVIEW; // while loading ...
+
     GetTeensyMacAddress();
+
     ConvertBuddyPipeTo64BITS();
     Wire.begin();
     ScanI2c();

@@ -155,7 +155,10 @@ FASTRUN void FailedPacket()
     ReconnectingNow = true;
     LastPacketSentTime = 0; // Force a new packet to be sent immediately
     CheckGap();
-    TryToReconnect();
+    if (!LedWasGreen)
+        TryToConnect();
+    else
+        TryToReconnect();
     CheckInactivityTimeout();
 }
 /************************************************************************************************************/
@@ -197,19 +200,33 @@ void SimplePing()
     }
 }
 
+// // ************************************************************************************************************/
+void TryToConnect() // first connect before binding
+{
+    static uint8_t ReconnectionIndex = 0;
+   // Look1("Trying to connect...");
+    //Look(FHSS_data::Used_Recovery_Channels[ReconnectionIndex]);
+    if (!DontChangePipeAddress)
+        TryOtherPipe();
+    ++ReconnectionIndex;
+    if (ReconnectionIndex >= 3)
+    {
+        ReconnectionIndex = 0;
+    }
+    NextChannel = FHSS_data::Used_Recovery_Channels[ReconnectionIndex];
+    HopToNextChannel();
+}
+
 /************************************************************************************************************/
 void TryToReconnect() /* This function attempt to reconnect by very fast pings. And it has speeded up reconnection a lot.
                          It will attempt up to nine times and then revert to the main loop method in order that
-                         other functions are also serviced. */
+                         other functions are also serviced. This ONLY AFTER BINDING */
 {
-#ifdef DB_Reconnect
-    uint32_t starttime = millis();
-#endif
     uint8_t Iterations = 0;
-   // static uint32_t TimerTest = 0;
     uint16_t Ping = 0;
-    const uint8_t max_iterations = 9;
+    const uint8_t max_iterations = 6;
     uint8_t ReconnectionIndex = 0;
+   // Look("Trying to reconnect...");
     if (!DontChangePipeAddress)
         TryOtherPipe();
     while (Iterations <= max_iterations)
@@ -217,35 +234,18 @@ void TryToReconnect() /* This function attempt to reconnect by very fast pings. 
         ++ReconnectionIndex;
         if (ReconnectionIndex >= 3)
         {
-          ReconnectionIndex = 0;
-          KickTheDog();
-         // Look(millis() - TimerTest);
-         // TimerTest = millis();
+            ReconnectionIndex = 0;
+            KickTheDog();
         }
         NextChannel = FHSS_data::Used_Recovery_Channels[ReconnectionIndex];
-
         HopToNextChannel();
-        if (!LedWasGreen)
-            return;
         ++Iterations;
         if (Radio1.write(&Ping, 2))
         {
             SuccessfulPacket();
-#ifdef DB_Reconnect
-            Look1("YES! Iterations: ");
-            Look(Iterations);
-            Look1("Time taken: ");
-            Look(millis() - starttime);
-#endif
             return;
         }
     }
-#ifdef DB_Reconnect
-    Look1("No! Iterations: ");
-    Look(Iterations);
-    Look1("Time taken: ");
-    Look(millis() - starttime);
-#endif
 }
 /************************************************************************************************************/
 void FlushFifos()
