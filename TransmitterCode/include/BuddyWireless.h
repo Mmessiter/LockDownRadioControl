@@ -501,6 +501,20 @@ void GetSpecialPacket()
         }
     }
 }
+/************************************************************************************************************/
+void GetBuddyData() // For Master only
+{
+    if (BuddyMasterOnWireless)
+        GetSlaveChannelValuesWireless(); // Get buddy Wireless data and maybe use it.
+}
+/************************************************************************************************************/
+void DoWirelessBuddyListen()
+{                          // For Slave only
+    GetNewChannelValues(); // Read sticks and trims and switches etc
+    FixMotorChannel();
+    ShowServoPos();
+    GetSpecialPacket(); // Get the special packet and send our control data in the ask payload
+}
 
 //*************************************************************************************************************************
 void StartBuddyListen()

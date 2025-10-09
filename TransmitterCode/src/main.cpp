@@ -5024,33 +5024,7 @@ void FixMotorChannel()
         SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.
     }
 }
-/************************************************************************************************************/
-void GetBuddyData() // For Master only
-{
-    if (BuddyMasterOnWireless)
-        GetSlaveChannelValuesWireless(); // Get buddy Wireless data and maybe use it.
-}
-/************************************************************************************************************/
-void DoWirelessBuddyListen()
-{                          // For Slave only
-    GetNewChannelValues(); // Read sticks and trims and switches etc
-    FixMotorChannel();
-    ShowServoPos();
-    GetSpecialPacket(); // Get the special packet and send our control data in the ask payload
-}
 
-/************************************************************************************************************/
-
-// a utility for timing
-void DoTimer(bool Start)
-{
-    static uint32_t tt = 0;
-
-    if (Start)
-        tt = micros();
-    else
-        Look(micros() - tt);
-}
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
