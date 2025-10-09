@@ -155,7 +155,7 @@ FASTRUN void FailedPacket()
     ReconnectingNow = true;
     LastPacketSentTime = 0; // Force a new packet to be sent immediately
     CheckGap();
-    if (!LedWasGreen)
+    if (!LedWasGreen || BuddyMasterOnWireless)
         TryToConnect();
     else
         TryToReconnect();
@@ -188,6 +188,8 @@ FASTRUN void TryOtherPipe()
 // This function sends a simple ping packet to the receiver. It is used to reassure the receiver that the transmitter is still present
 void SimplePing()
 {
+    if (BuddyPupilOnWireless)
+        return;
     uint16_t Ping = 0;
     uint32_t u = millis();
     if ((u - LastPacketSentTime) >= FHSS_data::PaceMaker)

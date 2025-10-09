@@ -5013,9 +5013,6 @@ void FASTRUN ManageTransmitter()
         CheckHardwareTrims();
         GetBank(); // Check switch positions 20 times a secon
         TransmitterLastManaged = millis();
-#ifdef USE_STABILISATION
-        ReadGainsKnob();
-#endif
     }
 }
 
@@ -5042,6 +5039,8 @@ void DoWirelessBuddyListen()
     GetSpecialPacket(); // Get the special packet and send our control data in the ask payload
 }
 
+/************************************************************************************************************/
+
 // a utility for timing
 void DoTimer(bool Start)
 {
@@ -5058,8 +5057,6 @@ void DoTimer(bool Start)
 
 FASTRUN void loop()
 {
-    // DoTimer(0);
-    // DoTimer(1);
     ManageTransmitter();   // Do the needed chores ... (if there's time)
     GetNewChannelValues(); // Load SendBuffer with new servo positions very frequently
 
@@ -5095,7 +5092,6 @@ FASTRUN void loop()
         break;
     case LISTENMODE: // 6  ... listen only ... for wireless buddy
         DoWirelessBuddyListen();
-
         break;
     default:
         break;
