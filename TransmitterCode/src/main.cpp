@@ -1182,10 +1182,11 @@ FLASHMEM void setup()
     SendValue(FrontView_Special, SpecialColour);
     SendValue(FrontView_Highlight, HighlightColour);
     CurrentView = 254;
-
     SetAudioVolume(AudioVolume);
-    if (PlayFanfare)
+    if (PlayFanfare){
         PlaySound(WINDOWS1);
+        DelayWithDog(3000);
+    }
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
@@ -1236,7 +1237,7 @@ FLASHMEM void setup()
     RationaliseBuddy();
     WarnUserIfBuddyBoxIsOn();
     ClearMostParameters();
-    DelayWithDog(4000);
+    DelayWithDog(500);
     GotoFrontView();
 }
 // **************************************************************************************************************************************************************
