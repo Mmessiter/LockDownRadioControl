@@ -19,18 +19,15 @@
 #include <InterpolationLib.h>
 #include "ADC-master/ADC.h"
 
-#ifdef USE_BTLE
-#include <BTLE.h>
-#endif
 
 // *************************************************************************************
-//               TX VERSION NUMBER   (May 2020 - August 2025 Malcolm Messiter)       *
+//               TX VERSION NUMBER   (May 2020 - October 2025 Malcolm Messiter)       *
 //**************************************************************************************
 
 #define TXVERSION_MAJOR 2 // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 5
 #define TXVERSION_MINIMUS 4
-#define TXVERSION_EXTRA "E 23/09/25"
+#define TXVERSION_EXTRA "F 10/10/25"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
