@@ -188,7 +188,7 @@ FASTRUN void TryOtherPipe()
 // This function sends a simple ping packet to the receiver. It is used to reassure the receiver that the transmitter is still present
 void SimplePing()
 {
-    if (BuddyPupilOnWireless || BuddyMasterOnWireless)
+    if (BuddyPupilOnWireless || BuddyMasterOnWireless || LedWasRed)
         return;
     uint16_t Ping = 0;
     uint32_t u = millis();

@@ -879,7 +879,6 @@ void PopulateGapsView()
     SimplePing();
     SendCommand(NextionCommand);
     SimplePing();
-    // Look(NextionCommand); // This is to see how many were included for optimisation purposes
     ClearNextionCommand();
     SimplePing();
 }
