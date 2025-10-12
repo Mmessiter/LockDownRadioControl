@@ -45,7 +45,6 @@ bool LoadCorrectModel(uint64_t ModelID)
     {                                 //  Found it!
         UpdateModelsNameEveryWhere(); //  Show it everywhere.
         SaveAllParameters();          //  Save it
-        GotoFrontView();              //  pretty obvious really
         FailedID = 0;                 //  Reset the failed ID
         return true;                  //  Success
     }
@@ -55,7 +54,6 @@ bool LoadCorrectModel(uint64_t ModelID)
         ModelNumber = SavedModelNumber; //  Restore the current model number
         FailedID = ModelID;             //  Save the failed ID so we don't try again
         ReadOneModel(ModelNumber);      //  Restore the current model
-        GotoFrontView();                //  pretty obvious really
         UpdateModelsNameEveryWhere();   //  Show model name everywhere.
         return false;                   //  Failed to match the model
     }
@@ -169,7 +167,7 @@ void MasterDetected(bool Detected)
         if (LostMasterCount > LOSTCONTACTTHRESHOLD)
         {
             if (MasterIsAlive != 2)
-            { // MasterIsAlive = 2 means Master was already dead
+             { // MasterIsAlive = 2 means Master was already dead
                 SendText(wb, Mlost);
                 SendCommand(YesVisible);
                 MasterIsAlive = 2;
