@@ -286,8 +286,9 @@ void GreenLedOn()
         {
             LogConnection();
         }
-        ModelMatched = true;
-        BoundFlag = true;
+       
+       // ModelMatched = true;
+       // BoundFlag = true;
 
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0);
@@ -1202,7 +1203,6 @@ FLASHMEM void setup()
     {
         LogPowerOn();
         LogThisModel();
-        LogNewRateInUse();
     }
     SendText(FrontView_Connected, na);
     UpdateModelsNameEveryWhere();
@@ -4986,7 +4986,7 @@ void FASTRUN ManageTransmitter()
     DoTheVariometer();            // Do the variometer
     if (RightNow - LastTimeRead >= 1000)
     { // Only once a second for these..
-        if (((millis() - LedGreenMoment) <= 4500) && ((millis() - LedGreenMoment) >= 2500))
+        if (((millis() - LedGreenMoment) <= 6000) && ((millis() - LedGreenMoment) >= 4000))
         {
             ZeroDataScreen(); // this will clear the long gaps that might occur while binding.
         }

@@ -206,8 +206,8 @@ void SimplePing()
 void TryToConnect() // first connect before binding
 {
     static uint8_t ReconnectionIndex = 0;
-   // Look1("Trying to connect...");
-    //Look(FHSS_data::Used_Recovery_Channels[ReconnectionIndex]);
+    // Look1("Trying to connect...");
+    // Look(FHSS_data::Used_Recovery_Channels[ReconnectionIndex]);
     if (!DontChangePipeAddress)
         TryOtherPipe();
     ++ReconnectionIndex;
@@ -228,7 +228,7 @@ void TryToReconnect() /* This function attempt to reconnect by very fast pings. 
     uint16_t Ping = 0;
     const uint8_t max_iterations = 6;
     uint8_t ReconnectionIndex = 0;
-   // Look("Trying to reconnect...");
+    // Look("Trying to reconnect...");
     if (!DontChangePipeAddress)
         TryOtherPipe();
     while (Iterations <= max_iterations)

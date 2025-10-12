@@ -6,7 +6,9 @@
 #define MODEL_MATCH_H
 
 //****************************************************************************************/
+
 #define MACS_MATCHED (ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64)
+
 void CompareModelsIDs()
 {
     /*
@@ -20,32 +22,30 @@ void CompareModelsIDs()
     This function also saves the pilot from having always to select the correct model manually, which can get tedious and is also error prone.
     5-byte MAC addresses give 2^40 (≈1.1 trillion) unique combinations, making false matches vanishingly unlikely.
     */
-
     uint8_t SavedModelNumber = ModelNumber;
-    if ((BuddyPupilOnWireless) || (BuddyState == BUDDY_ON) || (ModelMatched && MACS_MATCHED))
+  
+    if (ModelMatched || BuddyPupilOnWireless || BuddyState == BUDDY_ON)
         return; //  Don't do this if any of these are ON
 
-    GotoFrontView();
-    RestoreBrightness();
     if (!AutoModelSelect)
     {
         BindNow();
         return; //  If AutoModelSelect is OFF, just bind with the current model
     }
+
     if (!ModelIdentified) //  We have both bits of Model ID?
         return;
+
     if (MACS_MATCHED) //  Is it a match for current model?
     {
-        if (AnnounceConnected) // Yes ...
-        {
-            Connect_MMmsg = MMMATCHED; // Set the message to be played later
-            if (UseLog)
-                LogModelMatched();
-        }
+        Connect_MMmsg = MMMATCHED; // Set the message to be played later
         ModelMatched = true; //  It's a match so start flying!
+        if (UseLog)
+            LogModelMatched();
         return;
     }
-    else
+
+    if (!MACS_MATCHED)
     {
         for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER; ++ModelNumber) //  Try to match the ID with a saved one
         {
