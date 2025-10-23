@@ -219,9 +219,6 @@ void EnsureMotorIsOff()
 
 void RedLedOn()
 {
-    char InVisible[] = "vis Quality,0";
-    char FrontView_Connected[] = "Connected";
-
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
     analogWrite(REDLED, GetLEDBrightness()); // Brightness is a function of maybe blinking
@@ -233,13 +230,13 @@ void RedLedOn()
             LogDisConnection();
         if (CurrentView == FRONTVIEW)
         {
-            SendText(FrontView_Connected, na);
+            SendText((char *)"Connected", na);
             SendCommand(WarnOff);
-            SendCommand(InVisible);
+            SendCommand((char *)"vis Quality,0");
         }
     }
 
-    SendCommand((char *)"vis rpm,0");  // This will make the RPM display visible
+    SendCommand((char *)"vis rpm,0");  // This will make the RPM display invisible
     SendText((char *)"Owner", TxName); // Put owner name back
     First_RPM_Data = true;             // ready to start RPM data ...
     ClearMostParameters();
@@ -262,13 +259,13 @@ void BlueLedOn()
 
 void GreenLedOn()
 {
-    char NotVisible[] = "vis wb,0";
+
     if (!ModelMatched || UsingDefaultPipeAddress)
         return; // no green led for wrong model
     if (!LedWasGreen)
     {
-        SendCommand(NotVisible); // Hide the binding button
-        BindingEnabled = false;  // Disable new binding after successful bind
+        SendCommand((char *)"vis wb,0"); // Hide the binding button
+        BindingEnabled = false;          // Disable new binding after successful bind
         LedGreenMoment = millis();
         LastShowTime = 0;
         ShowComms();
@@ -286,9 +283,6 @@ void GreenLedOn()
         {
             LogConnection();
         }
-       
-       // ModelMatched = true;
-       // BoundFlag = true;
 
         analogWrite(BLUELED, 0);
         analogWrite(REDLED, 0);
@@ -509,17 +503,11 @@ uint16_t ExponentialInterpolation(uint16_t InputValue, uint16_t InputChannel, ui
     uint16_t k = 0;
     if (InputValue >= ChannelCentre[InputChannel])
     {
-        k = MapWithExponential(InputValue - ChannelCentre[InputChannel], 0, ChannelMax[InputChannel] - ChannelCentre[InputChannel], 0, IntoHigherRes(CurveDots[4]) - //
-                                                                                                                                           IntoHigherRes(CurveDots[2]),
-                               Exponential[Bank][OutputChannel]) //
-            + IntoHigherRes(CurveDots[2]);                       //
+        k = MapWithExponential(InputValue - ChannelCentre[InputChannel], 0, ChannelMax[InputChannel] - ChannelCentre[InputChannel], 0, IntoHigherRes(CurveDots[4]) - IntoHigherRes(CurveDots[2]),Exponential[Bank][OutputChannel]) + IntoHigherRes(CurveDots[2]);
     }
     else
     {
-        k = MapWithExponential(ChannelCentre[InputChannel] - InputValue, 0, ChannelCentre[InputChannel] - ChannelMin[InputChannel], IntoHigherRes(CurveDots[2]) - //
-                                                                                                                                        IntoHigherRes(CurveDots[0]),
-                               0, Exponential[Bank][OutputChannel]) //
-            + IntoHigherRes(CurveDots[0]);
+        k = MapWithExponential(ChannelCentre[InputChannel] - InputValue, 0, ChannelCentre[InputChannel] - ChannelMin[InputChannel], IntoHigherRes(CurveDots[2]) -  IntoHigherRes(CurveDots[0]),0, Exponential[Bank][OutputChannel]) + IntoHigherRes(CurveDots[0]);
     }
     return k;
 }
@@ -1155,7 +1143,7 @@ FLASHMEM void setup()
         ErrorState = MODELSFILENOTFOUND; // if no file ... or no SD
     }
     RestoreBrightness();
-    
+
     // SendCommand(pBlankView);
     // SendText((char *) "t0", (char *) "TESTING...");
     // if (displayBMP565_Fast((char *) "1.bmp", 80, 80)){
@@ -1184,7 +1172,8 @@ FLASHMEM void setup()
     SendValue(FrontView_Highlight, HighlightColour);
     CurrentView = 254;
     SetAudioVolume(AudioVolume);
-    if (PlayFanfare){
+    if (PlayFanfare)
+    {
         PlaySound(WINDOWS1);
         DelayWithDog(3000);
     }

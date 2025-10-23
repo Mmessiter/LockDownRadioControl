@@ -1169,8 +1169,7 @@ int LastRXModelMaxAltitude = 0;
 float LastRXTemperature = 0;
 uint8_t RadioNumber = 0;
 uint32_t LastRXReceivedPackets = 0;
-// uint8_t StabilisedBank = 3;
-// uint8_t LevelledBank = 3; // 3
+
 
 char ParaNames[9][30] = {
     "FailSafe positions", // 1
