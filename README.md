@@ -164,7 +164,7 @@ Here is a brief summary of the features supported at the time of writing (July 2
 | PCB & Modules      | Nextion Display               | NX8048P050, 5" capacitive touch       | 1       |
 | PCB & Modules      | ML01DP5                       | RF module                             | 1       |
 | PCB & Modules      | POLOLU-2808 Electronic switch | -                                     | 1       |
-| PCB & Modules      | microSD card                  | 32 GB, FAT32 formatted                | 1       |
+| PCB & Modules      | microSD card                  | Up to 2 TB, exFAT formatted           | 1       |
 | PCB & Modules      | RTC module                    | I2C, DS1307                           | 1       |
 | Power & Regulation | Voltage Regulator             | Pololu 5V 1A S13V10F5 or 7805         | 2       |
 | Power & Regulation | AMS 1117 3.3V regulator       | -                                     | 1       |
