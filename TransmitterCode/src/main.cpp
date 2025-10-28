@@ -503,11 +503,11 @@ uint16_t ExponentialInterpolation(uint16_t InputValue, uint16_t InputChannel, ui
     uint16_t k = 0;
     if (InputValue >= ChannelCentre[InputChannel])
     {
-        k = MapWithExponential(InputValue - ChannelCentre[InputChannel], 0, ChannelMax[InputChannel] - ChannelCentre[InputChannel], 0, IntoHigherRes(CurveDots[4]) - IntoHigherRes(CurveDots[2]),Exponential[Bank][OutputChannel]) + IntoHigherRes(CurveDots[2]);
+        k = MapWithExponential(InputValue - ChannelCentre[InputChannel], 0, ChannelMax[InputChannel] - ChannelCentre[InputChannel], 0, IntoHigherRes(CurveDots[4]) - IntoHigherRes(CurveDots[2]), Exponential[Bank][OutputChannel]) + IntoHigherRes(CurveDots[2]);
     }
     else
     {
-        k = MapWithExponential(ChannelCentre[InputChannel] - InputValue, 0, ChannelCentre[InputChannel] - ChannelMin[InputChannel], IntoHigherRes(CurveDots[2]) -  IntoHigherRes(CurveDots[0]),0, Exponential[Bank][OutputChannel]) + IntoHigherRes(CurveDots[0]);
+        k = MapWithExponential(ChannelCentre[InputChannel] - InputValue, 0, ChannelCentre[InputChannel] - ChannelMin[InputChannel], IntoHigherRes(CurveDots[2]) - IntoHigherRes(CurveDots[0]), 0, Exponential[Bank][OutputChannel]) + IntoHigherRes(CurveDots[0]);
     }
     return k;
 }
@@ -1094,6 +1094,20 @@ void initADC() //
     adc->setConversionSpeed(ADC_CONVERSION_SPEED::MED_SPEED);
     adc->setSamplingSpeed(ADC_SAMPLING_SPEED::MED_SPEED);
 }
+//*********************************************************************************************************************************/
+void SetBrightness(uint8_t B) // 0 to 100
+{
+    char cmd[20];
+    char dim[] = "dim=";
+    char nb[10];
+    strcpy(cmd, dim);
+    Str(nb, B, 0);
+    strcat(cmd, nb);
+    ScreenIsOff = false;
+    SendCommand(cmd);
+    ScreenTimeTimer = millis(); // reset screen counter
+}
+
 /*********************************************************************************************************************************/
 // SETUP
 /*********************************************************************************************************************************/
@@ -1142,22 +1156,10 @@ FLASHMEM void setup()
     {
         ErrorState = MODELSFILENOTFOUND; // if no file ... or no SD
     }
-    RestoreBrightness();
-
-    // SendCommand(pBlankView);
-    // SendText((char *) "t0", (char *) "TESTING...");
-    // if (displayBMP565_Fast((char *) "1.bmp", 80, 80)){
-    //     Look("OK");
-    // }else{
-    //     Look("FAILED");
-    // }
-    // DelayWithDog(2000);
-
+    SetBrightness(1);         // start with screen almost off
     SendCommand(pSplashView); // show splash screen **************************
     CurrentView = SPLASHVIEW; // while loading ...
-
     GetTeensyMacAddress();
-
     ConvertBuddyPipeTo64BITS();
     Wire.begin();
     ScanI2c();
@@ -1173,10 +1175,15 @@ FLASHMEM void setup()
     CurrentView = 254;
     SetAudioVolume(AudioVolume);
     if (PlayFanfare)
-    {
         PlaySound(WINDOWS1);
-        DelayWithDog(3000);
+    for (int i = 0; i < 100; ++i) // fade in screen brightness
+    {
+        SetBrightness(i);
+        DelayWithDog(15);
     }
+    if (PlayFanfare)
+        DelayWithDog(1000);
+
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
@@ -1218,9 +1225,6 @@ FLASHMEM void setup()
             }
         }
     }
-#ifdef USE_STABILISATION
-    init_gains_pin();
-#endif
     initADC();
     FHSS_data::PaceMaker = PACEMAKER;
     RationaliseBuddy();
@@ -1228,6 +1232,7 @@ FLASHMEM void setup()
     ClearMostParameters();
     DelayWithDog(500);
     GotoFrontView();
+    RedLedOn();
 }
 // **************************************************************************************************************************************************************
 void RationaliseBuddy()
@@ -4820,7 +4825,12 @@ void Close_TX_Down()
         SaveAllParameters();     // Save the model if it's not 'Not in use'
         DelayWithDog(500);       // Wait for 0.5 seconds to allow the message to be displayed
     }
-    SendText(t0, ClosingDown); // Show 'Closing down ...' on screen
+    SendText(t0, ClosingDown);    // Show 'Closing down ...' on screen
+    for (int i = 0; i < 100; ++i) // fade in screen brightness
+    {
+        SetBrightness(100 - i);
+        DelayWithDog(25);
+    }
     if (UseLog)
     {
         strcpy(LogFileName, ""); // avoid logging to the wrong file
