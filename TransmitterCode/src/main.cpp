@@ -4851,16 +4851,19 @@ void CheckWhetherToEnableBinding()
     char wb[] = "wb"; // wb is the name of the label on front view
     char YesVisible[] = "vis wb,1";
 
-    if (!digitalRead(BUTTON_SENSE_PIN) && ((millis()) < 5000) && (millis() > 1250)) //  To initiate Binding, hold ON button for 2 secs
+    if (!digitalRead(BUTTON_SENSE_PIN) && ((millis()) < 5000) && (millis() >= 2000)) //  To initiate Binding, hold ON button for 2-5 secs
     {
         if (!BindingEnabled)
         {
-            PlaySound(BEEPCOMPLETE);   // Play sound to indicate binding enabled
-            delay(250);                // Wait for chirp to finish
-            PlaySound(BINDINGENABLED); // Play sound to indicate binding enabled
-            SendText(wb, Mfound);      // Show binding enabled
-            SendCommand(YesVisible);   // Show binding enabled
-            BindingEnabled = true;     // Set binding enabled flag
+            SendCommand(pFrontView);      // Go to front view
+            CurrentView = FRONTVIEW;      // Set to FrontView
+            UpdateModelsNameEveryWhere(); // Update model name
+            PlaySound(BEEPCOMPLETE);      // Play sound to indicate binding enabled
+            delay(250);                   // Wait for chirp to finish
+            PlaySound(BINDINGENABLED);    // Play sound to indicate binding enabled
+            SendText(wb, Mfound);         // Show binding enabled
+            SendCommand(YesVisible);      // Show binding enabled
+            BindingEnabled = true;        // Set binding enabled flag
         }
         return;
     }
