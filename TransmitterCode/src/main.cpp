@@ -156,7 +156,7 @@
 #include "Switches.h"
 #include "ADC-master/ADC.h"
 #include "Parameters.h"
-#include "ShowBMPfile.h"
+
 
 /*********************************************************************************************************************************/
 
