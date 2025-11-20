@@ -1079,6 +1079,7 @@ uint8_t ConnectionAssessSeconds = 1;
 uint32_t PreviousPowerOffTimer = 0;
 bool ModelIdentified = false;
 bool ModelMatched = false;
+bool ModelMatchFailed = false;
 bool AutoModelSelect = true;
 uint32_t TrimTimer = 0;
 uint32_t LastPassivePacketTime = 0;

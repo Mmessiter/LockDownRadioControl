@@ -180,6 +180,7 @@ void ClearMostParameters()
     RXSuccessfulPackets = 0;
     TotalLostPackets = 0;
     TotalPacketsAttempted = 0;
+    ModelMatchFailed = false;
 
     strcpy(LogFileName, "");
     for (int i = 0; i < CHANNELSUSED; ++i)
@@ -4782,6 +4783,7 @@ void GotoFrontView()
     if (BuddyPupilOnWireless)
         StartBuddyListen();
     CurrentView = FRONTVIEW;
+    ModelMatchFailed = false;
     First_RPM_Data = true;
     RestoreBrightness();
 }

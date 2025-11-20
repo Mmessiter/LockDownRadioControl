@@ -23,8 +23,8 @@ void CompareModelsIDs()
     5-byte MAC addresses give 2^40 (≈1.1 trillion) unique combinations, making false matches vanishingly unlikely.
     */
     uint8_t SavedModelNumber = ModelNumber;
-  
-    if (ModelMatched || BuddyPupilOnWireless || BuddyState == BUDDY_ON)
+
+    if (ModelMatched || BuddyPupilOnWireless || BuddyState == BUDDY_ON || ModelMatchFailed)
         return; //  Don't do this if any of these are ON
 
     if (!AutoModelSelect)
@@ -39,7 +39,7 @@ void CompareModelsIDs()
     if (MACS_MATCHED) //  Is it a match for current model?
     {
         Connect_MMmsg = MMMATCHED; // Set the message to be played later
-        ModelMatched = true; //  It's a match so start flying!
+        ModelMatched = true;       //  It's a match so start flying!
         if (UseLog)
             LogModelMatched();
         return;
@@ -77,6 +77,10 @@ void CompareModelsIDs()
             Connect_MMmsg = NOTFOUND; // Set the message to be played later
         }
     }
-    BindNow(); // Always bind after considering model's MAC ID, whether matched, found, or not found (this last one is needed for New Models).
+    ModelMatchFailed = true;
+    PlaySound(Connect_MMmsg);
+    MsgBox((char *)"page FrontView", (char *)"Turn off AMS to connect anyway.");
+    // Binding not allowed without model match.
+    // BindNow(); // Always bind after considering model's MAC ID, whether matched, found, or not found (this last one is needed for New Models).
 }
 #endif
