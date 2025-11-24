@@ -42,6 +42,7 @@ void CompareModelsIDs()
         ModelMatched = true;       //  It's a match so start flying!
         if (UseLog)
             LogModelMatched();
+        BindNow();
         return;
     }
 
@@ -67,6 +68,8 @@ void CompareModelsIDs()
                     LogModelFound();
             }
             SaveAllParameters(); //  Save it
+            BindNow();
+            return;
         }
         else
         {
@@ -78,9 +81,7 @@ void CompareModelsIDs()
         }
     }
     ModelMatchFailed = true;
-    PlaySound(Connect_MMmsg);
-    MsgBox((char *)"page FrontView", (char *)"Turn off AMS to connect anyway.");
-    // Binding not allowed without model match.
-    // BindNow(); // Always bind after considering model's MAC ID, whether matched, found, or not found (this last one is needed for New Models).
+    PlaySound(NOTFOUND); // Binding not allowed without model match.
+    MsgBox((char *)"page FrontView", (char *)"AMS is ON and Model ID not found!\r\nConnection not allowed.\r\nTurn off AMS to connect anyway.");
 }
 #endif
