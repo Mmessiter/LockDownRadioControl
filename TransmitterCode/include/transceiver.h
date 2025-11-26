@@ -416,8 +416,10 @@ void DrawFhssBox()
     int y2 = y1 + 255;
     int y3 = y2 + YY1EXTRA;
     int xd1 = 20;
-    uint16_t p = 158; // separation between ghz marks
-    uint16_t b = 10;  // height of ghz mark
+
+    uint16_t p = 5; // pixels per frequency
+
+    uint16_t b = 10; // height of ghz mark
 
     char STR125GHZ[] = "\"2.525\""; // 125th channel
     char STR96GHZ[] = "\"2.496\"";  // 96th channel
@@ -444,20 +446,27 @@ void DrawFhssBox()
     Str(NewWhite, ForeGroundColour, 0);
     Str(NewWhite1, ForeGroundColour, 1);
 
-    SendCharArray(CB, draw, Str(NB1, x1 - 5, 1), Str(NB2, y1, 1), Str(NB3, x2 - 1, 1), Str(NB4, y2, 1), NewWhite, NA, NA, NA, NA, NA, NA);
+    SendCharArray(CB, draw, Str(NB1, x1 - 5, 1), Str(NB2, y1, 1), Str(NB3, x2 + 5, 1), Str(NB4, y2, 1), NewWhite, NA, NA, NA, NA, NA, NA);
     SendCharArray(CB, xstr, Str(NB, 0, 1), Str(NB1, y3, 1), Str(NB2, 70, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), GHZ);
     SendCharArray(CB, xstr, Str(NB, x1 - xd1, 1), Str(NB1, y3, 1), Str(NB2, 80, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR1GHZ);
     DrawLine(x1, y2, x1, y2 + b, ForeGroundColour);
     SendCharArray(CB, xstr, Str(NB, (x1 + ((x2 - x1) / 4) - xd1), 1), Str(NB1, y3, 1), Str(NB2, 90, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR32GHZ);
+    p *= 32;
     DrawLine(x1 + p, y2, x1 + p, y2 + b, ForeGroundColour);
     SendCharArray(CB, xstr, Str(NB, (x1 + ((x2 - x1) / 2) - xd1), 1), Str(NB1, y3, 1), Str(NB2, 90, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR64GHZ);
-    DrawLine(x1 + p * 2, y2, x1 + p * 2, y2 + b, ForeGroundColour);
+    DrawLine(x1 + p, y2, x1 + p, y2 + b, ForeGroundColour);
     SendCharArray(CB, xstr, Str(NB, (x1 + (((x2 - x1) / 4) * 3) - xd1), 1), Str(NB1, y3, 1), Str(NB2, 90, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR96GHZ);
-    DrawLine(x1 + p * 3, y2, x1 + p * 3, y2 + b, ForeGroundColour);
+    p += 160;
+    DrawLine(x1 + p, y2, x1 + p, y2 + b, ForeGroundColour);
     SendCharArray(CB, xstr, Str(NB, (x2 - xd1), 1), Str(NB1, y3, 1), Str(NB2, 80, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR125GHZ);
-    DrawLine(x1 + p * 4, y2, x1 + p * 4, y2 + b, ForeGroundColour);
-    SendCharArray(CB, fyll, Str(NB, (x1 + 1), 1), Str(NB1, (y1 + 1), 1), Str(NB2, ((128 * 5) - 2), 1), Str(NB3, 254, 1), Str(NB4, BackGroundColour, 0), NA, NA, NA, NA, NA, NA);
-    DrawLine(x1 + p * 5, y2, x1 + p * 5, y2 + b, ForeGroundColour);
+    p += 160;
+    DrawLine(x1 + p, y2, x1 + p, y2 + b, ForeGroundColour);
+    SendCharArray(CB, fyll, Str(NB, (x1), 1), Str(NB1, (y1 + 1), 1), Str(NB2, ((128 * 5) - 2), 1), Str(NB3, 254, 1), Str(NB4, BackGroundColour, 0), NA, NA, NA, NA, NA, NA);
+    p += 160;
+    DrawLine(x1 + p, y2, x1 + p, y2 + b, ForeGroundColour);
+    p = 419; // 83.5 * 5 = 417.5 The top of the legal ISM band
+    DrawLine(x1 + p, y1 + 1, x1 + p, y2 - 1, Red);
+    DrawLine(x1 + p + 1, y1 + 1, x1 + p + 1, y2 - 1, Red);
 }
 
 /************************************************************************************************************/
@@ -466,12 +475,14 @@ void DrawFhssBox()
 
 void ScanAllChannels(bool cls)
 {
-    int x1 = xx1+1;
-    int y1 = yy1;
-    int Sc;
-    int x2, y2;
-    int BlobHeight = 4; // Blobs are 4x4 pixels
-    char NB[12];        // Number Buffer
+    const uint16_t x1 = xx1;
+    const uint16_t y1 = yy1;
+    const uint8_t BlobHeight = 4; // Blobs are 4x5 pixels
+    const uint8_t BlobWidth = 5;  // Blobs are 4x5 pixels
+    uint16_t Sc;
+    uint16_t x2, y2;
+
+    char NB[12]; // Number Buffer
     char NB1[12];
     char NB2[12];
     char NB3[12];
@@ -499,6 +510,7 @@ void ScanAllChannels(bool cls)
         }
         return;
     }
+
     Str(NewYellow, HighlightColour, 0);
     for (Sc = 0; Sc <= 125; ++Sc)
     {
@@ -518,7 +530,7 @@ void ScanAllChannels(bool cls)
             {
                 AllChannels[Sc] += BlobHeight;
                 ++TotalHits[Sc];
-                SendCharArray(CB, fyll, Str(NB, x2, 1), Str(NB1, (y2), 1), Str(NB2, 5, 1), Str(NB3, BlobHeight, 1), NewYellow, NA, NA, NA, NA, NA, NA);
+                SendCharArray(CB, fyll, Str(NB, x2, 1), Str(NB1, (y2), 1), Str(NB2, BlobWidth, 1), Str(NB3, BlobHeight, 1), NewYellow, NA, NA, NA, NA, NA, NA);
             }
         }
         else
@@ -528,7 +540,7 @@ void ScanAllChannels(bool cls)
             { // must see no carrier >= ScanSensitivity times before reducing the trace
                 if (AllChannels[Sc] >= (BlobHeight))
                 {
-                    SendCharArray(CB, fyll, Str(NB, x2, 1), Str(NB1, (y2 + BlobHeight), 1), Str(NB2, 5, 1), Str(NB3, BlobHeight, 1), Str(NB4, BackGroundColour, 0), NA, NA, NA, NA, NA, NA);
+                    SendCharArray(CB, fyll, Str(NB, x2, 1), Str(NB1, (y2 + BlobHeight), 1), Str(NB2, BlobWidth, 1), Str(NB3, BlobHeight, 1), Str(NB4, BackGroundColour, 0), NA, NA, NA, NA, NA, NA);
                     AllChannels[Sc] -= (BlobHeight);
                     NoCarrier[Sc] = 0;
                 }

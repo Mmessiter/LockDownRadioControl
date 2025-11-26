@@ -10,7 +10,7 @@
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 5
 #define RXVERSION_MINIMUS 4
-#define RXVERSION_EXTRA 'F' // 12 October 2025
+#define RXVERSION_EXTRA 'G' // 24 November 2025
 #define HOPTIME 8           // gives about 100Hz FHSS
 // **************************************************************************
 
@@ -25,7 +25,7 @@
  //#define USE_NEXUS // if DEFINED then USE_PWM will be UNDEFINED ( = commented out) and USE_SBUS must be DEFINED ( = uncommented) to use the Nexus transceiver
 
 #define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
-//#define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
+#define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
 #define USE_SBUS
 
 #ifndef USE_NEXUS
