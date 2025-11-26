@@ -401,10 +401,15 @@ void DoScanInit()
     BoundFlag = false;
     ScanAllChannels(true);
 }
-
+//************************************************************************************************************/
+void DrawDoubleLine(int x1, int y1, int x2, int y2, uint16_t colour)
+{ // This function draws a double line because a single line is simply too thin.
+    DrawLine(x1, y1, x2, y2, colour);
+    DrawLine(x1 + 1, y1, x2 + 1, y2, colour);
+}
 /************************************************************************************************************/
 // This function draws or re-draws and clears the box that display wave band scanning information
-#define xx1 90      // Needed below... Edit xx1,yy1 to move box ....
+#define xx1 85      // Needed below... Edit xx1,yy1 to move box ....
 #define yy1 70      // Needed below... Edit xx1,yy1 to move box ....
 #define YY1EXTRA 15 // 15
 
@@ -415,19 +420,15 @@ void DrawFhssBox()
     int x2 = x1 + (128 * 5);
     int y2 = y1 + 255;
     int y3 = y2 + YY1EXTRA;
-    int xd1 = 20;
-
-    uint16_t p = 5; // pixels per frequency
-
-    uint16_t b = 10; // height of ghz mark
-
-    char STR125GHZ[] = "\"2.525\""; // 125th channel
-    char STR96GHZ[] = "\"2.496\"";  // 96th channel
-    char STR64GHZ[] = "\"2.464\"";  // 64th channel
-    char STR32GHZ[] = "\"2.432\"";  // 32nd channel
-    char STR1GHZ[] = "\"2.400\"";   // 1st channel
-    char GHZ[] = "\"GHz\"";
-    char CB[150]; // COMMAND BUFFER
+    int xd1 = 25;                   // to center the frequency strings
+    uint16_t p = 0;                 // pixels per frequency
+    uint16_t b = 10;                // height of ghz mark
+    char STR125GHZ[]    = "\"2.525\""; // 125th channel
+    char STR96GHZ[]     = "\"2.496\"";  // 96th channel
+    char STR64GHZ[]     = "\"2.464\"";  // 64th channel
+    char STR32GHZ[]     = "\"2.432\"";  // 32nd channel
+    char STR1GHZ[]      = "\"2.400\"";   // 1st channel
+    char CB[150];                   // COMMAND BUFFER
     char draw[] = "draw ";
     char xstr[] = "xstr ";
     char NB[9]; // Number Buffers...
@@ -443,30 +444,47 @@ void DrawFhssBox()
     char NewWhite[15];
     char NewWhite1[15];
     char fyll[] = "fill ";
+    char X1_pos[9];
+
+    strcpy(X1_pos, Str(NB, x1 + p - xd1, 1));
+
     Str(NewWhite, ForeGroundColour, 0);
     Str(NewWhite1, ForeGroundColour, 1);
-
     SendCharArray(CB, draw, Str(NB1, x1 - 5, 1), Str(NB2, y1, 1), Str(NB3, x2 + 5, 1), Str(NB4, y2, 1), NewWhite, NA, NA, NA, NA, NA, NA);
-    SendCharArray(CB, xstr, Str(NB, 0, 1), Str(NB1, y3, 1), Str(NB2, 70, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), GHZ);
-    SendCharArray(CB, xstr, Str(NB, x1 - xd1, 1), Str(NB1, y3, 1), Str(NB2, 80, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR1GHZ);
-    DrawLine(x1, y2, x1, y2 + b, ForeGroundColour);
-    SendCharArray(CB, xstr, Str(NB, (x1 + ((x2 - x1) / 4) - xd1), 1), Str(NB1, y3, 1), Str(NB2, 90, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR32GHZ);
-    p *= 32;
-    DrawLine(x1 + p, y2, x1 + p, y2 + b, ForeGroundColour);
-    SendCharArray(CB, xstr, Str(NB, (x1 + ((x2 - x1) / 2) - xd1), 1), Str(NB1, y3, 1), Str(NB2, 90, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR64GHZ);
-    DrawLine(x1 + p, y2, x1 + p, y2 + b, ForeGroundColour);
-    SendCharArray(CB, xstr, Str(NB, (x1 + (((x2 - x1) / 4) * 3) - xd1), 1), Str(NB1, y3, 1), Str(NB2, 90, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR96GHZ);
+    SendCharArray(CB, draw, Str(NB1, x1 - 6, 1), Str(NB2, y1 - 1, 1), Str(NB3, x2 + 6, 1), Str(NB4, y2 + 1, 1), NewWhite, NA, NA, NA, NA, NA, NA);
+
+    SendCharArray(CB, xstr, X1_pos, Str(NB1, y3, 1), Str(NB2, 80, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR1GHZ);
+    
+    DrawDoubleLine(x1 + p, y2, x1 + p, y2 + b, ForeGroundColour);
     p += 160;
-    DrawLine(x1 + p, y2, x1 + p, y2 + b, ForeGroundColour);
-    SendCharArray(CB, xstr, Str(NB, (x2 - xd1), 1), Str(NB1, y3, 1), Str(NB2, 80, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR125GHZ);
+    strcpy(X1_pos, Str(NB, x1 + p - xd1, 1));
+
+    SendCharArray(CB, xstr, X1_pos, Str(NB1, y3, 1), Str(NB2, 90, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR32GHZ);
+    
+    DrawDoubleLine(x1 + p, y2, x1 + p, y2 + b, ForeGroundColour);
     p += 160;
-    DrawLine(x1 + p, y2, x1 + p, y2 + b, ForeGroundColour);
+    strcpy(X1_pos, Str(NB, x1 + p - xd1, 1));
+
+    SendCharArray(CB, xstr, X1_pos, Str(NB1, y3, 1), Str(NB2, 90, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR64GHZ);
+    
+    DrawDoubleLine(x1 + p, y2, x1 + p, y2 + b, ForeGroundColour);
+    p += 160;
+    strcpy(X1_pos, Str(NB, x1 + p - xd1, 1));
+
+    SendCharArray(CB, xstr, X1_pos, Str(NB1, y3, 1), Str(NB2, 90, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR96GHZ);
+    
+    DrawDoubleLine(x1 + p, y2, x1 + p, y2 + b, ForeGroundColour);
+    p += 160;
+    strcpy(X1_pos, Str(NB, x1 + p - xd1, 1));
+
+    SendCharArray(CB, xstr, X1_pos, Str(NB1, y3, 1), Str(NB2, 80, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR125GHZ);
+    DrawDoubleLine(x1 + p, y2, x1 + p, y2 + b, ForeGroundColour);
+
     SendCharArray(CB, fyll, Str(NB, (x1), 1), Str(NB1, (y1 + 1), 1), Str(NB2, ((128 * 5) - 2), 1), Str(NB3, 254, 1), Str(NB4, BackGroundColour, 0), NA, NA, NA, NA, NA, NA);
-    p += 160;
-    DrawLine(x1 + p, y2, x1 + p, y2 + b, ForeGroundColour);
-    p = 419; // 83.5 * 5 = 417.5 The top of the legal ISM band
-    DrawLine(x1 + p, y1 + 1, x1 + p, y2 - 1, Red);
-    DrawLine(x1 + p + 1, y1 + 1, x1 + p + 1, y2 - 1, Red);
+
+    p = 419; // 83.5 * 5 = 417.5 The top of the legal ISM ban
+    DrawDoubleLine(x1 + p, y1 + 1, x1 + p, y2 - 1, SpecialColour);
+    DrawDoubleLine(x1 + p + 2, y1 + 1, x1 + p + 2, y2 - 1, SpecialColour);
 }
 
 /************************************************************************************************************/
@@ -477,8 +495,8 @@ void ScanAllChannels(bool cls)
 {
     const uint16_t x1 = xx1;
     const uint16_t y1 = yy1;
-    const uint8_t BlobHeight = 4; // Blobs are 4x5 pixels
-    const uint8_t BlobWidth = 5;  // Blobs are 4x5 pixels
+    const uint8_t BlobHeight = 4; // Blobs are 4 x 5 pixels
+    const uint8_t BlobWidth = 5;  // Blobs are 4 x 5 pixels
     uint16_t Sc;
     uint16_t x2, y2;
 
@@ -558,6 +576,9 @@ void ScanAllChannels(bool cls)
         if (TotalHits[Sc] >= TotalHits[WorstScore])
             WorstScore = Sc;
     }
+
+    // uint16_t BestFreq = 2400 + BestScore;
+    // uint16_t WorstFreq = 2400 + WorstScore;
 
     SendValue(Quietest, BestScore);
     SendValue(Noisyest, WorstScore);
