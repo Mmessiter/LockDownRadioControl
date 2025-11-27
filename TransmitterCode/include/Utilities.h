@@ -1252,26 +1252,33 @@ int GetIntFromTextIn(uint8_t offset)
         NextionCommand.F4Bytes[i] = TextIn[i + offset];
     return NextionCommand.FDWord;
 }
+// ************************************************************************************************************/
+void ShowMismatchMsg()
+{
+    char MisMatchCommand[] = "vis Warning,1";
+    char wbon[] = "vis wb,1";
+    char SCon[]= "vis Owner,1";
+    char TDetails[40];
+    char RDetails[40];
+    strcpy(RDetails, (char *)"RX:");
+    strcat(RDetails, ReceiverVersionNumber);
+    strcpy(TDetails, (char *)"TX:");
+    strcat(TDetails, TransmitterVersionNumber);
+    SendText((char *)"Warning", (char *)"!! ->Versions<- !!");
+    SendText((char *)"wb", TDetails);
+    SendText((char *)"Owner", RDetails);
+    SendCommand(MisMatchCommand);
+    SendCommand(wbon);
+    SendCommand(SCon);
+}
 
 /************************************************************************************************************/
 
 void WarnUserOfVersionsMismatch()
 {
-    char TXVersionNumber[] = "Version mismatch!\r\n\r\nTX = ";
-    char RXVersionNumber[] = "\r\nRX = ";
-    char TheFix[] = "\r\nPlease update TX and/or RX \r\nto the same version.";
-    char Prompt[150];
-    char FrontView[] = "page FrontView";
-    strcpy(Prompt, TXVersionNumber);
-    strcat(Prompt, TransmitterVersionNumber);
-    strcat(Prompt, RXVersionNumber);
-    strcat(Prompt, ReceiverVersionNumber);
-    strcat(Prompt, TheFix); // Build up the prompt
+    VersionMismatch = true;
+    ShowMismatchMsg();
     PlaySound(WHAHWHAHMSG); // Play warning sound
-    MsgBox(FrontView, Prompt);
-    ForceDataRedisplay(); // force redisplay of data on FrontView
-    CurrentView = 255;    // force redisplay of data on FrontView
-    GotoFrontView();
 }
 
 /************************************************************************************************************/

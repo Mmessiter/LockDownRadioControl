@@ -21,13 +21,13 @@
 
 
 // *************************************************************************************
-//               TX VERSION NUMBER   (May 2020 - October 2025 Malcolm Messiter)       *
+//               TX VERSION NUMBER   (May 2020 - November 2025 Malcolm Messiter)       *
 //**************************************************************************************
 
 #define TXVERSION_MAJOR 2 // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 5
-#define TXVERSION_MINIMUS 4
-#define TXVERSION_EXTRA "G 24/11/25"
+#define TXVERSION_MINIMUS 5
+#define TXVERSION_EXTRA "A 27/11/25"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -735,8 +735,8 @@ void PopulateGapsView();
 void ProcessRecentCommsGap();
 void InitializeCommsGapScreen();
 void SimplePing();
-bool displayBMP565_Fast(const char *filename, int x, int y);
 void TryToConnect();
+void ShowMismatchMsg();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
@@ -1170,17 +1170,17 @@ int LastRXModelMaxAltitude = 0;
 float LastRXTemperature = 0;
 uint8_t RadioNumber = 0;
 uint32_t LastRXReceivedPackets = 0;
+bool VersionMismatch = false;
 
-
-char ParaNames[9][30] = {
-    "FailSafe positions", // 1
-    "QNH",                // 2
-    "Mark Location",      // 3
-    "PID Values",         // 4
-    "Kalman Values",      // 5
-    "Servo Frequencies",  // 6
-    "Servo Pulse Widths", // 7
-    "Gear Ratio",         // 8
+    char ParaNames[9][30] = {
+        "FailSafe positions", // 1
+        "QNH",                // 2
+        "Mark Location",      // 3
+        "PID Values",         // 4
+        "Kalman Values",      // 5
+        "Servo Frequencies",  // 6
+        "Servo Pulse Widths", // 7
+        "Gear Ratio",         // 8
 };
 uint16_t ScreenData[50];
 uint16_t AverageFrameRate = 0;
@@ -1275,7 +1275,7 @@ namespace FHSS_data
     uint8_t FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15, 71, 82, 32, 49, 69, 13, 2, 34, 47, 20, 16, 72, // UK array
                                  35, 57, 45, 29, 75, 3, 41, 62, 11, 9, 77, 37, 8, 31, 36, 18, 17, 50, 78, 73, 30, 79, 6, 23, 40,
                                  54, 12, 80, 53, 22, 1, 74, 39, 58, 63, 70, 52, 42, 25, 43, 26, 14, 38, 48, 68, 33, 27, 60, 44, 46,
-                                 56, 7, 81, 5, 65, 4, 10, 1};
+                                 56, 7, 81, 5, 65, 4, 10, 0};
 
     uint8_t *FHSSRecoveryPointer = Used_Recovery_Channels;
     uint8_t *FHSSChPointer = FHSS_Channels; // pointer for channels array

@@ -386,6 +386,13 @@ FASTRUN void SendData()
     }
 }
 /***********************************************************************************************************/
+//                                 Waveband scanning functions
+/***********************************************************************************************************/
+
+#define xx1 85      // Needed below... Edit xx1,yy1 to move box ....
+#define yy1 70      // Needed below... Edit xx1,yy1 to move box ....
+#define YY1EXTRA 15 // 15
+
 void DoScanEnd()
 {
     ConfigureRadio();
@@ -402,16 +409,22 @@ void DoScanInit()
     ScanAllChannels(true);
 }
 //************************************************************************************************************/
+
 void DrawDoubleLine(int x1, int y1, int x2, int y2, uint16_t colour)
 { // This function draws a double line because a single line is simply too thin.
     DrawLine(x1, y1, x2, y2, colour);
     DrawLine(x1 + 1, y1, x2 + 1, y2, colour);
 }
+// ************************************************************************************************************/
+void ShowTickMarkEtc(uint16_t x, uint16_t y, uint16_t *p, char X1_pos[9], char NB[9], int x1, int xd1, int y2)
+{
+    uint16_t b = 10; // height of ghz mark
+    DrawDoubleLine(x1 + *p, y2, x1 + *p, y2 + b, ForeGroundColour);
+    *p += 160;
+    strcpy(X1_pos, Str(NB, x1 + *p - xd1, 1));
+}
 /************************************************************************************************************/
 // This function draws or re-draws and clears the box that display wave band scanning information
-#define xx1 85      // Needed below... Edit xx1,yy1 to move box ....
-#define yy1 70      // Needed below... Edit xx1,yy1 to move box ....
-#define YY1EXTRA 15 // 15
 
 void DrawFhssBox()
 {
@@ -420,14 +433,14 @@ void DrawFhssBox()
     int x2 = x1 + (128 * 5);
     int y2 = y1 + 255;
     int y3 = y2 + YY1EXTRA;
-    int xd1 = 25;                   // to center the frequency strings
+    int xd1 = 20;                   // this puts the decimal point right under the tick mark
     uint16_t p = 0;                 // pixels per frequency
-    uint16_t b = 10;                // height of ghz mark
-    char STR125GHZ[]    = "\"2.525\""; // 125th channel
-    char STR96GHZ[]     = "\"2.496\"";  // 96th channel
-    char STR64GHZ[]     = "\"2.464\"";  // 64th channel
-    char STR32GHZ[]     = "\"2.432\"";  // 32nd channel
-    char STR1GHZ[]      = "\"2.400\"";   // 1st channel
+    
+    char STR125GHZ[] = "\"2.525\""; // 125th channel
+    char STR96GHZ[] = "\"2.496\"";  // 96th channel
+    char STR64GHZ[] = "\"2.464\"";  // 64th channel
+    char STR32GHZ[] = "\"2.432\"";  // 32nd channel
+    char STR1GHZ[] = "\"2.400\"";   // 1st channel
     char CB[150];                   // COMMAND BUFFER
     char draw[] = "draw ";
     char xstr[] = "xstr ";
@@ -446,45 +459,26 @@ void DrawFhssBox()
     char fyll[] = "fill ";
     char X1_pos[9];
 
-    strcpy(X1_pos, Str(NB, x1 + p - xd1, 1));
-
     Str(NewWhite, ForeGroundColour, 0);
     Str(NewWhite1, ForeGroundColour, 1);
+    //  Draw the box with double lines
     SendCharArray(CB, draw, Str(NB1, x1 - 5, 1), Str(NB2, y1, 1), Str(NB3, x2 + 5, 1), Str(NB4, y2, 1), NewWhite, NA, NA, NA, NA, NA, NA);
     SendCharArray(CB, draw, Str(NB1, x1 - 6, 1), Str(NB2, y1 - 1, 1), Str(NB3, x2 + 6, 1), Str(NB4, y2 + 1, 1), NewWhite, NA, NA, NA, NA, NA, NA);
-
-    SendCharArray(CB, xstr, X1_pos, Str(NB1, y3, 1), Str(NB2, 80, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR1GHZ);
-    
-    DrawDoubleLine(x1 + p, y2, x1 + p, y2 + b, ForeGroundColour);
-    p += 160;
+    //  Draw the frequency markers and labels
     strcpy(X1_pos, Str(NB, x1 + p - xd1, 1));
-
-    SendCharArray(CB, xstr, X1_pos, Str(NB1, y3, 1), Str(NB2, 90, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR32GHZ);
-    
-    DrawDoubleLine(x1 + p, y2, x1 + p, y2 + b, ForeGroundColour);
-    p += 160;
-    strcpy(X1_pos, Str(NB, x1 + p - xd1, 1));
-
-    SendCharArray(CB, xstr, X1_pos, Str(NB1, y3, 1), Str(NB2, 90, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR64GHZ);
-    
-    DrawDoubleLine(x1 + p, y2, x1 + p, y2 + b, ForeGroundColour);
-    p += 160;
-    strcpy(X1_pos, Str(NB, x1 + p - xd1, 1));
-
-    SendCharArray(CB, xstr, X1_pos, Str(NB1, y3, 1), Str(NB2, 90, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR96GHZ);
-    
-    DrawDoubleLine(x1 + p, y2, x1 + p, y2 + b, ForeGroundColour);
-    p += 160;
-    strcpy(X1_pos, Str(NB, x1 + p - xd1, 1));
-
-    SendCharArray(CB, xstr, X1_pos, Str(NB1, y3, 1), Str(NB2, 80, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 1, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR125GHZ);
-    DrawDoubleLine(x1 + p, y2, x1 + p, y2 + b, ForeGroundColour);
-
+    SendCharArray(CB, xstr, X1_pos, Str(NB1, y3, 1), Str(NB2, 80, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 0, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR1GHZ);
+    ShowTickMarkEtc(x1 + p, y2, &p, X1_pos, NB, x1, xd1, y2);
+    SendCharArray(CB, xstr, X1_pos, Str(NB1, y3, 1), Str(NB2, 90, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 0, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR32GHZ);
+    ShowTickMarkEtc(x1 + p, y2, &p, X1_pos, NB, x1, xd1, y2);
+    SendCharArray(CB, xstr, X1_pos, Str(NB1, y3, 1), Str(NB2, 90, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 0, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR64GHZ);
+    ShowTickMarkEtc(x1 + p, y2, &p, X1_pos, NB, x1, xd1, y2);
+    SendCharArray(CB, xstr, X1_pos, Str(NB1, y3, 1), Str(NB2, 90, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 0, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR96GHZ);
+    ShowTickMarkEtc(x1 + p, y2, &p, X1_pos, NB, x1, xd1, y2);
+    SendCharArray(CB, xstr, X1_pos, Str(NB1, y3, 1), Str(NB2, 80, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 0, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), STR125GHZ);
+    ShowTickMarkEtc(x1 + p, y2, &p, X1_pos, NB, x1, xd1, y2);
     SendCharArray(CB, fyll, Str(NB, (x1), 1), Str(NB1, (y1 + 1), 1), Str(NB2, ((128 * 5) - 2), 1), Str(NB3, 254, 1), Str(NB4, BackGroundColour, 0), NA, NA, NA, NA, NA, NA);
-
-    p = 419; // 83.5 * 5 = 417.5 The top of the legal ISM ban
+    p = 419; // 83.5 * 5 = 417.5 The top of the legal ISM band
     DrawDoubleLine(x1 + p, y1 + 1, x1 + p, y2 - 1, SpecialColour);
-    DrawDoubleLine(x1 + p + 2, y1 + 1, x1 + p + 2, y2 - 1, SpecialColour);
 }
 
 /************************************************************************************************************/

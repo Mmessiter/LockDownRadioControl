@@ -157,7 +157,6 @@
 #include "ADC-master/ADC.h"
 #include "Parameters.h"
 
-
 /*********************************************************************************************************************************/
 
 void ClearMostParameters()
@@ -260,7 +259,6 @@ void BlueLedOn()
 
 void GreenLedOn()
 {
-
     if (!ModelMatched || UsingDefaultPipeAddress)
         return; // no green led for wrong model
     if (!LedWasGreen)
@@ -2273,7 +2271,8 @@ void DeleteModelID()
     }
 }
 // *********************************************************************************************************************************/
-void ClearDuplicateModelIDs(uint64_t ThisModelID){
+void ClearDuplicateModelIDs(uint64_t ThisModelID)
+{
     // This clears any duplicate model IDs
     bool Found = false;
     SavedModelNumber = ModelNumber; // save current
@@ -2288,9 +2287,9 @@ void ClearDuplicateModelIDs(uint64_t ThisModelID){
         }
     }
     if (Found)
-       MsgBox(pRXSetupView, (char *) "Duplicate Model ID(s) cleared!");
+        MsgBox(pRXSetupView, (char *)"Duplicate Model ID(s) cleared!");
     ModelNumber = SavedModelNumber; // restore current model number
-    ReadOneModel(ModelNumber);// reload current model
+    ReadOneModel(ModelNumber);      // reload current model
 }
 
 /*********************************************************************************************************************************/
@@ -5012,6 +5011,10 @@ void FASTRUN ManageTransmitter()
     DoTheVariometer();            // Do the variometer
     if (RightNow - LastTimeRead >= 1000)
     { // Only once a second for these..
+        if (VersionMismatch)
+        {
+            ShowMismatchMsg(); // Show version mismatch message if needed
+        }
         if (((millis() - LedGreenMoment) <= 6000) && ((millis() - LedGreenMoment) >= 4000))
         {
             ZeroDataScreen(); // this will clear the long gaps that might occur while binding.
