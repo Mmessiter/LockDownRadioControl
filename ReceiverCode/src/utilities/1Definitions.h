@@ -14,7 +14,7 @@
 #define HOPTIME 8           // gives about 100Hz FHSS
 // **************************************************************************
 
-//  #define DB_FHSS
+  #define DB_FHSS
 //  #define DB_SENSORS
 //  #define DB_BIND
 //  #define DB_FAILSAFE
@@ -22,7 +22,7 @@
 
 // >>>>>>>>>>>>>>>>>******* DON'T FORGET TO SET THIS LOT !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
- //#define USE_NEXUS // if DEFINED then USE_PWM will be UNDEFINED ( = commented out) and USE_SBUS must be DEFINED ( = uncommented) to use the Nexus transceiver
+ #define USE_NEXUS // if DEFINED then USE_PWM will be UNDEFINED ( = commented out) and USE_SBUS must be DEFINED ( = uncommented) to use the Nexus transceiver
 
 #define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
 #define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
@@ -87,7 +87,7 @@ struct CD2
 CD2 Parameters;
 uint8_t SizeOfParameters = sizeof(Parameters);
 
-#define FREQUENCYSCOUNT 83 // uses 83 different channels
+#define FREQUENCYSCOUNT 83 // uses 83 different channels (0 to 82)
 
 #ifdef USE_11PWM_OUTPUTS
 #define SERVOSUSED 11
