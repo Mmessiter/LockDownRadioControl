@@ -14,7 +14,7 @@
 #define HOPTIME 8           // gives about 100Hz FHSS
 // **************************************************************************
 
-  #define DB_FHSS
+ // #define DB_FHSS
 //  #define DB_SENSORS
 //  #define DB_BIND
 //  #define DB_FAILSAFE
