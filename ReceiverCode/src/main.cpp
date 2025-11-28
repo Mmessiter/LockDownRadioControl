@@ -486,15 +486,16 @@ void TimeTheMainLoop()
     }
     ++Interations; // count interations per second
 }
-
+/************************************************************************************************************/
+#ifdef USE_NEXUS
 // ************************************************************************************************************
 #define MSP_MOTOR_TELEMETRY 139                 // Motor telemetry data
 #define MSP_ANALOG 110                          // vbat, mAh, RSSI, amps
 static constexpr float VBAT_CAL_SCALE = 1.795f; // refine later if needed
-
 // ************************************************************************************************************
+
 // Send RPM request to ROTORFLIGHT
-#ifdef USE_NEXUS
+
 void requestRPM()
 {
     uint8_t checksum = 0;
@@ -646,7 +647,9 @@ void CheckMSPSerial()
         float packV = vbatAnalog * VBAT_CAL_SCALE;
 
         if (!INA219Connected)
+        {
             INA219Volts = packV / 2; // pack volts
+        }
         // BatteryCurrent = ampsAnalog; // amps (already in A from GetAnalog)
         // Battery_mAh = mAhAnalog;     // rough mAh
 

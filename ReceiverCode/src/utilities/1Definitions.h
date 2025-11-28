@@ -12,7 +12,8 @@
 #define RXVERSION_MINIMUS 5
 #define RXVERSION_EXTRA 'A' // 27th November 2025
 #define HOPTIME 8           // gives about 100Hz FHSS
-                            // **************************************************************************
+
+// **************************************************************************
 
 //  #define DB_FHSS
 //  #define DB_SENSORS

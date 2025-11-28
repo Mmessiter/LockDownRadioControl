@@ -894,7 +894,9 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         {
             RXVoltsDetected = true;
             if (RXCellCount == 12)
-                RXModelVolts *= 2; // voltage divider needed !
+            {
+                RXModelVolts *= 2; // voltage divider used!
+            } 
             snprintf(ModelVolts, 5, "%1.2f", RXModelVolts);
         }
         break;
