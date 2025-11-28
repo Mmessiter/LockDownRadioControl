@@ -648,7 +648,11 @@ void CheckMSPSerial()
 
         if (!INA219Connected)
         {
-            INA219Volts = packV / 2; // pack volts
+            INA219Volts = packV; // full pack volts
+            if (packV > 25.2f)
+            {
+                INA219Volts /= 2.0f; // must be 12s so divide by 2
+            }
         }
         // BatteryCurrent = ampsAnalog; // amps (already in A from GetAnalog)
         // Battery_mAh = mAhAnalog;     // rough mAh
