@@ -486,12 +486,17 @@ void TimeTheMainLoop()
     }
     ++Interations; // count interations per second
 }
+
+// ************************************************************************************************************
+#define MSP_MOTOR_TELEMETRY 139                 // Motor telemetry data
+#define MSP_ANALOG 110                          // vbat, mAh, RSSI, amps
+static constexpr float VBAT_CAL_SCALE = 1.795f; // refine later if needed
+
 // ************************************************************************************************************
 // Send RPM request to ROTORFLIGHT
 #ifdef USE_NEXUS
 void requestRPM()
 {
-#define MSP_MOTOR_TELEMETRY 139 // Motor telemetry data
     uint8_t checksum = 0;
     NEXUS_SERIAL_TELEMETRY.write('$');
     NEXUS_SERIAL_TELEMETRY.write('M');
@@ -502,67 +507,165 @@ void requestRPM()
     checksum ^= MSP_MOTOR_TELEMETRY;
     NEXUS_SERIAL_TELEMETRY.write(checksum);
 }
-// *************************************************************************************************************
-// Parse a complete MSP frame from a raw byte buffer and return HEAD RPM (rounded).
-// Returns 0xffff if no valid MSP_MOTOR_TELEMETRY (0x8B) frame is found.
+// ************************************************************************************************************
 
+void requestAnalog()
+{
+    uint8_t checksum = 0;
+    NEXUS_SERIAL_TELEMETRY.write('$');
+    NEXUS_SERIAL_TELEMETRY.write('M');
+    NEXUS_SERIAL_TELEMETRY.write('<');
+    NEXUS_SERIAL_TELEMETRY.write(0); // size = 0
+    checksum ^= 0;
+    NEXUS_SERIAL_TELEMETRY.write(MSP_ANALOG);
+    checksum ^= MSP_ANALOG;
+    NEXUS_SERIAL_TELEMETRY.write(checksum);
+}
+// *************************************************************************************************************
 uint16_t GetRPM(const uint8_t *data, uint8_t n)
 {
-    const uint8_t CMD = 0x8B; // MSP_MOTOR_TELEMETRY
+    const uint8_t CMD = MSP_MOTOR_TELEMETRY; // 0x8B
+
     if (!Ratio)
         Ratio = 10.3f; // Default ratio if not set
+
     for (uint8_t i = 0; i + 6 < n; ++i)
     {
         if (data[i] != '$' || data[i + 1] != 'M' || data[i + 2] != '>')
             continue;
+
         uint8_t size = data[i + 3];
         uint8_t cmd = data[i + 4];
         uint16_t frame_end = i + 5 + size;
         if (frame_end >= n)
             break;
+
         uint8_t ck = size ^ cmd;
         for (uint8_t k = 0; k < size; ++k)
             ck ^= data[i + 5 + k];
         if (ck != data[frame_end])
             continue;
+
         if (cmd != CMD)
             continue;
         if (size < 3)
             continue;
+
         const uint8_t *payload = &data[i + 5];
-        if (payload[0] < 1)
-            continue;
         uint16_t motor_rpm = (uint16_t)payload[1] | ((uint16_t)payload[2] << 8);
         float head = float(motor_rpm) / Ratio;
         if (head < 0.0f)
             head = 0.0f;
         if (head > 65535.0f)
             head = 65535.0f;
+
         return (uint16_t)(head + 0.5f);
     }
     return 0xffff;
 }
+// ************************************************************************************************************
+// Returns true if a valid MSP_ANALOG frame was found and decoded.
+bool GetAnalog(const uint8_t *data, uint8_t n,
+               float &vbatOut, float &ampsOut, uint16_t &mAhOut)
+{
+    const uint8_t CMD = MSP_ANALOG;
 
+    for (uint8_t i = 0; i + 6 < n; ++i)
+    {
+        if (data[i] != '$' || data[i + 1] != 'M' || data[i + 2] != '>')
+            continue;
+
+        uint8_t size = data[i + 3];
+        uint8_t cmd = data[i + 4];
+        uint16_t frame_end = i + 5 + size;
+        if (frame_end >= n)
+            break;
+
+        uint8_t ck = size ^ cmd;
+        for (uint8_t k = 0; k < size; ++k)
+            ck ^= data[i + 5 + k];
+        if (ck != data[frame_end])
+            continue;
+
+        if (cmd != CMD)
+            continue;
+        if (size < 1) // must at least have vbat
+            continue;
+
+        const uint8_t *payload = &data[i + 5];
+
+        // MSP_ANALOG layout:
+        // payload[0] = vbat (0.1 V units)
+        // payload[1..2] = powerMeterSum (raw)
+        // payload[3..4] = RSSI (0–1023)
+        // payload[5..6] = amperage (0.1 A units)
+        uint8_t vbat_raw = payload[0];
+        vbatOut = vbat_raw / 10.0f;
+
+        // Default if fields are missing
+        mAhOut = 0;
+        ampsOut = 0.0f;
+
+        if (size >= 7)
+        {
+            uint16_t powerMeterSum = (uint16_t)payload[1] | ((uint16_t)payload[2] << 8);
+            // Many firmwares use this as mAh * some scale; treat roughly as mAh here:
+            mAhOut = powerMeterSum; // you can refine this once you compare numbers
+            uint16_t amps_raw = (uint16_t)payload[5] | ((uint16_t)payload[6] << 8);
+            ampsOut = amps_raw / 10.0f; // 0.1 A units
+        }
+
+        return true;
+    }
+    return false;
+}
 // ************************************************************************************************************/
-
 void CheckMSPSerial()
 {
-    static uint32_t Localtimer = millis();
+    static uint32_t Localtimer = 0;
     if (millis() - Localtimer < 100) // 10 x per second
         return;
     Localtimer = millis();
-    uint8_t data_in[60];
+    uint8_t data_in[80];
     uint8_t p = 0;
-    while (NEXUS_SERIAL_TELEMETRY.available())
+    while (NEXUS_SERIAL_TELEMETRY.available() && p < sizeof(data_in))
     {
-        uint8_t b = NEXUS_SERIAL_TELEMETRY.read();
-        if (p < sizeof(data_in)) // safeguard against overflow
-            data_in[p++] = b;
+        data_in[p++] = NEXUS_SERIAL_TELEMETRY.read();
     }
-    uint16_t temp = GetRPM(&data_in[0], p); // Process the received data which we requested last time
-    if (temp != 0xffff)                     // Check if valid RPM was received (RPM of 65536 is very unlikely)
-        RotorRPM = temp;                    // Process the received data
-    requestRPM();                           // Request RPM data from Nexus (which we will read next time...)
+    // 1) RPM as before
+    uint16_t tempRPM = GetRPM(&data_in[0], p);
+    if (tempRPM != 0xffff)
+        RotorRPM = tempRPM;
+
+    // 2) Battery / current from MSP_ANALOG
+    float vbatAnalog, ampsAnalog;
+    uint16_t mAhAnalog;
+    if (GetAnalog(&data_in[0], p, vbatAnalog, ampsAnalog, mAhAnalog))
+    {
+        // MSP_ANALOG vbat is low; scale it to real pack volts
+        float packV = vbatAnalog * VBAT_CAL_SCALE;
+
+        if (!INA219Connected)
+            INA219Volts = packV / 2; // pack volts
+        // BatteryCurrent = ampsAnalog; // amps (already in A from GetAnalog)
+        // Battery_mAh = mAhAnalog;     // rough mAh
+
+        // Debug print
+        // Look1(" RPM: ");
+        // Look(RotorRPM);
+        // Look1(" VBAT (raw): ");
+        // Look(vbatAnalog);
+        // Look1(" VBAT (Per cell): ");
+        // Look(packV / 12.0f);
+        // Look1(" V  Amps: ");
+        // Look(ampsAnalog);
+        // Look1(" A  mAh: ");
+        // Look(mAhAnalog);
+        // Look("");
+    }
+    // 3) Request new data for next cycle
+    requestRPM();
+    requestAnalog();
 }
 #endif
 
