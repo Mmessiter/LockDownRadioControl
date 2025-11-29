@@ -649,7 +649,7 @@ void CheckMSPSerial()
         if (!INA219Connected)
         {
             INA219Volts = packV; // full pack volts
-            if (packV > 25.2f)
+            if (packV > 25.2f)   // bigger than 6s pack?
             {
                 INA219Volts /= 2.0f; // must be 12s so divide by 2
             }
