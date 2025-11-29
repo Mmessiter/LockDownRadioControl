@@ -825,7 +825,7 @@ void LoadLongerAckPayload()
         SendFloatToAckPayload(RateOfClimb);
         break;
 
-#ifdef USE_NEXUS
+#ifdef USE_NEXUS // These are only useful if Nexus (+ its telemetry) is being used
     case 20:
         SendIntToAckPayload(RotorRPM);
         break;

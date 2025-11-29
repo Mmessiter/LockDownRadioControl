@@ -237,6 +237,8 @@ void RedLedOn()
     }
 
     SendCommand((char *)"vis rpm,0");  // This will make the RPM display invisible
+    SendCommand((char *)"vis StillConnected,0");
+    SendCommand((char *)"vis wb,0");
     SendText((char *)"Owner", TxName); // Put owner name back
     First_RPM_Data = true;             // ready to start RPM data ...
     ClearMostParameters();

@@ -845,8 +845,40 @@ bool rpmShouldUpdate(uint16_t rpm_new)
     }
     return false;
 }
-/************************************************************************************************************/
-FASTRUN void ParseLongerAckPayload() // It's already pretty short!
+// ******************************************************************************************
+void ShowMilliAmpHoursUsed(float mAh)
+{
+    static float lastmAh = 0;
+    if (abs((int32_t)(mAh - lastmAh)) < 5)
+        return; // only update if changed by 5mAh or more
+    lastmAh = mAh;
+    char mAhUsed[25];
+    char VisON[] = "vis wb,1";
+    snprintf(mAhUsed, sizeof(mAhUsed), "mAh: %1.0f", mAh);
+    SendCommand(VisON);
+    SendText((char *)"wb", mAhUsed);
+}   
+// ******************************************************************************************
+void ShowAmpsBeingUsed(float amps){
+
+    static float lastAmps = 0.0f;
+    if (abs(amps - lastAmps) < 0.1f)
+        return; // only update if changed by 0.1A or more
+    lastAmps = amps;
+    char AmpsBeingUsed[25];
+    char VisON[] = "vis StillConnected,1";
+    if (amps < 0.1f)
+        return; // ignore tiny values
+    if (amps > 99.9f)
+        amps = 99.9f; // limit to 2 digits before decimal point
+
+    snprintf(AmpsBeingUsed, sizeof(AmpsBeingUsed), "Amps: %1.1f", amps);
+    SendCommand(VisON);
+    SendText((char *)"StillConnected", AmpsBeingUsed);
+}
+    /************************************************************************************************************/
+    FASTRUN void
+    ParseLongerAckPayload() // It's already pretty short!
 {
     FHSS_data::NextChannelNumber = AckPayload.Byte5; // every packet tells of next hop destination
     if (AckPayload.Purpose & 0x80)
@@ -896,7 +928,7 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
             if (RXCellCount == 12)
             {
                 RXModelVolts *= 2; // voltage divider used!
-            } 
+            }
             snprintf(ModelVolts, 5, "%1.2f", RXModelVolts);
         }
         break;
@@ -973,25 +1005,25 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         if (CurrentView != FRONTVIEW)
             break;
         RotorRPM = GetIntFromAckPayload(); // Get the current RPM value from the payload
-        if (First_RPM_Data) // If this is the first time we get RPM data
+        if (First_RPM_Data)                // If this is the first time we get RPM data
         {
             First_RPM_Data = false;
             SendCommand((char *)"vis rpm,1");               // This will make the RPM display visible
             SendText((char *)"Owner", (char *)"Rotor RPM"); // Change the owner text so user knows it's RPM data
         }
         if (rpmShouldUpdate(RotorRPM))
+        {
             SendValue((char *)"rpm", RotorRPM); // Send the updated RPM value to Nextion Frontscreen only if it has changed sufficiently
+
+        }
         break;
     case 21:
-        Battery_Amps = GetFloatFromAckPayload();
-       // Look1(" Battery current (A): ");
-       // Look(Battery_Amps, 2);
+        Battery_Amps = GetFloatFromAckPayload(); // current ... amps being used :-)
+        ShowAmpsBeingUsed(Battery_Amps);
         break;
     case 22:
-        Battery_mAh = GetFloatFromAckPayload();
-       // Look1(" Battery used (mAh): ");
-      //  Look(Battery_mAh, 0);
-      //  Look("");
+        Battery_mAh = GetFloatFromAckPayload(); // milliamp hours used so far
+        ShowMilliAmpHoursUsed(Battery_mAh);
         break;
     default:
         break;
