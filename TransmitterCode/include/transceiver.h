@@ -984,7 +984,17 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         if (rpmShouldUpdate(RotorRPM))
             SendValue((char *)"rpm", RotorRPM); // Send the updated RPM value to Nextion Frontscreen only if it has changed sufficiently
         break;
-
+    case 21:
+        Battery_Amps = GetFloatFromAckPayload();
+        Look1(" Battery current (A): ");
+        Look(Battery_Amps, 2);
+        break;
+    case 22:
+        Battery_mAh = GetFloatFromAckPayload();
+        Look1(" Battery used (mAh): ");
+        Look(Battery_mAh, 0);
+        Look("");
+        break;
     default:
         break;
     }

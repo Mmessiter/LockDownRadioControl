@@ -644,31 +644,29 @@ void CheckMSPSerial()
     if (GetAnalog(&data_in[0], p, vbatAnalog, ampsAnalog, mAhAnalog))
     {
         // MSP_ANALOG vbat is low; scale it to real pack volts
-        float packV = vbatAnalog * VBAT_CAL_SCALE;
+        PackVoltage = vbatAnalog * VBAT_CAL_SCALE;
 
         if (!INA219Connected)
         {
-            INA219Volts = packV; // full pack volts
-            if (packV > 25.2f)   // bigger than 6s pack?
+            ModelBatteryVoltage = PackVoltage; // full pack volts
+            if (PackVoltage > 25.2f)           // bigger than 6s pack?
             {
-                INA219Volts /= 2.0f; // must be 12s so divide by 2
+                ModelBatteryVoltage /= 2.0f; // must be 12s so divide by 2
             }
         }
-        // BatteryCurrent = ampsAnalog; // amps (already in A from GetAnalog)
-        // Battery_mAh = mAhAnalog;     // rough mAh
+        Battery_Amps = ampsAnalog; // amps (already in A from GetAnalog)
+        Battery_mAh = mAhAnalog;   // rough mAh
 
         // Debug print
-        // Look1(" RPM: ");
-        // Look(RotorRPM);
-        // Look1(" VBAT (raw): ");
-        // Look(vbatAnalog);
-        // Look1(" VBAT (Per cell): ");
-        // Look(packV / 12.0f);
-        // Look1(" V  Amps: ");
-        // Look(ampsAnalog);
-        // Look1(" A  mAh: ");
-        // Look(mAhAnalog);
-        // Look("");
+        Look1(" RPM: ");
+        Look(RotorRPM);
+        Look1(" Voltage (Per cell): ");
+        Look(PackVoltage / 12.0f);
+        Look1(" Battery_Amps: ");
+        Look(Battery_Amps);
+        Look1(" Battery_mAh: ");
+        Look(Battery_mAh);
+        Look("");
     }
     // 3) Request new data for next cycle
     requestRPM();

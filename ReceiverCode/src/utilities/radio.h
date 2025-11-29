@@ -12,9 +12,9 @@
 // The data might be new, or it might be the same as before. It doesn't matter much.
 void SendSBUSData()
 {
-  
+
     static uint32_t LocalTime = millis();
-   
+
     if (((millis() - LocalTime) < SBUSRATE) || (!BoundFlag) || (!CheckForCrazyValues()))
         return;                 // Don't send SBUS data except when due
     MySbus.write(SbusChannels); // Send SBUS data
@@ -198,10 +198,10 @@ inline void AdjustTimeout() // Adjust the receive timeout based on packet rate
 bool ReadData()
 {
     Connected = false;
-   
+
     if (CurrentRadio->available(&Pipnum))
     {
-      
+
         AdjustTimeout();                                                    // adjust timeout for packet rate
         uint8_t DynamicPayloadSize = CurrentRadio->getDynamicPayloadSize(); // Get the size of the new data (14)
         if ((DynamicPayloadSize == 0) || (DynamicPayloadSize > 32))
@@ -298,7 +298,7 @@ void GetRXVolts()
     if ((millis() - LastTime > 1007) && (INA219Connected))
     {
         LastTime = millis();
-        INA219Volts = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected
+        ModelBatteryVoltage = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected
     }
     else
     {
@@ -535,7 +535,7 @@ FASTRUN void Reconnect()
         TryToConnectNow();
         // Switch to next recovery channel
         ReconnectIndex = (ReconnectIndex + 1) % 3;
-       // Look(FHSS_Recovery_Channels[ReconnectIndex]);
+        // Look(FHSS_Recovery_Channels[ReconnectIndex]);
 
         if (!Connected)
         {
@@ -779,8 +779,8 @@ void LoadLongerAckPayload()
         }
         break;
     case 5:
-        SendFloatToAckPayload(INA219Volts);
-       // Look(INA219Volts);
+        SendFloatToAckPayload(ModelBatteryVoltage);
+        // Look(ModelBatteryVoltage);
         break;
     case 6:
         SendFloatToAckPayload(BaroAltitude);
@@ -824,11 +824,16 @@ void LoadLongerAckPayload()
     case 19:
         SendFloatToAckPayload(RateOfClimb);
         break;
-    case 20:
+
 #ifdef USE_NEXUS
+    case 20:
         SendIntToAckPayload(RotorRPM);
-#else
-        SendIntToAckPayload(0xffff); // Not using Nexus ... this is the flag
+        break;
+    case 21:
+        SendFloatToAckPayload(Battery_Amps);
+        break;
+    case 22:
+        SendFloatToAckPayload(Battery_mAh);
         break;
 #endif // USE_NEXUS
 

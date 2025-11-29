@@ -66,8 +66,14 @@
 #define DATARATE RF24_250KBPS // RF24_250KBPS, RF24_1MBPS, RF24_2MBPS
 #define PIPENUMBER 1
 #define BOUNDPIPENUMBER 1
-#define MAX_TELEMETERY_ITEMS 20 // Max number of telemetry items to send... 1 per packet
-#define CHANNELSUSED 16         // Number of channels used
+
+#ifdef USE_NEXUS
+#define MAX_TELEMETERY_ITEMS 22 // Max number of telemetry items to send... 1 per packet
+#else
+#define MAX_TELEMETERY_ITEMS 19 // Max number of telemetry items to send...
+#endif                          // USE_NEXUS
+
+#define CHANNELSUSED 16 // Number of channels used
 #define RECEIVEBUFFERSIZE 20
 
 struct CD
@@ -305,7 +311,7 @@ uint8_t FS_byte2 = 0;
 uint32_t ReconnectedMoment;
 float BaroAltitude;
 float BaroTemperature;
-float INA219Volts = 0;
+float ModelBatteryVoltage = 0;
 uint32_t SensorTime = 0;
 uint32_t SensorHubAccessed = 0;
 float Qnh = 1079.00; // Pressure at sea level here and now (defined at TX)
@@ -360,5 +366,9 @@ bool DPS310Connected = false;
 uint16_t DPS310Address = 0x76; // DPS310 I2C address
 bool BindPlugInserted = false; // Bind plug inserted or not
 uint8_t ReceiveTimeout = 10;   // this gets adjusted later
+
+float PackVoltage;
+float Battery_Amps = 0;
+float Battery_mAh = 0;
 
 #endif // defined (_SRC_UTILITIES_1DEFINITIONS_H)
