@@ -658,15 +658,15 @@ void CheckMSPSerial()
         Battery_mAh = mAhAnalog;   // rough mAh
 
         // Debug print
-        Look1(" RPM: ");
-        Look(RotorRPM);
-        Look1(" Voltage (Per cell): ");
-        Look(PackVoltage / 12.0f);
-        Look1(" Battery_Amps: ");
-        Look(Battery_Amps);
-        Look1(" Battery_mAh: ");
-        Look(Battery_mAh);
-        Look("");
+        // Look1(" RPM: ");
+        // Look(RotorRPM);
+        // Look1(" Voltage (Per cell): ");
+        // Look(PackVoltage / 12.0f);
+        // Look1(" Battery_Amps: ");
+        // Look(Battery_Amps);
+        // Look1(" Battery_mAh: ");
+        // Look(Battery_mAh);
+        // Look("");
     }
     // 3) Request new data for next cycle
     requestRPM();

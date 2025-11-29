@@ -986,14 +986,14 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         break;
     case 21:
         Battery_Amps = GetFloatFromAckPayload();
-        Look1(" Battery current (A): ");
-        Look(Battery_Amps, 2);
+       // Look1(" Battery current (A): ");
+       // Look(Battery_Amps, 2);
         break;
     case 22:
         Battery_mAh = GetFloatFromAckPayload();
-        Look1(" Battery used (mAh): ");
-        Look(Battery_mAh, 0);
-        Look("");
+       // Look1(" Battery used (mAh): ");
+      //  Look(Battery_mAh, 0);
+      //  Look("");
         break;
     default:
         break;
