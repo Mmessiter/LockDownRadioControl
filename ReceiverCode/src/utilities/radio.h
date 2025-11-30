@@ -298,7 +298,7 @@ void GetRXVolts()
     if ((millis() - LastTime > 1007) && (INA219Connected))
     {
         LastTime = millis();
-        ModelBatteryVoltage = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected
+        RXModelVolts = ina219.getBusVoltage_V(); //  Get RX LIPO volts if connected
     }
     else
     {
@@ -736,24 +736,16 @@ void LoadLongerAckPayload()
     }
     AckPayload.Purpose &= 0x7F; // NOTE: The HIGH BIT of "purpose" bit is the HOPNOW flag. It gets set only when it's time to hop.
     ++AckPayload.Purpose;
-    AckPayloadSize = 6;                            // 6 bytes of telemetry data
     if (AckPayload.Purpose > MAX_TELEMETERY_ITEMS) // max number of telemetry items
         AckPayload.Purpose = 0;                    // wrap after max
 
     switch (AckPayload.Purpose)
     {
     case 0:
-        if (millis() - ConnectMoment < 11000) // first 11 seconds send only version number
-        {
-            SendVersionNumberToAckPayload();
-        }
-        else
-        {
-            SendIntToAckPayload(SuccessfulPackets); // then send the number of successful packets
-        }
+        SendVersionNumberToAckPayload();
         break;
     case 1:
-        SendIntToAckPayload(0);
+        SendIntToAckPayload(SuccessfulPackets); // total successful packets we received here
         break;
     case 2:
         SendIntToAckPayload(RadioSwaps);
@@ -779,8 +771,7 @@ void LoadLongerAckPayload()
         }
         break;
     case 5:
-        SendFloatToAckPayload(ModelBatteryVoltage);
-        // Look(ModelBatteryVoltage);
+        SendFloatToAckPayload(RXModelVolts);
         break;
     case 6:
         SendFloatToAckPayload(BaroAltitude);
@@ -824,18 +815,15 @@ void LoadLongerAckPayload()
     case 19:
         SendFloatToAckPayload(RateOfClimb);
         break;
-
-#ifdef USE_NEXUS // These are only useful if Nexus (+ its telemetry) is being used
     case 20:
-        SendIntToAckPayload(RotorRPM);
+        SendIntToAckPayload(RotorRPM); // RPM from Nexus
         break;
     case 21:
-        SendFloatToAckPayload(Battery_Amps);
+        SendFloatToAckPayload(Battery_Amps); // Amps from Nexus
         break;
     case 22:
-        SendFloatToAckPayload(Battery_mAh);
+        SendFloatToAckPayload(Battery_mAh); // mAh from Nexus
         break;
-#endif // USE_NEXUS
 
     default:
         break;

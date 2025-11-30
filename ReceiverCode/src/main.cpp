@@ -25,11 +25,13 @@
  * @section rxpinout TEENSY 4.0 PINS
  * | pin number(s) | purpose |
  * |---------------|---------|
- * | 0...6 | PWM SERVOS Channels 1 - 7 |  (Channels 10 - 16 available via SBUS)
- * | 7     | PWM Servo Channel 8 | or RX2 for telemetry if using NEXUS
- * | 8     | PWM Servo Channel 9 | not used if using NEXUS
- * | 9     | SPI CE1  (FOR RADIO1)  | or PWM channel 10 when 11 PWM channels are used
- * | 10    | SPI CSN1 (FOR RADIO1)  | or PWM channel 11 when 11 PWM channels are used
+
+ * | 0,1   | Nexus Serial Telemetry. 1 = RX, 2 = TX. | >>> Only if Nexus is connected  <<<
+ * | X...6 | PWM SERVOS Channels X - 7 |  if Nexus is used X = 2 else X = 0 (Channels 0 - 16 always available via SBUS)
+ * | 7     | PWM Servo Channel 8 | Always
+ * | 8     | PWM Servo Channel 9 | only when 11 PWM channels are used
+ * | 9     | SPI CE1  (FOR RADIO1)  | or PWM channel 10 if 11 PWM channels are used
+ * | 10    | SPI CSN1 (FOR RADIO1)  | or PWM channel 11 if 11 PWM channels are used
  * | 11    | SPI MOSI (FOR BOTH RADIOS)  |
  * | 12    | SPI MISO (FOR BOTH RADIOS)  |
  * | 13    | SPI SCK  (FOR BOTH RADIOS)  |
@@ -64,6 +66,7 @@
 #include "utilities/Binding.h"
 #include "utilities/eeprom.h"
 #include "utilities/Parameters.h"
+#include "utilities/Nexus.h"
 
 void DelayMillis(uint16_t ms) // This replaces any delay() calls
 {
@@ -101,6 +104,11 @@ bool CheckForCrazyValues() // might come while binding ... indeed will.
     }
     return true;
 }
+//************************************************************************************************************/
+inline uint8_t PwmStartIndex()
+{
+    return NexusPresent ? 2 : 0; // if Nexus is present,returns 2 else 0
+}
 
 /************************************************************************************************************/
 // Function to get PWM value needed for given pulse length in microseconds
@@ -131,7 +139,7 @@ void MoveServos()
 #endif
 
 #ifdef USE_PWM
-    for (int j = 0; j < SERVOSUSED; ++j)
+    for (int j = PwmStartIndex(); j < SERVOSUSED; ++j)
     {
         int PulseLength = ReceivedData[j];
         if (ServoCentrePulse[j] < 1000)
@@ -182,7 +190,7 @@ void FailSafe()
 void SetServoFrequency()
 {
     analogWriteResolution(SERVO_RES_BITS); // 12 Bits for 4096 steps
-    for (uint8_t i = 0; i < SERVOSUSED; ++i)
+    for (uint8_t i = PwmStartIndex(); i < SERVOSUSED; ++i)
     {
         analogWriteFrequency(PWMPins[i], ServoFrequency[i]);
     }
@@ -348,7 +356,7 @@ void TestTheSBUSPin()
 void TestAllPWMPins()
 {
 #ifdef USE_PWM
-    for (uint8_t i = 0; i < SERVOSUSED; ++i)
+    for (uint8_t i = PwmStartIndex(); i < SERVOSUSED; ++i)
     {
         pinMode(PWMPins[i], OUTPUT);
         delayMicroseconds(50);
@@ -425,8 +433,6 @@ FLASHMEM void setup()
 {
     digitalWrite(LED_PIN, HIGH);
     SetupPINMODES();
-    TestTheSBUSPin(); // Check that the SBUS pin is not held low (plug in wrong way round)
-    TestAllPWMPins(); // Check that the no PWM pins are held low (plug in wrong way round)
     Wire.begin();
     Wire.setClock(400000); // Or 1000000, etc
                            // delay(400);// *only* needed if you want to see terminal output
@@ -441,6 +447,11 @@ FLASHMEM void setup()
     if (GPS_Connected)
         setupGPS();
     CopyToCurrentPipe(DefaultPipe, PIPENUMBER);
+
+    DetectNexusAtBoot(); // Check for Nexus presence before we set up any PWM pins it might use
+    TestTheSBUSPin();    // Check that the SBUS pin is not held low (plug in wrong way round)
+    TestAllPWMPins();    // Check that the no PWM pins are held low (plug in wrong way round)
+    
     SetupRadios();
     SetupWatchDog();
     LoadSavedPipeFromEEPROM();
@@ -448,10 +459,6 @@ FLASHMEM void setup()
     BindPlugInserted = Blinking;           // Bind plug inserted or not
     if (BindPlugInserted)
         delay(200);
-
-#ifdef USE_NEXUS
-    NEXUS_SERIAL_TELEMETRY.begin(115200); // Nexus serial port for telemetry
-#endif                                    // USE_NEXUS
 
     digitalWrite(LED_PIN, LOW);
 }
@@ -486,193 +493,7 @@ void TimeTheMainLoop()
     }
     ++Interations; // count interations per second
 }
-/************************************************************************************************************/
-#ifdef USE_NEXUS
-// ************************************************************************************************************
-#define MSP_MOTOR_TELEMETRY 139                 // Motor telemetry data
-#define MSP_ANALOG 110                          // vbat, mAh, RSSI, amps
-static constexpr float VBAT_CAL_SCALE = 1.795f; // refine later if needed
-// ************************************************************************************************************
 
-// Send RPM request to ROTORFLIGHT
-
-void requestRPM()
-{
-    uint8_t checksum = 0;
-    NEXUS_SERIAL_TELEMETRY.write('$');
-    NEXUS_SERIAL_TELEMETRY.write('M');
-    NEXUS_SERIAL_TELEMETRY.write('<');
-    NEXUS_SERIAL_TELEMETRY.write(0);
-    checksum ^= 0;
-    NEXUS_SERIAL_TELEMETRY.write(MSP_MOTOR_TELEMETRY);
-    checksum ^= MSP_MOTOR_TELEMETRY;
-    NEXUS_SERIAL_TELEMETRY.write(checksum);
-}
-// ************************************************************************************************************
-
-void requestAnalog()
-{
-    uint8_t checksum = 0;
-    NEXUS_SERIAL_TELEMETRY.write('$');
-    NEXUS_SERIAL_TELEMETRY.write('M');
-    NEXUS_SERIAL_TELEMETRY.write('<');
-    NEXUS_SERIAL_TELEMETRY.write(0); // size = 0
-    checksum ^= 0;
-    NEXUS_SERIAL_TELEMETRY.write(MSP_ANALOG);
-    checksum ^= MSP_ANALOG;
-    NEXUS_SERIAL_TELEMETRY.write(checksum);
-}
-// *************************************************************************************************************
-uint16_t GetRPM(const uint8_t *data, uint8_t n)
-{
-    const uint8_t CMD = MSP_MOTOR_TELEMETRY; // 0x8B
-
-    if (!Ratio)
-        Ratio = 10.3f; // Default ratio if not set
-
-    for (uint8_t i = 0; i + 6 < n; ++i)
-    {
-        if (data[i] != '$' || data[i + 1] != 'M' || data[i + 2] != '>')
-            continue;
-
-        uint8_t size = data[i + 3];
-        uint8_t cmd = data[i + 4];
-        uint16_t frame_end = i + 5 + size;
-        if (frame_end >= n)
-            break;
-
-        uint8_t ck = size ^ cmd;
-        for (uint8_t k = 0; k < size; ++k)
-            ck ^= data[i + 5 + k];
-        if (ck != data[frame_end])
-            continue;
-
-        if (cmd != CMD)
-            continue;
-        if (size < 3)
-            continue;
-
-        const uint8_t *payload = &data[i + 5];
-        uint16_t motor_rpm = (uint16_t)payload[1] | ((uint16_t)payload[2] << 8);
-        float head = float(motor_rpm) / Ratio;
-        if (head < 0.0f)
-            head = 0.0f;
-        if (head > 65535.0f)
-            head = 65535.0f;
-
-        return (uint16_t)(head + 0.5f);
-    }
-    return 0xffff;
-}
-// ************************************************************************************************************
-// Returns true if a valid MSP_ANALOG frame was found and decoded.
-bool GetAnalog(const uint8_t *data, uint8_t n,
-               float &vbatOut, float &ampsOut, uint16_t &mAhOut)
-{
-    const uint8_t CMD = MSP_ANALOG;
-
-    for (uint8_t i = 0; i + 6 < n; ++i)
-    {
-        if (data[i] != '$' || data[i + 1] != 'M' || data[i + 2] != '>')
-            continue;
-
-        uint8_t size = data[i + 3];
-        uint8_t cmd = data[i + 4];
-        uint16_t frame_end = i + 5 + size;
-        if (frame_end >= n)
-            break;
-
-        uint8_t ck = size ^ cmd;
-        for (uint8_t k = 0; k < size; ++k)
-            ck ^= data[i + 5 + k];
-        if (ck != data[frame_end])
-            continue;
-
-        if (cmd != CMD)
-            continue;
-        if (size < 1) // must at least have vbat
-            continue;
-
-        const uint8_t *payload = &data[i + 5];
-
-        // MSP_ANALOG layout:
-        // payload[0] = vbat (0.1 V units)
-        // payload[1..2] = powerMeterSum (raw)
-        // payload[3..4] = RSSI (0–1023)
-        // payload[5..6] = amperage (0.1 A units)
-        uint8_t vbat_raw = payload[0];
-        vbatOut = vbat_raw / 10.0f;
-
-        // Default if fields are missing
-        mAhOut = 0;
-        ampsOut = 0.0f;
-
-        if (size >= 7)
-        {
-            uint16_t powerMeterSum = (uint16_t)payload[1] | ((uint16_t)payload[2] << 8);
-            // Many firmwares use this as mAh * some scale; treat roughly as mAh here:
-            mAhOut = powerMeterSum; // you can refine this once you compare numbers
-            uint16_t amps_raw = (uint16_t)payload[5] | ((uint16_t)payload[6] << 8);
-            ampsOut = amps_raw / 10.0f; // 0.1 A units
-        }
-
-        return true;
-    }
-    return false;
-}
-// ************************************************************************************************************/
-void CheckMSPSerial()
-{
-    static uint32_t Localtimer = 0;
-    if (millis() - Localtimer < 100) // 10 x per second
-        return;
-    Localtimer = millis();
-    uint8_t data_in[80];
-    uint8_t p = 0;
-    while (NEXUS_SERIAL_TELEMETRY.available() && p < sizeof(data_in))
-    {
-        data_in[p++] = NEXUS_SERIAL_TELEMETRY.read();
-    }
-    // 1) RPM as before
-    uint16_t tempRPM = GetRPM(&data_in[0], p);
-    if (tempRPM != 0xffff)
-        RotorRPM = tempRPM;
-
-    // 2) Battery / current from MSP_ANALOG
-    float vbatAnalog, ampsAnalog;
-    uint16_t mAhAnalog;
-    if (GetAnalog(&data_in[0], p, vbatAnalog, ampsAnalog, mAhAnalog))
-    {
-        // MSP_ANALOG vbat is low; scale it to real pack volts
-        PackVoltage = vbatAnalog * VBAT_CAL_SCALE;
-
-        if (!INA219Connected)
-        {
-            ModelBatteryVoltage = PackVoltage; // full pack volts
-            if (PackVoltage > 25.2f)           // bigger than 6s pack?
-            {
-                ModelBatteryVoltage /= 2.0f; // must be 12s so divide by 2
-            }
-        }
-        Battery_Amps = ampsAnalog; // amps (already in A from GetAnalog)
-        Battery_mAh = mAhAnalog;   // rough mAh
-
-        // Debug print
-        // Look1(" RPM: ");
-        // Look(RotorRPM);
-        // Look1(" Voltage (Per cell): ");
-        // Look(PackVoltage / 12.0f);
-        // Look1(" Battery_Amps: ");
-        // Look(Battery_Amps);
-        // Look1(" Battery_mAh: ");
-        // Look(Battery_mAh);
-        // Look("");
-    }
-    // 3) Request new data for next cycle
-    requestRPM();
-    requestAnalog();
-}
-#endif
 
 /************************************************************************************************************/
 // LOOP
@@ -683,9 +504,11 @@ void loop()
     KickTheDog();
     ReceiveData();
 
-#ifdef USE_NEXUS
-    CheckMSPSerial(); // this is to read the RPM value
-#endif
+    if (NexusPresent)
+    {
+        CheckMSPSerial(); // this is to read the RPM value
+    }
+
     if (Blinking)
     {
         BlinkLed();

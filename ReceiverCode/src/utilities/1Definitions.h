@@ -23,15 +23,10 @@
 
 // >>>>>>>>>>>>>>>>>******* DON'T FORGET TO SET THIS LOT !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-#define USE_NEXUS // if DEFINED then USE_PWM will be UNDEFINED ( = commented out) and USE_SBUS must be DEFINED ( = uncommented) to use the Nexus transceiver
-
 #define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
-// #define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
+//#define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
 #define USE_SBUS
-
-#ifndef USE_NEXUS
 #define USE_PWM
-#endif // USE_NEXUS
 
 // **************************************************************************
 #define NEXUS_SERIAL_TELEMETRY Serial1
@@ -66,13 +61,7 @@
 #define DATARATE RF24_250KBPS // RF24_250KBPS, RF24_1MBPS, RF24_2MBPS
 #define PIPENUMBER 1
 #define BOUNDPIPENUMBER 1
-
-#ifdef USE_NEXUS
-#define MAX_TELEMETERY_ITEMS 22 // Max number of telemetry items to send... 1 per packet
-#else
-#define MAX_TELEMETERY_ITEMS 19 // Max number of telemetry items to send...
-#endif                          // USE_NEXUS
-
+#define MAX_TELEMETERY_ITEMS 22 // Max number of telemetry items to send...
 #define CHANNELSUSED 16 // Number of channels used
 #define RECEIVEBUFFERSIZE 20
 
@@ -174,7 +163,7 @@ bool INA219Connected = false;  //  Volts from INA219 ?
 bool MPU6050Connected = false; //  Accelerometer and Gyro from MPU6050 ?
 uint8_t ReconnectChannel = 0;
 int32_t RateOfClimb = 0;
-uint32_t RotorRPM = 0;
+uint32_t RotorRPM = 0xffff;
 float Ratio = 0;
 bool ForceCalibration = false; // Force calibration of MPU6050
 
@@ -261,11 +250,14 @@ void AttachServos();
 void LoadFailSafeDataFromEEPROM();
 void SaveFailSafeDataToEEPROM();
 void SavePipeToEEPROM();
+void DetectNexusAtBoot();
+void requestAnalog();
+bool GetAnalog(const uint8_t *data, uint8_t n, float &vbatOut, float &ampsOut, uint16_t &mAhOut);
 
-/************************************************************************************************************/
-// For numeric types (int, float, double, etc.)
-template <typename T>
-void Look(const T &value, int format)
+    /************************************************************************************************************/
+    // For numeric types (int, float, double, etc.)
+    template <typename T>
+    void Look(const T &value, int format)
 {
     Serial.println(value, format);
 }
@@ -311,7 +303,7 @@ uint8_t FS_byte2 = 0;
 uint32_t ReconnectedMoment;
 float BaroAltitude;
 float BaroTemperature;
-float ModelBatteryVoltage = 0;
+float RXModelVolts = 0;
 uint32_t SensorTime = 0;
 uint32_t SensorHubAccessed = 0;
 float Qnh = 1079.00; // Pressure at sea level here and now (defined at TX)
@@ -366,7 +358,7 @@ bool DPS310Connected = false;
 uint16_t DPS310Address = 0x76; // DPS310 I2C address
 bool BindPlugInserted = false; // Bind plug inserted or not
 uint8_t ReceiveTimeout = 10;   // this gets adjusted later
-
+bool NexusPresent = false;
 float PackVoltage;
 float Battery_Amps = 0;
 float Battery_mAh = 0;

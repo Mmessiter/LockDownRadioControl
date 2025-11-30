@@ -857,9 +857,10 @@ void ShowMilliAmpHoursUsed(float mAh)
     snprintf(mAhUsed, sizeof(mAhUsed), "mAh: %1.0f", mAh);
     SendCommand(VisON);
     SendText((char *)"wb", mAhUsed);
-}   
+}
 // ******************************************************************************************
-void ShowAmpsBeingUsed(float amps){
+void ShowAmpsBeingUsed(float amps)
+{
 
     static float lastAmps = 0.0f;
     if (abs(amps - lastAmps) < 0.1f)
@@ -876,9 +877,9 @@ void ShowAmpsBeingUsed(float amps){
     SendCommand(VisON);
     SendText((char *)"StillConnected", AmpsBeingUsed);
 }
-    /************************************************************************************************************/
-    FASTRUN void
-    ParseLongerAckPayload() // It's already pretty short!
+/************************************************************************************************************/
+FASTRUN void
+ParseLongerAckPayload() // It's already pretty short!
 {
     FHSS_data::NextChannelNumber = AckPayload.Byte5; // every packet tells of next hop destination
     if (AckPayload.Purpose & 0x80)
@@ -897,18 +898,10 @@ void ShowAmpsBeingUsed(float amps){
     switch (AckPayload.Purpose) // Only look at the low 7 BITS
     {
     case 0:
-        if (millis() - LedGreenMoment < 5000)
-        {
-            GetRXVersionNumber();
-        }
-        else
-        {
-            RXSuccessfulPackets = GetIntFromAckPayload();
-        }
-
+        GetRXVersionNumber();
         break;
     case 1:
-        SbusRepeats = GetIntFromAckPayload();
+        RXSuccessfulPackets = GetIntFromAckPayload();
         break;
     case 2:
         RadioSwaps = GetIntFromAckPayload();
@@ -927,7 +920,7 @@ void ShowAmpsBeingUsed(float amps){
             RXVoltsDetected = true;
             if (RXCellCount == 12)
             {
-                RXModelVolts *= 2; // voltage divider used!
+                RXModelVolts *= 2; // voltage divider was used so double it!
             }
             snprintf(ModelVolts, 5, "%1.2f", RXModelVolts);
         }
@@ -1005,7 +998,12 @@ void ShowAmpsBeingUsed(float amps){
         if (CurrentView != FRONTVIEW)
             break;
         RotorRPM = GetIntFromAckPayload(); // Get the current RPM value from the payload
-        if (First_RPM_Data)                // If this is the first time we get RPM data
+        if (RotorRPM == 0xffff)
+        {
+            RotorRPM = 0; // sanity check
+            break;
+        }
+        if (First_RPM_Data) // If this is the first time we get RPM data
         {
             First_RPM_Data = false;
             SendCommand((char *)"vis rpm,1");               // This will make the RPM display visible
@@ -1014,7 +1012,6 @@ void ShowAmpsBeingUsed(float amps){
         if (rpmShouldUpdate(RotorRPM))
         {
             SendValue((char *)"rpm", RotorRPM); // Send the updated RPM value to Nextion Frontscreen only if it has changed sufficiently
-
         }
         break;
     case 21:
