@@ -25,6 +25,8 @@
 
 #define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
 //#define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
+
+
 #define USE_SBUS
 #define USE_PWM
 
@@ -102,13 +104,6 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define RANGEMAX 2047 // = Frsky at 150 %
 #define RANGEMIN 0
 
-#ifdef USE_11PWM_OUTPUTS
-#define pinCE1 22  // NRF1
-#define pinCSN1 23 // NRF1
-#else
-#define pinCE1 9   // NRF1
-#define pinCSN1 10 // NRF1
-#endif
 
 #define pinCSN2 20            // NRF2
 #define pinCE2 21             // NRF2
@@ -135,9 +130,28 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 
 // ****************************************************************************************************************************************
 
+// ************************************************************************************************************/
+
+#define pinCSN2 20 // NRF2
+#define pinCE2 21  // NRF2
+
+#ifdef USE_11PWM_OUTPUTS
+#define pinCE1 22  // NRF1
+#define pinCSN1 23 // NRF1
+#else
+#define pinCE1 9   // NRF1
+#define pinCSN1 10 // NRF1
+#endif
+
+
+
 RF24 Radio1(pinCE1, pinCSN1);
 RF24 Radio2(pinCE2, pinCSN2);
 RF24 *CurrentRadio = &Radio1;
+
+bool RadioAt_9_10 = false;
+bool RadioAt_22_23 = false;
+bool RadioAt_21_20 = false;
 
 bool Connected = false;
 bool HopNow = false;

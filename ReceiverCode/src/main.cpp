@@ -67,6 +67,7 @@
 #include "utilities/eeprom.h"
 #include "utilities/Parameters.h"
 #include "utilities/Nexus.h"
+#include "utilities/Detect_Transceivers.h"
 
 void DelayMillis(uint16_t ms) // This replaces any delay() calls
 {
@@ -432,6 +433,27 @@ void Init_DPS310()
 FLASHMEM void setup()
 {
     digitalWrite(LED_PIN, HIGH);
+    delay(100); // wait for power to stabilise
+    DetectTransceivers();
+    delay(2000);
+
+    if (RadioAt_9_10)
+    {
+        Look1("Only 8 PWMs and ");
+    }
+    if (RadioAt_22_23)
+    {
+        Look1("All 11 PWMs and ");
+    }
+    if (RadioAt_21_20)
+    {
+        Look("2 transceivers.");
+    }
+    else
+    {
+        Look("1 transceiver.");
+    }
+
     SetupPINMODES();
     Wire.begin();
     Wire.setClock(400000); // Or 1000000, etc
@@ -447,11 +469,9 @@ FLASHMEM void setup()
     if (GPS_Connected)
         setupGPS();
     CopyToCurrentPipe(DefaultPipe, PIPENUMBER);
-
     DetectNexusAtBoot(); // Check for Nexus presence before we set up any PWM pins it might use
     TestTheSBUSPin();    // Check that the SBUS pin is not held low (plug in wrong way round)
     TestAllPWMPins();    // Check that the no PWM pins are held low (plug in wrong way round)
-    
     SetupRadios();
     SetupWatchDog();
     LoadSavedPipeFromEEPROM();
@@ -459,7 +479,6 @@ FLASHMEM void setup()
     BindPlugInserted = Blinking;           // Bind plug inserted or not
     if (BindPlugInserted)
         delay(200);
-
     digitalWrite(LED_PIN, LOW);
 }
 
@@ -493,7 +512,6 @@ void TimeTheMainLoop()
     }
     ++Interations; // count interations per second
 }
-
 
 /************************************************************************************************************/
 // LOOP

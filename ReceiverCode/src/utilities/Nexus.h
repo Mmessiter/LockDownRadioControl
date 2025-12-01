@@ -16,43 +16,33 @@ static constexpr float VBAT_CAL_SCALE = 1.78f; // refine later if needed
 void DetectNexusAtBoot()
 {
 #define NEXUS_DETECT_WINDOW_MS 1500 // 1.5 seconds time window to detect Nexus at boot
-    // 1) Temporarily claim the pins as a UART
+    
     NEXUS_SERIAL_TELEMETRY.begin(115200);
-
     uint32_t start = millis();
     uint8_t buf[80];
 
     while (millis() - start < NEXUS_DETECT_WINDOW_MS)
     {
-        // Ask politely for something ... the Nexus will answer if present
         requestAnalog(); 
         delay(20);       // give it a moment to reply
-
-        // Read any reply
         uint8_t p = 0;
         while (NEXUS_SERIAL_TELEMETRY.available() && p < sizeof(buf))
         {
             buf[p++] = NEXUS_SERIAL_TELEMETRY.read();
         }
-        // Try to decode MSP_ANALOG – you already know this works
         float vbat, amps;
         uint16_t mAh;
         if (GetAnalog(buf, p, vbat, amps, mAh))
         {
-            // We got a valid MSP frame → Nexus is present
             NexusPresent = true;
-            // Leave the UART running for normal telemetry use
             return;
         }
     }
-    // If we get here, no valid MSP reply in the time window → assume no Nexus
     NEXUS_SERIAL_TELEMETRY.end();
     NexusPresent = false;
 }
 
 // ************************************************************************************************************
-
-// Send RPM request to ROTORFLIGHT
 
 void requestRPM()
 {
