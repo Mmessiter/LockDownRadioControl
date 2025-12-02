@@ -5,41 +5,17 @@
 #define _SRC_BINDING_H
 #include <Arduino.h>
 #include "utilities/1Definitions.h"
-
-/************************************************************************************************************/
-// This function compares the just-received pipe with several of the previous ones
-// if it matches most of them then its probably not corrupted.
-
-bool ValidateNewPipe()
-{
-    uint8_t MatchedCounter = 0;
-    if (pcount < 2)
-        return false; // ignore first few
-
-    PreviousNewPipes[PreviousNewPipesIndex] = NewPipeMaybe;
-    PreviousNewPipesIndex++;
-    if (PreviousNewPipesIndex > PIPES_TO_COMPARE)
-        PreviousNewPipesIndex = 0;
-
-    for (int i = 0; i < PIPES_TO_COMPARE; ++i)
-    {
-        if (NewPipeMaybe == PreviousNewPipes[i])
-            ++MatchedCounter;
-    }
-    if (MatchedCounter > 2)
-        return true;
-    return false;
-}
-// ************************************************************************************************************/
+//************************************************************************************************************/
 
 bool TestTheNewPipe() // Check that the set pipe can actually receive data before going further.
 {
-    if (Blinking) // if binding, then we don't need to test the pipe
+    if (Blinking)
+    {
         return true;
+    }
     uint8_t idx = 1;
-
     uint32_t LookTime = millis();
-    while (millis() - LookTime < 350)
+    while (millis() - LookTime < 650)
     {
         CurrentRadio->stopListening();
         delayMicroseconds(STOPLISTENINGDELAY);
@@ -47,6 +23,12 @@ bool TestTheNewPipe() // Check that the set pipe can actually receive data befor
         delayMicroseconds(STOPLISTENINGDELAY);
         CurrentRadio->startListening();
         delayMicroseconds(STOPLISTENINGDELAY);
+        uint32_t t = millis();
+        while (!CurrentRadio->available(&Pipnum) && (millis() - t < 30))
+        {
+           delay(1);
+           KickTheDog();
+        }
         if (CurrentRadio->available(&Pipnum))
         {
             return true;
@@ -58,7 +40,6 @@ bool TestTheNewPipe() // Check that the set pipe can actually receive data befor
                 idx = 0;
         }
         KickTheDog(); // keep the watchdog happy
-        delay(1);     // wait a bit
     }
     return false;
 }
@@ -69,7 +50,6 @@ void GetNewPipe() // from TX
 {
     if (!NewData)
         return;
-
     NewData = false;
     if (PipeSeen)
         return;
@@ -80,8 +60,6 @@ void GetNewPipe() // from TX
     NewPipeMaybe += (uint64_t)ReceivedData[4] << 8;
     NewPipeMaybe += (uint64_t)ReceivedData[5];
 
-    if (ValidateNewPipe()) // was this pipe uncorrupted?
-    {
         for (int i = 0; i < 5; ++i)
             TheReceivedPipe[4 - i] = ReceivedData[i + 1] & 0xff; // reversed byte array for our use
         TheReceivedPipe[5] = 0;
@@ -103,7 +81,6 @@ void GetNewPipe() // from TX
             BindModel(); // don't bind if the pipe is not valid
         }
         PipeSeen = true;
-    }
     ++pcount; // inc pipes received
 }
 
@@ -116,17 +93,16 @@ void CopyToCurrentPipe(uint8_t *p, uint8_t pn)
     Pipnum = pn;
 }
 //************************************************************************************************************/
-void SetNewPipe()
-{
-    CurrentRadio->openReadingPipe(Pipnum, PipePointer); //  5 * byte array
-}
-
-//************************************************************************************************************/
 void DisplayAPipe(const uint8_t *pipe) // for debug
 {
     char buffer[44];
     snprintf(buffer, 44, "Pipe: %02X %02X %02X %02X %02X", pipe[0], pipe[1], pipe[2], pipe[3], pipe[4]);
     Look(buffer);
+}
+//************************************************************************************************************/
+void SetNewPipe()
+{
+    CurrentRadio->openReadingPipe(Pipnum, PipePointer); //  5 * byte array
 }
 
 /************************************************************************************************************/

@@ -60,12 +60,12 @@ void ReadExtraParameters()
         break;
 #ifdef USE_PWM
     case SERVO_FREQUENCIES: // 6
-        for (int i = 0; i < SERVOSUSED; ++i)
+        for (int i = 0; i < Servos_Used; ++i)
             ServoFrequency[i] = Parameters.word[i + 1];
         SetServoFrequency();
         break;
     case SERVO_PULSE_WIDTHS: // 7
-        for (int i = 0; i < SERVOSUSED; ++i)
+        for (int i = 0; i < Servos_Used; ++i)
             ServoCentrePulse[i] = Parameters.word[i + 1];
         break;
 #endif

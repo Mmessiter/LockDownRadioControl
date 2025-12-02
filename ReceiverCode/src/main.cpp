@@ -140,7 +140,7 @@ void MoveServos()
 #endif
 
 #ifdef USE_PWM
-    for (int j = PwmStartIndex(); j < SERVOSUSED; ++j)
+    for (int j = PwmStartIndex(); j < Servos_Used; ++j)
     {
         int PulseLength = ReceivedData[j];
         if (ServoCentrePulse[j] < 1000)
@@ -161,6 +161,7 @@ void MoveServos()
 /** Execute FailSafe data from EEPROM. */
 void FailSafe()
 {
+    Look("Entering Failsafe!");
     if (BoundFlag)
     {
         LoadFailSafeDataFromEEPROM(); // load failsafe values from EEPROM
@@ -191,7 +192,7 @@ void FailSafe()
 void SetServoFrequency()
 {
     analogWriteResolution(SERVO_RES_BITS); // 12 Bits for 4096 steps
-    for (uint8_t i = PwmStartIndex(); i < SERVOSUSED; ++i)
+    for (uint8_t i = PwmStartIndex(); i < Servos_Used; ++i)
     {
         analogWriteFrequency(PWMPins[i], ServoFrequency[i]);
     }
@@ -357,7 +358,7 @@ void TestTheSBUSPin()
 void TestAllPWMPins()
 {
 #ifdef USE_PWM
-    for (uint8_t i = PwmStartIndex(); i < SERVOSUSED; ++i)
+    for (uint8_t i = PwmStartIndex(); i < Servos_Used; ++i)
     {
         pinMode(PWMPins[i], OUTPUT);
         delayMicroseconds(50);
@@ -374,12 +375,18 @@ void TestAllPWMPins()
 void SetupPINMODES()
 {
     pinMode(LED_PIN, OUTPUT);
-    pinMode(pinCSN1, OUTPUT);
-#ifdef SECOND_TRANSCEIVER
-    pinMode(pinCSN2, OUTPUT);
-    pinMode(pinCE2, OUTPUT);
-#endif
-    pinMode(pinCE1, OUTPUT);
+    delay(10);
+    if (Use_Second_Transceiver)
+    {
+        pinMode(V_Pin_Csn2, OUTPUT);
+        delay(10);
+        pinMode(V_Pin_Ce2, OUTPUT);
+        delay(10);
+    }
+    pinMode(V_Pin_Ce1, OUTPUT);
+    delay(10);
+    pinMode(V_Pin_Csn1, OUTPUT);
+    delay(10);
     pinMode(BINDPLUG_PIN, INPUT_PULLUP);
     pinMode(LED_RED, OUTPUT);
     digitalWrite(LED_PIN, HIGH);
@@ -435,23 +442,38 @@ FLASHMEM void setup()
     digitalWrite(LED_PIN, HIGH);
     delay(100); // wait for power to stabilise
     DetectTransceivers();
-    delay(2000);
-
-    if (RadioAt_9_10)
+    delay(100);
+    if (RadioAt_9_10) // old rxs with only 8 pwm outputs
     {
-        Look1("Only 8 PWMs and ");
+       // Look1("Only 8 PWMs and ");
+        Use_eleven_PWM_Outputs = false;
+        Servos_Used = 9;
+        V_Pin_Ce1 = PINA_CE1; //9
+        V_Pin_Csn1 = PINA_CSN1;//10
     }
-    if (RadioAt_22_23)
+    if (RadioAt_22_23) // all rxs with 2nd transceiver
     {
-        Look1("All 11 PWMs and ");
+        //Look1("All 11 PWMs and ");
+        Use_eleven_PWM_Outputs = true;
+        Servos_Used = 11;
+        V_Pin_Ce1 = PIN_CE1; //22
+        V_Pin_Csn1 = PIN_CSN1; //23
     }
     if (RadioAt_21_20)
     {
-        Look("2 transceivers.");
+        //Look("2 transceivers.");
+        Use_Second_Transceiver = true;
+        V_Pin_Ce2 = PIN_CE2; //21
+        V_Pin_Csn2 = PIN_CSN2; //20
     }
     else
     {
-        Look("1 transceiver.");
+        //Look("1 transceiver.");
+        Use_Second_Transceiver = false;
+        Use_eleven_PWM_Outputs = false;
+        Servos_Used = 9;
+        V_Pin_Ce1 = PINA_CE1; //9
+        V_Pin_Csn1 = PINA_CSN1; //10
     }
 
     SetupPINMODES();
@@ -478,7 +500,7 @@ FLASHMEM void setup()
     Blinking = !digitalRead(BINDPLUG_PIN); // Blinking = binding to new TX ... because bind plug is inserted
     BindPlugInserted = Blinking;           // Bind plug inserted or not
     if (BindPlugInserted)
-        delay(200);
+       delay(200);
     digitalWrite(LED_PIN, LOW);
 }
 

@@ -440,24 +440,45 @@ void ProdRadio(uint8_t Recon_Ch)
 
 /************************************************************************************************************/
 
-#ifdef SECOND_TRANSCEIVER
 void SwapChipEnableLines()
 {
     if (ThisRadio == 1)
     {
-        digitalWrite(pinCE2, CE_OFF);
-        digitalWrite(pinCSN2, CSN_OFF);
-        digitalWrite(pinCE1, CE_ON);
-        digitalWrite(pinCSN1, CSN_ON);
+        digitalWrite(V_Pin_Ce2, CE_OFF);
+        digitalWrite(V_Pin_Csn2, CSN_OFF);
+        digitalWrite(V_Pin_Ce1, CE_ON);
+        digitalWrite(V_Pin_Csn1, CSN_ON);
     }
     else
     {
-        digitalWrite(pinCSN1, CSN_OFF);
-        digitalWrite(pinCE1, CE_OFF);
-        digitalWrite(pinCSN2, CSN_ON);
-        digitalWrite(pinCE2, CE_ON);
+        digitalWrite(V_Pin_Csn1, CSN_OFF);
+        digitalWrite(V_Pin_Ce1, CE_OFF);
+        digitalWrite(V_Pin_Csn2, CSN_ON);
+        digitalWrite(V_Pin_Ce2, CE_ON);
     }
     delayMicroseconds(STOPLISTENINGDELAY);
+}
+// ************************************************************************************************************/
+
+void PointToRadio1()
+{
+    if (Use_eleven_PWM_Outputs)
+    {
+        Servos_Used = 11;
+        CurrentRadio = &Radio1;
+    }
+    else
+    {
+        CurrentRadio = &Radio1a; // old RX with 8 PWMs (and 9!)
+        Servos_Used = 9;
+    }
+    ThisRadio = 1;
+}
+//************************************************************************************************************/
+void PointToRadio2()
+{
+    CurrentRadio = &Radio2;
+    ThisRadio = 2;
 }
 
 /************************************************************************************************************/
@@ -466,20 +487,14 @@ void TryTheOtherTransceiver(uint8_t Recon_Ch)
 {
     CurrentRadio->stopListening();
     if (ThisRadio == 2)
-    {
-        CurrentRadio = &Radio1;
-        ThisRadio = 1;
-    }
+        PointToRadio1();
     else
-    {
-        CurrentRadio = &Radio2;
-        ThisRadio = 2;
-    }
+        PointToRadio2();
     SwapChipEnableLines();
     ProdRadio(Recon_Ch);
     DelayMillis(1);
 }
-#endif // defined (SECOND_TRANSCEIVER)
+
 //************************************************************************************************************/
 void DisplayPipe()
 {
@@ -515,7 +530,6 @@ FASTRUN void Reconnect()
     {
         if (Blinking)
             BlinkLed();
-
         KickTheDog();
 #ifdef USE_SBUS
         SendSBUSData();
@@ -530,29 +544,28 @@ FASTRUN void Reconnect()
         CurrentRadio->setChannel(ReconnectChannel);
         CurrentRadio->startListening();
         delayMicroseconds(STOPLISTENINGDELAY);
-
         ++attempts;
         TryToConnectNow();
-        // Switch to next recovery channel
         ReconnectIndex = (ReconnectIndex + 1) % 3;
-        // Look(FHSS_Recovery_Channels[ReconnectIndex]);
-
         if (!Connected)
         {
-#ifdef SECOND_TRANSCEIVER
-            if (attempts >= MAXTRIESPERTRANSCEIVER)
+            if (Use_Second_Transceiver)
             {
-                TryTheOtherTransceiver(ReconnectChannel);
-                attempts = 0;
+                if (attempts >= MAXTRIESPERTRANSCEIVER)
+                {
+                    TryTheOtherTransceiver(ReconnectChannel);
+                    attempts = 0;
+                }
             }
-#else
-            if (attempts >= MAXTRIESPERTRANSCEIVER)
+            else
             {
-                ProdRadio(ReconnectChannel);
-                DelayMillis(1);
-                attempts = 0;
+                if (attempts >= MAXTRIESPERTRANSCEIVER)
+                {
+                    ProdRadio(ReconnectChannel);
+                    DelayMillis(1);
+                    attempts = 0;
+                }
             }
-#endif
             if ((millis() - start) > FAILSAFE_TIMEOUT && !FailSafeSent)
             {
                 FailSafe();
@@ -704,25 +717,27 @@ void SetupRadios()
     teensyMAC(MacAddress);
     PipePointer = DefaultPipe;
     CopyToCurrentPipe(DefaultPipe, PIPENUMBER);
-    CurrentRadio = &Radio1;
-#ifdef SECOND_TRANSCEIVER
-    digitalWrite(pinCSN2, CSN_OFF);
-    digitalWrite(pinCE2, CE_OFF);
-#endif
-    digitalWrite(pinCSN1, CSN_ON);
-    digitalWrite(pinCE1, CE_ON);
+    PointToRadio1();
+    if (Use_Second_Transceiver)
+    {
+        digitalWrite(V_Pin_Csn2, CSN_OFF);
+        digitalWrite(V_Pin_Ce2, CE_OFF);
+    }
+    digitalWrite(V_Pin_Csn1, CSN_ON);
+    digitalWrite(V_Pin_Ce1, CE_ON);
     delay(4);
     InitCurrentRadio();
     ThisRadio = 1;
-#ifdef SECOND_TRANSCEIVER
-    CurrentRadio = &Radio2;
-    digitalWrite(pinCSN1, CSN_OFF);
-    digitalWrite(pinCE1, CE_OFF);
-    digitalWrite(pinCSN2, CSN_ON);
-    digitalWrite(pinCE2, CE_ON);
-    InitCurrentRadio();
-    ThisRadio = 2;
-#endif
+    if (Use_Second_Transceiver)
+    {
+        PointToRadio2();
+        digitalWrite(V_Pin_Csn1, CSN_OFF);
+        digitalWrite(V_Pin_Ce1, CE_OFF);
+        digitalWrite(V_Pin_Csn2, CSN_ON);
+        digitalWrite(V_Pin_Ce2, CE_ON);
+        InitCurrentRadio();
+        ThisRadio = 2;
+    }
     delay(4);
 }
 

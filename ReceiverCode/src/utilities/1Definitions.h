@@ -23,10 +23,6 @@
 
 // >>>>>>>>>>>>>>>>>******* DON'T FORGET TO SET THIS LOT !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-#define SECOND_TRANSCEIVER // must be UNDEFINED ( = commented out) if using ONE transceiver but DEFINED if using TWO transceivers!
-//#define USE_11PWM_OUTPUTS  // must be UNDEFINED ( = commented out) if NOT using all 11 PWM outputs (i.e. older rxs with only 8 outputs) but DEFINED if using all 11 PWM outputs!
-
-
 #define USE_SBUS
 #define USE_PWM
 
@@ -64,7 +60,7 @@
 #define PIPENUMBER 1
 #define BOUNDPIPENUMBER 1
 #define MAX_TELEMETERY_ITEMS 22 // Max number of telemetry items to send...
-#define CHANNELSUSED 16 // Number of channels used
+#define CHANNELSUSED 16         // Number of channels used
 #define RECEIVEBUFFERSIZE 20
 
 struct CD
@@ -86,16 +82,9 @@ CD2 Parameters;
 uint8_t SizeOfParameters = sizeof(Parameters);
 
 #define FREQUENCYSCOUNT 83 // uses 83 different channels (0 to 82)
-
-#ifdef USE_11PWM_OUTPUTS
-#define SERVOSUSED 11
-#else
-#define SERVOSUSED 9 // But all 16 are available via SBUS
-#endif
-
-#define SBUSRATE 10      // SBUS frame every 10 milliseconds
-#define SBUSPORT Serial3 // = 14
-#define SBUSPIN 14       //
+#define SBUSRATE 10        // SBUS frame every 10 milliseconds
+#define SBUSPORT Serial3   // = 14
+#define SBUSPIN 14         //
 #define MINMICROS 500
 #define MAXMICROS 2500
 #define LED_PIN LED_BUILTIN
@@ -104,9 +93,6 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define RANGEMAX 2047 // = Frsky at 150 %
 #define RANGEMIN 0
 
-
-#define pinCSN2 20            // NRF2
-#define pinCE2 21             // NRF2
 #define FAILSAFE_TIMEOUT 1500 //
 #define CSN_ON LOW
 #define CSN_OFF HIGH
@@ -129,25 +115,27 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define PARAMETERS_MAX_ID 12 // Max types of parameters packet to send  ... will increase.
 
 // ****************************************************************************************************************************************
+#define PIN_CE1 22   // NRF1 for new rxs with 11 pwm outputs
+#define PIN_CSN1 23  // NRF1 for new rxs with 11 pwm outputs
+#define PINA_CE1 9   // NRF1 for old rxs with only 8 pwm outputs
+#define PINA_CSN1 10 // NRF1 for old rxs with only 8 pwm outputs
+#define PIN_CSN2 20  // NRF2 // always same if exists
+#define PIN_CE2 21   // NRF2 // always same if exists
+// ****************************************************************************************************************************************
 
-// ************************************************************************************************************/
+RF24 Radio1(PIN_CE1, PIN_CSN1);    // for new rxs with 11 pwm outputs
+RF24 Radio1a(PINA_CE1, PINA_CSN1); // for old rxs with only 8 pwm outputs
+RF24 Radio2(PIN_CE2, PIN_CSN2);    // NRF2 always same
 
-#define pinCSN2 20 // NRF2
-#define pinCE2 21  // NRF2
+bool Use_eleven_PWM_Outputs = false;
+bool Use_Second_Transceiver = false;
 
-#ifdef USE_11PWM_OUTPUTS
-#define pinCE1 22  // NRF1
-#define pinCSN1 23 // NRF1
-#else
-#define pinCE1 9   // NRF1
-#define pinCSN1 10 // NRF1
-#endif
+uint8_t V_Pin_Ce1; // using variables now to allow for both old and new pin assignments
+uint8_t V_Pin_Csn1;
+uint8_t V_Pin_Ce2;
+uint8_t V_Pin_Csn2;
 
-
-
-RF24 Radio1(pinCE1, pinCSN1);
-RF24 Radio2(pinCE2, pinCSN2);
-RF24 *CurrentRadio = &Radio1;
+RF24 *CurrentRadio = nullptr;
 
 bool RadioAt_9_10 = false;
 bool RadioAt_22_23 = false;
@@ -166,8 +154,7 @@ uint16_t ReceivedData[RECEIVEBUFFERSIZE + 1]; //  21 x 16 BIT words// lots of sp
 uint16_t Interations = 0;
 uint32_t HopStart;
 uint64_t NewPipeMaybe = 0;
-uint64_t PreviousNewPipes[PIPES_TO_COMPARE];
-uint8_t PreviousNewPipesIndex = 0;
+
 bool FailSafeSent = true;
 uint32_t RX1TotalTime = 0;
 uint32_t RX2TotalTime = 0;
@@ -267,11 +254,13 @@ void SavePipeToEEPROM();
 void DetectNexusAtBoot();
 void requestAnalog();
 bool GetAnalog(const uint8_t *data, uint8_t n, float &vbatOut, float &ampsOut, uint16_t &mAhOut);
+void PointToRadio1();
+void PointToRadio2();
 
-    /************************************************************************************************************/
-    // For numeric types (int, float, double, etc.)
-    template <typename T>
-    void Look(const T &value, int format)
+/************************************************************************************************************/
+// For numeric types (int, float, double, etc.)
+template <typename T>
+void Look(const T &value, int format)
 {
     Serial.println(value, format);
 }
@@ -301,14 +290,15 @@ Adafruit_DPS310 dps310;
 
 #ifdef USE_PWM
 //           Channels: 1  2 [3][4] 5  6 {7} 8  9 {10} 11 (Channels 3+4 & 7+10 must have same frquency)
-uint8_t PWMPins[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}; // if only SERVOSUSED = 9 then last two are ignored
+uint8_t PWMPins[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}; // if  Servos_Used = 9 then last two are ignored
 #endif
 
 #ifdef USE_SBUS
 SBUS MySbus(SBUSPORT); // SBUS
 #endif
 
-bool BoundFlag = false;                  /** indicates if receiver paired with transmitter */
+
+
 uint16_t SbusChannels[CHANNELSUSED + 1]; // Just one spare
 bool FailSafeChannel[17];
 bool FailSafeDataLoaded = false;
@@ -376,5 +366,7 @@ bool NexusPresent = false;
 float PackVoltage;
 float Battery_Amps = 0;
 float Battery_mAh = 0;
+uint8_t Servos_Used = 9; // default to 9 servos used
 
+bool BoundFlag = false; /** indicates if receiver paired with transmitter */
 #endif // defined (_SRC_UTILITIES_1DEFINITIONS_H)
