@@ -26,8 +26,8 @@ bool TestTheNewPipe() // Check that the set pipe can actually receive data befor
         uint32_t t = millis();
         while (!CurrentRadio->available(&Pipnum) && (millis() - t < 30))
         {
-           delay(1);
-           KickTheDog();
+            delay(1);
+            KickTheDog();
         }
         if (CurrentRadio->available(&Pipnum))
         {
@@ -60,27 +60,27 @@ void GetNewPipe() // from TX
     NewPipeMaybe += (uint64_t)ReceivedData[4] << 8;
     NewPipeMaybe += (uint64_t)ReceivedData[5];
 
-        for (int i = 0; i < 5; ++i)
-            TheReceivedPipe[4 - i] = ReceivedData[i + 1] & 0xff; // reversed byte array for our use
-        TheReceivedPipe[5] = 0;
-        if (Blinking) // if binding, then use the received pipe
-        {
-            CopyToCurrentPipe(TheReceivedPipe, BOUNDPIPENUMBER);
-        }
-        else // if not binding, then use the saved pipe
-        {
-            CopyToCurrentPipe(TheSavedPipe, BOUNDPIPENUMBER);
-        }
-        SetNewPipe();
-        delay(5);
-        CurrentRadio->flush_tx();
-        CurrentRadio->flush_rx();
-        delay(5);
-        if (TestTheNewPipe())
-        {
-            BindModel(); // don't bind if the pipe is not valid
-        }
-        PipeSeen = true;
+    for (int i = 0; i < 5; ++i)
+        TheReceivedPipe[4 - i] = ReceivedData[i + 1] & 0xff; // reversed byte array for our use
+    TheReceivedPipe[5] = 0;
+    if (Blinking) // if binding, then use the received pipe
+    {
+        CopyToCurrentPipe(TheReceivedPipe, BOUNDPIPENUMBER);
+    }
+    else // if not binding, then use the saved pipe
+    {
+        CopyToCurrentPipe(TheSavedPipe, BOUNDPIPENUMBER);
+    }
+    SetNewPipe();
+    delay(5);
+    CurrentRadio->flush_tx();
+    CurrentRadio->flush_rx();
+    delay(5);
+    if (TestTheNewPipe())
+    {
+        BindModel(); // don't bind if the pipe is not valid
+    }
+    PipeSeen = true;
     ++pcount; // inc pipes received
 }
 

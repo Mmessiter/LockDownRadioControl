@@ -137,9 +137,7 @@ uint8_t V_Pin_Csn2;
 
 RF24 *CurrentRadio = nullptr;
 
-bool RadioAt_9_10 = false;
-bool RadioAt_22_23 = false;
-bool RadioAt_21_20 = false;
+
 
 bool Connected = false;
 bool HopNow = false;
@@ -367,6 +365,6 @@ float PackVoltage;
 float Battery_Amps = 0;
 float Battery_mAh = 0;
 uint8_t Servos_Used = 9; // default to 9 servos used
-
+uint8_t Receiver_Type = 0;
 bool BoundFlag = false; /** indicates if receiver paired with transmitter */
 #endif // defined (_SRC_UTILITIES_1DEFINITIONS_H)

@@ -440,42 +440,8 @@ void Init_DPS310()
 FLASHMEM void setup()
 {
     digitalWrite(LED_PIN, HIGH);
-    delay(100); // wait for power to stabilise
+    delay(100); // NEEDED! (wait for power to stabilise before doing anything else)
     DetectTransceivers();
-    delay(100);
-    if (RadioAt_9_10) // old rxs with only 8 pwm outputs
-    {
-       // Look1("Only 8 PWMs and ");
-        Use_eleven_PWM_Outputs = false;
-        Servos_Used = 9;
-        V_Pin_Ce1 = PINA_CE1; //9
-        V_Pin_Csn1 = PINA_CSN1;//10
-    }
-    if (RadioAt_22_23) // all rxs with 2nd transceiver
-    {
-        //Look1("All 11 PWMs and ");
-        Use_eleven_PWM_Outputs = true;
-        Servos_Used = 11;
-        V_Pin_Ce1 = PIN_CE1; //22
-        V_Pin_Csn1 = PIN_CSN1; //23
-    }
-    if (RadioAt_21_20)
-    {
-        //Look("2 transceivers.");
-        Use_Second_Transceiver = true;
-        V_Pin_Ce2 = PIN_CE2; //21
-        V_Pin_Csn2 = PIN_CSN2; //20
-    }
-    else
-    {
-        //Look("1 transceiver.");
-        Use_Second_Transceiver = false;
-        Use_eleven_PWM_Outputs = false;
-        Servos_Used = 9;
-        V_Pin_Ce1 = PINA_CE1; //9
-        V_Pin_Csn1 = PINA_CSN1; //10
-    }
-
     SetupPINMODES();
     Wire.begin();
     Wire.setClock(400000); // Or 1000000, etc
@@ -500,8 +466,10 @@ FLASHMEM void setup()
     Blinking = !digitalRead(BINDPLUG_PIN); // Blinking = binding to new TX ... because bind plug is inserted
     BindPlugInserted = Blinking;           // Bind plug inserted or not
     if (BindPlugInserted)
-       delay(200);
+        delay(200);
     digitalWrite(LED_PIN, LOW);
+    Look1("Receiver Type Detected: ");
+    Look(Receiver_Type);
 }
 
 /************************************************************************************************************/
