@@ -10,7 +10,7 @@
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 5
 #define RXVERSION_MINIMUS 5
-#define RXVERSION_EXTRA 'A' // 27th November 2025
+#define RXVERSION_EXTRA 'B' // 4th December 2025
 #define HOPTIME 8           // gives about 100Hz FHSS
 
 // **************************************************************************
@@ -21,12 +21,10 @@
 //  #define DB_FAILSAFE
 //  #define DB_RXTIMERS
 
-// >>>>>>>>>>>>>>>>>******* DON'T FORGET TO SET THIS LOT !!! ******* <<<<<<<<<<<<<<<<<<<<< **** <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+// >>>>>>>>>>>>>>>>>*******************************************************************************************************
 
 #define USE_SBUS
 #define USE_PWM
-
-// **************************************************************************
 #define NEXUS_SERIAL_TELEMETRY Serial1
 #define SERVO_RES_BITS 12
 #define SERVO_RESOLUTION 4096
@@ -59,7 +57,6 @@
 #define DATARATE RF24_250KBPS // RF24_250KBPS, RF24_1MBPS, RF24_2MBPS
 #define PIPENUMBER 1
 #define BOUNDPIPENUMBER 1
-#define MAX_TELEMETERY_ITEMS 22 // Max number of telemetry items to send...
 #define CHANNELSUSED 16         // Number of channels used
 #define RECEIVEBUFFERSIZE 20
 

@@ -744,6 +744,7 @@ void SetupRadios()
 /************************************************************************************************************/
 void LoadLongerAckPayload()
 {
+    const uint8_t MAX_TELEMETERY_ITEMS = 23; // Max number of telemetry items to send...
     if (MacAddressSentCounter < 20)
     {
         SendMacAddress();
@@ -838,6 +839,12 @@ void LoadLongerAckPayload()
         break;
     case 22:
         SendFloatToAckPayload(Battery_mAh); // mAh from Nexus
+        break;
+    case 23:
+        SendIntToAckPayload(Receiver_Type); // Receiver Type
+        // Look1 ("Sent Receiver Type: ");
+        // Look (Receiver_Type);
+
         break;
 
     default:

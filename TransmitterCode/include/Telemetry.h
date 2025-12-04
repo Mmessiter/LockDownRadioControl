@@ -318,6 +318,7 @@ void PopulateDataView()
     char MeanFrameRate[] = "n0";
     char TimeSinceBoot[] = "n1";
     unsigned int TempModelId = 0;
+    char Rx_type[4][30] = {"Unknown", "TRX:1 PWM:8", "TRX:2 PWM:8", "TRX:2 PWM:11"};
     uint32_t BootedMinutes = millis() / 60000;
     static int LastGroundModelAltitude = 0;
 
@@ -433,13 +434,15 @@ void PopulateDataView()
         BuildText(DataView_Rx, Vbuf); // SendText(DataView_Rx, Vbuf);
     }
 
-    if (LastMaxRateOfClimb != MaxRateOfClimb)
-    {
-        LastMaxRateOfClimb = MaxRateOfClimb;
-        int feet = (int)MaxRateOfClimb + 0.5; // round to nearest integer
-        snprintf(Vbuf, 26, "%d feet / minute", feet);
-        BuildText(Sbs, Vbuf);
-    }
+    // if (LastMaxRateOfClimb != MaxRateOfClimb)
+    // {
+    //     LastMaxRateOfClimb = Receiver_type;
+       // int feet = (int)MaxRateOfClimb + 0.5; // round to nearest integer
+       // snprintf(Vbuf, 26, "%d feet / minute", feet);
+        // Look(" RX type: ");
+        // Serial.println(Rx_type[Receiver_type]);
+        BuildText(Sbs, Rx_type[Receiver_type]); // SendText(Sbs, Vbuf);
+    // }
 
     if (LastTimeSinceBoot != BootedMinutes)
     {
