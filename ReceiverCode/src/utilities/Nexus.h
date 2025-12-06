@@ -144,12 +144,12 @@ bool GetAnalog(const uint8_t *data, uint8_t n,
         const uint8_t *payload = &data[i + 5];
 
         // MSP_ANALOG layout:
-        // payload[0] = vbat (0.1 V units)
+        // payload[0] = vbat (0.1 V units) // removed as unreliable above 25v
         // payload[1..2] = powerMeterSum (raw)
         // payload[3..4] = RSSI (0–1023)
         // payload[5..6] = amperage (0.1 A units)
-        uint8_t vbat_raw = payload[0];
-        vbatOut = vbat_raw / 10.0f;
+       // uint8_t vbat_raw = payload[0];
+       // vbatOut = vbat_raw / 10.0f;
 
         // Default if fields are missing
         mAhOut = 0;
@@ -191,31 +191,10 @@ void CheckMSPSerial()
     uint16_t mAhAnalog;
     if (GetAnalog(&data_in[0], p, vbatAnalog, ampsAnalog, mAhAnalog)) // this volts reading is not reliable after 25v
     {
-        // MSP_ANALOG vbat is low; scale it to real pack volts
-        // PackVoltage = vbatAnalog * VBAT_CAL_SCALE;
-
-        // if (!INA219Connected)
-        // {
-        //     RXModelVolts = PackVoltage; // full pack volts
-        //     if (PackVoltage > 25.2f)    // bigger than 6s pack?
-        //     {
-        //         RXModelVolts /= 2.0f; // must be 12s so divide by 2
-        //     }
-        // }
+        
         Battery_Amps = ampsAnalog; // amps (already in A from GetAnalog)
         Battery_mAh = mAhAnalog;   // rough mAh
 
-
-        // Debug print
-        // Look1(" RPM: ");
-        // Look(RotorRPM);
-        // Look1(" Voltage (Per cell): ");
-        // Look(PackVoltage / 12.0f);
-        // Look1(" Battery_Amps: ");
-        // Look(Battery_Amps);
-        // Look1(" Battery_mAh: ");
-        // Look(Battery_mAh);
-        // Look("");
     }
     // 3) Request new data for next cycle
     requestRPM();
