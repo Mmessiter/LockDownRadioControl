@@ -144,12 +144,12 @@ bool GetAnalog(const uint8_t *data, uint8_t n,
         const uint8_t *payload = &data[i + 5];
 
         // MSP_ANALOG layout:
-        // payload[0] = vbat (0.1 V units) // unreliable above 25v so set Rotorflight correction to -50% for 12S
+        // payload[0] = vbat (0.1 V units) // Only 8 BITS. So set Rotorflight correction to -50% for 12S, otherwise use INA219 on i2c with voltage divider
         // payload[1..2] = powerMeterSum (raw)
         // payload[3..4] = RSSI (0–1023)
         // payload[5..6] = amperage (0.1 A units)
-       // uint8_t vbat_raw = payload[0];
-       // vbatOut = vbat_raw / 10.0f;
+        // uint8_t vbat_raw = payload[0];
+        // vbatOut = vbat_raw / 10.0f;
 
         // Default if fields are missing
         mAhOut = 0;
