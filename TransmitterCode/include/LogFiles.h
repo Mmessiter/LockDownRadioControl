@@ -468,10 +468,10 @@ FASTRUN void LogDisConnection()
 {
     char buf[40] = " ";
     char TheText[] = "Disconnected from ";
-
     strcpy(buf, TheText);
     strcat(buf, ModelName);
     LogText(buf, strlen(buf), true);
+
     LogConnectedDuration();
     LogMotorOnDuration();
     LogRx_type();
@@ -487,9 +487,9 @@ FASTRUN void LogDisConnection()
     LogAverageGap();
     LogAverageFrameRate();
     LogTotalLostPackets();
-    LogTotalGoodPackets();
-    LogTotalRXGoodPackets();
-    LogTotalPacketsAttempted();
+    // LogTotalGoodPackets(); // not very interesting
+    // LogTotalRXGoodPackets();// not very interesting
+    // LogTotalPacketsAttempted();// not very interesting
     LogRXVoltsPerCell();
     LogTXVoltsPerCell();
     LogOverallSuccessRate();
