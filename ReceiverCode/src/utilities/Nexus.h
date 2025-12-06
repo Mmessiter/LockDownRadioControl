@@ -144,7 +144,7 @@ bool GetAnalog(const uint8_t *data, uint8_t n,
         const uint8_t *payload = &data[i + 5];
 
         // MSP_ANALOG layout:
-        // payload[0] = vbat (0.1 V units) // removed as unreliable above 25v
+        // payload[0] = vbat (0.1 V units) // unreliable above 25v so set Rotorflight correction to -50% for 12S
         // payload[1..2] = powerMeterSum (raw)
         // payload[3..4] = RSSI (0–1023)
         // payload[5..6] = amperage (0.1 A units)
@@ -162,8 +162,9 @@ bool GetAnalog(const uint8_t *data, uint8_t n,
             mAhOut = powerMeterSum; // you can refine this once you compare numbers
             uint16_t amps_raw = (uint16_t)payload[5] | ((uint16_t)payload[6] << 8);
             ampsOut = amps_raw / 10.0f; // 0.1 A units
+            if (!INA219Connected)
+                RXModelVolts = (float)((uint8_t)payload[0]) / 10.0f; // decivolts from analog input if INA219 not present (set Rotorflight to -50% for 12S)
         }
-
         return true;
     }
     return false;
@@ -191,10 +192,8 @@ void CheckMSPSerial()
     uint16_t mAhAnalog;
     if (GetAnalog(&data_in[0], p, vbatAnalog, ampsAnalog, mAhAnalog)) // this volts reading is not reliable after 25v
     {
-        
         Battery_Amps = ampsAnalog/10; // amps (already in A from GetAnalog)
         Battery_mAh = mAhAnalog;   // rough mAh
-
     }
     // 3) Request new data for next cycle
     requestRPM();
