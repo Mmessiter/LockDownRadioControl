@@ -10,7 +10,7 @@
 
 #define MSP_MOTOR_TELEMETRY 139                 // Motor telemetry data
 #define MSP_ANALOG 110                          // vbat, mAh, RSSI, amps
-static constexpr float VBAT_CAL_SCALE = 1.78f; // refine later if needed
+//static constexpr float VBAT_CAL_SCALE = 1.78f; // refine later if needed
 
 // ************************************************************************************************************
 void DetectNexusAtBoot()
@@ -189,21 +189,22 @@ void CheckMSPSerial()
     // 2) Battery / current from MSP_ANALOG
     float vbatAnalog, ampsAnalog;
     uint16_t mAhAnalog;
-    if (GetAnalog(&data_in[0], p, vbatAnalog, ampsAnalog, mAhAnalog))
+    if (GetAnalog(&data_in[0], p, vbatAnalog, ampsAnalog, mAhAnalog)) // this volts reading is not reliable after 25v
     {
         // MSP_ANALOG vbat is low; scale it to real pack volts
-        PackVoltage = vbatAnalog * VBAT_CAL_SCALE;
+        // PackVoltage = vbatAnalog * VBAT_CAL_SCALE;
 
-        if (!INA219Connected)
-        {
-            RXModelVolts = PackVoltage; // full pack volts
-            if (PackVoltage > 25.2f)    // bigger than 6s pack?
-            {
-                RXModelVolts /= 2.0f; // must be 12s so divide by 2
-            }
-        }
+        // if (!INA219Connected)
+        // {
+        //     RXModelVolts = PackVoltage; // full pack volts
+        //     if (PackVoltage > 25.2f)    // bigger than 6s pack?
+        //     {
+        //         RXModelVolts /= 2.0f; // must be 12s so divide by 2
+        //     }
+        // }
         Battery_Amps = ampsAnalog; // amps (already in A from GetAnalog)
         Battery_mAh = mAhAnalog;   // rough mAh
+
 
         // Debug print
         // Look1(" RPM: ");

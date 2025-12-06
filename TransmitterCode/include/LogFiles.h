@@ -422,13 +422,47 @@ void Log_RXMAXModelAltitude()
     LogText(buf, strlen(buf), false);
 }
 // ************************************************************************
+void LogMaxAmpsUsed()
+{
+    if (!Max_Battery_Amps)
+        return;
+    char TheText[] = "Max Amps used: ";
+    char buf[60] = " ";
+    char NB[10];
+    dtostrf(Max_Battery_Amps, 2, 2, NB);
+    strcpy(buf, TheText);
+    strcat(buf, NB);
+    strcat(buf, " Amps");
+    LogText(buf, strlen(buf), false);
+}
+// ************************************************************************
+void LogTotalMahUsed()
+{
+    if (!Battery_mAh)
+        return;
+    char TheText[] = "Total mAh used: ";
+    char buf[60] = " ";
+    char NB[10];
+    dtostrf(Battery_mAh, 2, 2, NB);
+    strcpy(buf, TheText);
+    strcat(buf, NB);
+    strcat(buf, " mAh");
+    LogText(buf, strlen(buf), false);
+}
+// Rx_type ************************************************************************
+void LogRx_type()
+{
+    char TheText[] = "Receiver type: ";
+    char buf[60] = " ";
+    strcpy(buf, TheText);
+    strcat(buf, Rx_type[Receiver_type]);
+    LogText(buf, strlen(buf), false);
+}
+// ************************************************************************
 /**
  * @brief Logs the disconnection event.
  *
- * This function logs the disconnection event by creating a log message with the information about the disconnection.
- * It includes the model name and various statistics related to the radio control system.
- * The log message is then passed to the LogText function for logging.
-
+ * This function logs the disconnection and various statistics related to the session.
  */
 FASTRUN void LogDisConnection()
 {
@@ -440,6 +474,9 @@ FASTRUN void LogDisConnection()
     LogText(buf, strlen(buf), true);
     LogConnectedDuration();
     LogMotorOnDuration();
+    LogRx_type();
+    LogMaxAmpsUsed();
+    LogTotalMahUsed();
     LogTotalRXSwaps();
     LogRXsTotalTimes();
     if (RXMAXModelAltitude > 0)

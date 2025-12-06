@@ -1017,6 +1017,8 @@ ParseLongerAckPayload() // It's already pretty short!
     case 21:
         Battery_Amps = GetFloatFromAckPayload(); // current ... amps being used :-)
         ShowAmpsBeingUsed(Battery_Amps);
+        if (Battery_Amps > Max_Battery_Amps)
+            Max_Battery_Amps = Battery_Amps;
         break;
     case 22:
         Battery_mAh = GetFloatFromAckPayload(); // milliamp hours used so far
@@ -1024,8 +1026,6 @@ ParseLongerAckPayload() // It's already pretty short!
         break;
     case 23:
         Receiver_type = (uint8_t)GetIntFromAckPayload();
-        // Look1(" RX type: ");
-        // Serial.println(Receiver_type);
         break;
     default:
         break;

@@ -1264,8 +1264,10 @@ const uint16_t GapThesholds[11] =   {0, 4, 8, 10, 12, 15, 25, 50, 100, 250, 500}
 uint32_t MaxBin = 100;
 uint32_t PrevGapSets[11] = {0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff};
 float Battery_Amps = 0;
+float Max_Battery_Amps = 0;
 float Battery_mAh = 0;
 uint8_t Receiver_type = 0;
+char Rx_type[4][30] = {"Unknown", "TRX:1 PWM:8", "TRX:2 PWM:8", "TRX:2 PWM:11"};
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
 // **********************************************************************************************************************************

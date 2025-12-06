@@ -318,7 +318,6 @@ void PopulateDataView()
     char MeanFrameRate[] = "n0";
     char TimeSinceBoot[] = "n1";
     unsigned int TempModelId = 0;
-    char Rx_type[4][30] = {"Unknown", "TRX:1 PWM:8", "TRX:2 PWM:8", "TRX:2 PWM:11"};
     uint32_t BootedMinutes = millis() / 60000;
     static int LastGroundModelAltitude = 0;
 
