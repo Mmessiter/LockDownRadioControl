@@ -20,6 +20,13 @@
  * - Supports one or two tranceivers (ML01SP4s)
  * - Variometer added.
  * - Support for GPS added (Adafruit)
+ * - Nexus telemetry support added (RPM etc)
+ * - FHSS with 83 channels driven from RX.
+ * - EEPROM storage of bind data and failsafe data
+ * - Transceiver detection at startup - no more conditional compilation needed.
+ * - I2C device detection at startup 
+ * - Watchdog timer implemented
+ * - and so on...   
  *
  *
  * @section rxpinout TEENSY 4.0 PINS
