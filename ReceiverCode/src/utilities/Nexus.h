@@ -192,7 +192,7 @@ void CheckMSPSerial()
     if (GetAnalog(&data_in[0], p, vbatAnalog, ampsAnalog, mAhAnalog)) // this volts reading is not reliable after 25v
     {
         
-        Battery_Amps = ampsAnalog; // amps (already in A from GetAnalog)
+        Battery_Amps = ampsAnalog/10; // amps (already in A from GetAnalog)
         Battery_mAh = mAhAnalog;   // rough mAh
 
     }
