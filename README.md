@@ -112,6 +112,7 @@ Here is a brief summary of the features supported at the time of writing (July 2
 - 8 user definable switches. (and four of these can be knobs for continious variation of a channel).
 - Digital trims, subtrim, servo reverse, servo speeds, user macros, motor timer, log files, etc., etc...
 - Receiver supports SBUS and PWM (with definable frequency and centre position).
+- Special telemetry support for Nexus (Rotorflight) - Rotor RPM, mAH, RX pack voltage, etc.
 - Variometer function for gliders.
 - Context sensitive help screens for all functions.
 
