@@ -24,9 +24,9 @@
  * - FHSS with 83 channels driven from RX.
  * - EEPROM storage of bind data and failsafe data
  * - Transceiver detection at startup - no more conditional compilation needed.
- * - I2C device detection at startup 
+ * - I2C device detection at startup
  * - Watchdog timer implemented
- * - and so on...   
+ * - and so on...
  *
  *
  * @section rxpinout TEENSY 4.0 PINS
@@ -131,6 +131,8 @@ void MoveServos()
     if ((millis() - LocalTimer) < 10)
         return;
     LocalTimer = millis();
+    // Look1("Moving Servos at ");
+    // Look(LocalTimer);
 
     if (!CheckForCrazyValues())
     {
@@ -168,7 +170,7 @@ void MoveServos()
 /** Execute FailSafe data from EEPROM. */
 void FailSafe()
 {
-    Look("Entering Failsafe!");
+    // Look("Entering Failsafe!");
     if (BoundFlag)
     {
         LoadFailSafeDataFromEEPROM(); // load failsafe values from EEPROM
@@ -206,7 +208,7 @@ void SetServoFrequency()
 }
 #endif // USE_PWM
 /************************************************************************************************************/
-void AttachServos()
+void StartSBUSandSERVOS()
 {
 #ifdef USE_PWM
     SetServoFrequency();
@@ -534,6 +536,8 @@ void loop()
     }
     else
     {
+        // Look1("Not Bound, attempting to get new pipe at ");
+        // Look(millis());
         GetNewPipe();
     }
 }

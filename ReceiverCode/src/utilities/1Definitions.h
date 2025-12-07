@@ -57,7 +57,7 @@
 #define DATARATE RF24_250KBPS // RF24_250KBPS, RF24_1MBPS, RF24_2MBPS
 #define PIPENUMBER 1
 #define BOUNDPIPENUMBER 1
-#define CHANNELSUSED 16         // Number of channels used
+#define CHANNELSUSED 16 // Number of channels used
 #define RECEIVEBUFFERSIZE 20
 
 struct CD
@@ -134,8 +134,6 @@ uint8_t V_Pin_Csn2;
 
 RF24 *CurrentRadio = nullptr;
 
-
-
 bool Connected = false;
 bool HopNow = false;
 uint8_t ThisRadio = 1;
@@ -148,8 +146,6 @@ uint16_t RawDataIn[RECEIVEBUFFERSIZE + 1];    //  21 x 16 BIT words // lots of s
 uint16_t ReceivedData[RECEIVEBUFFERSIZE + 1]; //  21 x 16 BIT words// lots of spare space//
 uint16_t Interations = 0;
 uint32_t HopStart;
-uint64_t NewPipeMaybe = 0;
-
 bool FailSafeSent = true;
 uint32_t RX1TotalTime = 0;
 uint32_t RX2TotalTime = 0;
@@ -201,9 +197,7 @@ uint8_t FHSS_Channels[83] = {51, 28, 24, 61, 64, 55, 66, 19, 76, 21, 59, 67, 15,
                              35, 57, 45, 29, 75, 3, 41, 62, 11, 9, 77, 37, 8, 31, 36, 18, 17, 50, 78, 73, 30, 79, 6, 23, 40,
                              54, 12, 80, 53, 22, 1, 74, 39, 58, 63, 70, 52, 42, 25, 43, 26, 14, 38, 48, 68, 33, 27, 60, 44, 46,
                              56, 7, 81, 5, 65, 4, 10, 0};
-uint8_t *FHSSChPointer = FHSS_Channels; // Pointer for FHSS channels' array
-bool PipeSeen = false;
-
+uint8_t *FHSSChPointer = FHSS_Channels;                                                             // Pointer for FHSS channels' array
 uint16_t ServoCentrePulse[11] = {1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500, 1500}; // 11 channels for servo centre pulse
 uint16_t ServoFrequency[11] = {50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50};                         // 11 channels for servo frequency
 
@@ -242,7 +236,7 @@ FASTRUN void ReceiveData();
 void CopyToCurrentPipe(uint8_t *p, uint8_t pn);
 void SetNewPipe();
 void UnbindModel();
-void AttachServos();
+void StartSBUSandSERVOS();
 void LoadFailSafeDataFromEEPROM();
 void SaveFailSafeDataToEEPROM();
 void SavePipeToEEPROM();
@@ -292,8 +286,6 @@ uint8_t PWMPins[11] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10}; // if  Servos_Used = 9
 SBUS MySbus(SBUSPORT); // SBUS
 #endif
 
-
-
 uint16_t SbusChannels[CHANNELSUSED + 1]; // Just one spare
 bool FailSafeChannel[17];
 bool FailSafeDataLoaded = false;
@@ -334,7 +326,6 @@ uint8_t TheCurrentPipe[6];
 bool FirstConnection = true;
 bool FailedSafe = true; // Starting up as the same as after failsafe
 bool NewData = false;
-uint16_t pcount = 0; // how many pipes so far received from TX
 bool Blinking = false;
 uint8_t BlinkValue = 1;
 uint32_t BlinkTimer = 0;
@@ -364,4 +355,4 @@ float Battery_mAh = 0;
 uint8_t Servos_Used = 9; // default to 9 servos used
 uint8_t Receiver_Type = 0;
 bool BoundFlag = false; /** indicates if receiver paired with transmitter */
-#endif // defined (_SRC_UTILITIES_1DEFINITIONS_H)
+#endif                  // defined (_SRC_UTILITIES_1DEFINITIONS_H)

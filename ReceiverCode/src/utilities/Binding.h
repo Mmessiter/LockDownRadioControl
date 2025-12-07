@@ -9,10 +9,6 @@
 
 bool TestTheNewPipe() // Check that the set pipe can actually receive data before going further.
 {
-    if (Blinking)
-    {
-        return true;
-    }
     uint8_t idx = 1;
     uint32_t LookTime = millis();
     while (millis() - LookTime < 650)
@@ -51,19 +47,10 @@ void GetNewPipe() // from TX
     if (!NewData)
         return;
     NewData = false;
-    if (PipeSeen)
-        return;
-    NewPipeMaybe = (uint64_t)ReceivedData[0] << 40;
-    NewPipeMaybe += (uint64_t)ReceivedData[1] << 32;
-    NewPipeMaybe += (uint64_t)ReceivedData[2] << 24;
-    NewPipeMaybe += (uint64_t)ReceivedData[3] << 16;
-    NewPipeMaybe += (uint64_t)ReceivedData[4] << 8;
-    NewPipeMaybe += (uint64_t)ReceivedData[5];
-
     for (int i = 0; i < 5; ++i)
         TheReceivedPipe[4 - i] = ReceivedData[i + 1] & 0xff; // reversed byte array for our use
-    TheReceivedPipe[5] = 0;
-    if (Blinking) // if binding, then use the received pipe
+    TheReceivedPipe[5] = 0;                                  // need a terminating zero
+    if (Blinking)                                            // if binding, then use the received pipe
     {
         CopyToCurrentPipe(TheReceivedPipe, BOUNDPIPENUMBER);
     }
@@ -79,9 +66,12 @@ void GetNewPipe() // from TX
     if (TestTheNewPipe())
     {
         BindModel(); // don't bind if the pipe is not valid
+      //  Look("Pipe test succeeded. Model bound.");
     }
-    PipeSeen = true;
-    ++pcount; // inc pipes received
+    else
+    {
+       // Look("Pipe test failed. Not bound.");
+    }
 }
 
 /************************************************************************************************************/
@@ -96,7 +86,7 @@ void CopyToCurrentPipe(uint8_t *p, uint8_t pn)
 void DisplayAPipe(const uint8_t *pipe) // for debug
 {
     char buffer[44];
-    snprintf(buffer, 44, "Pipe: %02X %02X %02X %02X %02X", pipe[0], pipe[1], pipe[2], pipe[3], pipe[4]);
+    snprintf(buffer, 44, "Pipe: %02X %02X %02X %02X %02X %02X", pipe[0], pipe[1], pipe[2], pipe[3], pipe[4], pipe[5]);
     Look(buffer);
 }
 //************************************************************************************************************/
@@ -120,7 +110,7 @@ void BindModel()
     }
     if (FirstConnection)
     {
-        AttachServos(); // AND START SBUS
+        StartSBUSandSERVOS(); // start SBUS and SERVOS on first connection
         FirstConnection = false;
     }
     ConnectMoment = millis();
@@ -132,8 +122,6 @@ void UnbindModel()
 {
     BoundFlag = false;
     LongAcknowledgementsCounter = 0;
-    PipeSeen = false;
-    pcount = 0;
     MacAddressSentCounter = 0;
     CopyToCurrentPipe(DefaultPipe, BOUNDPIPENUMBER);
     SetNewPipe(); // set the default pipe
