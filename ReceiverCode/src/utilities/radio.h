@@ -744,7 +744,7 @@ void SetupRadios()
 /************************************************************************************************************/
 void LoadLongerAckPayload()
 {
-    const uint8_t MAX_TELEMETERY_ITEMS = 23; // Max number of telemetry items to send...
+    const uint8_t MAX_TELEMETERY_ITEMS = 24; // Max number of telemetry items to send...
     if (MacAddressSentCounter < 20)
     {
         SendMacAddress();
@@ -842,9 +842,9 @@ void LoadLongerAckPayload()
         break;
     case 23:
         SendIntToAckPayload(Receiver_Type); // Receiver Type
-        // Look1 ("Sent Receiver Type: ");
-        // Look (Receiver_Type);
-
+        break;
+    case 24:
+        SendFloatToAckPayload(escTempC); // ESC temperature in degrees C from Nexus 
         break;
 
     default:

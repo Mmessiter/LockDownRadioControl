@@ -355,4 +355,5 @@ float Battery_mAh = 0;
 uint8_t Servos_Used = 9; // default to 9 servos used
 uint8_t Receiver_Type = 0;
 bool BoundFlag = false; /** indicates if receiver paired with transmitter */
+float escTempC = 0.0f; // ESC temperature in degrees C
 #endif                  // defined (_SRC_UTILITIES_1DEFINITIONS_H)

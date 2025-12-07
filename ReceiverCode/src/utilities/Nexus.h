@@ -8,22 +8,22 @@
 // NEXUS TELEMETRY SUPPORT FUNCTIONS
 // ************************************************************************************************************
 
-#define MSP_MOTOR_TELEMETRY 139                 // Motor telemetry data
-#define MSP_ANALOG 110                          // vbat, mAh, RSSI, amps
+#define MSP_MOTOR_TELEMETRY 139 // Motor telemetry data
+#define MSP_ANALOG 110          // vbat, mAh, RSSI, amps
 
 // ************************************************************************************************************
 void DetectNexusAtBoot()
 {
 #define NEXUS_DETECT_WINDOW_MS 1500 // 1.5 seconds time window to detect Nexus at boot
-    
+
     NEXUS_SERIAL_TELEMETRY.begin(115200);
     uint32_t start = millis();
     uint8_t buf[80];
 
     while (millis() - start < NEXUS_DETECT_WINDOW_MS)
     {
-        requestAnalog(); 
-        delay(20);       // give it a moment to reply
+        requestAnalog();
+        delay(20); // give it a moment to reply
         uint8_t p = 0;
         while (NEXUS_SERIAL_TELEMETRY.available() && p < sizeof(buf))
         {
@@ -69,7 +69,9 @@ void requestAnalog()
     checksum ^= MSP_ANALOG;
     NEXUS_SERIAL_TELEMETRY.write(checksum);
 }
+
 // *************************************************************************************************************
+
 uint16_t GetRPM(const uint8_t *data, uint8_t n)
 {
     const uint8_t CMD = MSP_MOTOR_TELEMETRY; // 0x8B
@@ -100,6 +102,13 @@ uint16_t GetRPM(const uint8_t *data, uint8_t n)
             continue;
 
         const uint8_t *payload = &data[i + 5];
+
+        if (size >= 8)
+        {
+            escTempC = (float)((uint8_t)payload[7]); 
+            Look(escTempC);/// tomorrow!
+        }
+
         uint16_t motor_rpm = (uint16_t)payload[1] | ((uint16_t)payload[2] << 8);
         float head = float(motor_rpm) / Ratio;
         if (head < 0.0f)
@@ -150,14 +159,13 @@ bool GetAnalog(const uint8_t *data, uint8_t n,
         // uint8_t vbat_raw = payload[0];
         // vbatOut = vbat_raw / 10.0f;
 
-   
         mAhOut = 0;
         ampsOut = 0.0f;
 
         if (size >= 7)
         {
             uint16_t powerMeterSum = (uint16_t)payload[1] | ((uint16_t)payload[2] << 8);
-            mAhOut = powerMeterSum; 
+            mAhOut = powerMeterSum;
             uint16_t amps_raw = (uint16_t)payload[5] | ((uint16_t)payload[6] << 8);
             ampsOut = amps_raw / 10.0f; // 0.1 A units
             if (!INA219Connected)
@@ -188,8 +196,8 @@ void CheckMSPSerial()
     uint16_t mAhAnalog;
     if (GetAnalog(&data_in[0], p, vbatAnalog, ampsAnalog, mAhAnalog)) // this volts reading is not reliable after 25v
     {
-        Battery_Amps = ampsAnalog/10; // amps (already in A from GetAnalog)
-        Battery_mAh = mAhAnalog;   // rough mAh
+        Battery_Amps = ampsAnalog / 10; // amps (already in A from GetAnalog)
+        Battery_mAh = mAhAnalog;        // rough mAh
     }
     // 3) Request new data for next cycle
     requestRPM();

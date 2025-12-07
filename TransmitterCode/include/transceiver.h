@@ -1027,6 +1027,14 @@ ParseLongerAckPayload() // It's already pretty short!
     case 23:
         Receiver_type = (uint8_t)GetIntFromAckPayload();
         break;
+    case 24:
+        ESC_Temp = GetFloatFromAckPayload(); // ESC Temperature
+        if (ESC_Temp > Max_ESC_Temp)
+        {
+            Max_ESC_Temp = ESC_Temp;
+        }
+        Look(ESC_Temp);
+        break;
     default:
         break;
     }
