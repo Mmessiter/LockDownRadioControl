@@ -10,7 +10,6 @@
 
 #define MSP_MOTOR_TELEMETRY 139                 // Motor telemetry data
 #define MSP_ANALOG 110                          // vbat, mAh, RSSI, amps
-//static constexpr float VBAT_CAL_SCALE = 1.78f; // refine later if needed
 
 // ************************************************************************************************************
 void DetectNexusAtBoot()
@@ -151,15 +150,14 @@ bool GetAnalog(const uint8_t *data, uint8_t n,
         // uint8_t vbat_raw = payload[0];
         // vbatOut = vbat_raw / 10.0f;
 
-        // Default if fields are missing
+   
         mAhOut = 0;
         ampsOut = 0.0f;
 
         if (size >= 7)
         {
             uint16_t powerMeterSum = (uint16_t)payload[1] | ((uint16_t)payload[2] << 8);
-            // Many firmwares use this as mAh * some scale; treat roughly as mAh here:
-            mAhOut = powerMeterSum; // you can refine this once you compare numbers
+            mAhOut = powerMeterSum; 
             uint16_t amps_raw = (uint16_t)payload[5] | ((uint16_t)payload[6] << 8);
             ampsOut = amps_raw / 10.0f; // 0.1 A units
             if (!INA219Connected)
@@ -182,12 +180,10 @@ void CheckMSPSerial()
     {
         data_in[p++] = NEXUS_SERIAL_TELEMETRY.read();
     }
-    // 1) RPM as before
     uint16_t tempRPM = GetRPM(&data_in[0], p);
     if (tempRPM != 0xffff)
         RotorRPM = tempRPM;
 
-    // 2) Battery / current from MSP_ANALOG
     float vbatAnalog, ampsAnalog;
     uint16_t mAhAnalog;
     if (GetAnalog(&data_in[0], p, vbatAnalog, ampsAnalog, mAhAnalog)) // this volts reading is not reliable after 25v
