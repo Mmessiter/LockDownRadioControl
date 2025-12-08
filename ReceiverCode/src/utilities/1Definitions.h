@@ -7,6 +7,7 @@
 #include <Adafruit_DPS310.h>
 #include <EEPROM.h>
 
+#define USE_MSP_LIBRARY 1 // set to 1 to use the ReefwingMSP library
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 5
 #define RXVERSION_MINIMUS 5

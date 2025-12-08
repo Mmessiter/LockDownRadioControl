@@ -1,10 +1,9 @@
 
-// ************************************************** Receiver code **************************************************
-
-/** @file ReceiverCode/src/main.cpp
- * // Malcolm Messiter 2020 - 2025
+/**************************************************** Receiver code **************************************************
+  @file       main.cpp
+  @brief      Main code for Lockdown Radio Control Receiver.
+  @author     Malcolm Messiter 2020 - 2025
  * @page RXCODE RecieverCode
- *
  * @section rx Features List
  * - WORKS ON TEENSY 4.0
  * - Detects and uses INA219 to read volts
@@ -75,6 +74,17 @@
 #include "utilities/Parameters.h"
 #include "utilities/Nexus.h"
 #include "utilities/Detect_Transceivers.h"
+
+/************************************************************************************************************/
+#ifdef USE_MSP_LIBRARY
+#include "utilities/msp/ReefwingMSP.h"
+#define MAX_CMD_SIZE 32
+#define RETURN '\r'
+#define NEW_LINE '\n'
+#define NULL_CHAR '\0'
+ReefwingMSP msp;
+#endif
+//************************************************************************************************************/
 
 void DelayMillis(uint16_t ms) // This replaces any delay() calls
 {
@@ -479,6 +489,9 @@ FLASHMEM void setup()
     digitalWrite(LED_PIN, LOW);
     Look1("Receiver Type Detected: ");
     Look(Receiver_Type);
+#ifdef USE_MSP_LIBRARY
+    msp.begin(NEXUS_SERIAL_TELEMETRY);
+#endif
 }
 
 /************************************************************************************************************/
