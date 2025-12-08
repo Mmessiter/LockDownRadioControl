@@ -103,11 +103,24 @@ uint16_t GetRPM(const uint8_t *data, uint8_t n)
 
         const uint8_t *payload = &data[i + 5];
 
-        if (size >= 8)
+        if (size >= 9)
         {
-            escTempC = (float)((uint8_t)payload[7]); 
-            Look(escTempC);/// tomorrow!
+            escTempC = (float)((uint8_t)payload[7]);
+            Look((uint8_t)payload[7]);
         }
+       
+        // Serial.print("MSP Motor Telemetry size: ");
+        // Serial.print(size);
+        // Serial.print(" bytes: ");
+        // for (int j = 0; j < size; j++)
+        // {
+        //     Serial.print(" j=");
+        //     Serial.print(j, DEC);
+        //     Serial.print("->");
+        //     Serial.print(payload[j], DEC);
+        // }
+        // Serial.println();
+        //**** */
 
         uint16_t motor_rpm = (uint16_t)payload[1] | ((uint16_t)payload[2] << 8);
         float head = float(motor_rpm) / Ratio;
