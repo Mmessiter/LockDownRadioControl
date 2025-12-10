@@ -3,12 +3,12 @@
 #ifndef NEXUS_H
 #define NEXUS_H
 #include "utilities/1Definitions.h" 
-//#include "utilities/msp/ReefwingMSP.h"
+
 
 // ************************************************************************************************************
 // MSP SUPPORT FUNCTIONS FOR NEXUS etc.
 // ************************************************************************************************************
-//ReefwingMSP msp;
+
 #define MSP_MOTOR_TELEMETRY 139 // Motor telemetry data
 #define MSP_ANALOG 110          // vbat, mAh, RSSI, amps
 
