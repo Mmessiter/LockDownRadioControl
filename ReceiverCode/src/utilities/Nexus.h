@@ -16,7 +16,7 @@ void DetectNexusAtBoot()
 {
 #define NEXUS_DETECT_WINDOW_MS 1500 // 1.5 seconds time window to detect Nexus at boot
 
-    NEXUS_SERIAL_TELEMETRY.begin(115200);
+    MSP_UART.begin(115200);
     uint32_t start = millis();
     uint8_t buf[80];
 
@@ -25,9 +25,9 @@ void DetectNexusAtBoot()
         requestAnalog();
         delay(20); // give it a moment to reply
         uint8_t p = 0;
-        while (NEXUS_SERIAL_TELEMETRY.available() && p < sizeof(buf))
+        while (MSP_UART.available() && p < sizeof(buf))
         {
-            buf[p++] = NEXUS_SERIAL_TELEMETRY.read();
+            buf[p++] = MSP_UART.read();
         }
         float vbat, amps;
         uint16_t mAh;
@@ -37,7 +37,7 @@ void DetectNexusAtBoot()
             return;
         }
     }
-    NEXUS_SERIAL_TELEMETRY.end();
+    MSP_UART.end();
     NexusPresent = false;
 }
 
@@ -46,28 +46,28 @@ void DetectNexusAtBoot()
 void requestRPM()
 {
     uint8_t checksum = 0;
-    NEXUS_SERIAL_TELEMETRY.write('$');
-    NEXUS_SERIAL_TELEMETRY.write('M');
-    NEXUS_SERIAL_TELEMETRY.write('<');
-    NEXUS_SERIAL_TELEMETRY.write(0);
+    MSP_UART.write('$');
+    MSP_UART.write('M');
+    MSP_UART.write('<');
+    MSP_UART.write(0);
     checksum ^= 0;
-    NEXUS_SERIAL_TELEMETRY.write(MSP_MOTOR_TELEMETRY);
+    MSP_UART.write(MSP_MOTOR_TELEMETRY);
     checksum ^= MSP_MOTOR_TELEMETRY;
-    NEXUS_SERIAL_TELEMETRY.write(checksum);
+    MSP_UART.write(checksum);
 }
 // ************************************************************************************************************
 
 void requestAnalog()
 {
     uint8_t checksum = 0;
-    NEXUS_SERIAL_TELEMETRY.write('$');
-    NEXUS_SERIAL_TELEMETRY.write('M');
-    NEXUS_SERIAL_TELEMETRY.write('<');
-    NEXUS_SERIAL_TELEMETRY.write(0); // size = 0
+    MSP_UART.write('$');
+    MSP_UART.write('M');
+    MSP_UART.write('<');
+    MSP_UART.write(0); // size = 0
     checksum ^= 0;
-    NEXUS_SERIAL_TELEMETRY.write(MSP_ANALOG);
+    MSP_UART.write(MSP_ANALOG);
     checksum ^= MSP_ANALOG;
-    NEXUS_SERIAL_TELEMETRY.write(checksum);
+    MSP_UART.write(checksum);
 }
 
 // *************************************************************************************************************
@@ -103,24 +103,11 @@ uint16_t GetRPM(const uint8_t *data, uint8_t n)
 
         const uint8_t *payload = &data[i + 5];
 
-        if (size >= 9)
-        {
-            escTempC = (float)((uint8_t)payload[7]);
-            Look((uint8_t)payload[7]);
-        }
-       
-        // Serial.print("MSP Motor Telemetry size: ");
-        // Serial.print(size);
-        // Serial.print(" bytes: ");
-        // for (int j = 0; j < size; j++)
+        // if (size >= 9)
         // {
-        //     Serial.print(" j=");
-        //     Serial.print(j, DEC);
-        //     Serial.print("->");
-        //     Serial.print(payload[j], DEC);
+        //     escTempC = (float)((uint8_t)payload[7]);
+        //     Look((uint8_t)payload[7]);
         // }
-        // Serial.println();
-        //**** */
 
         uint16_t motor_rpm = (uint16_t)payload[1] | ((uint16_t)payload[2] << 8);
         float head = float(motor_rpm) / Ratio;
@@ -197,9 +184,9 @@ void CheckMSPSerial()
     Localtimer = millis();
     uint8_t data_in[80];
     uint8_t p = 0;
-    while (NEXUS_SERIAL_TELEMETRY.available() && p < sizeof(data_in))
+    while (MSP_UART.available() && p < sizeof(data_in))
     {
-        data_in[p++] = NEXUS_SERIAL_TELEMETRY.read();
+        data_in[p++] = MSP_UART.read();
     }
     uint16_t tempRPM = GetRPM(&data_in[0], p);
     if (tempRPM != 0xffff)

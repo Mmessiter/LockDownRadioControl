@@ -74,17 +74,8 @@
 #include "utilities/Parameters.h"
 #include "utilities/Nexus.h"
 #include "utilities/Detect_Transceivers.h"
+#include "utilities/MSP_Library_Calls.h"
 
-/************************************************************************************************************/
-#ifdef USE_MSP_LIBRARY
-#include "utilities/msp/ReefwingMSP.h"
-#define MAX_CMD_SIZE 32
-#define RETURN '\r'
-#define NEW_LINE '\n'
-#define NULL_CHAR '\0'
-ReefwingMSP msp;
-#endif
-//************************************************************************************************************/
 
 void DelayMillis(uint16_t ms) // This replaces any delay() calls
 {
@@ -477,6 +468,9 @@ FLASHMEM void setup()
         setupGPS();
     CopyToCurrentPipe(DefaultPipe, PIPENUMBER);
     DetectNexusAtBoot(); // Check for Nexus presence before we set up any PWM pins it might use
+    
+    if (NexusPresent)
+        InitMsp();
     TestTheSBUSPin();    // Check that the SBUS pin is not held low (plug in wrong way round)
     TestAllPWMPins();    // Check that the no PWM pins are held low (plug in wrong way round)
     SetupRadios();
@@ -489,9 +483,6 @@ FLASHMEM void setup()
     digitalWrite(LED_PIN, LOW);
     Look1("Receiver Type Detected: ");
     Look(Receiver_Type);
-#ifdef USE_MSP_LIBRARY
-    msp.begin(NEXUS_SERIAL_TELEMETRY);
-#endif
 }
 
 /************************************************************************************************************/
@@ -536,7 +527,7 @@ void loop()
 
     if (NexusPresent)
     {
-        CheckMSPSerial(); // this is to read the RPM value
+      CheckMSPSerial(); // this is to read the RPM value
     }
 
     if (Blinking)

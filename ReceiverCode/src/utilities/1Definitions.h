@@ -26,7 +26,7 @@
 
 #define USE_SBUS
 #define USE_PWM
-#define NEXUS_SERIAL_TELEMETRY Serial1
+#define MSP_UART Serial1
 #define SERVO_RES_BITS 12
 #define SERVO_RESOLUTION 4096
 #define EXTRAAT1500 1000
@@ -246,6 +246,8 @@ void requestAnalog();
 bool GetAnalog(const uint8_t *data, uint8_t n, float &vbatOut, float &ampsOut, uint16_t &mAhOut);
 void PointToRadio1();
 void PointToRadio2();
+void InitMsp();
+void PollMspDebug();
 
 /************************************************************************************************************/
 // For numeric types (int, float, double, etc.)
@@ -356,5 +358,5 @@ float Battery_mAh = 0;
 uint8_t Servos_Used = 9; // default to 9 servos used
 uint8_t Receiver_Type = 0;
 bool BoundFlag = false; /** indicates if receiver paired with transmitter */
-float escTempC = 0.0f; // ESC temperature in degrees C
+float escTempC = 0.0f;  // ESC temperature in degrees C
 #endif                  // defined (_SRC_UTILITIES_1DEFINITIONS_H)
