@@ -2,13 +2,13 @@
 // Malcolm Messiter 2020 - 2025
 #ifndef NEXUS_H
 #define NEXUS_H
-#include "utilities/1Definitions.h"
-// #include "utilities/msp/ReefwingMSP.h"
+#include "utilities/1Definitions.h" 
+//#include "utilities/msp/ReefwingMSP.h"
 
 // ************************************************************************************************************
 // MSP SUPPORT FUNCTIONS FOR NEXUS etc.
 // ************************************************************************************************************
-// ReefwingMSP msp;
+//ReefwingMSP msp;
 #define MSP_MOTOR_TELEMETRY 139 // Motor telemetry data
 #define MSP_ANALOG 110          // vbat, mAh, RSSI, amps
 
@@ -30,12 +30,12 @@ void DetectNexusAtBoot()
         {
             buf[p++] = MSP_UART.read();
         }
+       
         float vbat, amps;
         uint16_t mAh;
         if (GetAnalog(buf, p, vbat, amps, mAh))
         {
             NexusPresent = true;
-            // msp.begin(MSP_UART); // start  communication with MSP library
             return;
         }
     }
@@ -105,20 +105,10 @@ uint16_t GetRPM(const uint8_t *data, uint8_t n)
 
         const uint8_t *payload = &data[i + 5];
 
-        // if (size >= 9)
-        // {
-        //     escTempC = (float)((uint8_t)payload[7]);
-        //     Look((uint8_t)payload[7]);
-        // }
-
-        // for (int i = 0; i < size; i++)
-        // {
-        //     Serial.print(i);
-        //     Serial.print("->");
-        //     Serial.print(payload[i], DEC);
-        //     Serial.println(" ");
-        // }
-        // Serial.println(" ");
+        // MSP_MOTOR_TELEMETRY layout:
+        // payload[0..1] = motor RPM (uint16_t)
+        // payload[2..3] = motor current (uint16_t) in 0.1 A units
+        // payload[4..5] = motor voltage (uint16_t) in 0.1 V units  
 
         uint16_t motor_rpm = (uint16_t)payload[1] | ((uint16_t)payload[2] << 8);
         float head = float(motor_rpm) / Ratio;
@@ -172,6 +162,7 @@ bool GetAnalog(const uint8_t *data, uint8_t n,
 
         mAhOut = 0;
         ampsOut = 0.0f;
+
 
         if (size >= 7)
         {
