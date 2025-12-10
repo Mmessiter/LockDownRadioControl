@@ -74,7 +74,6 @@
 #include "utilities/Parameters.h"
 #include "utilities/Nexus.h"
 #include "utilities/Detect_Transceivers.h"
-#include "utilities/MSP_Library_Calls.h"
 
 
 void DelayMillis(uint16_t ms) // This replaces any delay() calls
@@ -469,8 +468,7 @@ FLASHMEM void setup()
     CopyToCurrentPipe(DefaultPipe, PIPENUMBER);
     DetectNexusAtBoot(); // Check for Nexus presence before we set up any PWM pins it might use
     
-    if (NexusPresent)
-        InitMsp();
+    
     TestTheSBUSPin();    // Check that the SBUS pin is not held low (plug in wrong way round)
     TestAllPWMPins();    // Check that the no PWM pins are held low (plug in wrong way round)
     SetupRadios();

@@ -246,8 +246,7 @@ void requestAnalog();
 bool GetAnalog(const uint8_t *data, uint8_t n, float &vbatOut, float &ampsOut, uint16_t &mAhOut);
 void PointToRadio1();
 void PointToRadio2();
-void InitMsp();
-void PollMspDebug();
+
 
 /************************************************************************************************************/
 // For numeric types (int, float, double, etc.)
