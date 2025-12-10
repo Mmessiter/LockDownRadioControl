@@ -2,13 +2,13 @@
 // Malcolm Messiter 2020 - 2025
 #ifndef NEXUS_H
 #define NEXUS_H
-#include "utilities/1Definitions.h"    // this file has many global definitions and functions defined
-#include "utilities/msp/ReefwingMSP.h" // The new MSP library
+#include "utilities/1Definitions.h"
+// #include "utilities/msp/ReefwingMSP.h"
 
 // ************************************************************************************************************
 // MSP SUPPORT FUNCTIONS FOR NEXUS etc.
 // ************************************************************************************************************
-ReefwingMSP msp;
+// ReefwingMSP msp;
 #define MSP_MOTOR_TELEMETRY 139 // Motor telemetry data
 #define MSP_ANALOG 110          // vbat, mAh, RSSI, amps
 
@@ -35,7 +35,7 @@ void DetectNexusAtBoot()
         if (GetAnalog(buf, p, vbat, amps, mAh))
         {
             NexusPresent = true;
-            msp.begin(MSP_UART); // start  communication with MSP library
+            // msp.begin(MSP_UART); // start  communication with MSP library
             return;
         }
     }
@@ -110,6 +110,15 @@ uint16_t GetRPM(const uint8_t *data, uint8_t n)
         //     escTempC = (float)((uint8_t)payload[7]);
         //     Look((uint8_t)payload[7]);
         // }
+
+        // for (int i = 0; i < size; i++)
+        // {
+        //     Serial.print(i);
+        //     Serial.print("->");
+        //     Serial.print(payload[i], DEC);
+        //     Serial.println(" ");
+        // }
+        // Serial.println(" ");
 
         uint16_t motor_rpm = (uint16_t)payload[1] | ((uint16_t)payload[2] << 8);
         float head = float(motor_rpm) / Ratio;
