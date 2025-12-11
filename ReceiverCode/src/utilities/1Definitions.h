@@ -242,7 +242,7 @@ void LoadFailSafeDataFromEEPROM();
 void SaveFailSafeDataToEEPROM();
 void SavePipeToEEPROM();
 void DetectNexusAtBoot();
-void requestAnalog();
+void RequestFromMSP(uint8_t command);
 bool GetAnalog(const uint8_t *data, uint8_t n, float &vbatOut, float &ampsOut, uint16_t &mAhOut);
 void PointToRadio1();
 void PointToRadio2();

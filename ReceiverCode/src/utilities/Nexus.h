@@ -23,7 +23,7 @@ void DetectNexusAtBoot()
 
     while (millis() - start < NEXUS_DETECT_WINDOW_MS)
     {
-        requestAnalog();
+        RequestFromMSP(MSP_ANALOG);
         delay(20); // give it a moment to reply
         uint8_t p = 0;
         while (MSP_UART.available() && p < sizeof(buf))
@@ -42,10 +42,8 @@ void DetectNexusAtBoot()
     MSP_UART.end();
     NexusPresent = false;
 }
-
 // ************************************************************************************************************
-
-void requestRPM()
+void RequestFromMSP(uint8_t command) // send a request to the flight controller
 {
     uint8_t checksum = 0;
     MSP_UART.write('$');
@@ -53,22 +51,8 @@ void requestRPM()
     MSP_UART.write('<');
     MSP_UART.write(0);
     checksum ^= 0;
-    MSP_UART.write(MSP_MOTOR_TELEMETRY);
-    checksum ^= MSP_MOTOR_TELEMETRY;
-    MSP_UART.write(checksum);
-}
-// ************************************************************************************************************
-
-void requestAnalog()
-{
-    uint8_t checksum = 0;
-    MSP_UART.write('$');
-    MSP_UART.write('M');
-    MSP_UART.write('<');
-    MSP_UART.write(0); // size = 0
-    checksum ^= 0;
-    MSP_UART.write(MSP_ANALOG);
-    checksum ^= MSP_ANALOG;
+    MSP_UART.write(command);
+    checksum ^= command;
     MSP_UART.write(checksum);
 }
 
@@ -202,8 +186,8 @@ void CheckMSPSerial()
         Battery_mAh = mAhAnalog;        // rough mAh
     }
     // 3) Request new data for next cycle
-    requestRPM();
-    requestAnalog();
+    RequestFromMSP(MSP_MOTOR_TELEMETRY);
+    RequestFromMSP(MSP_ANALOG);
 }
 
 #endif // NEXUS_H
