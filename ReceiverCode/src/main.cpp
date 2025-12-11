@@ -98,7 +98,7 @@ void KickTheDog()
 
 /************************************************************************************************************/
 
-bool CheckForCrazyValues() // might come while binding ... indeed will.
+bool CheckForCrazyValues() // Crazy values might come while binding, and should not get sent to servos.
 {
     if (millis() - ReconnectedMoment > 10000)                               // crazy values are very rare after 10 seconds of connection
         return true;                                                        // go home happy
