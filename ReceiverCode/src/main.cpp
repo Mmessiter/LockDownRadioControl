@@ -100,9 +100,6 @@ void KickTheDog()
 
 bool CheckForCrazyValues() // might come while binding ... indeed will.
 {
-    if (!BindPlugInserted)
-        return true;
-
     if (millis() - ReconnectedMoment > 10000)                               // crazy values are very rare after 10 seconds of connection
         return true;                                                        // go home happy
     for (int i = 0; i < 7; ++i)                                             // need only check first few as that's where bind data are (Teensy MAC address etc.)
@@ -131,8 +128,7 @@ void MoveServos()
     if ((millis() - LocalTimer) < 10)
         return;
     LocalTimer = millis();
-    // Look1("Moving Servos at ");
-    // Look(LocalTimer);
+   
 
     if (!CheckForCrazyValues())
     {

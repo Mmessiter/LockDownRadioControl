@@ -1196,11 +1196,11 @@ FLASHMEM void setup()
     StartInactvityTimeout();
     GetTXVersionNumber();
     ScreenTimeTimer = millis();
-    if (UseLog)
-    {
-        LogPowerOn();
-        LogThisModel();
-    }
+    // if (UseLog)
+    // {
+        // LogPowerOn();
+        // LogThisModel();
+    // }
     SendText(FrontView_Connected, na);
     UpdateModelsNameEveryWhere();
     ConfigureStickMode();
@@ -4813,8 +4813,8 @@ bool CheckModelName()
         }
         ReadOneModel(ModelNumber);
         SendText(mn, ModelName);
-        if (UseLog)
-            LogThisModel();
+        // if (UseLog)
+        //     LogThisModel();
         LastModelLoaded = ModelNumber;
         UpdateModelsNameEveryWhere();
         return true;
@@ -4856,11 +4856,11 @@ void Close_TX_Down()
         SetBrightness(100 - i);
         DelayWithDog(25);
     }
-    if (UseLog)
-    {
-        strcpy(LogFileName, ""); // avoid logging to the wrong file
-        LogPowerOff();
-    } // log the event
+    //if (UseLog)
+    // {
+    //     strcpy(LogFileName, ""); // avoid logging to the wrong file
+    //     LogPowerOff();
+    // } // log the event
     DelayWithDog(POWERONOFFDELAY);     // 2 seconds delay in case button held down too long
     digitalWrite(POWER_OFF_PIN, HIGH); // Power off the transmitter
     delay(100);                        // Wait for a short time to ensure power off

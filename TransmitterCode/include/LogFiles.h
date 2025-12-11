@@ -499,6 +499,10 @@ FASTRUN void LogDisConnection()
 // ************************************************************************
 FASTRUN void LogNewBank()
 {
+    
+    if (!BoundFlag || !ModelMatched)
+        return; // Don't log bank changes if not bound or model not matched
+    
     char Ltext[50];
     char bk[] = "Bank";
     char thetext[40];
@@ -680,25 +684,25 @@ void LogOverallSuccessRate()
 }
 // ************************************************************************
 
-FASTRUN void LogPowerOn()
-{
-    char Ltext[] = "Power ON";
-    char sp[] = "*******************************************";
-    LogText(sp, strlen(sp), false);
-    LogText(Ltext, strlen(Ltext), true);
-    CheckTXVolts();
-    LogTXVoltsPerCell();
-}
+// FASTRUN void LogPowerOn()
+// {
+//     char Ltext[] = "Power ON";
+//     char sp[] = "*******************************************";
+//     LogText(sp, strlen(sp), false);
+//     LogText(Ltext, strlen(Ltext), true);
+//     CheckTXVolts();
+//     LogTXVoltsPerCell();
+// }
 
 // ************************************************************************
 
-FASTRUN void LogPowerOff()
-{
-    char Ltext[] = "Power OFF";
-    char sp[] = "*******************************************";
-    LogText(Ltext, strlen(Ltext), true);
-    LogText(sp, strlen(sp), false);
-}
+// FASTRUN void LogPowerOff()
+// {
+//     char Ltext[] = "Power OFF";
+//     char sp[] = "*******************************************";
+//     LogText(Ltext, strlen(Ltext), true);
+//     LogText(sp, strlen(sp), false);
+// }
 
 // ************************************************************************
 
@@ -718,14 +722,14 @@ void LogNewRateInUse()
 
 // ************************************************************************
 
-FASTRUN void LogThisModel()
-{
-    char Ltext[] = "Model loaded: ";
-    char thetext[75];
-    strcpy(thetext, Ltext);
-    strcat(thetext, ModelName);
-    LogText(thetext, strlen(Ltext) + strlen(ModelName), false);
-}
+// FASTRUN void LogThisModel()
+// {
+//     char Ltext[] = "Model loaded: ";
+//     char thetext[75];
+//     strcpy(thetext, Ltext);
+//     strcat(thetext, ModelName);
+//     LogText(thetext, strlen(Ltext) + strlen(ModelName), false);
+// }
 
 // ************************************************************************
 void LogTouched()
