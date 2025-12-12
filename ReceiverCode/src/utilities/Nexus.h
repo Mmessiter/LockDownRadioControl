@@ -87,10 +87,12 @@ bool Get_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n)
         if (size >= 16)
         {
            RotorRPM = ((uint32_t)payload[1] | ((uint32_t)payload[2] << 8) | ((uint32_t)payload[3] << 16)) / Ratio; // Ignore payload[0] which is motor index???
-           RXModelVolts = (float)((uint16_t)payload[7] | ((uint16_t)payload[8] << 8)) / 2000.00f; // divide by 2000 to get volts if 12s LiPo otherwise divide by 1000 for 6s and less
+           RXModelVolts = (float)((uint16_t)payload[7] | ((uint16_t)payload[8] << 8)) / 1000.00f; // divide by 1000 to get volts 
            Battery_Amps = (float)((uint16_t)payload[9] | ((uint16_t)payload[10] << 8)) / 1000.00f;
            Battery_mAh = (float)((uint16_t)payload[11] | ((uint16_t)payload[12] << 8));
            escTempC = (float)((uint16_t)payload[13] | ((uint16_t)payload[14] << 8)) / 10.00f;
+           if (RXModelVolts > 26) // 6S max volt is 25.2V so anything above that must be 12S
+               RXModelVolts /= 2; // must be 12S battery and the TX will double the voltage reading because INA219 can't handle above 26V
            return true;
         }
     }
