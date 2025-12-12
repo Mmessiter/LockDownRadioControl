@@ -243,7 +243,8 @@ void SaveFailSafeDataToEEPROM();
 void SavePipeToEEPROM();
 void DetectNexusAtBoot();
 void RequestFromMSP(uint8_t command);
-bool GetAnalog(const uint8_t *data, uint8_t n, float &vbatOut, float &ampsOut, uint16_t &mAhOut);
+//bool GetAnalog(const uint8_t *data, uint8_t n, float &vbatOut, float &ampsOut, uint16_t &mAhOut);
+bool Get_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n);
 void PointToRadio1();
 void PointToRadio2();
 
@@ -351,11 +352,14 @@ uint16_t DPS310Address = 0x76; // DPS310 I2C address
 bool BindPlugInserted = false; // Bind plug inserted or not
 uint8_t ReceiveTimeout = 10;   // this gets adjusted later
 bool NexusPresent = false;
+
 float PackVoltage;
 float Battery_Amps = 0;
 float Battery_mAh = 0;
+float escTempC = 0.0f;   // ESC temperature in degrees C
+
 uint8_t Servos_Used = 9; // default to 9 servos used
 uint8_t Receiver_Type = 0;
 bool BoundFlag = false; /** indicates if receiver paired with transmitter */
-float escTempC = 0.0f;  // ESC temperature in degrees C
+
 #endif                  // defined (_SRC_UTILITIES_1DEFINITIONS_H)

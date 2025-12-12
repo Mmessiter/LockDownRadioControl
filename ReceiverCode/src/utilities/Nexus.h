@@ -7,13 +7,7 @@
 // ************************************************************************************************************
 // MSP SUPPORT FUNCTIONS FOR NEXUS etc.
 // ************************************************************************************************************
-
-
-#define MSP_ESC_SENSOR_DATA 134 // extra ESC data (temp, RPM, voltage, current)???
-
 #define MSP_MOTOR_TELEMETRY 139 // Motor telemetry data
-#define MSP_ANALOG 110          // vbat, mAh, RSSI, amps
-
 // ************************************************************************************************************
 void DetectNexusAtBoot()
 {
@@ -25,17 +19,14 @@ void DetectNexusAtBoot()
 
     while (millis() - start < NEXUS_DETECT_WINDOW_MS)
     {
-        RequestFromMSP(MSP_ANALOG);
+        RequestFromMSP(MSP_MOTOR_TELEMETRY);
         delay(20); // give it a moment to reply
         uint8_t p = 0;
         while (MSP_UART.available() && p < sizeof(buf))
         {
             buf[p++] = MSP_UART.read();
         }
-
-        float vbat, amps;
-        uint16_t mAh;
-        if (GetAnalog(buf, p, vbat, amps, mAh))
+        if (Get_MSP_Motor_Telemetry(&buf[0], p))
         {
             NexusPresent = true;
             return;
@@ -58,131 +49,50 @@ void RequestFromMSP(uint8_t command) // send a request to the flight controller
     MSP_UART.write(checksum);
 }
 
-
-
 // *************************************************************************************************************
 
-uint16_t Get_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n)
+//         MSP_MOTOR_TELEMETRY FROM ROTORFLIGHT FIRMWARE
+//         uint32_t motorRpm = 0;                        // offset 0
+//         uint16_t errorRatio = 0;                      // offset 5
+//         uint16_t escVoltage = 0;      // 1mV per unit // offset 7
+//         uint16_t escCurrent = 0;      // 1mA per unit // offset 9
+//         uint16_t escConsumption = 0;  // mAh          // offset 11
+//         uint16_t escTemperature = 0;  // 0.1C         // offset 13
+//         uint16_t escTemperature2 = 0; // 0.1C         // offset 15
+
+bool Get_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n)
 {
     const uint8_t CMD = MSP_MOTOR_TELEMETRY; // 0x8B
-
     if (!Ratio)
         Ratio = 10.3f; // Default ratio if not set
-
     for (uint8_t i = 0; i + 6 < n; ++i)
     {
         if (data[i] != '$' || data[i + 1] != 'M' || data[i + 2] != '>')
             continue;
-
         uint8_t size = data[i + 3];
         uint8_t cmd = data[i + 4];
         uint16_t frame_end = i + 5 + size;
         if (frame_end >= n)
             break;
-
         uint8_t ck = size ^ cmd;
         for (uint8_t k = 0; k < size; ++k)
             ck ^= data[i + 5 + k];
         if (ck != data[frame_end])
             continue;
-
         if (cmd != CMD)
             continue;
         if (size < 3)
             continue;
-
         const uint8_t *payload = &data[i + 5];
-
-    //          (MSP_MOTOR_TELEMETRY:) // FROM ROTORFLIGHT FIRMWARE
-    //     
-    //         uint32_t motorRpm = 0; //0 
-    //         uint16_t errorRatio = 0;//5
-    //         uint16_t escVoltage = 0;      // 1mV per unit //7
-    //         uint16_t escCurrent = 0;      // 1mA per unit //9
-    //         uint16_t escConsumption = 0;  // mAh //11
-    //         uint16_t escTemperature = 0;  // 0.1C //13
-    //         uint16_t escTemperature2 = 0; // 0.1C    //15
-
-        uint16_t motor_rpm = (uint16_t)payload[1] | ((uint16_t)payload[2] << 8);
-
-        // float Volts = (float)((uint16_t)payload[7] | ((uint16_t)payload[8] << 8)) / 1000.00f;
-        // Look1("Volts: ");
-        // Look(Volts);
-        // float Amps = (float)((uint16_t)payload[9] | ((uint16_t)payload[10] << 8)) / 1000.00f;
-        // Look1("Amps: ");
-        // Look(Amps);
-        // float mAh = (float)((uint16_t)payload[11] | ((uint16_t)payload[12] << 8));
-        // Look1("mAh: ");
-        // Look(mAh);  
-
-
-
-
-        escTempC = (float)((uint16_t)payload[13] | ((uint16_t)payload[14] << 8)) / 10.00f;
-
-
-        float head = float(motor_rpm) / Ratio;
-        if (head < 0.0f)
-            head = 0.0f;
-        if (head > 65535.0f)
-            head = 65535.0f;
-
-        return (uint16_t)(head + 0.5f);
-        }
-        return 0xffff;
-    }
-// ************************************************************************************************************
-// Returns true if a valid MSP_ANALOG frame was found and decoded.
-bool GetAnalog(const uint8_t *data, uint8_t n,
-               float &vbatOut, float &ampsOut, uint16_t &mAhOut)
-{
-    const uint8_t CMD = MSP_ANALOG;
-
-    for (uint8_t i = 0; i + 6 < n; ++i)
-    {
-        if (data[i] != '$' || data[i + 1] != 'M' || data[i + 2] != '>')
-            continue;
-
-        uint8_t size = data[i + 3];
-        uint8_t cmd = data[i + 4];
-        uint16_t frame_end = i + 5 + size;
-        if (frame_end >= n)
-            break;
-
-        uint8_t ck = size ^ cmd;
-        for (uint8_t k = 0; k < size; ++k)
-            ck ^= data[i + 5 + k];
-        if (ck != data[frame_end])
-            continue;
-
-        if (cmd != CMD)
-            continue;
-        if (size < 1) // must at least have vbat
-            continue;
-
-        const uint8_t *payload = &data[i + 5];
-
-        // MSP_ANALOG layout:
-        // payload[0] = vbat (0.1 V units) // Only 8 BITS. So set Rotorflight correction to -50% for 12S, otherwise use INA219 on i2c with voltage divider
-        // payload[1..2] = powerMeterSum (raw)
-        // payload[3..4] = RSSI (0–1023)
-        // payload[5..6] = amperage (0.1 A units)
-        // uint8_t vbat_raw = payload[0];
-        // vbatOut = vbat_raw / 10.0f;
-        // debugPayload(payload, size);
-        mAhOut = 0;
-        ampsOut = 0.0f;
-
-        if (size >= 7)
+        if (size >= 16)
         {
-            uint16_t powerMeterSum = (uint16_t)payload[1] | ((uint16_t)payload[2] << 8);
-            mAhOut = powerMeterSum;
-            uint16_t amps_raw = (uint16_t)payload[5] | ((uint16_t)payload[6] << 8);
-            ampsOut = amps_raw / 10.0f; // 0.1 A units
-            if (!INA219Connected)
-                RXModelVolts = (float)((uint8_t)payload[0]) / 10.0f; // decivolts from analog input if INA219 not present (set Rotorflight to -50% for 12S)
+           RotorRPM = ((uint32_t)payload[1] | ((uint32_t)payload[2] << 8) | ((uint32_t)payload[3] << 16)) / Ratio; // Ignore payload[0] which is motor index???
+           RXModelVolts = (float)((uint16_t)payload[7] | ((uint16_t)payload[8] << 8)) / 1000.00f;
+           Battery_Amps = (float)((uint16_t)payload[9] | ((uint16_t)payload[10] << 8)) / 1000.00f;
+           Battery_mAh = (float)((uint16_t)payload[11] | ((uint16_t)payload[12] << 8));
+           escTempC = (float)((uint16_t)payload[13] | ((uint16_t)payload[14] << 8)) / 10.00f;
+           return true;
         }
-        return true;
     }
     return false;
 }
@@ -200,20 +110,7 @@ void CheckMSPSerial()
     {
         data_in[p++] = MSP_UART.read();
     }
-    uint16_t tempRPM = Get_MSP_Motor_Telemetry(&data_in[0], p);
-    if (tempRPM != 0xffff)
-        RotorRPM = tempRPM;
-
-    float vbatAnalog, ampsAnalog;
-    uint16_t mAhAnalog;
-    if (GetAnalog(&data_in[0], p, vbatAnalog, ampsAnalog, mAhAnalog)) // this volts reading is not reliable after 25v
-    {
-        Battery_Amps = ampsAnalog / 10; // amps (already in A from GetAnalog)
-        Battery_mAh = mAhAnalog;        // rough mAh
-    }
-
+    Get_MSP_Motor_Telemetry(&data_in[0], p);
     RequestFromMSP(MSP_MOTOR_TELEMETRY);
-    RequestFromMSP(MSP_ANALOG);
 }
-
 #endif // NEXUS_H
