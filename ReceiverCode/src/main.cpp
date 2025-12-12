@@ -521,7 +521,7 @@ void loop()
 
     if (NexusPresent)
     {
-      CheckMSPSerial(); // this is to read the RPM value
+      CheckMSPSerial(); // this is to read telemetry from Nexus via MSP
     }
 
     if (Blinking)
