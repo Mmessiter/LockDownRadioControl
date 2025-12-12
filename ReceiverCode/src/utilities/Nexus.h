@@ -9,7 +9,7 @@
 // ************************************************************************************************************
 #define MSP_MOTOR_TELEMETRY 139 // Motor telemetry data
 // ************************************************************************************************************
-void DetectNexusAtBoot()
+inline void DetectNexusAtBoot()
 {
 #define NEXUS_DETECT_WINDOW_MS 1500 // 1.5 seconds time window to detect Nexus at boot
 
@@ -36,7 +36,7 @@ void DetectNexusAtBoot()
     NexusPresent = false;
 }
 // ************************************************************************************************************
-void RequestFromMSP(uint8_t command) // send a request to the flight controller
+inline void RequestFromMSP(uint8_t command) // send a request to the flight controller
 {
     uint8_t checksum = 0;
     MSP_UART.write('$');
@@ -60,7 +60,7 @@ void RequestFromMSP(uint8_t command) // send a request to the flight controller
 //         uint16_t escTemperature = 0;  // 0.1C         // offset 13
 //         uint16_t escTemperature2 = 0; // 0.1C         // offset 15
 
-bool Get_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n)
+inline bool Get_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n)
 {
     const uint8_t CMD = MSP_MOTOR_TELEMETRY; // 0x8B
     if (!Ratio)
@@ -100,10 +100,10 @@ bool Get_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n)
 }
 
 // ************************************************************************************************************/
-void CheckMSPSerial()
+inline void CheckMSPSerial()
 {
     static uint32_t Localtimer = 0;
-    if (millis() - Localtimer < 100) // 10 x per second
+    if (millis() - Localtimer < 250) // 4 x per second
         return;
     Localtimer = millis();
     uint8_t data_in[80];
