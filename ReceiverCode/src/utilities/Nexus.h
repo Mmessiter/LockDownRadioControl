@@ -58,25 +58,11 @@ void RequestFromMSP(uint8_t command) // send a request to the flight controller
     MSP_UART.write(checksum);
 }
 
-// *************************************************************************************************************
-void debugPayload(const uint8_t *p, uint8_t size)
-{
-    for (uint8_t i = 0; i < size; ++i)
-    {
-        Look1(i);
-        Look1(" = ");
-        Look(p[i]);
-    }
-    Look("");
-}
-// *************************************************************************************************************
-float F_to_C(uint16_t f)
-{
-    return ((((float)f) - 32.0f) * (5.0f / 9.0f) + 0.5f);
-}   
+
+
 // *************************************************************************************************************
 
-uint16_t GetRPM(const uint8_t *data, uint8_t n)
+uint16_t Get_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n)
 {
     const uint8_t CMD = MSP_MOTOR_TELEMETRY; // 0x8B
 
@@ -107,31 +93,41 @@ uint16_t GetRPM(const uint8_t *data, uint8_t n)
 
         const uint8_t *payload = &data[i + 5];
 
-    // case MSP_MOTOR_TELEMETRY:
-    //     sbufWriteU8(dst, getMotorCount());
-    //     for (unsigned i = 0; i < getMotorCount(); i++)
-    //     {
-    //         uint32_t motorRpm = 0;
-    //         uint16_t errorRatio = 0;
-    //         uint16_t escVoltage = 0;      // 1mV per unit
-    //         uint16_t escCurrent = 0;      // 1mA per unit
-    //         uint16_t escConsumption = 0;  // mAh
-    //         uint16_t escTemperature = 0;  // 0.1C
-    //         uint16_t escTemperature2 = 0; // 0.1C
+    //          (MSP_MOTOR_TELEMETRY:) // FROM ROTORFLIGHT FIRMWARE
+    //     
+    //         uint32_t motorRpm = 0; //0 
+    //         uint16_t errorRatio = 0;//5
+    //         uint16_t escVoltage = 0;      // 1mV per unit //7
+    //         uint16_t escCurrent = 0;      // 1mA per unit //9
+    //         uint16_t escConsumption = 0;  // mAh //11
+    //         uint16_t escTemperature = 0;  // 0.1C //13
+    //         uint16_t escTemperature2 = 0; // 0.1C    //15
 
-            // debugPayload(payload, size);
+        uint16_t motor_rpm = (uint16_t)payload[1] | ((uint16_t)payload[2] << 8);
 
-           
-            escTempC = (float) ((uint16_t)payload[13] | ((uint16_t)payload[14] << 8))/10.00f;
-        
-            uint16_t motor_rpm = (uint16_t)payload[1] | ((uint16_t)payload[2] << 8);
-            float head = float(motor_rpm) / Ratio;
-            if (head < 0.0f)
-                head = 0.0f;
-            if (head > 65535.0f)
-                head = 65535.0f;
+        // float Volts = (float)((uint16_t)payload[7] | ((uint16_t)payload[8] << 8)) / 1000.00f;
+        // Look1("Volts: ");
+        // Look(Volts);
+        // float Amps = (float)((uint16_t)payload[9] | ((uint16_t)payload[10] << 8)) / 1000.00f;
+        // Look1("Amps: ");
+        // Look(Amps);
+        // float mAh = (float)((uint16_t)payload[11] | ((uint16_t)payload[12] << 8));
+        // Look1("mAh: ");
+        // Look(mAh);  
 
-            return (uint16_t)(head + 0.5f);
+
+
+
+        escTempC = (float)((uint16_t)payload[13] | ((uint16_t)payload[14] << 8)) / 10.00f;
+
+
+        float head = float(motor_rpm) / Ratio;
+        if (head < 0.0f)
+            head = 0.0f;
+        if (head > 65535.0f)
+            head = 65535.0f;
+
+        return (uint16_t)(head + 0.5f);
         }
         return 0xffff;
     }
@@ -204,7 +200,7 @@ void CheckMSPSerial()
     {
         data_in[p++] = MSP_UART.read();
     }
-    uint16_t tempRPM = GetRPM(&data_in[0], p);
+    uint16_t tempRPM = Get_MSP_Motor_Telemetry(&data_in[0], p);
     if (tempRPM != 0xffff)
         RotorRPM = tempRPM;
 
