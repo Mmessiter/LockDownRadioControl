@@ -436,6 +436,20 @@ void LogMaxAmpsUsed()
     LogText(buf, strlen(buf), false);
 }
 // ************************************************************************
+void LogMaxESC_Temp()
+{
+    if (!Max_ESC_Temp)
+        return;
+    char TheText[] = "Max ESC Temp: ";
+    char buf[60] = " ";
+    char NB[10];
+    dtostrf(Max_ESC_Temp, 2, 2, NB);
+    strcpy(buf, TheText);
+    strcat(buf, NB);
+    strcat(buf, " C.");
+    LogText(buf, strlen(buf), false);
+}
+// ************************************************************************
 void LogTotalMahUsed()
 {
     if (!Battery_mAh)
@@ -476,6 +490,7 @@ FASTRUN void LogDisConnection()
     LogMotorOnDuration();
     LogRx_type();
     LogMaxAmpsUsed();
+    LogMaxESC_Temp();
     LogTotalMahUsed();
     LogTotalRXSwaps();
     LogRXsTotalTimes();

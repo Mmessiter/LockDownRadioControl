@@ -844,7 +844,9 @@ void LoadLongerAckPayload()
         SendIntToAckPayload(Receiver_Type); // Receiver Type
         break;
     case 24:
-        SendFloatToAckPayload(escTempC); // ESC temperature in degrees C from Nexus 
+        SendFloatToAckPayload(escTempC); // ESC temperature in degrees C from Nexus
+        // Look1("sent: ");
+        // Look(escTempC);
         break;
 
     default:

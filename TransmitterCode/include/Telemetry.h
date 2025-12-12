@@ -413,18 +413,18 @@ void PopulateDataView()
         BuildText(DataView_Alt, ModelAltitude); // SendText(DataView_Alt, ModelAltitude);
     }
 
-    if ((RXMAXModelAltitude != LastRXModelMaxAltitude) || (GroundModelAltitude != LastGroundModelAltitude))
-    {
-        LastRXModelMaxAltitude = RXMAXModelAltitude;
-        BuildText(DataView_MaxAlt, Maxaltitude); // SendText(DataView_MaxAlt, Maxaltitude);
-        LastGroundModelAltitude = GroundModelAltitude;
-    }
+    // if ((RXMAXModelAltitude != LastRXModelMaxAltitude) || (GroundModelAltitude != LastGroundModelAltitude))
+    // {
+        // = Max_ESC_Temp;
+        BuildText(DataView_MaxAlt, MAX_ESC_Temperature); // SendText(DataView_MaxAlt, Maxaltitude);
+       // LastGroundModelAltitude = GroundModelAltitude;
+   // }
 
-    if (RXTemperature != LastRXTemperature)
-    {
-        LastRXTemperature = RXTemperature;
-        BuildText(DataView_Temp, ModelTempRX); // SendText(DataView_Temp, ModelTempRX);
-    }
+    // if (RXTemperature != LastRXTemperature)
+    // {
+      //  LastRXTemperature = ESC_Temp;
+        BuildText(DataView_Temp, ESC_Temperature); // SendText(DataView_Temp, ModelTempRX);
+    //}
 
     if (RadioNumber != LastRXReceivedPackets)
     {

@@ -858,6 +858,7 @@ void ShowMilliAmpHoursUsed(float mAh)
     SendCommand(VisON);
     SendText((char *)"wb", mAhUsed);
 }
+
 // ******************************************************************************************
 void ShowAmpsBeingUsed(float amps)
 {
@@ -1033,7 +1034,13 @@ ParseLongerAckPayload() // It's already pretty short!
         {
             Max_ESC_Temp = ESC_Temp;
         }
-        Look(ESC_Temp);
+        sprintf(ESC_Temperature, "%.1f C.", ESC_Temp);
+        sprintf(MAX_ESC_Temperature, "%.1f C.", Max_ESC_Temp);
+        // Look1("ESC Temp:");
+        // Look(ESC_Temperature);
+        // Look1("Max ESC Temp:");
+        // Look(MAX_ESC_Temperature);  
+
         break;
     default:
         break;

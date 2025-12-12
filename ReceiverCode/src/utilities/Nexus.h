@@ -2,12 +2,14 @@
 // Malcolm Messiter 2020 - 2025
 #ifndef NEXUS_H
 #define NEXUS_H
-#include "utilities/1Definitions.h" 
-
+#include "utilities/1Definitions.h"
 
 // ************************************************************************************************************
 // MSP SUPPORT FUNCTIONS FOR NEXUS etc.
 // ************************************************************************************************************
+
+
+#define MSP_ESC_SENSOR_DATA 134 // extra ESC data (temp, RPM, voltage, current)???
 
 #define MSP_MOTOR_TELEMETRY 139 // Motor telemetry data
 #define MSP_ANALOG 110          // vbat, mAh, RSSI, amps
@@ -30,7 +32,7 @@ void DetectNexusAtBoot()
         {
             buf[p++] = MSP_UART.read();
         }
-       
+
         float vbat, amps;
         uint16_t mAh;
         if (GetAnalog(buf, p, vbat, amps, mAh))
@@ -56,6 +58,22 @@ void RequestFromMSP(uint8_t command) // send a request to the flight controller
     MSP_UART.write(checksum);
 }
 
+// *************************************************************************************************************
+void debugPayload(const uint8_t *p, uint8_t size)
+{
+    for (uint8_t i = 0; i < size; ++i)
+    {
+        Look1(i);
+        Look1(" = ");
+        Look(p[i]);
+    }
+    Look("");
+}
+// *************************************************************************************************************
+float F_to_C(uint16_t f)
+{
+    return ((((float)f) - 32.0f) * (5.0f / 9.0f) + 0.5f);
+}   
 // *************************************************************************************************************
 
 uint16_t GetRPM(const uint8_t *data, uint8_t n)
@@ -89,22 +107,34 @@ uint16_t GetRPM(const uint8_t *data, uint8_t n)
 
         const uint8_t *payload = &data[i + 5];
 
-        // MSP_MOTOR_TELEMETRY layout:
-        // payload[0..1] = motor RPM (uint16_t)
-        // payload[2..3] = motor current (uint16_t) in 0.1 A units
-        // payload[4..5] = motor voltage (uint16_t) in 0.1 V units  
+    // case MSP_MOTOR_TELEMETRY:
+    //     sbufWriteU8(dst, getMotorCount());
+    //     for (unsigned i = 0; i < getMotorCount(); i++)
+    //     {
+    //         uint32_t motorRpm = 0;
+    //         uint16_t errorRatio = 0;
+    //         uint16_t escVoltage = 0;      // 1mV per unit
+    //         uint16_t escCurrent = 0;      // 1mA per unit
+    //         uint16_t escConsumption = 0;  // mAh
+    //         uint16_t escTemperature = 0;  // 0.1C
+    //         uint16_t escTemperature2 = 0; // 0.1C
 
-        uint16_t motor_rpm = (uint16_t)payload[1] | ((uint16_t)payload[2] << 8);
-        float head = float(motor_rpm) / Ratio;
-        if (head < 0.0f)
-            head = 0.0f;
-        if (head > 65535.0f)
-            head = 65535.0f;
+            // debugPayload(payload, size);
 
-        return (uint16_t)(head + 0.5f);
+           
+            escTempC = (float) ((uint16_t)payload[13] | ((uint16_t)payload[14] << 8))/10.00f;
+        
+            uint16_t motor_rpm = (uint16_t)payload[1] | ((uint16_t)payload[2] << 8);
+            float head = float(motor_rpm) / Ratio;
+            if (head < 0.0f)
+                head = 0.0f;
+            if (head > 65535.0f)
+                head = 65535.0f;
+
+            return (uint16_t)(head + 0.5f);
+        }
+        return 0xffff;
     }
-    return 0xffff;
-}
 // ************************************************************************************************************
 // Returns true if a valid MSP_ANALOG frame was found and decoded.
 bool GetAnalog(const uint8_t *data, uint8_t n,
@@ -143,10 +173,9 @@ bool GetAnalog(const uint8_t *data, uint8_t n,
         // payload[5..6] = amperage (0.1 A units)
         // uint8_t vbat_raw = payload[0];
         // vbatOut = vbat_raw / 10.0f;
-
+        // debugPayload(payload, size);
         mAhOut = 0;
         ampsOut = 0.0f;
-
 
         if (size >= 7)
         {
@@ -161,6 +190,7 @@ bool GetAnalog(const uint8_t *data, uint8_t n,
     }
     return false;
 }
+
 // ************************************************************************************************************/
 void CheckMSPSerial()
 {
@@ -185,7 +215,7 @@ void CheckMSPSerial()
         Battery_Amps = ampsAnalog / 10; // amps (already in A from GetAnalog)
         Battery_mAh = mAhAnalog;        // rough mAh
     }
-    // 3) Request new data for next cycle
+
     RequestFromMSP(MSP_MOTOR_TELEMETRY);
     RequestFromMSP(MSP_ANALOG);
 }
