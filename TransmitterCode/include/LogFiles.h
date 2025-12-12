@@ -450,6 +450,20 @@ void LogMaxESC_Temp()
     LogText(buf, strlen(buf), false);
 }
 // ************************************************************************
+void LogMaxRPM()
+{
+    if (!Max_RotorRPM)
+        return;
+    char TheText[] = "Max Rotor RPM: ";
+    char buf[60] = " ";
+    char NB[10];
+    Str(NB, Max_RotorRPM, 0);
+    strcpy(buf, TheText);
+    strcat(buf, NB);
+    strcat(buf, " RPM");
+    LogText(buf, strlen(buf), false);
+}
+// ************************************************************************
 void LogTotalMahUsed()
 {
     if (!Battery_mAh)
@@ -491,6 +505,7 @@ FASTRUN void LogDisConnection()
     LogRx_type();
     LogMaxAmpsUsed();
     LogMaxESC_Temp();
+    LogMaxRPM();
     LogTotalMahUsed();
     LogTotalRXSwaps();
     LogRXsTotalTimes();
@@ -507,7 +522,7 @@ FASTRUN void LogDisConnection()
     // LogTotalPacketsAttempted();// not very interesting
     LogRXVoltsPerCell();
     LogTXVoltsPerCell();
-    LogOverallSuccessRate();
+    // LogOverallSuccessRate(); // not very interesting
     LogTimeSinceBoot();
     LogEndLine();
 }

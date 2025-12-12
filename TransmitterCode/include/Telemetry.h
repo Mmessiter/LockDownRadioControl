@@ -319,7 +319,7 @@ void PopulateDataView()
     char TimeSinceBoot[] = "n1";
     unsigned int TempModelId = 0;
     uint32_t BootedMinutes = millis() / 60000;
-    static int LastGroundModelAltitude = 0;
+   
 
     ClearNextionCommand();
 
@@ -368,7 +368,7 @@ void PopulateDataView()
         BuildText(LocalMacID, Vbuf);                       // SendText(LocalMacID, Vbuf);
         BuildText(DataView_txv, TransmitterVersionNumber); // SendText(DataView_txv, TransmitterVersionNumber);
         if (BoundFlag && ModelMatched)
-            BuildText(DataView_rxv, ReceiverVersionNumber); // SendText(DataView_rxv, ReceiverVersionNumber);
+        BuildText(DataView_rxv, ReceiverVersionNumber); // SendText(DataView_rxv, ReceiverVersionNumber);
     }
 
     if (LastPacketsPerSecond != PacketsPerSecond)
@@ -407,42 +407,22 @@ void PopulateDataView()
         BuildValue(DataView_Gc, RX2TotalTime); // SendValue(DataView_Gc, RX2TotalTime);
     }
 
-    if ((RXModelAltitude != LastRXModelAltitude) || (GroundModelAltitude != LastGroundModelAltitude))
-    {
-        LastRXModelAltitude = RXModelAltitude;
-        BuildText(DataView_Alt, ModelAltitude); // SendText(DataView_Alt, ModelAltitude);
-    }
+    sprintf(Max_Rotor_RPM, "%" PRIu32 " RPM", Max_RotorRPM);
 
-    // if ((RXMAXModelAltitude != LastRXModelMaxAltitude) || (GroundModelAltitude != LastGroundModelAltitude))
-    // {
-        // = Max_ESC_Temp;
-        BuildText(DataView_MaxAlt, MAX_ESC_Temperature); // SendText(DataView_MaxAlt, Maxaltitude);
-       // LastGroundModelAltitude = GroundModelAltitude;
-   // }
+    BuildText(DataView_Alt, Max_Rotor_RPM); // SendText(DataView_Alt, ModelAltitude);
 
-    // if (RXTemperature != LastRXTemperature)
-    // {
-      //  LastRXTemperature = ESC_Temp;
-        BuildText(DataView_Temp, ESC_Temperature); // SendText(DataView_Temp, ModelTempRX);
-    //}
-
+    sprintf(ESC_Temperature, "%.1f C.", ESC_Temp);
+    sprintf(MAX_ESC_Temperature, "%.1f C.", Max_ESC_Temp);
+    BuildText(DataView_MaxAlt, MAX_ESC_Temperature);                                               
+    BuildText(DataView_Temp, ESC_Temperature); // SendText(DataView_Temp, ModelTempRX);
+    
     if (RadioNumber != LastRXReceivedPackets)
     {
         LastRXReceivedPackets = RXSuccessfulPackets;
         snprintf(Vbuf, 7, "%" PRIu32, RXSuccessfulPackets);
-        BuildText(DataView_Rx, Vbuf); // SendText(DataView_Rx, Vbuf);
+        BuildText(DataView_Rx, Vbuf); 
     }
-
-    // if (LastMaxRateOfClimb != MaxRateOfClimb)
-    // {
-    //     LastMaxRateOfClimb = Receiver_type;
-       // int feet = (int)MaxRateOfClimb + 0.5; // round to nearest integer
-       // snprintf(Vbuf, 26, "%d feet / minute", feet);
-        // Look(" RX type: ");
-        // Serial.println(Rx_type[Receiver_type]);
-        BuildText(Sbs, Rx_type[Receiver_type]); // SendText(Sbs, Vbuf);
-    // }
-
+    BuildText(Sbs, Rx_type[Receiver_type]); 
     if (LastTimeSinceBoot != BootedMinutes)
     {
         BuildValue(TimeSinceBoot, BootedMinutes); // SendValue(TimeSinceBoot, BootedMinutes);
@@ -809,18 +789,19 @@ void CalculateGapPercentages()
 {
     if (!GapCount)
         return;
-    for (int i = 0; i < 11; ++i){
+    for (int i = 0; i < 11; ++i)
+    {
         GapPercentages[i] = (GapSets[i] * 100.0f) / GapCount;
         SimplePing();
     }
-    }
+}
 // **********************************************************************************************************
 void PopulateGapsView()
 {
     char PerCents[11][6] = {"t13", "t15", "t17", "t18", "t19", "t20", "t21", "t22", "t23", "t24", "t25"};
     char visible[11][12] = {"vis n0,1", "vis n1,1", "vis n2,1", "vis n3,1", "vis n4,1", "vis n5,1", "vis n6,1", "vis n7,1", "vis n8,1", "vis n9,1", "vis n10,1"};
     char invisible[11][12] = {"vis n0,0", "vis n1,0", "vis n2,0", "vis n3,0", "vis n4,0", "vis n5,0", "vis n6,0", "vis n7,0", "vis n8,0", "vis n9,0", "vis n10,0"};
-    
+
     char Js[11][4] = {
         "j0",
         "j10",

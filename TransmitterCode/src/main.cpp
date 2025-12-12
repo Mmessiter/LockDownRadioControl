@@ -3678,8 +3678,8 @@ FASTRUN void ButtonWasPressed()
             GPS_RX_GroundAltitude = GPS_RX_Altitude;
             GPS_RX_Maxaltitude = 0;
             RXMAXModelAltitude = 0;
-            LastRXModelMaxAltitude = 0;
-            LastRXModelAltitude = 0;
+            //LastRXModelMaxAltitude = 0;
+            //LastRXModelAltitude = 0;
             ClearText();
             return;
         }

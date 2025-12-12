@@ -1013,6 +1013,8 @@ ParseLongerAckPayload() // It's already pretty short!
         if (rpmShouldUpdate(RotorRPM))
         {
             SendValue((char *)"rpm", RotorRPM); // Send the updated RPM value to Nextion Frontscreen only if it has changed sufficiently
+            if (RotorRPM > Max_RotorRPM)
+                Max_RotorRPM = RotorRPM;
         }
         break;
     case 21:
@@ -1036,10 +1038,7 @@ ParseLongerAckPayload() // It's already pretty short!
         }
         sprintf(ESC_Temperature, "%.1f C.", ESC_Temp);
         sprintf(MAX_ESC_Temperature, "%.1f C.", Max_ESC_Temp);
-        // Look1("ESC Temp:");
-        // Look(ESC_Temperature);
-        // Look1("Max ESC Temp:");
-        // Look(MAX_ESC_Temperature);  
+      
 
         break;
     default:
