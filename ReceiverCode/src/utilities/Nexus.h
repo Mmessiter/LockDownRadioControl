@@ -84,7 +84,7 @@ inline bool Get_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n)
         if (size < 3)
             continue;
         const uint8_t *payload = &data[i + 5];
-        if (size >= 16)
+        if (size >= 16 && payload[0] == 1) // at least 16 bytes expected and motor index must be 1
         {
            RotorRPM = ((uint32_t)payload[1] | ((uint32_t)payload[2] << 8) | ((uint32_t)payload[3] << 16)) / Ratio; // Ignore payload[0] which is motor index???
            RXModelVolts = (float)((uint16_t)payload[7] | ((uint16_t)payload[8] << 8)) / 1000.00f; // divide by 1000 to get volts 
