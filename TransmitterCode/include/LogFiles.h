@@ -44,12 +44,13 @@ void LogRPM(uint32_t RPM)
 {
     if ((RPM) && (RPM < 60000)) // no rpm might give 0xffff
     {
-        char TheText[] = "Main rotor RPM: ";
+        char TheText[] = "Head speed: ";
         char buf[40] = " ";
         char NB[10];
         Str(NB, RPM, 0);
         strcpy(buf, TheText);
         strcat(buf, NB);
+        strcat(buf, " RPM");
         LogText(buf, strlen(buf), false);
     }
 }
@@ -426,7 +427,7 @@ void LogMaxAmpsUsed()
 {
     if (!Max_Battery_Amps)
         return;
-    char TheText[] = "Max Amps used: ";
+    char TheText[] = "Max Current: ";
     char buf[60] = " ";
     char NB[10];
     dtostrf(Max_Battery_Amps, 2, 2, NB);
@@ -454,7 +455,7 @@ void LogMaxRPM()
 {
     if (!Max_RotorRPM)
         return;
-    char TheText[] = "Max Rotor RPM: ";
+    char TheText[] = "Max Head speed: ";
     char buf[60] = " ";
     char NB[10];
     Str(NB, Max_RotorRPM, 0);
