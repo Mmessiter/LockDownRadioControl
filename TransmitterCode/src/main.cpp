@@ -156,6 +156,7 @@
 #include "Switches.h"
 #include "ADC-master/ADC.h"
 #include "Parameters.h"
+#include "PIDView.h"
 
 /*********************************************************************************************************************************/
 
@@ -3322,7 +3323,7 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     LogTouched,           // 15   // this does nothing, yet ...
     RefreshDualRatesNew,  // 16
     StartGapsView,        // 17
-    Blank,                // 18
+    StartPIDView,         // 18
     Blank,                // 19
     Blank,                // 20
     Blank,                // 21
@@ -4706,6 +4707,10 @@ void BankHasChanged()
     if (CurrentView == DUALRATESVIEW)
     {
         DisplayNewDualRateBank();
+    }
+    if (CurrentView == PIDVIEW)
+    {
+        ShowPIDBank();
     }
 }
 
