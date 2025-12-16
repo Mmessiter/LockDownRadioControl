@@ -86,9 +86,11 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
         break;
     case GEAR_RATIO: // 8 = Gear Ratio
         EncodeAFloat(GearRatio);
+    case SEND_PID_VALUES:
+        Parameters.word[1] = 321;
         break;
 
-    default:
+        default:
         break;
     }
 }

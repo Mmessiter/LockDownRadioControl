@@ -704,25 +704,25 @@ FASTRUN float GetFloatFromAckPayload()
         float Val32;
         uint8_t Val8[4];
     } ThisUnion;
-    ThisUnion.Val8[0] = AckPayload.Byte1;
-    ThisUnion.Val8[1] = AckPayload.Byte2;
-    ThisUnion.Val8[2] = AckPayload.Byte3;
-    ThisUnion.Val8[3] = AckPayload.Byte4;
+    ThisUnion.Val8[0] = AckPayload.Ack_Payload_byte[1];
+    ThisUnion.Val8[1] = AckPayload.Ack_Payload_byte[2];
+    ThisUnion.Val8[2] = AckPayload.Ack_Payload_byte[3];
+    ThisUnion.Val8[3] = AckPayload.Ack_Payload_byte[4];
     return ThisUnion.Val32;
 }
 /************************************************************************************************************/
 void GetTimeFromAckPayload()
 {
-    GPS_RX_SECS = AckPayload.Byte1;
-    GPS_RX_Mins = AckPayload.Byte2;
-    GPS_RX_Hours = AckPayload.Byte3;
+    GPS_RX_SECS = AckPayload.Ack_Payload_byte[1];
+    GPS_RX_Mins = AckPayload.Ack_Payload_byte[2];
+    GPS_RX_Hours = AckPayload.Ack_Payload_byte[3];
 }
 /************************************************************************************************************/
 void GetDateFromAckPayload()
 {
-    GPS_RX_DAY = AckPayload.Byte1;
-    GPS_RX_MONTH = AckPayload.Byte2;
-    GPS_RX_YEAR = AckPayload.Byte3;
+    GPS_RX_DAY = AckPayload.Ack_Payload_byte[1];
+    GPS_RX_MONTH = AckPayload.Ack_Payload_byte[2];
+    GPS_RX_YEAR = AckPayload.Ack_Payload_byte[3];
 }
 // ************************************************************************************************************/
 void FixInches(int *inches, int *feet)
@@ -763,33 +763,55 @@ FASTRUN uint32_t GetIntFromAckPayload() // This one uses a uint32_t int
         uint32_t Val32 = 0;
         uint8_t Val8[4];
     } ThisUnion;
-    ThisUnion.Val8[0] = AckPayload.Byte1;
-    ThisUnion.Val8[1] = AckPayload.Byte2;
-    ThisUnion.Val8[2] = AckPayload.Byte3;
-    ThisUnion.Val8[3] = AckPayload.Byte4;
+    ThisUnion.Val8[0] = AckPayload.Ack_Payload_byte[1];
+    ThisUnion.Val8[1] = AckPayload.Ack_Payload_byte[2];
+    ThisUnion.Val8[2] = AckPayload.Ack_Payload_byte[3];
+    ThisUnion.Val8[3] = AckPayload.Ack_Payload_byte[4];
     return ThisUnion.Val32;
 }
-
 /************************************************************************************************************/
-
+uint16_t GetFirstWordFromAckPayload()
+{
+    union
+    {
+        uint32_t Val16 = 0;
+        uint8_t Val8[2];
+    } ThisUnion;
+    ThisUnion.Val8[0] = AckPayload.Ack_Payload_byte[1];
+    ThisUnion.Val8[1] = AckPayload.Ack_Payload_byte[2];
+    return ThisUnion.Val16;
+}
+/************************************************************************************************************/
+uint16_t GetSecondWordFromAckPayload()
+{
+    union
+    {
+        uint32_t Val16 = 0;
+        uint8_t Val8[2];
+    } ThisUnion;
+    ThisUnion.Val8[0] = AckPayload.Ack_Payload_byte[3];
+    ThisUnion.Val8[1] = AckPayload.Ack_Payload_byte[4];
+    return ThisUnion.Val16;
+}
+/************************************************************************************************************/
 void GetRXVersionNumber()
 {
     char nbuf[5];
-    RadioNumber = AckPayload.Byte1;
+    RadioNumber = AckPayload.Ack_Payload_byte[1];
     Str(nbuf, RadioNumber, 0);
     strcpy(ThisRadio, nbuf);
-    if (LastRadio != AckPayload.Byte1)
+    if (LastRadio != AckPayload.Ack_Payload_byte[1])
     {
-        LastRadio = AckPayload.Byte1;
+        LastRadio = AckPayload.Ack_Payload_byte[1];
         if (LogRXSwaps && UseLog && LastRadio <= 2 && (LastRadio))
             LogThisRX();
     }
-    Str(ReceiverVersionNumber, AckPayload.Byte2, 2);
-    Str(nbuf, AckPayload.Byte3, 2);
+    Str(ReceiverVersionNumber, AckPayload.Ack_Payload_byte[2], 2);
+    Str(nbuf, AckPayload.Ack_Payload_byte[3], 2);
     strcat(ReceiverVersionNumber, nbuf);
-    Str(nbuf, AckPayload.Byte4, 0);
+    Str(nbuf, AckPayload.Ack_Payload_byte[4], 0);
     strcat(ReceiverVersionNumber, nbuf);
-    nbuf[0] = AckPayload.Byte5; // this appends the letter
+    nbuf[0] = AckPayload.Ack_Payload_byte[5]; // this appends the letter
     nbuf[1] = 0;
     strcat(ReceiverVersionNumber, nbuf);
     strcat(ReceiverVersionNumber, " (RX)");
@@ -801,7 +823,7 @@ void GetModelsMacAddress()
 
     if (BuddyPupilOnWireless)
         return; //  Don't do this if we are a pupil
-    switch (AckPayload.Purpose)
+    switch (AckPayload.Ack_Payload_byte[0])
     {
     case 0:
         ModelsMacUnion.Val32[0] = GetIntFromAckPayload();
@@ -879,15 +901,14 @@ void ShowAmpsBeingUsed(float amps)
     SendText((char *)"StillConnected", AmpsBeingUsed);
 }
 /************************************************************************************************************/
-FASTRUN void
-ParseLongerAckPayload() // It's already pretty short!
+FASTRUN void ParseLongerAckPayload() // It's already pretty short!
 {
-    FHSS_data::NextChannelNumber = AckPayload.Byte5; // every packet tells of next hop destination
-    if (AckPayload.Purpose & 0x80)
+    FHSS_data::NextChannelNumber = AckPayload.Ack_Payload_byte[5]; // every packet tells of next hop destination
+    if (AckPayload.Ack_Payload_byte[0] & 0x80)
     {                                                                             // Hi bit is now the **HOP NOW!!** flag
         NextChannel = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber); // The actual channel number pointed to.
         HopToNextChannel();
-        AckPayload.Purpose &= 0x7f; // Clear the high BIT, use the remainder ...
+        AckPayload.Ack_Payload_byte[0] &= 0x7f; // Clear the high BIT, use the remainder ...
     }
 
     if (!ModelMatched && !LedWasGreen)
@@ -896,7 +917,7 @@ ParseLongerAckPayload() // It's already pretty short!
         return;
     }
 
-    switch (AckPayload.Purpose) // Only look at the low 7 BITS
+    switch (AckPayload.Ack_Payload_byte[0]) // Only look at the low 7 BITS
     {
     case 0:
         GetRXVersionNumber();
@@ -933,33 +954,89 @@ ParseLongerAckPayload() // It's already pretty short!
         GetTemperature();
         break;
     case 8:
-        GPS_RX_Latitude = GetFloatFromAckPayload();
+        if (GPS_RX_FIX)
+        {
+            GPS_RX_Latitude = GetFloatFromAckPayload();
+        }
+        else
+        {
+            PID_Roll_P = GetFirstWordFromAckPayload(); 
+            PID_Roll_I = GetSecondWordFromAckPayload();
+            LoadScreenPIDsArray();
+           
+        }
         break;
     case 9:
-        GPS_RX_Longitude = GetFloatFromAckPayload();
+        if (GPS_RX_FIX)
+        {
+            GPS_RX_Longitude = GetFloatFromAckPayload();
+        }
+        else
+        {
+            PID_Roll_D = GetFirstWordFromAckPayload();
+            PID_Roll_FF = GetSecondWordFromAckPayload();
+            LoadScreenPIDsArray();
+        }
         break;
     case 10:
-        GPS_RX_ANGLE = GetFloatFromAckPayload();
+        if (GPS_RX_FIX)
+        {
+            GPS_RX_ANGLE = GetFloatFromAckPayload();
+        }
+        else
+        {
+            PID_Pitch_P = GetFirstWordFromAckPayload();
+            PID_Pitch_I = GetSecondWordFromAckPayload();
+            LoadScreenPIDsArray();
+        }
         break;
     case 11:
-        GPS_RX_Speed = GetFloatFromAckPayload();
-        if (GPS_RX_MaxSpeed < GPS_RX_Speed)
-            GPS_RX_MaxSpeed = GPS_RX_Speed;
+        if (GPS_RX_FIX)
+        {
+            GPS_RX_Speed = GetFloatFromAckPayload();
+            if (GPS_RX_MaxSpeed < GPS_RX_Speed)
+                GPS_RX_MaxSpeed = GPS_RX_Speed;
+        }
+        else
+        {
+            PID_Pitch_D = GetFirstWordFromAckPayload();
+            PID_Pitch_FF = GetSecondWordFromAckPayload();
+            LoadScreenPIDsArray();
+        }
         break;
     case 12:
         GPS_RX_FIX = GetFloatFromAckPayload();
         break;
     case 13:
-        GPS_RX_Altitude = GetFloatFromAckPayload() - GPS_RX_GroundAltitude;
-        if (GPS_RX_Altitude < 0)
-            GPS_RX_Altitude = 0;
-        if (GPS_RX_Maxaltitude < GPS_RX_Altitude)
-            GPS_RX_Maxaltitude = GPS_RX_Altitude;
+        if (GPS_RX_FIX)
+        {
+            GPS_RX_Altitude = GetFloatFromAckPayload() - GPS_RX_GroundAltitude;
+            if (GPS_RX_Altitude < 0)
+                GPS_RX_Altitude = 0;
+            if (GPS_RX_Maxaltitude < GPS_RX_Altitude)
+                GPS_RX_Maxaltitude = GPS_RX_Altitude;
+        }
+        else
+        {
+            PID_Yaw_P = GetFirstWordFromAckPayload();
+            PID_Yaw_I = GetSecondWordFromAckPayload();
+            LoadScreenPIDsArray();
+        }
+
         break;
     case 14:
-        GPS_RX_DistanceTo = GetFloatFromAckPayload(); // now calculated locally
-        if (GPS_RX_MaxDistance < GPS_RX_DistanceTo)
-            GPS_RX_MaxDistance = GPS_RX_DistanceTo;
+        if (GPS_RX_FIX)
+        {
+            GPS_RX_DistanceTo = GetFloatFromAckPayload(); // now calculated locally
+            if (GPS_RX_MaxDistance < GPS_RX_DistanceTo)
+                GPS_RX_MaxDistance = GPS_RX_DistanceTo;
+        }
+        else
+        {
+            PID_Yaw_D = GetFirstWordFromAckPayload();
+            PID_Yaw_FF = GetSecondWordFromAckPayload();
+            LoadScreenPIDsArray();
+        }
         break;
     case 15:
         GPS_RX_CourseTo = GetFloatFromAckPayload();
@@ -1038,7 +1115,6 @@ ParseLongerAckPayload() // It's already pretty short!
         }
         sprintf(ESC_Temperature, "%.1f C.", ESC_Temp);
         sprintf(MAX_ESC_Temperature, "%.1f C.", Max_ESC_Temp);
-      
 
         break;
     default:

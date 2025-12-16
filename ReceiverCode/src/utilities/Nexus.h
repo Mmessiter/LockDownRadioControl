@@ -198,7 +198,7 @@ inline bool Parse_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n)
     RXModelVolts = (float)((uint16_t)payload[7] | ((uint16_t)payload[8] << 8)) / 1000.0f;
     Battery_Amps = (float)((uint16_t)payload[9] | ((uint16_t)payload[10] << 8)) / 1000.0f;
     Battery_mAh = (float)((uint16_t)payload[11] | ((uint16_t)payload[12] << 8));
-    Temp_Of_ESC_In_Centigrade = (float)((uint16_t)payload[13] | ((uint16_t)payload[14] << 8)) / 10.0f;
+    ESC_Temp_C = (float)((uint16_t)payload[13] | ((uint16_t)payload[14] << 8)) / 10.0f;
 
     if (RXModelVolts > 26.0f) // this is to handle 12S which were read with INA219 which cannot read above 26V ...
         RXModelVolts /= 2.0f; // ... so transmitter still halves the voltage for 12S for backwards compatibility.
@@ -221,11 +221,21 @@ inline void CheckMSPSerial()
         data_in[p++] = MSP_UART.read();
     }
 
-     Parse_MSP_Motor_Telemetry(&data_in[0], p);
-     RequestFromMSP(MSP_MOTOR_TELEMETRY);
-
-   // Parse_MSP_PID(data_in, p);
-   // RequestFromMSP(MSP_PID);
+    if (!SendPIDsNow)
+    {
+        Parse_MSP_Motor_Telemetry(&data_in[0], p);
+        RequestFromMSP(MSP_MOTOR_TELEMETRY);
+    }
+    else
+    {
+        Parse_MSP_PID(data_in, p);
+        RequestFromMSP(MSP_PID);
+        if ((millis() - Started_Sending_PIDs) > 3000)
+        {
+            SendPIDsNow = false;
+        }
+    }
 }
+
 // ************************************************************************************************************
 #endif // NEXUS_H

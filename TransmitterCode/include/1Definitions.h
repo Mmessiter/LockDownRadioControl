@@ -19,7 +19,6 @@
 #include <InterpolationLib.h>
 #include "ADC-master/ADC.h"
 
-
 // *************************************************************************************
 //               TX VERSION NUMBER   (May 2020 - December 2025 Malcolm Messiter)       *
 //**************************************************************************************
@@ -167,8 +166,9 @@
 #define KALMAN_VALUES 5
 #define SERVO_FREQUENCIES 6
 #define SERVO_PULSE_WIDTHS 7
-#define GEAR_RATIO 8        // Gear Ratio for RPM calculation
-#define PARAMETERS_MAX_ID 9 // Max types of parameters packet to send  ... will increase.
+#define GEAR_RATIO 8 // Gear Ratio for RPM calculation
+#define SEND_PID_VALUES 9
+#define PARAMETERS_MAX_ID 10 // Max types of parameters packet to send  ... will increase.
 
 // **************************************************************************
 //                               Mixes                                      *
@@ -739,12 +739,14 @@ void TryToConnect();
 void ShowMismatchMsg();
 void StartPIDView();
 void ShowPIDBank();
+void LoadScreenPIDsArray();
+void DisplayPIDValues(uint8_t Bank);
 
-    // **************************************************************************
-    //                            GLOBAL DATA                                   *
-    //***************************************************************************
+// **************************************************************************
+//                            GLOBAL DATA                                   *
+//***************************************************************************
 
-    RF24 Radio1(CE_PIN, CSN_PIN);
+RF24 Radio1(CE_PIN, CSN_PIN);
 
 /************************************************************************************************************/
 /************************************************************************************************************/
@@ -1162,27 +1164,27 @@ uint16_t LastRadioSwaps = 0;
 uint16_t LastRX1TotalTime = 0;
 uint16_t LastRX2TotalTime = 0;
 uint32_t LastGapAverage = 0;
-//float LastMaxRateOfClimb = 0;
+// float LastMaxRateOfClimb = 0;
 uint32_t LastTimeSinceBoot = 0;
 uint16_t LastAverageFrameRate = 0;
 float MaxRateOfClimb = 0;
 uint16_t LastConnectionQuality = 0;
-//int LastRXModelAltitude = 0;
-//int LastRXModelMaxAltitude = 0;
+// int LastRXModelAltitude = 0;
+// int LastRXModelMaxAltitude = 0;
 float LastRXTemperature = 0;
 uint8_t RadioNumber = 0;
 uint32_t LastRXReceivedPackets = 0;
 bool VersionMismatch = false;
 
-    char ParaNames[9][30] = {
-        "FailSafe positions", // 1
-        "QNH",                // 2
-        "Mark Location",      // 3
-        "PID Values",         // 4
-        "Kalman Values",      // 5
-        "Servo Frequencies",  // 6
-        "Servo Pulse Widths", // 7
-        "Gear Ratio",         // 8
+char ParaNames[9][30] = {
+    "FailSafe positions", // 1
+    "QNH",                // 2
+    "Mark Location",      // 3
+    "PID Values",         // 4
+    "Kalman Values",      // 5
+    "Servo Frequencies",  // 6
+    "Servo Pulse Widths", // 7
+    "Gear Ratio",         // 8
 };
 uint16_t ScreenData[50];
 uint16_t AverageFrameRate = 0;
@@ -1224,7 +1226,6 @@ char pBlankView[] = "page BlankView";
 char pGapsView[] = "page GapsView";
 char pSplashView[] = "page SplashView";
 
-
 int Previous_Current_Y = 0; // for scrolling log file
 int Max_Y = 666;
 uint32_t NextionReturn = 0;
@@ -1264,7 +1265,7 @@ uint32_t GapCount = 0;
 float GearRatio = 10.3;
 uint32_t GapSets[11] = {0};
 uint8_t GapPercentages[11] = {0};
-const uint16_t GapThesholds[11] =   {0, 4, 8, 10, 12, 15, 25, 50, 100, 250, 500};
+const uint16_t GapThesholds[11] = {0, 4, 8, 10, 12, 15, 25, 50, 100, 250, 500};
 uint32_t MaxBin = 100;
 uint32_t PrevGapSets[11] = {0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff};
 float Battery_Amps = 0;
@@ -1301,24 +1302,16 @@ namespace FHSS_data
 
 /* ************************************* AckPayload structure ******************************************************
 
- * This first byte "Purpose" defines what all the other bytes mean, AND ...
- * the highest BIT of Purpose means ** HOP TO NEXT CHANNEL A.S.A.P. (IF ON) **
+ * This first byte "Ack_Payload_byte[0]" defines what all the other bytes mean, AND ...
+ * the highest BIT of Ack_Payload_byte[0] means ** HOP TO NEXT CHANNEL A.S.A.P. (IF ON) **
  * the lower 7 BITs then define the meaning of the remainder of the ackpayload bytes
  */
-
+#define PAYLOADSIZE 6
 struct Payload
 {
-    uint8_t Purpose; // Defines meaning of the remainder
-                     // Highest BIT of Purpose means HOP NOW! when ON
-    uint8_t Byte1;   //
-    uint8_t Byte2;   //
-    uint8_t Byte3;   //
-    uint8_t Byte4;   //
-    uint8_t Byte5;   //
+    uint8_t Ack_Payload_byte[PAYLOADSIZE];
 };
 Payload AckPayload;
-
-const uint8_t AckPayloadSize = sizeof(AckPayload); // i.e. 6
 
 struct spd // Special Packet Data for Wireless Buddy functions
 {
@@ -1335,6 +1328,20 @@ bool NeedToRecover = false;
 uint8_t ChannelSentLastTime = 0; // The old channel number
 uint8_t Index = 82;
 
+uint16_t PID_Roll_P;
+uint16_t PID_Roll_I;
+uint16_t PID_Roll_D;
+uint16_t PID_Roll_FF;
+
+uint16_t PID_Pitch_P;
+uint16_t PID_Pitch_I;
+uint16_t PID_Pitch_D;
+uint16_t PID_Pitch_FF;
+
+uint16_t PID_Yaw_P;
+uint16_t PID_Yaw_I;
+uint16_t PID_Yaw_D;
+uint16_t PID_Yaw_FF;
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 
 #endif

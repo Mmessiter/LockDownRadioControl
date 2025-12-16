@@ -13,16 +13,16 @@ void ForceDataRedisplay()
     LastShowTime = 0; //
     LastPacketsPerSecond = 0;
     LastLostPackets = 0;
-   // LastMaxRateOfClimb = 0;
-   // LastTimeSinceBoot = 0;
+    // LastMaxRateOfClimb = 0;
+    // LastTimeSinceBoot = 0;
     LastGapLongest = 0;
     LastRadioSwaps = 0;
     LastRX1TotalTime = 0;
     LastRX2TotalTime = 0;
     LastGapAverage = 0;
-  //  LastMaxRateOfClimb = 0;
-    //LastRXModelAltitude = 0;
-   // LastRXModelMaxAltitude = 0;
+    //  LastMaxRateOfClimb = 0;
+    // LastRXModelAltitude = 0;
+    // LastRXModelMaxAltitude = 0;
     LastRXTemperature = 0;
     LastRXReceivedPackets = 0;
     LastAverageFrameRate = 0;
@@ -1104,8 +1104,9 @@ void DelayWithDog(uint32_t HowLong)
         KickTheDog();
         CheckPowerOffButton();
         if (ModelMatched && BoundFlag)
-        {
-            SimplePing();
+        { //  SimplePing();
+            GetNewChannelValues();
+            SendData();
         }
     }
     AlreadyKicking = false;
@@ -1257,7 +1258,7 @@ void ShowMismatchMsg()
 {
     char MisMatchCommand[] = "vis Warning,1";
     char wbon[] = "vis wb,1";
-    char SCon[]= "vis Owner,1";
+    char SCon[] = "vis Owner,1";
     char TDetails[40];
     char RDetails[40];
     strcpy(RDetails, (char *)"RX:");

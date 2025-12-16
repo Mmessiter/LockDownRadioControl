@@ -69,9 +69,22 @@ void ReadExtraParameters()
             ServoCentrePulse[i] = Parameters.word[i + 1];
         break;
 #endif
+
     case GEAR_RATIO: // 8
         Ratio = DecodeAFloat(Parameters.word[1], Parameters.word[2], Parameters.word[3], Parameters.word[4]);
         break;
+
+        if (NexusPresent)
+        {
+        case SEND_PID_VALUES: // 9
+            if (Parameters.word[1] == 321) // 321 is the command to send PIDs NOW!
+            {
+                SendPIDsNow = true;
+                Started_Sending_PIDs = millis();
+            }
+            break;
+        }
+
     default:
         break;
     }

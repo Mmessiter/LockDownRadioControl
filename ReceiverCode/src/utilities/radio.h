@@ -141,7 +141,7 @@ void UseReceivedData(uint8_t DynamicPayloadSize) // DynamicPayloadSize is total 
 #endif
     ++SuccessfulPackets;     // These packets did arrive, but our acknowledgement might yet fail...
     if (HopNow)              // time to hop?
-    {                        // This flag gets set in LoadLongerAckPayload();
+    {                        // This flag gets set in LoadAckPayload();
         HopToNextChannel();  // Ack payload instructed us to Hop at next opportunity. So hop now ...
         HopNow = false;      // ... and clear the flag,
         HopStart = millis(); // ... and start the timer.
@@ -153,7 +153,7 @@ void SendAckWithPayload() // This function loads the acknowledgement payload It 
 #define FULLDELAYNEEDED 615 // delay required between writing ack payload and reading data
 #define READVOLTSTIME 481   // 481 is the time needed to read the voltage from the INA219
 #define DELAYNEEDED (FULLDELAYNEEDED - READVOLTSTIME)
-    LoadLongerAckPayload();                                        // Load the AckPayload with telemetry data
+    LoadAckPayload();                                              // Load the AckPayload with telemetry data
     CurrentRadio->writeAckPayload(1, &AckPayload, AckPayloadSize); // send Full PAYLOAD (6 bytes)
     delayMicroseconds(DELAYNEEDED);                                // delay DELAYNEEDED
     GetRXVolts();                                                  // Takes 481us
@@ -331,11 +331,11 @@ FASTRUN void ReceiveData()
 
 void SendVersionNumberToAckPayload() // AND which radio transceiver is currently in use
 {
-    AckPayload.Byte1 = ThisRadio;
-    AckPayload.Byte2 = RXVERSION_MAJOR;
-    AckPayload.Byte3 = RXVERSION_MINOR;
-    AckPayload.Byte4 = RXVERSION_MINIMUS;
-    AckPayload.Byte5 = toascii(RXVERSION_EXTRA);
+    AckPayload.Ack_Payload_byte[1] = ThisRadio;
+    AckPayload.Ack_Payload_byte[2] = RXVERSION_MAJOR;
+    AckPayload.Ack_Payload_byte[3] = RXVERSION_MINOR;
+    AckPayload.Ack_Payload_byte[4] = RXVERSION_MINIMUS;
+    AckPayload.Ack_Payload_byte[5] = toascii(RXVERSION_EXTRA);
 }
 
 /************************************************************************************************************/
@@ -597,23 +597,23 @@ void IncChannelNumber()
     {
         NextChannelNumber = 0;
     } // If needed, wrap the channels' array pointer
-    AckPayload.Byte5 = NextChannelNumber;               // Tell the transmitter which element of the array to use next.
+    AckPayload.Ack_Payload_byte[5] = NextChannelNumber; // Tell the transmitter which element of the array to use next.
     NextChannel = *(FHSSChPointer + NextChannelNumber); // Get the actual channel number from the array.
 }
 
 /************************************************************************************************************/
 // This function checks the time since last hop.
-// If it's time to HOP, it sets the high bit in AckPayload.Purpose and both ends then HOP to new channel before next packet.
-// The other 7 BITS of AckPayload.Purpose dictate the Payload's function (therefore 127 possibities.)
+// If it's time to HOP, it sets the high bit in AckPayload.Ack_Payload_byte[0] and both ends then HOP to new channel before next packet.
+// The other 7 BITS of AckPayload.Ack_Payload_byte[0] dictate the Payload's function (therefore 127 possibities.)
 // This happens for *every* AckPayload, which return telemetry data as well as this hoptime information.
 // Hence a single BIT directs the transmitter to hop.
 
 void CheckWhetherItsTimeToHop()
 {
-    AckPayload.Purpose &= 0x7f; // Clear the HOP flag
+    AckPayload.Ack_Payload_byte[0] &= 0x7f; // Clear the HOP flag
     if ((millis() - HopStart) >= HOPTIME)
-    {                               // Time to hop??
-        AckPayload.Purpose |= 0x80; // Yes. So set the HOP flag leaving lower 7 bits unchanged
+    {                                           // Time to hop??
+        AckPayload.Ack_Payload_byte[0] |= 0x80; // Yes. So set the HOP flag leaving lower 7 bits unchanged
         IncChannelNumber();
         HopNow = true; // Set local flag and hop when ready BUT NOT BEFORE.
     }
@@ -628,28 +628,42 @@ void SendFloatToAckPayload(float U)
     } ThisUnion;
     CheckWhetherItsTimeToHop();
     ThisUnion.Val32 = U;
-    AckPayload.Byte1 = ThisUnion.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2 = ThisUnion.Val8[1];
-    AckPayload.Byte3 = ThisUnion.Val8[2];
-    AckPayload.Byte4 = ThisUnion.Val8[3];
+    AckPayload.Ack_Payload_byte[1] = ThisUnion.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Ack_Payload_byte[2] = ThisUnion.Val8[1];
+    AckPayload.Ack_Payload_byte[3] = ThisUnion.Val8[2];
+    AckPayload.Ack_Payload_byte[4] = ThisUnion.Val8[3];
 }
 /************************************************************************************************************/
 void SendTimeToAckPayload()
 {
     CheckWhetherItsTimeToHop();
-    AckPayload.Byte1 = SecsGPS;
-    AckPayload.Byte2 = MinsGPS;
-    AckPayload.Byte3 = HoursGPS;
+    AckPayload.Ack_Payload_byte[1] = SecsGPS;
+    AckPayload.Ack_Payload_byte[2] = MinsGPS;
+    AckPayload.Ack_Payload_byte[3] = HoursGPS;
 }
 /************************************************************************************************************/
 void SendDateToAckPayload()
 {
     CheckWhetherItsTimeToHop();
-    AckPayload.Byte1 = DayGPS;
-    AckPayload.Byte2 = MonthGPS;
-    AckPayload.Byte3 = YearGPS;
+    AckPayload.Ack_Payload_byte[1] = DayGPS;
+    AckPayload.Ack_Payload_byte[2] = MonthGPS;
+    AckPayload.Ack_Payload_byte[3] = YearGPS;
 }
-
+// **********************************************************************************************************
+void Send_2_x_uint16_t(uint16_t v1, uint16_t v2) // sends two x uint16_ts
+{
+    union
+    {
+        uint16_t Val16;
+        uint8_t Val8[2];
+    } ThisUnion;
+        ThisUnion.Val16 = v1;
+        AckPayload.Ack_Payload_byte[1] = ThisUnion.Val8[0];
+        AckPayload.Ack_Payload_byte[2] = ThisUnion.Val8[1];
+        ThisUnion.Val16 = v2;
+        AckPayload.Ack_Payload_byte[3] = ThisUnion.Val8[0];
+        AckPayload.Ack_Payload_byte[4] = ThisUnion.Val8[1];
+}
 /************************************************************************************************************/
 void SendIntToAckPayload(uint32_t U)
 { // This one function now works with most int parameters
@@ -660,10 +674,10 @@ void SendIntToAckPayload(uint32_t U)
     } ThisUnion;
     CheckWhetherItsTimeToHop();
     ThisUnion.Val32 = U;
-    AckPayload.Byte1 = ThisUnion.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
-    AckPayload.Byte2 = ThisUnion.Val8[1];
-    AckPayload.Byte3 = ThisUnion.Val8[2];
-    AckPayload.Byte4 = ThisUnion.Val8[3];
+    AckPayload.Ack_Payload_byte[1] = ThisUnion.Val8[0]; // These values are herewith delivered to Transmitter in Ack Payload
+    AckPayload.Ack_Payload_byte[2] = ThisUnion.Val8[1];
+    AckPayload.Ack_Payload_byte[3] = ThisUnion.Val8[2];
+    AckPayload.Ack_Payload_byte[4] = ThisUnion.Val8[3];
 }
 
 /************************************************************************************************************/
@@ -681,15 +695,15 @@ void SendMacAddress()
 
     ++MacAddressSentCounter;
 
-    AckPayload.Purpose &= 0x7F;
-    ++AckPayload.Purpose;
-    if (AckPayload.Purpose > MaxAckP)
-        AckPayload.Purpose = 0; // wrap after max
+    AckPayload.Ack_Payload_byte[0] &= 0x7F;
+    ++AckPayload.Ack_Payload_byte[0];
+    if (AckPayload.Ack_Payload_byte[0] > MaxAckP)
+        AckPayload.Ack_Payload_byte[0] = 0; // wrap after max
 
     for (int i = 0; i < 8; ++i)
         ThisUnion.Val8[i] = MacAddress[i];
 
-    switch (AckPayload.Purpose)
+    switch (AckPayload.Ack_Payload_byte[0])
     {
     case 0:
         SendIntToAckPayload(ThisUnion.Val32[0]);
@@ -742,20 +756,21 @@ void SetupRadios()
 }
 
 /************************************************************************************************************/
-void LoadLongerAckPayload()
+void LoadAckPayload()
 {
     const uint8_t MAX_TELEMETERY_ITEMS = 24; // Max number of telemetry items to send...
+
     if (MacAddressSentCounter < 20)
     {
         SendMacAddress();
         return;
     }
-    AckPayload.Purpose &= 0x7F; // NOTE: The HIGH BIT of "purpose" bit is the HOPNOW flag. It gets set only when it's time to hop.
-    ++AckPayload.Purpose;
-    if (AckPayload.Purpose > MAX_TELEMETERY_ITEMS) // max number of telemetry items
-        AckPayload.Purpose = 0;                    // wrap after max
+    AckPayload.Ack_Payload_byte[0] &= 0x7F; // NOTE: The HIGH BIT of "Ack_Payload_byte[0]" bit is the HOPNOW flag. It gets set only when it's time to hop.
+    ++AckPayload.Ack_Payload_byte[0];
+    if (AckPayload.Ack_Payload_byte[0] > MAX_TELEMETERY_ITEMS) // max number of telemetry items
+        AckPayload.Ack_Payload_byte[0] = 0;                    // wrap after max
 
-    switch (AckPayload.Purpose)
+    switch (AckPayload.Ack_Payload_byte[0])
     {
     case 0:
         SendVersionNumberToAckPayload();
@@ -796,31 +811,85 @@ void LoadLongerAckPayload()
         SendFloatToAckPayload(BaroTemperature);
         break;
     case 8:
-        SendFloatToAckPayload(LatitudeGPS);
+        if (GpsFix)
+        {
+            SendFloatToAckPayload(LatitudeGPS);
+        }
+        else // Roll P Roll I
+        {
+            Send_2_x_uint16_t(PID_Roll_P, PID_Roll_I);
+        }
         break;
     case 9:
-        SendFloatToAckPayload(LongitudeGPS);
+        if (GpsFix)
+        {
+            SendFloatToAckPayload(LongitudeGPS);
+        }
+        else // Roll D & Roll FF
+        {
+            Send_2_x_uint16_t(PID_Roll_D, PID_Roll_FF);
+        }
         break;
     case 10:
-        SendFloatToAckPayload(AngleGPS);
+        if (GpsFix)
+        {
+            SendFloatToAckPayload(AngleGPS);
+        }
+        else // Pitch P & Pitch I
+        {
+            Send_2_x_uint16_t(PID_Pitch_P, PID_Pitch_I);
+        }
         break;
     case 11:
-        SendFloatToAckPayload(SpeedGPS);
+        if (GpsFix)
+        {
+            SendFloatToAckPayload(SpeedGPS);
+        }
+        else // Pitch D & Pitch FF
+        {
+            Send_2_x_uint16_t(PID_Pitch_D, PID_Pitch_FF);
+        }
         break;
     case 12:
         SendFloatToAckPayload(GpsFix);
         break;
     case 13:
-        SendFloatToAckPayload(AltitudeGPS);
+        if (GpsFix)
+        {
+            SendFloatToAckPayload(AltitudeGPS);
+        }
+        else // YAW P & YAW I
+        {
+            Send_2_x_uint16_t(PID_Yaw_P, PID_Yaw_I);
+        }
         break;
     case 14:
-        SendFloatToAckPayload(DistanceGPS);
+        if (GpsFix)
+        {
+            SendFloatToAckPayload(DistanceGPS);
+        }
+        else // YAW D & YAW FF
+        {
+            Send_2_x_uint16_t(PID_Yaw_D, PID_Yaw_FF);
+        }
         break;
     case 15:
-        SendFloatToAckPayload(CourseToGPS);
+        if (GpsFix)
+        {
+            SendFloatToAckPayload(CourseToGPS);
+        }
+        else // reserved for future use
+        {
+        }
         break;
     case 16:
-        SendIntToAckPayload(SatellitesGPS);
+        if (GpsFix)
+        {
+            SendIntToAckPayload(SatellitesGPS);
+        }
+        else // reserved for future use
+        {
+        }
         break;
     case 17:
         SendDateToAckPayload();
@@ -844,14 +913,10 @@ void LoadLongerAckPayload()
         SendIntToAckPayload(Receiver_Type); // Receiver Type
         break;
     case 24:
-        SendFloatToAckPayload(Temp_Of_ESC_In_Centigrade); // ESC temperature in degrees C from Nexus
-        // Look1("sent: ");
-        // Look(Temp_Of_ESC_In_Centigrade);
+        SendFloatToAckPayload(ESC_Temp_C);
         break;
-
     default:
         break;
     }
 }
-
 #endif // defined (_SRC_UTILITIES_RADIO_H)

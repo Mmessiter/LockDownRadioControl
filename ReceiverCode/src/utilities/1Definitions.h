@@ -110,6 +110,7 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define SERVO_FREQUENCIES 6
 #define SERVO_PULSE_WIDTHS 7
 #define GEAR_RATIO 8
+#define SEND_PID_VALUES 9
 #define PARAMETERS_MAX_ID 12 // Max types of parameters packet to send  ... will increase.
 
 // ****************************************************************************************************************************************
@@ -174,22 +175,15 @@ char ParaNames[12][30] = {
     "Tail PID Values"      // 11
 };
 /** AckPayload Stucture for data returned to transmitter. */
+
+#define PAYLOADSIZE 6 // 6 bytes only
 struct Payload
 {
-    /**
-     * This first byte "Purpose" defines what all the other bytes mean, AND ...
-     * the highest BIT of Purpose means ** HOP TO NEXT CHANNEL A.S.A.P. (IF ON) **
-     * the lower 7 BITs then define the meaning of the remainder of the ackpayload bytes
-     **/
-    uint8_t Purpose = 0; // 0  Purpose
-    uint8_t Byte1 = 0;   // 1
-    uint8_t Byte2 = 0;   // 2
-    uint8_t Byte3 = 0;   // 3
-    uint8_t Byte4 = 0;   // 4
-    uint8_t Byte5 = 0;   // 5
+    uint8_t Ack_Payload_byte[PAYLOADSIZE];
 };
 Payload AckPayload;
-uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed etc. (=6)
+
+uint8_t AckPayloadSize = sizeof(AckPayload); // Size for later externs if needed etc.
 
 // ************************************************************************************************************/
 
@@ -208,7 +202,7 @@ void HopToNextChannel();
 void DelayMillis(uint16_t ms);
 void ReadExtraParameters();
 FASTRUN void Reconnect();
-void LoadLongerAckPayload();
+void LoadAckPayload();
 void Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, uint8_t uncompressed_size);
 void RebuildFlags(bool *f, uint16_t tb);
 void MarkHere();
@@ -354,10 +348,12 @@ bool NexusPresent = false;
 float PackVoltage;
 float Battery_Amps = 0;
 float Battery_mAh = 0;
-float Temp_Of_ESC_In_Centigrade = 0.0f; // ESC temperature in degrees C
+float ESC_Temp_C = 0.0f; // ESC temperature in degrees C
 
 uint8_t Servos_Used = 9; // default to 9 servos used
 uint8_t Receiver_Type = 0;
+bool SendPIDsNow = false;
+uint32_t Started_Sending_PIDs = 0;
 
 uint16_t PID_Roll_P;
 uint16_t PID_Roll_I;
