@@ -370,7 +370,7 @@ uint16_t PID_Yaw_I;
 uint16_t PID_Yaw_D;
 uint16_t PID_Yaw_FF;
 
-uint16_t PID_Send_Duration = 2;
+uint16_t PID_Send_Duration = 1000;
 
 bool BoundFlag = false; /** indicates if receiver paired with transmitter */
 

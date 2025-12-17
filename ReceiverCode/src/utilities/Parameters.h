@@ -81,8 +81,7 @@ void ReadExtraParameters()
             {
                 SendPIDsNow = true;
                 Started_Sending_PIDs = millis();
-                PID_Send_Duration = (Parameters.word[2] * 1000);
-                Look(PID_Send_Duration);
+                PID_Send_Duration = Parameters.word[2];
             }
             break;
         }

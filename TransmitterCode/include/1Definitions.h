@@ -740,12 +740,13 @@ void ShowMismatchMsg();
 void StartPIDView();
 void ShowPIDBank();
 void Display2PIDValues(uint8_t i);
+void HidePIDMsg();
+void SendColour(char *but, int Colour);
+    // **************************************************************************
+    //                            GLOBAL DATA                                   *
+    //***************************************************************************
 
-// **************************************************************************
-//                            GLOBAL DATA                                   *
-//***************************************************************************
-
-RF24 Radio1(CE_PIN, CSN_PIN);
+    RF24 Radio1(CE_PIN, CSN_PIN);
 
 /************************************************************************************************************/
 /************************************************************************************************************/
@@ -1325,7 +1326,7 @@ bool NeedToRecover = false;
 uint8_t ChannelSentLastTime = 0; // The old channel number
 uint8_t Index = 82;
 uint16_t PID_Values[12];
-uint8_t PID_Send_Duration = 3;
+uint16_t PID_Send_Duration = 0;
 uint32_t PID_Start_Time = 0;
 bool Reading_PIDS_Now = false;
 

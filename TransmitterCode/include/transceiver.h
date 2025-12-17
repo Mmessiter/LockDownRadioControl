@@ -919,8 +919,11 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
 
     if (Reading_PIDS_Now)
     {
-        if ((millis() - PID_Start_Time) > PID_Send_Duration * 1000)
+        if ((millis() - PID_Start_Time) > PID_Send_Duration)
+        {
             Reading_PIDS_Now = false;
+            HidePIDMsg();
+        }
     }
 
     switch (AckPayload.Ack_Payload_byte[0]) // Only look at the low 7 BITS
