@@ -739,8 +739,7 @@ void TryToConnect();
 void ShowMismatchMsg();
 void StartPIDView();
 void ShowPIDBank();
-void LoadScreenPIDsArray();
-void DisplayPIDValues(uint8_t Bank);
+void Display2PIDValues(uint8_t i);
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
@@ -1321,27 +1320,12 @@ struct spd // Special Packet Data for Wireless Buddy functions
     uint8_t Channel = QUIETCHANNEL;
 };
 spd SpecialPacketData; // longer version
-
 bool MasterIsInControl = true;
-
 bool NeedToRecover = false;
 uint8_t ChannelSentLastTime = 0; // The old channel number
 uint8_t Index = 82;
+uint16_t PID_Values[12];
 
-uint16_t PID_Roll_P;
-uint16_t PID_Roll_I;
-uint16_t PID_Roll_D;
-uint16_t PID_Roll_FF;
-
-uint16_t PID_Pitch_P;
-uint16_t PID_Pitch_I;
-uint16_t PID_Pitch_D;
-uint16_t PID_Pitch_FF;
-
-uint16_t PID_Yaw_P;
-uint16_t PID_Yaw_I;
-uint16_t PID_Yaw_D;
-uint16_t PID_Yaw_FF;
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 
 #endif

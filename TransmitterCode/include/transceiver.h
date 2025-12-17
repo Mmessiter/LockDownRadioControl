@@ -960,10 +960,9 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         }
         else
         {
-            PID_Roll_P = GetFirstWordFromAckPayload(); 
-            PID_Roll_I = GetSecondWordFromAckPayload();
-            LoadScreenPIDsArray();
-           
+            PID_Values[0] = GetFirstWordFromAckPayload();  // PID_Roll_P
+            PID_Values[1] = GetSecondWordFromAckPayload(); // PID_Roll_I
+            Display2PIDValues(0);
         }
         break;
     case 9:
@@ -973,9 +972,9 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         }
         else
         {
-            PID_Roll_D = GetFirstWordFromAckPayload();
-            PID_Roll_FF = GetSecondWordFromAckPayload();
-            LoadScreenPIDsArray();
+            PID_Values[2] = GetFirstWordFromAckPayload();  // PID_Roll_D
+            PID_Values[3] = GetSecondWordFromAckPayload(); // PID_Roll_FF
+            Display2PIDValues(2);
         }
         break;
     case 10:
@@ -985,9 +984,9 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         }
         else
         {
-            PID_Pitch_P = GetFirstWordFromAckPayload();
-            PID_Pitch_I = GetSecondWordFromAckPayload();
-            LoadScreenPIDsArray();
+            PID_Values[4] = GetFirstWordFromAckPayload();  // PID_Pitch_P
+            PID_Values[5] = GetSecondWordFromAckPayload(); // PID_Pitch_I
+            Display2PIDValues(4);
         }
         break;
     case 11:
@@ -999,9 +998,9 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         }
         else
         {
-            PID_Pitch_D = GetFirstWordFromAckPayload();
-            PID_Pitch_FF = GetSecondWordFromAckPayload();
-            LoadScreenPIDsArray();
+            PID_Values[6] = GetFirstWordFromAckPayload(); // PID_Pitch_D
+            PID_Values[7] = GetSecondWordFromAckPayload(); // PID_Pitch_FF
+            Display2PIDValues(6);
         }
         break;
     case 12:
@@ -1018,9 +1017,9 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         }
         else
         {
-            PID_Yaw_P = GetFirstWordFromAckPayload();
-            PID_Yaw_I = GetSecondWordFromAckPayload();
-            LoadScreenPIDsArray();
+            PID_Values[8] = GetFirstWordFromAckPayload(); // PID_Yaw_P
+            PID_Values[9] = GetSecondWordFromAckPayload(); // PID_Yaw_I
+            Display2PIDValues(8);
         }
 
         break;
@@ -1033,9 +1032,9 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         }
         else
         {
-            PID_Yaw_D = GetFirstWordFromAckPayload();
-            PID_Yaw_FF = GetSecondWordFromAckPayload();
-            LoadScreenPIDsArray();
+            PID_Values[10] = GetFirstWordFromAckPayload(); // PID_Yaw_D
+            PID_Values[11] = GetSecondWordFromAckPayload(); // PID_Yaw_FF
+            Display2PIDValues(10);
         }
         break;
     case 15:
