@@ -10,16 +10,21 @@ void Display2PIDValues(uint8_t i) // Displays two PID values as soon as they arr
     if (CurrentView == PIDVIEW) // Must be in PID view
     {
         SendValue(PID_Labels[i], PID_Values[i]);
-        SendValue(PID_Labels[i+1], PID_Values[i + 1]);
+        SendValue(PID_Labels[i + 1], PID_Values[i + 1]);
     }
 }
 //************************************************************************************************************/
 void ShowPIDBank() // this is called when bank is changed so new bank's PID values are shown
 {
-    char buf[20];
-    AddParameterstoQueue(SEND_PID_VALUES); // Request PID values from RX
-    sprintf(buf, "Bank: %d", Bank);        // Display which Bank
-    SendText((char *)"t9", buf);
+    if (CurrentView == PIDVIEW) // Must be in PID view
+    {
+        char buf[20];
+        PID_Start_Time = millis();
+        Reading_PIDS_Now = true;
+        AddParameterstoQueue(SEND_PID_VALUES); // Request PID values from RX
+        sprintf(buf, "Bank: %d", Bank);        // Display which Bank
+        SendText((char *)"t9", buf);
+    }
 }
 //************************************************************************************************************/
 void StartPIDView() // this starts PID view

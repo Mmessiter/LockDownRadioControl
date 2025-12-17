@@ -87,10 +87,11 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
     case GEAR_RATIO: // 8 = Gear Ratio
         EncodeAFloat(GearRatio);
     case SEND_PID_VALUES:
-        Parameters.word[1] = 321;
+        Parameters.word[1] = 321;               // confirms request for PID values
+        Parameters.word[2] = PID_Send_Duration; // 3 - how many seconds to send these
         break;
 
-        default:
+    default:
         break;
     }
 }
@@ -137,7 +138,7 @@ int GetExtraParameters() // This gets extra parameters ready for sending and ret
     LoadOneParameter();
     LoadRawDataWithParameters();
     DataTosend.ChannelBitMask = 0; // IMPORTANT! This flag stops these data being seen as channel data at the RX!
-   // DebugParamsOut();              // long
+                                   // DebugParamsOut();              // long
     // Look1(Parameters.ID);
     // Look1(" ");
     //  Look(ParaNames[Parameters.ID - 1]); // brief

@@ -917,6 +917,12 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         return;
     }
 
+    if (Reading_PIDS_Now)
+    {
+        if ((millis() - PID_Start_Time) > PID_Send_Duration * 1000)
+            Reading_PIDS_Now = false;
+    }
+
     switch (AckPayload.Ack_Payload_byte[0]) // Only look at the low 7 BITS
     {
     case 0:
@@ -960,9 +966,12 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         }
         else
         {
-            PID_Values[0] = GetFirstWordFromAckPayload();  // PID_Roll_P
-            PID_Values[1] = GetSecondWordFromAckPayload(); // PID_Roll_I
-            Display2PIDValues(0);
+            if (Reading_PIDS_Now)
+            {
+                PID_Values[0] = GetFirstWordFromAckPayload();  // PID_Roll_P
+                PID_Values[1] = GetSecondWordFromAckPayload(); // PID_Roll_I
+                Display2PIDValues(0);
+            }
         }
         break;
     case 9:
@@ -972,9 +981,12 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         }
         else
         {
-            PID_Values[2] = GetFirstWordFromAckPayload();  // PID_Roll_D
-            PID_Values[3] = GetSecondWordFromAckPayload(); // PID_Roll_FF
-            Display2PIDValues(2);
+            if (Reading_PIDS_Now)
+            {
+                PID_Values[2] = GetFirstWordFromAckPayload();  // PID_Roll_D
+                PID_Values[3] = GetSecondWordFromAckPayload(); // PID_Roll_FF
+                Display2PIDValues(2);
+            }
         }
         break;
     case 10:
@@ -984,9 +996,12 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         }
         else
         {
-            PID_Values[4] = GetFirstWordFromAckPayload();  // PID_Pitch_P
-            PID_Values[5] = GetSecondWordFromAckPayload(); // PID_Pitch_I
-            Display2PIDValues(4);
+            if (Reading_PIDS_Now)
+            {
+                PID_Values[4] = GetFirstWordFromAckPayload();  // PID_Pitch_P
+                PID_Values[5] = GetSecondWordFromAckPayload(); // PID_Pitch_I
+                Display2PIDValues(4);
+            }
         }
         break;
     case 11:
@@ -998,9 +1013,12 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         }
         else
         {
-            PID_Values[6] = GetFirstWordFromAckPayload(); // PID_Pitch_D
-            PID_Values[7] = GetSecondWordFromAckPayload(); // PID_Pitch_FF
-            Display2PIDValues(6);
+            if (Reading_PIDS_Now)
+            {
+                PID_Values[6] = GetFirstWordFromAckPayload();  // PID_Pitch_D
+                PID_Values[7] = GetSecondWordFromAckPayload(); // PID_Pitch_FF
+                Display2PIDValues(6);
+            }
         }
         break;
     case 12:
@@ -1017,11 +1035,13 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         }
         else
         {
-            PID_Values[8] = GetFirstWordFromAckPayload(); // PID_Yaw_P
-            PID_Values[9] = GetSecondWordFromAckPayload(); // PID_Yaw_I
-            Display2PIDValues(8);
+            if (Reading_PIDS_Now)
+            {
+                PID_Values[8] = GetFirstWordFromAckPayload();  // PID_Yaw_P
+                PID_Values[9] = GetSecondWordFromAckPayload(); // PID_Yaw_I
+                Display2PIDValues(8);
+            }
         }
-
         break;
     case 14:
         if (GPS_RX_FIX)
@@ -1032,9 +1052,12 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         }
         else
         {
-            PID_Values[10] = GetFirstWordFromAckPayload(); // PID_Yaw_D
-            PID_Values[11] = GetSecondWordFromAckPayload(); // PID_Yaw_FF
-            Display2PIDValues(10);
+            if (Reading_PIDS_Now)
+            {
+                PID_Values[10] = GetFirstWordFromAckPayload();  // PID_Yaw_D
+                PID_Values[11] = GetSecondWordFromAckPayload(); // PID_Yaw_FF
+                Display2PIDValues(10);
+            }
         }
         break;
     case 15:

@@ -221,6 +221,11 @@ inline void CheckMSPSerial()
         data_in[p++] = MSP_UART.read();
     }
 
+    if ((millis() - Started_Sending_PIDs) > PID_Send_Duration)
+    {
+        SendPIDsNow = false;
+    }
+
     if (!SendPIDsNow)
     {
         Parse_MSP_Motor_Telemetry(&data_in[0], p);
@@ -230,10 +235,6 @@ inline void CheckMSPSerial()
     {
         Parse_MSP_PID(data_in, p);
         RequestFromMSP(MSP_PID);
-        if ((millis() - Started_Sending_PIDs) > 3000)
-        {
-            SendPIDsNow = false;
-        }
     }
 }
 

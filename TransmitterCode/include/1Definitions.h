@@ -1325,6 +1325,9 @@ bool NeedToRecover = false;
 uint8_t ChannelSentLastTime = 0; // The old channel number
 uint8_t Index = 82;
 uint16_t PID_Values[12];
+uint8_t PID_Send_Duration = 3;
+uint32_t PID_Start_Time = 0;
+bool Reading_PIDS_Now = false;
 
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 
