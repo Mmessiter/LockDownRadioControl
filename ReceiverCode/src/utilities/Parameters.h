@@ -36,7 +36,7 @@ bool pidsLookValid(const uint16_t p[12])
 {
     // super simple sanity checks (tweak limits if you like)
     for (int i = 0; i < 12; i++)
-        if ((p[i] > 750))
+        if ((p[i] > 750) || (p[i] < 1))
             return false; // absurd for RF PID scales
     return true;
 }

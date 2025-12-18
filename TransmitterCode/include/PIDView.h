@@ -1,4 +1,9 @@
 // ******************************************** PID ******************************************************
+// This module handles the PID View screen on the Nextion display
+// It allows the user to view and edit the 12 PID values for the current bank
+// It also handles sending the edited PID values back to the Nexus receiver
+// **********************************************************************************************************
+
 #ifndef PIDVIEW_H
 #define PIDVIEW_H
 #include <Arduino.h>
@@ -75,7 +80,7 @@ void HidePIDMsg()
     if (CurrentView == PIDVIEW) // Must be in PID view
     {
         SendCommand((char *)"vis busy,0"); // Hide  message
-        ForegroundColourPIDLabels(0);      // make text black so it is visible again
+        ForegroundColourPIDLabels(Black);      // make text black so it is visible again
     }
 }
 //************************************************************************************************************/
@@ -99,11 +104,16 @@ void ShowPIDBank() // this is called when bank is changed so new bank's PID valu
 
 void SendEditedPIDs()
 {
+    if (!GetConfirmation((char *)"page PIDView", (char *)"Send edited PIDs to Nexus?"))
+    {
+        ShowPIDBank(); // reload old PIDs, undoing any edits
+        return;
+    }
     PIDMsg((char *)"Sending edited PIDs ...", Gray); // Show sending message
     ReadEditedPIDs();                                // read the edited PIDs from the screen;
-    AddParameterstoQueue(GET_SECOND_6_PID_VALUES);   // Send PID 7-12 values from TX to RX
-    AddParameterstoQueue(GET_FIRST_6_PID_VALUES);    // Send PID 1-6 values from TX to RX
-    HidePIDMsg();
+    AddParameterstoQueue(GET_SECOND_6_PID_VALUES);   // SECOND MUST BE SENT FIRST!!! Send PID 7-12 values from TX to RX
+    AddParameterstoQueue(GET_FIRST_6_PID_VALUES);    // SECOND MUST BE SENT FIRST!!! Send PID 1-6 values from TX to RX
+    HidePIDMsg();                                    // SECOND MUST BE SENT FIRST!!!  because this queue is a LIFO stack
 }
 //************************************************************************************************************/
 void StartPIDView() // this starts PID view

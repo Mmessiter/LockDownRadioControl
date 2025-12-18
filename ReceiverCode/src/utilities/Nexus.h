@@ -179,13 +179,13 @@ inline void WritePIDsToNexusAndSave(const uint16_t pid[12])
 
     if (now - lastWriteTime < WRITE_COOLDOWN_MS)
     {
-        Look("WritePIDsToNexusAndSave(): Write cooldown active, please wait.");
+      //  Look("WritePIDsToNexusAndSave(): Write cooldown active, please wait.");
         return;
     }
 
     if (!NexusPresent)
     {
-        Look("WritePIDsToNexusAndSave(): NexusPresent is false - not writing.");
+      //  Look("WritePIDsToNexusAndSave(): NexusPresent is false - not writing.");
         return;
     }
 
@@ -197,11 +197,11 @@ inline void WritePIDsToNexusAndSave(const uint16_t pid[12])
         payload[i * 2 + 1] = (uint8_t)(pid[i] >> 8);
     }
 
-    Look("Writing new PID values to Nexus...");
+    //Look("Writing new PID values to Nexus...");
     SendToMSP(MSP_SET_PID, payload, sizeof(payload));
     delay(50);
 
-    Look("Saving to EEPROM/flash...");
+   // Look("Saving to EEPROM/flash...");
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
     delay(50);
 
