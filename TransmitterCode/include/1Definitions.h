@@ -1179,7 +1179,7 @@ uint8_t RadioNumber = 0;
 uint32_t LastRXReceivedPackets = 0;
 bool VersionMismatch = false;
 
-char ParaNames[9][30] = {
+char ParaNames[12][30] = {
     "FailSafe positions", // 1
     "QNH",                // 2
     "Mark Location",      // 3
@@ -1188,6 +1188,10 @@ char ParaNames[9][30] = {
     "Servo Frequencies",  // 6
     "Servo Pulse Widths", // 7
     "Gear Ratio",         // 8
+    "GET PIDs",           // 9
+    "SET PIDs 1-6",       // 10
+    "SET PIDs 7-12",      // 11
+
 };
 uint16_t ScreenData[50];
 uint16_t AverageFrameRate = 0;

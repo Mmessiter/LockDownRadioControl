@@ -145,7 +145,7 @@ int GetExtraParameters() // This gets extra parameters ready for sending and ret
     LoadOneParameter();
     LoadRawDataWithParameters();
     DataTosend.ChannelBitMask = 0; // IMPORTANT! This flag stops these data being seen as channel data at the RX!
-                                   // DebugParamsOut();              // long
+  //  DebugParamsOut();              // long
     // Look1(Parameters.ID);
     // Look1(" ");
     //  Look(ParaNames[Parameters.ID - 1]); // brief

@@ -31,6 +31,16 @@ void ShowValues(const char *name, float value) // // Show values in the serial m
     Look1(": ");
     Look(value, 3); // 3 decimal places
 }
+//************************************************************************************************************/
+bool pidsLookValid(const uint16_t p[12])
+{
+    // super simple sanity checks (tweak limits if you like)
+    for (int i = 0; i < 12; i++)
+        if ((p[i] > 750))
+            return false; // absurd for RF PID scales
+    return true;
+}
+
 /************************************************************************************************************/
 /** Read extra parameters from the transmitter.
  * extra parameters are sent using the last few words bytes in every data packet.
@@ -74,41 +84,53 @@ void ReadExtraParameters()
         Ratio = DecodeAFloat(Parameters.word[1], Parameters.word[2], Parameters.word[3], Parameters.word[4]);
         break;
 
-        if (NexusPresent)
-        {
-        case SEND_PID_VALUES:              // 9
-            if (Parameters.word[1] == 321) // 321 is the command to send PIDs NOW!
-            {
-                SendPIDsNow = true;
-                Started_Sending_PIDs = millis();
-                PID_Send_Duration = Parameters.word[2];
-            }
+    case SEND_PID_VALUES: // 9
+        if (!NexusPresent)
             break;
+        if (Parameters.word[1] == 321) // 321 is the command to send PIDs NOW!
+        {
+            SendPIDsNow = true;
+            Started_Sending_PIDs = millis();
+            PID_Send_Duration = Parameters.word[2];
         }
-        
+        break;
+
     case GET_FIRST_6_PID_VALUES: // 10
-        PID_Roll_P = Parameters.word[1];
-        PID_Roll_I = Parameters.word[2];
-        PID_Roll_D = Parameters.word[3];
-        PID_Roll_FF = Parameters.word[4];
-        PID_Pitch_P = Parameters.word[5];
-        PID_Pitch_I = Parameters.word[6];
+        if (!NexusPresent)
+            break;
+
+        All_PIDs[0] = Parameters.word[1];
+        All_PIDs[1] = Parameters.word[2];
+        All_PIDs[2] = Parameters.word[3];
+        All_PIDs[3] = Parameters.word[4];
+        All_PIDs[4] = Parameters.word[5];
+        All_PIDs[5] = Parameters.word[6];
         break;
 
     case GET_SECOND_6_PID_VALUES: // 11
-        PID_Pitch_D = Parameters.word[1];
-        PID_Pitch_FF = Parameters.word[2];
-        PID_Yaw_P = Parameters.word[3];
-        PID_Yaw_I = Parameters.word[4];
-        PID_Yaw_D = Parameters.word[5];
-        PID_Yaw_FF = Parameters.word[6];
-        DebugPIDValues("NEW PID Values");
-        break;
+        if (!NexusPresent)
+            break;
+        All_PIDs[6] = Parameters.word[1];
+        All_PIDs[7] = Parameters.word[2];
+        All_PIDs[8] = Parameters.word[3];
+        All_PIDs[9] = Parameters.word[4];
+        All_PIDs[10] = Parameters.word[5];
+        All_PIDs[11] = Parameters.word[6];
+        
+      //  DebugPIDValues("NEW PID Values");
+        if (pidsLookValid(All_PIDs))
+        {
+             WritePIDsToNexusAndSave(All_PIDs);
+        }
+        else
+        {
+            // Look("ReadExtraParameters(): PID values look rather nuts! - not writing to Nexus.");
+        }
 
+        break;
     default:
         break;
     }
-    return;
 }
 
 #endif

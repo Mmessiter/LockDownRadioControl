@@ -8,7 +8,28 @@
 // MSP SUPPORT FUNCTIONS FOR NEXUS etc.
 // ************************************************************************************************************
 #define MSP_MOTOR_TELEMETRY 139 // Motor telemetry data
-#define MSP_PID 112             // PID settings
+#define MSP_PID 112             // PID settings (read)
+
+// *** NEW: MSP commands to WRITE PID + SAVE TO EEPROM/FLASH ***
+#define MSP_SET_PID 202      // write PID settings
+#define MSP_EEPROM_WRITE 250 // save settings to EEPROM/flash
+
+// *** NEW: indices into a 12-element PID array (so we never mix them up) ***
+enum : uint8_t
+{
+    ROLL_P = 0,
+    ROLL_I,
+    ROLL_D,
+    ROLL_FF,
+    PITCH_P,
+    PITCH_I,
+    PITCH_D,
+    PITCH_FF,
+    YAW_P,
+    YAW_I,
+    YAW_D,
+    YAW_FF
+};
 
 // ************************************************************************************************************
 inline void DetectNexusAtBoot()
@@ -85,43 +106,121 @@ inline void RequestFromMSP(uint8_t command) // send a request to the flight cont
     MSP_UART.write('$');
     MSP_UART.write('M');
     MSP_UART.write('<');
-    MSP_UART.write(0);
+    MSP_UART.write((uint8_t)0);
     checksum ^= 0;
     MSP_UART.write(command);
     checksum ^= command;
     MSP_UART.write(checksum);
 }
+
 // ************************************************************************************************************
-void DebugPIDValues(char const *msg){
+// *** NEW: send an MSPv1 COMMAND with a payload (this is what we need for SET_PID + EEPROM_WRITE) ***
+//
+// This transmits: $ M <  [size] [cmd] [payload bytes...] [checksum]
+//
+// Notes:
+// - This only "sends". It does NOT wait for a reply.
+// - Many flight controllers will ignore writes if ARMED. So do this only when disarmed.
+//
+inline void SendToMSP(uint8_t command, const uint8_t *payload, uint8_t payloadSize)
+{
+    uint8_t checksum = 0;
 
+    MSP_UART.write('$');
+    MSP_UART.write('M');
+    MSP_UART.write('<');
+
+    MSP_UART.write(payloadSize);
+    checksum ^= payloadSize;
+
+    MSP_UART.write(command);
+    checksum ^= command;
+
+    for (uint8_t i = 0; i < payloadSize; i++)
+    {
+        uint8_t b = payload[i];
+        MSP_UART.write(b);
+        checksum ^= b;
+    }
+
+    MSP_UART.write(checksum);
+}
+
+// ************************************************************************************************************
+// *** NEW: call this when you receive the edited 12 PID values back from the transmitter ***
+//
+// pid[0]  Roll P
+// pid[1]  Roll I
+// pid[2]  Roll D
+// pid[3]  Roll FF
+// pid[4]  Pitch P
+// pid[5]  Pitch I
+// pid[6]  Pitch D
+// pid[7]  Pitch FF
+// pid[8]  Yaw P
+// pid[9]  Yaw I
+// pid[10] Yaw D
+// pid[11] Yaw FF
+//
+// What it does:
+// 1) Sends MSP_SET_PID with 24 bytes (12 x uint16_t, little-endian)
+// 2) Sends MSP_EEPROM_WRITE with no payload to make it permanent
+//
+// IMPORTANT:
+// - Do this ONLY when NexusPresent == true
+// - Do this ONLY when the model is DISARMED
+// - After calling it, you can request MSP_PID again to confirm the values have stuck.
+//
+inline void WritePIDsToNexusAndSave(const uint16_t pid[12])
+{
+    static uint32_t lastWriteTime = 0;
+    const uint32_t WRITE_COOLDOWN_MS = 5000; // 5 seconds
+    uint32_t now = millis();
+
+    if (now - lastWriteTime < WRITE_COOLDOWN_MS)
+    {
+        Look("WritePIDsToNexusAndSave(): Write cooldown active, please wait.");
+        return;
+    }
+
+    if (!NexusPresent)
+    {
+        Look("WritePIDsToNexusAndSave(): NexusPresent is false - not writing.");
+        return;
+    }
+
+    uint8_t payload[24];
+
+    for (uint8_t i = 0; i < 12; i++)
+    {
+        payload[i * 2 + 0] = (uint8_t)(pid[i] & 0xFF);
+        payload[i * 2 + 1] = (uint8_t)(pid[i] >> 8);
+    }
+
+    Look("Writing new PID values to Nexus...");
+    SendToMSP(MSP_SET_PID, payload, sizeof(payload));
+    delay(50);
+
+    Look("Saving to EEPROM/flash...");
+    SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
+    delay(50);
+
+  //  Look("PID write + save sent. Now re-reading MSP_PID to confirm...");
+  //  RequestFromMSP(MSP_PID);
+
+    lastWriteTime = now; // set cooldown only after we actually did the write+save
+}
+// ************************************************************************************************************
+void DebugPIDValues(char const *msg)
+{
     Look(msg);
-    Look1(" Roll P: ");
-    Look(PID_Roll_P);
-    Look1(" Roll I: ");
-    Look(PID_Roll_I);
-    Look1(" Roll D: ");
-    Look(PID_Roll_D);
-    Look1(" Roll FF: ");
-    Look(PID_Roll_FF);
-
-    Look1(" Pitch P: ");
-    Look(PID_Pitch_P);
-    Look1(" Pitch I: ");
-    Look(PID_Pitch_I);
-    Look1(" Pitch D: ");
-    Look(PID_Pitch_D);
-    Look1(" Pitch FF: ");
-    Look(PID_Pitch_FF);
-
-    Look1(" Yaw P: ");
-    Look(PID_Yaw_P);
-    Look1(" Yaw I: ");
-    Look(PID_Yaw_I);
-    Look1(" Yaw D: ");
-    Look(PID_Yaw_D);
-    Look1(" Yaw FF: ");
-    Look(PID_Yaw_FF);
-
+    for (int i=0; i<12; ++i)
+    {
+        Look1(" PID[");
+        Look1(i);
+        Look1("]: ");
+        Look(All_PIDs[i]);
+    }
     Look("---------------------");
 }
 // ************************************************************************************************************
@@ -134,24 +233,30 @@ inline bool Parse_MSP_PID(const uint8_t *data, uint8_t n)
         return false;
     if (f.cmd != MSP_PID)
         return false;
-    if (f.size < 9)
+
+    // *** FIX: you read 24 bytes below, so size must be at least 24 ***
+    if (f.size < 24)
         return false;
+
     const uint8_t *p = f.payload;
 
     PID_Roll_P = p[0] | (p[1] << 8);
     PID_Roll_I = p[2] | (p[3] << 8);
     PID_Roll_D = p[4] | (p[5] << 8);
     PID_Roll_FF = p[6] | (p[7] << 8);
+
     PID_Pitch_P = p[8] | (p[9] << 8);
     PID_Pitch_I = p[10] | (p[11] << 8);
     PID_Pitch_D = p[12] | (p[13] << 8);
     PID_Pitch_FF = p[14] | (p[15] << 8);
+
     PID_Yaw_P = p[16] | (p[17] << 8);
     PID_Yaw_I = p[18] | (p[19] << 8);
     PID_Yaw_D = p[20] | (p[21] << 8);
     PID_Yaw_FF = p[22] | (p[23] << 8);
-    DebugPIDValues("Current Nexus PID Values");
-    
+
+  //  DebugPIDValues("Current Nexus PID Values");
+
     return true;
 }
 // ************************************************************************************************************

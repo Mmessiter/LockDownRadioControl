@@ -101,23 +101,23 @@ void SendEditedPIDs()
 {
     PIDMsg((char *)"Sending edited PIDs ...", Gray); // Show sending message
     ReadEditedPIDs();                                // read the edited PIDs from the screen;
-    AddParameterstoQueue(GET_FIRST_6_PID_VALUES);    // Send PID 1-6 values from TX to RX
     AddParameterstoQueue(GET_SECOND_6_PID_VALUES);   // Send PID 7-12 values from TX to RX
+    AddParameterstoQueue(GET_FIRST_6_PID_VALUES);    // Send PID 1-6 values from TX to RX
     HidePIDMsg();
 }
 //************************************************************************************************************/
 void StartPIDView() // this starts PID view
 {
-    // if (!SafetyON)
-    // {
-    //     MsgBox(RXOptionsView, (char *)"Please enable Safety!");
-    //     return;
-    // }
-    // if (!LedWasGreen)
-    // {
-    //     MsgBox(RXOptionsView, (char *)"Please connect to model!");
-    //     return;
-    // }
+    if (!SafetyON)
+    {
+        MsgBox(RXOptionsView, (char *)"Please enable Safety!");
+        return;
+    }
+    if (!LedWasGreen)
+    {
+        MsgBox(RXOptionsView, (char *)"Please connect to model!");
+        return;
+    }
     CurrentView = PIDVIEW;               // Set current view
     SendCommand((char *)"page PIDView"); // Go to PID view page
     ShowPIDBank();                       // Show the current bank's PIDs

@@ -244,6 +244,7 @@ inline bool Parse_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n);
 void PointToRadio1();
 void PointToRadio2();
 void DebugPIDValues(char const *msg);
+inline void WritePIDsToNexusAndSave(const uint16_t pid[12]);
 
     /************************************************************************************************************/
     // For numeric types (int, float, double, etc.)
@@ -362,16 +363,16 @@ uint16_t PID_Roll_P;
 uint16_t PID_Roll_I;
 uint16_t PID_Roll_D;
 uint16_t PID_Roll_FF;
-
 uint16_t PID_Pitch_P;
 uint16_t PID_Pitch_I;
 uint16_t PID_Pitch_D;
 uint16_t PID_Pitch_FF;
-
 uint16_t PID_Yaw_P;
 uint16_t PID_Yaw_I;
 uint16_t PID_Yaw_D;
 uint16_t PID_Yaw_FF;
+uint16_t All_PIDs[12];
+
 
 uint16_t PID_Send_Duration = 1000;
 
