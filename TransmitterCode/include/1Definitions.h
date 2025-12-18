@@ -1197,6 +1197,7 @@ char LogFileName[40];
 char MOD[10];
 char Mfiles[10];
 int LastTrim[5][17];
+char RXOptionsView []="page RXOptionsView";
 char pFhssView[] = "page FhssView";
 char pDataView[] = "page DataView";
 char pSwitchesView[] = "page SwitchesView";

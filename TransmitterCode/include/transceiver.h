@@ -1140,7 +1140,6 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         }
         sprintf(ESC_Temperature, "%.1f C.", ESC_Temp);
         sprintf(MAX_ESC_Temperature, "%.1f C.", Max_ESC_Temp);
-
         break;
     default:
         break;
