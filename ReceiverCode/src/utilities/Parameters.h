@@ -76,7 +76,7 @@ void ReadExtraParameters()
 
         if (NexusPresent)
         {
-        case SEND_PID_VALUES: // 9
+        case SEND_PID_VALUES:              // 9
             if (Parameters.word[1] == 321) // 321 is the command to send PIDs NOW!
             {
                 SendPIDsNow = true;
@@ -85,6 +85,25 @@ void ReadExtraParameters()
             }
             break;
         }
+        
+    case GET_FIRST_6_PID_VALUES: // 10
+        PID_Roll_P = Parameters.word[1];
+        PID_Roll_I = Parameters.word[2];
+        PID_Roll_D = Parameters.word[3];
+        PID_Roll_FF = Parameters.word[4];
+        PID_Pitch_P = Parameters.word[5];
+        PID_Pitch_I = Parameters.word[6];
+        break;
+
+    case GET_SECOND_6_PID_VALUES: // 11
+        PID_Pitch_D = Parameters.word[1];
+        PID_Pitch_FF = Parameters.word[2];
+        PID_Yaw_P = Parameters.word[3];
+        PID_Yaw_I = Parameters.word[4];
+        PID_Yaw_D = Parameters.word[5];
+        PID_Yaw_FF = Parameters.word[6];
+        DebugPIDValues("NEW PID Values");
+        break;
 
     default:
         break;

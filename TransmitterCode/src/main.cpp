@@ -3324,7 +3324,7 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     RefreshDualRatesNew,  // 16
     StartGapsView,        // 17
     StartPIDView,         // 18
-    Blank,                // 19
+    SendEditedPIDs,       // 19
     Blank,                // 20
     Blank,                // 21
     Blank,                // 22

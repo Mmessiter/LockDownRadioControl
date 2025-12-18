@@ -92,38 +92,9 @@ inline void RequestFromMSP(uint8_t command) // send a request to the flight cont
     MSP_UART.write(checksum);
 }
 // ************************************************************************************************************
-//         MSP_PID FROM ROTORFLIGHT FIRMWARE
+void DebugPIDValues(char const *msg){
 
-inline bool Parse_MSP_PID(const uint8_t *data, uint8_t n)
-{
-    MspFrame f;
-    if (!FindMspV1ResponseFrame(data, n, f))
-        return false;
-
-    if (f.cmd != MSP_PID)
-        return false;
-
-    if (f.size < 9)
-        return false;
-
-    const uint8_t *p = f.payload;
-
-    PID_Roll_P = p[0] | (p[1] << 8);
-    PID_Roll_I = p[2] | (p[3] << 8);
-    PID_Roll_D = p[4] | (p[5] << 8);
-    PID_Roll_FF = p[6] | (p[7] << 8);
-
-    PID_Pitch_P = p[8] | (p[9] << 8);
-    PID_Pitch_I = p[10] | (p[11] << 8);
-    PID_Pitch_D = p[12] | (p[13] << 8);
-    PID_Pitch_FF = p[14] | (p[15] << 8);
-
-    PID_Yaw_P = p[16] | (p[17] << 8);
-    PID_Yaw_I = p[18] | (p[19] << 8);
-    PID_Yaw_D = p[20] | (p[21] << 8);
-    PID_Yaw_FF = p[22] | (p[23] << 8);
-
-    Look("Nexus PID values:");
+    Look(msg);
     Look1(" Roll P: ");
     Look(PID_Roll_P);
     Look1(" Roll I: ");
@@ -152,7 +123,35 @@ inline bool Parse_MSP_PID(const uint8_t *data, uint8_t n)
     Look(PID_Yaw_FF);
 
     Look("---------------------");
+}
+// ************************************************************************************************************
+//         MSP_PID FROM ROTORFLIGHT FIRMWARE
 
+inline bool Parse_MSP_PID(const uint8_t *data, uint8_t n)
+{
+    MspFrame f;
+    if (!FindMspV1ResponseFrame(data, n, f))
+        return false;
+    if (f.cmd != MSP_PID)
+        return false;
+    if (f.size < 9)
+        return false;
+    const uint8_t *p = f.payload;
+
+    PID_Roll_P = p[0] | (p[1] << 8);
+    PID_Roll_I = p[2] | (p[3] << 8);
+    PID_Roll_D = p[4] | (p[5] << 8);
+    PID_Roll_FF = p[6] | (p[7] << 8);
+    PID_Pitch_P = p[8] | (p[9] << 8);
+    PID_Pitch_I = p[10] | (p[11] << 8);
+    PID_Pitch_D = p[12] | (p[13] << 8);
+    PID_Pitch_FF = p[14] | (p[15] << 8);
+    PID_Yaw_P = p[16] | (p[17] << 8);
+    PID_Yaw_I = p[18] | (p[19] << 8);
+    PID_Yaw_D = p[20] | (p[21] << 8);
+    PID_Yaw_FF = p[22] | (p[23] << 8);
+    DebugPIDValues("Current Nexus PID Values");
+    
     return true;
 }
 // ************************************************************************************************************

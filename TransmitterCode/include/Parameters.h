@@ -90,7 +90,14 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
         Parameters.word[1] = 321;               // confirms request for PID values
         Parameters.word[2] = PID_Send_Duration; // 3 - how many seconds to send these
         break;
-
+    case GET_FIRST_6_PID_VALUES: // 10 = Get first 6 PID values (TX->RX) (Because we cannot fit all 12 in one go)
+        for (int i = 0; i < 6; ++i)
+            Parameters.word[i + 1] = PID_Values[i];
+        break;
+    case GET_SECOND_6_PID_VALUES: // 11 = Get second 6 PID values (TX->RX) (Because we cannot fit all 12 in one go)
+        for (int i = 0; i < 6; ++i)
+            Parameters.word[i + 1] = PID_Values[i + 6];
+        break;
     default:
         break;
     }

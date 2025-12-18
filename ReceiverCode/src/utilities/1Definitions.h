@@ -111,6 +111,8 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define SERVO_PULSE_WIDTHS 7
 #define GEAR_RATIO 8
 #define SEND_PID_VALUES 9
+#define GET_FIRST_6_PID_VALUES 10
+#define GET_SECOND_6_PID_VALUES 11
 #define PARAMETERS_MAX_ID 12 // Max types of parameters packet to send  ... will increase.
 
 // ****************************************************************************************************************************************
@@ -241,11 +243,12 @@ void RequestFromMSP(uint8_t command);
 inline bool Parse_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n);
 void PointToRadio1();
 void PointToRadio2();
+void DebugPIDValues(char const *msg);
 
-/************************************************************************************************************/
-// For numeric types (int, float, double, etc.)
-template <typename T>
-void Look(const T &value, int format)
+    /************************************************************************************************************/
+    // For numeric types (int, float, double, etc.)
+    template <typename T>
+    void Look(const T &value, int format)
 {
     Serial.println(value, format);
 }

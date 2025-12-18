@@ -168,7 +168,9 @@
 #define SERVO_PULSE_WIDTHS 7
 #define GEAR_RATIO 8 // Gear Ratio for RPM calculation
 #define SEND_PID_VALUES 9
-#define PARAMETERS_MAX_ID 10 // Max types of parameters packet to send  ... will increase.
+#define GET_FIRST_6_PID_VALUES 10
+#define GET_SECOND_6_PID_VALUES 11
+#define PARAMETERS_MAX_ID 12 // Max types of parameters packet to send  ... will increase.
 
 // **************************************************************************
 //                               Mixes                                      *
@@ -742,6 +744,7 @@ void ShowPIDBank();
 void Display2PIDValues(uint8_t i);
 void HidePIDMsg();
 void SendColour(char *but, int Colour);
+void SendEditedPIDs();
     // **************************************************************************
     //                            GLOBAL DATA                                   *
     //***************************************************************************

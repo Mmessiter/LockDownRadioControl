@@ -38,6 +38,15 @@ void ForegroundColourPIDLabels(uint16_t Colour)
         SendForegroundColour(PID_Labels[i], Colour);
     }
 }
+// ********************************************************************************************************
+
+void ReadEditedPIDs()
+{
+    for (int i = 0; i < 12; ++i)
+    {
+        PID_Values[i] = GetValue(PID_Labels[i]);
+    }
+}
 
 // ********************************************************************************************************
 void Display2PIDValues(uint8_t i) // Displays two PID values as soon as they arrive in Ack payload
@@ -50,11 +59,11 @@ void Display2PIDValues(uint8_t i) // Displays two PID values as soon as they arr
     }
 }
 // **********************************************************************************************************/
-void PIDMsg(const char *msg)
+void PIDMsg(const char *msg, uint16_t Colour)
 {
     if (CurrentView == PIDVIEW) // Must be in PID view
     {
-        ForegroundColourPIDLabels(0xFFFF);     // make text white so it isnt visible
+        ForegroundColourPIDLabels(Colour);     // make text white so it isnt visible
         SendText((char *)"busy", (char *)msg); // Show PID message
         SendCommand((char *)"vis busy,1");     // Make it visible
     }
@@ -76,7 +85,7 @@ void ShowPIDBank() // this is called when bank is changed so new bank's PID valu
     {
         char buf[40];
         snprintf(buf, sizeof(buf), "Loading PIDs for Bank %d ...", Bank);
-        PIDMsg(buf);                                  // Show loading message and hides old PIDs
+        PIDMsg(buf, Gray);                            // Show loading message and hides old PIDs
         PID_Send_Duration = 1000;                     // how many milliseconds to await PID values
         Reading_PIDS_Now = true;                      // This tells the Ack payload parser to get PID values
         AddParameterstoQueue(SEND_PID_VALUES);        // Request PID values from RX
@@ -93,4 +102,13 @@ void StartPIDView() // this starts PID view
     ShowPIDBank();                       // Show the current bank's PIDs
 }
 /************************************************************************************************************/
+
+void SendEditedPIDs()
+{
+    PIDMsg((char *)"Sending edited PIDs ...", Gray); // Show sending message
+    ReadEditedPIDs();                                 // read the edited PIDs from the screen;
+    AddParameterstoQueue(GET_FIRST_6_PID_VALUES);     // Send PID 1-6 values from TX to RX
+    AddParameterstoQueue(GET_SECOND_6_PID_VALUES);    // Send PID 7-12 values from TX to RX
+    HidePIDMsg();
+}
 #endif
