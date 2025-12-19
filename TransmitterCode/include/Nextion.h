@@ -175,19 +175,6 @@ void SendCommand(char *tbox)
     if (InStrng(page, tbox))
         DelayWithDog(SCREENCHANGEWAIT); // Allow time for new page to appear
 }
-
-/*********************************************************************************************************************************/
-// void BuildCommand(char *cmd)
-// {
-//     if (strlen(NextionCommand) + strlen(cmd) >= MAXNEXTIONCOMMANDLENGTH) // If too long, send what we have and start building again.
-//     {
-//         SendCommand(NextionCommand);
-//         ClearNextionCommand();
-//         return;
-//     }
-//     strcat(NextionCommand, cmd);
-//     strcat(NextionCommand, "\xFF\xFF\xFF");
-// }
 /*********************************************************************************************************************************/
 void EndSend()
 {

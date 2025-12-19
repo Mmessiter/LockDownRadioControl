@@ -9,12 +9,9 @@
 // ************************************************************************************************************
 #define MSP_MOTOR_TELEMETRY 139 // Motor telemetry data
 #define MSP_PID 112             // PID settings (read)
-
-// *** NEW: MSP commands to WRITE PID + SAVE TO EEPROM/FLASH ***
 #define MSP_SET_PID 202      // write PID settings
 #define MSP_EEPROM_WRITE 250 // save settings to EEPROM/flash
-
-// *** NEW: indices into a 12-element PID array (so we never mix them up) ***
+// ************************************************************************************************************
 enum : uint8_t
 {
     ROLL_P = 0,
@@ -114,11 +111,8 @@ inline void RequestFromMSP(uint8_t command) // send a request to the flight cont
 }
 
 // ************************************************************************************************************
-// *** NEW: send an MSPv1 COMMAND with a payload (this is what we need for SET_PID + EEPROM_WRITE) ***
-//
+// Send an MSPv1 COMMAND with a payload (this is what we need for SET_PID + EEPROM_WRITE) ***
 // This transmits: $ M <  [size] [cmd] [payload bytes...] [checksum]
-//
-// Notes:
 // - This only "sends". It does NOT wait for a reply.
 // - Many flight controllers will ignore writes if ARMED. So do this only when disarmed.
 //
@@ -147,30 +141,7 @@ inline void SendToMSP(uint8_t command, const uint8_t *payload, uint8_t payloadSi
 }
 
 // ************************************************************************************************************
-// *** NEW: call this when you receive the edited 12 PID values back from the transmitter ***
-//
-// pid[0]  Roll P
-// pid[1]  Roll I
-// pid[2]  Roll D
-// pid[3]  Roll FF
-// pid[4]  Pitch P
-// pid[5]  Pitch I
-// pid[6]  Pitch D
-// pid[7]  Pitch FF
-// pid[8]  Yaw P
-// pid[9]  Yaw I
-// pid[10] Yaw D
-// pid[11] Yaw FF
-//
-// What it does:
-// 1) Sends MSP_SET_PID with 24 bytes (12 x uint16_t, little-endian)
-// 2) Sends MSP_EEPROM_WRITE with no payload to make it permanent
-//
-// IMPORTANT:
-// - Do this ONLY when NexusPresent == true
-// - Do this ONLY when the model is DISARMED
-// - After calling it, you can request MSP_PID again to confirm the values have stuck.
-//
+// Write the given array of 12 PID values to Nexus via MSP, and then save to EEPROM/flash.
 inline void WritePIDsToNexusAndSave(const uint16_t pid[12])
 {
     static uint32_t lastWriteTime = 0;
@@ -197,16 +168,11 @@ inline void WritePIDsToNexusAndSave(const uint16_t pid[12])
         payload[i * 2 + 1] = (uint8_t)(pid[i] >> 8);
     }
 
-    //Look("Writing new PID values to Nexus...");
     SendToMSP(MSP_SET_PID, payload, sizeof(payload));
     delay(50);
 
-   // Look("Saving to EEPROM/flash...");
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
     delay(50);
-
-  //  Look("PID write + save sent. Now re-reading MSP_PID to confirm...");
-  //  RequestFromMSP(MSP_PID);
 
     lastWriteTime = now; // set cooldown only after we actually did the write+save
 }

@@ -34,7 +34,6 @@ void ShowValues(const char *name, float value) // // Show values in the serial m
 //************************************************************************************************************/
 bool pidsLookValid(const uint16_t p[12])
 {
-    // super simple sanity checks (tweak limits if you like)
     for (int i = 0; i < 12; i++)
         if ((p[i] > 750) || (p[i] < 1))
             return false; // absurd for RF PID scales
@@ -117,16 +116,9 @@ void ReadExtraParameters()
         All_PIDs[10] = Parameters.word[5];
         All_PIDs[11] = Parameters.word[6];
         
-      //  DebugPIDValues("NEW PID Values");
         if (pidsLookValid(All_PIDs))
-        {
              WritePIDsToNexusAndSave(All_PIDs);
-        }
-        else
-        {
-            // Look("ReadExtraParameters(): PID values look rather nuts! - not writing to Nexus.");
-        }
-
+        
         break;
     default:
         break;
