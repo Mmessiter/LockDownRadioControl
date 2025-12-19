@@ -6,12 +6,14 @@
 
 **LockDownRadioControl (LDRC)** is an open-source radio system designed for simplicity, speed, and reliability. It’s ideal for users who want a system that “just works” — no tinkering, no steep learning curve, and no unnecessary options. Whether you’re an experienced pilot or just starting out, LDRC offers a streamlined alternative to EdgeTX and commercial transmitters.
 
+NEW! - If your helicopter uses the Nexus flight controller or indeed any flight controller which runs Rotorflight software, you can now edit its PID values on the transmitter at the field.
+
 ---
 
 ### (0) Simplicity
 
 LDRC isn’t trying to be compatible with every protocol under the sun. It avoids bloat by skipping rarely-used features and focusing on what’s needed to fly — cleanly and reliably. As a result, it’s easy to understand and quick to use.  
-(Of course, it does support SBUS and PWM — for flight controllers and servos.)
+(Of course, it does support SBUS, PWM and even MSP — for flight controllers and servos.)
 
 ---
 
@@ -113,6 +115,7 @@ Here is a brief summary of the features supported at the time of writing (July 2
 - Digital trims, subtrim, servo reverse, servo speeds, user macros, motor timer, log files, etc., etc...
 - Receiver supports SBUS and PWM (with definable frequency and centre position).
 - Special telemetry support for Nexus (Rotorflight) - Rotor RPM, mAH, RX pack voltage, etc.
+- NEW! - If your helicopter uses the Nexus flight controller or indeed any flight controller which runs Rotorflight software, you can now edit its PID values on the transmitter at the field.
 - Variometer function for gliders.
 - Context sensitive help screens for all functions.
 

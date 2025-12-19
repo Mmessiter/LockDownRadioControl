@@ -9,7 +9,7 @@
 #include <Arduino.h>
 #include "1Definitions.h"
 char PID_Labels[12][4] = {"n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11"};
-
+bool PIDS_Were_Edited = false;
 // ********************************************************************************************************
 void SendBackgroundColour(const char *label, uint16_t colour)
 {
@@ -71,6 +71,7 @@ void PIDMsg(const char *msg, uint16_t Colour)
         ForegroundColourPIDLabels(Colour);     // make text white so it isnt visible
         SendText((char *)"busy", (char *)msg); // Show PID message
         SendCommand((char *)"vis busy,1");     // Make it visible
+        SendCommand((char *)"vis b3,0");       // hide "Send" button
     }
 }
 // **********************************************************************************************************/
@@ -80,7 +81,7 @@ void HidePIDMsg()
     if (CurrentView == PIDVIEW) // Must be in PID view
     {
         SendCommand((char *)"vis busy,0"); // Hide  message
-        ForegroundColourPIDLabels(Black);      // make text black so it is visible again
+        ForegroundColourPIDLabels(Black);  // make text black so it is visible again
     }
 }
 //************************************************************************************************************/
@@ -99,8 +100,25 @@ void ShowPIDBank() // this is called when bank is changed so new bank's PID valu
         PID_Start_Time = millis();                    // record start time as it's not long
     }
 }
-
-/************************************************************************************************************/
+//************************************************************************************************************/
+void PIDs_Were_edited()
+{
+    SendCommand((char *)"vis b3,1"); // show "Send" button
+    PIDS_Were_Edited = true;
+}
+//***********************************************************************************************************/
+void EndPIDView()
+{
+    if (PIDS_Were_Edited){
+       if (GetConfirmation((char *)"page PIDView", (char *)"Discard edited PIDs?"))
+           GotoFrontView();
+    }else{
+        PIDS_Were_Edited = false;
+        GotoFrontView();
+    }
+       
+}
+/***********************************************************************************************************/
 
 void SendEditedPIDs()
 {
@@ -114,6 +132,8 @@ void SendEditedPIDs()
     AddParameterstoQueue(GET_SECOND_6_PID_VALUES);   // SECOND MUST BE SENT FIRST!!! Send PID 7-12 values from TX to RX
     AddParameterstoQueue(GET_FIRST_6_PID_VALUES);    // SECOND MUST BE SENT FIRST!!! Send PID 1-6 values from TX to RX
     HidePIDMsg();                                    // SECOND MUST BE SENT FIRST!!!  because this queue is a LIFO stack
+    SendCommand((char *)"vis b3,0");                 // hide "Send" button
+    PIDS_Were_Edited = false;
 }
 //************************************************************************************************************/
 void StartPIDView() // this starts PID view
@@ -131,5 +151,6 @@ void StartPIDView() // this starts PID view
     CurrentView = PIDVIEW;               // Set current view
     SendCommand((char *)"page PIDView"); // Go to PID view page
     ShowPIDBank();                       // Show the current bank's PIDs
+    PIDS_Were_Edited = false;
 }
 #endif

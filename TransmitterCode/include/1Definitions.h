@@ -745,11 +745,14 @@ void Display2PIDValues(uint8_t i);
 void HidePIDMsg();
 void SendColour(char *but, int Colour);
 void SendEditedPIDs();
-    // **************************************************************************
-    //                            GLOBAL DATA                                   *
-    //***************************************************************************
+void PIDs_Were_edited();
+void EndPIDView();
 
-    RF24 Radio1(CE_PIN, CSN_PIN);
+// **************************************************************************
+//                            GLOBAL DATA                                   *
+//***************************************************************************
+
+RF24 Radio1(CE_PIN, CSN_PIN);
 
 /************************************************************************************************************/
 /************************************************************************************************************/
@@ -1198,7 +1201,7 @@ char LogFileName[40];
 char MOD[10];
 char Mfiles[10];
 int LastTrim[5][17];
-char RXOptionsView []="page RXOptionsView";
+char RXOptionsView[] = "page RXOptionsView";
 char pFhssView[] = "page FhssView";
 char pDataView[] = "page DataView";
 char pSwitchesView[] = "page SwitchesView";

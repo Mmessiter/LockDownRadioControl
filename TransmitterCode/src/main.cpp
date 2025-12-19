@@ -3325,8 +3325,8 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     StartGapsView,        // 17
     StartPIDView,         // 18
     SendEditedPIDs,       // 19
-    Blank,                // 20
-    Blank,                // 21
+    PIDs_Were_edited,     // 20
+    EndPIDView,           // 21
     Blank,                // 22
     Blank,                // 23
     Blank,                // 24
