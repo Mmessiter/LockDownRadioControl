@@ -97,6 +97,7 @@ void ShowPIDBank() // this is called when bank is changed so new bank's PID valu
         AddParameterstoQueue(SEND_PID_VALUES);        // Request PID values from RX
         snprintf(buf, sizeof(buf), "Bank: %d", Bank); // Display which Bank
         SendText((char *)"t9", buf);                  // Show bank number etc
+        PIDS_Were_Edited = false;
         PID_Start_Time = millis();                    // record start time as it's not long
     }
 }
