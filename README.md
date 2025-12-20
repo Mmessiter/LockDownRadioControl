@@ -83,7 +83,7 @@ Recently I have removed all PPM functions because no one uses them any more. Thi
 
 I have just added 'nudge mode' the the wireless buddy feature and a variometer for gliders so the transmitter can now emit an audible signal to indicate when the model is ascending or decending, to help with finding thermals.
 
-Right now I am adding PID stabilisation. It's currently still under developement and I'll add a note here when it's done, tested, and ready to fly!
+I originally planned to add PID stabiliation for helicopters to my system. But when I discovered Rotorflight (Nexus FC etc.) I dropped the idea and decided insead to add good support for Rotorflight instead! Telemetry and PID editing are already done, over MSP protocol, and more will likely follow as this project gets developed further almost every day.
 
 ## Features
 
