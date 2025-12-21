@@ -1,9 +1,9 @@
 // ******************************************** PID ******************************************************
 // This module handles the PID View screen on the Nextion display
 // It allows the user to view and edit the 12 PID values for the current bank
-// It also handles sending the edited PID values back to the Nexus receiver
+// It also handles sending the edited PID values back to the Rotorflight compatible flight controller via our receiver ... 
+// ... by queuing the appropriate parameter packets ** WHICH ARE SENT IN REVERSE ORDER! ** (- a LIFO stack!) 
 // **********************************************************************************************************
-
 #ifndef PIDVIEW_H
 #define PIDVIEW_H
 #include <Arduino.h>
@@ -17,7 +17,6 @@ void SendBackgroundColour(const char *label, uint16_t colour)
     snprintf(cmd, sizeof(cmd), "%s.bco=%u", label, (unsigned)colour);
     SendCommand(cmd);
 }
-
 // ********************************************************************************************************
 void SendForegroundColour(const char *label, uint16_t colour)
 {
@@ -25,9 +24,7 @@ void SendForegroundColour(const char *label, uint16_t colour)
     snprintf(cmd, sizeof(cmd), "%s.pco=%u", label, (unsigned)colour);
     SendCommand(cmd);
 }
-
 // ********************************************************************************************************
-
 void BackgroundColourPIDLabels(uint16_t Colour)
 {
     for (int i = 0; i < 12; ++i)
@@ -44,7 +41,6 @@ void ForegroundColourPIDLabels(uint16_t Colour)
     }
 }
 // ********************************************************************************************************
-
 void ReadEditedPIDs()
 {
     for (int i = 0; i < 12; ++i)
@@ -52,7 +48,6 @@ void ReadEditedPIDs()
         PID_Values[i] = GetValue(PID_Labels[i]);
     }
 }
-
 // ********************************************************************************************************
 void Display2PIDValues(uint8_t i) // Displays two PID values as soon as they arrive in Ack payload
 {                                 // (They arrive in pairs because Ack payload has four usable bytes)
@@ -90,7 +85,14 @@ void ShowPIDBank() // this is called when bank is changed so new bank's PID valu
     if (CurrentView == PIDVIEW) // Must be in PID view
     {
         char buf[40];
-        snprintf(buf, sizeof(buf), "Loading PIDs for Bank %d ...", Bank);
+        if (LedWasGreen)
+        {
+            snprintf(buf, sizeof(buf), "Loading PIDs for Bank %d ...", Bank);
+        }
+        else
+        {
+            snprintf(buf, sizeof(buf), "Model is not connected!");
+        }
         PIDMsg(buf, Gray);                            // Show loading message and hides old PIDs
         PID_Send_Duration = 1000;                     // how many milliseconds to await PID values
         Reading_PIDS_Now = true;                      // This tells the Ack payload parser to get PID values
@@ -98,7 +100,7 @@ void ShowPIDBank() // this is called when bank is changed so new bank's PID valu
         snprintf(buf, sizeof(buf), "Bank: %d", Bank); // Display which Bank
         SendText((char *)"t9", buf);                  // Show bank number etc
         PIDS_Were_Edited = false;
-        PID_Start_Time = millis();                    // record start time as it's not long
+        PID_Start_Time = millis(); // record start time as it's not long
     }
 }
 //************************************************************************************************************/
@@ -110,14 +112,16 @@ void PIDs_Were_edited()
 //***********************************************************************************************************/
 void EndPIDView()
 {
-    if (PIDS_Were_Edited){
-       if (GetConfirmation((char *)"page PIDView", (char *)"Discard edited PIDs?"))
-           GotoFrontView();
-    }else{
+    if (PIDS_Were_Edited)
+    {
+        if (GetConfirmation((char *)"page PIDView", (char *)"Discard edited PIDs?"))
+            GotoFrontView();
+    }
+    else
+    {
         PIDS_Were_Edited = false;
         GotoFrontView();
     }
-       
 }
 /***********************************************************************************************************/
 
@@ -141,17 +145,13 @@ void StartPIDView() // this starts PID view
 {
     if (!SafetyON)
     {
-        MsgBox(RXOptionsView, (char *)"Please enable Safety!");
-        return;
-    }
-    if (!LedWasGreen)
-    {
-        MsgBox(RXOptionsView, (char *)"Please connect to model!");
+        MsgBox(RXOptionsView, (char *)"Please enable 'Safety'!");
         return;
     }
     CurrentView = PIDVIEW;               // Set current view
     SendCommand((char *)"page PIDView"); // Go to PID view page
     ShowPIDBank();                       // Show the current bank's PIDs
+    SendText((char *)"t11", ModelName);  // Show model name
     PIDS_Were_Edited = false;
 }
 #endif
