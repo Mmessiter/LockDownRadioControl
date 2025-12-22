@@ -1160,6 +1160,11 @@ FASTRUN void StoreNewCommsGap() // Store a gap on recovery, but don't process it
 
 FASTRUN void ProcessRecentCommsGap() // When we know there is time, process a recent gap.
 {
+    if (CurrentView == PIDVIEW)
+    {
+        ThisGap = 0; // ignore any gaps when in PID view
+        return; 
+    }
     ++GapCount;
     int i = 0;
     for (i = 0; i < 10; ++i)

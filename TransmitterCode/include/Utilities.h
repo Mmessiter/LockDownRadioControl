@@ -1093,20 +1093,21 @@ FASTRUN void ServoReverse()
 
 /************************************************************************************************************/
 void DelayWithDog(uint32_t HowLong)
-{ // Implements delay() and meanwhile keeps kicking the dog (very cruelly) to keep it quiet.
+{ // Implements delay() while kicking the dog (very cruelly) and checking for power-off button and sending data to RX.
     uint32_t ThisMoment = millis();
     static bool AlreadyKicking = false;
     if (AlreadyKicking)
-        return; // Guard against recursive calls
+        return; // Guard against possible recursivity which would be disastrous
     AlreadyKicking = true;
     while ((millis() - ThisMoment) < HowLong)
     {
         KickTheDog();
         CheckPowerOffButton();
         if (ModelMatched && BoundFlag)
-        { //  SimplePing();
-            GetNewChannelValues();
-            SendData();
+        {
+            GetNewChannelValues(); // these might have changed while we were waiting
+            FixMotorChannel();     // ensure motor channel is off if that's needed 
+            SendData();            // send new data to RX
         }
     }
     AlreadyKicking = false;

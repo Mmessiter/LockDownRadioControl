@@ -1,15 +1,14 @@
 // ******************************************** PID ******************************************************
 // This module handles the PID View screen on the Nextion display
 // It allows the user to view and edit the 12 PID values for the current bank
-// It also handles sending the edited PID values back to the Rotorflight compatible flight controller via our receiver ... 
-// ... by queuing the appropriate parameter packets ** WHICH ARE SENT IN REVERSE ORDER! ** (- a LIFO stack!) 
+// It also handles sending the edited PID values back to the Rotorflight compatible flight controller via our receiver ...
+// ... by queuing the appropriate parameter packets ** WHICH ARE SENT IN REVERSE ORDER! ** (- a LIFO stack!)
 // **********************************************************************************************************
 #ifndef PIDVIEW_H
 #define PIDVIEW_H
 #include <Arduino.h>
 #include "1Definitions.h"
-char PID_Labels[12][4] = {"n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11"};
-bool PIDS_Were_Edited = false;
+
 // ********************************************************************************************************
 void SendBackgroundColour(const char *label, uint16_t colour)
 {
@@ -45,7 +44,7 @@ void ReadEditedPIDs()
 {
     for (int i = 0; i < 12; ++i)
     {
-        PID_Values[i] = GetValue(PID_Labels[i]);
+        PID_Values[i] = GetValue(PID_Labels[i]); // Read edited PID values from screen ASAP!
     }
 }
 // ********************************************************************************************************
