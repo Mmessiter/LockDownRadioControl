@@ -963,7 +963,7 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         GetTemperature();
         break;
     case 8:
-        if (CurrentView != PIDVIEW)
+        if (CurrentView != PIDVIEW && GPS_RX_FIX)
         {
             GPS_RX_Latitude = GetFloatFromAckPayload();
         }
@@ -978,7 +978,7 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         }
         break;
     case 9:
-        if (CurrentView != PIDVIEW)
+        if (CurrentView != PIDVIEW && GPS_RX_FIX)
         {
             GPS_RX_Longitude = GetFloatFromAckPayload();
         }
@@ -993,7 +993,7 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         }
         break;
     case 10:
-        if (CurrentView != PIDVIEW)
+        if (CurrentView != PIDVIEW && GPS_RX_FIX)
         {
             GPS_RX_ANGLE = GetFloatFromAckPayload();
         }
@@ -1008,7 +1008,7 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         }
         break;
     case 11:
-        if (CurrentView != PIDVIEW)
+        if (CurrentView != PIDVIEW && GPS_RX_FIX)
         {
             GPS_RX_Speed = GetFloatFromAckPayload();
             if (GPS_RX_MaxSpeed < GPS_RX_Speed)
@@ -1028,7 +1028,7 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         GPS_RX_FIX = GetFloatFromAckPayload();
         break;
     case 13:
-        if (GPS_RX_FIX)
+        if (CurrentView != PIDVIEW && GPS_RX_FIX)
         {
             GPS_RX_Altitude = GetFloatFromAckPayload() - GPS_RX_GroundAltitude;
             if (GPS_RX_Altitude < 0)
@@ -1047,7 +1047,7 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         }
         break;
     case 14:
-        if (GPS_RX_FIX)
+        if (CurrentView != PIDVIEW && GPS_RX_FIX)
         {
             GPS_RX_DistanceTo = GetFloatFromAckPayload(); // now calculated locally
             if (GPS_RX_MaxDistance < GPS_RX_DistanceTo)
