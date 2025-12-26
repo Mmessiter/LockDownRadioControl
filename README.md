@@ -119,28 +119,31 @@ Here is a brief summary of the features supported at the time of writing (July 2
 - Variometer function for gliders.
 - Context sensitive help screens for all functions.
 
-
-
 # LockDown Radio Control – Communications Protocol Specification
 
 ## 1. Identity and Binding
 
 ### 1.1 Device Identity
+
 Each transmitter and receiver derives a unique ID from the hardware MAC address of its Teensy 4.x MCU.  
 These IDs are used directly as RF pipe addresses.
 
 ### 1.2 Binding States
 
 **Receiver**
+
 - Normal mode: listens only for the transmitter ID to which it is already bound.
 - Binding mode: listens on a default pseudo-ID.
 
 **Transmitter**
+
 - Normal mode: transmits only using its own unique ID.
 - Binding mode: transmits using the default pseudo-ID.
 
 ### 1.3 Binding Procedure
+
 When both transmitter and receiver are in binding mode:
+
 1. A connection is established using the default pseudo-ID.
 2. The transmitter sends its unique transmitter ID.
 3. The receiver stores this ID in EEPROM.
@@ -154,9 +157,11 @@ After binding, all communication uses the transmitter’s ID as the pipe address
 ## 2. Normal Data Transmission
 
 ### 2.1 Packet Rate
+
 Approximately 500 packets per second. Packet length is variable.
 
 ### 2.2 Channel Update Encoding
+
 The first two bytes form a 16-bit bitmap indicating which channels have changed or timed out.
 Only those channels are transmitted, each compressed to 12 bits.
 
@@ -188,6 +193,8 @@ Frequency hopping is receiver-driven.
 
 The RF transceiver retries a lost packet once.  
 No further retries are attempted by the transmitter.
+Transmitter and receiver search for each other using an array of only 3 frequencies for rapid reconnection.
+On reconnection they revert to the full 82 freqencies array.
 
 ---
 
@@ -198,9 +205,6 @@ No further retries are attempted by the transmitter.
 - Minimal airtime waste
 - Control latency prioritised
 - Safe protocol version detection
-
-
-
 
 # Bill of Materials (BOM)
 
