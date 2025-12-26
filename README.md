@@ -119,6 +119,89 @@ Here is a brief summary of the features supported at the time of writing (July 2
 - Variometer function for gliders.
 - Context sensitive help screens for all functions.
 
+
+
+# LockDown Radio Control – Communications Protocol Specification
+
+## 1. Identity and Binding
+
+### 1.1 Device Identity
+Each transmitter and receiver derives a unique ID from the hardware MAC address of its Teensy 4.x MCU.  
+These IDs are used directly as RF pipe addresses.
+
+### 1.2 Binding States
+
+**Receiver**
+- Normal mode: listens only for the transmitter ID to which it is already bound.
+- Binding mode: listens on a default pseudo-ID.
+
+**Transmitter**
+- Normal mode: transmits only using its own unique ID.
+- Binding mode: transmits using the default pseudo-ID.
+
+### 1.3 Binding Procedure
+When both transmitter and receiver are in binding mode:
+1. A connection is established using the default pseudo-ID.
+2. The transmitter sends its unique transmitter ID.
+3. The receiver stores this ID in EEPROM.
+4. The receiver replies in the acknowledgement payload with its unique receiver ID.
+5. The transmitter uses this receiver ID to identify the model and verify the correct model memory is loaded.
+
+After binding, all communication uses the transmitter’s ID as the pipe address.
+
+---
+
+## 2. Normal Data Transmission
+
+### 2.1 Packet Rate
+Approximately 500 packets per second. Packet length is variable.
+
+### 2.2 Channel Update Encoding
+The first two bytes form a 16-bit bitmap indicating which channels have changed or timed out.
+Only those channels are transmitted, each compressed to 12 bits.
+
+---
+
+## 3. Parameter and Configuration Packets
+
+If the channel bitmap is zero and additional data follows, the packet is interpreted as parameter data.
+Parameters use the same 12-bit compressed format, allowing up to 4096 parameter types.
+
+---
+
+## 4. Acknowledgement Payloads, FHSS, and Versioning
+
+Acknowledgement payloads are always 6 bytes long and are sent for every received packet.
+
+- Byte 0: Payload type (low 7 bits) and hop instruction (high bit)
+- Bytes 1–4: Receiver data, including protocol version
+- Byte 5: Index of the next RF frequency
+
+The receiver reports its protocol version in the acknowledgement payload.  
+If versions do not match, the transmitter displays a warning but continues operation.
+
+Frequency hopping is receiver-driven.
+
+---
+
+## 5. Packet Loss Strategy
+
+The RF transceiver retries a lost packet once.  
+No further retries are attempted by the transmitter.
+
+---
+
+## 6. Design Principles
+
+- Deterministic identity-based binding
+- Receiver-driven FHSS
+- Minimal airtime waste
+- Control latency prioritised
+- Safe protocol version detection
+
+
+
+
 # Bill of Materials (BOM)
 
 **Project:** LockDownRadioControl
