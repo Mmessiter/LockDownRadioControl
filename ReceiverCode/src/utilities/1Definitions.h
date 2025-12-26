@@ -237,7 +237,7 @@ void StartSBUSandSERVOS();
 void LoadFailSafeDataFromEEPROM();
 void SaveFailSafeDataToEEPROM();
 void SavePipeToEEPROM();
-void DetectNexusAtBoot();
+void DetectRotorFlightAtBoot();
 void RequestFromMSP(uint8_t command);
 
 inline bool Parse_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n);
@@ -246,10 +246,10 @@ void PointToRadio2();
 void DebugPIDValues(char const *msg);
 inline void WritePIDsToNexusAndSave(const uint16_t pid[12]);
 
-    /************************************************************************************************************/
-    // For numeric types (int, float, double, etc.)
-    template <typename T>
-    void Look(const T &value, int format)
+/************************************************************************************************************/
+// For numeric types (int, float, double, etc.)
+template <typename T>
+void Look(const T &value, int format)
 {
     Serial.println(value, format);
 }
@@ -348,7 +348,7 @@ bool DPS310Connected = false;
 uint16_t DPS310Address = 0x76; // DPS310 I2C address
 bool BindPlugInserted = false; // Bind plug inserted or not
 uint8_t ReceiveTimeout = 10;   // this gets adjusted later
-bool NexusPresent = false;
+bool Rotorflight22Detected = false;
 float PackVoltage;
 float Battery_Amps = 0;
 float Battery_mAh = 0;
@@ -372,7 +372,6 @@ uint16_t PID_Yaw_I;
 uint16_t PID_Yaw_D;
 uint16_t PID_Yaw_FF;
 uint16_t All_PIDs[12];
-
 
 uint16_t PID_Send_Duration = 1000;
 

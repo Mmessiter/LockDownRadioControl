@@ -75,7 +75,6 @@
 #include "utilities/Nexus.h"
 #include "utilities/Detect_Transceivers.h"
 
-
 void DelayMillis(uint16_t ms) // This replaces any delay() calls
 {
     uint32_t tt = millis();
@@ -112,7 +111,7 @@ bool CheckForCrazyValues() // Crazy values might come while binding, and should 
 //************************************************************************************************************/
 inline uint8_t PwmStartIndex()
 {
-    return NexusPresent ? 2 : 0; // if Nexus is present,returns 2 else 0
+    return Rotorflight22Detected ? 2 : 0; // if Nexus is present,returns 2 else 0
 }
 
 /************************************************************************************************************/
@@ -128,7 +127,6 @@ void MoveServos()
     if ((millis() - LocalTimer) < 10)
         return;
     LocalTimer = millis();
-   
 
     if (!CheckForCrazyValues())
     {
@@ -462,11 +460,10 @@ FLASHMEM void setup()
     if (GPS_Connected)
         setupGPS();
     CopyToCurrentPipe(DefaultPipe, PIPENUMBER);
-    DetectNexusAtBoot(); // Check for Nexus presence before we set up any PWM pins it might use
-    
-    
-    TestTheSBUSPin();    // Check that the SBUS pin is not held low (plug in wrong way round)
-    TestAllPWMPins();    // Check that the no PWM pins are held low (plug in wrong way round)
+    DetectRotorFlightAtBoot(); // Check for Nexus presence before we set up any PWM pins it might use
+
+    TestTheSBUSPin(); // Check that the SBUS pin is not held low (plug in wrong way round)
+    TestAllPWMPins(); // Check that the no PWM pins are held low (plug in wrong way round)
     SetupRadios();
     SetupWatchDog();
     LoadSavedPipeFromEEPROM();
@@ -519,9 +516,9 @@ void loop()
     KickTheDog();
     ReceiveData();
 
-    if (NexusPresent)
+    if (Rotorflight22Detected)
     {
-      CheckMSPSerial(); // this is to read telemetry from Nexus via MSP
+        CheckMSPSerial(); // this is to read telemetry from Nexus via MSP
     }
 
     if (Blinking)

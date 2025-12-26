@@ -1,16 +1,16 @@
 /** @file ReceiverCode/src/utilities/Nexus.h */
-// Malcolm Messiter 2020 - 2025 (with help from ChatGPT :-)
+// Malcolm Messiter 2020 - 2025 (with just a little help from ChatGPT :-)
 #ifndef NEXUS_H
 #define NEXUS_H
 #include "utilities/1Definitions.h"
 
 // ************************************************************************************************************
-// MSP SUPPORT FUNCTIONS FOR NEXUS etc.
+// MSP SUPPORT FUNCTIONS FOR ROTORFLIGHT (Nexus) etc.
 // ************************************************************************************************************
 #define MSP_MOTOR_TELEMETRY 139 // Motor telemetry data
 #define MSP_PID 112             // PID settings (read)
-#define MSP_SET_PID 202      // write PID settings
-#define MSP_EEPROM_WRITE 250 // save settings to EEPROM/flash
+#define MSP_SET_PID 202         // write PID settings
+#define MSP_EEPROM_WRITE 250    // save settings to EEPROM/flash
 // ************************************************************************************************************
 enum : uint8_t
 {
@@ -30,13 +30,11 @@ enum : uint8_t
 // ************************************************************************************************************
 #define MSP_API_VERSION 1
 
-// Globals
-float Version = 0.0f; // API version as e.g. 1.46
-uint8_t MspProto = 0; // protocol version byte (optional but handy)
-uint16_t api100 = 0; // API version as integer 1.46 -> 146
+// Global
+uint16_t api100 = 0; // API version as integer 12.08 -> 1208
 
-    static bool
-    Parse_MSP_API_VERSION(const uint8_t *buf, uint8_t len, uint8_t &mspProto, uint8_t &apiMaj, uint8_t &apiMin)
+static bool
+Parse_MSP_API_VERSION(const uint8_t *buf, uint8_t len, uint8_t &mspProto, uint8_t &apiMaj, uint8_t &apiMin)
 {
     for (uint8_t i = 0; i + 6 <= len; i++)
     {
@@ -65,20 +63,18 @@ uint16_t api100 = 0; // API version as integer 1.46 -> 146
         mspProto = buf[i + 5 + 0];
         apiMaj = buf[i + 5 + 1];
         apiMin = buf[i + 5 + 2];
-
         api100 = (uint16_t)apiMaj * 100u + (uint16_t)apiMin; // 12.08 -> 1208
-
         return true;
     }
     return false;
 }
 // ************************************************************************************************************
-// Detect if a Nexus flight controller is present at boot time
+// Detect if Rotorflight 2.2 is present at boot time
 // If detected, fetch API version and protocol version
-// Keeps the MSP_UART open if Nexus is present
+// Keeps the MSP_UART open if Rotorflight 2.2 is present
 // Closes it if not present
 // ************************************************************************************************************
-inline void DetectNexusAtBoot()
+inline void DetectRotorFlightAtBoot()
 {
 #define NEXUS_DETECT_WINDOW_MS 1500
 
@@ -89,9 +85,7 @@ inline void DetectNexusAtBoot()
     uint32_t start = millis();
     uint8_t buf[80];
 
-    NexusPresent = false;
-    Version = 0.0f;
-    MspProto = 0;
+    Rotorflight22Detected = false;
 
     while (millis() - start < NEXUS_DETECT_WINDOW_MS)
     {
@@ -101,7 +95,6 @@ inline void DetectNexusAtBoot()
         uint8_t p = 0;
         while (MSP_UART.available() && p < sizeof(buf))
             buf[p++] = (uint8_t)MSP_UART.read();
-
         if (Parse_MSP_Motor_Telemetry(buf, p))
         {
             // Now fetch API version
@@ -115,19 +108,14 @@ inline void DetectNexusAtBoot()
             uint8_t apiMaj = 0, apiMin = 0, proto = 0;
             if (Parse_MSP_API_VERSION(buf, p, proto, apiMaj, apiMin))
             {
-                MspProto = proto;
-                Version = (float)apiMaj + ((float)apiMin / 100.0f); // e.g. 1.46
-
-                if (api100 >= 1208)
-                {
-                    NexusPresent = true;
-                }
+                if (api100 >= 1208) // (x 100 to deal with floats more easily)
+                    Rotorflight22Detected = true;
             }
             return; // keep UART open
         }
     }
     MSP_UART.end();
-    NexusPresent = false;
+    Rotorflight22Detected = false;
 }
 // **********************************************************************************************************// @brief Structure representing an MSP frame
 
@@ -221,20 +209,9 @@ inline void WritePIDsToNexusAndSave(const uint16_t pid[12])
     const uint32_t WRITE_COOLDOWN_MS = 5000; // 5 seconds
     uint32_t now = millis();
 
-    if (now - lastWriteTime < WRITE_COOLDOWN_MS)
-    {
-      //  Look("WritePIDsToNexusAndSave(): Write cooldown active, please wait.");
+    if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight22Detected))
         return;
-    }
-
-    if (!NexusPresent)
-    {
-      //  Look("WritePIDsToNexusAndSave(): NexusPresent is false - not writing.");
-        return;
-    }
-
     uint8_t payload[24];
-
     for (uint8_t i = 0; i < 12; i++)
     {
         payload[i * 2 + 0] = (uint8_t)(pid[i] & 0xFF);
@@ -253,7 +230,7 @@ inline void WritePIDsToNexusAndSave(const uint16_t pid[12])
 void DebugPIDValues(char const *msg)
 {
     Look(msg);
-    for (int i=0; i<12; ++i)
+    for (int i = 0; i < 12; ++i)
     {
         Look1(" PID[");
         Look1(i);
@@ -294,7 +271,7 @@ inline bool Parse_MSP_PID(const uint8_t *data, uint8_t n)
     PID_Yaw_D = p[20] | (p[21] << 8);
     PID_Yaw_FF = p[22] | (p[23] << 8);
 
-  //  DebugPIDValues("Current Nexus PID Values");
+    //  DebugPIDValues("Current Nexus PID Values");
 
     return true;
 }
@@ -356,7 +333,6 @@ inline void CheckMSPSerial()
     if (millis() - Localtimer < 250) // 4 x per second
         return;
     Localtimer = millis();
-
     uint8_t data_in[80];
     uint8_t p = 0;
     while (MSP_UART.available() && p < sizeof(data_in))

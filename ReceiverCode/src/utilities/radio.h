@@ -657,12 +657,12 @@ void Send_2_x_uint16_t(uint16_t v1, uint16_t v2) // sends two x uint16_ts
         uint16_t Val16;
         uint8_t Val8[2];
     } ThisUnion;
-        ThisUnion.Val16 = v1;
-        AckPayload.Ack_Payload_byte[1] = ThisUnion.Val8[0];
-        AckPayload.Ack_Payload_byte[2] = ThisUnion.Val8[1];
-        ThisUnion.Val16 = v2;
-        AckPayload.Ack_Payload_byte[3] = ThisUnion.Val8[0];
-        AckPayload.Ack_Payload_byte[4] = ThisUnion.Val8[1];
+    ThisUnion.Val16 = v1;
+    AckPayload.Ack_Payload_byte[1] = ThisUnion.Val8[0];
+    AckPayload.Ack_Payload_byte[2] = ThisUnion.Val8[1];
+    ThisUnion.Val16 = v2;
+    AckPayload.Ack_Payload_byte[3] = ThisUnion.Val8[0];
+    AckPayload.Ack_Payload_byte[4] = ThisUnion.Val8[1];
 }
 /************************************************************************************************************/
 void SendIntToAckPayload(uint32_t U)
@@ -901,6 +901,8 @@ void LoadAckPayload()
         SendFloatToAckPayload(RateOfClimb);
         break;
     case 20:
+        if (!Rotorflight22Detected)
+            RotorRPM = 0xffff;         // invalid RPM
         SendIntToAckPayload(RotorRPM); // RPM from Nexus
         break;
     case 21:

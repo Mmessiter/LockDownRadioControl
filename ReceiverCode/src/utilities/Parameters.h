@@ -84,7 +84,7 @@ void ReadExtraParameters()
         break;
 
     case SEND_PID_VALUES: // 9
-        if (!NexusPresent)
+        if (!Rotorflight22Detected)
             break;
         if (Parameters.word[1] == 321) // 321 is the command to send PIDs NOW!
         {
@@ -95,7 +95,7 @@ void ReadExtraParameters()
         break;
 
     case GET_FIRST_6_PID_VALUES: // 10
-        if (!NexusPresent)
+        if (!Rotorflight22Detected)
             break;
 
         All_PIDs[0] = Parameters.word[1];
@@ -107,7 +107,7 @@ void ReadExtraParameters()
         break;
 
     case GET_SECOND_6_PID_VALUES: // 11
-        if (!NexusPresent)
+        if (!Rotorflight22Detected)
             break;
         All_PIDs[6] = Parameters.word[1];
         All_PIDs[7] = Parameters.word[2];
@@ -115,10 +115,10 @@ void ReadExtraParameters()
         All_PIDs[9] = Parameters.word[4];
         All_PIDs[10] = Parameters.word[5];
         All_PIDs[11] = Parameters.word[6];
-        
+
         if (pidsLookValid(All_PIDs))
-             WritePIDsToNexusAndSave(All_PIDs);
-        
+            WritePIDsToNexusAndSave(All_PIDs);
+
         break;
     default:
         break;
