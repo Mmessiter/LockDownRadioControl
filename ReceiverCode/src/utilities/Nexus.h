@@ -27,36 +27,109 @@ enum : uint8_t
     YAW_D,
     YAW_FF
 };
+// ************************************************************************************************************
+#define MSP_API_VERSION 1
 
+// Globals
+float Version = 0.0f; // API version as e.g. 1.46
+uint8_t MspProto = 0; // protocol version byte (optional but handy)
+uint16_t api100 = 0; // API version as integer 1.46 -> 146
+
+    static bool
+    Parse_MSP_API_VERSION(const uint8_t *buf, uint8_t len, uint8_t &mspProto, uint8_t &apiMaj, uint8_t &apiMin)
+{
+    for (uint8_t i = 0; i + 6 <= len; i++)
+    {
+        if (buf[i] != '$' || buf[i + 1] != 'M' || buf[i + 2] != '>')
+            continue;
+
+        const uint8_t size = buf[i + 3];
+        const uint8_t cmd = buf[i + 4];
+
+        if (cmd != MSP_API_VERSION)
+            continue;
+        if (size < 3)
+            continue;
+        if (i + 6 + size > len)
+            continue;
+
+        uint8_t cs = 0;
+        cs ^= size;
+        cs ^= cmd;
+        for (uint8_t k = 0; k < size; k++)
+            cs ^= buf[i + 5 + k];
+
+        if (cs != buf[i + 5 + size])
+            continue;
+
+        mspProto = buf[i + 5 + 0];
+        apiMaj = buf[i + 5 + 1];
+        apiMin = buf[i + 5 + 2];
+
+        api100 = (uint16_t)apiMaj * 100u + (uint16_t)apiMin; // 12.08 -> 1208
+
+        return true;
+    }
+    return false;
+}
+// ************************************************************************************************************
+// Detect if a Nexus flight controller is present at boot time
+// If detected, fetch API version and protocol version
+// Keeps the MSP_UART open if Nexus is present
+// Closes it if not present
 // ************************************************************************************************************
 inline void DetectNexusAtBoot()
 {
-#define NEXUS_DETECT_WINDOW_MS 1500 // 1.5 seconds time window to detect Nexus at boot
+#define NEXUS_DETECT_WINDOW_MS 1500
 
     MSP_UART.begin(115200);
+    while (MSP_UART.available())
+        (void)MSP_UART.read();
+
     uint32_t start = millis();
     uint8_t buf[80];
+
+    NexusPresent = false;
+    Version = 0.0f;
+    MspProto = 0;
 
     while (millis() - start < NEXUS_DETECT_WINDOW_MS)
     {
         RequestFromMSP(MSP_MOTOR_TELEMETRY);
-        delay(20); // give it a moment to reply
+        delay(20);
+
         uint8_t p = 0;
         while (MSP_UART.available() && p < sizeof(buf))
+            buf[p++] = (uint8_t)MSP_UART.read();
+
+        if (Parse_MSP_Motor_Telemetry(buf, p))
         {
-            buf[p++] = MSP_UART.read();
-        }
-        if (Parse_MSP_Motor_Telemetry(&buf[0], p))
-        {
-            NexusPresent = true;
-            return;
+            // Now fetch API version
+            RequestFromMSP(MSP_API_VERSION);
+            delay(20);
+
+            p = 0;
+            while (MSP_UART.available() && p < sizeof(buf))
+                buf[p++] = (uint8_t)MSP_UART.read();
+
+            uint8_t apiMaj = 0, apiMin = 0, proto = 0;
+            if (Parse_MSP_API_VERSION(buf, p, proto, apiMaj, apiMin))
+            {
+                MspProto = proto;
+                Version = (float)apiMaj + ((float)apiMin / 100.0f); // e.g. 1.46
+
+                if (api100 >= 1208)
+                {
+                    NexusPresent = true;
+                }
+            }
+            return; // keep UART open
         }
     }
     MSP_UART.end();
     NexusPresent = false;
 }
-// ************************************************************************************************************
-// @brief Structure representing an MSP frame
+// **********************************************************************************************************// @brief Structure representing an MSP frame
 
 struct MspFrame
 {
@@ -280,10 +353,10 @@ inline bool Parse_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n)
 inline void CheckMSPSerial()
 {
     static uint32_t Localtimer = 0;
-
     if (millis() - Localtimer < 250) // 4 x per second
         return;
     Localtimer = millis();
+
     uint8_t data_in[80];
     uint8_t p = 0;
     while (MSP_UART.available() && p < sizeof(data_in))
