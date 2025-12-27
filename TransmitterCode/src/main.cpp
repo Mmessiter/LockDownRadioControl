@@ -5015,6 +5015,8 @@ void FASTRUN ManageTransmitter()
     }
     CheckPowerOffButton();
     CheckForNextionButtonPress(); // Pretty obvious really ...
+
+    
     DoTheVariometer();            // Do the variometer
     if (RightNow - LastTimeRead >= 1000)
     { // Only once a second for these..

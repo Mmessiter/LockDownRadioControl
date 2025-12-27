@@ -119,92 +119,102 @@ Here is a brief summary of the features supported at the time of writing (July 2
 - Variometer function for gliders.
 - Context sensitive help screens for all functions.
 
-# LockDown Radio Control – Communications Protocol Specification
+# Lockdown Radio Control Protocol Specification
 
-## 1. Identity and Binding
+## 1. Overview and Addressing
 
-### 1.1 Device Identity
+The Lockdown Radio Control protocol is a proprietary low-latency communications standard designed for high-reliability remote control applications.
 
-Each transmitter and receiver derives a unique ID from the hardware MAC address of its Teensy 4.x MCU.  
-These IDs are used directly as RF pipe addresses.
+### 1.1 Device Identification
 
-### 1.2 Binding States
+Device uniqueness is established via a hardware-level ID derived from the MAC address of the Teensy 4.x microcontroller unit (MCU) embedded within the transmitter (Tx) and receiver (Rx).
 
-**Receiver**
+### 1.2 Binding Procedure
 
-- Normal mode: listens only for the transmitter ID to which it is already bound.
-- Binding mode: listens on a default pseudo-ID.
+The binding process establishes a trusted link between a specific Tx and Rx pair.
 
-**Transmitter**
+- **Unbound State:** An Rx in binding mode scans for a signal containing a reserved **Default Pseudo-ID**. Similarly, a Tx in binding mode broadcasts using this Pseudo-ID.
+- **Handshake:** Upon connection via the Pseudo-ID:
+  1.  The Tx transmits its unique hardware ID.
+  2.  The Rx stores the Tx ID in non-volatile memory (EEPROM).
+  3.  The Rx transmits its own unique hardware ID via the acknowledgement payload.
+  4.  The Tx validates the Rx ID to confirm the correct model memory is loaded.
+- **Bound State:** Post-binding, all communications use the Transmitter’s unique ID as the pipe address. An Rx not in binding mode filters all traffic, responding only to packets matching its stored bound Tx ID.
 
-- Normal mode: transmits only using its own unique ID.
-- Binding mode: transmits using the default pseudo-ID.
+## 2. Physical Layer and Link Control
 
-### 1.3 Binding Procedure
+### 2.1 Frequency Hopping Spread Spectrum (FHSS)
 
-When both transmitter and receiver are in binding mode:
+The protocol utilizes a Receiver-driven FHSS scheme operating in the $2.4\text{ GHz}$ ISM band.
 
-1. A connection is established using the default pseudo-ID.
-2. The transmitter sends its unique transmitter ID.
-3. The receiver stores this ID in EEPROM.
-4. The receiver replies in the acknowledgement payload with its unique receiver ID.
-5. The transmitter uses this receiver ID to identify the model and verify the correct model memory is loaded.
+- **Frequency Arrays:** The system maintains two synchronized frequency tables:
+  - **Main Array:** Contains 82 discrete legal frequencies.
+  - **Discovery Array:** A subset containing 3 frequencies used for rapid connection establishment.
+- **Hopping Logic:** The hopping sequence is pseudo-random. The specific frequency index for the _next_ hop is dictated by the Receiver in the acknowledgement payload (see Section 3.2).
+- **Hop Timing:** The hop rate is approximately $100\text{ Hz}$. The instruction to hop is encoded in the Most Significant Bit (MSB) of the acknowledgement packet’s first byte.
 
-After binding, all communication uses the transmitter’s ID as the pipe address.
+### 2.2 Connection Establishment and Recovery
 
----
+- **Discovery Phase:** Upon initialization or signal loss, both units cycle the **Discovery Array** to minimize lock time.
+- **Active Phase:** Once locked, both units switch immediately to the **Main Array**.
+- **Failsafe:** If the link is lost and not re-established within the defined timeout period, the Rx enters failsafe mode while the Tx reverts to the scanning algorithm.
 
-## 2. Normal Data Transmission
+## 3. Data Packet Structure
 
-### 2.1 Packet Rate
+### 3.1 Downlink (Transmitter to Receiver)
 
-Approximately 500 packets per second. Packet length is variable.
+The protocol utilizes a variable-length packet structure to optimize bandwidth. The update rate is approximately $500\text{ Hz}$.
 
-### 2.2 Channel Update Encoding
+**A. Control Data Packets**
+Prioritized for low latency, these packets contain servo/channel updates.
 
-The first two bytes form a 16-bit bitmap indicating which channels have changed or timed out.
-Only those channels are transmitted, each compressed to 12 bits.
+- **Header (16 bits):** A bitmask representing channel status.
+  - If Bit $N$ is set ($1$), Channel $N$ has changed or timed out.
+  - If Bit $N$ is clear ($0$), the channel remains unchanged.
+- **Payload:** Compressed channel data follows immediately. Each active channel is encoded using 12-bit resolution.
+- **Processing:** The Rx parses the header length (> 2 bytes) and the bitmask to decompress and map the data to the appropriate output channels.
 
----
+**B. Configuration Parameter Packets**
+Used for system settings, these are interleaved with control data to ensure control link stability.
 
-## 3. Parameter and Configuration Packets
+- **Identifier:** A null header (`0x0000`) followed by a payload indicates a Configuration Packet.
+- **Structure:** The first 12 bits of the payload define the Parameter ID (4096 possible types).
+- **Capacity:** A single packet may contain up to 12 words of configuration data. Due to the compression algorithm, only the lower 12 bits of each word are utilized.
 
-If the channel bitmap is zero and additional data follows, the packet is interpreted as parameter data.
-Parameters use the same 12-bit compressed format, allowing up to 4096 parameter types.
+### 3.2 Uplink (Receiver to Transmitter)
 
----
+The Rx generates an acknowledgement (ACK) payload upon the successful receipt of any Tx packet. The ACK payload is fixed at 6 bytes.
 
-## 4. Acknowledgement Payloads, FHSS, and Versioning
+| Byte Index    | Bit Range   | Description                                                                         |
+| :------------ | :---------- | :---------------------------------------------------------------------------------- |
+| **Byte 0**    | Bit 7 (MSB) | **Hop Flag:** $1 =$ Hop frequency; $0 =$ Stay.                                      |
+| **Byte 0**    | Bits 0-6    | **Data Type ID:** Identifies the nature of the telemetry in Bytes 1-4.              |
+| **Bytes 1-4** | All         | **Telemetry/Payload:** Variable data defined by the Data Type ID.                   |
+| **Byte 5**    | All         | **Next Frequency Index:** Pointer to the next frequency in the pseudo-random array. |
 
-Acknowledgement payloads are always 6 bytes long and are sent for every received packet.
+## 4. Error Handling and Latency
 
-- Byte 0: Payload type (low 7 bits) and hop instruction (high bit)
-- Bytes 1–4: Receiver data, including protocol version
-- Byte 5: Index of the next RF frequency
+- **Retransmission Strategy:** The protocol implements a "one-shot" retry mechanism. If a packet is lost, the transceiver attempts retransmission exactly once. Further attempts are abandoned to prevent data staleness ("buffer bloat"), prioritizing new stick input over historic data.
+- **Bandwidth Management:** Large configuration data transfers are interleaved with control packets, ensuring that high-priority control inputs retain the majority of the duty cycle.
 
-The receiver reports its protocol version in the acknowledgement payload.  
-If versions do not match, the transmitter displays a warning but continues operation.
+## 5. Wireless Buddy Box Extension
 
-Frequency hopping is receiver-driven.
+The protocol supports a wireless trainer (Buddy Box) system using Time Division Multiplexing (TDM).
 
----
-
-## 5. Packet Loss Strategy
-
-The RF transceiver retries a lost packet once.  
-No further retries are attempted by the transmitter.
-Transmitter and receiver search for each other using an array of only 3 frequencies for rapid reconnection.
-On reconnection they revert to the full 82 freqencies array.
-
----
-
-## 6. Design Principles
-
-- Deterministic identity-based binding
-- Receiver-driven FHSS
-- Minimal airtime waste
-- Control latency prioritised
-- Safe protocol version detection
+- **Topology:** Master Tx communicates with the Model Rx and the Buddy Tx sequentially.
+- **Frame Rate:**
+  - Master $\to$ Model: $200\text{ Hz}$.
+  - Master $\to$ Buddy: $200\text{ Hz}$.
+  - Total Master Tx Output: $400\text{ packets/sec}$.
+- **Data Rates:**
+  - Master $\leftrightarrow$ Model: $256\text{ kbps}$.
+  - Master $\leftrightarrow$ Buddy: $2\text{ Mbps}$.
+- **Operation:**
+  1.  Between every control packet sent to the model, the Master sends a packet to the Buddy Tx.
+  2.  The Buddy Tx responds with an ACK payload containing its current stick positions.
+  3.  The Master Tx mixes or swaps control inputs based on its internal switch position before transmitting to the model.
+- **Synchronization:** The Buddy link utilizes the same frequency array as the model link but traverses the hop sequence in the **reverse direction** to prevent collisions.
+- **Model Verification:** Master-to-Buddy packets contain the target Model ID. The Buddy unit automatically verifies or loads the correct model memory.
 
 # Bill of Materials (BOM)
 
