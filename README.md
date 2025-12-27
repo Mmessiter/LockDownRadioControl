@@ -148,7 +148,7 @@ The binding process establishes a trusted link between a specific Tx and Rx pair
 The protocol utilizes a Receiver-driven FHSS scheme operating in the $2.4\text{ GHz}$ ISM band.
 
 - **Frequency Arrays:** The system maintains two synchronized frequency tables:
-  - **Main Array:** Contains 82 discrete legal frequencies.
+  - **Main Array:** Contains 83 discrete legal frequencies.
   - **Discovery Array:** A subset containing 3 frequencies used for rapid connection establishment.
 - **Hopping Logic:** The hopping sequence is pseudo-random. The specific frequency index for the _next_ hop is dictated by the Receiver in the acknowledgement payload (see Section 3.2).
 - **Hop Timing:** The hop rate is approximately $100\text{ Hz}$. The instruction to hop is encoded in the Most Significant Bit (MSB) of the acknowledgement packet’s first byte.
