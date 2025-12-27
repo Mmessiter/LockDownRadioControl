@@ -123,7 +123,7 @@ Here is a brief summary of the features supported at the time of writing (July 2
 
 ## 1. Overview and Addressing
 
-The Lockdown Radio Control protocol is a proprietary low-latency communications standard designed for high-reliability remote control applications.
+The Lockdown Radio Control protocol is a proprietary low-latency communications standard designed for very high-reliability remote control applications. This is described here because it's by far the most important aspect of any control system. It must simply never fail.
 
 ### 1.1 Device Identification
 
