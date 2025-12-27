@@ -43,9 +43,9 @@ When the master needs to take over to save the model, thereâ€™s no hesitation â€
 
 ---
 
-### (5) Data screen
+### (5) Telemetry screen
 
-This screen reveals current and average data packet rate, total lost packets counter, maximum and average reconnection times after lost packet, transceiver swaps count, and lots of other critical information that other systems hide.
+This screen reveals current and average data packet rate, total lost packets counter, maximum and average reconnection times after lost packet, transceiver swaps count, and lots of other critical information that other systems usually hide.
 
 ---
 
