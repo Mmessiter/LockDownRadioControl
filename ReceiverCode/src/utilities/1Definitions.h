@@ -7,7 +7,6 @@
 #include <Adafruit_DPS310.h>
 #include <EEPROM.h>
 
-#define USE_MSP_LIBRARY 1 // set to 1 to use the ReefwingMSP library
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 5
 #define RXVERSION_MINIMUS 5
@@ -15,6 +14,8 @@
 #define HOPTIME 8           // gives about 100Hz FHSS
 
 // **************************************************************************
+// These debug options can be enabled or disabled as needed.
+// Don't leave any enabled in normal use as they slow things down.
 
 //  #define DB_FHSS
 //  #define DB_SENSORS
@@ -22,11 +23,20 @@
 //  #define DB_FAILSAFE
 //  #define DB_RXTIMERS
 
-// >>>>>>>>>>>>>>>>>*******************************************************************************************************
+// >>>>>>>>>>>>>>>>>********************************************************************
+// These options can be enabled or disabled as needed. Disabling unused options saves code space.
 
-#define USE_SBUS
-#define USE_PWM
+// #define USE_BOTTOM_SOLDER_PADS_FOR_SERIAL6 // Uncomment this line to use Serial6 on the bottom solder pads for MSP communication with Nexus Rotorflight22 etc.
+#define USE_SBUS // Enable SBUS output
+#define USE_PWM  // Enable PWM output
+
+// **************************************************************************
+
+#ifdef USE_BOTTOM_SOLDER_PADS_FOR_SERIAL6
+#define MSP_UART Serial6
+#else
 #define MSP_UART Serial1
+#endif
 #define SERVO_RES_BITS 12
 #define SERVO_RESOLUTION 4096
 #define EXTRAAT1500 1000

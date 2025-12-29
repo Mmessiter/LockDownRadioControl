@@ -7,6 +7,7 @@
  * @section rx Features List
  * - WORKS ON TEENSY 4.0
  * - Detects and uses INA219 to read volts
+ * - Detects and uses Rotorflight (via MSP) 
  * - Detects and uses BMP280 pressure sensor for altitude and temperature and rate of climb (use default address 0x76)
  * - Detects and uses DPS310 pressure sensor for altitude and temperature and rate of climb (use default address 0x77)
  * - (DPS310 is recommended! It's better.)
@@ -109,11 +110,17 @@ bool CheckForCrazyValues() // Crazy values might come while binding, and should 
     return true;
 }
 //************************************************************************************************************/
+#ifdef USE_PWM
+
 inline uint8_t PwmStartIndex()
 {
-    return Rotorflight22Detected ? 2 : 0; // if Nexus is present,returns 2 else 0
+#ifndef USE_BOTTOM_SOLDER_PADS_FOR_SERIAL6
+    return Rotorflight22Detected ? 2 : 0; // if Nexus is present,returns 2 else 0 
+#else
+    return 0; // always 0 if using bottom solder pads for serial6 - the MSP_UART
+#endif
 }
-
+#endif // USE_PWM
 /************************************************************************************************************/
 // Function to get PWM value needed for given pulse length in microseconds
 #ifdef USE_PWM
