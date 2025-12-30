@@ -10,7 +10,7 @@
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 5
 #define RXVERSION_MINIMUS 5
-#define RXVERSION_EXTRA 'B' // 4th December 2025
+#define RXVERSION_EXTRA 'C' // 29th December 2025
 #define HOPTIME 8           // gives about 100Hz FHSS
 
 // **************************************************************************
@@ -24,9 +24,9 @@
 //  #define DB_RXTIMERS
 
 // >>>>>>>>>>>>>>>>>********************************************************************
-// These options can be enabled or disabled as needed. Disabling unused options saves code space.
+// These options can be enabled or disabled as needed.
 
-// #define USE_BOTTOM_SOLDER_PADS_FOR_SERIAL6 // Uncomment this line to use Serial6 on the bottom solder pads for MSP communication with Nexus Rotorflight22 etc.
+#define USE_BOTTOM_SOLDER_PADS_FOR_SERIAL6 // Uncomment this line to use Serial6 on the bottom solder pads for MSP communication with Nexus Rotorflight22 etc.
 #define USE_SBUS // Enable SBUS output
 #define USE_PWM  // Enable PWM output
 
@@ -60,8 +60,8 @@
 
 // ********************* >>> Reconnect params <<< ***************************************
 
-#define LISTEN_PERIOD 14
-#define STOPLISTENINGDELAY 100 // was 30 microseconds to wait after stopListening() in Reconnect()
+#define LISTEN_PERIOD 14       // milliseconds to listen for packets on the 3 recovery channels
+#define STOPLISTENINGDELAY 100 // microseconds to wait after stopListening() in Reconnect()
 
 // *************************************************************************************
 

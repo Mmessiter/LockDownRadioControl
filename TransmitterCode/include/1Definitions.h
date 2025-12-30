@@ -26,7 +26,7 @@
 #define TXVERSION_MAJOR 2 // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 5
 #define TXVERSION_MINIMUS 5
-#define TXVERSION_EXTRA "B 04/12/25"
+#define TXVERSION_EXTRA "C 29/12/25"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -146,7 +146,7 @@
 // **************************************************************************
 
 // When servo frequencies, servo centre points, PID values, failsafe data, QNH settings,
-// Kalman parameters (etc.) are sent to the RX, they are sent for only 5 ms in each 100 ms period.
+// PID parameters (etc.) are sent to the RX, they are sent for only 5 ms in each 100 ms period.
 // This is to allow the TX and RX to exchange control data too - during the remaining 95 ms.
 // It therefore takes a few seconds to send all the parameters,
 // but it is necessary to allow control data to be sent too.
@@ -158,7 +158,7 @@
 #define PARAMETER_SEND_DURATION 5        // ms duration for parameter sending (remainder used for control)
 #define PARAMETER_QUEUE_MAXIMUM 250      // Maximum queued parameters allowed at once
 
-// Parameter ID definitions. Most are used for PID stabilisation, but some are used for other purposes.
+// Parameter ID definitions.
 #define FAILSAFE_SETTINGS 1
 #define QNH_SETTING 2
 #define GPS_MARK_LOCATION 3
@@ -166,11 +166,11 @@
 #define KALMAN_VALUES 5
 #define SERVO_FREQUENCIES 6
 #define SERVO_PULSE_WIDTHS 7
-#define GEAR_RATIO 8 // Gear Ratio for RPM calculation
-#define SEND_PID_VALUES 9
-#define GET_FIRST_6_PID_VALUES 10
-#define GET_SECOND_6_PID_VALUES 11
-#define PARAMETERS_MAX_ID 12 // Max types of parameters packet to send  ... will increase.
+#define GEAR_RATIO 8               // Gear Ratio (Motor:Rotor) for RPM calculation
+#define SEND_PID_VALUES 9          // Command to request PID values from RX
+#define GET_FIRST_6_PID_VALUES 10  // Command to update first 6 PID values to RX
+#define GET_SECOND_6_PID_VALUES 11 // Command to update second 6 PID values to RX
+#define PARAMETERS_MAX_ID 12       // Max types of parameters packet to send  ... might increase.
 
 // **************************************************************************
 //                               Mixes                                      *
