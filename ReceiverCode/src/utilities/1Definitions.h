@@ -255,11 +255,12 @@ void PointToRadio1();
 void PointToRadio2();
 void DebugPIDValues(char const *msg);
 inline void WritePIDsToNexusAndSave(const uint16_t pid[12]);
+inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n);
 
-/************************************************************************************************************/
-// For numeric types (int, float, double, etc.)
-template <typename T>
-void Look(const T &value, int format)
+    /************************************************************************************************************/
+    // For numeric types (int, float, double, etc.)
+    template <typename T>
+    void Look(const T &value, int format)
 {
     Serial.println(value, format);
 }

@@ -1,5 +1,5 @@
 /** @file ReceiverCode/src/utilities/Nexus.h */
-// Malcolm Messiter 2020 - 2025 (with just a little help from ChatGPT :-)
+// Malcolm Messiter 2020 - 2025
 #ifndef NEXUS_H
 #define NEXUS_H
 #include "utilities/1Definitions.h"
@@ -11,6 +11,8 @@
 #define MSP_PID 112             // PID settings (read)
 #define MSP_SET_PID 202         // write PID settings
 #define MSP_EEPROM_WRITE 250    // save settings to EEPROM/flash
+#define MSP_RC_TUNING 111
+#define MSP_SET_RC_TUNING 204
 // ************************************************************************************************************
 enum : uint8_t
 {
@@ -347,8 +349,10 @@ inline void CheckMSPSerial()
 
     if (!SendPIDsNow)
     {
-        Parse_MSP_Motor_Telemetry(&data_in[0], p);
-        RequestFromMSP(MSP_MOTOR_TELEMETRY);
+       Parse_MSP_Motor_Telemetry(&data_in[0], p);
+       RequestFromMSP(MSP_MOTOR_TELEMETRY);
+      //  Parse_MSP_RC_TUNING(data_in, p);
+      //  RequestFromMSP(MSP_RC_TUNING);
     }
     else
     {
@@ -357,5 +361,156 @@ inline void CheckMSPSerial()
     }
 }
 
-// ************************************************************************************************************
+//// ************************************************************************************************************
+//// ************************************************************************************************************
+//// ************************************************************************************************************
+//// ************************************************************************************************************
+//// ************************************************************************************************************
+//// ************************************************************************************************************
+//// ************************************************************************************************************
+//// ************************************************************************************************************
+//// ************************************************************************************************************
+
+
+// Add to globals section
+extern uint16_t api100; // Assuming already declared, but ensure it's visible
+
+// Rates globals - add these as global variables
+uint8_t Rates_Type;
+float RC_Rate, RC_Expo, Roll_Rate, Pitch_RC_Rate, Pitch_RC_Expo, Pitch_Rate;
+float Yaw_RC_Rate, Yaw_RC_Expo, Yaw_Rate, Collective_RC_Rate, Collective_RC_Expo, Collective_Rate;
+uint8_t Roll_Response_Time, Pitch_Response_Time, Yaw_Response_Time, Collective_Response_Time;
+uint16_t Roll_Accel_Limit, Pitch_Accel_Limit, Yaw_Accel_Limit, Collective_Accel_Limit;
+uint8_t Roll_Setpoint_Boost_Gain, Roll_Setpoint_Boost_Cutoff, Pitch_Setpoint_Boost_Gain, Pitch_Setpoint_Boost_Cutoff;
+uint8_t Yaw_Setpoint_Boost_Gain, Yaw_Setpoint_Boost_Cutoff, Collective_Setpoint_Boost_Gain, Collective_Setpoint_Boost_Cutoff;
+uint8_t Yaw_Dynamic_Ceiling_Gain, Yaw_Dynamic_Deadband_Gain, Yaw_Dynamic_Deadband_Filter;
+
+// Function prototypes if needed, but since inline, place after dependencies
+// Ensure MspFrame, FindMspV1ResponseFrame, SendToMSP are declared before these
+
+inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
+{
+    MspFrame f;
+    if (!FindMspV1ResponseFrame(data, n, f))
+        return false;
+    if (f.cmd != MSP_RC_TUNING)
+        return false;
+    uint8_t min_size = 25;
+    if (api100 >= 1208)
+        min_size += 11;
+    if (f.size < min_size)
+        return false;
+    const uint8_t *p = f.payload;
+    uint8_t offset = 0;
+    Rates_Type = p[offset++];
+    RC_Rate = (float)p[offset++] / 100.0f;
+    RC_Expo = (float)p[offset++] / 100.0f;
+    Roll_Rate = (float)p[offset++] / 100.0f;
+    Roll_Response_Time = p[offset++];
+    Roll_Accel_Limit = p[offset] | (p[offset + 1] << 8);
+    offset += 2;
+    Pitch_RC_Rate = (float)p[offset++] / 100.0f;
+    Pitch_RC_Expo = (float)p[offset++] / 100.0f;
+    Pitch_Rate = (float)p[offset++] / 100.0f;
+    Pitch_Response_Time = p[offset++];
+    Pitch_Accel_Limit = p[offset] | (p[offset + 1] << 8);
+    offset += 2;
+    Yaw_RC_Rate = (float)p[offset++] / 100.0f;
+    Yaw_RC_Expo = (float)p[offset++] / 100.0f;
+    Yaw_Rate = (float)p[offset++] / 100.0f;
+    Yaw_Response_Time = p[offset++];
+    Yaw_Accel_Limit = p[offset] | (p[offset + 1] << 8);
+    offset += 2;
+    Collective_RC_Rate = (float)p[offset++] / 100.0f;
+    Collective_RC_Expo = (float)p[offset++] / 100.0f;
+    Collective_Rate = (float)p[offset++] / 100.0f;
+    Collective_Response_Time = p[offset++];
+    Collective_Accel_Limit = p[offset] | (p[offset + 1] << 8);
+    offset += 2;
+    if (api100 >= 1208)
+    {
+        Roll_Setpoint_Boost_Gain = p[offset++];
+        Roll_Setpoint_Boost_Cutoff = p[offset++];
+        Pitch_Setpoint_Boost_Gain = p[offset++];
+        Pitch_Setpoint_Boost_Cutoff = p[offset++];
+        Yaw_Setpoint_Boost_Gain = p[offset++];
+        Yaw_Setpoint_Boost_Cutoff = p[offset++];
+        Collective_Setpoint_Boost_Gain = p[offset++];
+        Collective_Setpoint_Boost_Cutoff = p[offset++];
+        Yaw_Dynamic_Ceiling_Gain = p[offset++];
+        Yaw_Dynamic_Deadband_Gain = p[offset++];
+        Yaw_Dynamic_Deadband_Filter = p[offset++];
+    }
+    Look1("EXPO: ");
+    Look(RC_Expo * 1000);
+    Look1("Roll: ");
+    Look(Roll_Rate * 1000);
+    Look1("Pitch: ");
+    Look(Pitch_Rate * 1000);
+    Look1("YAW: ");
+    Look(Yaw_Rate * 1000);
+    Look1("Coll: ");
+    Look(Collective_Rate * 1000);
+    Look("---------------------\n");
+    return true;
+}
+
+inline void WriteRatesToNexusAndSave()
+{
+    static uint32_t lastWriteTime = 0;
+    const uint32_t WRITE_COOLDOWN_MS = 5000;
+    uint32_t now = millis();
+    if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight22Detected))
+        return;
+    uint8_t payload_size = 25;
+    if (api100 >= 1208)
+        payload_size += 11;
+    uint8_t payload[36];
+    uint8_t offset = 0;
+    payload[offset++] = Rates_Type;
+    payload[offset++] = (uint8_t)(RC_Rate * 100.0f);
+    payload[offset++] = (uint8_t)(RC_Expo * 100.0f);
+    payload[offset++] = (uint8_t)(Roll_Rate * 100.0f);
+    payload[offset++] = Roll_Response_Time;
+    payload[offset++] = (uint8_t)(Roll_Accel_Limit & 0xFF);
+    payload[offset++] = (uint8_t)(Roll_Accel_Limit >> 8);
+    payload[offset++] = (uint8_t)(Pitch_RC_Rate * 100.0f);
+    payload[offset++] = (uint8_t)(Pitch_RC_Expo * 100.0f);
+    payload[offset++] = (uint8_t)(Pitch_Rate * 100.0f);
+    payload[offset++] = Pitch_Response_Time;
+    payload[offset++] = (uint8_t)(Pitch_Accel_Limit & 0xFF);
+    payload[offset++] = (uint8_t)(Pitch_Accel_Limit >> 8);
+    payload[offset++] = (uint8_t)(Yaw_RC_Rate * 100.0f);
+    payload[offset++] = (uint8_t)(Yaw_RC_Expo * 100.0f);
+    payload[offset++] = (uint8_t)(Yaw_Rate * 100.0f);
+    payload[offset++] = Yaw_Response_Time;
+    payload[offset++] = (uint8_t)(Yaw_Accel_Limit & 0xFF);
+    payload[offset++] = (uint8_t)(Yaw_Accel_Limit >> 8);
+    payload[offset++] = (uint8_t)(Collective_RC_Rate * 100.0f);
+    payload[offset++] = (uint8_t)(Collective_RC_Expo * 100.0f);
+    payload[offset++] = (uint8_t)(Collective_Rate * 100.0f);
+    payload[offset++] = Collective_Response_Time;
+    payload[offset++] = (uint8_t)(Collective_Accel_Limit & 0xFF);
+    payload[offset++] = (uint8_t)(Collective_Accel_Limit >> 8);
+    if (api100 >= 1208)
+    {
+        payload[offset++] = Roll_Setpoint_Boost_Gain;
+        payload[offset++] = Roll_Setpoint_Boost_Cutoff;
+        payload[offset++] = Pitch_Setpoint_Boost_Gain;
+        payload[offset++] = Pitch_Setpoint_Boost_Cutoff;
+        payload[offset++] = Yaw_Setpoint_Boost_Gain;
+        payload[offset++] = Yaw_Setpoint_Boost_Cutoff;
+        payload[offset++] = Collective_Setpoint_Boost_Gain;
+        payload[offset++] = Collective_Setpoint_Boost_Cutoff;
+        payload[offset++] = Yaw_Dynamic_Ceiling_Gain;
+        payload[offset++] = Yaw_Dynamic_Deadband_Gain;
+        payload[offset++] = Yaw_Dynamic_Deadband_Filter;
+    }
+    SendToMSP(MSP_SET_RC_TUNING, payload, payload_size);
+    delay(50);
+    SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
+    delay(50);
+    lastWriteTime = now;
+}
+
 #endif // NEXUS_H
