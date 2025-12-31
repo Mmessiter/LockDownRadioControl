@@ -157,6 +157,7 @@
 #include "ADC-master/ADC.h"
 #include "Parameters.h"
 #include "PIDView.h"
+#include "RatesRF.h"
 
 /*********************************************************************************************************************************/
 
@@ -3327,8 +3328,8 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     SendEditedPIDs,       // 19
     PIDs_Were_edited,     // 20
     EndPIDView,           // 21
-    Blank,                // 22
-    Blank,                // 23
+    StartRatesView,       // 22
+    EndRatesView,         // 23
     Blank,                // 24
     Blank,                // 25
     Blank,                // 26

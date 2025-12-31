@@ -1,5 +1,6 @@
 // ********************** Rates.h ***********************************************
-// This file contains  the functions for reading and writing to the SD card for MODEL MEMORIES and TRANSMITTER PARAMETERS
+// This file contains the functions to handle Dual Rates
+// ******************************************************************************
 
 #include <Arduino.h>
 #include "1Definitions.h"
