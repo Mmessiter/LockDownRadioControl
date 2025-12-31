@@ -367,6 +367,8 @@ float ESC_Temp_C = 0.0f; // ESC temperature in degrees C
 
 uint8_t Servos_Used = 9; // default to 9 servos used
 uint8_t Receiver_Type = 0;
+
+uint16_t api100 = 0; // API version as integer 12.08 -> 1208
 bool SendPIDsNow = false;
 uint32_t Started_Sending_PIDs = 0;
 
