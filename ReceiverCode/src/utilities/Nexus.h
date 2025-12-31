@@ -346,10 +346,10 @@ inline void CheckMSPSerial()
 
     if (!SendPIDsNow)
     {
-        // Parse_MSP_Motor_Telemetry(&data_in[0], p);
-        // RequestFromMSP(MSP_MOTOR_TELEMETRY);
-        Parse_MSP_RC_TUNING(data_in, p);
-        RequestFromMSP(MSP_RC_TUNING);
+        Parse_MSP_Motor_Telemetry(&data_in[0], p);
+        RequestFromMSP(MSP_MOTOR_TELEMETRY);
+        // Parse_MSP_RC_TUNING(data_in, p);
+        // RequestFromMSP(MSP_RC_TUNING);
     }
     else
     {
