@@ -343,7 +343,7 @@ inline void CheckMSPSerial()
     {
         SendRotorFlightParametresNow = SEND_NO_RF;
     }
-     SendRotorFlightParametresNow = SEND_RATES_RF; // force for testing...
+    SendRotorFlightParametresNow = SEND_RATES_RF; // force for testing...
 
     if (SendRotorFlightParametresNow) // ******************** HEER!!! ***********************************************
     {
@@ -378,6 +378,9 @@ inline void CheckMSPSerial()
 //// ************************************************************************************************************
 
 // this code will read all of the parameters, allow editing for some of them, and then write all of them.
+// They are all stored as uint8_t values in Nexus firmware
+// so we need to convert to/from float as needed only for display / editing.
+// ************************************************************************************************************
 
 inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
 {
@@ -394,27 +397,27 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
     const uint8_t *p = f.payload;
     uint8_t offset = 0;
     Rates_Type = p[offset++];                             // Banner
-    Roll_Centre_Rate = (float)p[offset++];                // * 10 - n0
-    Roll_Expo = (float)p[offset++];                       // / 100.0f - n2
-    Roll_Max_Rate = (float)p[offset++];                   // * 10.0f - n1
+    Roll_Centre_Rate = p[offset++];                       // * 10 - n0
+    Roll_Expo = p[offset++];                              // / 100.0f - n2
+    Roll_Max_Rate = p[offset++];                          // * 10.0f - n1
     Roll_Response_Time = p[offset++];                     // not yet used
     Roll_Accel_Limit = p[offset] | (p[offset + 1] << 8);  // not yet used
     offset += 2;                                          // ---
-    Pitch_Centre_Rate = (float)p[offset++];               //  * 10.0f; // n3
-    Pitch_Expo = (float)p[offset++];                      // / 100.0f; // n5
-    Pitch_Max_Rate = (float)p[offset++];                  // * 10.0f;    // n4
+    Pitch_Centre_Rate = p[offset++];                      //  * 10.0f; // n3
+    Pitch_Expo = p[offset++];                             // / 100.0f; // n5
+    Pitch_Max_Rate = p[offset++];                         // * 10.0f;    // n4
     Pitch_Response_Time = p[offset++];                    // not yet used
     Pitch_Accel_Limit = p[offset] | (p[offset + 1] << 8); // not yet used
     offset += 2;                                          // ---
-    Yaw_Centre_Rate = (float)p[offset++];                 // * 10.0f;
-    Yaw_Expo = (float)p[offset++];                        // / 100.0f;
-    Yaw_Max_Rate = (float)p[offset++];                    // * 10.0f;
+    Yaw_Centre_Rate = p[offset++];                        // * 10.0f;
+    Yaw_Expo = p[offset++];                               // / 100.0f;
+    Yaw_Max_Rate = p[offset++];                           // * 10.0f;
     Yaw_Response_Time = p[offset++];                      // not yet used
     Yaw_Accel_Limit = p[offset] | (p[offset + 1] << 8);   // not yet used
     offset += 2;                                          // ---
-    Collective_Centre_Rate = (float)p[offset++];          // / 4.0f;
-    Collective_Expo = (float)p[offset++];                 // / 100.0f;
-    Collective_Max_Rate = (float)p[offset++];             // / 4.0f
+    Collective_Centre_Rate = p[offset++];                 // / 4.0f;
+    Collective_Expo = p[offset++];                        // / 100.0f;
+    Collective_Max_Rate = p[offset++];                    // / 4.0f
 
     Collective_Response_Time = p[offset++];
     Collective_Accel_Limit = p[offset] | (p[offset + 1] << 8);
