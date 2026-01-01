@@ -88,7 +88,7 @@ void ReadExtraParameters()
             break;
         if (Parameters.word[1] == 321) // 321 is the command to send PIDs NOW!
         {
-            SendPIDsNow = true;
+            SendRotorFlightParametresNow = SEND_PID_RF;
             Started_Sending_PIDs = millis();
             PID_Send_Duration = Parameters.word[2];
         }

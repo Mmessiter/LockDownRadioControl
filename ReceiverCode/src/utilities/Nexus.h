@@ -341,20 +341,29 @@ inline void CheckMSPSerial()
 
     if ((millis() - Started_Sending_PIDs) > PID_Send_Duration)
     {
-        SendPIDsNow = false;
+        SendRotorFlightParametresNow = SEND_NO_RF;
     }
+    // SendRotorFlightParametresNow = SEND_RATES_RF; // force for testing...
 
-    if (!SendPIDsNow) // ******************** HEER!!! ***********************************************
+    if (SendRotorFlightParametresNow) // ******************** HEER!!! ***********************************************
     {
-        // Parse_MSP_Motor_Telemetry(&data_in[0], p);
-        // RequestFromMSP(MSP_MOTOR_TELEMETRY);
-        Parse_MSP_RC_TUNING(data_in, p);
-        RequestFromMSP(MSP_RC_TUNING);
+        switch (SendRotorFlightParametresNow)
+        {
+        case SEND_PID_RF:
+            Parse_MSP_PID(data_in, p);
+            RequestFromMSP(MSP_PID); // parse reply next time around
+            break;
+
+        case SEND_RATES_RF:
+            Parse_MSP_RC_TUNING(data_in, p);
+            RequestFromMSP(MSP_RC_TUNING); // parse reply next time around
+            break;
+        }
     }
     else
     {
-        Parse_MSP_PID(data_in, p);
-        RequestFromMSP(MSP_PID);
+        Parse_MSP_Motor_Telemetry(&data_in[0], p);
+        RequestFromMSP(MSP_MOTOR_TELEMETRY); // parse reply next time around
     }
 }
 
@@ -481,9 +490,9 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
     //  Look(Yaw_Accel_Limit);
 
     Look1("Collective Centre Rate: ");
-    Look(Collective_Centre_Rate );
+    Look(Collective_Centre_Rate);
     Look1("Collective MAX Rate: ");
-    Look(Collective_Max_Rate );
+    Look(Collective_Max_Rate);
     Look1("Collective Expo: ");
     Look(Collective_Expo);
     Look("");
@@ -554,9 +563,9 @@ inline void WriteRatesToNexusAndSave()
     payload[offset++] = Yaw_Response_Time;
     payload[offset++] = (uint8_t)(Yaw_Accel_Limit & 0xFF);
     payload[offset++] = (uint8_t)(Yaw_Accel_Limit >> 8);
-    payload[offset++] = (uint8_t)(Collective_Centre_Rate  * 4);
+    payload[offset++] = (uint8_t)(Collective_Centre_Rate * 4);
     payload[offset++] = (uint8_t)(Collective_Expo * 100.0f);
-    payload[offset++] = (uint8_t)(Collective_Max_Rate * 4); 
+    payload[offset++] = (uint8_t)(Collective_Max_Rate * 4);
     payload[offset++] = Collective_Response_Time;
     payload[offset++] = (uint8_t)(Collective_Accel_Limit & 0xFF);
     payload[offset++] = (uint8_t)(Collective_Accel_Limit >> 8);

@@ -125,6 +125,13 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define GET_SECOND_6_PID_VALUES 11
 #define PARAMETERS_MAX_ID 12 // Max types of parameters packet to send  ... will increase.
 
+// **************************************************************************
+//                             Rotorflight Definitions                      *
+// **************************************************************************
+#define SEND_NO_RF 0
+#define SEND_PID_RF 1
+#define SEND_RATES_RF 2
+
 // ****************************************************************************************************************************************
 #define PIN_CE1 22   // NRF1 for new rxs with 11 pwm outputs
 #define PIN_CSN1 23  // NRF1 for new rxs with 11 pwm outputs
@@ -369,7 +376,7 @@ uint8_t Servos_Used = 9; // default to 9 servos used
 uint8_t Receiver_Type = 0;
 
 uint16_t api100 = 0; // API version as integer 12.08 -> 1208
-bool SendPIDsNow = false;
+uint8_t SendRotorFlightParametresNow = 0;
 uint32_t Started_Sending_PIDs = 0;
 
 uint16_t PID_Roll_P;
