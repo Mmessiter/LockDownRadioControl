@@ -27,8 +27,8 @@
 // These options can be enabled or disabled as needed.
 
 #define USE_BOTTOM_SOLDER_PADS_FOR_SERIAL6 // Uncomment this line to use Serial6 on the bottom solder pads for MSP communication with Nexus Rotorflight22 etc.
-#define USE_SBUS // Enable SBUS output
-#define USE_PWM  // Enable PWM output
+#define USE_SBUS                           // Enable SBUS output
+#define USE_PWM                            // Enable PWM output
 
 // **************************************************************************
 
@@ -257,10 +257,10 @@ void DebugPIDValues(char const *msg);
 inline void WritePIDsToNexusAndSave(const uint16_t pid[12]);
 inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n);
 
-    /************************************************************************************************************/
-    // For numeric types (int, float, double, etc.)
-    template <typename T>
-    void Look(const T &value, int format)
+/************************************************************************************************************/
+// For numeric types (int, float, double, etc.)
+template <typename T>
+void Look(const T &value, int format)
 {
     Serial.println(value, format);
 }
@@ -387,6 +387,14 @@ uint16_t PID_Yaw_FF;
 uint16_t All_PIDs[12];
 
 uint16_t PID_Send_Duration = 1000;
+
+char RF_RateTypes[6][15] = {
+    "None",
+    "Betatflight",
+    "Raceflight",
+    "KISS",
+    "Actual",
+    "QuickRates"};
 
 bool BoundFlag = false; /** indicates if receiver paired with transmitter */
 
