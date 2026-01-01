@@ -380,12 +380,6 @@ uint8_t Roll_Setpoint_Boost_Gain, Roll_Setpoint_Boost_Cutoff, Pitch_Setpoint_Boo
 uint8_t Yaw_Setpoint_Boost_Gain, Yaw_Setpoint_Boost_Cutoff, Collective_Setpoint_Boost_Gain, Collective_Setpoint_Boost_Cutoff;
 uint8_t Yaw_Dynamic_Ceiling_Gain, Yaw_Dynamic_Deadband_Gain, Yaw_Dynamic_Deadband_Filter;
 
-// Roll_Centre_Rate, Pitch_Centre_Rate, Yaw_Centre_Rate, Collective_Centre_Rate are center sensitivity (*10 scaling)
-// Roll_Max_Rate, Pitch_Max_Rate, Yaw_Max_Rate, Collective_Max_Rate are max rate (*10 scaling, or for collective perhaps *1 if units differ)
-
-// Function prototypes if needed, but since inline, place after dependencies
-// Ensure MspFrame, FindMspV1ResponseFrame, SendToMSP are declared before these
-
 inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
 {
     MspFrame f;
@@ -419,15 +413,10 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
     Yaw_Response_Time = p[offset++];
     Yaw_Accel_Limit = p[offset] | (p[offset + 1] << 8);
     offset += 2;
-   
-   
-    // Collective_Centre_Rate = (float)p[offset++] * 10.0f;
-    // Collective_Expo = (float)p[offset++] / 100.0f;
-    // Collective_Max_Rate = (float)p[offset++] * 10.0f; // If matches 48, fine; if needs 12, change to *1.0f
 
-    Collective_Centre_Rate = (float)p[offset++];
-    Collective_Expo = (float)p[offset++];
-    Collective_Max_Rate = (float)p[offset++] ; // If matches 48, fine; if needs 12, change to *1.0f
+    Collective_Centre_Rate = (float)p[offset++] / 4.0f;
+    Collective_Expo = (float)p[offset++] / 100.0f;
+    Collective_Max_Rate = (float)p[offset++] / 4.0f; // If matches 48, fine; if needs 12, change to *1.0f
 
     Collective_Response_Time = p[offset++];
     Collective_Accel_Limit = p[offset] | (p[offset + 1] << 8);
@@ -492,9 +481,9 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
     //  Look(Yaw_Accel_Limit);
 
     Look1("Collective Centre Rate: ");
-    Look(Collective_Centre_Rate / 4.0f);
+    Look(Collective_Centre_Rate );
     Look1("Collective MAX Rate: ");
-    Look(Collective_Max_Rate / 4.0f);
+    Look(Collective_Max_Rate );
     Look1("Collective Expo: ");
     Look(Collective_Expo);
     Look("");
@@ -565,11 +554,9 @@ inline void WriteRatesToNexusAndSave()
     payload[offset++] = Yaw_Response_Time;
     payload[offset++] = (uint8_t)(Yaw_Accel_Limit & 0xFF);
     payload[offset++] = (uint8_t)(Yaw_Accel_Limit >> 8);
-   
-    payload[offset++] = (uint8_t)(Collective_Centre_Rate / 10.0f);
+    payload[offset++] = (uint8_t)(Collective_Centre_Rate  * 4);
     payload[offset++] = (uint8_t)(Collective_Expo * 100.0f);
-    payload[offset++] = (uint8_t)(Collective_Max_Rate / 10.0f); // If needs *1, change to /1.0f
-   
+    payload[offset++] = (uint8_t)(Collective_Max_Rate * 4); 
     payload[offset++] = Collective_Response_Time;
     payload[offset++] = (uint8_t)(Collective_Accel_Limit & 0xFF);
     payload[offset++] = (uint8_t)(Collective_Accel_Limit >> 8);
