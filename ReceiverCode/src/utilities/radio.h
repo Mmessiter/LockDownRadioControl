@@ -817,9 +817,17 @@ void LoadAckPayload()
         }
         else // Roll P Roll I
         {
-            Send_2_x_uint16_t(PID_Roll_P, PID_Roll_I);
+            switch (SendRotorFlightParametresNow)
+            {
+            case SEND_PID_RF:
+                Send_2_x_uint16_t(PID_Roll_P, PID_Roll_I);
+                break;
+            case SEND_RATES_RF:
+              //  Look("TEST");
+                break;
+            }
+            break;
         }
-        break;
     case 9:
         if (GpsFix)
         {

@@ -343,7 +343,7 @@ inline void CheckMSPSerial()
     {
         SendRotorFlightParametresNow = SEND_NO_RF;
     }
-    // SendRotorFlightParametresNow = SEND_RATES_RF; // force for testing...
+     SendRotorFlightParametresNow = SEND_RATES_RF; // force for testing...
 
     if (SendRotorFlightParametresNow) // ******************** HEER!!! ***********************************************
     {
@@ -377,17 +377,7 @@ inline void CheckMSPSerial()
 //// ************************************************************************************************************
 //// ************************************************************************************************************
 
-// Rates globals - add these as global variables
-uint8_t Rates_Type;
-float Roll_Centre_Rate, Roll_Expo, Roll_Max_Rate;
-float Pitch_Centre_Rate, Pitch_Expo, Pitch_Max_Rate;
-float Yaw_Centre_Rate, Yaw_Expo, Yaw_Max_Rate;
-float Collective_Centre_Rate, Collective_Expo, Collective_Max_Rate;
-uint8_t Roll_Response_Time, Pitch_Response_Time, Yaw_Response_Time, Collective_Response_Time;
-uint16_t Roll_Accel_Limit, Pitch_Accel_Limit, Yaw_Accel_Limit, Collective_Accel_Limit;
-uint8_t Roll_Setpoint_Boost_Gain, Roll_Setpoint_Boost_Cutoff, Pitch_Setpoint_Boost_Gain, Pitch_Setpoint_Boost_Cutoff;
-uint8_t Yaw_Setpoint_Boost_Gain, Yaw_Setpoint_Boost_Cutoff, Collective_Setpoint_Boost_Gain, Collective_Setpoint_Boost_Cutoff;
-uint8_t Yaw_Dynamic_Ceiling_Gain, Yaw_Dynamic_Deadband_Gain, Yaw_Dynamic_Deadband_Filter;
+// this code will read all of the parameters, allow editing for some of them, and then write all of them.
 
 inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
 {
@@ -403,29 +393,28 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
         return false;
     const uint8_t *p = f.payload;
     uint8_t offset = 0;
-    Rates_Type = p[offset++];                            // Banner
-    Roll_Centre_Rate = (float)p[offset++] * 10.0f;       // n0
-    Roll_Expo = (float)p[offset++] / 100.0f;             // n2
-    Roll_Max_Rate = (float)p[offset++] * 10.0f;          // n1
-    Roll_Response_Time = p[offset++];                    // not yet used
-    Roll_Accel_Limit = p[offset] | (p[offset + 1] << 8); // not yet used
-    offset += 2;
-    Pitch_Centre_Rate = (float)p[offset++] * 10.0f; // n3
-    Pitch_Expo = (float)p[offset++] / 100.0f;       // n5
-    Pitch_Max_Rate = (float)p[offset++] * 10.0f;    // n4
-    Pitch_Response_Time = p[offset++];
-    Pitch_Accel_Limit = p[offset] | (p[offset + 1] << 8);
-    offset += 2;
-    Yaw_Centre_Rate = (float)p[offset++] * 10.0f;
-    Yaw_Expo = (float)p[offset++] / 100.0f;
-    Yaw_Max_Rate = (float)p[offset++] * 10.0f;
-    Yaw_Response_Time = p[offset++];
-    Yaw_Accel_Limit = p[offset] | (p[offset + 1] << 8);
-    offset += 2;
-
-    Collective_Centre_Rate = (float)p[offset++] / 4.0f;
-    Collective_Expo = (float)p[offset++] / 100.0f;
-    Collective_Max_Rate = (float)p[offset++] / 4.0f; // If matches 48, fine; if needs 12, change to *1.0f
+    Rates_Type = p[offset++];                             // Banner
+    Roll_Centre_Rate = (float)p[offset++];                // * 10 - n0
+    Roll_Expo = (float)p[offset++];                       // / 100.0f - n2
+    Roll_Max_Rate = (float)p[offset++];                   // * 10.0f - n1
+    Roll_Response_Time = p[offset++];                     // not yet used
+    Roll_Accel_Limit = p[offset] | (p[offset + 1] << 8);  // not yet used
+    offset += 2;                                          // ---
+    Pitch_Centre_Rate = (float)p[offset++];               //  * 10.0f; // n3
+    Pitch_Expo = (float)p[offset++];                      // / 100.0f; // n5
+    Pitch_Max_Rate = (float)p[offset++];                  // * 10.0f;    // n4
+    Pitch_Response_Time = p[offset++];                    // not yet used
+    Pitch_Accel_Limit = p[offset] | (p[offset + 1] << 8); // not yet used
+    offset += 2;                                          // ---
+    Yaw_Centre_Rate = (float)p[offset++];                 // * 10.0f;
+    Yaw_Expo = (float)p[offset++];                        // / 100.0f;
+    Yaw_Max_Rate = (float)p[offset++];                    // * 10.0f;
+    Yaw_Response_Time = p[offset++];                      // not yet used
+    Yaw_Accel_Limit = p[offset] | (p[offset + 1] << 8);   // not yet used
+    offset += 2;                                          // ---
+    Collective_Centre_Rate = (float)p[offset++];          // / 4.0f;
+    Collective_Expo = (float)p[offset++];                 // / 100.0f;
+    Collective_Max_Rate = (float)p[offset++];             // / 4.0f
 
     Collective_Response_Time = p[offset++];
     Collective_Accel_Limit = p[offset] | (p[offset + 1] << 8);
@@ -450,13 +439,13 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
     Look(RF_RateTypes[Rates_Type]);
 
     Look1("Roll Centre Rate: ");
-    Look(Roll_Centre_Rate);
+    Look(Roll_Centre_Rate * 10);
 
     Look1("Roll MAX Rate: ");
-    Look(Roll_Max_Rate);
+    Look(Roll_Max_Rate * 10);
 
     Look1("Roll Expo: ");
-    Look(Roll_Expo);
+    Look((float)Roll_Expo / 100.0f);
 
     Look("");
     // Look1("Roll Response Time: ");
@@ -464,24 +453,24 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
     // Look1("Roll Accel Limit: ");
     // Look(Roll_Accel_Limit);
     Look1("Pitch Centre Rate: ");
-    Look(Pitch_Centre_Rate);
+    Look(Pitch_Centre_Rate * 10.0f);
     Look1("Pitch Max Rate: ");
-    Look(Pitch_Max_Rate);
+    Look(Pitch_Max_Rate * 10);
     Look1("Pitch Expo: ");
-    Look(Pitch_Expo);
+    Look((float)Pitch_Expo / 100.0f);
     Look("");
 
-    //  Look1("Pitch Response Time: ");
-    //  Look(Pitch_Response_Time);
+    // Look1("Pitch Response Time: ");
+    // Look(Pitch_Response_Time);
     // Look1("Pitch Accel Limit: ");
     // Look(Pitch_Accel_Limit);
 
     Look1("Yaw Centre Rate: ");
-    Look(Yaw_Centre_Rate);
+    Look(Yaw_Centre_Rate * 10);
     Look1("Yaw Max Rate: ");
-    Look(Yaw_Max_Rate);
+    Look(Yaw_Max_Rate * 10);
     Look1("Yaw Expo: ");
-    Look(Yaw_Expo);
+    Look((float)Yaw_Expo / 100.0f);
     Look("");
 
     //  Look1("Yaw Response Time: ");
@@ -490,11 +479,11 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
     //  Look(Yaw_Accel_Limit);
 
     Look1("Collective Centre Rate: ");
-    Look(Collective_Centre_Rate);
+    Look((float)Collective_Centre_Rate / 4.00f);
     Look1("Collective MAX Rate: ");
-    Look(Collective_Max_Rate);
+    Look((float)Collective_Max_Rate / 4.00f);
     Look1("Collective Expo: ");
-    Look(Collective_Expo);
+    Look((float)Collective_Expo / 100.0f);
     Look("");
 
     // Look1("Collective Response Time: ");
