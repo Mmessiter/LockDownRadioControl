@@ -343,7 +343,7 @@ inline void CheckMSPSerial()
     {
         SendRotorFlightParametresNow = SEND_NO_RF;
     }
-    SendRotorFlightParametresNow = SEND_RATES_RF; // force for testing...
+  //  SendRotorFlightParametresNow = SEND_RATES_RF; // force for testing...
 
     if (SendRotorFlightParametresNow) // ******************** HEER!!! ***********************************************
     {
@@ -365,6 +365,27 @@ inline void CheckMSPSerial()
         Parse_MSP_Motor_Telemetry(&data_in[0], p);
         RequestFromMSP(MSP_MOTOR_TELEMETRY); // parse reply next time around
     }
+}
+
+
+// ************************************************************************************************************
+// Store the currently used rates bytes ready for ack payload
+// ************************************************************************************************************
+ 
+void StoreRatesBytesForAckPayload(){
+    RatesBytes[0] = Rates_Type;
+    RatesBytes[1] = Roll_Centre_Rate;
+    RatesBytes[2] = Roll_Max_Rate;
+    RatesBytes[3] = Roll_Expo;
+    RatesBytes[4] = Pitch_Centre_Rate;
+    RatesBytes[5] = Pitch_Max_Rate;
+    RatesBytes[6] = Pitch_Expo;
+    RatesBytes[7] = Yaw_Centre_Rate;
+    RatesBytes[8] = Yaw_Max_Rate;
+    RatesBytes[9] = Yaw_Expo;
+    RatesBytes[10] = Collective_Centre_Rate;
+    RatesBytes[11] = Collective_Max_Rate;
+    RatesBytes[12] = Collective_Expo; 
 }
 
 //// ************************************************************************************************************
@@ -397,27 +418,27 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
     const uint8_t *p = f.payload;
     uint8_t offset = 0;
     Rates_Type = p[offset++];                             // Banner
-    Roll_Centre_Rate = p[offset++];                       // * 10 - n0
-    Roll_Expo = p[offset++];                              // / 100.0f - n2
-    Roll_Max_Rate = p[offset++];                          // * 10.0f - n1
+    Roll_Centre_Rate = p[offset++];                       // * 10         - n0
+    Roll_Expo = p[offset++];                              // / 100.0f     - n2
+    Roll_Max_Rate = p[offset++];                          // * 10.0f      - n1
     Roll_Response_Time = p[offset++];                     // not yet used
     Roll_Accel_Limit = p[offset] | (p[offset + 1] << 8);  // not yet used
     offset += 2;                                          // ---
-    Pitch_Centre_Rate = p[offset++];                      //  * 10.0f; // n3
-    Pitch_Expo = p[offset++];                             // / 100.0f; // n5
-    Pitch_Max_Rate = p[offset++];                         // * 10.0f;    // n4
+    Pitch_Centre_Rate = p[offset++];                      //  * 10.0f;    - n3
+    Pitch_Expo = p[offset++];                             // / 100.0f;    - n5
+    Pitch_Max_Rate = p[offset++];                         // * 10.0f;     - n4
     Pitch_Response_Time = p[offset++];                    // not yet used
     Pitch_Accel_Limit = p[offset] | (p[offset + 1] << 8); // not yet used
     offset += 2;                                          // ---
-    Yaw_Centre_Rate = p[offset++];                        // * 10.0f;
-    Yaw_Expo = p[offset++];                               // / 100.0f;
-    Yaw_Max_Rate = p[offset++];                           // * 10.0f;
+    Yaw_Centre_Rate = p[offset++];                        // * 10.0f       - n6
+    Yaw_Expo = p[offset++];                               // / 100.0f      - n8 
+    Yaw_Max_Rate = p[offset++];                           // * 10.0f       - n7
     Yaw_Response_Time = p[offset++];                      // not yet used
     Yaw_Accel_Limit = p[offset] | (p[offset + 1] << 8);   // not yet used
     offset += 2;                                          // ---
-    Collective_Centre_Rate = p[offset++];                 // / 4.0f;
-    Collective_Expo = p[offset++];                        // / 100.0f;
-    Collective_Max_Rate = p[offset++];                    // / 4.0f
+    Collective_Centre_Rate = p[offset++];                 // / 4.0f        - n9
+    Collective_Expo = p[offset++];                        // / 100.0f      - n11
+    Collective_Max_Rate = p[offset++];                    // / 4.0f        - n10
 
     Collective_Response_Time = p[offset++];
     Collective_Accel_Limit = p[offset] | (p[offset + 1] << 8);
@@ -436,6 +457,8 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
         Yaw_Dynamic_Deadband_Gain = p[offset++];
         Yaw_Dynamic_Deadband_Filter = p[offset++];
     }
+
+    StoreRatesBytesForAckPayload();
 
     Look("---- Nexus RC Tuning Values ----");
     Look1("Rates Type: ");

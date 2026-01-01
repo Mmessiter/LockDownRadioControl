@@ -649,6 +649,19 @@ void SendDateToAckPayload()
     AckPayload.Ack_Payload_byte[2] = MonthGPS;
     AckPayload.Ack_Payload_byte[3] = YearGPS;
 }
+// ************************************************************************************************************
+
+void Send_4_Rates_Bytes(uint8_t n) // send next 4 bytes from RatesBytes array
+{
+    for (uint8_t i = 0; i < 4; ++i)
+    {
+        if ((i + n) <= MAX_RATES_BYTES - 1) // avoid overflow
+        {
+            AckPayload.Ack_Payload_byte[i + 1] = RatesBytes[i + n];
+        }
+    }
+}
+
 // **********************************************************************************************************
 void Send_2_x_uint16_t(uint16_t v1, uint16_t v2) // sends two x uint16_ts
 {
@@ -819,11 +832,13 @@ void LoadAckPayload()
         {
             switch (SendRotorFlightParametresNow)
             {
-            case SEND_PID_RF:
+            case SEND_NO_RF: // 0
+                break;
+            case SEND_PID_RF: // 1
                 Send_2_x_uint16_t(PID_Roll_P, PID_Roll_I);
                 break;
-            case SEND_RATES_RF:
-              //  Look("TEST");
+            case SEND_RATES_RF: // 2
+                Send_4_Rates_Bytes(0);
                 break;
             }
             break;
@@ -835,9 +850,19 @@ void LoadAckPayload()
         }
         else // Roll D & Roll FF
         {
-            Send_2_x_uint16_t(PID_Roll_D, PID_Roll_FF);
+            switch (SendRotorFlightParametresNow)
+            {
+            case SEND_NO_RF: // 0
+                break;
+            case SEND_PID_RF: // 1
+                Send_2_x_uint16_t(PID_Roll_D, PID_Roll_FF);
+                break;
+            case SEND_RATES_RF: // 2
+                Send_4_Rates_Bytes(4);
+                break;
+            }
+            break;
         }
-        break;
     case 10:
         if (GpsFix)
         {
@@ -845,9 +870,19 @@ void LoadAckPayload()
         }
         else // Pitch P & Pitch I
         {
-            Send_2_x_uint16_t(PID_Pitch_P, PID_Pitch_I);
+            switch (SendRotorFlightParametresNow)
+            {
+            case SEND_NO_RF: // 0
+                break;
+            case SEND_PID_RF: // 1
+                Send_2_x_uint16_t(PID_Pitch_P, PID_Pitch_I);
+                break;
+            case SEND_RATES_RF: // 2
+                Send_4_Rates_Bytes(8);
+                break;
+            }
+            break;
         }
-        break;
     case 11:
         if (GpsFix)
         {
@@ -855,7 +890,17 @@ void LoadAckPayload()
         }
         else // Pitch D & Pitch FF
         {
-            Send_2_x_uint16_t(PID_Pitch_D, PID_Pitch_FF);
+            switch (SendRotorFlightParametresNow)
+            {
+            case SEND_NO_RF: // 0
+                break;
+            case SEND_PID_RF: // 1
+                Send_2_x_uint16_t(PID_Pitch_D, PID_Pitch_FF);
+                break;
+            case SEND_RATES_RF: // 2
+                Send_4_Rates_Bytes(12);
+                break; 
+            }
         }
         break;
     case 12:
