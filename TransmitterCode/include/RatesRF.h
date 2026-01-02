@@ -13,6 +13,8 @@ float FixFactor(uint8_t val, uint8_t i)
 
     switch (i)
     {
+    case 0:
+        return ((float)val);
     case 1:
         return ((float)val) * 10;
     case 2:
@@ -44,21 +46,21 @@ float FixFactor(uint8_t val, uint8_t i)
 }
 
 // ************************************************************************************************************/
-void DisplayFourRatesValues(uint8_t startIndex)
+void DisplayRatesValues(uint8_t startIndex, uint8_t stopIndex)
 {
-    for (uint8_t i = 0; i < 4; ++i)
+    for (uint8_t i = startIndex; i < stopIndex; ++i)
     {
-        if ((startIndex + i) < 14)
+        if (i < 14)
         {
-            if ((startIndex + i) == 0)
+            if (i == 0)
             {
                 SendText(RatesWindows[0], Rate_Types[Rate_Values[0]]); // Show rate type
                 continue;
             }
             char buf[10];
-            float ThisValue = FixFactor(Rate_Values[startIndex + i], i);
+            float ThisValue = FixFactor(Rate_Values[i], i);
             snprintf(buf, sizeof(buf), "%.2f", ThisValue);
-            SendText(RatesWindows[startIndex+i], buf);
+            SendText(RatesWindows[i], buf);
         }
     }
 }
@@ -66,7 +68,7 @@ void DisplayFourRatesValues(uint8_t startIndex)
 // ********************************************************************************************************
 void ForegroundColourRATESLabels(uint16_t Colour)
 {
-    for (int i = 1; i < 12; ++i)
+    for (int i = 1; i < 13; ++i)
     {
         SendForegroundColour(RatesWindows[i], Colour);
     }

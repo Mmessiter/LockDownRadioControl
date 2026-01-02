@@ -753,13 +753,14 @@ void StartRatesView();
 void EndRatesView();
 void Rates_Were_edited();
 void SendEditedRates();
-void DisplayFourRatesValues(uint8_t startIndex);
+void DisplayRatesValues(uint8_t startIndex, uint8_t stopIndex);
+void ReadRatesBytesFromAckPayload(uint8_t n, uint8_t m);
 
-    // **************************************************************************
-    //                            GLOBAL DATA                                   *
-    //***************************************************************************
+// **************************************************************************
+//                            GLOBAL DATA                                   *
+//***************************************************************************
 
-    RF24 Radio1(CE_PIN, CSN_PIN);
+RF24 Radio1(CE_PIN, CSN_PIN);
 
 /************************************************************************************************************/
 /************************************************************************************************************/

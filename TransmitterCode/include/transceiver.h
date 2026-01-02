@@ -901,15 +901,18 @@ void ShowAmpsBeingUsed(float amps)
     SendText((char *)"StillConnected", AmpsBeingUsed);
 }
 // ******************************************************************************************
-void ReadFourRatesBytesFromAckPayload(uint8_t startIndex)
+void ReadRatesBytesFromAckPayload(uint8_t n, uint8_t m)
 {
-    for (uint8_t i = 0; i < 4; ++i)
+    uint8_t p = 0;
+    for (uint8_t i = n; i < m; ++i)
     {
-        if ((startIndex + i) < 14)
+        if (i < 14)
         {
-            Rate_Values[startIndex + i] = AckPayload.Ack_Payload_byte[i + 1];
+            Rate_Values[i] = AckPayload.Ack_Payload_byte[p + 1];
+            ++p;
         }
     }
+    DisplayRatesValues(n, m);
 }
 
 /************************************************************************************************************/
@@ -997,8 +1000,7 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
             }
             if (Reading_RATES_Now)
             {
-                ReadFourRatesBytesFromAckPayload(0);
-                DisplayFourRatesValues(0);
+                ReadRatesBytesFromAckPayload(0, 4);
             }
         }
         break;
@@ -1017,8 +1019,7 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
             }
             if (Reading_RATES_Now)
             {
-                   ReadFourRatesBytesFromAckPayload(4);
-                   DisplayFourRatesValues(3);
+                ReadRatesBytesFromAckPayload(4, 7);
             }
         }
         break;
@@ -1037,7 +1038,7 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
             }
             if (Reading_RATES_Now)
             {
-                //  ReadFourRatesBytesFromAckPayload(8);
+                ReadRatesBytesFromAckPayload(7, 11);
             }
         }
         break;
@@ -1058,7 +1059,7 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
             }
             if (Reading_RATES_Now)
             {
-                // ReadFourRatesBytesFromAckPayload(12);
+                ReadRatesBytesFromAckPayload(11, 14);
             }
         }
         break;
