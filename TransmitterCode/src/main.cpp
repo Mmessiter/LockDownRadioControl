@@ -3330,8 +3330,8 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     EndPIDView,           // 21
     StartRatesView,       // 22
     EndRatesView,         // 23
-    Blank,                // 24
-    Blank,                // 25
+    Rates_Were_edited,    // 24
+    SendEditedRates,      // 25
     Blank,                // 26
     Blank                 // 27
 };

@@ -91,6 +91,7 @@ void ReadExtraParameters()
             SendRotorFlightParametresNow = SEND_PID_RF;
             Started_Sending_PIDs = millis();
             PID_Send_Duration = Parameters.word[2];
+           // Look("Request to send PID values received");
         }
         break;
 
@@ -119,6 +120,15 @@ void ReadExtraParameters()
         if (pidsLookValid(All_PIDs))
             WritePIDsToNexusAndSave(All_PIDs);
 
+        break;
+
+    case SEND_RATES_VALUES: // 12
+        if (!Rotorflight22Detected)
+            break;
+        SendRotorFlightParametresNow = SEND_RATES_RF; // send rates now =2
+        Started_Sending_RATEs = millis();
+        RATES_Send_Duration = Parameters.word[2];
+       // Look("Request to send RATES values received");
         break;
     default:
         break;

@@ -343,7 +343,8 @@ inline void CheckMSPSerial()
     {
         SendRotorFlightParametresNow = SEND_NO_RF;
     }
-  //  SendRotorFlightParametresNow = SEND_RATES_RF; // force for testing...
+    
+   // SendRotorFlightParametresNow = SEND_RATES_RF; // force for testing...
 
     if (SendRotorFlightParametresNow) // ******************** HEER!!! ***********************************************
     {

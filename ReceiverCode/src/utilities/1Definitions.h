@@ -123,7 +123,8 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define SEND_PID_VALUES 9
 #define GET_FIRST_6_PID_VALUES 10
 #define GET_SECOND_6_PID_VALUES 11
-#define PARAMETERS_MAX_ID 12 // Max types of parameters packet to send  ... will increase.
+#define SEND_RATES_VALUES 12
+#define PARAMETERS_MAX_ID 13 // Max types of parameters packet to send  ... will increase.
 
 // **************************************************************************
 //                             Rotorflight Definitions                      *
@@ -381,6 +382,7 @@ float ESC_Temp_C = 0.0f; // ESC temperature in degrees C
 uint16_t api100 = 0; // API version as integer 12.08 -> 1208
 uint8_t SendRotorFlightParametresNow = 0;
 uint32_t Started_Sending_PIDs = 0;
+uint32_t Started_Sending_RATEs = 0;
 
 uint16_t PID_Roll_P;
 uint16_t PID_Roll_I;
@@ -397,6 +399,7 @@ uint16_t PID_Yaw_FF;
 uint16_t All_PIDs[12];
 
 uint16_t PID_Send_Duration = 1000;
+uint16_t RATES_Send_Duration = 1000;
 
 char RF_RateTypes[6][15] = {
     "None",

@@ -839,6 +839,7 @@ void LoadAckPayload()
                 break;
             case SEND_RATES_RF: // 2
                 Send_4_Rates_Bytes(0);
+            //Look("Sent Rates 0-3");
                 break;
             }
             break;
@@ -859,6 +860,7 @@ void LoadAckPayload()
                 break;
             case SEND_RATES_RF: // 2
                 Send_4_Rates_Bytes(4);
+               // Look("Sent Rates 4-7");
                 break;
             }
             break;
@@ -879,6 +881,7 @@ void LoadAckPayload()
                 break;
             case SEND_RATES_RF: // 2
                 Send_4_Rates_Bytes(8);
+                //Look("Sent Rates 8-11");
                 break;
             }
             break;
@@ -899,6 +902,7 @@ void LoadAckPayload()
                 break;
             case SEND_RATES_RF: // 2
                 Send_4_Rates_Bytes(12);
+               // Look("Sent Rates 12-?");
                 break; 
             }
         }

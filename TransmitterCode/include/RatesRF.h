@@ -1,13 +1,85 @@
 // This file handles rates for Rotorflight
-#include <Arduino.h>
-#include "1Definitions.h"
-    
-
-
-
 #ifndef RATESRF_H
 #define RATESRF_H
+#include <Arduino.h>
+#include "1Definitions.h"
 
-#endif //RATESRF_H
+char RatesWindows[12][5] = {"tn0", "tn1", "tn2", "tn3", "tn4", "tn5", "tn6", "tn7", "tn8", "tn9", "tn10", "tn11"};
 
+// ********************************************************************************************************
+void ForegroundColourRATESLabels(uint16_t Colour)
+{
+    for (int i = 0; i < 12; ++i)
+    {
+        SendForegroundColour(RatesWindows[i], Colour);
+    }
+}
+// ********************************************************************************************************
+void RatesMsg(const char *msg, uint16_t Colour)
+{
+    if (CurrentView == RATESVIEW1) // Must be in RATES view
+    {
+        ForegroundColourRATESLabels(Colour);   // make text white so it isnt visible
+        SendText((char *)"busy", (char *)msg); // Show RATES message
+        SendCommand((char *)"vis busy,1");     // Make it visible
+        SendCommand((char *)"vis b3,0");       // hide "Send" button
+    }
+}
+
+// ******************************************************************************************************************************/
+
+void ShowRatesBank()
+{
+    char buf[40];
+    if (LedWasGreen)
+    {
+        snprintf(buf, sizeof(buf), "Loading RATESs for Bank %d ...", Bank);
+    }
+    else
+    {
+        snprintf(buf, sizeof(buf), "Model is not connected!");
+    }
+    RatesMsg(buf, Gray);
+    RATES_Send_Duration = 1000;                   // how many milliseconds to await RATES values
+    Reading_RATES_Now = true;                     // This tells the Ack payload parser to get RATES values
+    AddParameterstoQueue(SEND_RATES_VALUES);      // Request RATES values from RX
+    snprintf(buf, sizeof(buf), "Bank: %d", Bank); // Display which Bank
+    SendText((char *)"t9", buf);                  // Show bank number etc
+    Rates_Were_Edited = false;                    // reset edited flag
+    RATES_Start_Time = millis();                  // record start time as it's not long
+}
+
+// ******************************************************************************************************************************/
+void StartRatesView()
+{
+    if (!SafetyON)
+    {
+        MsgBox(RXOptionsView, (char *)"Please enable 'Safety'!");
+        return;
+    }
+    SendCommand((char *)"page RatesView");
+    CurrentView = RATESVIEW1;
+    ShowRatesBank();                    // Show the current bank's RATES
+    SendText((char *)"t11", ModelName); // Show model name
+    Rates_Were_Edited = false;
+}
+// ******************************************************************************************************************************/
+void EndRatesView()
+{
+    Rates_Were_Edited = false;
+    SendCommand((char *)"page RXOptionsView");
+}
+// ************************************************************************************************************/
+void Rates_Were_edited()
+{
+    // SendCommand((char *)"vis b3,1"); // show "Send" button
+    Rates_Were_Edited = true;
+}
+// ************************************************************************************************************/
+void SendEditedRates()
+{
+    Rates_Were_Edited = false;
+}
+#endif
+// RATESRF_H
 // ************************************************************************************************************/
