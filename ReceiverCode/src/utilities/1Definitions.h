@@ -27,8 +27,8 @@
 // These options can be enabled or disabled as needed.
 
 #define USE_BOTTOM_SOLDER_PADS_FOR_SERIAL6 // Uncomment this line to use Serial6 on the bottom solder pads for MSP communication with Nexus Rotorflight22 etc.
-#define USE_SBUS // Enable SBUS output
-#define USE_PWM  // Enable PWM output
+#define USE_SBUS                           // Enable SBUS output
+#define USE_PWM                            // Enable PWM output
 
 // **************************************************************************
 
@@ -123,7 +123,15 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define SEND_PID_VALUES 9
 #define GET_FIRST_6_PID_VALUES 10
 #define GET_SECOND_6_PID_VALUES 11
-#define PARAMETERS_MAX_ID 12 // Max types of parameters packet to send  ... will increase.
+#define SEND_RATES_VALUES 12
+#define PARAMETERS_MAX_ID 13 // Max types of parameters packet to send  ... will increase.
+
+// **************************************************************************
+//                             Rotorflight Definitions                      *
+// **************************************************************************
+#define SEND_NO_RF 0
+#define SEND_PID_RF 1
+#define SEND_RATES_RF 2
 
 // ****************************************************************************************************************************************
 #define PIN_CE1 22   // NRF1 for new rxs with 11 pwm outputs
@@ -257,10 +265,10 @@ void DebugPIDValues(char const *msg);
 inline void WritePIDsToNexusAndSave(const uint16_t pid[12]);
 inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n);
 
-    /************************************************************************************************************/
-    // For numeric types (int, float, double, etc.)
-    template <typename T>
-    void Look(const T &value, int format)
+/************************************************************************************************************/
+// For numeric types (int, float, double, etc.)
+template <typename T>
+void Look(const T &value, int format)
 {
     Serial.println(value, format);
 }
@@ -359,18 +367,22 @@ bool DPS310Connected = false;
 uint16_t DPS310Address = 0x76; // DPS310 I2C address
 bool BindPlugInserted = false; // Bind plug inserted or not
 uint8_t ReceiveTimeout = 10;   // this gets adjusted later
+
+uint8_t Servos_Used = 9; // default to 9 servos used
+uint8_t Receiver_Type = 0;
+// *************************************************************************************************************************
+// Rotorflight API and MSP protocol version variables
+// *************************************************************************************************************************
 bool Rotorflight22Detected = false;
 float PackVoltage;
 float Battery_Amps = 0;
 float Battery_mAh = 0;
 float ESC_Temp_C = 0.0f; // ESC temperature in degrees C
 
-uint8_t Servos_Used = 9; // default to 9 servos used
-uint8_t Receiver_Type = 0;
-
 uint16_t api100 = 0; // API version as integer 12.08 -> 1208
-bool SendPIDsNow = false;
+uint8_t SendRotorFlightParametresNow = 0;
 uint32_t Started_Sending_PIDs = 0;
+uint32_t Started_Sending_RATEs = 0;
 
 uint16_t PID_Roll_P;
 uint16_t PID_Roll_I;
@@ -387,6 +399,30 @@ uint16_t PID_Yaw_FF;
 uint16_t All_PIDs[12];
 
 uint16_t PID_Send_Duration = 1000;
+uint16_t RATES_Send_Duration = 1000;
+
+char RF_RateTypes[6][15] = {
+    "None",
+    "Betatflight",
+    "Raceflight",
+    "KISS",
+    "Actual",
+    "QuickRates"};
+
+uint8_t Rates_Type;
+
+
+uint8_t Roll_Centre_Rate, Roll_Expo, Roll_Max_Rate;
+uint8_t Pitch_Centre_Rate, Pitch_Expo, Pitch_Max_Rate;
+uint8_t Yaw_Centre_Rate, Yaw_Expo, Yaw_Max_Rate;
+uint8_t Collective_Centre_Rate, Collective_Expo, Collective_Max_Rate;
+uint8_t Roll_Response_Time, Pitch_Response_Time, Yaw_Response_Time, Collective_Response_Time;
+uint16_t Roll_Accel_Limit, Pitch_Accel_Limit, Yaw_Accel_Limit, Collective_Accel_Limit;
+uint8_t Roll_Setpoint_Boost_Gain, Roll_Setpoint_Boost_Cutoff, Pitch_Setpoint_Boost_Gain, Pitch_Setpoint_Boost_Cutoff;
+uint8_t Yaw_Setpoint_Boost_Gain, Yaw_Setpoint_Boost_Cutoff, Collective_Setpoint_Boost_Gain, Collective_Setpoint_Boost_Cutoff;
+uint8_t Yaw_Dynamic_Ceiling_Gain, Yaw_Dynamic_Deadband_Gain, Yaw_Dynamic_Deadband_Filter;
+#define MAX_RATES_BYTES 13
+uint8_t RatesBytes[MAX_RATES_BYTES]; // 13 bytes to store rates for ack payload
 
 bool BoundFlag = false; /** indicates if receiver paired with transmitter */
 
