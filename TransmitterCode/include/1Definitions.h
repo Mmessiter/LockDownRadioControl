@@ -753,12 +753,13 @@ void StartRatesView();
 void EndRatesView();
 void Rates_Were_edited();
 void SendEditedRates();
+void DisplayFourRatesValues(uint8_t startIndex);
 
-// **************************************************************************
-//                            GLOBAL DATA                                   *
-//***************************************************************************
+    // **************************************************************************
+    //                            GLOBAL DATA                                   *
+    //***************************************************************************
 
-RF24 Radio1(CE_PIN, CSN_PIN);
+    RF24 Radio1(CE_PIN, CSN_PIN);
 
 /************************************************************************************************************/
 /************************************************************************************************************/
@@ -1349,6 +1350,8 @@ uint32_t PID_Start_Time = 0;
 uint32_t RATES_Start_Time = 0;
 bool Reading_PIDS_Now = false;
 bool Reading_RATES_Now = false;
+uint8_t Rate_Values[14];
+char Rate_Types[6][15] = {"None", "Betaflight", "Raceflight","KISS", "Actual","QuickRates"};
 
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 

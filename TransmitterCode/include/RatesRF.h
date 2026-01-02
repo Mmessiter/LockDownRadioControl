@@ -4,12 +4,69 @@
 #include <Arduino.h>
 #include "1Definitions.h"
 
-char RatesWindows[12][5] = {"tn0", "tn1", "tn2", "tn3", "tn4", "tn5", "tn6", "tn7", "tn8", "tn9", "tn10", "tn11"};
+char RatesWindows[14][5] = {"t10", "tn0", "tn1", "tn2", "tn3", "tn4", "tn5", "tn6", "tn7", "tn8", "tn9", "tn10", "tn11", "tn12"};
+
+// ************************************************************************************************************/
+
+float FixFactor(uint8_t val, uint8_t i)
+{
+
+    switch (i)
+    {
+    case 1:
+        return ((float)val) * 10;
+    case 2:
+        return ((float)val) * 10;
+    case 3:
+        return ((float)val) / 100;
+    case 4:
+        return ((float)val) * 10;
+    case 5:
+        return ((float)val) * 10;
+    case 6:
+        return ((float)val) / 100;
+    case 7:
+        return ((float)val) * 10;
+    case 8:
+        return ((float)val) * 10;
+    case 9:
+        return ((float)val) / 100;
+    case 10:
+        return ((float)val) / 4.0;
+    case 11:
+        return ((float)val) / 4.0;
+    case 12:
+        return ((float)val) / 100;
+
+    default:
+        return ((float)1111);
+    }
+}
+
+// ************************************************************************************************************/
+void DisplayFourRatesValues(uint8_t startIndex)
+{
+    for (uint8_t i = 0; i < 4; ++i)
+    {
+        if ((startIndex + i) < 14)
+        {
+            if ((startIndex + i) == 0)
+            {
+                SendText(RatesWindows[0], Rate_Types[Rate_Values[0]]); // Show rate type
+                continue;
+            }
+            char buf[10];
+            float ThisValue = FixFactor(Rate_Values[startIndex + i], i);
+            snprintf(buf, sizeof(buf), "%.2f", ThisValue);
+            SendText(RatesWindows[startIndex+i], buf);
+        }
+    }
+}
 
 // ********************************************************************************************************
 void ForegroundColourRATESLabels(uint16_t Colour)
 {
-    for (int i = 0; i < 12; ++i)
+    for (int i = 1; i < 12; ++i)
     {
         SendForegroundColour(RatesWindows[i], Colour);
     }

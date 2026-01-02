@@ -900,6 +900,18 @@ void ShowAmpsBeingUsed(float amps)
     SendCommand(VisON);
     SendText((char *)"StillConnected", AmpsBeingUsed);
 }
+// ******************************************************************************************
+void ReadFourRatesBytesFromAckPayload(uint8_t startIndex)
+{
+    for (uint8_t i = 0; i < 4; ++i)
+    {
+        if ((startIndex + i) < 14)
+        {
+            Rate_Values[startIndex + i] = AckPayload.Ack_Payload_byte[i + 1];
+        }
+    }
+}
+
 /************************************************************************************************************/
 FASTRUN void ParseLongerAckPayload() // It's already pretty short!
 {
@@ -923,6 +935,14 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         {
             Reading_PIDS_Now = false;
             HidePIDMsg();
+        }
+    }
+    if (Reading_RATES_Now)
+    {
+        if ((millis() - RATES_Start_Time) > RATES_Send_Duration)
+        {
+            Reading_RATES_Now = false;
+            // HideRATESMsg();
         }
     }
 
@@ -975,6 +995,11 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
                 PID_Values[1] = GetSecondWordFromAckPayload(); // PID_Roll_I
                 Display2PIDValues(0);
             }
+            if (Reading_RATES_Now)
+            {
+                ReadFourRatesBytesFromAckPayload(0);
+                DisplayFourRatesValues(0);
+            }
         }
         break;
     case 9:
@@ -990,6 +1015,11 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
                 PID_Values[3] = GetSecondWordFromAckPayload(); // PID_Roll_FF
                 Display2PIDValues(2);
             }
+            if (Reading_RATES_Now)
+            {
+                   ReadFourRatesBytesFromAckPayload(4);
+                   DisplayFourRatesValues(3);
+            }
         }
         break;
     case 10:
@@ -1004,6 +1034,10 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
                 PID_Values[4] = GetFirstWordFromAckPayload();  // PID_Pitch_P
                 PID_Values[5] = GetSecondWordFromAckPayload(); // PID_Pitch_I
                 Display2PIDValues(4);
+            }
+            if (Reading_RATES_Now)
+            {
+                //  ReadFourRatesBytesFromAckPayload(8);
             }
         }
         break;
@@ -1021,6 +1055,10 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
                 PID_Values[6] = GetFirstWordFromAckPayload();  // PID_Pitch_D
                 PID_Values[7] = GetSecondWordFromAckPayload(); // PID_Pitch_FF
                 Display2PIDValues(6);
+            }
+            if (Reading_RATES_Now)
+            {
+                // ReadFourRatesBytesFromAckPayload(12);
             }
         }
         break;
@@ -1044,6 +1082,9 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
                 PID_Values[9] = GetSecondWordFromAckPayload(); // PID_Yaw_I
                 Display2PIDValues(8);
             }
+            // if (Reading_RATES_Now)
+            // {
+            // }
         }
         break;
     case 14:
@@ -1163,7 +1204,7 @@ FASTRUN void ProcessRecentCommsGap() // When we know there is time, process a re
     if (CurrentView == PIDVIEW)
     {
         ThisGap = 0; // ignore any gaps when in PID view
-        return; 
+        return;
     }
     ++GapCount;
     int i = 0;

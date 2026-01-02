@@ -19,7 +19,7 @@ void SendBackgroundColour(const char *label, uint16_t colour)
 // ********************************************************************************************************
 void SendForegroundColour(const char *label, uint16_t colour)
 {
-    char cmd[71];
+    char cmd[701];// big enough buffer?!
     snprintf(cmd, sizeof(cmd), "%s.pco=%u", label, (unsigned)colour);
     SendCommand(cmd);
 }
@@ -90,7 +90,7 @@ void ShowPIDBank() // this is called when bank is changed so new bank's PID valu
         }
         else
         {
-            snprintf(buf, sizeof(buf), "Model is not connected!");
+            snprintf(buf, sizeof(buf), "Model is not connected!");// Model not connected message
         }
         PIDMsg(buf, Gray);                            // Show loading message and hides old PIDs
         PID_Send_Duration = 1000;                     // how many milliseconds to await PID values
