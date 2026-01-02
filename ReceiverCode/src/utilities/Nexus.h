@@ -339,41 +339,45 @@ inline void CheckMSPSerial()
         data_in[p++] = MSP_UART.read();
     }
 
-    if ((millis() - Started_Sending_PIDs) > PID_Send_Duration)
+    if ((millis() - Started_Sending_PIDs > PID_Send_Duration) && (SendRotorFlightParametresNow == SEND_PID_RF))
     {
         SendRotorFlightParametresNow = SEND_NO_RF;
     }
-    
-   // SendRotorFlightParametresNow = SEND_RATES_RF; // force for testing...
 
-    if (SendRotorFlightParametresNow) // ******************** HEER!!! ***********************************************
+    if ((millis() - Started_Sending_RATEs > RATES_Send_Duration) && (SendRotorFlightParametresNow == SEND_RATES_RF))
     {
-        switch (SendRotorFlightParametresNow)
-        {
-        case SEND_PID_RF:
-            Parse_MSP_PID(data_in, p);
-            RequestFromMSP(MSP_PID); // parse reply next time around
-            break;
-
-        case SEND_RATES_RF:
-            Parse_MSP_RC_TUNING(data_in, p);
-            RequestFromMSP(MSP_RC_TUNING); // parse reply next time around
-            break;
-        }
+        SendRotorFlightParametresNow = SEND_NO_RF;
     }
-    else
+    switch (SendRotorFlightParametresNow)
     {
+    case SEND_NO_RF:
         Parse_MSP_Motor_Telemetry(&data_in[0], p);
         RequestFromMSP(MSP_MOTOR_TELEMETRY); // parse reply next time around
+      //  Look("No RF Send");
+        break;
+
+    case SEND_PID_RF:
+        Parse_MSP_PID(data_in, p);
+        RequestFromMSP(MSP_PID); // parse reply next time around
+     //   Look("PID");
+        break;
+
+    case SEND_RATES_RF:
+        Parse_MSP_RC_TUNING(data_in, p);
+        RequestFromMSP(MSP_RC_TUNING); // parse reply next time around
+      //  Look("RATES");
+        break;
+    default:
+        break;
     }
 }
-
 
 // ************************************************************************************************************
 // Store the currently used rates bytes ready for ack payload
 // ************************************************************************************************************
- 
-void StoreRatesBytesForAckPayload(){
+
+void StoreRatesBytesForAckPayload()
+{
     RatesBytes[0] = Rates_Type;
     RatesBytes[1] = Roll_Centre_Rate;
     RatesBytes[2] = Roll_Max_Rate;
@@ -386,7 +390,7 @@ void StoreRatesBytesForAckPayload(){
     RatesBytes[9] = Yaw_Expo;
     RatesBytes[10] = Collective_Centre_Rate;
     RatesBytes[11] = Collective_Max_Rate;
-    RatesBytes[12] = Collective_Expo; 
+    RatesBytes[12] = Collective_Expo;
 }
 
 //// ************************************************************************************************************
@@ -432,7 +436,7 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
     Pitch_Accel_Limit = p[offset] | (p[offset + 1] << 8); // not yet used
     offset += 2;                                          // ---
     Yaw_Centre_Rate = p[offset++];                        // * 10.0f       - n6
-    Yaw_Expo = p[offset++];                               // / 100.0f      - n8 
+    Yaw_Expo = p[offset++];                               // / 100.0f      - n8
     Yaw_Max_Rate = p[offset++];                           // * 10.0f       - n7
     Yaw_Response_Time = p[offset++];                      // not yet used
     Yaw_Accel_Limit = p[offset] | (p[offset + 1] << 8);   // not yet used
@@ -459,18 +463,17 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
         Yaw_Dynamic_Deadband_Filter = p[offset++];
     }
 
-    StoreRatesBytesForAckPayload();
+     StoreRatesBytesForAckPayload();
+
+    return true; // skip the rest for now
 
     Look("---- Nexus RC Tuning Values ----");
     Look1("Rates Type: ");
     Look(RF_RateTypes[Rates_Type]);
-
     Look1("Roll Centre Rate: ");
     Look(Roll_Centre_Rate * 10);
-
     Look1("Roll MAX Rate: ");
     Look(Roll_Max_Rate * 10);
-
     Look1("Roll Expo: ");
     Look((float)Roll_Expo / 100.0f);
 
