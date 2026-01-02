@@ -19,7 +19,7 @@ void SendBackgroundColour(const char *label, uint16_t colour)
 // ********************************************************************************************************
 void SendForegroundColour(const char *label, uint16_t colour)
 {
-    char cmd[64];
+    char cmd[71];
     snprintf(cmd, sizeof(cmd), "%s.pco=%u", label, (unsigned)colour);
     SendCommand(cmd);
 }
@@ -119,7 +119,7 @@ void EndPIDView()
     else
     {
         PIDS_Were_Edited = false;
-        GotoFrontView();
+        SendCommand((char *)"page RXOptionsView");
     }
 }
 /***********************************************************************************************************/

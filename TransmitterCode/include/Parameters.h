@@ -87,17 +87,22 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
     case GEAR_RATIO: // 8 = Gear Ratio
         EncodeAFloat(GearRatio);
     case SEND_PID_VALUES:
-        Parameters.word[1] = 321;               // confirms request for PID values
-        Parameters.word[2] = PID_Send_Duration; // 3 - how many seconds to send these
+        Parameters.word[1] = 321;               // Please send PID values
+        Parameters.word[2] = PID_Send_Duration; // 1000 - how many milliseconds to send these
         break;
-    case GET_FIRST_6_PID_VALUES: // 10 = Get first 6 PID values (TX->RX) (Because we cannot fit all 12 in one go)
+    case GET_FIRST_6_PID_VALUES: // 10 = I'm sending first 6 PID values (TX->RX) (Because we cannot fit all 12 in one go)
         for (int i = 0; i < 6; ++i)
             Parameters.word[i + 1] = PID_Values[i];
         break;
-    case GET_SECOND_6_PID_VALUES: // 11 = Get second 6 PID values (TX->RX) (Because we cannot fit all 12 in one go)
+    case GET_SECOND_6_PID_VALUES: // 11 = I'm sending second 6 PID values (TX->RX) (Because we cannot fit all 12 in one go)
         for (int i = 0; i < 6; ++i)
             Parameters.word[i + 1] = PID_Values[i + 6];
         break;
+    case SEND_RATES_VALUES: // 12 = Please send RATES values
+        Parameters.word[1] = 321;                 // confirms request for RATES values
+        Parameters.word[2] = RATES_Send_Duration; // 1000 - how many milliseconds to send these
+        break;
+
     default:
         break;
     }
@@ -145,7 +150,7 @@ int GetExtraParameters() // This gets extra parameters ready for sending and ret
     LoadOneParameter();
     LoadRawDataWithParameters();
     DataTosend.ChannelBitMask = 0; // IMPORTANT! This flag stops these data being seen as channel data at the RX!
-  //  DebugParamsOut();              // long
+                                   //  DebugParamsOut();              // long
     // Look1(Parameters.ID);
     // Look1(" ");
     //  Look(ParaNames[Parameters.ID - 1]); // brief
