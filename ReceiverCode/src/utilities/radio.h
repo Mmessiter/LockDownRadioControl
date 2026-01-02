@@ -657,7 +657,7 @@ void Send_4_Rates_Bytes(uint8_t n) // send next 4 bytes from RatesBytes array
     {
         if ((i + n) <= MAX_RATES_BYTES - 1) // avoid overflow
         {
-            AckPayload.Ack_Payload_byte[i + 1] = RatesBytes[i + n];
+            AckPayload.Ack_Payload_byte[i + 1] = RatesBytes[i + n]; // +1 because first byte is payload type
         }
     }
 }
@@ -839,7 +839,7 @@ void LoadAckPayload()
                 break;
             case SEND_RATES_RF: // 2
                 Send_4_Rates_Bytes(0);
-            //Look("Sent Rates 0-3");
+                // Look("Sent Rates 0-3");
                 break;
             }
             break;
@@ -860,7 +860,7 @@ void LoadAckPayload()
                 break;
             case SEND_RATES_RF: // 2
                 Send_4_Rates_Bytes(4);
-               // Look("Sent Rates 4-7");
+                // Look("Sent Rates 4-7");
                 break;
             }
             break;
@@ -881,7 +881,7 @@ void LoadAckPayload()
                 break;
             case SEND_RATES_RF: // 2
                 Send_4_Rates_Bytes(8);
-                //Look("Sent Rates 8-11");
+                // Look("Sent Rates 8-11");
                 break;
             }
             break;
@@ -902,8 +902,8 @@ void LoadAckPayload()
                 break;
             case SEND_RATES_RF: // 2
                 Send_4_Rates_Bytes(12);
-               // Look("Sent Rates 12-?");
-                break; 
+                // Look("Sent Rates 12-?");
+                break;
             }
         }
         break;
