@@ -421,7 +421,7 @@ uint16_t Roll_Accel_Limit, Pitch_Accel_Limit, Yaw_Accel_Limit, Collective_Accel_
 uint8_t Roll_Setpoint_Boost_Gain, Roll_Setpoint_Boost_Cutoff, Pitch_Setpoint_Boost_Gain, Pitch_Setpoint_Boost_Cutoff;
 uint8_t Yaw_Setpoint_Boost_Gain, Yaw_Setpoint_Boost_Cutoff, Collective_Setpoint_Boost_Gain, Collective_Setpoint_Boost_Cutoff;
 uint8_t Yaw_Dynamic_Ceiling_Gain, Yaw_Dynamic_Deadband_Gain, Yaw_Dynamic_Deadband_Filter;
-#define MAX_RATES_BYTES 13
+#define MAX_RATES_BYTES 14
 uint8_t RatesBytes[MAX_RATES_BYTES]; // 13 bytes to store rates for ack payload
 
 bool BoundFlag = false; /** indicates if receiver paired with transmitter */

@@ -651,13 +651,15 @@ void SendDateToAckPayload()
 }
 // ************************************************************************************************************
 
-void Send_4_Rates_Bytes(uint8_t n) // send next 4 bytes from RatesBytes array
+void Send_Rates_Bytes(uint8_t n,uint8_t m) // send next 4 bytes from RatesBytes array
 {
-    for (uint8_t i = 0; i < 4; ++i)
+    uint8_t p = 0;
+    for (uint8_t i = n; i < m; ++i)
     {
-        if ((i + n) <= MAX_RATES_BYTES - 1) // avoid overflow
+        if (i <= MAX_RATES_BYTES) // avoid overflow
         {
-            AckPayload.Ack_Payload_byte[i + 1] = RatesBytes[i + n]; // +1 because first byte is payload type
+            AckPayload.Ack_Payload_byte[p + 1] = RatesBytes[i]; 
+            ++p;
         }
     }
 }
@@ -838,8 +840,7 @@ void LoadAckPayload()
                 Send_2_x_uint16_t(PID_Roll_P, PID_Roll_I);
                 break;
             case SEND_RATES_RF: // 2
-                Send_4_Rates_Bytes(0);
-                // Look("Sent Rates 0-3");
+                Send_Rates_Bytes(0,4);
                 break;
             }
             break;
@@ -859,8 +860,7 @@ void LoadAckPayload()
                 Send_2_x_uint16_t(PID_Roll_D, PID_Roll_FF);
                 break;
             case SEND_RATES_RF: // 2
-                Send_4_Rates_Bytes(4);
-                // Look("Sent Rates 4-7");
+                Send_Rates_Bytes(4, 7);
                 break;
             }
             break;
@@ -880,8 +880,7 @@ void LoadAckPayload()
                 Send_2_x_uint16_t(PID_Pitch_P, PID_Pitch_I);
                 break;
             case SEND_RATES_RF: // 2
-                Send_4_Rates_Bytes(8);
-                // Look("Sent Rates 8-11");
+                Send_Rates_Bytes(7, 11);
                 break;
             }
             break;
@@ -901,8 +900,7 @@ void LoadAckPayload()
                 Send_2_x_uint16_t(PID_Pitch_D, PID_Pitch_FF);
                 break;
             case SEND_RATES_RF: // 2
-                Send_4_Rates_Bytes(12);
-                // Look("Sent Rates 12-?");
+                Send_Rates_Bytes(11, 14);
                 break;
             }
         }
