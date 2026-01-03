@@ -906,7 +906,7 @@ void ReadRatesBytesFromAckPayload(uint8_t n, uint8_t m)
     uint8_t p = 0;
     for (uint8_t i = n; i < m; ++i)
     {
-        if (i < 14)
+        if (i < MAX_RATES_BYTES)
         {
             Rate_Values[i] = AckPayload.Ack_Payload_byte[p + 1];
             ++p;
@@ -945,7 +945,7 @@ FASTRUN void ParseLongerAckPayload() // It's already pretty short!
         if ((millis() - RATES_Start_Time) > RATES_Send_Duration)
         {
             Reading_RATES_Now = false;
-            // HideRATESMsg();
+            HideRATESMsg();
         }
     }
 

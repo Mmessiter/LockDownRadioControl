@@ -745,6 +745,7 @@ void StartPIDView();
 void ShowPIDBank();
 void Display2PIDValues(uint8_t i);
 void HidePIDMsg();
+void HideRATESMsg();
 void SendColour(char *but, int Colour);
 void SendEditedPIDs();
 void PIDs_Were_edited();
@@ -1296,6 +1297,10 @@ char MAX_ESC_Temperature[10];
 char PID_Labels[12][4] = {"n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11"};
 bool PIDS_Were_Edited = false;
 bool Rates_Were_Edited = false;
+
+#define MAX_RATES_BYTES 14
+
+char RatesWindows[MAX_RATES_BYTES][5] = {"t10", "tn0", "tn1", "tn2", "tn3", "tn4", "tn5", "tn6", "tn7", "tn8", "tn9", "tn10", "tn11", "tn12"};
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

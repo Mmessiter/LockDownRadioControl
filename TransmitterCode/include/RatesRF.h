@@ -4,8 +4,6 @@
 #include <Arduino.h>
 #include "1Definitions.h"
 
-char RatesWindows[14][5] = {"t10", "tn0", "tn1", "tn2", "tn3", "tn4", "tn5", "tn6", "tn7", "tn8", "tn9", "tn10", "tn11", "tn12"};
-
 // ************************************************************************************************************/
 
 float FixFactor(uint8_t val, uint8_t i)
@@ -50,7 +48,7 @@ void DisplayRatesValues(uint8_t startIndex, uint8_t stopIndex)
 {
     for (uint8_t i = startIndex; i < stopIndex; ++i)
     {
-        if (i < 14)
+        if (i < MAX_RATES_BYTES)
         {
             if (i == 0)
             {
@@ -84,7 +82,15 @@ void RatesMsg(const char *msg, uint16_t Colour)
         SendCommand((char *)"vis b3,0");       // hide "Send" button
     }
 }
-
+// ************************************************************************************************************/
+void HideRATESMsg()
+{
+    if (CurrentView == RATESVIEW1) // Must be in RATES view
+    {
+        SendCommand((char *)"vis busy,0"); // Hide  message
+        ForegroundColourRATESLabels(Black);  // make text black so it is visible again
+    }
+}
 // ******************************************************************************************************************************/
 
 void ShowRatesBank()
