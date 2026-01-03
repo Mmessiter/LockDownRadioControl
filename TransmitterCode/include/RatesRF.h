@@ -42,7 +42,41 @@ float FixFactor(uint8_t val, uint8_t i)
         return ((float)1111);
     }
 }
-
+// ************************************************************************************************************/
+uint8_t UnFixFactor(float val, uint8_t i)
+{
+    switch (i)
+    {
+    case 0:
+        return (uint8_t)val;
+    case 1:
+        return uint8_t(val / 10);
+    case 2:
+        return uint8_t(val / 10);
+    case 3:
+        return uint8_t(val * 100);
+    case 4:
+        return uint8_t(val / 10);
+    case 5:
+        return uint8_t(val / 10);
+    case 6:
+        return uint8_t(val * 100);
+    case 7:
+        return uint8_t(val / 10);
+    case 8:
+        return uint8_t(val / 10);
+    case 9:
+        return uint8_t(val * 100);
+    case 10:
+        return (uint8_t)(val * 4.0);
+    case 11:
+        return (uint8_t)(val * 4.0);
+    case 12:
+        return (uint8_t)(val * 100);
+    default:
+        return (uint8_t)111;
+    }
+}
 // ************************************************************************************************************/
 void DisplayRatesValues(uint8_t startIndex, uint8_t stopIndex)
 {
@@ -87,8 +121,8 @@ void HideRATESMsg()
 {
     if (CurrentView == RATESVIEW1) // Must be in RATES view
     {
-        SendCommand((char *)"vis busy,0"); // Hide  message
-        ForegroundColourRATESLabels(Black);  // make text black so it is visible again
+        SendCommand((char *)"vis busy,0");  // Hide  message
+        ForegroundColourRATESLabels(Black); // make text black so it is visible again
     }
 }
 // ******************************************************************************************************************************/
@@ -140,9 +174,44 @@ void Rates_Were_edited()
     // SendCommand((char *)"vis b3,1"); // show "Send" button
     Rates_Were_Edited = true;
 }
+
+// ************************************************************************************************************/
+
+void ReadEditedRATES()
+{
+    char temp[] = "000.00";
+   
+    for (int i = 1; i < MAX_RATES_BYTES; ++i)
+    {
+        Look1(i);
+        Look1(" = ");
+       
+        GetText(RatesWindows[i], temp);
+        Rate_Values[i] = (uint8_t)UnFixFactor(atof(temp), i);
+       
+        Look1(Rate_Values[i]);
+        Look1("\n");
+    }
+}
+
 // ************************************************************************************************************/
 void SendEditedRates()
 {
+
+    if (!GetConfirmation((char *)"page RatesView", (char *)"Send edited RATES to Nexus?"))
+    {
+        ShowRatesBank(); // reload old RATES, undoing any edits
+        return;
+    }
+    RatesMsg((char *)"Sending edited RATES ...", Gray); // Show sending message
+    DelayWithDog(150);                                  // allow time for screen to update 
+    ReadEditedRATES();                                  // read the edited RATES from the screen;
+
+
+
+
+    HideRATESMsg();                  // SECOND MUST BE SENT FIRST!!!  because this queue is a LIFO stack
+    SendCommand((char *)"vis b3,0"); // hide "Send" button
     Rates_Were_Edited = false;
 }
 #endif

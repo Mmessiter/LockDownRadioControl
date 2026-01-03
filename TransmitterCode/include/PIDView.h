@@ -132,6 +132,8 @@ void SendEditedPIDs()
         return;
     }
     PIDMsg((char *)"Sending edited PIDs ...", Gray); // Show sending message
+  
+  
     ReadEditedPIDs();                                // read the edited PIDs from the screen;
     AddParameterstoQueue(GET_SECOND_6_PID_VALUES);   // SECOND MUST BE SENT FIRST!!! Send PID 7-12 values from TX to RX
     AddParameterstoQueue(GET_FIRST_6_PID_VALUES);    // SECOND MUST BE SENT FIRST!!! Send PID 1-6 values from TX to RX
