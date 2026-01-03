@@ -1356,7 +1356,7 @@ uint32_t PID_Start_Time = 0;
 uint32_t RATES_Start_Time = 0;
 bool Reading_PIDS_Now = false;
 bool Reading_RATES_Now = false;
-uint8_t Rate_Values[14];
+uint8_t Rate_Values[MAX_RATES_BYTES];
 char Rate_Types[6][15] = {"None", "Betaflight", "Raceflight","KISS", "Actual","QuickRates"};
 
 // *********************************************** END OF GLOBAL DATA ***************************************************************

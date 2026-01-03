@@ -19,7 +19,7 @@ void SendBackgroundColour(const char *label, uint16_t colour)
 // ********************************************************************************************************
 void SendForegroundColour(const char *label, uint16_t colour)
 {
-    char cmd[701];// big enough buffer?!
+    char cmd[701]; // big enough buffer?!
     snprintf(cmd, sizeof(cmd), "%s.pco=%u", label, (unsigned)colour);
     SendCommand(cmd);
 }
@@ -90,7 +90,7 @@ void ShowPIDBank() // this is called when bank is changed so new bank's PID valu
         }
         else
         {
-            snprintf(buf, sizeof(buf), "Model is not connected!");// Model not connected message
+            snprintf(buf, sizeof(buf), "Model is not connected!"); // Model not connected message
         }
         PIDMsg(buf, Gray);                            // Show loading message and hides old PIDs
         PID_Send_Duration = 1000;                     // how many milliseconds to await PID values
@@ -132,13 +132,13 @@ void SendEditedPIDs()
         return;
     }
     PIDMsg((char *)"Sending edited PIDs ...", Gray); // Show sending message
-  
-  
-    ReadEditedPIDs();                                // read the edited PIDs from the screen;
-    AddParameterstoQueue(GET_SECOND_6_PID_VALUES);   // SECOND MUST BE SENT FIRST!!! Send PID 7-12 values from TX to RX
-    AddParameterstoQueue(GET_FIRST_6_PID_VALUES);    // SECOND MUST BE SENT FIRST!!! Send PID 1-6 values from TX to RX
-    HidePIDMsg();                                    // SECOND MUST BE SENT FIRST!!!  because this queue is a LIFO stack
-    SendCommand((char *)"vis b3,0");                 // hide "Send" button
+
+    DelayWithDog(150);                             // allow time for screen to update
+    ReadEditedPIDs();                              // read the edited PIDs from the screen;
+    AddParameterstoQueue(GET_SECOND_6_PID_VALUES); // SECOND MUST BE SENT FIRST!!! Send PID 7-12 values from TX to RX
+    AddParameterstoQueue(GET_FIRST_6_PID_VALUES);  // SECOND MUST BE SENT FIRST!!! Send PID 1-6 values from TX to RX
+    HidePIDMsg();                                  // SECOND MUST BE SENT FIRST!!!  because this queue is a LIFO stack
+    SendCommand((char *)"vis b3,0");               // hide "Send" button
     PIDS_Were_Edited = false;
 }
 //************************************************************************************************************/

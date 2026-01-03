@@ -39,7 +39,7 @@ float FixFactor(uint8_t val, uint8_t i)
         return ((float)val) / 100;
 
     default:
-        return ((float)1111);
+        return ((float)1111); // error!
     }
 }
 // ************************************************************************************************************/
@@ -74,7 +74,7 @@ uint8_t UnFixFactor(float val, uint8_t i)
     case 12:
         return (uint8_t)(val * 100);
     default:
-        return (uint8_t)111;
+        return (uint8_t)111; // error!
     }
 }
 // ************************************************************************************************************/
