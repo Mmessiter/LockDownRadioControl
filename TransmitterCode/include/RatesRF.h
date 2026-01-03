@@ -8,7 +8,6 @@
 
 float FixFactor(uint8_t val, uint8_t i)
 {
-
     switch (i)
     {
     case 0:
@@ -77,6 +76,7 @@ uint8_t UnFixFactor(float val, uint8_t i)
         return (uint8_t)111; // error!
     }
 }
+
 // ************************************************************************************************************/
 void DisplayRatesValues(uint8_t startIndex, uint8_t stopIndex)
 {
@@ -132,14 +132,14 @@ void ShowRatesBank()
     char buf[40];
     if (LedWasGreen)
     {
-        snprintf(buf, sizeof(buf), "Loading RATESs for Bank %d ...", Bank);
+        snprintf(buf, sizeof(buf), "Loading rates for Bank %d ...", Bank);
     }
     else
     {
         snprintf(buf, sizeof(buf), "Model is not connected!");
     }
     RatesMsg(buf, Gray);
-    RATES_Send_Duration = 1000;                   // how many milliseconds to await RATES values
+    RATES_Send_Duration = 1000;                    // how many milliseconds to await RATES values
     Reading_RATES_Now = true;                     // This tells the Ack payload parser to get RATES values
     AddParameterstoQueue(SEND_RATES_VALUES);      // Request RATES values from RX
     snprintf(buf, sizeof(buf), "Bank: %d", Bank); // Display which Bank
