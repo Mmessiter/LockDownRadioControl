@@ -353,19 +353,19 @@ inline void CheckMSPSerial()
     case SEND_NO_RF:
         Parse_MSP_Motor_Telemetry(&data_in[0], p);
         RequestFromMSP(MSP_MOTOR_TELEMETRY); // parse reply next time around
-      //  Look("No RF Send");
+                                             //  Look("No RF Send");
         break;
 
     case SEND_PID_RF:
         Parse_MSP_PID(data_in, p);
         RequestFromMSP(MSP_PID); // parse reply next time around
-     //   Look("PID");
+                                 //   Look("PID");
         break;
 
     case SEND_RATES_RF:
         Parse_MSP_RC_TUNING(data_in, p);
         RequestFromMSP(MSP_RC_TUNING); // parse reply next time around
-      //  Look("RATES");
+                                       //  Look("RATES");
         break;
     default:
         break;
@@ -463,7 +463,7 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
         Yaw_Dynamic_Deadband_Filter = p[offset++];
     }
 
-     StoreRatesBytesForAckPayload();
+    StoreRatesBytesForAckPayload();
 
     return true; // skip the rest for now
 
@@ -567,41 +567,58 @@ inline void WriteRatesToNexusAndSave()
     payload[offset++] = (uint8_t)(Roll_Centre_Rate / 10.0f);
     payload[offset++] = (uint8_t)(Roll_Expo * 100.0f);
     payload[offset++] = (uint8_t)(Roll_Max_Rate / 10.0f);
-    payload[offset++] = Roll_Response_Time;
-    payload[offset++] = (uint8_t)(Roll_Accel_Limit & 0xFF);
-    payload[offset++] = (uint8_t)(Roll_Accel_Limit >> 8);
-    payload[offset++] = (uint8_t)(Pitch_Centre_Rate / 10.0f);
-    payload[offset++] = (uint8_t)(Pitch_Expo * 100.0f);
-    payload[offset++] = (uint8_t)(Pitch_Max_Rate / 10.0f);
-    payload[offset++] = Pitch_Response_Time;
-    payload[offset++] = (uint8_t)(Pitch_Accel_Limit & 0xFF);
-    payload[offset++] = (uint8_t)(Pitch_Accel_Limit >> 8);
-    payload[offset++] = (uint8_t)(Yaw_Centre_Rate / 10.0f);
-    payload[offset++] = (uint8_t)(Yaw_Expo * 100.0f);
-    payload[offset++] = (uint8_t)(Yaw_Max_Rate / 10.0f);
-    payload[offset++] = Yaw_Response_Time;
-    payload[offset++] = (uint8_t)(Yaw_Accel_Limit & 0xFF);
-    payload[offset++] = (uint8_t)(Yaw_Accel_Limit >> 8);
-    payload[offset++] = (uint8_t)(Collective_Centre_Rate * 4);
-    payload[offset++] = (uint8_t)(Collective_Expo * 100.0f);
-    payload[offset++] = (uint8_t)(Collective_Max_Rate * 4);
-    payload[offset++] = Collective_Response_Time;
-    payload[offset++] = (uint8_t)(Collective_Accel_Limit & 0xFF);
-    payload[offset++] = (uint8_t)(Collective_Accel_Limit >> 8);
-    if (api100 >= 1208)
-    {
-        payload[offset++] = Roll_Setpoint_Boost_Gain;
-        payload[offset++] = Roll_Setpoint_Boost_Cutoff;
-        payload[offset++] = Pitch_Setpoint_Boost_Gain;
-        payload[offset++] = Pitch_Setpoint_Boost_Cutoff;
-        payload[offset++] = Yaw_Setpoint_Boost_Gain;
-        payload[offset++] = Yaw_Setpoint_Boost_Cutoff;
-        payload[offset++] = Collective_Setpoint_Boost_Gain;
-        payload[offset++] = Collective_Setpoint_Boost_Cutoff;
-        payload[offset++] = Yaw_Dynamic_Ceiling_Gain;
-        payload[offset++] = Yaw_Dynamic_Deadband_Gain;
-        payload[offset++] = Yaw_Dynamic_Deadband_Filter;
-    }
+
+    offset++;
+    offset++;
+    offset++;
+    // payload[offset++] = Roll_Response_Time;
+    // payload[offset++] = (uint8_t)(Roll_Accel_Limit & 0xFF);
+    // payload[offset++] = (uint8_t)(Roll_Accel_Limit >> 8);
+
+    payload[offset++] = (uint8_t)(Pitch_Centre_Rate); // /10.0f
+    payload[offset++] = (uint8_t)(Pitch_Expo);        // /100.0f
+    payload[offset++] = (uint8_t)(Pitch_Max_Rate);    // /10.0f
+
+    offset++;
+    offset++;
+    offset++;
+    // payload[offset++] = Pitch_Response_Time;
+    // payload[offset++] = (uint8_t)(Pitch_Accel_Limit & 0xFF);
+    // payload[offset++] = (uint8_t)(Pitch_Accel_Limit >> 8);
+
+    payload[offset++] = (uint8_t)(Yaw_Centre_Rate); // /10.0f
+    payload[offset++] = (uint8_t)(Yaw_Expo);        // /100.0f
+    payload[offset++] = (uint8_t)(Yaw_Max_Rate);    // /10.0f
+
+    offset++;
+    offset++;
+    offset++;
+
+    // payload[offset++] = Yaw_Response_Time;
+    // payload[offset++] = (uint8_t)(Yaw_Accel_Limit & 0xFF);
+    // payload[offset++] = (uint8_t)(Yaw_Accel_Limit >> 8);
+
+    payload[offset++] = (uint8_t)(Collective_Centre_Rate); // * 4
+    payload[offset++] = (uint8_t)(Collective_Expo);        // *100
+    payload[offset++] = (uint8_t)(Collective_Max_Rate);    // *4
+
+    // payload[offset++] = Collective_Response_Time;
+    // payload[offset++] = (uint8_t)(Collective_Accel_Limit & 0xFF);
+    // payload[offset++] = (uint8_t)(Collective_Accel_Limit >> 8);
+    // if (api100 >= 1208)
+    // {
+    //     payload[offset++] = Roll_Setpoint_Boost_Gain;
+    //     payload[offset++] = Roll_Setpoint_Boost_Cutoff;
+    //     payload[offset++] = Pitch_Setpoint_Boost_Gain;
+    //     payload[offset++] = Pitch_Setpoint_Boost_Cutoff;
+    //     payload[offset++] = Yaw_Setpoint_Boost_Gain;
+    //     payload[offset++] = Yaw_Setpoint_Boost_Cutoff;
+    //     payload[offset++] = Collective_Setpoint_Boost_Gain;
+    //     payload[offset++] = Collective_Setpoint_Boost_Cutoff;
+    //     payload[offset++] = Yaw_Dynamic_Ceiling_Gain;
+    //     payload[offset++] = Yaw_Dynamic_Deadband_Gain;
+    //     payload[offset++] = Yaw_Dynamic_Deadband_Filter;
+    // }
     SendToMSP(MSP_SET_RC_TUNING, payload, payload_size);
     delay(50);
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
