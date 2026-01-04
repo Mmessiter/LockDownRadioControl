@@ -91,7 +91,21 @@ void DisplayRatesValues(uint8_t startIndex, uint8_t stopIndex)
             }
             char buf[10];
             float ThisValue = FixFactor(Rate_Values[i], i);
-            snprintf(buf, sizeof(buf), "%.2f", ThisValue);
+            if (ThisValue == int(ThisValue))
+            {
+                if (i < 9)
+                {
+                    snprintf(buf, sizeof(buf), "%.0f", ThisValue);
+                }
+                else
+                {
+                    snprintf(buf, sizeof(buf), "%.1f", ThisValue);
+                }
+            }
+            else
+            {
+                snprintf(buf, sizeof(buf), "%.2f", ThisValue);
+            }
             SendText(RatesWindows[i], buf);
         }
     }
@@ -171,7 +185,7 @@ void EndRatesView()
 // ************************************************************************************************************/
 void Rates_Were_edited()
 {
-    // SendCommand((char *)"vis b3,1"); // show "Send" button
+    SendCommand((char *)"vis b3,1"); // show "Send" button
     Rates_Were_Edited = true;
 }
 
@@ -180,24 +194,10 @@ void Rates_Were_edited()
 void ReadEditedRATES()
 {
     char temp[20];
-
     for (int i = 1; i < MAX_RATES_BYTES; ++i)
     {
-        Look1(i);
-        Look1(" = ");
-
         GetText(RatesWindows[i], temp);
         Rate_Values[i] = (uint8_t)UnFixFactor(atof(temp), i);
-
-        Look1(Rate_Values[i]);
-        Look1("\n");
-    }
-
-    for (int i = 1; i < MAX_RATES_BYTES; ++i)
-    {
-        Look1(i);
-        Look1(" = ");
-        Look (FixFactor(Rate_Values[i], i));
     }
 }
 // ************************************************************************************************************/
