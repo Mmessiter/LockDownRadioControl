@@ -152,6 +152,7 @@ void SendEditedPIDs()
     HidePIDMsg();                                  // SECOND MUST BE SENT FIRST!!!  because this queue is a LIFO stack
     SendCommand((char *)"vis b3,0");               // hide "Send" button
     PIDS_Were_Edited = false;
+    //MsgBox((char *)"page PIDView", (char *)"Edited PIDs were sent to Nexus.");
 }
 //************************************************************************************************************/
 void StartPIDView() // this starts PID view

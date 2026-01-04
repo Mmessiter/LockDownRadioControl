@@ -236,6 +236,8 @@ void SendEditedRates()
     HideRATESMsg();                                     // SECOND MUST BE SENT FIRST!!!  because this queue is a LIFO stack
     SendCommand((char *)"vis b3,0");                    // hide "Send" button
     Rates_Were_Edited = false;
+  //  MsgBox((char *)"page RatesView", (char *)"Edited Rates were sent to Nexus.");
+  
 }
 #endif
 // RATESRF_H
