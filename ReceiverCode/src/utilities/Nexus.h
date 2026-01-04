@@ -564,9 +564,9 @@ inline void WriteRatesToNexusAndSave()
     uint8_t payload[36];
     uint8_t offset = 0;
     payload[offset++] = Rates_Type;
-    payload[offset++] = (uint8_t)(Roll_Centre_Rate / 10.0f);
-    payload[offset++] = (uint8_t)(Roll_Expo * 100.0f);
-    payload[offset++] = (uint8_t)(Roll_Max_Rate / 10.0f);
+    payload[offset++] = (uint8_t)(Roll_Centre_Rate); // / 10.0f);
+    payload[offset++] = (uint8_t)(Roll_Expo);// * 100.0f);
+    payload[offset++] = (uint8_t)(Roll_Max_Rate);// / 10.0f);
 
     offset++;
     offset++;
@@ -582,6 +582,7 @@ inline void WriteRatesToNexusAndSave()
     offset++;
     offset++;
     offset++;
+    
     // payload[offset++] = Pitch_Response_Time;
     // payload[offset++] = (uint8_t)(Pitch_Accel_Limit & 0xFF);
     // payload[offset++] = (uint8_t)(Pitch_Accel_Limit >> 8);
@@ -620,9 +621,9 @@ inline void WriteRatesToNexusAndSave()
     //     payload[offset++] = Yaw_Dynamic_Deadband_Filter;
     // }
     SendToMSP(MSP_SET_RC_TUNING, payload, payload_size);
-    delay(50);
+    delay(100);
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
-    delay(50);
+    delay(100);
     lastWriteTime = now;
 }
 #endif // NEXUS_H
