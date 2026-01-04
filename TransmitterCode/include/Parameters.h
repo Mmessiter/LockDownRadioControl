@@ -104,11 +104,11 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
         break;
     case GET_FIRST_7_RATES_VALUES: // 13 = I'm sending first 7 RATES values (TX->RX) (Because we cannot fit all 12 in one go)
         for (int i = 0; i < 7; ++i)
-            Parameters.word[i + 1] = Rate_Values[i];
+            Parameters.word[i + 1] = Rate_Values[i]; // 0 to 7
         break;
     case GET_SECOND_6_RATES_VALUES: // 14 = I'm sending second 6 RATES values (TX->RX) (Because we cannot fit all 12 in one go)
         for (int i = 0; i < 6; ++i)
-            Parameters.word[i + 1] = Rate_Values[i + 6];
+            Parameters.word[i + 1] = Rate_Values[i + 7]; // 7 to 12
         break;
 
     default:
