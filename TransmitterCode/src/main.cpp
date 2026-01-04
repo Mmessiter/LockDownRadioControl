@@ -238,7 +238,7 @@ void RedLedOn()
         }
     }
 
-    SendCommand((char *)"vis rpm,0");  // This will make the RPM display invisible
+    SendCommand((char *)"vis rpm,0"); // This will make the RPM display invisible
     SendCommand((char *)"vis StillConnected,0");
     SendCommand((char *)"vis wb,0");
     SendText((char *)"Owner", TxName); // Put owner name back
@@ -1200,8 +1200,8 @@ FLASHMEM void setup()
     ScreenTimeTimer = millis();
     // if (UseLog)
     // {
-        // LogPowerOn();
-        // LogThisModel();
+    // LogPowerOn();
+    // LogThisModel();
     // }
     SendText(FrontView_Connected, na);
     UpdateModelsNameEveryWhere();
@@ -3330,7 +3330,7 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     EndPIDView,           // 21
     StartRatesView,       // 22
     EndRatesView,         // 23
-    Rates_Were_edited,    // 24
+    RatesWereEdited,      // 24
     SendEditedRates,      // 25
     Blank,                // 26
     Blank                 // 27
@@ -3680,8 +3680,8 @@ FASTRUN void ButtonWasPressed()
             GPS_RX_GroundAltitude = GPS_RX_Altitude;
             GPS_RX_Maxaltitude = 0;
             RXMAXModelAltitude = 0;
-            //LastRXModelMaxAltitude = 0;
-            //LastRXModelAltitude = 0;
+            // LastRXModelMaxAltitude = 0;
+            // LastRXModelAltitude = 0;
             ClearText();
             return;
         }
@@ -4866,11 +4866,11 @@ void Close_TX_Down()
         SetBrightness(100 - i);
         DelayWithDog(25);
     }
-    //if (UseLog)
-    // {
-    //     strcpy(LogFileName, ""); // avoid logging to the wrong file
-    //     LogPowerOff();
-    // } // log the event
+    // if (UseLog)
+    //  {
+    //      strcpy(LogFileName, ""); // avoid logging to the wrong file
+    //      LogPowerOff();
+    //  } // log the event
     DelayWithDog(POWERONOFFDELAY);     // 2 seconds delay in case button held down too long
     digitalWrite(POWER_OFF_PIN, HIGH); // Power off the transmitter
     delay(100);                        // Wait for a short time to ensure power off
@@ -5021,8 +5021,7 @@ void FASTRUN ManageTransmitter()
     CheckPowerOffButton();
     CheckForNextionButtonPress(); // Pretty obvious really ...
 
-    
-    DoTheVariometer();            // Do the variometer
+    DoTheVariometer(); // Do the variometer
     if (RightNow - LastTimeRead >= 1000)
     { // Only once a second for these..
         if (VersionMismatch)

@@ -143,23 +143,38 @@ void HideRATESMsg()
 
 void ShowRatesBank()
 {
-    char buf[40];
-    if (LedWasGreen)
+    if (CurrentView == RATESVIEW1) // Must be in RATES view
     {
-        snprintf(buf, sizeof(buf), "Loading rates for Bank %d ...", Bank);
+        char buf[40];
+        if (LedWasGreen)
+        {
+            snprintf(buf, sizeof(buf), "Loading rates for Bank %d ...", Bank);
+        }
+        else
+        {
+            snprintf(buf, sizeof(buf), "Model is not connected!");
+        }
+        if (Rates_Were_Edited)
+        {
+            char NB[10];
+            char Wmsg[120];
+            char w1[] = "Rates for Bank ";
+            char w2[] = " were edited \r\nbut not saved. (Too late now!)\r\nSo you may want to check them.";
+            strcpy(Wmsg, w1);
+            strcat(Wmsg, Str(NB, PreviousBank, 0));
+            strcat(Wmsg, w2);
+            MsgBox((char *)"page RatesView", Wmsg); // Warn about unsaved edits
+        }
+        RatesMsg(buf, Gray);
+        RATES_Send_Duration = 1000;                   // how many milliseconds to await RATES values
+        Reading_RATES_Now = true;                     // This tells the Ack payload parser to get RATES values
+        AddParameterstoQueue(SEND_RATES_VALUES);      // Request RATES values from RX
+        snprintf(buf, sizeof(buf), "Bank: %d", Bank); // Display which Bank
+        SendText((char *)"t9", buf);                  // Show bank number etc
+        RATES_Start_Time = millis();                  // record start time as it's not long
+
+        Rates_Were_Edited = false; // reset edited flag
     }
-    else
-    {
-        snprintf(buf, sizeof(buf), "Model is not connected!");
-    }
-    RatesMsg(buf, Gray);
-    RATES_Send_Duration = 1000;                   // how many milliseconds to await RATES values
-    Reading_RATES_Now = true;                     // This tells the Ack payload parser to get RATES values
-    AddParameterstoQueue(SEND_RATES_VALUES);      // Request RATES values from RX
-    snprintf(buf, sizeof(buf), "Bank: %d", Bank); // Display which Bank
-    SendText((char *)"t9", buf);                  // Show bank number etc
-    Rates_Were_Edited = false;                    // reset edited flag
-    RATES_Start_Time = millis();                  // record start time as it's not long
 }
 
 // ******************************************************************************************************************************/
@@ -188,7 +203,7 @@ void EndRatesView()
     SendCommand((char *)"page RXOptionsView");
 }
 // ************************************************************************************************************/
-void Rates_Were_edited()
+void RatesWereEdited()
 {
     SendCommand((char *)"vis b3,1"); // show "Send" button
     Rates_Were_Edited = true;

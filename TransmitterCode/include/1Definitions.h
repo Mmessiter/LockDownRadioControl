@@ -754,7 +754,7 @@ void PIDs_Were_edited();
 void EndPIDView();
 void StartRatesView();
 void EndRatesView();
-void Rates_Were_edited();
+void RatesWereEdited();
 void SendEditedRates();
 void DisplayRatesValues(uint8_t startIndex, uint8_t stopIndex);
 void ReadRatesBytesFromAckPayload(uint8_t n, uint8_t m);
