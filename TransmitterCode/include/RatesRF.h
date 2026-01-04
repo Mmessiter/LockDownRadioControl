@@ -179,6 +179,11 @@ void StartRatesView()
 // ******************************************************************************************************************************/
 void EndRatesView()
 {
+    if (Rates_Were_Edited)
+    {
+        if (!GetConfirmation((char *)"page RatesView", (char *)"Discard edited RATES?"))
+            return;
+    }
     Rates_Were_Edited = false;
     SendCommand((char *)"page RXOptionsView");
 }
