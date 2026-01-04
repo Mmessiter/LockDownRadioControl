@@ -98,9 +98,17 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
         for (int i = 0; i < 6; ++i)
             Parameters.word[i + 1] = PID_Values[i + 6];
         break;
-    case SEND_RATES_VALUES: // 12 = Please send RATES values
+    case SEND_RATES_VALUES:                       // 12 = Please send RATES values
         Parameters.word[1] = 321;                 // confirms request for RATES values
         Parameters.word[2] = RATES_Send_Duration; // 1000 - how many milliseconds to send these
+        break;
+    case GET_FIRST_7_RATES_VALUES: // 13 = I'm sending first 7 RATES values (TX->RX) (Because we cannot fit all 12 in one go)
+        for (int i = 0; i < 7; ++i)
+            Parameters.word[i + 1] = Rate_Values[i];
+        break;
+    case GET_SECOND_6_RATES_VALUES: // 14 = I'm sending second 6 RATES values (TX->RX) (Because we cannot fit all 12 in one go)
+        for (int i = 0; i < 6; ++i)
+            Parameters.word[i + 1] = Rate_Values[i + 6];
         break;
 
     default:

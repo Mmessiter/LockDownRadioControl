@@ -139,7 +139,7 @@ void ShowRatesBank()
         snprintf(buf, sizeof(buf), "Model is not connected!");
     }
     RatesMsg(buf, Gray);
-    RATES_Send_Duration = 1000;                    // how many milliseconds to await RATES values
+    RATES_Send_Duration = 1000;                   // how many milliseconds to await RATES values
     Reading_RATES_Now = true;                     // This tells the Ack payload parser to get RATES values
     AddParameterstoQueue(SEND_RATES_VALUES);      // Request RATES values from RX
     snprintf(buf, sizeof(buf), "Bank: %d", Bank); // Display which Bank
@@ -179,39 +179,42 @@ void Rates_Were_edited()
 
 void ReadEditedRATES()
 {
-    char temp[] = "000.00";
-   
+    char temp[20];
+
     for (int i = 1; i < MAX_RATES_BYTES; ++i)
     {
         Look1(i);
         Look1(" = ");
-       
+
         GetText(RatesWindows[i], temp);
         Rate_Values[i] = (uint8_t)UnFixFactor(atof(temp), i);
-       
+
         Look1(Rate_Values[i]);
         Look1("\n");
     }
-}
 
+    for (int i = 1; i < MAX_RATES_BYTES; ++i)
+    {
+        Look1(i);
+        Look1(" = ");
+        Look (FixFactor(Rate_Values[i], i));
+    }
+}
 // ************************************************************************************************************/
 void SendEditedRates()
 {
-
     if (!GetConfirmation((char *)"page RatesView", (char *)"Send edited RATES to Nexus?"))
     {
         ShowRatesBank(); // reload old RATES, undoing any edits
         return;
     }
     RatesMsg((char *)"Sending edited RATES ...", Gray); // Show sending message
-    DelayWithDog(150);                                  // allow time for screen to update 
+    DelayWithDog(150);                                  // allow time for screen to update
     ReadEditedRATES();                                  // read the edited RATES from the screen;
-
-
-
-
-    HideRATESMsg();                  // SECOND MUST BE SENT FIRST!!!  because this queue is a LIFO stack
-    SendCommand((char *)"vis b3,0"); // hide "Send" button
+    AddParameterstoQueue(GET_SECOND_6_RATES_VALUES);    // SECOND MUST BE SENT FIRST!!! Send RATES 7-12 values from TX to RX
+    AddParameterstoQueue(GET_FIRST_7_RATES_VALUES);     // SECOND MUST BE SENT FIRST!!! Send RATES 1-6 values from TX to RX
+    HideRATESMsg();                                     // SECOND MUST BE SENT FIRST!!!  because this queue is a LIFO stack
+    SendCommand((char *)"vis b3,0");                    // hide "Send" button
     Rates_Were_Edited = false;
 }
 #endif

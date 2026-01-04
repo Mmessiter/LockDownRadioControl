@@ -166,12 +166,14 @@
 #define KALMAN_VALUES 5
 #define SERVO_FREQUENCIES 6
 #define SERVO_PULSE_WIDTHS 7
-#define GEAR_RATIO 8               // Gear Ratio (Motor:Rotor) for RPM calculation
-#define SEND_PID_VALUES 9          // Command to request PID values from RX
-#define GET_FIRST_6_PID_VALUES 10  // Command to update first 6 PID values to RX
-#define GET_SECOND_6_PID_VALUES 11 // Command to update second 6 PID values to RX
-#define SEND_RATES_VALUES 12       // Command to request RATES values from RX
-#define PARAMETERS_MAX_ID 13       // Max types of parameters packet to send  ... might increase.
+#define GEAR_RATIO 8                 // Gear Ratio (Motor:Rotor) for RPM calculation
+#define SEND_PID_VALUES 9            // Command to request PID values from RX
+#define GET_FIRST_6_PID_VALUES 10    // Command to update first 6 PID values to RX
+#define GET_SECOND_6_PID_VALUES 11   // Command to update second 6 PID values to RX
+#define SEND_RATES_VALUES 12         // Command to request RATES values from RX
+#define GET_FIRST_7_RATES_VALUES 13  // Command to update first 6 RATES values to RX
+#define GET_SECOND_6_RATES_VALUES 14 // Command to update second 6 RATES values to RX
+#define PARAMETERS_MAX_ID 15         // Max types of parameters packet to send  ... might increase.
 
 // **************************************************************************
 //                               Mixes                                      *
@@ -1357,7 +1359,7 @@ uint32_t RATES_Start_Time = 0;
 bool Reading_PIDS_Now = false;
 bool Reading_RATES_Now = false;
 uint8_t Rate_Values[MAX_RATES_BYTES];
-char Rate_Types[6][15] = {"None", "Betaflight", "Raceflight","KISS", "Actual","QuickRates"};
+char Rate_Types[6][15] = {"None", "Betaflight", "Raceflight", "KISS", "Actual", "QuickRates"};
 
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 
