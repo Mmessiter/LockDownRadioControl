@@ -132,10 +132,34 @@ void ReadExtraParameters()
             RATES_Send_Duration = Parameters.word[2];
             // Look("Request to send RATES values received");
         }
-        break;
-        default:
+    case GET_FIRST_7_RATES_VALUES: // 13
+        if (!Rotorflight22Detected)
             break;
-        }
+        Rates_Type = Parameters.word[1];
+        Roll_Centre_Rate = Parameters.word[2];
+        Roll_Max_Rate = Parameters.word[3];
+        Roll_Expo = Parameters.word[4];
+        Pitch_Centre_Rate = Parameters.word[5];
+        Pitch_Max_Rate = Parameters.word[6];
+        Pitch_Expo = Parameters.word[7];
+        break;
+
+    case GET_SECOND_6_RATES_VALUES: // 14
+        if (!Rotorflight22Detected)
+            break;
+        Yaw_Centre_Rate = Parameters.word[1];
+        Yaw_Max_Rate = Parameters.word[2];
+        Yaw_Expo = Parameters.word[3];
+        Collective_Centre_Rate = Parameters.word[4];
+        Collective_Max_Rate = Parameters.word[5];
+        Collective_Expo = Parameters.word[6];
+        WriteRatesToNexusAndSave();
+        break;
+
+        
+    default:
+        break;
+    }
 }
 
 #endif

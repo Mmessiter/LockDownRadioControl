@@ -124,7 +124,9 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define GET_FIRST_6_PID_VALUES 10
 #define GET_SECOND_6_PID_VALUES 11
 #define SEND_RATES_VALUES 12
-#define PARAMETERS_MAX_ID 13 // Max types of parameters packet to send  ... will increase.
+#define GET_FIRST_7_RATES_VALUES 13  // Command to update first 6 RATES values to RX
+#define GET_SECOND_6_RATES_VALUES 14 // Command to update second 6 RATES values to RX
+#define PARAMETERS_MAX_ID 15         // Max types of parameters packet to send  ... might increase.
 
 // **************************************************************************
 //                             Rotorflight Definitions                      *
@@ -264,6 +266,7 @@ void PointToRadio2();
 void DebugPIDValues(char const *msg);
 inline void WritePIDsToNexusAndSave(const uint16_t pid[12]);
 inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n);
+inline void WriteRatesToNexusAndSave();
 
 /************************************************************************************************************/
 // For numeric types (int, float, double, etc.)
@@ -410,7 +413,6 @@ char RF_RateTypes[6][15] = {
     "QuickRates"};
 
 uint8_t Rates_Type;
-
 
 uint8_t Roll_Centre_Rate, Roll_Expo, Roll_Max_Rate;
 uint8_t Pitch_Centre_Rate, Pitch_Expo, Pitch_Max_Rate;
