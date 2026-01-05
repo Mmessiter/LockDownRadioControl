@@ -656,7 +656,7 @@ void Send_Rates_Bytes(uint8_t n,uint8_t m) // send next 4 bytes from RatesBytes 
     uint8_t p = 0;
     for (uint8_t i = n; i < m; ++i)
     {
-        if (i <= MAX_RATES_BYTES) // avoid overflow
+        if (i < MAX_RATES_BYTES) // avoid overflow
         {
             AckPayload.Ack_Payload_byte[p + 1] = RatesBytes[i]; 
             ++p;
