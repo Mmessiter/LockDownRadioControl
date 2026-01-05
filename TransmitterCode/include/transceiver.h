@@ -769,6 +769,14 @@ FASTRUN uint32_t GetIntFromAckPayload() // This one uses a uint32_t int
     ThisUnion.Val8[3] = AckPayload.Ack_Payload_byte[4];
     return ThisUnion.Val32;
 }
+//************************************************************************************************************/
+bool GetBoolFromAckPayload(uint8_t byteIndex)
+{
+    if (AckPayload.Ack_Payload_byte[byteIndex])
+        return true;
+    else
+        return false;
+}
 /************************************************************************************************************/
 uint16_t GetFirstWordFromAckPayload()
 {
@@ -1083,9 +1091,6 @@ FASTRUN void ParseAckPayload() // It's already pretty short!
                 PID_Values[9] = GetSecondWordFromAckPayload(); // PID_Yaw_I
                 Display2PIDValues(8);
             }
-            // if (Reading_RATES_Now)
-            // {
-            // }
         }
         break;
     case 14:
@@ -1106,7 +1111,14 @@ FASTRUN void ParseAckPayload() // It's already pretty short!
         }
         break;
     case 15:
-        GPS_RX_CourseTo = GetFloatFromAckPayload();
+        if (GPS_RX_FIX)
+        {
+            GPS_RX_CourseTo = GetFloatFromAckPayload();
+        }
+        else
+        {
+            Rotorflight22Detected = GetBoolFromAckPayload(1);
+        }
         break;
     case 16:
         GPS_RX_Satellites = (uint8_t)GetIntFromAckPayload();

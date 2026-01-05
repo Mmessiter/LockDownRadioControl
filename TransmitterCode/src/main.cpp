@@ -216,7 +216,6 @@ void EnsureMotorIsOff()
     SendCommand(WarnOff);
     SendNoData = false;
 }
-
 /*********************************************************************************************************************************/
 
 void RedLedOn()
@@ -237,7 +236,6 @@ void RedLedOn()
             SendCommand((char *)"vis Quality,0");
         }
     }
-
     SendCommand((char *)"vis rpm,0"); // This will make the RPM display invisible
     SendCommand((char *)"vis StillConnected,0");
     if (!BindingEnabled)
