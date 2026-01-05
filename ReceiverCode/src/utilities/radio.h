@@ -679,6 +679,13 @@ void Send_2_x_uint16_t(uint16_t v1, uint16_t v2) // sends two x uint16_ts
     AckPayload.Ack_Payload_byte[3] = ThisUnion.Val8[0];
     AckPayload.Ack_Payload_byte[4] = ThisUnion.Val8[1];
 }
+// ************************************************************************************************************/
+void SendBoolToAckPayload(bool val, uint8_t bytePos) // byte position can be 1,2,3,4 (but not 0)
+{ // This one function now works with most bool parameters
+    CheckWhetherItsTimeToHop();
+    AckPayload.Ack_Payload_byte[bytePos] = val;
+}
+
 /************************************************************************************************************/
 void SendIntToAckPayload(uint32_t U)
 { // This one function now works with most int parameters
@@ -933,10 +940,12 @@ void LoadAckPayload()
         {
             SendFloatToAckPayload(CourseToGPS);
         }
-        else // reserved for future use
+        else 
         {
+            SendBoolToAckPayload(Rotorflight22Detected,1); // Tell TX if Rotorflight22 detected in first Bool position
         }
         break;
+        ;
     case 16:
         if (GpsFix)
         {
