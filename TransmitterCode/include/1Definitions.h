@@ -1361,6 +1361,7 @@ bool Reading_RATES_Now = false;
 uint8_t Rate_Values[MAX_RATES_BYTES];
 char Rate_Types[6][15] = {"None", "Betaflight", "Raceflight", "KISS", "Actual", "QuickRates"};
 
+
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 
 #endif
