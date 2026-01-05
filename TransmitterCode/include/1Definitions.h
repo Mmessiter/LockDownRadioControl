@@ -25,8 +25,8 @@
 
 #define TXVERSION_MAJOR 2 // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 5
-#define TXVERSION_MINIMUS 5
-#define TXVERSION_EXTRA "C 29/12/25"
+#define TXVERSION_MINIMUS 6
+#define TXVERSION_EXTRA "A 5/01/26"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -534,7 +534,7 @@ char *Str(char *s, int n, int comma);
 void GetNewChannelValues();
 void GreenLedOn();
 void StoreNewCommsGap();
-FASTRUN void ParseLongerAckPayload();
+FASTRUN void ParseAckPayload();
 void FailedPacket();
 void StartInactvityTimeout();
 void ShowServoPos();

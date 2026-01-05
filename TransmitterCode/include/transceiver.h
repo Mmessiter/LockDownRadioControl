@@ -275,7 +275,7 @@ void SuccessfulPacket()
     {
         uint8_t PayloadSize = Radio1.getDynamicPayloadSize();
         Radio1.read(&AckPayload, PayloadSize);
-        ParseLongerAckPayload();
+        ParseAckPayload();
         // using a short payload added complexity without driving an advantage! So it is dropped.
     }
     if (BoundFlag && (!LedWasGreen || LedIsBlinking) && !UsingDefaultPipeAddress)
@@ -916,7 +916,7 @@ void ReadRatesBytesFromAckPayload(uint8_t n, uint8_t m)
 }
 
 /************************************************************************************************************/
-FASTRUN void ParseLongerAckPayload() // It's already pretty short!
+FASTRUN void ParseAckPayload() // It's already pretty short!
 {
     FHSS_data::NextChannelNumber = AckPayload.Ack_Payload_byte[5]; // every packet tells of next hop destination
     if (AckPayload.Ack_Payload_byte[0] & 0x80)
