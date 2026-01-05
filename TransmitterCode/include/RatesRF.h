@@ -1,54 +1,53 @@
+// **********************************************************************************************************
 // This file handles basic rates editing for Rotorflight
+// It uses a factors' table to convert between screen display values and the actual byte values needed by Rotorflight
+// **********************************************************************************************************
 
 #ifndef RATESRF_H
 #define RATESRF_H
 #include <Arduino.h>
 #include "1Definitions.h"
-const float FactorTableRF[13] = {1, 10, 10, .01, 10, 10, .01, 10, 10, .01, 0.25, 0.25, .01}; // Factors for each RATES byte needed by Rotorflight
-// ************************************************************************************************************/
 
-float FixFactor(uint8_t val, uint8_t i)
+// ************************************************************************************************************/
+void ReadEditedRateValues()
 {
-    return ((float)val) * FactorTableRF[i];
+    for (int i = 1; i < MAX_RATES_BYTES; ++i) // start at 1 as 0 is Rates Type and not yet edited here
+    {
+        char temp[10];
+        GetText(RatesWindows[i], temp);
+        Rate_Values[i] = (uint8_t)(atof(temp) / FactorTableRF[i]); // DIVIDE BY factor to get byte value
+    }
 }
-
 // ************************************************************************************************************/
-
-uint8_t UnFixFactor(float val, uint8_t i)
-{
-    return (uint8_t)(val / FactorTableRF[i]);
-}
-
-// ************************************************************************************************************/
-void DisplayRatesValues(uint8_t startIndex, uint8_t stopIndex)
+void DisplayRatesValues(uint8_t startIndex, uint8_t stopIndex) // Displays RATES values on screen a few at a time as they arrive in Ack payloads
 {
     for (uint8_t i = startIndex; i < stopIndex; ++i)
     {
         if (i < MAX_RATES_BYTES)
         {
+            char temp[10];
             if (i == 0)
             {
                 SendText(RatesWindows[0], Rate_Types[Rate_Values[0]]); // Show rate type
                 continue;
             }
-            char buf[10];
-            float ThisValue = FixFactor(Rate_Values[i], i);
+            float ThisValue = (Rate_Values[i] * FactorTableRF[i]); // MULTIPLY BY factor to get display value
             if (ThisValue == int(ThisValue))
             {
                 if (i < 10)
                 {
-                    snprintf(buf, sizeof(buf), "%.0f", ThisValue);
+                    snprintf(temp, sizeof(temp), "%.0f", ThisValue);
                 }
                 else
                 {
-                    snprintf(buf, sizeof(buf), "%.1f", ThisValue);
+                    snprintf(temp, sizeof(temp), "%.1f", ThisValue);
                 }
             }
             else
             {
-                snprintf(buf, sizeof(buf), "%.2f", ThisValue);
+                snprintf(temp, sizeof(temp), "%.2f", ThisValue);
             }
-            SendText(RatesWindows[i], buf);
+            SendText(RatesWindows[i], temp);
         }
     }
 }
@@ -96,7 +95,7 @@ void ShowRatesBank()
         {
             snprintf(buf, sizeof(buf), "Model is not connected!");
         }
-        if (Rates_Were_Edited)
+        if (Rates_Were_Edited) // if RATES were edited but not sent and bank changed
         {
             char NB[10];
             char Wmsg[120];
@@ -114,8 +113,7 @@ void ShowRatesBank()
         snprintf(buf, sizeof(buf), "Bank: %d", Bank); // Display which Bank
         SendText((char *)"t9", buf);                  // Show bank number etc
         RATES_Start_Time = millis();                  // record start time as it's not long
-
-        Rates_Were_Edited = false; // reset edited flag
+        Rates_Were_Edited = false;                    // reset edited flag
     }
 }
 
@@ -152,17 +150,6 @@ void RatesWereEdited()
 }
 
 // ************************************************************************************************************/
-
-void ReadEditedRATES()
-{
-    char temp[20];
-    for (int i = 1; i < MAX_RATES_BYTES; ++i)
-    {
-        GetText(RatesWindows[i], temp);
-        Rate_Values[i] = (uint8_t)UnFixFactor(atof(temp), i);
-    }
-}
-// ************************************************************************************************************/
 void SendEditedRates()
 {
     if (!GetConfirmation((char *)"page RatesView", (char *)"Send edited RATES to Nexus?"))
@@ -172,13 +159,14 @@ void SendEditedRates()
     }
     RatesMsg((char *)"Sending edited Rates ...", Gray); // Show sending message
     DelayWithDog(150);                                  // allow time for screen to update
-    ReadEditedRATES();                                  // read the edited RATES from the screen;
+    ReadEditedRateValues();                                  // read the edited RATES from the screen;
     AddParameterstoQueue(GET_SECOND_6_RATES_VALUES);    // SECOND MUST BE SENT FIRST!!! Send RATES 7-12 values from TX to RX
     AddParameterstoQueue(GET_FIRST_7_RATES_VALUES);     // SECOND MUST BE SENT FIRST!!! Send RATES 1-6 values from TX to RX
-    HideRATESMsg();                                     // SECOND MUST BE SENT FIRST!!!  because this queue is a LIFO stack
+    HideRATESMsg();                                     // ...because this queue is a LIFO stack
     SendCommand((char *)"vis b3,0");                    // hide "Send" button
-    Rates_Were_Edited = false;
+    Rates_Were_Edited = false;                          // reset edited flag
+    PlaySound(BEEPCOMPLETE);                            // let user know we're done
 }
-#endif
-// RATESRF_H
+#endif // RATESRF_H
+
 // ************************************************************************************************************/

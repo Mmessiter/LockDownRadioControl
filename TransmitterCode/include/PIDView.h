@@ -144,7 +144,6 @@ void SendEditedPIDs()
         return;
     }
     PIDMsg((char *)"Sending edited PIDs ...", Gray); // Show sending message
-
     DelayWithDog(150);                             // allow time for screen to update
     ReadEditedPIDs();                              // read the edited PIDs from the screen;
     AddParameterstoQueue(GET_SECOND_6_PID_VALUES); // SECOND MUST BE SENT FIRST!!! Send PID 7-12 values from TX to RX
@@ -152,7 +151,7 @@ void SendEditedPIDs()
     HidePIDMsg();                                  // SECOND MUST BE SENT FIRST!!!  because this queue is a LIFO stack
     SendCommand((char *)"vis b3,0");               // hide "Send" button
     PIDS_Were_Edited = false;
-    //MsgBox((char *)"page PIDView", (char *)"Edited PIDs were sent to Nexus.");
+    PlaySound(BEEPCOMPLETE); // let user know we're done
 }
 //************************************************************************************************************/
 void StartPIDView() // this starts PID view
