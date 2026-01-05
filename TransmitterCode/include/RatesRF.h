@@ -4,7 +4,7 @@
 #define RATESRF_H
 #include <Arduino.h>
 #include "1Definitions.h"
-const float FactorTableRF[13] = {1, 10, 10, .01, 10, 10, .01, 10, 10, .01, 0.25, 0.25, .01};
+const float FactorTableRF[13] = {1, 10, 10, .01, 10, 10, .01, 10, 10, .01, 0.25, 0.25, .01}; // Factors for each RATES byte needed by Rotorflight
 // ************************************************************************************************************/
 
 float FixFactor(uint8_t val, uint8_t i)

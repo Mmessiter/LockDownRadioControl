@@ -1,4 +1,12 @@
-|This screen allows the editing of RATES values for the Nexus helicopter flight controller, and probably other flight controllers that support the same MSP v1 protocol.||
+
+                                         * IMPORTANT! *  ||
+
+The Centre Sensitivity and Maximum values MUST be a multiple of 10.|
+The Exponential values range from 0 to 1 only.||
+If you enter a value thats not allowed it will be rounded downwards by Rotorflights firmware.||
+
+
+This screen allows the editing of RATES values for the Nexus helicopter flight controller, and probably other flight controllers that support the same MSP v1 protocol.||
 
 The screen will only appear when connected to a model which is using a compatible flight controller. ||
 
@@ -6,7 +14,7 @@ Also the Safety switch must be ON - so the model had better be on the ground wit
 
 1). First select the Bank you would like to edit using the Bank switch. After selecting a Bank  there will be a brief pause while the values for that Bank are loaded.||
 
-2). Then edit any of the 12 values by pressing the box containing that value. Note that the Centre Sensitivity and Maximum values must be 
+2). Then edit any of the 12 values by pressing the box containing that value. ||
 
 3). Then press Save and wait a moment while updated values are sent the the flight controller and saved in its EEPROM.||
 
