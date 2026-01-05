@@ -465,7 +465,7 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
 
     StoreRatesBytesForAckPayload();
 
-    return true; // skip the rest for now
+    return true; // skip the rest for now. remove this line to enable debug output
 
     Look("---- Nexus RC Tuning Values ----");
     Look1("Rates Type: ");
@@ -563,63 +563,53 @@ inline void WriteRatesToNexusAndSave()
         payload_size += 11;
     uint8_t payload[36];
     uint8_t offset = 0;
+
     payload[offset++] = Rates_Type;
-    payload[offset++] = (uint8_t)(Roll_Centre_Rate); // / 10.0f);
-    payload[offset++] = (uint8_t)(Roll_Expo);// * 100.0f);
-    payload[offset++] = (uint8_t)(Roll_Max_Rate);// / 10.0f);
+    payload[offset++] = (uint8_t)(Roll_Centre_Rate); // / 10.0f);// These factors are now handled in the Transmitter so BYTES only are sent
+    payload[offset++] = (uint8_t)(Roll_Expo);        // * 100.0f); // These factors are now handled in the Transmitter so BYTES only are sent
+    payload[offset++] = (uint8_t)(Roll_Max_Rate);    // / 10.0f);// These factors are now handled in the Transmitter so BYTES only are sent
 
-    offset++;
-    offset++;
-    offset++;
-    // payload[offset++] = Roll_Response_Time;
-    // payload[offset++] = (uint8_t)(Roll_Accel_Limit & 0xFF);
-    // payload[offset++] = (uint8_t)(Roll_Accel_Limit >> 8);
+    payload[offset++] = Roll_Response_Time;
+    payload[offset++] = (uint8_t)(Roll_Accel_Limit & 0xFF);
+    payload[offset++] = (uint8_t)(Roll_Accel_Limit >> 8);
 
-    payload[offset++] = (uint8_t)(Pitch_Centre_Rate); // /10.0f
-    payload[offset++] = (uint8_t)(Pitch_Expo);        // /100.0f
-    payload[offset++] = (uint8_t)(Pitch_Max_Rate);    // /10.0f
+    payload[offset++] = (uint8_t)(Pitch_Centre_Rate); // /10.0f  // These factors are now handled in the Transmitter so BYTES only are sent
+    payload[offset++] = (uint8_t)(Pitch_Expo);        // /100.0f // These factors are now handled in the Transmitter so BYTES only are sent
+    payload[offset++] = (uint8_t)(Pitch_Max_Rate);    // /10.0f  // These factors are now handled in the Transmitter so BYTES only are sent
 
-    offset++;
-    offset++;
-    offset++;
-    
-    // payload[offset++] = Pitch_Response_Time;
-    // payload[offset++] = (uint8_t)(Pitch_Accel_Limit & 0xFF);
-    // payload[offset++] = (uint8_t)(Pitch_Accel_Limit >> 8);
+    payload[offset++] = Pitch_Response_Time;
+    payload[offset++] = (uint8_t)(Pitch_Accel_Limit & 0xFF);
+    payload[offset++] = (uint8_t)(Pitch_Accel_Limit >> 8);
 
-    payload[offset++] = (uint8_t)(Yaw_Centre_Rate); // /10.0f
-    payload[offset++] = (uint8_t)(Yaw_Expo);        // /100.0f
-    payload[offset++] = (uint8_t)(Yaw_Max_Rate);    // /10.0f
+    payload[offset++] = (uint8_t)(Yaw_Centre_Rate); // /10.0f  // These factors are now handled in the Transmitter so BYTES only are sent
+    payload[offset++] = (uint8_t)(Yaw_Expo);        // /100.0f // These factors are now handled in the Transmitter so BYTES only are sent
+    payload[offset++] = (uint8_t)(Yaw_Max_Rate);    // /10.0f  // These factors are now handled in the Transmitter so BYTES only are sent
 
-    offset++;
-    offset++;
-    offset++;
+    payload[offset++] = Yaw_Response_Time;
+    payload[offset++] = (uint8_t)(Yaw_Accel_Limit & 0xFF);
+    payload[offset++] = (uint8_t)(Yaw_Accel_Limit >> 8);
 
-    // payload[offset++] = Yaw_Response_Time;
-    // payload[offset++] = (uint8_t)(Yaw_Accel_Limit & 0xFF);
-    // payload[offset++] = (uint8_t)(Yaw_Accel_Limit >> 8);
+    payload[offset++] = (uint8_t)(Collective_Centre_Rate); // * 4  // These factors are now handled in the Transmitter so BYTES only are sent
+    payload[offset++] = (uint8_t)(Collective_Expo);        // *100 // These factors are now handled in the Transmitter so BYTES only are sent
+    payload[offset++] = (uint8_t)(Collective_Max_Rate);    // *4   // These factors are now handled in the Transmitter so BYTES only are sent
 
-    payload[offset++] = (uint8_t)(Collective_Centre_Rate); // * 4
-    payload[offset++] = (uint8_t)(Collective_Expo);        // *100
-    payload[offset++] = (uint8_t)(Collective_Max_Rate);    // *4
-
-    // payload[offset++] = Collective_Response_Time;
-    // payload[offset++] = (uint8_t)(Collective_Accel_Limit & 0xFF);
-    // payload[offset++] = (uint8_t)(Collective_Accel_Limit >> 8);
-    // if (api100 >= 1208)
-    // {
-    //     payload[offset++] = Roll_Setpoint_Boost_Gain;
-    //     payload[offset++] = Roll_Setpoint_Boost_Cutoff;
-    //     payload[offset++] = Pitch_Setpoint_Boost_Gain;
-    //     payload[offset++] = Pitch_Setpoint_Boost_Cutoff;
-    //     payload[offset++] = Yaw_Setpoint_Boost_Gain;
-    //     payload[offset++] = Yaw_Setpoint_Boost_Cutoff;
-    //     payload[offset++] = Collective_Setpoint_Boost_Gain;
-    //     payload[offset++] = Collective_Setpoint_Boost_Cutoff;
-    //     payload[offset++] = Yaw_Dynamic_Ceiling_Gain;
-    //     payload[offset++] = Yaw_Dynamic_Deadband_Gain;
-    //     payload[offset++] = Yaw_Dynamic_Deadband_Filter;
-    // }
+    payload[offset++] = Collective_Response_Time;
+    payload[offset++] = (uint8_t)(Collective_Accel_Limit & 0xFF);
+    payload[offset++] = (uint8_t)(Collective_Accel_Limit >> 8);
+    if (api100 >= 1208)
+    {
+        payload[offset++] = Roll_Setpoint_Boost_Gain;
+        payload[offset++] = Roll_Setpoint_Boost_Cutoff;
+        payload[offset++] = Pitch_Setpoint_Boost_Gain;
+        payload[offset++] = Pitch_Setpoint_Boost_Cutoff;
+        payload[offset++] = Yaw_Setpoint_Boost_Gain;
+        payload[offset++] = Yaw_Setpoint_Boost_Cutoff;
+        payload[offset++] = Collective_Setpoint_Boost_Gain;
+        payload[offset++] = Collective_Setpoint_Boost_Cutoff;
+        payload[offset++] = Yaw_Dynamic_Ceiling_Gain;
+        payload[offset++] = Yaw_Dynamic_Deadband_Gain;
+        payload[offset++] = Yaw_Dynamic_Deadband_Filter;
+    }
     SendToMSP(MSP_SET_RC_TUNING, payload, payload_size);
     delay(100);
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
