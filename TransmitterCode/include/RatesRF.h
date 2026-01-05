@@ -6,75 +6,17 @@
 
 // ************************************************************************************************************/
 
+const float FactorTableRF[13] = {1.0, 0.1, 0.1, 0.01, 0.1, 0.1, 0.01, 0.1, 0.1, 0.01, 0.25, 0.25, 0.01};
 float FixFactor(uint8_t val, uint8_t i)
 {
-    switch (i)
-    {
-    case 0:
-        return ((float)val);
-    case 1:
-        return ((float)val) * 10;
-    case 2:
-        return ((float)val) * 10;
-    case 3:
-        return ((float)val) / 100;
-    case 4:
-        return ((float)val) * 10;
-    case 5:
-        return ((float)val) * 10;
-    case 6:
-        return ((float)val) / 100;
-    case 7:
-        return ((float)val) * 10;
-    case 8:
-        return ((float)val) * 10;
-    case 9:
-        return ((float)val) / 100;
-    case 10:
-        return ((float)val) / 4.0;
-    case 11:
-        return ((float)val) / 4.0;
-    case 12:
-        return ((float)val) / 100;
-
-    default:
-        return ((float)1111); // error!
-    }
+    return ((float)val) * FactorTableRF[i];
 }
+
 // ************************************************************************************************************/
+
 uint8_t UnFixFactor(float val, uint8_t i)
 {
-    switch (i)
-    {
-    case 0:
-        return (uint8_t)val;
-    case 1:
-        return uint8_t(val / 10);
-    case 2:
-        return uint8_t(val / 10);
-    case 3:
-        return uint8_t(val * 100);
-    case 4:
-        return uint8_t(val / 10);
-    case 5:
-        return uint8_t(val / 10);
-    case 6:
-        return uint8_t(val * 100);
-    case 7:
-        return uint8_t(val / 10);
-    case 8:
-        return uint8_t(val / 10);
-    case 9:
-        return uint8_t(val * 100);
-    case 10:
-        return (uint8_t)(val * 4.0);
-    case 11:
-        return (uint8_t)(val * 4.0);
-    case 12:
-        return (uint8_t)(val * 100);
-    default:
-        return (uint8_t)111; // error!
-    }
+    return (uint8_t)(val / FactorTableRF[i]);
 }
 
 // ************************************************************************************************************/
@@ -93,7 +35,7 @@ void DisplayRatesValues(uint8_t startIndex, uint8_t stopIndex)
             float ThisValue = FixFactor(Rate_Values[i], i);
             if (ThisValue == int(ThisValue))
             {
-                if (i < 9)
+                if (i < 10)
                 {
                     snprintf(buf, sizeof(buf), "%.0f", ThisValue);
                 }
@@ -228,7 +170,7 @@ void SendEditedRates()
         ShowRatesBank(); // reload old RATES, undoing any edits
         return;
     }
-    RatesMsg((char *)"Sending edited RATES ...", Gray); // Show sending message
+    RatesMsg((char *)"Sending edited Rates ...", Gray); // Show sending message
     DelayWithDog(150);                                  // allow time for screen to update
     ReadEditedRATES();                                  // read the edited RATES from the screen;
     AddParameterstoQueue(GET_SECOND_6_RATES_VALUES);    // SECOND MUST BE SENT FIRST!!! Send RATES 7-12 values from TX to RX
@@ -236,8 +178,6 @@ void SendEditedRates()
     HideRATESMsg();                                     // SECOND MUST BE SENT FIRST!!!  because this queue is a LIFO stack
     SendCommand((char *)"vis b3,0");                    // hide "Send" button
     Rates_Were_Edited = false;
-  //  MsgBox((char *)"page RatesView", (char *)"Edited Rates were sent to Nexus.");
-  
 }
 #endif
 // RATESRF_H
