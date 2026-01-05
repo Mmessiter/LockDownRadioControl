@@ -1361,6 +1361,7 @@ bool Reading_RATES_Now = false;
 uint8_t Rate_Values[MAX_RATES_BYTES];
 char Rate_Types[6][15] = {"None", "Betaflight", "Raceflight", "KISS", "Actual", "QuickRates"};
 const float FactorTableRF[13] = {1, 10, 10, .01, 10, 10, .01, 10, 10, .01, .25, .25, .01}; // Factors for each RATES byte needed by Rotorflight
+bool Rotorflight22Detected = false;
 
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 

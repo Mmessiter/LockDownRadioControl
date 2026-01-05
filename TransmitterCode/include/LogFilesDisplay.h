@@ -17,7 +17,7 @@
 #define MXLINES BUFFEREDLINES * 4   // (EDIT THESE NUMBERS WITH GREAT CAUTION!!!!)
 #define SCROLLTRIGGER 0.75          // (EDIT THESE NUMBERS WITH GREAT CAUTION!!!!)
 #define MXLINELENGTH 110
-#define WRAPPOINT 66          // where to word-wrap
+#define WRAPPOINT 65          // where to word-wrap
 #define MAXSEEKPOSITIONS 5000 // hope it's enough
 #define FONTPOINTS 24         // 24 point font at Nextion
 #define GOING_NOWHERE 0
