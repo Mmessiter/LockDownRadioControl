@@ -141,6 +141,7 @@ void EndRatesView()
     }
     Rates_Were_Edited = false;
     SendCommand((char *)"page RXOptionsView");
+    CurrentView = RXSETUPVIEW1;
 }
 // ************************************************************************************************************/
 void RatesWereEdited()

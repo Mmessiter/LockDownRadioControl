@@ -132,6 +132,7 @@ void EndPIDView()
     {
         PIDS_Were_Edited = false;
         SendCommand((char *)"page RXOptionsView");
+        CurrentView = RXSETUPVIEW1;
     }
 }
 /***********************************************************************************************************/ 
@@ -163,6 +164,7 @@ void StartPIDView() // this starts PID view
     }
     CurrentView = PIDVIEW;               // Set current view
     SendCommand((char *)"page PIDView"); // Go to PID view page
+    CurrentView = PIDVIEW;
     ShowPIDBank();                       // Show the current bank's PIDs
     SendText((char *)"t11", ModelName);  // Show model name
     PIDS_Were_Edited = false;
