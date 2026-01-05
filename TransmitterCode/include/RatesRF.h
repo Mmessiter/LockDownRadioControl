@@ -1,12 +1,12 @@
-// This file handles rates for Rotorflight
+// This file handles basic rates editing for Rotorflight
+
 #ifndef RATESRF_H
 #define RATESRF_H
 #include <Arduino.h>
 #include "1Definitions.h"
-
+const float FactorTableRF[13] = {1, 10, 10, .01, 10, 10, .01, 10, 10, .01, 0.25, 0.25, .01}; // Factors for each RATES byte needed by Rotorflight
 // ************************************************************************************************************/
 
-const float FactorTableRF[13] = {1.0, 0.1, 0.1, 0.01, 0.1, 0.1, 0.01, 0.1, 0.1, 0.01, 0.25, 0.25, 0.01};
 float FixFactor(uint8_t val, uint8_t i)
 {
     return ((float)val) * FactorTableRF[i];
