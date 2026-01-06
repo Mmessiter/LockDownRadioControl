@@ -122,15 +122,7 @@ void CheckServoSpeeds()
         }
     }
 }
-/*********************************************************************************************************************************/
-void CheckBanksInUse()
-{
-    for (int i = 0; i < 4; ++i)
-    {
-        if (BanksInUse[i] > 23)
-            BanksInUse[i] = i;
-    }
-}
+
 /*********************************************************************************************************************************/
 
 void CheckServoType()
@@ -410,7 +402,6 @@ bool ReadOneModel(uint32_t Mnum)
         BanksInUse[i] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
-    CheckBanksInUse();
 
     for (i = 0; i < 12; ++i)
     {

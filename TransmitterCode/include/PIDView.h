@@ -86,7 +86,10 @@ void ShowPIDBank() // this is called when bank is changed so new bank's PID valu
         char buf[40];
         if (LedWasGreen)
         {
-            snprintf(buf, sizeof(buf), "Loading PIDs for Bank %d ...", Bank);
+            strcpy (buf, "Loading PIDs for  ");
+            strcat (buf, BankNames[BanksInUse[Bank - 1]]);
+            strcat (buf, " ...");
+            // snprintf(buf, sizeof(buf), "Loading PIDs for Bank %d ...", Bank);
         }
         else
         {
@@ -108,8 +111,12 @@ void ShowPIDBank() // this is called when bank is changed so new bank's PID valu
         PID_Send_Duration = 1000;                     // how many milliseconds to await PID values
         Reading_PIDS_Now = true;                      // This tells the Ack payload parser to get PID values
         AddParameterstoQueue(SEND_PID_VALUES);        // Request PID values from RX
-        snprintf(buf, sizeof(buf), "Bank: %d", Bank); // Display which Bank
-        SendText((char *)"t9", buf);                  // Show bank number etc
+       
+      
+
+              // snprintf(buf, sizeof(buf), "Bank: %d", Bank); // Display which Bank
+
+        SendText((char *)"t9", BankNames[BanksInUse[Bank - 1]]); // Show bank number etc
         PIDS_Were_Edited = false;
         PID_Start_Time = millis(); // record start time as it's not long
     }
