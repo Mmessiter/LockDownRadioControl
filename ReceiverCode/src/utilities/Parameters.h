@@ -116,10 +116,10 @@ void ReadExtraParameters()
         All_PIDs[9] = Parameters.word[4];
         All_PIDs[10] = Parameters.word[5];
         All_PIDs[11] = Parameters.word[6];
-
-        if (pidsLookValid(All_PIDs))
+      //  if (pidsLookValid(All_PIDs)) // LATER!
+      //  {
             WritePIDsToNexusAndSave(All_PIDs);
-
+      //  }
         break;
 
     case SEND_RATES_VALUES: // 12
@@ -156,7 +156,6 @@ void ReadExtraParameters()
         WriteRatesToNexusAndSave();
         break;
 
-        
     default:
         break;
     }
