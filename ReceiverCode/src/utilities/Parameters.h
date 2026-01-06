@@ -35,8 +35,10 @@ void ShowValues(const char *name, float value) // // Show values in the serial m
 bool pidsLookValid(const uint16_t p[12])
 {
     for (int i = 0; i < 12; i++)
-        if ((p[i] > 750) || (p[i] < 1))
-            return false; // absurd for RF PID scales
+        if (p[i] > 1000) // arbitrary limit for sanity check. ) is OK.
+        {
+            return false;
+        } 
     return true;
 }
 
@@ -116,21 +118,18 @@ void ReadExtraParameters()
         All_PIDs[9] = Parameters.word[4];
         All_PIDs[10] = Parameters.word[5];
         All_PIDs[11] = Parameters.word[6];
-      //  if (pidsLookValid(All_PIDs)) // LATER!
-      //  {
+        if (pidsLookValid(All_PIDs)) 
             WritePIDsToNexusAndSave(All_PIDs);
-      //  }
         break;
 
     case SEND_RATES_VALUES: // 12
         if (!Rotorflight22Detected)
             break;
-        if (Parameters.word[1] == 321) // 321 is the command to send PIDs NOW!
+        if (Parameters.word[1] == 321) // 321 is the command to send RATES NOW!
         {
             SendRotorFlightParametresNow = SEND_RATES_RF; // send rates now =2
             Started_Sending_RATEs = millis();
             RATES_Send_Duration = Parameters.word[2];
-            // Look("Request to send RATES values received");
         }
     case GET_FIRST_7_RATES_VALUES: // 13
         if (!Rotorflight22Detected)
@@ -153,7 +152,7 @@ void ReadExtraParameters()
         Collective_Centre_Rate = Parameters.word[4];
         Collective_Max_Rate = Parameters.word[5];
         Collective_Expo = Parameters.word[6];
-        WriteRatesToNexusAndSave();
+        WriteRatesToNexusAndSave(); // no checking here yet for validity. Maybe later if needed 
         break;
 
     default:
