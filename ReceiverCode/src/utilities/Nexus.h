@@ -216,13 +216,10 @@ inline void WritePIDsToNexusAndSave(const uint16_t pid[12])
         payload[i * 2 + 0] = (uint8_t)(pid[i] & 0xFF);
         payload[i * 2 + 1] = (uint8_t)(pid[i] >> 8);
     }
-
     SendToMSP(MSP_SET_PID, payload, sizeof(payload));
-    delay(50);
-
+    delay(100);
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
-    delay(50);
-
+    delay(100);
     lastWriteTime = now; // set cooldown only after we actually did the write+save
 }
 // ************************************************************************************************************
