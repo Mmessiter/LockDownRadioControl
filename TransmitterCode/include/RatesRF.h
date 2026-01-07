@@ -48,7 +48,7 @@ void DisplayRatesValues(uint8_t startIndex, uint8_t stopIndex) // Displays RATES
             char temp[10];
             if (i == 0)
             {
-                SendText(RatesWindows[0], Rate_Types[Rate_Values[0]]); // Show rate type
+                SendText(RatesWindows[0], Rate_Types[Rate_Values[0]]); // Show rates type but it cannot be edited here
                 continue;
             }
             float ThisValue = (Rate_Values[i] * FactorTableRF[i]); // MULTIPLY BY factor to get display value

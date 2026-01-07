@@ -171,7 +171,7 @@ void SendCommand(char *tbox)
     delayMicroseconds(70);
     GetReturnCode(tbox);
     if (InStrng(blankview, tbox))
-        return; // Don't wait for blankview
+        return; // Don't need to wait for blankview
     if (InStrng(page, tbox))
         DelayWithDog(SCREENCHANGEWAIT); // Allow time for new page to appear
 }

@@ -86,7 +86,7 @@
 #define LOW_VOLTAGE_TIME 10000                // How many ms to endure low voltage before announcing it. (10 seconds)
 #define SHOWCOMMSDELAY 100                    // ms pauses between updated info on NEXTION
 #define WARMUPDELAY 300                       // fails at 200 so must be >200 ...
-#define SCREENCHANGEWAIT 10                   // allow 10ms for screen to appear
+#define SCREENCHANGEWAIT 20                   // allow 20ms for screen to appear
 #define BATTERY_CHECK_INTERVAL 1000           // 2 seconds between battery checks
 #define POWERONOFFDELAY 1000                  // Delay after power OFF before transmit stops.
 #define POWERONOFFDELAY2 4000                 // Delay after power ON before Off is possible....
