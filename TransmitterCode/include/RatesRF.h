@@ -12,7 +12,7 @@
 void ReadEditedRateValues()
 {
 
-    for (int i = 1; i < MAX_RATES_BYTES; ++i) // start at 1 as 0 is Rates Type and not yet edited here
+    for (int i = 1; i < MAX_RATES_BYTES; ++i) // start at 1 because 0 is Rates Type and not yet edited here
     {
         char temp[10];
         GetText(RatesWindows[i], temp);
@@ -31,8 +31,8 @@ void SendEditedRates()
     DelayWithDog(200);                                  // allow LOTS of time for screen to update BEFORE sending another Nextion command
     RatesMsg((char *)"Sending edited Rates ...", Gray); // Show sending message
     ReadEditedRateValues();                             // read the edited RATES from the screen;
-    AddParameterstoQueue(GET_SECOND_6_RATES_VALUES);    // SECOND MUST BE SENT FIRST!!! Send RATES 7-12 values from TX to RX
-    AddParameterstoQueue(GET_FIRST_7_RATES_VALUES);     // SECOND MUST BE SENT FIRST!!! Send RATES 1-6 values from TX to RX
+    AddParameterstoQueue(GET_SECOND_6_RATES_VALUES);    // SECOND MUST BE QUEUED FIRST!!! Send RATES 7-12 values from TX to RX
+    AddParameterstoQueue(GET_FIRST_7_RATES_VALUES);     // SECOND MUST BE QUEUED FIRST!!! Send RATES 1-6 values from TX to RX
     HideRATESMsg();                                     // ...because this queue is a LIFO stack
     SendCommand((char *)"vis b3,0");                    // hide "Send" button
     Rates_Were_Edited = false;                          // reset edited flag
@@ -85,7 +85,7 @@ void RatesMsg(const char *msg, uint16_t Colour)
 {
     if (CurrentView == RATESVIEW1) // Must be in RATES view
     {
-        ForegroundColourRATESLabels(Colour);   // make text white so it isnt visible
+        ForegroundColourRATESLabels(Colour);   // make text white so it isn't visible
         SendText((char *)"busy", (char *)msg); // Show RATES message
         SendCommand((char *)"vis busy,1");     // Make it visible
         SendCommand((char *)"vis b3,0");       // hide "Send" button

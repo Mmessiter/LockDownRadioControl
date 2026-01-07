@@ -148,9 +148,9 @@ void SendEditedPIDs()
     DelayWithDog(200);                               //  allow LOTS of time for screen to update BEFORE sending another Nextion command
     PIDMsg((char *)"Sending edited PIDs ...", Gray); // Show sending message
     ReadEditedPIDs();                                // read the edited PIDs from the screen;
-    AddParameterstoQueue(GET_SECOND_6_PID_VALUES);   // SECOND MUST BE SENT FIRST!!! Send PID 7-12 values from TX to RX
-    AddParameterstoQueue(GET_FIRST_6_PID_VALUES);    // SECOND MUST BE SENT FIRST!!! Send PID 1-6 values from TX to RX
-    HidePIDMsg();                                    // SECOND MUST BE SENT FIRST!!!  because this queue is a LIFO stack
+    AddParameterstoQueue(GET_SECOND_6_PID_VALUES);   // SECOND MUST BE QUEUED FIRST!!! Send PID 7-12 values from TX to RX
+    AddParameterstoQueue(GET_FIRST_6_PID_VALUES);    // SECOND MUST BE QUEUED FIRST!!! Send PID 1-6 values from TX to RX
+    HidePIDMsg();                                    // SECOND MUST BE QUEUED FIRST!!!  because this queue is a LIFO stack
     SendCommand((char *)"vis b3,0");                 // hide "Send" button
     PIDS_Were_Edited = false;
     PlaySound(BEEPCOMPLETE); // let user know we're done
