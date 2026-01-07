@@ -89,7 +89,8 @@ void ShowRatesBank()
         char buf[40];
         if (LedWasGreen)
         {
-            snprintf(buf, sizeof(buf), "Loading rates for Bank %d ...", Bank);
+            strcpy(buf, "Loading rates for ");
+            strcat(buf, BankNames[BanksInUse[Bank - 1]]);
         }
         else
         {
@@ -97,12 +98,11 @@ void ShowRatesBank()
         }
         if (Rates_Were_Edited) // if RATES were edited but not sent and bank changed
         {
-            char NB[10];
             char Wmsg[120];
-            char w1[] = "Rates for Bank ";
+            char w1[] = "Rates for "; //heer
             char w2[] = " were edited \r\nbut not saved. (Too late now!)\r\nSo you may want to check them.";
             strcpy(Wmsg, w1);
-            strcat(Wmsg, Str(NB, PreviousBank, 0));
+            strcat(Wmsg, BankNames[BanksInUse[Bank - 1]]);
             strcat(Wmsg, w2);
             MsgBox((char *)"page RatesView", Wmsg); // Warn about unsaved edits
         }
