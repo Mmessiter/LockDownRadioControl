@@ -89,7 +89,6 @@ void ShowPIDBank() // this is called when bank is changed so new bank's PID valu
             strcpy (buf, "Loading PIDs for  ");
             strcat (buf, BankNames[BanksInUse[Bank - 1]]);
             strcat (buf, " ...");
-            // snprintf(buf, sizeof(buf), "Loading PIDs for Bank %d ...", Bank);
         }
         else
         {
