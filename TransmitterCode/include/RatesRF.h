@@ -11,12 +11,32 @@
 // ************************************************************************************************************/
 void ReadEditedRateValues()
 {
+
     for (int i = 1; i < MAX_RATES_BYTES; ++i) // start at 1 as 0 is Rates Type and not yet edited here
     {
         char temp[10];
         GetText(RatesWindows[i], temp);
         Rate_Values[i] = (uint8_t)(atof(temp) / FactorTableRF[i]); // DIVIDE BY factor to get byte value
     }
+}
+
+// ************************************************************************************************************/
+void SendEditedRates()
+{
+    if (!GetConfirmation((char *)"page RatesView", (char *)"Send edited RATES to Nexus?"))
+    {
+        ShowRatesBank(); // reload old RATES, undoing any edits
+        return;
+    }
+    DelayWithDog(200);                                  // allow LOTS of time for screen to update BEFORE sending another Nextion command
+    RatesMsg((char *)"Sending edited Rates ...", Gray); // Show sending message
+    ReadEditedRateValues();                             // read the edited RATES from the screen;
+    AddParameterstoQueue(GET_SECOND_6_RATES_VALUES);    // SECOND MUST BE SENT FIRST!!! Send RATES 7-12 values from TX to RX
+    AddParameterstoQueue(GET_FIRST_7_RATES_VALUES);     // SECOND MUST BE SENT FIRST!!! Send RATES 1-6 values from TX to RX
+    HideRATESMsg();                                     // ...because this queue is a LIFO stack
+    SendCommand((char *)"vis b3,0");                    // hide "Send" button
+    Rates_Were_Edited = false;                          // reset edited flag
+    PlaySound(BEEPCOMPLETE);                            // let user know we're done
 }
 // ************************************************************************************************************/
 void DisplayRatesValues(uint8_t startIndex, uint8_t stopIndex) // Displays RATES values on screen a few at a time as they arrive in Ack payloads
@@ -99,7 +119,7 @@ void ShowRatesBank()
         if (Rates_Were_Edited) // if RATES were edited but not sent and bank changed
         {
             char Wmsg[120];
-            char w1[] = "Rates for "; //heer
+            char w1[] = "Rates for "; // heer
             char w2[] = " were edited \r\nbut not saved. (Too late now!)\r\nSo you may want to check them.";
             strcpy(Wmsg, w1);
             strcat(Wmsg, BankNames[BanksInUse[Bank - 1]]);
@@ -107,12 +127,12 @@ void ShowRatesBank()
             MsgBox((char *)"page RatesView", Wmsg); // Warn about unsaved edits
         }
         RatesMsg(buf, Gray);
-        RATES_Send_Duration = 1000;                   // how many milliseconds to await RATES values
-        Reading_RATES_Now = true;                     // This tells the Ack payload parser to get RATES values
-        AddParameterstoQueue(SEND_RATES_VALUES);      // Request RATES values from RX
+        RATES_Send_Duration = 1000;                              // how many milliseconds to await RATES values
+        Reading_RATES_Now = true;                                // This tells the Ack payload parser to get RATES values
+        AddParameterstoQueue(SEND_RATES_VALUES);                 // Request RATES values from RX
         SendText((char *)"t9", BankNames[BanksInUse[Bank - 1]]); // Show bank number etc
-        RATES_Start_Time = millis();                  // record start time as it's not long
-        Rates_Were_Edited = false;                    // reset edited flag
+        RATES_Start_Time = millis();                             // record start time as it's not long
+        Rates_Were_Edited = false;                               // reset edited flag
     }
 }
 
@@ -149,24 +169,6 @@ void RatesWereEdited()
     Rates_Were_Edited = true;
 }
 
-// ************************************************************************************************************/
-void SendEditedRates()
-{
-    if (!GetConfirmation((char *)"page RatesView", (char *)"Send edited RATES to Nexus?"))
-    {
-        ShowRatesBank(); // reload old RATES, undoing any edits
-        return;
-    }
-    RatesMsg((char *)"Sending edited Rates ...", Gray); // Show sending message
-    DelayWithDog(400);                                  // allow LOTS of time for screen to update
-    ReadEditedRateValues();                             // read the edited RATES from the screen;
-    AddParameterstoQueue(GET_SECOND_6_RATES_VALUES);    // SECOND MUST BE SENT FIRST!!! Send RATES 7-12 values from TX to RX
-    AddParameterstoQueue(GET_FIRST_7_RATES_VALUES);     // SECOND MUST BE SENT FIRST!!! Send RATES 1-6 values from TX to RX
-    HideRATESMsg();                                     // ...because this queue is a LIFO stack
-    SendCommand((char *)"vis b3,0");                    // hide "Send" button
-    Rates_Were_Edited = false;                          // reset edited flag
-    PlaySound(BEEPCOMPLETE);                            // let user know we're done
-}
 #endif // RATESRF_H
 
 // ************************************************************************************************************/

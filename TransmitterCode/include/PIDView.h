@@ -86,9 +86,9 @@ void ShowPIDBank() // this is called when bank is changed so new bank's PID valu
         char buf[40];
         if (LedWasGreen)
         {
-            strcpy (buf, "Loading PIDs for  ");
-            strcat (buf, BankNames[BanksInUse[Bank - 1]]);
-            strcat (buf, " ...");
+            strcpy(buf, "Loading PIDs for  ");
+            strcat(buf, BankNames[BanksInUse[Bank - 1]]);
+            strcat(buf, " ...");
         }
         else
         {
@@ -106,10 +106,10 @@ void ShowPIDBank() // this is called when bank is changed so new bank's PID valu
             MsgBox((char *)"page PIDView", Wmsg); // Warn about unsaved edits
         }
 
-        PIDMsg(buf, Gray);                            // Show loading message and hides old PIDs
-        PID_Send_Duration = 1000;                     // how many milliseconds to await PID values
-        Reading_PIDS_Now = true;                      // This tells the Ack payload parser to get PID values
-        AddParameterstoQueue(SEND_PID_VALUES);        // Request PID values from RX   
+        PIDMsg(buf, Gray);                                       // Show loading message and hides old PIDs
+        PID_Send_Duration = 1000;                                // how many milliseconds to await PID values
+        Reading_PIDS_Now = true;                                 // This tells the Ack payload parser to get PID values
+        AddParameterstoQueue(SEND_PID_VALUES);                   // Request PID values from RX
         SendText((char *)"t9", BankNames[BanksInUse[Bank - 1]]); // Show bank number etc
         PIDS_Were_Edited = false;
         PID_Start_Time = millis(); // record start time as it's not long
@@ -136,7 +136,7 @@ void EndPIDView()
         CurrentView = RXSETUPVIEW1;
     }
 }
-/***********************************************************************************************************/ 
+/***********************************************************************************************************/
 
 void SendEditedPIDs()
 {
@@ -145,13 +145,13 @@ void SendEditedPIDs()
         ShowPIDBank(); // reload old PIDs, undoing any edits
         return;
     }
+    DelayWithDog(200);                               //  allow LOTS of time for screen to update BEFORE sending another Nextion command
     PIDMsg((char *)"Sending edited PIDs ...", Gray); // Show sending message
-    DelayWithDog(150);                             // allow time for screen to update
-    ReadEditedPIDs();                              // read the edited PIDs from the screen;
-    AddParameterstoQueue(GET_SECOND_6_PID_VALUES); // SECOND MUST BE SENT FIRST!!! Send PID 7-12 values from TX to RX
-    AddParameterstoQueue(GET_FIRST_6_PID_VALUES);  // SECOND MUST BE SENT FIRST!!! Send PID 1-6 values from TX to RX
-    HidePIDMsg();                                  // SECOND MUST BE SENT FIRST!!!  because this queue is a LIFO stack
-    SendCommand((char *)"vis b3,0");               // hide "Send" button
+    ReadEditedPIDs();                                // read the edited PIDs from the screen;
+    AddParameterstoQueue(GET_SECOND_6_PID_VALUES);   // SECOND MUST BE SENT FIRST!!! Send PID 7-12 values from TX to RX
+    AddParameterstoQueue(GET_FIRST_6_PID_VALUES);    // SECOND MUST BE SENT FIRST!!! Send PID 1-6 values from TX to RX
+    HidePIDMsg();                                    // SECOND MUST BE SENT FIRST!!!  because this queue is a LIFO stack
+    SendCommand((char *)"vis b3,0");                 // hide "Send" button
     PIDS_Were_Edited = false;
     PlaySound(BEEPCOMPLETE); // let user know we're done
 }
@@ -166,8 +166,8 @@ void StartPIDView() // this starts PID view
     CurrentView = PIDVIEW;               // Set current view
     SendCommand((char *)"page PIDView"); // Go to PID view page
     CurrentView = PIDVIEW;
-    ShowPIDBank();                       // Show the current bank's PIDs
-    SendText((char *)"t11", ModelName);  // Show model name
+    ShowPIDBank();                      // Show the current bank's PIDs
+    SendText((char *)"t11", ModelName); // Show model name
     PIDS_Were_Edited = false;
 }
 #endif

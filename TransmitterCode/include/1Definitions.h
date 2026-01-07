@@ -758,6 +758,8 @@ void RatesWereEdited();
 void SendEditedRates();
 void DisplayRatesValues(uint8_t startIndex, uint8_t stopIndex);
 void ReadRatesBytesFromAckPayload(uint8_t n, uint8_t m);
+void RatesMsg(const char *msg, uint16_t Colour);
+void ShowRatesBank();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
