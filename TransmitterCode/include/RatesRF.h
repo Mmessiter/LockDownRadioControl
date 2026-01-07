@@ -110,8 +110,7 @@ void ShowRatesBank()
         RATES_Send_Duration = 1000;                   // how many milliseconds to await RATES values
         Reading_RATES_Now = true;                     // This tells the Ack payload parser to get RATES values
         AddParameterstoQueue(SEND_RATES_VALUES);      // Request RATES values from RX
-        snprintf(buf, sizeof(buf), "Bank: %d", Bank); // Display which Bank
-        SendText((char *)"t9", buf);                  // Show bank number etc
+        SendText((char *)"t9", BankNames[BanksInUse[Bank - 1]]); // Show bank number etc
         RATES_Start_Time = millis();                  // record start time as it's not long
         Rates_Were_Edited = false;                    // reset edited flag
     }
@@ -159,8 +158,8 @@ void SendEditedRates()
         return;
     }
     RatesMsg((char *)"Sending edited Rates ...", Gray); // Show sending message
-    DelayWithDog(150);                                  // allow time for screen to update
-    ReadEditedRateValues();                                  // read the edited RATES from the screen;
+    DelayWithDog(400);                                  // allow LOTS of time for screen to update
+    ReadEditedRateValues();                             // read the edited RATES from the screen;
     AddParameterstoQueue(GET_SECOND_6_RATES_VALUES);    // SECOND MUST BE SENT FIRST!!! Send RATES 7-12 values from TX to RX
     AddParameterstoQueue(GET_FIRST_7_RATES_VALUES);     // SECOND MUST BE SENT FIRST!!! Send RATES 1-6 values from TX to RX
     HideRATESMsg();                                     // ...because this queue is a LIFO stack
