@@ -144,9 +144,9 @@ void SendEditedPIDs()
 //************************************************************************************************************/
 void StartPIDView() // this starts PID view
 {
-    if (!SafetyON)
+    if (SendBuffer[ArmingChannel-1] > 1000) // Safety is on if value > 1000
     {
-        MsgBox(RXOptionsView, (char *)"Please enable 'Safety'!");
+        MsgBox((char *)"page RFView", (char *)"Model is armed and dangerous!\r\n(Disarm model to edit PIDs.)");
         return;
     }
     CurrentView = PIDVIEW;               // Set current view

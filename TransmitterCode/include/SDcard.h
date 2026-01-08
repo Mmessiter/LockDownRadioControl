@@ -139,19 +139,7 @@ void CheckServoType()
             ServoCentrePulse[i] = 760;
     }
 }
-///*********************************************************************************************************************************/
-// void CheckStabilistionParameters()
-// {
 
-//     if (ActiveSettings->Marker != PID_MARKER_VALUE)
-//     {
-//         ActiveSettings = &RateSettings; // set the active settings to the rate settings
-//         RateSettings = FactoryPlaneRate;
-//         SelfLevelSettings = FactoryPlaneLevelling;
-//         SelfLevellingOn = false; // defaults are always without self-levelling
-//                                  // MsgBox(pFrontView, (char*)"PIDs etc. -> defaults!");
-//     }
-// }
 
 /************************************************************************************************************************************************/
 /**********************************  READ A MODEL ***********************************************************************************************/
@@ -303,8 +291,8 @@ bool ReadOneModel(uint32_t Mnum)
     ++SDCardAddress;
     ++SDCardAddress;
     ++SDCardAddress;
-// spare
-    ++SDCardAddress;
+    ArmingChannel = SDRead8BITS(SDCardAddress); // heer
+    ++ SDCardAddress;
 
     for (i = 0; i < CHANNELSUSED; ++i)
     {
@@ -1219,8 +1207,7 @@ void SaveOneModel(uint32_t mnum)
     ++SDCardAddress;
     ++SDCardAddress;
     ++SDCardAddress;
-
-// spare one
+    SDUpdate8BITS(SDCardAddress, ArmingChannel); // heer
     ++SDCardAddress;
 
     // *********************************************************************************
