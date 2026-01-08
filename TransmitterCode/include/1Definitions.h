@@ -241,6 +241,7 @@
 #define SPLASHVIEW 44
 #define PIDVIEW 45
 #define RATESVIEW1 46
+#define ROTORFLIGHTVIEW 47
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -760,6 +761,9 @@ void DisplayRatesValues(uint8_t startIndex, uint8_t stopIndex);
 void ReadRatesBytesFromAckPayload(uint8_t n, uint8_t m);
 void RatesMsg(const char *msg, uint16_t Colour);
 void ShowRatesBank();
+void RotorFlightStart();
+void RXOptionsViewStart();
+void RotorFlightEnd();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
@@ -1315,7 +1319,7 @@ uint32_t GapStart = 0;
 uint32_t ThisGap = 0;
 uint32_t GapAverage = 0;
 uint32_t GapCount = 0;
-float GearRatio = 10.3;
+
 uint32_t GapSets[11] = {0};
 uint8_t GapPercentages[11] = {0};
 const uint16_t GapThesholds[11] = {0, 4, 8, 10, 12, 15, 25, 50, 100, 250, 500};
@@ -1333,6 +1337,8 @@ char MAX_ESC_Temperature[10];
 char PID_Labels[12][4] = {"n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11"};
 bool PIDS_Were_Edited = false;
 bool Rates_Were_Edited = false;
+float GearRatio = 10.3;
+uint8_t ArmingChannel = 5;
 
 #define MAX_RATES_BYTES 13
 

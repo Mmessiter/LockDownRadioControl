@@ -158,6 +158,7 @@
 #include "Parameters.h"
 #include "PIDView.h"
 #include "RatesRF.h"
+#include "RotorFlight.h"
 
 /*********************************************************************************************************************************/
 
@@ -3331,8 +3332,8 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     EndRatesView,         // 23
     RatesWereEdited,      // 24
     SendEditedRates,      // 25
-    Blank,                // 26
-    Blank                 // 27
+    RotorFlightStart,     // 26
+    RotorFlightEnd        // 27 *******
 };
 
 // This list migth become MUCH longer as it limit is 24 bits big

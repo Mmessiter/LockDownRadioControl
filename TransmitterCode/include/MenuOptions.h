@@ -1074,14 +1074,14 @@ void BuddyChViewEnd()
 
 /******************************************************************************************************************************/
 
-void RXOptionsViewStart() // model options screen
+void RXOptionsViewStart() // model Options screen
 {
     char pRXSetup1[] = "page RXOptionsView";
     char UseKill[] = "c0";
     char Mchannel[] = "n1";
     char Mvalue[] = "n0";
     char t10[] = "t10";
-    char t12[] = "t12"; // gear ratio
+   
     char Vbuf[15];
     char RxVCorrextion[] = "n2";
     char c1[] = "c1";
@@ -1100,22 +1100,15 @@ void RXOptionsViewStart() // model options screen
     SendValue(RxVCorrextion, RxVoltageCorrection);
     SendValue(c2, TimerDownwards);
     SendValue(n4, TimerStartTime / 60);
-    snprintf(Vbuf, 5, "%1.2f", GearRatio);
-    SendText(t12, Vbuf);
+   
     CurrentView = RXSETUPVIEW1;
 
     if (Rotorflight22Detected)
     {
-        SendCommand((char *)"vis t12,1"); // show gear ratio if Rotorflight 2.2 detected
-        SendCommand((char *)"vis t11,1"); // show gear ratio if Rotorflight 2.2 detected
-        SendCommand((char *)"vis Pid,1"); // show gear ratio if Rotorflight 2.2 detected
         SendCommand((char *)"vis b1,1"); // show gear ratio if Rotorflight 2.2 detected
     }
     else
     {
-        SendCommand((char *)"vis t12,0"); // hide gear ratio if Rotorflight 2.2 not detected
-        SendCommand((char *)"vis t11,0"); // hide gear ratio if Rotorflight 2.2 not detected
-        SendCommand((char *)"vis Pid,0"); // hide gear ratio if Rotorflight 2.2 not detected
         SendCommand((char *)"vis b1,0"); // hide gear ratio if Rotorflight 2.2 not detected
     }
 
@@ -1300,6 +1293,10 @@ void EndServoTypeView()
     }
     GotoFrontView();
 }
-
+//******************************************************************************************************************************/
+void ReturnToModelSetupView()
+{
+    RXOptionsViewStart();
+}
 
 #endif

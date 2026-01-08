@@ -1,10 +1,15 @@
 
-                                         * IMPORTANT! *  ||
+                                            * IMPORTANT! *  ||
 
-The Centre Sensitivity and Maximum values MUST be a multiple of 10.|
-The Exponential values range from 0 to 1 only.||
+The Centre Sensitivity and Maximum values must be a multiple of 10.||
+
+The Exponential values range between 0 to 1 only.||
+
 If you enter a value thats not allowed it will be rounded downwards by Rotorflights firmware.||
 
+The values for Roll, Pitch and Yaw are degress of rotation per second which will be sought, and may well be achieved, physics permitting.||
+
+The values for Collective are the angle (amount) of collective pitch of the main blades - assuming the mechanism can actually do that.|| 
 
 This screen allows the editing of RATES values for the Nexus helicopter flight controller, and probably other flight controllers that support the same MSP v1 protocol.||
 

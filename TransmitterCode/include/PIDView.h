@@ -121,21 +121,7 @@ void PIDs_Were_edited()
     SendCommand((char *)"vis b3,1"); // show "Send" button
     PIDS_Were_Edited = true;
 }
-//***********************************************************************************************************/
-void EndPIDView()
-{
-    if (PIDS_Were_Edited)
-    {
-        if (GetConfirmation((char *)"page PIDView", (char *)"Discard edited PIDs?"))
-            GotoFrontView();
-    }
-    else
-    {
-        PIDS_Were_Edited = false;
-        SendCommand((char *)"page RXOptionsView");
-        CurrentView = RXSETUPVIEW1;
-    }
-}
+
 /***********************************************************************************************************/
 
 void SendEditedPIDs()
@@ -169,5 +155,20 @@ void StartPIDView() // this starts PID view
     ShowPIDBank();                      // Show the current bank's PIDs
     SendText((char *)"t11", ModelName); // Show model name
     PIDS_Were_Edited = false;
+}
+//***********************************************************************************************************/
+void EndPIDView()
+{
+    if (PIDS_Were_Edited)
+    {
+        if (GetConfirmation((char *)"page PIDView", (char *)"Discard edited PIDs?"))
+            GotoFrontView();
+    }
+    else
+    {
+        PIDS_Were_Edited = false;
+        SendCommand((char *)"page RFView");
+        CurrentView = ROTORFLIGHTVIEW;
+    }
 }
 #endif

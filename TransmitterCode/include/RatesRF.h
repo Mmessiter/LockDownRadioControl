@@ -159,8 +159,8 @@ void EndRatesView()
             return;
     }
     Rates_Were_Edited = false;
-    SendCommand((char *)"page RXOptionsView");
-    CurrentView = RXSETUPVIEW1;
+    SendCommand((char *)"page RFView");
+    CurrentView = ROTORFLIGHTVIEW;
 }
 // ************************************************************************************************************/
 void RatesWereEdited()
