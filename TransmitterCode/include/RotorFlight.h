@@ -12,7 +12,6 @@ void RotorFlightStart()
     char t12[] = "t12";
     char t7[] = "t7";
     char Vbuf[15];
-
     SendCommand((char *)"page RFView");
     CurrentView = ROTORFLIGHTVIEW;
     SendText((char *)"t5", (char *) "2.2"); // Show version
@@ -21,9 +20,6 @@ void RotorFlightStart()
     SendText(t12, Vbuf);
     snprintf(Vbuf, 5, "%d", ArmingChannel);
     SendText(t7, Vbuf);
-
-  
-      
 }
 // **********************************************************************************************************/
 void RotorFlightEnd()
