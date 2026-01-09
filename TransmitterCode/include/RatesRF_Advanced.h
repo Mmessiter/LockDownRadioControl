@@ -11,7 +11,7 @@
 
 void StartRatesAdvancedView(){
 
-    Look("page RatesAdvancedView");
+   SendCommand((char *)"page Rates_A_View");
 
 }
 
