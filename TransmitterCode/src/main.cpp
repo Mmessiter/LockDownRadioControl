@@ -159,6 +159,8 @@
 #include "PIDView.h"
 #include "RatesRF.h"
 #include "RotorFlight.h"
+#include "RatesRF_Advanced.h"
+#include "PID_Advanced.h"
 
 /*********************************************************************************************************************************/
 
@@ -240,7 +242,7 @@ void RedLedOn()
     SendCommand((char *)"vis rpm,0"); // This will make the RPM display invisible
     SendCommand((char *)"vis StillConnected,0");
     if (!BindingEnabled)
-    SendCommand((char *)"vis wb,0");
+        SendCommand((char *)"vis wb,0");
     SendText((char *)"Owner", TxName); // Put owner name back
     First_RPM_Data = true;             // ready to start RPM data ...
     ClearMostParameters();
@@ -3303,37 +3305,40 @@ void CheckAllModelIds()
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!  ( Use "NUMBER<<8" )
-#define LASTFUNCTION1 28 // One more than final one
+#define LASTFUNCTION1 30 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])(){
-    Blank,                // 0 Cannot be used
-    DeleteModel,          // 1
-    StartAudioVisualView, // 2
-    EndAudioVisualView,   // 3
-    StartTXSetupView,     // 4
-    InputsViewEnd,        // 5
-    SystemPage1End,       // 6
-    SystemPage1Start,     // 7
-    StartWifiScan,        // 8
-    EndWifiScan,          // 9
-    StartServosTypeView,  // 10
-    EndServoTypeView,     // 11
-    LoadNewLogFile,       // 12
-    DeleteThisLogFile,    // 13
-    LogReleasedNEW,       // 14   // new version
-    LogTouched,           // 15   // this does nothing, yet ...
-    RefreshDualRatesNew,  // 16
-    StartGapsView,        // 17
-    StartPIDView,         // 18
-    SendEditedPIDs,       // 19
-    PIDs_Were_edited,     // 20
-    EndPIDView,           // 21
-    StartRatesView,       // 22
-    EndRatesView,         // 23
-    RatesWereEdited,      // 24
-    SendEditedRates,      // 25
-    RotorFlightStart,     // 26
-    RotorFlightEnd        // 27 *******
+    Blank,                  // 0 Cannot be used
+    DeleteModel,            // 1
+    StartAudioVisualView,   // 2
+    EndAudioVisualView,     // 3
+    StartTXSetupView,       // 4
+    InputsViewEnd,          // 5
+    SystemPage1End,         // 6
+    SystemPage1Start,       // 7
+    StartWifiScan,          // 8
+    EndWifiScan,            // 9
+    StartServosTypeView,    // 10
+    EndServoTypeView,       // 11
+    LoadNewLogFile,         // 12
+    DeleteThisLogFile,      // 13
+    LogReleasedNEW,         // 14   // new version
+    LogTouched,             // 15   // this does nothing, yet ...
+    RefreshDualRatesNew,    // 16
+    StartGapsView,          // 17
+    StartPIDView,           // 18
+    SendEditedPIDs,         // 19
+    PIDs_Were_edited,       // 20
+    EndPIDView,             // 21
+    StartRatesView,         // 22
+    EndRatesView,           // 23
+    RatesWereEdited,        // 24
+    SendEditedRates,        // 25
+    RotorFlightStart,       // 26
+    RotorFlightEnd,         // 27
+    StartRatesAdvancedView, // 28
+    StartPIDAdvancedView    // 29
+
 };
 
 // This list migth become MUCH longer as it limit is 24 bits big

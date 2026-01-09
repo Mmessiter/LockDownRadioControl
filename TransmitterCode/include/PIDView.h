@@ -65,6 +65,7 @@ void PIDMsg(const char *msg, uint16_t Colour)
         ForegroundColourPIDLabels(Colour);     // make text white so it isnt visible
         SendText((char *)"busy", (char *)msg); // Show PID message
         SendCommand((char *)"vis busy,1");     // Make it visible
+        SendCommand((char *)"vis b2,0");       // Make Advanced invisible
         SendCommand((char *)"vis b3,0");       // hide "Send" button
     }
 }
@@ -75,6 +76,7 @@ void HidePIDMsg()
     if (CurrentView == PIDVIEW) // Must be in PID view
     {
         SendCommand((char *)"vis busy,0"); // Hide  message
+        SendCommand((char *)"vis b2,1");   // Make Advanced visible
         ForegroundColourPIDLabels(Black);  // make text black so it is visible again
     }
 }
@@ -146,6 +148,7 @@ void StartPIDView() // this starts PID view
 {
     if (SendBuffer[ArmingChannel-1] > 1000) // Safety is on if value > 1000
     {
+        PlaySound(WHAHWHAHMSG); // let user know we're in trouble
         MsgBox((char *)"page RFView", (char *)"Model is armed and dangerous!\r\n(Disarm model to edit PIDs.)");
         return;
     }

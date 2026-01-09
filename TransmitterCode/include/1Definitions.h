@@ -764,6 +764,8 @@ void ShowRatesBank();
 void RotorFlightStart();
 void RXOptionsViewStart();
 void RotorFlightEnd();
+void StartRatesAdvancedView();
+void StartPIDAdvancedView();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *

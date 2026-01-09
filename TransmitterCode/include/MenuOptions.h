@@ -1090,6 +1090,11 @@ void RXOptionsViewStart() // model Options screen
     char c2[] = "c2"; // TimerDownwards timer on off
 
     SendCommand(pRXSetup1);
+    CurrentView = RXSETUPVIEW1;
+    if (Rotorflight22Detected)
+        SendCommand((char *)"b1.pco=WHITE"); // show in WHITE if Rotorflight 2.2 detected
+    else
+        SendCommand((char *)"b1.pco=GRAY"); // show in 33840 (GRAY) if Rotorflight 2.2 not detected
     SendValue(c1, CopyTrimsToAll);
     SendValue(n3, TrimMultiplier);
     snprintf(Vbuf, 5, "%1.2f", StopFlyingVoltsPerCell);
@@ -1101,17 +1106,6 @@ void RXOptionsViewStart() // model Options screen
     SendValue(c2, TimerDownwards);
     SendValue(n4, TimerStartTime / 60);
    
-    CurrentView = RXSETUPVIEW1;
-
-    if (Rotorflight22Detected)
-    {
-        SendCommand((char *)"vis b1,1"); // show gear ratio if Rotorflight 2.2 detected
-    }
-    else
-    {
-        SendCommand((char *)"vis b1,0"); // hide gear ratio if Rotorflight 2.2 not detected
-    }
-
     UpdateModelsNameEveryWhere();
 }
 
@@ -1123,7 +1117,6 @@ void RXOptionsViewEnd()
     char Mchannel[] = "n1";
     char Mvalue[] = "n0";
     char t10[] = "t10";
-    char t12[] = "t12";
     char fbuf[16];
     char RxVCorrextion[] = "n2";
     char c1[] = "c1";
@@ -1165,14 +1158,6 @@ void RXOptionsViewEnd()
         SFV = StopFlyingVoltsPerCell * 100; // this makes it a 16 bit value I can save easily
         Altered = true;
         SendValue(Progress, 15);
-    }
-
-    if (InStrng(t12, chgs) || ModelMatched) // gear ratio
-    {
-        GetText(t12, fbuf);
-        GearRatio = atof(fbuf);
-        Altered = true;
-        SendValue(Progress, 18);
     }
 
     if (InStrng(Mvalue, chgs) || ModelMatched)

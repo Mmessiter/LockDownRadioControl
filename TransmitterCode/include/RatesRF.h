@@ -88,6 +88,7 @@ void RatesMsg(const char *msg, uint16_t Colour)
         ForegroundColourRATESLabels(Colour);   // make text white so it isn't visible
         SendText((char *)"busy", (char *)msg); // Show RATES message
         SendCommand((char *)"vis busy,1");     // Make it visible
+        SendCommand((char *)"vis b2,0");        // Make Advanced invisible
         SendCommand((char *)"vis b3,0");       // hide "Send" button
     }
 }
@@ -97,6 +98,7 @@ void HideRATESMsg()
     if (CurrentView == RATESVIEW1) // Must be in RATES view
     {
         SendCommand((char *)"vis busy,0");  // Hide  message
+        SendCommand((char *)"vis b2,1");    // Make Advanced visible
         ForegroundColourRATESLabels(Black); // make text black so it is visible again
     }
 }
@@ -141,6 +143,7 @@ void StartRatesView()
 {
     if (SendBuffer[ArmingChannel - 1] > 1000) // Safety is on if value > 1000
     {
+        PlaySound(WHAHWHAHMSG); // let user know we're in trouble
         MsgBox((char *)"page RFView", (char *)"Model is armed and dangerous!\r\n(Disarm model to edit Rates.)");
         return;
     }
