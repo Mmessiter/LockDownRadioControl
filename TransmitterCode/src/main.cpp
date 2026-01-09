@@ -4722,6 +4722,10 @@ void BankHasChanged()
     {
         ShowRatesBank();
     }
+    if (CurrentView == RATESADVANCEDVIEW)
+    {
+        ShowRatesADBank();
+    }
 }
 
 /************************************************************************************************************/

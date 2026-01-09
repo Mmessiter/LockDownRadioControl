@@ -92,6 +92,7 @@ void RatesMsg(const char *msg, uint16_t Colour)
         SendCommand((char *)"vis b3,0");       // hide "Send" button
     }
 }
+
 // ************************************************************************************************************/
 void HideRATESMsg()
 {

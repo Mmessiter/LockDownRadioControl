@@ -242,6 +242,7 @@
 #define PIDVIEW 45
 #define RATESVIEW1 46
 #define ROTORFLIGHTVIEW 47
+#define RATESADVANCEDVIEW 48
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -766,6 +767,7 @@ void RXOptionsViewStart();
 void RotorFlightEnd();
 void StartRatesAdvancedView();
 void StartPIDAdvancedView();
+void SendForegroundColour(const char *label, uint16_t colour);
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
@@ -1339,6 +1341,7 @@ char MAX_ESC_Temperature[10];
 char PID_Labels[12][4] = {"n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11"};
 bool PIDS_Were_Edited = false;
 bool Rates_Were_Edited = false;
+bool Rates_Advanced_Were_Edited = false;
 float GearRatio = 10.3;
 uint8_t ArmingChannel = 5;
 
