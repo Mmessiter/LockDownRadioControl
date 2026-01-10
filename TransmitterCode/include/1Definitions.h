@@ -175,7 +175,7 @@
 #define GET_SECOND_6_RATES_VALUES 14  // Command to update second 6 RATES values to RX
 #define SEND_RATES_ADVANCED_VALUES 15 // Command to request RATES values from RX
 
-#define PARAMETERS_MAX_ID 16          // Max types of parameters packet to send  ... might increase.
+#define PARAMETERS_MAX_ID 16 // Max types of parameters packet to send  ... might increase.
 
 // **************************************************************************
 //                               Mixes                                      *
@@ -770,9 +770,9 @@ void RotorFlightEnd();
 void StartRatesAdvancedView();
 void StartPIDAdvancedView();
 void SendForegroundColour(const char *label, uint16_t colour);
-void DisplayRates_Advanced_Values(uint8_t n, uint8_t m);
-void HideRATES_Advanced_Msg();
-void ForegroundColourRATESALabels(uint16_t Colour);
+void Display_Advanced_Rates_Values(uint8_t n, uint8_t m);
+void Hide_Advanced_Rates_Msg();
+void ForegroundColourAdvancedRates(uint16_t Colour);
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
