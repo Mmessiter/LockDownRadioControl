@@ -663,6 +663,19 @@ void Send_Rates_Bytes(uint8_t n,uint8_t m) // send next 4 bytes from RatesBytes 
         }
     }
 }
+// ************************************************************************************************************
+void Send_Rates_Advanced_Bytes(uint8_t n, uint8_t m) // send next 4 bytes from RatesBytes array
+{
+    uint8_t p = 0;
+    for (uint8_t i = n; i < m; ++i)
+    {
+        if (i < MAX_RATES_ADVANCED_BYTES) // avoid overflow
+        {
+            AckPayload.Ack_Payload_byte[p + 1] = RatesBytesAdvanced[i];
+            ++p;
+        }
+    }
+}
 
 // **********************************************************************************************************
 void Send_2_x_uint16_t(uint16_t v1, uint16_t v2) // sends two x uint16_ts
@@ -849,6 +862,9 @@ void LoadAckPayload()
             case SEND_RATES_RF: // 2
                 Send_Rates_Bytes(0,4);
                 break;
+            case SEND_RATES_ADVANCED_RF: // 3
+                Send_Rates_Advanced_Bytes(0, 4);
+                break;
             }
             break;
         }
@@ -868,6 +884,9 @@ void LoadAckPayload()
                 break;
             case SEND_RATES_RF: // 2
                 Send_Rates_Bytes(4, 7);
+                break;
+            case SEND_RATES_ADVANCED_RF: // 3
+                Send_Rates_Advanced_Bytes(4, 8);
                 break;
             }
             break;
@@ -889,6 +908,9 @@ void LoadAckPayload()
             case SEND_RATES_RF: // 2
                 Send_Rates_Bytes(7, 11);
                 break;
+            case SEND_RATES_ADVANCED_RF: // 3
+                Send_Rates_Advanced_Bytes(8, 12);
+                break;
             }
             break;
         }
@@ -908,6 +930,9 @@ void LoadAckPayload()
                 break;
             case SEND_RATES_RF: // 2
                 Send_Rates_Bytes(11, 14);
+                break;
+            case SEND_RATES_ADVANCED_RF: // 3
+                Send_Rates_Advanced_Bytes(12, 16);
                 break;
             }
         }

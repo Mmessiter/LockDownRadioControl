@@ -335,13 +335,15 @@ inline void CheckMSPSerial()
     {
         data_in[p++] = MSP_UART.read();
     }
-
     if ((millis() - Started_Sending_PIDs > PID_Send_Duration) && (SendRotorFlightParametresNow == SEND_PID_RF))
     {
         SendRotorFlightParametresNow = SEND_NO_RF;
     }
-
     if ((millis() - Started_Sending_RATEs > RATES_Send_Duration) && (SendRotorFlightParametresNow == SEND_RATES_RF))
+    {
+        SendRotorFlightParametresNow = SEND_NO_RF;
+    }
+    if ((millis() - Started_Sending_RATES_ADVANCED > RATES_ADVANCED_Send_Duration) && (SendRotorFlightParametresNow == SEND_RATES_ADVANCED_RF))
     {
         SendRotorFlightParametresNow = SEND_NO_RF;
     }
@@ -356,23 +358,41 @@ inline void CheckMSPSerial()
     case SEND_PID_RF:
         Parse_MSP_PID(data_in, p);
         RequestFromMSP(MSP_PID); // parse reply next time around
-                                 //   Look("PID");
+        Look("PID");
         break;
 
     case SEND_RATES_RF:
         Parse_MSP_RC_TUNING(data_in, p);
         RequestFromMSP(MSP_RC_TUNING); // parse reply next time around
-                                       //  Look("RATES");
+        Look("RATES");
         break;
+    case SEND_RATES_ADVANCED_RF:
+        Parse_MSP_RC_TUNING(data_in, p);
+        RequestFromMSP(MSP_RC_TUNING); // parse reply next time around
+        Look("RATES ADVANCED");
     default:
         break;
     }
 }
 
+//// ************************************************************************************************************
+//// ************************************************************************************************************
+//// ************************************************************************************************************
+//// *************************************           ************************************************************
+//// *************************************   RATES   ************************************************************
+//// *************************************           ************************************************************
+//// ************************************************************************************************************
+//// ************************************************************************************************************
+//// ************************************************************************************************************
+
+// this code will read all of the parameters, allow editing for some of them, and then write all of them.
+// They are all stored as uint8_t values in Nexus firmware
+// so we need to convert to/from float as needed only for display / editing.
+// ************************************************************************************************************
+
 // ************************************************************************************************************
 // Store the currently used rates bytes ready for ack payload
 // ************************************************************************************************************
-
 void StoreRatesBytesForAckPayload()
 {
     RatesBytes[0] = Rates_Type;
@@ -389,20 +409,30 @@ void StoreRatesBytesForAckPayload()
     RatesBytes[11] = Collective_Max_Rate;
     RatesBytes[12] = Collective_Expo;
 }
+// ************************************************************************************************************
+// Store the currently used advanced rates bytes ready for ack payload
+// ************************************************************************************************************
+void StoreAdvancedRatesBytesForAckPayload()
+{
+    RatesBytesAdvanced[0] = Roll_Response_Time;
+    RatesBytesAdvanced[1] = Pitch_Response_Time;
+    RatesBytesAdvanced[2] = Yaw_Response_Time;
+    RatesBytesAdvanced[3] = Collective_Response_Time;
 
-//// ************************************************************************************************************
-//// ************************************************************************************************************
-//// ************************************************************************************************************
-//// *************************************           ************************************************************
-//// *************************************   RATES   ************************************************************
-//// *************************************           ************************************************************
-//// ************************************************************************************************************
-//// ************************************************************************************************************
-//// ************************************************************************************************************
+    RatesBytesAdvanced[4] = Roll_Setpoint_Boost_Gain;
+    RatesBytesAdvanced[5] = Pitch_Setpoint_Boost_Gain;
+    RatesBytesAdvanced[6] = Yaw_Setpoint_Boost_Gain;
+    RatesBytesAdvanced[7] = Collective_Setpoint_Boost_Gain;
 
-// this code will read all of the parameters, allow editing for some of them, and then write all of them.
-// They are all stored as uint8_t values in Nexus firmware
-// so we need to convert to/from float as needed only for display / editing.
+    RatesBytesAdvanced[8] = Roll_Setpoint_Boost_Cutoff;
+    RatesBytesAdvanced[9] = Pitch_Setpoint_Boost_Cutoff;
+    RatesBytesAdvanced[10] = Yaw_Setpoint_Boost_Cutoff;
+    RatesBytesAdvanced[11] = Collective_Setpoint_Boost_Cutoff;
+
+    RatesBytesAdvanced[12] = Yaw_Dynamic_Ceiling_Gain;
+    RatesBytesAdvanced[13] = Yaw_Dynamic_Deadband_Gain;
+    RatesBytesAdvanced[14] = Yaw_Dynamic_Deadband_Filter;
+}
 // ************************************************************************************************************
 
 inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
@@ -461,6 +491,7 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
     }
 
     StoreRatesBytesForAckPayload();
+    StoreAdvancedRatesBytesForAckPayload();
 
     return true; // skip the rest for now. remove this line to enable debug output
 

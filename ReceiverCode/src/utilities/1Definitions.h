@@ -126,7 +126,8 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define SEND_RATES_VALUES 12
 #define GET_FIRST_7_RATES_VALUES 13  // Command to update first 6 RATES values to RX
 #define GET_SECOND_6_RATES_VALUES 14 // Command to update second 6 RATES values to RX
-#define PARAMETERS_MAX_ID 15         // Max types of parameters packet to send  ... might increase.
+#define SEND_RATES_ADVANCED_VALUES 15
+#define PARAMETERS_MAX_ID 16         // Max types of parameters packet to send  ... might increase.
 
 // **************************************************************************
 //                             Rotorflight Definitions                      *
@@ -134,6 +135,7 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define SEND_NO_RF 0
 #define SEND_PID_RF 1
 #define SEND_RATES_RF 2
+#define SEND_RATES_ADVANCED_RF 3
 
 // ****************************************************************************************************************************************
 #define PIN_CE1 22   // NRF1 for new rxs with 11 pwm outputs
@@ -386,6 +388,7 @@ uint16_t api100 = 0; // API version as integer 12.08 -> 1208
 uint8_t SendRotorFlightParametresNow = 0;
 uint32_t Started_Sending_PIDs = 0;
 uint32_t Started_Sending_RATEs = 0;
+uint32_t Started_Sending_RATES_ADVANCED = 0;
 
 uint16_t PID_Roll_P;
 uint16_t PID_Roll_I;
@@ -403,6 +406,7 @@ uint16_t All_PIDs[12];
 
 uint16_t PID_Send_Duration = 1000;
 uint16_t RATES_Send_Duration = 1000;
+uint16_t RATES_ADVANCED_Send_Duration = 1000;
 
 char RF_RateTypes[6][15] = {
     "None",
@@ -423,8 +427,12 @@ uint16_t Roll_Accel_Limit, Pitch_Accel_Limit, Yaw_Accel_Limit, Collective_Accel_
 uint8_t Roll_Setpoint_Boost_Gain, Roll_Setpoint_Boost_Cutoff, Pitch_Setpoint_Boost_Gain, Pitch_Setpoint_Boost_Cutoff;
 uint8_t Yaw_Setpoint_Boost_Gain, Yaw_Setpoint_Boost_Cutoff, Collective_Setpoint_Boost_Gain, Collective_Setpoint_Boost_Cutoff;
 uint8_t Yaw_Dynamic_Ceiling_Gain, Yaw_Dynamic_Deadband_Gain, Yaw_Dynamic_Deadband_Filter;
+
 #define MAX_RATES_BYTES 13
+#define MAX_RATES_ADVANCED_BYTES 15
+
 uint8_t RatesBytes[MAX_RATES_BYTES]; // 13 bytes to store rates for ack payload
+uint8_t RatesBytesAdvanced[MAX_RATES_ADVANCED_BYTES]; // 15 bytes to store advanced rates for ack payload
 
 bool BoundFlag = false; /** indicates if receiver paired with transmitter */
 
