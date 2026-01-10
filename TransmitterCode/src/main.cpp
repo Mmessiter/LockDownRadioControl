@@ -147,7 +147,7 @@
 #include "SDcard.h"
 #include "Telemetry.h"
 #include "LogFiles.h"
-#include "Rates.h"
+#include "DualRates.h"
 #include "Mixes.h"
 #include "MenuOptions.h"
 #include "LogFilesList.h"
