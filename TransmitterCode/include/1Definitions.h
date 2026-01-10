@@ -1410,7 +1410,7 @@ uint8_t Index = 82;
 uint16_t PID_Values[12];
 uint16_t PID_Send_Duration = 0;
 uint16_t RATES_Send_Duration = 0;
-uint16_t RATES_A_Send_Duration = 0;
+uint16_t Rates_Advanced_Send_Duration = 0;
 
 uint32_t PID_Start_Time = 0;
 uint32_t RATES_Advanced_Start_Time = 0;

@@ -974,7 +974,7 @@ ParseAckPayload() // It's already pretty short!
 
     if (Reading_RATES_Advanced_Now)
     {
-        if ((millis() - RATES_Advanced_Start_Time) > RATES_A_Send_Duration)
+        if ((millis() - RATES_Advanced_Start_Time) > Rates_Advanced_Send_Duration)
         {
             Reading_RATES_Advanced_Now = false;
             Hide_Advanced_Rates_Msg();

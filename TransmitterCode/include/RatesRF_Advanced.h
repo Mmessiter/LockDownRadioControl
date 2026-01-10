@@ -91,7 +91,7 @@ void ShowRatesAdvancedBank()
     }
     SendText((char *)"t9", BankNames[BanksInUse[Bank - 1]]); // Show bank number etc
     RatesAdvancedMsg(buf, Gray);
-    RATES_A_Send_Duration = 1000;                     // how many milliseconds to await RATES values
+    Rates_Advanced_Send_Duration = 1000;                     // how many milliseconds to await RATES values
     Reading_RATES_Advanced_Now = true;                // This tells the Ack payload parser to
     AddParameterstoQueue(SEND_RATES_ADVANCED_VALUES); // Request RATES values from RX
     RATES_Advanced_Start_Time = millis();             // record start time as it's not long
