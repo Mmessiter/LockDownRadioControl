@@ -773,6 +773,7 @@ void SendForegroundColour(const char *label, uint16_t colour);
 void Display_Advanced_Rates_Values(uint8_t n, uint8_t m);
 void Hide_Advanced_Rates_Msg();
 void ForegroundColourAdvancedRates(uint16_t Colour);
+void RatesAdvancedWereEdited();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *

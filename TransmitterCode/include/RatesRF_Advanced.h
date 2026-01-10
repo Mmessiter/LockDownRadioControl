@@ -48,8 +48,13 @@ void ForegroundColourAdvancedRates(uint16_t Colour)
         SendForegroundColour(RatesAWindows[i], Colour);
     }
 }
-// ********************************************************************************************************
-void RatesAdvancedMsg(const char *msg, uint16_t Colour)
+// ************************************************************************************************************/
+void RatesAdvancedWereEdited(){
+    SendCommand((char *)"vis b3,1"); // show "Send" button
+    Rates_Advanced_Were_Edited = true;
+}
+    // ********************************************************************************************************
+    void RatesAdvancedMsg(const char *msg, uint16_t Colour)
 {
     if (CurrentView == RATESADVANCEDVIEW) // Must be in RATESADVANCEDVIEW view
     {
