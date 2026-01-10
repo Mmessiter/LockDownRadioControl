@@ -137,7 +137,7 @@
 
 #include "Utilities.h"
 #include "transceiver.h"
-#include "Pong.h"
+#include "ZPong.h"
 #include "macros.h"
 #include "Trims.h"
 #include "ModelMatch.h"
@@ -4695,6 +4695,9 @@ void BankHasChanged()
         if (AnnounceBanks)
             SoundBank();
     }
+
+
+    
     if (CurrentView == FRONTVIEW)
     {
         ShowBank();
@@ -4724,7 +4727,7 @@ void BankHasChanged()
     }
     if (CurrentView == RATESADVANCEDVIEW)
     {
-        ShowRatesADBank();
+        ShowRatesAdvancedBank();
     }
 }
 

@@ -14,7 +14,7 @@ char RatesAWindows[15][4] = {"n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8
 // ************************************************************************************************************/
 void ForegroundColourRATESALabels(uint16_t Colour)
 {
-    for (int i = 0; i < 14; ++i)
+    for (int i = 0; i < 15; ++i)
     {
         SendForegroundColour(RatesAWindows[i], Colour);
     }
@@ -31,9 +31,8 @@ void RatesAMsg(const char *msg, uint16_t Colour)
     }
 }
 // ************************************************************************************************************/
-void ShowRatesADBank()
+void ShowRatesAdvancedBank()
 {
-
     if (CurrentView != RATESADVANCEDVIEW) // Must be in  RATESADVANCEDVIEW
         return;
     char buf[40];
@@ -46,7 +45,13 @@ void ShowRatesADBank()
     {
         snprintf(buf, sizeof(buf), "Model is not connected!");
     }
+    SendText((char *)"t9", BankNames[BanksInUse[Bank - 1]]); // Show bank number etc
     RatesAMsg(buf, Gray);
+    RATES_A_Send_Duration = 1000;                          // how many milliseconds to await RATES values
+    Reading_RATES_A_Now = true;                            // This tells the Ack payload parser to
+    AddParameterstoQueue(SEND_RATES_ADVANCED_VALUES);      // Request RATES values from RX
+    RATES_Advanced_Start_Time = millis();                  // record start time as it's not long
+    Rates_Were_Edited = false;                             // reset edited flag
 }
 
 // **********************************************************************************************************/
@@ -60,7 +65,7 @@ void StartRatesAdvancedView()
     }
     SendCommand((char *)"page Rates_A_View");
     CurrentView = RATESADVANCEDVIEW;
-    ShowRatesADBank();                  // Show the current bank's RATES
+    ShowRatesAdvancedBank();                  // Show the current bank's RATES
     SendText((char *)"t11", ModelName); // Show model name
     Rates_Advanced_Were_Edited = false;
 }
