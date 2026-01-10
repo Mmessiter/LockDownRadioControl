@@ -923,7 +923,8 @@ void ReadRatesBytesFromAckPayload(uint8_t n, uint8_t m)
     DisplayRatesValues(n, m);
 }
 // ******************************************************************************************
-void ReadRates_Advanced_FromAckPayload(uint8_t n, uint8_t m){
+void ReadRates_Advanced_FromAckPayload(uint8_t n, uint8_t m)
+{
     uint8_t p = 0;
     for (uint8_t i = n; i < m; ++i)
     {
@@ -933,12 +934,12 @@ void ReadRates_Advanced_FromAckPayload(uint8_t n, uint8_t m){
             ++p;
         }
     }
-    DisplayRates_Advanced_Values(n, m); 
+    Display_Advanced_Rates_Values(n, m);
 }
 
-    /************************************************************************************************************/
-    FASTRUN void
-    ParseAckPayload() // It's already pretty short!
+/************************************************************************************************************/
+FASTRUN void
+ParseAckPayload() // It's already pretty short!
 {
     FHSS_data::NextChannelNumber = AckPayload.Ack_Payload_byte[5]; // every packet tells of next hop destination
     if (AckPayload.Ack_Payload_byte[0] & 0x80)
@@ -976,11 +977,9 @@ void ReadRates_Advanced_FromAckPayload(uint8_t n, uint8_t m){
         if ((millis() - RATES_Advanced_Start_Time) > RATES_A_Send_Duration)
         {
             Reading_RATES_Advanced_Now = false;
-            HideRATES_Advanced_Msg();
+            Hide_Advanced_Rates_Msg();
         }
     }
-
-
 
     switch (AckPayload.Ack_Payload_byte[0]) // Only look at the low 7 BITS
     {
@@ -1108,7 +1107,7 @@ void ReadRates_Advanced_FromAckPayload(uint8_t n, uint8_t m){
             }
             if (Reading_RATES_Advanced_Now)
             {
-                ReadRates_Advanced_FromAckPayload(12, 15);
+                ReadRates_Advanced_FromAckPayload(12, 15); // last three advanced rates
             }
         }
         break;
