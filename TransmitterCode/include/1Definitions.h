@@ -174,8 +174,10 @@
 #define GET_FIRST_7_RATES_VALUES 13   // Command to update first 6 RATES values to RX
 #define GET_SECOND_6_RATES_VALUES 14  // Command to update second 6 RATES values to RX
 #define SEND_RATES_ADVANCED_VALUES 15 // Command to request RATES values from RX
+#define GET_RATES_ADVANCED_VALUES_SECOND_8 16
+#define GET_RATES_ADVANCED_VALUES_FIRST_7 17
 
-#define PARAMETERS_MAX_ID 16 // Max types of parameters packet to send  ... might increase.
+#define PARAMETERS_MAX_ID 18 // Max types of parameters packet to send  ... might increase.
 
 // **************************************************************************
 //                               Mixes                                      *
@@ -774,6 +776,8 @@ void Display_Advanced_Rates_Values(uint8_t n, uint8_t m);
 void Hide_Advanced_Rates_Msg();
 void ForegroundColourAdvancedRates(uint16_t Colour);
 void RatesAdvancedWereEdited();
+void EndRatesAdvancedView();
+void SaveRatesAdvanced();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *

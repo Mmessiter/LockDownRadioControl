@@ -114,7 +114,14 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
         Parameters.word[1] = 321;                   // confirms request for RATES ADVANCED values
         Parameters.word[2] = RATES_A_Send_Duration; // 1000 - how many milliseconds to send these
         break;
-
+    case GET_RATES_ADVANCED_VALUES_SECOND_8: // 16 = I'm sending last 8 RATES ADVANCED values (TX->RX) (Because we cannot fit all 15 in one go)
+        for (int i = 0; i < 8; ++i)
+            Parameters.word[i + 1] = Rate_Advanced_Values[i + 7]; // 7 to 14
+        break;
+    case GET_RATES_ADVANCED_VALUES_FIRST_7: // 17 = I'm sending first 7 RATES ADVANCED values (TX->RX) (Because we cannot fit all 15 in one go)
+        for (int i = 0; i < 7; ++i)
+            Parameters.word[i + 1] = Rate_Advanced_Values[i]; // 0 to 6
+        break;
     default:
         break;
     }

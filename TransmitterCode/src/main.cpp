@@ -3305,40 +3305,42 @@ void CheckAllModelIds()
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!  ( Use "NUMBER<<8" )
-#define LASTFUNCTION1 31 // One more than final one
+#define LASTFUNCTION1 33 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])(){
-    Blank,                  // 0 Cannot be used
-    DeleteModel,            // 1
-    StartAudioVisualView,   // 2
-    EndAudioVisualView,     // 3
-    StartTXSetupView,       // 4
-    InputsViewEnd,          // 5
-    SystemPage1End,         // 6
-    SystemPage1Start,       // 7
-    StartWifiScan,          // 8
-    EndWifiScan,            // 9
-    StartServosTypeView,    // 10
-    EndServoTypeView,       // 11
-    LoadNewLogFile,         // 12
-    DeleteThisLogFile,      // 13
-    LogReleasedNEW,         // 14   // new version
-    LogTouched,             // 15   // this does nothing, yet ...
-    RefreshDualRatesNew,    // 16
-    StartGapsView,          // 17
-    StartPIDView,           // 18
-    SendEditedPIDs,         // 19
-    PIDs_Were_edited,       // 20
-    EndPIDView,             // 21
-    StartRatesView,         // 22
-    EndRatesView,           // 23
-    RatesWereEdited,        // 24
-    SendEditedRates,        // 25
-    RotorFlightStart,       // 26
-    RotorFlightEnd,         // 27
-    StartRatesAdvancedView, // 28
+    Blank,                   // 0 Cannot be used
+    DeleteModel,             // 1
+    StartAudioVisualView,    // 2
+    EndAudioVisualView,      // 3
+    StartTXSetupView,        // 4
+    InputsViewEnd,           // 5
+    SystemPage1End,          // 6
+    SystemPage1Start,        // 7
+    StartWifiScan,           // 8
+    EndWifiScan,             // 9
+    StartServosTypeView,     // 10
+    EndServoTypeView,        // 11
+    LoadNewLogFile,          // 12
+    DeleteThisLogFile,       // 13
+    LogReleasedNEW,          // 14   // new version
+    LogTouched,              // 15   // this does nothing, yet ...
+    RefreshDualRatesNew,     // 16
+    StartGapsView,           // 17
+    StartPIDView,            // 18
+    SendEditedPIDs,          // 19
+    PIDs_Were_edited,        // 20
+    EndPIDView,              // 21
+    StartRatesView,          // 22
+    EndRatesView,            // 23
+    RatesWereEdited,         // 24
+    SendEditedRates,         // 25
+    RotorFlightStart,        // 26
+    RotorFlightEnd,          // 27
+    StartRatesAdvancedView,  // 28
     StartPIDAdvancedView,    // 29
-    RatesAdvancedWereEdited  // 30
+    RatesAdvancedWereEdited, // 30
+    EndRatesAdvancedView,     // 31
+    SaveRatesAdvanced       // 32
 
 };
 
@@ -4696,8 +4698,6 @@ void BankHasChanged()
         if (AnnounceBanks)
             SoundBank();
     }
-
-
 
     if (CurrentView == FRONTVIEW)
     {

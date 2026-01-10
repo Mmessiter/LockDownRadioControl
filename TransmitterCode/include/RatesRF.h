@@ -25,6 +25,7 @@ void SendEditedRates()
 {
     if (!GetConfirmation((char *)"page RatesView", (char *)"Send edited RATES to Nexus?"))
     {
+        Rates_Were_Edited = false; // reset edited flag
         ShowRatesBank(); // reload old RATES, undoing any edits
         return;
     }

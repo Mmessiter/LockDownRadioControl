@@ -130,6 +130,7 @@ void SendEditedPIDs()
 {
     if (!GetConfirmation((char *)"page PIDView", (char *)"Send edited PIDs to Nexus?"))
     {
+        PIDS_Were_Edited = false;
         ShowPIDBank(); // reload old PIDs, undoing any edits
         return;
     }
