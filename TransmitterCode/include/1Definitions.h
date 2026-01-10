@@ -770,6 +770,9 @@ void RotorFlightEnd();
 void StartRatesAdvancedView();
 void StartPIDAdvancedView();
 void SendForegroundColour(const char *label, uint16_t colour);
+void DisplayRates_Advanced_Values(uint8_t n, uint8_t m);
+void HideRATES_Advanced_Msg();
+void ForegroundColourRATESALabels(uint16_t Colour);
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
@@ -1348,6 +1351,7 @@ float GearRatio = 10.3;
 uint8_t ArmingChannel = 5;
 
 #define MAX_RATES_BYTES 13
+#define MAX_RATES_ADVANCED_BYTES 15
 
 char RatesWindows[MAX_RATES_BYTES][5] = {"t10", "tn0", "tn1", "tn2", "tn3", "tn4", "tn5", "tn6", "tn7", "tn8", "tn9", "tn10", "tn11"};
 
@@ -1402,14 +1406,15 @@ uint16_t PID_Values[12];
 uint16_t PID_Send_Duration = 0;
 uint16_t RATES_Send_Duration = 0;
 uint16_t RATES_A_Send_Duration = 0;
-bool Reading_RATES_A_Now = false;
 
 uint32_t PID_Start_Time = 0;
 uint32_t RATES_Advanced_Start_Time = 0;
 uint32_t RATES_Start_Time = 0;
 bool Reading_PIDS_Now = false;
 bool Reading_RATES_Now = false;
+bool Reading_RATES_Advanced_Now = false;
 uint8_t Rate_Values[MAX_RATES_BYTES];
+uint8_t Rate_Advanced_Values[MAX_RATES_ADVANCED_BYTES];
 char Rate_Types[6][15] = {"None", "Betaflight", "Raceflight", "KISS", "Actual", "QuickRates"};
 const float FactorTableRF[13] = {1, 10, 10, .01, 10, 10, .01, 10, 10, .01, .25, .25, .01}; // Factors for each RATES byte needed by Rotorflight
 bool Rotorflight22Detected = false;

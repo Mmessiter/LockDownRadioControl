@@ -922,9 +922,23 @@ void ReadRatesBytesFromAckPayload(uint8_t n, uint8_t m)
     }
     DisplayRatesValues(n, m);
 }
+// ******************************************************************************************
+void ReadRates_Advanced_FromAckPayload(uint8_t n, uint8_t m){
+    uint8_t p = 0;
+    for (uint8_t i = n; i < m; ++i)
+    {
+        if (i < MAX_RATES_ADVANCED_BYTES)
+        {
+            Rate_Advanced_Values[i] = AckPayload.Ack_Payload_byte[p + 1];
+            ++p;
+        }
+    }
+    DisplayRates_Advanced_Values(n, m); 
+}
 
-/************************************************************************************************************/
-FASTRUN void ParseAckPayload() // It's already pretty short!
+    /************************************************************************************************************/
+    FASTRUN void
+    ParseAckPayload() // It's already pretty short!
 {
     FHSS_data::NextChannelNumber = AckPayload.Ack_Payload_byte[5]; // every packet tells of next hop destination
     if (AckPayload.Ack_Payload_byte[0] & 0x80)
@@ -956,6 +970,17 @@ FASTRUN void ParseAckPayload() // It's already pretty short!
             HideRATESMsg();
         }
     }
+
+    if (Reading_RATES_Advanced_Now)
+    {
+        if ((millis() - RATES_Advanced_Start_Time) > RATES_A_Send_Duration)
+        {
+            Reading_RATES_Advanced_Now = false;
+            HideRATES_Advanced_Msg();
+        }
+    }
+
+
 
     switch (AckPayload.Ack_Payload_byte[0]) // Only look at the low 7 BITS
     {
@@ -1010,6 +1035,10 @@ FASTRUN void ParseAckPayload() // It's already pretty short!
             {
                 ReadRatesBytesFromAckPayload(0, 4);
             }
+            if (Reading_RATES_Advanced_Now)
+            {
+                ReadRates_Advanced_FromAckPayload(0, 4);
+            }
         }
         break;
     case 9:
@@ -1029,6 +1058,10 @@ FASTRUN void ParseAckPayload() // It's already pretty short!
             {
                 ReadRatesBytesFromAckPayload(4, 7);
             }
+            if (Reading_RATES_Advanced_Now)
+            {
+                ReadRates_Advanced_FromAckPayload(4, 8);
+            }
         }
         break;
     case 10:
@@ -1047,6 +1080,10 @@ FASTRUN void ParseAckPayload() // It's already pretty short!
             if (Reading_RATES_Now)
             {
                 ReadRatesBytesFromAckPayload(7, 11);
+            }
+            if (Reading_RATES_Advanced_Now)
+            {
+                ReadRates_Advanced_FromAckPayload(8, 12);
             }
         }
         break;
@@ -1068,6 +1105,10 @@ FASTRUN void ParseAckPayload() // It's already pretty short!
             if (Reading_RATES_Now)
             {
                 ReadRatesBytesFromAckPayload(11, 14);
+            }
+            if (Reading_RATES_Advanced_Now)
+            {
+                ReadRates_Advanced_FromAckPayload(12, 15);
             }
         }
         break;

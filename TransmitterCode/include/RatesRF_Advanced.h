@@ -10,6 +10,33 @@
 #include "1Definitions.h"
 
 char RatesAWindows[15][4] = {"n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11", "n12", "n13", "n14"}; // Text boxes for Rates Advanced view
+// ************************************************************************************************************/
+void HideRATES_Advanced_Msg(){
+
+    if (CurrentView == RATESADVANCEDVIEW) // Must be in RATESADVANCEDVIEW view
+    {
+        SendCommand((char *)"vis busy,0"); // Hide RATES message
+
+        ForegroundColourRATESALabels(Black); // make text black so it is visible again
+        
+    }   
+
+
+
+
+}
+// ************************************************************************************************************/
+void DisplayRates_Advanced_Values(uint8_t n, uint8_t m)
+{
+
+    for (uint8_t i = n; i < m; ++i)
+    {
+        if (i < MAX_RATES_ADVANCED_BYTES)
+        {
+            SendValue(RatesAWindows[i], Rate_Advanced_Values[i]); // Send to screen
+        }
+    }
+}
 
 // ************************************************************************************************************/
 void ForegroundColourRATESALabels(uint16_t Colour)
@@ -48,7 +75,7 @@ void ShowRatesAdvancedBank()
     SendText((char *)"t9", BankNames[BanksInUse[Bank - 1]]); // Show bank number etc
     RatesAMsg(buf, Gray);
     RATES_A_Send_Duration = 1000;                          // how many milliseconds to await RATES values
-    Reading_RATES_A_Now = true;                            // This tells the Ack payload parser to
+    Reading_RATES_Advanced_Now = true;                     // This tells the Ack payload parser to
     AddParameterstoQueue(SEND_RATES_ADVANCED_VALUES);      // Request RATES values from RX
     RATES_Advanced_Start_Time = millis();                  // record start time as it's not long
     Rates_Were_Edited = false;                             // reset edited flag
