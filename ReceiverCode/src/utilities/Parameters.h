@@ -93,7 +93,7 @@ void ReadExtraParameters()
             SendRotorFlightParametresNow = SEND_PID_RF;
             Started_Sending_PIDs = millis();
             PID_Send_Duration = Parameters.word[2];
-            // Look("Request to send PID values received");
+            
         }
         break;
 
@@ -142,7 +142,6 @@ void ReadExtraParameters()
         Pitch_Max_Rate = Parameters.word[6];
         Pitch_Expo = Parameters.word[7];
         break;
-
     case GET_SECOND_6_RATES_VALUES: // 14
         if (!Rotorflight22Detected)
             break;
@@ -163,6 +162,30 @@ void ReadExtraParameters()
             Started_Sending_RATES_ADVANCED = millis();
             RATES_ADVANCED_Send_Duration = Parameters.word[2];
         }
+    case GET_RATES_ADVANCED_VALUES_FIRST_7:
+        if (!Rotorflight22Detected)
+            break;
+        Roll_Response_Time = Parameters.word[1];
+        Pitch_Response_Time = Parameters.word[2];
+        Yaw_Response_Time = Parameters.word[3];
+        Collective_Response_Time = Parameters.word[4];
+        Roll_Setpoint_Boost_Gain = Parameters.word[5];
+        Pitch_Setpoint_Boost_Gain = Parameters.word[6];
+        Yaw_Setpoint_Boost_Gain = Parameters.word[7];
+        break;
+    case GET_RATES_ADVANCED_VALUES_SECOND_8:
+        if (!Rotorflight22Detected)
+            break;
+        Collective_Setpoint_Boost_Gain = Parameters.word[1];
+        Roll_Setpoint_Boost_Cutoff = Parameters.word[2];
+        Pitch_Setpoint_Boost_Cutoff = Parameters.word[3];
+        Yaw_Setpoint_Boost_Cutoff = Parameters.word[4];
+        Collective_Setpoint_Boost_Cutoff = Parameters.word[5];
+        Yaw_Dynamic_Ceiling_Gain = Parameters.word[6];
+        Yaw_Dynamic_Deadband_Gain = Parameters.word[7];
+        Yaw_Dynamic_Deadband_Filter = Parameters.word[8];
+        WriteRatesToNexusAndSave(); // no checking here yet for validity. Maybe later if needed
+        break;
 
     default:
         break;

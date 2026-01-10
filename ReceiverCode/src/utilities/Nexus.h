@@ -354,22 +354,17 @@ inline void CheckMSPSerial()
         RequestFromMSP(MSP_MOTOR_TELEMETRY); // parse reply next time around
                                              //  Look("No RF Send");
         break;
-
     case SEND_PID_RF:
         Parse_MSP_PID(data_in, p);
         RequestFromMSP(MSP_PID); // parse reply next time around
-        Look("PID");
         break;
-
     case SEND_RATES_RF:
         Parse_MSP_RC_TUNING(data_in, p);
         RequestFromMSP(MSP_RC_TUNING); // parse reply next time around
-        Look("RATES");
         break;
     case SEND_RATES_ADVANCED_RF:
         Parse_MSP_RC_TUNING(data_in, p);
         RequestFromMSP(MSP_RC_TUNING); // parse reply next time around
-        Look("RATES ADVANCED");
     default:
         break;
     }

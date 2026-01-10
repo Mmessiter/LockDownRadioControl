@@ -124,10 +124,12 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define GET_FIRST_6_PID_VALUES 10
 #define GET_SECOND_6_PID_VALUES 11
 #define SEND_RATES_VALUES 12
-#define GET_FIRST_7_RATES_VALUES 13  // Command to update first 6 RATES values to RX
-#define GET_SECOND_6_RATES_VALUES 14 // Command to update second 6 RATES values to RX
-#define SEND_RATES_ADVANCED_VALUES 15
-#define PARAMETERS_MAX_ID 16         // Max types of parameters packet to send  ... might increase.
+#define GET_FIRST_7_RATES_VALUES 13           // Command to update first 6 RATES values to RX
+#define GET_SECOND_6_RATES_VALUES 14          // Command to update second 6 RATES values to RX
+#define SEND_RATES_ADVANCED_VALUES 15         // Command to send RATES ADVANCED values to TX
+#define GET_RATES_ADVANCED_VALUES_SECOND_8 16 // Command to update second 8 RATES ADVANCED values to RX
+#define GET_RATES_ADVANCED_VALUES_FIRST_7 17  // Command to update first 7 RATES ADVANCED values to RX
+#define PARAMETERS_MAX_ID 17                  // Max types of parameters packet to send  ... might increase.
 
 // **************************************************************************
 //                             Rotorflight Definitions                      *
@@ -431,7 +433,7 @@ uint8_t Yaw_Dynamic_Ceiling_Gain, Yaw_Dynamic_Deadband_Gain, Yaw_Dynamic_Deadban
 #define MAX_RATES_BYTES 13
 #define MAX_RATES_ADVANCED_BYTES 15
 
-uint8_t RatesBytes[MAX_RATES_BYTES]; // 13 bytes to store rates for ack payload
+uint8_t RatesBytes[MAX_RATES_BYTES];                  // 13 bytes to store rates for ack payload
 uint8_t RatesBytesAdvanced[MAX_RATES_ADVANCED_BYTES]; // 15 bytes to store advanced rates for ack payload
 
 bool BoundFlag = false; /** indicates if receiver paired with transmitter */
