@@ -13,6 +13,75 @@
 #define MSP_EEPROM_WRITE 250    // save settings to EEPROM/flash
 #define MSP_RC_TUNING 111       // RC Tuning settings (RATES etc)
 #define MSP_SET_RC_TUNING 204   // write RC Tuning settings (RATES etc)
+#define MSP_PID_ADVANCED 94     // Advanced PID settings (read)
+#define MSP_SET_PID_ADVANCED 95 // write Advanced PID settings
+
+// Add defines for send states
+#define SEND_NO_RF 0
+#define SEND_PID_RF 1
+#define SEND_RATES_RF 2
+#define SEND_RATES_ADVANCED_RF 3
+#define SEND_PID_ADVANCED_RF 4
+
+// Add global variables for timings
+uint32_t Started_Sending_PID_ADVANCED = 0;
+uint32_t PID_ADVANCED_Send_Duration = 0;
+
+// -------------------------------------------------------------------------------------------------
+// MSP PID ADVANCED parameters (MSP_PID_ADVANCED / MSP_SET_PID_ADVANCED)
+//
+// These correspond to Rotorflight Configurator > Profiles page shown in your photo.
+// NOTE: A few fields exist in the MSP payload but are NOT shown on that screen.
+// Those are tagged "NOT ON SCREEN".
+// -------------------------------------------------------------------------------------------------
+
+// Tail Rotor Settings (left, bottom in your screenshot)
+uint8_t cyclicFeedforwardGain = 0;     // "Cyclic Feedforward Gain"
+uint8_t collectiveFeedforwardGain = 0; // "Collective Feedforward Gain"
+
+// Main Rotor Settings (left, middle in your screenshot)
+uint8_t collectiveToPitchCompensation = 0; // "Collective to Pitch Compensation" (Configurator shows as a toggle)
+uint8_t crossCouplingGain = 0;             // "Cross-Coupling Gain"
+uint8_t crossCouplingRatioPercent = 0;     // "Cross-Coupling Ratio [%]"
+uint8_t crossCouplingCutoffHz = 0;         // "Cross-Coupling Cutoff Frequency [Hz]"
+
+// PID Controller Settings (left, upper part in your screenshot)
+uint8_t iTermRelaxType = 0;       // "I-Term Relax Type" (e.g. RPY)
+uint8_t iTermRelaxCutoff = 0;     // "Cutoff Point for Roll/Pitch/Yaw" (Configurator shows 3 boxes; often same value)
+uint8_t groundErrorDecayTime = 0; // "Ground Error Decay -> Decay Time [s]" (scaling unknown; often 0.1s units)
+
+// Error limits (left, upper part in your screenshot)
+uint16_t errorLimitRollDeg = 0;  // "Error Limit for Roll Axis [°]"
+uint16_t errorLimitPitchDeg = 0; // "Error Limit for Pitch Axis [°]"
+uint16_t errorLimitYawDeg = 0;   // "Error Limit for Yaw Axis [°]"
+
+// HS Offset (left, upper part in your screenshot)
+uint16_t hsOffsetLimitRollDeg = 0;  // "HS Offset Limit for Roll Axis [°]"
+uint16_t hsOffsetLimitPitchDeg = 0; // "HS Offset Limit for Pitch Axis [°]"
+uint16_t hsOffsetLimitYawDeg = 0;   // NOT ON SCREEN (present in MSP payload)
+
+uint8_t hsOffsetGainRoll = 0;  // "HS Offset Gain for Roll Axis"
+uint8_t hsOffsetGainPitch = 0; // "HS Offset Gain for Pitch Axis"
+uint8_t hsOffsetGainYaw = 0;   // NOT ON SCREEN (present in MSP payload)
+
+// PID Controller Bandwidth (right side of your screenshot)
+uint8_t rollBandwidthHz = 0;  // "Roll Bandwidth"
+uint8_t pitchBandwidthHz = 0; // "Pitch Bandwidth"
+uint8_t yawBandwidthHz = 0;   // "Yaw Bandwidth"
+
+uint8_t rollDtermCutoffHz = 0;  // "Roll D-term Cutoff"
+uint8_t pitchDtermCutoffHz = 0; // "Pitch D-term Cutoff"
+uint8_t yawDtermCutoffHz = 0;   // "Yaw D-term Cutoff"
+
+uint8_t bTermCutoffHz = 0; // Configurator shows Roll/Pitch/Yaw B-term Cutoff (3 fields), but MSP gives 1 value here
+
+// Main Rotor Settings (left, lower part in your screenshot)
+uint8_t errorDecayMaxRateDps = 0; // likely "Error Decay maximum rate [°/s]"
+
+// NOT ON SCREEN (present in MSP payload)
+uint8_t collectiveImpulseFeedforwardGain = 0;      // NOT ON SCREEN
+uint8_t collectiveImpulseFeedforwardDecayTime = 0; // NOT ON SCREEN
+
 // ************************************************************************************************************
 enum : uint8_t
 {
@@ -222,7 +291,19 @@ inline void WritePIDsToNexusAndSave(const uint16_t pid[12])
     delay(100);
     lastWriteTime = now; // set cooldown only after we actually did the write+save
 }
-
+// ************************************************************************************************************
+void DebugPIDValues(char const *msg)
+{
+    Look(msg);
+    for (int i = 0; i < 12; ++i)
+    {
+        Look1(" PID[");
+        Look1(i);
+        Look1("]: ");
+        Look(All_PIDs[i]);
+    }
+    Look("---------------------");
+}
 // ************************************************************************************************************
 //         MSP_PID FROM ROTORFLIGHT FIRMWARE
 
@@ -255,6 +336,8 @@ inline bool Parse_MSP_PID(const uint8_t *data, uint8_t n)
     PID_Yaw_D = p[20] | (p[21] << 8);
     PID_Yaw_FF = p[22] | (p[23] << 8);
 
+    //  DebugPIDValues("Current Nexus PID Values");
+
     return true;
 }
 // ************************************************************************************************************
@@ -283,6 +366,8 @@ inline bool Parse_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n)
     const uint8_t size = f.size;
     const uint8_t *payload = f.payload;
 
+    // Need enough bytes for what we read:
+    // index 14 used for temp1 => size must be >= 15
     if (size < 15)
         return false;
 
@@ -293,18 +378,20 @@ inline bool Parse_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n)
     RotorRPM = ((uint32_t)payload[1] |
                 ((uint32_t)payload[2] << 8) |
                 ((uint32_t)payload[3] << 16) |
-                ((uint32_t)payload[4] << 24)) / Ratio; // RPM: decode 24-bit, and include the 4th byte even if zero
+                ((uint32_t)payload[4] << 24)) /
+               Ratio; // RPM: decode 24-bit, and include the 4th byte even if zero
     RXModelVolts = (float)((uint16_t)payload[7] | ((uint16_t)payload[8] << 8)) / 1000.0f;
     Battery_Amps = (float)((uint16_t)payload[9] | ((uint16_t)payload[10] << 8)) / 1000.0f;
     Battery_mAh = (float)((uint16_t)payload[11] | ((uint16_t)payload[12] << 8));
     ESC_Temp_C = (float)((uint16_t)payload[13] | ((uint16_t)payload[14] << 8)) / 10.0f;
 
-    if (RXModelVolts > 26.0f) // this is to handle 12s batteries which were read with INA219 which cannot read above 26V ...
-        RXModelVolts /= 2.0f; // ... so transmitter still halves the voltage for 12s for backwards compatibility.
+    if (RXModelVolts > 26.0f) // this is to handle 12S which were read with INA219 which cannot read above 26V ...
+        RXModelVolts /= 2.0f; // ... so transmitter still halves the voltage for 12S for backwards compatibility.
 
     return true;
 }
-// ************************************************************************************************************
+
+// ************************************************************************************************************/
 inline void CheckMSPSerial()
 {
     static uint32_t Localtimer = 0;
@@ -329,6 +416,10 @@ inline void CheckMSPSerial()
     {
         SendRotorFlightParametresNow = SEND_NO_RF;
     }
+    if ((millis() - Started_Sending_PID_ADVANCED > PID_ADVANCED_Send_Duration) && (SendRotorFlightParametresNow == SEND_PID_ADVANCED_RF))
+    {
+        SendRotorFlightParametresNow = SEND_NO_RF;
+    }
     switch (SendRotorFlightParametresNow)
     {
     case SEND_NO_RF:
@@ -347,6 +438,11 @@ inline void CheckMSPSerial()
     case SEND_RATES_ADVANCED_RF:
         Parse_MSP_RC_TUNING(data_in, p);
         RequestFromMSP(MSP_RC_TUNING); // parse reply next time around
+        break;
+    case SEND_PID_ADVANCED_RF:
+        Parse_MSP_PID_ADVANCED(data_in, p);
+        RequestFromMSP(MSP_PID_ADVANCED); // parse reply next time around
+        break;
     default:
         break;
     }
@@ -426,24 +522,24 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
         return false;
     const uint8_t *p = f.payload;
     uint8_t offset = 0;
-    Rates_Type = p[offset++];                             // Banner - displayed but not editable at the moment at the transmitter end
+    Rates_Type = p[offset++];                             // Banner
     Roll_Centre_Rate = p[offset++];                       // * 10         - n0
     Roll_Expo = p[offset++];                              // / 100.0f     - n2
     Roll_Max_Rate = p[offset++];                          // * 10.0f      - n1
-    Roll_Response_Time = p[offset++];                     // Advanced screen
-    Roll_Accel_Limit = p[offset] | (p[offset + 1] << 8);  // Advanced screen
+    Roll_Response_Time = p[offset++];                     // not yet used
+    Roll_Accel_Limit = p[offset] | (p[offset + 1] << 8);  // not yet used
     offset += 2;                                          // ---
     Pitch_Centre_Rate = p[offset++];                      //  * 10.0f;    - n3
     Pitch_Expo = p[offset++];                             // / 100.0f;    - n5
     Pitch_Max_Rate = p[offset++];                         // * 10.0f;     - n4
-    Pitch_Response_Time = p[offset++];                    // Advanced screen
-    Pitch_Accel_Limit = p[offset] | (p[offset + 1] << 8); // Advanced screen
+    Pitch_Response_Time = p[offset++];                    // not yet used
+    Pitch_Accel_Limit = p[offset] | (p[offset + 1] << 8); // not yet used
     offset += 2;                                          // ---
     Yaw_Centre_Rate = p[offset++];                        // * 10.0f       - n6
     Yaw_Expo = p[offset++];                               // / 100.0f      - n8
     Yaw_Max_Rate = p[offset++];                           // * 10.0f       - n7
-    Yaw_Response_Time = p[offset++];                      // Advanced screen
-    Yaw_Accel_Limit = p[offset] | (p[offset + 1] << 8);   // Advanced screen
+    Yaw_Response_Time = p[offset++];                      // not yet used
+    Yaw_Accel_Limit = p[offset] | (p[offset + 1] << 8);   // not yet used
     offset += 2;                                          // ---
     Collective_Centre_Rate = p[offset++];                 // / 4.0f        - n9
     Collective_Expo = p[offset++];                        // / 100.0f      - n11
@@ -466,8 +562,66 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
         Yaw_Dynamic_Deadband_Gain = p[offset++];
         Yaw_Dynamic_Deadband_Filter = p[offset++];
     }
+
     StoreRatesBytesForAckPayload();
     StoreAdvancedRatesBytesForAckPayload();
+
+    return true; // skip the rest for now. remove this line to enable debug output
+
+    Look("---- Nexus RC Tuning Values ----");
+    Look1("Rates Type: ");
+    Look(RF_RateTypes[Rates_Type]);
+    Look1("Roll Centre Rate: ");
+    Look(Roll_Centre_Rate * 10);
+    Look1("Roll MAX Rate: ");
+    Look(Roll_Max_Rate * 10);
+    Look1("Roll Expo: ");
+    Look((float)Roll_Expo / 100.0f);
+
+    Look("");
+    // Look1("Roll Response Time: ");
+    // Look(Roll_Response_Time);
+    // Look1("Roll Accel Limit: ");
+    // Look(Roll_Accel_Limit);
+    Look1("Pitch Centre Rate: ");
+    Look(Pitch_Centre_Rate * 10.0f);
+    Look1("Pitch Max Rate: ");
+    Look(Pitch_Max_Rate * 10);
+    Look1("Pitch Expo: ");
+    Look((float)Pitch_Expo / 100.0f);
+    Look("");
+
+    // Look1("Pitch Response Time: ");
+    // Look(Pitch_Response_Time);
+    // Look1("Pitch Accel Limit: ");
+    // Look(Pitch_Accel_Limit);
+
+    Look1("Yaw Centre Rate: ");
+    Look(Yaw_Centre_Rate * 10);
+    Look1("Yaw Max Rate: ");
+    Look(Yaw_Max_Rate * 10);
+    Look1("Yaw Expo: ");
+    Look((float)Yaw_Expo / 100.0f);
+    Look("");
+
+    //  Look1("Yaw Response Time: ");
+    //  Look(Yaw_Response_Time);
+    //  Look1("Yaw Accel Limit: ");
+    //  Look(Yaw_Accel_Limit);
+
+    Look1("Collective Centre Rate: ");
+    Look((float)Collective_Centre_Rate / 4.00f);
+    Look1("Collective MAX Rate: ");
+    Look((float)Collective_Max_Rate / 4.00f);
+    Look1("Collective Expo: ");
+    Look((float)Collective_Expo / 100.0f);
+    Look("");
+
+    // Look1("Collective Response Time: ");
+    // Look(Collective_Response_Time);
+    // Look1("Collective Accel Limit: ");
+    // Look(Collective_Accel_Limit);
+
     return true;
 }
 // ************************************************************************************************************
@@ -486,54 +640,196 @@ inline void WriteRatesToNexusAndSave()
     uint8_t offset = 0;
 
     payload[offset++] = Rates_Type;
-    payload[offset++] = (uint8_t)(Roll_Centre_Rate); // / 10.0f);// These factors are now handled in the Transmitter so BYTES only are sent
-    payload[offset++] = (uint8_t)(Roll_Expo);        // * 100.0f); // These factors are now handled in the Transmitter so BYTES only are sent
-    payload[offset++] = (uint8_t)(Roll_Max_Rate);    // / 10.0f);// These factors are now handled in the Transmitter so BYTES only are sent
+    payload[offset++] = (uint8_t)(Roll_Centre_Rate); // These factors are now handled in the Transmitter so BYTES only are sent
+    payload[offset++] = (uint8_t)(Roll_Expo);
+    payload[offset++] = (uint8_t)(Roll_Max_Rate);
 
     payload[offset++] = Roll_Response_Time;
     payload[offset++] = (uint8_t)(Roll_Accel_Limit & 0xFF);
     payload[offset++] = (uint8_t)(Roll_Accel_Limit >> 8);
 
-    payload[offset++] = (uint8_t)(Pitch_Centre_Rate); // /10.0f  // These factors are now handled in the Transmitter so BYTES only are sent
-    payload[offset++] = (uint8_t)(Pitch_Expo);        // /100.0f // These factors are now handled in the Transmitter so BYTES only are sent
-    payload[offset++] = (uint8_t)(Pitch_Max_Rate);    // /10.0f  // These factors are now handled in the Transmitter so BYTES only are sent
+    payload[offset++] = (uint8_t)(Pitch_Centre_Rate);
+    payload[offset++] = (uint8_t)(Pitch_Expo);
+    payload[offset++] = (uint8_t)(Pitch_Max_Rate);
 
     payload[offset++] = Pitch_Response_Time;
     payload[offset++] = (uint8_t)(Pitch_Accel_Limit & 0xFF);
     payload[offset++] = (uint8_t)(Pitch_Accel_Limit >> 8);
 
-    payload[offset++] = (uint8_t)(Yaw_Centre_Rate); // /10.0f  // These factors are now handled in the Transmitter so BYTES only are sent
-    payload[offset++] = (uint8_t)(Yaw_Expo);        // /100.0f // These factors are now handled in the Transmitter so BYTES only are sent
-    payload[offset++] = (uint8_t)(Yaw_Max_Rate);    // /10.0f  // These factors are now handled in the Transmitter so BYTES only are sent
+    payload[offset++] = (uint8_t)(Yaw_Centre_Rate);
+    payload[offset++] = (uint8_t)(Yaw_Expo);
+    payload[offset++] = (uint8_t)(Yaw_Max_Rate);
 
     payload[offset++] = Yaw_Response_Time;
     payload[offset++] = (uint8_t)(Yaw_Accel_Limit & 0xFF);
     payload[offset++] = (uint8_t)(Yaw_Accel_Limit >> 8);
 
-    payload[offset++] = (uint8_t)(Collective_Centre_Rate); // * 4  // These factors are now handled in the Transmitter so BYTES only are sent
-    payload[offset++] = (uint8_t)(Collective_Expo);        // *100 // These factors are now handled in the Transmitter so BYTES only are sent
-    payload[offset++] = (uint8_t)(Collective_Max_Rate);    // *4   // These factors are now handled in the Transmitter so BYTES only are sent
+    payload[offset++] = (uint8_t)(Collective_Centre_Rate);
+    payload[offset++] = (uint8_t)(Collective_Expo);
+    payload[offset++] = (uint8_t)(Collective_Max_Rate);
 
     payload[offset++] = Collective_Response_Time;
     payload[offset++] = (uint8_t)(Collective_Accel_Limit & 0xFF);
     payload[offset++] = (uint8_t)(Collective_Accel_Limit >> 8);
-
-    payload[offset++] = Roll_Setpoint_Boost_Gain;
-    payload[offset++] = Roll_Setpoint_Boost_Cutoff;
-    payload[offset++] = Pitch_Setpoint_Boost_Gain;
-    payload[offset++] = Pitch_Setpoint_Boost_Cutoff;
-    payload[offset++] = Yaw_Setpoint_Boost_Gain;
-    payload[offset++] = Yaw_Setpoint_Boost_Cutoff;
-    payload[offset++] = Collective_Setpoint_Boost_Gain;
-    payload[offset++] = Collective_Setpoint_Boost_Cutoff;
-    payload[offset++] = Yaw_Dynamic_Ceiling_Gain;
-    payload[offset++] = Yaw_Dynamic_Deadband_Gain;
-    payload[offset++] = Yaw_Dynamic_Deadband_Filter;
-
+    if (api100 >= 1208)
+    {
+        payload[offset++] = Roll_Setpoint_Boost_Gain;
+        payload[offset++] = Roll_Setpoint_Boost_Cutoff;
+        payload[offset++] = Pitch_Setpoint_Boost_Gain;
+        payload[offset++] = Pitch_Setpoint_Boost_Cutoff;
+        payload[offset++] = Yaw_Setpoint_Boost_Gain;
+        payload[offset++] = Yaw_Setpoint_Boost_Cutoff;
+        payload[offset++] = Collective_Setpoint_Boost_Gain;
+        payload[offset++] = Collective_Setpoint_Boost_Cutoff;
+        payload[offset++] = Yaw_Dynamic_Ceiling_Gain;
+        payload[offset++] = Yaw_Dynamic_Deadband_Gain;
+        payload[offset++] = Yaw_Dynamic_Deadband_Filter;
+    }
     SendToMSP(MSP_SET_RC_TUNING, payload, payload_size);
     delay(100);
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
     delay(100);
     lastWriteTime = now;
 }
+// ************************************************************************************************************
+
+//         MSP_PID_ADVANCED FROM ROTORFLIGHT FIRMWARE
+
+inline bool Parse_MSP_PID_ADVANCED(const uint8_t *data, uint8_t n)
+{
+    MspFrame f;
+    if (!FindMspV1ResponseFrame(data, n, f))
+        return false;
+    if (f.cmd != MSP_PID_ADVANCED)
+        return false;
+
+    if (f.size < 34)
+        return false;
+
+    const uint8_t *p = f.payload;
+    uint8_t offset = 0;
+
+    // Main Rotor Settings
+    collectiveToPitchCompensation = p[offset++]; // "Collective to Pitch Compensation" (shown as toggle)
+
+    // Tail Rotor Settings
+    cyclicFeedforwardGain = p[offset++];     // "Cyclic Feedforward Gain"
+    collectiveFeedforwardGain = p[offset++]; // "Collective Feedforward Gain"
+
+    // NOT ON SCREEN (present in MSP payload)
+    collectiveImpulseFeedforwardGain = p[offset++];      // NOT ON SCREEN
+    collectiveImpulseFeedforwardDecayTime = p[offset++]; // NOT ON SCREEN
+
+    // Bandwidth / Cutoffs
+    bTermCutoffHz = p[offset++]; // UI shows per-axis; MSP provides one value
+
+    // PID Controller Settings
+    iTermRelaxType = p[offset++];       // "I-Term Relax Type"
+    iTermRelaxCutoff = p[offset++];     // "Cutoff Point for Roll/Pitch/Yaw" (often shared)
+    errorDecayMaxRateDps = p[offset++]; // likely "Error Decay maximum rate [°/s]"
+    groundErrorDecayTime = p[offset++]; // "Ground Error Decay -> Decay Time [s]" (scaling unknown)
+
+    // Error limits
+    errorLimitRollDeg = (uint16_t)p[offset] | ((uint16_t)p[offset + 1] << 8);
+    offset += 2;
+    errorLimitPitchDeg = (uint16_t)p[offset] | ((uint16_t)p[offset + 1] << 8);
+    offset += 2;
+    errorLimitYawDeg = (uint16_t)p[offset] | ((uint16_t)p[offset + 1] << 8);
+    offset += 2;
+
+    // HS Offset limits
+    hsOffsetLimitRollDeg = (uint16_t)p[offset] | ((uint16_t)p[offset + 1] << 8);
+    offset += 2;
+    hsOffsetLimitPitchDeg = (uint16_t)p[offset] | ((uint16_t)p[offset + 1] << 8);
+    offset += 2;
+    hsOffsetLimitYawDeg = (uint16_t)p[offset] | ((uint16_t)p[offset + 1] << 8);
+    offset += 2; // NOT ON SCREEN
+
+    // HS Offset gains
+    hsOffsetGainRoll = p[offset++];  // shown
+    hsOffsetGainPitch = p[offset++]; // shown
+    hsOffsetGainYaw = p[offset++];   // NOT ON SCREEN
+
+    // Cross-coupling
+    crossCouplingGain = p[offset++];         // "Cross-Coupling Gain"
+    crossCouplingRatioPercent = p[offset++]; // "Cross-Coupling Ratio [%]"
+    crossCouplingCutoffHz = p[offset++];     // "Cross-Coupling Cutoff Frequency [Hz]"
+
+    // Bandwidth
+    rollBandwidthHz = p[offset++];  // "Roll Bandwidth"
+    pitchBandwidthHz = p[offset++]; // "Pitch Bandwidth"
+    yawBandwidthHz = p[offset++];   // "Yaw Bandwidth"
+
+    // D-term cutoff
+    rollDtermCutoffHz = p[offset++];  // "Roll D-term Cutoff"
+    pitchDtermCutoffHz = p[offset++]; // "Pitch D-term Cutoff"
+    yawDtermCutoffHz = p[offset++];   // "Yaw D-term Cutoff"
+
+    return true;
+}
+// ************************************************************************************************************
+
+inline void WritePIDAdvancedToNexusAndSave()
+{
+    static uint32_t lastWriteTime = 0;
+    const uint32_t WRITE_COOLDOWN_MS = 5000;
+    uint32_t now = millis();
+    if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight22Detected))
+        return;
+
+    uint8_t payload[34];
+    uint8_t offset = 0;
+
+    payload[offset++] = collectiveToPitchCompensation;
+
+    payload[offset++] = cyclicFeedforwardGain;
+    payload[offset++] = collectiveFeedforwardGain;
+
+    payload[offset++] = collectiveImpulseFeedforwardGain;      // NOT ON SCREEN
+    payload[offset++] = collectiveImpulseFeedforwardDecayTime; // NOT ON SCREEN
+
+    payload[offset++] = bTermCutoffHz;
+
+    payload[offset++] = iTermRelaxType;
+    payload[offset++] = iTermRelaxCutoff;
+    payload[offset++] = errorDecayMaxRateDps;
+    payload[offset++] = groundErrorDecayTime;
+
+    payload[offset++] = (uint8_t)(errorLimitRollDeg & 0xFF);
+    payload[offset++] = (uint8_t)(errorLimitRollDeg >> 8);
+    payload[offset++] = (uint8_t)(errorLimitPitchDeg & 0xFF);
+    payload[offset++] = (uint8_t)(errorLimitPitchDeg >> 8);
+    payload[offset++] = (uint8_t)(errorLimitYawDeg & 0xFF);
+    payload[offset++] = (uint8_t)(errorLimitYawDeg >> 8);
+
+    payload[offset++] = (uint8_t)(hsOffsetLimitRollDeg & 0xFF);
+    payload[offset++] = (uint8_t)(hsOffsetLimitRollDeg >> 8);
+    payload[offset++] = (uint8_t)(hsOffsetLimitPitchDeg & 0xFF);
+    payload[offset++] = (uint8_t)(hsOffsetLimitPitchDeg >> 8);
+    payload[offset++] = (uint8_t)(hsOffsetLimitYawDeg & 0xFF); // NOT ON SCREEN
+    payload[offset++] = (uint8_t)(hsOffsetLimitYawDeg >> 8);   // NOT ON SCREEN
+
+    payload[offset++] = hsOffsetGainRoll;
+    payload[offset++] = hsOffsetGainPitch;
+    payload[offset++] = hsOffsetGainYaw; // NOT ON SCREEN
+
+    payload[offset++] = crossCouplingGain;
+    payload[offset++] = crossCouplingRatioPercent;
+    payload[offset++] = crossCouplingCutoffHz;
+
+    payload[offset++] = rollBandwidthHz;
+    payload[offset++] = pitchBandwidthHz;
+    payload[offset++] = yawBandwidthHz;
+
+    payload[offset++] = rollDtermCutoffHz;
+    payload[offset++] = pitchDtermCutoffHz;
+    payload[offset++] = yawDtermCutoffHz;
+
+    SendToMSP(MSP_SET_PID_ADVANCED, payload, sizeof(payload));
+    delay(100);
+    SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
+    delay(100);
+    lastWriteTime = now;
+}
+
 #endif // NEXUS_H
