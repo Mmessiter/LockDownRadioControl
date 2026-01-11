@@ -81,6 +81,7 @@ uint8_t errorDecayMaxRateDps = 0; // likely "Error Decay maximum rate [°/s]"
 // NOT ON SCREEN (present in MSP payload)
 uint8_t collectiveImpulseFeedforwardGain = 0;      // NOT ON SCREEN
 uint8_t collectiveImpulseFeedforwardDecayTime = 0; // NOT ON SCREEN
+uint8_t PID_Advanced_Values[19];                  // for ack payload
 
 // ************************************************************************************************************
 enum : uint8_t
@@ -98,6 +99,7 @@ enum : uint8_t
     YAW_D,
     YAW_FF
 };
+
 // ************************************************************************************************************
 #define MSP_API_VERSION 1
 
@@ -565,63 +567,6 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
 
     StoreRatesBytesForAckPayload();
     StoreAdvancedRatesBytesForAckPayload();
-
-    return true; // skip the rest for now. remove this line to enable debug output
-
-    Look("---- Nexus RC Tuning Values ----");
-    Look1("Rates Type: ");
-    Look(RF_RateTypes[Rates_Type]);
-    Look1("Roll Centre Rate: ");
-    Look(Roll_Centre_Rate * 10);
-    Look1("Roll MAX Rate: ");
-    Look(Roll_Max_Rate * 10);
-    Look1("Roll Expo: ");
-    Look((float)Roll_Expo / 100.0f);
-
-    Look("");
-    // Look1("Roll Response Time: ");
-    // Look(Roll_Response_Time);
-    // Look1("Roll Accel Limit: ");
-    // Look(Roll_Accel_Limit);
-    Look1("Pitch Centre Rate: ");
-    Look(Pitch_Centre_Rate * 10.0f);
-    Look1("Pitch Max Rate: ");
-    Look(Pitch_Max_Rate * 10);
-    Look1("Pitch Expo: ");
-    Look((float)Pitch_Expo / 100.0f);
-    Look("");
-
-    // Look1("Pitch Response Time: ");
-    // Look(Pitch_Response_Time);
-    // Look1("Pitch Accel Limit: ");
-    // Look(Pitch_Accel_Limit);
-
-    Look1("Yaw Centre Rate: ");
-    Look(Yaw_Centre_Rate * 10);
-    Look1("Yaw Max Rate: ");
-    Look(Yaw_Max_Rate * 10);
-    Look1("Yaw Expo: ");
-    Look((float)Yaw_Expo / 100.0f);
-    Look("");
-
-    //  Look1("Yaw Response Time: ");
-    //  Look(Yaw_Response_Time);
-    //  Look1("Yaw Accel Limit: ");
-    //  Look(Yaw_Accel_Limit);
-
-    Look1("Collective Centre Rate: ");
-    Look((float)Collective_Centre_Rate / 4.00f);
-    Look1("Collective MAX Rate: ");
-    Look((float)Collective_Max_Rate / 4.00f);
-    Look1("Collective Expo: ");
-    Look((float)Collective_Expo / 100.0f);
-    Look("");
-
-    // Look1("Collective Response Time: ");
-    // Look(Collective_Response_Time);
-    // Look1("Collective Accel Limit: ");
-    // Look(Collective_Accel_Limit);
-
     return true;
 }
 // ************************************************************************************************************
@@ -690,6 +635,43 @@ inline void WriteRatesToNexusAndSave()
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
     delay(100);
     lastWriteTime = now;
+}
+
+// ************************************************************************************************************
+// Store the currently used PID advanced *byte* values ready for ack payload
+// (19 values — includes the toggle at [0]) heer!
+// ************************************************************************************************************
+void StorePIDAdvancedBytesForAckPayload()
+{
+    PID_Advanced_Values[0] = collectiveToPitchCompensation; // "Collective to Pitch Compensation" (toggle)
+
+    PID_Advanced_Values[1] = cyclicFeedforwardGain;     // "Cyclic Feedforward Gain"
+    PID_Advanced_Values[2] = collectiveFeedforwardGain; // "Collective Feedforward Gain"
+
+    PID_Advanced_Values[3] = bTermCutoffHz; // "B-Term Cutoff Hz"
+
+    PID_Advanced_Values[4] = iTermRelaxType;   // "I-Term Relax Type"
+    PID_Advanced_Values[5] = iTermRelaxCutoff; // "I-Term Relax Cutoff"
+
+    PID_Advanced_Values[6] = errorDecayMaxRateDps; // "Error Decay Max Rate [deg/s]"
+    PID_Advanced_Values[7] = groundErrorDecayTime; // "Ground Error Decay Time"
+
+    PID_Advanced_Values[8] = hsOffsetGainRoll;  // "HS Offset Gain Roll"
+    PID_Advanced_Values[9] = hsOffsetGainPitch; // "HS Offset Gain Pitch"
+
+    PID_Advanced_Values[10] = crossCouplingGain;         // "Cross-Coupling Gain"
+    PID_Advanced_Values[11] = crossCouplingRatioPercent; // "Cross-Coupling Ratio [%]"
+    PID_Advanced_Values[12] = crossCouplingCutoffHz;     // "Cross-Coupling Cutoff [Hz]"
+
+
+    
+    PID_Advanced_Values[13] = rollBandwidthHz;  // "Roll Bandwidth [Hz]"
+    PID_Advanced_Values[14] = pitchBandwidthHz; // "Pitch Bandwidth [Hz]"
+    PID_Advanced_Values[15] = yawBandwidthHz;   // "Yaw Bandwidth [Hz]"
+
+    PID_Advanced_Values[16] = rollDtermCutoffHz;  // "Roll D-term Cutoff [Hz]"
+    PID_Advanced_Values[17] = pitchDtermCutoffHz; // "Pitch D-term Cutoff [Hz]"
+    PID_Advanced_Values[18] = yawDtermCutoffHz;   // "Yaw D-term Cutoff [Hz]"
 }
 // ************************************************************************************************************
 
