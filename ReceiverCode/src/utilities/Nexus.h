@@ -663,8 +663,6 @@ void StorePIDAdvancedBytesForAckPayload()
     PID_Advanced_Values[11] = crossCouplingRatioPercent; // "Cross-Coupling Ratio [%]"
     PID_Advanced_Values[12] = crossCouplingCutoffHz;     // "Cross-Coupling Cutoff [Hz]"
 
-
-    
     PID_Advanced_Values[13] = rollBandwidthHz;  // "Roll Bandwidth [Hz]"
     PID_Advanced_Values[14] = pitchBandwidthHz; // "Pitch Bandwidth [Hz]"
     PID_Advanced_Values[15] = yawBandwidthHz;   // "Yaw Bandwidth [Hz]"
