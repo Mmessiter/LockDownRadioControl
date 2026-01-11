@@ -81,24 +81,23 @@ uint8_t errorDecayMaxRateDps = 0; // likely "Error Decay maximum rate [°/s]"
 // NOT ON SCREEN (present in MSP payload)
 uint8_t collectiveImpulseFeedforwardGain = 0;      // NOT ON SCREEN
 uint8_t collectiveImpulseFeedforwardDecayTime = 0; // NOT ON SCREEN
-uint8_t PID_Advanced_Values[19];                  // for ack payload
+uint8_t PID_Advanced_Bytes[34];                   // for Ackpayload
 
-// ************************************************************************************************************
-enum : uint8_t
-{
-    ROLL_P = 0,
-    ROLL_I,
-    ROLL_D,
-    ROLL_FF,
-    PITCH_P,
-    PITCH_I,
-    PITCH_D,
-    PITCH_FF,
-    YAW_P,
-    YAW_I,
-    YAW_D,
-    YAW_FF
-};
+    // ************************************************************************************************************
+    enum : uint8_t {
+        ROLL_P = 0,
+        ROLL_I,
+        ROLL_D,
+        ROLL_FF,
+        PITCH_P,
+        PITCH_I,
+        PITCH_D,
+        PITCH_FF,
+        YAW_P,
+        YAW_I,
+        YAW_D,
+        YAW_FF
+    };
 
 // ************************************************************************************************************
 #define MSP_API_VERSION 1
@@ -641,35 +640,76 @@ inline void WriteRatesToNexusAndSave()
 // Store the currently used PID advanced *byte* values ready for ack payload
 // (19 values — includes the toggle at [0]) heer!
 // ************************************************************************************************************
+// ************************************************************************************************************
+// Store the currently used PID advanced values ready for ack payload / sending back via MSP
+// This mirrors the MSP_PID_ADVANCED payload layout (34 bytes, little-endian 16-bit fields)
+// ************************************************************************************************************
 void StorePIDAdvancedBytesForAckPayload()
 {
-    PID_Advanced_Values[0] = collectiveToPitchCompensation; // "Collective to Pitch Compensation" (toggle)
+    uint8_t i = 0;
 
-    PID_Advanced_Values[1] = cyclicFeedforwardGain;     // "Cyclic Feedforward Gain"
-    PID_Advanced_Values[2] = collectiveFeedforwardGain; // "Collective Feedforward Gain"
+    // Main Rotor Settings
+    PID_Advanced_Bytes[i++] = collectiveToPitchCompensation;
 
-    PID_Advanced_Values[3] = bTermCutoffHz; // "B-Term Cutoff Hz"
+    // Tail Rotor Settings
+    PID_Advanced_Bytes[i++] = cyclicFeedforwardGain;
+    PID_Advanced_Bytes[i++] = collectiveFeedforwardGain;
 
-    PID_Advanced_Values[4] = iTermRelaxType;   // "I-Term Relax Type"
-    PID_Advanced_Values[5] = iTermRelaxCutoff; // "I-Term Relax Cutoff"
+    // NOT ON SCREEN (present in MSP payload)
+    PID_Advanced_Bytes[i++] = collectiveImpulseFeedforwardGain;
+    PID_Advanced_Bytes[i++] = collectiveImpulseFeedforwardDecayTime;
 
-    PID_Advanced_Values[6] = errorDecayMaxRateDps; // "Error Decay Max Rate [deg/s]"
-    PID_Advanced_Values[7] = groundErrorDecayTime; // "Ground Error Decay Time"
+    // Bandwidth / Cutoffs
+    PID_Advanced_Bytes[i++] = bTermCutoffHz;
 
-    PID_Advanced_Values[8] = hsOffsetGainRoll;  // "HS Offset Gain Roll"
-    PID_Advanced_Values[9] = hsOffsetGainPitch; // "HS Offset Gain Pitch"
+    // PID Controller Settings
+    PID_Advanced_Bytes[i++] = iTermRelaxType;
+    PID_Advanced_Bytes[i++] = iTermRelaxCutoff;
+    PID_Advanced_Bytes[i++] = errorDecayMaxRateDps;
+    PID_Advanced_Bytes[i++] = groundErrorDecayTime;
 
-    PID_Advanced_Values[10] = crossCouplingGain;         // "Cross-Coupling Gain"
-    PID_Advanced_Values[11] = crossCouplingRatioPercent; // "Cross-Coupling Ratio [%]"
-    PID_Advanced_Values[12] = crossCouplingCutoffHz;     // "Cross-Coupling Cutoff [Hz]"
+    // Error limits (uint16_t, little-endian)
+    PID_Advanced_Bytes[i++] = (uint8_t)(errorLimitRollDeg & 0xFF);
+    PID_Advanced_Bytes[i++] = (uint8_t)(errorLimitRollDeg >> 8);
 
-    PID_Advanced_Values[13] = rollBandwidthHz;  // "Roll Bandwidth [Hz]"
-    PID_Advanced_Values[14] = pitchBandwidthHz; // "Pitch Bandwidth [Hz]"
-    PID_Advanced_Values[15] = yawBandwidthHz;   // "Yaw Bandwidth [Hz]"
+    PID_Advanced_Bytes[i++] = (uint8_t)(errorLimitPitchDeg & 0xFF);
+    PID_Advanced_Bytes[i++] = (uint8_t)(errorLimitPitchDeg >> 8);
 
-    PID_Advanced_Values[16] = rollDtermCutoffHz;  // "Roll D-term Cutoff [Hz]"
-    PID_Advanced_Values[17] = pitchDtermCutoffHz; // "Pitch D-term Cutoff [Hz]"
-    PID_Advanced_Values[18] = yawDtermCutoffHz;   // "Yaw D-term Cutoff [Hz]"
+    PID_Advanced_Bytes[i++] = (uint8_t)(errorLimitYawDeg & 0xFF);
+    PID_Advanced_Bytes[i++] = (uint8_t)(errorLimitYawDeg >> 8);
+
+    // HS Offset limits (uint16_t, little-endian)
+    PID_Advanced_Bytes[i++] = (uint8_t)(hsOffsetLimitRollDeg & 0xFF);
+    PID_Advanced_Bytes[i++] = (uint8_t)(hsOffsetLimitRollDeg >> 8);
+
+    PID_Advanced_Bytes[i++] = (uint8_t)(hsOffsetLimitPitchDeg & 0xFF);
+    PID_Advanced_Bytes[i++] = (uint8_t)(hsOffsetLimitPitchDeg >> 8);
+
+    PID_Advanced_Bytes[i++] = (uint8_t)(hsOffsetLimitYawDeg & 0xFF);
+    PID_Advanced_Bytes[i++] = (uint8_t)(hsOffsetLimitYawDeg >> 8);
+
+    // HS Offset gains
+    PID_Advanced_Bytes[i++] = hsOffsetGainRoll;
+    PID_Advanced_Bytes[i++] = hsOffsetGainPitch;
+    PID_Advanced_Bytes[i++] = hsOffsetGainYaw;
+
+    // Cross-coupling
+    PID_Advanced_Bytes[i++] = crossCouplingGain;
+    PID_Advanced_Bytes[i++] = crossCouplingRatioPercent;
+    PID_Advanced_Bytes[i++] = crossCouplingCutoffHz;
+
+    // Bandwidth
+    PID_Advanced_Bytes[i++] = rollBandwidthHz;
+    PID_Advanced_Bytes[i++] = pitchBandwidthHz;
+    PID_Advanced_Bytes[i++] = yawBandwidthHz;
+
+    // D-term cutoff
+    PID_Advanced_Bytes[i++] = rollDtermCutoffHz;
+    PID_Advanced_Bytes[i++] = pitchDtermCutoffHz;
+    PID_Advanced_Bytes[i++] = yawDtermCutoffHz;
+
+    // Optional sanity check in debug builds:
+    // i should end up == 34
 }
 // ************************************************************************************************************
 
