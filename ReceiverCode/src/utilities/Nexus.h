@@ -222,19 +222,7 @@ inline void WritePIDsToNexusAndSave(const uint16_t pid[12])
     delay(100);
     lastWriteTime = now; // set cooldown only after we actually did the write+save
 }
-// ************************************************************************************************************
-void DebugPIDValues(char const *msg)
-{
-    Look(msg);
-    for (int i = 0; i < 12; ++i)
-    {
-        Look1(" PID[");
-        Look1(i);
-        Look1("]: ");
-        Look(All_PIDs[i]);
-    }
-    Look("---------------------");
-}
+
 // ************************************************************************************************************
 //         MSP_PID FROM ROTORFLIGHT FIRMWARE
 
@@ -267,8 +255,6 @@ inline bool Parse_MSP_PID(const uint8_t *data, uint8_t n)
     PID_Yaw_D = p[20] | (p[21] << 8);
     PID_Yaw_FF = p[22] | (p[23] << 8);
 
-    //  DebugPIDValues("Current Nexus PID Values");
-
     return true;
 }
 // ************************************************************************************************************
@@ -297,8 +283,6 @@ inline bool Parse_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n)
     const uint8_t size = f.size;
     const uint8_t *payload = f.payload;
 
-    // Need enough bytes for what we read:
-    // index 14 used for temp1 => size must be >= 15
     if (size < 15)
         return false;
 
@@ -309,20 +293,18 @@ inline bool Parse_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n)
     RotorRPM = ((uint32_t)payload[1] |
                 ((uint32_t)payload[2] << 8) |
                 ((uint32_t)payload[3] << 16) |
-                ((uint32_t)payload[4] << 24)) /
-               Ratio; // RPM: decode 24-bit, and include the 4th byte even if zero
+                ((uint32_t)payload[4] << 24)) / Ratio; // RPM: decode 24-bit, and include the 4th byte even if zero
     RXModelVolts = (float)((uint16_t)payload[7] | ((uint16_t)payload[8] << 8)) / 1000.0f;
     Battery_Amps = (float)((uint16_t)payload[9] | ((uint16_t)payload[10] << 8)) / 1000.0f;
     Battery_mAh = (float)((uint16_t)payload[11] | ((uint16_t)payload[12] << 8));
     ESC_Temp_C = (float)((uint16_t)payload[13] | ((uint16_t)payload[14] << 8)) / 10.0f;
 
-    if (RXModelVolts > 26.0f) // this is to handle 12S which were read with INA219 which cannot read above 26V ...
-        RXModelVolts /= 2.0f; // ... so transmitter still halves the voltage for 12S for backwards compatibility.
+    if (RXModelVolts > 26.0f) // this is to handle 12s batteries which were read with INA219 which cannot read above 26V ...
+        RXModelVolts /= 2.0f; // ... so transmitter still halves the voltage for 12s for backwards compatibility.
 
     return true;
 }
-
-// ************************************************************************************************************/
+// ************************************************************************************************************
 inline void CheckMSPSerial()
 {
     static uint32_t Localtimer = 0;
@@ -444,24 +426,24 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
         return false;
     const uint8_t *p = f.payload;
     uint8_t offset = 0;
-    Rates_Type = p[offset++];                             // Banner
+    Rates_Type = p[offset++];                             // Banner - displayed but not editable at the moment at the transmitter end
     Roll_Centre_Rate = p[offset++];                       // * 10         - n0
     Roll_Expo = p[offset++];                              // / 100.0f     - n2
     Roll_Max_Rate = p[offset++];                          // * 10.0f      - n1
-    Roll_Response_Time = p[offset++];                     // not yet used
-    Roll_Accel_Limit = p[offset] | (p[offset + 1] << 8);  // not yet used
+    Roll_Response_Time = p[offset++];                     // Advanced screen
+    Roll_Accel_Limit = p[offset] | (p[offset + 1] << 8);  // Advanced screen
     offset += 2;                                          // ---
     Pitch_Centre_Rate = p[offset++];                      //  * 10.0f;    - n3
     Pitch_Expo = p[offset++];                             // / 100.0f;    - n5
     Pitch_Max_Rate = p[offset++];                         // * 10.0f;     - n4
-    Pitch_Response_Time = p[offset++];                    // not yet used
-    Pitch_Accel_Limit = p[offset] | (p[offset + 1] << 8); // not yet used
+    Pitch_Response_Time = p[offset++];                    // Advanced screen
+    Pitch_Accel_Limit = p[offset] | (p[offset + 1] << 8); // Advanced screen
     offset += 2;                                          // ---
     Yaw_Centre_Rate = p[offset++];                        // * 10.0f       - n6
     Yaw_Expo = p[offset++];                               // / 100.0f      - n8
     Yaw_Max_Rate = p[offset++];                           // * 10.0f       - n7
-    Yaw_Response_Time = p[offset++];                      // not yet used
-    Yaw_Accel_Limit = p[offset] | (p[offset + 1] << 8);   // not yet used
+    Yaw_Response_Time = p[offset++];                      // Advanced screen
+    Yaw_Accel_Limit = p[offset] | (p[offset + 1] << 8);   // Advanced screen
     offset += 2;                                          // ---
     Collective_Centre_Rate = p[offset++];                 // / 4.0f        - n9
     Collective_Expo = p[offset++];                        // / 100.0f      - n11
@@ -484,92 +466,8 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
         Yaw_Dynamic_Deadband_Gain = p[offset++];
         Yaw_Dynamic_Deadband_Filter = p[offset++];
     }
-
     StoreRatesBytesForAckPayload();
     StoreAdvancedRatesBytesForAckPayload();
-
-    return true; // skip the rest for now. remove this line to enable debug output
-
-    Look("---- Nexus RC Tuning Values ----");
-    Look1("Rates Type: ");
-    Look(RF_RateTypes[Rates_Type]);
-    Look1("Roll Centre Rate: ");
-    Look(Roll_Centre_Rate * 10);
-    Look1("Roll MAX Rate: ");
-    Look(Roll_Max_Rate * 10);
-    Look1("Roll Expo: ");
-    Look((float)Roll_Expo / 100.0f);
-
-    Look("");
-    // Look1("Roll Response Time: ");
-    // Look(Roll_Response_Time);
-    // Look1("Roll Accel Limit: ");
-    // Look(Roll_Accel_Limit);
-    Look1("Pitch Centre Rate: ");
-    Look(Pitch_Centre_Rate * 10.0f);
-    Look1("Pitch Max Rate: ");
-    Look(Pitch_Max_Rate * 10);
-    Look1("Pitch Expo: ");
-    Look((float)Pitch_Expo / 100.0f);
-    Look("");
-
-    // Look1("Pitch Response Time: ");
-    // Look(Pitch_Response_Time);
-    // Look1("Pitch Accel Limit: ");
-    // Look(Pitch_Accel_Limit);
-
-    Look1("Yaw Centre Rate: ");
-    Look(Yaw_Centre_Rate * 10);
-    Look1("Yaw Max Rate: ");
-    Look(Yaw_Max_Rate * 10);
-    Look1("Yaw Expo: ");
-    Look((float)Yaw_Expo / 100.0f);
-    Look("");
-
-    //  Look1("Yaw Response Time: ");
-    //  Look(Yaw_Response_Time);
-    //  Look1("Yaw Accel Limit: ");
-    //  Look(Yaw_Accel_Limit);
-
-    Look1("Collective Centre Rate: ");
-    Look((float)Collective_Centre_Rate / 4.00f);
-    Look1("Collective MAX Rate: ");
-    Look((float)Collective_Max_Rate / 4.00f);
-    Look1("Collective Expo: ");
-    Look((float)Collective_Expo / 100.0f);
-    Look("");
-
-    // Look1("Collective Response Time: ");
-    // Look(Collective_Response_Time);
-    // Look1("Collective Accel Limit: ");
-    // Look(Collective_Accel_Limit);
-
-    // if (api100 >= 1208)
-    // {
-    //     Look1("Roll Setpoint Boost Gain: ");
-    //     Look(Roll_Setpoint_Boost_Gain);
-    //     Look1("Roll Setpoint Boost Cutoff: ");
-    //     Look(Roll_Setpoint_Boost_Cutoff);
-    //     Look1("Pitch Setpoint Boost Gain: ");
-    //     Look(Pitch_Setpoint_Boost_Gain);
-    //     Look1("Pitch Setpoint Boost Cutoff: ");
-    //     Look(Pitch_Setpoint_Boost_Cutoff);
-    //     Look1("Yaw Setpoint Boost Gain: ");
-    //     Look(Yaw_Setpoint_Boost_Gain);
-    //     Look1("Yaw Setpoint Boost Cutoff: ");
-    //     Look(Yaw_Setpoint_Boost_Cutoff);
-    //     Look1("Collective Setpoint Boost Gain: ");
-    //     Look(Collective_Setpoint_Boost_Gain);
-    //     Look1("Collective Setpoint Boost Cutoff: ");
-    //     Look(Collective_Setpoint_Boost_Cutoff);
-    //     Look1("Yaw Dynamic Ceiling Gain: ");
-    //     Look(Yaw_Dynamic_Ceiling_Gain);
-    //     Look1("Yaw Dynamic Deadband Gain: ");
-    //     Look(Yaw_Dynamic_Deadband_Gain);
-    //     Look1("Yaw Dynamic Deadband Filter: ");
-    //     Look(Yaw_Dynamic_Deadband_Filter);
-    // }
-
     return true;
 }
 // ************************************************************************************************************
@@ -619,20 +517,19 @@ inline void WriteRatesToNexusAndSave()
     payload[offset++] = Collective_Response_Time;
     payload[offset++] = (uint8_t)(Collective_Accel_Limit & 0xFF);
     payload[offset++] = (uint8_t)(Collective_Accel_Limit >> 8);
-    if (api100 >= 1208)
-    {
-        payload[offset++] = Roll_Setpoint_Boost_Gain;
-        payload[offset++] = Roll_Setpoint_Boost_Cutoff;
-        payload[offset++] = Pitch_Setpoint_Boost_Gain;
-        payload[offset++] = Pitch_Setpoint_Boost_Cutoff;
-        payload[offset++] = Yaw_Setpoint_Boost_Gain;
-        payload[offset++] = Yaw_Setpoint_Boost_Cutoff;
-        payload[offset++] = Collective_Setpoint_Boost_Gain;
-        payload[offset++] = Collective_Setpoint_Boost_Cutoff;
-        payload[offset++] = Yaw_Dynamic_Ceiling_Gain;
-        payload[offset++] = Yaw_Dynamic_Deadband_Gain;
-        payload[offset++] = Yaw_Dynamic_Deadband_Filter;
-    }
+
+    payload[offset++] = Roll_Setpoint_Boost_Gain;
+    payload[offset++] = Roll_Setpoint_Boost_Cutoff;
+    payload[offset++] = Pitch_Setpoint_Boost_Gain;
+    payload[offset++] = Pitch_Setpoint_Boost_Cutoff;
+    payload[offset++] = Yaw_Setpoint_Boost_Gain;
+    payload[offset++] = Yaw_Setpoint_Boost_Cutoff;
+    payload[offset++] = Collective_Setpoint_Boost_Gain;
+    payload[offset++] = Collective_Setpoint_Boost_Cutoff;
+    payload[offset++] = Yaw_Dynamic_Ceiling_Gain;
+    payload[offset++] = Yaw_Dynamic_Deadband_Gain;
+    payload[offset++] = Yaw_Dynamic_Deadband_Filter;
+
     SendToMSP(MSP_SET_RC_TUNING, payload, payload_size);
     delay(100);
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
