@@ -122,6 +122,10 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
         for (int i = 0; i < 7; ++i)
             Parameters.word[i + 1] = Rate_Advanced_Values[i]; // 0 to 6
         break;
+    case SEND_PID_ADVANCED_VALUES:                       // 18 = Please send PID ADVANCED values
+        Parameters.word[1] = 321;                        // confirms request for PID ADVANCED values
+        Parameters.word[2] = PID_Advanced_Send_Duration; // 1000 - how many milliseconds to send these
+        break;
     default:
         break;
     }

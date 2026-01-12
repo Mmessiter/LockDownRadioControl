@@ -1,7 +1,6 @@
 
 // **********************************************************************************************************
-// This file handles basic rates editing for Rotorflight
-// It uses a factors' table to convert between screen display values and the actual byte values needed by Rotorflight
+// This file handles advanced rates editing for Rotorflight compatible flight controllers
 // **********************************************************************************************************
 
 #ifndef RATESRF_ADVANCED_H

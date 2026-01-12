@@ -980,6 +980,16 @@ ParseAckPayload() // It's already pretty short!
             Hide_Advanced_Rates_Msg();
         }
     }
+    if (Reading_PIDS_Advanced_Now) // heer
+    {
+        if ((millis() - PID_Advanced_Start_Time) > PID_Advanced_Send_Duration)
+        {
+            Reading_PIDS_Advanced_Now = false;
+            HidePID_Advanced_Msg();
+        }
+    }
+
+
 
     switch (AckPayload.Ack_Payload_byte[0]) // Only look at the low 7 BITS
     {

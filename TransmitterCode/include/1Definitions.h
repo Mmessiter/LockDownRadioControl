@@ -176,8 +176,9 @@
 #define SEND_RATES_ADVANCED_VALUES 15 // Command to request RATES values from RX
 #define GET_RATES_ADVANCED_VALUES_SECOND_8 16
 #define GET_RATES_ADVANCED_VALUES_FIRST_7 17
+#define SEND_PID_ADVANCED_VALUES 18     // Command to request PID values from RX
 
-#define PARAMETERS_MAX_ID 18 // Max types of parameters packet to send  ... might increase.
+#define PARAMETERS_MAX_ID 19 // Max types of parameters packet to send  ... might increase.
 
 // **************************************************************************
 //                               Mixes                                      *
@@ -247,6 +248,7 @@
 #define RATESVIEW1 46
 #define ROTORFLIGHTVIEW 47
 #define RATESADVANCEDVIEW 48
+#define PIDADVANCEDVIEW 49
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -778,6 +780,7 @@ void ForegroundColourAdvancedRates(uint16_t Colour);
 void RatesAdvancedWereEdited();
 void EndRatesAdvancedView();
 void SaveRatesAdvanced();
+void HidePID_Advanced_Msg();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
@@ -1350,6 +1353,7 @@ char ESC_Temperature[10];
 char MAX_ESC_Temperature[10];
 char PID_Labels[12][4] = {"n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11"};
 bool PIDS_Were_Edited = false;
+bool PIDS_Advanced_Were_Edited = false;
 bool Rates_Were_Edited = false;
 bool Rates_Advanced_Were_Edited = false;
 float GearRatio = 10.3;
@@ -1409,13 +1413,16 @@ uint8_t ChannelSentLastTime = 0; // The old channel number
 uint8_t Index = 82;
 uint16_t PID_Values[12];
 uint16_t PID_Send_Duration = 0;
+uint16_t PID_Advanced_Send_Duration = 0;
 uint16_t RATES_Send_Duration = 0;
 uint16_t Rates_Advanced_Send_Duration = 0;
 
 uint32_t PID_Start_Time = 0;
+uint32_t PID_Advanced_Start_Time = 0;
 uint32_t RATES_Advanced_Start_Time = 0;
 uint32_t RATES_Start_Time = 0;
 bool Reading_PIDS_Now = false;
+bool Reading_PIDS_Advanced_Now = false;
 bool Reading_RATES_Now = false;
 bool Reading_RATES_Advanced_Now = false;
 uint8_t Rate_Values[MAX_RATES_BYTES];
