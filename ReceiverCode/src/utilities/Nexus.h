@@ -136,6 +136,7 @@ Parse_MSP_API_VERSION(const uint8_t *buf, uint8_t len, uint8_t &mspProto, uint8_
     }
     return false;
 }
+
 // ************************************************************************************************************
 // Detect if Rotorflight 2.2 is present at boot time
 // If detected, fetch API version and protocol version
@@ -185,6 +186,7 @@ inline void DetectRotorFlightAtBoot()
     MSP_UART.end();
     Rotorflight22Detected = false;
 }
+
 // **********************************************************************************************************// @brief Structure representing an MSP frame
 
 struct MspFrame
@@ -193,6 +195,7 @@ struct MspFrame
     uint8_t cmd;
     const uint8_t *payload; // points into your input buffer
 };
+
 // ************************************************************************************************************
 // Finds the *first* valid MSPv1 response frame ($M>) in data[].
 // If found, fills out 'out' and returns true.
@@ -208,7 +211,7 @@ inline bool FindMspV1ResponseFrame(const uint8_t *data, uint8_t n, MspFrame &out
 
         uint16_t frame_end = i + 5 + size; // index of checksum byte
         if (frame_end >= n)
-            return false; // header found but frame not complete in buffer
+            continue; // header found but frame not complete in buffer; keep scanning
 
         uint8_t ck = size ^ cmd;
         for (uint8_t k = 0; k < size; ++k)
@@ -216,6 +219,41 @@ inline bool FindMspV1ResponseFrame(const uint8_t *data, uint8_t n, MspFrame &out
 
         if (ck != data[frame_end])
             continue; // bad checksum, keep scanning
+
+        out.size = size;
+        out.cmd = cmd;
+        out.payload = &data[i + 5];
+        return true;
+    }
+    return false;
+}
+
+// ************************************************************************************************************
+// Finds the *first* valid MSPv1 response frame ($M>) for a SPECIFIC cmd.
+// This fixes the problem you saw: your buffer can contain multiple valid frames, so f.cmd might be "39" etc.
+inline bool FindMspV1ResponseFrameForCmd(const uint8_t *data, uint8_t n, uint8_t wantCmd, MspFrame &out)
+{
+    for (uint8_t i = 0; i + 6 < n; ++i)
+    {
+        if (data[i] != '$' || data[i + 1] != 'M' || data[i + 2] != '>')
+            continue;
+
+        uint8_t size = data[i + 3];
+        uint8_t cmd = data[i + 4];
+
+        uint16_t frame_end = i + 5 + size; // index of checksum byte
+        if (frame_end >= n)
+            continue; // frame not complete yet, keep scanning
+
+        uint8_t ck = size ^ cmd;
+        for (uint8_t k = 0; k < size; ++k)
+            ck ^= data[i + 5 + k];
+
+        if (ck != data[frame_end])
+            continue; // bad checksum
+
+        if (cmd != wantCmd)
+            continue; // valid frame, but not the one we want
 
         out.size = size;
         out.cmd = cmd;
@@ -291,6 +329,7 @@ inline void WritePIDsToNexusAndSave(const uint16_t pid[12])
     delay(100);
     lastWriteTime = now; // set cooldown only after we actually did the write+save
 }
+
 // ************************************************************************************************************
 void DebugPIDValues(char const *msg)
 {
@@ -304,15 +343,14 @@ void DebugPIDValues(char const *msg)
     }
     Look("---------------------");
 }
+
 // ************************************************************************************************************
 //         MSP_PID FROM ROTORFLIGHT FIRMWARE
 
 inline bool Parse_MSP_PID(const uint8_t *data, uint8_t n)
 {
     MspFrame f;
-    if (!FindMspV1ResponseFrame(data, n, f))
-        return false;
-    if (f.cmd != MSP_PID)
+    if (!FindMspV1ResponseFrameForCmd(data, n, MSP_PID, f))
         return false;
 
     // *** FIX: you read 24 bytes below, so size must be at least 24 ***
@@ -340,6 +378,7 @@ inline bool Parse_MSP_PID(const uint8_t *data, uint8_t n)
 
     return true;
 }
+
 // ************************************************************************************************************
 
 //         MSP_MOTOR_TELEMETRY FROM ROTORFLIGHT FIRMWARE
@@ -357,10 +396,7 @@ inline bool Parse_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n)
         Ratio = 10.3f;
 
     MspFrame f;
-    if (!FindMspV1ResponseFrame(data, n, f))
-        return false;
-
-    if (f.cmd != MSP_MOTOR_TELEMETRY)
+    if (!FindMspV1ResponseFrameForCmd(data, n, MSP_MOTOR_TELEMETRY, f))
         return false;
 
     const uint8_t size = f.size;
@@ -511,10 +547,9 @@ void StoreAdvancedRatesBytesForAckPayload()
 inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
 {
     MspFrame f;
-    if (!FindMspV1ResponseFrame(data, n, f))
+    if (!FindMspV1ResponseFrameForCmd(data, n, MSP_RC_TUNING, f))
         return false;
-    if (f.cmd != MSP_RC_TUNING)
-        return false;
+
     uint8_t min_size = 25;
     if (api100 >= 1208)
         min_size += 11;
@@ -567,6 +602,7 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
     StoreAdvancedRatesBytesForAckPayload();
     return true;
 }
+
 // ************************************************************************************************************
 
 inline void WriteRatesToNexusAndSave()
@@ -636,11 +672,6 @@ inline void WriteRatesToNexusAndSave()
 }
 
 // ************************************************************************************************************
-// Store PID ADVANCED values into TX ack payload
-// Order matches Rotorflight Configurator screen (top → bottom)
-// 16-bit values stored LSB then MSB
-// ************************************************************************************************************
-// ************************************************************************************************************
 // Store PID ADVANCED values into TX ack payload (user-friendly order)
 // Order follows the Rotorflight Configurator screen (top-to-bottom)
 // 16-bit values stored LSB then MSB
@@ -707,79 +738,100 @@ void StorePIDAdvancedBytesForAckPayload()
 // ************************************************************************************************************
 
 //         MSP_PID_PROFILE FROM ROTORFLIGHT FIRMWARE
-
 inline bool Parse_MSP_PID_PROFILE(const uint8_t *data, uint8_t n)
 {
     MspFrame f;
-    if (!FindMspV1ResponseFrame(data, n, f))
-        return false;
-    if (f.cmd != MSP_PID_PROFILE)
+    if (!FindMspV1ResponseFrameForCmd(data, n, MSP_PID_PROFILE, f))
         return false;
 
-    if (f.size < 34)
+    if (f.size < 43)
         return false;
 
     const uint8_t *p = f.payload;
-    uint8_t offset = 0;
+    uint8_t o = 0;
 
-    // Main Rotor Settings
-    collectiveToPitchCompensation = p[offset++]; // "Collective to Pitch Compensation" (shown as toggle)
+    // Rotorflight order (your snippet), 43 bytes total:
 
-    // Tail Rotor Settings
-    cyclicFeedforwardGain = p[offset++];     // "Cyclic Feedforward Gain"
-    collectiveFeedforwardGain = p[offset++]; // "Collective Feedforward Gain"
+    collectiveToPitchCompensation = p[o++]; // pid_mode  (Configurator: "Piro Compensation")
 
-    // NOT ON SCREEN (present in MSP payload)
-    collectiveImpulseFeedforwardGain = p[offset++];      // NOT ON SCREEN
-    collectiveImpulseFeedforwardDecayTime = p[offset++]; // NOT ON SCREEN
+    // Error decay
+    groundErrorDecayTime = p[o++];         // error_decay_time_ground   (Configurator: "Ground Error Decay")
+    uint8_t errorDecayTimeCyclic = p[o++]; // error_decay_time_cyclic   (not on your screen)
+    uint8_t errorDecayTimeYaw = p[o++];    // error_decay_time_yaw      (not on your screen)
+    errorDecayMaxRateDps = p[o++];         // error_decay_limit_cyclic  (best match for your "Error decay max rate")
+    uint8_t errorDecayLimitYaw = p[o++];   // error_decay_limit_yaw     (not on your screen)
+    uint8_t errorRotation = p[o++];        // constant 1 in RF snippet,,
 
-    // Bandwidth / Cutoffs
-    bTermCutoffHz = p[offset++]; // UI shows per-axis; MSP provides one value
+    // Error limits (ALL U8 in this message)
+    // IMPORTANT: change your globals to uint8_t for these three.
+    errorLimitRollDeg = p[o++];  // error_limit[0]
+    errorLimitPitchDeg = p[o++]; // error_limit[1]
+    errorLimitYawDeg = p[o++];   // error_limit[2]...
 
-    // PID Controller Settings
-    iTermRelaxType = p[offset++];       // "I-Term Relax Type"
-    iTermRelaxCutoff = p[offset++];     // "Cutoff Point for Roll/Pitch/Yaw" (often shared)
-    errorDecayMaxRateDps = p[offset++]; // likely "Error Decay maximum rate [°/s]"
-    groundErrorDecayTime = p[offset++]; // "Ground Error Decay -> Decay Time [s]" (scaling unknown)
-
-    // Error limits
-    errorLimitRollDeg = (uint16_t)p[offset] | ((uint16_t)p[offset + 1] << 8);
-    offset += 2;
-    errorLimitPitchDeg = (uint16_t)p[offset] | ((uint16_t)p[offset + 1] << 8);
-    offset += 2;
-    errorLimitYawDeg = (uint16_t)p[offset] | ((uint16_t)p[offset + 1] << 8);
-    offset += 2;
-
-    // HS Offset limits
-    hsOffsetLimitRollDeg = (uint16_t)p[offset] | ((uint16_t)p[offset + 1] << 8);
-    offset += 2;
-    hsOffsetLimitPitchDeg = (uint16_t)p[offset] | ((uint16_t)p[offset + 1] << 8);
-    offset += 2;
-    hsOffsetLimitYawDeg = (uint16_t)p[offset] | ((uint16_t)p[offset + 1] << 8);
-    offset += 2; // NOT ON SCREEN
-
-    // HS Offset gains
-    hsOffsetGainRoll = p[offset++];  // shown
-    hsOffsetGainPitch = p[offset++]; // shown
-    hsOffsetGainYaw = p[offset++];   // NOT ON SCREEN
-
-    // Cross-coupling
-    crossCouplingGain = p[offset++];         // "Cross-Coupling Gain"
-    crossCouplingRatioPercent = p[offset++]; // "Cross-Coupling Ratio [%]"
-    crossCouplingCutoffHz = p[offset++];     // "Cross-Coupling Cutoff Frequency [Hz]"
-
-    // Bandwidth
-    rollBandwidthHz = p[offset++];  // "Roll Bandwidth"
-    pitchBandwidthHz = p[offset++]; // "Pitch Bandwidth"
-    yawBandwidthHz = p[offset++];   // "Yaw Bandwidth"
+    // "PID Controller Bandwidth" == gyro_cutoff[axis]
+    rollBandwidthHz = p[o++];
+    pitchBandwidthHz = p[o++];
+    yawBandwidthHz = p[o++];
 
     // D-term cutoff
-    rollDtermCutoffHz = p[offset++];  // "Roll D-term Cutoff"
-    pitchDtermCutoffHz = p[offset++]; // "Pitch D-term Cutoff"
-    yawDtermCutoffHz = p[offset++];   // "Yaw D-term Cutoff"
+    rollDtermCutoffHz = p[o++];
+    pitchDtermCutoffHz = p[o++];
+    yawDtermCutoffHz = p[o++];
+
+    // I-term relax
+    iTermRelaxType = p[o++];
+    uint8_t itCutRoll = p[o++];   // iterm_relax_cutoff[0]
+    uint8_t itCutPitch = p[o++];  // iterm_relax_cutoff[1]
+    uint8_t itCutYaw = p[o++];    // iterm_relax_cutoff[2]
+    iTermRelaxCutoff = itCutRoll; // your UI shows one value ("Cutoff point for RPY")
+
+    // Yaw stop / precomp (not on your PID+ screen)
+    uint8_t yawCwStopGain = p[o++];
+    uint8_t yawCcwStopGain = p[o++];
+    uint8_t yawPrecompCutoff = p[o++];
+
+    // Feedforward (these DO correspond to your screen labels)
+    cyclicFeedforwardGain = p[o++];     // yaw_cyclic_ff_gain
+    collectiveFeedforwardGain = p[o++]; // yaw_collective_ff_gain
+
+    // Two bytes that RF writes as 0 in your snippet
+    uint8_t yawCollectiveDynGain = p[o++];  // 0
+    uint8_t yawCollectiveDynDecay = p[o++]; // 0
+
+    // Pitch collective FF gain (not on your PID+ screen)
+    uint8_t pitchCollectiveFfGain = p[o++];
+
+    // Angle mode
+    uint8_t angleLevelStrength = p[o++];
+    uint8_t angleLevelLimit = p[o++];
+
+    // Horizon mode
+    uint8_t horizonLevelStrength = p[o++];
+
+    // Acro trainer
+    uint8_t trainerGain = p[o++];
+    uint8_t trainerAngleLimit = p[o++];
+
+    // Cyclic cross coupling (your screen)
+    crossCouplingGain = p[o++];
+    crossCouplingRatioPercent = p[o++];
+    crossCouplingCutoffHz = p[o++];
+
+    // Offset limits (ONLY TWO BYTES in this message)
+    // IMPORTANT: change your globals to uint8_t for these too.
+    hsOffsetLimitRollDeg = p[o++];  // offset_limit[0]
+    hsOffsetLimitPitchDeg = p[o++]; // offset_limit[1]
+    hsOffsetLimitYawDeg = 0;        // not present in this 43-byte payload
+
+    // B-term cutoffs (3 values exist; your UI shows one)
+    uint8_t bTermRoll = p[o++];  // bterm_cutoff[0]
+    uint8_t bTermPitch = p[o++]; // bterm_cutoff[1]
+    uint8_t bTermYaw = p[o++];   // bterm_cutoff[2]
+    bTermCutoffHz = bTermRoll;   // your single UI field uses roll
+
+    // o should be 43 now
 
     StorePIDAdvancedBytesForAckPayload();
-
     return true;
 }
 // ************************************************************************************************************
