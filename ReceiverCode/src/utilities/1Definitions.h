@@ -129,7 +129,9 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define SEND_RATES_ADVANCED_VALUES 15         // Command to send RATES ADVANCED values to TX
 #define GET_RATES_ADVANCED_VALUES_SECOND_8 16 // Command to update second 8 RATES ADVANCED values to RX
 #define GET_RATES_ADVANCED_VALUES_FIRST_7 17  // Command to update first 7 RATES ADVANCED values to RX
-#define PARAMETERS_MAX_ID 17                  // Max types of parameters packet to send  ... might increase.
+#define SEND_PID_ADVANCED_VALUES 18           // Command to send PID ADVANCED values to TX
+
+#define PARAMETERS_MAX_ID 18 // Max types of parameters packet to send  ... might increase.
 
 // **************************************************************************
 //                             Rotorflight Definitions                      *
@@ -138,6 +140,7 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define SEND_PID_RF 1
 #define SEND_RATES_RF 2
 #define SEND_RATES_ADVANCED_RF 3
+#define SEND_PID_ADVANCED_RF 4
 
 // ****************************************************************************************************************************************
 #define PIN_CE1 22   // NRF1 for new rxs with 11 pwm outputs
@@ -271,12 +274,12 @@ void DebugPIDValues(char const *msg);
 inline void WritePIDsToNexusAndSave(const uint16_t pid[12]);
 inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n);
 inline void WriteRatesToNexusAndSave();
-inline bool Parse_MSP_PID_ADVANCED(const uint8_t *data, uint8_t n);
+inline bool Parse_MSP_PID_PROFILE(const uint8_t *data, uint8_t n);
 
-    /************************************************************************************************************/
-    // For numeric types (int, float, double, etc.)
-    template <typename T>
-    void Look(const T &value, int format)
+/************************************************************************************************************/
+// For numeric types (int, float, double, etc.)
+template <typename T>
+void Look(const T &value, int format)
 {
     Serial.println(value, format);
 }
@@ -392,6 +395,7 @@ uint8_t SendRotorFlightParametresNow = 0;
 uint32_t Started_Sending_PIDs = 0;
 uint32_t Started_Sending_RATEs = 0;
 uint32_t Started_Sending_RATES_ADVANCED = 0;
+uint32_t Started_Sending_PID_ADVANCED = 0;
 
 uint16_t PID_Roll_P;
 uint16_t PID_Roll_I;
@@ -410,6 +414,7 @@ uint16_t All_PIDs[12];
 uint16_t PID_Send_Duration = 1000;
 uint16_t RATES_Send_Duration = 1000;
 uint16_t RATES_ADVANCED_Send_Duration = 1000;
+uint16_t PID_ADVANCED_Send_Duration = 1000;
 
 char RF_RateTypes[6][15] = {
     "None",

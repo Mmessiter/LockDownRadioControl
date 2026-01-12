@@ -93,7 +93,6 @@ void ReadExtraParameters()
             SendRotorFlightParametresNow = SEND_PID_RF;
             Started_Sending_PIDs = millis();
             PID_Send_Duration = Parameters.word[2];
-            
         }
         break;
 
@@ -162,17 +161,6 @@ void ReadExtraParameters()
             Started_Sending_RATES_ADVANCED = millis();
             RATES_ADVANCED_Send_Duration = Parameters.word[2];
         }
-    case GET_RATES_ADVANCED_VALUES_FIRST_7:
-        if (!Rotorflight22Detected)
-            break;
-        Roll_Response_Time = Parameters.word[1];
-        Pitch_Response_Time = Parameters.word[2];
-        Yaw_Response_Time = Parameters.word[3];
-        Collective_Response_Time = Parameters.word[4];
-        Roll_Setpoint_Boost_Gain = Parameters.word[5];
-        Pitch_Setpoint_Boost_Gain = Parameters.word[6];
-        Yaw_Setpoint_Boost_Gain = Parameters.word[7];
-        break;
     case GET_RATES_ADVANCED_VALUES_SECOND_8:
         if (!Rotorflight22Detected)
             break;
@@ -185,6 +173,29 @@ void ReadExtraParameters()
         Yaw_Dynamic_Deadband_Gain = Parameters.word[7];
         Yaw_Dynamic_Deadband_Filter = Parameters.word[8];
         WriteRatesToNexusAndSave(); // no checking here yet for validity. Maybe later if needed
+        break;
+    case GET_RATES_ADVANCED_VALUES_FIRST_7:
+        if (!Rotorflight22Detected)
+            break;
+        Roll_Response_Time = Parameters.word[1];
+        Pitch_Response_Time = Parameters.word[2];
+        Yaw_Response_Time = Parameters.word[3];
+        Collective_Response_Time = Parameters.word[4];
+        Roll_Setpoint_Boost_Gain = Parameters.word[5];
+        Pitch_Setpoint_Boost_Gain = Parameters.word[6];
+        Yaw_Setpoint_Boost_Gain = Parameters.word[7];
+        break;
+
+    case SEND_PID_ADVANCED_VALUES: // 18
+        if (!Rotorflight22Detected)
+            break;
+        if (Parameters.word[1] == 321) // 321 is the command to send RATES NOW!
+        {
+            SendRotorFlightParametresNow = SEND_PID_ADVANCED_RF;
+            Started_Sending_PID_ADVANCED = millis();
+            PID_ADVANCED_Send_Duration = Parameters.word[2];
+        }
+
         break;
 
     default:
