@@ -4730,6 +4730,10 @@ void BankHasChanged()
     {
         ShowRatesAdvancedBank();
     }
+    if (CurrentView == PIDADVANCEDVIEW)
+    {
+        ShowPIDAdvancedBank();
+    }
 }
 
 /************************************************************************************************************/
