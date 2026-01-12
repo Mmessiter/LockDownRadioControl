@@ -654,62 +654,45 @@ void StorePIDAdvancedBytesForAckPayload()
     // ---------------- PID Controller Settings (left panel) ----------------
 
     PID_Advanced_Bytes[i++] = collectiveToPitchCompensation; // "Piro Compensation" (toggle)
-
     PID_Advanced_Bytes[i++] = groundErrorDecayTime; // "Decay Time [s]" (under "Ground Error Decay")
-
     PID_Advanced_Bytes[i++] = iTermRelaxType;       // "I-term Relax Type" (under "I-Term Relax")
     PID_Advanced_Bytes[i++] = iTermRelaxCutoff;     // "Cutoff Point for Roll" (MSP: shared R/P/Y)
     PID_Advanced_Bytes[i++] = errorDecayMaxRateDps; // "Error Decay maximum rate [°/s]" (label wording varies)
     // (Rotorflight UI may show "Cutoff Point for Pitch" and "Cutoff Point for Yaw" separately,
     //  but MSP_PID_ADVANCED provides only one cutoff value.)
-
     PID_Advanced_Bytes[i++] = (uint8_t)(errorLimitRollDeg & 0xFF);
     PID_Advanced_Bytes[i++] = (uint8_t)(errorLimitRollDeg >> 8); // "Error Limit for Roll Axis [°]"
-
     PID_Advanced_Bytes[i++] = (uint8_t)(errorLimitPitchDeg & 0xFF);
     PID_Advanced_Bytes[i++] = (uint8_t)(errorLimitPitchDeg >> 8); // "Error Limit for Pitch Axis [°]"
-
     PID_Advanced_Bytes[i++] = (uint8_t)(errorLimitYawDeg & 0xFF);
     PID_Advanced_Bytes[i++] = (uint8_t)(errorLimitYawDeg >> 8); // "Error Limit for Yaw Axis [°]"
-
     PID_Advanced_Bytes[i++] = (uint8_t)(hsOffsetLimitRollDeg & 0xFF);
     PID_Advanced_Bytes[i++] = (uint8_t)(hsOffsetLimitRollDeg >> 8); // "HSI Offset Limit for Roll Axis [°]"
-
     PID_Advanced_Bytes[i++] = (uint8_t)(hsOffsetLimitPitchDeg & 0xFF);
     PID_Advanced_Bytes[i++] = (uint8_t)(hsOffsetLimitPitchDeg >> 8); // "HSI Offset Limit for Pitch Axis [°]"
-
     PID_Advanced_Bytes[i++] = (uint8_t)(hsOffsetLimitYawDeg & 0xFF);
     PID_Advanced_Bytes[i++] = (uint8_t)(hsOffsetLimitYawDeg >> 8); // "HSI Offset Limit for Yaw Axis [°]" (not shown in your screenshot, but in MSP)
-
     PID_Advanced_Bytes[i++] = hsOffsetGainRoll;  // "HSI Offset Gain for Roll Axis"
     PID_Advanced_Bytes[i++] = hsOffsetGainPitch; // "HSI Offset Gain for Pitch Axis"
     PID_Advanced_Bytes[i++] = hsOffsetGainYaw;   // "HSI Offset Gain for Yaw Axis" (not shown in your screenshot, but in MSP)
-
     // ---------------- Main Rotor Settings (bottom-left) ----------------
     // Rotorflight shows "Cyclic Cross-Coupling" as a toggle + settings; MSP gives us these parameters:
-
     PID_Advanced_Bytes[i++] = crossCouplingGain;         // "Cross-Coupling Gain"
     PID_Advanced_Bytes[i++] = crossCouplingRatioPercent; // "Cross-Coupling Ratio [%]"
     PID_Advanced_Bytes[i++] = crossCouplingCutoffHz;     // "Cross-Coupling Cutoff Frequency [Hz]"
-
     // ---------------- (Not shown on your screenshot, but part of MSP_PID_ADVANCED) ----------------
     PID_Advanced_Bytes[i++] = cyclicFeedforwardGain;                 // "Cyclic Feedforward Gain"
     PID_Advanced_Bytes[i++] = collectiveFeedforwardGain;             // "Collective Feedforward Gain"
     PID_Advanced_Bytes[i++] = collectiveImpulseFeedforwardGain;      // NOT ON SCREEN
     PID_Advanced_Bytes[i++] = collectiveImpulseFeedforwardDecayTime; // NOT ON SCREEN
-
     // ---------------- PID Controller Bandwidth (right panel) ----------------
-
     PID_Advanced_Bytes[i++] = rollBandwidthHz;  // "Roll Bandwidth"
     PID_Advanced_Bytes[i++] = pitchBandwidthHz; // "Pitch Bandwidth"
     PID_Advanced_Bytes[i++] = yawBandwidthHz;   // "Yaw Bandwidth"
-
     PID_Advanced_Bytes[i++] = rollDtermCutoffHz;  // "Roll D-term Cutoff"
     PID_Advanced_Bytes[i++] = pitchDtermCutoffHz; // "Pitch D-term Cutoff"
     PID_Advanced_Bytes[i++] = yawDtermCutoffHz;   // "Yaw D-term Cutoff"
-
     PID_Advanced_Bytes[i++] = bTermCutoffHz; // "Roll B-term Cutoff" (MSP: single shared value)
-
     // i should end up == 34
 }
 // ************************************************************************************************************
