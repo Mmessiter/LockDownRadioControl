@@ -782,12 +782,13 @@ void EndRatesAdvancedView();
 void SaveRatesAdvanced();
 void HidePID_Advanced_Msg();
 void Hide_msg_if_needed();
+void Display_PID_Advanced_Values(uint8_t n, uint8_t m);
 
-// **************************************************************************
-//                            GLOBAL DATA                                   *
-//***************************************************************************
+    // **************************************************************************
+    //                            GLOBAL DATA                                   *
+    //***************************************************************************
 
-RF24 Radio1(CE_PIN, CSN_PIN);
+    RF24 Radio1(CE_PIN, CSN_PIN);
 
 /************************************************************************************************************/
 /************************************************************************************************************/
@@ -1362,6 +1363,7 @@ uint8_t ArmingChannel = 5;
 
 #define MAX_RATES_BYTES 13
 #define MAX_RATES_ADVANCED_BYTES 15
+#define MAX_PIDS_ADVANCED_BYTES 26
 
 char RatesWindows[MAX_RATES_BYTES][5] = {"t10", "tn0", "tn1", "tn2", "tn3", "tn4", "tn5", "tn6", "tn7", "tn8", "tn9", "tn10", "tn11"};
 
@@ -1428,6 +1430,7 @@ bool Reading_RATES_Now = false;
 bool Reading_RATES_Advanced_Now = false;
 uint8_t Rate_Values[MAX_RATES_BYTES];
 uint8_t Rate_Advanced_Values[MAX_RATES_ADVANCED_BYTES];
+uint8_t PID_Advanced_Values[MAX_PIDS_ADVANCED_BYTES];
 char Rate_Types[6][15] = {"None", "Betaflight", "Raceflight", "KISS", "Actual", "QuickRates"};
 const float FactorTableRF[13] = {1, 10, 10, .01, 10, 10, .01, 10, 10, .01, .25, .25, .01}; // Factors for each RATES byte needed by Rotorflight
 bool Rotorflight22Detected = false;

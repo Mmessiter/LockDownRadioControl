@@ -978,6 +978,20 @@ void ReadRates_Advanced_FromAckPayload(uint8_t n, uint8_t m)
     Display_Advanced_Rates_Values(n, m);
 }
 // ******************************************************************************************
+void ReadPIDs_Advanced_FromAckPayload(uint8_t n, uint8_t m)
+{
+    uint8_t p = 0;
+    for (uint8_t i = n; i < m; ++i)
+    {
+        if (i < MAX_PIDS_ADVANCED_BYTES)
+        {
+            PID_Advanced_Values[i] = AckPayload.Ack_Payload_byte[p + 1];
+            ++p;
+        }
+    }
+    Display_PID_Advanced_Values(n, m);    
+}
+// ******************************************************************************************
 void Hide_msg_if_needed()
 {
 
@@ -1191,7 +1205,7 @@ FASTRUN void ParseAckPayload()
         sprintf(ESC_Temperature, "%.1f C.", ESC_Temp);
         sprintf(MAX_ESC_Temperature, "%.1f C.", Max_ESC_Temp);
         break;
-    case 25:
+    case 25: // ROTORFLIGHT config PIDs and Rates **********************
         if (Reading_PIDS_Now)
         {
             PID_Values[0] = GetFirstWordFromAckPayload();  // PID_Roll_P
@@ -1206,7 +1220,12 @@ FASTRUN void ParseAckPayload()
         {
             ReadRates_Advanced_FromAckPayload(0, 4);
         }
-        break;
+        if (Reading_PIDS_Advanced_Now)
+        {
+            ReadPIDs_Advanced_FromAckPayload(0, 4);
+        }
+
+            break;
     case 26:
         if (Reading_PIDS_Now)
         {
@@ -1221,6 +1240,10 @@ FASTRUN void ParseAckPayload()
         if (Reading_RATES_Advanced_Now)
         {
             ReadRates_Advanced_FromAckPayload(4, 8);
+        }
+        if (Reading_PIDS_Advanced_Now)
+        {
+            ReadPIDs_Advanced_FromAckPayload(4, 8);
         }
         break;
     case 27:
@@ -1238,44 +1261,68 @@ FASTRUN void ParseAckPayload()
         {
             ReadRates_Advanced_FromAckPayload(8, 12);
         }
-        break;
-    case 28:
-        if (Reading_PIDS_Now)
-        {
-            PID_Values[6] = GetFirstWordFromAckPayload();  // PID_Pitch_D
-            PID_Values[7] = GetSecondWordFromAckPayload(); // PID_Pitch_FF
-            Display2PIDValues(6);
+        if (Reading_PIDS_Advanced_Now)
+        {   
+            ReadPIDs_Advanced_FromAckPayload(8, 12);
         }
-        if (Reading_RATES_Now)
-        {
-            ReadRatesBytesFromAckPayload(11, 14);
+            break;
+        case 28:
+            if (Reading_PIDS_Now)
+            {
+                PID_Values[6] = GetFirstWordFromAckPayload();  // PID_Pitch_D
+                PID_Values[7] = GetSecondWordFromAckPayload(); // PID_Pitch_FF
+                Display2PIDValues(6);
+            }
+            if (Reading_RATES_Now)
+            {
+                ReadRatesBytesFromAckPayload(11, 14);
+            }
+            if (Reading_RATES_Advanced_Now)
+            {
+                ReadRates_Advanced_FromAckPayload(12, 15); // last three advanced rates
+            }
+            if (Reading_PIDS_Advanced_Now)
+            {
+                ReadPIDs_Advanced_FromAckPayload(12, 16);
+            }
+            break;
+        case 29:
+            if (Reading_PIDS_Now)
+            {
+                PID_Values[8] = GetFirstWordFromAckPayload();  // PID_Yaw_P
+                PID_Values[9] = GetSecondWordFromAckPayload(); // PID_Yaw_I
+                Display2PIDValues(8);
+            }
+            if (Reading_PIDS_Advanced_Now)
+            {
+                ReadPIDs_Advanced_FromAckPayload(16, 20);
+            }
+            break;
+        case 30:
+            if (Reading_PIDS_Now)
+            {
+                PID_Values[10] = GetFirstWordFromAckPayload();  // PID_Yaw_D
+                PID_Values[11] = GetSecondWordFromAckPayload(); // PID_Yaw_FF
+                Display2PIDValues(10);
+            }
+            if (Reading_PIDS_Advanced_Now)
+            {
+                ReadPIDs_Advanced_FromAckPayload(20, 24);
+            }
+            break;
+        case 31:
+            Rotorflight22Detected = GetBoolFromAckPayload(1);
+            break;
+        case 32:
+            if (Reading_PIDS_Advanced_Now)
+            {
+                ReadPIDs_Advanced_FromAckPayload(24, 26);
+            }
+            break;
+        default:
+
+            break;
         }
-        if (Reading_RATES_Advanced_Now)
-        {
-            ReadRates_Advanced_FromAckPayload(12, 15); // last three advanced rates
-        }
-        break;
-    case 29:
-        if (Reading_PIDS_Now)
-        {
-            PID_Values[8] = GetFirstWordFromAckPayload();  // PID_Yaw_P
-            PID_Values[9] = GetSecondWordFromAckPayload(); // PID_Yaw_I
-            Display2PIDValues(8);
-        }
-        break;
-    case 30:
-        if (Reading_PIDS_Now)
-        {
-            PID_Values[10] = GetFirstWordFromAckPayload();  // PID_Yaw_D
-            PID_Values[11] = GetSecondWordFromAckPayload(); // PID_Yaw_FF
-            Display2PIDValues(10);
-        }
-        break;
-    case 31:
-        Rotorflight22Detected = GetBoolFromAckPayload(1);
-    default:
-        break;
-    }
 }
 
 #endif
