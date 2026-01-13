@@ -23,13 +23,12 @@ void Display_PID_Advanced_Values(uint8_t n, uint8_t m)
                 SendValue(PID_Advanced_Labels[i], (bool)PID_Advanced_Values[i]);
                 continue;
             }
-            if (i == 1)
+            if ((i == 1) || (i == 25)) // these two are floats divided by 10
             {
                 snprintf(TextFloat, sizeof(TextFloat), "%.1f", (float)PID_Advanced_Values[i] / 10.0f);
                 SendText(PID_Advanced_Labels[i], TextFloat); // Send to screen
                 continue;
             }
-
             snprintf(TextFloat, sizeof(TextFloat), "%u", (unsigned)PID_Advanced_Values[i]);
             SendText(PID_Advanced_Labels[i], TextFloat); // Send to screen
         }
