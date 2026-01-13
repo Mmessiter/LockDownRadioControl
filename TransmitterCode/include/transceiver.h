@@ -86,7 +86,7 @@ void Decompress(uint16_t *uncompressed_buf, uint16_t *compressed_buf, uint8_t un
         uncompressed_buf[p++] = w2 & 0x0FFF;
     }
 }
-
+//************************************************************************************************************/
 FASTRUN void Compress(uint16_t *compressed_buf, uint16_t *uncompressed_buf, uint8_t uncompressed_size)
 {
     if (!NewCompressNeeded)
@@ -110,6 +110,47 @@ FASTRUN void Compress(uint16_t *compressed_buf, uint16_t *uncompressed_buf, uint
     }
 }
 
+/************************************************************************************************************/
+FASTRUN void StoreNewCommsGap() // Store a gap on recovery, but don't process it immediately
+{
+    if (GapStart > 0)
+    {
+        ThisGap = (millis() - GapStart);
+        GapStart = 0;
+    }
+}
+
+/************************************************************************************************************/
+
+FASTRUN void ProcessRecentCommsGap() // When we know there is time, process a recent gap.
+{
+    if (CurrentView == PIDVIEW)
+    {
+        ThisGap = 0; // ignore any gaps when in PID view
+        return;
+    }
+    ++GapCount;
+    int i = 0;
+    for (i = 0; i < 10; ++i)
+    {
+        if (ThisGap < GapThesholds[i + 1]) // no need to check if (ThisGap >= GapThesholds[i]) since it must be true
+        {
+            ++GapSets[i];
+            break;
+        }
+    }
+    if (i == 10)
+        ++GapSets[i];
+    GapSum += ThisGap;
+    GapAverage = GapSum / GapCount;
+    if (ThisGap >= MinimumGap && UseLog)
+        LogThisGap();
+    if (ThisGap > GapLongest)
+        GapLongest = ThisGap;
+    if (ThisGap < GapShortest)
+        GapShortest = ThisGap;
+    ThisGap = 0;
+}
 /************************************************************************************************************/
 void RecordsPacketSuccess(uint8_t s)
 { // or failure according to s which is 1 or 0
@@ -936,24 +977,9 @@ void ReadRates_Advanced_FromAckPayload(uint8_t n, uint8_t m)
     }
     Display_Advanced_Rates_Values(n, m);
 }
-
-/************************************************************************************************************/
-FASTRUN void
-ParseAckPayload() // It's already pretty short!
+// ******************************************************************************************
+void Hide_msg_if_needed()
 {
-    FHSS_data::NextChannelNumber = AckPayload.Ack_Payload_byte[5]; // every packet tells of next hop destination
-    if (AckPayload.Ack_Payload_byte[0] & 0x80)
-    {                                                                             // Hi bit is now the **HOP NOW!!** flag
-        NextChannel = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber); // The actual channel number pointed to.
-        HopToNextChannel();
-        AckPayload.Ack_Payload_byte[0] &= 0x7f; // Clear the high BIT, use the remainder ...
-    }
-
-    if (!ModelMatched && !LedWasGreen)
-    {
-        GetModelsMacAddress();
-        return;
-    }
 
     if (Reading_PIDS_Now)
     {
@@ -971,7 +997,6 @@ ParseAckPayload() // It's already pretty short!
             HideRATESMsg();
         }
     }
-
     if (Reading_RATES_Advanced_Now)
     {
         if ((millis() - RATES_Advanced_Start_Time) > Rates_Advanced_Send_Duration)
@@ -988,10 +1013,27 @@ ParseAckPayload() // It's already pretty short!
             HidePID_Advanced_Msg();
         }
     }
+}
 
+/************************************************************************************************************/
+FASTRUN void ParseAckPayload()
+{
+    FHSS_data::NextChannelNumber = AckPayload.Ack_Payload_byte[5]; // every packet tells of next hop destination
 
+    if (AckPayload.Ack_Payload_byte[0] & 0x80)
+    {                                                                             // Hi bit is now the **HOP NOW!!** flag
+        NextChannel = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber); // The actual channel number pointed to.
+        HopToNextChannel();
+        AckPayload.Ack_Payload_byte[0] &= 0x7f; // Clear the high BIT, use the remainder ...
+    }
 
-    switch (AckPayload.Ack_Payload_byte[0]) // Only look at the low 7 BITS
+    if (!ModelMatched && !LedWasGreen) // If we are not model matched yet, keep asking for the MAC address
+    {
+        GetModelsMacAddress();
+        return;
+    }
+
+    switch (AckPayload.Ack_Payload_byte[0]) // Only looking at the low 7 BITS (127 values max)
     {
     case 0:
         GetRXVersionNumber();
@@ -1028,104 +1070,30 @@ ParseAckPayload() // It's already pretty short!
         GetTemperature();
         break;
     case 8:
-        if (CurrentView != PIDVIEW && GPS_RX_FIX)
-        {
+        if (GPS_RX_FIX)
             GPS_RX_Latitude = GetFloatFromAckPayload();
-        }
-        else
-        {
-            if (Reading_PIDS_Now)
-            {
-                PID_Values[0] = GetFirstWordFromAckPayload();  // PID_Roll_P
-                PID_Values[1] = GetSecondWordFromAckPayload(); // PID_Roll_I
-                Display2PIDValues(0);
-            }
-            if (Reading_RATES_Now)
-            {
-                ReadRatesBytesFromAckPayload(0, 4);
-            }
-            if (Reading_RATES_Advanced_Now)
-            {
-                ReadRates_Advanced_FromAckPayload(0, 4);
-            }
-        }
         break;
     case 9:
-        if (CurrentView != PIDVIEW && GPS_RX_FIX)
-        {
+        if (GPS_RX_FIX)
             GPS_RX_Longitude = GetFloatFromAckPayload();
-        }
-        else
-        {
-            if (Reading_PIDS_Now)
-            {
-                PID_Values[2] = GetFirstWordFromAckPayload();  // PID_Roll_D
-                PID_Values[3] = GetSecondWordFromAckPayload(); // PID_Roll_FF
-                Display2PIDValues(2);
-            }
-            if (Reading_RATES_Now)
-            {
-                ReadRatesBytesFromAckPayload(4, 7);
-            }
-            if (Reading_RATES_Advanced_Now)
-            {
-                ReadRates_Advanced_FromAckPayload(4, 8);
-            }
-        }
         break;
     case 10:
-        if (CurrentView != PIDVIEW && GPS_RX_FIX)
-        {
+        if (GPS_RX_FIX)
             GPS_RX_ANGLE = GetFloatFromAckPayload();
-        }
-        else
-        {
-            if (Reading_PIDS_Now)
-            {
-                PID_Values[4] = GetFirstWordFromAckPayload();  // PID_Pitch_P
-                PID_Values[5] = GetSecondWordFromAckPayload(); // PID_Pitch_I
-                Display2PIDValues(4);
-            }
-            if (Reading_RATES_Now)
-            {
-                ReadRatesBytesFromAckPayload(7, 11);
-            }
-            if (Reading_RATES_Advanced_Now)
-            {
-                ReadRates_Advanced_FromAckPayload(8, 12);
-            }
-        }
         break;
     case 11:
-        if (CurrentView != PIDVIEW && GPS_RX_FIX)
+        if (GPS_RX_FIX)
         {
             GPS_RX_Speed = GetFloatFromAckPayload();
             if (GPS_RX_MaxSpeed < GPS_RX_Speed)
                 GPS_RX_MaxSpeed = GPS_RX_Speed;
-        }
-        else
-        {
-            if (Reading_PIDS_Now)
-            {
-                PID_Values[6] = GetFirstWordFromAckPayload();  // PID_Pitch_D
-                PID_Values[7] = GetSecondWordFromAckPayload(); // PID_Pitch_FF
-                Display2PIDValues(6);
-            }
-            if (Reading_RATES_Now)
-            {
-                ReadRatesBytesFromAckPayload(11, 14);
-            }
-            if (Reading_RATES_Advanced_Now)
-            {
-                ReadRates_Advanced_FromAckPayload(12, 15); // last three advanced rates
-            }
         }
         break;
     case 12:
         GPS_RX_FIX = GetFloatFromAckPayload();
         break;
     case 13:
-        if (CurrentView != PIDVIEW && GPS_RX_FIX)
+        if (GPS_RX_FIX)
         {
             GPS_RX_Altitude = GetFloatFromAckPayload() - GPS_RX_GroundAltitude;
             if (GPS_RX_Altitude < 0)
@@ -1133,41 +1101,19 @@ ParseAckPayload() // It's already pretty short!
             if (GPS_RX_Maxaltitude < GPS_RX_Altitude)
                 GPS_RX_Maxaltitude = GPS_RX_Altitude;
         }
-        else
-        {
-            if (Reading_PIDS_Now)
-            {
-                PID_Values[8] = GetFirstWordFromAckPayload();  // PID_Yaw_P
-                PID_Values[9] = GetSecondWordFromAckPayload(); // PID_Yaw_I
-                Display2PIDValues(8);
-            }
-        }
         break;
     case 14:
-        if (CurrentView != PIDVIEW && GPS_RX_FIX)
+        if (GPS_RX_FIX)
         {
             GPS_RX_DistanceTo = GetFloatFromAckPayload(); // now calculated locally
             if (GPS_RX_MaxDistance < GPS_RX_DistanceTo)
                 GPS_RX_MaxDistance = GPS_RX_DistanceTo;
-        }
-        else
-        {
-            if (Reading_PIDS_Now)
-            {
-                PID_Values[10] = GetFirstWordFromAckPayload();  // PID_Yaw_D
-                PID_Values[11] = GetSecondWordFromAckPayload(); // PID_Yaw_FF
-                Display2PIDValues(10);
-            }
         }
         break;
     case 15:
         if (GPS_RX_FIX)
         {
             GPS_RX_CourseTo = GetFloatFromAckPayload();
-        }
-        else
-        {
-            Rotorflight22Detected = GetBoolFromAckPayload(1);
         }
         break;
     case 16:
@@ -1245,51 +1191,91 @@ ParseAckPayload() // It's already pretty short!
         sprintf(ESC_Temperature, "%.1f C.", ESC_Temp);
         sprintf(MAX_ESC_Temperature, "%.1f C.", Max_ESC_Temp);
         break;
+    case 25:
+        if (Reading_PIDS_Now)
+        {
+            PID_Values[0] = GetFirstWordFromAckPayload();  // PID_Roll_P
+            PID_Values[1] = GetSecondWordFromAckPayload(); // PID_Roll_I
+            Display2PIDValues(0);
+        }
+        if (Reading_RATES_Now)
+        {
+            ReadRatesBytesFromAckPayload(0, 4);
+        }
+        if (Reading_RATES_Advanced_Now)
+        {
+            ReadRates_Advanced_FromAckPayload(0, 4);
+        }
+        break;
+    case 26:
+        if (Reading_PIDS_Now)
+        {
+            PID_Values[2] = GetFirstWordFromAckPayload();  // PID_Roll_D
+            PID_Values[3] = GetSecondWordFromAckPayload(); // PID_Roll_FF
+            Display2PIDValues(2);
+        }
+        if (Reading_RATES_Now)
+        {
+            ReadRatesBytesFromAckPayload(4, 7);
+        }
+        if (Reading_RATES_Advanced_Now)
+        {
+            ReadRates_Advanced_FromAckPayload(4, 8);
+        }
+        break;
+    case 27:
+        if (Reading_PIDS_Now)
+        {
+            PID_Values[4] = GetFirstWordFromAckPayload();  // PID_Pitch_P
+            PID_Values[5] = GetSecondWordFromAckPayload(); // PID_Pitch_I
+            Display2PIDValues(4);
+        }
+        if (Reading_RATES_Now)
+        {
+            ReadRatesBytesFromAckPayload(7, 11);
+        }
+        if (Reading_RATES_Advanced_Now)
+        {
+            ReadRates_Advanced_FromAckPayload(8, 12);
+        }
+        break;
+    case 28:
+        if (Reading_PIDS_Now)
+        {
+            PID_Values[6] = GetFirstWordFromAckPayload();  // PID_Pitch_D
+            PID_Values[7] = GetSecondWordFromAckPayload(); // PID_Pitch_FF
+            Display2PIDValues(6);
+        }
+        if (Reading_RATES_Now)
+        {
+            ReadRatesBytesFromAckPayload(11, 14);
+        }
+        if (Reading_RATES_Advanced_Now)
+        {
+            ReadRates_Advanced_FromAckPayload(12, 15); // last three advanced rates
+        }
+        break;
+    case 29:
+        if (Reading_PIDS_Now)
+        {
+            PID_Values[8] = GetFirstWordFromAckPayload();  // PID_Yaw_P
+            PID_Values[9] = GetSecondWordFromAckPayload(); // PID_Yaw_I
+            Display2PIDValues(8);
+        }
+        break;
+    case 30:
+        if (Reading_PIDS_Now)
+        {
+            PID_Values[10] = GetFirstWordFromAckPayload();  // PID_Yaw_D
+            PID_Values[11] = GetSecondWordFromAckPayload(); // PID_Yaw_FF
+            Display2PIDValues(10);
+        }
+        break;
+    case 31:
+        Rotorflight22Detected = GetBoolFromAckPayload(1);
     default:
         break;
     }
-}
-
-/************************************************************************************************************/
-FASTRUN void StoreNewCommsGap() // Store a gap on recovery, but don't process it immediately
-{
-    if (GapStart > 0)
-    {
-        ThisGap = (millis() - GapStart);
-        GapStart = 0;
-    }
-}
-
-/************************************************************************************************************/
-
-FASTRUN void ProcessRecentCommsGap() // When we know there is time, process a recent gap.
-{
-    if (CurrentView == PIDVIEW)
-    {
-        ThisGap = 0; // ignore any gaps when in PID view
-        return;
-    }
-    ++GapCount;
-    int i = 0;
-    for (i = 0; i < 10; ++i)
-    {
-        if (ThisGap < GapThesholds[i + 1]) // no need to check if (ThisGap >= GapThesholds[i]) since it must be true
-        {
-            ++GapSets[i];
-            break;
-        }
-    }
-    if (i == 10)
-        ++GapSets[i];
-    GapSum += ThisGap;
-    GapAverage = GapSum / GapCount;
-    if (ThisGap >= MinimumGap && UseLog)
-        LogThisGap();
-    if (ThisGap > GapLongest)
-        GapLongest = ThisGap;
-    if (ThisGap < GapShortest)
-        GapShortest = ThisGap;
-    ThisGap = 0;
 }
 
 #endif

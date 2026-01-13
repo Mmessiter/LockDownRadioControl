@@ -781,6 +781,7 @@ void RatesAdvancedWereEdited();
 void EndRatesAdvancedView();
 void SaveRatesAdvanced();
 void HidePID_Advanced_Msg();
+void Hide_msg_if_needed();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
