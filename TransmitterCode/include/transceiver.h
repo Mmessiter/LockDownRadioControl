@@ -1019,7 +1019,7 @@ void Hide_msg_if_needed()
             Hide_Advanced_Rates_Msg();
         }
     }
-    if (Reading_PIDS_Advanced_Now) // heer
+    if (Reading_PIDS_Advanced_Now) 
     {
         if ((millis() - PID_Advanced_Start_Time) > PID_Advanced_Send_Duration)
         {

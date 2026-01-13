@@ -11,7 +11,7 @@ char PID_Advanced_Labels[26][4] = {"sw0", "t1", "t2", "t3", "t4", "t5", "t6", "t
                                    "t13", "t14", "t15", "t16", "t17", "t18", "t19", "t20", "t21", "t22", "t23", "t24", "t25"}; // Text boxes for PID Advanced view
 
 // ************************************************************************************************************/
-void Display_PID_Advanced_Values(uint8_t n, uint8_t m)
+void Display_PID_Advanced_Values(uint8_t n, uint8_t m) // display PID Advanced values n to m on screen as they are read from RX
 {
     char TextFloat[10];
     for (uint8_t i = n; i < m; ++i)
@@ -24,12 +24,10 @@ void Display_PID_Advanced_Values(uint8_t n, uint8_t m)
                 continue;
             }
             if ((i == 1) || (i == 25)) // these two are floats divided by 10
-            {
                 snprintf(TextFloat, sizeof(TextFloat), "%.1f", (float)PID_Advanced_Values[i] / 10.0f);
-                SendText(PID_Advanced_Labels[i], TextFloat); // Send to screen
-                continue;
-            }
-            snprintf(TextFloat, sizeof(TextFloat), "%u", (unsigned)PID_Advanced_Values[i]);
+            else
+                snprintf(TextFloat, sizeof(TextFloat), "%u", (unsigned)PID_Advanced_Values[i]);
+
             SendText(PID_Advanced_Labels[i], TextFloat); // Send to screen
         }
     }
