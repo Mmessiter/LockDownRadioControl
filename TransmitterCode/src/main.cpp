@@ -5072,12 +5072,11 @@ void FASTRUN ManageTransmitter()
         ReadTheSwitchesAndTrims();
         CheckHardwareTrims();
         GetBank(); // Check switch positions 20 times a secon
-        TransmitterLastManaged = millis();
         if (CurrentView >= PIDVIEW && CurrentView <= PIDADVANCEDVIEW)
         {
             Hide_msg_if_needed(); // Hide any message in rotoflight config area
         }
-       
+        TransmitterLastManaged = millis();
     }
 }
 
