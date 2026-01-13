@@ -656,38 +656,6 @@ inline void WriteRatesToNexusAndSave()
     lastWriteTime = now;
 }
 
-// *************************************************************************************************************
-
-uint8_t PID_Advanced_Bytes[43]; // PID Advanced data for Ackpayload
-uint8_t Original_PID_Advanced_Bytes[43]; // to detect changes
-
-uint8_t Piro_Compensation6 = 0;
-uint8_t Ground_Error_Decay1 = 0;
-uint8_t Cutoff_Roll17 = 0;
-uint8_t Cutoff_Pitch18 = 0;
-uint8_t Cutoff_Yaw19 = 0;
-uint8_t Error_Limit_Roll7 = 0;
-uint8_t Error_Limit_Pitch8 = 0;
-uint8_t Error_Limit_Yaw9 = 0;
-uint8_t HSI_Offset_Limit_Roll36 = 0;
-uint8_t HSI_Offset_Limit_Pitch37 = 0;
-uint8_t HSI_Offset_Bandwidth_Roll10 = 0;
-uint8_t HSI_Offset_Bandwidth_Pitch11 = 0;
-uint8_t HSI_Offset_Bandwidth_Yaw12 = 0;
-uint8_t Roll_D_Term_Cutoff13 = 0;
-uint8_t Pitch_D_Term_Cutoff14 = 0;
-uint8_t Yaw_D_Term_Cutoff15 = 0;
-uint8_t Roll_B_Term_Cutoff38 = 0;
-uint8_t Pitch_B_Term_Cutoff39 = 0;
-uint8_t Yaw_B_Term_Cutoff40 = 0;
-uint8_t CW_Yaw_Stop_Gain20 = 0;
-uint8_t CCW_Yaw_Stop_Gain21 = 0;
-uint8_t Yaw_Precomp_Cutoff22 = 0;
-uint8_t Cyclic_FF_Gain23 = 0;
-uint8_t Collective_FF_Gain24 = 0;
-uint8_t Inertia_Precomp_Gain41 = 0;
-uint8_t Inertia_Precomp_Cutoff42 = 0;
-
 // ************************************************************************************************************
 
 //         MSP_PID_PROFILE FROM ROTORFLIGHT FIRMWARE
@@ -696,14 +664,13 @@ inline bool Parse_MSP_PID_PROFILE(const uint8_t *data, uint8_t n)
     MspFrame f;
     if (!FindMspV1ResponseFrameForCmd(data, n, MSP_PID_PROFILE, f))
         return false;
-    if (f.size < 43)
+    if (f.size < MAX_PID_ADVANCED_BYTES)
         return false;
 
     const uint8_t *p = f.payload;
 
-    for (uint8_t i = 0; i < 43; i++)
-        Original_PID_Advanced_Bytes[i] = p[i];  // store original 
-
+    for (uint8_t i = 0; i < MAX_PID_ADVANCED_BYTES; i++)
+        Original_PID_Advanced_Bytes[i] = p[i]; // store original
 
     Piro_Compensation6 = p[6];
     PID_Advanced_Bytes[0] = Piro_Compensation6;
@@ -725,19 +692,19 @@ inline bool Parse_MSP_PID_PROFILE(const uint8_t *data, uint8_t n)
 
     Error_Limit_Pitch8 = p[8];
     PID_Advanced_Bytes[6] = Error_Limit_Pitch8;
-    
+
     Error_Limit_Yaw9 = p[9];
     PID_Advanced_Bytes[7] = Error_Limit_Yaw9;
 
     HSI_Offset_Limit_Roll36 = p[36];
     PID_Advanced_Bytes[8] = HSI_Offset_Limit_Roll36;
-    
+
     HSI_Offset_Limit_Pitch37 = p[37];
     PID_Advanced_Bytes[9] = HSI_Offset_Limit_Pitch37;
 
     HSI_Offset_Bandwidth_Roll10 = p[10];
     PID_Advanced_Bytes[10] = HSI_Offset_Bandwidth_Roll10;
-    
+
     HSI_Offset_Bandwidth_Pitch11 = p[11];
     PID_Advanced_Bytes[11] = HSI_Offset_Bandwidth_Pitch11;
 
@@ -749,7 +716,7 @@ inline bool Parse_MSP_PID_PROFILE(const uint8_t *data, uint8_t n)
 
     Pitch_D_Term_Cutoff14 = p[14];
     PID_Advanced_Bytes[14] = Pitch_D_Term_Cutoff14;
-    
+
     Yaw_D_Term_Cutoff15 = p[15];
     PID_Advanced_Bytes[15] = Yaw_D_Term_Cutoff15;
 
@@ -761,7 +728,7 @@ inline bool Parse_MSP_PID_PROFILE(const uint8_t *data, uint8_t n)
 
     Yaw_B_Term_Cutoff40 = p[40];
     PID_Advanced_Bytes[18] = Yaw_B_Term_Cutoff40;
-    
+
     CW_Yaw_Stop_Gain20 = p[20];
     PID_Advanced_Bytes[19] = CW_Yaw_Stop_Gain20;
 
@@ -780,7 +747,8 @@ inline bool Parse_MSP_PID_PROFILE(const uint8_t *data, uint8_t n)
     Inertia_Precomp_Gain41 = p[41];
     PID_Advanced_Bytes[24] = Inertia_Precomp_Gain41;
 
-    Inertia_Precomp_Cutoff42 = p[42];;
+    Inertia_Precomp_Cutoff42 = p[42];
+    ;
     PID_Advanced_Bytes[25] = Inertia_Precomp_Cutoff42;
 
     Look("---------------------");
@@ -797,38 +765,37 @@ inline void WritePIDAdvancedToNexusAndSave()
     if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight22Detected))
         return;
 
-    uint8_t payload[43];
+    uint8_t payload[MAX_PID_ADVANCED_BYTES];
 
-    for (uint8_t i = 0; i < 43; i++)
+    for (uint8_t i = 0; i < MAX_PID_ADVANCED_BYTES; i++)
         payload[i] = Original_PID_Advanced_Bytes[i]; // start with original values
- 
 
-    payload[6] = PID_Advanced_Bytes[0];
-    payload[1] = PID_Advanced_Bytes[1];
-    payload[17] = PID_Advanced_Bytes[2];
-    payload[18] = PID_Advanced_Bytes[3];
-    payload[19] = PID_Advanced_Bytes[4];
-    payload[7] = PID_Advanced_Bytes[5];
-    payload[8] = PID_Advanced_Bytes[6];
-    payload[9] = PID_Advanced_Bytes[7];
-    payload[36] = PID_Advanced_Bytes[8];
-    payload[37] = PID_Advanced_Bytes[9];
-    payload[10] = PID_Advanced_Bytes[10];
-    payload[11] = PID_Advanced_Bytes[11];
-    payload[12] = PID_Advanced_Bytes[12];
-    payload[13] = PID_Advanced_Bytes[13];
-    payload[14] = PID_Advanced_Bytes[14];
-    payload[15] = PID_Advanced_Bytes[15];
-    payload[38] = PID_Advanced_Bytes[16];
-    payload[39] = PID_Advanced_Bytes[17];
-    payload[40] = PID_Advanced_Bytes[18];
-    payload[20] = PID_Advanced_Bytes[19];   
-    payload[21] = PID_Advanced_Bytes[20];
-    payload[22] = PID_Advanced_Bytes[21];
-    payload[23] = PID_Advanced_Bytes[22];
-    payload[24] = PID_Advanced_Bytes[23];
-    payload[41] = PID_Advanced_Bytes[24];
-    payload[42] = PID_Advanced_Bytes[25];
+    payload[6] = PID_Advanced_Bytes[0];   // Piro_Compensation6
+    payload[1] = PID_Advanced_Bytes[1];   // Ground_Error_Decay1
+    payload[17] = PID_Advanced_Bytes[2];  // Cutoff_Roll17
+    payload[18] = PID_Advanced_Bytes[3];  // Cutoff_Pitch18
+    payload[19] = PID_Advanced_Bytes[4];  // Cutoff_Yaw19
+    payload[7] = PID_Advanced_Bytes[5];   // Error_Limit_Roll7
+    payload[8] = PID_Advanced_Bytes[6];   // Error_Limit_Pitch8
+    payload[9] = PID_Advanced_Bytes[7];   // Error_Limit_Yaw9
+    payload[36] = PID_Advanced_Bytes[8];  // HSI_Offset_Limit_Roll36
+    payload[37] = PID_Advanced_Bytes[9];  // HSI_Offset_Limit_Pitch37
+    payload[10] = PID_Advanced_Bytes[10]; // HSI_Offset_Bandwidth_Roll10
+    payload[11] = PID_Advanced_Bytes[11]; // HSI_Offset_Bandwidth_Pitch11
+    payload[12] = PID_Advanced_Bytes[12]; // HSI_Offset_Bandwidth_Yaw12
+    payload[13] = PID_Advanced_Bytes[13]; // Roll_D_Term_Cutoff13
+    payload[14] = PID_Advanced_Bytes[14]; // Pitch_D_Term_Cutoff14
+    payload[15] = PID_Advanced_Bytes[15]; // Yaw_D_Term_Cutoff15
+    payload[38] = PID_Advanced_Bytes[16]; // Roll_B_Term_Cutoff38
+    payload[39] = PID_Advanced_Bytes[17]; // Pitch_B_Term_Cutoff39
+    payload[40] = PID_Advanced_Bytes[18]; // Yaw_B_Term_Cutoff40
+    payload[20] = PID_Advanced_Bytes[19]; // CW_Yaw_Stop_Gain20
+    payload[21] = PID_Advanced_Bytes[20]; // CCW_Yaw_Stop_Gain21
+    payload[22] = PID_Advanced_Bytes[21]; // Yaw_Precomp_Cutoff22
+    payload[23] = PID_Advanced_Bytes[22]; // Cyclic_FF_Gain23
+    payload[24] = PID_Advanced_Bytes[23]; // Collective_FF_Gain24
+    payload[41] = PID_Advanced_Bytes[24]; // Inertia_Precomp_Gain41
+    payload[42] = PID_Advanced_Bytes[25]; // Inertia_Precomp_Cutoff42
 
     SendToMSP(MSP_SET_PID_PROFILE, payload, sizeof(payload));
     delay(100);

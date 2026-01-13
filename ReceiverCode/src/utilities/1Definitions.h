@@ -438,9 +438,39 @@ uint8_t Yaw_Dynamic_Ceiling_Gain, Yaw_Dynamic_Deadband_Gain, Yaw_Dynamic_Deadban
 
 #define MAX_RATES_BYTES 13
 #define MAX_RATES_ADVANCED_BYTES 15
+#define MAX_PID_ADVANCED_BYTES 43
 
 uint8_t RatesBytes[MAX_RATES_BYTES];                  // 13 bytes to store rates for ack payload
 uint8_t RatesBytesAdvanced[MAX_RATES_ADVANCED_BYTES]; // 15 bytes to store advanced rates for ack payload
+uint8_t PID_Advanced_Bytes[MAX_PID_ADVANCED_BYTES];          // PID Advanced data for Ackpayload
+uint8_t Original_PID_Advanced_Bytes[MAX_PID_ADVANCED_BYTES]; // to detect changes
+
+uint8_t Piro_Compensation6 = 0;
+uint8_t Ground_Error_Decay1 = 0;
+uint8_t Cutoff_Roll17 = 0;
+uint8_t Cutoff_Pitch18 = 0;
+uint8_t Cutoff_Yaw19 = 0;
+uint8_t Error_Limit_Roll7 = 0;
+uint8_t Error_Limit_Pitch8 = 0;
+uint8_t Error_Limit_Yaw9 = 0;
+uint8_t HSI_Offset_Limit_Roll36 = 0;
+uint8_t HSI_Offset_Limit_Pitch37 = 0;
+uint8_t HSI_Offset_Bandwidth_Roll10 = 0;
+uint8_t HSI_Offset_Bandwidth_Pitch11 = 0;
+uint8_t HSI_Offset_Bandwidth_Yaw12 = 0;
+uint8_t Roll_D_Term_Cutoff13 = 0;
+uint8_t Pitch_D_Term_Cutoff14 = 0;
+uint8_t Yaw_D_Term_Cutoff15 = 0;
+uint8_t Roll_B_Term_Cutoff38 = 0;
+uint8_t Pitch_B_Term_Cutoff39 = 0;
+uint8_t Yaw_B_Term_Cutoff40 = 0;
+uint8_t CW_Yaw_Stop_Gain20 = 0;
+uint8_t CCW_Yaw_Stop_Gain21 = 0;
+uint8_t Yaw_Precomp_Cutoff22 = 0;
+uint8_t Cyclic_FF_Gain23 = 0;
+uint8_t Collective_FF_Gain24 = 0;
+uint8_t Inertia_Precomp_Gain41 = 0;
+uint8_t Inertia_Precomp_Cutoff42 = 0;
 
 bool BoundFlag = false; /** indicates if receiver paired with transmitter */
 
