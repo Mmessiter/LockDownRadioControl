@@ -651,14 +651,14 @@ void SendDateToAckPayload()
 }
 // ************************************************************************************************************
 
-void Send_Rates_Bytes(uint8_t n,uint8_t m) // send next 4 bytes from RatesBytes array
+void Send_Rates_Bytes(uint8_t n, uint8_t m) // send next 4 bytes from RatesBytes array
 {
     uint8_t p = 0;
     for (uint8_t i = n; i < m; ++i)
     {
         if (i < MAX_RATES_BYTES) // avoid overflow
         {
-            AckPayload.Ack_Payload_byte[p + 1] = RatesBytes[i]; 
+            AckPayload.Ack_Payload_byte[p + 1] = RatesBytes[i];
             ++p;
         }
     }
@@ -708,7 +708,7 @@ void Send_2_x_uint16_t(uint16_t v1, uint16_t v2) // sends two x uint16_ts
 }
 // ************************************************************************************************************/
 void SendBoolToAckPayload(bool val, uint8_t bytePos) // byte position can be 1,2,3,4 (but not 0)
-{ // This one function now works with most bool parameters
+{                                                    // This one function now works with most bool parameters
     CheckWhetherItsTimeToHop();
     AckPayload.Ack_Payload_byte[bytePos] = val;
 }
@@ -807,7 +807,7 @@ void SetupRadios()
 /************************************************************************************************************/
 void LoadAckPayload()
 {
-    const uint8_t MAX_TELEMETERY_ITEMS = 24; // Max number of telemetry items to send...
+    const uint8_t MAX_TELEMETERY_ITEMS = 31; // Max number of telemetry items to send...
 
     if (MacAddressSentCounter < 20)
     {
@@ -817,7 +817,9 @@ void LoadAckPayload()
     AckPayload.Ack_Payload_byte[0] &= 0x7F; // NOTE: The HIGH BIT of "Ack_Payload_byte[0]" bit is the HOPNOW flag. It gets set only when it's time to hop.
     ++AckPayload.Ack_Payload_byte[0];
     if (AckPayload.Ack_Payload_byte[0] > MAX_TELEMETERY_ITEMS) // max number of telemetry items
-        AckPayload.Ack_Payload_byte[0] = 0;                    // wrap after max
+    {
+        AckPayload.Ack_Payload_byte[0] = 0; // wrap after max
+    }
 
     switch (AckPayload.Ack_Payload_byte[0])
     {
@@ -861,138 +863,39 @@ void LoadAckPayload()
         break;
     case 8:
         if (GpsFix)
-        {
             SendFloatToAckPayload(LatitudeGPS);
-        }
-        else // Roll P Roll I
-        {
-            switch (SendRotorFlightParametresNow)
-            {
-            case SEND_NO_RF: // 0
-                break;
-            case SEND_PID_RF: // 1
-                Send_2_x_uint16_t(PID_Roll_P, PID_Roll_I);
-                break;
-            case SEND_RATES_RF: // 2
-                Send_Rates_Bytes(0,4);
-                break;
-            case SEND_RATES_ADVANCED_RF: // 3
-                Send_Rates_Advanced_Bytes(0, 4);
-                break;
-            }
-            break;
-        }
+        break;
+
     case 9:
         if (GpsFix)
-        {
             SendFloatToAckPayload(LongitudeGPS);
-        }
-        else // Roll D & Roll FF
-        {
-            switch (SendRotorFlightParametresNow)
-            {
-            case SEND_NO_RF: // 0
-                break;
-            case SEND_PID_RF: // 1
-                Send_2_x_uint16_t(PID_Roll_D, PID_Roll_FF);
-                break;
-            case SEND_RATES_RF: // 2
-                Send_Rates_Bytes(4, 7);
-                break;
-            case SEND_RATES_ADVANCED_RF: // 3
-                Send_Rates_Advanced_Bytes(4, 8);
-                break;
-            }
-            break;
-        }
+        break;
     case 10:
         if (GpsFix)
-        {
             SendFloatToAckPayload(AngleGPS);
-        }
-        else // Pitch P & Pitch I
-        {
-            switch (SendRotorFlightParametresNow)
-            {
-            case SEND_NO_RF: // 0
-                break;
-            case SEND_PID_RF: // 1
-                Send_2_x_uint16_t(PID_Pitch_P, PID_Pitch_I);
-                break;
-            case SEND_RATES_RF: // 2
-                Send_Rates_Bytes(7, 11);
-                break;
-            case SEND_RATES_ADVANCED_RF: // 3
-                Send_Rates_Advanced_Bytes(8, 12);
-                break;
-            }
-            break;
-        }
+        break;
     case 11:
         if (GpsFix)
-        {
             SendFloatToAckPayload(SpeedGPS);
-        }
-        else // Pitch D & Pitch FF
-        {
-            switch (SendRotorFlightParametresNow)
-            {
-            case SEND_NO_RF: // 0
-                break;
-            case SEND_PID_RF: // 1
-                Send_2_x_uint16_t(PID_Pitch_D, PID_Pitch_FF);
-                break;
-            case SEND_RATES_RF: // 2
-                Send_Rates_Bytes(11, 14);
-                break;
-            case SEND_RATES_ADVANCED_RF: // 3
-                Send_Rates_Advanced_Bytes(12, 16);
-                break;
-            }
-        }
         break;
     case 12:
         SendFloatToAckPayload(GpsFix);
         break;
     case 13:
         if (GpsFix)
-        {
             SendFloatToAckPayload(AltitudeGPS);
-        }
-        else // YAW P & YAW I
-        {
-            Send_2_x_uint16_t(PID_Yaw_P, PID_Yaw_I);
-        }
         break;
     case 14:
         if (GpsFix)
-        {
             SendFloatToAckPayload(DistanceGPS);
-        }
-        else // YAW D & YAW FF
-        {
-            Send_2_x_uint16_t(PID_Yaw_D, PID_Yaw_FF);
-        }
         break;
     case 15:
         if (GpsFix)
-        {
             SendFloatToAckPayload(CourseToGPS);
-        }
-        else 
-        {
-            SendBoolToAckPayload(Rotorflight22Detected,1); // Tell TX if Rotorflight22 detected in first Bool position
-        }
         break;
-        ;
     case 16:
         if (GpsFix)
-        {
             SendIntToAckPayload(SatellitesGPS);
-        }
-        else // reserved for future use
-        {
-        }
         break;
     case 17:
         SendDateToAckPayload();
@@ -1019,6 +922,104 @@ void LoadAckPayload()
         break;
     case 24:
         SendFloatToAckPayload(ESC_Temp_C);
+        break;
+    case 25: // Send Rotorflight flight parameters  *************************************************************
+        switch (SendRotorFlightParametresNow)
+        {
+        case SEND_NO_RF: // 0
+            break;
+        case SEND_PID_RF: // 1
+            Send_2_x_uint16_t(PID_Roll_P, PID_Roll_I);
+            break;
+        case SEND_RATES_RF: // 2
+            Send_Rates_Bytes(0, 4);
+            break;
+        case SEND_RATES_ADVANCED_RF: // 3
+            Send_Rates_Advanced_Bytes(0, 4);
+            break;
+        default:
+            break;
+        }
+        break;
+    case 26: // Send Rotorflight flight parameters  ********
+        switch (SendRotorFlightParametresNow)
+        {
+        case SEND_NO_RF: // 0
+            break;
+        case SEND_PID_RF: // 1
+            Send_2_x_uint16_t(PID_Roll_D, PID_Roll_FF);
+            break;
+        case SEND_RATES_RF: // 2
+            Send_Rates_Bytes(4, 7);
+            break;
+        case SEND_RATES_ADVANCED_RF: // 3
+            Send_Rates_Advanced_Bytes(4, 8);
+            break;
+        default:
+            break;
+        }
+        break;
+
+    case 27: // Send Rotorflight PID Advanced parameters  ********
+        switch (SendRotorFlightParametresNow)
+        {
+        case SEND_NO_RF: // 0
+            break;
+        case SEND_PID_RF: // 1
+            Send_2_x_uint16_t(PID_Pitch_P, PID_Pitch_I);
+            break;
+        case SEND_RATES_RF: // 2
+            Send_Rates_Bytes(7, 11);
+            break;
+        case SEND_RATES_ADVANCED_RF: // 3
+            Send_Rates_Advanced_Bytes(8, 12);
+            break;
+        default:
+            break;
+        }
+        break;
+    case 28:
+        switch (SendRotorFlightParametresNow)
+        {
+        case SEND_NO_RF: // 0
+            break;
+        case SEND_PID_RF: // 1
+            Send_2_x_uint16_t(PID_Pitch_D, PID_Pitch_FF);
+            break;
+        case SEND_RATES_RF: // 2
+            Send_Rates_Bytes(11, 14);
+            break;
+        case SEND_RATES_ADVANCED_RF: // 3
+            Send_Rates_Advanced_Bytes(12, 16);
+            break;
+        default:
+            break;
+        }
+        break;
+    case 29:
+        switch (SendRotorFlightParametresNow)
+        {
+        case SEND_NO_RF: // 0
+            break;
+        case SEND_RATES_RF: // 2
+            Send_2_x_uint16_t(PID_Yaw_P, PID_Yaw_I);
+            break;
+        default:
+            break;
+        }
+        break;
+    case 30:
+        switch (SendRotorFlightParametresNow)
+        {
+        case SEND_NO_RF: // 0
+            break;
+        case SEND_RATES_RF: // 2
+            Send_2_x_uint16_t(PID_Yaw_D, PID_Yaw_FF);
+            break;
+        }
+        break;
+    case 31:
+        SendBoolToAckPayload(Rotorflight22Detected, 1); // Tell TX if Rotorflight22 detected in first Bool position
         break;
     default:
         break;
