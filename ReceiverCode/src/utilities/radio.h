@@ -683,9 +683,9 @@ void Send_PID_Advanced_Bytes(uint8_t n, uint8_t m) // send next 4 bytes from Rat
     uint8_t p = 0;
     for (uint8_t i = n; i < m; ++i)
     {
-        if (i < MAX_RATES_ADVANCED_BYTES) // avoid overflow
+        if (i < MAX_PID_SEND_PAYLOAD_BYTES) // avoid overflow
         {
-            AckPayload.Ack_Payload_byte[p + 1] = RatesBytesAdvanced[i];
+            AckPayload.Ack_Payload_byte[p + 1] = PID_Advanced_Bytes[i];
             ++p;
         }
     }
@@ -807,7 +807,7 @@ void SetupRadios()
 /************************************************************************************************************/
 void LoadAckPayload()
 {
-    const uint8_t MAX_TELEMETERY_ITEMS = 31; // Max number of telemetry items to send...
+    const uint8_t MAX_TELEMETERY_ITEMS = 32; // Max number of telemetry items to send...
 
     if (MacAddressSentCounter < 20)
     {
@@ -937,6 +937,9 @@ void LoadAckPayload()
         case SEND_RATES_ADVANCED_RF: // 3
             Send_Rates_Advanced_Bytes(0, 4);
             break;
+        case SEND_PID_ADVANCED_RF: // 4
+            Send_PID_Advanced_Bytes(0, 4);
+            break;
         default:
             break;
         }
@@ -954,6 +957,9 @@ void LoadAckPayload()
             break;
         case SEND_RATES_ADVANCED_RF: // 3
             Send_Rates_Advanced_Bytes(4, 8);
+            break;
+        case SEND_PID_ADVANCED_RF: // 4
+            Send_PID_Advanced_Bytes(4, 8);
             break;
         default:
             break;
@@ -974,6 +980,9 @@ void LoadAckPayload()
         case SEND_RATES_ADVANCED_RF: // 3
             Send_Rates_Advanced_Bytes(8, 12);
             break;
+        case SEND_PID_ADVANCED_RF: // 4
+            Send_PID_Advanced_Bytes(8, 12);
+            break;
         default:
             break;
         }
@@ -992,6 +1001,9 @@ void LoadAckPayload()
         case SEND_RATES_ADVANCED_RF: // 3
             Send_Rates_Advanced_Bytes(12, 16);
             break;
+        case SEND_PID_ADVANCED_RF: // 4
+            Send_PID_Advanced_Bytes(12, 16);
+            break;
         default:
             break;
         }
@@ -1003,6 +1015,10 @@ void LoadAckPayload()
             break;
         case SEND_RATES_RF: // 2
             Send_2_x_uint16_t(PID_Yaw_P, PID_Yaw_I);
+            break;
+        
+        case SEND_PID_ADVANCED_RF: // 4
+            Send_PID_Advanced_Bytes(16, 20);
             break;
         default:
             break;
@@ -1016,11 +1032,29 @@ void LoadAckPayload()
         case SEND_RATES_RF: // 2
             Send_2_x_uint16_t(PID_Yaw_D, PID_Yaw_FF);
             break;
+        case SEND_PID_ADVANCED_RF: // 4
+            Send_PID_Advanced_Bytes(20, 24);
+            break;
+        default:
+            break;
         }
         break;
     case 31:
         SendBoolToAckPayload(Rotorflight22Detected, 1); // Tell TX if Rotorflight22 detected in first Bool position
         break;
+    case 32:
+        switch (SendRotorFlightParametresNow)
+        {
+        case SEND_NO_RF: // 0
+            break;
+        case SEND_PID_ADVANCED_RF: // 4
+            Send_PID_Advanced_Bytes(24, 28);
+            break;
+        default:
+            break;
+        }
+        break;
+
     default:
         break;
     }

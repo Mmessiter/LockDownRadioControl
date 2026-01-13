@@ -439,10 +439,11 @@ uint8_t Yaw_Dynamic_Ceiling_Gain, Yaw_Dynamic_Deadband_Gain, Yaw_Dynamic_Deadban
 #define MAX_RATES_BYTES 13
 #define MAX_RATES_ADVANCED_BYTES 15
 #define MAX_PID_ADVANCED_BYTES 43
+#define MAX_PID_SEND_PAYLOAD_BYTES 26
 
-uint8_t RatesBytes[MAX_RATES_BYTES];                  // 13 bytes to store rates for ack payload
-uint8_t RatesBytesAdvanced[MAX_RATES_ADVANCED_BYTES]; // 15 bytes to store advanced rates for ack payload
-uint8_t PID_Advanced_Bytes[MAX_PID_ADVANCED_BYTES];          // PID Advanced data for Ackpayload
+uint8_t RatesBytes[MAX_RATES_BYTES];                         // 13 bytes to store rates for ack payload
+uint8_t RatesBytesAdvanced[MAX_RATES_ADVANCED_BYTES];        // 15 bytes to store advanced rates for ack payload
+uint8_t PID_Advanced_Bytes[MAX_PID_SEND_PAYLOAD_BYTES];      // PID Advanced data for Ackpayload
 uint8_t Original_PID_Advanced_Bytes[MAX_PID_ADVANCED_BYTES]; // to detect changes
 
 uint8_t Piro_Compensation6 = 0;
