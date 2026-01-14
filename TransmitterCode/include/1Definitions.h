@@ -788,6 +788,7 @@ void Hide_msg_if_needed();
 void Display_PID_Advanced_Values(uint8_t n, uint8_t m);
 void PIDsAdvancedWereEdited();
 void SendEditedPID_Advanced();
+void EndPIDsAdvancedView();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *

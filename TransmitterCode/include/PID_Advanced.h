@@ -48,8 +48,6 @@ void ReadEditedPIDAdvancedValues()
             PID_Advanced_Values[i] = (uint8_t)(atof(temp) * 10.0f);
         else
             PID_Advanced_Values[i] = (uint8_t)(atoi(temp));
-       // Look1("PID Advanced Value Read: ");
-      //  Look(PID_Advanced_Values[i]);
         }
 }
 // ************************************************************************************************************/
@@ -151,5 +149,21 @@ void StartPIDAdvancedView()
     ShowPIDAdvancedBank();              // Show the current bank's PID Advanced values
     SendText((char *)"t27", ModelName); // Show model name
 }
+// **********************************************************************************************************/
+void EndPIDsAdvancedView()
+{
+    if (PIDS_Advanced_Were_Edited)
+    {
+        if (GetConfirmation((char *)"page PID_A_View", (char *)"Discard edited values?"))
+            GotoFrontView();
+    }
+    else
+    {
+        PIDS_Advanced_Were_Edited = false;
+        SendCommand((char *)"page RFView");
+        CurrentView = ROTORFLIGHTVIEW;
+    }
+}
+
 #endif // PIDADVANCED_H
-       // *********************************************************************************************************************************/
+// *********************************************************************************************************************************/
