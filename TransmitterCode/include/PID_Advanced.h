@@ -13,6 +13,10 @@ char PID_Advanced_Labels[26][4] = {"sw0", "t1", "t2", "t3", "t4", "t5", "t6", "t
 // ************************************************************************************************************/
 void Display_PID_Advanced_Values(uint8_t n, uint8_t m) // display PID Advanced values n to m on screen as they are read from RX
 {
+
+    if ((millis() - PID_Advanced_Start_Time) < 500)
+    return; // wait at least 500 ms because RX may be slow to respond after bank change and earlier values may be junk
+
     char TextFloat[10];
     for (uint8_t i = n; i < m; ++i)
     {
@@ -48,7 +52,7 @@ void ReadEditedPIDAdvancedValues()
             PID_Advanced_Values[i] = (uint8_t)(atof(temp) * 10.0f);
         else
             PID_Advanced_Values[i] = (uint8_t)(atoi(temp));
-        }
+    }
 }
 // ************************************************************************************************************/
 void ForegroundColourPIDAdvancedLabels(uint16_t Colour)
@@ -115,11 +119,10 @@ void ShowPIDAdvancedBank() // this is called when bank is changed so new bank's 
         Reading_PIDS_Advanced_Now = true;                         // This tells the Ack payload parser to get PID values
         AddParameterstoQueue(SEND_PID_ADVANCED_VALUES);           // Request PID values from RX
         SendText((char *)"t26", BankNames[BanksInUse[Bank - 1]]); // Show bank number etc
-        PIDS_Advanced_Were_Edited = false;
-        PID_Advanced_Start_Time = millis(); // record start time as it's not long
+        PIDS_Advanced_Were_Edited = false;                        // reset edited flag
+        PID_Advanced_Start_Time = millis();                       // record start time as it's not long
     }
 }
-
 // ************************************************************************************************************/
 void SendEditedPID_Advanced()
 {
@@ -164,6 +167,5 @@ void EndPIDsAdvancedView()
         CurrentView = ROTORFLIGHTVIEW;
     }
 }
-
 #endif // PIDADVANCED_H
-// *********************************************************************************************************************************/
+       // *********************************************************************************************************************************/
