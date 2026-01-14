@@ -32,11 +32,30 @@ void Display_PID_Advanced_Values(uint8_t n, uint8_t m) // display PID Advanced v
         }
     }
 }
-
+// ************************************************************************************************************/
+void ReadEditedPIDAdvancedValues()
+{
+    for (uint8_t i = 0; i < MAX_PIDS_ADVANCED_BYTES; ++i)
+    {
+        if (i == 0) // Piro compensation is boolean switch
+        {
+            PID_Advanced_Values[i] = (uint8_t)(GetValue(PID_Advanced_Labels[i]) != 0);
+            continue;
+        }
+        char temp[10];
+        GetText(PID_Advanced_Labels[i], temp);
+        if ((i == 1) || (i == 25)) // these two are floats multiplied by 10
+            PID_Advanced_Values[i] = (uint8_t)(atof(temp) * 10.0f);
+        else
+            PID_Advanced_Values[i] = (uint8_t)(atoi(temp));
+       // Look1("PID Advanced Value Read: ");
+      //  Look(PID_Advanced_Values[i]);
+        }
+}
 // ************************************************************************************************************/
 void ForegroundColourPIDAdvancedLabels(uint16_t Colour)
 {
-    for (int i = 0; i < 26; ++i)
+    for (int i = 0; i < MAX_PIDS_ADVANCED_BYTES; ++i)
         SendForegroundColour(PID_Advanced_Labels[i], Colour);
 }
 // ************************************************************************************************************/
@@ -59,7 +78,12 @@ void PIDAdvancedMsg(const char *msg, uint16_t Colour)
         SendCommand((char *)"vis b3,0");           // hide "Send" button
     }
 }
-
+// ************************************************************************************************************/
+void PIDsAdvancedWereEdited()
+{
+    SendCommand((char *)"vis b3,1"); // show "Send" button
+    PIDS_Advanced_Were_Edited = true;
+}
 //************************************************************************************************************/
 void ShowPIDAdvancedBank() // this is called when bank is changed so new bank's PID Advanced values are requested from Nexus and shown
 {
@@ -98,6 +122,27 @@ void ShowPIDAdvancedBank() // this is called when bank is changed so new bank's 
     }
 }
 
+// ************************************************************************************************************/
+void SendEditedPID_Advanced()
+{
+    if (!GetConfirmation((char *)"page PID_A_View", (char *)"Send edited values to Nexus?"))
+    {
+        PIDS_Advanced_Were_Edited = false; // reset edited flag
+        ShowPIDAdvancedBank();             // reload old PID Advanced values, undoing any edits
+        return;
+    }
+    DelayWithDog(200);                                                      // allow LOTS of time for screen to update BEFORE sending another Nextion command
+    PIDAdvancedMsg((char *)"Sending edited PID Advanced values ...", Gray); // Show sending message
+    ReadEditedPIDAdvancedValues();                                          // read the edited PID Advanced values from the screen;
+    AddParameterstoQueue(GET_THIRD_8_ADVANCED_PID_VALUES);                  // LAST MUST BE QUEUED FIRST!!!
+    AddParameterstoQueue(GET_SECOND_9_ADVANCED_PID_VALUES);                 // the order of the other two doesn't matter ...
+    AddParameterstoQueue(GET_FIRST_9_ADVANCED_PID_VALUES);                  // its a LIFO stack with 26 parametres to send
+    PID_Advanced_Send_Duration = 3000;                                      // allow 3 seconds for sending all PID Advanced values
+    HidePID_Advanced_Msg();                                                 // ...because this queue is a LIFO stack
+    SendCommand((char *)"vis b3,0");                                        // hide "Send" button
+    PIDS_Advanced_Were_Edited = false;                                      // reset edited flag
+    PlaySound(BEEPCOMPLETE);                                                // let user know we're done
+}
 // ********************************************************************************************************
 void StartPIDAdvancedView()
 {

@@ -126,7 +126,19 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
         Parameters.word[1] = 321;                        // confirms request for PID ADVANCED values
         Parameters.word[2] = PID_Advanced_Send_Duration; // 1000 - how many milliseconds to send these
         break;
-    default:
+    case GET_FIRST_9_ADVANCED_PID_VALUES: // 19 = I'm sending first 9 ADVANCED PID values (TX->RX) (Because we cannot fit all 26 in one go)
+        for (int i = 0; i < 9; ++i)
+            Parameters.word[i + 1] = PID_Advanced_Values[i]; // 0 to 8
+        break;
+    case GET_SECOND_9_ADVANCED_PID_VALUES: // 20 = I'm sending second 9 ADVANCED PID values (TX->RX) (Because we cannot fit all 26 in one go)
+        for (int i = 0; i < 9; ++i)
+            Parameters.word[i + 1] = PID_Advanced_Values[i + 9]; // 9 to 17
+        break;
+    case GET_THIRD_8_ADVANCED_PID_VALUES: // 21 = I'm sending last 8 ADVANCED PID values (TX->RX) (Because we cannot fit all 26 in one go)
+        for (int i = 0; i < 8; ++i)
+            Parameters.word[i + 1] = PID_Advanced_Values[i + 18]; // 18 to 25
+        break;
+        default:
         break;
     }
 }

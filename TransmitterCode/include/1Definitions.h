@@ -166,19 +166,22 @@
 #define KALMAN_VALUES 5
 #define SERVO_FREQUENCIES 6
 #define SERVO_PULSE_WIDTHS 7
-#define GEAR_RATIO 8                  // Gear Ratio (Motor:Rotor) for RPM calculation
-#define SEND_PID_VALUES 9             // Command to request PID values from RX
-#define GET_FIRST_6_PID_VALUES 10     // Command to update first 6 PID values to RX
-#define GET_SECOND_6_PID_VALUES 11    // Command to update second 6 PID values to RX
-#define SEND_RATES_VALUES 12          // Command to request RATES values from RX
-#define GET_FIRST_7_RATES_VALUES 13   // Command to update first 6 RATES values to RX
-#define GET_SECOND_6_RATES_VALUES 14  // Command to update second 6 RATES values to RX
-#define SEND_RATES_ADVANCED_VALUES 15 // Command to request RATES values from RX
-#define GET_RATES_ADVANCED_VALUES_SECOND_8 16
-#define GET_RATES_ADVANCED_VALUES_FIRST_7 17
-#define SEND_PID_ADVANCED_VALUES 18     // Command to request PID values from RX
+#define GEAR_RATIO 8                          // Gear Ratio (Motor:Rotor) for RPM calculation
+#define SEND_PID_VALUES 9                     // Command to request PID values from RX
+#define GET_FIRST_6_PID_VALUES 10             // Command to update first 6 PID values to RX
+#define GET_SECOND_6_PID_VALUES 11            // Command to update second 6 PID values to RX
+#define SEND_RATES_VALUES 12                  // Command to request RATES values from RX
+#define GET_FIRST_7_RATES_VALUES 13           // Command to update first 6 RATES values to RX
+#define GET_SECOND_6_RATES_VALUES 14          // Command to update second 6 RATES values to RX
+#define SEND_RATES_ADVANCED_VALUES 15         // Command to request RATES values from RX
+#define GET_RATES_ADVANCED_VALUES_SECOND_8 16 // Command to update second 8 RATES values to RX
+#define GET_RATES_ADVANCED_VALUES_FIRST_7 17  // Command to update first 7 RATES values to RX
+#define SEND_PID_ADVANCED_VALUES 18           // Command to request PID values from RX
+#define GET_FIRST_9_ADVANCED_PID_VALUES 19    // Command to update first 9 Advanced PID values to RX
+#define GET_SECOND_9_ADVANCED_PID_VALUES 20   // Command to update second 9 Advanced PID values to RX
+#define GET_THIRD_8_ADVANCED_PID_VALUES 21    // Command to update third 8 Advanced PID values to RX ... 26 total
 
-#define PARAMETERS_MAX_ID 19 // Max types of parameters packet to send  ... might increase.
+#define PARAMETERS_MAX_ID 21 // Max types of parameters packet to send  ... might increase.
 
 // **************************************************************************
 //                               Mixes                                      *
@@ -783,12 +786,14 @@ void SaveRatesAdvanced();
 void HidePID_Advanced_Msg();
 void Hide_msg_if_needed();
 void Display_PID_Advanced_Values(uint8_t n, uint8_t m);
+void PIDsAdvancedWereEdited();
+void SendEditedPID_Advanced();
 
-    // **************************************************************************
-    //                            GLOBAL DATA                                   *
-    //***************************************************************************
+// **************************************************************************
+//                            GLOBAL DATA                                   *
+//***************************************************************************
 
-    RF24 Radio1(CE_PIN, CSN_PIN);
+RF24 Radio1(CE_PIN, CSN_PIN);
 
 /************************************************************************************************************/
 /************************************************************************************************************/
