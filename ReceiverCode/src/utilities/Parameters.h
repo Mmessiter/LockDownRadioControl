@@ -80,11 +80,9 @@ void ReadExtraParameters()
             ServoCentrePulse[i] = Parameters.word[i + 1];
         break;
 #endif
-
     case GEAR_RATIO: // 8
         Ratio = DecodeAFloat(Parameters.word[1], Parameters.word[2], Parameters.word[3], Parameters.word[4]);
         break;
-
     case SEND_PID_VALUES: // 9
         if (!Rotorflight22Detected)
             break;
@@ -95,11 +93,9 @@ void ReadExtraParameters()
             PID_Send_Duration = Parameters.word[2];
         }
         break;
-
     case GET_FIRST_6_PID_VALUES: // 10
         if (!Rotorflight22Detected)
             break;
-
         All_PIDs[0] = Parameters.word[1];
         All_PIDs[1] = Parameters.word[2];
         All_PIDs[2] = Parameters.word[3];
@@ -130,6 +126,7 @@ void ReadExtraParameters()
             Started_Sending_RATEs = millis();
             RATES_Send_Duration = Parameters.word[2];
         }
+        break;
     case GET_FIRST_7_RATES_VALUES: // 13
         if (!Rotorflight22Detected)
             break;
@@ -161,6 +158,7 @@ void ReadExtraParameters()
             Started_Sending_RATES_ADVANCED = millis();
             RATES_ADVANCED_Send_Duration = Parameters.word[2];
         }
+        break;
     case GET_RATES_ADVANCED_VALUES_SECOND_8:
         if (!Rotorflight22Detected)
             break;
@@ -185,7 +183,6 @@ void ReadExtraParameters()
         Pitch_Setpoint_Boost_Gain = Parameters.word[6];
         Yaw_Setpoint_Boost_Gain = Parameters.word[7];
         break;
-
     case SEND_PID_ADVANCED_VALUES: // 18
         if (!Rotorflight22Detected)
             break;
@@ -195,25 +192,26 @@ void ReadExtraParameters()
             Started_Sending_PID_ADVANCED = millis();
             PID_ADVANCED_Send_Duration = Parameters.word[2];
         }
-        case GET_FIRST_9_ADVANCED_PID_VALUES: // 19
-        if (!Rotorflight22Detected) 
         break;
+    case GET_FIRST_9_ADVANCED_PID_VALUES: // 19
+        if (!Rotorflight22Detected)
+            break;
         for (int i = 0; i < 9; i++)
             PID_Advanced_Bytes[i] = Parameters.word[i + 1];
         break;
     case GET_SECOND_9_ADVANCED_PID_VALUES: // 20
-        if (!Rotorflight22Detected)     
-        break;
+        if (!Rotorflight22Detected)
+            break;
         for (int i = 0; i < 9; i++)
-            PID_Advanced_Bytes[i + 9] = Parameters.word[i + 1]; 
+            PID_Advanced_Bytes[i + 9] = Parameters.word[i + 1];
         break;
     case GET_THIRD_8_ADVANCED_PID_VALUES: // 21
-        if (!Rotorflight22Detected) 
-        break;
+        if (!Rotorflight22Detected)
+            break;
         for (int i = 0; i < 8; i++)
             PID_Advanced_Bytes[i + 18] = Parameters.word[i + 1];
         WritePIDAdvancedToNexusAndSave();
-            break;
+        break;
     default:
         break;
     }
