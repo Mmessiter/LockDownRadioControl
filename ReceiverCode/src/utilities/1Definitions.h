@@ -130,8 +130,11 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define GET_RATES_ADVANCED_VALUES_SECOND_8 16 // Command to update second 8 RATES ADVANCED values to RX
 #define GET_RATES_ADVANCED_VALUES_FIRST_7 17  // Command to update first 7 RATES ADVANCED values to RX
 #define SEND_PID_ADVANCED_VALUES 18           // Command to send PID ADVANCED values to TX
+#define GET_FIRST_9_ADVANCED_PID_VALUES 19    // Command to update first 9 Advanced PID values to RX
+#define GET_SECOND_9_ADVANCED_PID_VALUES 20   // Command to update second 9 Advanced PID values to RX
+#define GET_THIRD_8_ADVANCED_PID_VALUES 21    // Command to update third 8 Advanced PID values to RX ... 26 total
 
-#define PARAMETERS_MAX_ID 18 // Max types of parameters packet to send  ... might increase.
+#define PARAMETERS_MAX_ID 21 // Max types of parameters packet to send  ... might increase.
 
 // **************************************************************************
 //                             Rotorflight Definitions                      *
@@ -275,6 +278,7 @@ inline void WritePIDsToNexusAndSave(const uint16_t pid[12]);
 inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n);
 inline void WriteRatesToNexusAndSave();
 inline bool Parse_MSP_PID_PROFILE(const uint8_t *data, uint8_t n);
+inline void WritePIDAdvancedToNexusAndSave();
 
 /************************************************************************************************************/
 // For numeric types (int, float, double, etc.)

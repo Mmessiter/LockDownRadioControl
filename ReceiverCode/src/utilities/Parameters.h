@@ -195,9 +195,25 @@ void ReadExtraParameters()
             Started_Sending_PID_ADVANCED = millis();
             PID_ADVANCED_Send_Duration = Parameters.word[2];
         }
-
+        case GET_FIRST_9_ADVANCED_PID_VALUES: // 19
+        if (!Rotorflight22Detected) 
         break;
-
+        for (int i = 0; i < 9; i++)
+            PID_Advanced_Bytes[i] = Parameters.word[i + 1];
+        break;
+    case GET_SECOND_9_ADVANCED_PID_VALUES: // 20
+        if (!Rotorflight22Detected)     
+        break;
+        for (int i = 0; i < 9; i++)
+            PID_Advanced_Bytes[i + 9] = Parameters.word[i + 1]; 
+        break;
+    case GET_THIRD_8_ADVANCED_PID_VALUES: // 21
+        if (!Rotorflight22Detected) 
+        break;
+        for (int i = 0; i < 8; i++)
+            PID_Advanced_Bytes[i + 18] = Parameters.word[i + 1];
+        WritePIDAdvancedToNexusAndSave();
+            break;
     default:
         break;
     }

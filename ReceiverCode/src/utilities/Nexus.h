@@ -23,64 +23,6 @@
 #define SEND_RATES_ADVANCED_RF 3
 #define SEND_PID_ADVANCED_RF 4
 
-// Add global variables for timings
-
-// -------------------------------------------------------------------------------------------------
-// MSP PID ADVANCED parameters (MSP_PID_PROFILE / MSP_SET_PID_PROFILE)
-//
-// These correspond to Rotorflight Configurator > Profiles page shown in your photo.
-// NOTE: A few fields exist in the MSP payload but are NOT shown on that screen.
-// Those are tagged "NOT ON SCREEN".
-// -------------------------------------------------------------------------------------------------
-
-// // Tail Rotor Settings (left, bottom in your screenshot)
-// uint8_t cyclicFeedforwardGain = 0;     // "Cyclic Feedforward Gain"
-// uint8_t collectiveFeedforwardGain = 0; // "Collective Feedforward Gain"
-
-// // Main Rotor Settings (left, middle in your screenshot)
-// uint8_t collectiveToPitchCompensation = 0; // "Collective to Pitch Compensation" (Configurator shows as a toggle)
-// uint8_t crossCouplingGain = 0;             // "Cross-Coupling Gain"
-// uint8_t crossCouplingRatioPercent = 0;     // "Cross-Coupling Ratio [%]"
-// uint8_t crossCouplingCutoffHz = 0;         // "Cross-Coupling Cutoff Frequency [Hz]"
-
-// // PID Controller Settings (left, upper part in your screenshot)
-// uint8_t iTermRelaxType = 0;       // "I-Term Relax Type" (e.g. RPY)
-// uint8_t iTermRelaxCutoff = 0;     // "Cutoff Point for Roll/Pitch/Yaw" (Configurator shows 3 boxes; often same value)
-// uint8_t groundErrorDecayTime = 0; // "Ground Error Decay -> Decay Time [s]" (scaling unknown; often 0.1s units)
-
-// // Error limits (left, upper part in your screenshot)
-// uint16_t errorLimitRollDeg = 0;  // "Error Limit for Roll Axis [°]"
-// uint16_t errorLimitPitchDeg = 0; // "Error Limit for Pitch Axis [°]"
-// uint16_t errorLimitYawDeg = 0;   // "Error Limit for Yaw Axis [°]"
-
-// // HS Offset (left, upper part in your screenshot)
-// uint16_t hsOffsetLimitRollDeg = 0;  // "HS Offset Limit for Roll Axis [°]"
-// uint16_t hsOffsetLimitPitchDeg = 0; // "HS Offset Limit for Pitch Axis [°]"
-// uint16_t hsOffsetLimitYawDeg = 0;   // NOT ON SCREEN (present in MSP payload)
-
-// uint8_t hsOffsetGainRoll = 0;  // "HS Offset Gain for Roll Axis"
-// uint8_t hsOffsetGainPitch = 0; // "HS Offset Gain for Pitch Axis"
-// uint8_t hsOffsetGainYaw = 0;   // NOT ON SCREEN (present in MSP payload)
-
-// // PID Controller Bandwidth (right side of your screenshot)
-// uint8_t rollBandwidthHz = 0;  // "Roll Bandwidth"
-// uint8_t pitchBandwidthHz = 0; // "Pitch Bandwidth"
-// uint8_t yawBandwidthHz = 0;   // "Yaw Bandwidth"
-
-// uint8_t rollDtermCutoffHz = 0;  // "Roll D-term Cutoff"
-// uint8_t pitchDtermCutoffHz = 0; // "Pitch D-term Cutoff"
-// uint8_t yawDtermCutoffHz = 0;   // "Yaw D-term Cutoff"
-
-// uint8_t bTermCutoffHz = 0; // Configurator shows Roll/Pitch/Yaw B-term Cutoff (3 fields), but MSP gives 1 value here
-
-// // Main Rotor Settings (left, lower part in your screenshot)
-// uint8_t errorDecayMaxRateDps = 0; // likely "Error Decay maximum rate [°/s]"
-
-// // NOT ON SCREEN (present in MSP payload)
-// uint8_t collectiveImpulseFeedforwardGain = 0;      // NOT ON SCREEN
-// uint8_t collectiveImpulseFeedforwardDecayTime = 0; // NOT ON SCREEN
-// uint8_t PID_Advanced_Bytes[34];                    // for Ackpayload
-
 // ************************************************************************************************************
 enum : uint8_t
 {
