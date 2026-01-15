@@ -15,7 +15,7 @@ void Display_PID_Advanced_Values(uint8_t n, uint8_t m) // display PID Advanced v
 {
 
     if ((millis() - PID_Advanced_Start_Time) < 500)
-    return; // wait at least 500 ms because RX may be slow to respond after bank change and earlier values may be junk
+        return; // wait at least 500 ms because RX may be slow to respond after bank change and earlier values may be junk
 
     char TextFloat[10];
     for (uint8_t i = n; i < m; ++i)
@@ -147,6 +147,17 @@ void SendEditedPID_Advanced()
 // ********************************************************************************************************
 void StartPIDAdvancedView()
 {
+    if (PIDS_Were_Edited)
+    {
+        if (GetConfirmation((char *)"page PIDView", (char *)"Discard edited PIDs?"))
+        {
+            PIDS_Were_Edited = false;
+        }
+        else
+        {
+            return;
+        }
+    }
     SendCommand((char *)"page PID_A_View"); // Make Advanced visible
     CurrentView = PIDADVANCEDVIEW;
     ShowPIDAdvancedBank();              // Show the current bank's PID Advanced values
