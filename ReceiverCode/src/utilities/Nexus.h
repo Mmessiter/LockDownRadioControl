@@ -266,11 +266,30 @@ inline void WritePIDsToNexusAndSave(const uint16_t pid[12])
         payload[i * 2 + 1] = (uint8_t)(pid[i] >> 8);
     }
     SendToMSP(MSP_SET_PID, payload, sizeof(payload));
-    delay(100);
+    delay(50);
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
-    delay(100);
+    delay(50);
     lastWriteTime = now; // set cooldown only after we actually did the write+save
 }
+// ************************************************************************************************************
+void DebugPIDValues(const char *msg)
+{
+    Look(msg);
+    Look1("Roll P: ");Look(PID_Roll_P);
+    Look1("Roll I: ");Look(PID_Roll_I);
+    Look1("Roll D: ");Look(PID_Roll_D);
+    Look1("Roll FF: ");Look(PID_Roll_FF);
+    Look1("Pitch P: ");Look(PID_Pitch_P);
+    Look1("Pitch I: ");Look(PID_Pitch_I);
+    Look1("Pitch D: ");Look(PID_Pitch_D);
+    Look1("Pitch FF: ");Look(PID_Pitch_FF);
+    Look1("Yaw P: ");Look(PID_Yaw_P);
+    Look1("Yaw I: ");Look(PID_Yaw_I);
+    Look1("Yaw D: ");Look(PID_Yaw_D);
+    Look1("Yaw FF: ");Look(PID_Yaw_FF);
+}
+   
+
 // ************************************************************************************************************
 //         MSP_PID FROM ROTORFLIGHT FIRMWARE
 
@@ -283,7 +302,6 @@ inline bool Parse_MSP_PID(const uint8_t *data, uint8_t n)
     // *** FIX: you read 24 bytes below, so size must be at least 24 ***
     if (f.size < 24)
         return false;
-
     const uint8_t *p = f.payload;
 
     PID_Roll_P = p[0] | (p[1] << 8);
@@ -299,9 +317,9 @@ inline bool Parse_MSP_PID(const uint8_t *data, uint8_t n)
     PID_Yaw_P = p[16] | (p[17] << 8);
     PID_Yaw_I = p[18] | (p[19] << 8);
     PID_Yaw_D = p[20] | (p[21] << 8);
-    PID_Yaw_FF = p[22] | (p[23] << 8);
+    PID_Yaw_FF = p[22] | (p[23] << 8); // correct so far
 
-    //  DebugPIDValues("Current Nexus PID Values");
+   // DebugPIDValues("Current Nexus PID Values");
 
     return true;
 }
@@ -592,15 +610,15 @@ inline void WriteRatesToNexusAndSave()
         payload[offset++] = Yaw_Dynamic_Deadband_Filter;
     }
     SendToMSP(MSP_SET_RC_TUNING, payload, payload_size);
-    delay(100);
+    delay(50);
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
-    delay(100);
+    delay(50);
     lastWriteTime = now;
 }
 
 // ************************************************************************************************************
-
 //         MSP_PID_PROFILE FROM ROTORFLIGHT FIRMWARE
+
 inline bool Parse_MSP_PID_PROFILE(const uint8_t *data, uint8_t n)
 {
     MspFrame f;
@@ -690,10 +708,8 @@ inline bool Parse_MSP_PID_PROFILE(const uint8_t *data, uint8_t n)
     PID_Advanced_Bytes[24] = Inertia_Precomp_Gain41;
 
     Inertia_Precomp_Cutoff42 = p[42];
-    ;
+    
     PID_Advanced_Bytes[25] = Inertia_Precomp_Cutoff42;
-
-    Look("---------------------");
 
     return true;
 }
@@ -740,9 +756,9 @@ inline void WritePIDAdvancedToNexusAndSave()
     payload[42] = PID_Advanced_Bytes[25]; // Inertia_Precomp_Cutoff42
 
     SendToMSP(MSP_SET_PID_PROFILE, payload, sizeof(payload));
-    delay(100);
+    delay(50);
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
-    delay(100);
+    delay(50);
     lastWriteTime = now;
 }
 

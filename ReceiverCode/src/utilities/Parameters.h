@@ -31,16 +31,6 @@ void ShowValues(const char *name, float value) // // Show values in the serial m
     Look1(": ");
     Look(value, 3); // 3 decimal places
 }
-//************************************************************************************************************/
-bool pidsLookValid(const uint16_t p[12])
-{
-    for (int i = 0; i < 12; i++)
-        if (p[i] > 1000) // arbitrary limit for sanity check. ) is OK.
-        {
-            return false;
-        }
-    return true;
-}
 
 /************************************************************************************************************/
 /** Read extra parameters from the transmitter.
@@ -96,25 +86,16 @@ void ReadExtraParameters()
     case GET_FIRST_6_PID_VALUES: // 10
         if (!Rotorflight22Detected)
             break;
-        All_PIDs[0] = Parameters.word[1];
-        All_PIDs[1] = Parameters.word[2];
-        All_PIDs[2] = Parameters.word[3];
-        All_PIDs[3] = Parameters.word[4];
-        All_PIDs[4] = Parameters.word[5];
-        All_PIDs[5] = Parameters.word[6];
+        for (int i = 0; i < 6; ++i)
+            All_PIDs[i] = Parameters.word[i + 1];
         break;
 
     case GET_SECOND_6_PID_VALUES: // 11
         if (!Rotorflight22Detected)
             break;
-        All_PIDs[6] = Parameters.word[1];
-        All_PIDs[7] = Parameters.word[2];
-        All_PIDs[8] = Parameters.word[3];
-        All_PIDs[9] = Parameters.word[4];
-        All_PIDs[10] = Parameters.word[5];
-        All_PIDs[11] = Parameters.word[6];
-        if (pidsLookValid(All_PIDs))
-            WritePIDsToNexusAndSave(All_PIDs);
+        for (int i = 0; i < 6; ++i)
+            All_PIDs[i + 6] = Parameters.word[i + 1];
+        WritePIDsToNexusAndSave(All_PIDs);
         break;
 
     case SEND_RATES_VALUES: // 12
