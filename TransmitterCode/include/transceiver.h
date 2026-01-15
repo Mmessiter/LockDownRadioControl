@@ -1208,8 +1208,8 @@ FASTRUN void ParseAckPayload()
     case 25: // ROTORFLIGHT config PIDs and Rates **********************
         if (Reading_PIDS_Now)
         {
-            PID_Values[0] = GetFirstWordFromAckPayload();  // PID_Roll_P
-            PID_Values[1] = GetSecondWordFromAckPayload(); // PID_Roll_I
+            PID_Values[0] = GetFirstWordFromAckPayload();  // PID_Roll_P  /1
+            PID_Values[1] = GetSecondWordFromAckPayload(); // PID_Roll_I  /2
             Display2PIDValues(0);
         }
         if (Reading_RATES_Now)

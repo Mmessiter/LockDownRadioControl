@@ -86,6 +86,7 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
         break;
     case GEAR_RATIO: // 8 = Gear Ratio
         EncodeAFloat(GearRatio);
+        break;
     case SEND_PID_VALUES:
         Parameters.word[1] = 321;               // Please send PID values
         Parameters.word[2] = PID_Send_Duration; // 1000 - how many milliseconds to send these
