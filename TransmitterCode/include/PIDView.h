@@ -40,7 +40,8 @@ void ForegroundColourPIDLabels(uint16_t Colour)
     }
 }
 // ********************************************************************************************************
-uint8_t CheckPIDsForBonkersValues() // returns 0 if one or more PID values are over 20% different from the original value
+uint8_t CheckPIDsForBonkersValues() // returns 0 if none of the new values is > 20% different from the original value 
+                                    // otherwise index+1 of first PID that is  > 20% different
 {
     for (int i = 0; i < 12; ++i)
     {
@@ -143,7 +144,7 @@ void SendEditedPIDs()
 {
     uint8_t bonkersIndex;
     PIDS_Were_Edited = false;
-    PIDMsg((char *)"Checking PIDs ...", Gray);
+    PIDMsg((char *)"Checking magnitude of changes ...", Gray);
     bonkersIndex = CheckPIDsForBonkersValues();
     if (bonkersIndex)
     {
@@ -158,7 +159,7 @@ void SendEditedPIDs()
             return;
         }
     }
-
+    HidePIDMsg();
     if (!GetConfirmation((char *)"page PIDView", (char *)"Send edited PIDs to Nexus?"))
     {
         ShowPIDBank(); // reload old PIDs, undoing any edits
