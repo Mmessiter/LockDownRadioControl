@@ -48,12 +48,13 @@ void ForegroundColourAdvancedRates(uint16_t Colour)
     }
 }
 // ************************************************************************************************************/
-void RatesAdvancedWereEdited(){
+void RatesAdvancedWereEdited()
+{
     SendCommand((char *)"vis b3,1"); // show "Send" button
     Rates_Advanced_Were_Edited = true;
 }
-    // ********************************************************************************************************
-    void RatesAdvancedMsg(const char *msg, uint16_t Colour)
+// ********************************************************************************************************
+void RatesAdvancedMsg(const char *msg, uint16_t Colour)
 {
     if (CurrentView == RATESADVANCEDVIEW) // Must be in RATESADVANCEDVIEW view
     {
@@ -90,11 +91,11 @@ void ShowRatesAdvancedBank()
     }
     SendText((char *)"t9", BankNames[BanksInUse[Bank - 1]]); // Show bank number etc
     RatesAdvancedMsg(buf, Gray);
-    Rates_Advanced_Send_Duration = 1000;                     // how many milliseconds to await RATES values
+    Rates_Advanced_Send_Duration = 1000;              // how many milliseconds to await RATES values
     Reading_RATES_Advanced_Now = true;                // This tells the Ack payload parser to
     AddParameterstoQueue(SEND_RATES_ADVANCED_VALUES); // Request RATES values from RX
     RATES_Advanced_Start_Time = millis();             // record start time as it's not long
-    Rates_Advanced_Were_Edited  = false;                        // reset edited flag
+    Rates_Advanced_Were_Edited = false;               // reset edited flag
 }
 
 // **********************************************************************************************************/
@@ -116,7 +117,7 @@ void StartRatesAdvancedView()
     ShowRatesAdvancedBank();            // Show the current bank's RATES
     SendText((char *)"t11", ModelName); // Show model name
     Rates_Advanced_Were_Edited = false;
-}// **********************************************************************************************************/
+} // **********************************************************************************************************/
 void EndRatesAdvancedView()
 {
     if (Rates_Advanced_Were_Edited)
@@ -131,18 +132,10 @@ void EndRatesAdvancedView()
         CurrentView = ROTORFLIGHTVIEW;
     }
 }
-// **********************************************************************************************************/
-void SaveRatesAdvanced()
+// ************************************************************************************************************/
+void ReadRatesAdvanced()
 {
-    if (!GetConfirmation((char *)"page Rates_A_View", (char *)"Send edited values to Nexus?"))
-    {
-        Rates_Advanced_Were_Edited = false;
-        ShowRatesAdvancedBank(); // reload old RATES, undoing any edits
-        return;
-    }
-    DelayWithDog(200);                                     //  allow LOTS of time for screen to update BEFORE sending another Nextion command
-    RatesAdvancedMsg((char *)"Sending edited values ...", Gray); // Show sending message
-    // read the edited RATES from the screen;
+
     for (uint8_t i = 0; i < MAX_RATES_ADVANCED_BYTES; ++i)
     {
         if (i == 14) // last one is divided by 10 and therefore must be text
@@ -155,10 +148,68 @@ void SaveRatesAdvanced()
         }
         Rate_Advanced_Values[i] = (uint8_t)GetValue(RatesAWindows[i]);
     }
-    AddParameterstoQueue(GET_RATES_ADVANCED_VALUES_SECOND_8);  // Send RATES ADVANCED values from TX to RX
-    AddParameterstoQueue(GET_RATES_ADVANCED_VALUES_FIRST_7);   // Send RATES ADVANCED values from TX to RX ...because this queue is a LIFO stack
-    Hide_Advanced_Rates_Msg();                        // SECOND MUST BE QUEUED FIRST!!!  because this queue is a LIFO stack
+}
+// ********************************************************************************************************
+uint8_t CheckRatesAdvancedForBonkersValues() // 0 = OK, else (i+1) of first bonkers field
+{
+    for (uint8_t i = 0; i < MAX_RATES_ADVANCED_BYTES; ++i)
+    {
+        const float orig = (float)Rate_Advanced_Values[i]; // original byte (0..255)
+        float edited;
+        if (i == 14)
+        {
+            char temp[20];
+            GetText(RatesAWindows[i], temp);
+            edited = (float)atof(temp) * 10.0f;
+        }
+        else
+        {
+            edited = (float)GetValue(RatesAWindows[i]); // <- key change
+        }
+        if (orig == 0.0f)
+        {
+            if (edited != 0.0f)
+                return (uint8_t)(i + 1);
+            continue;
+        }
+        if (edited < orig * 0.8f || edited > orig * 1.2f)
+            return (uint8_t)(i + 1);
+    }
+    return 0;
+}
+
+// **********************************************************************************************************/
+void SaveRatesAdvanced()
+{
+    uint8_t bonkersIndex;
     Rates_Advanced_Were_Edited = false;
+    RatesAdvancedMsg((char *)"Checking magnitude of changes ...", Gray);
+    bonkersIndex = CheckRatesAdvancedForBonkersValues();
+    if (bonkersIndex)
+    {
+        char msg[120] = "Do you REALLY mean this?!\r\nItem ";
+        char NB[10];
+        strcat(msg, Str(NB, bonkersIndex, 0));
+        strcat(msg, " would change by > 20%");
+        if (!GetConfirmation((char *)"page Rates_A_View", msg))
+        {
+            ShowRatesAdvancedBank(); // reload old RATES, undoing any edits
+            Hide_Advanced_Rates_Msg();
+            return;
+        }
+    }
+    Hide_Advanced_Rates_Msg();
+    if (!GetConfirmation((char *)"page Rates_A_View", (char *)"Send edited values to Nexus?"))
+    {
+        ShowRatesAdvancedBank(); // reload old RATES, undoing any edits
+        return;
+    }
+    DelayWithDog(200);                                           //  allow LOTS of time for screen to update BEFORE sending another Nextion command
+    RatesAdvancedMsg((char *)"Sending edited values ...", Gray); // Show sending message
+    ReadRatesAdvanced();
+    AddParameterstoQueue(GET_RATES_ADVANCED_VALUES_SECOND_8); // Send RATES ADVANCED values from TX to RX
+    AddParameterstoQueue(GET_RATES_ADVANCED_VALUES_FIRST_7);  // Send RATES ADVANCED values from TX to RX ...because this queue is a LIFO stack
+    Hide_Advanced_Rates_Msg();                                // SECOND MUST BE QUEUED FIRST!!!  because this queue is a LIFO stack
     PlaySound(BEEPCOMPLETE); // let user know we're done
 }
 #endif // RATESRF_ADVANCED_H

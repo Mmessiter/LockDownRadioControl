@@ -57,7 +57,6 @@ void SendEditedRates()
     HideRATESMsg();
     if (!GetConfirmation((char *)"page RatesView", (char *)"Send edited RATES to Nexus?"))
     {
-        Rates_Were_Edited = false; // reset edited flag
         ShowRatesBank(); // reload old RATES, undoing any edits
         return;
     }
@@ -68,7 +67,6 @@ void SendEditedRates()
     AddParameterstoQueue(GET_FIRST_7_RATES_VALUES);     // SECOND MUST BE QUEUED FIRST!!! Send RATES 1-6 values from TX to RX
     HideRATESMsg();                                     // ...because this queue is a LIFO stack
     SendCommand((char *)"vis b3,0");                    // hide "Send" button
-    Rates_Were_Edited = false;                          // reset edited flag
     PlaySound(BEEPCOMPLETE);                            // let user know we're done
 }
 // ************************************************************************************************************/
