@@ -396,11 +396,11 @@ void PopulateDataView()
         LastRX1TotalTime = RX1TotalTime;
         BuildValue(DataView_Sg, RX1TotalTime); // SendValue(DataView_Sg, RX1TotalTime);
     }
-    if (LastGapAverage != GapAverage)
-    {
-        LastGapAverage = GapAverage;
+   // if (LastGapAverage != GapAverage)
+   // {
+       // LastGapAverage = GapAverage;
         BuildValue(DataView_Ag, GapAverage); // SendValue(DataView_Ag, GapAverage);
-    }
+   // }
     if (LastRX2TotalTime != RX2TotalTime)
     {
         LastRX2TotalTime = RX2TotalTime;
