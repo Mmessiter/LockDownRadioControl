@@ -19,10 +19,42 @@ void ReadEditedRateValues()
         Rate_Values[i] = (uint8_t)(atof(temp) / FactorTableRF[i]); // DIVIDE BY factor to get byte value
     }
 }
+// ********************************************************************************************************
+uint8_t CheckRATESForBonkersValues() // 0 = OK, else (i+1) of first bonkers field
+{
+    for (int i = 1; i < MAX_RATES_BYTES; ++i) // start at 1 because 0 is Rates Type
+    {
+        char temp[10];
+        GetText(RatesWindows[i], temp);
+        float edited = (float)atof(temp) / FactorTableRF[i];   // edited value as float
+        float orig   = (float)Rate_Values[i];                  // original byte value (0..255)
+        if (edited < orig * 0.8f || edited > orig * 1.2f)
+            return (uint8_t)(i);
+    }
+    return 0;
+}
 
 // ************************************************************************************************************/
 void SendEditedRates()
 {
+    uint8_t bonkersIndex;
+    Rates_Were_Edited = false;
+    RatesMsg((char *)"Checking magnitude of changes ...", Gray);
+    bonkersIndex = CheckRATESForBonkersValues();
+    if (bonkersIndex)
+    {
+        char msg[120] = "Do you REALLY mean this?!\r\nItem ";
+        char NB[10];
+        strcat(msg, Str(NB, bonkersIndex, 0));
+        strcat(msg, " would change by > 20%");
+        if (!GetConfirmation((char *)"page RatesView", msg))
+        {
+            ShowRatesBank(); // reload old RATES, undoing any edits
+            HideRATESMsg();
+            return;
+        }
+    }
+    HideRATESMsg();
     if (!GetConfirmation((char *)"page RatesView", (char *)"Send edited RATES to Nexus?"))
     {
         Rates_Were_Edited = false; // reset edited flag
