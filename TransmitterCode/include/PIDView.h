@@ -40,12 +40,25 @@ void ForegroundColourPIDLabels(uint16_t Colour)
     }
 }
 // ********************************************************************************************************
+uint8_t CheckPIDsForBonkersValues() // returns 0 if one or more PID values are over 20% different from the original value
+{
+    for (int i = 0; i < 12; ++i)
+    {
+        float temp = (float)GetValue(PID_Labels[i]);
+
+        if (temp < (float)PID_Values[i] * 0.8f || temp > (float)PID_Values[i] * 1.2f)
+            return i + 1;
+    }
+    return 0;
+}
+// ********************************************************************************************************
 void ReadEditedPIDs()
 {
     for (int i = 0; i < 12; ++i)
     {
-        PID_Values[i] = GetValue(PID_Labels[i]); // Read edited PID values from screen ASAP!
+        PID_Values[i] = GetValue(PID_Labels[i]);
     }
+    return;
 }
 // ********************************************************************************************************
 void Display2PIDValues(uint8_t i) // Displays two PID values as soon as they arrive in Ack payload
@@ -128,26 +141,44 @@ void PIDs_Were_edited()
 
 void SendEditedPIDs()
 {
+    uint8_t bonkersIndex;
+    PIDS_Were_Edited = false;
+    PIDMsg((char *)"Checking PIDs ...", Gray);
+    bonkersIndex = CheckPIDsForBonkersValues();
+    if (bonkersIndex)
+    {
+        char msg[120] = "Do you REALLY mean this?!\r\nItem ";
+        char NB[10];
+        strcat(msg, Str(NB, bonkersIndex, 0));
+        strcat(msg, " would change by > 20%");
+        if (!GetConfirmation((char *)"page PIDView", msg))
+        {
+            ShowPIDBank(); // reload old PIDs, undoing any edits
+            HidePIDMsg();
+            return;
+        }
+    }
+
     if (!GetConfirmation((char *)"page PIDView", (char *)"Send edited PIDs to Nexus?"))
     {
-        PIDS_Were_Edited = false;
         ShowPIDBank(); // reload old PIDs, undoing any edits
+        HidePIDMsg();
         return;
     }
-    DelayWithDog(200);                               //  allow LOTS of time for screen to update BEFORE sending another Nextion command
+
     PIDMsg((char *)"Sending edited PIDs ...", Gray); // Show sending message
+    DelayWithDog(200);                               // allow LOTS of time for screen to update BEFORE sending another Nextion command
     ReadEditedPIDs();                                // read the edited PIDs from the screen;
     AddParameterstoQueue(GET_SECOND_6_PID_VALUES);   // SECOND MUST BE QUEUED FIRST!!! Send PID 7-12 values from TX to RX
     AddParameterstoQueue(GET_FIRST_6_PID_VALUES);    // SECOND MUST BE QUEUED FIRST!!! Send PID 1-6 values from TX to RX
     HidePIDMsg();                                    // SECOND MUST BE QUEUED FIRST!!!  because this queue is a LIFO stack
     SendCommand((char *)"vis b3,0");                 // hide "Send" button
-    PIDS_Were_Edited = false;
-    PlaySound(BEEPCOMPLETE); // let user know we're done
+    PlaySound(BEEPCOMPLETE);                         // let user know we're done
 }
 //************************************************************************************************************/
 void StartPIDView() // this starts PID view
 {
-    if (SendBuffer[ArmingChannel-1] > 1000) // Safety is on if value > 1000
+    if (SendBuffer[ArmingChannel - 1] > 1000) // Safety is on if value > 1000
     {
         PlaySound(WHAHWHAHMSG); // let user know we're in trouble
         MsgBox((char *)"page RFView", (char *)"Model is armed and dangerous!\r\n(Disarm model to edit PIDs.)");
