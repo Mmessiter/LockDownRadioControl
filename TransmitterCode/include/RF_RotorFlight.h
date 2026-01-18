@@ -30,6 +30,7 @@ void RotorFlightEnd()
     GetText((char *)"t7", temp);
     ArmingChannel = atoi(temp);
     SaveOneModel(ModelNumber); // save the model including gear ratio and arming channel
+    ZeroDataScreen();          // clear the screen data because editing Rotorflight parameters may have created misleading comms gaps
     SendCommand((char *)"page RXOptionsView");
     CurrentView = RXSETUPVIEW1;
 }
