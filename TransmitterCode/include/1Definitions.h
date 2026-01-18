@@ -790,12 +790,14 @@ void PIDsAdvancedWereEdited();
 void SendEditedPID_Advanced();
 void EndPIDsAdvancedView();
 void PIDMsg(const char *msg, uint16_t Colour);
+void SaveRFParameters();
+void RestoreRFParameters();
 
-    // **************************************************************************
-    //                            GLOBAL DATA                                   *
-    //***************************************************************************
+// **************************************************************************
+//                            GLOBAL DATA                                   *
+//***************************************************************************
 
-    RF24 Radio1(CE_PIN, CSN_PIN);
+RF24 Radio1(CE_PIN, CSN_PIN);
 
 /************************************************************************************************************/
 /************************************************************************************************************/
@@ -920,6 +922,7 @@ uint16_t ChanneltoSet = 0;
 bool Connected = false;
 uint16_t BuddyControlled = 0; // Flags
 bool BuddyHasAllSwitches = true;
+bool ForcingBank = false;
 double PointsCount = 5; // This for displaying curves only
 double xPoints[5];
 double yPoints[5];

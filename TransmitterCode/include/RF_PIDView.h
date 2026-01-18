@@ -1,5 +1,5 @@
-// ******************************************** PID ******************************************************
-// This module handles the PID View screen on the Nextion display
+// ******************************************** Rotorflight PID ******************************************************
+// This module handles the  Rotorflight PID View screen on the Nextion display
 // It allows the user to view and edit the 12 PID values for the current bank
 // It also handles sending the edited PID values back to the Rotorflight compatible flight controller via our receiver ...
 // ... by queuing the appropriate parameter packets ** WHICH ARE SENT IN REVERSE ORDER! ** (- a LIFO stack!)
@@ -84,7 +84,6 @@ void PIDMsg(const char *msg, uint16_t Colour)
     }
 }
 // **********************************************************************************************************/
-
 void HidePIDMsg()
 {
     if (CurrentView == PIDVIEW) // Must be in PID view
@@ -121,7 +120,6 @@ void ShowPIDBank() // this is called when bank is changed so new bank's PID valu
             strcat(Wmsg, w2);
             MsgBox((char *)"page PIDView", Wmsg); // Warn about unsaved edits
         }
-
         PIDMsg(buf, Gray);                                       // Show loading message and hides old PIDs
         PID_Send_Duration = 1000;                                // how many milliseconds to await PID values
         Reading_PIDS_Now = true;                                 // This tells the Ack payload parser to get PID values

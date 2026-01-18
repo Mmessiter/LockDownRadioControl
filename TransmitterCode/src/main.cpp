@@ -156,11 +156,12 @@
 #include "Switches.h"
 #include "ADC-master/ADC.h"
 #include "Parameters.h"
-#include "PIDView.h"
-#include "RatesRF.h"
-#include "RotorFlight.h"
-#include "RatesRF_Advanced.h"
-#include "PID_Advanced.h"
+#include "RF_PIDView.h"
+#include "RF_Rates.h"
+#include "RF_RotorFlight.h"
+#include "RF_Rates_Advanced.h"
+#include "RF_PID_Advanced.h"
+#include "RF_Save_Restore.h"
 
 /*********************************************************************************************************************************/
 
@@ -3305,7 +3306,7 @@ void CheckAllModelIds()
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!  ( Use "NUMBER<<8" )
-#define LASTFUNCTION1 36 // One more than final one
+#define LASTFUNCTION1 38 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])(){
     Blank,                   // 0 Cannot be used
@@ -3343,7 +3344,9 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     SaveRatesAdvanced,       // 32
     PIDsAdvancedWereEdited,  // 33
     SendEditedPID_Advanced,  // 34
-    EndPIDsAdvancedView      // 35
+    EndPIDsAdvancedView,     // 35
+    SaveRFParameters,        // 36
+    RestoreRFParameters      // 37
 
 };
 
@@ -4843,8 +4846,6 @@ bool CheckModelName()
         }
         ReadOneModel(ModelNumber);
         SendText(mn, ModelName);
-        // if (UseLog)
-        //     LogThisModel();
         LastModelLoaded = ModelNumber;
         UpdateModelsNameEveryWhere();
         return true;

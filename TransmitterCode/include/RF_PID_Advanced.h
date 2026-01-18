@@ -1,5 +1,5 @@
-// ******************************************** PID Advanced ******************************************************
-// This module handles the PID Advanced  screen on the Nextion display
+// ******************************************** Rotorflight PID Advanced ******************************************************
+// This module handles the Rotorflight PID Advanced screen on the Nextion display
 
 // **********************************************************************************************************
 #ifndef PIDADVANCED_H

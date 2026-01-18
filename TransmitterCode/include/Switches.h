@@ -103,7 +103,7 @@ uint8_t GetSwitchPosition(uint8_t ThisSwitchNumber) // returns 1,2, or 3 for any
 /************************************************************************************************************/
 void ReadBuddySwitch()
 {
-    if (!BuddyMasterOnWireless)
+    if (!BuddyMasterOnWireless) // ????
         return;
 
     static uint8_t LastBuddyState = BUDDY_OFF;
@@ -132,8 +132,11 @@ void ReadBuddySwitch()
 /************************************************************************************************************/
 void ReadBankSwitch()
 {
+    if (ForcingBank)
+        return;
+
     Bank = GetSwitchPosition(BankSwitch);
-    if(!Bank)
+    if (!Bank)
         Bank = 1; // If no bank switch was defined, use Bank 1 by default
 }
 
