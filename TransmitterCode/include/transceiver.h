@@ -949,11 +949,7 @@ void ShowAmpsBeingUsed(float amps)
     SendCommand(VisON);
     SendText((char *)"StillConnected", AmpsBeingUsed);
 }
-// #define PIDVIEW 45
-// #define RATESVIEW1 46
-// #define ROTORFLIGHTVIEW 47
-// #define RATESADVANCEDVIEW 48
-// #define PIDADVANCEDVIEW 49
+
 // ******************************************************************************************
 void ReadRatesBytesFromAckPayload(uint8_t n, uint8_t m)
 {
