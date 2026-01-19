@@ -6,8 +6,9 @@
 #define RF_SAVE_RESTORE_H
 #include <Arduino.h>
 #include "1Definitions.h"
-#define WAIT_TIME_BETWEEN_PARAMETERS 1000         // milliseconds to wait between receiving parameter blocks
+#define WAIT_TIME_BETWEEN_READING_PARAMETERS 1000 // milliseconds to wait between receiving parameter blocks
 #define WAIT_TIME_BETWEEN_WRITING_PARAMETERS 1000 // milliseconds to wait between sending parameter blocks
+#define BANK_CHANGE_DELAY 1000                    // milliseconds to wait after changing bank switch
 uint8_t Parameter_Progress_Index = 0;             // index of parameter being saved/restored
 uint16_t ProgressSoFar = 0;                       // progress bar value
 uint16_t OneProgressItem = 100 / 16;              // total steps is 16 for progress bar
@@ -102,15 +103,19 @@ void Restore_SOME_RF_Parameters()
         }
         else
         {
-            Parameter_Progress_Index = 9; // move to next bank
+            Parameter_Progress_Index = 10; // move to next bank after delay
             LTimer = millis();
         }
         break;
     case 9:
-        if ((millis() - LTimer) >= 1000)
+        Parameter_Progress_Index = 10; // move to next bank after delay
+        LTimer = millis();
+        break;
+    case 10:
+        AddParameterstoQueue(SEND_RATES_VALUES); // Request RATES values just to kick the FC bank switch?!?!?!?!?!?!?!?!?
+        if ((millis() - LTimer) >= BANK_CHANGE_DELAY)
             Parameter_Progress_Index = 0; // start restoring next bank
         break;
-
     case 200:
         SendText(t2, (char *)"Success!");
         SendValue((char *)"Progress", 100); // update progress bar
@@ -142,7 +147,7 @@ void RestoreRFParameters()
         SendCommand((char *)"vis Progress,1"); // show progress bar
         SendCommand((char *)"vis t2,1");       // show please wait text
         ProgressSoFar = 1;
-        Parameter_Progress_Index = 0;
+        Parameter_Progress_Index = 9; // start restoring first bank after delay
         SendValue((char *)"Progress", ProgressSoFar);
         Bank = 1;
         DelayWithDog(200);
@@ -164,7 +169,7 @@ void Save_SOME_RF_Parameters()
         strcpy(msg, "Saving PIDs for Bank ");
         strcat(msg, NB);
         SendText(t2, msg);
-        PID_Send_Duration = WAIT_TIME_BETWEEN_PARAMETERS; // how many milliseconds to await PID values
+        PID_Send_Duration = WAIT_TIME_BETWEEN_READING_PARAMETERS; // how many milliseconds to await PID values
         Reading_PIDS_Now = true;                          // This tells the Ack payload parser to get PID values
         AddParameterstoQueue(SEND_PID_VALUES);            // Request PID values from RX
         PID_Start_Time = millis();                        // record start time as it's not long
@@ -185,7 +190,7 @@ void Save_SOME_RF_Parameters()
         strcpy(msg, "Saving Advanced PIDs for Bank ");
         strcat(msg, NB);
         SendText(t2, msg);
-        PID_Advanced_Send_Duration = WAIT_TIME_BETWEEN_PARAMETERS; // how many milliseconds to await PID Advanced values
+        PID_Advanced_Send_Duration = WAIT_TIME_BETWEEN_READING_PARAMETERS; // how many milliseconds to await PID Advanced values
         Reading_PIDS_Advanced_Now = true;                          // This tells the Ack payload parser to get PID Advanced values
         AddParameterstoQueue(SEND_PID_ADVANCED_VALUES);            // Request PID Advanced values from RX
         PID_Advanced_Start_Time = millis();                        // record start time as it's not long
@@ -206,7 +211,7 @@ void Save_SOME_RF_Parameters()
         strcpy(msg, "Saving Rates for Bank ");
         strcat(msg, NB);
         SendText(t2, msg);
-        RATES_Send_Duration = WAIT_TIME_BETWEEN_PARAMETERS; // how many milliseconds to await RATES values
+        RATES_Send_Duration = WAIT_TIME_BETWEEN_READING_PARAMETERS; // how many milliseconds to await RATES values
         Reading_RATES_Now = true;                           // This tells the Ack payload parser to get RATES values
         AddParameterstoQueue(SEND_RATES_VALUES);            // Request RATES values from RX
         RATES_Start_Time = millis();                        // record start time as it's not long
@@ -227,7 +232,7 @@ void Save_SOME_RF_Parameters()
         strcpy(msg, "Saving Advanced Rates for Bank ");
         strcat(msg, NB);
         SendText(t2, msg);
-        Rates_Advanced_Send_Duration = WAIT_TIME_BETWEEN_PARAMETERS; // how many milliseconds to await RATES Advanced values
+        Rates_Advanced_Send_Duration = WAIT_TIME_BETWEEN_READING_PARAMETERS; // how many milliseconds to await RATES Advanced values
         Reading_RATES_Advanced_Now = true;                           // This tells the Ack payload parser to get RATES Advanced values
         AddParameterstoQueue(SEND_RATES_ADVANCED_VALUES);            // Request RATES Advanced values from RX
         RATES_Advanced_Start_Time = millis();                        // record start time as it's not long
@@ -251,12 +256,17 @@ void Save_SOME_RF_Parameters()
         }
         else
         {
-            Parameter_Progress_Index = 12; // move to next bank
+            Parameter_Progress_Index = 15; // move to next bank
             LTimer = millis();
         }
         break;
-    case 12:
-        if ((millis() - LTimer) >= 1000)
+    case 12:                                          // move to next bank afer delay
+        LTimer = millis();
+        Parameter_Progress_Index = 15;
+        break;
+
+    case 15:
+        if ((millis() - LTimer) >= BANK_CHANGE_DELAY)
             Parameter_Progress_Index = 0; // start saving next bank
         break;
 
@@ -284,7 +294,7 @@ void SaveRFParameters()
     }
     if (GetConfirmation((char *)"page RFView", (char *)"Save ALL these values?"))
     {
-        Parameter_Progress_Index = 0;
+        Parameter_Progress_Index = 12;         // start saving first bank after delay
         SendCommand((char *)"vis Progress,1"); // show progress bar
         SendCommand((char *)"vis t2,1");       // show please wait text
         ProgressSoFar = 1;
