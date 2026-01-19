@@ -1,11 +1,12 @@
+
+// ***************************************** 1Definitions.h ***************************************
+// NOTE: This header contains *definitions* of globals (storage), not just declarations.          *
+// Project must remain single translation unit (only main.cpp compiled).                          *
+// If additional .cpp files are added they must NOT include this header, only extern declarations *
+// ************************************************************************************************
+
 #ifndef Definitions_H
 #define Definitions_H
-
-// ***************************************** 1Definitions.h *************************************
-//            This header file has prototypes, definitions and global variables                 *
-// **********************************************************************************************
-
-// #define USE_BTLE  // testing!
 
 #include <Arduino.h>
 #include <Watchdog_t4.h>
@@ -20,7 +21,7 @@
 #include "ADC-master/ADC.h"
 
 // *************************************************************************************
-//               TX VERSION NUMBER   (May 2020 - December 2025 Malcolm Messiter)       *
+//                   TX VERSION NUMBER   (2020 - 2026 Malcolm Messiter)                *
 //**************************************************************************************
 
 #define TXVERSION_MAJOR 2 // first three *must* match RX but _EXTRA can be different

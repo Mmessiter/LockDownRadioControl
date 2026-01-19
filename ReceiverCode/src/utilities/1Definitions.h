@@ -1,5 +1,10 @@
 /** @file ReceiverCode/src/utilities/1Definitions.h */
-// Malcolm Messiter 2020 - 2025 ...
+// Malcolm Messiter 2020 - 2026 
+
+// NOTE: This header contains *definitions* of globals (storage), not just declarations.
+// Project must remain single translation unit (only main.cpp compiled).
+// If additional .cpp files are added they must not include this header, only extern declarations.
+
 #ifndef _SRC_UTILITIES_1DEFINITIONS_H
 #define _SRC_UTILITIES_1DEFINITIONS_H
 
@@ -92,9 +97,7 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define FREQUENCYSCOUNT 83 // uses 83 different channels (0 to 82)
 #define SBUSRATE 10        // SBUS frame every 10 milliseconds
 #define SBUSPORT Serial3   // = 14
-#define SBUSPIN 14         //
-#define MINMICROS 500
-#define MAXMICROS 2500
+#define SBUSPIN 14         ///
 #define LED_PIN LED_BUILTIN
 #define LED_RED 16
 #define BINDPLUG_PIN 17
