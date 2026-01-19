@@ -112,7 +112,7 @@ void Restore_SOME_RF_Parameters()
         LTimer = millis();
         break;
     case 10:
-        AddParameterstoQueue(SEND_RATES_VALUES); // Request RATES values just to kick the FC bank switch?!?!?!?!?!?!?!?!?
+        AddParameterstoQueue(SEND_RATES_VALUES); // Request RATES values rather a lot just to kick the FC bank switch?!?!?!?!?!?!?!?!?
         if ((millis() - LTimer) >= BANK_CHANGE_DELAY)
             Parameter_Progress_Index = 0; // start restoring next bank
         break;
@@ -170,16 +170,16 @@ void Save_SOME_RF_Parameters()
         strcat(msg, NB);
         SendText(t2, msg);
         PID_Send_Duration = WAIT_TIME_BETWEEN_READING_PARAMETERS; // how many milliseconds to await PID values
-        Reading_PIDS_Now = true;                          // This tells the Ack payload parser to get PID values
-        AddParameterstoQueue(SEND_PID_VALUES);            // Request PID values from RX
-        PID_Start_Time = millis();                        // record start time as it's not long
-        Parameter_Progress_Index = 1;                     // move to next stage
-        break;                                            //--
-    case 1:                                               // wait until PIDs have been read
-        if (!Reading_PIDS_Now)                            // wait until PIDs have been read
-            Parameter_Progress_Index = 2;                 // move to next stage when PIDs have been read
-        break;                                            //--
-    case 2:                                               // save PIDs for this bank
+        Reading_PIDS_Now = true;                                  // This tells the Ack payload parser to get PID values
+        AddParameterstoQueue(SEND_PID_VALUES);                    // Request PID values from RX
+        PID_Start_Time = millis();                                // record start time as it's not long
+        Parameter_Progress_Index = 1;                             // move to next stage
+        break;                                                    //--
+    case 1:                                                       // wait until PIDs have been read
+        if (!Reading_PIDS_Now)                                    // wait until PIDs have been read
+            Parameter_Progress_Index = 2;                         // move to next stage when PIDs have been read
+        break;                                                    //--
+    case 2:                                                       // save PIDs for this bank
         for (int i = 0; i < MAX_PID_WORDS; ++i)
             Saved_PID_Values[i][Bank - 1] = PID_Values[i];
         Parameter_Progress_Index = 3;                 // move to next stage
@@ -191,16 +191,16 @@ void Save_SOME_RF_Parameters()
         strcat(msg, NB);
         SendText(t2, msg);
         PID_Advanced_Send_Duration = WAIT_TIME_BETWEEN_READING_PARAMETERS; // how many milliseconds to await PID Advanced values
-        Reading_PIDS_Advanced_Now = true;                          // This tells the Ack payload parser to get PID Advanced values
-        AddParameterstoQueue(SEND_PID_ADVANCED_VALUES);            // Request PID Advanced values from RX
-        PID_Advanced_Start_Time = millis();                        // record start time as it's not long
-        Parameter_Progress_Index = 4;                              // move to next stage
-        break;                                                     //--
-    case 4:                                                        // wait until Advanced PIDs have been read
-        if (!Reading_PIDS_Advanced_Now)                            // wait until Advanced PIDs have been read
-            Parameter_Progress_Index = 5;                          // move to next stage when Advanced PIDs have been read
-        break;                                                     //--
-    case 5:                                                        // save Advanced PIDs for this bank
+        Reading_PIDS_Advanced_Now = true;                                  // This tells the Ack payload parser to get PID Advanced values
+        AddParameterstoQueue(SEND_PID_ADVANCED_VALUES);                    // Request PID Advanced values from RX
+        PID_Advanced_Start_Time = millis();                                // record start time as it's not long
+        Parameter_Progress_Index = 4;                                      // move to next stage
+        break;                                                             //--
+    case 4:                                                                // wait until Advanced PIDs have been read
+        if (!Reading_PIDS_Advanced_Now)                                    // wait until Advanced PIDs have been read
+            Parameter_Progress_Index = 5;                                  // move to next stage when Advanced PIDs have been read
+        break;                                                             //--
+    case 5:                                                                // save Advanced PIDs for this bank
         for (int i = 0; i < MAX_PIDS_ADVANCED_BYTES; ++i)
             Saved_PID_Advanced_Values[i][Bank - 1] = PID_Advanced_Values[i];
         Parameter_Progress_Index = 6;                 // move to next stage
@@ -212,16 +212,16 @@ void Save_SOME_RF_Parameters()
         strcat(msg, NB);
         SendText(t2, msg);
         RATES_Send_Duration = WAIT_TIME_BETWEEN_READING_PARAMETERS; // how many milliseconds to await RATES values
-        Reading_RATES_Now = true;                           // This tells the Ack payload parser to get RATES values
-        AddParameterstoQueue(SEND_RATES_VALUES);            // Request RATES values from RX
-        RATES_Start_Time = millis();                        // record start time as it's not long
-        Parameter_Progress_Index = 7;                       // move to next stage
-        break;                                              //--
-    case 7:                                                 // wait until RATES have been read
-        if (!Reading_RATES_Now)                             // wait until RATES have been read
-            Parameter_Progress_Index = 8;                   // move to next stage when RATES have been read
-        break;                                              //--
-    case 8:                                                 // save RATES for this bank
+        Reading_RATES_Now = true;                                   // This tells the Ack payload parser to get RATES values
+        AddParameterstoQueue(SEND_RATES_VALUES);                    // Request RATES values from RX
+        RATES_Start_Time = millis();                                // record start time as it's not long
+        Parameter_Progress_Index = 7;                               // move to next stage
+        break;                                                      //--
+    case 7:                                                         // wait until RATES have been read
+        if (!Reading_RATES_Now)                                     // wait until RATES have been read
+            Parameter_Progress_Index = 8;                           // move to next stage when RATES have been read
+        break;                                                      //--
+    case 8:                                                         // save RATES for this bank
         for (int i = 0; i < MAX_RATES_BYTES; ++i)
             Saved_Rate_Values[i][Bank - 1] = Rate_Values[i];
         Parameter_Progress_Index = 9;                 // move to next stage
@@ -233,16 +233,16 @@ void Save_SOME_RF_Parameters()
         strcat(msg, NB);
         SendText(t2, msg);
         Rates_Advanced_Send_Duration = WAIT_TIME_BETWEEN_READING_PARAMETERS; // how many milliseconds to await RATES Advanced values
-        Reading_RATES_Advanced_Now = true;                           // This tells the Ack payload parser to get RATES Advanced values
-        AddParameterstoQueue(SEND_RATES_ADVANCED_VALUES);            // Request RATES Advanced values from RX
-        RATES_Advanced_Start_Time = millis();                        // record start time as it's not long
-        Parameter_Progress_Index = 10;                               // move to next stage
-        break;                                                       //--
-    case 10:                                                         // wait until Advanced RATES have been read
-        if (!Reading_RATES_Advanced_Now)                             // wait until Advanced RATES have been read
-            Parameter_Progress_Index = 11;                           // move to next stage when Advanced RATES have been read
-        break;                                                       //--
-    case 11:                                                         // save Advanced RATES for this bank
+        Reading_RATES_Advanced_Now = true;                                   // This tells the Ack payload parser to get RATES Advanced values
+        AddParameterstoQueue(SEND_RATES_ADVANCED_VALUES);                    // Request RATES Advanced values from RX
+        RATES_Advanced_Start_Time = millis();                                // record start time as it's not long
+        Parameter_Progress_Index = 10;                                       // move to next stage
+        break;                                                               //--
+    case 10:                                                                 // wait until Advanced RATES have been read
+        if (!Reading_RATES_Advanced_Now)                                     // wait until Advanced RATES have been read
+            Parameter_Progress_Index = 11;                                   // move to next stage when Advanced RATES have been read
+        break;                                                               //--
+    case 11:                                                                 // save Advanced RATES for this bank
         for (int i = 0; i < MAX_RATES_ADVANCED_BYTES; ++i)
             Saved_Rate_Advanced_Values[i][Bank - 1] = Rate_Advanced_Values[i];
         ProgressSoFar += OneProgressItem;             // update progress bar
@@ -260,7 +260,7 @@ void Save_SOME_RF_Parameters()
             LTimer = millis();
         }
         break;
-    case 12:                                          // move to next bank afer delay
+    case 12: // move to next bank afer delay
         LTimer = millis();
         Parameter_Progress_Index = 15;
         break;
