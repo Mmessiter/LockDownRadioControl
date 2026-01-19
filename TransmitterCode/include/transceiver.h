@@ -949,6 +949,11 @@ void ShowAmpsBeingUsed(float amps)
     SendCommand(VisON);
     SendText((char *)"StillConnected", AmpsBeingUsed);
 }
+// #define PIDVIEW 45
+// #define RATESVIEW1 46
+// #define ROTORFLIGHTVIEW 47
+// #define RATESADVANCEDVIEW 48
+// #define PIDADVANCEDVIEW 49
 // ******************************************************************************************
 void ReadRatesBytesFromAckPayload(uint8_t n, uint8_t m)
 {
@@ -961,7 +966,8 @@ void ReadRatesBytesFromAckPayload(uint8_t n, uint8_t m)
             ++p;
         }
     }
-    DisplayRatesValues(n, m);
+    if (CurrentView == RATESVIEW1)
+        DisplayRatesValues(n, m);
 }
 // ******************************************************************************************
 void ReadRates_Advanced_FromAckPayload(uint8_t n, uint8_t m)
@@ -975,7 +981,8 @@ void ReadRates_Advanced_FromAckPayload(uint8_t n, uint8_t m)
             ++p;
         }
     }
-    Display_Advanced_Rates_Values(n, m);
+    if (CurrentView == RATESADVANCEDVIEW)
+        Display_Advanced_Rates_Values(n, m);
 }
 // ******************************************************************************************
 void ReadPIDs_Advanced_FromAckPayload(uint8_t n, uint8_t m)
@@ -989,6 +996,7 @@ void ReadPIDs_Advanced_FromAckPayload(uint8_t n, uint8_t m)
             ++p;
         }
     }
+    if (CurrentView == PIDADVANCEDVIEW)
     Display_PID_Advanced_Values(n, m);    
 }
 // ******************************************************************************************

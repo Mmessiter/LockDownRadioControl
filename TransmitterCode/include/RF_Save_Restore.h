@@ -124,15 +124,16 @@ void Save_SOME_RF_Parameters()
             if (AnnounceBanks)
                 SoundBank();
         }
-        break; //--
+        break; 
 
     case 200:
         Look("");
         Look1("Save_SOME_RF_Parameters completed. ");
         CurrentMode = NORMAL;
+        SaveOneModel(ModelNumber); // save to SD card
+        PlaySound(BEEPCOMPLETE);
 
     default:
-
         break;
     }
 }
@@ -145,14 +146,14 @@ void Restore_SOME_RF_Parameters()
 // ************************************************************************************************************/
 void SaveRFParameters()
 {
-    // if (GetConfirmation((char *)"page RFView", (char *)"Save ALL these values?"))
-    // {
-    Saving_Parameters_Index = 0;
-    Bank = 1;
-    if (AnnounceBanks)
-        SoundBank();
-    CurrentMode = SAVE_RF_SETTINGS;
-    // }
+    if (GetConfirmation((char *)"page RFView", (char *)"Save ALL these values?"))
+    {
+        Saving_Parameters_Index = 0;
+        Bank = 1;
+        if (AnnounceBanks)
+            SoundBank();
+        CurrentMode = SAVE_RF_SETTINGS;
+     }
 }
 // ************************************************************************************************************/
 void RestoreRFParameters()
