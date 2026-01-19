@@ -430,10 +430,7 @@ bool ReadOneModel(uint32_t Mnum)
         ++SDCardAddress;
     }
 
-    // uint16_t Saved_PID_Values[MAX_PID_WORDS];
-    // uint8_t Saved_Rate_Values[MAX_RATES_BYTES];
-    // uint8_t Saved_Rate_Advanced_Values[MAX_RATES_ADVANCED_BYTES];
-    // uint8_t Saved_PID_Advanced_Values[MAX_PIDS_ADVANCED_BYTES];
+    
     for (j = 0; j < 4; ++j)
     {
         for (i = 0; i < MAX_PID_WORDS; ++i)
@@ -1358,10 +1355,7 @@ void SaveOneModel(uint32_t mnum)
         ++SDCardAddress;
         ++SDCardAddress;
     }
-    // #define MAX_PID_WORDS 12
-    // #define MAX_RATES_BYTES 13
-    // #define MAX_RATES_ADVANCED_BYTES 15
-    // #define MAX_PIDS_ADVANCED_BYTES 26
+   
     for (j = 0; j < 4; ++j)
     {
         for (i = 0; i < MAX_PID_WORDS; ++i)

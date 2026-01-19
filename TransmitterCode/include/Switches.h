@@ -132,7 +132,7 @@ void ReadBuddySwitch()
 /************************************************************************************************************/
 void ReadBankSwitch()
 {
-    if (CurrentMode == SAVE_RF_SETTINGS)
+    if ((CurrentMode == SAVE_RF_SETTINGS) || (CurrentMode == RESTORE_RF_SETTINGS))
         return;
     Bank = GetSwitchPosition(BankSwitch);
     if (!Bank)

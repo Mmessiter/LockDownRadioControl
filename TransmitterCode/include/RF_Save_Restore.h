@@ -97,13 +97,20 @@ void Restore_SOME_RF_Parameters()
         if (Bank > 4)
         {
             Parameter_Progress_Index = 200; // all done
+            Bank = PreviousBank;
             break;
         }
         else
         {
-            Parameter_Progress_Index = 0; // move to next bank
+            Parameter_Progress_Index = 9; // move to next bank
+            LTimer = millis();
         }
         break;
+    case 9:
+        if ((millis() - LTimer) >= 1000)
+            Parameter_Progress_Index = 0; // start restoring next bank
+        break;
+
     case 200:
         SendText(t2, (char *)"Success!");
         SendValue((char *)"Progress", 100); // update progress bar
@@ -122,8 +129,15 @@ void Restore_SOME_RF_Parameters()
 // ************************************************************************************************************/
 void RestoreRFParameters()
 {
+    if (LedWasGreen == false)
+    {
+        MsgBox((char *)"page RFView", (char *)"Please connect first!");
+        return;
+    }
+
     if (GetConfirmation((char *)"page RFView", (char *)"Restore ALL these values?"))
     {
+        PreviousBank = Bank;                   // save current bank
         ReadOneModel(ModelNumber);             // reload model to get saved values
         SendCommand((char *)"vis Progress,1"); // show progress bar
         SendCommand((char *)"vis t2,1");       // show please wait text
@@ -131,6 +145,7 @@ void RestoreRFParameters()
         Parameter_Progress_Index = 0;
         SendValue((char *)"Progress", ProgressSoFar);
         Bank = 1;
+        DelayWithDog(200);
         CurrentMode = RESTORE_RF_SETTINGS;
     }
 }
@@ -142,6 +157,7 @@ void Save_SOME_RF_Parameters()
     char t2[20] = "t2";
     char NB[10];
     Str(NB, Bank, 0);
+    static uint32_t LTimer = 0;
     switch (Parameter_Progress_Index)
     {
     case 0:
@@ -238,12 +254,18 @@ void Save_SOME_RF_Parameters()
         if (Bank > 4)
         {
             Parameter_Progress_Index = 200; // all done
+            Bank = PreviousBank;
             break;
         }
         else
         {
-            Parameter_Progress_Index = 0; // move to next bank
+            Parameter_Progress_Index = 12; // move to next bank
+            LTimer = millis();
         }
+        break;
+    case 12:
+        if ((millis() - LTimer) >= 1000)
+            Parameter_Progress_Index = 0; // start saving next bank
         break;
 
     case 200:
@@ -271,11 +293,13 @@ void SaveRFParameters()
     if (GetConfirmation((char *)"page RFView", (char *)"Save ALL these values?"))
     {
         Parameter_Progress_Index = 0;
+        PreviousBank = Bank;                   // save current bank
         SendCommand((char *)"vis Progress,1"); // show progress bar
         SendCommand((char *)"vis t2,1");       // show please wait text
         ProgressSoFar = 1;
         SendValue((char *)"Progress", ProgressSoFar);
         Bank = 1;
+        DelayWithDog(200);
         CurrentMode = SAVE_RF_SETTINGS;
     }
 }
