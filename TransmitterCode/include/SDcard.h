@@ -409,7 +409,6 @@ bool ReadOneModel(uint32_t Mnum)
         TimerStartTime = 5 * 60;
     ++SDCardAddress;
     ++SDCardAddress;
-    //  StabilisedBank = SDRead8BITS(SDCardAddress);
     ++SDCardAddress; // spare
                      //  LevelledBank = SDRead8BITS(SDCardAddress);
     ++SDCardAddress; // spare
@@ -434,7 +433,6 @@ bool ReadOneModel(uint32_t Mnum)
     for (j = 0; j < 4; ++j)
     {
         for (i = 0; i < MAX_PID_WORDS; ++i)
-
         {
             Saved_PID_Values[i][j] = SDRead16BITS(SDCardAddress);
             ++SDCardAddress;

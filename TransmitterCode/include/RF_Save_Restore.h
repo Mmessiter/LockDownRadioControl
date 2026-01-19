@@ -176,9 +176,7 @@ void Save_SOME_RF_Parameters()
         break;                                            //--
     case 2:                                               // save PIDs for this bank
         for (int i = 0; i < MAX_PID_WORDS; ++i)
-        {
             Saved_PID_Values[i][Bank - 1] = PID_Values[i];
-        }
         Parameter_Progress_Index = 3;                 // move to next stage
         ProgressSoFar += OneProgressItem;             // update progress bar
         SendValue((char *)"Progress", ProgressSoFar); // update progress bar
@@ -199,9 +197,7 @@ void Save_SOME_RF_Parameters()
         break;                                                     //--
     case 5:                                                        // save Advanced PIDs for this bank
         for (int i = 0; i < MAX_PIDS_ADVANCED_BYTES; ++i)
-        {
             Saved_PID_Advanced_Values[i][Bank - 1] = PID_Advanced_Values[i];
-        }
         Parameter_Progress_Index = 6;                 // move to next stage
         ProgressSoFar += OneProgressItem;             // update progress bar
         SendValue((char *)"Progress", ProgressSoFar); // update progress bar
@@ -222,9 +218,7 @@ void Save_SOME_RF_Parameters()
         break;                                              //--
     case 8:                                                 // save RATES for this bank
         for (int i = 0; i < MAX_RATES_BYTES; ++i)
-        {
             Saved_Rate_Values[i][Bank - 1] = Rate_Values[i];
-        }
         Parameter_Progress_Index = 9;                 // move to next stage
         ProgressSoFar += OneProgressItem;             // update progress bar
         SendValue((char *)"Progress", ProgressSoFar); // update progress bar
@@ -245,9 +239,7 @@ void Save_SOME_RF_Parameters()
         break;                                                       //--
     case 11:                                                         // save Advanced RATES for this bank
         for (int i = 0; i < MAX_RATES_ADVANCED_BYTES; ++i)
-        {
             Saved_Rate_Advanced_Values[i][Bank - 1] = Rate_Advanced_Values[i];
-        }
         ProgressSoFar += OneProgressItem;             // update progress bar
         SendValue((char *)"Progress", ProgressSoFar); // update progress bar
         ++Bank;
@@ -293,13 +285,12 @@ void SaveRFParameters()
     if (GetConfirmation((char *)"page RFView", (char *)"Save ALL these values?"))
     {
         Parameter_Progress_Index = 0;
-        PreviousBank = Bank;                   // save current bank
         SendCommand((char *)"vis Progress,1"); // show progress bar
         SendCommand((char *)"vis t2,1");       // show please wait text
         ProgressSoFar = 1;
         SendValue((char *)"Progress", ProgressSoFar);
+        PreviousBank = Bank; // save current bank
         Bank = 1;
-        DelayWithDog(200);
         CurrentMode = SAVE_RF_SETTINGS;
     }
 }
