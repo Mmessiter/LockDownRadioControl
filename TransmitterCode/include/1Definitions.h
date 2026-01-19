@@ -1,9 +1,9 @@
-
 // ***************************************** 1Definitions.h ***************************************
 // NOTE: This header contains *definitions* of globals (storage), not just declarations.          *
-// Project must remain single translation unit (only main.cpp compiled).                          *
+// Project must remain only main.cpp compiled plus many .h include files.                         *
 // If additional .cpp files are added they must NOT include this header, only extern declarations *
 // ************************************************************************************************
+// Malcolm Messiter 2020 - 2026
 
 #ifndef Definitions_H
 #define Definitions_H
@@ -1372,9 +1372,10 @@ bool Rates_Advanced_Were_Edited = false;
 float GearRatio = 10.3;
 uint8_t ArmingChannel = 5;
 
-#define MAX_RATES_BYTES 13
-#define MAX_RATES_ADVANCED_BYTES 15
-#define MAX_PIDS_ADVANCED_BYTES 26
+#define MAX_PID_WORDS 12            // 24 bytes
+#define MAX_RATES_BYTES 13          // 13 bytes
+#define MAX_RATES_ADVANCED_BYTES 15 // 15 bytes
+#define MAX_PIDS_ADVANCED_BYTES 26  // 26 bytes (Total = 78 bytes)
 
 char RatesWindows[MAX_RATES_BYTES][5] = {"t10", "tn0", "tn1", "tn2", "tn3", "tn4", "tn5", "tn6", "tn7", "tn8", "tn9", "tn10", "tn11"};
 
@@ -1425,7 +1426,17 @@ bool MasterIsInControl = true;
 bool NeedToRecover = false;
 uint8_t ChannelSentLastTime = 0; // The old channel number
 uint8_t Index = 82;
-uint16_t PID_Values[12];
+
+uint16_t PID_Values[MAX_PID_WORDS];
+uint8_t Rate_Values[MAX_RATES_BYTES];
+uint8_t Rate_Advanced_Values[MAX_RATES_ADVANCED_BYTES];
+uint8_t PID_Advanced_Values[MAX_PIDS_ADVANCED_BYTES];
+
+uint16_t Saved_PID_Values[MAX_PID_WORDS];
+uint8_t Saved_Rate_Values[MAX_RATES_BYTES];
+uint8_t Saved_Rate_Advanced_Values[MAX_RATES_ADVANCED_BYTES];
+uint8_t Saved_PID_Advanced_Values[MAX_PIDS_ADVANCED_BYTES];
+
 uint16_t PID_Send_Duration = 0;
 uint16_t PID_Advanced_Send_Duration = 0;
 uint16_t RATES_Send_Duration = 0;
@@ -1439,9 +1450,7 @@ bool Reading_PIDS_Now = false;
 bool Reading_PIDS_Advanced_Now = false;
 bool Reading_RATES_Now = false;
 bool Reading_RATES_Advanced_Now = false;
-uint8_t Rate_Values[MAX_RATES_BYTES];
-uint8_t Rate_Advanced_Values[MAX_RATES_ADVANCED_BYTES];
-uint8_t PID_Advanced_Values[MAX_PIDS_ADVANCED_BYTES];
+
 char Rate_Types[6][15] = {"None", "Betaflight", "Raceflight", "KISS", "Actual", "QuickRates"};
 const float FactorTableRF[13] = {1, 10, 10, .01, 10, 10, .01, 10, 10, .01, .25, .25, .01}; // Factors for each RATES byte needed by Rotorflight
 bool Rotorflight22Detected = false;

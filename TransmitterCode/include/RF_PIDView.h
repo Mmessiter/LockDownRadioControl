@@ -8,7 +8,7 @@
 #define PIDVIEW_H
 #include <Arduino.h>
 #include "1Definitions.h"
-#define MAX_PID_BYTES 12
+
 // ********************************************************************************************************
 void SendBackgroundColour(const char *label, uint16_t colour)
 {
@@ -26,7 +26,7 @@ void SendForegroundColour(const char *label, uint16_t colour)
 // ********************************************************************************************************
 void BackgroundColourPIDLabels(uint16_t Colour)
 {
-    for (int i = 0; i < MAX_PID_BYTES; ++i)
+    for (int i = 0; i < MAX_PID_WORDS; ++i)
     {
         SendBackgroundColour(PID_Labels[i], Colour);
     }
@@ -34,16 +34,16 @@ void BackgroundColourPIDLabels(uint16_t Colour)
 // ********************************************************************************************************
 void ForegroundColourPIDLabels(uint16_t Colour)
 {
-    for (int i = 0; i < MAX_PID_BYTES; ++i)
+    for (int i = 0; i < MAX_PID_WORDS; ++i)
     {
         SendForegroundColour(PID_Labels[i], Colour);
     }
 }
 // ********************************************************************************************************
-uint8_t CheckPIDsForBonkersValues() // returns 0 if none of the new values is > 20% different from the original value 
+uint8_t CheckPIDsForBonkersValues() // returns 0 if none of the new values is > 20% different from the original value
                                     // otherwise index+1 of first PID that is  > 20% different
 {
-    for (int i = 0; i < MAX_PID_BYTES; ++i)
+    for (int i = 0; i < MAX_PID_WORDS; ++i)
     {
         float temp = (float)GetValue(PID_Labels[i]);
 
@@ -55,7 +55,7 @@ uint8_t CheckPIDsForBonkersValues() // returns 0 if none of the new values is > 
 // ********************************************************************************************************
 void ReadEditedPIDs()
 {
-    for (int i = 0; i < MAX_PID_BYTES; ++i)
+    for (int i = 0; i < MAX_PID_WORDS; ++i)
     {
         PID_Values[i] = GetValue(PID_Labels[i]);
     }
@@ -65,7 +65,7 @@ void ReadEditedPIDs()
 void Display2PIDValues(uint8_t i) // Displays two PID values as soon as they arrive in Ack payload
 {                                 // (They arrive in pairs because Ack payload has four usable bytes)
 
-    if (CurrentView == PIDVIEW && i + 1 < MAX_PID_BYTES) // Must be in PID view and a valid index
+    if (CurrentView == PIDVIEW && i + 1 < MAX_PID_WORDS) // Must be in PID view and a valid index
     {
         SendValue(PID_Labels[i], PID_Values[i]);
         SendValue(PID_Labels[i + 1], PID_Values[i + 1]);

@@ -1,9 +1,9 @@
-/** @file ReceiverCode/src/utilities/1Definitions.h */
-// Malcolm Messiter 2020 - 2026 
-
-// NOTE: This header contains *definitions* of globals (storage), not just declarations.
-// Project must remain single translation unit (only main.cpp compiled).
-// If additional .cpp files are added they must not include this header, only extern declarations.
+// ***************************************** 1Definitions.h ***************************************
+// NOTE: This header contains *definitions* of globals (storage), not just declarations.          *
+// Project must remain only main.cpp compiled plus many .h include files.                         *
+// If additional .cpp files are added they must NOT include this header, only extern declarations *
+// ************************************************************************************************
+// Malcolm Messiter 2020 - 2026
 
 #ifndef _SRC_UTILITIES_1DEFINITIONS_H
 #define _SRC_UTILITIES_1DEFINITIONS_H
