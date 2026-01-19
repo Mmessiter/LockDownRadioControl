@@ -132,9 +132,8 @@ void ReadBuddySwitch()
 /************************************************************************************************************/
 void ReadBankSwitch()
 {
-    if (ForcingBank)
+    if (CurrentMode == SAVE_RF_SETTINGS)
         return;
-
     Bank = GetSwitchPosition(BankSwitch);
     if (!Bank)
         Bank = 1; // If no bank switch was defined, use Bank 1 by default

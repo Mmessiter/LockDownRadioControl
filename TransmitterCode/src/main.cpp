@@ -5148,6 +5148,14 @@ FASTRUN void loop()
     case LISTENMODE: // 6  ... listen only ... for wireless buddy
         DoWirelessBuddyListen();
         break;
+    case SAVE_RF_SETTINGS: // 7
+        Save_SOME_RF_Parameters();
+        SendData(); // local TX
+        break;
+    case RESTORE_RF_SETTINGS: // 8
+        Restore_SOME_RF_Parameters();
+        SendData(); // local TX
+        break;
     default:
         break;
     }

@@ -118,13 +118,15 @@
 //                            CURRENTMODE VALUES                            *
 //***************************************************************************
 
-#define NORMAL 0          // Normal = transmit as usual                 (SEND DATA!)
-#define CALIBRATELIMITS 1 // Calibrate limits                           (SEND NO DATA)
-#define CENTRESTICKS 2    // Calibrate Centres                          (SEND NO DATA)
-#define SCANWAVEBAND 3    // Scan waveband                              (SEND NO DATA)
-#define SENDNOTHING 4     // Transmission off                           (SEND NO DATA)
-#define PONGMODE 5        // Play Pong                                  (SEND NO DATA)
-#define LISTENMODE 6      // Listen only - for wireless buddy boxing    (SEND NO DATA)
+#define NORMAL 0              // Normal = transmit as usual                 (SEND DATA!)
+#define CALIBRATELIMITS 1     // Calibrate limits                           (SEND NO DATA)
+#define CENTRESTICKS 2        // Calibrate Centres                          (SEND NO DATA)
+#define SCANWAVEBAND 3        // Scan waveband                              (SEND NO DATA)
+#define SENDNOTHING 4         // Transmission off                           (SEND NO DATA)
+#define PONGMODE 5            // Play Pong                                  (SEND NO DATA)
+#define LISTENMODE 6          // Listen only - for wireless buddy boxing    (SEND NO DATA)
+#define SAVE_RF_SETTINGS 7    // Save RF settings from RX                   (SEND DATA!)
+#define RESTORE_RF_SETTINGS 8 // Restore RF settings to RX                  (SEND DATA!)
 
 // **************************************************************************
 //                               Colours                                    *
@@ -793,6 +795,9 @@ void EndPIDsAdvancedView();
 void PIDMsg(const char *msg, uint16_t Colour);
 void SaveRFParameters();
 void RestoreRFParameters();
+void Save_SOME_RF_Parameters();
+void Restore_SOME_RF_Parameters();
+void SoundBank();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
@@ -923,7 +928,6 @@ uint16_t ChanneltoSet = 0;
 bool Connected = false;
 uint16_t BuddyControlled = 0; // Flags
 bool BuddyHasAllSwitches = true;
-bool ForcingBank = false;
 double PointsCount = 5; // This for displaying curves only
 double xPoints[5];
 double yPoints[5];
@@ -1432,10 +1436,10 @@ uint8_t Rate_Values[MAX_RATES_BYTES];
 uint8_t Rate_Advanced_Values[MAX_RATES_ADVANCED_BYTES];
 uint8_t PID_Advanced_Values[MAX_PIDS_ADVANCED_BYTES];
 
-uint16_t Saved_PID_Values[MAX_PID_WORDS];
-uint8_t Saved_Rate_Values[MAX_RATES_BYTES];
-uint8_t Saved_Rate_Advanced_Values[MAX_RATES_ADVANCED_BYTES];
-uint8_t Saved_PID_Advanced_Values[MAX_PIDS_ADVANCED_BYTES];
+uint16_t Saved_PID_Values[MAX_PID_WORDS][4];
+uint8_t Saved_Rate_Values[MAX_RATES_BYTES][4];
+uint8_t Saved_Rate_Advanced_Values[MAX_RATES_ADVANCED_BYTES][4];
+uint8_t Saved_PID_Advanced_Values[MAX_PIDS_ADVANCED_BYTES][4];
 
 uint16_t PID_Send_Duration = 0;
 uint16_t PID_Advanced_Send_Duration = 0;

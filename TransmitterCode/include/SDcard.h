@@ -140,7 +140,6 @@ void CheckServoType()
     }
 }
 
-
 /************************************************************************************************************************************************/
 /**********************************  READ A MODEL ***********************************************************************************************/
 /************************************************************************************************************************************************/
@@ -287,12 +286,12 @@ bool ReadOneModel(uint32_t Mnum)
     BuddyHasAllSwitches = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     GearRatio = SDReadFLOAT(SDCardAddress);
-    ++SDCardAddress; 
+    ++SDCardAddress;
     ++SDCardAddress;
     ++SDCardAddress;
     ++SDCardAddress;
     ArmingChannel = SDRead8BITS(SDCardAddress); // heer
-    ++ SDCardAddress;
+    ++SDCardAddress;
 
     for (i = 0; i < CHANNELSUSED; ++i)
     {
@@ -410,9 +409,9 @@ bool ReadOneModel(uint32_t Mnum)
         TimerStartTime = 5 * 60;
     ++SDCardAddress;
     ++SDCardAddress;
-  //  StabilisedBank = SDRead8BITS(SDCardAddress);
+    //  StabilisedBank = SDRead8BITS(SDCardAddress);
     ++SDCardAddress; // spare
-  //  LevelledBank = SDRead8BITS(SDCardAddress);
+                     //  LevelledBank = SDRead8BITS(SDCardAddress);
     ++SDCardAddress; // spare
     ++SDCardAddress; // spare
 
@@ -431,31 +430,34 @@ bool ReadOneModel(uint32_t Mnum)
         ++SDCardAddress;
     }
 
-   // uint16_t Saved_PID_Values[MAX_PID_WORDS];
-   // uint8_t Saved_Rate_Values[MAX_RATES_BYTES];
-   // uint8_t Saved_Rate_Advanced_Values[MAX_RATES_ADVANCED_BYTES];
-   // uint8_t Saved_PID_Advanced_Values[MAX_PIDS_ADVANCED_BYTES];
+    // uint16_t Saved_PID_Values[MAX_PID_WORDS];
+    // uint8_t Saved_Rate_Values[MAX_RATES_BYTES];
+    // uint8_t Saved_Rate_Advanced_Values[MAX_RATES_ADVANCED_BYTES];
+    // uint8_t Saved_PID_Advanced_Values[MAX_PIDS_ADVANCED_BYTES];
+    for (j = 0; j < 4; ++j)
+    {
+        for (i = 0; i < MAX_PID_WORDS; ++i)
 
-   for (i = 0; i < MAX_PID_WORDS; ++i)
-    {
-        Saved_PID_Values[i] = SDRead16BITS(SDCardAddress);
-        ++SDCardAddress;
-        ++SDCardAddress;
-    }
-    for (i = 0; i < MAX_RATES_BYTES; ++i)
-    {
-        Saved_Rate_Values[i] = SDRead8BITS(SDCardAddress);
-        ++SDCardAddress;
-    }
-    for (i = 0; i < MAX_RATES_ADVANCED_BYTES; ++i)
-    {
-        Saved_Rate_Advanced_Values[i] = SDRead8BITS(SDCardAddress);
-        ++SDCardAddress;
-    }
-    for (i = 0; i < MAX_PIDS_ADVANCED_BYTES; ++i)
-    {
-        Saved_PID_Advanced_Values[i] = SDRead8BITS(SDCardAddress);
-        ++SDCardAddress;
+        {
+            Saved_PID_Values[i][j] = SDRead16BITS(SDCardAddress);
+            ++SDCardAddress;
+            ++SDCardAddress;
+        }
+        for (i = 0; i < MAX_RATES_BYTES; ++i)
+        {
+            Saved_Rate_Values[i][j] = SDRead8BITS(SDCardAddress);
+            ++SDCardAddress;
+        }
+        for (i = 0; i < MAX_RATES_ADVANCED_BYTES; ++i)
+        {
+            Saved_Rate_Advanced_Values[i][j] = SDRead8BITS(SDCardAddress);
+            ++SDCardAddress;
+        }
+        for (i = 0; i < MAX_PIDS_ADVANCED_BYTES; ++i)
+        {
+            Saved_PID_Advanced_Values[i][j] = SDRead8BITS(SDCardAddress);
+            ++SDCardAddress;
+        }
     }
 
     CheckOutPutChannels();
@@ -1337,10 +1339,10 @@ void SaveOneModel(uint32_t mnum)
     SDUpdate16BITS(SDCardAddress, TimerStartTime);
     ++SDCardAddress;
     ++SDCardAddress;
-  //  SDUpdate8BITS(SDCardAddress, StabilisedBank);
+    //  SDUpdate8BITS(SDCardAddress, StabilisedBank);
     ++SDCardAddress; // spare
-  //  SDUpdate8BITS(SDCardAddress, LevelledBank);
-    ++SDCardAddress; //spare
+                     //  SDUpdate8BITS(SDCardAddress, LevelledBank);
+    ++SDCardAddress; // spare
     ++SDCardAddress; // spare
     for (i = 0; i < 16; ++i)
     {
@@ -1356,34 +1358,35 @@ void SaveOneModel(uint32_t mnum)
         ++SDCardAddress;
         ++SDCardAddress;
     }
-
-// #define MAX_PID_WORDS 12
-// #define MAX_RATES_BYTES 13
-// #define MAX_RATES_ADVANCED_BYTES 15
-// #define MAX_PIDS_ADVANCED_BYTES 26
-
-    for (i = 0; i < MAX_PID_WORDS; ++i)
+    // #define MAX_PID_WORDS 12
+    // #define MAX_RATES_BYTES 13
+    // #define MAX_RATES_ADVANCED_BYTES 15
+    // #define MAX_PIDS_ADVANCED_BYTES 26
+    for (j = 0; j < 4; ++j)
     {
-        SDUpdate16BITS(SDCardAddress, Saved_PID_Values[i]);
-        ++SDCardAddress;
-        ++SDCardAddress;
+        for (i = 0; i < MAX_PID_WORDS; ++i)
+        {
+            SDUpdate16BITS(SDCardAddress, Saved_PID_Values[i][j]);
+            ++SDCardAddress;
+            ++SDCardAddress;
+        }
+        for (i = 0; i < MAX_RATES_BYTES; ++i)
+        {
+            SDUpdate8BITS(SDCardAddress, Saved_Rate_Values[i][j]);
+            ++SDCardAddress;
+        }
+        for (i = 0; i < MAX_RATES_ADVANCED_BYTES; ++i)
+        {
+            SDUpdate8BITS(SDCardAddress, Saved_Rate_Advanced_Values[i][j]);
+            ++SDCardAddress;
+        }
+        for (i = 0; i < MAX_PIDS_ADVANCED_BYTES; ++i) 
+        {
+            SDUpdate8BITS(SDCardAddress, Saved_PID_Advanced_Values[i][j]);
+            ++SDCardAddress;
+        }
     }
-    for (i = 0; i < MAX_RATES_BYTES; ++i)
-    {
-        SDUpdate8BITS(SDCardAddress, Saved_Rate_Values[i]);
-        ++SDCardAddress;
-    }
-    for (i = 0; i < MAX_RATES_ADVANCED_BYTES; ++i)
-    {
-        SDUpdate8BITS(SDCardAddress, Saved_Rate_Advanced_Values[i]);
-        ++SDCardAddress;
-    }
-    for (i = 0; i < MAX_PIDS_ADVANCED_BYTES; ++i)
-    {
-        SDUpdate8BITS(SDCardAddress, Saved_PID_Advanced_Values[i]);
-        ++SDCardAddress;
-    }   
-        SaveCheckSum32(); // Save the Model parametres checksm
+    SaveCheckSum32(); // Save the Model parametres checksm
 
     // ********************** Add more
 
