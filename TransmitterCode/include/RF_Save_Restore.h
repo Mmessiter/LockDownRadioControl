@@ -8,7 +8,6 @@
 #include "1Definitions.h"
 #define WAIT_TIME_BETWEEN_READING_PARAMETERS 1000 // milliseconds to wait between receiving parameter blocks
 #define WAIT_TIME_BETWEEN_WRITING_PARAMETERS 1000 // milliseconds to wait between sending parameter blocks
-#define BANK_CHANGE_DELAY 1000                    // milliseconds to wait after changing bank switch
 uint8_t Which_Case_Now = 0;                       // Which case we are up to in the state machine
 uint16_t ProgressSoFar = 0;                       // progress bar value
 uint16_t OneProgressItem = 100 / 4;               // total steps is 16 for progress bar
@@ -91,15 +90,11 @@ void Restore_SOME_RF_Parameters()
         Which_Case_Now = 200;
         LTimer = millis();
         break;
-   // case 7:
-   //     if ((millis() - LTimer) >= BANK_CHANGE_DELAY) // wait EXTRA TIME BEFORE NEXT BANK to allow RATES ADVANCED to be sent
-   //         Which_Case_Now = 200;
-   //     break;
+
     case 200:
         SendText(t2, (char *)"Success!");
         SendValue((char *)"Progress", 100); // update progress bar
         CurrentMode = NORMAL;               // no further calls will come here
-        SaveOneModel(ModelNumber);          // save all to SD card
         PlaySound(BEEPCOMPLETE);
         DelayWithDog(1000);
         SendCommand((char *)"vis Progress,0"); // hide progress bar
