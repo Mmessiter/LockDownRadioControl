@@ -11,7 +11,7 @@
 #define BANK_CHANGE_DELAY 1000                    // milliseconds to wait after changing bank switch
 uint8_t Which_Case_Now = 0;                       // Which case we are up to in the state machine
 uint16_t ProgressSoFar = 0;                       // progress bar value
-uint16_t OneProgressItem = 100 / 16;              // total steps is 16 for progress bar
+uint16_t OneProgressItem = 100 / 4;               // total steps is 16 for progress bar
 
 // ************************************************************************************************************/
 
@@ -83,52 +83,18 @@ void Restore_SOME_RF_Parameters()
         for (int i = 0; i < MAX_RATES_ADVANCED_BYTES; ++i)
         {
             Rate_Advanced_Values[i] = Saved_Rate_Advanced_Values[i][Bank - 1];
-            // Look1("Restoring Rate Adv Byte ");
-            // Look1(i);
-            // Look1(" for Bank ");
-            // Look1(Bank);
-            // Look1(" Value ");
-            // Look(Rate_Advanced_Values[i]);
         }
         AddParameterstoQueue(GET_RATES_ADVANCED_VALUES_SECOND_8); // Send RATES ADVANCED values from TX to RX
         AddParameterstoQueue(GET_RATES_ADVANCED_VALUES_FIRST_7);  // Send RATES ADVANCED values from TX to RX ...because this queue is a LIFO stack
-
-        // Look1("Queued RATES ADVANCED for Bank ");
-        // Look(Bank);
-
         ProgressSoFar += OneProgressItem;             // update progress bar
         SendValue((char *)"Progress", ProgressSoFar); // update progress bar
-        Which_Case_Now = 7;
+        Which_Case_Now = 200;
         LTimer = millis();
         break;
-    case 7:
-        if ((millis() - LTimer) >= BANK_CHANGE_DELAY) // wait EXTRA TIME BEFORE NEXT BANK to allow RATES ADVANCED to be sent
-            Which_Case_Now = 8;
-        break;
-    case 8:
-        ++Bank;
-        if (Bank > 4)
-        {
-            Which_Case_Now = 200; // all done
-            Bank = PreviousBank;
-            break;
-        }
-        else
-        {
-            AddParameterstoQueue(SEND_RATES_VALUES); // Request RATES values just to kick the FC bank ***** !!!!
-            Which_Case_Now = 10;                     // move to next bank then delay
-            LTimer = millis();
-        }
-        break;
-    case 9:                                      // main entry point!
-        AddParameterstoQueue(SEND_RATES_VALUES); // Request RATES values just to kick the FC bank ***** !!!!
-        Which_Case_Now = 10;                     // move to next bank then delay
-        LTimer = millis();
-        break;
-    case 10:
-        if ((millis() - LTimer) >= BANK_CHANGE_DELAY)
-            Which_Case_Now = 0; // start restoring next bank
-        break;
+   // case 7:
+   //     if ((millis() - LTimer) >= BANK_CHANGE_DELAY) // wait EXTRA TIME BEFORE NEXT BANK to allow RATES ADVANCED to be sent
+   //         Which_Case_Now = 200;
+   //     break;
     case 200:
         SendText(t2, (char *)"Success!");
         SendValue((char *)"Progress", 100); // update progress bar
@@ -143,7 +109,6 @@ void Restore_SOME_RF_Parameters()
         break;
     }
 }
-
 // ************************************************************************************************************/
 void RestoreRFParameters()
 {
@@ -152,22 +117,18 @@ void RestoreRFParameters()
         MsgBox((char *)"page RFView", (char *)"Please connect first!");
         return;
     }
-
     if (GetConfirmation((char *)"page RFView", (char *)"Restore ALL these values?"))
     {
-        PreviousBank = Bank;                   // save current bank
         ReadOneModel(ModelNumber);             // reload model to get saved values
         SendCommand((char *)"vis Progress,1"); // show progress bar
         SendCommand((char *)"vis t2,1");       // show please wait text
         ProgressSoFar = 1;
-        Which_Case_Now = 9; // start restoring first bank after delay
+        Which_Case_Now = 0; // start restoring first bank after delay
         SendValue((char *)"Progress", ProgressSoFar);
-        Bank = 1;
         DelayWithDog(200);
         CurrentMode = RESTORE_RF_SETTINGS;
     }
 }
-
 // ************************************************************************************************************/
 void Save_SOME_RF_Parameters()
 {
@@ -175,7 +136,6 @@ void Save_SOME_RF_Parameters()
     char t2[20] = "t2";
     char NB[10];
     Str(NB, Bank, 0);
-    static uint32_t LTimer = 0;
     switch (Which_Case_Now)
     {
     case 0:
@@ -259,38 +219,11 @@ void Save_SOME_RF_Parameters()
         for (int i = 0; i < MAX_RATES_ADVANCED_BYTES; ++i)
         {
             Saved_Rate_Advanced_Values[i][Bank - 1] = Rate_Advanced_Values[i];
-            // Look1("Saved Rate Adv Byte ");
-            // Look1(i);
-            // Look1(" for Bank ");
-            // Look1(Bank);
-            // Look1(" Value ");
-            // Look(Rate_Advanced_Values[i]);
         }
         ProgressSoFar += OneProgressItem;             // update progress bar
         SendValue((char *)"Progress", ProgressSoFar); // update progress bar
-        ++Bank;
-        if (Bank > 4)
-        {
-            Which_Case_Now = 200; // all done
-            Bank = PreviousBank;
-            break;
-        }
-        else
-        {
-            Which_Case_Now = 15; // move to next bank
-            LTimer = millis();
-        }
+        Which_Case_Now = 200; // move to next bank
         break;
-    case 12: // main entry point!
-        Which_Case_Now = 15;
-        LTimer = millis();
-        break;
-
-    case 15:
-        if ((millis() - LTimer) >= BANK_CHANGE_DELAY)
-            Which_Case_Now = 0; // start saving next bank
-        break;
-
     case 200:
         SendText(t2, (char *)"Success!");
         SendValue((char *)"Progress", 100); // update progress bar
@@ -315,17 +248,14 @@ void SaveRFParameters()
     }
     if (GetConfirmation((char *)"page RFView", (char *)"Save ALL these values?"))
     {
-        Which_Case_Now = 12;                   // start saving first bank after delay
+        Which_Case_Now = 0;                     // start saving first bank after delay
         SendCommand((char *)"vis Progress,1"); // show progress bar
         SendCommand((char *)"vis t2,1");       // show please wait text
         ProgressSoFar = 1;
         SendValue((char *)"Progress", ProgressSoFar);
-        PreviousBank = Bank; // save current bank
-        Bank = 1;
         CurrentMode = SAVE_RF_SETTINGS;
     }
 }
-
 // ************************************************************************************************************/
 
 #endif // RF_SAVE_RESTORE_H
