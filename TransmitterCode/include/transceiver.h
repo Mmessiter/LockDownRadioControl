@@ -953,6 +953,8 @@ void ShowAmpsBeingUsed(float amps)
 // ******************************************************************************************
 void ReadRatesBytesFromAckPayload(uint8_t n, uint8_t m)
 {
+    if (CurrentMode == RESTORE_RF_SETTINGS)
+        return;
     uint8_t p = 0;
     for (uint8_t i = n; i < m; ++i)
     {
@@ -968,6 +970,8 @@ void ReadRatesBytesFromAckPayload(uint8_t n, uint8_t m)
 // ******************************************************************************************
 void ReadRates_Advanced_FromAckPayload(uint8_t n, uint8_t m)
 {
+    if (CurrentMode == RESTORE_RF_SETTINGS)
+        return;
     uint8_t p = 0;
     for (uint8_t i = n; i < m; ++i)
     {
@@ -983,6 +987,8 @@ void ReadRates_Advanced_FromAckPayload(uint8_t n, uint8_t m)
 // ******************************************************************************************
 void ReadPIDs_Advanced_FromAckPayload(uint8_t n, uint8_t m)
 {
+    if (CurrentMode == RESTORE_RF_SETTINGS)
+        return;
     uint8_t p = 0;
     for (uint8_t i = n; i < m; ++i)
     {

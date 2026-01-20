@@ -6,12 +6,12 @@
 #define RF_SAVE_RESTORE_H
 #include <Arduino.h>
 #include "1Definitions.h"
-#define WAIT_TIME_BETWEEN_READING_PARAMETERS 800 // milliseconds to wait between receiving parameter blocks
-#define WAIT_TIME_BETWEEN_WRITING_PARAMETERS 800 // milliseconds to wait between sending parameter blocks
-#define BANK_CHANGE_DELAY 300                    // milliseconds to wait after changing bank switch
-uint8_t Which_Case_Now = 0;                      // Which case we are up to in the state machine
-uint16_t ProgressSoFar = 0;                      // progress bar value
-uint16_t OneProgressItem = 100 / 16;             // total steps is 16 for progress bar
+#define WAIT_TIME_BETWEEN_READING_PARAMETERS 1000 // milliseconds to wait between receiving parameter blocks
+#define WAIT_TIME_BETWEEN_WRITING_PARAMETERS 1000 // milliseconds to wait between sending parameter blocks
+#define BANK_CHANGE_DELAY 1000                    // milliseconds to wait after changing bank switch
+uint8_t Which_Case_Now = 0;                       // Which case we are up to in the state machine
+uint16_t ProgressSoFar = 0;                       // progress bar value
+uint16_t OneProgressItem = 100 / 16;              // total steps is 16 for progress bar
 
 // ************************************************************************************************************/
 
@@ -81,16 +81,28 @@ void Restore_SOME_RF_Parameters()
         strcat(msg, NB);
         SendText(t2, msg);
         for (int i = 0; i < MAX_RATES_ADVANCED_BYTES; ++i)
+        {
             Rate_Advanced_Values[i] = Saved_Rate_Advanced_Values[i][Bank - 1];
+            // Look1("Restoring Rate Adv Byte ");
+            // Look1(i);
+            // Look1(" for Bank ");
+            // Look1(Bank);
+            // Look1(" Value ");
+            // Look(Rate_Advanced_Values[i]);
+        }
         AddParameterstoQueue(GET_RATES_ADVANCED_VALUES_SECOND_8); // Send RATES ADVANCED values from TX to RX
         AddParameterstoQueue(GET_RATES_ADVANCED_VALUES_FIRST_7);  // Send RATES ADVANCED values from TX to RX ...because this queue is a LIFO stack
-        ProgressSoFar += OneProgressItem;                         // update progress bar
-        SendValue((char *)"Progress", ProgressSoFar);             // update progress bar
+
+        // Look1("Queued RATES ADVANCED for Bank ");
+        // Look(Bank);
+
+        ProgressSoFar += OneProgressItem;             // update progress bar
+        SendValue((char *)"Progress", ProgressSoFar); // update progress bar
         Which_Case_Now = 7;
         LTimer = millis();
         break;
     case 7:
-        if ((millis() - LTimer) >= WAIT_TIME_BETWEEN_WRITING_PARAMETERS) // wait to allow
+        if ((millis() - LTimer) >= BANK_CHANGE_DELAY) // wait EXTRA TIME BEFORE NEXT BANK to allow RATES ADVANCED to be sent
             Which_Case_Now = 8;
         break;
     case 8:
@@ -108,7 +120,7 @@ void Restore_SOME_RF_Parameters()
             LTimer = millis();
         }
         break;
-    case 9: // main entry point!
+    case 9:                                      // main entry point!
         AddParameterstoQueue(SEND_RATES_VALUES); // Request RATES values just to kick the FC bank ***** !!!!
         Which_Case_Now = 10;                     // move to next bank then delay
         LTimer = millis();
@@ -245,7 +257,15 @@ void Save_SOME_RF_Parameters()
         break;                                                               //--
     case 11:                                                                 // save Advanced RATES for this bank
         for (int i = 0; i < MAX_RATES_ADVANCED_BYTES; ++i)
+        {
             Saved_Rate_Advanced_Values[i][Bank - 1] = Rate_Advanced_Values[i];
+            // Look1("Saved Rate Adv Byte ");
+            // Look1(i);
+            // Look1(" for Bank ");
+            // Look1(Bank);
+            // Look1(" Value ");
+            // Look(Rate_Advanced_Values[i]);
+        }
         ProgressSoFar += OneProgressItem;             // update progress bar
         SendValue((char *)"Progress", ProgressSoFar); // update progress bar
         ++Bank;
@@ -263,6 +283,7 @@ void Save_SOME_RF_Parameters()
         break;
     case 12: // main entry point!
         Which_Case_Now = 15;
+        LTimer = millis();
         break;
 
     case 15:

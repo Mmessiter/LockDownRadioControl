@@ -204,7 +204,7 @@ void SaveRatesAdvanced()
         ShowRatesAdvancedBank(); // reload old RATES, undoing any edits
         return;
     }
-    DelayWithDog(200);                                           //  allow LOTS of time for screen to update BEFORE sending another Nextion command
+    DelayWithDog(200);                                          //  allow LOTS of time for screen to update BEFORE sending another Nextion command
     RatesAdvancedMsg((char *)"Sending edited values ...", Gray); // Show sending message
     ReadRatesAdvanced();
     AddParameterstoQueue(GET_RATES_ADVANCED_VALUES_SECOND_8); // Send RATES ADVANCED values from TX to RX

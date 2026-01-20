@@ -65,6 +65,8 @@ void ReadEditedPIDs()
 void Display2PIDValues(uint8_t i) // Displays two PID values as soon as they arrive in Ack payload
 {                                 // (They arrive in pairs because Ack payload has four usable bytes)
 
+    if (CurrentMode == RESTORE_RF_SETTINGS)
+        return;
     if (CurrentView == PIDVIEW && i + 1 < MAX_PID_WORDS) // Must be in PID view and a valid index
     {
         SendValue(PID_Labels[i], PID_Values[i]);
