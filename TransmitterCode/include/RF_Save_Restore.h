@@ -6,9 +6,9 @@
 #define RF_SAVE_RESTORE_H
 #include <Arduino.h>
 #include "1Definitions.h"
-#define WAIT_TIME_BETWEEN_READING_PARAMETERS 1000 // milliseconds to wait between receiving parameter blocks
-#define WAIT_TIME_BETWEEN_WRITING_PARAMETERS 1000 // milliseconds to wait between sending parameter blocks
-#define BANK_CHANGE_DELAY 1000                    // milliseconds to wait after changing bank switch
+#define WAIT_TIME_BETWEEN_READING_PARAMETERS 750 // milliseconds to wait between receiving parameter blocks
+#define WAIT_TIME_BETWEEN_WRITING_PARAMETERS 750 // milliseconds to wait between sending parameter blocks
+#define BANK_CHANGE_DELAY 250                     // milliseconds to wait after changing bank switch
 uint8_t Parameter_Progress_Index = 0;             // index of parameter being saved/restored
 uint16_t ProgressSoFar = 0;                       // progress bar value
 uint16_t OneProgressItem = 100 / 16;              // total steps is 16 for progress bar
@@ -103,16 +103,17 @@ void Restore_SOME_RF_Parameters()
         }
         else
         {
-            Parameter_Progress_Index = 10; // move to next bank after delay
+            AddParameterstoQueue(SEND_RATES_VALUES); // Request RATES values just to kick the FC bank
+            Parameter_Progress_Index = 10;           // move to next bank then delay
             LTimer = millis();
         }
         break;
     case 9:
-        Parameter_Progress_Index = 10; // move to next bank after delay
+        AddParameterstoQueue(SEND_RATES_VALUES); // Request RATES values just to kick the FC bank
+        Parameter_Progress_Index = 10;           // move to next bank then delay
         LTimer = millis();
         break;
     case 10:
-        AddParameterstoQueue(SEND_RATES_VALUES); // Request RATES values rather a lot just to kick the FC bank switch?!?!?!?!?!?!?!?!?
         if ((millis() - LTimer) >= BANK_CHANGE_DELAY)
             Parameter_Progress_Index = 0; // start restoring next bank
         break;
