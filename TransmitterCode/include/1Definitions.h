@@ -798,6 +798,7 @@ void RestoreRFParameters();
 void Save_SOME_RF_Parameters();
 void Restore_SOME_RF_Parameters();
 void SoundBank();
+void ShowRFBank();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *

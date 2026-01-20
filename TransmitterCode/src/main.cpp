@@ -4717,7 +4717,6 @@ void BankHasChanged()
         if (AnnounceBanks)
             SoundBank();
     }
-
     if (CurrentView == FRONTVIEW)
     {
         ShowBank();
@@ -4752,6 +4751,10 @@ void BankHasChanged()
     if (CurrentView == PIDADVANCEDVIEW)
     {
         ShowPIDAdvancedBank();
+    }
+    if (CurrentView == ROTORFLIGHTVIEW)
+    {
+        ShowRFBank();
     }
 }
 

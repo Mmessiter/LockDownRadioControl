@@ -104,26 +104,7 @@ void Restore_SOME_RF_Parameters()
         break;
     }
 }
-// ************************************************************************************************************/
-void RestoreRFParameters()
-{
-    if (LedWasGreen == false)
-    {
-        MsgBox((char *)"page RFView", (char *)"Please connect first!");
-        return;
-    }
-    if (GetConfirmation((char *)"page RFView", (char *)"Restore ALL these values?"))
-    {
-        ReadOneModel(ModelNumber);             // reload model to get saved values
-        SendCommand((char *)"vis Progress,1"); // show progress bar
-        SendCommand((char *)"vis t2,1");       // show please wait text
-        ProgressSoFar = 1;
-        Which_Case_Now = 0; // start restoring first bank after delay
-        SendValue((char *)"Progress", ProgressSoFar);
-        DelayWithDog(200);
-        CurrentMode = RESTORE_RF_SETTINGS;
-    }
-}
+
 // ************************************************************************************************************/
 void Save_SOME_RF_Parameters()
 {
@@ -233,15 +214,50 @@ void Save_SOME_RF_Parameters()
         break;
     }
 }
+
 // ************************************************************************************************************/
-void SaveRFParameters()
+void RestoreRFParameters()
 {
+    char msg[70];
+    char NB[10];
+    Str(NB, Bank, 0);
+    strcpy(msg, "Restore to Bank ");
+    strcat(msg, NB);
+    strcat(msg, "?");
     if (LedWasGreen == false)
     {
         MsgBox((char *)"page RFView", (char *)"Please connect first!");
         return;
     }
-    if (GetConfirmation((char *)"page RFView", (char *)"Save ALL these values?"))
+    if (GetConfirmation((char *)"page RFView", msg))
+    {
+        ReadOneModel(ModelNumber);             // reload model to get saved values
+        SendCommand((char *)"vis Progress,1"); // show progress bar
+        SendCommand((char *)"vis t2,1");       // show please wait text
+        ProgressSoFar = 1;
+        Which_Case_Now = 0; // start restoring first bank after delay
+        SendValue((char *)"Progress", ProgressSoFar);
+        DelayWithDog(200);
+        CurrentMode = RESTORE_RF_SETTINGS;
+    }
+}
+
+// ************************************************************************************************************/
+void SaveRFParameters()
+{
+    char msg[70];
+    char NB[10];
+    Str(NB, Bank, 0);
+    strcpy(msg, "Save from Bank ");
+    strcat(msg, NB);
+    strcat(msg, "?");
+
+    if (LedWasGreen == false)
+    {
+        MsgBox((char *)"page RFView", (char *)"Please connect first!");
+        return;
+    }
+    if (GetConfirmation((char *)"page RFView", msg))
     {
         Which_Case_Now = 0;                     // start saving first bank after delay
         SendCommand((char *)"vis Progress,1"); // show progress bar
