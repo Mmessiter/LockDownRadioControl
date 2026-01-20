@@ -108,7 +108,7 @@ void Restore_SOME_RF_Parameters()
             LTimer = millis();
         }
         break;
-    case 9:
+    case 9: // main entry point!
         AddParameterstoQueue(SEND_RATES_VALUES); // Request RATES values just to kick the FC bank ***** !!!!
         Which_Case_Now = 10;                     // move to next bank then delay
         LTimer = millis();
@@ -261,8 +261,7 @@ void Save_SOME_RF_Parameters()
             LTimer = millis();
         }
         break;
-    case 12: // move to next bank afer delay
-        LTimer = millis();
+    case 12: // main entry point!
         Which_Case_Now = 15;
         break;
 
