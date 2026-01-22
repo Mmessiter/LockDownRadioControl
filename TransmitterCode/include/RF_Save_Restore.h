@@ -37,7 +37,7 @@ uint8_t CountSelectedParams(uint8_t mask)
 //  ************************************************************************************************************/
 void Restore_SOME_RF_Parameters()
 {
-    char msg[70];
+    char msg[120];
     char t2[20] = "t2";
     char NB[10];
     char NB1[10];
@@ -167,7 +167,7 @@ void Restore_SOME_RF_Parameters()
 // ************************************************************************************************************/
 void Save_SOME_RF_Parameters()
 {
-    char msg[70];
+    char msg[120];
     char t2[20] = "t2";
     char NB[10];
     char NB1[10];
