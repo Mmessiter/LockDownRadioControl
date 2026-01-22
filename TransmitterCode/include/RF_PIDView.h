@@ -95,22 +95,33 @@ void HidePIDMsg()
         ForegroundColourPIDLabels(Black);  // make text black so it is visible again
     }
 }
+//***********************************************************************************************************/
+void ShowLocalBank()
+{
+    for (int i = 0; i < MAX_PID_WORDS; ++i)
+        if (CurrentView == PIDVIEW && i + 1 < MAX_PID_WORDS) // Must be in PID view and a valid index
+        {
+            SendValue(PID_Labels[i], Saved_PID_Values[i][Bank - 1]);
+        }
+    HidePIDMsg();
+}
 //************************************************************************************************************/
 void ShowPIDBank() // this is called when bank is changed so new bank's PID values are requested from Nexus and shown
 {
     if (CurrentView == PIDVIEW) // Must be in PID view
     {
         char buf[40];
-        if (LedWasGreen)
-        {
-            strcpy(buf, "Loading PIDs for  ");
-            strcat(buf, BankNames[BanksInUse[Bank - 1]]);
-            strcat(buf, " ...");
+        strcpy(buf, "Loading PIDs for  ");
+        strcat(buf, BankNames[BanksInUse[Bank - 1]]);
+        strcat(buf, " ...");
+
+        if (!LedWasGreen)
+        {                      // Model not connected so show local saved PIDs
+            PIDMsg(buf, Gray); // Show loading message and hides old PIDs
+            ShowLocalBank();
+            return;
         }
-        else
-        {
-            snprintf(buf, sizeof(buf), "Model is not connected!"); // Model not connected message
-        }
+
         if (PIDS_Were_Edited)
         {
             char NB[10];
@@ -137,11 +148,31 @@ void PIDs_Were_edited()
     SendCommand((char *)"vis b3,1"); // show "Send" button
     PIDS_Were_Edited = true;
 }
+//************************************************************************************************************/
+void SaveToLocalBank()
+{
+    PIDMsg((char *)"Saving edited PIDs ...", Gray); // Show sending message
+    ReadEditedPIDs(); // read the edited PIDs from the screen;
+    for (int i = 0; i < MAX_PID_WORDS; ++i)
+    {
+        Saved_PID_Values[i][Bank - 1] = PID_Values[i];
+    }
+    SaveOneModel(ModelNumber);       // save all to SD card
+    SendCommand((char *)"vis b3,0"); // hide "Send" button
+    HidePIDMsg();
+    PIDS_Were_Edited = false; // reset edited flag
+    PlaySound(BEEPCOMPLETE);         // let user know we're done
+}
 
 /***********************************************************************************************************/
 
 void SendEditedPIDs()
 {
+    if (!LedWasGreen) // Model not connected so save to local PIDs
+    {
+        SaveToLocalBank();
+        return;
+    }
     uint8_t bonkersIndex;
     PIDS_Were_Edited = false;
     PIDMsg((char *)"Checking magnitude of changes ...", Gray);
@@ -187,8 +218,8 @@ void StartPIDView() // this starts PID view
     }
     CurrentView = PIDVIEW;               // Set current view
     SendCommand((char *)"page PIDView"); // Go to PID view page
-    ShowPIDBank();                      // Show the current bank's PIDs
-    SendText((char *)"t11", ModelName); // Show model name
+    ShowPIDBank();                       // Show the current bank's PIDs
+    SendText((char *)"t11", ModelName);  // Show model name
     PIDS_Were_Edited = false;
 }
 //***********************************************************************************************************/

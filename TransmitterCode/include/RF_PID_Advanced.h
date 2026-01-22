@@ -86,22 +86,48 @@ void PIDsAdvancedWereEdited()
     SendCommand((char *)"vis b3,1"); // show "Send" button
     PIDS_Advanced_Were_Edited = true;
 }
+// ************************************************************************************************************/
+void ShowLocalPIDsAdvancedBank()
+{
+    char TextFloat[10];
+
+    for (uint8_t i = 0; i < MAX_PIDS_ADVANCED_BYTES; ++i)
+    {
+        if (i < MAX_PIDS_ADVANCED_BYTES)
+        {
+            if (i == 0) // piro compensation is boolean switch
+            {
+                SendValue(PID_Advanced_Labels[i], (bool)Saved_PID_Advanced_Values[i][Bank - 1]);
+                continue;
+            }
+            if ((i == 1) || (i == 25)) // these two are floats divided by 10
+                snprintf(TextFloat, sizeof(TextFloat), "%.1f", (float)Saved_PID_Advanced_Values[i][Bank - 1] / 10.0f);
+            else
+                snprintf(TextFloat, sizeof(TextFloat), "%u", (unsigned)Saved_PID_Advanced_Values[i][Bank - 1]);
+
+            SendText(PID_Advanced_Labels[i], TextFloat); // Send to screen
+        }
+    }
+    HidePID_Advanced_Msg();
+}
 //************************************************************************************************************/
 void ShowPIDAdvancedBank() // this is called when bank is changed so new bank's PID Advanced values are requested from Nexus and shown
 {
+    char buf[40];
+    strcpy(buf, "Loading Values for  ");
+    strcat(buf, BankNames[BanksInUse[Bank - 1]]);
+    strcat(buf, " ...");
+
     if (CurrentView == PIDADVANCEDVIEW) // Must be in PIDAdvanced view
     {
-        char buf[40];
-        if (LedWasGreen)
+        SendText((char *)"t26", BankNames[BanksInUse[Bank - 1]]); // Show bank number etc
+        if (!LedWasGreen)
         {
-            strcpy(buf, "Loading Values for  ");
-            strcat(buf, BankNames[BanksInUse[Bank - 1]]);
-            strcat(buf, " ...");
+            PIDAdvancedMsg(buf, Gray); // Show loading message and hides old PIDs
+            ShowLocalPIDsAdvancedBank();
+            return;
         }
-        else
-        {
-            snprintf(buf, sizeof(buf), "Model is not connected!"); // Model not connected message
-        }
+
         if (PIDS_Advanced_Were_Edited)
         {
             char NB[10];
@@ -114,13 +140,13 @@ void ShowPIDAdvancedBank() // this is called when bank is changed so new bank's 
             MsgBox((char *)"page PID_A_View", Wmsg); // Warn about unsaved edits
         }
 
-        PIDAdvancedMsg(buf, Gray);                                // Show loading message and hides old PIDs
-        PID_Advanced_Send_Duration = 1000;                        // how many milliseconds to await PID values
-        Reading_PIDS_Advanced_Now = true;                         // This tells the Ack payload parser to get PID values
-        AddParameterstoQueue(SEND_PID_ADVANCED_VALUES);           // Request PID values from RX
-        SendText((char *)"t26", BankNames[BanksInUse[Bank - 1]]); // Show bank number etc
-        PIDS_Advanced_Were_Edited = false;                        // reset edited flag
-        PID_Advanced_Start_Time = millis();                       // record start time as it's not long
+        PIDAdvancedMsg(buf, Gray);                      // Show loading message and hides old PIDs
+        PID_Advanced_Send_Duration = 1000;              // how many milliseconds to await PID values
+        Reading_PIDS_Advanced_Now = true;               // This tells the Ack payload parser to get PID values
+        AddParameterstoQueue(SEND_PID_ADVANCED_VALUES); // Request PID values from RX
+
+        PIDS_Advanced_Were_Edited = false;  // reset edited flag
+        PID_Advanced_Start_Time = millis(); // record start time as it's not long
     }
 }
 
@@ -152,10 +178,30 @@ uint8_t CheckPID_AdvancedForBonkersValues() // returns 0 if none of the new valu
     }
     return 0; // no bonkers values found
 }
-
+// ************************************************************************************************************/
+void SaveToLocalABank()
+{
+    PIDAdvancedMsg((char *)"Saving edited PID Advanced values ...", Gray); // Show sending message
+    ReadEditedPIDAdvancedValues();                                         // read the edited PID Advanced values from the screen;
+    for (int i = 0; i < MAX_PIDS_ADVANCED_BYTES; ++i)
+    {
+        Saved_PID_Advanced_Values[i][Bank - 1] = PID_Advanced_Values[i];
+    }
+    SendCommand((char *)"vis b3,0"); // hide "Send" button
+    SaveOneModel(ModelNumber);       // save all to SD card
+    HidePID_Advanced_Msg();
+    PIDS_Advanced_Were_Edited = false; // reset edited flag
+    PlaySound(BEEPCOMPLETE); // let user know we're done
+}
 // ************************************************************************************************************/
 void SendEditedPID_Advanced()
 {
+    if (!LedWasGreen)
+    { // Model not connected so save to local PIDs
+        SaveToLocalABank();
+        return;
+    }
+
     uint8_t bonkersIndex;
     PIDS_Advanced_Were_Edited = false;
     PIDAdvancedMsg((char *)"Checking magnitude of changes ...", Gray);
