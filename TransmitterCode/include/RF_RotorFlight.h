@@ -7,24 +7,16 @@
 #include <Arduino.h>
 #include "1Definitions.h"
 
-
+// **********************************************************************************************************/
 void ShowRFBank()
 {
     char NB[10];
     Str(NB, Bank, 0);
     char msg[70];
-    strcpy(msg, "Restore to Bank ");
-    strcat(msg, NB);
-    SendText((char *)"b3", msg);
-    strcpy(msg, "Save from Bank ");
-    strcat(msg, NB);
-    SendText((char *)"b2", msg);
     strcpy(msg, "Bank ");
     strcat(msg, NB);
     SendText((char *)"t14", msg);
 }
-
-
 // **********************************************************************************************************/
 void RotorFlightStart()
 {
@@ -32,7 +24,6 @@ void RotorFlightStart()
     char t7[] = "t7";
     char Vbuf[15];
    
-    
     SendCommand((char *)"page RFView");
     CurrentView = ROTORFLIGHTVIEW;
     SendText((char *)"t5", (char *)"2.2"); // Show version
@@ -43,7 +34,7 @@ void RotorFlightStart()
     SendText(t7, Vbuf);
     ShowRFBank();
 }
-// **********************************************************************************************************
+// **********************************************************************************************************/
 void RotorFlightEnd()
 {
     char temp[10];

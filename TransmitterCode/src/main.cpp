@@ -3306,7 +3306,7 @@ void CheckAllModelIds()
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!  ( Use "NUMBER<<8" )
-#define LASTFUNCTION1 38 // One more than final one
+#define LASTFUNCTION1 42 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])(){
     Blank,                   // 0 Cannot be used
@@ -3346,7 +3346,11 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     SendEditedPID_Advanced,  // 34
     EndPIDsAdvancedView,     // 35
     SaveRFParameters,        // 36
-    RestoreRFParameters      // 37
+    RestoreRFParameters,     // 37
+    Start_RESTORE,           // 38
+    Cancel_RESTORE,          // 39
+    Start_SAVE,              // 40
+    Cancel_SAVE              // 41
 
 };
 
@@ -4755,6 +4759,11 @@ void BankHasChanged()
     if (CurrentView == ROTORFLIGHTVIEW)
     {
         ShowRFBank();
+    }
+    if ((CurrentView == PICKBANKVIEW1) || (CurrentView == PICKBANKVIEW2))
+    {
+        SendValue((char *) "n0",Bank);
+        SendValue((char *)"n1", Bank);
     }
 }
 
