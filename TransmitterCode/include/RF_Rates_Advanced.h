@@ -65,10 +65,38 @@ void RatesAdvancedMsg(const char *msg, uint16_t Colour)
     }
 }
 // ************************************************************************************************************/
+void ShowLocalRatesAdvancedBank()
+{
+    for (uint8_t i = 0; i < MAX_RATES_ADVANCED_BYTES; ++i)
+    {
+        float ThisValue;
+        if (i == 14) // last one is divided by 10 and therefore must be text
+        {
+            ThisValue = (Saved_Rate_Advanced_Values[i][Bank - 1] / (float)10);
+            char temp[10];
+            snprintf(temp, sizeof(temp), "%.1f", ThisValue);
+            SendText(RatesAWindows[i], temp);
+            continue;
+        }
+        ThisValue = (float)Saved_Rate_Advanced_Values[i][Bank - 1];
+        SendValue(RatesAWindows[i], (uint8_t)ThisValue);
+    }
+    Hide_Advanced_Rates_Msg();
+    SendCommand((char *)"vis b3,0"); // hide "Send" button
+}
+
+// ************************************************************************************************************/
 void ShowRatesAdvancedBank()
 {
     if (CurrentView != RATESADVANCEDVIEW) // Must be in  RATESADVANCEDVIEW
         return;
+    SendText((char *)"t9", BankNames[BanksInUse[Bank - 1]]); // Show bank number etc
+    if (!(LedWasGreen))
+    {
+        ShowLocalRatesAdvancedBank();   
+        return;
+    }
+
     char buf[40];
     if (LedWasGreen)
     {
@@ -89,7 +117,7 @@ void ShowRatesAdvancedBank()
         strcat(Wmsg, w2);
         MsgBox((char *)"page Rates_A_View", Wmsg); // Warn about unsaved edits
     }
-    SendText((char *)"t9", BankNames[BanksInUse[Bank - 1]]); // Show bank number etc
+   
     RatesAdvancedMsg(buf, Gray);
     Rates_Advanced_Send_Duration = 1000;              // how many milliseconds to await RATES values
     Reading_RATES_Advanced_Now = true;                // This tells the Ack payload parser to
@@ -135,7 +163,6 @@ void EndRatesAdvancedView()
 // ************************************************************************************************************/
 void ReadRatesAdvanced()
 {
-
     for (uint8_t i = 0; i < MAX_RATES_ADVANCED_BYTES; ++i)
     {
         if (i == 14) // last one is divided by 10 and therefore must be text
@@ -177,12 +204,35 @@ uint8_t CheckRatesAdvancedForBonkersValues() // 0 = OK, else (i+1) of first bonk
     }
     return 0;
 }
+// ************************************************************************************************************/
+void SaveLocalRatesAdvancedBank(){
+    RatesAdvancedMsg((char *)"Saving edited Advanced Rates ...", Gray); // Show sending message
+    Rates_Advanced_Were_Edited = false;
+    ReadRatesAdvanced();
+    for (uint8_t i = 0; i < MAX_RATES_ADVANCED_BYTES; ++i)
+    {
+        Saved_Rate_Advanced_Values[i][Bank - 1] = Rate_Advanced_Values[i];
+    }
+    SaveOneModel(ModelNumber);               // save all to SD card
+    Hide_Advanced_Rates_Msg();               // ...because this queue is a LIFO stack
+    SendCommand((char *)"vis b3,0");         // hide "Send" button
+    PlaySound(BEEPCOMPLETE);                 // let user know we're done
+
+
+}
 
 // **********************************************************************************************************/
 void SaveRatesAdvanced()
 {
     uint8_t bonkersIndex;
     Rates_Advanced_Were_Edited = false;
+
+    if (!(LedWasGreen)) // Model not connected so save to local Advanced RATES
+    {
+        SaveLocalRatesAdvancedBank();
+        return;
+    }
+
     RatesAdvancedMsg((char *)"Checking magnitude of changes ...", Gray);
     bonkersIndex = CheckRatesAdvancedForBonkersValues();
     if (bonkersIndex)
@@ -199,6 +249,7 @@ void SaveRatesAdvanced()
         }
     }
     Hide_Advanced_Rates_Msg();
+
     if (!GetConfirmation((char *)"page Rates_A_View", (char *)"Send edited values to Nexus?"))
     {
         ShowRatesAdvancedBank(); // reload old RATES, undoing any edits

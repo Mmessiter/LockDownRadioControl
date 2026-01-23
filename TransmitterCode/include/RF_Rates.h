@@ -187,6 +187,8 @@ void ShowRatesLocalBank()
             SendText(RatesWindows[i], temp);
         }
     }
+    HideRATESMsg();                  // ...because this queue is a LIFO stack
+    SendCommand((char *)"vis b3,0"); // hide "Send" button
 }
 // ******************************************************************************************************************************/
 
