@@ -729,17 +729,15 @@ void EndBuddyView()
     char cb2[] = "cb2";
     char Prompt[] = "Are Master's switch positions OK?";
 
-
-
     BuddyPupilOnWireless = GetValue(BuddyP);
     BuddyMasterOnWireless = GetValue(BuddyM);
     WirelessBuddy = BuddyPupilOnWireless || BuddyMasterOnWireless;
     if (WirelessBuddy)
-        FHSS_data::PaceMaker = 5;           // only 200 HZ for Buddy
-        else
-        FHSS_data::PaceMaker = PACEMAKER;   // flat out speed without buddy
+        FHSS_data::PaceMaker = 5; // only 200 HZ for Buddy
+    else
+        FHSS_data::PaceMaker = PACEMAKER; // flat out speed without buddy
 
-    Buddy_Low_Position = GetValue(cb0);     // here we read what to do at each switch position
+    Buddy_Low_Position = GetValue(cb0); // here we read what to do at each switch position
     Buddy_Mid_Position = GetValue(cb1);
     Buddy_Hi_Position = GetValue(cb2);
 
@@ -1081,7 +1079,7 @@ void RXOptionsViewStart() // model Options screen
     char Mchannel[] = "n1";
     char Mvalue[] = "n0";
     char t10[] = "t10";
-   
+
     char Vbuf[15];
     char RxVCorrextion[] = "n2";
     char c1[] = "c1";
@@ -1091,10 +1089,6 @@ void RXOptionsViewStart() // model Options screen
 
     SendCommand(pRXSetup1);
     CurrentView = RXSETUPVIEW1;
-    if (Rotorflight22Detected)
-        SendCommand((char *)"b1.pco=WHITE"); // show in WHITE if Rotorflight 2.2 detected
-    else
-        SendCommand((char *)"b1.pco=GRAY"); // show in 33840 (GRAY) if Rotorflight 2.2 not detected
     SendValue(c1, CopyTrimsToAll);
     SendValue(n3, TrimMultiplier);
     snprintf(Vbuf, 5, "%1.2f", StopFlyingVoltsPerCell);
@@ -1105,7 +1099,7 @@ void RXOptionsViewStart() // model Options screen
     SendValue(RxVCorrextion, RxVoltageCorrection);
     SendValue(c2, TimerDownwards);
     SendValue(n4, TimerStartTime / 60);
-   
+
     UpdateModelsNameEveryWhere();
 }
 
@@ -1123,7 +1117,6 @@ void RXOptionsViewEnd()
     char n3[] = "n3";
     char n4[] = "n4"; // TimerDownwards timer minutes
     char c2[] = "c2"; // TimerDownwards timer on off
-    
 
     char ProgressStart[] = "vis Progress,1";
     char Progress[] = "Progress";
@@ -1196,7 +1189,6 @@ void RXOptionsViewEnd()
         Altered = true;
         SendValue(Progress, 80);
     }
- 
 
     SendValue(Progress, 100);
     CurrentView = RXSETUPVIEW;

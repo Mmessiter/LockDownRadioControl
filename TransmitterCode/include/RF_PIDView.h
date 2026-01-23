@@ -114,7 +114,7 @@ void ShowPIDBank() // this is called when bank is changed so new bank's PID valu
         strcpy(buf, "Loading PIDs for  ");
         strcat(buf, BankNames[BanksInUse[Bank - 1]]);
         strcat(buf, " ...");
-
+        SendText((char *)"t9", BankNames[BanksInUse[Bank - 1]]); // Show bank number etc
         if (!LedWasGreen)
         {                      // Model not connected so show local saved PIDs
             PIDMsg(buf, Gray); // Show loading message and hides old PIDs
@@ -137,7 +137,7 @@ void ShowPIDBank() // this is called when bank is changed so new bank's PID valu
         PID_Send_Duration = 1000;                                // how many milliseconds to await PID values
         Reading_PIDS_Now = true;                                 // This tells the Ack payload parser to get PID values
         AddParameterstoQueue(SEND_PID_VALUES);                   // Request PID values from RX
-        SendText((char *)"t9", BankNames[BanksInUse[Bank - 1]]); // Show bank number etc
+       
         PIDS_Were_Edited = false;
         PID_Start_Time = millis(); // record start time as it's not long
     }

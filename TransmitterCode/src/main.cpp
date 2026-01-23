@@ -3327,7 +3327,7 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     LogTouched,              // 15   // this does nothing, yet ...
     RefreshDualRatesNew,     // 16
     StartGapsView,           // 17
-    StartPIDView,            // 18
+    StartPIDView,            // 18RXOptionsView
     SendEditedPIDs,          // 19
     PIDs_Were_edited,        // 20
     EndPIDView,              // 21

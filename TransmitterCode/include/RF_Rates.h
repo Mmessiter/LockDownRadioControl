@@ -32,11 +32,33 @@ uint8_t CheckRATESForBonkersValues() // 0 = OK, else (i+1) of first bonkers fiel
             return (uint8_t)(i);
     }
     return 0;
-}
+}// ************************************************************************************************************/
+void SaveRatesLocalBank(){
 
+    RatesMsg((char *)"Saving edited Rates ...", Gray); // Show sending message
+    Rates_Were_Edited = false;
+    ReadEditedRateValues();
+    Rate_Values[0] = 4; // set to "Actual" type
+    for (int i = 0; i < MAX_RATES_BYTES; ++i)
+    {
+        Saved_Rate_Values[i][Bank - 1] = Rate_Values[i];
+    }
+    SaveOneModel(ModelNumber);       // save all to SD card
+    HideRATESMsg();                  // ...because this queue is a LIFO stack
+    SendCommand((char *)"vis b3,0"); // hide "Send" button
+    PlaySound(BEEPCOMPLETE);         // let user know we're done
+}
 // ************************************************************************************************************/
 void SendEditedRates()
 {
+
+    if (!LedWasGreen) // Model not connected so save to local RATES
+    {
+        SaveRatesLocalBank();
+        return;
+    }
+    DelayWithDog(200);                                   // allow LOTS of time for screen to update BEFORE
+
     uint8_t bonkersIndex;
     Rates_Were_Edited = false;
     RatesMsg((char *)"Checking magnitude of changes ...", Gray);
@@ -135,12 +157,45 @@ void HideRATESMsg()
     }
 }
 // ******************************************************************************************************************************/
+void ShowRatesLocalBank()
+{
+    for (int i = 0; i < MAX_RATES_BYTES; ++i)
+    {
+        float ThisValue = (Saved_Rate_Values[i][Bank - 1] * FactorTableRF[i]); // MULTIPLY BY factor to get display value
+        char temp[10];
+        if (ThisValue == int(ThisValue))
+        {
+            if (i < 10)
+            {
+                snprintf(temp, sizeof(temp), "%.0f", ThisValue);
+            }
+            else
+            {
+                snprintf(temp, sizeof(temp), "%.1f", ThisValue);
+            }
+        }
+        else
+        {
+            snprintf(temp, sizeof(temp), "%.2f", ThisValue);
+        }
+        if (i == 0)
+        {
+            SendText(RatesWindows[0], Rate_Types[Saved_Rate_Values[0][Bank - 1]]); // Show rates type but it cannot be edited here
+        }
+        else
+        {
+            SendText(RatesWindows[i], temp);
+        }
+    }
+}
+// ******************************************************************************************************************************/
 
-void ShowRatesBank()
+    void ShowRatesBank()
 {
     if (CurrentView == RATESVIEW1) // Must be in RATES view
     {
         char buf[40];
+        SendText((char *)"t9", BankNames[BanksInUse[Bank - 1]]); // Show bank number etc
         if (LedWasGreen)
         {
             strcpy(buf, "Loading rates for ");
@@ -148,8 +203,10 @@ void ShowRatesBank()
         }
         else
         {
-            snprintf(buf, sizeof(buf), "Model is not connected!");
+          ShowRatesLocalBank(); // Model not connected so show local saved RATES
+            return;
         }
+       
         if (Rates_Were_Edited) // if RATES were edited but not sent and bank changed
         {
             char Wmsg[120];
@@ -164,7 +221,7 @@ void ShowRatesBank()
         RATES_Send_Duration = 1000;                              // how many milliseconds to await RATES values
         Reading_RATES_Now = true;                                // This tells the Ack payload parser to get RATES values
         AddParameterstoQueue(SEND_RATES_VALUES);                 // Request RATES values from RX
-        SendText((char *)"t9", BankNames[BanksInUse[Bank - 1]]); // Show bank number etc
+      
         RATES_Start_Time = millis();                             // record start time as it's not long
         Rates_Were_Edited = false;                               // reset edited flag
     }

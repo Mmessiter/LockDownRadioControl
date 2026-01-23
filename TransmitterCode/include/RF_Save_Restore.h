@@ -334,6 +334,11 @@ void Collect_data_from_dialog() // and close it
 // ************************************************************************************************************/
 void RestoreRFParameters() // show dialog to pick bank and params to save
 {
+    if (!(LedWasGreen))
+    {
+        MsgBox((char *)"page RFView", (char *)"Not connected!");
+        return;
+    }
     SendCommand((char *)"page PickBankView1"); // Save is View2
     CurrentView = PICKBANKVIEW1;
     SendValue((char *)"n0", Bank);
@@ -343,6 +348,10 @@ void RestoreRFParameters() // show dialog to pick bank and params to save
 // ************************************************************************************************************/
 void SaveRFParameters() // show dialog to pick bank and params to save
 {
+    if (!(LedWasGreen)){
+        MsgBox((char *)"page RFView", (char *)"Not connected!");
+        return;
+    }
     SendCommand((char *)"page PickBankView2"); // Restore is View1
     CurrentView = PICKBANKVIEW2;
     SendValue((char *)"n0", Bank);
@@ -352,6 +361,7 @@ void SaveRFParameters() // show dialog to pick bank and params to save
 // ************************************************************************************************************/
 void Start_RESTORE()
 {
+    
     Collect_data_from_dialog();            // get bank number and which params to save
     Which_Case_Now = 0;                    // start saving first bank
     SendCommand((char *)"vis Progress,1"); // show progress bar
