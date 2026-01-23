@@ -262,7 +262,6 @@ void RatesWereEdited()
     SendCommand((char *)"vis b3,1"); // show "Send" button
     Rates_Were_Edited = true;
 }
-
 #endif // RATESRF_H
 
 // ************************************************************************************************************/
