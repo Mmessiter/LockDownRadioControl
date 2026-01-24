@@ -176,34 +176,7 @@ void ReadRatesAdvanced()
         Rate_Advanced_Values[i] = (uint8_t)GetValue(RatesAWindows[i]);
     }
 }
-// ********************************************************************************************************
-uint8_t CheckRatesAdvancedForBonkersValues() // 0 = OK, else (i+1) of first bonkers field
-{
-    for (uint8_t i = 0; i < MAX_RATES_ADVANCED_BYTES; ++i)
-    {
-        const float orig = (float)Rate_Advanced_Values[i]; // original byte (0..255)
-        float edited;
-        if (i == 14)
-        {
-            char temp[20];
-            GetText(RatesAWindows[i], temp);
-            edited = (float)atof(temp) * 10.0f;
-        }
-        else
-        {
-            edited = (float)GetValue(RatesAWindows[i]); // <- key change
-        }
-        if (orig == 0.0f)
-        {
-            if (edited != 0.0f)
-                return (uint8_t)(i + 1);
-            continue;
-        }
-        if (edited < orig * 0.8f || edited > orig * 1.2f)
-            return (uint8_t)(i + 1);
-    }
-    return 0;
-}
+
 // ************************************************************************************************************/
 void SaveLocalRatesAdvancedBank(){
     RatesAdvancedMsg((char *)"Saving edited Advanced Rates ...", Gray); // Show sending message
@@ -224,38 +197,14 @@ void SaveLocalRatesAdvancedBank(){
 // **********************************************************************************************************/
 void SaveRatesAdvanced()
 {
-    uint8_t bonkersIndex;
     Rates_Advanced_Were_Edited = false;
-
     if (!(LedWasGreen)) // Model not connected so save to local Advanced RATES
     {
         SaveLocalRatesAdvancedBank();
         return;
     }
-
-    RatesAdvancedMsg((char *)"Checking magnitude of changes ...", Gray);
-    bonkersIndex = CheckRatesAdvancedForBonkersValues();
-    if (bonkersIndex)
-    {
-        char msg[120] = "Do you REALLY mean this?!\r\nItem ";
-        char NB[10];
-        strcat(msg, Str(NB, bonkersIndex, 0));
-        strcat(msg, " would change by > 20%");
-        if (!GetConfirmation((char *)"page Rates_A_View", msg))
-        {
-            ShowRatesAdvancedBank(); // reload old RATES, undoing any edits
-            Hide_Advanced_Rates_Msg();
-            return;
-        }
-    }
-    Hide_Advanced_Rates_Msg();
-
-    if (!GetConfirmation((char *)"page Rates_A_View", (char *)"Send edited values to Nexus?"))
-    {
-        ShowRatesAdvancedBank(); // reload old RATES, undoing any edits
-        return;
-    }
-    DelayWithDog(200);                                          //  allow LOTS of time for screen to update BEFORE sending another Nextion command
+    PlaySound(BEEPMIDDLE);
+    DelayWithDog(100);                                          //  allow LOTS of time for screen to update BEFORE sending another Nextion command
     RatesAdvancedMsg((char *)"Sending edited values ...", Gray); // Show sending message
     ReadRatesAdvanced();
     AddParameterstoQueue(GET_RATES_ADVANCED_VALUES_SECOND_8); // Send RATES ADVANCED values from TX to RX

@@ -156,7 +156,7 @@
 #include "Switches.h"
 #include "ADC-master/ADC.h"
 #include "Parameters.h"
-#include "RF_PIDView.h"
+#include "RF_PIDs.h"
 #include "RF_Rates.h"
 #include "RF_RotorFlight.h"
 #include "RF_Rates_Advanced.h"

@@ -39,19 +39,7 @@ void ForegroundColourPIDLabels(uint16_t Colour)
         SendForegroundColour(PID_Labels[i], Colour);
     }
 }
-// ********************************************************************************************************
-uint8_t CheckPIDsForBonkersValues() // returns 0 if none of the new values is > 20% different from the original value
-                                    // otherwise index+1 of first PID that is  > 20% different
-{
-    for (int i = 0; i < MAX_PID_WORDS; ++i)
-    {
-        float temp = (float)GetValue(PID_Labels[i]);
 
-        if (temp < (float)PID_Values[i] * 0.8f || temp > (float)PID_Values[i] * 1.2f)
-            return i + 1;
-    }
-    return 0;
-}
 // ********************************************************************************************************
 void ReadEditedPIDs()
 {
@@ -173,33 +161,11 @@ void SendEditedPIDs()
         SaveToLocalBank();
         return;
     }
-    uint8_t bonkersIndex;
+    PlaySound(BEEPMIDDLE);
     PIDS_Were_Edited = false;
-    PIDMsg((char *)"Checking magnitude of changes ...", Gray);
-    bonkersIndex = CheckPIDsForBonkersValues();
-    if (bonkersIndex)
-    {
-        char msg[120] = "Do you REALLY mean this?!\r\nItem ";
-        char NB[10];
-        strcat(msg, Str(NB, bonkersIndex, 0));
-        strcat(msg, " would change by > 20%");
-        if (!GetConfirmation((char *)"page PIDView", msg))
-        {
-            ShowPIDBank(); // reload old PIDs, undoing any edits
-            HidePIDMsg();
-            return;
-        }
-    }
     HidePIDMsg();
-    if (!GetConfirmation((char *)"page PIDView", (char *)"Send edited PIDs to Nexus?"))
-    {
-        ShowPIDBank(); // reload old PIDs, undoing any edits
-        HidePIDMsg();
-        return;
-    }
-
     PIDMsg((char *)"Sending edited PIDs ...", Gray); // Show sending message
-    DelayWithDog(200);                               // allow LOTS of time for screen to update BEFORE sending another Nextion command
+    DelayWithDog(100);                               // allow LOTS of time for screen to update BEFORE sending another Nextion command
     ReadEditedPIDs();                                // read the edited PIDs from the screen;
     AddParameterstoQueue(GET_SECOND_6_PID_VALUES);   // SECOND MUST BE QUEUED FIRST!!! Send PID 7-12 values from TX to RX
     AddParameterstoQueue(GET_FIRST_6_PID_VALUES);    // SECOND MUST BE QUEUED FIRST!!! Send PID 1-6 values from TX to RX

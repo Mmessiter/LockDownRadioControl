@@ -149,35 +149,6 @@ void ShowPIDAdvancedBank() // this is called when bank is changed so new bank's 
         PID_Advanced_Start_Time = millis(); // record start time as it's not long
     }
 }
-
-// ********************************************************************************************************
-uint8_t CheckPID_AdvancedForBonkersValues() // returns 0 if none of the new values is > 20% different from the original value
-                                            // otherwise index+1 of first PID that is  > 20% different
-{
-    for (uint8_t i = 1; i < MAX_PIDS_ADVANCED_BYTES; ++i)
-    {
-        uint8_t originalValue = PID_Advanced_Values[i];
-        char temp[10];
-        GetText(PID_Advanced_Labels[i], temp);
-        uint8_t newValue;
-
-        if ((i == 1) || (i == 25)) // these two are floats multiplied by 10
-        {
-            newValue = (uint8_t)(atof(temp) * 10.0f);
-        }
-        else
-        {
-            newValue = (uint8_t)(atoi(temp));
-        }
-        float difference = fabs((float)newValue - (float)originalValue);
-        float percentChange = (difference / (float)originalValue) * 100.0f;
-        if (percentChange > 20.0f)
-        {
-            return i; // return index of first bonkers value
-        }
-    }
-    return 0; // no bonkers values found
-}
 // ************************************************************************************************************/
 void SaveToLocalABank()
 {
@@ -201,32 +172,9 @@ void SendEditedPID_Advanced()
         SaveToLocalABank();
         return;
     }
-
-    uint8_t bonkersIndex;
+    PlaySound(BEEPMIDDLE);
     PIDS_Advanced_Were_Edited = false;
-    PIDAdvancedMsg((char *)"Checking magnitude of changes ...", Gray);
-    bonkersIndex = CheckPID_AdvancedForBonkersValues();
-    if (bonkersIndex)
-    {
-        char msg[120] = "Do you REALLY mean this?!\r\nItem ";
-        char NB[10];
-        strcat(msg, Str(NB, bonkersIndex, 0));
-        strcat(msg, " would change by > 20%");
-        if (!GetConfirmation((char *)"page PID_A_View", msg))
-        {
-            ShowPIDAdvancedBank(); // reload old PID Advanced values, undoing any edits
-            HidePID_Advanced_Msg();
-            return;
-        }
-    }
-    HidePID_Advanced_Msg();
-    if (!GetConfirmation((char *)"page PID_A_View", (char *)"Send edited values to Nexus?"))
-    {
-        PIDS_Advanced_Were_Edited = false; // reset edited flag
-        ShowPIDAdvancedBank();             // reload old PID Advanced values, undoing any edits
-        return;
-    }
-    DelayWithDog(200);                                                      // allow LOTS of time for screen to update BEFORE sending another Nextion command
+    DelayWithDog(100);                                                      // allow LOTS of time for screen to update BEFORE sending another Nextion command
     PIDAdvancedMsg((char *)"Sending edited PID Advanced values ...", Gray); // Show sending message
     ReadEditedPIDAdvancedValues();                                          // read the edited PID Advanced values from the screen;
     AddParameterstoQueue(GET_THIRD_8_ADVANCED_PID_VALUES);                  // LAST MUST BE QUEUED FIRST!!!
