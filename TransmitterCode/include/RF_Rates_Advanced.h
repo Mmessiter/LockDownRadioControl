@@ -12,7 +12,6 @@ char RatesAWindows[15][4] = {"n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8
 // ************************************************************************************************************/
 void Hide_Advanced_Rates_Msg()
 {
-
     if (CurrentView == RATESADVANCEDVIEW) // Must be in RATESADVANCEDVIEW view
     {
         SendCommand((char *)"vis busy,0");    // Hide RATES message
@@ -117,7 +116,6 @@ void ShowRatesAdvancedBank()
         strcat(Wmsg, w2);
         MsgBox((char *)"page Rates_A_View", Wmsg); // Warn about unsaved edits
     }
-   
     RatesAdvancedMsg(buf, Gray);
     Rates_Advanced_Send_Duration = 1000;              // how many milliseconds to await RATES values
     Reading_RATES_Advanced_Now = true;                // This tells the Ack payload parser to

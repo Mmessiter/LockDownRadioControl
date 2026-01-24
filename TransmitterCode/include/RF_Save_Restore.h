@@ -12,6 +12,7 @@
 #define DO_PIDS_ADVANCED 2
 #define DO_RATES 4
 #define DO_RATES_ADVANCED 8
+// ************************************************************************************************************/
 
 uint8_t Which_Case_Now = 0;    // Which case we are up to in the state machine
 uint16_t ProgressSoFar = 0;    // progress bar value
@@ -51,7 +52,6 @@ void Restore_SOME_RF_Parameters()
         CurrentMode = NORMAL;
         return;
     }
-
     switch (Which_Case_Now)
     {
     case 0:
@@ -116,8 +116,8 @@ void Restore_SOME_RF_Parameters()
         SendText(t2, msg);
         for (int i = 0; i < MAX_RATES_BYTES; ++i)
             Rate_Values[i] = Saved_Rate_Values[i][LocalBank - 1];
-        AddParameterstoQueue(GET_SECOND_6_RATES_VALUES); // SECOND MUST BE QUEUED FIRST!!! Send RATES 7-12 values from TX to RX
-        AddParameterstoQueue(GET_FIRST_7_RATES_VALUES);  // SECOND MUST BE QUEUED FIRST!!! Send RATES 1-6 values from TX to RX
+        AddParameterstoQueue(GET_SECOND_6_RATES_VALUES); // SECOND MUST BE QUEUED FIRST!!! Send RATES from TX to RX
+        AddParameterstoQueue(GET_FIRST_7_RATES_VALUES);  // SECOND MUST BE QUEUED FIRST!!! Send RATES from TX to RX
         ProgressSoFar += OneProgressItem;                // update progress bar
         SendValue((char *)"Progress", ProgressSoFar);    // update progress bar
         Which_Case_Now = 5;
@@ -302,6 +302,7 @@ void Save_SOME_RF_Parameters()
         ProgressSoFar += OneProgressItem;             // update progress bar
         SendValue((char *)"Progress", ProgressSoFar); // update progress bar
         Which_Case_Now = 200;                         // move to next bank
+        DelayWithDog(500);                            // briefish delay
         break;
     case 200:
         SendText(t2, (char *)"Success!");
@@ -366,7 +367,6 @@ void SaveRFParameters() // show dialog to pick bank and params to save
 // ************************************************************************************************************/
 void Start_RESTORE()
 {
-    
     Collect_data_from_dialog();            // get bank number and which params to save
     Which_Case_Now = 0;                    // start saving first bank
     SendCommand((char *)"vis Progress,1"); // show progress bar

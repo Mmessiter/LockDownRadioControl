@@ -187,7 +187,6 @@ void ShowRatesLocalBank()
         RATES_Send_Duration = 1000;                              // how many milliseconds to await RATES values
         Reading_RATES_Now = true;                                // This tells the Ack payload parser to get RATES values
         AddParameterstoQueue(SEND_RATES_VALUES);                 // Request RATES values from RX
-      
         RATES_Start_Time = millis();                             // record start time as it's not long
         Rates_Were_Edited = false;                               // reset edited flag
     }

@@ -109,7 +109,6 @@ void ShowPIDBank() // this is called when bank is changed so new bank's PID valu
             ShowLocalBank();
             return;
         }
-
         if (PIDS_Were_Edited)
         {
             char NB[10];
