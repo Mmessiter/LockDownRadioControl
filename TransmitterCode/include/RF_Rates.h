@@ -39,7 +39,6 @@ void SaveRatesLocalBank(){
 // ************************************************************************************************************/
 void SendEditedRates()
 {
-
     if (!LedWasGreen) // Model not connected so save to local RATES
     {
         SaveRatesLocalBank();

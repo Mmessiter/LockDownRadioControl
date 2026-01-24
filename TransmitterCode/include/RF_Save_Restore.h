@@ -130,7 +130,7 @@ void Restore_SOME_RF_Parameters()
     case 6:
         if (!(Which_Params & DO_RATES_ADVANCED))
         {
-            Which_Case_Now = 200; // skip to next if not doing RATES ADVANCED
+            Which_Case_Now = 150; // skip to next if not doing RATES ADVANCED
             break;
         }
         strcpy(msg, "Restoring Rates Advanced: LocalBank ");
@@ -146,8 +146,13 @@ void Restore_SOME_RF_Parameters()
         AddParameterstoQueue(GET_RATES_ADVANCED_VALUES_FIRST_7);  // Send RATES ADVANCED values from TX to RX ...because this queue is a LIFO stack
         ProgressSoFar += OneProgressItem;                         // update progress bar
         SendValue((char *)"Progress", ProgressSoFar);             // update progress bar
-        Which_Case_Now = 200;
+        Which_Case_Now = 150;
         LTimer = millis();
+        break;
+
+    case 150:
+        if ((millis() - LTimer) >= WAIT_TIME_BETWEEN_WRITING_PARAMETERS) // wait to allow RATES ADVANCED to be sent
+            Which_Case_Now = 200;
         break;
 
     case 200:
