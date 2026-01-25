@@ -12,7 +12,7 @@
 // ********************************************************************************************************
 void SendBackgroundColour(const char *label, uint16_t colour)
 {
-    char cmd[64];
+    char cmd[80];
     snprintf(cmd, sizeof(cmd), "%s.bco=%u", label, (unsigned)colour);
     SendCommand(cmd);
 }
@@ -26,7 +26,7 @@ void SendForegroundColour(const char *label, uint16_t colour)
 // ********************************************************************************************************
 void BackgroundColourPIDLabels(uint16_t Colour)
 {
-    for (int i = 0; i < MAX_PID_WORDS; ++i)
+    for (int i = 0; i < MAX_PID_WORDS + 3; ++i)
     {
         SendBackgroundColour(PID_Labels[i], Colour);
     }
@@ -34,7 +34,7 @@ void BackgroundColourPIDLabels(uint16_t Colour)
 // ********************************************************************************************************
 void ForegroundColourPIDLabels(uint16_t Colour)
 {
-    for (int i = 0; i < MAX_PID_WORDS; ++i)
+    for (int i = 0; i < MAX_PID_WORDS + 3; ++i)
     {
         SendForegroundColour(PID_Labels[i], Colour);
     }
@@ -47,12 +47,17 @@ void ReadEditedPIDs()
     {
         PID_Values[i] = GetValue(PID_Labels[i]);
     }
+    uint8_t p = MAX_PID_WORDS;
+    for (int i = 0; i < 3; ++i)
+    {
+        PID_Boost_Values[i] = GetValue(PID_Labels[i + p]);
+       
+    }   
     return;
 }
 // ********************************************************************************************************
-void Display2PIDValues(uint8_t i) // Displays two PID values as soon as they arrive in Ack payload
+void Display2PIDValues(uint8_t i) // Displays two PID values as soon as they arrive in Ack payload th
 {                                 // (They arrive in pairs because Ack payload has four usable bytes)
-
     if (CurrentMode == RESTORE_RF_SETTINGS)
         return;
     if (CurrentView == PIDVIEW && i + 1 < MAX_PID_WORDS) // Must be in PID view and a valid index
@@ -61,6 +66,19 @@ void Display2PIDValues(uint8_t i) // Displays two PID values as soon as they arr
         SendValue(PID_Labels[i + 1], PID_Values[i + 1]);
     }
 }
+// **********************************************************************************************************/
+void DisplayBoostPidValues() // Displays Boost PID values as soon as they arrive in Ack payload Theses are at the end of the normal PIDs ... tacked on
+{
+    if (CurrentMode == RESTORE_RF_SETTINGS)
+        return;
+    if (CurrentView == PIDVIEW) // Must be in PID view
+    {
+        SendValue(PID_Labels[12], PID_Boost_Values[0]); // Roll Boost
+        SendValue(PID_Labels[13], PID_Boost_Values[1]); // Pitch Boost
+        SendValue(PID_Labels[14], PID_Boost_Values[2]); // Yaw Boost
+    }
+}
+
 // **********************************************************************************************************/
 void PIDMsg(const char *msg, uint16_t Colour)
 {
@@ -91,6 +109,11 @@ void ShowLocalBank()
         {
             SendValue(PID_Labels[i], Saved_PID_Values[i][Bank - 1]);
         }
+    uint8_t p = MAX_PID_WORDS;
+    for (int i = 0; i < 3; ++i)
+    {
+        SendValue(PID_Labels[i + p], Saved_PID_Values[i + p][Bank - 1]);
+    }
     HidePIDMsg();
 }
 //************************************************************************************************************/
@@ -120,11 +143,11 @@ void ShowPIDBank() // this is called when bank is changed so new bank's PID valu
             strcat(Wmsg, w2);
             MsgBox((char *)"page PIDView", Wmsg); // Warn about unsaved edits
         }
-        PIDMsg(buf, Gray);                                       // Show loading message and hides old PIDs
-        PID_Send_Duration = 1000;                                // how many milliseconds to await PID values
-        Reading_PIDS_Now = true;                                 // This tells the Ack payload parser to get PID values
-        AddParameterstoQueue(SEND_PID_VALUES);                   // Request PID values from RX
-       
+        PIDMsg(buf, Gray);                     // Show loading message and hides old PIDs
+        PID_Send_Duration = 1000;              // how many milliseconds to await PID values
+        Reading_PIDS_Now = true;               // This tells the Ack payload parser to get PID values
+        AddParameterstoQueue(SEND_PID_VALUES); // Request PID values from RX
+
         PIDS_Were_Edited = false;
         PID_Start_Time = millis(); // record start time as it's not long
     }
@@ -139,16 +162,20 @@ void PIDs_Were_edited()
 void SaveToLocalBank()
 {
     PIDMsg((char *)"Saving edited PIDs ...", Gray); // Show sending message
-    ReadEditedPIDs(); // read the edited PIDs from the screen;
+    ReadEditedPIDs();                               // read the edited PIDs from the screen;
     for (int i = 0; i < MAX_PID_WORDS; ++i)
     {
         Saved_PID_Values[i][Bank - 1] = PID_Values[i];
+    }
+    for (int i = 0; i < 3; ++i)
+    {
+        Saved_PID_Values[i + MAX_PID_WORDS][Bank - 1] = PID_Boost_Values[i];
     }
     SaveOneModel(ModelNumber);       // save all to SD card
     SendCommand((char *)"vis b3,0"); // hide "Send" button
     HidePIDMsg();
     PIDS_Were_Edited = false; // reset edited flag
-    PlaySound(BEEPCOMPLETE);         // let user know we're done
+    PlaySound(BEEPCOMPLETE);  // let user know we're done
 }
 
 /***********************************************************************************************************/
@@ -166,7 +193,7 @@ void SendEditedPIDs()
     PIDMsg((char *)"Sending edited PIDs ...", Gray); // Show sending message
     DelayWithDog(100);                               // allow LOTS of time for screen to update BEFORE sending another Nextion command
     ReadEditedPIDs();                                // read the edited PIDs from the screen;
-    AddParameterstoQueue(GET_SECOND_6_PID_VALUES);   // SECOND MUST BE QUEUED FIRST!!! Send PID 7-12 values from TX to RX
+    AddParameterstoQueue(GET_SECOND_9_PID_VALUES);   // SECOND MUST BE QUEUED FIRST!!! Send PID 7-12 values from TX to RX
     AddParameterstoQueue(GET_FIRST_6_PID_VALUES);    // SECOND MUST BE QUEUED FIRST!!! Send PID 1-6 values from TX to RX
     HidePIDMsg();                                    // SECOND MUST BE QUEUED FIRST!!!  because this queue is a LIFO stack
     SendCommand((char *)"vis b3,0");                 // hide "Send" button

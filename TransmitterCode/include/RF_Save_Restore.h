@@ -66,8 +66,15 @@ void Restore_SOME_RF_Parameters()
         strcat(msg, NB);
         SendText(t2, msg);
         for (int i = 0; i < MAX_PID_WORDS; ++i)
+        {
             PID_Values[i] = Saved_PID_Values[i][LocalBank - 1];
-        AddParameterstoQueue(GET_SECOND_6_PID_VALUES); // SECOND MUST BE QUEUED FIRST!!! Send PID 7-12 values from TX to RX
+        }
+        for (int i = 0; i < 3; ++i)
+        {
+            PID_Boost_Values[i] = Saved_PID_Values[i + MAX_PID_WORDS][LocalBank - 1];
+        }
+
+        AddParameterstoQueue(GET_SECOND_9_PID_VALUES); // SECOND MUST BE QUEUED FIRST!!! Send PID 7-12 values from TX to RX
         AddParameterstoQueue(GET_FIRST_6_PID_VALUES);  // SECOND MUST BE QUEUED FIRST!!! Send PID 1-6 values from TX to RX
         ProgressSoFar += OneProgressItem;              // update progress bar
         SendValue((char *)"Progress", ProgressSoFar);  // update progress bar
@@ -178,7 +185,7 @@ void Save_SOME_RF_Parameters()
     char NB1[10];
     Str(NB, Bank, 0);
     Str(NB1, LocalBank, 0);
-    
+
     if (!SelectedItemCount)
     {
         SendCommand((char *)"vis Progress,0"); // hide progress bar
@@ -213,6 +220,10 @@ void Save_SOME_RF_Parameters()
     case 2:                                                       // save PIDs for this LocalBank
         for (int i = 0; i < MAX_PID_WORDS; ++i)
             Saved_PID_Values[i][LocalBank - 1] = PID_Values[i];
+
+        for (int i = 0; i < 3; ++i)
+            Saved_PID_Values[i + MAX_PID_WORDS][LocalBank - 1] = PID_Boost_Values[i];
+            
         Which_Case_Now = 3;                           // move to next stage
         ProgressSoFar += OneProgressItem;             // update progress bar
         SendValue((char *)"Progress", ProgressSoFar); // update progress bar
@@ -354,7 +365,8 @@ void RestoreRFParameters() // show dialog to pick bank and params to save
 // ************************************************************************************************************/
 void SaveRFParameters() // show dialog to pick bank and params to save
 {
-    if (!(LedWasGreen)){
+    if (!(LedWasGreen))
+    {
         MsgBox((char *)"page RFView", (char *)"Not connected!");
         return;
     }

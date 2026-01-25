@@ -91,13 +91,20 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
         Parameters.word[1] = 321;               // Please send PID values
         Parameters.word[2] = PID_Send_Duration; // 1000 - how many milliseconds to send these
         break;
-    case GET_FIRST_6_PID_VALUES: // 10 = I'm sending first 6 PID values (TX->RX) (Because we cannot fit all 12 in one go)
+    case GET_FIRST_6_PID_VALUES: // 10 = I'm sending first 9 PID values (TX->RX) (Because we cannot fit all 12 in one go)
         for (int i = 0; i < 6; ++i)
-            Parameters.word[i + 1] = PID_Values[i];
+        {
+            Parameters.word[i + 1] = PID_Values[i]; // 0 to 5
+        }
         break;
-    case GET_SECOND_6_PID_VALUES: // 11 = I'm sending second 6 PID values (TX->RX) (Because we cannot fit all 12 in one go)
-        for (int i = 0; i < 6; ++i)
+    case GET_SECOND_9_PID_VALUES: // 11 = I'm sending second 6 PID values (TX->RX) (Because we cannot fit all 12 in one go)
+        for (int i = 0; i < 6; ++i)// 
+        {
             Parameters.word[i + 1] = PID_Values[i + 6];
+        }
+        Parameters.word[7] = PID_Boost_Values[0]; // PID_Roll_Boost
+        Parameters.word[8] = PID_Boost_Values[1]; // PID_Pitch_Boost
+        Parameters.word[9] = PID_Boost_Values[2]; // PID_Yaw_Boost these were tacked on
         break;
     case SEND_RATES_VALUES:                       // 12 = Please send RATES values
         Parameters.word[1] = 321;                 // confirms request for RATES values
@@ -139,7 +146,7 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
         for (int i = 0; i < 8; ++i)
             Parameters.word[i + 1] = PID_Advanced_Values[i + 18]; // 18 to 25
         break;
-        default:
+    default:
         break;
     }
 }
