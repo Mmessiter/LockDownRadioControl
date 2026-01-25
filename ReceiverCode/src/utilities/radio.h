@@ -807,7 +807,7 @@ void SetupRadios()
 /************************************************************************************************************/
 void LoadAckPayload()
 {
-    const uint8_t MAX_TELEMETERY_ITEMS = 32; // Max number of telemetry items to send...
+    const uint8_t MAX_TELEMETERY_ITEMS = 33; // Max number of telemetry items to send...
 
     if (MacAddressSentCounter < 20)
     {
@@ -1048,8 +1048,23 @@ void LoadAckPayload()
         {
         case SEND_NO_RF: // 0
             break;
+        case SEND_PID_RF:
+            Send_2_x_uint16_t(PID_Roll_Boost, PID_Pitch_Boost);
+            break;
         case SEND_PID_ADVANCED_RF: // 4
             Send_PID_Advanced_Bytes(24, 28);
+            break;
+        default:
+            break;
+        }
+        break;
+    case 33: 
+    switch (SendRotorFlightParametresNow)
+        {
+        case SEND_NO_RF: // 0
+            break;
+        case SEND_PID_RF:
+            Send_2_x_uint16_t(PID_Yaw_Boost, 0); // second uint16_t is unused here
             break;
         default:
             break;

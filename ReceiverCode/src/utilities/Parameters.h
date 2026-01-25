@@ -87,14 +87,20 @@ void ReadExtraParameters()
         if (!Rotorflight22Detected)
             break;
         for (int i = 0; i < 6; ++i)
+        {
             All_PIDs[i] = Parameters.word[i + 1];
+           // Look(All_PIDs[i]);
+        }
         break;
 
-    case GET_SECOND_6_PID_VALUES: // 11
+    case GET_SECOND_9_PID_VALUES: // 11
         if (!Rotorflight22Detected)
             break;
-        for (int i = 0; i < 6; ++i)
+        for (int i = 0; i < 9; ++i)
+        {
             All_PIDs[i + 6] = Parameters.word[i + 1];
+           // if (i<6)Look(All_PIDs[i + 6]);
+        }
         WritePIDsToNexusAndSave(All_PIDs);
         break;
 
