@@ -3341,7 +3341,7 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     StartPIDAdvancedView,    // 29
     RatesAdvancedWereEdited, // 30
     EndRatesAdvancedView,    // 31
-    SaveRatesAdvanced,       // 32
+    SendEditedRatesAdvanced, // 32
     PIDsAdvancedWereEdited,  // 33
     SendEditedPID_Advanced,  // 34
     EndPIDsAdvancedView,     // 35
@@ -4762,7 +4762,7 @@ void BankHasChanged()
     }
     if ((CurrentView == PICKBANKVIEW1) || (CurrentView == PICKBANKVIEW2))
     {
-        SendValue((char *) "n0",Bank);
+        SendValue((char *)"n0", Bank);
         SendValue((char *)"n1", Bank);
     }
 }

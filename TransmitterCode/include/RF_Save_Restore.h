@@ -6,8 +6,8 @@
 #define RF_SAVE_RESTORE_H
 #include <Arduino.h>
 #include "1Definitions.h"
-#define WAIT_TIME_BETWEEN_READING_PARAMETERS 1000 // milliseconds to wait between receiving parameter blocks
-#define WAIT_TIME_BETWEEN_WRITING_PARAMETERS 1000 // milliseconds to wait between sending parameter blocks
+#define WAIT_TIME_BETWEEN_READING_PARAMETERS MSP_WAIT_TIME // milliseconds to wait between receiving parameter blocks
+#define WAIT_TIME_BETWEEN_WRITING_PARAMETERS MSP_WAIT_TIME*2 // milliseconds to wait between sending parameter blocks
 #define DO_PIDS 1
 #define DO_PIDS_ADVANCED 2
 #define DO_RATES 4
@@ -167,7 +167,7 @@ void Restore_SOME_RF_Parameters()
         SendValue((char *)"Progress", 100); // update progress bar
         CurrentMode = NORMAL;               // no further calls will come here
         PlaySound(BEEPCOMPLETE);
-        DelayWithDog(1000);
+        DelayWithDog(MSP_WAIT_TIME);
         SendCommand((char *)"vis Progress,0"); // hide progress bar
         SendCommand((char *)"vis t2,0");       // hide please wait text
         break;
@@ -321,7 +321,7 @@ void Save_SOME_RF_Parameters()
         CurrentMode = NORMAL;               // no further calls will come here
         SaveOneModel(ModelNumber);          // save all to SD card
         PlaySound(BEEPCOMPLETE);
-        DelayWithDog(1000);
+        DelayWithDog(MSP_WAIT_TIME);
         SendCommand((char *)"vis Progress,0"); // hide progress bar
         SendCommand((char *)"vis t2,0");       // hide please wait text
         break;

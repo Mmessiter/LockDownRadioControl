@@ -91,6 +91,7 @@
 #define BATTERY_CHECK_INTERVAL 1000           // 2 seconds between battery checks
 #define POWERONOFFDELAY 1000                  // Delay after power OFF before transmit stops.
 #define POWERONOFFDELAY2 4000                 // Delay after power ON before Off is possible....
+#define MSP_WAIT_TIME 500                     // Delay after model exchange before another can be done
                                               // and delay after power off before power on button is active
                                               // **************************************************************************
                                               //                            FHSS BITS                                     *
@@ -787,7 +788,7 @@ void Hide_Advanced_Rates_Msg();
 void ForegroundColourAdvancedRates(uint16_t Colour);
 void RatesAdvancedWereEdited();
 void EndRatesAdvancedView();
-void SaveRatesAdvanced();
+void SendEditedRatesAdvanced();
 void HidePID_Advanced_Msg();
 void Hide_msg_if_needed();
 void Display_PID_Advanced_Values(uint8_t n, uint8_t m);

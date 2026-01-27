@@ -13,8 +13,8 @@ char PID_Advanced_Labels[26][4] = {"sw0", "t1", "t2", "t3", "t4", "t5", "t6", "t
 // ************************************************************************************************************/
 void Display_PID_Advanced_Values(uint8_t n, uint8_t m) // display PID Advanced values n to m on screen as they are read from RX
 {
-    if ((millis() - PID_Advanced_Start_Time) < 500)
-        return; // wait at least 500 ms because RX may be slow to respond after bank change and earlier values may be junk
+   // if ((millis() - PID_Advanced_Start_Time) < 500)
+     //   return; // wait at least 500 ms because RX may be slow to respond after bank change and earlier values may be junk
     char TextFloat[10];
     for (uint8_t i = n; i < m; ++i)
     {
@@ -136,7 +136,7 @@ void ShowPIDAdvancedBank() // this is called when bank is changed so new bank's 
             MsgBox((char *)"page PID_A_View", Wmsg); // Warn about unsaved edits
         }
         PIDAdvancedMsg(buf, Gray);                      // Show loading message and hides old PIDs
-        PID_Advanced_Send_Duration = 1000;              // how many milliseconds to await PID values
+        PID_Advanced_Send_Duration = MSP_WAIT_TIME;              // how many milliseconds to await PID values
         Reading_PIDS_Advanced_Now = true;               // This tells the Ack payload parser to get PID values
         AddParameterstoQueue(SEND_PID_ADVANCED_VALUES); // Request PID values from RX
         PIDS_Advanced_Were_Edited = false;  // reset edited flag
@@ -174,7 +174,6 @@ void SendEditedPID_Advanced()
     AddParameterstoQueue(GET_THIRD_8_ADVANCED_PID_VALUES);                  // LAST MUST BE QUEUED FIRST!!!
     AddParameterstoQueue(GET_SECOND_9_ADVANCED_PID_VALUES);                 // the order of the other two doesn't matter ...
     AddParameterstoQueue(GET_FIRST_9_ADVANCED_PID_VALUES);                  // its a LIFO stack with 26 parametres to send
-    PID_Advanced_Send_Duration = 3000;                                      // allow 3 seconds for sending all PID Advanced values
     HidePID_Advanced_Msg();                                                 // ...because this queue is a LIFO stack
     SendCommand((char *)"vis b3,0");                                        // hide "Send" button
     PIDS_Advanced_Were_Edited = false;                                      // reset edited flag

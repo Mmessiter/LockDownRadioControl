@@ -144,7 +144,7 @@ void ShowPIDBank() // this is called when bank is changed so new bank's PID valu
             MsgBox((char *)"page PIDView", Wmsg); // Warn about unsaved edits
         }
         PIDMsg(buf, Gray);                     // Show loading message and hides old PIDs
-        PID_Send_Duration = 1000;              // how many milliseconds to await PID values
+        PID_Send_Duration = MSP_WAIT_TIME;              // how many milliseconds to await PID values
         Reading_PIDS_Now = true;               // This tells the Ack payload parser to get PID values
         AddParameterstoQueue(SEND_PID_VALUES); // Request PID values from RX
 

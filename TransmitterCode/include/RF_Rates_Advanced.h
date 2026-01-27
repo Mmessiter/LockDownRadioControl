@@ -117,7 +117,7 @@ void ShowRatesAdvancedBank()
         MsgBox((char *)"page Rates_A_View", Wmsg); // Warn about unsaved edits
     }
     RatesAdvancedMsg(buf, Gray);
-    Rates_Advanced_Send_Duration = 1000;              // how many milliseconds to await RATES values
+    Rates_Advanced_Send_Duration = MSP_WAIT_TIME;     // how many milliseconds to await RATES values
     Reading_RATES_Advanced_Now = true;                // This tells the Ack payload parser to
     AddParameterstoQueue(SEND_RATES_ADVANCED_VALUES); // Request RATES values from RX
     RATES_Advanced_Start_Time = millis();             // record start time as it's not long
@@ -193,7 +193,7 @@ void SaveLocalRatesAdvancedBank(){
 }
 
 // **********************************************************************************************************/
-void SaveRatesAdvanced()
+void SendEditedRatesAdvanced()
 {
     Rates_Advanced_Were_Edited = false;
     if (!(LedWasGreen)) // Model not connected so save to local Advanced RATES

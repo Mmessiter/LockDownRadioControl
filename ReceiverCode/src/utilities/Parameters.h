@@ -97,7 +97,7 @@ void ReadExtraParameters()
             break;
         for (int i = 0; i < 9; ++i)
         {
-            All_PIDs[i + 6] = Parameters.word[i + 1];
+            All_PIDs[i + 6] = Parameters.word[i + 1]; // todo: add last four bytes?
         }
         WritePIDsToNexusAndSave(All_PIDs);
         break;

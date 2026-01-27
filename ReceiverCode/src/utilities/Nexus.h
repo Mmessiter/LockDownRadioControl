@@ -259,7 +259,7 @@ inline void WritePIDsToNexusAndSave(const uint16_t pid[16])
 
     if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight22Detected))
         return;
-    uint8_t payload[30]; // actually 34 but we only send 30 (12 + 3 boost)
+    uint8_t payload[30]; // actually 34 but we only send 30 (12 + 3 boost four bytes are ignored at the mement)
     for (int i = 0; i < 30; i++)
     {
         payload[i] = Original_PID_Values[i]; // start with original values.. probably not really  needed
@@ -406,29 +406,78 @@ inline bool Parse_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n)
 // ************************************************************************************************************/
 inline void CheckMSPSerial()
 {
+    
+    uint32_t interval = (SendRotorFlightParametresNow == SEND_NO_RF) ? 250 : 50;
     static uint32_t Localtimer = 0;
-    if (millis() - Localtimer < 250) // 4 x per second
+    uint32_t Now = millis();
+
+    if (Now - Localtimer < interval) // varialble interval
         return;
-    Localtimer = millis();
-    uint8_t data_in[80];
-    uint8_t p = 0;
-    while (MSP_UART.available() && p < sizeof(data_in))
+
+    Localtimer = Now;
+    bool overflow = false;
+    uint8_t data_in[180];
+    uint16_t p = 0;
+    while (MSP_UART.available())
     {
-        data_in[p++] = MSP_UART.read();
+        uint8_t c = MSP_UART.read();
+        if (overflow)
+            continue;
+        if (p < sizeof(data_in))
+        {
+            data_in[p++] = c;
+        }
+        else
+        {
+            overflow = true;
+        }
     }
-    if ((millis() - Started_Sending_PIDs > PID_Send_Duration) && (SendRotorFlightParametresNow == SEND_PID_RF))
+    if (overflow)
+    {
+        return; // buffer overflow - just drop the data
+    }
+    bool looksLikeMSP =
+        (p >= 6 && data_in[0] == '$' && data_in[1] == 'M') || // MSPv1
+        (p >= 8 && data_in[0] == '$' && data_in[1] == 'X');   // MSPv2
+
+    if (!looksLikeMSP)
+    {
+        // ask again ...
+        switch (SendRotorFlightParametresNow)
+        {
+        case SEND_NO_RF:
+            RequestFromMSP(MSP_MOTOR_TELEMETRY);
+            break;
+        case SEND_PID_RF:
+            RequestFromMSP(MSP_PID);
+            break;
+        case SEND_RATES_RF:
+            RequestFromMSP(MSP_RC_TUNING);
+            break;
+        case SEND_RATES_ADVANCED_RF:
+            RequestFromMSP(MSP_RC_TUNING);
+            break;
+        case SEND_PID_ADVANCED_RF:
+            RequestFromMSP(MSP_PID_PROFILE);
+            break;
+        default:
+            break;
+        }
+        return;
+    }
+    if ((Now - Started_Sending_PIDs > PID_Send_Duration) && (SendRotorFlightParametresNow == SEND_PID_RF))
     {
         SendRotorFlightParametresNow = SEND_NO_RF;
     }
-    if ((millis() - Started_Sending_RATEs > RATES_Send_Duration) && (SendRotorFlightParametresNow == SEND_RATES_RF))
+    if ((Now - Started_Sending_RATEs > RATES_Send_Duration) && (SendRotorFlightParametresNow == SEND_RATES_RF))
     {
         SendRotorFlightParametresNow = SEND_NO_RF;
     }
-    if ((millis() - Started_Sending_RATES_ADVANCED > RATES_ADVANCED_Send_Duration) && (SendRotorFlightParametresNow == SEND_RATES_ADVANCED_RF))
+    if ((Now - Started_Sending_RATES_ADVANCED > RATES_ADVANCED_Send_Duration) && (SendRotorFlightParametresNow == SEND_RATES_ADVANCED_RF))
     {
         SendRotorFlightParametresNow = SEND_NO_RF;
     }
-    if ((millis() - Started_Sending_PID_ADVANCED > PID_ADVANCED_Send_Duration) && (SendRotorFlightParametresNow == SEND_PID_ADVANCED_RF))
+    if ((Now - Started_Sending_PID_ADVANCED > PID_ADVANCED_Send_Duration) && (SendRotorFlightParametresNow == SEND_PID_ADVANCED_RF))
     {
         SendRotorFlightParametresNow = SEND_NO_RF;
     }
