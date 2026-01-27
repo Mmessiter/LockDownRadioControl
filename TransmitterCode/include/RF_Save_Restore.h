@@ -7,7 +7,7 @@
 #include <Arduino.h>
 #include "1Definitions.h"
 #define WAIT_TIME_BETWEEN_READING_PARAMETERS MSP_WAIT_TIME // milliseconds to wait between receiving parameter blocks
-#define WAIT_TIME_BETWEEN_WRITING_PARAMETERS MSP_WAIT_TIME*2 // milliseconds to wait between sending parameter blocks
+#define WAIT_TIME_BETWEEN_WRITING_PARAMETERS 1000 // milliseconds to wait between sending parameter blocks
 #define DO_PIDS 1
 #define DO_PIDS_ADVANCED 2
 #define DO_RATES 4
