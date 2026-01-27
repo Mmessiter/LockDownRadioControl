@@ -218,6 +218,7 @@ void EndRatesView()
     Rates_Were_Edited = false;
     SendCommand((char *)"page RFView");
     CurrentView = ROTORFLIGHTVIEW;
+    ShowRFBank();
 }
 // ************************************************************************************************************/
 void RatesWereEdited()

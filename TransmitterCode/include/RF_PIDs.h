@@ -227,6 +227,7 @@ void EndPIDView()
         PIDS_Were_Edited = false;
         SendCommand((char *)"page RFView");
         CurrentView = ROTORFLIGHTVIEW;
+        ShowRFBank();
     }
 }
 #endif

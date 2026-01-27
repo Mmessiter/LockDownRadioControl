@@ -347,6 +347,7 @@ void Collect_data_from_dialog() // and close it
         OneProgressItem = 99 / SelectedItemCount;
     SendCommand((char *)"page RFView");
     CurrentView = ROTORFLIGHTVIEW;
+    ShowRFBank();
 }
 // ************************************************************************************************************/
 void RestoreRFParameters() // show dialog to pick bank and params to save
@@ -403,12 +404,14 @@ void Cancel_SAVE()
 {
     SendCommand((char *)"page RFView");
     CurrentView = ROTORFLIGHTVIEW;
+    ShowRFBank();
 }
 // ************************************************************************************************************/
 void Cancel_RESTORE()
 {
     SendCommand((char *)"page RFView");
     CurrentView = ROTORFLIGHTVIEW;
+    ShowRFBank();
 }
 
 // ************************************************************************************************************/
