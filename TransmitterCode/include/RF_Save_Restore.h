@@ -6,7 +6,6 @@
 #define RF_SAVE_RESTORE_H
 #include <Arduino.h>
 #include "1Definitions.h"
-#define WAIT_TIME_BETWEEN_READING_PARAMETERS MSP_WAIT_TIME // milliseconds to wait between receiving parameter blocks
 #define WAIT_TIME_BETWEEN_WRITING_PARAMETERS 1000 // milliseconds to wait between sending parameter blocks
 #define DO_PIDS 1
 #define DO_PIDS_ADVANCED 2
@@ -207,7 +206,7 @@ void Save_SOME_RF_Parameters()
         strcat(msg, NB1);
 
         SendText(t2, msg);
-        PID_Send_Duration = WAIT_TIME_BETWEEN_READING_PARAMETERS; // how many milliseconds to await PID values
+        PID_Send_Duration = MSP_WAIT_TIME; // how many milliseconds to await PID values
         Reading_PIDS_Now = true;                                  // This tells the Ack payload parser to get PID values
         AddParameterstoQueue(SEND_PID_VALUES);                    // Request PID values from RX
         PID_Start_Time = millis();                                // record start time as it's not long
@@ -239,7 +238,7 @@ void Save_SOME_RF_Parameters()
         strcat(msg, " to LocalBank ");
         strcat(msg, NB1);
         SendText(t2, msg);
-        PID_Advanced_Send_Duration = WAIT_TIME_BETWEEN_READING_PARAMETERS; // how many milliseconds to await PID Advanced values
+        PID_Advanced_Send_Duration = MSP_WAIT_TIME; // how many milliseconds to await PID Advanced values
         Reading_PIDS_Advanced_Now = true;                                  // This tells the Ack payload parser to get PID Advanced values
         AddParameterstoQueue(SEND_PID_ADVANCED_VALUES);                    // Request PID Advanced values from RX
         PID_Advanced_Start_Time = millis();                                // record start time as it's not long
@@ -267,7 +266,7 @@ void Save_SOME_RF_Parameters()
         strcat(msg, " to LocalBank ");
         strcat(msg, NB1);
         SendText(t2, msg);
-        RATES_Send_Duration = WAIT_TIME_BETWEEN_READING_PARAMETERS; // how many milliseconds to await RATES values
+        RATES_Send_Duration = MSP_WAIT_TIME; // how many milliseconds to await RATES values
         Reading_RATES_Now = true;                                   // This tells the Ack payload parser to get RATES values
         AddParameterstoQueue(SEND_RATES_VALUES);                    // Request RATES values from RX
         RATES_Start_Time = millis();                                // record start time as it's not long
@@ -295,7 +294,7 @@ void Save_SOME_RF_Parameters()
         strcat(msg, " to LocalBank ");
         strcat(msg, NB1);
         SendText(t2, msg);
-        Rates_Advanced_Send_Duration = WAIT_TIME_BETWEEN_READING_PARAMETERS; // how many milliseconds to await RATES Advanced values
+        Rates_Advanced_Send_Duration = MSP_WAIT_TIME; // how many milliseconds to await RATES Advanced values
         Reading_RATES_Advanced_Now = true;                                   // This tells the Ack payload parser to get RATES Advanced values
         AddParameterstoQueue(SEND_RATES_ADVANCED_VALUES);                    // Request RATES Advanced values from RX
         RATES_Advanced_Start_Time = millis();                                // record start time as it's not long

@@ -92,7 +92,6 @@
 #define POWERONOFFDELAY 1000                  // Delay after power OFF before transmit stops.
 #define POWERONOFFDELAY2 4000                 // Delay after power ON before Off is possible....
 #define MSP_WAIT_TIME 400                     // Time to allow for reading MSP data from RX and FC
-                                              // and delay after power off before power on button is active
                                               // **************************************************************************
                                               //                            FHSS BITS                                     *
                                               //***************************************************************************
