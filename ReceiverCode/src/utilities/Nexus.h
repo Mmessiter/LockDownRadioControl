@@ -259,8 +259,12 @@ inline void WritePIDsToNexusAndSave(const uint16_t pid[16])
 
     if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight22Detected))
         return;
-    uint8_t payload[34];
-    for (uint8_t i = 0; i < 16; i++)
+    uint8_t payload[30]; // actually 34 but we only send 30 (12 + 3 boost)
+    for (int i = 0; i < 30; i++)
+    {
+        payload[i] = Original_PID_Values[i]; // start with original values.. probably not really  needed
+    }
+    for (uint8_t i = 0; i < 15; i++)
     {
         payload[i * 2 + 0] = (uint8_t)(pid[i] & 0xFF);
         payload[i * 2 + 1] = (uint8_t)(pid[i] >> 8);
@@ -275,23 +279,37 @@ inline void WritePIDsToNexusAndSave(const uint16_t pid[16])
 void DebugPIDValues(const char *msg)
 {
     Look(msg);
-    Look1("Roll P: ");Look(PID_Roll_P);
-    Look1("Roll I: ");Look(PID_Roll_I);
-    Look1("Roll D: ");Look(PID_Roll_D);
-    Look1("Roll FF: ");Look(PID_Roll_FF);
-    Look1("Pitch P: ");Look(PID_Pitch_P);
-    Look1("Pitch I: ");Look(PID_Pitch_I);
-    Look1("Pitch D: ");Look(PID_Pitch_D);
-    Look1("Pitch FF: ");Look(PID_Pitch_FF);
-    Look1("Yaw P: ");Look(PID_Yaw_P);
-    Look1("Yaw I: ");Look(PID_Yaw_I);
-    Look1("Yaw D: ");Look(PID_Yaw_D);
-    Look1("Yaw FF: ");Look(PID_Yaw_FF);
-    Look1("Roll Boost: ");Look(PID_Roll_Boost);
-    Look1("Pitch Boost: ");Look(PID_Pitch_Boost);
-    Look1("Yaw Boost: ");Look(PID_Yaw_Boost);
+    Look1("Roll P: ");
+    Look(PID_Roll_P);
+    Look1("Roll I: ");
+    Look(PID_Roll_I);
+    Look1("Roll D: ");
+    Look(PID_Roll_D);
+    Look1("Roll FF: ");
+    Look(PID_Roll_FF);
+    Look1("Pitch P: ");
+    Look(PID_Pitch_P);
+    Look1("Pitch I: ");
+    Look(PID_Pitch_I);
+    Look1("Pitch D: ");
+    Look(PID_Pitch_D);
+    Look1("Pitch FF: ");
+    Look(PID_Pitch_FF);
+    Look1("Yaw P: ");
+    Look(PID_Yaw_P);
+    Look1("Yaw I: ");
+    Look(PID_Yaw_I);
+    Look1("Yaw D: ");
+    Look(PID_Yaw_D);
+    Look1("Yaw FF: ");
+    Look(PID_Yaw_FF);
+    Look1("Roll Boost: ");
+    Look(PID_Roll_Boost);
+    Look1("Pitch Boost: ");
+    Look(PID_Pitch_Boost);
+    Look1("Yaw Boost: ");
+    Look(PID_Yaw_Boost);
 }
-   
 
 // ************************************************************************************************************
 //         MSP_PID FROM ROTORFLIGHT FIRMWARE
@@ -302,8 +320,7 @@ inline bool Parse_MSP_PID(const uint8_t *data, uint8_t n)
     if (!FindMspV1ResponseFrameForCmd(data, n, MSP_PID, f))
         return false;
 
-    
-    if (f.size < 34)
+    if (f.size < 30) // 34 in fact but we only use 30 (12 + 3 boost)
         return false;
     const uint8_t *p = f.payload;
 
@@ -320,15 +337,20 @@ inline bool Parse_MSP_PID(const uint8_t *data, uint8_t n)
     PID_Yaw_P = p[16] | (p[17] << 8);
     PID_Yaw_I = p[18] | (p[19] << 8);
     PID_Yaw_D = p[20] | (p[21] << 8);
-    PID_Yaw_FF = p[22] | (p[23] << 8); 
+    PID_Yaw_FF = p[22] | (p[23] << 8);
 
     PID_Roll_Boost = p[24] | (p[25] << 8);
     PID_Pitch_Boost = p[26] | (p[27] << 8);
     PID_Yaw_Boost = p[28] | (p[29] << 8);
 
-   // Look(f.size); // == 34 !
+    for (int i = 0; i < 30; i++)
+    {
+        Original_PID_Values[i] = p[i];
+    }
 
-    //DebugPIDValues("Current Nexus PID Values");
+    // Look(f.size); // == 34 !
+
+    // DebugPIDValues("Current Nexus PID Values");
 
     return true;
 }
@@ -717,7 +739,7 @@ inline bool Parse_MSP_PID_PROFILE(const uint8_t *data, uint8_t n)
     PID_Advanced_Bytes[24] = Inertia_Precomp_Gain41;
 
     Inertia_Precomp_Cutoff42 = p[42];
-    
+
     PID_Advanced_Bytes[25] = Inertia_Precomp_Cutoff42;
 
     return true;
