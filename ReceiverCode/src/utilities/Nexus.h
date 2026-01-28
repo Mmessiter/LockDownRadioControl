@@ -251,37 +251,29 @@ inline void SendToMSP(uint8_t command, const uint8_t *payload, uint8_t payloadSi
 
 // ************************************************************************************************************
 // Write the given array of 12 PID values to Nexus via MSP, and then save to EEPROM/flash.
-inline void WritePIDsToNexusAndSave(const uint16_t pid[16])
+inline void WritePIDsToNexusAndSave(const uint16_t pid[17])
 {
     static uint32_t lastWriteTime = 0;
     const uint32_t WRITE_COOLDOWN_MS = 5000; // 5 seconds
     uint32_t now = millis();
-    uint8_t i;
 
     if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight22Detected))
         return;
     uint8_t payload[34]; // actually 34 but we only send 30 (12 + 3 boost four bytes are ignored at the moment)
-    for (i = 0; i < 30; i++)
+    for (int i = 0; i < 34; i++)
     {
         payload[i] = Original_PID_Values[i]; // start with original values.. probably not really  needed
     }
-    for (i = 0; i < 15; i++)
+    for (uint8_t i = 0; i < 17; i++)
     {
         payload[i * 2 + 0] = (uint8_t)(pid[i] & 0xFF);
         payload[i * 2 + 1] = (uint8_t)(pid[i] >> 8);
     }
-// **********************************************************************************
-// add default HSI offsets for Roll and Pitch (we won't change them here) heer 
-     payload[30] = 60; // 60 is default HSI Offset for Roll
-     payload[31] = 0;  // must be zero!
-     payload[32] = 60; // 60 is default HSI Offset for Pitch
-     payload[33] = 0;  // must be zero!
-// **********************************************************************************
-     SendToMSP(MSP_SET_PID, payload, sizeof(payload));
-     delay(50);
-     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
-     delay(50);
-     lastWriteTime = now; // set cooldown only after we actually did the write+save
+    SendToMSP(MSP_SET_PID, payload, sizeof(payload));
+    delay(50);
+    SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
+    delay(50);
+    lastWriteTime = now; // set cooldown only after we actually did the write+save
 }
 // ************************************************************************************************************
 void DebugPIDValues(const char *msg)
@@ -328,7 +320,7 @@ inline bool Parse_MSP_PID(const uint8_t *data, uint8_t n)
     if (!FindMspV1ResponseFrameForCmd(data, n, MSP_PID, f))
         return false;
 
-    if (f.size < 30) // 34 in fact but we only use 30 (12 + 3 boost)
+    if (f.size < 34) // 34 bytes expected
         return false;
     const uint8_t *p = f.payload;
 
@@ -351,14 +343,14 @@ inline bool Parse_MSP_PID(const uint8_t *data, uint8_t n)
     PID_Pitch_Boost = p[26] | (p[27] << 8);
     PID_Yaw_Boost = p[28] | (p[29] << 8);
 
-    for (int i = 0; i < 30; i++)
+    PID_HSI_Offset_Roll = p[30] | (p[31] << 8);
+    PID_HSI_Offset_Pitch = p[32] | (p[33] << 8);
+   
+
+    for (int i = 0; i < 34; i++)
     {
         Original_PID_Values[i] = p[i];
     }
-
-    // Look (p[30] | (p[31] << 8)); // 60 is default HSI Offset for Roll
-    // Look (p[32] | (p[33] << 8)); // 60 is default HSI Offset for Pitch
-    // Look("");
 
     // Look(f.size); // == 34 !
 

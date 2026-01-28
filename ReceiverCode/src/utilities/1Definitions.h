@@ -125,7 +125,7 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define GEAR_RATIO 8
 #define SEND_PID_VALUES 9
 #define GET_FIRST_6_PID_VALUES 10
-#define GET_SECOND_9_PID_VALUES 11
+#define GET_SECOND_11_PID_VALUES 11
 #define SEND_RATES_VALUES 12
 #define GET_FIRST_7_RATES_VALUES 13           // Command to update first 6 RATES values to RX
 #define GET_SECOND_6_RATES_VALUES 14          // Command to update second 6 RATES values to RX
@@ -419,9 +419,11 @@ uint16_t PID_Yaw_FF;
 uint16_t PID_Roll_Boost;
 uint16_t PID_Pitch_Boost;
 uint16_t PID_Yaw_Boost;
+uint16_t PID_HSI_Offset_Roll;
+uint16_t PID_HSI_Offset_Pitch;
 
-uint16_t All_PIDs[15]; // to hold all 12 + 3 boost PIDs + spare (was 12 now 15)
-uint8_t Original_PID_Values[30]; // to hold all 12 + 3 boost PIDs there are more beyond..
+uint16_t All_PIDs[17];           // to hold all 12, + 3 boost PIDs, + 2 HSI offsets
+uint8_t Original_PID_Values[34]; // to hold all 12 + 3 boost PIDs there are more beyond..
 
 uint16_t PID_Send_Duration = 1000;
 uint16_t RATES_Send_Duration = 1000;

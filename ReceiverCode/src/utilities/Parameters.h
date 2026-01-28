@@ -92,12 +92,12 @@ void ReadExtraParameters()
         }
         break;
 
-    case GET_SECOND_9_PID_VALUES: // 11
+    case GET_SECOND_11_PID_VALUES: // 11
         if (!Rotorflight22Detected)
             break;
-        for (int i = 0; i < 9; ++i)
+        for (int i = 0; i < 11; ++i)
         {
-            All_PIDs[i + 6] = Parameters.word[i + 1]; // todo: add last four bytes?
+            All_PIDs[i + 6] = Parameters.word[i + 1]; // 6 to 16
         }
         WritePIDsToNexusAndSave(All_PIDs);
         break;

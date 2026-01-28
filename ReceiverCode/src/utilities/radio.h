@@ -807,7 +807,7 @@ void SetupRadios()
 /************************************************************************************************************/
 void LoadAckPayload()
 {
-    const uint8_t MAX_TELEMETERY_ITEMS = 33; // Max number of telemetry items to send...
+    const uint8_t MAX_TELEMETERY_ITEMS = 34; // Max number of telemetry items to send...
 
     if (MacAddressSentCounter < 20)
     {
@@ -928,7 +928,7 @@ void LoadAckPayload()
         {
         case SEND_NO_RF: // 0
             break;
-        case SEND_PID_RF: // 1
+        case SEND_PID_RF:                              // 1
             Send_2_x_uint16_t(PID_Roll_P, PID_Roll_I); // roll P (1 & 2)
             break;
         case SEND_RATES_RF: // 2
@@ -949,7 +949,7 @@ void LoadAckPayload()
         {
         case SEND_NO_RF: // 0
             break;
-        case SEND_PID_RF: // 1
+        case SEND_PID_RF:                               // 1
             Send_2_x_uint16_t(PID_Roll_D, PID_Roll_FF); // roll D & ff (3 & 4)
             break;
         case SEND_RATES_RF: // 2
@@ -971,7 +971,7 @@ void LoadAckPayload()
         {
         case SEND_NO_RF: // 0
             break;
-        case SEND_PID_RF: // 1
+        case SEND_PID_RF:                                // 1
             Send_2_x_uint16_t(PID_Pitch_P, PID_Pitch_I); // pitch P (5 & 6)
             break;
         case SEND_RATES_RF: // 2
@@ -992,8 +992,8 @@ void LoadAckPayload()
         {
         case SEND_NO_RF: // 0
             break;
-        case SEND_PID_RF: // 1
-            Send_2_x_uint16_t(PID_Pitch_D, PID_Pitch_FF);// pitch D & ff (7 & 8)
+        case SEND_PID_RF:                                 // 1
+            Send_2_x_uint16_t(PID_Pitch_D, PID_Pitch_FF); // pitch D & ff (7 & 8)
             break;
         case SEND_RATES_RF: // 2
             Send_Rates_Bytes(11, 14);
@@ -1009,15 +1009,15 @@ void LoadAckPayload()
         }
         break;
     case 29:
-     
+
         switch (SendRotorFlightParametresNow)
         {
         case SEND_NO_RF: // 0
             break;
-        case SEND_PID_RF: // 1
+        case SEND_PID_RF:                            // 1
             Send_2_x_uint16_t(PID_Yaw_P, PID_Yaw_I); // yaw P & I (9 & 10)
             break;
-        
+
         case SEND_PID_ADVANCED_RF: // 4
             Send_PID_Advanced_Bytes(16, 20);
             break;
@@ -1058,8 +1058,8 @@ void LoadAckPayload()
             break;
         }
         break;
-    case 33: 
-    switch (SendRotorFlightParametresNow)
+    case 33:
+        switch (SendRotorFlightParametresNow)
         {
         case SEND_NO_RF: // 0
             break;
@@ -1070,7 +1070,18 @@ void LoadAckPayload()
             break;
         }
         break;
-
+    case 34:
+        switch (SendRotorFlightParametresNow)
+        {
+        case SEND_NO_RF: // 0
+            break;
+        case SEND_PID_RF:
+            Send_2_x_uint16_t(PID_HSI_Offset_Roll, PID_HSI_Offset_Pitch); // 
+            break;
+        default:
+            break;
+        }
+        break;
     default:
         break;
     }
