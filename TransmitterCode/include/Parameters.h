@@ -97,14 +97,16 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
             Parameters.word[i + 1] = PID_Values[i]; // 0 to 5
         }
         break;
-    case GET_SECOND_9_PID_VALUES: // 11 = I'm sending second 6 PID values (TX->RX) (Because we cannot fit all 12 in one go)
-        for (int i = 0; i < 6; ++i)// 
+    case GET_SECOND_11_PID_VALUES:  // 11 = I'm sending second 11 PID values (TX->RX) (Because we cannot fit > 12 in one go)
+        for (int i = 0; i < 6; ++i) //
         {
             Parameters.word[i + 1] = PID_Values[i + 6];
         }
-        Parameters.word[7] = PID_Boost_Values[0]; // PID_Roll_Boost
-        Parameters.word[8] = PID_Boost_Values[1]; // PID_Pitch_Boost
-        Parameters.word[9] = PID_Boost_Values[2]; // PID_Yaw_Boost these were tacked on
+        Parameters.word[7] = PID_Boost_Values[0];       // PID_Roll_Boost
+        Parameters.word[8] = PID_Boost_Values[1];       // PID_Pitch_Boost
+        Parameters.word[9] = PID_Boost_Values[2];       // PID_Yaw_Boost these were tacked on
+        Parameters.word[10] = PID_HSI_Offset_Values[0]; // PID_Roll_HSI_Offset
+        Parameters.word[11] = PID_HSI_Offset_Values[1]; // PID_Pitch_HSI_Offset
         break;
     case SEND_RATES_VALUES:                       // 12 = Please send RATES values
         Parameters.word[1] = 321;                 // confirms request for RATES values

@@ -247,8 +247,7 @@ void SimplePing()
 void TryToConnect() // first connect before binding
 {
     static uint8_t ReconnectionIndex = 0;
-    // Look1("Trying to connect...");
-    // Look(FHSS_data::Used_Recovery_Channels[ReconnectionIndex]);
+  
     if (!DontChangePipeAddress)
         TryOtherPipe();
     ++ReconnectionIndex;
@@ -1339,12 +1338,22 @@ FASTRUN void ParseAckPayload()
         if (Reading_PIDS_Now)
         {
             PID_Boost_Values[2] = GetFirstWordFromAckPayload(); // PID_Yaw_Boost
-            DisplayBoostPidValues(); // Second value not used yet
+            DisplayBoostPidValues();                            // Second value not used yet
         }
         break;
-    default:
+    case 34:
+        if (Reading_PIDS_Now)
+        {
+            PID_HSI_Offset_Values[0] = GetFirstWordFromAckPayload();  // PID_Roll_HSI_Offset
+            PID_HSI_Offset_Values[1] = GetSecondWordFromAckPayload(); // PID_Pitch_HSI_Offset
+            break;
+        }
         break;
-    }
+        // case 35:
+        //     break;
+        default:
+            break;
+        }
 }
 
 #endif

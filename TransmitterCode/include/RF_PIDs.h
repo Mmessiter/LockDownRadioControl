@@ -26,7 +26,7 @@ void SendForegroundColour(const char *label, uint16_t colour)
 // ********************************************************************************************************
 void BackgroundColourPIDLabels(uint16_t Colour)
 {
-    for (int i = 0; i < MAX_PID_WORDS + 3; ++i)
+    for (int i = 0; i < MAX_PID_WORDS + 5; ++i) // +5 for the 3 boost PIDs and 2 HSI offsets
     {
         SendBackgroundColour(PID_Labels[i], Colour);
     }
@@ -34,7 +34,7 @@ void BackgroundColourPIDLabels(uint16_t Colour)
 // ********************************************************************************************************
 void ForegroundColourPIDLabels(uint16_t Colour)
 {
-    for (int i = 0; i < MAX_PID_WORDS + 3; ++i)
+    for (int i = 0; i < MAX_PID_WORDS + 5; ++i) // +5 for the 3 boost PIDs and 2 HSI offsets
     {
         SendForegroundColour(PID_Labels[i], Colour);
     }
@@ -48,11 +48,15 @@ void ReadEditedPIDs()
         PID_Values[i] = GetValue(PID_Labels[i]);
     }
     uint8_t p = MAX_PID_WORDS;
+
     for (int i = 0; i < 3; ++i)
     {
         PID_Boost_Values[i] = GetValue(PID_Labels[i + p]);
-       
-    }   
+    }
+    for (int i = 0; i < 2; ++i)
+    {
+        PID_HSI_Offset_Values[i] = GetValue(PID_Labels[i + p + 3]);
+    }
     return;
 }
 // ********************************************************************************************************
@@ -73,9 +77,11 @@ void DisplayBoostPidValues() // Displays Boost PID values as soon as they arrive
         return;
     if (CurrentView == PIDVIEW) // Must be in PID view
     {
-        SendValue(PID_Labels[12], PID_Boost_Values[0]); // Roll Boost
-        SendValue(PID_Labels[13], PID_Boost_Values[1]); // Pitch Boost
-        SendValue(PID_Labels[14], PID_Boost_Values[2]); // Yaw Boost
+        SendValue(PID_Labels[12], PID_Boost_Values[0]);      // Roll Boost
+        SendValue(PID_Labels[13], PID_Boost_Values[1]);      // Pitch Boost
+        SendValue(PID_Labels[14], PID_Boost_Values[2]);      // Yaw Boost
+        SendValue(PID_Labels[15], PID_HSI_Offset_Values[0]); // HSI Offset Roll
+        SendValue(PID_Labels[16], PID_HSI_Offset_Values[1]); // HSI Offset Pitch
     }
 }
 
@@ -104,16 +110,9 @@ void HidePIDMsg()
 //***********************************************************************************************************/
 void ShowLocalBank()
 {
-    for (int i = 0; i < MAX_PID_WORDS; ++i)
-        if (CurrentView == PIDVIEW && i + 1 < MAX_PID_WORDS) // Must be in PID view and a valid index
-        {
+    for (int i = 0; i < MAX_PID_WORDS + 5; ++i)
+        if (CurrentView == PIDVIEW && i < MAX_PID_WORDS + 5) // Must be in PID view and a valid index
             SendValue(PID_Labels[i], Saved_PID_Values[i][Bank - 1]);
-        }
-    uint8_t p = MAX_PID_WORDS;
-    for (int i = 0; i < 3; ++i)
-    {
-        SendValue(PID_Labels[i + p], Saved_PID_Values[i + p][Bank - 1]);
-    }
     HidePIDMsg();
 }
 //************************************************************************************************************/
@@ -144,10 +143,9 @@ void ShowPIDBank() // this is called when bank is changed so new bank's PID valu
             MsgBox((char *)"page PIDView", Wmsg); // Warn about unsaved edits
         }
         PIDMsg(buf, Gray);                     // Show loading message and hides old PIDs
-        PID_Send_Duration = MSP_WAIT_TIME;              // how many milliseconds to await PID values
+        PID_Send_Duration = MSP_WAIT_TIME;     // how many milliseconds to await PID values
         Reading_PIDS_Now = true;               // This tells the Ack payload parser to get PID values
         AddParameterstoQueue(SEND_PID_VALUES); // Request PID values from RX
-
         PIDS_Were_Edited = false;
         PID_Start_Time = millis(); // record start time as it's not long
     }
@@ -171,6 +169,10 @@ void SaveToLocalBank()
     {
         Saved_PID_Values[i + MAX_PID_WORDS][Bank - 1] = PID_Boost_Values[i];
     }
+    for (int i = 0; i < 2; ++i)
+    {
+        Saved_PID_Values[i + MAX_PID_WORDS + 3][Bank - 1] = PID_HSI_Offset_Values[i];
+    }
     SaveOneModel(ModelNumber);       // save all to SD card
     SendCommand((char *)"vis b3,0"); // hide "Send" button
     HidePIDMsg();
@@ -193,8 +195,8 @@ void SendEditedPIDs()
     PIDMsg((char *)"Sending edited PIDs ...", Gray); // Show sending message
     DelayWithDog(100);                               // allow LOTS of time for screen to update BEFORE sending another Nextion command
     ReadEditedPIDs();                                // read the edited PIDs from the screen;
-    AddParameterstoQueue(GET_SECOND_9_PID_VALUES);   // SECOND MUST BE QUEUED FIRST!!! Send PID 7-12 values from TX to RX
-    AddParameterstoQueue(GET_FIRST_6_PID_VALUES);    // SECOND MUST BE QUEUED FIRST!!! Send PID 1-6 values from TX to RX
+    AddParameterstoQueue(GET_SECOND_11_PID_VALUES);  // SECOND MUST BE QUEUED FIRST!!! Send PID 6-16 values from TX to RX
+    AddParameterstoQueue(GET_FIRST_6_PID_VALUES);    // SECOND MUST BE QUEUED FIRST!!! Send PID 0-5 values from TX to RX
     HidePIDMsg();                                    // SECOND MUST BE QUEUED FIRST!!!  because this queue is a LIFO stack
     SendCommand((char *)"vis b3,0");                 // hide "Send" button
     PlaySound(BEEPCOMPLETE);                         // let user know we're done

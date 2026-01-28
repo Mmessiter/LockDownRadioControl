@@ -431,7 +431,7 @@ bool ReadOneModel(uint32_t Mnum)
 
     for (j = 0; j < 4; ++j)
     {
-        for (i = 0; i < MAX_PID_WORDS+3; ++i)
+        for (i = 0; i < MAX_PID_WORDS + 5; ++i)
         {
             Saved_PID_Values[i][j] = SDRead16BITS(SDCardAddress);
             ++SDCardAddress;
@@ -1355,7 +1355,7 @@ void SaveOneModel(uint32_t mnum)
 
     for (j = 0; j < 4; ++j)
     {
-        for (i = 0; i < MAX_PID_WORDS+3; ++i)
+        for (i = 0; i < MAX_PID_WORDS + 5; ++i)
         {
             SDUpdate16BITS(SDCardAddress, Saved_PID_Values[i][j]);
             ++SDCardAddress;
@@ -1370,7 +1370,6 @@ void SaveOneModel(uint32_t mnum)
         {
             SDUpdate8BITS(SDCardAddress, Saved_Rate_Advanced_Values[i][j]);
             ++SDCardAddress;
-            
         }
         for (i = 0; i < MAX_PIDS_ADVANCED_BYTES; ++i)
         {

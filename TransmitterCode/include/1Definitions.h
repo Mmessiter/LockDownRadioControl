@@ -172,7 +172,7 @@
 #define GEAR_RATIO 8                          // Gear Ratio (Motor:Rotor) for RPM calculation
 #define SEND_PID_VALUES 9                     // Command to request PID values from RX
 #define GET_FIRST_6_PID_VALUES 10             // Command to update first 6 PID values to RX
-#define GET_SECOND_9_PID_VALUES 11            // Command to update second 6 PID values to RX
+#define GET_SECOND_11_PID_VALUES 11           // Command to update second 6 PID values to RX
 #define SEND_RATES_VALUES 12                  // Command to request RATES values from RX
 #define GET_FIRST_7_RATES_VALUES 13           // Command to update first 6 RATES values to RX
 #define GET_SECOND_6_RATES_VALUES 14          // Command to update second 6 RATES values to RX
@@ -1376,7 +1376,7 @@ float ESC_Temp = 0;
 float Max_ESC_Temp = 0;
 char ESC_Temperature[10];
 char MAX_ESC_Temperature[10];
-char PID_Labels[15][4] = {"n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11", "n12", "n13", "n14"};
+char PID_Labels[17][4] = {"n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11", "n12", "n13", "n14", "n15", "n16"};
 bool PIDS_Were_Edited = false;
 bool PIDS_Advanced_Were_Edited = false;
 bool Rates_Were_Edited = false;
@@ -1441,11 +1441,12 @@ uint8_t Index = 82;
 
 uint16_t PID_Values[MAX_PID_WORDS];
 uint16_t PID_Boost_Values[3];
+uint16_t PID_HSI_Offset_Values[2];
 uint8_t Rate_Values[MAX_RATES_BYTES];
 uint8_t Rate_Advanced_Values[MAX_RATES_ADVANCED_BYTES];
 uint8_t PID_Advanced_Values[MAX_PIDS_ADVANCED_BYTES];
 
-uint16_t Saved_PID_Values[MAX_PID_WORDS+3][4];
+uint16_t Saved_PID_Values[MAX_PID_WORDS + 5][4];
 uint8_t Saved_Rate_Values[MAX_RATES_BYTES][4];
 uint8_t Saved_Rate_Advanced_Values[MAX_RATES_ADVANCED_BYTES][4];
 uint8_t Saved_PID_Advanced_Values[MAX_PIDS_ADVANCED_BYTES][4];
