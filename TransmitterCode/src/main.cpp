@@ -5157,16 +5157,16 @@ FASTRUN void loop()
     case PONGMODE: // 5
         PlayPong();
         break;
-    case LISTENMODE: // 6  ... listen only ... for wireless buddy
+    case LISTENMODE: // 6 for wireless buddy
         DoWirelessBuddyListen();
         break;
     case SAVE_RF_SETTINGS: // 7
         Save_SOME_RF_Parameters();
-        SendData(); // local TX
+        SendData(); 
         break;
     case RESTORE_RF_SETTINGS: // 8
         Restore_SOME_RF_Parameters();
-        SendData(); // local TX
+        SendData(); 
         break;
     default:
         break;
