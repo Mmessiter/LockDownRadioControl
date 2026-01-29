@@ -306,18 +306,18 @@ void PopulateDataView()
     char DataView_Ag[] = "Ag";
     char DataView_Gc[] = "Gc";
     char Sbs[] = "Sbus";
-    char IdReceived[] = "t22";
-    char IdStored[] = "t19";
-    char IdReceived1[] = "t23";
-    char IdStored1[] = "t24";
-    char LocalMacID[] = "t26";
-    char MasterID[] = "t28";
+    // char IdReceived[] = "t22";
+    // char IdStored[] = "t19";
+    // char IdReceived1[] = "t23";
+    // char IdStored1[] = "t24";
+    // char LocalMacID[] = "t26";
+    // char MasterID[] = "t28";
     char Vbuf[50];
-    char nb2[5];
-    char DataView_txv[] = "txv";
+    // char nb2[5];
+     char DataView_txv[] = "txv";
     char MeanFrameRate[] = "n0";
     char TimeSinceBoot[] = "n1";
-    unsigned int TempModelId = 0;
+    // unsigned int TempModelId = 0;
     uint32_t BootedMinutes = millis() / 60000;
    
 
@@ -325,47 +325,48 @@ void PopulateDataView()
 
     if (!LastPacketsPerSecond)
     { // these only need displaying once - they will not change
-        TempModelId = ModelsMacUnionSaved.Val32[0];
-        snprintf(Vbuf, 9, "%X", TempModelId);
-        if (TempModelId)
-            BuildText(IdStored, Vbuf); // was SendText(IdStored, Vbuf);
-        TempModelId = ModelsMacUnionSaved.Val32[1];
-        snprintf(Vbuf, 9, "%X", TempModelId);
-        if (TempModelId)
+        // TempModelId = ModelsMacUnionSaved.Val32[0];
+        // snprintf(Vbuf, 9, "%X", TempModelId);
+        // if (TempModelId)
+        //     BuildText(IdStored, Vbuf); // was SendText(IdStored, Vbuf);
+        // TempModelId = ModelsMacUnionSaved.Val32[1];
+        // snprintf(Vbuf, 9, "%X", TempModelId);
+        // if (TempModelId)
 
-            BuildText(IdStored1, Vbuf); // was SendText(IdStored1, Vbuf);
-        TempModelId = ModelsMacUnion.Val32[0];
-        snprintf(Vbuf, 9, "%X", TempModelId);
-        if (TempModelId)
-            BuildText(IdReceived, Vbuf); // was SendText(IdReceived, Vbuf);
-        TempModelId = ModelsMacUnion.Val32[1];
-        snprintf(Vbuf, 9, "%X", TempModelId);
-        if (TempModelId)
-            BuildText(IdReceived1, Vbuf); // was SendText(IdReceived1, Vbuf);
-        for (int i = 0; i < 5; ++i)
-        {
-            Vbuf[i] = 0;
-        }
-        for (int i = 4; i >= 0; --i)
-        { //**
-            snprintf(nb2, 4, "%X", BuddyMacAddress[i]);
-            strcat(Vbuf, nb2);
-            strcat(Vbuf, " ");
-        }
+        //     BuildText(IdStored1, Vbuf); // was SendText(IdStored1, Vbuf);
+        // TempModelId = ModelsMacUnion.Val32[0];
+        // snprintf(Vbuf, 9, "%X", TempModelId);
+      
+        // if (TempModelId)
+        //     BuildText(IdReceived, Vbuf); // was SendText(IdReceived, Vbuf);
+        // TempModelId = ModelsMacUnion.Val32[1];
+        // snprintf(Vbuf, 9, "%X", TempModelId);
+        // if (TempModelId)
+        //     BuildText(IdReceived1, Vbuf); // was SendText(IdReceived1, Vbuf);
+        // for (int i = 0; i < 5; ++i)
+        // {
+        //     Vbuf[i] = 0;
+        // }
+        // for (int i = 4; i >= 0; --i)
+        // { //**
+        //     snprintf(nb2, 4, "%X", BuddyMacAddress[i]);
+        //     strcat(Vbuf, nb2);
+        //     strcat(Vbuf, " ");
+        // }
 
-        BuildText(MasterID, Vbuf); // was SendText(MasterID, Vbuf);
+        // BuildText(MasterID, Vbuf); // was SendText(MasterID, Vbuf);
 
-        for (int i = 0; i < 5; ++i)
-        {
-            Vbuf[i] = 0;
-        }
-        for (int i = 5; i > 0; --i)
-        {
-            snprintf(nb2, 4, "%X", MacAddress[i]);
-            strcat(Vbuf, nb2);
-            strcat(Vbuf, " ");
-        }
-        BuildText(LocalMacID, Vbuf);                       // SendText(LocalMacID, Vbuf);
+        // for (int i = 0; i < 5; ++i)
+        // {
+        //     Vbuf[i] = 0;
+        // }
+        // for (int i = 5; i > 0; --i)
+        // {
+        //     snprintf(nb2, 4, "%X", MacAddress[i]);
+        //     strcat(Vbuf, nb2);
+        //     strcat(Vbuf, " ");
+        // }
+         //BuildText(LocalMacID, Vbuf);                       // SendText(LocalMacID, Vbuf);
         BuildText(DataView_txv, TransmitterVersionNumber); // SendText(DataView_txv, TransmitterVersionNumber);
         if (BoundFlag && ModelMatched)
         BuildText(DataView_rxv, ReceiverVersionNumber); // SendText(DataView_rxv, ReceiverVersionNumber);
@@ -396,11 +397,9 @@ void PopulateDataView()
         LastRX1TotalTime = RX1TotalTime;
         BuildValue(DataView_Sg, RX1TotalTime); // SendValue(DataView_Sg, RX1TotalTime);
     }
-   // if (LastGapAverage != GapAverage)
-   // {
-       // LastGapAverage = GapAverage;
+
         BuildValue(DataView_Ag, GapAverage); // SendValue(DataView_Ag, GapAverage);
-   // }
+  
     if (LastRX2TotalTime != RX2TotalTime)
     {
         LastRX2TotalTime = RX2TotalTime;
