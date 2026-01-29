@@ -44,8 +44,7 @@ void RotorFlightEnd()
     ArmingChannel = atoi(temp);
     SaveOneModel(ModelNumber); // save the model including gear ratio and arming channel
     ZeroDataScreen();          // clear the screen data because editing Rotorflight parameters may have created misleading comms gaps
-    SendCommand((char *)"page RXOptionsView");
-    CurrentView = RXSETUPVIEW1;
+    RXOptionsViewStart();      // go back to RX Options view
 }
 
 #endif // RotorFlight_H
