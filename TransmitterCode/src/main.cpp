@@ -1,5 +1,5 @@
 /** @file TransmitterCode/src/main.cpp
- * // Malcolm Messiter 2020 - 2025
+ * // Malcolm Messiter 2020 - 2026
  * @brief This is the main file for the transmitter code.
  *
  * @page TransmitterCode....
@@ -54,6 +54,7 @@
  * - Slow Servos implemented: Any channel can be slowed by almost any amount for realistic flaps, U/C etc,
  * - Support for external third party transmitter modules added (JR type).
  * - Variometer implemented (using a BMP280 or better still, a DPS310)
+ * - Support for RotorFlight PID and RATES etc. parameters added via MSP protocol
  *
  *
  * | Teensy 4.1 Pins | Connections |

@@ -161,7 +161,11 @@
 #define PARAMETER_SEND_DURATION 5        // ms duration for parameter sending (remainder used for control)
 #define PARAMETER_QUEUE_MAXIMUM 250      // Maximum queued parameters allowed at once
 
+// **************************************************************************
 // Parameter ID definitions.
+// Used to identify different types of parameters being sent to/from RX
+// **************************************************************************
+
 #define FAILSAFE_SETTINGS 1
 #define QNH_SETTING 2
 #define GPS_MARK_LOCATION 3
@@ -295,7 +299,7 @@
 #define BUTTON_SENSE_PIN 33
 
 // **************************************************************************
-//               Sounds                             *
+//                                Sounds                                    *
 //***************************************************************************
 
 #define CLICKZERO 0
@@ -888,38 +892,38 @@ uint8_t Bank = 1;
 // ************************************** 0                  1                 2                  3                4          5           6           7          8                9        10          11       12        13             14            15          16          17      18        19           20         21     22           23         24         25          26           27        ***
 char BankNames[32][14] = {{"Flight mode 1"}, {"Flight mode 2"}, {"Flight mode 3"}, {"Flight mode 4"}, {"Bank 1"}, {"Bank 2"}, {"Bank 3"}, {"Bank 4"}, {"Aerobatics"}, {"Auto"}, {"Cruise"}, {"Flaps"}, {"Hover"}, {"Idle up 1"}, {"Idle up 2"}, {"Landing"}, {"Launch"}, {"Normal"}, {"Speed"}, {"Takeoff"}, {"Thermal"}, {"Hold"}, {"3D"}, {"Brakes"}, {"Stunt 1"}, {"Stunt 2"}, {"Gear up"}, {"Gear down"}, {"Profile 1"}, {"Profile 2"}, {"Profile 3"}, {"Profile 4"}};
 uint8_t BankSounds[32] = {
-    BFM1,
-    BFM2,
-    BFM3,
-    BFM4,
-    BANKONE,
-    BANKTWO,
-    BANKTHREE,
-    BANKFOUR,
-    AEROBATICS,
-    AUTO,
-    CRUISE,
-    FLAPS,
-    HOVER,
-    IDLE1,
-    IDLE2,
-    LANDING,
-    LAUNCH,
-    NORMALB,
-    SPEED,
-    TAKEOFF,
-    THERMAL,
-    THRHOLD,
-    THREEDEE,
-    AIRBRAKES,
-    STUNT1,
-    STUNT2,
-    WHEELSDOWN,
-    WHEELSUP,
-    BANKONE,
-    BANKTWO,
-    BANKTHREE,
-    BANKFOUR};
+    BFM1,       // "Flight mode 1"
+    BFM2,       // "Flight mode 2"
+    BFM3,       // "Flight mode 3"
+    BFM4,       // "Flight mode 4"
+    BANKONE,    // "Bank 1"
+    BANKTWO,    // "Bank 2"
+    BANKTHREE,  // "Bank 3"
+    BANKFOUR,   // "Bank 4"
+    AEROBATICS, // "Aerobatics"
+    AUTO,       // "Auto"
+    CRUISE,     // "Cruise"
+    FLAPS,      // "Flaps"
+    HOVER,      // "Hover"
+    IDLE1,      // "Idle up 1"
+    IDLE2,      // "Idle up 2"
+    LANDING,    // "Landing"
+    LAUNCH,     // "Launch"
+    NORMALB,    // "Normal"
+    SPEED,      // "Speed"
+    TAKEOFF,    // "Takeoff"
+    THERMAL,    // "Thermal"
+    THRHOLD,    // "Hold"
+    THREEDEE,   // "3D"
+    AIRBRAKES,  // "Brakes"
+    STUNT1,     // "Stunt 1"
+    STUNT2,     // "Stunt 2"
+    WHEELSDOWN, // "Gear down"
+    WHEELSUP,   // "Gear up"
+    BANKONE,    // "Bank 1"
+    BANKTWO,    // "Bank 2"
+    BANKTHREE,  // "Bank 3"
+    BANKFOUR};  // "Bank 4"
 uint8_t BanksInUse[4] = {0, 1, 2, 3};
 uint8_t PreviousBank = 1;
 // ************************************
