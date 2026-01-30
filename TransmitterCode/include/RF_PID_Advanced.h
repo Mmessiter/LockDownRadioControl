@@ -136,7 +136,7 @@ void ShowPIDAdvancedBank() // this is called when bank is changed so new bank's 
             MsgBox((char *)"page PID_A_View", Wmsg); // Warn about unsaved edits
         }
         PIDAdvancedMsg(buf, Gray);                      // Show loading message and hides old PIDs
-        PID_Advanced_Send_Duration = MSP_WAIT_TIME;              // how many milliseconds to await PID values
+        PID_Advanced_Send_Duration = MSP_WAIT_TIME * 2;              // how many milliseconds to await PID values
         Reading_PIDS_Advanced_Now = true;               // This tells the Ack payload parser to get PID values
         AddParameterstoQueue(SEND_PID_ADVANCED_VALUES); // Request PID values from RX
         PIDS_Advanced_Were_Edited = false;  // reset edited flag

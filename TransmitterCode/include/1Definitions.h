@@ -91,7 +91,7 @@
 #define BATTERY_CHECK_INTERVAL 1000           // 2 seconds between battery checks
 #define POWERONOFFDELAY 1000                  // Delay after power OFF before transmit stops.
 #define POWERONOFFDELAY2 4000                 // Delay after power ON before Off is possible....
-#define MSP_WAIT_TIME 1000                    // Time to allow for reading MSP data from RX and FC
+#define MSP_WAIT_TIME 600                     // Time to allow for reading MSP data from RX and FC
                                               // **************************************************************************
                                               //                            FHSS BITS                                     *
                                               //***************************************************************************

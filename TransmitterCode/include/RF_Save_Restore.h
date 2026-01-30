@@ -165,7 +165,7 @@ void Restore_SOME_RF_Parameters()
         SendValue((char *)"Progress", 100); // update progress bar
         CurrentMode = NORMAL;               // no further calls will come here
         PlaySound(BEEPCOMPLETE);
-        DelayWithDog(MSP_WAIT_TIME);
+        DelayWithDog(MSP_WAIT_TIME * 2);
         SendCommand((char *)"vis Progress,0"); // hide progress bar
         SendCommand((char *)"vis t2,0");       // hide please wait text
         break;
@@ -238,7 +238,7 @@ void Save_SOME_RF_Parameters()
         strcat(msg, " to LocalBank ");
         strcat(msg, NB1);
         SendText(t2, msg);
-        PID_Advanced_Send_Duration = MSP_WAIT_TIME;     // how many milliseconds to await PID Advanced values
+        PID_Advanced_Send_Duration = MSP_WAIT_TIME * 2;     // how many milliseconds to await PID Advanced values
         Reading_PIDS_Advanced_Now = true;               // This tells the Ack payload parser to get PID Advanced values
         AddParameterstoQueue(SEND_PID_ADVANCED_VALUES); // Request PID Advanced values from RX
         PID_Advanced_Start_Time = millis();             // record start time as it's not long
@@ -266,7 +266,7 @@ void Save_SOME_RF_Parameters()
         strcat(msg, " to LocalBank ");
         strcat(msg, NB1);
         SendText(t2, msg);
-        RATES_Send_Duration = MSP_WAIT_TIME;     // how many milliseconds to await RATES values
+        RATES_Send_Duration = MSP_WAIT_TIME * 2;     // how many milliseconds to await RATES values
         Reading_RATES_Now = true;                // This tells the Ack payload parser to get RATES values
         AddParameterstoQueue(SEND_RATES_VALUES); // Request RATES values from RX
         RATES_Start_Time = millis();             // record start time as it's not long
@@ -294,7 +294,7 @@ void Save_SOME_RF_Parameters()
         strcat(msg, " to LocalBank ");
         strcat(msg, NB1);
         SendText(t2, msg);
-        Rates_Advanced_Send_Duration = MSP_WAIT_TIME;     // how many milliseconds to await RATES Advanced values
+        Rates_Advanced_Send_Duration = MSP_WAIT_TIME * 2;     // how many milliseconds to await RATES Advanced values
         Reading_RATES_Advanced_Now = true;                // This tells the Ack payload parser to get RATES Advanced values
         AddParameterstoQueue(SEND_RATES_ADVANCED_VALUES); // Request RATES Advanced values from RX
         RATES_Advanced_Start_Time = millis();             // record start time as it's not long
@@ -320,7 +320,7 @@ void Save_SOME_RF_Parameters()
         CurrentMode = NORMAL;               // no further calls will come here
         SaveOneModel(ModelNumber);          // save all to SD card
         PlaySound(BEEPCOMPLETE);
-        DelayWithDog(MSP_WAIT_TIME);
+        DelayWithDog(MSP_WAIT_TIME * 2);
         SendCommand((char *)"vis Progress,0"); // hide progress bar
         SendCommand((char *)"vis t2,0");       // hide please wait text
         break;
