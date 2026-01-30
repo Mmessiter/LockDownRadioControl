@@ -11,21 +11,6 @@
 void ForceDataRedisplay()
 {
     LastShowTime = 0; //
-    LastPacketsPerSecond = 0;
-    LastLostPackets = 0;
-    // LastMaxRateOfClimb = 0;
-    // LastTimeSinceBoot = 0;
-    LastGapLongest = 0;
-    LastRadioSwaps = 0;
-    LastRX1TotalTime = 0;
-    LastRX2TotalTime = 0;
-    LastGapAverage = 0;
-    //  LastMaxRateOfClimb = 0;
-    // LastRXModelAltitude = 0;
-    // LastRXModelMaxAltitude = 0;
-    LastRXTemperature = 0;
-    LastRXReceivedPackets = 0;
-    LastAverageFrameRate = 0;
     ForceVoltDisplay = true;
     for (int i = 0; i < 5; ++i)
     {
@@ -904,6 +889,7 @@ void ClearSuccessRate()
 {
     for (int i = 0; i < (PACKET_HISTORY_WINDOW * (uint16_t)ConnectionAssessSeconds); ++i)
     { // 126 packets per second start off good
+        if (i < PACKET_HISTORY_WINDOW)
         PacketsHistoryBuffer[i] = 1;
     }
 }

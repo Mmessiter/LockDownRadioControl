@@ -1099,6 +1099,7 @@ void RXOptionsViewStart() // model Options screen
     SendValue(RxVCorrextion, RxVoltageCorrection);
     SendValue(c2, TimerDownwards);
     SendValue(n4, TimerStartTime / 60);
+    SendCommand(pRXSetup1); // this just sets grey here and there when options are off
 
     UpdateModelsNameEveryWhere();
 }

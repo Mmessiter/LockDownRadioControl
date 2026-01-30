@@ -20,9 +20,9 @@ void ClearNextionCommand()
     strcpy(NextionCommand, "");
 }
 /*********************************************************************************************************************************/
-void BuildNextionCommand(char *cmd)
+void BuildNextionCommand(char *cmd) // these strings can be <= 255 bytes but here we limit to 127 to avoid delays etc.
 {
-    if (strlen(NextionCommand) + strlen(cmd) >= MAXNEXTIONCOMMANDLENGTH) // If too long, send what we have and start building again.
+    if (strlen(NextionCommand) + strlen(cmd) >= MAXNEXTIONCOMMANDLENGTH ) // If too long, send what we have and start building again.
     {
         SendCommand(NextionCommand);
         ClearNextionCommand();

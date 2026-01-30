@@ -120,7 +120,14 @@ FASTRUN bool CheckRXVolts()
     SimplePing();
     return RXWarningFlag;
 }
-
+//*********************************************************************************************************************************/
+char *Mins_Secs(uint32_t total_seconds, char *buffer, size_t buflen)
+{
+    uint32_t minutes = total_seconds / 60;
+    uint32_t seconds = total_seconds % 60;
+    snprintf(buffer, buflen, "%" PRIu32 ":%02" PRIu32, minutes, seconds);
+    return buffer;
+}
 /*********************************************************************************************************************************/
 
 void CheckBatteryStates()
@@ -306,137 +313,44 @@ void PopulateDataView()
     char DataView_Ag[] = "Ag";
     char DataView_Gc[] = "Gc";
     char Sbs[] = "Sbus";
-    // char IdReceived[] = "t22";
-    // char IdStored[] = "t19";
-    // char IdReceived1[] = "t23";
-    // char IdStored1[] = "t24";
-    // char LocalMacID[] = "t26";
-    // char MasterID[] = "t28";
     char Vbuf[50];
-    // char nb2[5];
-     char DataView_txv[] = "txv";
+    char DataView_txv[] = "txv";
     char MeanFrameRate[] = "n0";
     char TimeSinceBoot[] = "n1";
-    // unsigned int TempModelId = 0;
-    uint32_t BootedMinutes = millis() / 60000;
-   
+    uint32_t BootedSeconds = millis() / 1000;
+    char tempbuf[60];
 
     ClearNextionCommand();
-
-    if (!LastPacketsPerSecond)
-    { // these only need displaying once - they will not change
-        // TempModelId = ModelsMacUnionSaved.Val32[0];
-        // snprintf(Vbuf, 9, "%X", TempModelId);
-        // if (TempModelId)
-        //     BuildText(IdStored, Vbuf); // was SendText(IdStored, Vbuf);
-        // TempModelId = ModelsMacUnionSaved.Val32[1];
-        // snprintf(Vbuf, 9, "%X", TempModelId);
-        // if (TempModelId)
-
-        //     BuildText(IdStored1, Vbuf); // was SendText(IdStored1, Vbuf);
-        // TempModelId = ModelsMacUnion.Val32[0];
-        // snprintf(Vbuf, 9, "%X", TempModelId);
-      
-        // if (TempModelId)
-        //     BuildText(IdReceived, Vbuf); // was SendText(IdReceived, Vbuf);
-        // TempModelId = ModelsMacUnion.Val32[1];
-        // snprintf(Vbuf, 9, "%X", TempModelId);
-        // if (TempModelId)
-        //     BuildText(IdReceived1, Vbuf); // was SendText(IdReceived1, Vbuf);
-        // for (int i = 0; i < 5; ++i)
-        // {
-        //     Vbuf[i] = 0;
-        // }
-        // for (int i = 4; i >= 0; --i)
-        // { //**
-        //     snprintf(nb2, 4, "%X", BuddyMacAddress[i]);
-        //     strcat(Vbuf, nb2);
-        //     strcat(Vbuf, " ");
-        // }
-
-        // BuildText(MasterID, Vbuf); // was SendText(MasterID, Vbuf);
-
-        // for (int i = 0; i < 5; ++i)
-        // {
-        //     Vbuf[i] = 0;
-        // }
-        // for (int i = 5; i > 0; --i)
-        // {
-        //     snprintf(nb2, 4, "%X", MacAddress[i]);
-        //     strcat(Vbuf, nb2);
-        //     strcat(Vbuf, " ");
-        // }
-         //BuildText(LocalMacID, Vbuf);                       // SendText(LocalMacID, Vbuf);
-        BuildText(DataView_txv, TransmitterVersionNumber); // SendText(DataView_txv, TransmitterVersionNumber);
-        if (BoundFlag && ModelMatched)
-        BuildText(DataView_rxv, ReceiverVersionNumber); // SendText(DataView_rxv, ReceiverVersionNumber);
-    }
-
-    if (LastPacketsPerSecond != PacketsPerSecond)
-    {
-        LastPacketsPerSecond = PacketsPerSecond;
-        BuildValue(DataView_pps, PacketsPerSecond); // SendValue(DataView_pps, PacketsPerSecond);
-    }
-    if (LastLostPackets != TotalLostPackets)
-    {
-        LastLostPackets = TotalLostPackets;
-        BuildValue(DataView_lps, TotalLostPackets); // SendValue(DataView_lps, TotalLostPackets);
-    }
-    if (LastGapLongest != GapLongest)
-    {
-        LastGapLongest = GapLongest;
-        BuildValue(DataView_Ls, GapLongest); // SendValue(DataView_Ls, GapLongest); heer
-    }
-    if (LastRadioSwaps != RadioSwaps)
-    {
-        LastRadioSwaps = RadioSwaps;
-        BuildValue(DataView_Ts, RadioSwaps); // SendValue(DataView_Ts, RadioSwaps);
-    }
-    if (LastRX1TotalTime != RX1TotalTime)
-    {
-        LastRX1TotalTime = RX1TotalTime;
-        BuildValue(DataView_Sg, RX1TotalTime); // SendValue(DataView_Sg, RX1TotalTime);
-    }
-
-        BuildValue(DataView_Ag, GapAverage); // SendValue(DataView_Ag, GapAverage);
-  
-    if (LastRX2TotalTime != RX2TotalTime)
-    {
-        LastRX2TotalTime = RX2TotalTime;
-        BuildValue(DataView_Gc, RX2TotalTime); // SendValue(DataView_Gc, RX2TotalTime);
-    }
-
+    BuildText(DataView_txv, TransmitterVersionNumber); // SendText(DataView_txv, TransmitterVersionNumber);
+    if (BoundFlag && ModelMatched)
+    BuildValue(MeanFrameRate, AverageFrameRate); // SendValue(MeanFrameRate, AverageFrameRate);
+    BuildText(DataView_rxv, ReceiverVersionNumber); // SendText(DataView_rxv, ReceiverVersionNumber);
+    BuildValue(DataView_pps, PacketsPerSecond); // SendValue(DataView_pps, PacketsPerSecond);
+    BuildValue(DataView_lps, TotalLostPackets); // SendValue(DataView_lps, TotalLostPackets);
+    BuildValue(DataView_Ls, GapLongest); // SendValue(DataView_Ls, GapLongest); heer
+    BuildValue(DataView_Ts, RadioSwaps); // SendValue(DataView_Ts, RadioSwaps);
+    Mins_Secs(RX1TotalTime, tempbuf, sizeof(tempbuf));
+    BuildText(DataView_Sg, tempbuf);
+    BuildText(DataView_Sg, tempbuf);     // SendValue(DataView_Sg, RX1TotalTime);
+    BuildValue(DataView_Ag, GapAverage); // SendValue(DataView_Ag, GapAverage);
+    Mins_Secs(RX2TotalTime, tempbuf, sizeof(tempbuf));
+    BuildText(DataView_Gc, tempbuf);
+    BuildText(DataView_Gc, tempbuf); // SendValue(DataView_Gc, RX2TotalTime);
     sprintf(Max_Rotor_RPM, "%" PRIu32 " RPM", Max_RotorRPM);
-
     BuildText(DataView_Alt, Max_Rotor_RPM); // SendText(DataView_Alt, ModelAltitude);
-
     sprintf(ESC_Temperature, "%.1f C.", ESC_Temp);
     sprintf(MAX_ESC_Temperature, "%.1f C.", Max_ESC_Temp);
     BuildText(DataView_MaxAlt, MAX_ESC_Temperature);                                               
     BuildText(DataView_Temp, ESC_Temperature); // SendText(DataView_Temp, ModelTempRX);
-    
-    if (RadioNumber != LastRXReceivedPackets)
-    {
-        LastRXReceivedPackets = RXSuccessfulPackets;
-        snprintf(Vbuf, 7, "%" PRIu32, RXSuccessfulPackets);
-        BuildText(DataView_Rx, Vbuf); 
-    }
-    BuildText(Sbs, Rx_type[Receiver_type]); 
-    if (LastTimeSinceBoot != BootedMinutes)
-    {
-        BuildValue(TimeSinceBoot, BootedMinutes); // SendValue(TimeSinceBoot, BootedMinutes);
-        LastTimeSinceBoot = BootedMinutes;
-    }
-    if (BoundFlag && ModelMatched)
-        if (AverageFrameRate != LastAverageFrameRate)
-        {
-            BuildValue(MeanFrameRate, AverageFrameRate); // SendValue(MeanFrameRate, AverageFrameRate);
-            LastAverageFrameRate = AverageFrameRate;
-        }
-    SimplePing();
+    snprintf(Vbuf, 7, "%" PRIu32, RXSuccessfulPackets);
+    BuildText(DataView_Rx, Vbuf); 
+    BuildText(Sbs, Rx_type[Receiver_type]);
+    Mins_Secs(BootedSeconds, tempbuf, sizeof(tempbuf));
+    BuildText(TimeSinceBoot, tempbuf);
+    BuildText(TimeSinceBoot, tempbuf); // SendValue(TimeSinceBoot, BootedSeconds);
     SendCommand(NextionCommand);
-    // Look(NextionCommand); // This is to see how many were included for optimisation purposes
     ClearNextionCommand();
+    SimplePing();
 }
 
 /*********************************************************************************************************************************/

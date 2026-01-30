@@ -3687,9 +3687,9 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(DataView_Clear, TextIn) > 0)
         { //  Clear Data screen
-            ZeroDataScreen();
-            ClearSuccessRate();
-            ClearText();
+             ZeroDataScreen();
+             ClearSuccessRate();
+             ClearText();
             return;
         }
 
@@ -3699,8 +3699,6 @@ FASTRUN void ButtonWasPressed()
             GPS_RX_GroundAltitude = GPS_RX_Altitude;
             GPS_RX_Maxaltitude = 0;
             RXMAXModelAltitude = 0;
-            // LastRXModelMaxAltitude = 0;
-            // LastRXModelAltitude = 0;
             ClearText();
             return;
         }

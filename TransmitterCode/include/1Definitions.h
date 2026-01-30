@@ -74,7 +74,7 @@
 #define INACTIVITYMAXIMUM 30 * TICKSPERMINUTE // Inactivity timeout maximum is 30 minutes
 #define DS1307_ADDRESS 0x68                   // I2C address for RTC
 #define MAXLINES 60                           // text to load at once for help screens
-#define MAXNEXTIONCOMMANDLENGTH 255           //
+#define MAXNEXTIONCOMMANDLENGTH 127           // Max length of NEXTION command string buffer = 255
 #define DEFAULT_EXPO 50                       // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
 #define CHARSMAX 250                          // Max length for char arrays  (was 120)
 #define MAXTEXTIN 1024 * 4                    // 4K buffer for incoming text from Nextion
@@ -1258,20 +1258,10 @@ bool LastAutoModelSelect = false;
 bool LastCopyTrimsToAll = false;
 uint8_t OldRate = 0;
 bool ForceVoltDisplay = false;
-uint16_t LastPacketsPerSecond = 0;
-uint16_t LastLostPackets = 0;
-uint32_t LastGapLongest = 0;
-uint16_t LastRadioSwaps = 0;
-uint16_t LastRX1TotalTime = 0;
-uint16_t LastRX2TotalTime = 0;
-uint32_t LastGapAverage = 0;
-uint32_t LastTimeSinceBoot = 0;
-uint16_t LastAverageFrameRate = 0;
 float MaxRateOfClimb = 0;
 uint16_t LastConnectionQuality = 0;
-float LastRXTemperature = 0;
 uint8_t RadioNumber = 0;
-uint32_t LastRXReceivedPackets = 0;
+
 bool VersionMismatch = false;
 
 char ParaNames[12][30] = {
