@@ -121,11 +121,12 @@ FASTRUN bool CheckRXVolts()
     return RXWarningFlag;
 }
 //*********************************************************************************************************************************/
-char *Mins_Secs(uint32_t total_seconds, char *buffer, size_t buflen)
+char * Hours_Mins_Secs(uint32_t total_seconds, char *buffer, size_t buflen)
 {
-    uint32_t minutes = total_seconds / 60;
+    uint32_t hours = total_seconds / 3600;
+    uint32_t minutes = (total_seconds % 3600) / 60;
     uint32_t seconds = total_seconds % 60;
-    snprintf(buffer, buflen, "%" PRIu32 ":%02" PRIu32, minutes, seconds);
+    snprintf(buffer, buflen, "%" PRIu32 ":%02" PRIu32 ":%02" PRIu32, hours, minutes, seconds);
     return buffer;
 }
 /*********************************************************************************************************************************/
@@ -318,36 +319,36 @@ void PopulateDataView()
     char MeanFrameRate[] = "n0";
     char TimeSinceBoot[] = "n1";
     uint32_t BootedSeconds = millis() / 1000;
-    char tempbuf[60];
+    char tempbuf[25];
 
     ClearNextionCommand();
-    BuildText(DataView_txv, TransmitterVersionNumber); // SendText(DataView_txv, TransmitterVersionNumber);
+    BuildText(DataView_txv, TransmitterVersionNumber); 
     if (BoundFlag && ModelMatched)
-    BuildValue(MeanFrameRate, AverageFrameRate); // SendValue(MeanFrameRate, AverageFrameRate);
-    BuildText(DataView_rxv, ReceiverVersionNumber); // SendText(DataView_rxv, ReceiverVersionNumber);
-    BuildValue(DataView_pps, PacketsPerSecond); // SendValue(DataView_pps, PacketsPerSecond);
-    BuildValue(DataView_lps, TotalLostPackets); // SendValue(DataView_lps, TotalLostPackets);
-    BuildValue(DataView_Ls, GapLongest); // SendValue(DataView_Ls, GapLongest); heer
-    BuildValue(DataView_Ts, RadioSwaps); // SendValue(DataView_Ts, RadioSwaps);
-    Mins_Secs(RX1TotalTime, tempbuf, sizeof(tempbuf));
+    BuildValue(MeanFrameRate, AverageFrameRate); 
+    BuildText(DataView_rxv, ReceiverVersionNumber); 
+    BuildValue(DataView_pps, PacketsPerSecond); 
+    BuildValue(DataView_lps, TotalLostPackets); 
+    BuildValue(DataView_Ls, GapLongest); 
+    BuildValue(DataView_Ts, RadioSwaps); 
+    Hours_Mins_Secs(RX1TotalTime, tempbuf, sizeof(tempbuf));
     BuildText(DataView_Sg, tempbuf);
-    BuildText(DataView_Sg, tempbuf);     // SendValue(DataView_Sg, RX1TotalTime);
-    BuildValue(DataView_Ag, GapAverage); // SendValue(DataView_Ag, GapAverage);
-    Mins_Secs(RX2TotalTime, tempbuf, sizeof(tempbuf));
+    BuildText(DataView_Sg, tempbuf);  
+    BuildValue(DataView_Ag, GapAverage); 
+    Hours_Mins_Secs(RX2TotalTime, tempbuf, sizeof(tempbuf));
     BuildText(DataView_Gc, tempbuf);
-    BuildText(DataView_Gc, tempbuf); // SendValue(DataView_Gc, RX2TotalTime);
+    BuildText(DataView_Gc, tempbuf); 
     sprintf(Max_Rotor_RPM, "%" PRIu32 " RPM", Max_RotorRPM);
-    BuildText(DataView_Alt, Max_Rotor_RPM); // SendText(DataView_Alt, ModelAltitude);
+    BuildText(DataView_Alt, Max_Rotor_RPM); 
     sprintf(ESC_Temperature, "%.1f C.", ESC_Temp);
     sprintf(MAX_ESC_Temperature, "%.1f C.", Max_ESC_Temp);
     BuildText(DataView_MaxAlt, MAX_ESC_Temperature);                                               
-    BuildText(DataView_Temp, ESC_Temperature); // SendText(DataView_Temp, ModelTempRX);
+    BuildText(DataView_Temp, ESC_Temperature); 
     snprintf(Vbuf, 7, "%" PRIu32, RXSuccessfulPackets);
     BuildText(DataView_Rx, Vbuf); 
     BuildText(Sbs, Rx_type[Receiver_type]);
-    Mins_Secs(BootedSeconds, tempbuf, sizeof(tempbuf));
+    Hours_Mins_Secs(BootedSeconds, tempbuf, sizeof(tempbuf));
     BuildText(TimeSinceBoot, tempbuf);
-    BuildText(TimeSinceBoot, tempbuf); // SendValue(TimeSinceBoot, BootedSeconds);
+    BuildText(TimeSinceBoot, tempbuf); 
     SendCommand(NextionCommand);
     ClearNextionCommand();
     SimplePing();
