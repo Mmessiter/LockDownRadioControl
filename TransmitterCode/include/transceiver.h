@@ -247,7 +247,7 @@ void SimplePing()
 void TryToConnect() // first connect before binding
 {
     static uint8_t ReconnectionIndex = 0;
-  
+
     if (!DontChangePipeAddress)
         TryOtherPipe();
     ++ReconnectionIndex;
@@ -376,54 +376,53 @@ FASTRUN uint8_t EncodeTheChangedChannels()
 
 FASTRUN void SendData()
 {
-    uint8_t NumberOfChangedChannels = 0;
-    static uint8_t ByteCountToTransmit = 2;
-    if (SendNoData)
+
+    if (((millis() - LastPacketSentTime) < FHSS_data::PaceMaker) || (SendNoData))
         return;
 
-    if ((millis() - LastPacketSentTime) >= FHSS_data::PaceMaker)
-    {
-        Connected = false; // Assume failure until an ACK is received.
-        FlushFifos();      // This flush avoids a lockup that happens when the FIFO gets full.
-        LastPacketSentTime = millis();
-        if (ParametersToBeSentPointer && !ParamPause)
-        {
-            NumberOfChangedChannels = GetExtraParameters();
-            --ParametersToBeSentPointer;
-            if (!ParametersToBeSentPointer)
-                ParamPause = true; // Pause sending parameters until next time
-        }
-        else
-        {
-            NumberOfChangedChannels = EncodeTheChangedChannels(); // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels.
-        }
-        if (NumberOfChangedChannels)
-        {                                                                      // Any channels changed? Or parameters to send?
-            ByteCountToTransmit = ((float)NumberOfChangedChannels * 1.5f) + 4; // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 word because int rounds downwards.
-            uint8_t SizeOfUnCompressedData = (ByteCountToTransmit / 1.5);
-            Compress(DataTosend.CompressedData, RawDataBuffer, SizeOfUnCompressedData); // Compress the raw data buffer into the compressed data buffer (reduces it to 75% of original size)
-        }
-        else
-        {
-            ByteCountToTransmit = 2;
-            NewCompressNeeded = false; // No channels changed nor any params to send, so just send the flag
-        }
+    uint8_t NumberOfChangedChannels = 0;
+    static uint8_t ByteCountToTransmit = 2;
 
-        if (BuddyMasterOnWireless)
-            SendSpecialPacket(); // Talk to the buddy pupil if we are a master also 200 x per second
-        ++TotalPacketsAttempted;
-        if (Radio1.write(&DataTosend, ByteCountToTransmit))
-        {
-            SuccessfulPacket();
-        }
-        else
-        {
-            FailedPacket();
-        } // Send the data packet complete with ChannelBitMask and compressed data
-#ifdef DB_PACKETDATA
-        ShowPacketData(ByteCountToTransmit, NumberOfChangedChannels); // Just for debugging
-#endif
+    Connected = false; // Assume failure until an ACK is received.
+    FlushFifos();      // This flush avoids a lockup that happens when the FIFO gets full.
+    LastPacketSentTime = millis();
+    if (ParametersToBeSentPointer && !ParamPause)
+    {
+        NumberOfChangedChannels = GetExtraParameters();
+        --ParametersToBeSentPointer;
+        if (!ParametersToBeSentPointer)
+            ParamPause = true; // Pause sending parameters until next time
     }
+    else
+    {
+        NumberOfChangedChannels = EncodeTheChangedChannels(); // Returns the number of channels that have changed, as well as loading the raw data buffer with the changed channels.
+    }
+    if (NumberOfChangedChannels)
+    {                                                                      // Any channels changed? Or parameters to send?
+        ByteCountToTransmit = ((float)NumberOfChangedChannels * 1.5f) + 4; // 1.5 is the compression ratio. 2 is the number of extra bytes for flags - plus 1 word because int rounds downwards.
+        uint8_t SizeOfUnCompressedData = (ByteCountToTransmit / 1.5);
+        Compress(DataTosend.CompressedData, RawDataBuffer, SizeOfUnCompressedData); // Compress the raw data buffer into the compressed data buffer (reduces it to 75% of original size)
+    }
+    else
+    {
+        ByteCountToTransmit = 2;
+        NewCompressNeeded = false; // No channels changed nor any params to send, so just send the flag
+    }
+
+    if (BuddyMasterOnWireless)
+        SendSpecialPacket(); // Talk to the buddy pupil if we are a master also 200 x per second
+    ++TotalPacketsAttempted;
+    if (Radio1.write(&DataTosend, ByteCountToTransmit))
+    {
+        SuccessfulPacket();
+    }
+    else
+    {
+        FailedPacket();
+    } // Send the data packet complete with ChannelBitMask and compressed data
+#ifdef DB_PACKETDATA
+    ShowPacketData(ByteCountToTransmit, NumberOfChangedChannels); // Just for debugging
+#endif
 }
 /***********************************************************************************************************/
 //                                 Waveband scanning functions
@@ -1349,11 +1348,11 @@ FASTRUN void ParseAckPayload()
             break;
         }
         break;
-        // case 35:
-        //     break;
-        default:
-            break;
-        }
+    // case 35:
+    //     break;
+    default:
+        break;
+    }
 }
 
 #endif

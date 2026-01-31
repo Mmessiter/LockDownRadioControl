@@ -4147,6 +4147,13 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(CalibrateView, TextIn))
         {
+            if (LedWasGreen)
+            {
+                MsgBox(pTXSetupView, (char *)"Still connected!");
+                ClearText();
+                return;
+            }
+
             SendCommand(pCalibrateView);
             Force_ReDisplay();
             CurrentView = CALIBRATEVIEW;
@@ -4506,6 +4513,7 @@ FASTRUN void ButtonWasPressed()
         {
             if (strcmp(TextIn, "Calibrate1") == 0)
             {
+                Look("Starting calibration");
                 BlueLedOn();
                 SetDefaultValues();
                 ResetSwitchNumbers();
@@ -4525,6 +4533,7 @@ FASTRUN void ButtonWasPressed()
         {
             if (strcmp(TextIn, "Calibrate1") == 0)
             {
+                Look("Calibrate limits done");
                 CurrentMode = CENTRESTICKS;
                 CurrentView = CALIBRATEVIEW;
                 SendText1(SvT11, Cmsg3);
@@ -4537,6 +4546,7 @@ FASTRUN void ButtonWasPressed()
         {
             if (strcmp(TextIn, "Calibrate1") == 0)
             {
+                Look("Calibration complete");
                 CurrentMode = NORMAL;
                 RedLedOn();
                 SaveTransmitterParameters(); // Save calibrations
@@ -5051,7 +5061,7 @@ void FASTRUN ManageTransmitter()
     static uint32_t TransmitterLastManaged = 0;
 
     uint32_t RightNow = millis();
-    uint32_t TXPacketElapsed = RightNow - LastPacketSentTime;
+    int32_t TXPacketElapsed = RightNow - LastPacketSentTime;
 
     KickTheDog(); // Watchdog ... ALWAYS!
     if ((FHSS_data::PaceMaker - TXPacketElapsed < TIMEFORTXMANAGMENT) && ModelMatched)
@@ -5065,8 +5075,8 @@ void FASTRUN ManageTransmitter()
     }
     CheckPowerOffButton();
     CheckForNextionButtonPress(); // Pretty obvious really ...
-
     DoTheVariometer(); // Do the variometer
+    
     if (RightNow - LastTimeRead >= 1000)
     { // Only once a second for these..
         if (VersionMismatch)

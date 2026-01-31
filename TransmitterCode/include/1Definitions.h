@@ -1012,7 +1012,7 @@ char ReceiverVersionNumber[20];
 char TransmitterVersionNumber[20];
 char ModelVolts[11] = {'0', 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0};
 float RXVoltsPerCell = 0;
-float TXVoltsPerCell = 0;
+float TXVoltsTotal = 0;
 File ModelsFileNumber;
 Adafruit_INA219 ina219;
 char SingleModelFile[40];
@@ -1401,7 +1401,7 @@ namespace FHSS_data
     uint8_t *FHSSRecoveryPointer = Used_Recovery_Channels;
     uint8_t *FHSSChPointer = FHSS_Channels; // pointer for channels array
     uint8_t NextChannelNumber = 0;
-    uint8_t PaceMaker = PACEMAKER;   // now variables are used
+    uint8_t PaceMaker = PACEMAKER;   // now signed variables are used
     uint8_t RetryCount = RETRYCOUNT; // now variables are used
     uint8_t RetryWait = RETRYWAIT;   // now variables are used
 

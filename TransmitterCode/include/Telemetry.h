@@ -14,22 +14,25 @@ FASTRUN bool CheckTXVolts()
     float TransmitterBatteryPercentLeft, TXVoltsRaw;
     char TXBattInfo[80];
     char pc[] = "%";
-    char nbuf[10]; // Little buffer for numbers
-    char v[] = "V";
+    char nbuf[60]; //  buffer for numbers
+    char NB[10];
+    char PerCell[] = "V per cell)";
+    char v[] = "V (";
     char t17[] = "t17";
 
     if (USE_INA219)
     {
         TXVoltsRaw = ((ina219.getBusVoltage_V()) * 100) + (TxVoltageCorrection * 2); // Correction for inaccurate ina219
-        dtostrf(TXVoltsRaw / 200, 2, 2, nbuf);                                       // Volts per cell
-        TXVoltsPerCell = TXVoltsRaw / 200;
+        dtostrf(TXVoltsRaw / 100, 2, 2, nbuf);                                       // Volts per cell
+        TXVoltsTotal = TXVoltsRaw / 100; // total volts
+        float TXVoltsTotalPerCell = TXVoltsTotal / 2;
         if (TXLiPo)
         {                                                                                   // Does TX have a LiPo or a LiFePo4?
-            TransmitterBatteryPercentLeft = map(TXVoltsRaw, 3.5 * 200, 4.00 * 200, 0, 100); // LIPO Battery 3.50 -> c. 4.00  volts per cell
+            TransmitterBatteryPercentLeft = map(TXVoltsRaw, 3.5 * 100, 4.00 * 100, 0, 100); // LIPO Battery 3.50 -> c. 4.00  volts per cell
         }
         else
         {                                                                                   // No, it's a LiFePo4
-            TransmitterBatteryPercentLeft = map(TXVoltsRaw, 3.2 * 200, 3.33 * 200, 0, 100); // LiFePo4 Battery 3.1 -> 3.35  volts per cell
+            TransmitterBatteryPercentLeft = map(TXVoltsRaw, 3.2 * 100, 3.33 * 100, 0, 100); // LiFePo4 Battery 3.1 -> 3.35  volts per cell
         }
         if (TransmitterBatteryPercentLeft < LowBattery)
         {
@@ -41,7 +44,11 @@ FASTRUN bool CheckTXVolts()
         if (CurrentView == FRONTVIEW)
         {
             SendValue(JTX, TransmitterBatteryPercentLeft);
-            strcat(nbuf, v);
+            strcat(nbuf, v); // heer
+            dtostrf(TXVoltsTotalPerCell, 2, 2, NB);
+            strcat(nbuf, NB);
+            strcat(nbuf, PerCell);
+
             SendText(FrontView_TXBV, nbuf);
         }
         if (CurrentView == DATAVIEW)
@@ -61,17 +68,11 @@ FASTRUN bool CheckRXVolts()
     float ReadVolts = 0;
     uint8_t GreenPercentBar = 0;
     char JRX[] = "JRX";
-
     char Vbuf[10];
     char RXBattInfo[80];
-
     char FrontView_RXBV[] = "RXBV";
-    char RXPC[] = "RXPC";
-    char PerCell[] = " per cell)";
-    char RXBattNA[] = ""; //"(No data from RX)";
-    char v[] = "V  (";
-    char pc[] = "%";
-    char spaces[] = "  ";
+    char PerCell[] = "V per cell)";
+    char v[] = "V (";
     char t6[] = "t6";
 
     ReadVolts = (RXModelVolts * 100) + (RxVoltageCorrection * RXCellCount);
@@ -86,14 +87,12 @@ FASTRUN bool CheckRXVolts()
             if (CurrentView == FRONTVIEW)
             {
                 SendValue(JRX, GreenPercentBar);
-                strcat(Str(Vbuf, GreenPercentBar, 0), pc);
-                SendText(RXPC, Vbuf);
                 strcpy(RXBattInfo, ModelVolts);
                 strcat(RXBattInfo, v);
                 dtostrf(RXVoltsPerCell, 2, 2, Vbuf);
                 strcat(RXBattInfo, Vbuf);
                 strcat(RXBattInfo, PerCell);
-                SendText(FrontView_RXBV, RXBattInfo);
+                SendText(FrontView_RXBV, RXBattInfo); // heer
             }
             if (CurrentView == DATAVIEW)
             {
@@ -112,16 +111,15 @@ FASTRUN bool CheckRXVolts()
     {
         if (BoundFlag && CurrentView == FRONTVIEW)
         {
-            SendText(FrontView_RXBV, RXBattNA);
+            SendText(FrontView_RXBV, (char *)" ");
             SendValue(JRX, 0);
-            SendText(RXPC, spaces);
         }
     }
     SimplePing();
     return RXWarningFlag;
 }
 //*********************************************************************************************************************************/
-char * Hours_Mins_Secs(uint32_t total_seconds, char *buffer, size_t buflen)
+char *Hours_Mins_Secs(uint32_t total_seconds, char *buffer, size_t buflen)
 {
     uint32_t hours = total_seconds / 3600;
     uint32_t minutes = (total_seconds % 3600) / 60;
@@ -196,12 +194,12 @@ void ShowCurrentRate()
 void ShowAMS()
 {
     char ams[] = "ams";
-    char AmsOnMsg[] = "AMS  ";
-    char AmsOffMsg[] = "     ";
+    char AmsOnMsg[] =  "AMS is on   ";  
+    char AmsOffMsg[] = "AMS is off  ";   
 
     if (!ModelsMacUnionSaved.Val64)
     {
-        strcpy(AmsOnMsg, "[AMS]");
+        strcpy(AmsOnMsg, "[AMS is on]");
     }
 
     if (AutoModelSelect)
@@ -219,8 +217,8 @@ void ShowAMS()
 void ShowTrimToAll()
 {
     char trall[] = "trall";
-    char CopyTrimsToAllMSG[] = "TrimAll";
-    char CopyTrimsToNoneMSG[] = "       ";
+    char CopyTrimsToAllMSG[] = "TrimAll is on   ";
+    char CopyTrimsToNoneMSG[] = "TrimAll is off ";
 
     if (CopyTrimsToAll)
     {
@@ -321,28 +319,28 @@ void PopulateDataView()
     uint32_t BootedSeconds = millis() / 1000;
     char tempbuf[25];
     ClearNextionCommand();
- 
-    BuildText(DataView_txv, TransmitterVersionNumber); 
+
+    BuildText(DataView_txv, TransmitterVersionNumber);
     if (BoundFlag && ModelMatched)
-    BuildValue(MeanFrameRate, AverageFrameRate); 
-    BuildText(DataView_rxv, ReceiverVersionNumber); 
-    BuildValue(DataView_pps, PacketsPerSecond); 
-    BuildValue(DataView_lps, TotalLostPackets); 
-    BuildValue(DataView_Ls, GapLongest); 
-    BuildValue(DataView_Ts, RadioSwaps); 
+        BuildValue(MeanFrameRate, AverageFrameRate);
+    BuildText(DataView_rxv, ReceiverVersionNumber);
+    BuildValue(DataView_pps, PacketsPerSecond);
+    BuildValue(DataView_lps, TotalLostPackets);
+    BuildValue(DataView_Ls, GapLongest);
+    BuildValue(DataView_Ts, RadioSwaps);
     Hours_Mins_Secs(RX1TotalTime, tempbuf, sizeof(tempbuf));
     BuildText(DataView_Sg, tempbuf);
-    BuildValue(DataView_Ag, GapAverage); 
+    BuildValue(DataView_Ag, GapAverage);
     Hours_Mins_Secs(RX2TotalTime, tempbuf, sizeof(tempbuf));
-    BuildText(DataView_Gc, tempbuf); 
+    BuildText(DataView_Gc, tempbuf);
     sprintf(Max_Rotor_RPM, "%" PRIu32 " RPM", Max_RotorRPM);
-    BuildText(DataView_Alt, Max_Rotor_RPM); 
+    BuildText(DataView_Alt, Max_Rotor_RPM);
     sprintf(ESC_Temperature, "%.1f C.", ESC_Temp);
     sprintf(MAX_ESC_Temperature, "%.1f C.", Max_ESC_Temp);
-    BuildText(DataView_MaxAlt, MAX_ESC_Temperature);                                               
-    BuildText(DataView_Temp, ESC_Temperature); 
+    BuildText(DataView_MaxAlt, MAX_ESC_Temperature);
+    BuildText(DataView_Temp, ESC_Temperature);
     snprintf(Vbuf, 7, "%" PRIu32, RXSuccessfulPackets);
-    BuildText(DataView_Rx, Vbuf); 
+    BuildText(DataView_Rx, Vbuf);
     BuildText(Sbs, Rx_type[Receiver_type]);
     Hours_Mins_Secs(BootedSeconds, tempbuf, sizeof(tempbuf));
     BuildText(TimeSinceBoot, tempbuf);
@@ -350,7 +348,6 @@ void PopulateDataView()
     SendCommand(NextionCommand); // takes about 3 ms to send all at once
     SimplePing();
     ClearNextionCommand();
-   
 }
 
 /*********************************************************************************************************************************/

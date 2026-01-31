@@ -331,9 +331,9 @@ void LogTXVoltsPerCell()
     char TheText[] = "TX Volts per cell: ";
     char buf[40] = " ";
     char NB[10];
-    if (TXVoltsPerCell < 0.1)
+    if (TXVoltsTotal < 0.1)
         return;
-    dtostrf(TXVoltsPerCell, 2, 2, NB);
+    dtostrf(TXVoltsTotal, 2, 2, NB);
     strcpy(buf, TheText);
     strcat(buf, NB);
     LogText(buf, strlen(buf), false);
@@ -530,10 +530,10 @@ FASTRUN void LogDisConnection()
 // ************************************************************************
 FASTRUN void LogNewBank()
 {
-    
+
     if (!BoundFlag || !ModelMatched)
         return; // Don't log bank changes if not bound or model not matched
-    
+
     char Ltext[50];
     char bk[] = "Bank";
     char thetext[40];
