@@ -22,14 +22,14 @@ void ClearNextionCommand()
 /*********************************************************************************************************************************/
 void BuildNextionCommand(char *cmd) // these strings can be <= 255 bytes but here we limit to 127 to avoid delays etc.
 {
-    if (strlen(NextionCommand) + strlen(cmd) >= MAXNEXTIONCOMMANDLENGTH ) // If too long, send what we have and start building again.
+    if (strlen(NextionCommand) + strlen(cmd)+3 >= MAXNEXTIONCOMMANDLENGTH) // If too long, send what we have and start building again.
     {
         SendCommand(NextionCommand);
         ClearNextionCommand();
-        return;
     }
+    if (strlen(NextionCommand) > 0)
+        strcat(NextionCommand, "\xFF\xFF\xFF"); // add ending beforehand if this is not  first
     strcat(NextionCommand, cmd);
-    strcat(NextionCommand, "\xFF\xFF\xFF");
 }
 
 /*********************************************************************************************************************************/

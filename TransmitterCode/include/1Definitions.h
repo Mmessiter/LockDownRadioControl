@@ -74,7 +74,7 @@
 #define INACTIVITYMAXIMUM 30 * TICKSPERMINUTE // Inactivity timeout maximum is 30 minutes
 #define DS1307_ADDRESS 0x68                   // I2C address for RTC
 #define MAXLINES 60                           // text to load at once for help screens
-#define MAXNEXTIONCOMMANDLENGTH 127           // Max length of NEXTION command string buffer = 255
+#define MAXNEXTIONCOMMANDLENGTH 1024          // Max length of NEXTION "Intelligent" command string buffer
 #define DEFAULT_EXPO 50                       // = ZERO EXPO (Range is 0 - 200. Below 50 is negative Expo)
 #define CHARSMAX 250                          // Max length for char arrays  (was 120)
 #define MAXTEXTIN 1024 * 4                    // 4K buffer for incoming text from Nextion

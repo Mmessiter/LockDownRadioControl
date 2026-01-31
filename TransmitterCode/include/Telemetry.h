@@ -320,8 +320,8 @@ void PopulateDataView()
     char TimeSinceBoot[] = "n1";
     uint32_t BootedSeconds = millis() / 1000;
     char tempbuf[25];
-
     ClearNextionCommand();
+ 
     BuildText(DataView_txv, TransmitterVersionNumber); 
     if (BoundFlag && ModelMatched)
     BuildValue(MeanFrameRate, AverageFrameRate); 
@@ -332,10 +332,8 @@ void PopulateDataView()
     BuildValue(DataView_Ts, RadioSwaps); 
     Hours_Mins_Secs(RX1TotalTime, tempbuf, sizeof(tempbuf));
     BuildText(DataView_Sg, tempbuf);
-    BuildText(DataView_Sg, tempbuf);  
     BuildValue(DataView_Ag, GapAverage); 
     Hours_Mins_Secs(RX2TotalTime, tempbuf, sizeof(tempbuf));
-    BuildText(DataView_Gc, tempbuf);
     BuildText(DataView_Gc, tempbuf); 
     sprintf(Max_Rotor_RPM, "%" PRIu32 " RPM", Max_RotorRPM);
     BuildText(DataView_Alt, Max_Rotor_RPM); 
@@ -348,10 +346,11 @@ void PopulateDataView()
     BuildText(Sbs, Rx_type[Receiver_type]);
     Hours_Mins_Secs(BootedSeconds, tempbuf, sizeof(tempbuf));
     BuildText(TimeSinceBoot, tempbuf);
-    BuildText(TimeSinceBoot, tempbuf); 
-    SendCommand(NextionCommand);
-    ClearNextionCommand();
     SimplePing();
+    SendCommand(NextionCommand); // takes about 3 ms to send all at once
+    SimplePing();
+    ClearNextionCommand();
+   
 }
 
 /*********************************************************************************************************************************/
@@ -449,7 +448,7 @@ void PopulateFrontView()
 FASTRUN void ShowComms()
 {
     if (millis() - LastShowTime < SHOWCOMMSDELAY)
-        return; // 10x a second is more than enough
+        return; // 10x a second is more than enough .. only called once a second anyway
     LastShowTime = millis();
 
     if (GPS_RX_FIX)
