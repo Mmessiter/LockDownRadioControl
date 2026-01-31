@@ -1171,14 +1171,16 @@ FASTRUN void ParseAckPayload()
             MaxRateOfClimb = RateOfClimb;
         break;
     case 20:
-        if (CurrentView != FRONTVIEW)
-            break;
         RotorRPM = GetIntFromAckPayload(); // Get the current RPM value from the payload
         if (RotorRPM == 0xffff)
         {
             RotorRPM = 0; // sanity check
             break;
         }
+        if (RotorRPM > Max_RotorRPM)
+            Max_RotorRPM = RotorRPM;
+        if (CurrentView != FRONTVIEW)
+            break;
         if (First_RPM_Data) // If this is the first time we get RPM data
         {
             First_RPM_Data = false;
@@ -1188,8 +1190,6 @@ FASTRUN void ParseAckPayload()
         if (rpmShouldUpdate(RotorRPM))
         {
             SendValue((char *)"rpm", RotorRPM); // Send the updated RPM value to Nextion Frontscreen only if it has changed sufficiently
-            if (RotorRPM > Max_RotorRPM)
-                Max_RotorRPM = RotorRPM;
         }
         break;
     case 21:
