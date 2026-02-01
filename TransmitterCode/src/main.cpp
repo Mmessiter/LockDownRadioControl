@@ -3598,9 +3598,6 @@ FASTRUN void ButtonWasPressed()
         char DataView_AltZero[] = "AltZero";
         char Mark[] = "Mark";
         char SetupCol[] = "SetupCol";
-        char b0_bco[] = "b0.bco";
-        char b0_pco[] = "b0.pco";
-        char High_pco[] = "High.pco";
         char Fm_pco[] = "Fm.pco";
         char FrontView_BackGround[] = "FrontView.BackGround";
         char FrontView_ForeGround[] = "FrontView.ForeGround";
@@ -4249,9 +4246,9 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(SetupCol, TextIn) > 0)
         { // This is  return fr Colours setup
-            HighlightColour = GetOtherValue(High_pco);
-            ForeGroundColour = GetOtherValue(b0_pco);
-            BackGroundColour = GetOtherValue(b0_bco);
+            HighlightColour = GetOtherValue((char*) "High.pco");
+            ForeGroundColour = GetOtherValue((char *)"Example.pco");
+            BackGroundColour = GetOtherValue((char *)"Fm.bco");
             SpecialColour = GetOtherValue(Fm_pco);
             SendValue(FrontView_BackGround, BackGroundColour);
             SendValue(FrontView_ForeGround, ForeGroundColour);
