@@ -53,7 +53,8 @@ FASTRUN bool CheckTXVolts()
         }
         if (CurrentView == DATAVIEW)
         {
-            SendText(t17, nbuf);
+            dtostrf(TXVoltsTotalPerCell, 2, 2, NB);
+            SendText(t17, NB);
         }
     }
     SimplePing();
