@@ -1010,9 +1010,11 @@ void ClearBox()
     char nb[10];
     char cmd[80];
     // char fillcmd[] = "fill 30,30,380,365,";
-    char fillcmd[] = "fill 20,20,388,375,";
+   // 25, 25, 378, 370,
+    char fillcmd[] = "fill 25,25,378,370,";
     strcpy(cmd, fillcmd);
-    Str(nb, BackGroundColour, 0);
+    //Str(nb, BackGroundColour, 0);
+    Str(nb, 0, 0);
     strcat(cmd, nb);
     SendCommand(cmd);
 }

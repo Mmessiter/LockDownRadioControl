@@ -474,7 +474,7 @@ void ShowGhz(char X1_pos[9], char ghz[10], uint16_t *p)
     int y3 = y2 + YY1EXTRA;
     char NewWhite1[15];
     Str(NewWhite1, ForeGroundColour, 1);
-    SendCharArray(CB, xstr, X1_pos, Str(NB1, y3, 1), Str(NB2, 90, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, BackGroundColour, 1), Str(NB6, 0, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), ghz);
+    SendCharArray(CB, xstr, X1_pos, Str(NB1, y3, 1), Str(NB2, 90, 1), Str(NB3, 25, 1), Str(NB4, 0, 1), NewWhite1, Str(NB5, 0, 1), Str(NB6, 0, 1), Str(NB7, 1, 1), Str(NB8, 1, 1), ghz);
     ShowTickMarkEtc(x1 + *p, y2, p, X1_pos, NB, x1, xd1, y2);
 }
 /************************************************************************************************************/
@@ -505,7 +505,8 @@ void DrawFhssBox()
     ShowGhz(X1_pos, STR64GHZ, &p);
     ShowGhz(X1_pos, STR96GHZ, &p);
     ShowGhz(X1_pos, STR125GHZ, &p);
-    FillBox(x1 + 1, y1 + 1, (128 * 5) - 2, 254, BackGroundColour); // Clear the inside of the box
+   // FillBox(x1 + 1, y1 + 1, (128 * 5) - 2, 254, BackGroundColour); // Clear the inside of the box
+    FillBox(x1 + 1, y1 + 1, (128 * 5) - 2, 254, 0); // Clear the inside of the box
     p = 419;                                                       // 83.5 * 5 = 417.5 The top of the legal ISM band
     DrawDoubleLine(x1 + p, y1 + 1, x1 + p, y2 - 1, SpecialColour); // Draw a line at 2.4835 GHz
 }
@@ -581,7 +582,7 @@ void ScanAllChannels(bool cls)
             { // must see no carrier >= ScanSensitivity times before reducing the trace
                 if (AllChannels[Sc] >= (BlobHeight))
                 {
-                    SendCharArray(CB, fyll, Str(NB, x2, 1), Str(NB1, (y2 + BlobHeight), 1), Str(NB2, BlobWidth, 1), Str(NB3, BlobHeight, 1), Str(NB4, BackGroundColour, 0), NA, NA, NA, NA, NA, NA);
+                    SendCharArray(CB, fyll, Str(NB, x2, 1), Str(NB1, (y2 + BlobHeight), 1), Str(NB2, BlobWidth, 1), Str(NB3, BlobHeight, 1), Str(NB4, 0, 0), NA, NA, NA, NA, NA, NA);
                     AllChannels[Sc] -= (BlobHeight);
                     NoCarrier[Sc] = 0;
                 }

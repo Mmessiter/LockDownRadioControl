@@ -1885,7 +1885,7 @@ FASTRUN void DisplayCurve()
     int xDot2 = 0;
     int yDot2 = 0;
     int DotSize = 4;
-    int DotColour = ForeGroundColour;
+    int DotColour = 65535; // White
     double xPoint, yPoint;
 
     // Constrain degrees values
@@ -1905,7 +1905,8 @@ FASTRUN void DisplayCurve()
     // 1. First batch: Clear box and send top row values
 
     // Clear the box
-    sprintf(tempCmd, "fill %d,%d,%d,%d,%d", 20, 20, 388, 375, BackGroundColour);
+    //sprintf(tempCmd, "fill %d,%d,%d,%d,%d", 20, 20, 388, 375, BackGroundColour);
+    sprintf(tempCmd, "fill %d,%d,%d,%d,%d", 25, 25, 378, 370, 0);
     strcat(cmdBuffer, tempCmd);
     strcat(cmdBuffer, endMarker);
 
@@ -2809,7 +2810,7 @@ void ResetTransmitterSettings()
     strcpy(TxName, Tn);
     Qnh = 1009;
     DeltaGMT = 0;
-    BackGroundColour = 214;
+    BackGroundColour = 0;
     ForeGroundColour = White;
     SpecialColour = Red;
     HighlightColour = Yellow;
