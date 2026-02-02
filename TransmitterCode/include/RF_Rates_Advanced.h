@@ -92,7 +92,7 @@ void ShowRatesAdvancedBank()
     SendText((char *)"t9", BankNames[BanksInUse[Bank - 1]]); // Show bank number etc
     if (!(LedWasGreen))
     {
-        ShowLocalRatesAdvancedBank();   
+        ShowLocalRatesAdvancedBank();
         return;
     }
 
@@ -117,7 +117,7 @@ void ShowRatesAdvancedBank()
         MsgBox((char *)"page Rates_A_View", Wmsg); // Warn about unsaved edits
     }
     RatesAdvancedMsg(buf, Gray);
-    Rates_Advanced_Send_Duration = MSP_WAIT_TIME * 2;     // how many milliseconds to await RATES values
+    Rates_Advanced_Send_Duration = MSP_WAIT_TIME;     // how many milliseconds to await RATES values
     Reading_RATES_Advanced_Now = true;                // This tells the Ack payload parser to
     AddParameterstoQueue(SEND_RATES_ADVANCED_VALUES); // Request RATES values from RX
     RATES_Advanced_Start_Time = millis();             // record start time as it's not long
@@ -177,7 +177,8 @@ void ReadRatesAdvanced()
 }
 
 // ************************************************************************************************************/
-void SaveLocalRatesAdvancedBank(){
+void SaveLocalRatesAdvancedBank()
+{
     RatesAdvancedMsg((char *)"Saving edited Advanced Rates ...", Gray); // Show sending message
     Rates_Advanced_Were_Edited = false;
     ReadRatesAdvanced();
@@ -185,12 +186,10 @@ void SaveLocalRatesAdvancedBank(){
     {
         Saved_Rate_Advanced_Values[i][Bank - 1] = Rate_Advanced_Values[i];
     }
-    SaveOneModel(ModelNumber);               // save all to SD card
-    Hide_Advanced_Rates_Msg();               // ...because this queue is a LIFO stack
-    SendCommand((char *)"vis b3,0");         // hide "Send" button
-    PlaySound(BEEPCOMPLETE);                 // let user know we're done
-
-
+    SaveOneModel(ModelNumber);       // save all to SD card
+    Hide_Advanced_Rates_Msg();       // ...because this queue is a LIFO stack
+    SendCommand((char *)"vis b3,0"); // hide "Send" button
+    PlaySound(BEEPCOMPLETE);         // let user know we're done
 }
 
 // **********************************************************************************************************/
@@ -203,12 +202,12 @@ void SendEditedRatesAdvanced()
         return;
     }
     PlaySound(BEEPMIDDLE);
-    DelayWithDog(100);                                          //  allow LOTS of time for screen to update BEFORE sending another Nextion command
+    DelayWithDog(100);                                           //  allow LOTS of time for screen to update BEFORE sending another Nextion command
     RatesAdvancedMsg((char *)"Sending edited values ...", Gray); // Show sending message
     ReadRatesAdvanced();
     AddParameterstoQueue(GET_RATES_ADVANCED_VALUES_SECOND_8); // Send RATES ADVANCED values from TX to RX
     AddParameterstoQueue(GET_RATES_ADVANCED_VALUES_FIRST_7);  // Send RATES ADVANCED values from TX to RX ...because this queue is a LIFO stack
     Hide_Advanced_Rates_Msg();                                // SECOND MUST BE QUEUED FIRST!!!  because this queue is a LIFO stack
-    PlaySound(BEEPCOMPLETE); // let user know we're done
+    PlaySound(BEEPCOMPLETE);                                  // let user know we're done
 }
 #endif // RATESRF_ADVANCED_H

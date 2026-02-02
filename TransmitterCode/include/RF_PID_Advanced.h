@@ -13,8 +13,8 @@ char PID_Advanced_Labels[26][4] = {"sw0", "t1", "t2", "t3", "t4", "t5", "t6", "t
 // ************************************************************************************************************/
 void Display_PID_Advanced_Values(uint8_t n, uint8_t m) // display PID Advanced values n to m on screen as they are read from RX
 {
-   // if ((millis() - PID_Advanced_Start_Time) < 500)
-     //   return; // wait at least 500 ms because RX may be slow to respond after bank change and earlier values may be junk
+    // if ((millis() - PID_Advanced_Start_Time) < 500)
+    //   return; // wait at least 500 ms because RX may be slow to respond after bank change and earlier values may be junk
     char TextFloat[10];
     for (uint8_t i = n; i < m; ++i)
     {
@@ -136,11 +136,11 @@ void ShowPIDAdvancedBank() // this is called when bank is changed so new bank's 
             MsgBox((char *)"page PID_A_View", Wmsg); // Warn about unsaved edits
         }
         PIDAdvancedMsg(buf, Gray);                      // Show loading message and hides old PIDs
-        PID_Advanced_Send_Duration = MSP_WAIT_TIME * 2;              // how many milliseconds to await PID values
+        PID_Advanced_Send_Duration = MSP_WAIT_TIME;     // how many milliseconds to await PID values
         Reading_PIDS_Advanced_Now = true;               // This tells the Ack payload parser to get PID values
         AddParameterstoQueue(SEND_PID_ADVANCED_VALUES); // Request PID values from RX
-        PIDS_Advanced_Were_Edited = false;  // reset edited flag
-        PID_Advanced_Start_Time = millis(); // record start time as it's not long
+        PIDS_Advanced_Were_Edited = false;              // reset edited flag
+        PID_Advanced_Start_Time = millis();             // record start time as it's not long
     }
 }
 // ************************************************************************************************************/
@@ -156,7 +156,7 @@ void SaveToLocalABank()
     SaveOneModel(ModelNumber);       // save all to SD card
     HidePID_Advanced_Msg();
     PIDS_Advanced_Were_Edited = false; // reset edited flag
-    PlaySound(BEEPCOMPLETE); // let user know we're done
+    PlaySound(BEEPCOMPLETE);           // let user know we're done
 }
 // ************************************************************************************************************/
 void SendEditedPID_Advanced()

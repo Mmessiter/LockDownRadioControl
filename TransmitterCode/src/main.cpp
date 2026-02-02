@@ -928,10 +928,10 @@ void ShowSafetyIsOn()
         char bco2[] = "bt0.bco2=";
         char pco[] = "bt0.pco=";
         char pco2[] = "bt0.pco2=";
-        SendColour(bco, SpecialColour);
-        SendColour(bco2, SpecialColour);
-        SendColour(pco, HighlightColour);
-        SendColour(pco2, HighlightColour);
+        SendColour(bco, RED);
+        SendColour(bco2, RED);
+        SendColour(pco, WHITE);
+        SendColour(pco2, WHITE);
         BeQuiet = false;
     }
 }
@@ -950,10 +950,10 @@ void ShowSafetyIsOff()
         char bco2[] = "bt0.bco2=";
         char pco[] = "bt0.pco=";
         char pco2[] = "bt0.pco2=";
-        SendColour(bco, BackGroundColour);
-        SendColour(bco2, BackGroundColour);
-        SendColour(pco, HighlightColour);
-        SendColour(pco2, HighlightColour);
+        SendColour(bco, BLACK);
+        SendColour(bco2, BLACK);
+        SendColour(pco, WHITE);
+        SendColour(pco2, WHITE);
         BeQuiet = false;
     }
 }
@@ -1174,7 +1174,13 @@ FLASHMEM void setup()
         ina219.begin();
     InitSwitchesAndTrims();
     InitRadio(DefaultPipe);
-    delay(WARMUPDELAY);                                // Allow Nextion time to warm up
+    delay(WARMUPDELAY); // Allow Nextion time to warm up
+
+    BackGroundColour = Black;
+    ForeGroundColour = White;
+    SpecialColour = Red;
+    HighlightColour = Yellow;
+    
     SendValue(FrontView_BackGround, BackGroundColour); // Get colours ready
     SendValue(FrontView_ForeGround, ForeGroundColour);
     SendValue(FrontView_Special, SpecialColour);
@@ -1905,7 +1911,7 @@ FASTRUN void DisplayCurve()
     // 1. First batch: Clear box and send top row values
 
     // Clear the box
-    //sprintf(tempCmd, "fill %d,%d,%d,%d,%d", 20, 20, 388, 375, BackGroundColour);
+    // sprintf(tempCmd, "fill %d,%d,%d,%d,%d", 20, 20, 388, 375, BackGroundColour);
     sprintf(tempCmd, "fill %d,%d,%d,%d,%d", 25, 25, 378, 370, 0);
     strcat(cmdBuffer, tempCmd);
     strcat(cmdBuffer, endMarker);
@@ -3685,9 +3691,9 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(DataView_Clear, TextIn) > 0)
         { //  Clear Data screen
-             ZeroDataScreen();
-             ClearSuccessRate();
-             ClearText();
+            ZeroDataScreen();
+            ClearSuccessRate();
+            ClearText();
             return;
         }
 
@@ -4247,7 +4253,7 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(SetupCol, TextIn) > 0)
         { // This is  return fr Colours setup
-            HighlightColour = GetOtherValue((char*) "High.pco");
+            HighlightColour = GetOtherValue((char *)"High.pco");
             ForeGroundColour = GetOtherValue((char *)"Example.pco");
             BackGroundColour = GetOtherValue((char *)"Fm.bco");
             SpecialColour = GetOtherValue(Fm_pco);
@@ -5073,8 +5079,8 @@ void FASTRUN ManageTransmitter()
     }
     CheckPowerOffButton();
     CheckForNextionButtonPress(); // Pretty obvious really ...
-    DoTheVariometer(); // Do the variometer
-    
+    DoTheVariometer();            // Do the variometer
+
     if (RightNow - LastTimeRead >= 1000)
     { // Only once a second for these..
         if (VersionMismatch)
@@ -5169,11 +5175,11 @@ FASTRUN void loop()
         break;
     case SAVE_RF_SETTINGS: // 7
         Save_SOME_RF_Parameters();
-        SendData(); 
+        SendData();
         break;
     case RESTORE_RF_SETTINGS: // 8
         Restore_SOME_RF_Parameters();
-        SendData(); 
+        SendData();
         break;
     default:
         break;

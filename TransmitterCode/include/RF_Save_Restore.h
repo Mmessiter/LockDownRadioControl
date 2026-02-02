@@ -6,7 +6,6 @@
 #define RF_SAVE_RESTORE_H
 #include <Arduino.h>
 #include "1Definitions.h"
-#define WAIT_TIME_BETWEEN_WRITING_PARAMETERS 1000 // milliseconds to wait between sending parameter blocks
 #define DO_PIDS 1
 #define DO_PIDS_ADVANCED 2
 #define DO_RATES 4
@@ -80,7 +79,7 @@ void Restore_SOME_RF_Parameters()
         LTimer = millis();
         break;
     case 1:
-        if ((millis() - LTimer) >= WAIT_TIME_BETWEEN_WRITING_PARAMETERS) // wait to allow PIDs to be sent
+        if ((millis() - LTimer) >= MSP_WAIT_TIME) // wait to allow PIDs to be sent
             Which_Case_Now = 2;
         break;
     case 2:
@@ -105,7 +104,7 @@ void Restore_SOME_RF_Parameters()
         LTimer = millis();
         break;
     case 3:
-        if ((millis() - LTimer) >= WAIT_TIME_BETWEEN_WRITING_PARAMETERS) // wait to allow Advanced PIDs to be sent
+        if ((millis() - LTimer) >= MSP_WAIT_TIME) // wait to allow Advanced PIDs to be sent
             Which_Case_Now = 4;
         break;
     case 4:
@@ -129,7 +128,7 @@ void Restore_SOME_RF_Parameters()
         LTimer = millis();
         break;
     case 5:
-        if ((millis() - LTimer) >= WAIT_TIME_BETWEEN_WRITING_PARAMETERS) // wait to allow RATES to be sent
+        if ((millis() - LTimer) >= MSP_WAIT_TIME) // wait to allow RATES to be sent
             Which_Case_Now = 6;
         break;
     case 6:
@@ -156,7 +155,7 @@ void Restore_SOME_RF_Parameters()
         break;
 
     case 150:
-        if ((millis() - LTimer) >= WAIT_TIME_BETWEEN_WRITING_PARAMETERS) // wait to allow RATES ADVANCED to be sent
+        if ((millis() - LTimer) >= MSP_WAIT_TIME) // wait to allow RATES ADVANCED to be sent
             Which_Case_Now = 200;
         break;
 
@@ -165,7 +164,7 @@ void Restore_SOME_RF_Parameters()
         SendValue((char *)"Progress", 100); // update progress bar
         CurrentMode = NORMAL;               // no further calls will come here
         PlaySound(BEEPCOMPLETE);
-        DelayWithDog(MSP_WAIT_TIME * 2);
+        DelayWithDog(MSP_WAIT_TIME);
         SendCommand((char *)"vis Progress,0"); // hide progress bar
         SendCommand((char *)"vis t2,0");       // hide please wait text
         break;
@@ -238,7 +237,7 @@ void Save_SOME_RF_Parameters()
         strcat(msg, " to LocalBank ");
         strcat(msg, NB1);
         SendText(t2, msg);
-        PID_Advanced_Send_Duration = MSP_WAIT_TIME * 2;     // how many milliseconds to await PID Advanced values
+        PID_Advanced_Send_Duration = MSP_WAIT_TIME;     // how many milliseconds to await PID Advanced values
         Reading_PIDS_Advanced_Now = true;               // This tells the Ack payload parser to get PID Advanced values
         AddParameterstoQueue(SEND_PID_ADVANCED_VALUES); // Request PID Advanced values from RX
         PID_Advanced_Start_Time = millis();             // record start time as it's not long
@@ -266,7 +265,7 @@ void Save_SOME_RF_Parameters()
         strcat(msg, " to LocalBank ");
         strcat(msg, NB1);
         SendText(t2, msg);
-        RATES_Send_Duration = MSP_WAIT_TIME * 2;     // how many milliseconds to await RATES values
+        RATES_Send_Duration = MSP_WAIT_TIME;     // how many milliseconds to await RATES values
         Reading_RATES_Now = true;                // This tells the Ack payload parser to get RATES values
         AddParameterstoQueue(SEND_RATES_VALUES); // Request RATES values from RX
         RATES_Start_Time = millis();             // record start time as it's not long
@@ -294,7 +293,7 @@ void Save_SOME_RF_Parameters()
         strcat(msg, " to LocalBank ");
         strcat(msg, NB1);
         SendText(t2, msg);
-        Rates_Advanced_Send_Duration = MSP_WAIT_TIME * 2;     // how many milliseconds to await RATES Advanced values
+        Rates_Advanced_Send_Duration = MSP_WAIT_TIME;     // how many milliseconds to await RATES Advanced values
         Reading_RATES_Advanced_Now = true;                // This tells the Ack payload parser to get RATES Advanced values
         AddParameterstoQueue(SEND_RATES_ADVANCED_VALUES); // Request RATES Advanced values from RX
         RATES_Advanced_Start_Time = millis();             // record start time as it's not long
@@ -320,7 +319,7 @@ void Save_SOME_RF_Parameters()
         CurrentMode = NORMAL;               // no further calls will come here
         SaveOneModel(ModelNumber);          // save all to SD card
         PlaySound(BEEPCOMPLETE);
-        DelayWithDog(MSP_WAIT_TIME * 2);
+        DelayWithDog(MSP_WAIT_TIME);
         SendCommand((char *)"vis Progress,0"); // hide progress bar
         SendCommand((char *)"vis t2,0");       // hide please wait text
         break;

@@ -91,7 +91,7 @@
 #define BATTERY_CHECK_INTERVAL 1000           // 2 seconds between battery checks
 #define POWERONOFFDELAY 1000                  // Delay after power OFF before transmit stops.
 #define POWERONOFFDELAY2 4000                 // Delay after power ON before Off is possible....
-#define MSP_WAIT_TIME 600                     // Time to allow for reading MSP data from RX and FC
+#define MSP_WAIT_TIME 1500                    // Time to allow for reading MSP data from RX and FC
                                               // **************************************************************************
                                               //                            FHSS BITS                                     *
                                               //***************************************************************************
@@ -129,8 +129,19 @@
 #define RESTORE_RF_SETTINGS 8 // Restore RF settings to RX                  (SEND DATA!)
 
 // **************************************************************************
-//                               Colours                                    *
+//                      Colours   (UPPER or Lower case :-)                  *
 // **************************************************************************
+#define BLACK 0
+#define BLUE 31
+#define BROWN 48192
+#define GREEN 2016
+#define YELLOW 65504
+#define RED 63488
+#define GRAY 33840
+#define SKYBLUE 2047
+#define PURPLE 39070
+#define ORANGE 64512
+#define WHITE 65535
 
 #define Black 0
 #define Blue 31
@@ -143,7 +154,6 @@
 #define Purple 39070
 #define Orange 64512
 #define White 65535
-
 // **************************************************************************
 //                      Parameters to sent to RX IDs                        *
 // **************************************************************************
@@ -1377,6 +1387,8 @@ bool Rates_Were_Edited = false;
 bool Rates_Advanced_Were_Edited = false;
 float GearRatio = 10.3;
 uint8_t ArmingChannel = 5;
+
+bool BlockBankChanges = false; // used to block bank changes when Param go to or from Nexus
 
 #define MAX_PID_WORDS 12            // 24 bytes
 #define MAX_RATES_BYTES 13          // 13 bytes

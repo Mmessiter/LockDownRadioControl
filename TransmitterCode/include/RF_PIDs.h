@@ -190,7 +190,6 @@ void SendEditedPIDs()
         return;
     }
     PlaySound(BEEPMIDDLE);
-    PIDS_Were_Edited = false;
     HidePIDMsg();
     PIDMsg((char *)"Sending edited PIDs ...", Gray); // Show sending message
     DelayWithDog(100);                               // allow LOTS of time for screen to update BEFORE sending another Nextion command
@@ -199,6 +198,7 @@ void SendEditedPIDs()
     AddParameterstoQueue(GET_FIRST_6_PID_VALUES);    // SECOND MUST BE QUEUED FIRST!!! Send PID 0-5 values from TX to RX
     HidePIDMsg();                                    // SECOND MUST BE QUEUED FIRST!!!  because this queue is a LIFO stack
     SendCommand((char *)"vis b3,0");                 // hide "Send" button
+    PIDS_Were_Edited = false;
     PlaySound(BEEPCOMPLETE);                         // let user know we're done
 }
 //************************************************************************************************************/
