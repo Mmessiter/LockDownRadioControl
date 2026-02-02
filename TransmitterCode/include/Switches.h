@@ -132,7 +132,7 @@ void ReadBuddySwitch()
 /************************************************************************************************************/
 void ReadBankSwitch()
 {
-    if ((CurrentMode == SAVE_RF_SETTINGS) || (CurrentMode == RESTORE_RF_SETTINGS) || Reading_PIDS_Now) // do not change bank during these operations
+    if (BlockBankChanges) // do not change bank if blocked
         return;
     Bank = GetSwitchPosition(BankSwitch);
     if (!Bank)

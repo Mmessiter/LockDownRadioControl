@@ -16,6 +16,7 @@ void Hide_Advanced_Rates_Msg()
     {
         SendCommand((char *)"vis busy,0");    // Hide RATES message
         ForegroundColourAdvancedRates(Black); // make text black so it is visible again
+        BlockBankChanges = false;
     }
 }
 // ************************************************************************************************************/
@@ -119,6 +120,7 @@ void ShowRatesAdvancedBank()
     RatesAdvancedMsg(buf, Gray);
     Rates_Advanced_Send_Duration = MSP_WAIT_TIME;     // how many milliseconds to await RATES values
     Reading_RATES_Advanced_Now = true;                // This tells the Ack payload parser to
+    BlockBankChanges = true;                  // block bank changes while we do this
     AddParameterstoQueue(SEND_RATES_ADVANCED_VALUES); // Request RATES values from RX
     RATES_Advanced_Start_Time = millis();             // record start time as it's not long
     Rates_Advanced_Were_Edited = false;               // reset edited flag
@@ -202,6 +204,7 @@ void SendEditedRatesAdvanced()
         return;
     }
     PlaySound(BEEPMIDDLE);
+    BlockBankChanges = true;
     DelayWithDog(100);                                           //  allow LOTS of time for screen to update BEFORE sending another Nextion command
     RatesAdvancedMsg((char *)"Sending edited values ...", Gray); // Show sending message
     ReadRatesAdvanced();

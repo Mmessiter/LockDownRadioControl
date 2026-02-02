@@ -95,6 +95,7 @@ void PIDMsg(const char *msg, uint16_t Colour)
         SendCommand((char *)"vis busy,1");     // Make it visible
         SendCommand((char *)"vis b2,0");       // Make Advanced invisible
         SendCommand((char *)"vis b3,0");       // hide "Send" button
+        BlockBankChanges = true;
     }
 }
 // **********************************************************************************************************/
@@ -105,6 +106,7 @@ void HidePIDMsg()
         SendCommand((char *)"vis busy,0"); // Hide  message
         SendCommand((char *)"vis b2,1");   // Make Advanced visible
         ForegroundColourPIDLabels(Black);  // make text black so it is visible again
+        BlockBankChanges = false;
     }
 }
 //***********************************************************************************************************/
@@ -114,6 +116,7 @@ void ShowLocalBank()
         if (CurrentView == PIDVIEW && i < MAX_PID_WORDS + 5) // Must be in PID view and a valid index
             SendValue(PID_Labels[i], Saved_PID_Values[i][Bank - 1]);
     HidePIDMsg();
+    BlockBankChanges = false;
 }
 //************************************************************************************************************/
 void ShowPIDBank() // this is called when bank is changed so new bank's PID values are requested from Nexus and shown
@@ -142,6 +145,7 @@ void ShowPIDBank() // this is called when bank is changed so new bank's PID valu
             strcat(Wmsg, w2);
             MsgBox((char *)"page PIDView", Wmsg); // Warn about unsaved edits
         }
+        BlockBankChanges = true;                // block bank changes while we do this
         PIDMsg(buf, Gray);                     // Show loading message and hides old PIDs
         PID_Send_Duration = MSP_WAIT_TIME;     // how many milliseconds to await PID values
         Reading_PIDS_Now = true;               // This tells the Ack payload parser to get PID values
@@ -189,17 +193,19 @@ void SendEditedPIDs()
         SaveToLocalBank();
         return;
     }
+ 
     PlaySound(BEEPMIDDLE);
     HidePIDMsg();
     PIDMsg((char *)"Sending edited PIDs ...", Gray); // Show sending message
     DelayWithDog(100);                               // allow LOTS of time for screen to update BEFORE sending another Nextion command
     ReadEditedPIDs();                                // read the edited PIDs from the screen;
+    BlockBankChanges = true;
     AddParameterstoQueue(GET_SECOND_11_PID_VALUES);  // SECOND MUST BE QUEUED FIRST!!! Send PID 6-16 values from TX to RX
     AddParameterstoQueue(GET_FIRST_6_PID_VALUES);    // SECOND MUST BE QUEUED FIRST!!! Send PID 0-5 values from TX to RX
-    HidePIDMsg();                                    // SECOND MUST BE QUEUED FIRST!!!  because this queue is a LIFO stack
     SendCommand((char *)"vis b3,0");                 // hide "Send" button
     PIDS_Were_Edited = false;
     PlaySound(BEEPCOMPLETE);                         // let user know we're done
+    HidePIDMsg();
 }
 //************************************************************************************************************/
 void StartPIDView() // this starts PID view

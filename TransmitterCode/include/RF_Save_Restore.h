@@ -167,6 +167,7 @@ void Restore_SOME_RF_Parameters()
         DelayWithDog(MSP_WAIT_TIME);
         SendCommand((char *)"vis Progress,0"); // hide progress bar
         SendCommand((char *)"vis t2,0");       // hide please wait text
+        BlockBankChanges = false;
         break;
     default:
         break;
@@ -322,6 +323,7 @@ void Save_SOME_RF_Parameters()
         DelayWithDog(MSP_WAIT_TIME);
         SendCommand((char *)"vis Progress,0"); // hide progress bar
         SendCommand((char *)"vis t2,0");       // hide please wait text
+        BlockBankChanges = false;
         break;
     default:
         break;
@@ -378,6 +380,7 @@ void SaveRFParameters() // show dialog to pick bank and params to save
 // ************************************************************************************************************/
 void Start_RESTORE()
 {
+    BlockBankChanges = true;
     Collect_data_from_dialog();            // get bank number and which params to save
     Which_Case_Now = 0;                    // start saving first bank
     SendCommand((char *)"vis Progress,1"); // show progress bar
@@ -389,6 +392,7 @@ void Start_RESTORE()
 // ************************************************************************************************************/
 void Start_SAVE()
 {
+    BlockBankChanges = true;
     Collect_data_from_dialog();            // get bank number and which params to save
     Which_Case_Now = 0;                    // start saving first bank
     SendCommand((char *)"vis Progress,1"); // show progress bar
@@ -403,6 +407,7 @@ void Cancel_SAVE()
     SendCommand((char *)"page RFView");
     CurrentView = ROTORFLIGHTVIEW;
     ShowRFBank();
+    BlockBankChanges = false;
 }
 // ************************************************************************************************************/
 void Cancel_RESTORE()
@@ -410,6 +415,7 @@ void Cancel_RESTORE()
     SendCommand((char *)"page RFView");
     CurrentView = ROTORFLIGHTVIEW;
     ShowRFBank();
+    BlockBankChanges = false;
 }
 
 // ************************************************************************************************************/

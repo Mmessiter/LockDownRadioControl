@@ -45,6 +45,7 @@ void SendEditedRates()
         return;
     }
     Rates_Were_Edited = false;
+    BlockBankChanges = true;
     PlaySound(BEEPMIDDLE);
     DelayWithDog(100);                                  // allow LOTS of time for screen to update BEFORE sending another Nextion command
     RatesMsg((char *)"Sending edited Rates ...", Gray); // Show sending message
@@ -118,6 +119,7 @@ void HideRATESMsg()
         SendCommand((char *)"vis busy,0");  // Hide  message
         SendCommand((char *)"vis b2,1");    // Make Advanced visible
         ForegroundColourRATESLabels(Black); // make text black so it is visible again
+        BlockBankChanges = false;
     }
 }
 // ******************************************************************************************************************************/
@@ -153,10 +155,11 @@ void ShowRatesLocalBank()
     }
     HideRATESMsg();                  // ...because this queue is a LIFO stack
     SendCommand((char *)"vis b3,0"); // hide "Send" button
+    BlockBankChanges = false;
 }
 // ******************************************************************************************************************************/
 
-    void ShowRatesBank()
+void ShowRatesBank()
 {
     if (CurrentView == RATESVIEW1) // Must be in RATES view
     {
@@ -184,6 +187,7 @@ void ShowRatesLocalBank()
             MsgBox((char *)"page RatesView", Wmsg); // Warn about unsaved edits
         }
         RatesMsg(buf, Gray);
+        BlockBankChanges = true;
         RATES_Send_Duration = MSP_WAIT_TIME;                     // how many milliseconds to await RATES values
         Reading_RATES_Now = true;                                // This tells the Ack payload parser to get RATES values
         AddParameterstoQueue(SEND_RATES_VALUES);                 // Request RATES values from RX
@@ -219,6 +223,7 @@ void EndRatesView()
     SendCommand((char *)"page RFView");
     CurrentView = ROTORFLIGHTVIEW;
     ShowRFBank();
+    BlockBankChanges = false;
 }
 // ************************************************************************************************************/
 void RatesWereEdited()

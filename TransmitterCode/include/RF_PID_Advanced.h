@@ -65,6 +65,7 @@ void HidePID_Advanced_Msg()
     {
         SendCommand((char *)"vis busy,0");        // Hide PID message
         ForegroundColourPIDAdvancedLabels(Black); // make text black so it is visible again
+        BlockBankChanges = false;
     }
 }
 // **********************************************************************************************************/
@@ -135,6 +136,7 @@ void ShowPIDAdvancedBank() // this is called when bank is changed so new bank's 
             strcat(Wmsg, w2);
             MsgBox((char *)"page PID_A_View", Wmsg); // Warn about unsaved edits
         }
+        BlockBankChanges = true;                  // block bank changes while we do this
         PIDAdvancedMsg(buf, Gray);                      // Show loading message and hides old PIDs
         PID_Advanced_Send_Duration = MSP_WAIT_TIME;     // how many milliseconds to await PID values
         Reading_PIDS_Advanced_Now = true;               // This tells the Ack payload parser to get PID values
