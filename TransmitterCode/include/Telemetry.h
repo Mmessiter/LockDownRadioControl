@@ -28,11 +28,11 @@ FASTRUN bool CheckTXVolts()
         float TXVoltsTotalPerCell = TXVoltsTotal / 2;
         if (TXLiPo)
         {                                                                                   // Does TX have a LiPo or a LiFePo4?
-            TransmitterBatteryPercentLeft = map(TXVoltsRaw, 3.5 * 100, 4.00 * 100, 0, 100); // LIPO Battery 3.50 -> c. 4.00  volts per cell
+            TransmitterBatteryPercentLeft = map(TXVoltsTotalPerCell * 100, 3.5 * 100, 4.00 * 100, 0, 100); // LIPO Battery 3.50 -> c. 4.00  volts per cell
         }
         else
         {                                                                                   // No, it's a LiFePo4
-            TransmitterBatteryPercentLeft = map(TXVoltsRaw, 3.2 * 100, 3.33 * 100, 0, 100); // LiFePo4 Battery 3.1 -> 3.35  volts per cell
+            TransmitterBatteryPercentLeft = map(TXVoltsTotalPerCell * 100, 3.2 * 100, 3.33 * 100, 0, 100); // LiFePo4 Battery 3.1 -> 3.35  volts per cell
         }
         if (TransmitterBatteryPercentLeft < LowBattery)
         {

@@ -1139,9 +1139,9 @@ FLASHMEM void setup()
     digitalWrite(POWER_OFF_PIN, LOW); // default is LOW anyway. HIGH to turn off
     BlueLedOn();
     NEXTION.begin(921600); // BAUD rate also set in display code THIS IS THE MAX (was 115200)
-
     InitMaxMin();
     InitCentreDegrees();
+    SetBrightness(1);
     ResetSubTrims();
     CentreTrims();
     strcpy(LogFileName, "");
@@ -1150,7 +1150,6 @@ FLASHMEM void setup()
     WatchDogConfig.timeout = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
     CheckSDCard(); // Check if SD card is present and working and initialise it
-
     TeensyWatchDog.begin(WatchDogConfig);
     delay(300); // <<********************* MUST ALLOW DOG TO INITIALISE
     DelayWithDog(WARMUPDELAY);
@@ -1165,8 +1164,6 @@ FLASHMEM void setup()
     {
         ErrorState = MODELSFILENOTFOUND; // if no file ... or no SD
     }
-    SendOtherValue((char *)"Screen_Background", BackGroundSelection); // also set screen background
-    SendOtherValue((char *)"FrontView.pic", BackGroundSelection);
     
     SendCommand(pSplashView); // show splash screen **************************
     CurrentView = SPLASHVIEW; // while loading ...
@@ -1189,6 +1186,8 @@ FLASHMEM void setup()
     SendValue(FrontView_Highlight, HighlightColour);
     CurrentView = 254;
     SetAudioVolume(AudioVolume);
+    SendOtherValue((char *)"Screen_Background", BackGroundSelection); // also set screen background
+    SendOtherValue((char *)"FrontView.pic", BackGroundSelection);
     if (PlayFanfare)
         PlaySound(WINDOWS1);
     for (int i = 0; i < 100; ++i) // fade in screen brightness
@@ -1242,6 +1241,7 @@ FLASHMEM void setup()
     DelayWithDog(500);
     GotoFrontView();
     RedLedOn();
+   
 }
 // **************************************************************************************************************************************************************
 void RationaliseBuddy()
