@@ -737,16 +737,18 @@ bool LoadAllParameters()
     DeltaGMT = SDRead16BITS(SDCardAddress);
     ++SDCardAddress;
     ++SDCardAddress;
-  //  BackGroundColour = SDRead16BITS(SDCardAddress);
+    //  BackGroundColour = SDRead16BITS(SDCardAddress);
+    BackGroundSelection = SDRead8BITS(SDCardAddress);
+
+    ++SDCardAddress; // needed
+    ++SDCardAddress; // spare
+                     //  ForeGroundColour = SDRead16BITS(SDCardAddress);
     ++SDCardAddress;
     ++SDCardAddress;
-  //  ForeGroundColour = SDRead16BITS(SDCardAddress);
+    //  SpecialColour = SDRead16BITS(SDCardAddress);
     ++SDCardAddress;
     ++SDCardAddress;
-  //  SpecialColour = SDRead16BITS(SDCardAddress);
-    ++SDCardAddress;
-    ++SDCardAddress;
-  //  HighlightColour = SDRead16BITS(SDCardAddress);
+    //  HighlightColour = SDRead16BITS(SDCardAddress);
     ++SDCardAddress;
     ++SDCardAddress;
     SticksMode = SDRead8BITS(SDCardAddress);
@@ -937,16 +939,17 @@ void SaveTransmitterParameters()
     SDUpdate16BITS(SDCardAddress, DeltaGMT);
     ++SDCardAddress;
     ++SDCardAddress;
-  //  SDUpdate16BITS(SDCardAddress, BackGroundColour);
+    SDUpdate8BITS(SDCardAddress, BackGroundSelection);
+    //  SDUpdate16BITS(SDCardAddress, BackGroundColour);
+    ++SDCardAddress; // needed
+    ++SDCardAddress; // spare ....
+                     //  SDUpdate16BITS(SDCardAddress, ForeGroundColour);
     ++SDCardAddress;
     ++SDCardAddress;
-  //  SDUpdate16BITS(SDCardAddress, ForeGroundColour);
+    //  SDUpdate16BITS(SDCardAddress, SpecialColour);
     ++SDCardAddress;
     ++SDCardAddress;
-  //  SDUpdate16BITS(SDCardAddress, SpecialColour);
-    ++SDCardAddress;
-    ++SDCardAddress;
-  //  SDUpdate16BITS(SDCardAddress, HighlightColour);
+    //  SDUpdate16BITS(SDCardAddress, HighlightColour);
     ++SDCardAddress;
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, SticksMode);

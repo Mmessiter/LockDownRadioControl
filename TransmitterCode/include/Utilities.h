@@ -890,7 +890,7 @@ void ClearSuccessRate()
     for (int i = 0; i < (PACKET_HISTORY_WINDOW * (uint16_t)ConnectionAssessSeconds); ++i)
     { // 126 packets per second start off good
         if (i < PACKET_HISTORY_WINDOW)
-        PacketsHistoryBuffer[i] = 1;
+            PacketsHistoryBuffer[i] = 1;
     }
 }
 
@@ -1010,10 +1010,10 @@ void ClearBox()
     char nb[10];
     char cmd[80];
     // char fillcmd[] = "fill 30,30,380,365,";
-   // 25, 25, 378, 370,
+    // 25, 25, 378, 370,
     char fillcmd[] = "fill 25,25,378,370,";
     strcpy(cmd, fillcmd);
-    //Str(nb, BackGroundColour, 0);
+    // Str(nb, BackGroundColour, 0);
     Str(nb, 0, 0);
     strcat(cmd, nb);
     SendCommand(cmd);
@@ -1094,7 +1094,7 @@ void DelayWithDog(uint32_t HowLong)
         if (ModelMatched && BoundFlag)
         {
             GetNewChannelValues(); // these might have changed while we were waiting
-            FixMotorChannel();     // ensure motor channel is off if that's needed 
+            FixMotorChannel();     // ensure motor channel is off if that's needed
             SendData();            // send new data to RX
         }
     }
@@ -1298,4 +1298,17 @@ void swap(uint8_t *a, uint8_t *b)
     *a = *b;
     *b = c;
 }
+// ************************************************************************************************************/
+void ChooseBackGround()
+{
+    SendCommand(pColoursView); // go to colours page
+    CurrentView = COLOURS_VIEW;
+}
+// ************************************************************************************************************/
+void Save_BackGround()
+{
+    BackGroundSelection = GetValue((char *)"n0");
+    SaveTransmitterParameters();
+    StartTXSetupView(); 
+} 
 #endif

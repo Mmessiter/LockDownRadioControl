@@ -1139,6 +1139,7 @@ FLASHMEM void setup()
     digitalWrite(POWER_OFF_PIN, LOW); // default is LOW anyway. HIGH to turn off
     BlueLedOn();
     NEXTION.begin(921600); // BAUD rate also set in display code THIS IS THE MAX (was 115200)
+
     InitMaxMin();
     InitCentreDegrees();
     ResetSubTrims();
@@ -1149,6 +1150,7 @@ FLASHMEM void setup()
     WatchDogConfig.timeout = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
     CheckSDCard(); // Check if SD card is present and working and initialise it
+
     TeensyWatchDog.begin(WatchDogConfig);
     delay(300); // <<********************* MUST ALLOW DOG TO INITIALISE
     DelayWithDog(WARMUPDELAY);
@@ -1163,7 +1165,9 @@ FLASHMEM void setup()
     {
         ErrorState = MODELSFILENOTFOUND; // if no file ... or no SD
     }
-    SetBrightness(1);         // start with screen almost off
+    SendOtherValue((char *)"Screen_Background", BackGroundSelection); // also set screen background
+    SendOtherValue((char *)"FrontView.pic", BackGroundSelection);
+    
     SendCommand(pSplashView); // show splash screen **************************
     CurrentView = SPLASHVIEW; // while loading ...
     GetTeensyMacAddress();
@@ -1175,12 +1179,10 @@ FLASHMEM void setup()
     InitSwitchesAndTrims();
     InitRadio(DefaultPipe);
     delay(WARMUPDELAY); // Allow Nextion time to warm up
-
     BackGroundColour = Black;
     ForeGroundColour = White;
     SpecialColour = Red;
     HighlightColour = Yellow;
-    
     SendValue(FrontView_BackGround, BackGroundColour); // Get colours ready
     SendValue(FrontView_ForeGround, ForeGroundColour);
     SendValue(FrontView_Special, SpecialColour);
@@ -1196,7 +1198,6 @@ FLASHMEM void setup()
     }
     if (PlayFanfare)
         DelayWithDog(1000);
-
     SendValue(FrontView_Hours, 0);
     SendValue(FrontView_Mins, 0);
     SendValue(FrontView_Secs, 0);
@@ -1208,11 +1209,6 @@ FLASHMEM void setup()
     StartInactvityTimeout();
     GetTXVersionNumber();
     ScreenTimeTimer = millis();
-    // if (UseLog)
-    // {
-    // LogPowerOn();
-    // LogThisModel();
-    // }
     SendText(FrontView_Connected, na);
     UpdateModelsNameEveryWhere();
     ConfigureStickMode();
@@ -3310,11 +3306,16 @@ void CheckAllModelIds()
     ModelNumber = SavedModelNumber;
     ReadOneModel(ModelNumber);
 }
+// ******************************************************************************************************************************/
+void Screen_on()
+{
+    SetBrightness(Brightness);
+}
 
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!  ( Use "NUMBER<<8" )
-#define LASTFUNCTION1 42 // One more than final one
+#define LASTFUNCTION1 45 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])(){
     Blank,                   // 0 Cannot be used
@@ -3358,7 +3359,10 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     Start_RESTORE,           // 38
     Cancel_RESTORE,          // 39
     Start_SAVE,              // 40
-    Cancel_SAVE              // 41
+    Cancel_SAVE,             // 41
+    ChooseBackGround,        // 42
+    Save_BackGround,         // 43
+    Screen_on                // 44 
 
 };
 
@@ -3535,7 +3539,6 @@ FASTRUN void ButtonWasPressed()
         char ReScan[] = "ReScan";
         char MixesView_MixNumber[] = "MixNumber";
         char ModelsView_ModelNumber[] = "ModelNumber";
-        char ColoursView[] = "ColoursView";
         char SvT11[] = "t11";
         char CMsg1[] = "Move all controls to their full\r\nextent several times,\r\nthen press Next.";
         char SvB0[] = "b0";
@@ -3628,7 +3631,7 @@ FASTRUN void ButtonWasPressed()
         char FrontView_Hours[] = "Hours";
         char FrontView_Mins[] = "Mins";
         char FrontView_Secs[] = "Secs";
-        char StartBackGround[] = "click Background,0";
+
         char NotConnected[] = "Model isn't connected!";
         char IsConnected[] = "Warning: model is connected!";
         char invisb1[] = "vis b1,0";
@@ -4238,15 +4241,6 @@ FASTRUN void ButtonWasPressed()
                     ShowFileErrorMsg();
                 LoadModelSelector();
             }
-            ClearText();
-            return;
-        }
-
-        if (InStrng(ColoursView, TextIn) > 0)
-        {
-            CurrentView = COLOURS_VIEW;
-            SendCommand(pColoursView);
-            SendCommand(StartBackGround);
             ClearText();
             return;
         }

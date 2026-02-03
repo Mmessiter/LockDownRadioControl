@@ -142,6 +142,8 @@ void ReadBankSwitch()
 /************************************************************************************************************/
 void ReadAutoAndMotorSwitch()
 {
+    if (BlockBankChanges) // do not change bank if blocked
+        return;
     switch (GetSwitchPosition(Autoswitch))
     {
     case 1:

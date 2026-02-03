@@ -820,7 +820,9 @@ void Cancel_RESTORE();
 void Start_SAVE();
 void Cancel_SAVE();
 void DisplayBoostPidValues();
-
+void ChooseBackGround();
+void Save_BackGround();
+void StartTXSetupView();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************
@@ -1037,6 +1039,7 @@ uint8_t Autoswitch = Autoswitch;
 uint8_t SafetySwitch = 0;
 uint8_t BuddySwitch = 0;
 uint8_t DualRatesSwitch = 0;
+
 
 // **************************************************************************
 //                Top switch Channel numbers                                   *
@@ -1310,7 +1313,7 @@ char pRXSetupView[] = "page RXSetupView";
 char pCalibrateView[] = "page CalibrateView";
 char pSubTrimView[] = "page SubTrimView";
 char pAudioView[] = "page AudioView";
-char pColoursView[] = "page ColoursView";
+char pColoursView[] = "page BackGroundView";
 char pSticksView[] = "page SticksView";
 char pGraphView[] = "page GraphView";
 char pTXSetupView[] = "page TXSetupView";
@@ -1389,6 +1392,7 @@ float GearRatio = 10.3;
 uint8_t ArmingChannel = 5;
 
 bool BlockBankChanges = false; // used to block bank changes when Param go to or from Nexus
+uint8_t BackGroundSelection = 1;
 
 #define MAX_PID_WORDS 12            // 24 bytes
 #define MAX_RATES_BYTES 13          // 13 bytes
