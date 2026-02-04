@@ -205,19 +205,20 @@ void EnsureMotorIsOff()
 {
     if (!UseMotorKill)
         return;
-
-    CheckMotorOff();
-    while (MotorEnabled) // disconnected now so stay here until motor switch really is off!
-    {
-        SendCommand(WarnNow);
-        SendText(Warning, err_MotorOn);
-        SendNoData = true;
-        PlaySound(MOTORON);
-        DelayWithDog(1200);
-        PlaySound(PLSTURNOFF);
-        DelayWithDog(3000);
-        CheckMotorOff();
-    }
+ if (BuddyPupilOnWireless)
+     return;
+ CheckMotorOff();
+ while (MotorEnabled) // disconnected now so stay here until motor switch really is off!
+ {
+     SendCommand(WarnNow);
+     SendText(Warning, err_MotorOn);
+     SendNoData = true;
+     PlaySound(MOTORON);
+     DelayWithDog(1200);
+     PlaySound(PLSTURNOFF);
+     DelayWithDog(3000);
+     CheckMotorOff();
+ }
     SendCommand(WarnOff);
     SendNoData = false;
 }
@@ -4655,6 +4656,8 @@ void ResetMotorTimer()
 // ************************************************************************************************************/
 void MotorEnabledHasChanged()
 {
+    if (BuddyPupilOnWireless)
+        return;
     if (MotorEnabled)
     {
         if (LedWasRed)
