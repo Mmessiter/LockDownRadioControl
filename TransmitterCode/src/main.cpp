@@ -5058,13 +5058,12 @@ void CheckModelsScreen(uint32_t RightNow)
 /************************************************************************************************************/
 void FASTRUN ManageTransmitter()
 {
-
     static uint32_t TransmitterLastManaged = 0;
-
     uint32_t RightNow = millis();
     int32_t TXPacketElapsed = RightNow - LastPacketSentTime;
-
+    CheckForNextionButtonPress(); // must be done very frequently to avoid missing button presses. It updates the TextIn string which is used for button press processing.
     KickTheDog(); // Watchdog ... ALWAYS!
+
     if ((FHSS_data::PaceMaker - TXPacketElapsed < TIMEFORTXMANAGMENT) && ModelMatched)
     {
         return; // If it's almost time to send data, then do not start some other task which might easily take longer.
@@ -5075,7 +5074,7 @@ void FASTRUN ManageTransmitter()
         return;
     }
     CheckPowerOffButton();
-    CheckForNextionButtonPress(); // Pretty obvious really ...
+   
     DoTheVariometer();            // Do the variometer
 
     if (RightNow - LastTimeRead >= 1000)
