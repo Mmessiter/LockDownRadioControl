@@ -44,64 +44,29 @@ void SystemPage1End()
     char n0[] = "n0";
     char ScreenViewTimeout[] = "Sto"; // needed for display info
     char Pto[] = "Pto";
-    bool Altered = false;
-    char chgs[512];
     char change[] = "change";
     char cleared[] = "XX:";
-    for (uint16_t i = 0; i < 500; ++i)
-    { // get copy of any changes
-        chgs[i] = TextIn[i + 4];
-        chgs[i + 1] = 0;
-    }
-    Look(chgs);
-    SendCommand(ProgressStart);
-    if (InStrng(n0, chgs))
-    {
-        SticksMode = CheckRange(GetValue(n0), 1, 2);
-        Altered = true;
-        SendValue(Progress, 20);
-    }
-    if (InStrng(TxNme, chgs))
-    {
-        GetText(TxNme, TxName);
-        Altered = true;
-        SendValue(Progress, 40);
-    }
-    if (InStrng(lpm, chgs))
-    {
-        AutoModelSelect = GetValue(lpm);
-        Altered = true;
-        SendValue(Progress, 50);
-    }
-    if (InStrng(Bwn, chgs))
-    {
-        LowBattery = GetValue(Bwn);
-        Altered = true;
-        SendValue(Progress, 60);
-    }
-    if (InStrng(ScreenViewTimeout, chgs))
-    {
-        ScreenTimeout = GetValue(ScreenViewTimeout);
-        Altered = true;
-        SendValue(Progress, 80);
-    }
-    if (InStrng(Pto, chgs))
-    {
-        Inactivity_Timeout = GetValue(Pto) * TICKSPERMINUTE;
-        if (Inactivity_Timeout < INACTIVITYMINIMUM)
-            Inactivity_Timeout = INACTIVITYMINIMUM;
-        if (Inactivity_Timeout > INACTIVITYMAXIMUM)
-            Inactivity_Timeout = INACTIVITYMAXIMUM;
-        Altered = true;
-        SendValue(Progress, 90);
-    }
-    FixDeltaGMTSign();
 
-    if (Altered)
-    {
-        SaveTransmitterParameters();
-        SendText(change, cleared);
-    }
+    SendCommand(ProgressStart);
+    SticksMode = CheckRange(GetValue(n0), 1, 2);
+    SendValue(Progress, 20);
+    GetText(TxNme, TxName);
+    SendValue(Progress, 40);
+    AutoModelSelect = GetValue(lpm);
+    SendValue(Progress, 50);
+    LowBattery = GetValue(Bwn);
+    SendValue(Progress, 60);
+    ScreenTimeout = GetValue(ScreenViewTimeout);
+    SendValue(Progress, 80);
+    Inactivity_Timeout = GetValue(Pto) * TICKSPERMINUTE;
+    if (Inactivity_Timeout < INACTIVITYMINIMUM)
+        Inactivity_Timeout = INACTIVITYMINIMUM;
+    if (Inactivity_Timeout > INACTIVITYMAXIMUM)
+        Inactivity_Timeout = INACTIVITYMAXIMUM;
+    SendValue(Progress, 90);
+    FixDeltaGMTSign();
+    SaveTransmitterParameters();
+    SendText(change, cleared);
     SendValue(Progress, 100);
     CurrentView = TXSETUPVIEW;
     SendCommand(pTXSetupView);
