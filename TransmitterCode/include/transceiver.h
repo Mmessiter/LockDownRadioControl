@@ -517,6 +517,7 @@ void DrawFhssBox()
 
 void ScanAllChannels(bool cls)
 {
+  
     const uint16_t x1 = xx1;
     const uint16_t y1 = yy1;
     const uint8_t BlobHeight = 4; // Blobs are 4 x 5 pixels

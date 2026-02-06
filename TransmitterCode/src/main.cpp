@@ -164,6 +164,8 @@
 #include "RF_PID_Advanced.h"
 #include "RF_Save_Restore.h"
 
+
+
 /*********************************************************************************************************************************/
 
 void ClearMostParameters()
@@ -1139,7 +1141,7 @@ FLASHMEM void setup()
     pinMode(POWER_OFF_PIN, OUTPUT);
     digitalWrite(POWER_OFF_PIN, LOW); // default is LOW anyway. HIGH to turn off
     BlueLedOn();
-    NEXTION.begin(921600); // BAUD rate also set in display code THIS IS THE MAX (was 115200)
+    NEXTION.begin(921600); // BAUD rate also set in display code THIS IS THE MAX
     InitMaxMin();
     InitCentreDegrees();
     SetBrightness(1);
@@ -1165,7 +1167,7 @@ FLASHMEM void setup()
     {
         ErrorState = MODELSFILENOTFOUND; // if no file ... or no SD
     }
-    
+    SetBrightness(1); // Set low brightness for splash screen
     SendCommand(pSplashView); // show splash screen **************************
     CurrentView = SPLASHVIEW; // while loading ...
     GetTeensyMacAddress();
@@ -1191,7 +1193,7 @@ FLASHMEM void setup()
     SendOtherValue((char *)"FrontView.pic", BackGroundSelection);
     if (PlayFanfare)
         PlaySound(WINDOWS1);
-    for (int i = 0; i < 100; ++i) // fade in screen brightness
+    for (int i = 1; i < 100; ++i) // fade in screen brightness
     {
         SetBrightness(i);
         DelayWithDog(15);
@@ -1875,6 +1877,7 @@ FASTRUN void updateInterpolationTypes()
 
 FASTRUN void DisplayCurve()
 {
+   
     int p = 0;
     char cmdBuffer[512] = "";          // Buffer for commands
     char tempCmd[80];                  // Temporary buffer for individual commands
@@ -3307,11 +3310,6 @@ void CheckAllModelIds()
     ModelNumber = SavedModelNumber;
     ReadOneModel(ModelNumber);
 }
-// ******************************************************************************************************************************/
-void Screen_on()
-{
-    SetBrightness(Brightness);
-}
 
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
@@ -3363,7 +3361,7 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     Cancel_SAVE,             // 41
     ChooseBackGround,        // 42
     Save_BackGround,         // 43
-    Screen_on                // 44 
+    Blank                    // 44 
 
 };
 

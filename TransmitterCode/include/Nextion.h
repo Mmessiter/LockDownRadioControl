@@ -22,7 +22,7 @@ void ClearNextionCommand()
 /*********************************************************************************************************************************/
 void BuildNextionCommand(char *cmd) // these strings can be <= 255 bytes but here we limit to 127 to avoid delays etc.
 {
-    if (strlen(NextionCommand) + strlen(cmd)+3 >= MAXNEXTIONCOMMANDLENGTH) // If too long, send what we have and start building again.
+    if (strlen(NextionCommand) + strlen(cmd) + 3 >= MAXNEXTIONCOMMANDLENGTH) // If too long, send what we have and start building again.
     {
         SendCommand(NextionCommand);
         ClearNextionCommand();
@@ -164,7 +164,6 @@ void SendCommand(char *tbox)
 {
     char page[] = "page ";
     char blankview[] = "BlankView";
-
     NEXTION.print(tbox);
     for (int i = 0; i < 3; ++i)
         NEXTION.write(0xff);
@@ -230,6 +229,7 @@ uint32_t getvalue(char *nbox)
 
 uint32_t GetValue(char *nbox)
 { // This function calls the function above until it returns no error
+
     int i = 0;
     uint32_t ValueIn = getvalue(nbox);
 
@@ -247,6 +247,7 @@ uint32_t GetValue(char *nbox)
 // It returns the length of array
 uint16_t GetText(char *TextBoxName, char *TheText)
 {
+    
     char get[] = "get ";
     char _txt[] = ".txt";
     char CB[100];
@@ -271,7 +272,8 @@ uint16_t GetText(char *TextBoxName, char *TheText)
 }
 /*********************************************************************************************************************************/
 int GetOtherValue(char *nbox)
-{ // don't add .val as other thingy is already there ...
+{
+    // don't add .val as other thingy is already there ...
     double ValueIn = 0;
     char GET[] = "get ";
     char CB[100];

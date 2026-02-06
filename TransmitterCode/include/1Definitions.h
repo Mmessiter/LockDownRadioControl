@@ -823,6 +823,7 @@ void DisplayBoostPidValues();
 void ChooseBackGround();
 void Save_BackGround();
 void StartTXSetupView();
+bool CheckFileExists(char *fl);
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************
@@ -1039,7 +1040,6 @@ uint8_t Autoswitch = Autoswitch;
 uint8_t SafetySwitch = 0;
 uint8_t BuddySwitch = 0;
 uint8_t DualRatesSwitch = 0;
-
 
 // **************************************************************************
 //                Top switch Channel numbers                                   *
@@ -1478,6 +1478,7 @@ bool Reading_RATES_Advanced_Now = false;
 char Rate_Types[6][15] = {"None", "Betaflight", "Raceflight", "KISS", "Actual", "QuickRates"};
 const float FactorTableRF[13] = {1, 10, 10, .01, 10, 10, .01, 10, 10, .01, .25, .25, .01}; // Factors for each RATES byte needed by Rotorflight
 bool Rotorflight22Detected = false;
+
 
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 
