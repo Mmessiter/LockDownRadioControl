@@ -34,7 +34,7 @@
 //**************************************************************************************
 
 // #define DB_NEXTION        // Debug NEXTION
-// #define DB_SD             // Debug SD card data
+ #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
@@ -1440,7 +1440,7 @@ struct spd // Special Packet Data for Wireless Buddy functions
 {
     uint8_t Command[2];
     uint64_t ModelID;
-    uint8_t MasterPaceMaker; // heer
+    uint8_t MasterPaceMaker; 
     uint8_t Channel = QUIETCHANNEL;
 };
 spd SpecialPacketData; // longer version
@@ -1478,7 +1478,7 @@ bool Reading_RATES_Advanced_Now = false;
 char Rate_Types[6][15] = {"None", "Betaflight", "Raceflight", "KISS", "Actual", "QuickRates"};
 const float FactorTableRF[13] = {1, 10, 10, .01, 10, 10, .01, 10, 10, .01, .25, .25, .01}; // Factors for each RATES byte needed by Rotorflight
 bool Rotorflight22Detected = false;
-
+char ModelImageFileName[9];
 
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 

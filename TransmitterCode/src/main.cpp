@@ -4881,6 +4881,8 @@ bool CheckModelName()
         SendText(mn, ModelName);
         LastModelLoaded = ModelNumber;
         UpdateModelsNameEveryWhere();
+        DisplayModelImage();
+        Look(ModelImageFileName);
         return true;
     }
     ClearText();

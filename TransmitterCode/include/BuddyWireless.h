@@ -465,7 +465,7 @@ void GetSpecialPacket()
 
     if (Radio1.available())
     {                                                                   // if a packet has arrived
-        if (Radio1.getDynamicPayloadSize() != sizeof SpecialPacketData) // MUST be sizeof SpecialPacketData (= 24!) Heer
+        if (Radio1.getDynamicPayloadSize() != sizeof SpecialPacketData) // MUST be sizeof SpecialPacketData (= 24!) 
         {
             SendText(wb, ExsBd); // If not, declare an error: excess buddies !
             SendCommand(YesVisible);
@@ -488,7 +488,7 @@ void GetSpecialPacket()
     }
     else
     {                                                                                   // No packet arrived so maybe master's dead?
-        if (millis() - LastPassivePacketTime > ((uint32_t) SpecialPacketData.MasterPaceMaker)) // heer!!!
+        if (millis() - LastPassivePacketTime > ((uint32_t) SpecialPacketData.MasterPaceMaker)) 
         {
             Radio1.stopListening();
             Radio1.setChannel(QUIETCHANNEL); // Set the recovery channel

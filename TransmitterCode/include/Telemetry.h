@@ -44,7 +44,7 @@ FASTRUN bool CheckTXVolts()
         if (CurrentView == FRONTVIEW)
         {
             SendValue(JTX, TransmitterBatteryPercentLeft);
-            strcat(nbuf, v); // heer
+            strcat(nbuf, v);
             dtostrf(TXVoltsTotalPerCell, 2, 2, NB);
             strcat(nbuf, NB);
             strcat(nbuf, PerCell);
@@ -93,7 +93,7 @@ FASTRUN bool CheckRXVolts()
                 dtostrf(RXVoltsPerCell, 2, 2, Vbuf);
                 strcat(RXBattInfo, Vbuf);
                 strcat(RXBattInfo, PerCell);
-                SendText(FrontView_RXBV, RXBattInfo); // heer
+                SendText(FrontView_RXBV, RXBattInfo); 
             }
             if (CurrentView == DATAVIEW)
             {

@@ -110,7 +110,7 @@ void ShowRatesAdvancedBank()
     if (Rates_Advanced_Were_Edited) // if RATES were edited but not sent and bank changed
     {
         char Wmsg[120];
-        char w1[] = "Values for "; // heer
+        char w1[] = "Values for ";
         char w2[] = " were edited \r\nbut not saved. (Too late now!)\r\nSo you may want to check them.";
         strcpy(Wmsg, w1);
         strcat(Wmsg, BankNames[BanksInUse[Bank - 1]]);

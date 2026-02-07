@@ -155,7 +155,7 @@ void SendModelFile()
             Fbuffer[BUFFERSIZE + 3] = Fsize >> 24; // SEND FILE SIZE (four bytes)
             for (int q = 0; q < 5; ++q)
             {
-                Fbuffer[q + 16] = MacAddress[q + 1]; // Add only 5 bytes of the macaddress to buffer at offset 16 and sent it too! heer
+                Fbuffer[q + 16] = MacAddress[q + 1]; // Add only 5 bytes of the macaddress to buffer at offset 16 and sent it too! 
             }
         }
         else
@@ -344,8 +344,8 @@ void ReceiveModelFile()
 
     for (int q = 0; q < 5; ++q)
     {
-        BuddyMacAddress[q] = Fbuffer[q + 16]; // sender's macaddress is in buffer at offset 16 - get it heer!
-                                              //  if (q == 0) ++BuddyMacAddress[q];     // add one to lowest byte to make it unique // heer!!
+        BuddyMacAddress[q] = Fbuffer[q + 16]; // sender's macaddress is in buffer at offset 16 - get it 
+                                              //  if (q == 0) ++BuddyMacAddress[q];     // add one to lowest byte to make it unique 
     }
 
 #ifdef DB_MODEL_EXCHANGE

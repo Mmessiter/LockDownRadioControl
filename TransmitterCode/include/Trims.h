@@ -143,7 +143,7 @@ void SetATrimDefinition(int i)
             }
             if (i == 4)
             {
-                TrimNumber[4] = TRIM3A; // heer
+                TrimNumber[4] = TRIM3A; 
                 TrimNumber[5] = TRIM3B;
             }
             if (i == 5)

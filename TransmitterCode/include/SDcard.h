@@ -290,7 +290,7 @@ bool ReadOneModel(uint32_t Mnum)
     ++SDCardAddress;
     ++SDCardAddress;
     ++SDCardAddress;
-    ArmingChannel = SDRead8BITS(SDCardAddress); // heer
+    ArmingChannel = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
 
     for (i = 0; i < CHANNELSUSED; ++i)
@@ -453,6 +453,13 @@ bool ReadOneModel(uint32_t Mnum)
             ++SDCardAddress;
         }
     }
+    for (i = 0; i < 8; ++i)
+    {
+        ModelImageFileName[i] = SDRead8BITS(SDCardAddress);
+        ++SDCardAddress;
+    }
+    Look1("Read : ");
+    Look(ModelImageFileName);
 
     CheckOutPutChannels();
     CheckServoType();
@@ -871,6 +878,7 @@ bool LoadAllParameters()
     Buddy_Hi_Position = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
 
+   
     ReadCheckSum32();
     CheckTrimValues();
     MemoryForTransmtter = SDCardAddress;
@@ -879,10 +887,6 @@ bool LoadAllParameters()
     ReadOneModel(ModelNumber);
     return true;
 }
-
-// uint8_t Buddy_Low_Position = 0;
-// uint8_t Buddy_Mid_Position = 1;
-// uint8_t Buddy_Hi_Position = 2;
 
 /*********************************************************************************************************************************/
 /******************************************** SAVE ONLY THE TRANSMITTER PARAMS ****************************************************/
@@ -1059,6 +1063,8 @@ void SaveTransmitterParameters()
     SDUpdate8BITS(SDCardAddress, Buddy_Hi_Position);
     ++SDCardAddress;
 
+    
+
     SaveCheckSum32(); // Save the Transmitter parametres checksm
     CloseModelsFile();
 }
@@ -1226,7 +1232,7 @@ void SaveOneModel(uint32_t mnum)
     ++SDCardAddress;
     ++SDCardAddress;
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, ArmingChannel); // heer
+    SDUpdate8BITS(SDCardAddress, ArmingChannel); 
     ++SDCardAddress;
 
     // *********************************************************************************
@@ -1372,6 +1378,13 @@ void SaveOneModel(uint32_t mnum)
             ++SDCardAddress;
         }
     }
+
+    for (i = 0; i < 8; ++i)
+    {
+        SDUpdate8BITS(SDCardAddress, ModelImageFileName[i]);
+        ++SDCardAddress;
+    }
+
     SaveCheckSum32(); // Save the Model parametres checksm
 
     // ********************** Add more

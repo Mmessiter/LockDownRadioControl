@@ -1191,7 +1191,7 @@ void GetYesOrNo()
     while (Confirmed[0] == '?')
     { // await user response
         CheckForNextionButtonPress();
-        CheckPowerOffButton(); // heer
+        CheckPowerOffButton(); 
         KickTheDog();
         if (BoundFlag && ModelMatched)
         {

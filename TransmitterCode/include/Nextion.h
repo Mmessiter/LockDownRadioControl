@@ -59,6 +59,7 @@ void BuildText(char *tbox, char *NewWord) // same as sendtext only delayed send
     strcat(CB, NewWord);
     strcat(CB, quote);
     BuildNextionCommand(CB);
+   // Look(CB);
 }
 /*********************************************************************************************************************************/
 void SendText(char *tbox, char *NewWord)
@@ -76,6 +77,8 @@ void SendText(char *tbox, char *NewWord)
     strcat(CB, NewWord);
     strcat(CB, quote);
     SendCommand(CB);
+  
+  //  Look(CB);
     GetReturnCode(tbox);
 }
 
@@ -94,6 +97,7 @@ void SendOtherText(char *tbox, char *NewWord)
     strcat(CB, NewWord);
     strcat(CB, quote);
     SendCommand(CB);
+   // Look(CB);
     GetReturnCode(tbox);
 }
 
@@ -113,7 +117,6 @@ void SendText1(char *tbox, char *NewWord)
     strcat(CB, txt);
     strcat(CB, NewWord);
     strcat(CB, quote);
-    SendCommand(CB);
     GetReturnCode(tbox);
 }
 /*********************************************************************************************************************************/
@@ -131,7 +134,7 @@ void SendOtherValue(char *nbox, int value)
 }
 
 /*********************************************************************************************************************************/
-void GetTextIn() // heer
+void GetTextIn() 
 {
     delayMicroseconds(20);
     if (NEXTION.available())
@@ -149,7 +152,7 @@ void GetTextIn() // heer
 }
 
 /*********************************************************************************************************************************/
-bool GetButtonPress() // heer
+bool GetButtonPress() 
 {
     if (NEXTION.available())
     {

@@ -349,6 +349,17 @@ void GotoMacrosView()
     PopulateMacrosView();
 }
 
+// ******************************************************************************************************************************
+void DisplayModelImage()
+{
+    char temp[50];
+    strcpy(temp, "exp0.path=\"sd0/");
+    strcat(temp, ModelImageFileName);
+    strcat(temp, ".jpg\"");
+    SendCommand(temp);
+}
+
+
 /******************************************************************************************************************************/
 void GotoModelsView()
 {
@@ -358,9 +369,11 @@ void GotoModelsView()
         if (!GetConfirmation(pRXSetupView, prompt))
             return;
     }
+
     SaveCurrentModel();
     SendCommand(pModelsView);
     CurrentView = MODELSVIEW;
+    DisplayModelImage();
     UpdateModelsNameEveryWhere();
     strcpy(MOD, ".MOD");
     BuildDirectory();
@@ -369,6 +382,7 @@ void GotoModelsView()
     ShowFileNumber();
     PreviousModelNumber = ModelNumber; // save number
     LoadModelSelector();
+    
 }
 
 /******************************************************************************************************************************/
@@ -1044,13 +1058,13 @@ void RXOptionsViewStart() // model Options screen
     char Mchannel[] = "n1";
     char Mvalue[] = "n0";
     char t10[] = "t10";
-
     char Vbuf[15];
     char RxVCorrextion[] = "n2";
     char c1[] = "c1";
     char n3[] = "n3";
     char n4[] = "n4"; // TimerDownwards timer minutes
     char c2[] = "c2"; // TimerDownwards timer on off
+    char temp[13];
 
     SendCommand(pRXSetup1);
     CurrentView = RXSETUPVIEW1;
@@ -1066,8 +1080,15 @@ void RXOptionsViewStart() // model Options screen
     SendValue(n4, TimerStartTime / 60);
     SendCommand(pRXSetup1); // this just sets grey here and there when options are off
 
+    strcpy(temp, ModelImageFileName);
+    if (strlen(temp) == 0) // heer
+        strcpy(temp, "Noimage");
+    strcat(temp, ".jpg");
+    SendText((char *)"t11", temp);
+
     UpdateModelsNameEveryWhere();
 }
+
 
 /******************************************************************************************************************************/
 
@@ -1083,88 +1104,50 @@ void RXOptionsViewEnd()
     char n3[] = "n3";
     char n4[] = "n4"; // TimerDownwards timer minutes
     char c2[] = "c2"; // TimerDownwards timer on off
+    char temp[30];
 
     char ProgressStart[] = "vis Progress,1";
     char Progress[] = "Progress";
-    bool Altered = false;
-    char chgs[512];
     char change[] = "change";
     char cleared[] = "XX:";
 
-    for (uint16_t i = 0; i < 500; ++i)
-    { // get copy of any changes
-        chgs[i] = TextIn[i + 4];
-        chgs[i + 1] = 0;
-    }
-
     SendCommand(ProgressStart);
-    if (InStrng(c1, chgs) || ModelMatched)
-    {
-        Altered = true;
-        CopyTrimsToAll = GetValue(c1);
-        SendValue(Progress, 5);
-    }
-
-    if (InStrng(n3, chgs) || ModelMatched)
-    {
-        TrimMultiplier = GetValue(n3);
-        Altered = true;
-    }
-    if (InStrng(t10, chgs) || ModelMatched)
-    {
-        GetText(t10, fbuf);
-        StopFlyingVoltsPerCell = atof(fbuf);
-        SFV = StopFlyingVoltsPerCell * 100; // this makes it a 16 bit value I can save easily
-        Altered = true;
-        SendValue(Progress, 15);
-    }
-
-    if (InStrng(Mvalue, chgs) || ModelMatched)
-    {
-        MotorChannelZero = map(GetValue(Mvalue), -100, 100, 0, 180); // map to 0 to 180
-        Altered = true;
-        SendValue(Progress, 30);
-    }
-    if (InStrng(RxVCorrextion, chgs) || ModelMatched)
-    {
-        RxVoltageCorrection = GetValue(RxVCorrextion);
-        Altered = true;
-        SendValue(Progress, 40);
-    }
-    if (InStrng(UseKill, chgs) || ModelMatched)
-    {
-        UseMotorKill = GetValue(UseKill);
-        Altered = true;
-        SendValue(Progress, 50);
-    }
-    if (InStrng(Mchannel, chgs) || ModelMatched)
-    {
-        Altered = true;
-        MotorChannel = GetValue(Mchannel) - 1;
-        SendValue(Progress, 60);
-    }
-    if (InStrng(c2, chgs) || ModelMatched)
-    {
-        TimerDownwards = GetValue(c2);
-        Altered = true;
-        SendValue(Progress, 70);
-    }
-    if (InStrng(n4, chgs) || ModelMatched)
-    {
-        TimerStartTime = GetValue(n4) * 60;
-        Altered = true;
-        SendValue(Progress, 80);
-    }
-
+    CopyTrimsToAll = GetValue(c1);
+    SendValue(Progress, 5);
+    TrimMultiplier = GetValue(n3);
+    GetText(t10, fbuf);
+    StopFlyingVoltsPerCell = atof(fbuf);
+    SFV = StopFlyingVoltsPerCell * 100; // this makes it a 16 bit value I can save easily
+    SendValue(Progress, 15);
+    MotorChannelZero = map(GetValue(Mvalue), -100, 100, 0, 180); // map to 0 to 180
+    SendValue(Progress, 30);
+    RxVoltageCorrection = GetValue(RxVCorrextion);
+    SendValue(Progress, 40);
+    UseMotorKill = GetValue(UseKill);
+    SendValue(Progress, 50);
+    MotorChannel = GetValue(Mchannel) - 1;
+    SendValue(Progress, 60);
+    TimerDownwards = GetValue(c2);
+    SendValue(Progress, 70);
+    TimerStartTime = GetValue(n4) * 60;
+    SendValue(Progress, 80);
+    GetText((char *)"t11", temp);
+    uint8_t p = (InStrng((char *)".", temp));
+    if (p)
+        strncpy(ModelImageFileName, temp, p - 1); // copy up to but not including the dot
+    else
+        strcpy(ModelImageFileName, temp); // copy whole string if no dot found
+    if (strlen(ModelImageFileName) == 0)
+        strcpy(ModelImageFileName, "no_image");
+    if (strlen(ModelImageFileName) > 8)
+        ModelImageFileName[8] = 0; // ensure null terminated and not too long
+  
     SendValue(Progress, 100);
     CurrentView = RXSETUPVIEW;
-    if (Altered)
-    {
-        PreviousBank = 42;
-        GetBank();
-        SaveOneModel(ModelNumber);
-        SendText(change, cleared);
-    }
+    PreviousBank = 42;
+    GetBank();
+    SaveOneModel(ModelNumber);
+    SendText(change, cleared);
     UpdateModelsNameEveryWhere();
     GotoFrontView();
     DelayWithDog(200);
