@@ -164,8 +164,6 @@
 #include "RF_PID_Advanced.h"
 #include "RF_Save_Restore.h"
 
-
-
 /*********************************************************************************************************************************/
 
 void ClearMostParameters()
@@ -207,20 +205,20 @@ void EnsureMotorIsOff()
 {
     if (!UseMotorKill)
         return;
- if (BuddyPupilOnWireless)
-     return;
- CheckMotorOff();
- while (MotorEnabled) // disconnected now so stay here until motor switch really is off!
- {
-     SendCommand(WarnNow);
-     SendText(Warning, err_MotorOn);
-     SendNoData = true;
-     PlaySound(MOTORON);
-     DelayWithDog(1200);
-     PlaySound(PLSTURNOFF);
-     DelayWithDog(3000);
-     CheckMotorOff();
- }
+    if (BuddyPupilOnWireless)
+        return;
+    CheckMotorOff();
+    while (MotorEnabled) // disconnected now so stay here until motor switch really is off!
+    {
+        SendCommand(WarnNow);
+        SendText(Warning, err_MotorOn);
+        SendNoData = true;
+        PlaySound(MOTORON);
+        DelayWithDog(1200);
+        PlaySound(PLSTURNOFF);
+        DelayWithDog(3000);
+        CheckMotorOff();
+    }
     SendCommand(WarnOff);
     SendNoData = false;
 }
@@ -1167,7 +1165,7 @@ FLASHMEM void setup()
     {
         ErrorState = MODELSFILENOTFOUND; // if no file ... or no SD
     }
-    SetBrightness(1); // Set low brightness for splash screen
+    SetBrightness(1);         // Set low brightness for splash screen
     SendCommand(pSplashView); // show splash screen **************************
     CurrentView = SPLASHVIEW; // while loading ...
     GetTeensyMacAddress();
@@ -1244,7 +1242,6 @@ FLASHMEM void setup()
     DelayWithDog(500);
     GotoFrontView();
     RedLedOn();
-   
 }
 // **************************************************************************************************************************************************************
 void RationaliseBuddy()
@@ -1877,7 +1874,7 @@ FASTRUN void updateInterpolationTypes()
 
 FASTRUN void DisplayCurve()
 {
-   
+
     int p = 0;
     char cmdBuffer[512] = "";          // Buffer for commands
     char tempCmd[80];                  // Temporary buffer for individual commands
@@ -3361,7 +3358,7 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     Cancel_SAVE,             // 41
     ChooseBackGround,        // 42
     Save_BackGround,         // 43
-    Blank                    // 44 
+    Blank                    // 44
 
 };
 
@@ -4881,8 +4878,8 @@ bool CheckModelName()
         SendText(mn, ModelName);
         LastModelLoaded = ModelNumber;
         UpdateModelsNameEveryWhere();
+        CheckModelImageFileName();
         DisplayModelImage();
-        Look(ModelImageFileName);
         return true;
     }
     ClearText();
@@ -5062,7 +5059,7 @@ void FASTRUN ManageTransmitter()
     uint32_t RightNow = millis();
     int32_t TXPacketElapsed = RightNow - LastPacketSentTime;
     CheckForNextionButtonPress(); // must be done very frequently to avoid missing button presses. It updates the TextIn string which is used for button press processing.
-    KickTheDog(); // Watchdog ... ALWAYS!
+    KickTheDog();                 // Watchdog ... ALWAYS!
 
     if ((FHSS_data::PaceMaker - TXPacketElapsed < TIMEFORTXMANAGMENT) && ModelMatched)
     {
@@ -5074,8 +5071,8 @@ void FASTRUN ManageTransmitter()
         return;
     }
     CheckPowerOffButton();
-   
-    DoTheVariometer();            // Do the variometer
+
+    DoTheVariometer(); // Do the variometer
 
     if (RightNow - LastTimeRead >= 1000)
     { // Only once a second for these..

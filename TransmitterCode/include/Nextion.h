@@ -294,6 +294,110 @@ int GetOtherValue(char *nbox)
     }
     return ValueIn;
 }
+
+// ******************************************************************************************************************************
+static inline void NextionTerminator()
+{
+    NEXTION.write(0xFF);
+    NEXTION.write(0xFF);
+    NEXTION.write(0xFF);
+}
+
+// ******************************************************************************************************************************
+static void FlushNextionInput(uint32_t ms = 30)
+{
+    uint32_t start = millis();
+    while (millis() - start < ms)
+    {
+        while (NEXTION.available())
+            (void)NEXTION.read();
+        delay(1);
+        KickTheDog();
+    }
+}
+
+// ******************************************************************************************************************************
+static bool ReadNextionNumber(int32_t &out, uint32_t timeout_ms)
+{
+    uint32_t start = millis();
+
+    // wait for 0x71
+    while (millis() - start < timeout_ms)
+    {
+        if (NEXTION.available())
+        {
+            if ((uint8_t)NEXTION.read() == 0x71)
+                break;
+        }
+        delay(1);
+        KickTheDog();
+    }
+    if (millis() - start >= timeout_ms)
+        return false;
+
+    uint8_t b[4];
+    for (int i = 0; i < 4; i++)
+    {
+        uint32_t t0 = millis();
+        while (!NEXTION.available())
+        {
+            if (millis() - t0 > timeout_ms)
+                return false;
+            delay(1);
+            KickTheDog();
+        }
+        b[i] = (uint8_t)NEXTION.read();
+    }
+
+    out = (int32_t)((uint32_t)b[0] |
+                    ((uint32_t)b[1] << 8) |
+                    ((uint32_t)b[2] << 16) |
+                    ((uint32_t)b[3] << 24));
+    return true;
+}
+
+// ******************************************************************************************************************************
+bool NextionFileExistsOnSD(char *filename, bool verbose = false)
+{
+    // filename like "Adrians.jpg" in root
+    char path[96];
+    int n = snprintf(path, sizeof(path), "sd0/%s", filename);
+    if (n < 0 || n >= (int)sizeof(path))
+        return false;
+
+    if (verbose)
+    {
+        Look1("NextionFileExists: ");
+        Look(path);
+    }
+
+    FlushNextionInput(50);
+
+    NEXTION.print("findfile \"");
+    NEXTION.print(path);
+    NEXTION.print("\",sys0");
+    NextionTerminator();
+
+    delay(10);
+
+    NEXTION.print("get sys0");
+    NextionTerminator();
+
+    int32_t v = 0;
+    if (!ReadNextionNumber(v, 500))
+    {
+        if (verbose)
+            Look("  read sys0 FAILED.");
+        return false;
+    }
+
+    if (verbose)
+    {
+        Look1("  sys0 = ");
+        Look(v);
+    }
+    return (v != 0);
+}
 /*********************************************************************************************************************************/
 //             END OF NEXTION FUNCTIONS
 /*********************************************************************************************************************************/

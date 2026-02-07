@@ -458,9 +458,7 @@ bool ReadOneModel(uint32_t Mnum)
         ModelImageFileName[i] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
-    Look1("Read : ");
-    Look(ModelImageFileName);
-
+   
     CheckOutPutChannels();
     CheckServoType();
     // **************************************

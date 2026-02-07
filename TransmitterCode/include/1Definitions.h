@@ -34,7 +34,7 @@
 //**************************************************************************************
 
 // #define DB_NEXTION        // Debug NEXTION
- #define DB_SD             // Debug SD card data
+// #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
@@ -824,6 +824,8 @@ void ChooseBackGround();
 void Save_BackGround();
 void StartTXSetupView();
 bool CheckFileExists(char *fl);
+void CheckModelImageFileName();
+bool NextionFileExistsOnSD(const char *filename, bool verbose = false);
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************
@@ -1440,7 +1442,7 @@ struct spd // Special Packet Data for Wireless Buddy functions
 {
     uint8_t Command[2];
     uint64_t ModelID;
-    uint8_t MasterPaceMaker; 
+    uint8_t MasterPaceMaker;
     uint8_t Channel = QUIETCHANNEL;
 };
 spd SpecialPacketData; // longer version

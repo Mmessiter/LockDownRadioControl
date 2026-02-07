@@ -359,7 +359,6 @@ void DisplayModelImage()
     SendCommand(temp);
 }
 
-
 /******************************************************************************************************************************/
 void GotoModelsView()
 {
@@ -382,7 +381,6 @@ void GotoModelsView()
     ShowFileNumber();
     PreviousModelNumber = ModelNumber; // save number
     LoadModelSelector();
-    
 }
 
 /******************************************************************************************************************************/
@@ -1049,6 +1047,18 @@ void BuddyChViewEnd()
     CurrentView = BUDDYVIEW;
 }
 
+// *******************************************************************************************************************************/
+void CheckModelImageFileName() // If the file doesn't exist then set to Noimage .
+                               // This also covers zero length name and non ascii characters in the name which also are not found.
+{
+    char temp[30];
+    strncpy(temp, ModelImageFileName, sizeof(temp) - 1);
+    temp[sizeof(temp) - 1] = '\0';
+    if (strlen(temp) <= 8)   
+    strcat(temp, ".jpg");
+    if (!NextionFileExistsOnSD(temp, false))
+        strcpy(ModelImageFileName, "Noimage");
+}
 /******************************************************************************************************************************/
 
 void RXOptionsViewStart() // model Options screen
@@ -1080,15 +1090,13 @@ void RXOptionsViewStart() // model Options screen
     SendValue(n4, TimerStartTime / 60);
     SendCommand(pRXSetup1); // this just sets grey here and there when options are off
 
+    CheckModelImageFileName();
     strcpy(temp, ModelImageFileName);
-    if (strlen(temp) == 0) // heer
-        strcpy(temp, "Noimage");
     strcat(temp, ".jpg");
     SendText((char *)"t11", temp);
 
     UpdateModelsNameEveryWhere();
 }
-
 
 /******************************************************************************************************************************/
 
@@ -1141,7 +1149,7 @@ void RXOptionsViewEnd()
         strcpy(ModelImageFileName, "no_image");
     if (strlen(ModelImageFileName) > 8)
         ModelImageFileName[8] = 0; // ensure null terminated and not too long
-  
+
     SendValue(Progress, 100);
     CurrentView = RXSETUPVIEW;
     PreviousBank = 42;
