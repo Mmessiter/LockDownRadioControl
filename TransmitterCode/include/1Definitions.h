@@ -1333,6 +1333,7 @@ char pPopupView[] = "page PopupView";
 char pBlankView[] = "page BlankView";
 char pGapsView[] = "page GapsView";
 char pSplashView[] = "page SplashView";
+char pRXSetup1[] = "page RXOptionsView";
 
 int Previous_Current_Y = 0; // for scrolling log file
 int Max_Y = 666;

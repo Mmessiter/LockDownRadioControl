@@ -1063,7 +1063,7 @@ void CheckModelImageFileName() // If the file doesn't exist then set to Noimage 
 
 void RXOptionsViewStart() // model Options screen
 {
-    char pRXSetup1[] = "page RXOptionsView";
+  
     char UseKill[] = "c0";
     char Mchannel[] = "n1";
     char Mvalue[] = "n0";
