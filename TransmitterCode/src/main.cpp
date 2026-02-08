@@ -2238,6 +2238,10 @@ void BindNow()
     BoundFlag = true;
     ModelMatched = true;
     Connected = true;
+    if (CurrentView == FRONTVIEW){
+        CurrentView = 254;
+        GotoFrontView();
+    }
 #ifdef DB_BIND
     Serial.println("");
     Serial.println("Remote (model) ID saved:");
@@ -3308,13 +3312,13 @@ void CheckAllModelIds()
     ReadOneModel(ModelNumber);
 }
 // ******************************************************************************************************************************
-void ShowModelBriefly(){
-   CheckModelImageFileName();
-   DisplayModelImage();
-   SendCommand((char *)"vis Exp0,1");
-   DelayWithDog(1000); 
-   SendCommand(pRXSetup1);
-  
+void ShowModelBriefly()
+{
+    CheckModelImageFileName();
+    DisplayModelImage();
+    SendCommand((char *)"vis Exp0,1");
+    DelayWithDog(1000);
+    SendCommand(pRXSetup1);
 }
 
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
@@ -3322,54 +3326,54 @@ void ShowModelBriefly(){
 // This new list can be huge - up to 24 BITS unsigned!  ( Use "NUMBER<<8" )
 #define LASTFUNCTION1 45 // One more than final one
 
-    void (*NumberedFunctions1[LASTFUNCTION1])(){
-        Blank,                   // 0 Cannot be used
-        DeleteModel,             // 1
-        StartAudioVisualView,    // 2
-        EndAudioVisualView,      // 3
-        StartTXSetupView,        // 4
-        InputsViewEnd,           // 5
-        SystemPage1End,          // 6
-        SystemPage1Start,        // 7
-        StartWifiScan,           // 8
-        EndWifiScan,             // 9
-        StartServosTypeView,     // 10
-        EndServoTypeView,        // 11
-        LoadNewLogFile,          // 12
-        DeleteThisLogFile,       // 13
-        LogReleasedNEW,          // 14   // new version
-        LogTouched,              // 15   // this does nothing, yet ...
-        RefreshDualRatesNew,     // 16
-        StartGapsView,           // 17
-        StartPIDView,            // 18
-        SendEditedPIDs,          // 19
-        PIDs_Were_edited,        // 20
-        EndPIDView,              // 21
-        StartRatesView,          // 22
-        EndRatesView,            // 23
-        RatesWereEdited,         // 24
-        SendEditedRates,         // 25
-        RotorFlightStart,        // 26
-        RotorFlightEnd,          // 27
-        StartRatesAdvancedView,  // 28
-        StartPIDAdvancedView,    // 29
-        RatesAdvancedWereEdited, // 30
-        EndRatesAdvancedView,    // 31
-        SendEditedRatesAdvanced, // 32
-        PIDsAdvancedWereEdited,  // 33
-        SendEditedPID_Advanced,  // 34
-        EndPIDsAdvancedView,     // 35
-        SaveRFParameters,        // 36
-        RestoreRFParameters,     // 37
-        Start_RESTORE,           // 38
-        Cancel_RESTORE,          // 39
-        Start_SAVE,              // 40
-        Cancel_SAVE,             // 41
-        ChooseBackGround,        // 42
-        Save_BackGround,         // 43
-        ShowModelBriefly         // 44
+void (*NumberedFunctions1[LASTFUNCTION1])(){
+    Blank,                   // 0 Cannot be used
+    DeleteModel,             // 1
+    StartAudioVisualView,    // 2
+    EndAudioVisualView,      // 3
+    StartTXSetupView,        // 4
+    InputsViewEnd,           // 5
+    SystemPage1End,          // 6
+    SystemPage1Start,        // 7
+    StartWifiScan,           // 8
+    EndWifiScan,             // 9
+    StartServosTypeView,     // 10
+    EndServoTypeView,        // 11
+    LoadNewLogFile,          // 12
+    DeleteThisLogFile,       // 13
+    LogReleasedNEW,          // 14   // new version
+    LogTouched,              // 15   // this does nothing, yet ...
+    RefreshDualRatesNew,     // 16
+    StartGapsView,           // 17
+    StartPIDView,            // 18
+    SendEditedPIDs,          // 19
+    PIDs_Were_edited,        // 20
+    EndPIDView,              // 21
+    StartRatesView,          // 22
+    EndRatesView,            // 23
+    RatesWereEdited,         // 24
+    SendEditedRates,         // 25
+    RotorFlightStart,        // 26
+    RotorFlightEnd,          // 27
+    StartRatesAdvancedView,  // 28
+    StartPIDAdvancedView,    // 29
+    RatesAdvancedWereEdited, // 30
+    EndRatesAdvancedView,    // 31
+    SendEditedRatesAdvanced, // 32
+    PIDsAdvancedWereEdited,  // 33
+    SendEditedPID_Advanced,  // 34
+    EndPIDsAdvancedView,     // 35
+    SaveRFParameters,        // 36
+    RestoreRFParameters,     // 37
+    Start_RESTORE,           // 38
+    Cancel_RESTORE,          // 39
+    Start_SAVE,              // 40
+    Cancel_SAVE,             // 41
+    ChooseBackGround,        // 42
+    Save_BackGround,         // 43
+    ShowModelBriefly         // 44
 
-    };
+};
 
 // This list migth become MUCH longer as it limit is 24 bits big
 
@@ -4859,11 +4863,12 @@ void GotoFrontView()
     ModelMatchFailed = false;
     First_RPM_Data = true;
     RestoreBrightness();
-    CheckModelImageFileName();
-    // DisplayModelImage();
-    // SendCommand((char *)"vis exp0,1");
-    // DelayWithDog(750);
-    // SendCommand((char *)"vis exp0,0");
+    if (!Rotorflight22Detected)
+    {
+        CheckModelImageFileName();
+        DisplayModelImage();
+        SendCommand((char *)"vis exp0,1"); // heer
+    }
 }
 
 /************************************************************************************************************/

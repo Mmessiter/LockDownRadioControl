@@ -933,7 +933,7 @@ void ShowMilliAmpHoursUsed(float mAh)
 // ******************************************************************************************
 void ShowAmpsBeingUsed(float amps)
 {
-
+  //  return;
     static float lastAmps = 0.0f;
     if (abs(amps - lastAmps) < 0.1f)
         return; // only update if changed by 0.1A or more
@@ -1043,6 +1043,7 @@ void Hide_msg_if_needed()
 FASTRUN void ParseAckPayload()
 {
     FHSS_data::NextChannelNumber = AckPayload.Ack_Payload_byte[5]; // every packet tells of next hop destination
+    bool temprfd = Rotorflight22Detected;
 
     if (AckPayload.Ack_Payload_byte[0] & 0x80)
     {                                                                             // Hi bit is now the **HOP NOW!!** flag
@@ -1186,7 +1187,7 @@ FASTRUN void ParseAckPayload()
         {
             First_RPM_Data = false;
             SendCommand((char *)"vis rpm,1");               // This will make the RPM display visible
-            SendText((char *)"Owner", (char *)"Rotor RPM"); // Change the owner text so user knows it's RPM data
+          //  SendText((char *)"Owner", (char *)"Rotor RPM"); // Change the owner text so user knows it's RPM data
         }
         if (rpmShouldUpdate(RotorRPM))
         {
@@ -1321,8 +1322,17 @@ FASTRUN void ParseAckPayload()
         }
         break;
     case 31:
+    
         Rotorflight22Detected = GetBoolFromAckPayload(1);
+        if (Rotorflight22Detected && !temprfd)
+        {
+            CurrentView = 254;
+            GotoFrontView();
+            temprfd=true;
+        }
+
         break;
+
     case 32:
         if (Reading_PIDS_Now)
         {
