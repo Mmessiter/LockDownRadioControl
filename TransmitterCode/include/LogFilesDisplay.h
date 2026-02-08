@@ -151,6 +151,7 @@ void ShowLogFileNew(uint16_t LinesCounter)
         strcat(TheText, "\r\n");
     }
     SendText1(LogTeXt1, TheText); // Send it to the screen
+   
     DelayWithDog(50);
 }
 
@@ -299,6 +300,7 @@ void LogVIEWNew() // Start log screen
     if (LogFileNumber)
     {
         ShowLogFileNew(ReadAFewLines()); // builds the lines array and uses it to display the log file
+       
     }
     else
     {

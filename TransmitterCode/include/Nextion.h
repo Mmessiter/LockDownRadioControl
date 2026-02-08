@@ -59,16 +59,17 @@ void BuildText(char *tbox, char *NewWord) // same as sendtext only delayed send
     strcat(CB, NewWord);
     strcat(CB, quote);
     BuildNextionCommand(CB);
-   // Look(CB);
 }
+
+
 /*********************************************************************************************************************************/
-void SendText(char *tbox, char *NewWord)
+void SendText1(char *tbox, char *NewWord)
 {
     char txt[] = ".txt=\"";
     char quote[] = "\"";
-    char CB[120];
+    char CB[2048];
     char TooLong[] = "Too long!";
-    if (strlen(NewWord) > 110)
+    if (strlen(NewWord) > 2048-5)
     {
         strcpy(NewWord, TooLong); //
     }
@@ -77,9 +78,12 @@ void SendText(char *tbox, char *NewWord)
     strcat(CB, NewWord);
     strcat(CB, quote);
     SendCommand(CB);
-  
-  //  Look(CB);
     GetReturnCode(tbox);
+}
+/*********************************************************************************************************************************/
+void SendText(char *tbox, char *NewWord)
+{
+    SendText1(tbox, NewWord);
 }
 
 /*********************************************************************************************************************************/
@@ -97,28 +101,10 @@ void SendOtherText(char *tbox, char *NewWord)
     strcat(CB, NewWord);
     strcat(CB, quote);
     SendCommand(CB);
-   // Look(CB);
+    // Look(CB);
     GetReturnCode(tbox);
 }
 
-/*********************************************************************************************************************************/
-void SendText1(char *tbox, char *NewWord)
-{
-    char txt[] = ".txt=\"";
-    char quote[] = "\"";
-    char CB[MAXFILELEN + 10];
-    char TooLong[] = "Too long!";
-
-    if (strlen(NewWord) > MAXFILELEN)
-    {
-        strcpy(NewWord, TooLong);
-    }
-    strcpy(CB, tbox);
-    strcat(CB, txt);
-    strcat(CB, NewWord);
-    strcat(CB, quote);
-    GetReturnCode(tbox);
-}
 /*********************************************************************************************************************************/
 void SendOtherValue(char *nbox, int value)
 {
