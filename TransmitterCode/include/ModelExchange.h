@@ -42,23 +42,7 @@ void StoreBuffer(char *Buf, uint32_t len)
     }
     NewFileBufferPointer += len;
 }
-/*********************************************************************************************************************************/
 
-void WriteEntireBuffer()
-{
-    ModelsFileNumber.close();
-    CloseModelsFile();
-    for (int i = 0; i < 3; ++i)
-    {
-        ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);
-        ModelsFileNumber.seek(0);
-        ShortishDelay();
-        ModelsFileNumber.write(NewFileBuffer, NewFileBufferPointer);
-        ShortishDelay();
-        ModelsFileNumber.close();
-        ShortishDelay();
-    }
-}
 
 /*********************************************************************************************************************************/
 

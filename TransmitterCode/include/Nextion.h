@@ -345,9 +345,9 @@ static bool ReadNextionNumber(int32_t &out, uint32_t timeout_ms)
 // ******************************************************************************************************************************
 bool NextionFileExistsOnSD(char *filename, bool verbose = false)
 {
-    // filename like "Adrians.jpg" in root
+    // filename like "Adrians.jpg" in /images
     char path[96];
-    int n = snprintf(path, sizeof(path), "sd0/%s", filename);
+    int n = snprintf(path, sizeof(path), "sd0/images/%s", filename); // <-- changed
     if (n < 0 || n >= (int)sizeof(path))
         return false;
 

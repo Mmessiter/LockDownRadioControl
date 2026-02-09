@@ -163,6 +163,7 @@
 #include "RF_Rates_Advanced.h"
 #include "RF_PID_Advanced.h"
 #include "RF_Save_Restore.h"
+#include "SDFiles.h"
 
 /*********************************************************************************************************************************/
 
@@ -187,8 +188,9 @@ void ClearMostParameters()
     TotalLostPackets = 0;
     TotalPacketsAttempted = 0;
     ModelMatchFailed = false;
+    Rotorflight22Detected = false;
 
-    strcpy(LogFileName, "");
+        strcpy(LogFileName, "");
     for (int i = 0; i < CHANNELSUSED; ++i)
     {
         PreviousBuffer[i] = 0;

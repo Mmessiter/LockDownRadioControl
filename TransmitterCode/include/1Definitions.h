@@ -27,7 +27,7 @@
 #define TXVERSION_MAJOR 2 // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 5
 #define TXVERSION_MINIMUS 6
-#define TXVERSION_EXTRA "A 5/01/26"
+#define TXVERSION_EXTRA "A 9/02/26"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -826,6 +826,9 @@ void StartTXSetupView();
 bool CheckFileExists(char *fl);
 void CheckModelImageFileName();
 bool NextionFileExistsOnSD(const char *filename, bool verbose = false);
+FASTRUN void OpenLogFileW();
+uint32_t GetFileSize(char *filename);
+void WriteEntireBuffer();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************

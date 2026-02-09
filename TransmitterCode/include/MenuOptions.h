@@ -352,8 +352,8 @@ void GotoMacrosView()
 // ******************************************************************************************************************************
 void DisplayModelImage()
 {
-    char temp[50];
-    strcpy(temp, "exp0.path=\"sd0/");
+    char temp[60];
+    strcpy(temp, "exp0.path=\"sd0/images/");
     strcat(temp, ModelImageFileName);
     strcat(temp, ".jpg\"");
     SendCommand(temp);

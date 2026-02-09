@@ -150,15 +150,7 @@ FASTRUN void LogRXsTotalTimes()
     strcat(buf, secs);
     LogText(buf, strlen(buf), false);
 }
-/************************************************************************************************************/
-FASTRUN void OpenLogFileW()
-{
-    if (!LogFileOpen)
-    {
-        LogFileNumber = SD.open(LogFileName, FILE_WRITE);
-        LogFileOpen = true;
-    }
-}
+
 // ************************************************************************
 FASTRUN void CheckLogFileIsOpen()
 {

@@ -155,17 +155,7 @@ void ShowLogFileNew(uint16_t LinesCounter)
     DelayWithDog(50);
 }
 
-/****************************************************************************************************************************/
-File OpenTheLogFileForReading()
-{
-    char SearchFile[40];
-    strcpy(SearchFile, "/");
-    strcat(SearchFile, LogFileName);
-    File fnumber = SD.open(SearchFile, FILE_READ);
-    if (fnumber)
-        LogFileOpen = true;
-    return fnumber;
-}
+
 
 /******************************************************************************************************************/
 // if there is still room in the array, this function stores the file pointer so scrolling up is possible
