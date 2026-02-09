@@ -2,6 +2,8 @@
 
 ![Image](./Images/TX_and_RX.jpeg "The radio!")
 
+![Image](./Images/Front.jpeg "Recent UI update!")
+
 ## Why would anyone choose to use LockDownRadioControl (LDRC) instead of EdgeTX or a commercial system? Here are a few reasons:
 
 **LockDownRadioControl (LDRC)** is an open-source radio system designed for simplicity, speed, and reliability. It’s ideal for users who want a system that “just works” — no tinkering, no steep learning curve, and no unnecessary options. Whether you’re an experienced pilot or just starting out, LDRC offers a streamlined alternative to EdgeTX and commercial transmitters.
