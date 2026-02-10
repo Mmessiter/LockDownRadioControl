@@ -20,8 +20,7 @@ void StartLogFilesListScreen()
     // This function shows a directory of all log files OR all help files.
     // It allows deleting or viewing log files
     // it allows viewing of any help file.
-    
-    
+
     char pLogFiles[] = "page LogFiles";
     char prompt[] = "Please disconnect first!";
     char txt[] = ".TXT";
@@ -40,11 +39,11 @@ void StartLogFilesListScreen()
     CurrentView = LOGFILESLISTVIEW; // Set the current view to LogFilesList
     DelayWithDog(70);
 
-    if (InStrng(txt, LogFileName))
+    if (InStrng(txt, TextFileName))
     {
         strcpy(MOD, ".TXT");
-        SendCommand(b15off);  // no deleting of help files!
-        SendCommand(b1off);   // no help if viewing help already 
+        SendCommand(b15off); // no deleting of help files!
+        SendCommand(b1off);  // no help if viewing help already
         SendText(t0, HelpFilesTitle);
     }
     else
@@ -68,33 +67,10 @@ void EndLogFilesListScreen()
 void LoadNewLogFile()
 {
     char FileBox[] = "FilesBox";
-    strcpy(LogFileName, TheFilesList[GetValue(FileBox)]); // Get the selected file name
+    strcpy(TextFileName, TheFilesList[GetValue(FileBox)]); // Get the selected file name
     ReadingaFile = true;
     LogVIEWNew(); // Start the log screen
 }
-/******************************************************************************************************************************/
-
-void DeleteThisLogFile()
-{
-    char FileBox[] = "FilesBox";
-    char prompt[] = "Delete ";
-    char pLogFiles[] = "page LogFiles";
-    char Query[] = "?";
-    char pprompt[80];
-    strcpy(LogFileName, TheFilesList[GetValue(FileBox)]);
-    strcpy(pprompt, prompt);
-    strcat(pprompt, LogFileName);
-    strcat(pprompt, Query);
-    if (GetConfirmation(pLogFiles, pprompt))
-    {
-        SD.remove(LogFileName);
-        strcpy(MOD, ".LOG");
-        BuildDirectory();
-        strcpy(Mfiles, "FilesBox");
-        LoadFileSelector();
-    }
-}
-
 
 /******************************************************************************************************************************/
 
@@ -125,44 +101,6 @@ char *AddSpacesBefore(char *s, uint8_t n)
     strcat(temp, s);
     strcpy(s, temp);
     return s;
-}
-/******************************************************************************************************************************/
-
-void ShowFreeSpaceEtc()
-{
-
-    float FreeSpaceOnSD = ((float)SD.totalSize() - (float)SD.usedSize()) / ((float)(1024 * 1024 * 1024));
-    float UsedSpaceOnSD = (float)SD.usedSize() / ((float)(1024 * 1024));
-
-    char t4[] = "t4";
-    char t5[] = "t5";
-    char t6[] = "t6";
-    char NB[20];
-    char Gbytes[] = " GB";
-    char Mbytes[] = " MB";
-    char *Bbytes = Gbytes;
-
-    dtostrf((float)SD.totalSize() / (float)(1024 * 1024 * 1024), 2, 2, NB);
-    AddSpacesBefore(NB, 5);
-    strcat(NB, Gbytes);
-    SendText(t4, NB);
-    dtostrf(FreeSpaceOnSD, 2, 2, NB);
-    AddSpacesBefore(NB, 5);
-    strcat(NB, Gbytes);
-    SendText(t6, NB);
-
-    if (UsedSpaceOnSD >= 100) // less than 100 MB?
-    {
-        UsedSpaceOnSD /= (float)1024.00;
-    }
-    else
-    {
-        Bbytes = Mbytes; // use MB not GB
-    }
-    dtostrf(UsedSpaceOnSD, 2, 2, NB);
-    AddSpacesBefore(NB, 5);
-    strcat(NB, Bbytes);
-    SendText(t5, NB);
 }
 
 /******************************************************************************************************************************/

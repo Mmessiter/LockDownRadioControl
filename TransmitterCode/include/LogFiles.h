@@ -83,35 +83,35 @@ FASTRUN void CreateTimeStamp(char *DateAndTime)
     }
 }
 /************************************************************************************************************/
-FASTRUN void MakeLogFileName()
+FASTRUN void MakeTextFileName()
 {
     char NB[10];
     char dash[] = "-";
-    if (strlen(LogFileName) > 0)
+    if (strlen(TextFileName) > 0)
         return; // Already done
     if (RTC.read(tm))
     {
         ReadTheRTC();
         if (MayBeAddZero(GmonthDay))
         {
-            strcpy(LogFileName, "0");
-            strcat(LogFileName, Str(NB, GmonthDay, 0));
+            strcpy(TextFileName, "0");
+            strcat(TextFileName, Str(NB, GmonthDay, 0));
         }
         else
         {
-            strcpy(LogFileName, Str(NB, GmonthDay, 0));
+            strcpy(TextFileName, Str(NB, GmonthDay, 0));
         }
-        strcat(LogFileName, dash);
+        strcat(TextFileName, dash);
         if (MayBeAddZero(Gmonth))
-            strcat(LogFileName, "0");
-        strcat(LogFileName, Str(NB, Gmonth, 0));
-        strcat(LogFileName, dash);
-        strcat(LogFileName, Str(NB, Gyear, 0));
-        strcat(LogFileName, ".LOG");
+            strcat(TextFileName, "0");
+        strcat(TextFileName, Str(NB, Gmonth, 0));
+        strcat(TextFileName, dash);
+        strcat(TextFileName, Str(NB, Gyear, 0));
+        strcat(TextFileName, ".LOG");
     }
     else
     {
-        strcpy(LogFileName, "NO_CLOCK.LOG");
+        strcpy(TextFileName, "NO_CLOCK.LOG");
     }
 }
 
@@ -156,23 +156,18 @@ FASTRUN void CheckLogFileIsOpen()
 {
     if (!LogFileOpen)
     {
-        MakeLogFileName(); // Create a "today" filename
-        OpenLogFileW();    // Open file for writing
+        MakeTextFileName(); // Create a "today" filename
+        OpenLogFileW();     // Open file for writing
     }
 }
 
-/************************************************************************************************************/
-FASTRUN void DeleteLogFile()
-{
-    SD.remove(LogFileName);
-}
 /************************************************************************************************************/
 FASTRUN void DeleteLogFile1()
 {
     char LogTeXt1[] = "LogText";
     char BlankText[] = " ";
     CloseLogFile();
-    MakeLogFileName();
+    MakeTextFileName();
     DeleteLogFile();
     SendText1(LogTeXt1, BlankText);
 }
@@ -189,7 +184,7 @@ FASTRUN void CloseLogFile()
 FASTRUN void WriteToLogFile(char *SomeData, uint16_t len)
 {
     char txt[] = ".TXT";
-    if (InStrng(txt, LogFileName))
+    if (InStrng(txt, TextFileName))
         return; // Don't write to a HELP file
     LogFileNumber.write(SomeData, len);
 }

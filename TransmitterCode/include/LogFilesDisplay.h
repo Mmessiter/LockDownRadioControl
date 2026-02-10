@@ -47,7 +47,7 @@ void BottomOfLogFileNEW() // this isn't perfect but it usually works Ok ...
 {
     char Current_Y_Nextion_Label[] = "LogText.val_y";
     CloseLogFile();
-    LogFileNumber = OpenTheLogFileForReading();
+    LogFileNumber = OpenTextFileForReading();
     LogFileOpen = true;
     while (LogFileOpen)
     {
@@ -122,26 +122,26 @@ void ShowLogFileNew(uint16_t LinesCounter)
     char log[] = ".LOG";
 
     strcpy(buf, "");
-    while (LogFileName[i] > 0)
+    while (TextFileName[i] > 0)
     {
-        buf[i] = LogFileName[i];
+        buf[i] = TextFileName[i];
         if (buf[10] == '-')
             buf[10] = '/';
         ++i;
         buf[i] = 0;
     }
     if (ReadingaFile)
-        SendText(t0, LogFileName);
+        SendText(t0, TextFileName);
     ReadingaFile = false;
 
-    if (!InStrng(log, LogFileName))
+    if (!InStrng(log, TextFileName))
     {
         SendCommand(b15OFF);
     }
     else
     {
         SendCommand(b15ON);
-        SendText(t0, LogFileName);
+        SendText(t0, TextFileName);
     }
 
     strcpy(TheText, "");
@@ -151,11 +151,9 @@ void ShowLogFileNew(uint16_t LinesCounter)
         strcat(TheText, "\r\n");
     }
     SendText1(LogTeXt1, TheText); // Send it to the screen
-   
+
     DelayWithDog(50);
 }
-
-
 
 /******************************************************************************************************************/
 // if there is still room in the array, this function stores the file pointer so scrolling up is possible
@@ -245,7 +243,7 @@ uint16_t ReadAFewLines()
     }
     if (!LogFileOpen)
     {
-        LogFileNumber = OpenTheLogFileForReading(); // if not open, open it
+        LogFileNumber = OpenTextFileForReading(); // if not open, open it
     }
     LogFileNumber.seek(ThisSeekPosition);                                // seek to the position
     uint16_t BytesRead = LogFileNumber.read(ReadBuffer, READBUFFERSIZE); // read in the buffer
@@ -265,7 +263,7 @@ uint16_t ReadAFewLines()
 
 void StartLogFileView() // This is the entry point
 {
-    strcpy(LogFileName, "");
+    strcpy(TextFileName, "");
     LogVIEWNew();
 }
 /******************************************************************************************************************************/
@@ -281,23 +279,22 @@ void LogVIEWNew() // Start log screen
     FinalReadStartLine = 0xFFFF;
     CurrentView = LOGVIEW;
     ClearFilesList();
-    MakeLogFileName();
+    MakeTextFileName();
     CloseLogFile();
     for (uint16_t i = 0; i < MAXSEEKPOSITIONS; ++i)
         SeekPosition[i] = 0; // clear all seekpositions
     StartReadLine = 0;
-    LogFileNumber = OpenTheLogFileForReading();
+    LogFileNumber = OpenTextFileForReading();
     if (LogFileNumber)
     {
         ShowLogFileNew(ReadAFewLines()); // builds the lines array and uses it to display the log file
-       
     }
     else
     {
         LogFileOpen = false;
         ShowLogFileNew(6);
         strcpy(fbuffer, fnf);
-        strcat(fbuffer, LogFileName);
+        strcat(fbuffer, TextFileName);
         SendText(LogText, fbuffer);
     }
     CloseLogFile();

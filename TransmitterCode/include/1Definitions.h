@@ -734,7 +734,7 @@ FASTRUN void LogModelMatched();
 FASTRUN void LogModelFound();
 FASTRUN void LogModelNotFound();
 void SendHelp();
-FASTRUN void MakeLogFileName();
+FASTRUN void MakeTextFileName();
 void GetCommandbytes(uint8_t *C, uint8_t *C1);
 void TestTheCommandByte(uint8_t C, uint8_t C1);
 void LogRXVoltsPerCell();
@@ -750,7 +750,7 @@ int GetIntFromTextIn(uint8_t offset);
 void ShowLogFileNew(uint16_t LinesCounter);
 uint16_t ReadAFewLines();
 void LogVIEWNew();
-File OpenTheLogFileForReading();
+File OpenTextFileForReading();
 void StartLogFileView();
 void LogTotalRXGoodPackets();
 void LogTotalRXGoodPackets();
@@ -829,6 +829,10 @@ bool NextionFileExistsOnSD(const char *filename, bool verbose = false);
 FASTRUN void OpenLogFileW();
 uint32_t GetFileSize(char *filename);
 void WriteEntireBuffer();
+FASTRUN void DeleteLogFile();
+void ShowFreeSpaceEtc();
+void DeleteMODfile(int p);
+void AddPath(char *filename);
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************
@@ -956,6 +960,8 @@ uint16_t ChannelMidLow[CHANNELSUSED + 1];    //    output of pots at MidLow
 uint16_t ChannelMin[CHANNELSUSED + 1];       //    output of pots at min
 uint16_t ChanneltoSet = 0;
 bool Connected = false;
+File LogFileNumber;
+bool LogFileOpen = false;
 uint16_t BuddyControlled = 0; // Flags
 bool BuddyHasAllSwitches = true;
 double PointsCount = 5; // This for displaying curves only
@@ -1189,8 +1195,7 @@ bool CopyTrimsToAll = true;
 uint16_t ReversedChannelBITS = 0; // 16 BIT for 16 Channels
 uint16_t SavedLineX = 12345;
 uint8_t ReConnectChannel = 0;
-File LogFileNumber;
-bool LogFileOpen = false;
+
 bool ShowVPC = false;
 short int TxVoltageCorrection = 0;
 short int RxVoltageCorrection = 0;
@@ -1300,7 +1305,7 @@ uint16_t ScreenData[50];
 uint16_t AverageFrameRate = 0;
 uint64_t TotalFrameRate = 0;
 uint32_t FrameRateCounter = 0;
-char LogFileName[40];
+char TextFileName[40];
 char MOD[10];
 char Mfiles[10];
 int LastTrim[5][17];
@@ -1399,6 +1404,7 @@ uint8_t ArmingChannel = 5;
 
 bool BlockBankChanges = false; // used to block bank changes when Param go to or from Nexus
 uint8_t BackGroundSelection = 1;
+char SearchFile[80]; // used for searching files on SD card after adding path to filename
 
 #define MAX_PID_WORDS 12            // 24 bytes
 #define MAX_RATES_BYTES 13          // 13 bytes
@@ -1485,6 +1491,7 @@ char Rate_Types[6][15] = {"None", "Betaflight", "Raceflight", "KISS", "Actual", 
 const float FactorTableRF[13] = {1, 10, 10, .01, 10, 10, .01, 10, 10, .01, .25, .25, .01}; // Factors for each RATES byte needed by Rotorflight
 bool Rotorflight22Detected = false;
 char ModelImageFileName[9];
+
 
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 

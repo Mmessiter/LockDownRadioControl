@@ -1,6 +1,5 @@
 // *************************************** ModelExchange.h  *****************************************
 #include <Arduino.h>
-#include <SD.h>
 #include <RF24.h>
 #include "1Definitions.h"
 
@@ -100,7 +99,8 @@ void SendModelFile()
     Serial.println(SingleModelFile);
 #endif
     TXPipe = FILEPIPEADDRESS;
-    ModelsFileNumber = SD.open(SingleModelFile, O_READ); // Open file for reading
+    AddPath(SingleModelFile);
+    ModelsFileNumber = SD.open(SearchFile, O_READ); // Open file for reading
     Fsize = ModelsFileNumber.size();                     // Get file size
 #ifdef DB_MODEL_EXCHANGE
     Serial.print("File Size: ");
@@ -388,7 +388,10 @@ void ReceiveModelFile()
     // Below Here the new model is imported for immediate use
 
     SingleModelFlag = true;
+ ;
     ReadOneModel(1);
+
+    
     if (SavedSticksMode != SticksMode)
     { // swap over trims (elevator -  Throttle)
         for (int ba = 1; ba < 5; ++ba)

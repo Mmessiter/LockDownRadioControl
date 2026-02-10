@@ -4,7 +4,6 @@
 
 #include <Arduino.h>
 #include "1Definitions.h"
-#include <SD.h>
 #include <SPI.h>
 
 #ifndef DUALRATES_H

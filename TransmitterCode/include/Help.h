@@ -5,12 +5,14 @@
 #include <Arduino.h>
 #include "1Definitions.h"
 // ******************************************************************************************************************************/
-void SendHelp(){ // load new help file
-    uint8_t  i = 0;
-    while (TextIn[i+9] != 0 && i < 15) { // then load the help filename
-        LogFileName[i] = TextIn[i+9];
+void SendHelp()
+{ // load new help file
+    uint8_t i = 0;
+    while (TextIn[i + 9] != 0 && i < 15)
+    { // then load the help filename
+        TextFileName[i] = TextIn[i + 9];
         ++i;
-        LogFileName[i] = 0;
+        TextFileName[i] = 0;
     }
     LogVIEWNew(); // use the same function as for the log files
 }

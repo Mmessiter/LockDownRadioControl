@@ -127,7 +127,7 @@
 #include <Watchdog_t4.h>
 #include <PulsePosition.h>
 #include <RF24.h>
-#include <SD.h>
+// #include <SD.h>
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_INA219.h>
@@ -190,7 +190,7 @@ void ClearMostParameters()
     ModelMatchFailed = false;
     Rotorflight22Detected = false;
 
-        strcpy(LogFileName, "");
+    strcpy(TextFileName, "");
     for (int i = 0; i < CHANNELSUSED; ++i)
     {
         PreviousBuffer[i] = 0;
@@ -304,7 +304,7 @@ void GreenLedOn()
         SendInitialSetupParams();
         ResetMotorTimer();
         TotalPacketsAttempted = 0;
-        strcpy(LogFileName, ""); // avoid logging to the wrong file
+        strcpy(TextFileName, ""); // avoid logging to the wrong file
     }
     else
     {
@@ -1069,31 +1069,7 @@ void WarnUserIfBuddyBoxIsOn() // This function warns the user if the buddy box i
         FHSS_data::PaceMaker = PACEMAKER_BUDDY; // only 200Hz
     }
 }
-// *********************************************************************************************************************************/
-void CheckSDCard()
-{
-    char err_404[] = "SD card error!";
-    char err_405[] = "or not found!";
-    bool SDCARDOK = SD.begin(BUILTIN_SDCARD); // MUST return true or SD card is not working
-    if (!SDCARDOK)
-    {
-        delay(1000); // allow screen to warm up
-        SendCommand(pFrontView);
-        delay(70);
-        RestoreBrightness();
-        delay(70);
-        SendCommand(WarnNow);
-        for (uint8_t i = 0; i < 4; ++i)
-        {
-            SendText(Warning, err_404);
-            delay(1000);
-            SendText(Warning, err_405);
-            delay(1000);
-            PlaySound(WHAHWHAHMSG);
-        }
-        digitalWrite(POWER_OFF_PIN, HIGH); // turn off power now!
-    }
-}
+
 /*********************************************************************************************************************************/
 
 void initADC() //
@@ -1147,7 +1123,7 @@ FLASHMEM void setup()
     SetBrightness(1);
     ResetSubTrims();
     CentreTrims();
-    strcpy(LogFileName, "");
+    strcpy(TextFileName, "");
     ErrorState = NOERROR;
     WatchDogConfig.window = WATCHDOGMAXRATE;  //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
     WatchDogConfig.timeout = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
@@ -1387,34 +1363,6 @@ void SortDirectory() // Bubble sort for alphabetising the files. Not ideal for d
             }
         }
     }
-}
-
-/*********************************************************************************************************************************/
-void BuildDirectory()
-{
-    char Entry1[30];
-    char fn[20];
-    int i = 0;
-    File dir = SD.open("/");
-    ExportedFileCounter = 0;
-    while (true)
-    {
-        File entry = dir.openNextFile();
-        if (!entry || ExportedFileCounter > MAXBACKUPFILES)
-            break;
-        strcpy(Entry1, entry.name());
-        if ((InStrng(MOD, Entry1) > 0) && (!InStrng((char *)"._", Entry1)))
-        {
-            strcpy(fn, entry.name());
-            for (i = 0; i < 12; ++i)
-            {
-                TheFilesList[ExportedFileCounter][i] = fn[i];
-            }
-            ExportedFileCounter++;
-        }
-        entry.close();
-    }
-    SortDirectory();
 }
 
 /*********************************************************************************************************************************/
@@ -2240,7 +2188,8 @@ void BindNow()
     BoundFlag = true;
     ModelMatched = true;
     Connected = true;
-    if (CurrentView == FRONTVIEW){
+    if (CurrentView == FRONTVIEW)
+    {
         CurrentView = 254;
         GotoFrontView();
     }
@@ -3631,7 +3580,6 @@ FASTRUN void ButtonWasPressed()
         char s0[] = "s0";
         char StEDIT[] = "StEDIT";
         char Prompt[60];
-        char del[] = "Delete ";
         char overwr[] = "Overwrite ";
         char ques[] = "?";
         char hhead[] = "Create backup file for";
@@ -3804,11 +3752,11 @@ FASTRUN void ButtonWasPressed()
                 WhichPage[i] = 0;
             }
             // Look1("Returned from help: ");
-            // Look(LogFileName);
+            // Look(TextFileName);
             // Look(WhichPage);
             // Look(SavedCurrentView);
 
-            if (InStrng(LOG, LogFileName))
+            if (InStrng(LOG, TextFileName))
             {
                 CurrentView = DATAVIEW;
                 SavedCurrentView = DATAVIEW;
@@ -4124,32 +4072,9 @@ FASTRUN void ButtonWasPressed()
         }
 
         if (InStrng(DelFile, TextIn) > 0)
-        { // Delete a file
-            j = 0;
+        { // Delete a MOD file
             p = InStrng(DelFile, TextIn);
-            i = p + 6;
-            while (uint8_t(TextIn[i]) > 0)
-            {
-                SingleModelFile[j] = TextIn[i];
-                ++j;
-                ++i;
-                SingleModelFile[j] = 0;
-            }
-            strcpy(Prompt, del);
-            strcat(Prompt, SingleModelFile);
-            strcat(Prompt, ques);
-            if (GetConfirmation(pModelsView, Prompt))
-            {
-                SD.remove(SingleModelFile);
-                strcpy(MOD, ".MOD");
-                BuildDirectory();
-                strcpy(Mfiles, "Mfiles");
-                LoadFileSelector();
-                --FileNumberInView;
-                ShowFileNumber();
-            }
-            CloseModelsFile();
-            ClearText();
+            DeleteMODfile(p);
             return;
         }
 
@@ -4870,6 +4795,7 @@ void GotoFrontView()
         CheckModelImageFileName();
         DisplayModelImage();
         SendCommand((char *)"vis exp0,1"); // heer
+        Look("Entered Front View");
     }
 }
 
@@ -4942,7 +4868,7 @@ void Close_TX_Down()
     }
     // if (UseLog)
     //  {
-    //      strcpy(LogFileName, ""); // avoid logging to the wrong file
+    //      strcpy(TextFileName, ""); // avoid logging to the wrong file
     //      LogPowerOff();
     //  } // log the event
     DelayWithDog(POWERONOFFDELAY);     // 2 seconds delay in case button held down too long

@@ -3,7 +3,6 @@
 
 #include <Arduino.h>
 #include "1Definitions.h"
-#include <SD.h>
 #include <SPI.h>
 
 #ifndef SD_CARD_H
@@ -150,6 +149,8 @@ bool ReadOneModel(uint32_t Mnum)
     uint16_t i;
     char NoModelYet[] = "File error?";
 
+    //static int Counter = 0;
+
     FileCheckSum = 0;
     MixNumber = 0;
     if ((ModelNumber > 90) || (ModelNumber <= 0))
@@ -183,6 +184,10 @@ bool ReadOneModel(uint32_t Mnum)
         ModelName[j] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
+    // Look1(Counter);
+    // Look1(" ");
+    // Look(ModelName);
+    // ++Counter;
 
     for (i = 0; i < CHANNELSUSED; ++i)
     {
@@ -512,19 +517,7 @@ void CloseModelsFile()
     }
 }
 
-/*********************************************************************************************************************************/
 
-bool CheckFileExists(char *fl)
-{
-    CloseModelsFile();
-    bool exists = false;
-    File t;
-    t = SD.open(fl, FILE_READ);
-    if (t)
-        exists = true;
-    t.close();
-    return exists;
-}
 
 /*********************************************************************************************************************************/
 
@@ -538,35 +531,7 @@ void ShortishDelay()
     delayMicroseconds(1750);
 }
 
-/*********************************************************************************************************************************/
 
-void OpenModelsFile()
-{
-
-    char ModelsFile[] = "models.dat";
-
-    if (!ModelsFileOpen)
-    {
-        if (SingleModelFlag)
-        {
-            ModelsFileNumber = SD.open(SingleModelFile, FILE_WRITE);
-            DelayWithDog(100);
-        }
-        else
-        {
-            ModelsFileNumber = SD.open(ModelsFile, FILE_WRITE);
-            DelayWithDog(100);
-        }
-        if (ModelsFileNumber == 0)
-        {
-            FileError = true;
-        }
-        else
-        {
-            ModelsFileOpen = true;
-        }
-    }
-}
 /*********************************************************************************************************************************/
 
 void BuildCheckSum(int p_address, short int p_value)

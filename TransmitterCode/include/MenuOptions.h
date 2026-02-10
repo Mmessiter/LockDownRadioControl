@@ -922,55 +922,6 @@ void ResetClock()
 
 /******************************************************************************************************************************/
 
-// This implements the impossible "SD card rename file" ... by reading, re-saveing under new name, then deleting old file.
-
-void RenameFile()
-{
-    char ModelsView_filename[] = "filename";
-    char Head[] = "Rename this backup";
-    char model[] = "(i.e. just change its filename)";
-    char prompt[] = "New filename?";
-    char Prompt[50];
-    char overwr[] = "Overwrite ";
-    char ques[] = "?";
-    char Deleteable[42];
-
-    SaveCurrentModel();
-    GetText(ModelsView_filename, SingleModelFile);
-    strcpy(Deleteable, SingleModelFile);
-    LoadModelForRenaming();
-    if (GetBackupFilename(pModelsView, SingleModelFile, model, Head, prompt))
-    {
-        FixFileName();
-        if (strcmp(Deleteable, SingleModelFile) == 0)
-            return;
-        Serial.println(SingleModelFile);
-        if (CheckFileExists(SingleModelFile))
-        {
-            strcpy(Prompt, overwr);
-            strcat(Prompt, SingleModelFile);
-            strcat(Prompt, ques);
-            if (GetConfirmation(pModelsView, Prompt))
-            {
-                WriteBackup();
-                SD.remove(Deleteable);
-            }
-        }
-        else
-        {
-            WriteBackup();
-            SD.remove(Deleteable);
-        }
-    }
-    strcpy(MOD, ".MOD");
-    BuildDirectory();
-    strcpy(Mfiles, "Mfiles");
-    LoadFileSelector();
-    RestoreCurrentModel();
-}
-
-/******************************************************************************************************************************/
-
 void BuddyChViewStart()
 {
     char pBuddyChView[] = "page BuddyChView";
