@@ -3265,6 +3265,18 @@ void CheckAllModelIds()
 // ******************************************************************************************************************************
 void ShowModelBriefly()
 {
+    char temp[20];
+    GetText((char *)"t11", temp);
+    uint8_t p = (InStrng((char *)".", temp));
+    if (p)
+        strncpy(ModelImageFileName, temp, p - 1); // copy up to but not including the dot
+    else
+        strcpy(ModelImageFileName, temp); // copy whole string if no dot found
+    if (strlen(ModelImageFileName) == 0)
+        strcpy(ModelImageFileName, "no_image");
+    if (strlen(ModelImageFileName) > 8)
+        ModelImageFileName[8] = 0; // ensure null terminated and not too long
+
     CheckModelImageFileName();
     DisplayModelImage();
     SendCommand((char *)"vis Exp0,1");
