@@ -16,8 +16,9 @@
 
 
 // **********************************************************************************************************************************/
-// This function adds the needed path and creates SearchFile but doesnt alter the filename.
-// It also looks at the filename to determine which directory to look in.  This is because we have different directories for help files, log files and model files.
+// This function adds the needed path and creates 'SearchFile' but doesn't alter the filename.
+// It looks at the filename extension to determine which directory to look in.  
+// This is because we have different directories for help files, log files, image files and model files.
 
 void AddPath(char *filename)
 {
@@ -28,6 +29,8 @@ void AddPath(char *filename)
         strcat(SearchFile, "log/");
     if (InStrng((char *)".MOD", filename))
         strcat(SearchFile, "mod/");
+    if (InStrng((char *)".jpg", filename))
+        strcat(SearchFile, "images/");
     strcat(SearchFile, filename);
 }
 /****************************************************************************************************************************/

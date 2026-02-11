@@ -1734,6 +1734,18 @@ void SetDefaultValues()
         ServoFrequency[i] = 50;
         ServoCentrePulse[i] = 1500;
     }
+    for (j = 0; j < 4; ++j)
+    {
+        for (i = 0; i < MAX_PID_WORDS + 5; ++i)
+            Saved_PID_Values[i][j] = 0;
+        for (i = 0; i < MAX_RATES_BYTES; ++i)
+            Saved_Rate_Values[i][j] = 0;
+        for (i = 0; i < MAX_RATES_ADVANCED_BYTES; ++i)
+            Saved_Rate_Advanced_Values[i][j] = 0;
+        for (i = 0; i < MAX_PIDS_ADVANCED_BYTES; ++i)
+            Saved_PID_Advanced_Values[i][j] = 0;
+    }
+    strcpy(ModelImageFileName, "Noimage");
 
     ModelDefined = 42;
 }
