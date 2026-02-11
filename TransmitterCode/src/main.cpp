@@ -3591,7 +3591,6 @@ FASTRUN void ButtonWasPressed()
         char ProgressStart[] = "vis Progress,1";
         char ProgressEnd[] = "vis Progress,0";
         char Progress[] = "Progress";
-     
 
         char NotConnected[] = "Model isn't connected!";
         char IsConnected[] = "Warning: model is connected!";
@@ -3826,6 +3825,19 @@ FASTRUN void ButtonWasPressed()
             if (CurrentView == CHOOSEIMAGEVIEW)
             {
                 StartChooseImage();
+                ClearText();
+                return;
+            }
+            if (CurrentView == RXSETUPVIEW)
+            {
+                SendCommand(pRXSetupView);
+                return;
+            }
+            else // this handles those we forgot 
+            {
+                GotoFrontView(); // otherwise it goes round for ever ... might fix later
+                ClearText();
+                return;
             }
         }
 
