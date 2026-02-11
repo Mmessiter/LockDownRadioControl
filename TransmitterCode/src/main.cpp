@@ -3591,9 +3591,7 @@ FASTRUN void ButtonWasPressed()
         char ProgressStart[] = "vis Progress,1";
         char ProgressEnd[] = "vis Progress,0";
         char Progress[] = "Progress";
-        char FrontView_Hours[] = "Hours";
-        char FrontView_Mins[] = "Mins";
-        char FrontView_Secs[] = "Secs";
+     
 
         char NotConnected[] = "Model isn't connected!";
         char IsConnected[] = "Warning: model is connected!";
@@ -3812,11 +3810,11 @@ FASTRUN void ButtonWasPressed()
                 ShowServoPos();
                 if (CurrentView == FRONTVIEW)
                 {
-                    SendValue(FrontView_Secs, Secs);
-                    SendValue(FrontView_Mins, Mins);
-                    SendValue(FrontView_Hours, Hours);
                     ForceVoltDisplay = true;
                     LastConnectionQuality = 0;
+                    CheckModelImageFileName();
+                    DisplayModelImage();
+                    GotoFrontView();
                 }
             }
 
@@ -3828,7 +3826,6 @@ FASTRUN void ButtonWasPressed()
             if (CurrentView == CHOOSEIMAGEVIEW)
             {
                 StartChooseImage();
-                return;
             }
         }
 

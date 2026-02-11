@@ -34,7 +34,7 @@ void ImageScrollStop() // finger lifted from the screen, so stop scrolling and s
     for (int i = 0; i < 5; ++i) // display the image repeatedly for a second as it's often slow to respond.
     {
         ShowCurrentlySelectedImage();
-        DelayWithDog(200);
+        DelayWithDog(10);
     }
 }
 

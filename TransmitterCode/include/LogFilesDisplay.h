@@ -273,12 +273,13 @@ void LogVIEWNew() // Start log screen
     char Current_Y_Nextion_Label[] = "LogText.val_y"; // the Y position of the log text on the Nextion screen
     char fnf[] = "File not found: ";
     char LogText[] = "LogText"; // the label on the Nextion screen
-    char fbuffer[40];
+    char fbuffer[60];
 
     SendCommand(pLogView); // Show the right view
     FinalReadStartLine = 0xFFFF;
     CurrentView = LOGVIEW;
     ClearFilesList();
+
     MakeTextFileName();
     CloseLogFile();
     for (uint16_t i = 0; i < MAXSEEKPOSITIONS; ++i)
