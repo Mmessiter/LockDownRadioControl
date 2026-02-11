@@ -1746,7 +1746,6 @@ void SetDefaultValues()
             Saved_PID_Advanced_Values[i][j] = 0;
     }
     strcpy(ModelImageFileName, "Noimage");
-
     ModelDefined = 42;
 }
 
