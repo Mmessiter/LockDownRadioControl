@@ -33,7 +33,7 @@
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
 //**************************************************************************************
 
-// #define DB_NEXTION        // Debug NEXTION
+ //#define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
 // #define DB_FHSS           // Debug real time FHSS data
@@ -271,6 +271,7 @@
 #define PIDADVANCEDVIEW 49
 #define PICKBANKVIEW1 50
 #define PICKBANKVIEW2 51
+#define CHOOSEIMAGEVIEW 52
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -833,6 +834,9 @@ FASTRUN void DeleteLogFile();
 void ShowFreeSpaceEtc();
 void DeleteMODfile(int p);
 void AddPath(char *filename);
+void StartChooseImage();
+void EndChooseImage();
+void ImageScrollStop();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************

@@ -357,6 +357,7 @@ void DisplayModelImage()
     strcat(temp, ModelImageFileName);
     strcat(temp, ".jpg\"");
     SendCommand(temp);
+   // Look(temp);
 }
 
 /******************************************************************************************************************************/
@@ -1009,6 +1010,9 @@ void CheckModelImageFileName() // If the file doesn't exist then set to Noimage 
     strcat(temp, ".jpg");
     if (!NextionFileExistsOnSD(temp, false))
         strcpy(ModelImageFileName, "Noimage");
+
+   // Look1(ModelImageFileName);
+   // Look(" Checked");
 }
 /******************************************************************************************************************************/
 
@@ -1063,7 +1067,7 @@ void RXOptionsViewEnd()
     char n3[] = "n3";
     char n4[] = "n4"; // TimerDownwards timer minutes
     char c2[] = "c2"; // TimerDownwards timer on off
-    char temp[30];
+ 
 
     char ProgressStart[] = "vis Progress,1";
     char Progress[] = "Progress";
@@ -1089,18 +1093,6 @@ void RXOptionsViewEnd()
     TimerDownwards = GetValue(c2);
     SendValue(Progress, 70);
     TimerStartTime = GetValue(n4) * 60;
-    SendValue(Progress, 80);
-    GetText((char *)"t11", temp);
-    uint8_t p = (InStrng((char *)".", temp));
-    if (p)
-        strncpy(ModelImageFileName, temp, p - 1); // copy up to but not including the dot
-    else
-        strcpy(ModelImageFileName, temp); // copy whole string if no dot found
-    if (strlen(ModelImageFileName) == 0)
-        strcpy(ModelImageFileName, "no_image");
-    if (strlen(ModelImageFileName) > 8)
-        ModelImageFileName[8] = 0; // ensure null terminated and not too long
-
     SendValue(Progress, 100);
     CurrentView = RXSETUPVIEW;
     PreviousBank = 42;

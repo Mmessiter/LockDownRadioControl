@@ -127,7 +127,6 @@
 #include <Watchdog_t4.h>
 #include <PulsePosition.h>
 #include <RF24.h>
-// #include <SD.h>
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_INA219.h>
@@ -164,6 +163,7 @@
 #include "RF_PID_Advanced.h"
 #include "RF_Save_Restore.h"
 #include "SDFiles.h"
+#include "ChooseImage.h"
 
 /*********************************************************************************************************************************/
 
@@ -3273,32 +3273,11 @@ void CheckAllModelIds()
     ModelNumber = SavedModelNumber;
     ReadOneModel(ModelNumber);
 }
-// ******************************************************************************************************************************
-void ShowModelBriefly()
-{
-    char temp[20];
-    GetText((char *)"t11", temp);
-    uint8_t p = (InStrng((char *)".", temp));
-    if (p)
-        strncpy(ModelImageFileName, temp, p - 1); // copy up to but not including the dot
-    else
-        strcpy(ModelImageFileName, temp); // copy whole string if no dot found
-    if (strlen(ModelImageFileName) == 0)
-        strcpy(ModelImageFileName, "no_image");
-    if (strlen(ModelImageFileName) > 8)
-        ModelImageFileName[8] = 0; // ensure null terminated and not too long
-
-    CheckModelImageFileName();
-    DisplayModelImage();
-    SendCommand((char *)"vis Exp0,1");
-    DelayWithDog(1000);
-    SendCommand(pRXSetup1);
-}
 
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!  ( Use "NUMBER<<8" )
-#define LASTFUNCTION1 45 // One more than final one
+#define LASTFUNCTION1 47 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])(){
     Blank,                   // 0 Cannot be used
@@ -3345,7 +3324,9 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     Cancel_SAVE,             // 41
     ChooseBackGround,        // 42
     Save_BackGround,         // 43
-    ShowModelBriefly         // 44
+    StartChooseImage,        // 44
+    EndChooseImage,          // 45
+    ImageScrollStop          // 46
 
 };
 
@@ -3844,9 +3825,11 @@ FASTRUN void ButtonWasPressed()
                 GotoFrontView(); // otherwise it goes round for ever ... might fix later
             }
 
-            UpdateModelsNameEveryWhere();
-            ClearText();
-            return;
+            if (CurrentView == CHOOSEIMAGEVIEW)
+            {
+                StartChooseImage();
+                return;
+            }
         }
 
         if (InStrng(Exrite, TextIn) > 0)
@@ -4818,7 +4801,7 @@ void GotoFrontView()
         CheckModelImageFileName();
         DisplayModelImage();
         SendCommand((char *)"vis exp0,1"); // heer
-        Look("Entered Front View");
+        // Look("Entered Front View");
     }
 }
 

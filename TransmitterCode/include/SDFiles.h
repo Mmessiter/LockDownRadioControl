@@ -318,6 +318,9 @@ void BuildDirectory() // HEER
         dir = TINYCARD.open("/help/");
     if ((strcmp(MOD, ".MOD") == 0))
         dir = TINYCARD.open("/mod/");
+    if ((strcmp(MOD, ".jpg") == 0)){
+        dir = TINYCARD.open("/Images/");
+    }
 
     ExportedFileCounter = 0;
     while (true)
@@ -331,7 +334,7 @@ void BuildDirectory() // HEER
             strcpy(fn, entry.name());
             for (i = 0; i < 12; ++i)
             {
-                TheFilesList[ExportedFileCounter][i] = fn[i];
+                TheFilesList[ExportedFileCounter][i] = fn[i];   
             }
             ExportedFileCounter++;
         }
