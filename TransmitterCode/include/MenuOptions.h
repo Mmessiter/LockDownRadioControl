@@ -1029,7 +1029,7 @@ void RXOptionsViewStart() // model Options screen
     char n3[] = "n3";
     char n4[] = "n4"; // TimerDownwards timer minutes
     char c2[] = "c2"; // TimerDownwards timer on off
-    char temp[13];
+
 
     SendCommand(pRXSetup1);
     CurrentView = RXSETUPVIEW1;
@@ -1044,12 +1044,8 @@ void RXOptionsViewStart() // model Options screen
     SendValue(c2, TimerDownwards);
     SendValue(n4, TimerStartTime / 60);
     SendCommand(pRXSetup1); // this just sets grey here and there when options are off
-
     CheckModelImageFileName();
-    strcpy(temp, ModelImageFileName);
-    strcat(temp, ".jpg");
-    SendText((char *)"t11", temp);
-
+    DisplayModelImage();
     UpdateModelsNameEveryWhere();
 }
 
