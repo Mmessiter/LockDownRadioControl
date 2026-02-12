@@ -2444,8 +2444,8 @@ void ShowBank()
 void ShowMotor(int on)
 {
     char bt0[] = "bt0";
-    char OnMsg[] = "Motor ON";
-    char OffMsg[] = "Motor OFF";
+    char OnMsg[] = "Motor is ON";
+    char OffMsg[] = "Motor is OFF";
     if ((on == 1) || (!UseMotorKill))
         SendText(bt0, OnMsg);
     if (on == 0)
