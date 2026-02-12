@@ -164,6 +164,8 @@
 #include "RF_Save_Restore.h"
 #include "SDFiles.h"
 #include "ChooseImage.h"
+#include "Calibrate.h" 
+/*********************************************************************************************************************************/
 
 /*********************************************************************************************************************************/
 
@@ -637,24 +639,6 @@ FASTRUN void GetNewChannelValues()
     }
 }
 /*********************************************************************************************************************************/
-/*********************************************************************************************************************************/
-
-void ReduceLimits()
-{ // Get things setup for sticks calibration
-    for (uint8_t i = 0; i < CHANNELSUSED; ++i)
-    {
-        ChannelMax[i] = MAXRESOLUTION / 2;
-        ChannelMin[i] = MAXRESOLUTION / 2;
-    }
-    for (uint8_t i = 0; i < CHANNELSUSED; ++i)
-    {
-        MaxDegrees[Bank][i] = 180;
-        CentreDegrees[Bank][i] = 90;
-        MinDegrees[Bank][i] = 0;
-    }
-}
-
-/*********************************************************************************************************************************/
 void ResetSwitchNumbers()
 {
     for (int i = 0; i < 8; ++i)
@@ -662,41 +646,7 @@ void ResetSwitchNumbers()
         SwitchNumber[i] = DefaultSwitchNumber[i];
     }
 }
-/*********************************************************************************************************************************/
-void CalibrateSticks() // This discovers end of travel place for sticks etc.
-{
-    uint16_t p;
-    for (uint8_t i = 0; i < PROPOCHANNELS; ++i)
-    {
-        p = adc->analogRead(AnalogueInput[i]);
-        if (ChannelMax[i] < p)
-            ChannelMax[i] = p;
-        if (ChannelMin[i] > p)
-            ChannelMin[i] = p;
-    }
-    NewCompressNeeded = false; // fake it as we are not sending data
-    GetNewChannelValues();
-}
-/*********************************************************************************************************************************/
-/** @brief Get centre as 90 degrees */
-void ChannelCentres()
-{
-    for (int i = 0; i < PROPOCHANNELS; ++i)
-    {
-        ChannelCentre[i] = AnalogueReed(i);
-        ChannelMidHi[i] = ChannelCentre[i] + ((ChannelMax[i] - ChannelCentre[i]) / 2);
-        ChannelMidLow[i] = ChannelMin[i] + ((ChannelCentre[i] - ChannelMin[i]) / 2);
-    }
-    for (int i = PROPOCHANNELS; i < CHANNELSUSED; ++i)
-    {
-        ChannelMin[i] = 500;
-        ChannelCentre[i] = 1500;
-        ChannelMax[i] = 2500;
-    }
-    NewCompressNeeded = false; // fake it as we are not sending data
-    GetNewChannelValues();
-    CalibrateEdgeSwitches(); // These are now calibrated too in case some are reversed.
-}
+
 
 /*********************************************************************************************************************************/
 
@@ -801,20 +751,6 @@ FLASHMEM void InitSwitchesAndTrims()
     pinMode(BUTTON_SENSE_PIN, INPUT_PULLUP); // New function to sense power button press
 }
 
-/*********************************************************************************************************************************/
-
-/** @brief STICKS CALIBRATION */
-FLASHMEM void InitMaxMin()
-{
-    for (int i = 0; i < CHANNELSUSED; ++i)
-    {
-        ChannelMax[i] = MAXRESOLUTION;
-        ChannelMidHi[i] = MAXRESOLUTION * 3 / 4;
-        ChannelCentre[i] = MAXRESOLUTION / 2;
-        ChannelMidLow[i] = MAXRESOLUTION / 4;
-        ChannelMin[i] = 0;
-    }
-}
 
 /*********************************************************************************************************************************/
 
@@ -2502,6 +2438,7 @@ void ShowBank()
 {
     char FMPress[4][12] = {"click fm1,1", "click fm2,1", "click fm3,1", "click fm4,1"};
     SendCommand(FMPress[Bank - 1]);
+    SendText((char *)"t4", BankNames[BanksInUse[Bank - 1]]);
 }
 /*********************************************************************************************************************************/
 void ShowMotor(int on)
@@ -3833,7 +3770,7 @@ FASTRUN void ButtonWasPressed()
                 SendCommand(pRXSetupView);
                 return;
             }
-            else // this handles those we forgot 
+            else // this handles those we forgot
             {
                 GotoFrontView(); // otherwise it goes round for ever ... might fix later
                 ClearText();
@@ -4482,7 +4419,6 @@ FASTRUN void ButtonWasPressed()
         {
             if (strcmp(TextIn, "Calibrate1") == 0)
             {
-                Look("Calibrate limits done");
                 CurrentMode = CENTRESTICKS;
                 CurrentView = CALIBRATEVIEW;
                 SendText1(SvT11, Cmsg3);
@@ -4495,7 +4431,6 @@ FASTRUN void ButtonWasPressed()
         {
             if (strcmp(TextIn, "Calibrate1") == 0)
             {
-                Look("Calibration complete");
                 CurrentMode = NORMAL;
                 RedLedOn();
                 SaveTransmitterParameters(); // Save calibrations
@@ -4760,7 +4695,7 @@ void GetBank() // ... and the other three switches
 
 void GotoFrontView()
 {
-    char fms[4][4] = {{"fm1"}, {"fm2"}, {"fm3"}, {"fm4"}};
+    // char fms[4][4] = {{"fm1"}, {"fm2"}, {"fm3"}, {"fm4"}};
     char FrontView_Connected[] = "Connected";
     PupilIsAlive = 0;
     MasterIsAlive = 0;
@@ -4792,10 +4727,11 @@ void GotoFrontView()
         LastShowTime = 0; // this is to make redisplay sooner (in ShowComms())
         SendText(FrontView_Connected, na);
     }
-    for (int i = 0; i < 4; ++i)
-    {
-        SendText(fms[i], BankNames[BanksInUse[i]]);
-    }
+    // for (int i = 0; i < 4; ++i)
+    // {
+    //     SendText(fms[i], BankNames[BanksInUse[i]]);
+    // }
+    SendText((char *)"t4", BankNames[BanksInUse[Bank - 1]]); // show current bank name on front view
     ForceDataRedisplay();
     ShowAMS();
     UpdateTrimView();
@@ -5095,7 +5031,7 @@ FASTRUN void loop()
     ManageTransmitter();   // Do the needed chores ... (if there's time)
     GetNewChannelValues(); // Load SendBuffer with new servo positions very frequently
 
-    if (CurrentMode < 3)
+    if (CurrentMode == NORMAL)
     {
         if (UseMacros)
             ExecuteMacro(); // Modify it if macro is running

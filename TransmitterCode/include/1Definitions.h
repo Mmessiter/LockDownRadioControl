@@ -837,6 +837,13 @@ void AddPath(char *filename);
 void StartChooseImage();
 void EndChooseImage();
 void ImageScrollStop();
+void GetAllInputs();
+void CalculateAllOutputs();
+void ReduceLimits();
+void CalibrateSticks();
+void ChannelCentres();
+
+
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************
