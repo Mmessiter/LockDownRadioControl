@@ -1680,6 +1680,8 @@ void SetDefaultValues()
             Saved_PID_Advanced_Values[i][j] = 0;
     }
     strcpy(ModelImageFileName, "Noimage");
+    CheckModelImageFileName();
+    DisplayModelImage();
     ModelDefined = 42;
 }
 
@@ -4123,6 +4125,8 @@ FASTRUN void ButtonWasPressed()
                 SendValue(Progress, 100);
                 DelayWithDog(10);
                 SendCommand(ProgressEnd);
+                CheckModelImageFileName();
+                DisplayModelImage();
                 if (FileError)
                     ShowFileErrorMsg();
                 LoadModelSelector();
