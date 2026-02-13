@@ -312,7 +312,7 @@ void Save_SOME_RF_Parameters()
         ProgressSoFar += OneProgressItem;             // update progress bar
         SendValue((char *)"Progress", ProgressSoFar); // update progress bar
         Which_Case_Now = 200;                         // move to next bank
-        DelayWithDog(500);                            // briefish delay
+       // DelayWithDog(MSP_WAIT_TIME);                  //  delay not needed
         break;
     case 200:
         SendText(t2, (char *)"Success!");
