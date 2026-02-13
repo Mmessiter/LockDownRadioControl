@@ -889,10 +889,10 @@ void ShowSafetyIsOff()
         char bco2[] = "bt0.bco2=";
         char pco[] = "bt0.pco=";
         char pco2[] = "bt0.pco2=";
-        SendColour(bco, BLACK);
-        SendColour(bco2, BLACK);
-        SendColour(pco, WHITE);
-        SendColour(pco2, WHITE);
+        SendColour(bco, WHITE);
+        SendColour(bco2, WHITE);
+        SendColour(pco, BLACK);
+        SendColour(pco2, BLACK);
         BeQuiet = false;
     }
 }
