@@ -889,10 +889,10 @@ void ShowSafetyIsOff()
         char bco2[] = "bt0.bco2=";
         char pco[] = "bt0.pco=";
         char pco2[] = "bt0.pco2=";
-        SendColour(bco, WHITE);
-        SendColour(bco2, WHITE);
-        SendColour(pco, BLACK);
-        SendColour(pco2, BLACK);
+        SendColour(bco, BLACK);
+        SendColour(bco2, BLACK);
+        SendColour(pco, WHITE);
+        SendColour(pco2, WHITE);
         BeQuiet = false;
     }
 }
@@ -4741,6 +4741,20 @@ void GotoFrontView()
     ModelMatchFailed = false;
     First_RPM_Data = true;
     RestoreBrightness();
+
+    if (TrimMultiplier == 0){
+
+        SendCommand((char *)"vis ch1,0");
+        SendCommand((char *)"vis ch2,0");
+        SendCommand((char *)"vis ch3,0");
+        SendCommand((char *)"vis ch4,0");
+    }else{
+        SendCommand((char *)"vis ch1,1");
+        SendCommand((char *)"vis ch2,1");
+        SendCommand((char *)"vis ch3,1");
+        SendCommand((char *)"vis ch4,1");
+    }
+
     if (!Rotorflight22Detected)
     {
         CheckModelImageFileName();
