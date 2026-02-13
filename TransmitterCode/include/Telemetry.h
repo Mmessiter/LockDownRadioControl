@@ -168,21 +168,25 @@ void ShowCurrentRate()
     char rate1[] = "Rate 1";
     char rate2[] = "Rate 2";
     char rate3[] = "Rate 3";
-    char rate4[] = "      ";
+  //  char rate4[] = "      ";
 
     switch (DualRateInUse)
     {
     case 1:
         SendText(rate, rate1); //
+        SendCommand((char *)"vis rate,1");
         break;
     case 2:
         SendText(rate, rate2);
+        SendCommand((char *)"vis rate,1");
         break;
     case 3:
         SendText(rate, rate3);
+        SendCommand((char *)"vis rate,1");
         break;
     case 4:
-        SendText(rate, rate4); // rates not in use = 4
+       // SendText(rate, rate4); // rates not in use = 4
+        SendCommand((char *)"vis rate,0");
         break;
     default:
         break;

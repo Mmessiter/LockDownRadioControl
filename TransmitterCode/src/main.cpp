@@ -164,7 +164,7 @@
 #include "RF_Save_Restore.h"
 #include "SDFiles.h"
 #include "ChooseImage.h"
-#include "Calibrate.h" 
+#include "Calibrate.h"
 /*********************************************************************************************************************************/
 
 /*********************************************************************************************************************************/
@@ -647,7 +647,6 @@ void ResetSwitchNumbers()
     }
 }
 
-
 /*********************************************************************************************************************************/
 
 FLASHMEM void ScanI2c()
@@ -750,7 +749,6 @@ FLASHMEM void InitSwitchesAndTrims()
     }
     pinMode(BUTTON_SENSE_PIN, INPUT_PULLUP); // New function to sense power button press
 }
-
 
 /*********************************************************************************************************************************/
 
@@ -4742,26 +4740,26 @@ void GotoFrontView()
     First_RPM_Data = true;
     RestoreBrightness();
 
-    if (TrimMultiplier == 0){
+    if (TrimMultiplier == 0)
+    {
 
         SendCommand((char *)"vis ch1,0");
         SendCommand((char *)"vis ch2,0");
         SendCommand((char *)"vis ch3,0");
         SendCommand((char *)"vis ch4,0");
-    }else{
+        SendCommand((char *)"vis trall,0");
+    }
+    else
+    {
         SendCommand((char *)"vis ch1,1");
         SendCommand((char *)"vis ch2,1");
         SendCommand((char *)"vis ch3,1");
         SendCommand((char *)"vis ch4,1");
+        SendCommand((char *)"vis trall,1");
     }
-
-    if (!Rotorflight22Detected)
-    {
-        CheckModelImageFileName();
-        DisplayModelImage();
-        SendCommand((char *)"vis exp0,1"); // heer
-        // Look("Entered Front View");
-    }
+    CheckModelImageFileName();
+    DisplayModelImage();
+    SendCommand((char *)"vis exp0,1"); // heer
 }
 
 /************************************************************************************************************/
