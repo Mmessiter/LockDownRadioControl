@@ -24,17 +24,17 @@
 //                   TX VERSION NUMBER   (2020 - 2026 Malcolm Messiter)                *
 //**************************************************************************************
 
-#define BUILD_ID_STR __DATE__ " " __TIME__
-#define TXVERSION_MAJOR 2 // first three *must* match RX but _EXTRA can be different
+#define BUILD_ID_STR __DATE__ " " __TIME__ // EG "Feb 14 2026 13:31:06"
+#define TXVERSION_MAJOR 2                  // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 5
 #define TXVERSION_MINIMUS 6
-#define TXVERSION_EXTRA "A 9/02/26"
+#define TXVERSION_EXTRA "B 14/02/26"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
 //**************************************************************************************
 
- //#define DB_NEXTION        // Debug NEXTION
+// #define DB_NEXTION        // Debug NEXTION
 // #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
 // #define DB_FHSS           // Debug real time FHSS data
@@ -44,6 +44,7 @@
 // #define DB_Variometer     // Debug Variometer
 // #define DB_PACKETDATA     // Debug Packet Data
 // #define DB_Reconnect      // Debug reconnections
+// #define DB_BUILD_AGE_GAP  // Debug build age gap checking (set FAKE_BUILD_AGE_GAP to a value greater than MAX_ACCEPTABLE_AGE_GAP to see the message box)
 
 // ************************************************************************************
 //                                       General                                      *
@@ -843,7 +844,7 @@ void CalculateAllOutputs();
 void ReduceLimits();
 void CalibrateSticks();
 void ChannelCentres();
-
+uint32_t GetBuildDaysSince2020();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
@@ -1413,6 +1414,9 @@ bool Rates_Were_Edited = false;
 bool Rates_Advanced_Were_Edited = false;
 float GearRatio = 10.3;
 uint8_t ArmingChannel = 5;
+uint32_t TXBuildAge;
+uint32_t RXBuildAge;
+bool AgeGapChecked = false;
 
 bool BlockBankChanges = false; // used to block bank changes when Param go to or from Nexus
 uint8_t BackGroundSelection = 1;
@@ -1503,7 +1507,6 @@ char Rate_Types[6][15] = {"None", "Betaflight", "Raceflight", "KISS", "Actual", 
 const float FactorTableRF[13] = {1, 10, 10, .01, 10, 10, .01, 10, 10, .01, .25, .25, .01}; // Factors for each RATES byte needed by Rotorflight
 bool Rotorflight22Detected = false;
 char ModelImageFileName[9];
-
 
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 

@@ -16,7 +16,7 @@
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 5
 #define RXVERSION_MINIMUS 6
-#define RXVERSION_EXTRA 'A' // 5th January 2026
+#define RXVERSION_EXTRA 'B' // 14th February 2026
 #define HOPTIME 8           // gives about 100Hz FHSS
 
 // **************************************************************************
@@ -278,11 +278,12 @@ inline bool Parse_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n);
 void PointToRadio1();
 void PointToRadio2();
 void DebugPIDValues(char const *msg);
-inline void WritePIDsToNexusAndSave(const uint16_t pid[12]);
+inline void WritePIDsToNexusAndSave(const uint16_t pid[17]);
 inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n);
 inline void WriteRatesToNexusAndSave();
 inline bool Parse_MSP_PID_PROFILE(const uint8_t *data, uint8_t n);
 inline void WritePIDAdvancedToNexusAndSave();
+uint32_t GetBuildDaysSince2020(); // days since 1st Jan 2020 for this build
 
 /************************************************************************************************************/
 // For numeric types (int, float, double, etc.)
@@ -489,5 +490,6 @@ uint8_t Inertia_Precomp_Gain41 = 0;
 uint8_t Inertia_Precomp_Cutoff42 = 0;
 
 bool BoundFlag = false; /** indicates if receiver paired with transmitter */
+uint32_t BuildAge;          // days since 1st Jan 2020 for this build
 
 #endif // defined (_SRC_UTILITIES_1DEFINITIONS_H)

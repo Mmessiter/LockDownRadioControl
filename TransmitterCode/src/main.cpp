@@ -1154,7 +1154,7 @@ FLASHMEM void setup()
     DelayWithDog(500);
     GotoFrontView();
     RedLedOn();
-   
+    TXBuildAge = GetBuildDaysSince2020(); // days since 1st Jan 2020 for this build
 }
 // **************************************************************************************************************************************************************
 void RationaliseBuddy()
@@ -1195,7 +1195,7 @@ void GetFrameRate()
     RecentGoodPacketsCount = 0;
     TotalFrameRate += PacketsPerSecond;
     AverageFrameRate = TotalFrameRate / ++FrameRateCounter;
-  //  Look(BUILD_ID_STR);
+    // Look(TXBuildAge); // days since 1st Jan 2020 for this build
 }
 
 /*********************************************************************************************************************************/

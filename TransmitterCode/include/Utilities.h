@@ -1311,5 +1311,44 @@ void Save_BackGround()
     BackGroundSelection = GetValue((char *)"n0");
     SaveTransmitterParameters();
     StartTXSetupView(); 
-} 
+}
+// ************************************************************************************************************/
+//#define BUILD_ID_STR __DATE__ " " __TIME__ // EG "Feb 14 2026 13:31:06"
+
+static int monthFrom3(const char *m)
+{
+    static const char *months = "JanFebMarAprMayJunJulAugSepOctNovDec";
+    const char *p = strstr(months, m);
+    return p ? (int)((p - months) / 3) + 1 : 0; // 1..12
+}
+
+// Returns an integer day index: 0 == 2020-01-01, 1 == 2020-01-02, etc.
+// Good for "is this build wildly older/newer?" comparisons.
+// Note: this is a rough calculation that doesn't handle leap years or month lengths, but it's good enough for "huge" differences.
+// ******************************************************************************************************************
+uint32_t GetBuildDaysSince2020()
+{
+    // BUILD_ID_STR like: "Feb 14 2026 13:31:06"
+    const char *s = BUILD_ID_STR;
+
+    char mmm[4] = {s[0], s[1], s[2], 0};
+    int mm = monthFrom3(mmm);
+
+    int dd = (s[4] == ' ') ? (s[5] - '0')
+                           : ((s[4] - '0') * 10 + (s[5] - '0'));
+
+    int yyyy = (s[7] - '0') * 1000 + (s[8] - '0') * 100 + (s[9] - '0') * 10 + (s[10] - '0');
+
+    // Rough days since 2020-01-01:
+    // - 365 per year + 1 leap day every 4 years (close enough for your warning use)
+    // - month offsets assume non-leap years (again fine for "huge" differences)
+    int years = yyyy - 2020;
+    int leap = (years + 3) / 4; // approx leap days since 2020
+
+    static const uint16_t cumDays[13] =
+        {0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334}; // non-leap
+
+    uint32_t days = (uint32_t)(years * 365 + leap + cumDays[mm] + (dd - 1));
+    return days;
+}
 #endif

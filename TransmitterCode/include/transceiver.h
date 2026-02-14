@@ -505,8 +505,8 @@ void DrawFhssBox()
     ShowGhz(X1_pos, STR64GHZ, &p);
     ShowGhz(X1_pos, STR96GHZ, &p);
     ShowGhz(X1_pos, STR125GHZ, &p);
-   // FillBox(x1 + 1, y1 + 1, (128 * 5) - 2, 254, BackGroundColour); // Clear the inside of the box
-    FillBox(x1 + 1, y1 + 1, (128 * 5) - 2, 254, 0); // Clear the inside of the box
+    // FillBox(x1 + 1, y1 + 1, (128 * 5) - 2, 254, BackGroundColour); // Clear the inside of the box
+    FillBox(x1 + 1, y1 + 1, (128 * 5) - 2, 254, 0);                // Clear the inside of the box
     p = 419;                                                       // 83.5 * 5 = 417.5 The top of the legal ISM band
     DrawDoubleLine(x1 + p, y1 + 1, x1 + p, y2 - 1, SpecialColour); // Draw a line at 2.4835 GHz
 }
@@ -517,7 +517,7 @@ void DrawFhssBox()
 
 void ScanAllChannels(bool cls)
 {
-  
+
     const uint16_t x1 = xx1;
     const uint16_t y1 = yy1;
     const uint8_t BlobHeight = 4; // Blobs are 4 x 5 pixels
@@ -933,7 +933,7 @@ void ShowMilliAmpHoursUsed(float mAh)
 // ******************************************************************************************
 void ShowAmpsBeingUsed(float amps)
 {
-  //  return;
+    //  return;
     static float lastAmps = 0.0f;
     if (abs(amps - lastAmps) < 0.1f)
         return; // only update if changed by 0.1A or more
@@ -1036,6 +1036,34 @@ void Hide_msg_if_needed()
             Reading_PIDS_Advanced_Now = false;
             HidePID_Advanced_Msg();
         }
+    }
+}
+// ******************************************************************************************
+/// @brief Checks the age gap between the TX and RX builds and shows a message box if the gap is greater than MAX_ACCEPTABLE_AGE_GAP.
+void CheckAgeGap()
+{
+    constexpr int MAX_ACCEPTABLE_AGE_GAP = 7; // days
+
+#ifdef DB_BUILD_AGE_GAP
+    constexpr int FAKE_BUILD_AGE_GAP = 10; // testing only
+#else
+    constexpr int FAKE_BUILD_AGE_GAP = 0;
+#endif
+
+    const int gap = (int)TXBuildAge - (int)RXBuildAge + FAKE_BUILD_AGE_GAP; // +ve => TX newer, -ve => RX newer
+    const int agap = (gap < 0) ? -gap : gap;
+
+    if (agap > MAX_ACCEPTABLE_AGE_GAP)
+    {
+        char msg[180];
+        const char *which = (gap > 0) ? "   TX is newer than RX" : "   RX is newer than TX";
+        snprintf(msg, sizeof(msg),
+                 "%s by %d day%s.\r\n\r\nYou might want to update one or both.",
+                 which, agap, (agap == 1) ? "" : "s");
+
+        MsgBox(pFrontView, msg);
+        CurrentView = 254;
+        GotoFrontView();
     }
 }
 
@@ -1186,7 +1214,7 @@ FASTRUN void ParseAckPayload()
         if (First_RPM_Data) // If this is the first time we get RPM data
         {
             First_RPM_Data = false;
-            SendCommand((char *)"vis rpm,1");               // This will make the RPM display visible
+            SendCommand((char *)"vis rpm,1"); // This will make the RPM display visible
         }
         if (rpmShouldUpdate(RotorRPM))
         {
@@ -1323,13 +1351,13 @@ FASTRUN void ParseAckPayload()
         }
         break;
     case 31:
-    
+
         Rotorflight22Detected = GetBoolFromAckPayload(1);
         if (Rotorflight22Detected && !temprfd)
         {
             CurrentView = 254;
             GotoFrontView();
-            temprfd=true;
+            temprfd = true;
         }
 
         break;
@@ -1361,8 +1389,13 @@ FASTRUN void ParseAckPayload()
             break;
         }
         break;
-    // case 35:
-    //     break;
+    case 35:
+        if (AgeGapChecked)
+            break;                           // only do this once per power up
+        RXBuildAge = GetIntFromAckPayload(); // RX Build Age
+        AgeGapChecked = true;
+        CheckAgeGap();
+        break;
     default:
         break;
     }

@@ -807,7 +807,7 @@ void SetupRadios()
 /************************************************************************************************************/
 void LoadAckPayload()
 {
-    const uint8_t MAX_TELEMETERY_ITEMS = 34; // Max number of telemetry items to send...
+    const uint8_t MAX_TELEMETERY_ITEMS = 35; // Max number of telemetry items to send...
 
     if (MacAddressSentCounter < 20)
     {
@@ -1076,12 +1076,16 @@ void LoadAckPayload()
         case SEND_NO_RF: // 0
             break;
         case SEND_PID_RF:
-            Send_2_x_uint16_t(PID_HSI_Offset_Roll, PID_HSI_Offset_Pitch); // 
+            Send_2_x_uint16_t(PID_HSI_Offset_Roll, PID_HSI_Offset_Pitch); //
             break;
         default:
             break;
         }
         break;
+    case 35:
+        SendIntToAckPayload(BuildAge);
+        break;
+
     default:
         break;
     }
