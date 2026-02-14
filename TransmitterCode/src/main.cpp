@@ -1154,6 +1154,7 @@ FLASHMEM void setup()
     DelayWithDog(500);
     GotoFrontView();
     RedLedOn();
+   
 }
 // **************************************************************************************************************************************************************
 void RationaliseBuddy()
@@ -1194,6 +1195,7 @@ void GetFrameRate()
     RecentGoodPacketsCount = 0;
     TotalFrameRate += PacketsPerSecond;
     AverageFrameRate = TotalFrameRate / ++FrameRateCounter;
+  //  Look(BUILD_ID_STR);
 }
 
 /*********************************************************************************************************************************/

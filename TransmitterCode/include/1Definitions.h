@@ -24,6 +24,7 @@
 //                   TX VERSION NUMBER   (2020 - 2026 Malcolm Messiter)                *
 //**************************************************************************************
 
+#define BUILD_ID_STR __DATE__ " " __TIME__
 #define TXVERSION_MAJOR 2 // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 5
 #define TXVERSION_MINIMUS 6

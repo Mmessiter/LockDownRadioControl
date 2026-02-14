@@ -12,6 +12,7 @@
 #include <Adafruit_DPS310.h>
 #include <EEPROM.h>
 
+#define BUILD_ID_STR __DATE__ " " __TIME__
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 5
 #define RXVERSION_MINIMUS 6

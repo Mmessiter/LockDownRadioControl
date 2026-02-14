@@ -1181,22 +1181,18 @@ FASTRUN void ParseAckPayload()
         }
         if (RotorRPM > Max_RotorRPM)
             Max_RotorRPM = RotorRPM;
-        if (CurrentView != FRONTVIEW)
+        if (CurrentView != FRONTVIEW) // from here down must be on front screen
             break;
         if (First_RPM_Data) // If this is the first time we get RPM data
         {
             First_RPM_Data = false;
             SendCommand((char *)"vis rpm,1");               // This will make the RPM display visible
-          //  SendText((char *)"Owner", (char *)"Rotor RPM"); // Change the owner text so user knows it's RPM data
         }
         if (rpmShouldUpdate(RotorRPM))
         {
             char s[24];
             snprintf(s, sizeof(s), "RPM: %u", (unsigned)RotorRPM);
-
             SendText((char *)"rpm", s); // must set rpm.txt
-
-          //  SendValue((char *)"rpm", RotorRPM); // Send the updated RPM value to Nextion Frontscreen only if it has changed sufficiently
         }
         break;
     case 21:
