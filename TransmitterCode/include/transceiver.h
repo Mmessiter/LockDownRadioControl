@@ -1191,7 +1191,12 @@ FASTRUN void ParseAckPayload()
         }
         if (rpmShouldUpdate(RotorRPM))
         {
-            SendValue((char *)"rpm", RotorRPM); // Send the updated RPM value to Nextion Frontscreen only if it has changed sufficiently
+            char s[24];
+            snprintf(s, sizeof(s), "RPM: %u", (unsigned)RotorRPM);
+
+            SendText((char *)"rpm", s); // must set rpm.txt
+
+          //  SendValue((char *)"rpm", RotorRPM); // Send the updated RPM value to Nextion Frontscreen only if it has changed sufficiently
         }
         break;
     case 21:

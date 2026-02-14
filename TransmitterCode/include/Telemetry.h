@@ -135,18 +135,19 @@ void CheckBatteryStates()
     static uint32_t WarnTimer = 0;
     char WarnNow[] = "vis Warning,1";
     char WarnOff[] = "vis Warning,0";
+    uint32_t Now = millis();
 
     if ((CheckTXVolts() || CheckRXVolts()))
     { // Note: If TX Battery is low, then CheckRXVolts() is not even called
-        if (millis() - WarnTimer > 5000)
-        { // issue warning every 5 seconds
-            WarnTimer = millis();
+        if (Now - WarnTimer > 10000)
+        { // issue warning every 10 seconds
+            WarnTimer = Now;
             if (ModelMatched && Connected)
             {
                 PlaySound(WarningSound); // Issue audible warning
                 LogStopFlyingMsg();      // Log the stop flying message
                 LogRXVoltsPerCell();     // Log the RX volts per cell
-                LedIsBlinking = true;
+               //LedIsBlinking = true; // too annoying
                 if (CurrentView == FRONTVIEW)
                     SendCommand(WarnNow);
             }
@@ -154,9 +155,10 @@ void CheckBatteryStates()
     }
     else
     {
-        if (LedIsBlinking && (CurrentView == FRONTVIEW))
+        if (CurrentView == FRONTVIEW)
             SendCommand(WarnOff);
         LedIsBlinking = false;
+        WarnTimer = Now;
     }
     SimplePing();
 }
@@ -199,8 +201,8 @@ void ShowCurrentRate()
 void ShowAMS()
 {
     char ams[] = "ams";
-    char AmsOnMsg[] =  "AMS is on   ";  
-    char AmsOffMsg[] = "AMS is off  ";   
+    char AmsOnMsg[14] =  "AMS is on";  
+    char AmsOffMsg[14] = "AMS is off";   
 
     if (!ModelsMacUnionSaved.Val64)
     {
@@ -222,8 +224,8 @@ void ShowAMS()
 void ShowTrimToAll()
 {
     char trall[] = "trall";
-    char CopyTrimsToAllMSG[] = "TrimAll is on   ";
-    char CopyTrimsToNoneMSG[] = "TrimAll is off ";
+    char CopyTrimsToAllMSG[] = "TrimAll is on";
+    char CopyTrimsToNoneMSG[] = "TrimAll is off";
 
     if (CopyTrimsToAll)
     {
