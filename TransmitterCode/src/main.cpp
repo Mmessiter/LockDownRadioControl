@@ -192,6 +192,10 @@ void ClearMostParameters()
     ModelMatchFailed = false;
     Rotorflight22Detected = false;
 
+    if (CurrentView == FRONTVIEW){
+      SendCommand((char *)"vis ams,1");
+    }
+
     strcpy(TextFileName, "");
     for (int i = 0; i < CHANNELSUSED; ++i)
     {
@@ -276,6 +280,10 @@ void GreenLedOn()
         return; // no green led for wrong model
     if (!LedWasGreen)
     {
+        if (CurrentView == FRONTVIEW)
+        {
+            SendCommand((char *)"vis ams,0");
+        }
         SendCommand((char *)"vis wb,0"); // Hide the binding button
         BindingEnabled = false;          // Disable new binding after successful bind
         LedGreenMoment = millis();

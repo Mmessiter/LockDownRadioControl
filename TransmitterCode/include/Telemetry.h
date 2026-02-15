@@ -24,14 +24,14 @@ FASTRUN bool CheckTXVolts()
     {
         TXVoltsRaw = ((ina219.getBusVoltage_V()) * 100) + (TxVoltageCorrection * 2); // Correction for inaccurate ina219
         dtostrf(TXVoltsRaw / 100, 2, 2, nbuf);                                       // Volts per cell
-        TXVoltsTotal = TXVoltsRaw / 100; // total volts
+        TXVoltsTotal = TXVoltsRaw / 100;                                             // total volts
         float TXVoltsTotalPerCell = TXVoltsTotal / 2;
         if (TXLiPo)
-        {                                                                                   // Does TX have a LiPo or a LiFePo4?
+        {                                                                                                  // Does TX have a LiPo or a LiFePo4?
             TransmitterBatteryPercentLeft = map(TXVoltsTotalPerCell * 100, 3.5 * 100, 4.00 * 100, 0, 100); // LIPO Battery 3.50 -> c. 4.00  volts per cell
         }
         else
-        {                                                                                   // No, it's a LiFePo4
+        {                                                                                                  // No, it's a LiFePo4
             TransmitterBatteryPercentLeft = map(TXVoltsTotalPerCell * 100, 3.2 * 100, 3.33 * 100, 0, 100); // LiFePo4 Battery 3.1 -> 3.35  volts per cell
         }
         if (TransmitterBatteryPercentLeft < LowBattery)
@@ -93,7 +93,7 @@ FASTRUN bool CheckRXVolts()
                 dtostrf(RXVoltsPerCell, 2, 2, Vbuf);
                 strcat(RXBattInfo, Vbuf);
                 strcat(RXBattInfo, PerCell);
-                SendText(FrontView_RXBV, RXBattInfo); 
+                SendText(FrontView_RXBV, RXBattInfo);
             }
             if (CurrentView == DATAVIEW)
             {
@@ -147,7 +147,7 @@ void CheckBatteryStates()
                 PlaySound(WarningSound); // Issue audible warning
                 LogStopFlyingMsg();      // Log the stop flying message
                 LogRXVoltsPerCell();     // Log the RX volts per cell
-               //LedIsBlinking = true; // too annoying
+                                         // LedIsBlinking = true; // too annoying
                 if (CurrentView == FRONTVIEW)
                     SendCommand(WarnNow);
             }
@@ -170,7 +170,7 @@ void ShowCurrentRate()
     char rate1[] = "Rate 1";
     char rate2[] = "Rate 2";
     char rate3[] = "Rate 3";
-  //  char rate4[] = "      ";
+    //  char rate4[] = "      ";
 
     switch (DualRateInUse)
     {
@@ -187,7 +187,7 @@ void ShowCurrentRate()
         SendCommand((char *)"vis rate,1");
         break;
     case 4:
-       // SendText(rate, rate4); // rates not in use = 4
+        // SendText(rate, rate4); // rates not in use = 4
         SendCommand((char *)"vis rate,0");
         break;
     default:
@@ -201,8 +201,18 @@ void ShowCurrentRate()
 void ShowAMS()
 {
     char ams[] = "ams";
-    char AmsOnMsg[14] =  "AMS is on";  
-    char AmsOffMsg[14] = "AMS is off";   
+    char AmsOnMsg[14] = "AMS is on";
+    char AmsOffMsg[14] = "AMS is off";
+
+    if (LedWasGreen)
+    {
+        SendCommand((char *)"vis ams,0");
+        return;
+    }
+    else
+    {
+        SendCommand((char *)"vis ams,1");
+    }
 
     if (!ModelsMacUnionSaved.Val64)
     {
