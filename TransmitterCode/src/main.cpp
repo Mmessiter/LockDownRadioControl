@@ -887,10 +887,10 @@ void ShowSafetyIsOff()
         char bco2[] = "bt0.bco2=";
         char pco[] = "bt0.pco=";
         char pco2[] = "bt0.pco2=";
-        SendColour(bco, BLACK);
-        SendColour(bco2, BLACK);
-        SendColour(pco, WHITE);
-        SendColour(pco2, WHITE);
+        SendColour(bco, GREEN);
+        SendColour(bco2, GREEN);
+        SendColour(pco, BLACK);
+        SendColour(pco2, BLACK);
         BeQuiet = false;
     }
 }
@@ -4587,17 +4587,20 @@ void MotorEnabledHasChanged()
     LastSeconds = 0;
     ShowMotorTimer();
 }
+
 //************************************************************************************************************/
 void SafetySwitchChanged()
 {
     if (SafetyON)
     {
         ShowSafetyIsOn();
-        SendNoData = false; // can send data!
+        SendNoData = false;
+        Armed = false;
     }
     else
     {
         ShowSafetyIsOff();
+        Armed = true;
     }
     SafetyWasOn = SafetyON;
 }
@@ -4765,7 +4768,7 @@ void GotoFrontView()
     }
     CheckModelImageFileName();
     DisplayModelImage();
-    SendCommand((char *)"vis exp0,1"); // heer
+    SendCommand((char *)"vis exp0,1");
 }
 
 /************************************************************************************************************/
@@ -5039,7 +5042,13 @@ void FixMotorChannel()
         SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.
     }
 }
-
+//************************************************************************************************************/
+void SetArmingChannel() // heer
+{
+    uint16_t ArmValue[2] = {667, 2233}; // these are the values at the arming switch would give
+    if (!BuddyPupilOnWireless)
+        SendBuffer[ArmingChannel - 1] = ArmValue[(uint8_t)Armed]; // If safety is on, throttle will be zero whatever was shown.
+}
 /************************************************************************************************************/
 // LOOP
 /************************************************************************************************************/
@@ -5052,10 +5061,12 @@ FASTRUN void loop()
     if (CurrentMode == NORMAL)
     {
         if (UseMacros)
-            ExecuteMacro(); // Modify it if macro is running
-        GetBuddyData();     // Only if master
-        FixMotorChannel();  // Maybe force it low BEFORE Binding data is added
-        ShowServoPos();     // Show servo positions to user
+            ExecuteMacro();     // Modify channels if macro is running
+        GetBuddyData();         // Only if master
+        FixMotorChannel();      // Maybe force motor low BEFORE Binding data is added
+        if (ArmingChannel)      // if zero, then not using arming channel, so ignore it and don't force it low
+            SetArmingChannel(); // control Rotorflight 'arming' from the safety switch if arming channel is non zero and not using wireless buddy
+        ShowServoPos();         // Show servo positions to user
         if (BindingEnabled && !BoundFlag)
             SendBindingPipe(); // Only if binding and not bound yet - override low throttle setting
     }

@@ -1083,7 +1083,7 @@ void LoadAckPayload()
         }
         break;
     case 35:
-        SendIntToAckPayload(BuildAge);
+        SendIntToAckPayload(BuildAge); // this send the age of this build in days since 2020.
         break;
 
     default:

@@ -305,7 +305,7 @@ void DeleteMODfile(int p)
     ClearText();
 }
 /*********************************************************************************************************************************/
-void BuildDirectory() // HEER
+void BuildDirectory() 
 {
     char Entry1[30];
     char fn[20];

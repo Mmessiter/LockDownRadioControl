@@ -1413,7 +1413,7 @@ bool PIDS_Advanced_Were_Edited = false;
 bool Rates_Were_Edited = false;
 bool Rates_Advanced_Were_Edited = false;
 float GearRatio = 10.3;
-uint8_t ArmingChannel = 5;
+uint8_t ArmingChannel = 0;
 uint32_t TXBuildAge;
 uint32_t RXBuildAge;
 bool AgeGapChecked = false;
@@ -1507,6 +1507,7 @@ char Rate_Types[6][15] = {"None", "Betaflight", "Raceflight", "KISS", "Actual", 
 const float FactorTableRF[13] = {1, 10, 10, .01, 10, 10, .01, 10, 10, .01, .25, .25, .01}; // Factors for each RATES byte needed by Rotorflight
 bool Rotorflight22Detected = false;
 char ModelImageFileName[9];
+bool Armed = false;
 
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 
