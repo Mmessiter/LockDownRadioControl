@@ -1670,6 +1670,8 @@ void SetDefaultValues()
         ServoFrequency[i] = 50;
         ServoCentrePulse[i] = 1500;
     }
+    ArmingChannel = 0; // for Rotorflight arming switch. 0 means no arming switch
+    GearRatio = 10.3;  // for helicopters with swash plates. This is the ratio between servo movement and blade pitch change. 10.3 is a typical value for a 700 size heli
     for (j = 0; j < 4; ++j)
     {
         for (i = 0; i < MAX_PID_WORDS + 5; ++i)
@@ -2137,11 +2139,11 @@ void BindNow()
     BoundFlag = true;
     ModelMatched = true;
     Connected = true;
-    if (CurrentView == FRONTVIEW)
-    {
-        CurrentView = 254;
-        GotoFrontView();
-    }
+    // if (CurrentView == FRONTVIEW)
+    // {
+    //    // CurrentView = 254;
+    //    // GotoFrontView();
+    // }
 #ifdef DB_BIND
     Serial.println("");
     Serial.println("Remote (model) ID saved:");
@@ -5047,7 +5049,7 @@ void SetArmingChannel() // heer
 {
     uint16_t ArmValue[2] = {667, 2233}; // these are the values at the arming switch would give
     if (!BuddyPupilOnWireless)
-        SendBuffer[ArmingChannel - 1] = ArmValue[(uint8_t)Armed]; // If safety is on, throttle will be zero whatever was shown.
+        SendBuffer[ArmingChannel - 1] = ArmValue[(uint8_t)Armed]; // If safety is on, arming is off
 }
 /************************************************************************************************************/
 // LOOP

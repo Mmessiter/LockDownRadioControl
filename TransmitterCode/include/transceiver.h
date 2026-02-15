@@ -1071,7 +1071,7 @@ void CheckAgeGap()
 FASTRUN void ParseAckPayload()
 {
     FHSS_data::NextChannelNumber = AckPayload.Ack_Payload_byte[5]; // every packet tells of next hop destination
-    bool temprfd = Rotorflight22Detected;
+    bool Rotorflight22Detected_before = Rotorflight22Detected;
 
     if (AckPayload.Ack_Payload_byte[0] & 0x80)
     {                                                                             // Hi bit is now the **HOP NOW!!** flag
@@ -1353,11 +1353,10 @@ FASTRUN void ParseAckPayload()
     case 31:
 
         Rotorflight22Detected = GetBoolFromAckPayload(1);
-        if (Rotorflight22Detected && !temprfd)
+        if (Rotorflight22Detected && !Rotorflight22Detected_before)
         {
-            CurrentView = 254;
             GotoFrontView();
-            temprfd = true;
+            Rotorflight22Detected_before = true;
         }
 
         break;
