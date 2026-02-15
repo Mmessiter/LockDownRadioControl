@@ -156,20 +156,27 @@ void Restore_SOME_RF_Parameters()
 
     case 150:
         if ((millis() - LTimer) >= MSP_WAIT_TIME) // wait to allow RATES ADVANCED to be sent
+        {
+            LTimer = millis();
             Which_Case_Now = 200;
+            SendValue((char *)"Progress", 100); // update progress bar
+        }
         break;
 
     case 200:
-        Which_Case_Now = 400; // Dont do anything more after this
-        DelayWithDog(MSP_WAIT_TIME); // allow time 
+        if ((millis() - LTimer) >= MSP_WAIT_TIME) // wait
+        {
+            LTimer = millis();
+            Which_Case_Now = 400;
+        }
+        break;
+    case 400:
         SendText(t2, (char *)"Success!");
-        SendValue((char *)"Progress", 100); // update progress bar
         CurrentMode = NORMAL;               // no further calls will come here
         PlaySound(BEEPCOMPLETE);
         SendCommand((char *)"vis Progress,0"); // hide progress bar
         SendCommand((char *)"vis t2,0");       // hide please wait text
         BlockBankChanges = false;
-        break;
     default:
         break;
     }
@@ -310,22 +317,26 @@ void Save_SOME_RF_Parameters()
         {
             Saved_Rate_Advanced_Values[i][LocalBank - 1] = Rate_Advanced_Values[i];
         }
-        ProgressSoFar += OneProgressItem;             // update progress bar
-        SendValue((char *)"Progress", ProgressSoFar); // update progress bar
+        Rates_Advanced_Send_Duration = MSP_WAIT_TIME; // how many milliseconds to await RATES Advanced values
+        SendValue((char *)"Progress", 100);           // update progress bar
+        Reading_RATES_Advanced_Now = true;            // This tells the Ack payload parser to get RATES Advanced values .... extra sec
+        RATES_Advanced_Start_Time = millis();         // record start time as it's not long
         Which_Case_Now = 200;                         // move to next bank
         break;
     case 200:
-        Which_Case_Now = 400;        // Dont do anything more after this
-        DelayWithDog(MSP_WAIT_TIME); // allow time
+        if (!Reading_RATES_Advanced_Now) // wait until Advanced RATES have been read
+            Which_Case_Now = 400;         // move to next stage when Advanced RATES have been read
+        break;
+
+    case 400:
         SendText(t2, (char *)"Success!");
-        SendValue((char *)"Progress", 100); // update progress bar
         CurrentMode = NORMAL;               // no further calls will come here
         SaveOneModel(ModelNumber);          // save all to SD card
         PlaySound(BEEPCOMPLETE);
         SendCommand((char *)"vis Progress,0"); // hide progress bar
         SendCommand((char *)"vis t2,0");       // hide please wait text
         BlockBankChanges = false;
-        break;
+
     default:
         break;
     }
