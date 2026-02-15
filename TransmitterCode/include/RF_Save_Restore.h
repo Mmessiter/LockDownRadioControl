@@ -12,7 +12,7 @@
 #define DO_RATES_ADVANCED 8
 // ************************************************************************************************************/
 
-uint8_t Which_Case_Now = 0;    // Which case we are up to in the state machine
+uint16_t Which_Case_Now = 0;   // Which case we are up to in the state machine
 uint16_t ProgressSoFar = 0;    // progress bar value
 uint16_t OneProgressItem;      // total steps is 16 for progress bar
 uint8_t Which_Params = 0;      // bitmask of which parameters to save or restore
@@ -160,11 +160,12 @@ void Restore_SOME_RF_Parameters()
         break;
 
     case 200:
+        Which_Case_Now = 400; // Dont do anything more after this
+        DelayWithDog(MSP_WAIT_TIME); // allow time 
         SendText(t2, (char *)"Success!");
         SendValue((char *)"Progress", 100); // update progress bar
         CurrentMode = NORMAL;               // no further calls will come here
         PlaySound(BEEPCOMPLETE);
-        DelayWithDog(MSP_WAIT_TIME);
         SendCommand((char *)"vis Progress,0"); // hide progress bar
         SendCommand((char *)"vis t2,0");       // hide please wait text
         BlockBankChanges = false;
@@ -312,15 +313,15 @@ void Save_SOME_RF_Parameters()
         ProgressSoFar += OneProgressItem;             // update progress bar
         SendValue((char *)"Progress", ProgressSoFar); // update progress bar
         Which_Case_Now = 200;                         // move to next bank
-       // DelayWithDog(MSP_WAIT_TIME);                  //  delay not needed
         break;
     case 200:
+        Which_Case_Now = 400;        // Dont do anything more after this
+        DelayWithDog(MSP_WAIT_TIME); // allow time
         SendText(t2, (char *)"Success!");
         SendValue((char *)"Progress", 100); // update progress bar
         CurrentMode = NORMAL;               // no further calls will come here
         SaveOneModel(ModelNumber);          // save all to SD card
         PlaySound(BEEPCOMPLETE);
-        DelayWithDog(MSP_WAIT_TIME);
         SendCommand((char *)"vis Progress,0"); // hide progress bar
         SendCommand((char *)"vis t2,0");       // hide please wait text
         BlockBankChanges = false;
@@ -387,6 +388,7 @@ void Start_RESTORE()
     SendCommand((char *)"vis t2,1");       // show please wait text
     ProgressSoFar = 1;
     SendValue((char *)"Progress", ProgressSoFar);
+    DelayWithDog(MSP_WAIT_TIME); // allow time for progress bar to update before starting to send values to FC
     CurrentMode = RESTORE_RF_SETTINGS;
 }
 // ************************************************************************************************************/
@@ -399,6 +401,7 @@ void Start_SAVE()
     SendCommand((char *)"vis t2,1");       // show please wait text
     ProgressSoFar = 1;
     SendValue((char *)"Progress", ProgressSoFar);
+    DelayWithDog(MSP_WAIT_TIME); // allow time for progress bar to update before starting to send values to FC
     CurrentMode = SAVE_RF_SETTINGS;
 }
 // ************************************************************************************************************/
