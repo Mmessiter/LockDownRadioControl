@@ -31,11 +31,8 @@ void SendInitialSetupParams() // This function sends the initial setup parameter
     AddParameterstoQueue(SERVO_FREQUENCIES);  // Servo Frequencies 6
     AddParameterstoQueue(QNH_SETTING);        // QNH 2
     AddParameterstoQueue(GEAR_RATIO);         // Gear Ratio 8
-
     AddParameterstoQueue(MSP_BANK_CHANGE);
-    Bank |= 0x80; // Set the high bit to indicate that this is a rates change rather than a bank change
-    AddParameterstoQueue(MSP_BANK_CHANGE);
-    Bank &= 0x7F; // Clear the high bit again
+    AddParameterstoQueue(MSP_RATES_CHANGE);
 }
 // ****************************************************************************
 void EncodeAFloat(float value)
