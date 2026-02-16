@@ -93,7 +93,7 @@
 #define BATTERY_CHECK_INTERVAL 1000           // 2 seconds between battery checks
 #define POWERONOFFDELAY 1000                  // Delay after power OFF before transmit stops.
 #define POWERONOFFDELAY2 4000                 // Delay after power ON before Off is possible....
-#define MSP_WAIT_TIME 1000                    // Time to allow for reading MSP data from RX and FC
+#define MSP_WAIT_TIME 750                     // Time to allow for reading MSP data from RX and FC
                                               // **************************************************************************
                                               //                            FHSS BITS                                     *
                                               //***************************************************************************
@@ -102,7 +102,7 @@
 #define RETRYCOUNT 2                          // was 2. Auto retries inside nRF24L01. MAX is 15. Fails below 2.
 #define RETRYWAIT 1                           // was 1. 250us = Wait between retries (RetryWait+1 * 250us))
 #define QUIETCHANNEL 5                        // This was found to be the least busy channel in the 2.4GHz band in my house
-#define STOPLISTENINGDELAY 100                // 30 // 30 seems close to ideal <<<<< *********
+#define STOPLISTENINGDELAY 100                // seems close to ideal <<<<< *********
 #define SELECTTARGETDELAY 100
 
 // **************************************************************************
@@ -168,7 +168,7 @@
 // Parameter transmission timing and redundancy
 
 #define PAUSE_BEFORE_PARAMETER_SEND 3000 // ms pause before sending parameters (to allow RX to prepare)
-#define PARAMETER_SEND_REPEATS 4         // Each parameter is repeated this many times (in case of packet loss)
+#define PARAMETER_SEND_REPEATS 3         // Each parameter is repeated this many times (in case of packet loss)
 #define PARAMETER_SEND_FREQUENCY 50      // ms between parameter send slots (was 100)
 #define PARAMETER_SEND_DURATION 5        // ms duration for parameter sending (remainder used for control)
 #define PARAMETER_QUEUE_MAXIMUM 250      // Maximum queued parameters allowed at once
