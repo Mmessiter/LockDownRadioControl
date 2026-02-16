@@ -49,7 +49,7 @@ void EncodeAFloat(float value)
 }
 
 /************************************************************************************************************/
-// NB ONLY THE LOW 12 BITS ARE ACTUALLY SENT! (Because of the compression) so don't use the high bits!
+// NB ONLY THE LOW 12 BITS ARE ACTUALLY SENT! (Because of the compression) so don't use the high four BITs!
 
 void LoadOneParameter() // todo: return length of this parameter (avoid using MAX 12 always)
 {
@@ -157,7 +157,7 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
         break;
     case MSP_RATES_CHANGE: // 23 = I'm sending the current rates number to the RX (TX->RX)
         Parameters.word[1] = 1;
-        Parameters.word[2] = Bank | 0x80; // 0 to 3 new rates number
+        Parameters.word[2] = Bank | 0x80; // 0 to 3 new rates number RATES = BANK | 128 for now....
         break;
     default:
         break;
@@ -230,10 +230,7 @@ void ActuallySendParameters(uint32_t RightNow)
     static uint32_t LastParameterSent = 0;
 
     if (RightNow - LedGreenMoment < PAUSE_BEFORE_PARAMETER_SEND) // wait a little before sending parameters to allow the RX to Bind
-    {
-        // Look(LedGreenMoment);
         return;
-    }
 
     ShowSendingParameters();
     if (RightNow - LastParameterSent >= PARAMETER_SEND_FREQUENCY)
