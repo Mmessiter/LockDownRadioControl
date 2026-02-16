@@ -40,6 +40,7 @@ void ShowValues(const char *name, float value) // // Show values in the serial m
 void ReadExtraParameters()
 {
     uint16_t TwoBytes = 0;
+    static uint8_t BankRequested = 255;
     switch (Parameters.ID)
     {
     case FAILSAFE_SETTINGS:                                      // 1
@@ -196,6 +197,22 @@ void ReadExtraParameters()
         for (int i = 0; i < 8; i++)
             PID_Advanced_Bytes[i + 18] = Parameters.word[i + 1];
         WritePIDAdvancedToNexusAndSave();
+        break;
+    case MSP_BANK_CHANGE: // 22
+        if (BankRequested != Parameters.word[2])
+        {
+            BankRequested = Parameters.word[2];
+            NewBank = Parameters.word[2];
+            SetNexusProfile(NewBank - 1);
+        }
+        break;
+    case MSP_RATES_CHANGE: // 23
+        if (BankRequested != (Parameters.word[2]))
+        {
+            BankRequested = Parameters.word[2]; // the hi bit is set by the transmitter to indicate this is a RATES bank change, not a PID bank change
+            NewBank = Parameters.word[2]; // The HI BIT is set for RATES. else it would be PID profile
+            SetNexusProfile(NewBank - 1); // set high bit to indicate we're sending RATES bank change, not PID bank change
+        }
         break;
     default:
         break;

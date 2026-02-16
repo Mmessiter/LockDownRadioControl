@@ -15,6 +15,7 @@
 #define MSP_SET_RC_TUNING 204   // write RC Tuning settings (RATES etc)
 #define MSP_PID_PROFILE 94      // Advanced PID settings (read)
 #define MSP_SET_PID_PROFILE 95  // write Advanced PID settings
+#define MSP_SELECT_SETTING 210  // select setting bank
 
 // Add defines for send states
 #define SEND_NO_RF 0
@@ -43,8 +44,7 @@ enum : uint8_t
 // ************************************************************************************************************
 #define MSP_API_VERSION 1
 
-static bool
-Parse_MSP_API_VERSION(const uint8_t *buf, uint8_t len, uint8_t &mspProto, uint8_t &apiMaj, uint8_t &apiMin)
+static bool Parse_MSP_API_VERSION(const uint8_t *buf, uint8_t len, uint8_t &mspProto, uint8_t &apiMaj, uint8_t &apiMin)
 {
     for (uint8_t i = 0; i + 6 <= len; i++)
     {
@@ -345,7 +345,6 @@ inline bool Parse_MSP_PID(const uint8_t *data, uint8_t n)
 
     PID_HSI_Offset_Roll = p[30] | (p[31] << 8);
     PID_HSI_Offset_Pitch = p[32] | (p[33] << 8);
-   
 
     for (int i = 0; i < 34; i++)
     {
@@ -410,7 +409,7 @@ inline bool Parse_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n)
 // ************************************************************************************************************/
 inline void CheckMSPSerial()
 {
-    
+
     uint32_t interval = (SendRotorFlightParametresNow == SEND_NO_RF) ? 250 : 50;
     static uint32_t Localtimer = 0;
     uint32_t Now = millis();
@@ -844,6 +843,14 @@ inline void WritePIDAdvancedToNexusAndSave()
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
     delay(50);
     lastWriteTime = now;
+}
+// ************************************************************************************************************
+
+inline void SetNexusProfile(uint8_t index)
+{
+    if (!Rotorflight22Detected)
+        return;
+    SendToMSP(MSP_SELECT_SETTING, &index, 1); // The HI BIT is set for RATES. Otherwise it sets PID profile
 }
 
 #endif // NEXUS_H

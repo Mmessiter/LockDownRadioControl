@@ -137,8 +137,12 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define GET_FIRST_9_ADVANCED_PID_VALUES 19    // Command to update first 9 Advanced PID values to RX
 #define GET_SECOND_9_ADVANCED_PID_VALUES 20   // Command to update second 9 Advanced PID values to RX
 #define GET_THIRD_8_ADVANCED_PID_VALUES 21    // Command to update third 8 Advanced PID values to RX ... 26 total
+#define MSP_BANK_CHANGE 22                    // Command to change bank on MSP requests (for future use if needed)
+#define MSP_RATES_CHANGE 23                   // Command to change RATES on MSP requests (for future use if needed)
+#define PARAMETERS_MAX_ID 23                  // Max types of parameters packet to send  ... might increase.
 
-#define PARAMETERS_MAX_ID 21 // Max types of parameters packet to send  ... might increase.
+#define MSP_CHANGE_TYPE_PID 0
+#define MSP_CHANGE_TYPE_RATES 1
 
 // **************************************************************************
 //                             Rotorflight Definitions                      *
@@ -273,7 +277,6 @@ void SaveFailSafeDataToEEPROM();
 void SavePipeToEEPROM();
 void DetectRotorFlightAtBoot();
 void RequestFromMSP(uint8_t command);
-
 inline bool Parse_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n);
 void PointToRadio1();
 void PointToRadio2();
@@ -283,6 +286,7 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n);
 inline void WriteRatesToNexusAndSave();
 inline bool Parse_MSP_PID_PROFILE(const uint8_t *data, uint8_t n);
 inline void WritePIDAdvancedToNexusAndSave();
+inline void SetNexusProfile(uint8_t index);
 uint32_t GetBuildDaysSince2020(); // days since 1st Jan 2020 for this build
 
 /************************************************************************************************************/
@@ -490,6 +494,8 @@ uint8_t Inertia_Precomp_Gain41 = 0;
 uint8_t Inertia_Precomp_Cutoff42 = 0;
 
 bool BoundFlag = false; /** indicates if receiver paired with transmitter */
-uint32_t BuildAge;          // days since 1st Jan 2020 for this build
+uint32_t BuildAge;      // days since 1st Jan 2020 for this build
+uint8_t Change_Type;
+uint8_t NewBank;
 
 #endif // defined (_SRC_UTILITIES_1DEFINITIONS_H)
