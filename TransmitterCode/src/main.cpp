@@ -4627,6 +4627,14 @@ void BankHasChanged()
             LastTrim[Bank][pp] = 0; // force a trimview update
         UpdateTrimView();
     }
+
+    if (Rotorflight22Detected){ // msp bank change
+        AddParameterstoQueue(MSP_BANK_CHANGE); // BANK_CHANGE is the ID for the bank change command
+        AddParameterstoQueue(MSP_RATES_CHANGE); // 1 is the ID for the ROTORFLIGHT_BANK parameters
+    }
+
+
+
     if (UseLog)
         LogNewBank();
     if (MotorEnabled == MotorWasEnabled)

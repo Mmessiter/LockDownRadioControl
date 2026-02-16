@@ -93,7 +93,7 @@
 #define BATTERY_CHECK_INTERVAL 1000           // 2 seconds between battery checks
 #define POWERONOFFDELAY 1000                  // Delay after power OFF before transmit stops.
 #define POWERONOFFDELAY2 4000                 // Delay after power ON before Off is possible....
-#define MSP_WAIT_TIME 750                     // Time to allow for reading MSP data from RX and FC
+#define MSP_WAIT_TIME 1000                    // Time to allow for reading MSP data from RX and FC
                                               // **************************************************************************
                                               //                            FHSS BITS                                     *
                                               //***************************************************************************
@@ -199,8 +199,9 @@
 #define GET_FIRST_9_ADVANCED_PID_VALUES 19    // Command to update first 9 Advanced PID values to RX
 #define GET_SECOND_9_ADVANCED_PID_VALUES 20   // Command to update second 9 Advanced PID values to RX
 #define GET_THIRD_8_ADVANCED_PID_VALUES 21    // Command to update third 8 Advanced PID values to RX ... 26 total
-
-#define PARAMETERS_MAX_ID 21 // Max types of parameters packet to send  ... might increase.
+#define MSP_BANK_CHANGE 22                    // Command to send current bank number to RX (for MSP Bank change)
+#define MSP_RATES_CHANGE 23                   // Command to send current rates number to RX (for MSP Rates change)
+#define PARAMETERS_MAX_ID 23                  // Max types of parameters packet to send  ... might increase.
 
 // **************************************************************************
 //                               Mixes                                      *

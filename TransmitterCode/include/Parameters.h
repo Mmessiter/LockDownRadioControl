@@ -14,7 +14,7 @@ void AddParameterstoQueue(uint8_t ID) // this queue is essentially a LIFO stack
         if (ParametersToBeSentPointer < PARAMETER_QUEUE_MAXIMUM)
         {
             ++ParametersToBeSentPointer;
-            ParametersToBeSent[ParametersToBeSentPointer] = ID; 
+            ParametersToBeSent[ParametersToBeSentPointer] = ID;
         }
     }
     // Look1("Queued: ");
@@ -24,12 +24,18 @@ void AddParameterstoQueue(uint8_t ID) // this queue is essentially a LIFO stack
 }
 
 /*********************************************************************************************************************************/
-void SendInitialSetupParams()                 // This function sends the initial setup parameters.
-{                                             // Failsafe and stabilisation parameters are NOT sent here because they are sent separately
+void SendInitialSetupParams() // This function sends the initial setup parameters.
+{                             // Failsafe and stabilisation parameters are NOT sent here because they are sent separately
+
     AddParameterstoQueue(SERVO_PULSE_WIDTHS); // Servo Pulse Widths 7
     AddParameterstoQueue(SERVO_FREQUENCIES);  // Servo Frequencies 6
     AddParameterstoQueue(QNH_SETTING);        // QNH 2
     AddParameterstoQueue(GEAR_RATIO);         // Gear Ratio 8
+
+    AddParameterstoQueue(MSP_BANK_CHANGE);
+    Bank |= 0x80; // Set the high bit to indicate that this is a rates change rather than a bank change
+    AddParameterstoQueue(MSP_BANK_CHANGE);
+    Bank &= 0x7F; // Clear the high bit again
 }
 // ****************************************************************************
 void EncodeAFloat(float value)
@@ -147,6 +153,14 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
     case GET_THIRD_8_ADVANCED_PID_VALUES: // 21 = I'm sending last 8 ADVANCED PID values (TX->RX) (Because we cannot fit all 26 in one go)
         for (int i = 0; i < 8; ++i)
             Parameters.word[i + 1] = PID_Advanced_Values[i + 18]; // 18 to 25
+        break;
+    case MSP_BANK_CHANGE: // 22 = I'm sending the current bank number to the RX (TX->RX)
+        Parameters.word[1] = 1;
+        Parameters.word[2] = Bank; // 0 to 3 new bank number
+        break;
+    case MSP_RATES_CHANGE: // 23 = I'm sending the current rates number to the RX (TX->RX)
+        Parameters.word[1] = 1;
+        Parameters.word[2] = Bank | 0x80; // 0 to 3 new rates number
         break;
     default:
         break;
