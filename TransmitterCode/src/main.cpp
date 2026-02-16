@@ -2148,11 +2148,15 @@ void BindNow()
     BoundFlag = true;
     ModelMatched = true;
     Connected = true;
-    // if (CurrentView == FRONTVIEW)
-    // {
-    //    // CurrentView = 254;
-    //    // GotoFrontView();
-    // }
+    if (CurrentView == FRONTVIEW)
+    {
+        CheckModelImageFileName();
+        DisplayModelImage();
+    }
+    else
+    {
+        GotoFrontView(); // heer
+    }
 #ifdef DB_BIND
     Serial.println("");
     Serial.println("Remote (model) ID saved:");
@@ -4628,12 +4632,11 @@ void BankHasChanged()
         UpdateTrimView();
     }
 
-    if (Rotorflight22Detected){ // msp bank change
-        AddParameterstoQueue(MSP_BANK_CHANGE); // BANK_CHANGE is the ID for the bank change command
+    if (Rotorflight22Detected)
+    {                                           // msp bank change
+        AddParameterstoQueue(MSP_BANK_CHANGE);  // BANK_CHANGE is the ID for the bank change command
         AddParameterstoQueue(MSP_RATES_CHANGE); // 1 is the ID for the ROTORFLIGHT_BANK parameters
     }
-
-
 
     if (UseLog)
         LogNewBank();
