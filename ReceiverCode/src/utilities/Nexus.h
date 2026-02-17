@@ -16,6 +16,7 @@
 #define MSP_PID_PROFILE 94      // Advanced PID settings (read)
 #define MSP_SET_PID_PROFILE 95  // write Advanced PID settings
 #define MSP_SELECT_SETTING 210  // select setting bank
+//#define MSP_STATUS_EX 150       // extended status with more telemetry data WRONG
 
 // Add defines for send states
 #define SEND_NO_RF 0
@@ -484,6 +485,12 @@ inline void CheckMSPSerial()
     {
         SendRotorFlightParametresNow = SEND_NO_RF;
     }
+    if ((Now - Started_Sending_STATUS_EX > STATUS_EX_Send_Duration) && (SendRotorFlightParametresNow == SEND_STATUS_EX))
+    {
+        SendRotorFlightParametresNow = SEND_NO_RF;
+    }
+
+    
     switch (SendRotorFlightParametresNow)
     {
     case SEND_NO_RF:
@@ -507,6 +514,11 @@ inline void CheckMSPSerial()
         Parse_MSP_PID_PROFILE(data_in, p);
         RequestFromMSP(MSP_PID_PROFILE); // parse reply next time around
         break;
+
+  //  case SEND_STATUS_EX:
+  //      Parse_MSP_STATUS_EX(data_in, p);
+  //      RequestFromMSP(MSP_STATUS_EX); // parse reply next time around
+  //      break;
     default:
         break;
     }
@@ -844,6 +856,7 @@ inline void WritePIDAdvancedToNexusAndSave()
     delay(50);
     lastWriteTime = now;
 }
+
 // ************************************************************************************************************
 
 inline void SetNexusProfile(uint8_t index)
@@ -852,5 +865,6 @@ inline void SetNexusProfile(uint8_t index)
         return;
     SendToMSP(MSP_SELECT_SETTING, &index, 1); // The HI BIT is set for RATES. Otherwise it sets PID profile
 }
+// ************************************************************************************************************
 
 #endif // NEXUS_H

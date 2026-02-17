@@ -198,22 +198,23 @@ void ReadExtraParameters()
             PID_Advanced_Bytes[i + 18] = Parameters.word[i + 1];
         WritePIDAdvancedToNexusAndSave();
         break;
-    case MSP_BANK_CHANGE: // 22
-        if (BankRequested != Parameters.word[2])
-        {
-            BankRequested = Parameters.word[2];
-            NewBank = Parameters.word[2];
-            SetNexusProfile(NewBank - 1);
-        }
-        break;
+    case MSP_BANK_CHANGE: // 22....  drop though is intended here
+
     case MSP_RATES_CHANGE: // 23
         if (BankRequested != (Parameters.word[2]))
         {
             BankRequested = Parameters.word[2]; // the hi bit is set by the transmitter to indicate this is a RATES bank change, not a PID bank change
-            NewBank = Parameters.word[2]; // The HI BIT is set for RATES. else it would be PID profile
-            SetNexusProfile(NewBank - 1); // set high bit to indicate we're sending RATES bank change, not PID bank change
+            NewBank = Parameters.word[2];       // The HI BIT is set for RATES. else it would be PID profile
+            SetNexusProfile(NewBank - 1);       // set high bit to indicate we're sending RATES bank change, not PID bank change
         }
         break;
+        //  case MSP_BANK_CHANGE_CONFIRMATION: // 24
+        //  Look1("Bank change confirmation received for bank ");
+        //  Look(Parameters.word[2]);
+        //  SendRotorFlightParametresNow = SEND_STATUS_EX;
+        //  Started_Sending_STATUS_EX = millis();
+
+        //  break;
     default:
         break;
     }
