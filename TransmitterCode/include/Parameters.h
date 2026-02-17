@@ -159,11 +159,10 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
         Parameters.word[1] = 1;
         Parameters.word[2] = Bank | 0x80; // 0 to 3 new rates number RATES = BANK | 128 for now....
         break;
-    case MSP_BANK_CHANGE_CONFIRMATION: // 24 = I'm confirming that the bank change was successful (TX->RX)
-        Parameters.word[1] = 1;
-        Parameters.word[2] = Bank; // 0 to 3 new bank number
-        break;
-
+    // case MSP_BANK_CHANGE_CONFIRMATION:      // 24 = I'm confirming that the bank change was successful (TX->RX)
+    //     Parameters.word[1] = DualRateInUse; // might be used later for rates change confirmation
+    //     Parameters.word[2] = Bank;          // 0 to 3 new bank number
+    //     break;
 
     default:
         break;

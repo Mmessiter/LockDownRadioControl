@@ -4931,10 +4931,10 @@ void FASTRUN ManageTransmitter()
     { // Only once a second for these..
         
         
-        if (Rotorflight22Detected && BankCheckIsNeeded){
-            BankCheckIsNeeded = false;
-            AddParameterstoQueue(MSP_BANK_CHANGE_CONFIRMATION); // This is to confirm that we are talking to Rotorflight 2.2 which needs this extra step to complete the bank change process.
-        }
+        // if (Rotorflight22Detected && BankCheckIsNeeded){
+        //     BankCheckIsNeeded = false;
+        //     AddParameterstoQueue(MSP_BANK_CHANGE_CONFIRMATION); // This is to confirm that we are talking to Rotorflight 2.2 which needs this extra step to complete the bank change process.
+        // }
         
         
         if (VersionMismatch)

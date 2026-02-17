@@ -201,7 +201,7 @@
 #define GET_THIRD_8_ADVANCED_PID_VALUES 21    // Command to update third 8 Advanced PID values to RX ... 26 total
 #define MSP_BANK_CHANGE 22                    // Command to send current bank number to RX (for MSP Bank change)
 #define MSP_RATES_CHANGE 23                   // Command to send current rates number to RX (for MSP Rates change)
-#define MSP_BANK_CHANGE_CONFIRMATION 24       // Confirmation from RX that bank change was successful (for MSP Bank change)
+#define MSP_BANK_CHANGE_CONFIRMATION 24       // Confirmation from RX that bank change was successful (for MSP Bank change confirmation) NOT YET USED
 #define PARAMETERS_MAX_ID 24                  // Max types of parameters packet to send  ... might increase.
 
 // **************************************************************************
