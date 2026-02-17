@@ -2155,7 +2155,7 @@ void BindNow()
     }
     else
     {
-        GotoFrontView(); // heer
+        GotoFrontView();
     }
 #ifdef DB_BIND
     Serial.println("");
@@ -4603,94 +4603,6 @@ void MotorEnabledHasChanged()
     ShowMotorTimer();
 }
 
-//************************************************************************************************************/
-void SafetySwitchChanged()
-{
-    if (SafetyON)
-    {
-        ShowSafetyIsOn();
-        SendNoData = false;
-        Armed = false;
-    }
-    else
-    {
-        ShowSafetyIsOff();
-        Armed = true;
-    }
-    SafetyWasOn = SafetyON;
-}
-
-//************************************************************************************************************/
-// This function is called when the bank has changed
-void BankHasChanged()
-{
-
-    if ((CurrentView == FRONTVIEW) || (CurrentView == TRIM_VIEW))
-    {
-        for (int pp = 0; pp < 4; ++pp)
-            LastTrim[Bank][pp] = 0; // force a trimview update
-        UpdateTrimView();
-    }
-
-    if (Rotorflight22Detected)
-    {                                           // msp bank change
-        AddParameterstoQueue(MSP_BANK_CHANGE);  // BANK_CHANGE is the ID for the bank change command
-        AddParameterstoQueue(MSP_RATES_CHANGE); // 1 is the ID for the ROTORFLIGHT_BANK parameters
-    }
-
-    if (UseLog)
-        LogNewBank();
-    if (MotorEnabled == MotorWasEnabled)
-    { // When turning off motor, don't sound bank too.
-        if (AnnounceBanks)
-            SoundBank();
-    }
-    if (CurrentView == FRONTVIEW)
-    {
-        ShowBank();
-    }
-    else
-    {
-        UpdateModelsNameEveryWhere();
-    }
-    if (CurrentView == GRAPHVIEW)
-        DisplayCurveAndServoPos();
-    if (CurrentView == SLOWSERVOVIEW)
-    {
-        ReadSpeedsScreen(PreviousBank - 1);
-        UpdateSpeedScreen();
-    }
-    if (CurrentView == DUALRATESVIEW)
-    {
-        DisplayNewDualRateBank();
-    }
-    if (CurrentView == PIDVIEW)
-    {
-        ShowPIDBank();
-    }
-    if (CurrentView == RATESVIEW1)
-    {
-        ShowRatesBank();
-    }
-    if (CurrentView == RATESADVANCEDVIEW)
-    {
-        ShowRatesAdvancedBank();
-    }
-    if (CurrentView == PIDADVANCEDVIEW)
-    {
-        ShowPIDAdvancedBank();
-    }
-    if (CurrentView == ROTORFLIGHTVIEW)
-    {
-        ShowRFBank();
-    }
-    if ((CurrentView == PICKBANKVIEW1) || (CurrentView == PICKBANKVIEW2))
-    {
-        SendValue((char *)"n0", Bank);
-        SendValue((char *)"n1", Bank);
-    }
-}
-
 /************************************************************************************************************/
 void GetBank() // ... and the other three switches
 {
@@ -5017,6 +4929,14 @@ void FASTRUN ManageTransmitter()
 
     if (RightNow - LastTimeRead >= 1000)
     { // Only once a second for these..
+        
+        
+        if (Rotorflight22Detected && BankCheckIsNeeded){
+            BankCheckIsNeeded = false;
+            AddParameterstoQueue(MSP_BANK_CHANGE_CONFIRMATION); // This is to confirm that we are talking to Rotorflight 2.2 which needs this extra step to complete the bank change process.
+        }
+        
+        
         if (VersionMismatch)
         {
             ShowMismatchMsg(); // Show version mismatch message if needed
@@ -5065,7 +4985,7 @@ void FixMotorChannel()
     }
 }
 //************************************************************************************************************/
-void SendArmingChannel() // heer
+void SendArmingChannel() 
 {
     uint16_t ArmValue[2] = {667, 2233}; // these are the values at the arming switch would give
     if (!BuddyPupilOnWireless)

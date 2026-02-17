@@ -201,7 +201,8 @@
 #define GET_THIRD_8_ADVANCED_PID_VALUES 21    // Command to update third 8 Advanced PID values to RX ... 26 total
 #define MSP_BANK_CHANGE 22                    // Command to send current bank number to RX (for MSP Bank change)
 #define MSP_RATES_CHANGE 23                   // Command to send current rates number to RX (for MSP Rates change)
-#define PARAMETERS_MAX_ID 23                  // Max types of parameters packet to send  ... might increase.
+#define MSP_BANK_CHANGE_CONFIRMATION 24       // Confirmation from RX that bank change was successful (for MSP Bank change)
+#define PARAMETERS_MAX_ID 24                  // Max types of parameters packet to send  ... might increase.
 
 // **************************************************************************
 //                               Mixes                                      *
@@ -846,6 +847,12 @@ void ReduceLimits();
 void CalibrateSticks();
 void ChannelCentres();
 uint32_t GetBuildDaysSince2020();
+void ShowSafetyIsOn();
+void ShowSafetyIsOff();
+FASTRUN void DisplayCurveAndServoPos();
+void ReadSpeedsScreen(uint8_t bk);
+void ShowRatesAdvancedBank();
+void ShowPIDAdvancedBank();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
@@ -1418,6 +1425,7 @@ uint8_t ArmingChannel = 0;
 uint32_t TXBuildAge;
 uint32_t RXBuildAge;
 bool AgeGapChecked = false;
+bool BankCheckIsNeeded = false;
 
 bool BlockBankChanges = false; // used to block bank changes when Param go to or from Nexus
 uint8_t BackGroundSelection = 1;

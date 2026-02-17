@@ -257,4 +257,93 @@ void CalibrateEdgeSwitches()
     }
 }
 
+//************************************************************************************************************/
+void SafetySwitchChanged()
+{
+    if (SafetyON)
+    {
+        ShowSafetyIsOn();
+        SendNoData = false;
+        Armed = false;
+    }
+    else
+    {
+        ShowSafetyIsOff();
+        Armed = true;
+    }
+    SafetyWasOn = SafetyON;
+}
+
+//************************************************************************************************************/
+// This function is called when the bank has changed
+void BankHasChanged()
+{
+
+    if ((CurrentView == FRONTVIEW) || (CurrentView == TRIM_VIEW))
+    {
+        for (int pp = 0; pp < 4; ++pp)
+            LastTrim[Bank][pp] = 0; // force a trimview update
+        UpdateTrimView();
+    }
+
+    if (Rotorflight22Detected)
+    {                                           // msp bank change
+        AddParameterstoQueue(MSP_BANK_CHANGE);  // BANK_CHANGE is the ID for the bank change command
+        AddParameterstoQueue(MSP_RATES_CHANGE); // 1 is the ID for the ROTORFLIGHT_BANK parameters
+        BankCheckIsNeeded = true;               // this tells the Ack payload parser to check that the bank change was successful
+    }
+
+    if (UseLog)
+        LogNewBank();
+    if (MotorEnabled == MotorWasEnabled)
+    { // When turning off motor, don't sound bank too.
+        if (AnnounceBanks)
+            SoundBank();
+    }
+    if (CurrentView == FRONTVIEW)
+    {
+        ShowBank();
+    }
+    else
+    {
+        UpdateModelsNameEveryWhere();
+    }
+    if (CurrentView == GRAPHVIEW)
+        DisplayCurveAndServoPos();
+    if (CurrentView == SLOWSERVOVIEW)
+    {
+        ReadSpeedsScreen(PreviousBank - 1);
+        UpdateSpeedScreen();
+    }
+    if (CurrentView == DUALRATESVIEW)
+    {
+        DisplayNewDualRateBank();
+    }
+    if (CurrentView == PIDVIEW)
+    {
+        ShowPIDBank();
+    }
+    if (CurrentView == RATESVIEW1)
+    {
+        ShowRatesBank();
+    }
+    if (CurrentView == RATESADVANCEDVIEW)
+    {
+        ShowRatesAdvancedBank();
+    }
+    if (CurrentView == PIDADVANCEDVIEW)
+    {
+        ShowPIDAdvancedBank();
+    }
+    if (CurrentView == ROTORFLIGHTVIEW)
+    {
+        ShowRFBank();
+    }
+    if ((CurrentView == PICKBANKVIEW1) || (CurrentView == PICKBANKVIEW2))
+    {
+        SendValue((char *)"n0", Bank);
+        SendValue((char *)"n1", Bank);
+    }
+}
+
 #endif
