@@ -85,6 +85,7 @@
 #define MAXDUALRATE 200                       //
 #define MAXBUFFERSIZE 1024 * 6                //
 #define MAXMODELNUMBER 91                     //
+#define CRLF "\r\n"                           //
 #define RED_LED_ON_TIME 2000                  // How many ms of no connection before RED led comes on
 #define LOW_VOLTAGE_TIME 10000                // How many ms to endure low voltage before announcing it. (10 seconds)
 #define SHOWCOMMSDELAY 100                    // ms pauses between updated info on NEXTION

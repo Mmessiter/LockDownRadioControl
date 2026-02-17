@@ -27,12 +27,14 @@ void AddParameterstoQueue(uint8_t ID) // this queue is essentially a LIFO stack
 void SendInitialSetupParams() // This function sends the initial setup parameters.
 {                             // Failsafe and stabilisation parameters are NOT sent here because they are sent separately
 
+    
+    AddParameterstoQueue(MSP_BANK_CHANGE);    // for Rotorflight MSP Bank change
+    AddParameterstoQueue(MSP_RATES_CHANGE);   // for Rotorflight MSP Bank change
     AddParameterstoQueue(SERVO_PULSE_WIDTHS); // Servo Pulse Widths 7
     AddParameterstoQueue(SERVO_FREQUENCIES);  // Servo Frequencies 6
     AddParameterstoQueue(QNH_SETTING);        // QNH 2
     AddParameterstoQueue(GEAR_RATIO);         // Gear Ratio 8
-    AddParameterstoQueue(MSP_BANK_CHANGE);
-    AddParameterstoQueue(MSP_RATES_CHANGE);
+    
 }
 // ****************************************************************************
 void EncodeAFloat(float value)
@@ -159,10 +161,10 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
         Parameters.word[1] = 1;
         Parameters.word[2] = Bank | 0x80; // 0 to 3 new rates number RATES = BANK | 128 for now....
         break;
-    // case MSP_BANK_CHANGE_CONFIRMATION:      // 24 = I'm confirming that the bank change was successful (TX->RX)
-    //     Parameters.word[1] = DualRateInUse; // might be used later for rates change confirmation
-    //     Parameters.word[2] = Bank;          // 0 to 3 new bank number
-    //     break;
+        // case MSP_BANK_CHANGE_CONFIRMATION:      // 24 = I'm confirming that the bank change was successful (TX->RX)
+        //     Parameters.word[1] = DualRateInUse; // might be used later for rates change confirmation
+        //     Parameters.word[2] = Bank;          // 0 to 3 new bank number
+        //     break;
 
     default:
         break;

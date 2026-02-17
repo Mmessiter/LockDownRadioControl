@@ -847,7 +847,7 @@ void ClearText()
     {
         TextIn[i] = 0;
     }
- //   memset(TextIn, 0, sizeof(TextIn)); // Clear the text input buffer
+    //   memset(TextIn, 0, sizeof(TextIn)); // Clear the text input buffer
 }
 
 /*********************************************************************************************************************************/
@@ -1192,7 +1192,7 @@ void GetYesOrNo()
     while (Confirmed[0] == '?')
     { // await user response
         CheckForNextionButtonPress();
-        CheckPowerOffButton(); 
+        CheckPowerOffButton();
         KickTheDog();
         if (BoundFlag && ModelMatched)
         {
@@ -1246,21 +1246,21 @@ int GetIntFromTextIn(uint8_t offset)
 // ************************************************************************************************************/
 void ShowMismatchMsg()
 {
-    char MisMatchCommand[] = "vis Warning,1";
-    char wbon[] = "vis wb,1";
-    char SCon[] = "vis Owner,1";
+    if (CurrentView != FRONTVIEW)
+        GotoFrontView(); // if needed
+
+    char prompt[200];
     char TDetails[40];
     char RDetails[40];
-    strcpy(RDetails, (char *)"RX:");
+    strcpy(RDetails, (char *)"Versions mismatch!\r\n\r\nRX:");
     strcat(RDetails, ReceiverVersionNumber);
     strcpy(TDetails, (char *)"TX:");
     strcat(TDetails, TransmitterVersionNumber);
-    SendText((char *)"Warning", (char *)"!! ->Versions<- !!");
-    SendText((char *)"wb", TDetails);
-    SendText((char *)"Owner", RDetails);
-    SendCommand(MisMatchCommand);
-    SendCommand(wbon);
-    SendCommand(SCon);
+    strcpy(prompt, RDetails);
+    strcat(prompt, (char *)"\r\n");
+    strcat(prompt, TDetails);
+    MsgBox((char *)"page FrontView", prompt);
+
 }
 
 /************************************************************************************************************/
@@ -1268,8 +1268,9 @@ void ShowMismatchMsg()
 void WarnUserOfVersionsMismatch()
 {
     VersionMismatch = true;
-    ShowMismatchMsg();
     PlaySound(WHAHWHAHMSG); // Play warning sound
+    ShowMismatchMsg();
+  
 }
 
 /************************************************************************************************************/
@@ -1310,10 +1311,10 @@ void Save_BackGround()
 {
     BackGroundSelection = GetValue((char *)"n0");
     SaveTransmitterParameters();
-    StartTXSetupView(); 
+    StartTXSetupView();
 }
 // ************************************************************************************************************/
-//#define BUILD_ID_STR __DATE__ " " __TIME__ // EG "Feb 14 2026 13:31:06"
+// #define BUILD_ID_STR __DATE__ " " __TIME__ // EG "Feb 14 2026 13:31:06"
 
 static int monthFrom3(const char *m)
 {
