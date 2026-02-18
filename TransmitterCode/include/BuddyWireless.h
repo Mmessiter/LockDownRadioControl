@@ -8,7 +8,7 @@
 #define BUDDYWIRELESS_H
 
 #define LOSTCONTACTTHRESHOLD 1000 // 1000 fails in a row and we declare the buddy or master dead (5 seconds)
-#define ENCRYPT_KEY 0xFEADFEADBB // The encryption key is used for the Pipe address between the transmitters
+#define ENCRYPT_KEY 0xFEADFEADBB  // The encryption key is used for the Pipe address between the transmitters
 
 #define MASTER_HAS_CONTROL 0 // possible values for CurrentBuddyState
 #define SLAVE_HAS_CONTROL 1
@@ -45,6 +45,8 @@ bool LoadCorrectModel(uint64_t ModelID)
     {                                 //  Found it!
         UpdateModelsNameEveryWhere(); //  Show it everywhere.
         SaveAllParameters();          //  Save it
+        CheckModelName();             //  Check if the model name is valid and change it if not
+        DisplayModelImage();          //  Show the model image if it exists
         FailedID = 0;                 //  Reset the failed ID
         return true;                  //  Success
     }
@@ -167,7 +169,7 @@ void MasterDetected(bool Detected)
         if (LostMasterCount > LOSTCONTACTTHRESHOLD)
         {
             if (MasterIsAlive != 2)
-             { // MasterIsAlive = 2 means Master was already dead
+            { // MasterIsAlive = 2 means Master was already dead
                 SendText(wb, Mlost);
                 SendCommand(YesVisible);
                 MasterIsAlive = 2;
@@ -463,9 +465,11 @@ void GetSpecialPacket()
     char wb[] = "wb";                // wb is the name of the label on front view
     char YesVisible[] = "vis wb,1";
 
-    if (Radio1.available())
+    CheckPowerOffButton(); // Check if the power off button is pressed. If so, power off immediately without trying to receive the packet, which would cause a delay and a possible crash if the buddy is not present.
+
+        if (Radio1.available())
     {                                                                   // if a packet has arrived
-        if (Radio1.getDynamicPayloadSize() != sizeof SpecialPacketData) // MUST be sizeof SpecialPacketData (= 24!) 
+        if (Radio1.getDynamicPayloadSize() != sizeof SpecialPacketData) // MUST be sizeof SpecialPacketData (= 24!)
         {
             SendText(wb, ExsBd); // If not, declare an error: excess buddies !
             SendCommand(YesVisible);
@@ -487,8 +491,8 @@ void GetSpecialPacket()
         LastPassivePacketTime = millis(); // reset the timer
     }
     else
-    {                                                                                   // No packet arrived so maybe master's dead?
-        if (millis() - LastPassivePacketTime > ((uint32_t) SpecialPacketData.MasterPaceMaker)) 
+    { // No packet arrived so maybe master's dead?
+        if (millis() - LastPassivePacketTime > ((uint32_t)SpecialPacketData.MasterPaceMaker))
         {
             Radio1.stopListening();
             Radio1.setChannel(QUIETCHANNEL); // Set the recovery channel

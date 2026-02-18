@@ -99,7 +99,7 @@
                                               //                            FHSS BITS                                     *
                                               //***************************************************************************
 #define DATARATE RF24_250KBPS                 // RF24_250KBPS or RF24_1MBPS or RF24_2MBPS
-#define FASTDATARATE RF24_1MBPS               // 2 MBPS = RF24_2MBPS; 1 MBPS = RF24_1MBPS >> THIS IS FOR BUDDY ONLY <<
+#define FASTDATARATE RF24_2MBPS               // (WAS RF24_1MBPS) 2 MBPS = RF24_2MBPS; 1 MBPS = RF24_1MBPS >> THIS IS FOR BUDDY ONLY <<
 #define RETRYCOUNT 2                          // was 2. Auto retries inside nRF24L01. MAX is 15. Fails below 2.
 #define RETRYWAIT 1                           // was 1. 250us = Wait between retries (RetryWait+1 * 250us))
 #define QUIETCHANNEL 5                        // This was found to be the least busy channel in the 2.4GHz band in my house
@@ -856,6 +856,7 @@ void ReadSpeedsScreen(uint8_t bk);
 void ShowRatesAdvancedBank();
 void ShowPIDAdvancedBank();
 void LinkRatesToBanksChanged();
+void DisplayModelImage();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************

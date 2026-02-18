@@ -24,7 +24,7 @@ void CompareModelsIDs()
     */
     uint8_t SavedModelNumber = ModelNumber;
 
-    if (ModelMatched || BuddyPupilOnWireless || BuddyState == BUDDY_ON || ModelMatchFailed)
+    if (ModelMatched || BuddyPupilOnWireless || ModelMatchFailed)
         return; //  Don't do this if any of these are ON
 
     if (!AutoModelSelect)

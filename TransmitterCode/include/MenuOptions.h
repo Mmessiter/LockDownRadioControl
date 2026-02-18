@@ -357,7 +357,6 @@ void DisplayModelImage()
     strcat(temp, ModelImageFileName);
     strcat(temp, ".jpg\"");
     SendCommand(temp);
-    // Look(temp);
 }
 
 /******************************************************************************************************************************/

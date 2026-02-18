@@ -1164,6 +1164,8 @@ FLASHMEM void setup()
     GotoFrontView();
     RedLedOn();
     TXBuildAge = GetBuildDaysSince2020(); // days since 1st Jan 2020 for this build
+    Look(BUILD_ID_STR);
+    Look(TXBuildAge);
 }
 // **************************************************************************************************************************************************************
 void RationaliseBuddy()
@@ -1194,6 +1196,7 @@ void RationaliseBuddy()
     if (BuddyMasterOnWireless)
     {
         FHSS_data::PaceMaker = PACEMAKER_BUDDY;
+        LinkRatesToBanks = true;    
     }
 }
 /*********************************************************************************************************************************/

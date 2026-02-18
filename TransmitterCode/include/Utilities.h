@@ -1314,42 +1314,69 @@ void Save_BackGround()
     StartTXSetupView();
 }
 // ************************************************************************************************************/
-// #define BUILD_ID_STR __DATE__ " " __TIME__ // EG "Feb 14 2026 13:31:06"
+/// BUILD_ID_STR should be: __DATE__ " " __TIME__   e.g. "Feb 14 2026 13:31:06"
 
-static int monthFrom3(const char *m)
+static int monthFrom3(const char mmm[4])
 {
-    static const char *months = "JanFebMarAprMayJunJulAugSepOctNovDec";
-    const char *p = strstr(months, m);
-    return p ? (int)((p - months) / 3) + 1 : 0; // 1..12
+    // mmm is "Jan".."Dec"
+    if (mmm[0] == 'J' && mmm[1] == 'a' && mmm[2] == 'n')
+        return 1;
+    if (mmm[0] == 'F' && mmm[1] == 'e' && mmm[2] == 'b')
+        return 2;
+    if (mmm[0] == 'M' && mmm[1] == 'a' && mmm[2] == 'r')
+        return 3;
+    if (mmm[0] == 'A' && mmm[1] == 'p' && mmm[2] == 'r')
+        return 4;
+    if (mmm[0] == 'M' && mmm[1] == 'a' && mmm[2] == 'y')
+        return 5;
+    if (mmm[0] == 'J' && mmm[1] == 'u' && mmm[2] == 'n')
+        return 6;
+    if (mmm[0] == 'J' && mmm[1] == 'u' && mmm[2] == 'l')
+        return 7;
+    if (mmm[0] == 'A' && mmm[1] == 'u' && mmm[2] == 'g')
+        return 8;
+    if (mmm[0] == 'S' && mmm[1] == 'e' && mmm[2] == 'p')
+        return 9;
+    if (mmm[0] == 'O' && mmm[1] == 'c' && mmm[2] == 't')
+        return 10;
+    if (mmm[0] == 'N' && mmm[1] == 'o' && mmm[2] == 'v')
+        return 11;
+    if (mmm[0] == 'D' && mmm[1] == 'e' && mmm[2] == 'c')
+        return 12;
+    return 0;
 }
 
-// Returns an integer day index: 0 == 2020-01-01, 1 == 2020-01-02, etc.
-// Good for "is this build wildly older/newer?" comparisons.
-// Note: this is a rough calculation that doesn't handle leap years or month lengths, but it's good enough for "huge" differences.
-// ******************************************************************************************************************
+// Howard Hinnant's days-from-civil (public domain style; widely used)
+static int32_t daysFromCivil(int32_t y, uint32_t m, uint32_t d)
+{
+    y -= (m <= 2);
+    const int32_t era = (y >= 0 ? y : y - 399) / 400;
+    const uint32_t yoe = (uint32_t)(y - era * 400);                        // [0, 399]
+    const uint32_t doy = (153 * (m + (m > 2 ? -3u : 9u)) + 2) / 5 + d - 1; // [0, 365]
+    const uint32_t doe = yoe * 365 + yoe / 4 - yoe / 100 + doy;            // [0, 146096]
+    return era * 146097 + (int32_t)doe;                                    // days relative to an arbitrary origin
+}
+
 uint32_t GetBuildDaysSince2020()
 {
-    // BUILD_ID_STR like: "Feb 14 2026 13:31:06"
     const char *s = BUILD_ID_STR;
 
-    char mmm[4] = {s[0], s[1], s[2], 0};
-    int mm = monthFrom3(mmm);
+    // Parse: "Feb 14 2026 13:31:06"
+    char mmm[4] = {0};
+    int dd = 0, yyyy = 0;
 
-    int dd = (s[4] == ' ') ? (s[5] - '0')
-                           : ((s[4] - '0') * 10 + (s[5] - '0'));
+    // This ignores the time part safely.
+    if (sscanf(s, "%3s %d %d", mmm, &dd, &yyyy) != 3)
+        return 0;
 
-    int yyyy = (s[7] - '0') * 1000 + (s[8] - '0') * 100 + (s[9] - '0') * 10 + (s[10] - '0');
+    const int mm = monthFrom3(mmm);
+    if (mm < 1 || mm > 12 || dd < 1 || dd > 31 || yyyy < 1970)
+        return 0;
 
-    // Rough days since 2020-01-01:
-    // - 365 per year + 1 leap day every 4 years (close enough for your warning use)
-    // - month offsets assume non-leap years (again fine for "huge" differences)
-    int years = yyyy - 2020;
-    int leap = (years + 3) / 4; // approx leap days since 2020
+    const int32_t base = daysFromCivil(2020, 1, 1);
+    const int32_t cur = daysFromCivil(yyyy, (uint32_t)mm, (uint32_t)dd);
 
-    static const uint16_t cumDays[13] =
-        {0, 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334}; // non-leap
-
-    uint32_t days = (uint32_t)(years * 365 + leap + cumDays[mm] + (dd - 1));
-    return days;
+    // cur >= base for your builds; clamp just in case.
+    return (cur >= base) ? (uint32_t)(cur - base) : 0u;
 }
 #endif
