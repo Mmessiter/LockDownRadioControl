@@ -190,7 +190,7 @@ void ClearMostParameters()
     TotalLostPackets = 0;
     TotalPacketsAttempted = 0;
     ModelMatchFailed = false;
-    Rotorflight22Detected = false;
+
 
     if (CurrentView == FRONTVIEW)
     {
@@ -4931,7 +4931,7 @@ void FASTRUN ManageTransmitter()
     if (RightNow - LastTimeRead >= 1000)
     { // Only once a second for these..
 
-        // if (Rotorflight22Detected && BankCheckIsNeeded){
+        // if (Use_RotorFlight_Options && BankCheckIsNeeded){
         //     BankCheckIsNeeded = false;
         //     AddParameterstoQueue(MSP_BANK_CHANGE_CONFIRMATION); // This is to confirm that we are talking to Rotorflight 2.2 which needs this extra step to complete the bank change process.
         // }

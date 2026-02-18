@@ -1516,7 +1516,7 @@ bool Reading_RATES_Advanced_Now = false;
 
 char Rate_Types[6][15] = {"None", "Betaflight", "Raceflight", "KISS", "Actual", "QuickRates"};
 const float FactorTableRF[13] = {1, 10, 10, .01, 10, 10, .01, 10, 10, .01, .25, .25, .01}; // Factors for each RATES byte needed by Rotorflight
-bool Rotorflight22Detected = false;
+bool Use_RotorFlight_Options = false;
 char ModelImageFileName[9];
 bool Armed = false;
 

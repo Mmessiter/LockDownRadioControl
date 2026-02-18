@@ -465,6 +465,8 @@ bool ReadOneModel(uint32_t Mnum)
     }
     LinkRatesToBanks = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
+    Use_RotorFlight_Options = SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
    
     CheckOutPutChannels();
     CheckServoType();
@@ -1351,6 +1353,10 @@ void SaveOneModel(uint32_t mnum)
     }
     SDUpdate8BITS(SDCardAddress, LinkRatesToBanks);
     ++SDCardAddress;
+    SDUpdate8BITS(SDCardAddress, Use_RotorFlight_Options);
+    ++SDCardAddress;
+
+
     SaveCheckSum32(); // Save the Model parametres checksm
 
     // ********************** Add more

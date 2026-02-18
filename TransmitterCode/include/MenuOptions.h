@@ -357,7 +357,7 @@ void DisplayModelImage()
     strcat(temp, ModelImageFileName);
     strcat(temp, ".jpg\"");
     SendCommand(temp);
-   // Look(temp);
+    // Look(temp);
 }
 
 /******************************************************************************************************************************/
@@ -1006,19 +1006,19 @@ void CheckModelImageFileName() // If the file doesn't exist then set to Noimage 
     char temp[30];
     strncpy(temp, ModelImageFileName, sizeof(temp) - 1);
     temp[sizeof(temp) - 1] = '\0';
-    if (strlen(temp) <= 8)   
-    strcat(temp, ".jpg");
+    if (strlen(temp) <= 8)
+        strcat(temp, ".jpg");
     if (!NextionFileExistsOnSD(temp, false))
         strcpy(ModelImageFileName, "Noimage");
 
-   // Look1(ModelImageFileName);
-   // Look(" Checked");
+    // Look1(ModelImageFileName);
+    // Look(" Checked");
 }
 /******************************************************************************************************************************/
 
 void RXOptionsViewStart() // model Options screen
 {
-  
+
     char UseKill[] = "c0";
     char Mchannel[] = "n1";
     char Mvalue[] = "n0";
@@ -1030,9 +1030,18 @@ void RXOptionsViewStart() // model Options screen
     char n4[] = "n4"; // TimerDownwards timer minutes
     char c2[] = "c2"; // TimerDownwards timer on off
 
-
     SendCommand(pRXSetup1);
     CurrentView = RXSETUPVIEW1;
+
+    if (Use_RotorFlight_Options)
+    {
+        SendCommand((char*)"vis b1,1");
+    }
+    else
+    {
+        SendCommand((char*)"vis b1,0");
+    }
+
     SendValue(c1, CopyTrimsToAll);
     SendValue(n3, TrimMultiplier);
     snprintf(Vbuf, 5, "%1.2f", StopFlyingVoltsPerCell);
@@ -1043,7 +1052,7 @@ void RXOptionsViewStart() // model Options screen
     SendValue(RxVCorrextion, RxVoltageCorrection);
     SendValue(c2, TimerDownwards);
     SendValue(n4, TimerStartTime / 60);
-    SendCommand(pRXSetup1); // this just sets grey here and there when options are off
+    SendValue((char *)"sw0", Use_RotorFlight_Options);
     CheckModelImageFileName();
     DisplayModelImage();
     UpdateModelsNameEveryWhere();
@@ -1063,7 +1072,6 @@ void RXOptionsViewEnd()
     char n3[] = "n3";
     char n4[] = "n4"; // TimerDownwards timer minutes
     char c2[] = "c2"; // TimerDownwards timer on off
- 
 
     char ProgressStart[] = "vis Progress,1";
     char Progress[] = "Progress";
@@ -1089,6 +1097,7 @@ void RXOptionsViewEnd()
     TimerDownwards = GetValue(c2);
     SendValue(Progress, 70);
     TimerStartTime = GetValue(n4) * 60;
+    Use_RotorFlight_Options = GetValue((char *)"sw0");
     SendValue(Progress, 100);
     CurrentView = RXSETUPVIEW;
     PreviousBank = 42;

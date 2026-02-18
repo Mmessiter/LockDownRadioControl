@@ -172,7 +172,7 @@ void ReadDualRateSwitch()
             DualRateInUse = 4;
     }
 
-    if (LinkRatesToBanks && Rotorflight22Detected)
+    if (LinkRatesToBanks && Use_RotorFlight_Options)
     {
         DualRateInUse = Bank; // if linked, DualRateInUse is the same as Bank number
     }
@@ -195,7 +195,7 @@ void ReadDualRateSwitch()
         break;
     }
 
-    if (Rotorflight22Detected)
+    if (Use_RotorFlight_Options)
     {
         DualRateValue = 100;
     }
@@ -310,7 +310,7 @@ void BankHasChanged()
         UpdateTrimView();
     }
 
-    if (Rotorflight22Detected)
+    if (Use_RotorFlight_Options)
     { // msp bank change
         AddParameterstoQueue(MSP_BANK_CHANGE);
         if (LinkRatesToBanks)
@@ -319,7 +319,7 @@ void BankHasChanged()
             AddParameterstoQueue(MSP_RATES_CHANGE); // and maybe rates change too if linked
             ShowRatesBank();
         }
-        //BankCheckIsNeeded = true; // this tells the Ack payload parser to check that the bank change was successful
+        // BankCheckIsNeeded = true; // this tells the Ack payload parser to check that the bank change was successful
     }
 
     if (UseLog)
