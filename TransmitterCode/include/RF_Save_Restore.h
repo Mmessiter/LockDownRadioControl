@@ -113,9 +113,9 @@ void Restore_SOME_RF_Parameters()
             Which_Case_Now = 6; // skip to next if not doing RATES
             break;
         }
-        strcpy(msg, "Restoring Rates: LocalBank ");
+        strcpy(msg, "Restoring Rates: LocalRate ");
         strcat(msg, NB1);
-        strcat(msg, " to FC Bank ");
+        strcat(msg, " to FC Rates ");
         strcat(msg, NB);
         SendText(t2, msg);
         for (int i = 0; i < MAX_RATES_BYTES; ++i)
@@ -137,9 +137,9 @@ void Restore_SOME_RF_Parameters()
             Which_Case_Now = 150; // skip to next if not doing RATES ADVANCED
             break;
         }
-        strcpy(msg, "Restoring Rates Advanced: LocalBank ");
+        strcpy(msg, "Restoring Rates Advanced: LocalRates ");
         strcat(msg, NB1);
-        strcat(msg, " to FC Bank ");
+        strcat(msg, " to FC Rates ");
         strcat(msg, NB);
         SendText(t2, msg);
         for (int i = 0; i < MAX_RATES_ADVANCED_BYTES; ++i)
@@ -269,9 +269,9 @@ void Save_SOME_RF_Parameters()
             Which_Case_Now = 9; // skip to next if not doing RATES
             break;
         }
-        strcpy(msg, "Saving Rates: FC Bank ");
+        strcpy(msg, "Saving Rates: FC Rates ");
         strcat(msg, NB);
-        strcat(msg, " to LocalBank ");
+        strcat(msg, " to LocalRates ");
         strcat(msg, NB1);
         SendText(t2, msg);
         RATES_Send_Duration = MSP_WAIT_TIME;     // how many milliseconds to await RATES values
@@ -297,9 +297,9 @@ void Save_SOME_RF_Parameters()
             Which_Case_Now = 200; // skip to next if not doing Advanced RATES
             break;
         }
-        strcpy(msg, "Saving Advanced Rates: FC Bank ");
+        strcpy(msg, "Saving Advanced Rates: FC Rates ");
         strcat(msg, NB);
-        strcat(msg, " to LocalBank ");
+        strcat(msg, " to LocalRates ");
         strcat(msg, NB1);
         SendText(t2, msg);
         Rates_Advanced_Send_Duration = MSP_WAIT_TIME;     // how many milliseconds to await RATES Advanced values
@@ -360,6 +360,7 @@ void Collect_data_from_dialog() // and close it
     SendCommand((char *)"page RFView");
     CurrentView = ROTORFLIGHTVIEW;
     ShowRFBank();
+    ShowRFRate();
 }
 // ************************************************************************************************************/
 void RestoreRFParameters() // show dialog to pick bank and params to save
@@ -392,6 +393,8 @@ void SaveRFParameters() // show dialog to pick bank and params to save
 // ************************************************************************************************************/
 void Start_RESTORE()
 {
+    bool PreviousLinkRatesToBanks = LinkRatesToBanks;
+    LinkRatesToBanks = true;
     BlockBankChanges = true;
     Collect_data_from_dialog();            // get bank number and which params to save
     Which_Case_Now = 0;                    // start saving first bank
@@ -401,10 +404,14 @@ void Start_RESTORE()
     SendValue((char *)"Progress", ProgressSoFar);
     DelayWithDog(MSP_WAIT_TIME); // allow time for progress bar to update before starting to send values to FC
     CurrentMode = RESTORE_RF_SETTINGS;
+    LinkRatesToBanks = PreviousLinkRatesToBanks;
 }
 // ************************************************************************************************************/
 void Start_SAVE()
 {
+    bool PreviousLinkRatesToBanks = LinkRatesToBanks;
+    LinkRatesToBanks = true;
+
     BlockBankChanges = true;
     Collect_data_from_dialog();            // get bank number and which params to save
     Which_Case_Now = 0;                    // start saving first bank
@@ -414,6 +421,7 @@ void Start_SAVE()
     SendValue((char *)"Progress", ProgressSoFar);
     DelayWithDog(MSP_WAIT_TIME); // allow time for progress bar to update before starting to send values to FC
     CurrentMode = SAVE_RF_SETTINGS;
+    LinkRatesToBanks = PreviousLinkRatesToBanks;
 }
 // ************************************************************************************************************/
 void Cancel_SAVE()
@@ -421,6 +429,7 @@ void Cancel_SAVE()
     SendCommand((char *)"page RFView");
     CurrentView = ROTORFLIGHTVIEW;
     ShowRFBank();
+    ShowRFRate();
     BlockBankChanges = false;
 }
 // ************************************************************************************************************/
@@ -429,6 +438,7 @@ void Cancel_RESTORE()
     SendCommand((char *)"page RFView");
     CurrentView = ROTORFLIGHTVIEW;
     ShowRFBank();
+    ShowRFRate();
     BlockBankChanges = false;
 }
 

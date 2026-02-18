@@ -217,6 +217,10 @@ void ReadDualRateSwitch()
         {
             ShowRatesAdvancedBank();
         }
+        if (CurrentView == ROTORFLIGHTVIEW)
+        {
+            ShowRFRate();
+        }
 
         if (AnnounceBanks)
         {
@@ -348,14 +352,6 @@ void BankHasChanged()
     {
         ShowPIDBank();
     }
-    // if (CurrentView == RATESVIEW_RF)
-    // {
-    //     ShowRatesBank();
-    // }
-    // if (CurrentView == RATESADVANCEDVIEW) // heer
-    // {
-    //     ShowRatesAdvancedBank();
-    // }
     if (CurrentView == PIDADVANCEDVIEW)
     {
         ShowPIDAdvancedBank();
@@ -363,6 +359,7 @@ void BankHasChanged()
     if (CurrentView == ROTORFLIGHTVIEW)
     {
         ShowRFBank();
+        ShowRFRate();
     }
     if ((CurrentView == PICKBANKVIEW1) || (CurrentView == PICKBANKVIEW2))
     {

@@ -7,6 +7,16 @@
 #include <Arduino.h>
 #include "1Definitions.h"
 
+void ShowRFRate()
+{
+    char NB[10];
+    Str(NB, DualRateInUse, 0);
+    char msg[70];
+    strcpy(msg, "Rate ");
+    strcat(msg, NB);
+    SendText((char *)"t8", msg);
+}
+
 // **********************************************************************************************************/
 void ShowRFBank()
 {
@@ -35,6 +45,7 @@ void RotorFlightStart()
     SendText(t7, Vbuf);
     SendValue((char *)"sw0", LinkRatesToBanks);
     ShowRFBank();
+    ShowRFRate();
 }
 
 // **********************************************************************************************************/

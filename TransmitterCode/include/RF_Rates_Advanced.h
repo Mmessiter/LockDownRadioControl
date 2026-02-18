@@ -161,6 +161,7 @@ void EndRatesAdvancedView()
         SendCommand((char *)"page RFView");
         CurrentView = ROTORFLIGHTVIEW;
         ShowRFBank();
+        ShowRFRate();
     }
 }
 // ************************************************************************************************************/

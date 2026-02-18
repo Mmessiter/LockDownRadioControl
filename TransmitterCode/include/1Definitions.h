@@ -821,6 +821,7 @@ void Save_SOME_RF_Parameters();
 void Restore_SOME_RF_Parameters();
 void SoundBank();
 void ShowRFBank();
+void ShowRFRate();
 void Start_RESTORE();
 void Cancel_RESTORE();
 void Start_SAVE();

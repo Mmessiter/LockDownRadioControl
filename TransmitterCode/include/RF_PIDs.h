@@ -236,6 +236,7 @@ void EndPIDView()
         SendCommand((char *)"page RFView");
         CurrentView = ROTORFLIGHTVIEW;
         ShowRFBank();
+        ShowRFRate();
     }
 }
 #endif

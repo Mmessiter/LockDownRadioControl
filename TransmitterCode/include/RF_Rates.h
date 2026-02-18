@@ -224,6 +224,7 @@ void EndRFRatesView()
     SendCommand((char *)"page RFView");
     CurrentView = ROTORFLIGHTVIEW;
     ShowRFBank();
+    ShowRFRate();
     BlockBankChanges = false;
 }
 // ************************************************************************************************************/

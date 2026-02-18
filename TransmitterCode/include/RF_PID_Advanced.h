@@ -214,6 +214,7 @@ void EndPIDsAdvancedView()
         SendCommand((char *)"page RFView");
         CurrentView = ROTORFLIGHTVIEW;
         ShowRFBank();
+        ShowRFRate();
     }
 }
 #endif // PIDADVANCED_H
