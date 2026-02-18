@@ -30,7 +30,7 @@ void SaveRatesLocalBank()
     Rate_Values[0] = 4; // set to "Actual" type
     for (int i = 0; i < MAX_RATES_BYTES; ++i)
     {
-        Saved_Rate_Values[i][Bank - 1] = Rate_Values[i];
+        Saved_Rate_Values[i][DualRateInUse - 1] = Rate_Values[i];
     }
     SaveOneModel(ModelNumber);       // save all to SD card
     HideRATESMsg();                  // ...because this queue is a LIFO stack
@@ -128,7 +128,7 @@ void ShowRatesLocalBank()
 {
     for (int i = 0; i < MAX_RATES_BYTES; ++i)
     {
-        float ThisValue = (Saved_Rate_Values[i][Bank - 1] * FactorTableRF[i]); // MULTIPLY BY factor to get display value
+        float ThisValue = (Saved_Rate_Values[i][DualRateInUse -1] * FactorTableRF[i]); // MULTIPLY BY factor to get display value
         char temp[10];
         if (ThisValue == int(ThisValue))
         {
@@ -147,7 +147,7 @@ void ShowRatesLocalBank()
         }
         if (i == 0)
         {
-            SendText(RatesWindows[0], Rate_Types[Saved_Rate_Values[0][Bank - 1]]); // Show rates type but it cannot be edited here
+            SendText(RatesWindows[0], Rate_Types[Saved_Rate_Values[0][DualRateInUse -1]]); // Show rates type but it cannot be edited here
         }
         else
         {
