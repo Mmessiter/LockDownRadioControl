@@ -16,7 +16,7 @@
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 5
 #define RXVERSION_MINIMUS 6
-#define RXVERSION_EXTRA 'B' // 14th February 2026
+#define RXVERSION_EXTRA 'C' // 18th February 2026
 #define HOPTIME 8           // gives about 100Hz FHSS
 
 // **************************************************************************
