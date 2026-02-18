@@ -3231,7 +3231,7 @@ void CheckAllModelIds()
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!  ( Use "NUMBER<<8" )
-#define LASTFUNCTION1 47 // One more than final one
+#define LASTFUNCTION1 48 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])(){
     Blank,                   // 0 Cannot be used
@@ -3256,8 +3256,8 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     SendEditedPIDs,          // 19
     PIDs_Were_edited,        // 20
     EndPIDView,              // 21
-    StartRatesView,          // 22
-    EndRatesView,            // 23
+    StartRFRatesView,        // 22
+    EndRFRatesView,          // 23
     RatesWereEdited,         // 24
     SendEditedRates,         // 25
     RotorFlightStart,        // 26
@@ -3280,7 +3280,8 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     Save_BackGround,         // 43
     StartChooseImage,        // 44
     EndChooseImage,          // 45
-    ImageScrollStop          // 46
+    ImageScrollStop,         // 46
+    LinkRatesToBanksChanged  // 47
 
 };
 
@@ -4929,14 +4930,12 @@ void FASTRUN ManageTransmitter()
 
     if (RightNow - LastTimeRead >= 1000)
     { // Only once a second for these..
-        
-        
+
         // if (Rotorflight22Detected && BankCheckIsNeeded){
         //     BankCheckIsNeeded = false;
         //     AddParameterstoQueue(MSP_BANK_CHANGE_CONFIRMATION); // This is to confirm that we are talking to Rotorflight 2.2 which needs this extra step to complete the bank change process.
         // }
-        
-        
+
         if (VersionMismatch)
         {
             ShowMismatchMsg(); // Show version mismatch message if needed
@@ -4985,7 +4984,7 @@ void FixMotorChannel()
     }
 }
 //************************************************************************************************************/
-void SendArmingChannel() 
+void SendArmingChannel()
 {
     uint16_t ArmValue[2] = {667, 2233}; // these are the values at the arming switch would give
     if (!BuddyPupilOnWireless)

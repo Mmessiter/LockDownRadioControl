@@ -17,6 +17,7 @@ void ShowRFBank()
     strcat(msg, NB);
     SendText((char *)"t14", msg);
 }
+
 // **********************************************************************************************************/
 void RotorFlightStart()
 {
@@ -32,8 +33,10 @@ void RotorFlightStart()
     SendText(t12, Vbuf);
     snprintf(Vbuf, 5, "%d", ArmingChannel);
     SendText(t7, Vbuf);
+    SendValue((char *)"sw0", LinkRatesToBanks);
     ShowRFBank();
 }
+
 // **********************************************************************************************************/
 void RotorFlightEnd()
 {
@@ -42,9 +45,16 @@ void RotorFlightEnd()
     GearRatio = atof(temp);
     GetText((char *)"t7", temp);
     ArmingChannel = atoi(temp);
+    LinkRatesToBanks = GetValue((char *)"sw0");
     SaveOneModel(ModelNumber); // save the model including gear ratio and arming channel
     ZeroDataScreen();          // clear the screen data because editing Rotorflight parameters may have created misleading comms gaps
     RXOptionsViewStart();      // go back to RX Options view
+}
+// **********************************************************************************************************/
+void LinkRatesToBanksChanged()
+{
+    LinkRatesToBanks = GetValue((char *)"sw0");
+    SaveOneModel(ModelNumber); // save the model including LinkRatesToBanks
 }
 
 #endif // RotorFlight_H

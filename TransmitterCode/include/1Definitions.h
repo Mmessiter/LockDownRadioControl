@@ -270,7 +270,7 @@
 #define GAPSVIEW 43
 #define SPLASHVIEW 44
 #define PIDVIEW 45
-#define RATESVIEW1 46
+#define RATESVIEW_RF 46
 #define ROTORFLIGHTVIEW 47
 #define RATESADVANCEDVIEW 48
 #define PIDADVANCEDVIEW 49
@@ -788,8 +788,8 @@ void SendColour(char *but, int Colour);
 void SendEditedPIDs();
 void PIDs_Were_edited();
 void EndPIDView();
-void StartRatesView();
-void EndRatesView();
+void StartRFRatesView();
+void EndRFRatesView();
 void RatesWereEdited();
 void SendEditedRates();
 void DisplayRatesValues(uint8_t startIndex, uint8_t stopIndex);
@@ -854,7 +854,7 @@ FASTRUN void DisplayCurveAndServoPos();
 void ReadSpeedsScreen(uint8_t bk);
 void ShowRatesAdvancedBank();
 void ShowPIDAdvancedBank();
-
+void LinkRatesToBanksChanged();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************
@@ -1438,7 +1438,7 @@ char SearchFile[80]; // used for searching files on SD card after adding path to
 #define MAX_PIDS_ADVANCED_BYTES 26  // 26 bytes (Total = 78 bytes)
 
 char RatesWindows[MAX_RATES_BYTES][5] = {"t10", "tn0", "tn1", "tn2", "tn3", "tn4", "tn5", "tn6", "tn7", "tn8", "tn9", "tn10", "tn11"};
-
+bool LinkRatesToBanks = false;
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
 // **********************************************************************************************************************************

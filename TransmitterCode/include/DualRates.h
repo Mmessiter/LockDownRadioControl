@@ -237,6 +237,13 @@ void DualRatesRefresh()
 
 void DualRatesStart()
 {
+
+    if (Rotorflight22Detected)
+    {
+        MsgBox(pRXSetupView,(char *)"Please use the RotorFlight rates option.");
+        return;
+    }
+
     char GotoDualRates[] = "page DualRatesView";
     SendCommand(GotoDualRates);
     CurrentView = DUALRATESVIEW;

@@ -21,7 +21,8 @@ void ReadEditedRateValues()
 }
 
 // ************************************************************************************************************/
-void SaveRatesLocalBank(){
+void SaveRatesLocalBank()
+{
 
     RatesMsg((char *)"Saving edited Rates ...", Gray); // Show sending message
     Rates_Were_Edited = false;
@@ -101,12 +102,12 @@ void ForegroundColourRATESLabels(uint16_t Colour)
 // ********************************************************************************************************
 void RatesMsg(const char *msg, uint16_t Colour)
 {
-    if (CurrentView == RATESVIEW1) // Must be in RATES view
+    if (CurrentView == RATESVIEW_RF) // Must be in RATES view
     {
         ForegroundColourRATESLabels(Colour);   // make text white so it isn't visible
         SendText((char *)"busy", (char *)msg); // Show RATES message
         SendCommand((char *)"vis busy,1");     // Make it visible
-        SendCommand((char *)"vis b2,0");        // Make Advanced invisible
+        SendCommand((char *)"vis b2,0");       // Make Advanced invisible
         SendCommand((char *)"vis b3,0");       // hide "Send" button
     }
 }
@@ -114,7 +115,7 @@ void RatesMsg(const char *msg, uint16_t Colour)
 // ************************************************************************************************************/
 void HideRATESMsg()
 {
-    if (CurrentView == RATESVIEW1) // Must be in RATES view
+    if (CurrentView == RATESVIEW_RF) // Must be in RATES view
     {
         SendCommand((char *)"vis busy,0");  // Hide  message
         SendCommand((char *)"vis b2,1");    // Make Advanced visible
@@ -161,43 +162,43 @@ void ShowRatesLocalBank()
 
 void ShowRatesBank()
 {
-    if (CurrentView == RATESVIEW1) // Must be in RATES view
+    if (CurrentView == RATESVIEW_RF) // Must be in RATES view
     {
         char buf[40];
-        SendText((char *)"t9", BankNames[BanksInUse[Bank - 1]]); // Show bank number etc
+        char Rmsg[50];
+        char NB[10];
+
+        snprintf(Rmsg, sizeof(Rmsg), "Rate %u", (unsigned)DualRateInUse);
+        SendText((char *)"t9", Rmsg); // Show rate number etc
+
         if (LedWasGreen)
         {
-            strcpy(buf, "Loading rates for ");
-            strcat(buf, BankNames[BanksInUse[Bank - 1]]);
+            strcpy(buf, "Loading rates for Rate ");
+            strcat(buf, Str(NB, DualRateInUse, 0));
         }
         else
         {
-          ShowRatesLocalBank(); // Model not connected so show local saved RATES
+            ShowRatesLocalBank(); // Model not connected so show local saved RATES
             return;
         }
-       
+
         if (Rates_Were_Edited) // if RATES were edited but not sent and bank changed
         {
-            char Wmsg[120];
-            char w1[] = "Rates for "; 
-            char w2[] = " were edited \r\nbut not saved. (Too late now!)\r\nSo you may want to check them.";
-            strcpy(Wmsg, w1);
-            strcat(Wmsg, BankNames[BanksInUse[Bank - 1]]);
-            strcat(Wmsg, w2);
-            MsgBox((char *)"page RatesView", Wmsg); // Warn about unsaved edits
+            char w1[] = "Values for last Rate were edited \r\nbut not saved.(Too late now !)\r\nSo you may want to check them.";  
+            MsgBox((char *)"page RatesView", w1); // Warn about unsaved edits
         }
         RatesMsg(buf, Gray);
         BlockBankChanges = true;
-        RATES_Send_Duration = MSP_WAIT_TIME;                     // how many milliseconds to await RATES values
-        Reading_RATES_Now = true;                                // This tells the Ack payload parser to get RATES values
-        AddParameterstoQueue(SEND_RATES_VALUES);                 // Request RATES values from RX
-        RATES_Start_Time = millis();                             // record start time as it's not long
-        Rates_Were_Edited = false;                               // reset edited flag
+        RATES_Send_Duration = MSP_WAIT_TIME;     // how many milliseconds to await RATES values
+        Reading_RATES_Now = true;                // This tells the Ack payload parser to get RATES values
+        AddParameterstoQueue(SEND_RATES_VALUES); // Request RATES values from RX
+        RATES_Start_Time = millis();             // record start time as it's not long
+        Rates_Were_Edited = false;               // reset edited flag
     }
 }
 
 // ******************************************************************************************************************************/
-void StartRatesView()
+void StartRFRatesView()
 {
     if (SendBuffer[ArmingChannel - 1] > 1000) // Safety is on if value > 1000
     {
@@ -206,13 +207,13 @@ void StartRatesView()
         return;
     }
     SendCommand((char *)"page RatesView");
-    CurrentView = RATESVIEW1;
+    CurrentView = RATESVIEW_RF;
     ShowRatesBank();                    // Show the current bank's RATES
     SendText((char *)"t11", ModelName); // Show model name
     Rates_Were_Edited = false;
 }
 // ******************************************************************************************************************************/
-void EndRatesView()
+void EndRFRatesView()
 {
     if (Rates_Were_Edited)
     {

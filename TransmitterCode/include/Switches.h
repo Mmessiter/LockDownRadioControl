@@ -172,6 +172,11 @@ void ReadDualRateSwitch()
             DualRateInUse = 4;
     }
 
+    if (LinkRatesToBanks && Rotorflight22Detected)
+    {
+        DualRateInUse = Bank; // if linked, DualRateInUse is the same as Bank number
+    }
+
     // Assign actual dual rate value
     switch (DualRateInUse)
     {
@@ -190,13 +195,28 @@ void ReadDualRateSwitch()
         break;
     }
 
+    if (Rotorflight22Detected)
+    {
+        DualRateValue = 100;
+    }
+
     // Respond to a change
     if (PreviousDualRateInUse != DualRateInUse)
     {
+        AddParameterstoQueue(MSP_RATES_CHANGE); //
         PreviousDualRateInUse = DualRateInUse;
         LogNewRateInUse();
         LastShowTime = 0;
-        LastTimeRead = 0;
+        LastTimeRead = 0; // heer
+
+        if (CurrentView == RATESVIEW_RF)
+        {
+            ShowRatesBank();
+        }
+        if (CurrentView == RATESADVANCEDVIEW) // heer
+        {
+            ShowRatesAdvancedBank();
+        }
 
         if (AnnounceBanks)
         {
@@ -287,10 +307,15 @@ void BankHasChanged()
     }
 
     if (Rotorflight22Detected)
-    {                                           // msp bank change
-        AddParameterstoQueue(MSP_BANK_CHANGE);  // BANK_CHANGE is the ID for the bank change command
-        AddParameterstoQueue(MSP_RATES_CHANGE); // 1 is the ID for the ROTORFLIGHT_BANK parameters
-        BankCheckIsNeeded = true;               // this tells the Ack payload parser to check that the bank change was successful
+    { // msp bank change
+        AddParameterstoQueue(MSP_BANK_CHANGE);
+        if (LinkRatesToBanks)
+        {
+            DualRateInUse = Bank;                   // if linked, DualRateInUse is the same as Bank number
+            AddParameterstoQueue(MSP_RATES_CHANGE); // and maybe rates change too if linked
+            ShowRatesBank();
+        }
+        //BankCheckIsNeeded = true; // this tells the Ack payload parser to check that the bank change was successful
     }
 
     if (UseLog)
@@ -323,14 +348,14 @@ void BankHasChanged()
     {
         ShowPIDBank();
     }
-    if (CurrentView == RATESVIEW1)
-    {
-        ShowRatesBank();
-    }
-    if (CurrentView == RATESADVANCEDVIEW)
-    {
-        ShowRatesAdvancedBank();
-    }
+    // if (CurrentView == RATESVIEW_RF)
+    // {
+    //     ShowRatesBank();
+    // }
+    // if (CurrentView == RATESADVANCEDVIEW) // heer
+    // {
+    //     ShowRatesAdvancedBank();
+    // }
     if (CurrentView == PIDADVANCEDVIEW)
     {
         ShowPIDAdvancedBank();

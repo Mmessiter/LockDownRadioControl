@@ -463,6 +463,8 @@ bool ReadOneModel(uint32_t Mnum)
         ModelImageFileName[i] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
+    LinkRatesToBanks = SDRead8BITS(SDCardAddress);
+    ++SDCardAddress;
    
     CheckOutPutChannels();
     CheckServoType();
@@ -1347,7 +1349,8 @@ void SaveOneModel(uint32_t mnum)
         SDUpdate8BITS(SDCardAddress, ModelImageFileName[i]);
         ++SDCardAddress;
     }
-
+    SDUpdate8BITS(SDCardAddress, LinkRatesToBanks);
+    ++SDCardAddress;
     SaveCheckSum32(); // Save the Model parametres checksm
 
     // ********************** Add more

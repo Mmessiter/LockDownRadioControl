@@ -90,18 +90,23 @@ void ShowRatesAdvancedBank()
 {
     if (CurrentView != RATESADVANCEDVIEW) // Must be in  RATESADVANCEDVIEW
         return;
-    SendText((char *)"t9", BankNames[BanksInUse[Bank - 1]]); // Show bank number etc
+    char NB[10];
+    char buf[60];
+
+    strcpy(buf, "Rate ");
+    strcat(buf, Str(NB, DualRateInUse, 0));
+    SendText((char *)"t9", buf); // Show bank number etc
     if (!(LedWasGreen))
     {
         ShowLocalRatesAdvancedBank();
         return;
     }
 
-    char buf[40];
+    
     if (LedWasGreen)
     {
-        strcpy(buf, "Loading values for ");
-        strcat(buf, BankNames[BanksInUse[Bank - 1]]);
+        strcpy(buf, "Loading values for Rate ");
+        strcat(buf,Str(NB, DualRateInUse, 0));
     }
     else
     {
@@ -109,13 +114,10 @@ void ShowRatesAdvancedBank()
     }
     if (Rates_Advanced_Were_Edited) // if RATES were edited but not sent and bank changed
     {
-        char Wmsg[120];
-        char w1[] = "Values for ";
-        char w2[] = " were edited \r\nbut not saved. (Too late now!)\r\nSo you may want to check them.";
-        strcpy(Wmsg, w1);
-        strcat(Wmsg, BankNames[BanksInUse[Bank - 1]]);
-        strcat(Wmsg, w2);
-        MsgBox((char *)"page Rates_A_View", Wmsg); // Warn about unsaved edits
+        {
+            char w1[] = "Values for last Rate were edited \r\nbut not saved.(Too late now !)\r\nSo you may want to check them.";
+            MsgBox((char *)"page Rates_A_View", w1); // Warn about unsaved edits
+        }
     }
     RatesAdvancedMsg(buf, Gray);
     Rates_Advanced_Send_Duration = MSP_WAIT_TIME;     // how many milliseconds to await RATES values

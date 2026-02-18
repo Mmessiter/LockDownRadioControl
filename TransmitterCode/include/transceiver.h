@@ -964,7 +964,7 @@ void ReadRatesBytesFromAckPayload(uint8_t n, uint8_t m)
             ++p;
         }
     }
-    if (CurrentView == RATESVIEW1)
+    if (CurrentView == RATESVIEW_RF)
         DisplayRatesValues(n, m);
 }
 // ******************************************************************************************
