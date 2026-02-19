@@ -857,6 +857,7 @@ void ShowRatesAdvancedBank();
 void ShowPIDAdvancedBank();
 void LinkRatesToBanksChanged();
 void DisplayModelImage();
+void BankHasChanged();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************

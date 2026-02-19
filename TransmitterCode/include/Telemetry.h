@@ -170,7 +170,7 @@ void ShowCurrentRate()
     char rate1[] = "Rate 1";
     char rate2[] = "Rate 2";
     char rate3[] = "Rate 3";
-    //  char rate4[] = "      ";
+    char rate4[] = "Rate 4";
 
     switch (DualRateInUse)
     {
@@ -187,8 +187,10 @@ void ShowCurrentRate()
         SendCommand((char *)"vis rate,1");
         break;
     case 4:
-        // SendText(rate, rate4); // rates not in use = 4
-        SendCommand((char *)"vis rate,0");
+        if (LinkRatesToBanks)
+            SendText(rate, rate4); 
+        else
+            SendCommand((char *)"vis rate,0");
         break;
     default:
         break;
