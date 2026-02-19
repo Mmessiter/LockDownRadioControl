@@ -9,32 +9,31 @@
 #ifndef CHOOSEIMAGE_H
 #define CHOOSEIMAGE_H
 // *********************************************************************************************************************************/
-void ShowCurrentlySelectedImage()
+char *GetModelImageFileName(char *fname)
 {
-    char newfname[20];
     FileNumberInView = GetValue((char *)"MMems");
     for (int i = 0; i < 12; ++i)
     {
-        newfname[i] = TheFilesList[FileNumberInView][i];
+        fname[i] = TheFilesList[FileNumberInView][i];
         if (TheFilesList[FileNumberInView][i + 1] == '.')
         {
-            newfname[i + 1] = 0;
+            fname[i + 1] = 0;
             break;
         }
     }
-    strcpy(ModelImageFileName, newfname);
-    CheckModelImageFileName();
-    DisplayModelImage();
+    return fname;
 }
 
 // *************************************************************************************************************************/
 
 void ImageScrollStop() // finger lifted from the screen, so stop scrolling and show the currently selected image
 {
-    for (int i = 0; i < 10; ++i) // display the image repeatedly for a second as it's often slow to respond.
+    DisplayModelImage();        // show the currently selected image
+    for (int i = 0; i < 5; ++i) // display the image repeatedly for a second as it's often slow to respond.
     {
-        ShowCurrentlySelectedImage();
-        DelayWithDog(100);
+        DelayWithDog(100);                         // delay for a 0.1 second while kicking the dog and checking for power off button
+        GetModelImageFileName(ModelImageFileName); // get the currently selected image file name
+        DisplayModelImage();                       // show the currently selected image
     }
 }
 

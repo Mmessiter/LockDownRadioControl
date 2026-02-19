@@ -1696,7 +1696,6 @@ void SetDefaultValues()
             Saved_PID_Advanced_Values[i][j] = 0;
     }
     strcpy(ModelImageFileName, "Noimage");
-    CheckModelImageFileName();
     DisplayModelImage();
     ModelDefined = 42;
 }
@@ -2153,7 +2152,6 @@ void BindNow()
     Connected = true;
     if (CurrentView == FRONTVIEW)
     {
-        CheckModelImageFileName();
         DisplayModelImage();
     }
     else
@@ -3769,7 +3767,6 @@ FASTRUN void ButtonWasPressed()
                 {
                     ForceVoltDisplay = true;
                     LastConnectionQuality = 0;
-                    CheckModelImageFileName();
                     DisplayModelImage();
                     GotoFrontView();
                 }
@@ -4146,7 +4143,6 @@ FASTRUN void ButtonWasPressed()
                 SendValue(Progress, 100);
                 DelayWithDog(10);
                 SendCommand(ProgressEnd);
-                CheckModelImageFileName();
                 DisplayModelImage();
                 if (FileError)
                     ShowFileErrorMsg();
@@ -4704,7 +4700,6 @@ void GotoFrontView()
         SendCommand((char *)"vis ch4,1");
         SendCommand((char *)"vis trall,1");
     }
-    CheckModelImageFileName();
     DisplayModelImage();
     SendCommand((char *)"vis exp0,1");
 }
@@ -4735,7 +4730,6 @@ bool CheckModelName()
         SendText(mn, ModelName);
         LastModelLoaded = ModelNumber;
         UpdateModelsNameEveryWhere();
-        CheckModelImageFileName();
         DisplayModelImage();
         return true;
     }

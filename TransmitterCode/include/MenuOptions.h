@@ -353,6 +353,7 @@ void GotoMacrosView()
 void DisplayModelImage()
 {
     char temp[60];
+    CheckModelImageFileName();
     strcpy(temp, "exp0.path=\"sd0/images/");
     strcat(temp, ModelImageFileName);
     strcat(temp, ".jpg\"");
@@ -1009,9 +1010,6 @@ void CheckModelImageFileName() // If the file doesn't exist then set to Noimage 
         strcat(temp, ".jpg");
     if (!NextionFileExistsOnSD(temp, false))
         strcpy(ModelImageFileName, "Noimage");
-
-    // Look1(ModelImageFileName);
-    // Look(" Checked");
 }
 /******************************************************************************************************************************/
 
@@ -1034,11 +1032,11 @@ void RXOptionsViewStart() // model Options screen
 
     if (Use_RotorFlight_Options)
     {
-        SendCommand((char*)"vis b1,1");
+        SendCommand((char *)"vis b1,1");
     }
     else
     {
-        SendCommand((char*)"vis b1,0");
+        SendCommand((char *)"vis b1,0");
     }
 
     SendValue(c1, CopyTrimsToAll);
@@ -1052,7 +1050,6 @@ void RXOptionsViewStart() // model Options screen
     SendValue(c2, TimerDownwards);
     SendValue(n4, TimerStartTime / 60);
     SendValue((char *)"sw0", Use_RotorFlight_Options);
-    CheckModelImageFileName();
     DisplayModelImage();
     UpdateModelsNameEveryWhere();
 }
