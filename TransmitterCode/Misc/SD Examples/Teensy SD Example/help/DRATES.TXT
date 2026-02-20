@@ -1,0 +1,19 @@
+Three rates can be setup. One of these is normally set to 100%, but all can be 0% - 200% ||
+
+A three position edge switch can be allocated to select between rates, and/or rates can be selected according to which bank is selected.||
+
+The rates are applied to up to eight output channels, though usually only aileron, elevator and rudder are used.||
+
+If no switch is allocated to 'rates' then a rate of 100% is applied to all.||
+
+Each rate uses a percentage,  0% - 200%, of the values set for the selected channels, in all banks.||
+
+Any channel to which rates are not applied is sent as 100%.||
+
+To leave a channel unaltered (100%), set its channel number to 0.||
+
+After selecting channel numbers, press 'Refresh display' to display and confirm channel names.
+
+
+
+

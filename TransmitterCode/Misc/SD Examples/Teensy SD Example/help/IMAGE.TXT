@@ -1,0 +1,24 @@
+|
+Here you can choose from the avalable images for this model.||
+
+Images must be .jpg files, and NOT Progressive. Use lower case for .jpg|
+(NOT .JPG nor .jpeg etc.) ||
+
+The files must be in a directory called Images (with upper case I) on the SD card of the Nextion display.||
+
+The same files must also be in a directory called Images on the Teensy 4.1 SD card. The reason for this duplication is that the Nextion can display the file, but it cannot return a file list.||
+
+We recommend keeping a copy of this directory on your computer too. ||
+
+The resolution of each image file must be 320 width x 200 height.||
+
+Filenames must be max 8 characters plus .jpg|
+
+
+
+
+
+
+
+
+

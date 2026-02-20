@@ -1,0 +1,21 @@
+These trims on screen can be used instead of the hardware trims, or just as a clearer display. ||
+
+If the hardware trims move trims in the wrong direction, you should recalibrate the hardware trims from the Transmitter Setup / Calibrate menu.||
+
+Remember to set the 'Trim multiplier' under Model Options to a value greater than zero. ||
+
+5 is the default value, and 5 is a very good starting value for this. ||
+
+For a helicopter with a flybarless system, Trims should be disabled by setting the 'Trim multiplier' to zero. Also all subtrims should be set to zero. 
+
+On the Model Options screen there is the option to copy trims to all banks. If this is not set, the trims you set will be applied ONLY to the current bank.||
+
+Once you find the best place for all trims, you may like to transfer the trim settings to the Subtrims. Note that Subtrims always affect all banks equally.||
+
+The button marked 'Move these trims to Subtrims?' Will do this for you automatically. This button will move the trims as set for the current Bank into the Subtrims.||
+
+After moving Trims to Subtrims, the four Trims are zeroed for all four Banks. Other channels' Subtrims are not affected.||
+
+The 'Trim multiplier' used for Subtrims is always 5. When you move Trims to Subtrims, any difference between these two multipliers is automatically handled so that the effect on the control surfaces is the same. ||
+
+If the Subtrims already had a value, this is incorporated into the new value when moving Trims over to Subtrims.

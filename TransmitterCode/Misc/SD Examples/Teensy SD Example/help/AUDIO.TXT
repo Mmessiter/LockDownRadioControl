@@ -1,0 +1,9 @@
+|This screen allows you to alter audio volume and to select different sounds for different moments. 
+||
+It also allows the screen brightness to be changed.||
+
+The vario can use a BMP280 or a DPS310 pressure sensor. One or the other must be connected. The DPS310 is the better one! It emits sounds to help the pilot know whether the model is climbing or descending. The sounds are sign waves when ascending (they sound nice) and saw tooth waves when descending (they don't sound nice). ||
+
+The vario can be enabled in any bank (1,2,3, or 4). If zero is selected then the vario is enabled in all 4 banks.|
+The vario threshold is the minimum rate of climb or decent needed to trigger any sound.|
+The various spacing is the minimum change in rate of climb or descent needed to move to the next sound.|

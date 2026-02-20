@@ -1,0 +1,13 @@
+|This screen allows the editing of PID values for the Nexus helicopter flight controller, and probably other flight controllers that support the same MSP v1 protocol.||
+
+The screen will only appear when connected to a model which is using a compatible flight controller. ||
+
+Also the Safety switch must be ON - so the model had better be on the ground with motor off.||
+
+1). First select the Bank you would like to edit using the Bank switch. After selecting a Bank  there will be a brief pause while the values for that Bank are loaded.||
+
+2). Then edit any of the 12 values by pressing the box containing that value.||
+
+3). Then press Save and wait a moment while updated values are sent the the flight controller and saved in its EEPROM.||
+
+Confirm that your new values were indeed saved by moving the Bank switch briefly to another Bank and then back to the one you just edited. Check its values; because they were just read back from the flight controller. If all looks good, fly!!

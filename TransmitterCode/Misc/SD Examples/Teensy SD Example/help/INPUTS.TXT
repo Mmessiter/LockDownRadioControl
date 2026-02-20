@@ -1,0 +1,44 @@
+This screen allows all channels to be re-named and re-routed from any input and to any output.||
+
+For each channel, the input number is displayed first (in yellow) then the channel name (white), then the channel output number (in red).||
+
+All three of these items can be edited.||
+
+(1) A channel can be routed from any input device.|
+(2) The name of each channel can be changed.|
+(3) A channel can be routed to any output channel.||
+
+All channel numbers by default are routed from the input of the same number (in yellow) to the output of the same number (in red).|
+This default channel order is the same as Futaba ('AETR'). And on this screen you can change it if you would like to.||
+
+Input 1 is always the default aileron input stick.|
+Input 2 is always the default elevator input stick.|
+Input 3 is always the default throttle input stick.|
+Input 4 is always the default rudder input stick.||
+
+These are true both in Mode 2 and Mode 1.||
+
+Inputs 5 - 8 are the four switches (or knobs/potentiometers) nearer the middle of the transmitter.||
+
+Inputs 9,10,11 and 12 can optionally be assigned to the Edge switches, but these switches are more usually used for Banks 1,2,3 & 4, Buddy box, Rates, Safety, etc.||
+
+Inputs 13,14,15 and 16 don't exist at all. Nonetheless these four channels can be useful for mixes and extra functions. Their inputs can be mapped from any stick switch or knob.||
+
+To check that you are moving the intended channel, watch the Channels screen while moving a stick or switch or knob.||
+
+One input can be mapped to multiple output channels, and these can be reversed independently.|
+But never map an output from more than one input channel! That won't work. Use a 'mix' instead for this.||
+
+The trims' output channel number may be redefined here. Almost always, it's best to leave them unedited (as 1,2,3,4).||
+
+However, for the power user, they can be reassigned here.||
+
+Trim 1 input (Tr1) is horizontal and under the aileron input stick.|
+Trim 2 input (Tr2) is vertical and next to the elevator input stick.|
+Trim 3 input (Tr3) is vertical and next to the throttle input stick.|
+Trim 4 input (Tr4) is horizontal and under the rudder input stick.||
+
+For example, if you set 'Tr1' to '14', then moving the trim that's usually for aileron will actually move channel 14.|
+You can then adjust the 'trims multiplier' of course so that the extent of the control over channel 14 is correct for your application.||
+
+After making changes, Be *SURE TO TEST* on the ground before flying!||

@@ -1,0 +1,11 @@
+This screen shows some information about the quality of the current connection and other data.||
+
+Pressing 'Clear' will zero many parameters.||
+
+It will show the current altitude using atmospheric pressure if a BMP280 sensor is fitted. The sensor needs to know the current local QNH (atmospheric pressure at sea level). Enter the QNH under Transmitter setup / Settings / page 3. This information can usually be found on the web site of a nearby airfield, or a decent AI system will often tell you what it is I have found. Altitude derived from atmospheric pressure is usually accurate within a foot or so. It's usually far more accurate than altitude derived from GPS.||
+
+Pressing 'Zero Alt' sets the current altitude as zero so that height above current height will be displayed. It's best to use this on the ground of course.||
+
+If you are using a two-transceiver receiver, then this screen shows which transceiver is in current use, and how long each was in use so far.||
+
+'Longest gap' means the greatest number of milliseconds recorded between losing a data packet and re-establishing a connection. While this number is below about 250 (= a quarter of a second) all should be ok. Normally it's well below 100. If it gets much higher, consider relocating the aerials on the receiver. Dipole antennae are recommended.||

@@ -1,0 +1,14 @@
+This screen allows the use of servos whose PWM frequency (in Hertz) and centre pulse length (in microseconds) is different from 'usual'.||
+
+Please note that Channels 3 and 4 use the same timer inside the Teensy 4.0. So these two channels must always use the same frequency. The same is true for channels 7 and 10.||
+
+If you need the rudder servo frequency to be different from that of the throttle, this can achieved by re-routing the rudder to another output channel.||
+
+Parameters are sent to the receiver when you press the OK button to exit from this screen.||
+
+Before defining these parameters for the servos, please check the documentation that arrived with the servos to be certain to enter the correct values.|| 
+
+
+
+
+ 
