@@ -189,7 +189,6 @@ void ClearMostParameters()
     RXSuccessfulPackets = 0;
     TotalLostPackets = 0;
     TotalPacketsAttempted = 0;
-    ModelMatchFailed = false;
 
 
     if (CurrentView == FRONTVIEW)
@@ -2149,7 +2148,7 @@ void BindNow()
 {
     BoundFlag = true;
     ModelMatched = true;
-    Connected = true;
+   // Connected = true;
     if (CurrentView == FRONTVIEW)
     {
         DisplayModelImage();
@@ -4679,7 +4678,6 @@ void GotoFrontView()
     if (BuddyPupilOnWireless)
         StartBuddyListen();
     CurrentView = FRONTVIEW;
-    ModelMatchFailed = false;
     First_RPM_Data = true;
     RestoreBrightness();
 

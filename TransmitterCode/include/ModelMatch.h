@@ -80,8 +80,25 @@ void CompareModelsIDs()
             Connect_MMmsg = NOTFOUND; // Set the message to be played later
         }
     }
-    ModelMatchFailed = true;
-    PlaySound(NOTFOUND); // Binding not allowed without model match.
-    MsgBox((char *)"page FrontView", (char *)"AMS is ON and Model ID not found!\r\nConnection not allowed.\r\nTurn off AMS to connect anyway.");
+    char msg[100] = "AMS is on and model's ID was not found!\r\nSave this ID for '";
+    strcat(msg, ModelName);
+    strcat(msg, "' now ?");
+    PlaySound(NOTFOUND); // Play the 'not found' sound to alert the pilot to the situation and prompt for action.
+    if (GetConfirmation (pFrontView, msg)){
+        ModelsMacUnionSaved.Val64 = ModelsMacUnion.Val64;
+        SaveOneModel(ModelNumber);
+        Connect_MMmsg = BINDSUCCEEDED;
+        BindNow();
+        CurrentView = 254;
+        GotoFrontView();
+    }
+    else
+    {
+        ModelMatchFailed = true;
+        ModelMatched = false;
+        BoundFlag = false;
+        CurrentView = 254;
+        GotoFrontView();
+    }
 }
 #endif

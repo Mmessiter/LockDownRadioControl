@@ -410,6 +410,7 @@ void ModelViewEnd()
     }
     SaveAllParameters();
     GotoFrontView();
+    ModelMatchFailed = false;// allows us to match with selected model.
 }
 
 /******************************************************************************************************************************/
