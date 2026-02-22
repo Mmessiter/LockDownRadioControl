@@ -1096,7 +1096,6 @@ void DelayWithDog(uint32_t HowLong)
         {
           GetNewChannelValues(); // these might have changed while we were waiting
           FixMotorChannel();     // ensure motor channel is off if that's needed
-          SendArmingChannel();
           SendData(); // send new data to RX
         }
     }
@@ -1199,7 +1198,6 @@ void GetYesOrNo()
         {
             GetNewChannelValues();
             FixMotorChannel();
-            SendArmingChannel();
             SendData();
         }
     }

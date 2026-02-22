@@ -5002,8 +5002,6 @@ FASTRUN void loop()
             ExecuteMacro();      // Modify channels if macro is running
         GetBuddyData();          // Only if master
         FixMotorChannel();       // Maybe force motor low BEFORE Binding data is added
-        if (ArmingChannel)       // if zero, then not using arming channel, so ignore it and don't force it low
-            SendArmingChannel(); // control Rotorflight 'arming' from the safety switch if arming channel is non zero and not using wireless buddy
         ShowServoPos();          // Show servo positions to user
         if (BindingEnabled && !BoundFlag)
             SendBindingPipe(); // Only if binding and not bound yet - override low throttle setting
