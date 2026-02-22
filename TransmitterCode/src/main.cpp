@@ -190,7 +190,6 @@ void ClearMostParameters()
     TotalLostPackets = 0;
     TotalPacketsAttempted = 0;
 
-
     if (CurrentView == FRONTVIEW)
     {
         SendCommand((char *)"vis ams,1");
@@ -1195,7 +1194,7 @@ void RationaliseBuddy()
     if (BuddyMasterOnWireless)
     {
         FHSS_data::PaceMaker = PACEMAKER_BUDDY;
-        LinkRatesToBanks = true;    
+        LinkRatesToBanks = true;
     }
 }
 /*********************************************************************************************************************************/
@@ -2148,7 +2147,7 @@ void BindNow()
 {
     BoundFlag = true;
     ModelMatched = true;
-   // Connected = true;
+    // Connected = true;
     if (CurrentView == FRONTVIEW)
     {
         DisplayModelImage();
@@ -4981,9 +4980,12 @@ void FixMotorChannel()
 //************************************************************************************************************/
 void SendArmingChannel()
 {
-    uint16_t ArmValue[2] = {667, 2233}; // these are the values at the arming switch would give
-    if (!BuddyPupilOnWireless)
-        SendBuffer[ArmingChannel - 1] = ArmValue[(uint8_t)Armed]; // If safety is on, arming is off
+    if (Use_RotorFlight_Options)
+    {
+        uint16_t ArmValue[2] = {667, 2233}; // these are the values at the arming switch would give
+        if (!BuddyPupilOnWireless)
+            SendBuffer[ArmingChannel - 1] = ArmValue[(uint8_t)Armed]; // If safety is on, arming is off
+    }
 }
 /************************************************************************************************************/
 // LOOP

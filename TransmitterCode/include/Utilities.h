@@ -1094,9 +1094,10 @@ void DelayWithDog(uint32_t HowLong)
         CheckPowerOffButton();
         if (ModelMatched && BoundFlag)
         {
-            GetNewChannelValues(); // these might have changed while we were waiting
-            FixMotorChannel();     // ensure motor channel is off if that's needed
-            SendData();            // send new data to RX
+          GetNewChannelValues(); // these might have changed while we were waiting
+          FixMotorChannel();     // ensure motor channel is off if that's needed
+          SendArmingChannel();
+          SendData(); // send new data to RX
         }
     }
     AlreadyKicking = false;
@@ -1198,6 +1199,7 @@ void GetYesOrNo()
         {
             GetNewChannelValues();
             FixMotorChannel();
+            SendArmingChannel();
             SendData();
         }
     }
