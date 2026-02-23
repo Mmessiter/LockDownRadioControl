@@ -233,10 +233,7 @@ void EndPIDView()
     else
     {
         PIDS_Were_Edited = false;
-        SendCommand((char *)"page RFView");
-        CurrentView = ROTORFLIGHTVIEW;
-        ShowRFBank();
-        ShowRFRate();
+        RotorFlightStart();
     }
 }
 #endif

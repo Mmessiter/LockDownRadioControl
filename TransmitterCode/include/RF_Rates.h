@@ -221,10 +221,7 @@ void EndRFRatesView()
             return;
     }
     Rates_Were_Edited = false;
-    SendCommand((char *)"page RFView");
-    CurrentView = ROTORFLIGHTVIEW;
-    ShowRFBank();
-    ShowRFRate();
+    RotorFlightStart();
     BlockBankChanges = false;
 }
 // ************************************************************************************************************/

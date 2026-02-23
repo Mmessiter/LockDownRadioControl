@@ -357,10 +357,7 @@ void Collect_data_from_dialog() // and close it
     SelectedItemCount = CountSelectedParams(Which_Params);
     if (SelectedItemCount > 0)
         OneProgressItem = 99 / SelectedItemCount;
-    SendCommand((char *)"page RFView");
-    CurrentView = ROTORFLIGHTVIEW;
-    ShowRFBank();
-    ShowRFRate();
+    RotorFlightStart();
 }
 // ************************************************************************************************************/
 void RestoreRFParameters() // show dialog to pick bank and params to save
@@ -426,19 +423,13 @@ void Start_SAVE()
 // ************************************************************************************************************/
 void Cancel_SAVE()
 {
-    SendCommand((char *)"page RFView");
-    CurrentView = ROTORFLIGHTVIEW;
-    ShowRFBank();
-    ShowRFRate();
+    RotorFlightStart();
     BlockBankChanges = false;
 }
 // ************************************************************************************************************/
 void Cancel_RESTORE()
 {
-    SendCommand((char *)"page RFView");
-    CurrentView = ROTORFLIGHTVIEW;
-    ShowRFBank();
-    ShowRFRate();
+    RotorFlightStart();
     BlockBankChanges = false;
 }
 

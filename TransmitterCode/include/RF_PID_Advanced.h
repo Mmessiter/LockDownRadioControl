@@ -211,10 +211,7 @@ void EndPIDsAdvancedView()
     else
     {
         PIDS_Advanced_Were_Edited = false;
-        SendCommand((char *)"page RFView");
-        CurrentView = ROTORFLIGHTVIEW;
-        ShowRFBank();
-        ShowRFRate();
+        RotorFlightStart();
     }
 }
 #endif // PIDADVANCED_H
