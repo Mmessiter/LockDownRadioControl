@@ -383,7 +383,7 @@ FASTRUN void SendData()
     uint8_t NumberOfChangedChannels = 0;
     static uint8_t ByteCountToTransmit = 2;
 
-    SendArmingChannel();
+    FixArmingChannel();
 
     Connected = false; // Assume failure until an ACK is received.
     FlushFifos();      // This flush avoids a lockup that happens when the FIFO gets full.

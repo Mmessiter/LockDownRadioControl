@@ -4978,7 +4978,7 @@ void FixMotorChannel()
     }
 }
 //************************************************************************************************************/
-void SendArmingChannel()
+void FixArmingChannel()
 {
     if (Use_RotorFlight_Options)
     {
@@ -4999,10 +4999,11 @@ FASTRUN void loop()
     if (CurrentMode == NORMAL)
     {
         if (UseMacros)
-            ExecuteMacro();      // Modify channels if macro is running
-        GetBuddyData();          // Only if master
-        FixMotorChannel();       // Maybe force motor low BEFORE Binding data is added
-        ShowServoPos();          // Show servo positions to user
+            ExecuteMacro(); // Modify channels if macro is running
+        GetBuddyData();     // Only if master
+        FixMotorChannel();  // Maybe force motor low BEFORE Binding data is added
+        FixArmingChannel(); // Be sure to show correct arming channel value if using RotorFlight options
+        ShowServoPos(); // Show servo positions to user
         if (BindingEnabled && !BoundFlag)
             SendBindingPipe(); // Only if binding and not bound yet - override low throttle setting
     }
