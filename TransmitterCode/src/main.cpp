@@ -5003,7 +5003,7 @@ FASTRUN void loop()
         GetBuddyData();     // Only if master
         FixMotorChannel();  // Maybe force motor low BEFORE Binding data is added
         FixArmingChannel(); // Be sure to show correct arming channel value if using RotorFlight options
-        ShowServoPos(); // Show servo positions to user
+        ShowServoPos();     // Show servo positions to user
         if (BindingEnabled && !BoundFlag)
             SendBindingPipe(); // Only if binding and not bound yet - override low throttle setting
     }
@@ -5030,11 +5030,11 @@ FASTRUN void loop()
     case LISTENMODE: // 6 for wireless buddy
         DoWirelessBuddyListen();
         break;
-    case SAVE_RF_SETTINGS: // 7
+    case SAVE_RF_SETTINGS: // 7 for RotorFlight options
         Save_SOME_RF_Parameters();
         SendData();
         break;
-    case RESTORE_RF_SETTINGS: // 8
+    case RESTORE_RF_SETTINGS: // 8 for RotorFlight options
         Restore_SOME_RF_Parameters();
         SendData();
         break;
