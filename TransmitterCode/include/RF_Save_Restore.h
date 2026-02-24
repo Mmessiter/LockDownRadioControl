@@ -108,7 +108,7 @@ void Restore_SOME_RF_Parameters()
             Which_Case_Now = 4;
         break;
     case 4:
-        if (!(Which_Params & DO_RATES))
+        if (!(Which_Params & (DO_RATES || DO_RATES_ADVANCED))) /// RATES ****************************************************************************************************
         {
             Which_Case_Now = 6; // skip to next if not doing RATES
             break;
@@ -120,6 +120,7 @@ void Restore_SOME_RF_Parameters()
         SendText(t2, msg);
         for (int i = 0; i < MAX_RATES_BYTES; ++i)
             Rate_Values[i] = Saved_Rate_Values[i][LocalBank - 1];
+        Wait_for_Advanced_Rates_to_Be_Sent_Too = true;         // this flag tells the Ack payload parser to wait until these have been sent before allowing bank changes again because rates changes can cause problems if a bank change happens while they are being sent
         AddParameterstoQueue(GET_SECOND_6_RATES_VALUES); // SECOND MUST BE QUEUED FIRST!!! Send RATES from TX to RX
         AddParameterstoQueue(GET_FIRST_7_RATES_VALUES);  // SECOND MUST BE QUEUED FIRST!!! Send RATES from TX to RX
         ProgressSoFar += OneProgressItem;                // update progress bar
@@ -132,7 +133,7 @@ void Restore_SOME_RF_Parameters()
             Which_Case_Now = 6;
         break;
     case 6:
-        if (!(Which_Params & DO_RATES_ADVANCED))
+        if (!(Which_Params & (DO_RATES || DO_RATES_ADVANCED))) /// RATES ADVANCED. ****************************************************************************************************
         {
             Which_Case_Now = 150; // skip to next if not doing RATES ADVANCED
             break;
@@ -176,6 +177,7 @@ void Restore_SOME_RF_Parameters()
         PlaySound(BEEPCOMPLETE);
         SendCommand((char *)"vis Progress,0"); // hide progress bar
         SendCommand((char *)"vis t2,0");       // hide please wait text
+        SendText(t2, (char *)" ");
         BlockBankChanges = false;
     default:
         break;
@@ -335,6 +337,7 @@ void Save_SOME_RF_Parameters()
         PlaySound(BEEPCOMPLETE);
         SendCommand((char *)"vis Progress,0"); // hide progress bar
         SendCommand((char *)"vis t2,0");       // hide please wait text
+        SendText(t2, (char *)" ");
         BlockBankChanges = false;
 
     default:

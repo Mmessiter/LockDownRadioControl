@@ -51,6 +51,7 @@ void SendEditedRates()
     DelayWithDog(100);                                  // allow LOTS of time for screen to update BEFORE sending another Nextion command
     RatesMsg((char *)"Sending edited Rates ...", Gray); // Show sending message
     ReadEditedRateValues();                             // read the edited RATES from the screen;
+    Wait_for_Advanced_Rates_to_Be_Sent_Too = false;     // this flag tells the Ack payload parser not to wait until these have been sent before allowing bank changes again because rates changes can cause problems if a bank change happens while they are being sent
     AddParameterstoQueue(GET_SECOND_6_RATES_VALUES);    // SECOND MUST BE QUEUED FIRST!!! Send RATES 7-12 values from TX to RX
     AddParameterstoQueue(GET_FIRST_7_RATES_VALUES);     // SECOND MUST BE QUEUED FIRST!!! Send RATES 1-6 values from TX to RX
     HideRATESMsg();                                     // ...because this queue is a LIFO stack

@@ -27,14 +27,12 @@ void AddParameterstoQueue(uint8_t ID) // this queue is essentially a LIFO stack
 void SendInitialSetupParams() // This function sends the initial setup parameters.
 {                             // Failsafe and stabilisation parameters are NOT sent here because they are sent separately
 
-    
     AddParameterstoQueue(MSP_BANK_CHANGE);    // for Rotorflight MSP Bank change
     AddParameterstoQueue(MSP_RATES_CHANGE);   // for Rotorflight MSP Bank change
     AddParameterstoQueue(SERVO_PULSE_WIDTHS); // Servo Pulse Widths 7
     AddParameterstoQueue(SERVO_FREQUENCIES);  // Servo Frequencies 6
     AddParameterstoQueue(QNH_SETTING);        // QNH 2
     AddParameterstoQueue(GEAR_RATIO);         // Gear Ratio 8
-    
 }
 // ****************************************************************************
 void EncodeAFloat(float value)
@@ -119,11 +117,14 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
         break;
     case GET_FIRST_7_RATES_VALUES: // 13 = I'm sending first 7 RATES values (TX->RX) (Because we cannot fit all 12 in one go)
         for (int i = 0; i < 7; ++i)
-            Parameters.word[i + 1] = Rate_Values[i]; // 0 to 7
+            Parameters.word[i + 1] = Rate_Values[i]; // 0 to 6
         break;
     case GET_SECOND_6_RATES_VALUES: // 14 = I'm sending second 6 RATES values (TX->RX) (Because we cannot fit all 12 in one go)
         for (int i = 0; i < 6; ++i)
+        {
             Parameters.word[i + 1] = Rate_Values[i + 7]; // 7 to 12
+        } 
+        Parameters.word[7] = Wait_for_Advanced_Rates_to_Be_Sent_Too; // this flag tells the Ack payload parser whether to wait until these have been sent before allowing bank changes again because rates changes can cause problems if a bank change happens while they are being sent
         break;
     case SEND_RATES_ADVANCED_VALUES:                       // 15 = Please send RATES ADVANCED values
         Parameters.word[1] = 321;                          // confirms request for RATES ADVANCED values

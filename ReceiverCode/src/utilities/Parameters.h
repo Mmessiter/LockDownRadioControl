@@ -133,7 +133,8 @@ void ReadExtraParameters()
         Collective_Centre_Rate = Parameters.word[4];
         Collective_Max_Rate = Parameters.word[5];
         Collective_Expo = Parameters.word[6];
-        WriteRatesToNexusAndSave(); // no checking here yet for validity. Maybe later if needed
+        if (!Parameters.word[7]) // if this flag was set we must await the advanced rates values before writing to Nexus. If this flag isn't set, we can write to Nexus now.
+            WriteRatesToNexusAndSave(); // That's because they are all written together.
         break;
     case SEND_RATES_ADVANCED_VALUES: // 15
         if (!Rotorflight22Detected)
@@ -156,7 +157,8 @@ void ReadExtraParameters()
         Yaw_Dynamic_Ceiling_Gain = Parameters.word[6];
         Yaw_Dynamic_Deadband_Gain = Parameters.word[7];
         Yaw_Dynamic_Deadband_Filter = Parameters.word[8];
-        WriteRatesToNexusAndSave(); // no checking here yet for validity. Maybe later if needed
+        WriteRatesToNexusAndSave(); // That's because they are all written together.
+      //  Look("ALL rates updated from transmitter");
         break;
     case GET_RATES_ADVANCED_VALUES_FIRST_7:
         if (!Rotorflight22Detected)

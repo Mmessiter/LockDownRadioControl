@@ -1522,6 +1522,7 @@ const float FactorTableRF[13] = {1, 10, 10, .01, 10, 10, .01, 10, 10, .01, .25, 
 bool Use_RotorFlight_Options = false;
 char ModelImageFileName[9];
 bool Armed = false;
+bool Wait_for_Advanced_Rates_to_Be_Sent_Too = false;
 
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 
