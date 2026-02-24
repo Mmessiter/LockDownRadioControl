@@ -16,7 +16,7 @@
 #define MSP_PID_PROFILE 94      // Advanced PID settings (read)
 #define MSP_SET_PID_PROFILE 95  // write Advanced PID settings
 #define MSP_SELECT_SETTING 210  // select setting bank
-//#define MSP_STATUS_EX 150       // extended status with more telemetry data WRONG
+// #define MSP_STATUS_EX 150       // extended status with more telemetry data WRONG
 
 // Add defines for send states
 #define SEND_NO_RF 0
@@ -24,6 +24,8 @@
 #define SEND_RATES_RF 2
 #define SEND_RATES_ADVANCED_RF 3
 #define SEND_PID_ADVANCED_RF 4
+
+
 
 // ************************************************************************************************************
 enum : uint8_t
@@ -44,6 +46,117 @@ enum : uint8_t
 
 // ************************************************************************************************************
 #define MSP_API_VERSION 1
+
+// ************************************************************************************************************
+// ACK / reply wait support (prevents EEPROM save racing ahead of SET command processing)
+// ************************************************************************************************************
+static volatile bool MspAckWaitInProgress = false;
+
+// Waits for an MSPv1 reply frame ($M> or $M!) for the specified command.
+// Returns true only if the reply was $M> for expectedCmd.
+// Returns false on timeout or $M! error for expectedCmd.
+inline bool WaitForMspAck(uint8_t expectedCmd, uint32_t timeoutMs)
+{
+    enum
+    {
+        ST_IDLE = 0,
+        ST_DOLLAR,
+        ST_M,
+        ST_DIR,
+        ST_SIZE,
+        ST_CMD,
+        ST_PAYLOAD,
+        ST_CHECKSUM
+    };
+
+    uint8_t state = ST_IDLE;
+    uint8_t dir = 0; // '>' or '!'
+    uint8_t size = 0;
+    uint8_t cmd = 0;
+    uint8_t idx = 0;
+    uint8_t checksum = 0;
+
+    const uint32_t start = millis();
+    MspAckWaitInProgress = true;
+
+    while ((uint32_t)(millis() - start) < timeoutMs)
+    {
+        while (MSP_UART.available())
+        {
+            uint8_t c = (uint8_t)MSP_UART.read();
+
+            switch (state)
+            {
+            case ST_IDLE:
+                if (c == '$')
+                    state = ST_DOLLAR;
+                break;
+
+            case ST_DOLLAR:
+                state = (c == 'M') ? ST_M : ST_IDLE;
+                break;
+
+            case ST_M:
+                if (c == '>' || c == '!')
+                {
+                    dir = c;
+                    state = ST_DIR;
+                }
+                else
+                {
+                    state = ST_IDLE;
+                }
+                break;
+
+            case ST_DIR:
+                size = c;
+                checksum = c;
+                idx = 0;
+                state = ST_SIZE;
+                break;
+
+            case ST_SIZE:
+                cmd = c;
+                checksum ^= c;
+                state = (size == 0) ? ST_CHECKSUM : ST_PAYLOAD;
+                break;
+
+            case ST_PAYLOAD:
+                checksum ^= c;
+                idx++;
+                if (idx >= size)
+                    state = ST_CHECKSUM;
+                break;
+
+            case ST_CHECKSUM:
+            {
+                // c is received checksum
+                if (checksum == c)
+                {
+                    if (cmd == expectedCmd)
+                    {
+                        MspAckWaitInProgress = false;
+                        return (dir == '>');
+                    }
+                    // else valid frame, but not the one we are waiting for -> ignore and keep waiting
+                }
+                state = ST_IDLE;
+                break;
+            }
+
+            default:
+                state = ST_IDLE;
+                break;
+            }
+        }
+
+        delay(1);
+    }
+
+    MspAckWaitInProgress = false;
+    return false;
+}
+/// ************************************************************************************************************
 
 static bool Parse_MSP_API_VERSION(const uint8_t *buf, uint8_t len, uint8_t &mspProto, uint8_t &apiMaj, uint8_t &apiMin)
 {
@@ -251,7 +364,7 @@ inline void SendToMSP(uint8_t command, const uint8_t *payload, uint8_t payloadSi
 }
 
 // ************************************************************************************************************
-// Write the given array of 12 PID values to Nexus via MSP, and then save to EEPROM/flash.
+// Write the given array of 17 PID values to Nexus via MSP, and then save to EEPROM/flash.
 inline void WritePIDsToNexusAndSave(const uint16_t pid[17])
 {
     static uint32_t lastWriteTime = 0;
@@ -260,22 +373,31 @@ inline void WritePIDsToNexusAndSave(const uint16_t pid[17])
 
     if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight22Detected))
         return;
-    uint8_t payload[34]; // actually 34 but we only send 30 (12 + 3 boost four bytes are ignored at the moment)
+
+    uint8_t payload[34] = {0};
+
     for (int i = 0; i < 34; i++)
-    {
-        payload[i] = Original_PID_Values[i]; // start with original values.. probably not really  needed
-    }
+        payload[i] = Original_PID_Values[i]; // start with original values
+
     for (uint8_t i = 0; i < 17; i++)
     {
         payload[i * 2 + 0] = (uint8_t)(pid[i] & 0xFF);
         payload[i * 2 + 1] = (uint8_t)(pid[i] >> 8);
     }
+
     SendToMSP(MSP_SET_PID, payload, sizeof(payload));
-    delay(50);
+    MSP_UART.flush();
+    if (!WaitForMspAck(MSP_SET_PID, 300))
+        return;
+
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
-    delay(50);
-    lastWriteTime = now; // set cooldown only after we actually did the write+save
+    MSP_UART.flush();
+    if (!WaitForMspAck(MSP_EEPROM_WRITE, 1000))
+        return;
+
+    lastWriteTime = millis(); // set cooldown only after confirmed write+save
 }
+
 // ************************************************************************************************************
 void DebugPIDValues(const char *msg)
 {
@@ -352,10 +474,6 @@ inline bool Parse_MSP_PID(const uint8_t *data, uint8_t n)
         Original_PID_Values[i] = p[i];
     }
 
-    // Look(f.size); // == 34 !
-
-    // DebugPIDValues("Current Nexus PID Values");
-
     return true;
 }
 
@@ -382,12 +500,9 @@ inline bool Parse_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n)
     const uint8_t size = f.size;
     const uint8_t *payload = f.payload;
 
-    // Need enough bytes for what we read:
-    // index 14 used for temp1 => size must be >= 15
     if (size < 15)
         return false;
 
-    // motor index check
     if (payload[0] != 1)
         return false;
 
@@ -395,14 +510,14 @@ inline bool Parse_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n)
                 ((uint32_t)payload[2] << 8) |
                 ((uint32_t)payload[3] << 16) |
                 ((uint32_t)payload[4] << 24)) /
-               Ratio; // RPM: decode 24-bit, and include the 4th byte even if zero
+               Ratio;
     RXModelVolts = (float)((uint16_t)payload[7] | ((uint16_t)payload[8] << 8)) / 1000.0f;
     Battery_Amps = (float)((uint16_t)payload[9] | ((uint16_t)payload[10] << 8)) / 1000.0f;
     Battery_mAh = (float)((uint16_t)payload[11] | ((uint16_t)payload[12] << 8));
     ESC_Temp_C = (float)((uint16_t)payload[13] | ((uint16_t)payload[14] << 8)) / 10.0f;
 
-    if (RXModelVolts > 26.0f) // this is to handle 12S which were read with INA219 which cannot read above 26V ...
-        RXModelVolts /= 2.0f; // ... so transmitter still halves the voltage for 12S for backwards compatibility.
+    if (RXModelVolts > 26.0f)
+        RXModelVolts /= 2.0f;
 
     return true;
 }
@@ -410,12 +525,14 @@ inline bool Parse_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n)
 // ************************************************************************************************************/
 inline void CheckMSPSerial()
 {
+    if (MspAckWaitInProgress)
+        return; // prevent this poller from stealing reply bytes during a write/save transaction
 
     uint32_t interval = (SendRotorFlightParametresNow == SEND_NO_RF) ? 250 : 50;
     static uint32_t Localtimer = 0;
     uint32_t Now = millis();
 
-    if (Now - Localtimer < interval) // varialble interval
+    if (Now - Localtimer < interval)
         return;
 
     Localtimer = Now;
@@ -438,15 +555,14 @@ inline void CheckMSPSerial()
     }
     if (overflow)
     {
-        return; // buffer overflow - just drop the data
+        return;
     }
     bool looksLikeMSP =
-        (p >= 6 && data_in[0] == '$' && data_in[1] == 'M') || // MSPv1
-        (p >= 8 && data_in[0] == '$' && data_in[1] == 'X');   // MSPv2
+        (p >= 6 && data_in[0] == '$' && data_in[1] == 'M') ||
+        (p >= 8 && data_in[0] == '$' && data_in[1] == 'X');
 
     if (!looksLikeMSP)
     {
-        // ask again ...
         switch (SendRotorFlightParametresNow)
         {
         case SEND_NO_RF:
@@ -490,35 +606,33 @@ inline void CheckMSPSerial()
         SendRotorFlightParametresNow = SEND_NO_RF;
     }
 
-    
     switch (SendRotorFlightParametresNow)
     {
     case SEND_NO_RF:
         Parse_MSP_Motor_Telemetry(&data_in[0], p);
-        RequestFromMSP(MSP_MOTOR_TELEMETRY); // parse reply next time around
-                                             //  Look("No RF Send");
+        RequestFromMSP(MSP_MOTOR_TELEMETRY);
         break;
     case SEND_PID_RF:
         Parse_MSP_PID(data_in, p);
-        RequestFromMSP(MSP_PID); // parse reply next time around
+        RequestFromMSP(MSP_PID);
         break;
     case SEND_RATES_RF:
         Parse_MSP_RC_TUNING(data_in, p);
-        RequestFromMSP(MSP_RC_TUNING); // parse reply next time around
+        RequestFromMSP(MSP_RC_TUNING);
         break;
     case SEND_RATES_ADVANCED_RF:
         Parse_MSP_RC_TUNING(data_in, p);
-        RequestFromMSP(MSP_RC_TUNING); // parse reply next time around
+        RequestFromMSP(MSP_RC_TUNING);
         break;
     case SEND_PID_ADVANCED_RF:
         Parse_MSP_PID_PROFILE(data_in, p);
-        RequestFromMSP(MSP_PID_PROFILE); // parse reply next time around
+        RequestFromMSP(MSP_PID_PROFILE);
         break;
 
-  //  case SEND_STATUS_EX:
-  //      Parse_MSP_STATUS_EX(data_in, p);
-  //      RequestFromMSP(MSP_STATUS_EX); // parse reply next time around
-  //      break;
+        //  case SEND_STATUS_EX:
+        //      Parse_MSP_STATUS_EX(data_in, p);
+        //      RequestFromMSP(MSP_STATUS_EX); // parse reply next time around
+        //      break;
     default:
         break;
     }
@@ -595,34 +709,41 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
         min_size += 11;
     if (f.size < min_size)
         return false;
+
     const uint8_t *p = f.payload;
     uint8_t offset = 0;
-    Rates_Type = p[offset++];                             // Banner
-    Roll_Centre_Rate = p[offset++];                       // * 10         - n0
-    Roll_Expo = p[offset++];                              // / 100.0f     - n2
-    Roll_Max_Rate = p[offset++];                          // * 10.0f      - n1
-    Roll_Response_Time = p[offset++];                     // not yet used
-    Roll_Accel_Limit = p[offset] | (p[offset + 1] << 8);  // not yet used
-    offset += 2;                                          // ---
-    Pitch_Centre_Rate = p[offset++];                      //  * 10.0f;    - n3
-    Pitch_Expo = p[offset++];                             // / 100.0f;    - n5
-    Pitch_Max_Rate = p[offset++];                         // * 10.0f;     - n4
-    Pitch_Response_Time = p[offset++];                    // not yet used
-    Pitch_Accel_Limit = p[offset] | (p[offset + 1] << 8); // not yet used
-    offset += 2;                                          // ---
-    Yaw_Centre_Rate = p[offset++];                        // * 10.0f       - n6
-    Yaw_Expo = p[offset++];                               // / 100.0f      - n8
-    Yaw_Max_Rate = p[offset++];                           // * 10.0f       - n7
-    Yaw_Response_Time = p[offset++];                      // not yet used
-    Yaw_Accel_Limit = p[offset] | (p[offset + 1] << 8);   // not yet used
-    offset += 2;                                          // ---
-    Collective_Centre_Rate = p[offset++];                 // / 4.0f        - n9
-    Collective_Expo = p[offset++];                        // / 100.0f      - n11
-    Collective_Max_Rate = p[offset++];                    // / 4.0f        - n10
+
+    Rates_Type = p[offset++];
+    Roll_Centre_Rate = p[offset++];
+    Roll_Expo = p[offset++];
+    Roll_Max_Rate = p[offset++];
+
+    Roll_Response_Time = p[offset++];
+    Roll_Accel_Limit = p[offset] | (p[offset + 1] << 8);
+    offset += 2;
+
+    Pitch_Centre_Rate = p[offset++];
+    Pitch_Expo = p[offset++];
+    Pitch_Max_Rate = p[offset++];
+    Pitch_Response_Time = p[offset++];
+    Pitch_Accel_Limit = p[offset] | (p[offset + 1] << 8);
+    offset += 2;
+
+    Yaw_Centre_Rate = p[offset++];
+    Yaw_Expo = p[offset++];
+    Yaw_Max_Rate = p[offset++];
+    Yaw_Response_Time = p[offset++];
+    Yaw_Accel_Limit = p[offset] | (p[offset + 1] << 8);
+    offset += 2;
+
+    Collective_Centre_Rate = p[offset++];
+    Collective_Expo = p[offset++];
+    Collective_Max_Rate = p[offset++];
 
     Collective_Response_Time = p[offset++];
     Collective_Accel_Limit = p[offset] | (p[offset + 1] << 8);
     offset += 2;
+
     if (api100 >= 1208)
     {
         Roll_Setpoint_Boost_Gain = p[offset++];
@@ -650,16 +771,19 @@ inline void WriteRatesToNexusAndSave()
     static uint32_t lastWriteTime = 0;
     const uint32_t WRITE_COOLDOWN_MS = 5000;
     uint32_t now = millis();
+
     if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight22Detected))
         return;
+
     uint8_t payload_size = 25;
     if (api100 >= 1208)
         payload_size += 11;
-    uint8_t payload[36];
+
+    uint8_t payload[36] = {0};
     uint8_t offset = 0;
 
     payload[offset++] = Rates_Type;
-    payload[offset++] = (uint8_t)(Roll_Centre_Rate); // These factors are now handled in the Transmitter so BYTES only are sent
+    payload[offset++] = (uint8_t)(Roll_Centre_Rate);
     payload[offset++] = (uint8_t)(Roll_Expo);
     payload[offset++] = (uint8_t)(Roll_Max_Rate);
 
@@ -690,6 +814,7 @@ inline void WriteRatesToNexusAndSave()
     payload[offset++] = Collective_Response_Time;
     payload[offset++] = (uint8_t)(Collective_Accel_Limit & 0xFF);
     payload[offset++] = (uint8_t)(Collective_Accel_Limit >> 8);
+
     if (api100 >= 1208)
     {
         payload[offset++] = Roll_Setpoint_Boost_Gain;
@@ -704,11 +829,21 @@ inline void WriteRatesToNexusAndSave()
         payload[offset++] = Yaw_Dynamic_Deadband_Gain;
         payload[offset++] = Yaw_Dynamic_Deadband_Filter;
     }
+
+    if (offset != payload_size)
+        return; // defensive: never send malformed payload
+
     SendToMSP(MSP_SET_RC_TUNING, payload, payload_size);
-    delay(50);
+    MSP_UART.flush();
+    if (!WaitForMspAck(MSP_SET_RC_TUNING, 300))
+        return;
+
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
-    delay(50);
-    lastWriteTime = now;
+    MSP_UART.flush();
+    if (!WaitForMspAck(MSP_EEPROM_WRITE, 1000))
+        return;
+
+    lastWriteTime = millis();
 }
 
 // ************************************************************************************************************
@@ -725,7 +860,7 @@ inline bool Parse_MSP_PID_PROFILE(const uint8_t *data, uint8_t n)
     const uint8_t *p = f.payload;
 
     for (uint8_t i = 0; i < MAX_PID_ADVANCED_BYTES; i++)
-        Original_PID_Advanced_Bytes[i] = p[i]; // store original
+        Original_PID_Advanced_Bytes[i] = p[i];
 
     Piro_Compensation6 = p[6];
     PID_Advanced_Bytes[0] = Piro_Compensation6;
@@ -803,11 +938,11 @@ inline bool Parse_MSP_PID_PROFILE(const uint8_t *data, uint8_t n)
     PID_Advanced_Bytes[24] = Inertia_Precomp_Gain41;
 
     Inertia_Precomp_Cutoff42 = p[42];
-
     PID_Advanced_Bytes[25] = Inertia_Precomp_Cutoff42;
 
     return true;
 }
+
 // ************************************************************************************************************
 
 inline void WritePIDAdvancedToNexusAndSave()
@@ -815,46 +950,53 @@ inline void WritePIDAdvancedToNexusAndSave()
     static uint32_t lastWriteTime = 0;
     const uint32_t WRITE_COOLDOWN_MS = 5000;
     uint32_t now = millis();
+
     if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight22Detected))
         return;
 
     uint8_t payload[MAX_PID_ADVANCED_BYTES];
 
     for (uint8_t i = 0; i < MAX_PID_ADVANCED_BYTES; i++)
-        payload[i] = Original_PID_Advanced_Bytes[i]; // start with original values
+        payload[i] = Original_PID_Advanced_Bytes[i];
 
-    payload[6] = PID_Advanced_Bytes[0];   // Piro_Compensation6
-    payload[1] = PID_Advanced_Bytes[1];   // Ground_Error_Decay1
-    payload[17] = PID_Advanced_Bytes[2];  // Cutoff_Roll17
-    payload[18] = PID_Advanced_Bytes[3];  // Cutoff_Pitch18
-    payload[19] = PID_Advanced_Bytes[4];  // Cutoff_Yaw19
-    payload[7] = PID_Advanced_Bytes[5];   // Error_Limit_Roll7
-    payload[8] = PID_Advanced_Bytes[6];   // Error_Limit_Pitch8
-    payload[9] = PID_Advanced_Bytes[7];   // Error_Limit_Yaw9
-    payload[36] = PID_Advanced_Bytes[8];  // HSI_Offset_Limit_Roll36
-    payload[37] = PID_Advanced_Bytes[9];  // HSI_Offset_Limit_Pitch37
-    payload[10] = PID_Advanced_Bytes[10]; // HSI_Offset_Bandwidth_Roll10
-    payload[11] = PID_Advanced_Bytes[11]; // HSI_Offset_Bandwidth_Pitch11
-    payload[12] = PID_Advanced_Bytes[12]; // HSI_Offset_Bandwidth_Yaw12
-    payload[13] = PID_Advanced_Bytes[13]; // Roll_D_Term_Cutoff13
-    payload[14] = PID_Advanced_Bytes[14]; // Pitch_D_Term_Cutoff14
-    payload[15] = PID_Advanced_Bytes[15]; // Yaw_D_Term_Cutoff15
-    payload[38] = PID_Advanced_Bytes[16]; // Roll_B_Term_Cutoff38
-    payload[39] = PID_Advanced_Bytes[17]; // Pitch_B_Term_Cutoff39
-    payload[40] = PID_Advanced_Bytes[18]; // Yaw_B_Term_Cutoff40
-    payload[20] = PID_Advanced_Bytes[19]; // CW_Yaw_Stop_Gain20
-    payload[21] = PID_Advanced_Bytes[20]; // CCW_Yaw_Stop_Gain21
-    payload[22] = PID_Advanced_Bytes[21]; // Yaw_Precomp_Cutoff22
-    payload[23] = PID_Advanced_Bytes[22]; // Cyclic_FF_Gain23
-    payload[24] = PID_Advanced_Bytes[23]; // Collective_FF_Gain24
-    payload[41] = PID_Advanced_Bytes[24]; // Inertia_Precomp_Gain41
-    payload[42] = PID_Advanced_Bytes[25]; // Inertia_Precomp_Cutoff42
+    payload[6] = PID_Advanced_Bytes[0];
+    payload[1] = PID_Advanced_Bytes[1];
+    payload[17] = PID_Advanced_Bytes[2];
+    payload[18] = PID_Advanced_Bytes[3];
+    payload[19] = PID_Advanced_Bytes[4];
+    payload[7] = PID_Advanced_Bytes[5];
+    payload[8] = PID_Advanced_Bytes[6];
+    payload[9] = PID_Advanced_Bytes[7];
+    payload[36] = PID_Advanced_Bytes[8];
+    payload[37] = PID_Advanced_Bytes[9];
+    payload[10] = PID_Advanced_Bytes[10];
+    payload[11] = PID_Advanced_Bytes[11];
+    payload[12] = PID_Advanced_Bytes[12];
+    payload[13] = PID_Advanced_Bytes[13];
+    payload[14] = PID_Advanced_Bytes[14];
+    payload[15] = PID_Advanced_Bytes[15];
+    payload[38] = PID_Advanced_Bytes[16];
+    payload[39] = PID_Advanced_Bytes[17];
+    payload[40] = PID_Advanced_Bytes[18];
+    payload[20] = PID_Advanced_Bytes[19];
+    payload[21] = PID_Advanced_Bytes[20];
+    payload[22] = PID_Advanced_Bytes[21];
+    payload[23] = PID_Advanced_Bytes[22];
+    payload[24] = PID_Advanced_Bytes[23];
+    payload[41] = PID_Advanced_Bytes[24];
+    payload[42] = PID_Advanced_Bytes[25];
 
     SendToMSP(MSP_SET_PID_PROFILE, payload, sizeof(payload));
-    delay(50);
+    MSP_UART.flush();
+    if (!WaitForMspAck(MSP_SET_PID_PROFILE, 300))
+        return;
+
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
-    delay(50);
-    lastWriteTime = now;
+    MSP_UART.flush();
+    if (!WaitForMspAck(MSP_EEPROM_WRITE, 1000))
+        return;
+
+    lastWriteTime = millis();
 }
 
 // ************************************************************************************************************
@@ -863,8 +1005,12 @@ inline void SetNexusProfile(uint8_t index)
 {
     if (!Rotorflight22Detected)
         return;
-    SendToMSP(MSP_SELECT_SETTING, &index, 1); // The HI BIT is set for RATES. Otherwise it sets PID profile
+
+    SendToMSP(MSP_SELECT_SETTING, &index, 1);
+    MSP_UART.flush();
+    (void)WaitForMspAck(MSP_SELECT_SETTING, 300); // optional but useful
 }
+
 // ************************************************************************************************************
 
 #endif // NEXUS_H

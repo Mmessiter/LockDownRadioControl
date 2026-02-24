@@ -290,8 +290,9 @@ inline void WriteRatesToNexusAndSave();
 inline bool Parse_MSP_PID_PROFILE(const uint8_t *data, uint8_t n);
 inline void WritePIDAdvancedToNexusAndSave();
 inline void SetNexusProfile(uint8_t index);
-inline bool Parse_MSP_STATUS_EX(const uint8_t *data, uint8_t n);
+//inline bool Parse_MSP_STATUS_EX(const uint8_t *data, uint8_t n);
 uint32_t GetBuildDaysSince2020(); // days since 1st Jan 2020 for this build
+
 
 /************************************************************************************************************/
 // For numeric types (int, float, double, etc.)
