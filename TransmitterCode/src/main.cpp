@@ -4638,6 +4638,7 @@ void GotoFrontView()
     char FrontView_Connected[] = "Connected";
     PupilIsAlive = 0;
     MasterIsAlive = 0;
+    AddParameterstoQueue(MSP_ENABLE_TELEMETRY); // 26 = ENABLE telemetry after MSP data has been sent (for MSP data transmission)
     LastAutoModelSelect = true;
     LastCopyTrimsToAll = true;
     OldRate = 235;             // forced different

@@ -37,6 +37,7 @@ void RotorFlightStart()
    
     SendCommand((char *)"page RFView");
     CurrentView = ROTORFLIGHTVIEW;
+    AddParameterstoQueue(MSP_INHIBIT_TELEMETRY); // Inhibit telemetry for a short time to allow MSP data to be sent without interference from telemetry data (for MSP data transmission)
     SendText((char *)"t5", (char *)"2.2"); // Show version
     SendText((char *)"t11", ModelName);    // Show model name
     snprintf(Vbuf, 5, "%1.2f", GearRatio); // 10.3 usually

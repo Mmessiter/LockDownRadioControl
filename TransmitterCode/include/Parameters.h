@@ -123,7 +123,7 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
         for (int i = 0; i < 6; ++i)
         {
             Parameters.word[i + 1] = Rate_Values[i + 7]; // 7 to 12
-        } 
+        }
         Parameters.word[7] = Wait_for_Advanced_Rates_to_Be_Sent_Too; // this flag tells the Ack payload parser whether to wait until these have been sent before allowing bank changes again because rates changes can cause problems if a bank change happens while they are being sent
         break;
     case SEND_RATES_ADVANCED_VALUES:                       // 15 = Please send RATES ADVANCED values
@@ -166,6 +166,12 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
         //     Parameters.word[1] = DualRateInUse; // might be used later for rates change confirmation
         //     Parameters.word[2] = Bank;          // 0 to 3 new bank number
         //     break;
+    case MSP_INHIBIT_TELEMETRY:   // 25 = Inhibit telemetry for a short time to allow MSP data to be exchanged without interference from telemetry data (TX->RX)
+        Parameters.word[1] = 123; // this is just a flag to say "inhibit telemetry now"
+        break;
+    case MSP_ENABLE_TELEMETRY:    // 26 = ENABLE telemetry after MSP data has been sent (TX->RX)
+        Parameters.word[1] = 123; // this is just a flag to say "enable telemetry now"
+        break;
 
     default:
         break;

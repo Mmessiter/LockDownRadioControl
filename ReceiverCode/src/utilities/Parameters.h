@@ -217,6 +217,18 @@ void ReadExtraParameters()
         //  Started_Sending_STATUS_EX = millis();
 
         //  break;
+        case MSP_INHIBIT_TELEMETRY: // 25
+            InhibitTelemetry = true;
+            break;
+        case MSP_ENABLE_TELEMETRY: // 26
+            InhibitTelemetry = false;
+            break;  
+
+
+
+
+
+
     default:
         break;
     }

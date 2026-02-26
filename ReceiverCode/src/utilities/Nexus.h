@@ -25,8 +25,6 @@
 #define SEND_RATES_ADVANCED_RF 3
 #define SEND_PID_ADVANCED_RF 4
 
-
-
 // ************************************************************************************************************
 enum : uint8_t
 {
@@ -396,6 +394,7 @@ inline void WritePIDsToNexusAndSave(const uint16_t pid[17])
         return;
 
     lastWriteTime = millis(); // set cooldown only after confirmed write+save
+  //  InhibitTelemetry = false; // re-enable telemetry after successful write+save
 }
 
 // ************************************************************************************************************
@@ -527,7 +526,6 @@ inline void CheckMSPSerial()
 {
     if (MspAckWaitInProgress)
         return; // prevent this poller from stealing reply bytes during a write/save transaction
-
     uint32_t interval = (SendRotorFlightParametresNow == SEND_NO_RF) ? 250 : 50;
     static uint32_t Localtimer = 0;
     uint32_t Now = millis();
@@ -566,7 +564,14 @@ inline void CheckMSPSerial()
         switch (SendRotorFlightParametresNow)
         {
         case SEND_NO_RF:
-            RequestFromMSP(MSP_MOTOR_TELEMETRY);
+            if (InhibitTelemetry)
+            { 
+                break;
+            }
+            else
+            {
+                RequestFromMSP(MSP_MOTOR_TELEMETRY);
+            }
             break;
         case SEND_PID_RF:
             RequestFromMSP(MSP_PID);
@@ -609,8 +614,15 @@ inline void CheckMSPSerial()
     switch (SendRotorFlightParametresNow)
     {
     case SEND_NO_RF:
-        Parse_MSP_Motor_Telemetry(&data_in[0], p);
-        RequestFromMSP(MSP_MOTOR_TELEMETRY);
+        if (InhibitTelemetry)
+        {
+            break;
+        }
+        else
+        {
+            Parse_MSP_Motor_Telemetry(&data_in[0], p);
+            RequestFromMSP(MSP_MOTOR_TELEMETRY);
+        }
         break;
     case SEND_PID_RF:
         Parse_MSP_PID(data_in, p);
@@ -774,6 +786,8 @@ inline void WriteRatesToNexusAndSave()
 
     if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight22Detected))
         return;
+    delay(20); // optional: give FC a breather before sending
+    MSP_UART.flush();
 
     uint8_t payload_size = 25;
     if (api100 >= 1208)
@@ -835,15 +849,26 @@ inline void WriteRatesToNexusAndSave()
 
     SendToMSP(MSP_SET_RC_TUNING, payload, payload_size);
     MSP_UART.flush();
-    if (!WaitForMspAck(MSP_SET_RC_TUNING, 300))
+    if (!WaitForMspAck(MSP_SET_RC_TUNING, 600))
+    {
+        // Look("MSP_SET_RC_TUNING Ack Failed!");
         return;
+    }
+    // Look("MSP_SET_RC_TUNING Ack Success!");
+
+    delay(50); // optional: give FC a breather before EEPROM write
 
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
     MSP_UART.flush();
-    if (!WaitForMspAck(MSP_EEPROM_WRITE, 1000))
+    if (!WaitForMspAck(MSP_EEPROM_WRITE, 1500))
+    {
+        //   Look("MSP_EEPROM_WRITE Ack Failed!");
         return;
+    }
+    // Look("MSP_EEPROM_WRITE Ack Success!");
 
     lastWriteTime = millis();
+  //  InhibitTelemetry = false; // re-enable telemetry after successful write+save
 }
 
 // ************************************************************************************************************
@@ -997,6 +1022,7 @@ inline void WritePIDAdvancedToNexusAndSave()
         return;
 
     lastWriteTime = millis();
+   // InhibitTelemetry = false; // re-enable telemetry after successful write+save
 }
 
 // ************************************************************************************************************

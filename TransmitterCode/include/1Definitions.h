@@ -28,7 +28,7 @@
 #define TXVERSION_MAJOR 2                  // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 5
 #define TXVERSION_MINIMUS 6
-#define TXVERSION_EXTRA "C 18/02/26"
+#define TXVERSION_EXTRA "D 24/02/26"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -203,7 +203,9 @@
 #define MSP_BANK_CHANGE 22                    // Command to send current bank number to RX (for MSP Bank change)
 #define MSP_RATES_CHANGE 23                   // Command to send current rates number to RX (for MSP Rates change)
 #define MSP_BANK_CHANGE_CONFIRMATION 24       // Confirmation from RX that bank change was successful (for MSP Bank change confirmation) NOT YET USED
-#define PARAMETERS_MAX_ID 24                  // Max types of parameters packet to send  ... might increase.
+#define MSP_INHIBIT_TELEMETRY 25              // Inhibit telemetry for a short time to allow MSP data to be sent without interference from telemetry data (for MSP data transmission)
+#define MSP_ENABLE_TELEMETRY 26               // ENABLE telemetry after MSP data has been sent (for MSP data transmission)
+#define PARAMETERS_MAX_ID 26                  // Max types of parameters packet to send  ... might increase.
 
 // **************************************************************************
 //                               Mixes                                      *

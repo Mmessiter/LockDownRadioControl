@@ -337,6 +337,7 @@ void PopulateDataView()
     char TimeSinceBoot[] = "n1";
     uint32_t BootedSeconds = millis() / 1000;
     char tempbuf[25];
+    AddParameterstoQueue(MSP_ENABLE_TELEMETRY); // 26 = ENABLE telemetry after MSP data has been sent (for MSP data transmission)
     ClearNextionCommand();
 
     BuildText(DataView_txv, TransmitterVersionNumber);
