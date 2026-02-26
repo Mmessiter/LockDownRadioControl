@@ -2201,26 +2201,26 @@ void DeleteModelID()
     }
 }
 // *********************************************************************************************************************************/
-void ClearDuplicateModelIDs(uint64_t ThisModelID)
-{
-    // This clears any duplicate model IDs
-    bool Found = false;
-    SavedModelNumber = ModelNumber; // save current
-    for (int i = 0; i < MAXMODELNUMBER; ++i)
-    {
-        ReadOneModel(i);
-        if (ModelsMacUnionSaved.Val64 == ThisModelID)
-        {
-            ModelsMacUnionSaved.Val64 = 0;
-            SaveOneModel(i);
-            Found = true;
-        }
-    }
-    if (Found)
-        MsgBox(pRXSetupView, (char *)"Duplicate Model ID(s) cleared!");
-    ModelNumber = SavedModelNumber; // restore current model number
-    ReadOneModel(ModelNumber);      // reload current model
-}
+// void ClearDuplicateModelIDs(uint64_t ThisModelID)
+// {
+//     // This clears any duplicate model IDs
+//     bool Found = false;
+//     SavedModelNumber = ModelNumber; // save current
+//     for (int i = 0; i < MAXMODELNUMBER; ++i)
+//     {
+//         ReadOneModel(i);
+//         if (ModelsMacUnionSaved.Val64 == ThisModelID)
+//         {
+//             ModelsMacUnionSaved.Val64 = 0;
+//             SaveOneModel(i);
+//             Found = true;
+//         }
+//     }
+//     if (Found)
+//         MsgBox(pRXSetupView, (char *)"Duplicate Model ID(s) cleared!");
+//     ModelNumber = SavedModelNumber; // restore current model number
+//     ReadOneModel(ModelNumber);      // reload current model
+// }
 
 /*********************************************************************************************************************************/
 
@@ -2252,7 +2252,7 @@ void StoreModelID()
 
     if (GetConfirmation(pRXSetupView, prompt))
     {
-        ClearDuplicateModelIDs(ModelsMacUnion.Val64); // ensure no duplicates
+       // ClearDuplicateModelIDs(ModelsMacUnion.Val64); // ensure no duplicates
         PlaySound(MMSAVED);
         ModelsMacUnionSaved.Val64 = ModelsMacUnion.Val64;
         SaveOneModel(ModelNumber);

@@ -188,7 +188,7 @@ void ShowCurrentRate()
         break;
     case 4:
         if (LinkRatesToBanks)
-            SendText(rate, rate4); 
+            SendText(rate, rate4);
         else
             SendCommand((char *)"vis rate,0");
         break;
