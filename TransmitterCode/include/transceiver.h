@@ -1353,6 +1353,8 @@ FASTRUN void ParseAckPayload()
         }
         break;
     case 31:
+        if (BindingEnabled)
+            break;
 
         Use_RotorFlight_Options = GetBoolFromAckPayload(1);
         if (Use_RotorFlight_Options && !Use_RotorFlight_Options_before)

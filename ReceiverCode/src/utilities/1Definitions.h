@@ -39,7 +39,7 @@
 // **************************************************************************
 
 #ifdef USE_BOTTOM_SOLDER_PADS_FOR_SERIAL6
-#define MSP_UART Serial6
+#define MSP_UART Serial6 // green->24, white->25 for MSP communication with Nexus Rotorflight22 etc.
 #else
 #define MSP_UART Serial1
 #endif

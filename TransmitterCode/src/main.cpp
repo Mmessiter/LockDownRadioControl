@@ -4801,6 +4801,7 @@ void CheckWhetherToEnableBinding()
             SendText(wb, Mfound);         // Show binding enabled
             SendCommand(YesVisible);      // Show binding enabled
             BindingEnabled = true;        // Set binding enabled flag
+            Use_RotorFlight_Options = false; // Disable Rotorflight options as they are not needed for binding and can cause confusion if left on.
         }
         return;
     }

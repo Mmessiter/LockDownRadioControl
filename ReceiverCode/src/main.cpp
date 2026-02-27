@@ -2,7 +2,7 @@
 /**************************************************** Receiver code **************************************************
   @file       main.cpp
   @brief      Main code for Lockdown Radio Control Receiver.
-  @author     Malcolm Messiter 2020 - 2025
+  @author     Malcolm Messiter 2020 - 2026
  * @page RXCODE RecieverCode
  * @section rx Features List
  * - WORKS ON TEENSY 4.0

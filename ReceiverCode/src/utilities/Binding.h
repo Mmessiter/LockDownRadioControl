@@ -11,11 +11,21 @@ bool TestTheNewPipe() // Check that the set pipe can actually receive data befor
 {
     uint8_t idx = 1;
     uint32_t LookTime = millis();
+#ifdef DB_BIND
+    Look("Testing new pipe...");
+#endif
+
     while (millis() - LookTime < 650)
     {
         CurrentRadio->stopListening();
         delayMicroseconds(STOPLISTENINGDELAY);
         CurrentRadio->setChannel(FHSS_Recovery_Channels[idx]);
+
+#ifdef DB_BIND
+        Look1("Testing new pipe on channel ");
+        Look(FHSS_Recovery_Channels[idx]);
+#endif
+
         delayMicroseconds(STOPLISTENINGDELAY);
         CurrentRadio->startListening();
         delayMicroseconds(STOPLISTENINGDELAY);
@@ -27,6 +37,9 @@ bool TestTheNewPipe() // Check that the set pipe can actually receive data befor
         }
         if (CurrentRadio->available(&Pipnum))
         {
+#ifdef DB_BIND
+            Look("New pipe test succeeded.");
+#endif
             return true;
         }
         else
@@ -37,6 +50,10 @@ bool TestTheNewPipe() // Check that the set pipe can actually receive data befor
         }
         KickTheDog(); // keep the watchdog happy
     }
+#ifdef DB_BIND
+    Look("New pipe test failed.");
+#endif
+
     return false;
 }
 
@@ -66,12 +83,18 @@ void GetNewPipe() // from TX
     if (TestTheNewPipe())
     {
         BindModel(); // don't bind if the pipe is not valid
-      //  Look("Pipe test succeeded. Model bound.");
+#ifdef DB_BIND
+        Look("Pipe test succeeded. Model bound.");
+#endif
     }
     else
     {
-       // Look("Pipe test failed. Not bound.");
+#ifdef DB_BIND
+        Look("Pipe test failed. Not bound.");
+#endif
     }
+
+    // BindModel(); // don't bind if the pipe is not valid
 }
 
 /************************************************************************************************************/
