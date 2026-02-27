@@ -1075,6 +1075,7 @@ FASTRUN void ParseAckPayload()
     FHSS_data::NextChannelNumber = AckPayload.Ack_Payload_byte[5]; // every packet tells of next hop destination
     bool Use_RotorFlight_Options_before = Use_RotorFlight_Options;
 
+
     if (AckPayload.Ack_Payload_byte[0] & 0x80)
     {                                                                             // Hi bit is now the **HOP NOW!!** flag
         NextChannel = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber); // The actual channel number pointed to.
@@ -1357,7 +1358,12 @@ FASTRUN void ParseAckPayload()
             break;
 
         Use_RotorFlight_Options = GetBoolFromAckPayload(1);
-        if (Use_RotorFlight_Options && !Use_RotorFlight_Options_before)
+
+        // Look1("Use_RotorFlight_Options: ");
+        // Look(Use_RotorFlight_Options ? "YES" : "NO");
+        
+
+            if (Use_RotorFlight_Options && !Use_RotorFlight_Options_before)
         {
             GotoFrontView();
             Use_RotorFlight_Options_before = true;
