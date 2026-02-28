@@ -293,12 +293,12 @@ inline void WritePIDAdvancedToNexusAndSave();
 inline void SetNexusProfile(uint8_t index);
 //inline bool Parse_MSP_STATUS_EX(const uint8_t *data, uint8_t n);
 uint32_t GetBuildDaysSince2020(); // days since 1st Jan 2020 for this build
+static bool Parse_MSP_API_VERSION(const uint8_t *buf, uint8_t len, uint8_t &mspProto, uint8_t &apiMaj, uint8_t &apiMin);
 
-
-/************************************************************************************************************/
-// For numeric types (int, float, double, etc.)
-template <typename T>
-void Look(const T &value, int format)
+    /************************************************************************************************************/
+    // For numeric types (int, float, double, etc.)
+    template <typename T>
+    void Look(const T &value, int format)
 {
     Serial.println(value, format);
 }

@@ -380,6 +380,9 @@ FASTRUN void SendData()
     if (((millis() - LastPacketSentTime) < FHSS_data::PaceMaker) || (SendNoData))
         return;
 
+        
+    //Look(SendBuffer[0]);
+
     uint8_t NumberOfChangedChannels = 0;
     static uint8_t ByteCountToTransmit = 2;
 

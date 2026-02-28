@@ -7,6 +7,7 @@
 // ************************************************************************************************************
 // MSP SUPPORT FUNCTIONS FOR ROTORFLIGHT (Nexus) etc.
 // ************************************************************************************************************
+#define MSP_API_VERSION 1
 #define MSP_MOTOR_TELEMETRY 139 // Motor telemetry data
 #define MSP_PID 112             // PID settings (read)
 #define MSP_SET_PID 202         // write PID settings
@@ -24,6 +25,60 @@
 #define SEND_RATES_RF 2
 #define SEND_RATES_ADVANCED_RF 3
 #define SEND_PID_ADVANCED_RF 4
+
+HardwareSerial *This_MSP_Uart = &MSP_UART; // Serial port used for MSP communication with flight controller
+
+// ************************************************************************************************************
+// Detect if Rotorflight 2.2 is present at boot time
+// If detected, fetch API version and protocol version
+// Keeps the MSP_UART open if Rotorflight 2.2 is present
+// Closes it if not present
+// ************************************************************************************************************
+
+inline void DetectRotorFlightAtBoot()
+{
+#define NEXUS_DETECT_WINDOW_MS 1500
+
+    This_MSP_Uart->begin(115200);
+    while (This_MSP_Uart->available())
+        (void)This_MSP_Uart->read();
+
+    uint32_t start = millis();
+    uint8_t buf[80];
+
+    Rotorflight22Detected = false;
+
+    while (millis() - start < NEXUS_DETECT_WINDOW_MS)
+    {
+        RequestFromMSP(MSP_MOTOR_TELEMETRY);
+        delay(20);
+
+        uint8_t p = 0;
+        while (This_MSP_Uart->available() && p < sizeof(buf))
+            buf[p++] = (uint8_t)This_MSP_Uart->read();
+        if (Parse_MSP_Motor_Telemetry(buf, p))
+        {
+            // Now fetch API version
+            RequestFromMSP(MSP_API_VERSION);
+            delay(20);
+
+            p = 0;
+            while (This_MSP_Uart->available() && p < sizeof(buf))
+                buf[p++] = (uint8_t)This_MSP_Uart->read();
+
+            uint8_t apiMaj = 0, apiMin = 0, proto = 0;
+            if (Parse_MSP_API_VERSION(buf, p, proto, apiMaj, apiMin))
+            {
+                if (api100 >= 1208) // (x 100 to deal with floats more easily)
+                    Rotorflight22Detected = true;
+            }
+            return; // keep UART open
+        }
+    }
+    This_MSP_Uart->end();
+    Rotorflight22Detected = false;
+}
+
 
 // ************************************************************************************************************
 enum : uint8_t
@@ -43,7 +98,7 @@ enum : uint8_t
 };
 
 // ************************************************************************************************************
-#define MSP_API_VERSION 1
+
 
 // ************************************************************************************************************
 // ACK / reply wait support (prevents EEPROM save racing ahead of SET command processing)
@@ -79,9 +134,9 @@ inline bool WaitForMspAck(uint8_t expectedCmd, uint32_t timeoutMs)
 
     while ((uint32_t)(millis() - start) < timeoutMs)
     {
-        while (MSP_UART.available())
+        while (This_MSP_Uart->available())
         {
-            uint8_t c = (uint8_t)MSP_UART.read();
+            uint8_t c = (uint8_t)This_MSP_Uart->read();
 
             switch (state)
             {
@@ -191,56 +246,6 @@ static bool Parse_MSP_API_VERSION(const uint8_t *buf, uint8_t len, uint8_t &mspP
     return false;
 }
 
-// ************************************************************************************************************
-// Detect if Rotorflight 2.2 is present at boot time
-// If detected, fetch API version and protocol version
-// Keeps the MSP_UART open if Rotorflight 2.2 is present
-// Closes it if not present
-// ************************************************************************************************************
-inline void DetectRotorFlightAtBoot()
-{
-#define NEXUS_DETECT_WINDOW_MS 1500
-
-    MSP_UART.begin(115200);
-    while (MSP_UART.available())
-        (void)MSP_UART.read();
-
-    uint32_t start = millis();
-    uint8_t buf[80];
-
-    Rotorflight22Detected = false;
-
-    while (millis() - start < NEXUS_DETECT_WINDOW_MS)
-    {
-        RequestFromMSP(MSP_MOTOR_TELEMETRY);
-        delay(20);
-
-        uint8_t p = 0;
-        while (MSP_UART.available() && p < sizeof(buf))
-            buf[p++] = (uint8_t)MSP_UART.read();
-        if (Parse_MSP_Motor_Telemetry(buf, p))
-        {
-            // Now fetch API version
-            RequestFromMSP(MSP_API_VERSION);
-            delay(20);
-
-            p = 0;
-            while (MSP_UART.available() && p < sizeof(buf))
-                buf[p++] = (uint8_t)MSP_UART.read();
-
-            uint8_t apiMaj = 0, apiMin = 0, proto = 0;
-            if (Parse_MSP_API_VERSION(buf, p, proto, apiMaj, apiMin))
-            {
-                if (api100 >= 1208) // (x 100 to deal with floats more easily)
-                    Rotorflight22Detected = true;
-            }
-            return; // keep UART open
-        }
-    }
-    MSP_UART.end();
-    Rotorflight22Detected = false;
-}
-
 // **********************************************************************************************************// @brief Structure representing an MSP frame
 
 struct MspFrame
@@ -321,14 +326,14 @@ inline bool FindMspV1ResponseFrameForCmd(const uint8_t *data, uint8_t n, uint8_t
 inline void RequestFromMSP(uint8_t command) // send a request to the flight controller
 {
     uint8_t checksum = 0;
-    MSP_UART.write('$');
-    MSP_UART.write('M');
-    MSP_UART.write('<');
-    MSP_UART.write((uint8_t)0);
+    This_MSP_Uart->write('$');
+    This_MSP_Uart->write('M');
+    This_MSP_Uart->write('<');
+    This_MSP_Uart->write((uint8_t)0);
     checksum ^= 0;
-    MSP_UART.write(command);
+    This_MSP_Uart->write(command);
     checksum ^= command;
-    MSP_UART.write(checksum);
+    This_MSP_Uart->write(checksum);
 }
 
 // ************************************************************************************************************
@@ -341,24 +346,24 @@ inline void SendToMSP(uint8_t command, const uint8_t *payload, uint8_t payloadSi
 {
     uint8_t checksum = 0;
 
-    MSP_UART.write('$');
-    MSP_UART.write('M');
-    MSP_UART.write('<');
+    This_MSP_Uart->write('$');
+    This_MSP_Uart->write('M');
+    This_MSP_Uart->write('<');
 
-    MSP_UART.write(payloadSize);
+    This_MSP_Uart->write(payloadSize);
     checksum ^= payloadSize;
 
-    MSP_UART.write(command);
+    This_MSP_Uart->write(command);
     checksum ^= command;
 
     for (uint8_t i = 0; i < payloadSize; i++)
     {
         uint8_t b = payload[i];
-        MSP_UART.write(b);
+        This_MSP_Uart->write(b);
         checksum ^= b;
     }
 
-    MSP_UART.write(checksum);
+    This_MSP_Uart->write(checksum);
 }
 
 // ************************************************************************************************************
@@ -384,12 +389,12 @@ inline void WritePIDsToNexusAndSave(const uint16_t pid[17])
     }
 
     SendToMSP(MSP_SET_PID, payload, sizeof(payload));
-    MSP_UART.flush();
+    This_MSP_Uart->flush();
     if (!WaitForMspAck(MSP_SET_PID, 300))
         return;
 
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
-    MSP_UART.flush();
+    This_MSP_Uart->flush();
     if (!WaitForMspAck(MSP_EEPROM_WRITE, 1000))
         return;
 
@@ -537,9 +542,9 @@ inline void CheckMSPSerial()
     bool overflow = false;
     uint8_t data_in[180];
     uint16_t p = 0;
-    while (MSP_UART.available())
+    while (This_MSP_Uart->available())
     {
-        uint8_t c = MSP_UART.read();
+        uint8_t c = This_MSP_Uart->read();
         if (overflow)
             continue;
         if (p < sizeof(data_in))
@@ -787,7 +792,7 @@ inline void WriteRatesToNexusAndSave()
     if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight22Detected))
         return;
     delay(20); // optional: give FC a breather before sending
-    MSP_UART.flush();
+    This_MSP_Uart->flush();
 
     uint8_t payload_size = 25;
     if (api100 >= 1208)
@@ -848,7 +853,7 @@ inline void WriteRatesToNexusAndSave()
         return; // defensive: never send malformed payload
 
     SendToMSP(MSP_SET_RC_TUNING, payload, payload_size);
-    MSP_UART.flush();
+    This_MSP_Uart->flush();
     if (!WaitForMspAck(MSP_SET_RC_TUNING, 600))
     {
         // Look("MSP_SET_RC_TUNING Ack Failed!");
@@ -859,7 +864,7 @@ inline void WriteRatesToNexusAndSave()
     delay(50); // optional: give FC a breather before EEPROM write
 
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
-    MSP_UART.flush();
+    This_MSP_Uart->flush();
     if (!WaitForMspAck(MSP_EEPROM_WRITE, 1500))
     {
         //   Look("MSP_EEPROM_WRITE Ack Failed!");
@@ -1012,12 +1017,12 @@ inline void WritePIDAdvancedToNexusAndSave()
     payload[42] = PID_Advanced_Bytes[25];
 
     SendToMSP(MSP_SET_PID_PROFILE, payload, sizeof(payload));
-    MSP_UART.flush();
+    This_MSP_Uart->flush();
     if (!WaitForMspAck(MSP_SET_PID_PROFILE, 300))
         return;
 
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
-    MSP_UART.flush();
+    This_MSP_Uart->flush();
     if (!WaitForMspAck(MSP_EEPROM_WRITE, 1000))
         return;
 
@@ -1033,7 +1038,7 @@ inline void SetNexusProfile(uint8_t index)
         return;
 
     SendToMSP(MSP_SELECT_SETTING, &index, 1);
-    MSP_UART.flush();
+    This_MSP_Uart->flush();
     (void)WaitForMspAck(MSP_SELECT_SETTING, 300); // optional but useful
 }
 
