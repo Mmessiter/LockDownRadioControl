@@ -114,11 +114,14 @@ bool CheckForCrazyValues() // Crazy values might come while binding, and should 
 
 inline uint8_t PwmStartIndex()
 {
-#ifndef USE_BOTTOM_SOLDER_PADS_FOR_SERIAL6
-    return Rotorflight22Detected ? 2 : 0; // if Nexus is present,returns 2 else 0 
-#else
-    return 0; // always 0 if using bottom solder pads for serial6 - the MSP_UART
-#endif
+    if (Rotorflight22Detected)
+    {
+        return 2; // if Nexus is present, first two channels are used for SBUS output, so PWM starts at index 2
+    }
+    else
+    {
+        return 0; // if Nexus is not present, all channels are available for PWM, so start at index 0
+    }
 }
 #endif // USE_PWM
 /************************************************************************************************************/

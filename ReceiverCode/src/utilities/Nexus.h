@@ -26,8 +26,6 @@
 #define SEND_RATES_ADVANCED_RF 3
 #define SEND_PID_ADVANCED_RF 4
 
-HardwareSerial *This_MSP_Uart = &MSP_UART; // Serial port used for MSP communication with flight controller
-
 // ************************************************************************************************************
 // Detect if Rotorflight 2.2 is present at boot time
 // If detected, fetch API version and protocol version
@@ -36,6 +34,35 @@ HardwareSerial *This_MSP_Uart = &MSP_UART; // Serial port used for MSP communica
 // ************************************************************************************************************
 
 inline void DetectRotorFlightAtBoot()
+{
+
+#define Ports_Count 2
+   // uint32_t LocalTimer = millis();
+   // char Pnames[Ports_Count][10] = {"Serial6", "Serial1"};
+    HardwareSerial *Ports[Ports_Count] = {&Serial6, &Serial1};
+    for (uint8_t i = 0; i < Ports_Count; i++)
+    {
+        This_MSP_Uart = Ports[i];
+        DetectRotorFlightAtBoot1();
+        if (Rotorflight22Detected)
+        {
+            // Look1("Rotorflight 2.2 detected on ");
+            // Look(Pnames[i]);
+            // Look1("After ");
+            // Look1((float)(millis() - LocalTimer)/1000);
+            // Look(" seconds");  
+            return;
+        }
+        // Look1("Rotorflight 2.2 not detected on ");
+        // Look(Pnames[i]);
+        // Look1("After ");        
+        // Look1((float)(millis() - LocalTimer)/1000);
+        // Look(" seconds");
+    }
+}
+
+// ************************************************************************************************************
+inline void DetectRotorFlightAtBoot1()
 {
 #define NEXUS_DETECT_WINDOW_MS 1500
 
@@ -79,7 +106,6 @@ inline void DetectRotorFlightAtBoot()
     Rotorflight22Detected = false;
 }
 
-
 // ************************************************************************************************************
 enum : uint8_t
 {
@@ -98,7 +124,6 @@ enum : uint8_t
 };
 
 // ************************************************************************************************************
-
 
 // ************************************************************************************************************
 // ACK / reply wait support (prevents EEPROM save racing ahead of SET command processing)
@@ -399,7 +424,7 @@ inline void WritePIDsToNexusAndSave(const uint16_t pid[17])
         return;
 
     lastWriteTime = millis(); // set cooldown only after confirmed write+save
-  //  InhibitTelemetry = false; // re-enable telemetry after successful write+save
+                              //  InhibitTelemetry = false; // re-enable telemetry after successful write+save
 }
 
 // ************************************************************************************************************
@@ -570,7 +595,7 @@ inline void CheckMSPSerial()
         {
         case SEND_NO_RF:
             if (InhibitTelemetry)
-            { 
+            {
                 break;
             }
             else
@@ -873,7 +898,7 @@ inline void WriteRatesToNexusAndSave()
     // Look("MSP_EEPROM_WRITE Ack Success!");
 
     lastWriteTime = millis();
-  //  InhibitTelemetry = false; // re-enable telemetry after successful write+save
+    //  InhibitTelemetry = false; // re-enable telemetry after successful write+save
 }
 
 // ************************************************************************************************************
@@ -1027,7 +1052,7 @@ inline void WritePIDAdvancedToNexusAndSave()
         return;
 
     lastWriteTime = millis();
-   // InhibitTelemetry = false; // re-enable telemetry after successful write+save
+    // InhibitTelemetry = false; // re-enable telemetry after successful write+save
 }
 
 // ************************************************************************************************************

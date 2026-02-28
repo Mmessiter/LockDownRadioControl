@@ -32,17 +32,11 @@
 // >>>>>>>>>>>>>>>>>********************************************************************
 // These options can be enabled or disabled as needed.
 
-#define USE_BOTTOM_SOLDER_PADS_FOR_SERIAL6 // Uncomment this line to use Serial6 on the bottom solder pads for MSP communication with Nexus Rotorflight22 etc.
 #define USE_SBUS                           // Enable SBUS output
 #define USE_PWM                            // Enable PWM output
 
 // **************************************************************************
 
-#ifdef USE_BOTTOM_SOLDER_PADS_FOR_SERIAL6
-#define MSP_UART Serial6 // white->24, green->25 for MSP communication with Nexus Rotorflight22 etc.
-#else
-#define MSP_UART Serial1
-#endif
 #define SERVO_RES_BITS 12
 #define SERVO_RESOLUTION 4096
 #define EXTRAAT1500 1000
@@ -165,7 +159,7 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define PIN_CSN2 20  // NRF2 // always same if exists
 #define PIN_CE2 21   // NRF2 // always same if exists
 // ****************************************************************************************************************************************
-
+HardwareSerial *This_MSP_Uart = &Serial6;
 RF24 Radio1(PIN_CE1, PIN_CSN1);    // for new rxs with 11 pwm outputs
 RF24 Radio1a(PINA_CE1, PINA_CSN1); // for old rxs with only 8 pwm outputs
 RF24 Radio2(PIN_CE2, PIN_CSN2);    // NRF2 always same
@@ -294,6 +288,7 @@ inline void SetNexusProfile(uint8_t index);
 //inline bool Parse_MSP_STATUS_EX(const uint8_t *data, uint8_t n);
 uint32_t GetBuildDaysSince2020(); // days since 1st Jan 2020 for this build
 static bool Parse_MSP_API_VERSION(const uint8_t *buf, uint8_t len, uint8_t &mspProto, uint8_t &apiMaj, uint8_t &apiMin);
+inline void DetectRotorFlightAtBoot1();
 
     /************************************************************************************************************/
     // For numeric types (int, float, double, etc.)
