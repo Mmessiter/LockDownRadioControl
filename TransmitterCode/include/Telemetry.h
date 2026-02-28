@@ -437,6 +437,14 @@ void PopulateFrontView()
         SendText(FrontView_Connected, MsgBuddying);
     }
 
+    if (Use_RotorFlight_Options && LedWasGreen)
+    {
+        char ESC_Temp_Buf[20];
+        SendCommand((char *)"vis Warning,1");
+        snprintf(ESC_Temp_Buf, sizeof(ESC_Temp_Buf), "ESC: %.1f", ESC_Temp);
+        SendText((char *)"Warning", ESC_Temp_Buf);
+    }
+
     if (LedWasGreen)
     {
         if (BoundFlag)

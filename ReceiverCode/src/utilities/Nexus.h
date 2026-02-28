@@ -35,7 +35,6 @@
 
 inline void DetectRotorFlightAtBoot()
 {
-
 #define Ports_Count 2
    // uint32_t LocalTimer = millis();
    // char Pnames[Ports_Count][10] = {"Serial6", "Serial1"};
