@@ -1,10 +1,6 @@
 # Lockdown Radio Control
 
-![Image](./Images/TX_and_RX.jpeg "The radio!")
-
-## Recent UI update ...
-
-![Image](./Images/Front.jpeg "Recent UI update!")
+![Image](./Images/IMG_RAW420.jpg "The radio!")
 
 ## Why would anyone choose to use LockDownRadioControl (LDRC) instead of EdgeTX or a commercial system? Here are a few reasons:
 
