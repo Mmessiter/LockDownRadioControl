@@ -217,7 +217,7 @@ void PupilDetected(bool Detected)
 
 /************************************************************************************************************/
 
-void RearrangeTheChannels()
+void RearrangeTheBuddyChannels()
 {
     //  This function looks at the 16 BITS of DataReceived.ChannelBitMask and rearranges the channels accordingly.
     uint8_t p = 0;
@@ -232,7 +232,7 @@ void RearrangeTheChannels()
     return;
 }
 // ************************************************************************************************************/
-uint8_t GetDecompressedSize(uint8_t DynamicPayloadSize)
+uint8_t GetDecompressedBuddySize(uint8_t DynamicPayloadSize)
 {
     uint8_t Ds = (((DynamicPayloadSize - 2) * 4) / 3) / 2; // first 2 bytes are ChannelBitMask, the rest is the 3:4 compressed data (hence the "-2")
     while (Ds % 4)                                         // make sure Ds is a multiple of 4
@@ -251,8 +251,8 @@ void GetPupilAck()
         Radio1.read(&DataReceived, DynamicPayloadSize);              // read only bytes sent in the packet
         if (DataReceived.ChannelBitMask)                             // any channel changes?
         {
-            Decompress(RawDataIn, DataReceived.CompressedData, GetDecompressedSize(DynamicPayloadSize)); // yes, decompress the data into RawDataIn array
-            RearrangeTheChannels();                                                                      // Rearrange the channels
+            Decompress(RawDataIn, DataReceived.CompressedData, GetDecompressedBuddySize(DynamicPayloadSize)); // yes, decompress the data into RawDataIn array
+            RearrangeTheBuddyChannels();                                                                      // Rearrange the channels
         }
     }
 }
@@ -269,7 +269,7 @@ void ChangeTXTarget(uint8_t ch, uint64_t p, rf24_datarate_e rate) // Swap betwee
 }
 
 // ************************************************************************************************************
-void DoTheLongerSpecialPacket()
+void DoTheSpecialPacket()
 {
 
     SpecialPacketData.ModelID = ModelsMacUnionSaved.Val64; // Send the model ID so that pupil can check it
@@ -345,7 +345,7 @@ void SendSpecialPacket() // Here the master sends a packet to the buddy Hoping t
             return;
         LocalTimer = millis();
     }
-    DoTheLongerSpecialPacket();                                 // Send the longer packet (model ID sent) EVERYTIME!
+    DoTheSpecialPacket();                                       // Send the longer packet (model ID sent) EVERYTIME!
     ChangeTXTarget(CurrentChannel, TeensyMACAddPipe, DATARATE); // Set the TX target back to the receiver in model.
 }
 
@@ -432,7 +432,7 @@ void SetNewListenChannel(uint8_t Channel)
     Radio1.startListening();
 }
 // ************************************************************************************************************
-void ParseLongerSpecialPacket()
+void ParseSpecialPacket()
 { // This is called from GetSpecialPacket() function just below
     static uint64_t LastModelID = 0;
     Radio1.read(&SpecialPacketData, sizeof SpecialPacketData);                      // read the packet if its still there
@@ -467,7 +467,7 @@ void GetSpecialPacket()
 
     CheckPowerOffButton(); // Check if the power off button is pressed. If so, power off immediately without trying to receive the packet, which would cause a delay and a possible crash if the buddy is not present.
 
-        if (Radio1.available())
+    if (Radio1.available())
     {                                                                   // if a packet has arrived
         if (Radio1.getDynamicPayloadSize() != sizeof SpecialPacketData) // MUST be sizeof SpecialPacketData (= 24!)
         {
@@ -478,9 +478,9 @@ void GetSpecialPacket()
             return;
         }
         SendTheSpecialAckPayload();
-        ParseLongerSpecialPacket(); // Parse the packet
-        MasterDetected(true);       // Master is alive
-        ++PacketCounter;            // Count the packets
+        ParseSpecialPacket(); // Parse the packet
+        MasterDetected(true); // Master is alive
+        ++PacketCounter;      // Count the packets
 
         if (millis() - LocalTimer >= 1000)
         {                                     // Every second
