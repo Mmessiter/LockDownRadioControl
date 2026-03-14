@@ -1,0 +1,32 @@
+If you have questions even after looking at the help screens, please email these to Malcolm Messiter at mmessiter@gmail.com ||
+
+It's recommended that this screen is visible while flying a model because it shows the bank, time, trims, motor timer and battery voltages. ||
+
+The motor timer runs automatically when the motor is running. ||
+
+It can run forwards, or backwards from a specified number of minutes. (Under Model setup / Options).||
+
+The timer pauses when the motor is not running and is reset to 0 when the transmitter is turned on.||
+
+LED blue  = The radio is not trying to connect.|
+LED red   = The radio is trying to connect.|
+LED green = The radio is connected.||
+
+The power button will turn the radio on and off. If the radio is connected, a (user definable) long press is needed to turn it off. This is to guard 
+against the likely consequences of your accidentally hitting the button while flying a model. || 
+
+The green connection quality indicator near the bottom of the screen shows the proportion of successful data packets as a percentage of total data packets averaged over a definable period (of 1 - 6 seconds).||
+
+The battery indicator top right shows the transmitter battery state. |
+This battery can be LiPo, Li-Ion or LiFePo4 but always 2 cells.||
+
+The display shows the voltage PER CELL. This is because most people know immediately the 'per cell' voltage at which further discharge is a not a very good idea. 
+|For LiPo and Li-Ion, it's about 3.6V. |
+
+This battery type should be defined in 'Setup' in order to see a useful percent display.  
+
+The battery indicator bottom left shows the receiver battery state, including per cell voltage. |
+
+Under Model setup / Options you can set the per-cell receiver voltage below which the transmitter will announce "STOP FLYING!". About 3.6 volts is suggested.
+
+Press 'Model setup' Or 'Transmitter setup' to change settings. 

@@ -1,0 +1,13 @@
+To move a point up or down, touch the screen above or below the point. ||
+
+That point will move close to where you touched. For finer adjustment, use the buttons at the bottom left. First select the point you want to move, then press + or - .||
+
+Three type of interpolation are supported:||
+
+1. Straight: 4 straight lines joining 5 points.|
+2. Smooth: Smoothed curve between 5 points.|
+3. Exponential: 3 points joined by 2 exponential curves with expo values between -50% and +150%. Straight is obtained with an expo value of zero. Because it's tricky to stop the slider exactly at zero, an extra button is provided at the bottom for this function.
+
+
+  
+

@@ -1,0 +1,9 @@
+This screen is for setting up Failsafe.||
+If signal is lost by the receiver for >2 seconds, each CHECKED channel will go to where it was when you pressed 'Save' on this screen. ||
+(Channels not checked will not move at all on loss of signal.)||
+
+If or when connection subsequently recovers, full control is resumed.||
+
+Failsafe data are saved AT THE RECEIVER, so use the screen ONLY WHEN CONNECTED!||
+(Pressing 'Save' when not connected saves nothing at the receiver.)
+ 

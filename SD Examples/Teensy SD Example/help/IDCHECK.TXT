@@ -1,0 +1,25 @@
+Each model's 'ID' is actually the MAC address of the Teensy 4.0 MCU in the model's receiver. It's a unique 6 BYTE number. ||
+
+These 48 BIT unique numbers are use by the radio's Automatic Model Selector function. Hence it's important that they are correct and not duplicated.|| 
+
+Duplicates can be created if you move a receiver from one model to another, etc., and duplicates can lead to the automatic selection of the wrong model memory, which is best avoided!||
+
+Displayed at the bottom of the screen is the number of duplicates found - ideally zero (0).||
+
+If duplicate IDs exist they are marked in the list with '>>Duplicate n<<'  where 'n' is the number of the model memory which has the same ID. ||
+
+Duplicates should be 'unmatched' or simply deleted. ||
+
+'Store ID records the ID of that model so that it can subsequently be automatically selected.
+
+'Delete ID' simply removes the ID without making any other change.||
+
+If duplicate IDs exist at connection time, the radio will connect to the model with the lowest model number.||
+
+When you save a model memory to a backup file, its ID is also saved, hence its ID will also be restored if you later restore from that file.||
+
+If you are not sure that the model's ID is correct for an installed receiver, turn off AMS (Automatic Model Selection) and manually select the correct model before connecting. Then after connecting, save the model ID from the Model setup screen. ||
+
+When you transfer a model memory to another transmitter wirelessly, that model's ID is also transferred, assuming you had earlier saved it. Hence the transmitter that receives that model memory will also be able immediately automatically to select that model memory when it connects.
+
+
