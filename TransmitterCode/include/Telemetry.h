@@ -187,7 +187,7 @@ void ShowCurrentRate()
         SendCommand((char *)"vis rate,1");
         break;
     case 4:
-        if (LinkRatesToBanks)
+        if (LinkRatesToBanks && Use_RotorFlight_Options)
             SendText(rate, rate4);
         else
             SendCommand((char *)"vis rate,0");
