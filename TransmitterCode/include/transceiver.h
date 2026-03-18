@@ -1047,7 +1047,7 @@ void Hide_msg_if_needed()
 /// @brief Checks the age gap between the TX and RX builds and shows a message box if the gap is greater than MAX_ACCEPTABLE_AGE_GAP.
 void CheckAgeGap()
 {
-    constexpr int MAX_ACCEPTABLE_AGE_GAP = 30; // days
+    constexpr int MAX_ACCEPTABLE_AGE_GAP = 365; // days
 
 #ifdef DB_BUILD_AGE_GAP
     constexpr int FAKE_BUILD_AGE_GAP = 10; // testing only
