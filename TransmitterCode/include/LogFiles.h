@@ -615,6 +615,8 @@ FASTRUN void LogThisGap()
     char Ltext[] = "Gap: ";
     char NB[5];
     char thetext[10];
+if (CurrentView >= PIDVIEW)
+        return; // Don't log gaps when in PID views since they are not real gaps but just the result of not processing packets in time
     if (ThisGap > 1000)
         return;
     Str(NB, ThisGap, 0);
