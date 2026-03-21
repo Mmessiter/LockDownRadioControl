@@ -907,7 +907,7 @@ void LoadAckPayload()
         SendFloatToAckPayload(RateOfClimb);
         break;
     case 20:
-        if (!Rotorflight22Detected)
+        if (!Rotorflight_Version)
             RotorRPM = 0xffff;         // invalid RPM
         SendIntToAckPayload(RotorRPM); // RPM from Nexus
         break;
@@ -1041,7 +1041,7 @@ void LoadAckPayload()
         }
         break;
     case 31:
-        SendBoolToAckPayload(Rotorflight22Detected, 1); // Tell TX if Rotorflight22 detected in first Bool position
+        SendIntToAckPayload(Rotorflight_Version); // Tell TX if Rotorflightdetected 
         break;
     case 32:
         switch (SendRotorFlightParametresNow)

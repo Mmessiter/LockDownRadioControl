@@ -410,7 +410,7 @@ void ModelViewEnd()
     }
     SaveAllParameters();
     GotoFrontView();
-    ModelMatchFailed = false;// allows us to match with selected model.
+    ModelMatchFailed = false; // allows us to match with selected model.
 }
 
 /******************************************************************************************************************************/
@@ -1031,7 +1031,7 @@ void RXOptionsViewStart() // model Options screen
     SendCommand(pRXSetup1);
     CurrentView = RXSETUPVIEW1;
 
-    if (Use_RotorFlight_Options)
+    if (RotorFlight_V)
     {
         SendCommand((char *)"vis b1,1");
     }
@@ -1050,7 +1050,7 @@ void RXOptionsViewStart() // model Options screen
     SendValue(RxVCorrextion, RxVoltageCorrection);
     SendValue(c2, TimerDownwards);
     SendValue(n4, TimerStartTime / 60);
-    SendValue((char *)"sw0", Use_RotorFlight_Options);
+    SendValue((char *)"sw0", RotorFlight_V);
     DisplayModelImage();
     UpdateModelsNameEveryWhere();
 }
@@ -1094,7 +1094,7 @@ void RXOptionsViewEnd()
     TimerDownwards = GetValue(c2);
     SendValue(Progress, 70);
     TimerStartTime = GetValue(n4) * 60;
-    Use_RotorFlight_Options = GetValue((char *)"sw0");
+    RotorFlight_V = GetValue((char *)"sw0");
     SendValue(Progress, 100);
     CurrentView = RXSETUPVIEW;
     PreviousBank = 42;

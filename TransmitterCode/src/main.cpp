@@ -2252,7 +2252,7 @@ void StoreModelID()
 
     if (GetConfirmation(pRXSetupView, prompt))
     {
-       // ClearDuplicateModelIDs(ModelsMacUnion.Val64); // ensure no duplicates
+        // ClearDuplicateModelIDs(ModelsMacUnion.Val64); // ensure no duplicates
         PlaySound(MMSAVED);
         ModelsMacUnionSaved.Val64 = ModelsMacUnion.Val64;
         SaveOneModel(ModelNumber);
@@ -4801,7 +4801,7 @@ void CheckWhetherToEnableBinding()
             SendText(wb, Mfound);         // Show binding enabled
             SendCommand(YesVisible);      // Show binding enabled
             BindingEnabled = true;        // Set binding enabled flag
-            Use_RotorFlight_Options = false; // Disable Rotorflight options as they are not needed for binding and can cause confusion if left on. // heer!! ****
+            RotorFlight_V = false;        // Disable Rotorflight options as they are not needed for binding and can cause confusion if left on. // heer!! ****
         }
         return;
     }
@@ -4927,7 +4927,7 @@ void FASTRUN ManageTransmitter()
     if (RightNow - LastTimeRead >= 1000)
     { // Only once a second for these..
 
-        // if (Use_RotorFlight_Options && BankCheckIsNeeded){
+        // if (RotorFlight_V && BankCheckIsNeeded){
         //     BankCheckIsNeeded = false;
         //     AddParameterstoQueue(MSP_BANK_CHANGE_CONFIRMATION); // This is to confirm that we are talking to Rotorflight 2.2 which needs this extra step to complete the bank change process.
         // }
@@ -4982,7 +4982,7 @@ void FixMotorChannel()
 //************************************************************************************************************/
 void FixArmingChannel()
 {
-    if (Use_RotorFlight_Options)
+    if (RotorFlight_V)
     {
         uint16_t ArmValue[2] = {667, 2233}; // these are the values at the arming switch would give
         if (!BuddyPupilOnWireless)

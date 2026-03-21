@@ -36,25 +36,25 @@
 inline void DetectRotorFlightAtBoot()
 {
 #define Ports_Count 2
-   // uint32_t LocalTimer = millis();
-   // char Pnames[Ports_Count][10] = {"Serial6", "Serial1"};
+    // uint32_t LocalTimer = millis();
+    // char Pnames[Ports_Count][10] = {"Serial6", "Serial1"};
     HardwareSerial *Ports[Ports_Count] = {&Serial6, &Serial1};
     for (uint8_t i = 0; i < Ports_Count; i++)
     {
         This_MSP_Uart = Ports[i];
         DetectRotorFlightAtBoot1();
-        if (Rotorflight22Detected)
+        if (Rotorflight_Version)
         {
             // Look1("Rotorflight 2.2 detected on ");
             // Look(Pnames[i]);
             // Look1("After ");
             // Look1((float)(millis() - LocalTimer)/1000);
-            // Look(" seconds");  
+            // Look(" seconds");
             return;
         }
         // Look1("Rotorflight 2.2 not detected on ");
         // Look(Pnames[i]);
-        // Look1("After ");        
+        // Look1("After ");
         // Look1((float)(millis() - LocalTimer)/1000);
         // Look(" seconds");
     }
@@ -72,7 +72,7 @@ inline void DetectRotorFlightAtBoot1()
     uint32_t start = millis();
     uint8_t buf[80];
 
-    Rotorflight22Detected = false;
+    Rotorflight_Version = 0; // assume not present until we detect it
 
     while (millis() - start < NEXUS_DETECT_WINDOW_MS)
     {
@@ -95,14 +95,25 @@ inline void DetectRotorFlightAtBoot1()
             uint8_t apiMaj = 0, apiMin = 0, proto = 0;
             if (Parse_MSP_API_VERSION(buf, p, proto, apiMaj, apiMin))
             {
-                if (api100 >= 1208) // (x 100 to deal with floats more easily)
-                    Rotorflight22Detected = true;
+                if (api100 == 1208) // (x 100 to deal with floats more easily)
+                {
+                    Rotorflight_Version = 1; // 2.2
+                    //Look("Detected Rotorflight version: 2.2");
+                }
+                if (api100 >= 1209)
+                {
+                    Rotorflight_Version = 2; // 2.3 ... and later ... we can add more version checks here as needed
+                    //Look("Detected Rotorflight version: 2.3 or later");
+                 
+                }
+         
             }
             return; // keep UART open
         }
     }
     This_MSP_Uart->end();
-    Rotorflight22Detected = false;
+    Rotorflight_Version = 0;
+    ;
 }
 
 // ************************************************************************************************************
@@ -398,7 +409,7 @@ inline void WritePIDsToNexusAndSave(const uint16_t pid[17])
     const uint32_t WRITE_COOLDOWN_MS = 5000; // 5 seconds
     uint32_t now = millis();
 
-    if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight22Detected))
+    if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight_Version))
         return;
 
     uint8_t payload[34] = {0};
@@ -813,7 +824,7 @@ inline void WriteRatesToNexusAndSave()
     const uint32_t WRITE_COOLDOWN_MS = 5000;
     uint32_t now = millis();
 
-    if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight22Detected))
+    if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight_Version))
         return;
     delay(20); // optional: give FC a breather before sending
     This_MSP_Uart->flush();
@@ -1005,7 +1016,7 @@ inline void WritePIDAdvancedToNexusAndSave()
     const uint32_t WRITE_COOLDOWN_MS = 5000;
     uint32_t now = millis();
 
-    if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight22Detected))
+    if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight_Version))
         return;
 
     uint8_t payload[MAX_PID_ADVANCED_BYTES];
@@ -1058,7 +1069,7 @@ inline void WritePIDAdvancedToNexusAndSave()
 
 inline void SetNexusProfile(uint8_t index)
 {
-    if (!Rotorflight22Detected)
+    if (!Rotorflight_Version)
         return;
 
     SendToMSP(MSP_SELECT_SETTING, &index, 1);

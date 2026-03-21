@@ -28,7 +28,7 @@
 #define TXVERSION_MAJOR 2                  // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 5
 #define TXVERSION_MINIMUS 6
-#define TXVERSION_EXTRA "E 26/02/26"
+#define TXVERSION_EXTRA "F 21/03/26"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -1536,7 +1536,8 @@ bool Reading_RATES_Advanced_Now = false;
 
 char Rate_Types[6][15] = {"None", "Betaflight", "Raceflight", "KISS", "Actual", "QuickRates"};
 const float FactorTableRF[13] = {1, 10, 10, .01, 10, 10, .01, 10, 10, .01, .25, .25, .01}; // Factors for each RATES byte needed by Rotorflight
-bool Use_RotorFlight_Options = false;
+uint8_t RotorFlight_V = 0; // 0 = not RF, 1 = RF v2.2, 2 = RF v2.3
+float RotorFlight_Version = 0;
 char ModelImageFileName[9];
 bool Armed = false;
 bool Wait_for_Advanced_Rates_to_Be_Sent_Too = false;

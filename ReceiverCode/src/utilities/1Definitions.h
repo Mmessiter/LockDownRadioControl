@@ -16,7 +16,7 @@
 #define RXVERSION_MAJOR 2
 #define RXVERSION_MINOR 5
 #define RXVERSION_MINIMUS 6
-#define RXVERSION_EXTRA 'E' // 26th February 2026
+#define RXVERSION_EXTRA 'F' // 21st March 2026
 #define HOPTIME 8           // gives about 100Hz FHSS
 
 // **************************************************************************
@@ -32,8 +32,8 @@
 // >>>>>>>>>>>>>>>>>********************************************************************
 // These options can be enabled or disabled as needed.
 
-#define USE_SBUS                           // Enable SBUS output
-#define USE_PWM                            // Enable PWM output
+#define USE_SBUS // Enable SBUS output
+#define USE_PWM  // Enable PWM output
 
 // **************************************************************************
 
@@ -134,9 +134,9 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define MSP_BANK_CHANGE 22                    // Command to change bank on MSP requests (for future use if needed)
 #define MSP_RATES_CHANGE 23                   // Command to change RATES on MSP requests (for future use if needed)
 #define MSP_BANK_CHANGE_CONFIRMATION 24       // Command to confirm bank change on MSP requests
-#define MSP_INHIBIT_TELEMETRY 25 // Inhibit telemetry for a short time to allow MSP data to be sent without interference from telemetry data (for MSP data transmission)
-#define MSP_ENABLE_TELEMETRY 26  // ENABLE telemetry after MSP data has been sent (for MSP data transmission)
-#define PARAMETERS_MAX_ID 26     // Max types of parameters packet to send  ... might increase.
+#define MSP_INHIBIT_TELEMETRY 25              // Inhibit telemetry for a short time to allow MSP data to be sent without interference from telemetry data (for MSP data transmission)
+#define MSP_ENABLE_TELEMETRY 26               // ENABLE telemetry after MSP data has been sent (for MSP data transmission)
+#define PARAMETERS_MAX_ID 26                  // Max types of parameters packet to send  ... might increase.
 
 #define MSP_CHANGE_TYPE_PID 0
 #define MSP_CHANGE_TYPE_RATES 1
@@ -285,15 +285,15 @@ inline void WriteRatesToNexusAndSave();
 inline bool Parse_MSP_PID_PROFILE(const uint8_t *data, uint8_t n);
 inline void WritePIDAdvancedToNexusAndSave();
 inline void SetNexusProfile(uint8_t index);
-//inline bool Parse_MSP_STATUS_EX(const uint8_t *data, uint8_t n);
+// inline bool Parse_MSP_STATUS_EX(const uint8_t *data, uint8_t n);
 uint32_t GetBuildDaysSince2020(); // days since 1st Jan 2020 for this build
 static bool Parse_MSP_API_VERSION(const uint8_t *buf, uint8_t len, uint8_t &mspProto, uint8_t &apiMaj, uint8_t &apiMin);
 inline void DetectRotorFlightAtBoot1();
 
-    /************************************************************************************************************/
-    // For numeric types (int, float, double, etc.)
-    template <typename T>
-    void Look(const T &value, int format)
+/************************************************************************************************************/
+// For numeric types (int, float, double, etc.)
+template <typename T>
+void Look(const T &value, int format)
 {
     Serial.println(value, format);
 }
@@ -398,7 +398,7 @@ uint8_t Receiver_Type = 0;
 // *************************************************************************************************************************
 // Rotorflight API and MSP protocol version variables
 // *************************************************************************************************************************
-bool Rotorflight22Detected = false;
+uint8_t Rotorflight_Version = 0;
 float PackVoltage;
 float Battery_Amps = 0;
 float Battery_mAh = 0;

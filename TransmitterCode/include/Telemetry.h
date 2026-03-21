@@ -187,7 +187,7 @@ void ShowCurrentRate()
         SendCommand((char *)"vis rate,1");
         break;
     case 4:
-        if (LinkRatesToBanks && Use_RotorFlight_Options)
+        if (LinkRatesToBanks && RotorFlight_V)
             SendText(rate, rate4);
         else
             SendCommand((char *)"vis rate,0");
@@ -437,7 +437,7 @@ void PopulateFrontView()
         SendText(FrontView_Connected, MsgBuddying);
     }
 
-    if (Use_RotorFlight_Options && LedWasGreen)
+    if (RotorFlight_V && LedWasGreen)
     {
         char ESC_Temp_Buf[20];
         SendCommand((char *)"vis Warning,1");

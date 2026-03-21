@@ -238,7 +238,7 @@ void DualRatesRefresh()
 void DualRatesStart()
 {
 
-    if (Use_RotorFlight_Options)
+    if (RotorFlight_V)
     {
         MsgBox(pRXSetupView, (char *)"Please use the RotorFlight rates option.");
         return;

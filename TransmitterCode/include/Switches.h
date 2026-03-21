@@ -172,7 +172,7 @@ void ReadDualRateSwitch()
             DualRateInUse = 4;
     }
 
-    if (LinkRatesToBanks && Use_RotorFlight_Options)
+    if (LinkRatesToBanks && RotorFlight_V)
     {
         DualRateInUse = Bank; // if linked, DualRateInUse is the same as Bank number
     }
@@ -195,7 +195,7 @@ void ReadDualRateSwitch()
         break;
     }
 
-    if (Use_RotorFlight_Options)
+    if (RotorFlight_V)
     {
         DualRateValue = 100;
     }
@@ -310,7 +310,7 @@ void BankHasChanged()
         UpdateTrimView();
     }
 
-    if (Use_RotorFlight_Options)
+    if (RotorFlight_V)
     { // msp bank change
         AddParameterstoQueue(MSP_BANK_CHANGE);
         if (LinkRatesToBanks)

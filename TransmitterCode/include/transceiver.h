@@ -380,8 +380,7 @@ FASTRUN void SendData()
     if (((millis() - LastPacketSentTime) < FHSS_data::PaceMaker) || (SendNoData))
         return;
 
-        
-    //Look(SendBuffer[0]);
+    // Look(SendBuffer[0]);
 
     uint8_t NumberOfChangedChannels = 0;
     static uint8_t ByteCountToTransmit = 2;
@@ -1076,8 +1075,7 @@ void CheckAgeGap()
 FASTRUN void ParseAckPayload()
 {
     FHSS_data::NextChannelNumber = AckPayload.Ack_Payload_byte[5]; // every packet tells of next hop destination
-    bool Use_RotorFlight_Options_before = Use_RotorFlight_Options;
-
+    uint8_t RotorFlight_V_before = RotorFlight_V;
 
     if (AckPayload.Ack_Payload_byte[0] & 0x80)
     {                                                                             // Hi bit is now the **HOP NOW!!** flag
@@ -1360,17 +1358,23 @@ FASTRUN void ParseAckPayload()
         if (BindingEnabled)
             break;
 
-        Use_RotorFlight_Options = GetBoolFromAckPayload(1);
+        RotorFlight_V = GetIntFromAckPayload();
 
-        // Look1("Use_RotorFlight_Options: ");
-        // Look(Use_RotorFlight_Options ? "YES" : "NO");
-        
-
-            if (Use_RotorFlight_Options && !Use_RotorFlight_Options_before)
+        if (RotorFlight_V && !RotorFlight_V_before)
         {
             GotoFrontView();
-            Use_RotorFlight_Options_before = true;
+            RotorFlight_V_before = RotorFlight_V;
         }
+        if (RotorFlight_V == 1)
+        {
+            RotorFlight_Version = 2.2f;
+        }
+        if (RotorFlight_V == 2)
+        {
+            RotorFlight_Version = 2.3f;
+        }
+        Look1("RotorFlight Version: ");
+        Serial.println(RotorFlight_Version, 1); 
 
         break;
 

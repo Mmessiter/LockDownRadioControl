@@ -75,7 +75,7 @@ void ReadExtraParameters()
         Ratio = DecodeAFloat(Parameters.word[1], Parameters.word[2], Parameters.word[3], Parameters.word[4]);
         break;
     case SEND_PID_VALUES: // 9
-        if (!Rotorflight22Detected)
+        if (!Rotorflight_Version)
             break;
         if (Parameters.word[1] == 321) // 321 is the command to send PIDs NOW!
         {
@@ -85,7 +85,7 @@ void ReadExtraParameters()
         }
         break;
     case GET_FIRST_6_PID_VALUES: // 10
-        if (!Rotorflight22Detected)
+        if (!Rotorflight_Version)
             break;
         for (int i = 0; i < 6; ++i)
         {
@@ -94,7 +94,7 @@ void ReadExtraParameters()
         break;
 
     case GET_SECOND_11_PID_VALUES: // 11
-        if (!Rotorflight22Detected)
+        if (!Rotorflight_Version)
             break;
         for (int i = 0; i < 11; ++i)
         {
@@ -104,7 +104,7 @@ void ReadExtraParameters()
         break;
 
     case SEND_RATES_VALUES: // 12
-        if (!Rotorflight22Detected)
+        if (!Rotorflight_Version)
             break;
         if (Parameters.word[1] == 321) // 321 is the command to send RATES NOW!
         {
@@ -114,7 +114,7 @@ void ReadExtraParameters()
         }
         break;
     case GET_FIRST_7_RATES_VALUES: // 13
-        if (!Rotorflight22Detected)
+        if (!Rotorflight_Version)
             break;
         Rates_Type = Parameters.word[1];
         Roll_Centre_Rate = Parameters.word[2];
@@ -125,7 +125,7 @@ void ReadExtraParameters()
         Pitch_Expo = Parameters.word[7];
         break;
     case GET_SECOND_6_RATES_VALUES: // 14
-        if (!Rotorflight22Detected)
+        if (!Rotorflight_Version)
             break;
         Yaw_Centre_Rate = Parameters.word[1];
         Yaw_Max_Rate = Parameters.word[2];
@@ -133,11 +133,11 @@ void ReadExtraParameters()
         Collective_Centre_Rate = Parameters.word[4];
         Collective_Max_Rate = Parameters.word[5];
         Collective_Expo = Parameters.word[6];
-        if (!Parameters.word[7]) // if this flag was set we must await the advanced rates values before writing to Nexus. If this flag isn't set, we can write to Nexus now.
+        if (!Parameters.word[7])        // if this flag was set we must await the advanced rates values before writing to Nexus. If this flag isn't set, we can write to Nexus now.
             WriteRatesToNexusAndSave(); // That's because they are all written together.
         break;
     case SEND_RATES_ADVANCED_VALUES: // 15
-        if (!Rotorflight22Detected)
+        if (!Rotorflight_Version)
             break;
         if (Parameters.word[1] == 321) // 321 is the command to send RATES NOW!
         {
@@ -147,7 +147,7 @@ void ReadExtraParameters()
         }
         break;
     case GET_RATES_ADVANCED_VALUES_SECOND_8:
-        if (!Rotorflight22Detected)
+        if (!Rotorflight_Version)
             break;
         Collective_Setpoint_Boost_Gain = Parameters.word[1];
         Roll_Setpoint_Boost_Cutoff = Parameters.word[2];
@@ -158,10 +158,10 @@ void ReadExtraParameters()
         Yaw_Dynamic_Deadband_Gain = Parameters.word[7];
         Yaw_Dynamic_Deadband_Filter = Parameters.word[8];
         WriteRatesToNexusAndSave(); // That's because they are all written together.
-      //  Look("ALL rates updated from transmitter");
+                                    //  Look("ALL rates updated from transmitter");
         break;
     case GET_RATES_ADVANCED_VALUES_FIRST_7:
-        if (!Rotorflight22Detected)
+        if (!Rotorflight_Version)
             break;
         Roll_Response_Time = Parameters.word[1];
         Pitch_Response_Time = Parameters.word[2];
@@ -172,7 +172,7 @@ void ReadExtraParameters()
         Yaw_Setpoint_Boost_Gain = Parameters.word[7];
         break;
     case SEND_PID_ADVANCED_VALUES: // 18
-        if (!Rotorflight22Detected)
+        if (!Rotorflight_Version)
             break;
         if (Parameters.word[1] == 321) // 321 is the command to send RATES NOW!
         {
@@ -182,19 +182,19 @@ void ReadExtraParameters()
         }
         break;
     case GET_FIRST_9_ADVANCED_PID_VALUES: // 19
-        if (!Rotorflight22Detected)
+        if (!Rotorflight_Version)
             break;
         for (int i = 0; i < 9; i++)
             PID_Advanced_Bytes[i] = Parameters.word[i + 1];
         break;
     case GET_SECOND_9_ADVANCED_PID_VALUES: // 20
-        if (!Rotorflight22Detected)
+        if (!Rotorflight_Version)
             break;
         for (int i = 0; i < 9; i++)
             PID_Advanced_Bytes[i + 9] = Parameters.word[i + 1];
         break;
     case GET_THIRD_8_ADVANCED_PID_VALUES: // 21
-        if (!Rotorflight22Detected)
+        if (!Rotorflight_Version)
             break;
         for (int i = 0; i < 8; i++)
             PID_Advanced_Bytes[i + 18] = Parameters.word[i + 1];
@@ -210,24 +210,19 @@ void ReadExtraParameters()
             SetNexusProfile(NewBank - 1);       // set high bit to indicate we're sending RATES bank change, not PID bank change
         }
         break;
-        //  case MSP_BANK_CHANGE_CONFIRMATION: // 24
-        //  Look1("Bank change confirmation received for bank ");
-        //  Look(Parameters.word[2]);
-        //  SendRotorFlightParametresNow = SEND_STATUS_EX;
-        //  Started_Sending_STATUS_EX = millis();
+    //  case MSP_BANK_CHANGE_CONFIRMATION: // 24
+    //  Look1("Bank change confirmation received for bank ");
+    //  Look(Parameters.word[2]);
+    //  SendRotorFlightParametresNow = SEND_STATUS_EX;
+    //  Started_Sending_STATUS_EX = millis();
 
-        //  break;
-        case MSP_INHIBIT_TELEMETRY: // 25
-            InhibitTelemetry = true;
-            break;
-        case MSP_ENABLE_TELEMETRY: // 26
-            InhibitTelemetry = false;
-            break;  
-
-
-
-
-
+    //  break;
+    case MSP_INHIBIT_TELEMETRY: // 25
+        InhibitTelemetry = true;
+        break;
+    case MSP_ENABLE_TELEMETRY: // 26
+        InhibitTelemetry = false;
+        break;
 
     default:
         break;

@@ -149,7 +149,7 @@ bool ReadOneModel(uint32_t Mnum)
     uint16_t i;
     char NoModelYet[] = "File error?";
 
-    //static int Counter = 0;
+    // static int Counter = 0;
 
     FileCheckSum = 0;
     MixNumber = 0;
@@ -465,9 +465,9 @@ bool ReadOneModel(uint32_t Mnum)
     }
     LinkRatesToBanks = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-    Use_RotorFlight_Options = SDRead8BITS(SDCardAddress);
+    RotorFlight_V = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
-   
+
     CheckOutPutChannels();
     CheckServoType();
     // **************************************
@@ -521,8 +521,6 @@ void CloseModelsFile()
     }
 }
 
-
-
 /*********************************************************************************************************************************/
 
 void ShortDelay()
@@ -534,7 +532,6 @@ void ShortishDelay()
 {
     delayMicroseconds(1750);
 }
-
 
 /*********************************************************************************************************************************/
 
@@ -845,7 +842,6 @@ bool LoadAllParameters()
     Buddy_Hi_Position = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
 
-   
     ReadCheckSum32();
     CheckTrimValues();
     MemoryForTransmtter = SDCardAddress;
@@ -1030,8 +1026,6 @@ void SaveTransmitterParameters()
     SDUpdate8BITS(SDCardAddress, Buddy_Hi_Position);
     ++SDCardAddress;
 
-    
-
     SaveCheckSum32(); // Save the Transmitter parametres checksm
     CloseModelsFile();
 }
@@ -1199,7 +1193,7 @@ void SaveOneModel(uint32_t mnum)
     ++SDCardAddress;
     ++SDCardAddress;
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, ArmingChannel); 
+    SDUpdate8BITS(SDCardAddress, ArmingChannel);
     ++SDCardAddress;
 
     // *********************************************************************************
@@ -1353,9 +1347,8 @@ void SaveOneModel(uint32_t mnum)
     }
     SDUpdate8BITS(SDCardAddress, LinkRatesToBanks);
     ++SDCardAddress;
-    SDUpdate8BITS(SDCardAddress, Use_RotorFlight_Options);
+    SDUpdate8BITS(SDCardAddress, RotorFlight_V);
     ++SDCardAddress;
-
 
     SaveCheckSum32(); // Save the Model parametres checksm
 
