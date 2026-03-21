@@ -247,15 +247,20 @@ void ActuallySendParameters(uint32_t RightNow)
         return;
 
     ShowSendingParameters();
-    if (RightNow - LastParameterSent >= PARAMETER_SEND_FREQUENCY)
+    if ((RightNow - LastParameterSent >= PARAMETER_SEND_FREQUENCY) ) // if it's time to send the next parameter and we're not paused
     {
         ParamPause = false; // Reset pause flag to allow the parameters to be sent
         LastParameterSent = RightNow;
+       // Look("Sending parameters... ");
     }
     else if (RightNow - LastParameterSent >= PARAMETER_SEND_DURATION) // it would just keep sending parameters so we must pause it for a while
     {
-        ParamPause = true; // Pause sending parameters briefly so we can send data to control the model ! :-)
-        LastConnectionQuality = 0;
+        if (!ParamPause)
+        {
+            ParamPause = true; // Pause sending parameters briefly so we can send data to control the model ! :-)
+            LastConnectionQuality = 0;
+          // Look("Paused sending parameters: ");
+        }
     }
 }
 #endif

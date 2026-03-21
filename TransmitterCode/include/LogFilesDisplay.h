@@ -45,18 +45,21 @@ void TopOfLogFileNEW()
  */
 void BottomOfLogFileNEW() // this isn't perfect but it usually works Ok ...
 {
-    char Current_Y_Nextion_Label[] = "LogText.val_y";
+   // char Current_Y_Nextion_Label[] = "LogText.val_y";
     CloseLogFile();
     LogFileNumber = OpenTextFileForReading();
     LogFileOpen = true;
+   
     while (LogFileOpen)
     {
         StartReadLine += BUFFEREDLINES;
         ReadAFewLines();
+       
     }
     ShowLogFileNew(ReadAFewLines());
-    SendOtherValue(Current_Y_Nextion_Label, Max_Y);
-    Previous_Current_Y = Max_Y;
+   // SendOtherValue(Current_Y_Nextion_Label, Max_Y);
+   // Previous_Current_Y = Max_Y;
+   
 }
 
 // ************************************************************************

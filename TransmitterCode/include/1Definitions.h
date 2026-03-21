@@ -170,7 +170,7 @@
 
 #define PAUSE_BEFORE_PARAMETER_SEND 3000 // ms pause before sending parameters (to allow RX to prepare)
 #define PARAMETER_SEND_REPEATS 3         // Each parameter is repeated this many times (in case of packet loss)
-#define PARAMETER_SEND_FREQUENCY 50      // ms between parameter send slots (was 100)
+#define PARAMETER_SEND_FREQUENCY 100     // ms between parameter send slots (was 100)
 #define PARAMETER_SEND_DURATION 5        // ms duration for parameter sending (remainder used for control)
 #define PARAMETER_QUEUE_MAXIMUM 250      // Maximum queued parameters allowed at once
 
@@ -205,7 +205,7 @@
 #define MSP_BANK_CHANGE_CONFIRMATION 24       // Confirmation from RX that bank change was successful (for MSP Bank change confirmation) NOT YET USED
 #define MSP_INHIBIT_TELEMETRY 25              // Inhibit telemetry for a short time to allow MSP data to be sent without interference from telemetry data (for MSP data transmission)
 #define MSP_ENABLE_TELEMETRY 26               // ENABLE telemetry after MSP data has been sent (for MSP data transmission)
-#define PARAMETERS_MAX_ID 26                  // Max types of parameters packet to send  ... might increase.
+#define PARAMETERS_MAX_ID 27                  // Max types of parameters packet to send  ... might increase.
 
 // **************************************************************************
 //                               Mixes                                      *
@@ -1315,7 +1315,7 @@ uint8_t RadioNumber = 0;
 
 bool VersionMismatch = false;
 
-char ParaNames[12][30] = {
+char ParaNames[28][30] = {
     "FailSafe positions", // 1
     "QNH",                // 2
     "Mark Location",      // 3
@@ -1324,9 +1324,24 @@ char ParaNames[12][30] = {
     "Servo Frequencies",  // 6
     "Servo Pulse Widths", // 7
     "Gear Ratio",         // 8
-    "GET PIDs",           // 9
+    "READ PIDs",          // 9
     "SET PIDs 1-6",       // 10
     "SET PIDs 7-12",      // 11
+    "READ RATES",         // 12
+    "SET 6 RATES",        // 13
+    "SET 7 RATES",        // 14
+    "READ ADV RATES",     // 15
+    "SET 8 ADV RATES",    // 16
+    "SET 7 ADV RATES",    // 17
+    "READ ADV PIDs",      // 18
+    "SET 9 ADV PIDs",     // 19
+    "SET 9* ADV PIDs",    // 20
+    "SET 8  ADV PIDs",    // 21
+    "Bank Change",        // 22
+    "Rates Change",       // 23
+    "NOT USED",           // 24
+    "INHIBIT TELEMETRY",  // 25
+    "ENABLE TELEMETRY",   // 26
 
 };
 uint16_t ScreenData[50];
