@@ -1030,16 +1030,6 @@ void RXOptionsViewStart() // model Options screen
 
     SendCommand(pRXSetup1);
     CurrentView = RXSETUPVIEW1;
-
-    if (RotorFlight_V)
-    {
-        SendCommand((char *)"vis b1,1");
-    }
-    else
-    {
-        SendCommand((char *)"vis b1,0");
-    }
-
     SendValue(c1, CopyTrimsToAll);
     SendValue(n3, TrimMultiplier);
     snprintf(Vbuf, 5, "%1.2f", StopFlyingVoltsPerCell);
@@ -1050,7 +1040,7 @@ void RXOptionsViewStart() // model Options screen
     SendValue(RxVCorrextion, RxVoltageCorrection);
     SendValue(c2, TimerDownwards);
     SendValue(n4, TimerStartTime / 60);
-    SendValue((char *)"sw0", RotorFlight_V);
+    SendValue((char *)"sw0", 1); // redundant
     DisplayModelImage();
     UpdateModelsNameEveryWhere();
 }
