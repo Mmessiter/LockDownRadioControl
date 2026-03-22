@@ -9,6 +9,17 @@
 #include "1Definitions.h"
 
 // ************************************************************************************************************/
+float GetFactoredValue(uint8_t i) // this function gets the value to show
+{
+    float ThisValue;
+    if (RotorFlight_V >= 2)
+        ThisValue = (Rate_Values[i] * FactorTableRF2_3[i]); // MULTIPLY BY factor to get display value
+    else
+        ThisValue = (Rate_Values[i] * FactorTableRF2_2[i]); // MULTIPLY BY factor to get display value
+    return ThisValue;
+}
+
+// ************************************************************************************************************/
 void ReadEditedRateValues()
 {
 
@@ -17,7 +28,7 @@ void ReadEditedRateValues()
         char temp[10];
         GetText(RatesWindows[i], temp);
 
-        if (RotorFlight_V >= 2)
+        if (RotorFlight_V >= 2) //2
         {
             Rate_Values[i] = (uint8_t)(atof(temp) / FactorTableRF2_3[i]); // DIVIDE BY factor to get byte value
         }
@@ -31,7 +42,6 @@ void ReadEditedRateValues()
 // ************************************************************************************************************/
 void SaveRatesLocalBank()
 {
-
     RatesMsg((char *)"Saving edited Rates ...", Gray); // Show sending message
     Rates_Were_Edited = false;
     ReadEditedRateValues();
@@ -118,24 +128,13 @@ void DisplayRatesValues(uint8_t startIndex, uint8_t stopIndex) // Displays RATES
         if (i < MAX_RATES_BYTES)
         {
             char temp[10];
-            float ThisValue;
             if (i == 0)
             {
                 SendText(RatesWindows[0], Rate_Types[Rate_Values[0]]); // Show rates type but it cannot be edited here
                 continue;
             }
-
-            if (RotorFlight_V >= 2)
-            {
-                ThisValue = (Rate_Values[i] * FactorTableRF2_3[i]); // MULTIPLY BY factor to get display value
-            }
-            else
-            {
-                ThisValue = (Rate_Values[i] * FactorTableRF2_2[i]); // MULTIPLY BY factor to get display value
-            }
-
+            float ThisValue = GetFactoredValue(i);
             FixDecimalDisplay(temp, ThisValue, i, sizeof(temp));
-
             SendText(RatesWindows[i], temp);
         }
     }
@@ -173,21 +172,15 @@ void HideRATESMsg()
         BlockBankChanges = false;
     }
 }
+
+
 // ******************************************************************************************************************************/
 void ShowRatesLocalBank()
 {
     for (int i = 0; i < MAX_RATES_BYTES; ++i)
     {
-        float ThisValue;
-        if (RotorFlight_V >= 2)
-        {
-            ThisValue = (Saved_Rate_Values[i][DualRateInUse - 1] * FactorTableRF2_3[i]); // MULTIPLY BY factor to get display value
-        }
-        else
-        {
-            ThisValue = (Saved_Rate_Values[i][DualRateInUse - 1] * FactorTableRF2_2[i]); // MULTIPLY BY factor to get display value
-        }
         char temp[10];
+        float ThisValue = GetFactoredValue(i);
         FixDecimalDisplay(temp, ThisValue, i, sizeof(temp));
         if (i == 0)
         {
