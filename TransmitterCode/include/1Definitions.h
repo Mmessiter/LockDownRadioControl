@@ -1534,10 +1534,13 @@ bool Reading_PIDS_Advanced_Now = false;
 bool Reading_RATES_Now = false;
 bool Reading_RATES_Advanced_Now = false;
 
-char Rate_Types[6][15] = {"None", "Betaflight", "Raceflight", "KISS", "Actual", "QuickRates"};
-const float FactorTableRF[13] = {1, 10, 10, .01, 10, 10, .01, 10, 10, .01, .25, .25, .01}; // Factors for each RATES byte needed by Rotorflight
-uint8_t RotorFlight_V = 0; // 0 = not RF, 1 = RF v2.2, 2 = RF v2.3
-float RotorFlight_Version = 0;
+char Rate_Types[7][16] = {"None", "Betaflight", "Raceflight", "KISS", "Actual", "QuickRates","Rotorflight 2.3"};
+
+const float FactorTableRF2_2[13] = {1, 10, 10, .01, 10, 10, .01, 10, 10, .01, .25, .25, .01}; // Factors for RATES in RF V2.2 (0th element not used)
+const float FactorTableRF2_3[13] = {1,  5,  1,   1,  5,  1,   1,  5,  1,   1, .125,  1,   1}; // Factors for RATES in RF V2.3 (0th element not used)
+
+uint8_t RotorFlight_V = 0; // 0 = NO RF, 1 = RF v2.2, 2 = RF v2.3
+float RotorFlight_Version = 0; // none, V2.2, V2.3 for display only
 char ModelImageFileName[9];
 bool Armed = false;
 bool Wait_for_Advanced_Rates_to_Be_Sent_Too = false;

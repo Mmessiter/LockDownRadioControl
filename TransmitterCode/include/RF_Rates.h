@@ -16,7 +16,15 @@ void ReadEditedRateValues()
     {
         char temp[10];
         GetText(RatesWindows[i], temp);
-        Rate_Values[i] = (uint8_t)(atof(temp) / FactorTableRF[i]); // DIVIDE BY factor to get byte value
+
+        if (RotorFlight_V >= 2)
+        {
+            Rate_Values[i] = (uint8_t)(atof(temp) / FactorTableRF2_3[i]); // DIVIDE BY factor to get byte value
+        }
+        else
+        {
+            Rate_Values[i] = (uint8_t)(atof(temp) / FactorTableRF2_2[i]); // DIVIDE BY factor to get byte value
+        }
     }
 }
 
@@ -59,6 +67,50 @@ void SendEditedRates()
     PlaySound(BEEPCOMPLETE);                            // let user know we're done
 }
 // ************************************************************************************************************/
+char *FixDecimalDisplay(char *temp, float ThisValue, uint8_t i, size_t tempSize) // this function removes trailing zeros and decimal point if not needed and also rounds to 2 decimal places if needed
+{
+    if (RotorFlight_V == 1)
+    {
+        if (ThisValue == int(ThisValue))
+        {
+            if (i < 10)
+            {
+                snprintf(temp, tempSize, "%.0f", ThisValue);
+            }
+            else
+            {
+                snprintf(temp, tempSize, "%.1f", ThisValue);
+            }
+        }
+        else
+        {
+            snprintf(temp, tempSize, "%.2f", ThisValue);
+        }
+    }
+
+    if (RotorFlight_V >= 2)
+    {
+        if (ThisValue == int(ThisValue))
+        {
+            if (i != 10)
+            {
+                snprintf(temp, tempSize, "%.0f", ThisValue);
+            }
+            else
+            {
+                snprintf(temp, tempSize, "%.2f", ThisValue);
+            }
+        }
+        else
+        {
+            snprintf(temp, tempSize, "%.2f", ThisValue);
+        }
+    }
+
+    return temp;
+}
+
+// ************************************************************************************************************/
 void DisplayRatesValues(uint8_t startIndex, uint8_t stopIndex) // Displays RATES values on screen a few at a time as they arrive in Ack payloads
 {
     for (uint8_t i = startIndex; i < stopIndex; ++i)
@@ -66,27 +118,24 @@ void DisplayRatesValues(uint8_t startIndex, uint8_t stopIndex) // Displays RATES
         if (i < MAX_RATES_BYTES)
         {
             char temp[10];
+            float ThisValue;
             if (i == 0)
             {
                 SendText(RatesWindows[0], Rate_Types[Rate_Values[0]]); // Show rates type but it cannot be edited here
                 continue;
             }
-            float ThisValue = (Rate_Values[i] * FactorTableRF[i]); // MULTIPLY BY factor to get display value
-            if (ThisValue == int(ThisValue))
+
+            if (RotorFlight_V >= 2)
             {
-                if (i < 10)
-                {
-                    snprintf(temp, sizeof(temp), "%.0f", ThisValue);
-                }
-                else
-                {
-                    snprintf(temp, sizeof(temp), "%.1f", ThisValue);
-                }
+                ThisValue = (Rate_Values[i] * FactorTableRF2_3[i]); // MULTIPLY BY factor to get display value
             }
             else
             {
-                snprintf(temp, sizeof(temp), "%.2f", ThisValue);
+                ThisValue = (Rate_Values[i] * FactorTableRF2_2[i]); // MULTIPLY BY factor to get display value
             }
+
+            FixDecimalDisplay(temp, ThisValue, i, sizeof(temp));
+
             SendText(RatesWindows[i], temp);
         }
     }
@@ -129,26 +178,20 @@ void ShowRatesLocalBank()
 {
     for (int i = 0; i < MAX_RATES_BYTES; ++i)
     {
-        float ThisValue = (Saved_Rate_Values[i][DualRateInUse -1] * FactorTableRF[i]); // MULTIPLY BY factor to get display value
-        char temp[10];
-        if (ThisValue == int(ThisValue))
+        float ThisValue;
+        if (RotorFlight_V >= 2)
         {
-            if (i < 10)
-            {
-                snprintf(temp, sizeof(temp), "%.0f", ThisValue);
-            }
-            else
-            {
-                snprintf(temp, sizeof(temp), "%.1f", ThisValue);
-            }
+            ThisValue = (Saved_Rate_Values[i][DualRateInUse - 1] * FactorTableRF2_3[i]); // MULTIPLY BY factor to get display value
         }
         else
         {
-            snprintf(temp, sizeof(temp), "%.2f", ThisValue);
+            ThisValue = (Saved_Rate_Values[i][DualRateInUse - 1] * FactorTableRF2_2[i]); // MULTIPLY BY factor to get display value
         }
+        char temp[10];
+        FixDecimalDisplay(temp, ThisValue, i, sizeof(temp));
         if (i == 0)
         {
-            SendText(RatesWindows[0], Rate_Types[Saved_Rate_Values[0][DualRateInUse -1]]); // Show rates type but it cannot be edited here
+            SendText(RatesWindows[0], Rate_Types[Saved_Rate_Values[0][DualRateInUse - 1]]); // Show rates type but it cannot be edited here
         }
         else
         {
@@ -185,7 +228,7 @@ void ShowRatesBank()
 
         if (Rates_Were_Edited) // if RATES were edited but not sent and bank changed
         {
-            char w1[] = "Values for last Rate were edited \r\nbut not saved.(Too late now !)\r\nSo you may want to check them.";  
+            char w1[] = "Values for last Rate were edited \r\nbut not saved.(Too late now !)\r\nSo you may want to check them.";
             MsgBox((char *)"page RatesView", w1); // Warn about unsaved edits
         }
         RatesMsg(buf, Gray);
@@ -197,7 +240,17 @@ void ShowRatesBank()
         Rates_Were_Edited = false;               // reset edited flag
     }
 }
+// ******************************************************************************************************************************/
+void Modify_Labels_For_RATES_View()
+{ // make sure labels are correct for RATES view in Rotorflight because some are different than for Betaflight etc
 
+    if (RotorFlight_V >= 2)
+    {
+        SendText((char *)"t4", (char *)"Rates");
+        SendText((char *)"t5", (char *)"Rate");
+        SendText((char *)"t6", (char *)"Shape");
+    }
+}
 // ******************************************************************************************************************************/
 void StartRFRatesView()
 {
@@ -209,6 +262,7 @@ void StartRFRatesView()
     }
     SendCommand((char *)"page RatesView");
     CurrentView = RATESVIEW_RF;
+    Modify_Labels_For_RATES_View(); // make sure labels are correct for RATES view
     ShowRatesBank();                    // Show the current bank's RATES
     SendText((char *)"t11", ModelName); // Show model name
     Rates_Were_Edited = false;
