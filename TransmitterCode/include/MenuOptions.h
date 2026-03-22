@@ -1084,7 +1084,7 @@ void RXOptionsViewEnd()
     TimerDownwards = GetValue(c2);
     SendValue(Progress, 70);
     TimerStartTime = GetValue(n4) * 60;
-    RotorFlight_V = GetValue((char *)"sw0");
+
     SendValue(Progress, 100);
     CurrentView = RXSETUPVIEW;
     PreviousBank = 42;

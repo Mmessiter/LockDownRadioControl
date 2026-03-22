@@ -44,8 +44,8 @@ void RotorFlightStart()
     snprintf(Vbuf, 5, "%d", ArmingChannel);
     SendText(t7, Vbuf);
     SendValue((char *)"sw0", LinkRatesToBanks);
-
-    snprintf(Vbuf, 5, "%1.1f", RotorFlight_Version); // 10.3 usually
+    RotorFlight_Version = RFVersions[RotorFlight_V];
+    snprintf(Vbuf, 5, "%1.1f", RotorFlight_Version);
     SendText((char *)"t5", Vbuf);
 
     ShowRFBank();

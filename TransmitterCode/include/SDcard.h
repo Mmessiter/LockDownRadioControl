@@ -466,8 +466,8 @@ bool ReadOneModel(uint32_t Mnum)
     LinkRatesToBanks = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     RotorFlight_V = SDRead8BITS(SDCardAddress);
+   // Look(RotorFlight_V);
     ++SDCardAddress;
-
     CheckOutPutChannels();
     CheckServoType();
     // **************************************

@@ -179,9 +179,14 @@ void ShowRatesLocalBank()
 {
     for (int i = 0; i < MAX_RATES_BYTES; ++i)
     {
+        float ThisValue;
+        if (RotorFlight_V >= 2)
+            ThisValue = (Saved_Rate_Values[i][DualRateInUse - 1] * FactorTableRF2_3[i]); // MULTIPLY BY factor to get display value
+        else
+            ThisValue = (Saved_Rate_Values[i][DualRateInUse - 1] * FactorTableRF2_2[i]); // MULTIPLY BY factor to get display value
         char temp[10];
-        float ThisValue = GetFactoredValue(i);
         FixDecimalDisplay(temp, ThisValue, i, sizeof(temp));
+
         if (i == 0)
         {
             SendText(RatesWindows[0], Rate_Types[Saved_Rate_Values[0][DualRateInUse - 1]]); // Show rates type but it cannot be edited here
@@ -195,6 +200,7 @@ void ShowRatesLocalBank()
     SendCommand((char *)"vis b3,0"); // hide "Send" button
     BlockBankChanges = false;
 }
+
 // ******************************************************************************************************************************/
 
 void ShowRatesBank()

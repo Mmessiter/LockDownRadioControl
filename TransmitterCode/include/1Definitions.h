@@ -1541,6 +1541,8 @@ const float FactorTableRF2_3[13] = {1,  5,  1,   1,  5,  1,   1,  5,  1,   1, .1
 
 uint8_t RotorFlight_V = 0; // 0 = NO RF, 1 = RF v2.2, 2 = RF v2.3
 float RotorFlight_Version = 0; // none, V2.2, V2.3 for display only
+float RFVersions[3] = {0, 2.2, 2.3}; // for display only
+
 char ModelImageFileName[9];
 bool Armed = false;
 bool Wait_for_Advanced_Rates_to_Be_Sent_Too = false;
