@@ -183,14 +183,14 @@ void ShowRatesLocalBank()
         if (RotorFlight_V >= 2)
             ThisValue = (Saved_Rate_Values[i][DualRateInUse - 1] * FactorTableRF2_3[i]); // MULTIPLY BY factor to get display value 2.3
         else
-            ThisValue = (Saved_Rate_Values[i][DualRateInUse - 1] * FactorTableRF2_2[i]); // MULTIPLY BY factor to get display value
+            ThisValue = (Saved_Rate_Values[i][DualRateInUse - 1] * FactorTableRF2_2[i]); // MULTIPLY BY factor to get display value 2.2
         FixDecimalDisplay(temp, ThisValue, i, sizeof(temp));
         if (i == 0)
             SendText(RatesWindows[0], Rate_Types[Saved_Rate_Values[0][DualRateInUse - 1]]); // Show rates type but it cannot be edited here
         else
             SendText(RatesWindows[i], temp);
     }
-    HideRATESMsg();                  // ...because this queue is a LIFO stack
+    HideRATESMsg();    
     SendCommand((char *)"vis b3,0"); // hide "Send" button
     BlockBankChanges = false;
 }
