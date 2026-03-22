@@ -7,6 +7,7 @@
 **LockDownRadioControl (LDRC)** is an open-source radio system designed for simplicity, speed, and reliability. It’s ideal for users who want a system that “just works” — no tinkering, no steep learning curve, and no unnecessary options. Whether you’re an experienced pilot or just starting out, LDRC offers a streamlined alternative to EdgeTX and commercial transmitters.
 
 NEW! - If your helicopter uses the Nexus flight controller (or any flight controller which runs Rotorflight software) you can now edit Profiles, PIDs, Rates and _all_ flight tuning values on the transmitter at the field. There's no need for a laptop, except for initial setup!
+Now supports Rotorflight 2.2 and 2.3 !
 
 ---
 
