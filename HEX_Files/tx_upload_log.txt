@@ -1,0 +1,8 @@
+Processing teensy41 (platform: teensy; board: teensy41; framework: arduino)
+--------------------------------------------------------------------------------
+Verbose mode can be enabled via `-v, --verbose` option
+Configuring upload protocol...
+AVAILABLE: jlink, teensy-cli, teensy-gui
+CURRENT: upload_protocol = teensy-gui
+Uploading .pio/build/teensy41/firmware.hex
+========================= [SUCCESS] Took 2.38 seconds =========================

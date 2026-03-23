@@ -1,65 +1,72 @@
 #!/bin/zsh
 
 BASE="/Users/malcolmmessiter/Documents/GitHub/LockDownRadioControl"
-HEX="$BASE/HEX_Files/TX.HEX"
-
-TOOLS="/Users/malcolmmessiter/.platformio/packages/tool-teensy"
-LOADER="$TOOLS/teensy_loader_cli"
-REBOOT="$TOOLS/teensy_reboot"
-LOG="$BASE/HEX_Files/teensy_upload_log.txt"
+PROJECT="$BASE/TransmitterCode"
+HEX_SOURCE="$BASE/HEX_Files/TX.HEX"
+BUILD_HEX="$PROJECT/.pio/build/teensy41/firmware.hex"
+PIO="$HOME/.platformio/penv/bin/platformio"
+LOG="$BASE/HEX_Files/tx_upload_log.txt"
 
 echo "========================================"
-echo "PROGRAMMING TRANSMITTER TEENSY 4.1"
+echo "UPLOAD TX.HEX TO TRANSMITTER TEENSY 4.1"
+echo "USING PLATFORMIO UPLOAD"
 echo "========================================"
+echo
 
-if [ ! -f "$HEX" ]; then
+if [ ! -f "$HEX_SOURCE" ]; then
     echo "TX.HEX not found:"
-    echo "$HEX"
+    echo "$HEX_SOURCE"
     osascript -e 'display dialog "TX.HEX not found." buttons {"OK"} default button "OK"'
     exit 1
 fi
 
-if [ ! -f "$LOADER" ]; then
-    echo "teensy_loader_cli not found:"
-    echo "$LOADER"
-    osascript -e 'display dialog "teensy_loader_cli not found." buttons {"OK"} default button "OK"'
+if [ ! -f "$PIO" ]; then
+    echo "PlatformIO not found:"
+    echo "$PIO"
+    osascript -e 'display dialog "PlatformIO not found." buttons {"OK"} default button "OK"'
     exit 1
 fi
 
-echo "Using HEX file:"
-echo "$HEX"
+mkdir -p "$(dirname "$BUILD_HEX")"
+
+echo "Copying TX.HEX into PlatformIO build location..."
+cp "$HEX_SOURCE" "$BUILD_HEX"
+if [ $? -ne 0 ]; then
+    echo "Failed to copy TX.HEX into build folder."
+    osascript -e 'display dialog "Failed to copy TX.HEX into build folder." buttons {"OK"} default button "OK"'
+    exit 1
+fi
+
 echo
-echo "Using loader:"
-echo "$LOADER"
+echo "Using source HEX:"
+echo "$HEX_SOURCE"
+echo
+echo "Upload HEX path:"
+echo "$BUILD_HEX"
 echo
 echo "Log file:"
 echo "$LOG"
 echo
 
-if [ -f "$REBOOT" ]; then
-    echo "Trying to reboot Teensy into bootloader..."
-    "$REBOOT" >/dev/null 2>&1
-    sleep 1
-fi
+cd "$PROJECT" || exit 1
 
-echo "Waiting for Teensy 4.1..."
-echo "If needed, press the PROGRAM button on the Teensy."
+echo "Starting PlatformIO upload..."
 echo
 
-"$LOADER" --mcu=imxrt1062 -w -v "$HEX" | tee "$LOG"
-RESULT=$?
+"$PIO" run -e teensy41 -t nobuild -t upload | tee "$LOG"
+RESULT=${pipestatus[1]}
 
 echo
-echo "teensy_loader_cli exit code = $RESULT"
+echo "PlatformIO exit code = $RESULT"
 echo
 
 if [ $RESULT -eq 0 ]; then
     echo "Done. TX.HEX has been loaded into the Teensy 4.1."
     osascript -e 'display dialog "Done. TX.HEX has been loaded into the Teensy 4.1." buttons {"OK"} default button "OK"'
 else
-    echo "The loader reported a problem, but the Teensy may still have been programmed successfully."
-    echo "Please check whether the new firmware is actually running."
-    osascript -e 'display dialog "Loader reported a problem. The Teensy may still have been programmed successfully." buttons {"OK"} default button "OK"'
+    echo "Upload failed."
+    echo "If the current firmware is not responding over USB, the PROGRAM button may still be needed."
+    osascript -e 'display dialog "Upload failed. If the current firmware is not responding over USB, the PROGRAM button may still be needed." buttons {"OK"} default button "OK"'
 fi
 
 exit 0
