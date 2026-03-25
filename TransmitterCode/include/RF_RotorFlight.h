@@ -34,12 +34,18 @@ void RotorFlightStart()
     char t12[] = "t12";
     char t7[] = "t7";
     char Vbuf[15];
-   
+
+    if (MotorEnabled || !SafetyON)
+    {
+        PlaySound(BEEPMIDDLE); // warn that you can't enter Rotorflight view if the motor is enabled or safety is off
+        return;
+    }
+
     SendCommand((char *)"page RFView");
     CurrentView = ROTORFLIGHTVIEW;
     AddParameterstoQueue(MSP_INHIBIT_TELEMETRY); // Inhibit telemetry for a short time to allow MSP data to be sent without interference from telemetry data (for MSP data transmission)
-    SendText((char *)"t11", ModelName);    // Show model name
-    snprintf(Vbuf, 5, "%1.2f", GearRatio); // 10.3 usually
+    SendText((char *)"t11", ModelName);          // Show model name
+    snprintf(Vbuf, 5, "%1.2f", GearRatio);       // 10.3 usually
     SendText(t12, Vbuf);
     snprintf(Vbuf, 5, "%d", ArmingChannel);
     SendText(t7, Vbuf);
@@ -47,7 +53,6 @@ void RotorFlightStart()
     RotorFlight_Version = RFVersions[RotorFlight_V];
     snprintf(Vbuf, 5, "%1.1f", RotorFlight_Version);
     SendText((char *)"t5", Vbuf);
-
     ShowRFBank();
     ShowRFRate();
 }
@@ -62,8 +67,9 @@ void RotorFlightEnd()
     ArmingChannel = atoi(temp);
     LinkRatesToBanks = GetValue((char *)"sw0");
     SaveOneModel(ModelNumber); // save the model including gear ratio and arming channel
-    ZeroDataScreen();          // clear the screen data because editing Rotorflight parameters may have created misleading comms gaps
-    RXOptionsViewStart();      // go back to RX Options view
+                               //  ZeroDataScreen();        // clear the screen data because editing Rotorflight parameters may have created misleading comms gaps
+    GotoFrontView();
+    // RXOptionsViewStart();      // go back to RX Options view
 }
 // **********************************************************************************************************/
 void LinkRatesToBanksChanged()
