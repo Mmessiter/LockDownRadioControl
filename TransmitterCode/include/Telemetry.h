@@ -734,13 +734,30 @@ void CalculateGapPercentages()
     }
 }
 // **********************************************************************************************************
+// **********************************************************************************************************
 void PopulateGapsView()
 {
-    char PerCents[11][6] = {"t13", "t15", "t17", "t18", "t19", "t20", "t21", "t22", "t23", "t24", "t25"};
-    char visible[11][12] = {"vis n0,1", "vis n1,1", "vis n2,1", "vis n3,1", "vis n4,1", "vis n5,1", "vis n6,1", "vis n7,1", "vis n8,1", "vis n9,1", "vis n10,1"};
-    char invisible[11][12] = {"vis n0,0", "vis n1,0", "vis n2,0", "vis n3,0", "vis n4,0", "vis n5,0", "vis n6,0", "vis n7,0", "vis n8,0", "vis n9,0", "vis n10,0"};
+    static bool FirstCall = true;
 
-    char Js[11][4] = {
+    static uint32_t PrevGapSets[11] = {0};
+    static uint32_t PrevGapPercentages[11] = {0};
+    static uint32_t PrevGapLongest = 0xFFFFFFFF;
+    static uint32_t PrevGapAverage = 0xFFFFFFFF;
+    static uint32_t PrevGapShortest = 0xFFFFFFFF;
+    static uint32_t PrevMaxBin = 0xFFFFFFFF;
+
+    const char PerCents[11][6] = {
+        "t13", "t15", "t17", "t18", "t19", "t20", "t21", "t22", "t23", "t24", "t25"};
+
+    const char visible[11][12] = {
+        "vis n0,1", "vis n1,1", "vis n2,1", "vis n3,1", "vis n4,1", "vis n5,1",
+        "vis n6,1", "vis n7,1", "vis n8,1", "vis n9,1", "vis n10,1"};
+
+    const char invisible[11][12] = {
+        "vis n0,0", "vis n1,0", "vis n2,0", "vis n3,0", "vis n4,0", "vis n5,0",
+        "vis n6,0", "vis n7,0", "vis n8,0", "vis n9,0", "vis n10,0"};
+
+    const char Js[11][4] = {
         "j0",
         "j10",
         "j11",
@@ -751,56 +768,109 @@ void PopulateGapsView()
         "j9",
         "j2",
         "j8",
-        "j7",
-    };
-    char Ns[11][4] = {"n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10"};
+        "j7"};
+
+    const char Ns[11][4] = {
+        "n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10"};
+
     char PercentText[6];
+
     CalculateGapPercentages();
     ClearNextionCommand();
+
+    // Recompute MaxBin from current data each call
+    uint32_t CurrentMaxBin = 0;
+    for (int i = 0; i < 11; ++i)
+    {
+        if (GapSets[i] > CurrentMaxBin)
+            CurrentMaxBin = GapSets[i];
+    }
+
+    bool MaxBinChanged = FirstCall || (CurrentMaxBin != PrevMaxBin);
+
     for (int i = 0; i < 11; ++i)
     {
         SimplePing();
-        if (GapSets[i] != PrevGapSets[i])
-        {
-            BuildValue(Ns[i], GapSets[i]);
-            if (GapSets[i])
-                BuildNextionCommand(visible[i]);
-            else
-                BuildNextionCommand(invisible[i]);
-            uint32_t n = GapSets[i];
-            if (n > MaxBin)
-                MaxBin = n;
-            n = MapWithExponential(n, 0, MaxBin, 0, 100, -15);
-            BuildValue(Js[i], n);
-            PrevGapSets[i] = GapSets[i];
-        }
-        if (GapSets[i])
-        {
-            if (!GapPercentages[i])
-            {
-                BuildText(PerCents[i], (char *)"< 1%");
-            }
-            else
-            {
-                Str(PercentText, GapPercentages[i], 0);
-                strcat(PercentText, "%");
-                BuildText(PerCents[i], PercentText);
-            }
-        }
-        else
-        {
-            BuildText(PerCents[i], (char *)" ");
-        }
-        BuildValue((char *)"n13", GapLongest);
-        BuildValue((char *)"n12", GapAverage);
 
-        if (GapShortest < 1000)
-            BuildValue((char *)"n11", GapShortest);
+        bool GapSetChanged = FirstCall || (GapSets[i] != PrevGapSets[i]);
+        bool PercentageChanged = FirstCall || (GapPercentages[i] != PrevGapPercentages[i]);
+        bool BarChanged = GapSetChanged || MaxBinChanged;
+
+        if (GapSetChanged)
+        {
+            BuildValue((char *)Ns[i], GapSets[i]);
+
+            if (GapSets[i])
+                BuildNextionCommand((char *)visible[i]);
+            else
+                BuildNextionCommand((char *)invisible[i]);
+        }
+
+        if (BarChanged)
+        {
+            uint32_t n = GapSets[i];
+
+            if (CurrentMaxBin == 0)
+                n = 0;
+            else
+                n = MapWithExponential(n, 0, CurrentMaxBin, 0, 100, -15);
+
+            BuildValue((char *)Js[i], n);
+        }
+
+        if (GapSetChanged || PercentageChanged)
+        {
+            if (GapSets[i])
+            {
+                if (!GapPercentages[i])
+                {
+                    BuildText((char *)PerCents[i], (char *)"< 1%");
+                }
+                else
+                {
+                    Str(PercentText, GapPercentages[i], 0);
+                    strcat(PercentText, "%");
+                    BuildText((char *)PerCents[i], PercentText);
+                }
+            }
+            else
+            {
+                BuildText((char *)PerCents[i], (char *)" ");
+            }
+        }
+
+        PrevGapSets[i] = GapSets[i];
+        PrevGapPercentages[i] = GapPercentages[i];
     }
-    SimplePing();
-    SendCommand(NextionCommand);
-    SimplePing();
+
+    if (FirstCall || GapLongest != PrevGapLongest)
+    {
+        BuildValue((char *)"n13", GapLongest);
+        PrevGapLongest = GapLongest;
+    }
+
+    if (FirstCall || GapAverage != PrevGapAverage)
+    {
+        BuildValue((char *)"n12", GapAverage);
+        PrevGapAverage = GapAverage;
+    }
+
+    if (GapShortest < 1000)
+    {
+        if (FirstCall || GapShortest != PrevGapShortest)
+        {
+            BuildValue((char *)"n11", GapShortest);
+            PrevGapShortest = GapShortest;
+        }
+    }
+
+    PrevMaxBin = CurrentMaxBin;
+
+    if (NextionCommand[0] != 0)
+        SendCommand(NextionCommand);
+
     ClearNextionCommand();
+    FirstCall = false;
     SimplePing();
 }
 // **********************************************************************************************************
