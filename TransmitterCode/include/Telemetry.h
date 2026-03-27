@@ -734,6 +734,7 @@ void CalculateGapPercentages()
     }
 }
 // **********************************************************************************************************
+
 // **********************************************************************************************************
 void PopulateGapsView()
 {
@@ -744,7 +745,6 @@ void PopulateGapsView()
     static uint32_t PrevGapLongest = 0xFFFFFFFF;
     static uint32_t PrevGapAverage = 0xFFFFFFFF;
     static uint32_t PrevGapShortest = 0xFFFFFFFF;
-    static uint32_t PrevMaxBin = 0xFFFFFFFF;
 
     const char PerCents[11][6] = {
         "t13", "t15", "t17", "t18", "t19", "t20", "t21", "t22", "t23", "t24", "t25"};
@@ -778,23 +778,13 @@ void PopulateGapsView()
     CalculateGapPercentages();
     ClearNextionCommand();
 
-    // Recompute MaxBin from current data each call
-    uint32_t CurrentMaxBin = 0;
-    for (int i = 0; i < 11; ++i)
-    {
-        if (GapSets[i] > CurrentMaxBin)
-            CurrentMaxBin = GapSets[i];
-    }
-
-    bool MaxBinChanged = FirstCall || (CurrentMaxBin != PrevMaxBin);
-
     for (int i = 0; i < 11; ++i)
     {
         SimplePing();
 
         bool GapSetChanged = FirstCall || (GapSets[i] != PrevGapSets[i]);
         bool PercentageChanged = FirstCall || (GapPercentages[i] != PrevGapPercentages[i]);
-        bool BarChanged = GapSetChanged || MaxBinChanged;
+        bool BarChanged = GapSetChanged;
 
         if (GapSetChanged)
         {
@@ -808,14 +798,34 @@ void PopulateGapsView()
 
         if (BarChanged)
         {
+            const uint32_t FullScaleCount = 30; // adjust to taste
             uint32_t n = GapSets[i];
+            uint32_t barHeight;
 
-            if (CurrentMaxBin == 0)
-                n = 0;
+            if (n == 0)
+            {
+                barHeight = 0;
+            }
+            else if (n <= 10)
+            {
+                barHeight = n * 6; // 1->6, 2->12, ... 10->60
+            }
             else
-                n = MapWithExponential(n, 0, CurrentMaxBin, 0, 100, -15);
+            {
+                if (FullScaleCount <= 10)
+                {
+                    barHeight = 100;
+                }
+                else
+                {
+                    barHeight = 60 + (((n - 10) * 40) + ((FullScaleCount - 10) / 2)) / (FullScaleCount - 10);
+                }
 
-            BuildValue((char *)Js[i], n);
+                if (barHeight > 100)
+                    barHeight = 100;
+            }
+
+            BuildValue((char *)Js[i], barHeight);
         }
 
         if (GapSetChanged || PercentageChanged)
@@ -864,8 +874,6 @@ void PopulateGapsView()
         }
     }
 
-    PrevMaxBin = CurrentMaxBin;
-
     if (NextionCommand[0] != 0)
         SendCommand(NextionCommand);
 
@@ -873,6 +881,7 @@ void PopulateGapsView()
     FirstCall = false;
     SimplePing();
 }
+
 // **********************************************************************************************************
 void StartGapsView()
 {
