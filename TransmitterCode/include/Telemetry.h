@@ -733,9 +733,9 @@ void CalculateGapPercentages()
         SimplePing();
     }
 }
-// **********************************************************************************************************
 
 // **********************************************************************************************************
+
 void PopulateGapsView()
 {
     static bool FirstCall = true;
@@ -780,8 +780,6 @@ void PopulateGapsView()
 
     for (int i = 0; i < 11; ++i)
     {
-        SimplePing();
-
         bool GapSetChanged = FirstCall || (GapSets[i] != PrevGapSets[i]);
         bool PercentageChanged = FirstCall || (GapPercentages[i] != PrevGapPercentages[i]);
         bool BarChanged = GapSetChanged;
@@ -798,7 +796,7 @@ void PopulateGapsView()
 
         if (BarChanged)
         {
-            const uint32_t FullScaleCount = 30; // adjust to taste
+            const uint32_t FullScaleCount = 50; // adjust to taste
             uint32_t n = GapSets[i];
             uint32_t barHeight;
 

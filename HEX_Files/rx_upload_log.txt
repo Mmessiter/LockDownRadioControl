@@ -5,4 +5,8 @@ Configuring upload protocol...
 AVAILABLE: jlink, teensy-cli, teensy-gui
 CURRENT: upload_protocol = teensy-gui
 Uploading .pio/build/teensy40/firmware.hex
-========================= [SUCCESS] Took 3.01 seconds =========================
+Teensy Loader, Command Line, Version 2.2
+Read "/Users/malcolmmessiter/Documents/GitHub/LockDownRadioControl/HEX_Files/RX.HEX": 165888 bytes, 8.2% usage
+Error opening USB device: No such file or directory
+Waiting for Teensy device...
+ (hint: press the reset button)

@@ -26,8 +26,8 @@
  * - Transceiver detection at startup - no more conditional compilation needed.
  * - I2C device detection at startup
  * - Watchdog timer implemented
- * - Support for Rotorflight 2.2 (Nexus) added, with auto-detection at boot time and MSP telemetry support
- * - Support for advanced PID and RATES profiles in Rotorflight 2.2 (Nexus) added, with auto-detection at boot time and MSP telemetry support
+ * - Support for Rotorflight 2.2 and 2.3 (Nexus) added, with auto-detection at boot time and MSP telemetry support
+ * - Support for advanced PID and RATES profiles in Rotorflight 2.2 and 2.3 (Nexus) added, with auto-detection at boot time and MSP telemetry support
  * - and so on...
  *
  *
