@@ -233,8 +233,7 @@ uint16_t BuildLinesArray(char *ReadBuffer, uint16_t BytesRead, uint32_t StartSee
 
 uint16_t ReadAFewLines()
 {
-    char ReadBuffer[READBUFFERSIZE];
-    char EndMarker[] = "||* END OF FILE *||";
+    char ReadBuffer[READBUFFERSIZE+50]; // a bit of extra just in case
 
     if (!StartReadLine)
     {
@@ -253,12 +252,9 @@ uint16_t ReadAFewLines()
 
     if (BytesRead < READBUFFERSIZE) // if we read less than the buffer size, we are at the end of the file
     {
-        ReadBuffer[BytesRead] = 0; // null-terminate the buffer
         CloseLogFile();
         FinalReadStartLine = StartReadLine;
-        strcat(ReadBuffer, EndMarker);
-        BytesRead += (strlen(EndMarker));
-        ReadBuffer[BytesRead] = 0; // null-terminate the buffer
+        ReadBuffer[BytesRead-1] = 0; // null-terminate the buffer
     }
     return BuildLinesArray(ReadBuffer, BytesRead, ThisSeekPosition); // build the lines array and return the number of lines
 }
