@@ -16,10 +16,10 @@
 #define BUFFEREDLINES 10            // (EDIT THESE NUMBERS WITH GREAT CAUTION!!!!)
 #define MXLINES BUFFEREDLINES * 4   // (EDIT THESE NUMBERS WITH GREAT CAUTION!!!!)
 #define SCROLLTRIGGER 0.75          // (EDIT THESE NUMBERS WITH GREAT CAUTION!!!!)
-#define MXLINELENGTH 110
-#define WRAPPOINT 65          // where to word-wrap
-#define MAXSEEKPOSITIONS 5000 // hope it's enough
-#define FONTPOINTS 24         // 24 point font at Nextion
+#define MXLINELENGTH 110            // (EDIT THIS NUMBER WITH GREAT CAUTION!!!!) This is the number of characters that can fit on a line. It is not exact as it depends on the characters, but it's a good starting point. Too high and it will cause problems with word wrap, too low and it will cause too much scrolling.
+#define WRAPPOINT 65                // where to word-wrap
+#define MAXSEEKPOSITIONS 5000       // hope it's enough
+#define FONTPOINTS 24               // 24 point font at Nextion
 #define GOING_NOWHERE 0
 #define GOING_UP 1
 #define GOING_DOWN 2
@@ -43,24 +43,18 @@ void TopOfLogFileNEW()
 /**
  * This function scrolls to the bottom of the log file and displays the most recent log entries.
  */
-void BottomOfLogFileNEW() // this isn't perfect but it usually works Ok ...
+void BottomOfLogFileNEW() 
 {
-   // char Current_Y_Nextion_Label[] = "LogText.val_y";
     CloseLogFile();
     LogFileNumber = OpenTextFileForReading();
     LogFileOpen = true;
-   
     while (LogFileOpen)
     {
         StartReadLine += BUFFEREDLINES;
         ReadAFewLines();
-       
     }
     ShowLogFileNew(ReadAFewLines());
-   // SendOtherValue(Current_Y_Nextion_Label, Max_Y);
-   // Previous_Current_Y = Max_Y;
-   
-}
+ }
 
 // ************************************************************************
 // This function reads more of the log file automatically and scroll up or as needed. IT WORKS !!!!!
@@ -154,7 +148,6 @@ void ShowLogFileNew(uint16_t LinesCounter)
         strcat(TheText, "\r\n");
     }
     SendText1(LogTeXt1, TheText); // Send it to the screen
-
     DelayWithDog(50);
 }
 
@@ -233,7 +226,7 @@ uint16_t BuildLinesArray(char *ReadBuffer, uint16_t BytesRead, uint32_t StartSee
 
 uint16_t ReadAFewLines()
 {
-    char ReadBuffer[READBUFFERSIZE+50]; // a bit of extra just in case
+    char ReadBuffer[READBUFFERSIZE + 50]; // a bit of extra just in case
 
     if (!StartReadLine)
     {
@@ -254,7 +247,7 @@ uint16_t ReadAFewLines()
     {
         CloseLogFile();
         FinalReadStartLine = StartReadLine;
-        ReadBuffer[BytesRead-1] = 0; // null-terminate the buffer
+        ReadBuffer[BytesRead - 1] = 0; // null-terminate the buffer
     }
     return BuildLinesArray(ReadBuffer, BytesRead, ThisSeekPosition); // build the lines array and return the number of lines
 }
@@ -278,7 +271,6 @@ void LogVIEWNew() // Start log screen
     FinalReadStartLine = 0xFFFF;
     CurrentView = LOGVIEW;
     ClearFilesList();
-
     MakeTextFileName();
     CloseLogFile();
     for (uint16_t i = 0; i < MAXSEEKPOSITIONS; ++i)
