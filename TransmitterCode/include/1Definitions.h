@@ -279,6 +279,8 @@
 #define PICKBANKVIEW1 50
 #define PICKBANKVIEW2 51
 #define CHOOSEIMAGEVIEW 52
+#define RFBACKUP_RESTOREVIEW 53
+#define RFGOVERNORVIEW 54
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *

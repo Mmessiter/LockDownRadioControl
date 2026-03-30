@@ -289,6 +289,8 @@ inline void SetNexusProfile(uint8_t index);
 uint32_t GetBuildDaysSince2020(); // days since 1st Jan 2020 for this build
 static bool Parse_MSP_API_VERSION(const uint8_t *buf, uint8_t len, uint8_t &mspProto, uint8_t &apiMaj, uint8_t &apiMin);
 inline void DetectRotorFlightAtBoot1();
+inline bool Parse_MSP_Governor_Config(const uint8_t *data, uint8_t n);
+inline bool Parse_MSP_Governor_Profile(const uint8_t *data, uint8_t n);
 
 /************************************************************************************************************/
 // For numeric types (int, float, double, etc.)
@@ -411,6 +413,10 @@ uint32_t Started_Sending_RATEs = 0;
 uint32_t Started_Sending_RATES_ADVANCED = 0;
 uint32_t Started_Sending_PID_ADVANCED = 0;
 uint32_t Started_Sending_STATUS_EX = 0;
+uint32_t Started_Sending_GOV_PROFILE = 0;
+uint32_t Started_Sending_GOV_CONFIG = 0;
+
+bool Governor_RF23_Required = false; // if API version is too old to support Governor data then this flag is set and we try to send it anyway, and hope for the best!
 
 uint16_t PID_Roll_P;
 uint16_t PID_Roll_I;
@@ -438,6 +444,7 @@ uint16_t RATES_Send_Duration = 1000;
 uint16_t RATES_ADVANCED_Send_Duration = 1000;
 uint16_t PID_ADVANCED_Send_Duration = 1000;
 uint16_t STATUS_EX_Send_Duration = 1000;
+uint32_t GOV_Send_Duration = 1000;
 
 char RF_RateTypes[6][15] = {
     "None",

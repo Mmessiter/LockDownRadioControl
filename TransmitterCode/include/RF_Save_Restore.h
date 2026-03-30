@@ -423,19 +423,33 @@ void Start_SAVE()
     CurrentMode = SAVE_RF_SETTINGS;
     LinkRatesToBanks = PreviousLinkRatesToBanks;
 }
-// ************************************************************************************************************/
-void Cancel_SAVE()
-{
-    RotorFlightStart();
-    BlockBankChanges = false;
-}
+
 // ************************************************************************************************************/
 void Cancel_RESTORE()
 {
+    Cancel_SAVE();
+}
+// ************************************************************************************************************/
+void Start_RF_Backup_Restore(){
+    SendCommand((char *)"page RFBackUpView");
+    CurrentView = RFBACKUP_RESTOREVIEW;
+    ShowRFBank();
+    ShowRFRate();
+    SendText((char *)"t11", ModelName);          // Show model name
+
+}
+// ************************************************************************************************************/
+void End_RF_Backup_Restore()
+{
     RotorFlightStart();
-    BlockBankChanges = false;
 }
 
+// ************************************************************************************************************/
+void Cancel_SAVE()
+{
+    Start_RF_Backup_Restore();
+    BlockBankChanges = false;
+}
 // ************************************************************************************************************/
 
 #endif // RF_SAVE_RESTORE_H

@@ -165,6 +165,7 @@
 #include "SDFiles.h"
 #include "ChooseImage.h"
 #include "Calibrate.h"
+#include "RF_Governor.h"
 /*********************************************************************************************************************************/
 
 /*********************************************************************************************************************************/
@@ -3230,7 +3231,7 @@ void CheckAllModelIds()
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!  ( Use "NUMBER<<8" )
-#define LASTFUNCTION1 48 // One more than final one
+#define LASTFUNCTION1 52 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])(){
     Blank,                   // 0 Cannot be used
@@ -3280,7 +3281,11 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     StartChooseImage,        // 44
     EndChooseImage,          // 45
     ImageScrollStop,         // 46
-    LinkRatesToBanksChanged  // 47
+    LinkRatesToBanksChanged, // 47
+    Start_RF_Backup_Restore, // 48
+    End_RF_Backup_Restore,   // 49
+    Start_RF_Governor,       // 50
+    End_RF_Governor          // 51
 
 };
 
@@ -4801,7 +4806,7 @@ void CheckWhetherToEnableBinding()
             SendText(wb, Mfound);         // Show binding enabled
             SendCommand(YesVisible);      // Show binding enabled
             BindingEnabled = true;        // Set binding enabled flag
-         }
+        }
         return;
     }
 }

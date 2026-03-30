@@ -356,7 +356,7 @@ void BankHasChanged()
     {
         ShowPIDAdvancedBank();
     }
-    if (CurrentView == ROTORFLIGHTVIEW)
+    if (CurrentView == ROTORFLIGHTVIEW || CurrentView == RFBACKUP_RESTOREVIEW)
     {
         ShowRFBank();
         ShowRFRate();

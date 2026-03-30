@@ -228,7 +228,7 @@ void EndPIDView()
     if (PIDS_Were_Edited)
     {
         if (GetConfirmation((char *)"page PIDView", (char *)"Discard edited PIDs?"))
-            GotoFrontView();
+            RotorFlightStart();
     }
     else
     {
