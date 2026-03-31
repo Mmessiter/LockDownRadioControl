@@ -4967,7 +4967,7 @@ void FASTRUN ManageTransmitter()
         ReadTheSwitchesAndTrims();
         CheckHardwareTrims();
         GetBank(); // Check switch positions 20 times a secon
-        if (CurrentView >= PIDVIEW && CurrentView <= PIDADVANCEDVIEW)
+        if (CurrentView >= PIDVIEW && CurrentView <= RFGOVERNORVIEW)
         {
             Hide_msg_if_needed(); // Hide any message in rotoflight config area
         }

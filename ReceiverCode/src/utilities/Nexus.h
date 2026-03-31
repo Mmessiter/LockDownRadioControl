@@ -30,8 +30,8 @@
 #define SEND_RATES_RF 2
 #define SEND_RATES_ADVANCED_RF 3
 #define SEND_PID_ADVANCED_RF 4
-#define SEND_GOV_CONFIG_RF 5
-#define SEND_GOV_PROFILE_RF 6
+// SEND_GOV_CONFIG_RF  and SEND_GOV_PROFILE_RF are defined in 1Definitions.h
+// as they are needed by both Nexus.h and radio.h
 
 // Governor flags bitmap helpers
 #define GOV_FLAG_FALLBACK_PRECOMP (1u << 2)
@@ -43,9 +43,7 @@
 #define GOV_CONFIG_PAYLOAD_SIZE 42
 #define GOV_PROFILE_PAYLOAD_SIZE 17
 
-// Governor ACK payload size
-// 35 display values packed as described in PackGovernorForAckPayload()
-#define GOV_ACK_PAYLOAD_SIZE 59
+// GOV_ACK_PAYLOAD_SIZE is defined in 1Definitions.h (needed by both Nexus.h and radio.h)
 
 // ************************************************************************************************************
 // Detect if Rotorflight 2.2 is present at boot time
@@ -581,14 +579,16 @@ inline void CheckMSPSerial()
             Parse_MSP_Governor_Config(data_in, p);
         else
             Governor_RF23_Required = true;
-        RequestFromMSP(MSP_GOVERNOR_CONFIG);
+        if (SendRotorFlightParametresNow == SEND_GOV_CONFIG_RF) // guard: only re-request if not auto-sequenced
+            RequestFromMSP(MSP_GOVERNOR_CONFIG);
         break;
     case SEND_GOV_PROFILE_RF:
         if (api100 >= 1209)
             Parse_MSP_Governor_Profile(data_in, p);
         else
             Governor_RF23_Required = true;
-        RequestFromMSP(MSP_GOVERNOR_PROFILE);
+        if (SendRotorFlightParametresNow == SEND_GOV_PROFILE_RF) // guard: only re-request if parse didn't change state
+            RequestFromMSP(MSP_GOVERNOR_PROFILE);
         break;
     default:
         break;
@@ -915,42 +915,36 @@ inline void SetNexusProfile(uint8_t index)
 // Governor global variables
 // ====================================================
 
-// Upgrade-nag flag — transmitter should show "Please upgrade to Rotorflight 2.3"
-// when this arrives in the ACK payload as true.
-//static bool Governor_RF23_Required = false;
+// Note: Governor_RF23_Required, Started_Sending_GOV_CONFIG,
+// Started_Sending_GOV_PROFILE, GOV_Send_Duration, and
+// GovAckPayload[] are all declared in 1Definitions.h as
+// they are shared across multiple translation units.
 
 // Raw round-trip buffers — complete payloads preserved for safe write-back
 static uint8_t Original_Gov_Config_Bytes[GOV_CONFIG_PAYLOAD_SIZE] = {0};
 static uint8_t Original_Gov_Profile_Bytes[GOV_PROFILE_PAYLOAD_SIZE] = {0};
 
-// Polling timers
-//static uint32_t Started_Sending_GOV_CONFIG = 0;
-//static uint32_t Started_Sending_GOV_PROFILE = 0;
-//static const uint32_t GOV_Send_Duration = 2000; // ms
-
 // GOVERNOR_CONFIG fields
-// Payload layout (42 bytes) — see byte map in comments below parse function
 static uint8_t Gov_Mode = 0;
-static uint16_t Gov_Startup_Time = 200;         // raw (/10 = seconds)
-static uint16_t Gov_Spoolup_Time = 100;         // raw (/10 = %/s)
-static uint16_t Gov_Tracking_Time = 20;         // raw (/10 = %/s)
-static uint16_t Gov_Recovery_Time = 20;         // raw (/10 = %/s)
-static uint16_t Gov_Throttle_Hold_Timeout = 50; // raw (/10 = seconds)
-static uint16_t Gov_Autorotation_Timeout = 0;   // seconds (no scale)
-static uint8_t Gov_Handover_Throttle = 20;      // %
-static uint8_t Gov_Pwr_Filter = 20;             // Hz
-static uint8_t Gov_Rpm_Filter = 20;             // Hz
-static uint8_t Gov_Tta_Filter = 0;              // Hz
-static uint8_t Gov_Ff_Filter = 10;              // Hz
-static uint8_t Gov_D_Filter = 50;               // raw (/10 = Hz)
-static uint16_t Gov_Spooldown_Time = 30;        // raw (/10 = %/s)
-static uint8_t Gov_Throttle_Type = 0;           // 0=Normal 1=Switch 2=Function
-static uint8_t Gov_Idle_Throttle = 10;          // raw (/10 = %)
-static uint8_t Gov_Auto_Throttle = 10;          // raw (/10 = %)
+static uint16_t Gov_Startup_Time = 200;
+static uint16_t Gov_Spoolup_Time = 100;
+static uint16_t Gov_Tracking_Time = 20;
+static uint16_t Gov_Recovery_Time = 20;
+static uint16_t Gov_Throttle_Hold_Timeout = 50;
+static uint16_t Gov_Autorotation_Timeout = 0;
+static uint8_t Gov_Handover_Throttle = 20;
+static uint8_t Gov_Pwr_Filter = 20;
+static uint8_t Gov_Rpm_Filter = 20;
+static uint8_t Gov_Tta_Filter = 0;
+static uint8_t Gov_Ff_Filter = 10;
+static uint8_t Gov_D_Filter = 50;
+static uint16_t Gov_Spooldown_Time = 30;
+static uint8_t Gov_Throttle_Type = 0;
+static uint8_t Gov_Idle_Throttle = 10;
+static uint8_t Gov_Auto_Throttle = 10;
 static uint8_t Gov_Bypass_Curve[9] = {0, 10, 20, 30, 50, 60, 70, 80, 100};
 
 // GOVERNOR_PROFILE fields
-// Payload layout (17 bytes) — see byte map in comments below parse function
 static uint16_t Gov_Headspeed = 2000;
 static uint8_t Gov_Gain = 100;
 static uint8_t Gov_P_Gain = 10;
@@ -967,38 +961,70 @@ static uint8_t Gov_Min_Throttle = 10;
 static uint8_t Gov_Fallback_Drop = 10;
 static uint16_t Gov_Flags = 0;
 
-// ACK payload byte array — packed by PackGovernorForAckPayload()
-// and sent to the transmitter in your existing ACK payload mechanism.
-static uint8_t GovAckPayload[GOV_ACK_PAYLOAD_SIZE] = {0};
+// ====================================================
+// PackGovernorForAckPayload()
+// Must be defined BEFORE the parse functions that call it.
+// GovAckPayload[] is declared in 1Definitions.h.
+// ====================================================
+
+inline void PackGovernorForAckPayload()
+{
+    uint8_t *b = GovAckPayload;
+    for (uint8_t i = 0; i < GOV_ACK_PAYLOAD_SIZE; i++)
+        b[i] = 0;
+
+    b[0] = Governor_RF23_Required ? 1 : 0;
+    b[1] = (uint8_t)(Gov_Headspeed & 0xFF);
+    b[2] = (uint8_t)(Gov_Headspeed >> 8);
+    b[3] = Gov_Gain;
+    b[4] = Gov_P_Gain;
+    b[5] = Gov_I_Gain;
+    b[6] = Gov_D_Gain;
+    b[7] = Gov_F_Gain;
+    b[8] = Gov_TTA_Gain;
+    b[9] = Gov_TTA_Limit;
+    b[10] = Gov_Max_Throttle;
+    b[11] = Gov_Min_Throttle;
+    b[12] = Gov_Fallback_Drop;
+    b[13] = Gov_Yaw_Weight;
+    b[14] = Gov_Cyclic_Weight;
+    b[15] = Gov_Collective_Weight;
+    b[16] = (uint8_t)(Gov_Flags & 0xFF);
+    b[17] = (uint8_t)(Gov_Flags >> 8);
+    b[18] = Gov_Mode;
+    b[19] = Gov_Handover_Throttle;
+    b[20] = (uint8_t)(Gov_Startup_Time & 0xFF);
+    b[21] = (uint8_t)(Gov_Startup_Time >> 8);
+    b[22] = (uint8_t)(Gov_Spoolup_Time & 0xFF);
+    b[23] = (uint8_t)(Gov_Spoolup_Time >> 8);
+    b[24] = (uint8_t)(Gov_Spooldown_Time & 0xFF);
+    b[25] = (uint8_t)(Gov_Spooldown_Time >> 8);
+    b[26] = (uint8_t)(Gov_Tracking_Time & 0xFF);
+    b[27] = (uint8_t)(Gov_Tracking_Time >> 8);
+    b[28] = (uint8_t)(Gov_Recovery_Time & 0xFF);
+    b[29] = (uint8_t)(Gov_Recovery_Time >> 8);
+    b[30] = (uint8_t)(Gov_Throttle_Hold_Timeout & 0xFF);
+    b[31] = (uint8_t)(Gov_Throttle_Hold_Timeout >> 8);
+    b[32] = (uint8_t)(Gov_Autorotation_Timeout & 0xFF);
+    b[33] = (uint8_t)(Gov_Autorotation_Timeout >> 8);
+    b[34] = Gov_Rpm_Filter;
+    b[35] = Gov_Pwr_Filter;
+    b[36] = Gov_D_Filter;
+    b[37] = Gov_Ff_Filter;
+    b[38] = Gov_Tta_Filter;
+    b[39] = Gov_Throttle_Type;
+    b[40] = Gov_Idle_Throttle;
+    b[41] = Gov_Auto_Throttle;
+    b[42] = (Gov_Flags & GOV_FLAG_VOLTAGE_COMP) ? 1 : 0;
+    b[43] = (Gov_Flags & GOV_FLAG_PID_SPOOLUP) ? 1 : 0;
+    b[44] = (Gov_Flags & GOV_FLAG_FALLBACK_PRECOMP) ? 1 : 0;
+    b[45] = (Gov_Flags & GOV_FLAG_DYN_MIN_THROTTLE) ? 1 : 0;
+    // [46-58] already zeroed above
+}
 
 // ====================================================
 // Parse — GOVERNOR_CONFIG (MSP read cmd 142)
 // ====================================================
-// Byte map (42 bytes total):
-//  0       gov_mode                U8   0=Off 1=Limit 2=Direct 3=Electric 4=Nitro
-//  1-2     gov_startup_time        U16  raw/10 = seconds
-//  3-4     gov_spoolup_time        U16  raw/10 = %/s
-//  5-6     gov_tracking_time       U16  raw/10 = %/s
-//  7-8     gov_recovery_time       U16  raw/10 = %/s
-//  9-10    gov_throttle_hold_to    U16  raw/10 = seconds
-//  11-12   spare_0                 U16  reserved — round-tripped unchanged
-//  13-14   gov_autorotation_to     U16  seconds (no scale)
-//  15-16   spare_1                 U16  reserved
-//  17-18   spare_2                 U16  reserved
-//  19      gov_handover_throttle   U8   %
-//  20      gov_pwr_filter          U8   Hz
-//  21      gov_rpm_filter          U8   Hz
-//  22      gov_tta_filter          U8   Hz
-//  23      gov_ff_filter           U8   Hz
-//  24      spare_3                 U8   reserved
-//  25      gov_d_filter            U8   raw/10 = Hz
-//  26-27   gov_spooldown_time      U16  raw/10 = %/s
-//  28      gov_throttle_type       U8   0=Normal 1=Switch 2=Function
-//  29      spare_4                 S8   reserved
-//  30      spare_5                 S8   reserved
-//  31      gov_idle_throttle       U8   raw/10 = %
-//  32      gov_auto_throttle       U8   raw/10 = %
-//  33-41   gov_bypass_curve[9]     U8   bypass throttle curve points
 
 inline bool Parse_MSP_Governor_Config(const uint8_t *data, uint8_t n)
 {
@@ -1017,7 +1043,6 @@ inline bool Parse_MSP_Governor_Config(const uint8_t *data, uint8_t n)
 
     const uint8_t *p = f.payload;
 
-    // Stash complete raw payload — spare bytes preserved for write-back
     for (uint8_t i = 0; i < GOV_CONFIG_PAYLOAD_SIZE; i++)
         Original_Gov_Config_Bytes[i] = p[i];
 
@@ -1055,28 +1080,27 @@ inline bool Parse_MSP_Governor_Config(const uint8_t *data, uint8_t n)
     for (uint8_t i = 0; i < 9; i++)
         Gov_Bypass_Curve[i] = p[o++];
 
+    // Pack complete data (profile + config) into ACK payload
+    PackGovernorForAckPayload();
+
+    // Config fetch complete — return to normal telemetry
+   // SendRotorFlightParametresNow = SEND_NO_RF; // removed!
+
+    // Look("GOV CONFIG parsed OK");
+    // Look1("Mode: ");
+    // Look(Gov_Mode);
+    // Look1("Handover: ");
+    // Look(Gov_Handover_Throttle);
+
     return true;
 }
 
 // ====================================================
 // Parse — GOVERNOR_PROFILE (MSP read cmd 148)
+// Phase 1 only — no auto-sequence to config.
+// Config is triggered separately by transmitter sending
+// SEND_GOV_CONFIG_VALUES parameter.
 // ====================================================
-// Byte map (17 bytes total):
-//  0-1     governor_headspeed          U16  RPM
-//  2       governor_gain               U8
-//  3       governor_p_gain             U8
-//  4       governor_i_gain             U8
-//  5       governor_d_gain             U8
-//  6       governor_f_gain             U8
-//  7       governor_tta_gain           U8
-//  8       governor_tta_limit          U8   %
-//  9       governor_yaw_weight         U8   (was yaw_ff_weight in RF 2.2)
-//  10      governor_cyclic_weight      U8   (was cyclic_ff_weight in RF 2.2)
-//  11      governor_collective_weight  U8   (was collective_ff_weight in RF 2.2)
-//  12      governor_max_throttle       U8   %
-//  13      governor_min_throttle       U8   %
-//  14      governor_fallback_drop      U8   %  (new in RF 2.3)
-//  15-16   governor_flags              U16  bitmap — use GOV_FLAG_* defines
 
 inline bool Parse_MSP_Governor_Profile(const uint8_t *data, uint8_t n)
 {
@@ -1116,6 +1140,19 @@ inline bool Parse_MSP_Governor_Profile(const uint8_t *data, uint8_t n)
     Gov_Flags = (uint16_t)p[o] | ((uint16_t)p[o + 1] << 8);
     o += 2;
 
+    // Pack profile data into ACK payload
+    PackGovernorForAckPayload();
+
+    // Phase 1 complete — stay in SEND_GOV_PROFILE_RF state so
+    // CheckMSPSerial() keeps polling until timeout expires,
+    // keeping fresh data available in GovAckPayload[].
+
+    //Look("GOV PROFILE parsed OK");
+    // Look1("Headspeed: ");
+    // Look(Gov_Headspeed);
+    // Look1("P gain: ");
+    // Look(Gov_P_Gain);
+
     return true;
 }
 
@@ -1149,7 +1186,7 @@ inline void WriteGovernorConfigToNexusAndSave()
     payload[o++] = (uint8_t)(Gov_Recovery_Time >> 8);
     payload[o++] = (uint8_t)(Gov_Throttle_Hold_Timeout & 0xFF);
     payload[o++] = (uint8_t)(Gov_Throttle_Hold_Timeout >> 8);
-    o += 2; // spare_0 already correct from Original
+    o += 2; // spare_0
     payload[o++] = (uint8_t)(Gov_Autorotation_Timeout & 0xFF);
     payload[o++] = (uint8_t)(Gov_Autorotation_Timeout >> 8);
     o += 2; // spare_1
@@ -1172,7 +1209,7 @@ inline void WriteGovernorConfigToNexusAndSave()
         payload[o++] = Gov_Bypass_Curve[i];
 
     if (o != GOV_CONFIG_PAYLOAD_SIZE)
-        return; // defensive
+        return;
 
     delay(20);
     This_MSP_Uart->flush();
@@ -1243,144 +1280,11 @@ inline void WriteGovernorProfileToNexusAndSave()
 }
 
 // ====================================================
-// Pack governor values for ACK payload to transmitter
-// ====================================================
-// Call this after a successful parse of both config and
-// profile. The resulting GovAckPayload[] byte array is
-// ready to insert into your existing ACK payload mechanism.
-//
-// Layout of GovAckPayload[GOV_ACK_PAYLOAD_SIZE] (59 bytes):
-//
-//  [0]     Governor_RF23_Required  (0 or 1)
-//
-//  Profile values (matching RFGovView column 1 + col 2 top):
-//  [1-2]   Gov_Headspeed           U16 LE
-//  [3]     Gov_Gain
-//  [4]     Gov_P_Gain
-//  [5]     Gov_I_Gain
-//  [6]     Gov_D_Gain
-//  [7]     Gov_F_Gain
-//  [8]     Gov_TTA_Gain
-//  [9]     Gov_TTA_Limit
-//  [10]    Gov_Max_Throttle
-//  [11]    Gov_Min_Throttle
-//  [12]    Gov_Fallback_Drop
-//  [13]    Gov_Yaw_Weight
-//  [14]    Gov_Cyclic_Weight
-//  [15]    Gov_Collective_Weight
-//  [16-17] Gov_Flags               U16 LE
-//
-//  Config values (matching RFGovView column 2 + column 3):
-//  [18]    Gov_Mode
-//  [19]    Gov_Handover_Throttle
-//  [20-21] Gov_Startup_Time        U16 LE  (raw, /10 = seconds)
-//  [22-23] Gov_Spoolup_Time        U16 LE  (raw, /10 = %/s)
-//  [24-25] Gov_Spooldown_Time      U16 LE  (raw, /10 = %/s)
-//  [26-27] Gov_Tracking_Time       U16 LE  (raw, /10 = %/s)
-//  [28-29] Gov_Recovery_Time       U16 LE  (raw, /10 = %/s)
-//  [30-31] Gov_Throttle_Hold_Timeout U16 LE (raw, /10 = seconds)
-//  [32-33] Gov_Autorotation_Timeout  U16 LE (seconds, no scale)
-//  [34]    Gov_Rpm_Filter
-//  [35]    Gov_Pwr_Filter
-//  [36]    Gov_D_Filter            (raw, /10 = Hz)
-//  [37]    Gov_Ff_Filter
-//  [38]    Gov_Tta_Filter
-//  [39]    Gov_Throttle_Type
-//  [40]    Gov_Idle_Throttle       (raw, /10 = %)
-//  [41]    Gov_Auto_Throttle       (raw, /10 = %)
-//
-//  Flags unpacked as individual bytes for easy display:
-//  [42]    GOV_FLAG_VOLTAGE_COMP    (0 or 1)
-//  [43]    GOV_FLAG_PID_SPOOLUP     (0 or 1)
-//  [44]    GOV_FLAG_FALLBACK_PRECOMP(0 or 1)
-//  [45]    GOV_FLAG_DYN_MIN_THROTTLE(0 or 1)
-//
-//  Spare/future use:
-//  [46-58] reserved, set to 0
-// ====================================================
-
-inline void PackGovernorForAckPayload()
-{
-    uint8_t *b = GovAckPayload;
-
-    // Clear entire buffer first
-    for (uint8_t i = 0; i < GOV_ACK_PAYLOAD_SIZE; i++)
-        b[i] = 0;
-
-    // [0] RF23 required flag
-    b[0] = Governor_RF23_Required ? 1 : 0;
-
-    // [1-17] Profile
-    b[1] = (uint8_t)(Gov_Headspeed & 0xFF);
-    b[2] = (uint8_t)(Gov_Headspeed >> 8);
-    b[3] = Gov_Gain;
-    b[4] = Gov_P_Gain;
-    b[5] = Gov_I_Gain;
-    b[6] = Gov_D_Gain;
-    b[7] = Gov_F_Gain;
-    b[8] = Gov_TTA_Gain;
-    b[9] = Gov_TTA_Limit;
-    b[10] = Gov_Max_Throttle;
-    b[11] = Gov_Min_Throttle;
-    b[12] = Gov_Fallback_Drop;
-    b[13] = Gov_Yaw_Weight;
-    b[14] = Gov_Cyclic_Weight;
-    b[15] = Gov_Collective_Weight;
-    b[16] = (uint8_t)(Gov_Flags & 0xFF);
-    b[17] = (uint8_t)(Gov_Flags >> 8);
-
-    // [18-41] Config
-    b[18] = Gov_Mode;
-    b[19] = Gov_Handover_Throttle;
-    b[20] = (uint8_t)(Gov_Startup_Time & 0xFF);
-    b[21] = (uint8_t)(Gov_Startup_Time >> 8);
-    b[22] = (uint8_t)(Gov_Spoolup_Time & 0xFF);
-    b[23] = (uint8_t)(Gov_Spoolup_Time >> 8);
-    b[24] = (uint8_t)(Gov_Spooldown_Time & 0xFF);
-    b[25] = (uint8_t)(Gov_Spooldown_Time >> 8);
-    b[26] = (uint8_t)(Gov_Tracking_Time & 0xFF);
-    b[27] = (uint8_t)(Gov_Tracking_Time >> 8);
-    b[28] = (uint8_t)(Gov_Recovery_Time & 0xFF);
-    b[29] = (uint8_t)(Gov_Recovery_Time >> 8);
-    b[30] = (uint8_t)(Gov_Throttle_Hold_Timeout & 0xFF);
-    b[31] = (uint8_t)(Gov_Throttle_Hold_Timeout >> 8);
-    b[32] = (uint8_t)(Gov_Autorotation_Timeout & 0xFF);
-    b[33] = (uint8_t)(Gov_Autorotation_Timeout >> 8);
-    b[34] = Gov_Rpm_Filter;
-    b[35] = Gov_Pwr_Filter;
-    b[36] = Gov_D_Filter;
-    b[37] = Gov_Ff_Filter;
-    b[38] = Gov_Tta_Filter;
-    b[39] = Gov_Throttle_Type;
-    b[40] = Gov_Idle_Throttle;
-    b[41] = Gov_Auto_Throttle;
-
-    // [42-45] Flags unpacked
-    b[42] = (Gov_Flags & GOV_FLAG_VOLTAGE_COMP) ? 1 : 0;
-    b[43] = (Gov_Flags & GOV_FLAG_PID_SPOOLUP) ? 1 : 0;
-    b[44] = (Gov_Flags & GOV_FLAG_FALLBACK_PRECOMP) ? 1 : 0;
-    b[45] = (Gov_Flags & GOV_FLAG_DYN_MIN_THROTTLE) ? 1 : 0;
-
-    // [46-58] reserved — already zeroed above
-}
-
-// ====================================================
-// Unpack governor write-request from transmitter ACK
-// ====================================================
-// When the user edits values on the Nextion and presses
-// Save, the transmitter packs the edited values into an
-// outgoing payload using the same layout as GovAckPayload
-// and sends them back in the next packet to the receiver.
-// Call this function to unpack that incoming payload into
-// the global variables, then call WriteGovernorProfileToNexusAndSave()
-// and/or WriteGovernorConfigToNexusAndSave() as appropriate.
-//
-// src must point to GOV_ACK_PAYLOAD_SIZE bytes.
+// Unpack governor write-request from transmitter
 // ====================================================
 
 inline void UnpackGovernorFromTxPayload(const uint8_t *src)
 {
-    // [1-17] Profile
     Gov_Headspeed = (uint16_t)src[1] | ((uint16_t)src[2] << 8);
     Gov_Gain = src[3];
     Gov_P_Gain = src[4];
@@ -1396,8 +1300,6 @@ inline void UnpackGovernorFromTxPayload(const uint8_t *src)
     Gov_Cyclic_Weight = src[14];
     Gov_Collective_Weight = src[15];
     Gov_Flags = (uint16_t)src[16] | ((uint16_t)src[17] << 8);
-
-    // [18-41] Config
     Gov_Mode = src[18];
     Gov_Handover_Throttle = src[19];
     Gov_Startup_Time = (uint16_t)src[20] | ((uint16_t)src[21] << 8);
@@ -1416,7 +1318,6 @@ inline void UnpackGovernorFromTxPayload(const uint8_t *src)
     Gov_Idle_Throttle = src[40];
     Gov_Auto_Throttle = src[41];
 
-    // [42-45] Flags — reconstruct Gov_Flags bitmap from unpacked bits
     Gov_Flags &= ~(GOV_FLAG_VOLTAGE_COMP | GOV_FLAG_PID_SPOOLUP |
                    GOV_FLAG_FALLBACK_PRECOMP | GOV_FLAG_DYN_MIN_THROTTLE);
     if (src[42])

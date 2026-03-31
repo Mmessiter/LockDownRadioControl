@@ -118,6 +118,14 @@
 #define BOXRIGHT BOXLEFT + BOXWIDTH
 
 // **************************************************************************
+//      GOVERNOR (RF)                    *
+//***************************************************************************
+
+#define GOV_ACK_PAYLOAD_SIZE 59
+#define SEND_GOV_PROFILE_RF 6
+#define SEND_GOV_CONFIG_RF 5
+
+// **************************************************************************
 //                            CURRENTMODE VALUES                            *
 //***************************************************************************
 
@@ -205,7 +213,10 @@
 #define MSP_BANK_CHANGE_CONFIRMATION 24       // Confirmation from RX that bank change was successful (for MSP Bank change confirmation) NOT YET USED
 #define MSP_INHIBIT_TELEMETRY 25              // Inhibit telemetry for a short time to allow MSP data to be sent without interference from telemetry data (for MSP data transmission)
 #define MSP_ENABLE_TELEMETRY 26               // ENABLE telemetry after MSP data has been sent (for MSP data transmission)
-#define PARAMETERS_MAX_ID 27                  // Max types of parameters packet to send  ... might increase.
+#define SEND_GOV_VALUES 27                    // Command to request RFGOVERNOR values from RX
+#define SEND_GOV_CONFIG_VALUES 28             // Command to request RFGOVERNOR CONFIG values from RX
+
+#define PARAMETERS_MAX_ID 29 // Max types of parameters packet to send  ... might increase.
 
 // **************************************************************************
 //                               Mixes                                      *
@@ -565,6 +576,9 @@
 //***************************************************************************
 
 ADC *adc = new ADC();
+
+
+
 void KickTheDog();
 void SendCommand(char *tbox);
 void ReadTheSwitchesAndTrims();
@@ -863,6 +877,8 @@ void LinkRatesToBanksChanged();
 void DisplayModelImage();
 void BankHasChanged();
 void FixArmingChannel();
+void DisplayGovValues(uint8_t n, uint8_t m);
+void HideGOVMsg();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************
@@ -1441,6 +1457,7 @@ char ESC_Temperature[10];
 char MAX_ESC_Temperature[10];
 char PID_Labels[17][4] = {"n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11", "n12", "n13", "n14", "n15", "n16"};
 bool PIDS_Were_Edited = false;
+bool GOVS_Were_Edited = false;
 bool PIDS_Advanced_Were_Edited = false;
 bool Rates_Were_Edited = false;
 bool Rates_Advanced_Were_Edited = false;
@@ -1462,6 +1479,7 @@ char SearchFile[80]; // used for searching files on SD card after adding path to
 
 char RatesWindows[MAX_RATES_BYTES][5] = {"t10", "tn0", "tn1", "tn2", "tn3", "tn4", "tn5", "tn6", "tn7", "tn8", "tn9", "tn10", "tn11"};
 bool LinkRatesToBanks = false;
+
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
 // **********************************************************************************************************************************
@@ -1528,6 +1546,15 @@ uint16_t RATES_Send_Duration = 0;
 uint16_t Rates_Advanced_Send_Duration = 0;
 
 uint32_t PID_Start_Time = 0;
+
+uint32_t GOV_Start_Time = 0;
+uint32_t GOV_Config_Start_Time = 0;
+uint16_t GOV_Send_Duration = 0;
+uint16_t GOV_Config_Send_Duration = 0;
+
+
+static uint8_t GovAckPayload[GOV_ACK_PAYLOAD_SIZE] = {0};
+
 uint32_t PID_Advanced_Start_Time = 0;
 uint32_t RATES_Advanced_Start_Time = 0;
 uint32_t RATES_Start_Time = 0;
@@ -1535,14 +1562,16 @@ bool Reading_PIDS_Now = false;
 bool Reading_PIDS_Advanced_Now = false;
 bool Reading_RATES_Now = false;
 bool Reading_RATES_Advanced_Now = false;
+bool Reading_GOV_Now = false;
+bool Reading_GOV_Config_Now = false;
 
-char Rate_Types[7][16] = {"None", "Betaflight", "Raceflight", "KISS", "Actual", "QuickRates","Rotorflight 2.3"};
+char Rate_Types[7][16] = {"None", "Betaflight", "Raceflight", "KISS", "Actual", "QuickRates", "Rotorflight 2.3"};
 
 const float FactorTableRF2_2[13] = {1, 10, 10, .01, 10, 10, .01, 10, 10, .01, .25, .25, .01}; // Factors for RATES in RF V2.2 (0th element not used)
-const float FactorTableRF2_3[13] = {1,  5,  1,   1,  5,  1,   1,  5,  1,   1, .125,  1,   1}; // Factors for RATES in RF V2.3 (0th element not used)
+const float FactorTableRF2_3[13] = {1, 5, 1, 1, 5, 1, 1, 5, 1, 1, .125, 1, 1};                // Factors for RATES in RF V2.3 (0th element not used)
 
-uint8_t RotorFlight_V = 0; // 0 = NO RF, 1 = RF v2.2, 2 = RF v2.3
-float RotorFlight_Version = 0; // none, V2.2, V2.3 for display only
+uint8_t RotorFlight_V = 0;           // 0 = NO RF, 1 = RF v2.2, 2 = RF v2.3
+float RotorFlight_Version = 0;       // none, V2.2, V2.3 for display only
 float RFVersions[3] = {0, 2.2, 2.3}; // for display only
 
 char ModelImageFileName[9];

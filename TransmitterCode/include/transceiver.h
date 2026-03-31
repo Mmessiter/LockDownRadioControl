@@ -1008,13 +1008,13 @@ void ReadPIDs_Advanced_FromAckPayload(uint8_t n, uint8_t m)
 // ******************************************************************************************
 void Hide_msg_if_needed()
 {
-
     if (Reading_PIDS_Now)
     {
         if ((millis() - PID_Start_Time) > PID_Send_Duration)
         {
             Reading_PIDS_Now = false;
             HidePIDMsg();
+            return;
         }
     }
     if (Reading_RATES_Now)
@@ -1023,6 +1023,7 @@ void Hide_msg_if_needed()
         {
             Reading_RATES_Now = false;
             HideRATESMsg();
+            return;
         }
     }
     if (Reading_RATES_Advanced_Now)
@@ -1031,6 +1032,7 @@ void Hide_msg_if_needed()
         {
             Reading_RATES_Advanced_Now = false;
             Hide_Advanced_Rates_Msg();
+            return;
         }
     }
     if (Reading_PIDS_Advanced_Now)
@@ -1039,6 +1041,30 @@ void Hide_msg_if_needed()
         {
             Reading_PIDS_Advanced_Now = false;
             HidePID_Advanced_Msg();
+            return;
+        }
+    }
+    if (Reading_GOV_Now)
+    {
+        if ((millis() - GOV_Start_Time) > GOV_Send_Duration)
+        {
+            Reading_GOV_Now = false;
+            Reading_GOV_Config_Now = true; // Phase 1 complete — immediately trigger phase 2 (config data)
+            GOV_Config_Start_Time = millis();
+            GOV_Config_Send_Duration = 1000;              // show config values for 1 seconds
+            AddParameterstoQueue(SEND_GOV_CONFIG_VALUES); // new parameter ID 28
+            return;
+        }
+    }
+
+    if (Reading_GOV_Config_Now)
+    {
+        if ((millis() - GOV_Config_Start_Time) > GOV_Config_Send_Duration)
+        {
+           // Look("GOV Config reading timed out");
+            Reading_GOV_Config_Now = false;
+            HideGOVMsg();
+            return;
         }
     }
 }
@@ -1069,6 +1095,24 @@ void CheckAgeGap()
         CurrentView = 254;
         GotoFrontView();
     }
+}
+
+// ******************************************************************************************
+void ReadGovBytesFromAckPayload(uint8_t n, uint8_t m)
+{
+    if (CurrentMode == RESTORE_RF_SETTINGS)
+        return;
+    uint8_t p = 0;
+    for (uint8_t i = n; i < m; ++i)
+    {
+        if (i < GOV_ACK_PAYLOAD_SIZE)
+        {
+            GovAckPayload[i] = AckPayload.Ack_Payload_byte[p + 1];
+            ++p;
+        }
+    }
+    if (CurrentView == RFGOVERNORVIEW)
+        DisplayGovValues(n, m);
 }
 
 /************************************************************************************************************/
@@ -1267,6 +1311,11 @@ FASTRUN void ParseAckPayload()
         {
             ReadPIDs_Advanced_FromAckPayload(0, 4);
         }
+        if (Reading_GOV_Now)
+            ReadGovBytesFromAckPayload(0, 4);
+
+        if (Reading_GOV_Config_Now)
+            ReadGovBytesFromAckPayload(18, 22);
 
         break;
     case 26:
@@ -1288,6 +1337,10 @@ FASTRUN void ParseAckPayload()
         {
             ReadPIDs_Advanced_FromAckPayload(4, 8);
         }
+        if (Reading_GOV_Now)
+            ReadGovBytesFromAckPayload(4, 8);
+        if (Reading_GOV_Config_Now)
+            ReadGovBytesFromAckPayload(22, 26);
         break;
     case 27:
         if (Reading_PIDS_Now)
@@ -1296,6 +1349,8 @@ FASTRUN void ParseAckPayload()
             PID_Values[5] = GetSecondWordFromAckPayload(); // PID_Pitch_I
             Display2PIDValues(4);
         }
+        if (Reading_GOV_Now)
+            ReadGovBytesFromAckPayload(8, 12);
         if (Reading_RATES_Now)
         {
             ReadRatesBytesFromAckPayload(7, 11);
@@ -1308,6 +1363,13 @@ FASTRUN void ParseAckPayload()
         {
             ReadPIDs_Advanced_FromAckPayload(8, 12);
         }
+        if (Reading_GOV_Now)
+        {
+            ReadGovBytesFromAckPayload(8, 12);
+        }
+        if (Reading_GOV_Config_Now)
+            ReadGovBytesFromAckPayload(26, 30);
+
         break;
     case 28:
         if (Reading_PIDS_Now)
@@ -1328,6 +1390,12 @@ FASTRUN void ParseAckPayload()
         {
             ReadPIDs_Advanced_FromAckPayload(12, 16);
         }
+        if (Reading_GOV_Now)
+        {
+            ReadGovBytesFromAckPayload(12, 16);
+        }
+        if (Reading_GOV_Config_Now)
+            ReadGovBytesFromAckPayload(30, 34);
         break;
     case 29:
         if (Reading_PIDS_Now)
@@ -1340,6 +1408,12 @@ FASTRUN void ParseAckPayload()
         {
             ReadPIDs_Advanced_FromAckPayload(16, 20);
         }
+        if (Reading_GOV_Now)
+        {
+            ReadGovBytesFromAckPayload(16, 18);
+        }
+        if (Reading_GOV_Config_Now)
+            ReadGovBytesFromAckPayload(34, 38);
         break;
     case 30:
         if (Reading_PIDS_Now)
@@ -1352,12 +1426,22 @@ FASTRUN void ParseAckPayload()
         {
             ReadPIDs_Advanced_FromAckPayload(20, 24);
         }
+        if (Reading_GOV_Config_Now)
+        {
+            ReadGovBytesFromAckPayload(38, 42);
+        }
+
         break;
     case 31:
         if (BindingEnabled)
             break;
+        if (Reading_GOV_Config_Now)
+        {
+            ReadGovBytesFromAckPayload(42, 46);
+            break;
+        }
         RotorFlight_V = GetIntFromAckPayload();
-        RotorFlight_Version = RFVersions[RotorFlight_V]; 
+        RotorFlight_Version = RFVersions[RotorFlight_V];
         break;
 
     case 32:

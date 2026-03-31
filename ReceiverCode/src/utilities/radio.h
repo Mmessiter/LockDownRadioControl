@@ -706,6 +706,7 @@ void Send_2_x_uint16_t(uint16_t v1, uint16_t v2) // sends two x uint16_ts
     AckPayload.Ack_Payload_byte[3] = ThisUnion.Val8[0];
     AckPayload.Ack_Payload_byte[4] = ThisUnion.Val8[1];
 }
+
 // ************************************************************************************************************/
 void SendBoolToAckPayload(bool val, uint8_t bytePos) // byte position can be 1,2,3,4 (but not 0)
 {                                                    // This one function now works with most bool parameters
@@ -802,6 +803,20 @@ void SetupRadios()
         ThisRadio = 2;
     }
     delay(4);
+}
+
+// ************************************************************************************************************/
+void SendGovAckBytes(uint8_t n, uint8_t m)
+{
+    uint8_t p = 0;
+    for (uint8_t i = n; i < m; ++i)
+    {
+        if (i < GOV_ACK_PAYLOAD_SIZE) // avoid overflow
+        {
+            AckPayload.Ack_Payload_byte[p + 1] = GovAckPayload[i];
+            ++p;
+        }
+    }
 }
 
 /************************************************************************************************************/
@@ -940,6 +955,14 @@ void LoadAckPayload()
         case SEND_PID_ADVANCED_RF: // 4
             Send_PID_Advanced_Bytes(0, 4);
             break;
+
+        case SEND_GOV_PROFILE_RF: // new
+            SendGovAckBytes(0, 4);
+            break; // [0..3]
+        case SEND_GOV_CONFIG_RF:
+            SendGovAckBytes(18, 22); // new
+            break; // [18..21]
+
         default:
             break;
         }
@@ -961,6 +984,15 @@ void LoadAckPayload()
         case SEND_PID_ADVANCED_RF: // 4
             Send_PID_Advanced_Bytes(4, 8);
             break;
+
+        case SEND_GOV_PROFILE_RF:
+            SendGovAckBytes(4, 8); // new
+            break;                 // [4..7]
+        case SEND_GOV_CONFIG_RF:
+            SendGovAckBytes(22, 26); // new
+            Look("Gov Config bytes sent");
+            break;                   // [22..25]
+
         default:
             break;
         }
@@ -983,6 +1015,15 @@ void LoadAckPayload()
         case SEND_PID_ADVANCED_RF: // 4
             Send_PID_Advanced_Bytes(8, 12);
             break;
+
+        case SEND_GOV_PROFILE_RF: // new
+            SendGovAckBytes(8, 12);
+            break; // [8..11]
+
+        case SEND_GOV_CONFIG_RF:
+            SendGovAckBytes(26, 30); // new
+            break;                   // [26..29]
+
         default:
             break;
         }
@@ -1004,6 +1045,14 @@ void LoadAckPayload()
         case SEND_PID_ADVANCED_RF: // 4
             Send_PID_Advanced_Bytes(12, 16);
             break;
+
+        case SEND_GOV_PROFILE_RF: // new
+            SendGovAckBytes(12, 16);
+            break;               // [12..15]
+        case SEND_GOV_CONFIG_RF: // new
+            SendGovAckBytes(30, 34);
+            break; // [30..33]
+
         default:
             break;
         }
@@ -1021,6 +1070,14 @@ void LoadAckPayload()
         case SEND_PID_ADVANCED_RF: // 4
             Send_PID_Advanced_Bytes(16, 20);
             break;
+
+        case SEND_GOV_PROFILE_RF:
+            SendGovAckBytes(16, 18);
+            break; // [16..17] last 2 profile bytes
+        case SEND_GOV_CONFIG_RF:
+            SendGovAckBytes(34, 38);
+            break; // [34..37]
+
         default:
             break;
         }
@@ -1036,12 +1093,19 @@ void LoadAckPayload()
         case SEND_PID_ADVANCED_RF: // 4
             Send_PID_Advanced_Bytes(20, 24);
             break;
+
+        case SEND_GOV_CONFIG_RF: // new
+            SendGovAckBytes(38, 42);
+            break; // [38..41]
         default:
             break;
         }
         break;
     case 31:
-        SendIntToAckPayload(Rotorflight_Version); // Tell TX if Rotorflightdetected 
+        if (SendRotorFlightParametresNow == SEND_GOV_CONFIG_RF)
+            SendGovAckBytes(42, 46); // [42..45] — the four unpacked flag bytes
+        else
+            SendIntToAckPayload(Rotorflight_Version); // preserve existing behaviour
         break;
     case 32:
         switch (SendRotorFlightParametresNow)

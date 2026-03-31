@@ -136,7 +136,9 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define MSP_BANK_CHANGE_CONFIRMATION 24       // Command to confirm bank change on MSP requests
 #define MSP_INHIBIT_TELEMETRY 25              // Inhibit telemetry for a short time to allow MSP data to be sent without interference from telemetry data (for MSP data transmission)
 #define MSP_ENABLE_TELEMETRY 26               // ENABLE telemetry after MSP data has been sent (for MSP data transmission)
-#define PARAMETERS_MAX_ID 26                  // Max types of parameters packet to send  ... might increase.
+#define SEND_GOV_VALUES 27                    // Command to get governor profile from MSP
+#define SEND_GOV_CONFIG_VALUES 28             // Command to get governor config from MSP
+#define PARAMETERS_MAX_ID 29                  // Max types of parameters packet to send  ... might increase.
 
 #define MSP_CHANGE_TYPE_PID 0
 #define MSP_CHANGE_TYPE_RATES 1
@@ -445,6 +447,10 @@ uint16_t RATES_ADVANCED_Send_Duration = 1000;
 uint16_t PID_ADVANCED_Send_Duration = 1000;
 uint16_t STATUS_EX_Send_Duration = 1000;
 uint32_t GOV_Send_Duration = 1000;
+#define GOV_ACK_PAYLOAD_SIZE 59
+#define SEND_GOV_PROFILE_RF 6
+#define SEND_GOV_CONFIG_RF 5
+static uint8_t GovAckPayload[GOV_ACK_PAYLOAD_SIZE] = {0};
 
 char RF_RateTypes[6][15] = {
     "None",

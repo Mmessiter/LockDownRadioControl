@@ -223,6 +223,27 @@ void ReadExtraParameters()
     case MSP_ENABLE_TELEMETRY: // 26
         InhibitTelemetry = false;
         break;
+    case SEND_GOV_VALUES: // 27
+        if (!Rotorflight_Version)
+            break;
+        if (Parameters.word[1] == 321) // 321 is the command to send GOVERNOR PROFILE NOW!
+        {
+            SendRotorFlightParametresNow = SEND_GOV_PROFILE_RF;
+            Started_Sending_GOV_PROFILE = millis();
+            GOV_Send_Duration = Parameters.word[2];
+        }
+        break;
+
+    case SEND_GOV_CONFIG_VALUES: // 28
+        if (!Rotorflight_Version)
+            break;
+        if (Parameters.word[1] == 321)
+        {
+            SendRotorFlightParametresNow = SEND_GOV_CONFIG_RF;
+            Started_Sending_GOV_CONFIG = millis();
+            GOV_Send_Duration = Parameters.word[2];
+        }
+        break;
 
     default:
         break;
