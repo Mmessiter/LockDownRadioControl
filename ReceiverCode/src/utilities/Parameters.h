@@ -241,7 +241,10 @@ void ReadExtraParameters()
         {
             SendRotorFlightParametresNow = SEND_GOV_CONFIG_RF;
             Started_Sending_GOV_CONFIG = millis();
-            GOV_Send_Duration = Parameters.word[2];
+            PROFILE_Send_Duration = Parameters.word[2];
+            // Look("GOV CONFIG send started");
+            // Look("Duration: ");
+            // Look(PROFILE_Send_Duration);
         }
         break;
 

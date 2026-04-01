@@ -447,10 +447,13 @@ uint16_t RATES_ADVANCED_Send_Duration = 1000;
 uint16_t PID_ADVANCED_Send_Duration = 1000;
 uint16_t STATUS_EX_Send_Duration = 1000;
 uint32_t GOV_Send_Duration = 1000;
+
+uint32_t PROFILE_Send_Duration = 1000; // for both PID and RATES config, as they are sent together
+
 #define GOV_ACK_PAYLOAD_SIZE 59
 #define SEND_GOV_PROFILE_RF 6
 #define SEND_GOV_CONFIG_RF 5
-static uint8_t GovAckPayload[GOV_ACK_PAYLOAD_SIZE] = {0};
+    static uint8_t GovAckPayload[GOV_ACK_PAYLOAD_SIZE] = {0};
 
 char RF_RateTypes[6][15] = {
     "None",

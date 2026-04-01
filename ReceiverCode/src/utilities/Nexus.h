@@ -525,6 +525,7 @@ inline void CheckMSPSerial()
             break;
         case SEND_GOV_PROFILE_RF:
             RequestFromMSP(MSP_GOVERNOR_PROFILE);
+            Look("Requested GOV PROFILE");
             break;
         default:
             break;
@@ -545,8 +546,11 @@ inline void CheckMSPSerial()
         SendRotorFlightParametresNow = SEND_NO_RF;
     if ((Now - Started_Sending_GOV_CONFIG > GOV_Send_Duration) && (SendRotorFlightParametresNow == SEND_GOV_CONFIG_RF))
         SendRotorFlightParametresNow = SEND_NO_RF;
-    if ((Now - Started_Sending_GOV_PROFILE > GOV_Send_Duration) && (SendRotorFlightParametresNow == SEND_GOV_PROFILE_RF))
+    if ((Now - Started_Sending_GOV_PROFILE > PROFILE_Send_Duration) && (SendRotorFlightParametresNow == SEND_GOV_PROFILE_RF))
         SendRotorFlightParametresNow = SEND_NO_RF;
+
+
+
 
     // Parse and re-request
     switch (SendRotorFlightParametresNow)
@@ -1086,11 +1090,11 @@ inline bool Parse_MSP_Governor_Config(const uint8_t *data, uint8_t n)
     // Config fetch complete — return to normal telemetry
    // SendRotorFlightParametresNow = SEND_NO_RF; // removed!
 
-    // Look("GOV CONFIG parsed OK");
-    // Look1("Mode: ");
-    // Look(Gov_Mode);
-    // Look1("Handover: ");
-    // Look(Gov_Handover_Throttle);
+    Look("GOV CONFIG parsed OK");
+    Look1("Mode: ");
+    Look(Gov_Mode);
+    Look1("Handover: ");
+    Look(Gov_Handover_Throttle);
 
     return true;
 }
@@ -1147,11 +1151,11 @@ inline bool Parse_MSP_Governor_Profile(const uint8_t *data, uint8_t n)
     // CheckMSPSerial() keeps polling until timeout expires,
     // keeping fresh data available in GovAckPayload[].
 
-    //Look("GOV PROFILE parsed OK");
-    // Look1("Headspeed: ");
-    // Look(Gov_Headspeed);
-    // Look1("P gain: ");
-    // Look(Gov_P_Gain);
+    Look("GOV PROFILE parsed OK");
+    Look1("Headspeed: ");
+    Look(Gov_Headspeed);
+    Look1("P gain: ");
+    Look(Gov_P_Gain);
 
     return true;
 }
