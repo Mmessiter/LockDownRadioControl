@@ -74,6 +74,20 @@ void DisplayGovValues(uint8_t n, uint8_t m)
     if (CurrentView != RFGOVERNORVIEW)
         return;
 
+    // Look1("DisplayGov n=");
+    // Look1(n);
+    // Look1(" m=");
+    // Look(m);
+    // Look1("  CurrentView=");
+    // Look(CurrentView);
+
+    // Look1("DGV bytes: ");
+    // for (uint8_t i = n; i < m; ++i)
+    // {
+    //     Look1(GovAckPayload[i]);
+    //     Look1(" ");
+    // }
+    // Look("");
     char buf[12];
 
     for (uint8_t i = n; i < m; ++i)

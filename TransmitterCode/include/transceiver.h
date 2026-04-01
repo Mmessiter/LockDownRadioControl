@@ -1044,6 +1044,18 @@ void Hide_msg_if_needed()
             return;
         }
     }
+   
+    if (Reading_GOV_Config_Now)
+    {
+        if ((millis() - GOV_Config_Start_Time) > GOV_Config_Send_Duration)
+        {
+           // Look("GOV Config reading timed out");
+            Reading_GOV_Config_Now = false;
+            HideGOVMsg();
+            return;
+        }
+    }
+
     if (Reading_GOV_Now)
     {
         if ((millis() - GOV_Start_Time) > GOV_Send_Duration)
@@ -1053,17 +1065,6 @@ void Hide_msg_if_needed()
             GOV_Config_Start_Time = millis();
             GOV_Config_Send_Duration = 1000;              // show config values for 1 seconds
             AddParameterstoQueue(SEND_GOV_CONFIG_VALUES); // new parameter ID 28
-            return;
-        }
-    }
-
-    if (Reading_GOV_Config_Now)
-    {
-        if ((millis() - GOV_Config_Start_Time) > GOV_Config_Send_Duration)
-        {
-           // Look("GOV Config reading timed out");
-            Reading_GOV_Config_Now = false;
-            HideGOVMsg();
             return;
         }
     }
@@ -1103,6 +1104,12 @@ void ReadGovBytesFromAckPayload(uint8_t n, uint8_t m)
     if (CurrentMode == RESTORE_RF_SETTINGS)
         return;
     uint8_t p = 0;
+
+    // Look1("ReadGovBytes: ");
+    // Look1(n);
+    // Look1("-");
+    // Look(m);
+
     for (uint8_t i = n; i < m; ++i)
     {
         if (i < GOV_ACK_PAYLOAD_SIZE)
