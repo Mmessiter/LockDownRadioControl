@@ -331,41 +331,6 @@ inline void WritePIDsToNexusAndSave(const uint16_t pid[17])
     lastWriteTime = millis();
 }
 
-void DebugPIDValues(const char *msg)
-{
-    Look(msg);
-    Look1("Roll P: ");
-    Look(PID_Roll_P);
-    Look1("Roll I: ");
-    Look(PID_Roll_I);
-    Look1("Roll D: ");
-    Look(PID_Roll_D);
-    Look1("Roll FF: ");
-    Look(PID_Roll_FF);
-    Look1("Pitch P: ");
-    Look(PID_Pitch_P);
-    Look1("Pitch I: ");
-    Look(PID_Pitch_I);
-    Look1("Pitch D: ");
-    Look(PID_Pitch_D);
-    Look1("Pitch FF: ");
-    Look(PID_Pitch_FF);
-    Look1("Yaw P: ");
-    Look(PID_Yaw_P);
-    Look1("Yaw I: ");
-    Look(PID_Yaw_I);
-    Look1("Yaw D: ");
-    Look(PID_Yaw_D);
-    Look1("Yaw FF: ");
-    Look(PID_Yaw_FF);
-    Look1("Roll Boost: ");
-    Look(PID_Roll_Boost);
-    Look1("Pitch Boost: ");
-    Look(PID_Pitch_Boost);
-    Look1("Yaw Boost: ");
-    Look(PID_Yaw_Boost);
-}
-
 // ************************************************************************************************************
 inline bool Parse_MSP_PID(const uint8_t *data, uint8_t n)
 {
@@ -891,9 +856,7 @@ static uint16_t Gov_Flags = 0;
 inline void PackGovernorForAckPayload()
 {
     uint8_t *b = GovAckPayload;
-    Look1("GovMode=");
-    Look(Gov_Mode);
-    // Only zero unused tail — all used bytes explicitly written below
+  
     for (uint8_t i = 46; i < GOV_ACK_PAYLOAD_SIZE; i++)
         b[i] = 0;
 
@@ -943,8 +906,7 @@ inline void PackGovernorForAckPayload()
     b[43] = (Gov_Flags & GOV_FLAG_PID_SPOOLUP) ? 1 : 0;
     b[44] = (Gov_Flags & GOV_FLAG_FALLBACK_PRECOMP) ? 1 : 0;
     b[45] = (Gov_Flags & GOV_FLAG_DYN_MIN_THROTTLE) ? 1 : 0;
-    Look1("Pack b18=");
-    Look(b[18]);
+ 
 }
 
 // ====================================================
