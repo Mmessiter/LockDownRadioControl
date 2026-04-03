@@ -352,6 +352,10 @@ void BankHasChanged()
     {
         ShowPIDBank();
     }
+    if (CurrentView == RFGOVERNORVIEW)
+    {
+        ShowGOVBank();
+    }
     if (CurrentView == PIDADVANCEDVIEW)
     {
         ShowPIDAdvancedBank();

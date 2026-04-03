@@ -1,6 +1,5 @@
 // ******************************************** Rotorflight PID Advanced ******************************************************
 // This module handles the Rotorflight Governor on the Nextion display
-
 // **********************************************************************************************************
 #ifndef GOVERNOR_H
 #define GOVERNOR_H
@@ -54,18 +53,6 @@ void ForegroundColourGOVLabels(uint16_t Colour)
         SendForegroundColour(GOV_Labels[i], Colour);
     }
 }
-// ********************************************************************************************************
-void HideGOVMsg()
-{
-    if (CurrentView == RFGOVERNORVIEW) // Must be in RFGOVERNORVIEW view
-    {
-        SendCommand((char *)"vis busy,0"); // Hide  message
-        SendCommand((char *)"vis b2,1");   // Make Advanced visible
-        ForegroundColourGOVLabels(Black);  // make text black so it is visible again
-        BlockBankChanges = false;
-        PlaySound(BEEPCOMPLETE); // let them know it's done
-    }
-}
 
 // ************************************************************************************************************/
 // ******************************************** Rotorflight Governor ******************************************************
@@ -75,7 +62,6 @@ void DisplayGovValues(uint8_t n, uint8_t m)
     if (CurrentView != RFGOVERNORVIEW)
         return;
 
-   
     char buf[12];
 
     for (uint8_t i = n; i < m; ++i)
@@ -290,12 +276,24 @@ void DisplayGovValues(uint8_t n, uint8_t m)
         }
     }
 }
+
+// ********************************************************************************************************
+void HideGOVMsg()
+{
+    if (CurrentView == RFGOVERNORVIEW) // Must be in RFGOVERNORVIEW view
+    {
+        SendCommand((char *)"vis busy,0"); // Hide  message
+        SendCommand((char *)"vis b2,1");   // Make Advanced visible
+        ForegroundColourGOVLabels(Black);  // make text black so it is visible again
+        BlockBankChanges = false;
+     
+    }
+}
 // **********************************************************************************************************/
-void govMsg(const char *msg, uint16_t Colour)
+void ShowGOVMsg(const char *msg, uint16_t Colour)
 {
     if (CurrentView == RFGOVERNORVIEW) // Must be in GOVERNOR view
     {
-        PlaySound(BEEPMIDDLE);                      // warn that you can't enter Rotorflight view if the motor is enabled or safety is off
         ForegroundColourGOVLabels(Colour);     // make text white so it isnt visible
         SendText((char *)"busy", (char *)msg); // Show  message
         SendCommand((char *)"vis busy,1");     // Make it visible
@@ -311,16 +309,16 @@ void ShowGOVBank() // this is called when bank is changed so new bank's GOVERNOR
     if (CurrentView == RFGOVERNORVIEW) // Must be in GOVERNOR view
     {
         char buf[40];
+
         strcpy(buf, "Loading governor values ...");
-       
         SendText((char *)"t26", BankNames[BanksInUse[Bank - 1]]);
         BlockBankChanges = true;               // block bank changes while we do this
-        govMsg(buf, Gray);                     //  Show loading message and hides old PIDs
-        GOV_Send_Duration = GOV_MSP_WAIT_TIME; // how many milliseconds to await GOV values
+        ShowGOVMsg(buf, Gray);                 // Show loading message and hides GOV values
+        GOV_Send_Duration = GOV_1_WAIT_TIME;   // how many milliseconds to await GOV values
         Reading_GOV_Now = true;                // This tells the Ack payload parser to get GOV values
         AddParameterstoQueue(SEND_GOV_VALUES); // Request GOV values from RX
-        GOVS_Were_Edited = false;
-        GOV_Start_Time = millis(); // record start time as it's not long
+        GOVS_Were_Edited = false;              // reset this flag as we are now back in sync with the RX GOV values
+        GOV_Start_Time = millis();             // record start time as it's not long
     }
 }
 

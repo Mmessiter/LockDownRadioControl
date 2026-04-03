@@ -341,6 +341,62 @@ static bool ReadNextionNumber(int32_t &out, uint32_t timeout_ms)
                     ((uint32_t)b[3] << 24));
     return true;
 }
+// ******************************************************************************************************************************
+int GetIntFromTextBox(char *tbox)
+{
+    char get[] = "get ";
+    char _txt[] = ".txt";
+    char CB[100];
+    uint8_t j = 0;
+    char Text[50];
+    strcpy(CB, get);
+    strcat(CB, tbox);
+    strcat(CB, _txt);
+    NEXTION.print(CB);
+    EndSend();
+    GetTextIn();
+    if (TextIn[0] == 'p')
+    {
+        while (TextIn[j + 1] < 0xFF)
+        {
+            Text[j] = TextIn[j + 1];
+            ++j;
+            KickTheDog(); // ??
+        }
+        Text[j] = 0;
+
+        return atoi(Text);
+    }
+    return 0;
+}
+// ******************************************************************************************************************************
+float GetFloatFromTextBox(char *tbox)
+{
+    char get[] = "get ";
+    char _txt[] = ".txt";
+    char CB[100];
+    uint8_t j = 0;
+    char Text[50];
+    strcpy(CB, get);
+    strcat(CB, tbox);
+    strcat(CB, _txt);
+    NEXTION.print(CB);
+    EndSend();
+    GetTextIn();
+    if (TextIn[0] == 'p')
+    {
+        while (TextIn[j + 1] < 0xFF)
+        {
+            Text[j] = TextIn[j + 1];
+            ++j;
+            KickTheDog(); // ??
+        }
+        Text[j] = 0;
+
+        return atof(Text);
+    }
+    return 0;
+}
 
 // ******************************************************************************************************************************
 bool NextionFileExistsOnSD(char *filename, bool verbose = false)
