@@ -179,7 +179,67 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
     case SEND_GOV_CONFIG_VALUES: // 28 = Please send Rotorflight Governor CONFIG values
         Parameters.word[1] = 321;                          // confirms request for RFGOV CONFIG values
         Parameters.word[2] = GOV_Config_Send_Duration; // 1000 - how many milliseconds to send these
-        break;  
+        break;
+
+    case SEND_GOV_WRITE_PROFILE1:                  // 29 — profile bytes 1-11
+        Parameters.word[1] = GovWritePayload[1];   // Headspeed lo
+        Parameters.word[2] = GovWritePayload[2];   // Headspeed hi
+        Parameters.word[3] = GovWritePayload[3];   // Gain
+        Parameters.word[4] = GovWritePayload[4];   // P
+        Parameters.word[5] = GovWritePayload[5];   // I
+        Parameters.word[6] = GovWritePayload[6];   // D
+        Parameters.word[7] = GovWritePayload[7];   // F
+        Parameters.word[8] = GovWritePayload[8];   // TTA gain
+        Parameters.word[9] = GovWritePayload[9];   // TTA limit
+        Parameters.word[10] = GovWritePayload[10]; // Max throttle
+        Parameters.word[11] = GovWritePayload[11]; // Min throttle
+        break;
+
+    case SEND_GOV_WRITE_PROFILE2:                 // 30 — profile bytes 12-17
+        Parameters.word[1] = GovWritePayload[12]; // Fallback drop
+        Parameters.word[2] = GovWritePayload[13]; // Yaw weight
+        Parameters.word[3] = GovWritePayload[14]; // Cyclic weight
+        Parameters.word[4] = GovWritePayload[15]; // Collective weight
+        Parameters.word[5] = GovWritePayload[16]; // Flags lo
+        Parameters.word[6] = GovWritePayload[17]; // Flags hi
+        break;
+
+    case SEND_GOV_WRITE_CONFIG1:                   // 31 — config bytes 18-28
+        Parameters.word[1] = GovWritePayload[18];  // Gov mode
+        Parameters.word[2] = GovWritePayload[19];  // Handover throttle
+        Parameters.word[3] = GovWritePayload[20];  // Startup lo
+        Parameters.word[4] = GovWritePayload[21];  // Startup hi
+        Parameters.word[5] = GovWritePayload[22];  // Spoolup lo
+        Parameters.word[6] = GovWritePayload[23];  // Spoolup hi
+        Parameters.word[7] = GovWritePayload[24];  // Spooldown lo
+        Parameters.word[8] = GovWritePayload[25];  // Spooldown hi
+        Parameters.word[9] = GovWritePayload[26];  // Tracking lo
+        Parameters.word[10] = GovWritePayload[27]; // Tracking hi
+        Parameters.word[11] = GovWritePayload[28]; // Recovery lo
+        break;
+
+    case SEND_GOV_WRITE_CONFIG2:                   // 32 — config bytes 29-39
+        Parameters.word[1] = GovWritePayload[29];  // Recovery hi
+        Parameters.word[2] = GovWritePayload[30];  // Hold timeout lo
+        Parameters.word[3] = GovWritePayload[31];  // Hold timeout hi
+        Parameters.word[4] = GovWritePayload[32];  // Autorot timeout lo
+        Parameters.word[5] = GovWritePayload[33];  // Autorot timeout hi
+        Parameters.word[6] = GovWritePayload[34];  // RPM filter
+        Parameters.word[7] = GovWritePayload[35];  // Pwr filter
+        Parameters.word[8] = GovWritePayload[36];  // D filter
+        Parameters.word[9] = GovWritePayload[37];  // FF filter
+        Parameters.word[10] = GovWritePayload[38]; // TTA filter
+        Parameters.word[11] = GovWritePayload[39]; // Throttle type
+        break;
+
+    case SEND_GOV_WRITE_CONFIG3:                  // 33 — config bytes 40-45
+        Parameters.word[1] = GovWritePayload[40]; // Idle throttle
+        Parameters.word[2] = GovWritePayload[41]; // Auto throttle
+        Parameters.word[3] = GovWritePayload[42]; // Volt comp flag
+        Parameters.word[4] = GovWritePayload[43]; // PID spoolup flag
+        Parameters.word[5] = GovWritePayload[44]; // Fallback precomp flag
+        Parameters.word[6] = GovWritePayload[45]; // Dyn min thr flag
+        break;
 
     default:
         break;

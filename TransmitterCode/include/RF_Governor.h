@@ -45,6 +45,107 @@ char GOV_Labels[GOVERNOR_LABELS_COUNT][4] = {
     "t62",
 };
 
+
+// ************************************************************************************************************/
+// uint8_t GovWritePayload[GOV_ACK_PAYLOAD_SIZE] = {0};
+
+void LoadGovWritePayload()
+{
+    // ── Profile fields (bytes 0-17) ──────────────────────────────────
+    GovWritePayload[0] = 0; // RF23 flag — not written back
+
+    uint16_t hs = (uint16_t)GetIntFromTextBox((char *)"t78");
+    GovWritePayload[1] = (uint8_t)(hs & 0xFF);
+    GovWritePayload[2] = (uint8_t)(hs >> 8);
+
+    GovWritePayload[3] = (uint8_t)GetIntFromTextBox((char *)"t1");   // Gain
+    GovWritePayload[4] = (uint8_t)GetIntFromTextBox((char *)"t2");   // P
+    GovWritePayload[5] = (uint8_t)GetIntFromTextBox((char *)"t3");   // I
+    GovWritePayload[6] = (uint8_t)GetIntFromTextBox((char *)"t4");   // D
+    GovWritePayload[7] = (uint8_t)GetIntFromTextBox((char *)"t5");   // F
+    GovWritePayload[8] = (uint8_t)GetIntFromTextBox((char *)"t6");   // TTA gain
+    GovWritePayload[9] = (uint8_t)GetIntFromTextBox((char *)"t7");   // TTA limit
+    GovWritePayload[10] = (uint8_t)GetIntFromTextBox((char *)"t8");  // Max throttle
+    GovWritePayload[11] = (uint8_t)GetIntFromTextBox((char *)"t9");  // Min throttle
+    GovWritePayload[12] = (uint8_t)GetIntFromTextBox((char *)"t10"); // Fallback drop
+    GovWritePayload[13] = (uint8_t)GetIntFromTextBox((char *)"t11"); // Yaw weight
+    GovWritePayload[14] = (uint8_t)GetIntFromTextBox((char *)"t12"); // Cyclic weight
+    GovWritePayload[15] = (uint8_t)GetIntFromTextBox((char *)"t13"); // Collective weight
+
+    // Flags — read individual flag fields, pack into uint16_t
+    uint16_t flags = 0;
+    if (GetIntFromTextBox((char *)"t59"))
+        flags |= GOV_FLAG_VOLTAGE_COMP;
+    if (GetIntFromTextBox((char *)"t60"))
+        flags |= GOV_FLAG_PID_SPOOLUP;
+    if (GetIntFromTextBox((char *)"t61"))
+        flags |= GOV_FLAG_FALLBACK_PRECOMP;
+    if (GetIntFromTextBox((char *)"t62"))
+        flags |= GOV_FLAG_DYN_MIN_THROTTLE;
+    GovWritePayload[16] = (uint8_t)(flags & 0xFF);
+    GovWritePayload[17] = (uint8_t)(flags >> 8);
+
+    // ── Config fields (bytes 18-45) ──────────────────────────────────
+    GovWritePayload[18] = (uint8_t)GetIntFromTextBox((char *)"t14"); // Gov mode
+
+    GovWritePayload[19] = (uint8_t)GetIntFromTextBox((char *)"t15"); // Handover throttle
+
+    uint16_t startup = (uint16_t)GetIntFromTextBox((char *)"t16");
+    GovWritePayload[20] = (uint8_t)(startup & 0xFF);
+    GovWritePayload[21] = (uint8_t)(startup >> 8);
+
+    uint16_t spoolup = (uint16_t)GetIntFromTextBox((char *)"t17");
+    GovWritePayload[22] = (uint8_t)(spoolup & 0xFF);
+    GovWritePayload[23] = (uint8_t)(spoolup >> 8);
+
+    uint16_t spooldown = (uint16_t)GetIntFromTextBox((char *)"t18");
+    GovWritePayload[24] = (uint8_t)(spooldown & 0xFF);
+    GovWritePayload[25] = (uint8_t)(spooldown >> 8);
+
+    uint16_t tracking = (uint16_t)GetIntFromTextBox((char *)"t19");
+    GovWritePayload[26] = (uint8_t)(tracking & 0xFF);
+    GovWritePayload[27] = (uint8_t)(tracking >> 8);
+
+    uint16_t recovery = (uint16_t)GetIntFromTextBox((char *)"t20");
+    GovWritePayload[28] = (uint8_t)(recovery & 0xFF);
+    GovWritePayload[29] = (uint8_t)(recovery >> 8);
+
+    uint16_t holdtimeout = (uint16_t)GetIntFromTextBox((char *)"t21");
+    GovWritePayload[30] = (uint8_t)(holdtimeout & 0xFF);
+    GovWritePayload[31] = (uint8_t)(holdtimeout >> 8);
+
+    uint16_t autotimeout = (uint16_t)GetIntFromTextBox((char *)"t22");
+    GovWritePayload[32] = (uint8_t)(autotimeout & 0xFF);
+    GovWritePayload[33] = (uint8_t)(autotimeout >> 8);
+
+    GovWritePayload[34] = (uint8_t)GetIntFromTextBox((char *)"t23"); // RPM filter
+    GovWritePayload[35] = (uint8_t)GetIntFromTextBox((char *)"t24"); // Pwr filter
+    GovWritePayload[36] = (uint8_t)GetIntFromTextBox((char *)"t25"); // D filter
+    GovWritePayload[37] = (uint8_t)GetIntFromTextBox((char *)"t54"); // FF filter
+    GovWritePayload[38] = (uint8_t)GetIntFromTextBox((char *)"t55"); // TTA filter
+    GovWritePayload[39] = (uint8_t)GetIntFromTextBox((char *)"t56"); // Throttle type
+    GovWritePayload[40] = (uint8_t)GetIntFromTextBox((char *)"t57"); // Idle throttle
+    GovWritePayload[41] = (uint8_t)GetIntFromTextBox((char *)"t58"); // Auto throttle
+
+    // Individual flag bytes for RX unpacker
+    GovWritePayload[42] = (flags & GOV_FLAG_VOLTAGE_COMP) ? 1 : 0;
+    GovWritePayload[43] = (flags & GOV_FLAG_PID_SPOOLUP) ? 1 : 0;
+    GovWritePayload[44] = (flags & GOV_FLAG_FALLBACK_PRECOMP) ? 1 : 0;
+    GovWritePayload[45] = (flags & GOV_FLAG_DYN_MIN_THROTTLE) ? 1 : 0;
+
+    // uint8_t GovWritePayload[GOV_ACK_PAYLOAD_SIZE] = {0};
+
+    // For debugging: print the payload to the Serial console
+    Serial.println("GovWritePayload:");
+    for (uint8_t i = 0; i < GOV_ACK_PAYLOAD_SIZE; ++i)
+    {
+        Serial.print("Byte ");
+        Serial.print(i);
+        Serial.print(": ");
+        Serial.println(GovWritePayload[i]);
+    }
+}
+
 // ********************************************************************************************************
 void ForegroundColourGOVLabels(uint16_t Colour)
 {
@@ -286,7 +387,6 @@ void HideGOVMsg()
         SendCommand((char *)"vis b2,1");   // Make Advanced visible
         ForegroundColourGOVLabels(Black);  // make text black so it is visible again
         BlockBankChanges = false;
-     
     }
 }
 // **********************************************************************************************************/
@@ -298,7 +398,7 @@ void ShowGOVMsg(const char *msg, uint16_t Colour)
         SendText((char *)"busy", (char *)msg); // Show  message
         SendCommand((char *)"vis busy,1");     // Make it visible
         SendCommand((char *)"vis b2,0");       // Make Advanced invisible
-        SendCommand((char *)"vis b3,0");       // hide "Send" button
+                                               // SendCommand((char *)"vis b3,0");       // hide "Send" button
         BlockBankChanges = true;
     }
 }
@@ -334,6 +434,44 @@ void Start_RF_Governor()
 void End_RF_Governor()
 {
     RotorFlightStart();
+}
+// 
+void SendEditedGovValues()
+{
+    if (!LedWasGreen)
+    {
+        // GovMsg((char *)"Not connected!");
+        // DelayWithDog(2000);
+        // HideGovMsg();
+        return;
+    }
+    if (SendBuffer[ArmingChannel - 1] > 1000)
+    {
+        PlaySound(WHAHWHAHMSG);
+        MsgBox((char *)"page RFGovView", (char *)"Model is armed!\r\nDisarm before writing governor values.");
+        return;
+    }
+    PlaySound(BEEPMIDDLE);
+   // GovMsg((char *)"Sending governor values...");
+    DelayWithDog(100);
+    LoadGovWritePayload(); // read all values from Nextion
+    // Queue in reverse order — LIFO executes profile first, then config
+    AddParameterstoQueue(SEND_GOV_WRITE_CONFIG3);  // executes 5th
+    AddParameterstoQueue(SEND_GOV_WRITE_CONFIG2);  // executes 4th
+    AddParameterstoQueue(SEND_GOV_WRITE_CONFIG1);  // executes 3rd
+    AddParameterstoQueue(SEND_GOV_WRITE_PROFILE2); // executes 2nd
+    AddParameterstoQueue(SEND_GOV_WRITE_PROFILE1); // executes 1st
+   // GOV_Were_Edited = false;
+    PlaySound(BEEPCOMPLETE);
+   // HideGovMsg();
+}
+
+// ************************************************************************************************************/
+void Save_RF_Governor()
+{
+    
+    SendEditedGovValues(); // this function will check if we're connected and armed, and if not will show a message box and return without sending. If all is good, it will send the values to the RX and play a completion beep.
+       
 }
 
 #endif // GOVERNOR_H

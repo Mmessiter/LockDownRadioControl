@@ -128,6 +128,11 @@
 #define GOV_ACK_PAYLOAD_SIZE 59
 #define SEND_GOV_PROFILE_RF 6
 #define SEND_GOV_CONFIG_RF 5
+// Governor flags bitmap helpers (must match Nexus.h on RX side)
+#define GOV_FLAG_FALLBACK_PRECOMP (1u << 2)
+#define GOV_FLAG_VOLTAGE_COMP (1u << 3)
+#define GOV_FLAG_PID_SPOOLUP (1u << 4)
+#define GOV_FLAG_DYN_MIN_THROTTLE (1u << 6)
 
 // **************************************************************************
 //                            CURRENTMODE VALUES                            *
@@ -220,7 +225,13 @@
 #define SEND_GOV_VALUES 27                    // Command to request RFGOVERNOR values from RX
 #define SEND_GOV_CONFIG_VALUES 28             // Command to request RFGOVERNOR CONFIG values from RX
 
-#define PARAMETERS_MAX_ID 29 // Max types of parameters packet to send  ... might increase.
+#define SEND_GOV_WRITE_PROFILE1 29
+#define SEND_GOV_WRITE_PROFILE2 30
+#define SEND_GOV_WRITE_CONFIG1 31
+#define SEND_GOV_WRITE_CONFIG2 32
+#define SEND_GOV_WRITE_CONFIG3 33
+
+#define PARAMETERS_MAX_ID 34 // Max types of parameters packet to send  ... might increase.
 
 // **************************************************************************
 //                               Mixes                                      *
@@ -1556,7 +1567,7 @@ uint32_t GOV_Config_Start_Time = 0;
 uint16_t GOV_Send_Duration = 0;
 uint16_t GOV_Config_Send_Duration = 0;
 
-static uint8_t GovAckPayload[GOV_ACK_PAYLOAD_SIZE] = {0};
+
 
 uint32_t PID_Advanced_Start_Time = 0;
 uint32_t RATES_Advanced_Start_Time = 0;
@@ -1567,6 +1578,9 @@ bool Reading_RATES_Now = false;
 bool Reading_RATES_Advanced_Now = false;
 bool Reading_GOV_Now = false;
 bool Reading_GOV_Config_Now = false;
+
+uint8_t GovWritePayload[GOV_ACK_PAYLOAD_SIZE] = {0};
+uint8_t GovAckPayload[GOV_ACK_PAYLOAD_SIZE] = {0};
 
 char Rate_Types[7][16] = {"None", "Betaflight", "Raceflight", "KISS", "Actual", "QuickRates", "Rotorflight 2.3"};
 
