@@ -63,6 +63,7 @@ void HideGOVMsg()
         SendCommand((char *)"vis b2,1");   // Make Advanced visible
         ForegroundColourGOVLabels(Black);  // make text black so it is visible again
         BlockBankChanges = false;
+        PlaySound(BEEPCOMPLETE); // let them know it's done
     }
 }
 
@@ -294,6 +295,7 @@ void govMsg(const char *msg, uint16_t Colour)
 {
     if (CurrentView == RFGOVERNORVIEW) // Must be in GOVERNOR view
     {
+        PlaySound(BEEPMIDDLE);                      // warn that you can't enter Rotorflight view if the motor is enabled or safety is off
         ForegroundColourGOVLabels(Colour);     // make text white so it isnt visible
         SendText((char *)"busy", (char *)msg); // Show  message
         SendCommand((char *)"vis busy,1");     // Make it visible
@@ -309,14 +311,12 @@ void ShowGOVBank() // this is called when bank is changed so new bank's GOVERNOR
     if (CurrentView == RFGOVERNORVIEW) // Must be in GOVERNOR view
     {
         char buf[40];
-        strcpy(buf, "Loading GOVERNOR VALUES for  ");
-        strcat(buf, BankNames[BanksInUse[Bank - 1]]);
-        strcat(buf, " ...");
+        strcpy(buf, "Loading governor values ...");
+       
         SendText((char *)"t26", BankNames[BanksInUse[Bank - 1]]);
-
         BlockBankChanges = true;               // block bank changes while we do this
         govMsg(buf, Gray);                     //  Show loading message and hides old PIDs
-        GOV_Send_Duration = MSP_WAIT_TIME;     // how many milliseconds to await GOV values
+        GOV_Send_Duration = GOV_MSP_WAIT_TIME; // how many milliseconds to await GOV values
         Reading_GOV_Now = true;                // This tells the Ack payload parser to get GOV values
         AddParameterstoQueue(SEND_GOV_VALUES); // Request GOV values from RX
         GOVS_Were_Edited = false;
@@ -329,13 +329,12 @@ void Start_RF_Governor()
 {
     SendCommand((char *)"page RFGovView"); // Make Governor view visible
     CurrentView = RFGOVERNORVIEW;
-   // AddParameterstoQueue(MSP_INHIBIT_TELEMETRY);
+    SendText((char *)"t27", ModelName);
     ShowGOVBank();
 }
 // ************************************************************************************************************/
 void End_RF_Governor()
 {
-  //  AddParameterstoQueue(MSP_ENABLE_TELEMETRY);
     RotorFlightStart();
 }
 

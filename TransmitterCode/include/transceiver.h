@@ -1050,10 +1050,10 @@ void Hide_msg_if_needed()
         if ((millis() - GOV_Start_Time) > GOV_Send_Duration)
         {
             Reading_GOV_Now = false;
-            DelayWithDog(500); // give the RX a chance to breathe before we ask for the config values
+            DelayWithDog(GOV_MSP_PAUSE_TIME); // give the RX a chance to breathe before we ask for the config values
             Reading_GOV_Config_Now = true; // Phase 1 complete — immediately trigger phase 2 (config data)
             GOV_Config_Start_Time = millis();
-            GOV_Config_Send_Duration = 1000;              // show config values for 5 seconds
+            GOV_Config_Send_Duration = GOV_MSP_WAIT_TIME; 
             AddParameterstoQueue(SEND_GOV_CONFIG_VALUES); // new parameter ID 28
             return;
         }
