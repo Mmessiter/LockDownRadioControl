@@ -74,20 +74,7 @@ void DisplayGovValues(uint8_t n, uint8_t m)
     if (CurrentView != RFGOVERNORVIEW)
         return;
 
-    // Look1("DisplayGov n=");
-    // Look1(n);
-    // Look1(" m=");
-    // Look(m);
-    // Look1("  CurrentView=");
-    // Look(CurrentView);
-
-    // Look1("DGV bytes: ");
-    // for (uint8_t i = n; i < m; ++i)
-    // {
-    //     Look1(GovAckPayload[i]);
-    //     Look1(" ");
-    // }
-    // Look("");
+   
     char buf[12];
 
     for (uint8_t i = n; i < m; ++i)
@@ -342,11 +329,13 @@ void Start_RF_Governor()
 {
     SendCommand((char *)"page RFGovView"); // Make Governor view visible
     CurrentView = RFGOVERNORVIEW;
+   // AddParameterstoQueue(MSP_INHIBIT_TELEMETRY);
     ShowGOVBank();
 }
 // ************************************************************************************************************/
 void End_RF_Governor()
 {
+  //  AddParameterstoQueue(MSP_ENABLE_TELEMETRY);
     RotorFlightStart();
 }
 

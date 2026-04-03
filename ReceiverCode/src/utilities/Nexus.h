@@ -30,8 +30,7 @@
 #define SEND_RATES_RF 2
 #define SEND_RATES_ADVANCED_RF 3
 #define SEND_PID_ADVANCED_RF 4
-// SEND_GOV_CONFIG_RF  and SEND_GOV_PROFILE_RF are defined in 1Definitions.h
-// as they are needed by both Nexus.h and radio.h
+// SEND_GOV_CONFIG_RF and SEND_GOV_PROFILE_RF defined in 1Definitions.h
 
 // Governor flags bitmap helpers
 #define GOV_FLAG_FALLBACK_PRECOMP (1u << 2)
@@ -39,19 +38,13 @@
 #define GOV_FLAG_PID_SPOOLUP (1u << 4)
 #define GOV_FLAG_DYN_MIN_THROTTLE (1u << 6)
 
-// Governor payload sizes
+// Governor payload sizes for api100 >= 1209 (firmware 4.6.0)
 #define GOV_CONFIG_PAYLOAD_SIZE 42
 #define GOV_PROFILE_PAYLOAD_SIZE 17
 
-// GOV_ACK_PAYLOAD_SIZE is defined in 1Definitions.h (needed by both Nexus.h and radio.h)
+// GOV_ACK_PAYLOAD_SIZE defined in 1Definitions.h
 
 // ************************************************************************************************************
-// Detect if Rotorflight 2.2 is present at boot time
-// If detected, fetch API version and protocol version
-// Keeps the MSP_UART open if Rotorflight 2.2 is present
-// Closes it if not present
-// ************************************************************************************************************
-
 inline void DetectRotorFlightAtBoot()
 {
 #define Ports_Count 2
@@ -65,25 +58,19 @@ inline void DetectRotorFlightAtBoot()
     }
 }
 
-// ************************************************************************************************************
 inline void DetectRotorFlightAtBoot1()
 {
 #define NEXUS_DETECT_WINDOW_MS 1500
-
     This_MSP_Uart->begin(115200);
     while (This_MSP_Uart->available())
         (void)This_MSP_Uart->read();
-
     uint32_t start = millis();
     uint8_t buf[80];
-
     Rotorflight_Version = 0;
-
     while (millis() - start < NEXUS_DETECT_WINDOW_MS)
     {
         RequestFromMSP(MSP_MOTOR_TELEMETRY);
         delay(20);
-
         uint8_t p = 0;
         while (This_MSP_Uart->available() && p < sizeof(buf))
             buf[p++] = (uint8_t)This_MSP_Uart->read();
@@ -91,18 +78,16 @@ inline void DetectRotorFlightAtBoot1()
         {
             RequestFromMSP(MSP_API_VERSION);
             delay(20);
-
             p = 0;
             while (This_MSP_Uart->available() && p < sizeof(buf))
                 buf[p++] = (uint8_t)This_MSP_Uart->read();
-
             uint8_t apiMaj = 0, apiMin = 0, proto = 0;
             if (Parse_MSP_API_VERSION(buf, p, proto, apiMaj, apiMin))
             {
                 if (api100 == 1208)
-                    Rotorflight_Version = 1; // RF 2.2
+                    Rotorflight_Version = 1;
                 if (api100 >= 1209)
-                    Rotorflight_Version = 2; // RF 2.3+
+                    Rotorflight_Version = 2;
             }
             return;
         }
@@ -129,8 +114,6 @@ enum : uint8_t
 };
 
 // ************************************************************************************************************
-// ACK / reply wait support
-// ************************************************************************************************************
 static volatile bool MspAckWaitInProgress = false;
 
 inline bool WaitForMspAck(uint8_t expectedCmd, uint32_t timeoutMs)
@@ -146,17 +129,9 @@ inline bool WaitForMspAck(uint8_t expectedCmd, uint32_t timeoutMs)
         ST_PAYLOAD,
         ST_CHECKSUM
     };
-
-    uint8_t state = ST_IDLE;
-    uint8_t dir = 0;
-    uint8_t size = 0;
-    uint8_t cmd = 0;
-    uint8_t idx = 0;
-    uint8_t checksum = 0;
-
+    uint8_t state = ST_IDLE, dir = 0, size = 0, cmd = 0, idx = 0, checksum = 0;
     const uint32_t start = millis();
     MspAckWaitInProgress = true;
-
     while ((uint32_t)(millis() - start) < timeoutMs)
     {
         while (This_MSP_Uart->available())
@@ -223,15 +198,9 @@ static bool Parse_MSP_API_VERSION(const uint8_t *buf, uint8_t len, uint8_t &mspP
     {
         if (buf[i] != '$' || buf[i + 1] != 'M' || buf[i + 2] != '>')
             continue;
-        const uint8_t size = buf[i + 3];
-        const uint8_t cmd = buf[i + 4];
-        if (cmd != MSP_API_VERSION)
+        const uint8_t size = buf[i + 3], cmd = buf[i + 4];
+        if (cmd != MSP_API_VERSION || size < 3 || i + 6 + size > len)
             continue;
-        if (size < 3)
-            continue;
-        if (i + 6 + size > len)
-            continue;
-
         uint8_t cs = 0;
         cs ^= size;
         cs ^= cmd;
@@ -239,7 +208,6 @@ static bool Parse_MSP_API_VERSION(const uint8_t *buf, uint8_t len, uint8_t &mspP
             cs ^= buf[i + 5 + k];
         if (cs != buf[i + 5 + size])
             continue;
-
         mspProto = buf[i + 5 + 0];
         apiMaj = buf[i + 5 + 1];
         apiMin = buf[i + 5 + 2];
@@ -252,12 +220,10 @@ static bool Parse_MSP_API_VERSION(const uint8_t *buf, uint8_t len, uint8_t &mspP
 // ************************************************************************************************************
 struct MspFrame
 {
-    uint8_t size;
-    uint8_t cmd;
+    uint8_t size, cmd;
     const uint8_t *payload;
 };
 
-// ************************************************************************************************************
 inline bool FindMspV1ResponseFrame(const uint8_t *data, uint8_t n, MspFrame &out)
 {
     for (uint8_t i = 0; i + 6 < n; ++i)
@@ -265,13 +231,13 @@ inline bool FindMspV1ResponseFrame(const uint8_t *data, uint8_t n, MspFrame &out
         if (data[i] != '$' || data[i + 1] != 'M' || data[i + 2] != '>')
             continue;
         uint8_t size = data[i + 3], cmd = data[i + 4];
-        uint16_t frame_end = i + 5 + size;
-        if (frame_end >= n)
+        uint16_t fe = i + 5 + size;
+        if (fe >= n)
             continue;
         uint8_t ck = size ^ cmd;
         for (uint8_t k = 0; k < size; ++k)
             ck ^= data[i + 5 + k];
-        if (ck != data[frame_end])
+        if (ck != data[fe])
             continue;
         out.size = size;
         out.cmd = cmd;
@@ -281,7 +247,6 @@ inline bool FindMspV1ResponseFrame(const uint8_t *data, uint8_t n, MspFrame &out
     return false;
 }
 
-// ************************************************************************************************************
 inline bool FindMspV1ResponseFrameForCmd(const uint8_t *data, uint8_t n, uint8_t wantCmd, MspFrame &out)
 {
     for (uint8_t i = 0; i + 6 < n; ++i)
@@ -289,13 +254,13 @@ inline bool FindMspV1ResponseFrameForCmd(const uint8_t *data, uint8_t n, uint8_t
         if (data[i] != '$' || data[i + 1] != 'M' || data[i + 2] != '>')
             continue;
         uint8_t size = data[i + 3], cmd = data[i + 4];
-        uint16_t frame_end = i + 5 + size;
-        if (frame_end >= n)
+        uint16_t fe = i + 5 + size;
+        if (fe >= n)
             continue;
         uint8_t ck = size ^ cmd;
         for (uint8_t k = 0; k < size; ++k)
             ck ^= data[i + 5 + k];
-        if (ck != data[frame_end])
+        if (ck != data[fe])
             continue;
         if (cmd != wantCmd)
             continue;
@@ -321,7 +286,6 @@ inline void RequestFromMSP(uint8_t command)
     This_MSP_Uart->write(checksum);
 }
 
-// ************************************************************************************************************
 inline void SendToMSP(uint8_t command, const uint8_t *payload, uint8_t payloadSize)
 {
     uint8_t checksum = 0;
@@ -345,11 +309,9 @@ inline void SendToMSP(uint8_t command, const uint8_t *payload, uint8_t payloadSi
 inline void WritePIDsToNexusAndSave(const uint16_t pid[17])
 {
     static uint32_t lastWriteTime = 0;
-    const uint32_t WRITE_COOLDOWN_MS = 5000;
     uint32_t now = millis();
-    if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight_Version))
+    if ((now - lastWriteTime < 5000) || (!Rotorflight_Version))
         return;
-
     uint8_t payload[34] = {0};
     for (int i = 0; i < 34; i++)
         payload[i] = Original_PID_Values[i];
@@ -369,7 +331,6 @@ inline void WritePIDsToNexusAndSave(const uint16_t pid[17])
     lastWriteTime = millis();
 }
 
-// ************************************************************************************************************
 void DebugPIDValues(const char *msg)
 {
     Look(msg);
@@ -406,17 +367,12 @@ void DebugPIDValues(const char *msg)
 }
 
 // ************************************************************************************************************
-//         MSP_PID FROM ROTORFLIGHT FIRMWARE
-// ************************************************************************************************************
 inline bool Parse_MSP_PID(const uint8_t *data, uint8_t n)
 {
     MspFrame f;
-    if (!FindMspV1ResponseFrameForCmd(data, n, MSP_PID, f))
-        return false;
-    if (f.size < 34)
+    if (!FindMspV1ResponseFrameForCmd(data, n, MSP_PID, f) || f.size < 34)
         return false;
     const uint8_t *p = f.payload;
-
     PID_Roll_P = p[0] | (p[1] << 8);
     PID_Roll_I = p[2] | (p[3] << 8);
     PID_Roll_D = p[4] | (p[5] << 8);
@@ -434,31 +390,23 @@ inline bool Parse_MSP_PID(const uint8_t *data, uint8_t n)
     PID_Yaw_Boost = p[28] | (p[29] << 8);
     PID_HSI_Offset_Roll = p[30] | (p[31] << 8);
     PID_HSI_Offset_Pitch = p[32] | (p[33] << 8);
-
     for (int i = 0; i < 34; i++)
         Original_PID_Values[i] = p[i];
     return true;
 }
 
 // ************************************************************************************************************
-//         MSP_MOTOR_TELEMETRY FROM ROTORFLIGHT FIRMWARE
-// ************************************************************************************************************
 inline bool Parse_MSP_Motor_Telemetry(const uint8_t *data, uint8_t n)
 {
     if (!Ratio)
         Ratio = 10.3f;
     MspFrame f;
-    if (!FindMspV1ResponseFrameForCmd(data, n, MSP_MOTOR_TELEMETRY, f))
-        return false;
-    if (f.size < 15)
+    if (!FindMspV1ResponseFrameForCmd(data, n, MSP_MOTOR_TELEMETRY, f) || f.size < 15)
         return false;
     if (f.payload[0] != 1)
         return false;
-
     const uint8_t *payload = f.payload;
-    RotorRPM = ((uint32_t)payload[1] | ((uint32_t)payload[2] << 8) |
-                ((uint32_t)payload[3] << 16) | ((uint32_t)payload[4] << 24)) /
-               Ratio;
+    RotorRPM = ((uint32_t)payload[1] | ((uint32_t)payload[2] << 8) | ((uint32_t)payload[3] << 16) | ((uint32_t)payload[4] << 24)) / Ratio;
     RXModelVolts = (float)((uint16_t)payload[7] | ((uint16_t)payload[8] << 8)) / 1000.0f;
     Battery_Amps = (float)((uint16_t)payload[9] | ((uint16_t)payload[10] << 8)) / 1000.0f;
     Battery_mAh = (float)((uint16_t)payload[11] | ((uint16_t)payload[12] << 8));
@@ -473,12 +421,17 @@ inline void CheckMSPSerial()
 {
     if (MspAckWaitInProgress)
         return;
+
     uint32_t interval = (SendRotorFlightParametresNow == SEND_NO_RF) ? 250 : 50;
     static uint32_t Localtimer = 0;
     uint32_t Now = millis();
     if (Now - Localtimer < interval)
         return;
     Localtimer = Now;
+
+    // For config phase, wait briefly to allow cmd 142 response to arrive after cmd 148 push
+    if (SendRotorFlightParametresNow == SEND_GOV_CONFIG_RF)
+        delay(20);
 
     bool overflow = false;
     uint8_t data_in[180];
@@ -500,6 +453,10 @@ inline void CheckMSPSerial()
         (p >= 6 && data_in[0] == '$' && data_in[1] == 'M') ||
         (p >= 8 && data_in[0] == '$' && data_in[1] == 'X');
 
+    // GOV_CONFIG timeout must be checked here — sync parse runs in !looksLikeMSP branch
+    if ((Now - Started_Sending_GOV_CONFIG > GOV_Config_Send_Duration) && (SendRotorFlightParametresNow == SEND_GOV_CONFIG_RF))
+        SendRotorFlightParametresNow = SEND_NO_RF;
+
     if (!looksLikeMSP)
     {
         switch (SendRotorFlightParametresNow)
@@ -520,12 +477,21 @@ inline void CheckMSPSerial()
         case SEND_PID_ADVANCED_RF:
             RequestFromMSP(MSP_PID_PROFILE);
             break;
-        case SEND_GOV_CONFIG_RF:
-            RequestFromMSP(MSP_GOVERNOR_CONFIG);
-            break;
         case SEND_GOV_PROFILE_RF:
             RequestFromMSP(MSP_GOVERNOR_PROFILE);
-            Look("Requested GOV PROFILE");
+            break;
+        case SEND_GOV_CONFIG_RF:
+            RequestFromMSP(MSP_GOVERNOR_CONFIG);
+            delay(20);
+            {
+                uint8_t buf[180];
+                uint8_t bp = 0;
+                while (This_MSP_Uart->available() && bp < sizeof(buf))
+                    buf[bp++] = This_MSP_Uart->read();
+                MspFrame ff;
+                if (FindMspV1ResponseFrameForCmd(buf, bp, MSP_GOVERNOR_CONFIG, ff))
+                    Parse_MSP_Governor_Config(buf, bp);
+            }
             break;
         default:
             break;
@@ -544,13 +510,10 @@ inline void CheckMSPSerial()
         SendRotorFlightParametresNow = SEND_NO_RF;
     if ((Now - Started_Sending_STATUS_EX > STATUS_EX_Send_Duration) && (SendRotorFlightParametresNow == SEND_STATUS_EX))
         SendRotorFlightParametresNow = SEND_NO_RF;
-    if ((Now - Started_Sending_GOV_CONFIG > GOV_Send_Duration) && (SendRotorFlightParametresNow == SEND_GOV_CONFIG_RF))
+    if ((Now - Started_Sending_GOV_CONFIG > GOV_Config_Send_Duration) && (SendRotorFlightParametresNow == SEND_GOV_CONFIG_RF))
         SendRotorFlightParametresNow = SEND_NO_RF;
     if ((Now - Started_Sending_GOV_PROFILE > PROFILE_Send_Duration) && (SendRotorFlightParametresNow == SEND_GOV_PROFILE_RF))
         SendRotorFlightParametresNow = SEND_NO_RF;
-
-
-
 
     // Parse and re-request
     switch (SendRotorFlightParametresNow)
@@ -578,21 +541,19 @@ inline void CheckMSPSerial()
         Parse_MSP_PID_PROFILE(data_in, p);
         RequestFromMSP(MSP_PID_PROFILE);
         break;
-    case SEND_GOV_CONFIG_RF:
-        if (api100 >= 1209)
-            Parse_MSP_Governor_Config(data_in, p);
-        else
-            Governor_RF23_Required = true;
-        if (SendRotorFlightParametresNow == SEND_GOV_CONFIG_RF) // guard: only re-request if not auto-sequenced
-            RequestFromMSP(MSP_GOVERNOR_CONFIG);
-        break;
     case SEND_GOV_PROFILE_RF:
-        if (api100 >= 1209)
-            Parse_MSP_Governor_Profile(data_in, p);
-        else
-            Governor_RF23_Required = true;
-        if (SendRotorFlightParametresNow == SEND_GOV_PROFILE_RF) // guard: only re-request if parse didn't change state
-            RequestFromMSP(MSP_GOVERNOR_PROFILE);
+        // Phase 1 — FC pushes cmd 148 continuously, just parse it
+        Parse_MSP_Governor_Profile(data_in, p);
+        RequestFromMSP(MSP_GOVERNOR_PROFILE);
+        break;
+    case SEND_GOV_CONFIG_RF:
+        // Already handled synchronously in !looksLikeMSP branch above
+        // But if we get here with data, scan for cmd 142 anyway
+        {
+            MspFrame fCfg;
+            if (FindMspV1ResponseFrameForCmd(data_in, (uint8_t)p, MSP_GOVERNOR_CONFIG, fCfg))
+                Parse_MSP_Governor_Config(data_in, (uint8_t)p);
+        }
         break;
     default:
         break;
@@ -600,9 +561,6 @@ inline void CheckMSPSerial()
 }
 
 // ************************************************************************************************************
-//         RATES
-// ************************************************************************************************************
-
 void StoreRatesBytesForAckPayload()
 {
     RatesBytes[0] = Rates_Type;
@@ -644,60 +602,52 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
     MspFrame f;
     if (!FindMspV1ResponseFrameForCmd(data, n, MSP_RC_TUNING, f))
         return false;
-
     uint8_t min_size = 25;
     if (api100 >= 1208)
         min_size += 11;
     if (f.size < min_size)
         return false;
-
     const uint8_t *p = f.payload;
-    uint8_t offset = 0;
-
-    Rates_Type = p[offset++];
-    Roll_Centre_Rate = p[offset++];
-    Roll_Expo = p[offset++];
-    Roll_Max_Rate = p[offset++];
-    Roll_Response_Time = p[offset++];
-    Roll_Accel_Limit = p[offset] | (p[offset + 1] << 8);
-    offset += 2;
-
-    Pitch_Centre_Rate = p[offset++];
-    Pitch_Expo = p[offset++];
-    Pitch_Max_Rate = p[offset++];
-    Pitch_Response_Time = p[offset++];
-    Pitch_Accel_Limit = p[offset] | (p[offset + 1] << 8);
-    offset += 2;
-
-    Yaw_Centre_Rate = p[offset++];
-    Yaw_Expo = p[offset++];
-    Yaw_Max_Rate = p[offset++];
-    Yaw_Response_Time = p[offset++];
-    Yaw_Accel_Limit = p[offset] | (p[offset + 1] << 8);
-    offset += 2;
-
-    Collective_Centre_Rate = p[offset++];
-    Collective_Expo = p[offset++];
-    Collective_Max_Rate = p[offset++];
-    Collective_Response_Time = p[offset++];
-    Collective_Accel_Limit = p[offset] | (p[offset + 1] << 8);
-    offset += 2;
-
+    uint8_t o = 0;
+    Rates_Type = p[o++];
+    Roll_Centre_Rate = p[o++];
+    Roll_Expo = p[o++];
+    Roll_Max_Rate = p[o++];
+    Roll_Response_Time = p[o++];
+    Roll_Accel_Limit = p[o] | (p[o + 1] << 8);
+    o += 2;
+    Pitch_Centre_Rate = p[o++];
+    Pitch_Expo = p[o++];
+    Pitch_Max_Rate = p[o++];
+    Pitch_Response_Time = p[o++];
+    Pitch_Accel_Limit = p[o] | (p[o + 1] << 8);
+    o += 2;
+    Yaw_Centre_Rate = p[o++];
+    Yaw_Expo = p[o++];
+    Yaw_Max_Rate = p[o++];
+    Yaw_Response_Time = p[o++];
+    Yaw_Accel_Limit = p[o] | (p[o + 1] << 8);
+    o += 2;
+    Collective_Centre_Rate = p[o++];
+    Collective_Expo = p[o++];
+    Collective_Max_Rate = p[o++];
+    Collective_Response_Time = p[o++];
+    Collective_Accel_Limit = p[o] | (p[o + 1] << 8);
+    o += 2;
     if (api100 >= 1208)
     {
-        Roll_Setpoint_Boost_Gain = p[offset++];
-        Roll_Setpoint_Boost_Cutoff = p[offset++];
-        Pitch_Setpoint_Boost_Gain = p[offset++];
-        Pitch_Setpoint_Boost_Cutoff = p[offset++];
-        Yaw_Setpoint_Boost_Gain = p[offset++];
-        Yaw_Setpoint_Boost_Cutoff = p[offset++];
-        Collective_Setpoint_Boost_Gain = p[offset++];
-        Collective_Setpoint_Boost_Cutoff = p[offset++];
-        Yaw_Dynamic_Ceiling_Gain = p[offset++];
-        Yaw_Dynamic_Deadband_Gain = p[offset++];
-        Yaw_Dynamic_Deadband_Filter = p[offset++];
+        Roll_Setpoint_Boost_Gain = p[o++];
+        Roll_Setpoint_Boost_Cutoff = p[o++];
+        Pitch_Setpoint_Boost_Gain = p[o++];
+        Pitch_Setpoint_Boost_Cutoff = p[o++];
+        Yaw_Setpoint_Boost_Gain = p[o++];
+        Yaw_Setpoint_Boost_Cutoff = p[o++];
+        Collective_Setpoint_Boost_Gain = p[o++];
+        Collective_Setpoint_Boost_Cutoff = p[o++];
+        Yaw_Dynamic_Ceiling_Gain = p[o++];
+        Yaw_Dynamic_Deadband_Gain = p[o++];
+        Yaw_Dynamic_Deadband_Filter = p[o++];
     }
-
     StoreRatesBytesForAckPayload();
     StoreAdvancedRatesBytesForAckPayload();
     return true;
@@ -706,94 +656,78 @@ inline bool Parse_MSP_RC_TUNING(const uint8_t *data, uint8_t n)
 inline void WriteRatesToNexusAndSave()
 {
     static uint32_t lastWriteTime = 0;
-    const uint32_t WRITE_COOLDOWN_MS = 5000;
     uint32_t now = millis();
-    if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight_Version))
+    if ((now - lastWriteTime < 5000) || (!Rotorflight_Version))
         return;
-
     delay(20);
     This_MSP_Uart->flush();
-
     uint8_t payload_size = 25;
     if (api100 >= 1208)
         payload_size += 11;
-
     uint8_t payload[36] = {0};
-    uint8_t offset = 0;
-
-    payload[offset++] = Rates_Type;
-    payload[offset++] = (uint8_t)(Roll_Centre_Rate);
-    payload[offset++] = (uint8_t)(Roll_Expo);
-    payload[offset++] = (uint8_t)(Roll_Max_Rate);
-    payload[offset++] = Roll_Response_Time;
-    payload[offset++] = (uint8_t)(Roll_Accel_Limit & 0xFF);
-    payload[offset++] = (uint8_t)(Roll_Accel_Limit >> 8);
-    payload[offset++] = (uint8_t)(Pitch_Centre_Rate);
-    payload[offset++] = (uint8_t)(Pitch_Expo);
-    payload[offset++] = (uint8_t)(Pitch_Max_Rate);
-    payload[offset++] = Pitch_Response_Time;
-    payload[offset++] = (uint8_t)(Pitch_Accel_Limit & 0xFF);
-    payload[offset++] = (uint8_t)(Pitch_Accel_Limit >> 8);
-    payload[offset++] = (uint8_t)(Yaw_Centre_Rate);
-    payload[offset++] = (uint8_t)(Yaw_Expo);
-    payload[offset++] = (uint8_t)(Yaw_Max_Rate);
-    payload[offset++] = Yaw_Response_Time;
-    payload[offset++] = (uint8_t)(Yaw_Accel_Limit & 0xFF);
-    payload[offset++] = (uint8_t)(Yaw_Accel_Limit >> 8);
-    payload[offset++] = (uint8_t)(Collective_Centre_Rate);
-    payload[offset++] = (uint8_t)(Collective_Expo);
-    payload[offset++] = (uint8_t)(Collective_Max_Rate);
-    payload[offset++] = Collective_Response_Time;
-    payload[offset++] = (uint8_t)(Collective_Accel_Limit & 0xFF);
-    payload[offset++] = (uint8_t)(Collective_Accel_Limit >> 8);
-
+    uint8_t o = 0;
+    payload[o++] = Rates_Type;
+    payload[o++] = (uint8_t)Roll_Centre_Rate;
+    payload[o++] = (uint8_t)Roll_Expo;
+    payload[o++] = (uint8_t)Roll_Max_Rate;
+    payload[o++] = Roll_Response_Time;
+    payload[o++] = (uint8_t)(Roll_Accel_Limit & 0xFF);
+    payload[o++] = (uint8_t)(Roll_Accel_Limit >> 8);
+    payload[o++] = (uint8_t)Pitch_Centre_Rate;
+    payload[o++] = (uint8_t)Pitch_Expo;
+    payload[o++] = (uint8_t)Pitch_Max_Rate;
+    payload[o++] = Pitch_Response_Time;
+    payload[o++] = (uint8_t)(Pitch_Accel_Limit & 0xFF);
+    payload[o++] = (uint8_t)(Pitch_Accel_Limit >> 8);
+    payload[o++] = (uint8_t)Yaw_Centre_Rate;
+    payload[o++] = (uint8_t)Yaw_Expo;
+    payload[o++] = (uint8_t)Yaw_Max_Rate;
+    payload[o++] = Yaw_Response_Time;
+    payload[o++] = (uint8_t)(Yaw_Accel_Limit & 0xFF);
+    payload[o++] = (uint8_t)(Yaw_Accel_Limit >> 8);
+    payload[o++] = (uint8_t)Collective_Centre_Rate;
+    payload[o++] = (uint8_t)Collective_Expo;
+    payload[o++] = (uint8_t)Collective_Max_Rate;
+    payload[o++] = Collective_Response_Time;
+    payload[o++] = (uint8_t)(Collective_Accel_Limit & 0xFF);
+    payload[o++] = (uint8_t)(Collective_Accel_Limit >> 8);
     if (api100 >= 1208)
     {
-        payload[offset++] = Roll_Setpoint_Boost_Gain;
-        payload[offset++] = Roll_Setpoint_Boost_Cutoff;
-        payload[offset++] = Pitch_Setpoint_Boost_Gain;
-        payload[offset++] = Pitch_Setpoint_Boost_Cutoff;
-        payload[offset++] = Yaw_Setpoint_Boost_Gain;
-        payload[offset++] = Yaw_Setpoint_Boost_Cutoff;
-        payload[offset++] = Collective_Setpoint_Boost_Gain;
-        payload[offset++] = Collective_Setpoint_Boost_Cutoff;
-        payload[offset++] = Yaw_Dynamic_Ceiling_Gain;
-        payload[offset++] = Yaw_Dynamic_Deadband_Gain;
-        payload[offset++] = Yaw_Dynamic_Deadband_Filter;
+        payload[o++] = Roll_Setpoint_Boost_Gain;
+        payload[o++] = Roll_Setpoint_Boost_Cutoff;
+        payload[o++] = Pitch_Setpoint_Boost_Gain;
+        payload[o++] = Pitch_Setpoint_Boost_Cutoff;
+        payload[o++] = Yaw_Setpoint_Boost_Gain;
+        payload[o++] = Yaw_Setpoint_Boost_Cutoff;
+        payload[o++] = Collective_Setpoint_Boost_Gain;
+        payload[o++] = Collective_Setpoint_Boost_Cutoff;
+        payload[o++] = Yaw_Dynamic_Ceiling_Gain;
+        payload[o++] = Yaw_Dynamic_Deadband_Gain;
+        payload[o++] = Yaw_Dynamic_Deadband_Filter;
     }
-
-    if (offset != payload_size)
+    if (o != payload_size)
         return;
-
     SendToMSP(MSP_SET_RC_TUNING, payload, payload_size);
     This_MSP_Uart->flush();
     if (!WaitForMspAck(MSP_SET_RC_TUNING, 600))
         return;
-
     delay(50);
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
     This_MSP_Uart->flush();
     if (!WaitForMspAck(MSP_EEPROM_WRITE, 1500))
         return;
-
     lastWriteTime = millis();
 }
 
 // ************************************************************************************************************
-//         MSP_PID_PROFILE FROM ROTORFLIGHT FIRMWARE
-// ************************************************************************************************************
 inline bool Parse_MSP_PID_PROFILE(const uint8_t *data, uint8_t n)
 {
     MspFrame f;
-    if (!FindMspV1ResponseFrameForCmd(data, n, MSP_PID_PROFILE, f))
+    if (!FindMspV1ResponseFrameForCmd(data, n, MSP_PID_PROFILE, f) || f.size < MAX_PID_ADVANCED_BYTES)
         return false;
-    if (f.size < MAX_PID_ADVANCED_BYTES)
-        return false;
-
     const uint8_t *p = f.payload;
     for (uint8_t i = 0; i < MAX_PID_ADVANCED_BYTES; i++)
         Original_PID_Advanced_Bytes[i] = p[i];
-
     Piro_Compensation6 = p[6];
     PID_Advanced_Bytes[0] = Piro_Compensation6;
     Ground_Error_Decay1 = p[1];
@@ -846,22 +780,18 @@ inline bool Parse_MSP_PID_PROFILE(const uint8_t *data, uint8_t n)
     PID_Advanced_Bytes[24] = Inertia_Precomp_Gain41;
     Inertia_Precomp_Cutoff42 = p[42];
     PID_Advanced_Bytes[25] = Inertia_Precomp_Cutoff42;
-
     return true;
 }
 
 inline void WritePIDAdvancedToNexusAndSave()
 {
     static uint32_t lastWriteTime = 0;
-    const uint32_t WRITE_COOLDOWN_MS = 5000;
     uint32_t now = millis();
-    if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight_Version))
+    if ((now - lastWriteTime < 5000) || (!Rotorflight_Version))
         return;
-
     uint8_t payload[MAX_PID_ADVANCED_BYTES];
     for (uint8_t i = 0; i < MAX_PID_ADVANCED_BYTES; i++)
         payload[i] = Original_PID_Advanced_Bytes[i];
-
     payload[6] = PID_Advanced_Bytes[0];
     payload[1] = PID_Advanced_Bytes[1];
     payload[17] = PID_Advanced_Bytes[2];
@@ -888,7 +818,6 @@ inline void WritePIDAdvancedToNexusAndSave()
     payload[24] = PID_Advanced_Bytes[23];
     payload[41] = PID_Advanced_Bytes[24];
     payload[42] = PID_Advanced_Bytes[25];
-
     SendToMSP(MSP_SET_PID_PROFILE, payload, sizeof(payload));
     This_MSP_Uart->flush();
     if (!WaitForMspAck(MSP_SET_PID_PROFILE, 300))
@@ -910,21 +839,10 @@ inline void SetNexusProfile(uint8_t index)
 }
 
 // ************************************************************************************************************
-// ************************************************************************************************************
 //         GOVERNOR MSP SUPPORT — ROTORFLIGHT 2.3+ ONLY (api100 >= 1209)
+//         TX already guards against pre-2.3 so no api100 checks needed here
 // ************************************************************************************************************
-// ************************************************************************************************************
 
-// ====================================================
-// Governor global variables
-// ====================================================
-
-// Note: Governor_RF23_Required, Started_Sending_GOV_CONFIG,
-// Started_Sending_GOV_PROFILE, GOV_Send_Duration, and
-// GovAckPayload[] are all declared in 1Definitions.h as
-// they are shared across multiple translation units.
-
-// Raw round-trip buffers — complete payloads preserved for safe write-back
 static uint8_t Original_Gov_Config_Bytes[GOV_CONFIG_PAYLOAD_SIZE] = {0};
 static uint8_t Original_Gov_Profile_Bytes[GOV_PROFILE_PAYLOAD_SIZE] = {0};
 
@@ -935,12 +853,16 @@ static uint16_t Gov_Spoolup_Time = 100;
 static uint16_t Gov_Tracking_Time = 20;
 static uint16_t Gov_Recovery_Time = 20;
 static uint16_t Gov_Throttle_Hold_Timeout = 50;
+static uint16_t Gov_Lost_Headspeed_Timeout = 10;
 static uint16_t Gov_Autorotation_Timeout = 0;
+static uint16_t Gov_Autorotation_Bailout_Time = 0;
+static uint16_t Gov_Autorotation_Min_Entry_Time = 0;
 static uint8_t Gov_Handover_Throttle = 20;
 static uint8_t Gov_Pwr_Filter = 20;
 static uint8_t Gov_Rpm_Filter = 20;
 static uint8_t Gov_Tta_Filter = 0;
 static uint8_t Gov_Ff_Filter = 10;
+static uint8_t Gov_Spoolup_Min_Throttle = 5;
 static uint8_t Gov_D_Filter = 50;
 static uint16_t Gov_Spooldown_Time = 30;
 static uint8_t Gov_Throttle_Type = 0;
@@ -966,15 +888,13 @@ static uint8_t Gov_Fallback_Drop = 10;
 static uint16_t Gov_Flags = 0;
 
 // ====================================================
-// PackGovernorForAckPayload()
-// Must be defined BEFORE the parse functions that call it.
-// GovAckPayload[] is declared in 1Definitions.h.
-// ====================================================
-
 inline void PackGovernorForAckPayload()
 {
     uint8_t *b = GovAckPayload;
-    for (uint8_t i = 0; i < GOV_ACK_PAYLOAD_SIZE; i++)
+    Look1("GovMode=");
+    Look(Gov_Mode);
+    // Only zero unused tail — all used bytes explicitly written below
+    for (uint8_t i = 46; i < GOV_ACK_PAYLOAD_SIZE; i++)
         b[i] = 0;
 
     b[0] = Governor_RF23_Required ? 1 : 0;
@@ -1023,22 +943,13 @@ inline void PackGovernorForAckPayload()
     b[43] = (Gov_Flags & GOV_FLAG_PID_SPOOLUP) ? 1 : 0;
     b[44] = (Gov_Flags & GOV_FLAG_FALLBACK_PRECOMP) ? 1 : 0;
     b[45] = (Gov_Flags & GOV_FLAG_DYN_MIN_THROTTLE) ? 1 : 0;
-    // [46-58] already zeroed above
+    Look1("Pack b18=");
+    Look(b[18]);
 }
 
 // ====================================================
-// Parse — GOVERNOR_CONFIG (MSP read cmd 142)
-// ====================================================
-
 inline bool Parse_MSP_Governor_Config(const uint8_t *data, uint8_t n)
 {
-    if (api100 < 1209)
-    {
-        Governor_RF23_Required = true;
-        return false;
-    }
-    Governor_RF23_Required = false;
-
     MspFrame f;
     if (!FindMspV1ResponseFrameForCmd(data, n, MSP_GOVERNOR_CONFIG, f))
         return false;
@@ -1046,7 +957,6 @@ inline bool Parse_MSP_Governor_Config(const uint8_t *data, uint8_t n)
         return false;
 
     const uint8_t *p = f.payload;
-
     for (uint8_t i = 0; i < GOV_CONFIG_PAYLOAD_SIZE; i++)
         Original_Gov_Config_Bytes[i] = p[i];
 
@@ -1062,69 +972,46 @@ inline bool Parse_MSP_Governor_Config(const uint8_t *data, uint8_t n)
     o += 2;
     Gov_Throttle_Hold_Timeout = (uint16_t)p[o] | ((uint16_t)p[o + 1] << 8);
     o += 2;
-    o += 2; // spare_0
+    Gov_Lost_Headspeed_Timeout = (uint16_t)p[o] | ((uint16_t)p[o + 1] << 8);
+    o += 2;
     Gov_Autorotation_Timeout = (uint16_t)p[o] | ((uint16_t)p[o + 1] << 8);
     o += 2;
-    o += 2; // spare_1
-    o += 2; // spare_2
+    Gov_Autorotation_Bailout_Time = (uint16_t)p[o] | ((uint16_t)p[o + 1] << 8);
+    o += 2;
+    Gov_Autorotation_Min_Entry_Time = (uint16_t)p[o] | ((uint16_t)p[o + 1] << 8);
+    o += 2;
     Gov_Handover_Throttle = p[o++];
     Gov_Pwr_Filter = p[o++];
     Gov_Rpm_Filter = p[o++];
     Gov_Tta_Filter = p[o++];
     Gov_Ff_Filter = p[o++];
-    o++; // spare_3
+    Gov_Spoolup_Min_Throttle = p[o++];
     Gov_D_Filter = p[o++];
     Gov_Spooldown_Time = (uint16_t)p[o] | ((uint16_t)p[o + 1] << 8);
     o += 2;
     Gov_Throttle_Type = p[o++];
-    o++; // spare_4
-    o++; // spare_5
+    o++;
+    o++; // spare, spare
     Gov_Idle_Throttle = p[o++];
     Gov_Auto_Throttle = p[o++];
     for (uint8_t i = 0; i < 9; i++)
         Gov_Bypass_Curve[i] = p[o++];
 
-    // Pack complete data (profile + config) into ACK payload
     PackGovernorForAckPayload();
-
-    // Config fetch complete — return to normal telemetry
-   // SendRotorFlightParametresNow = SEND_NO_RF; // removed!
-
-    Look("GOV CONFIG parsed OK");
-    Look1("Mode: ");
-    Look(Gov_Mode);
-    Look1("Handover: ");
-    Look(Gov_Handover_Throttle);
-
     return true;
 }
 
 // ====================================================
-// Parse — GOVERNOR_PROFILE (MSP read cmd 148)
-// Phase 1 only — no auto-sequence to config.
-// Config is triggered separately by transmitter sending
-// SEND_GOV_CONFIG_VALUES parameter.
-// ====================================================
-
 inline bool Parse_MSP_Governor_Profile(const uint8_t *data, uint8_t n)
 {
-    if (api100 < 1209)
-    {
-        Governor_RF23_Required = true;
-        return false;
-    }
-    Governor_RF23_Required = false;
-
     MspFrame f;
     if (!FindMspV1ResponseFrameForCmd(data, n, MSP_GOVERNOR_PROFILE, f))
         return false;
     if (f.size < GOV_PROFILE_PAYLOAD_SIZE)
         return false;
-
     const uint8_t *p = f.payload;
     for (uint8_t i = 0; i < GOV_PROFILE_PAYLOAD_SIZE; i++)
         Original_Gov_Profile_Bytes[i] = p[i];
-
     uint8_t o = 0;
     Gov_Headspeed = (uint16_t)p[o] | ((uint16_t)p[o + 1] << 8);
     o += 2;
@@ -1143,41 +1030,20 @@ inline bool Parse_MSP_Governor_Profile(const uint8_t *data, uint8_t n)
     Gov_Fallback_Drop = p[o++];
     Gov_Flags = (uint16_t)p[o] | ((uint16_t)p[o + 1] << 8);
     o += 2;
-
-    // Pack profile data into ACK payload
     PackGovernorForAckPayload();
-
-    // Phase 1 complete — stay in SEND_GOV_PROFILE_RF state so
-    // CheckMSPSerial() keeps polling until timeout expires,
-    // keeping fresh data available in GovAckPayload[].
-
-    Look("GOV PROFILE parsed OK");
-    Look1("Headspeed: ");
-    Look(Gov_Headspeed);
-    Look1("P gain: ");
-    Look(Gov_P_Gain);
-
     return true;
 }
 
 // ====================================================
-// Write — GOVERNOR_CONFIG (MSP write cmd 143)
-// ====================================================
-
 inline void WriteGovernorConfigToNexusAndSave()
 {
     static uint32_t lastWriteTime = 0;
-    const uint32_t WRITE_COOLDOWN_MS = 5000;
     uint32_t now = millis();
-    if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight_Version))
+    if ((now - lastWriteTime < 5000) || (!Rotorflight_Version))
         return;
-    if (api100 < 1209)
-        return;
-
     uint8_t payload[GOV_CONFIG_PAYLOAD_SIZE];
     for (uint8_t i = 0; i < GOV_CONFIG_PAYLOAD_SIZE; i++)
         payload[i] = Original_Gov_Config_Bytes[i];
-
     uint8_t o = 0;
     payload[o++] = Gov_Mode;
     payload[o++] = (uint8_t)(Gov_Startup_Time & 0xFF);
@@ -1190,31 +1056,32 @@ inline void WriteGovernorConfigToNexusAndSave()
     payload[o++] = (uint8_t)(Gov_Recovery_Time >> 8);
     payload[o++] = (uint8_t)(Gov_Throttle_Hold_Timeout & 0xFF);
     payload[o++] = (uint8_t)(Gov_Throttle_Hold_Timeout >> 8);
-    o += 2; // spare_0
+    payload[o++] = (uint8_t)(Gov_Lost_Headspeed_Timeout & 0xFF);
+    payload[o++] = (uint8_t)(Gov_Lost_Headspeed_Timeout >> 8);
     payload[o++] = (uint8_t)(Gov_Autorotation_Timeout & 0xFF);
     payload[o++] = (uint8_t)(Gov_Autorotation_Timeout >> 8);
-    o += 2; // spare_1
-    o += 2; // spare_2
+    payload[o++] = (uint8_t)(Gov_Autorotation_Bailout_Time & 0xFF);
+    payload[o++] = (uint8_t)(Gov_Autorotation_Bailout_Time >> 8);
+    payload[o++] = (uint8_t)(Gov_Autorotation_Min_Entry_Time & 0xFF);
+    payload[o++] = (uint8_t)(Gov_Autorotation_Min_Entry_Time >> 8);
     payload[o++] = Gov_Handover_Throttle;
     payload[o++] = Gov_Pwr_Filter;
     payload[o++] = Gov_Rpm_Filter;
     payload[o++] = Gov_Tta_Filter;
     payload[o++] = Gov_Ff_Filter;
-    o++; // spare_3
+    payload[o++] = Gov_Spoolup_Min_Throttle;
     payload[o++] = Gov_D_Filter;
     payload[o++] = (uint8_t)(Gov_Spooldown_Time & 0xFF);
     payload[o++] = (uint8_t)(Gov_Spooldown_Time >> 8);
     payload[o++] = Gov_Throttle_Type;
-    o++; // spare_4
-    o++; // spare_5
+    o++;
+    o++; // spare, spare
     payload[o++] = Gov_Idle_Throttle;
     payload[o++] = Gov_Auto_Throttle;
     for (uint8_t i = 0; i < 9; i++)
         payload[o++] = Gov_Bypass_Curve[i];
-
     if (o != GOV_CONFIG_PAYLOAD_SIZE)
         return;
-
     delay(20);
     This_MSP_Uart->flush();
     SendToMSP(MSP_SET_GOVERNOR_CONFIG, payload, GOV_CONFIG_PAYLOAD_SIZE);
@@ -1230,23 +1097,15 @@ inline void WriteGovernorConfigToNexusAndSave()
 }
 
 // ====================================================
-// Write — GOVERNOR_PROFILE (MSP write cmd 149)
-// ====================================================
-
 inline void WriteGovernorProfileToNexusAndSave()
 {
     static uint32_t lastWriteTime = 0;
-    const uint32_t WRITE_COOLDOWN_MS = 5000;
     uint32_t now = millis();
-    if ((now - lastWriteTime < WRITE_COOLDOWN_MS) || (!Rotorflight_Version))
+    if ((now - lastWriteTime < 5000) || (!Rotorflight_Version))
         return;
-    if (api100 < 1209)
-        return;
-
     uint8_t payload[GOV_PROFILE_PAYLOAD_SIZE];
     for (uint8_t i = 0; i < GOV_PROFILE_PAYLOAD_SIZE; i++)
         payload[i] = Original_Gov_Profile_Bytes[i];
-
     uint8_t o = 0;
     payload[o++] = (uint8_t)(Gov_Headspeed & 0xFF);
     payload[o++] = (uint8_t)(Gov_Headspeed >> 8);
@@ -1265,10 +1124,8 @@ inline void WriteGovernorProfileToNexusAndSave()
     payload[o++] = Gov_Fallback_Drop;
     payload[o++] = (uint8_t)(Gov_Flags & 0xFF);
     payload[o++] = (uint8_t)(Gov_Flags >> 8);
-
     if (o != GOV_PROFILE_PAYLOAD_SIZE)
         return;
-
     delay(20);
     This_MSP_Uart->flush();
     SendToMSP(MSP_SET_GOVERNOR_PROFILE, payload, GOV_PROFILE_PAYLOAD_SIZE);
@@ -1284,9 +1141,6 @@ inline void WriteGovernorProfileToNexusAndSave()
 }
 
 // ====================================================
-// Unpack governor write-request from transmitter
-// ====================================================
-
 inline void UnpackGovernorFromTxPayload(const uint8_t *src)
 {
     Gov_Headspeed = (uint16_t)src[1] | ((uint16_t)src[2] << 8);
@@ -1321,9 +1175,7 @@ inline void UnpackGovernorFromTxPayload(const uint8_t *src)
     Gov_Throttle_Type = src[39];
     Gov_Idle_Throttle = src[40];
     Gov_Auto_Throttle = src[41];
-
-    Gov_Flags &= ~(GOV_FLAG_VOLTAGE_COMP | GOV_FLAG_PID_SPOOLUP |
-                   GOV_FLAG_FALLBACK_PRECOMP | GOV_FLAG_DYN_MIN_THROTTLE);
+    Gov_Flags &= ~(GOV_FLAG_VOLTAGE_COMP | GOV_FLAG_PID_SPOOLUP | GOV_FLAG_FALLBACK_PRECOMP | GOV_FLAG_DYN_MIN_THROTTLE);
     if (src[42])
         Gov_Flags |= GOV_FLAG_VOLTAGE_COMP;
     if (src[43])
@@ -1335,5 +1187,4 @@ inline void UnpackGovernorFromTxPayload(const uint8_t *src)
 }
 
 // ************************************************************************************************************
-
 #endif // NEXUS_H

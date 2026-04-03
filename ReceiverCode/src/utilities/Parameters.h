@@ -241,10 +241,12 @@ void ReadExtraParameters()
         {
             SendRotorFlightParametresNow = SEND_GOV_CONFIG_RF;
             Started_Sending_GOV_CONFIG = millis();
-            PROFILE_Send_Duration = Parameters.word[2];
-            // Look("GOV CONFIG send started");
-            // Look("Duration: ");
-            // Look(PROFILE_Send_Duration);
+            GOV_Config_Send_Duration = Parameters.word[2];
+            //GOV_Config_Send_Duration = 5000; // override whatever the transmitter sent with 3 seconds, because that's about right for the time it takes to send the config and get the acks back, and we don't want it to stop sending too early.
+
+            Look("GOV CONFIG send started");
+            Look1("Duration: ");
+            Look(GOV_Config_Send_Duration);
         }
         break;
 

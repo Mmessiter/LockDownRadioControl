@@ -1045,17 +1045,6 @@ void Hide_msg_if_needed()
         }
     }
    
-    if (Reading_GOV_Config_Now)
-    {
-        if ((millis() - GOV_Config_Start_Time) > GOV_Config_Send_Duration)
-        {
-           // Look("GOV Config reading timed out");
-            Reading_GOV_Config_Now = false;
-            HideGOVMsg();
-            return;
-        }
-    }
-
     if (Reading_GOV_Now)
     {
         if ((millis() - GOV_Start_Time) > GOV_Send_Duration)
@@ -1063,8 +1052,18 @@ void Hide_msg_if_needed()
             Reading_GOV_Now = false;
             Reading_GOV_Config_Now = true; // Phase 1 complete — immediately trigger phase 2 (config data)
             GOV_Config_Start_Time = millis();
-            GOV_Config_Send_Duration = 1000;              // show config values for 1 seconds
+            GOV_Config_Send_Duration = 1000;              // show config values for 5 seconds
             AddParameterstoQueue(SEND_GOV_CONFIG_VALUES); // new parameter ID 28
+            return;
+        }
+    }
+
+    if (Reading_GOV_Config_Now)
+    {
+        if ((millis() - GOV_Config_Start_Time) > GOV_Config_Send_Duration)
+        {
+            Reading_GOV_Config_Now = false;
+            HideGOVMsg();
             return;
         }
     }
