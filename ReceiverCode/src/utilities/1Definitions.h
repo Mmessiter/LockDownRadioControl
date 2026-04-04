@@ -134,12 +134,16 @@ uint8_t SizeOfParameters = sizeof(Parameters);
 #define MSP_BANK_CHANGE 22                    // Command to change bank on MSP requests (for future use if needed)
 #define MSP_RATES_CHANGE 23                   // Command to change RATES on MSP requests (for future use if needed)
 #define MSP_BANK_CHANGE_CONFIRMATION 24       // Command to confirm bank change on MSP requests
-#define MSP_INHIBIT_TELEMETRY 25              // Inhibit telemetry for a short time to allow MSP data to be sent without interference from telemetry data (for MSP data transmission)
-#define MSP_ENABLE_TELEMETRY 26               // ENABLE telemetry after MSP data has been sent (for MSP data transmission)
-#define SEND_GOV_VALUES 27                    // Command to get governor profile from MSP
-#define SEND_GOV_CONFIG_VALUES 28             // Command to get governor config from MSP
-#define PARAMETERS_MAX_ID 29                  // Max types of parameters packet to send  ... might increase.
-
+#define MSP_INHIBIT_TELEMETRY 25
+#define MSP_ENABLE_TELEMETRY 26
+#define SEND_GOV_VALUES 27
+#define SEND_GOV_CONFIG_VALUES 28
+#define SEND_GOV_WRITE_PROFILE1 29 // write governor profile bytes 1-11
+#define SEND_GOV_WRITE_PROFILE2 30 // write governor profile bytes 12-17
+#define SEND_GOV_WRITE_CONFIG1 31  // write governor config bytes 18-28
+#define SEND_GOV_WRITE_CONFIG2 32  // write governor config bytes 29-39
+#define SEND_GOV_WRITE_CONFIG3 33  // write governor config bytes 40-45
+#define PARAMETERS_MAX_ID 34
 #define MSP_CHANGE_TYPE_PID 0
 #define MSP_CHANGE_TYPE_RATES 1
 
@@ -293,6 +297,9 @@ static bool Parse_MSP_API_VERSION(const uint8_t *buf, uint8_t len, uint8_t &mspP
 inline void DetectRotorFlightAtBoot1();
 inline bool Parse_MSP_Governor_Config(const uint8_t *data, uint8_t n);
 inline bool Parse_MSP_Governor_Profile(const uint8_t *data, uint8_t n);
+inline void WriteGovernorConfigToNexusAndSave();
+inline void UnpackGovernorFromTxPayload(const uint8_t *src);
+inline void WriteGovernorProfileToNexusAndSave();
 
 /************************************************************************************************************/
 // For numeric types (int, float, double, etc.)
@@ -518,5 +525,6 @@ uint32_t BuildAge;      // days since 1st Jan 2020 for this build
 uint8_t Change_Type;
 uint8_t NewBank;
 bool InhibitTelemetry = false; // stop telemetry when recieving MSP data that must be written to EEPROM
+uint8_t GovWritePayload[GOV_ACK_PAYLOAD_SIZE] = {0};
 
 #endif // defined (_SRC_UTILITIES_1DEFINITIONS_H)

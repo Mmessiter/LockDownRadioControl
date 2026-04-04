@@ -245,9 +245,86 @@ void ReadExtraParameters()
         }
         break;
 
+    case SEND_GOV_WRITE_PROFILE1: // 29 — profile bytes 1-11
+        if (!Rotorflight_Version)
+            break;
+        GovWritePayload[1] = (uint8_t)Parameters.word[1];   // Headspeed lo
+        GovWritePayload[2] = (uint8_t)Parameters.word[2];   // Headspeed hi
+        GovWritePayload[3] = (uint8_t)Parameters.word[3];   // Gain
+        GovWritePayload[4] = (uint8_t)Parameters.word[4];   // P
+        GovWritePayload[5] = (uint8_t)Parameters.word[5];   // I
+        GovWritePayload[6] = (uint8_t)Parameters.word[6];   // D
+        GovWritePayload[7] = (uint8_t)Parameters.word[7];   // F
+        GovWritePayload[8] = (uint8_t)Parameters.word[8];   // TTA gain
+        GovWritePayload[9] = (uint8_t)Parameters.word[9];   // TTA limit
+        GovWritePayload[10] = (uint8_t)Parameters.word[10]; // Max throttle
+        GovWritePayload[11] = (uint8_t)Parameters.word[11]; // Min throttle
+        break;
+
+    case SEND_GOV_WRITE_PROFILE2: // 30 — profile bytes 12-17 + flags
+        if (!Rotorflight_Version)
+            break;
+        GovWritePayload[12] = (uint8_t)Parameters.word[1]; // Fallback drop
+        GovWritePayload[13] = (uint8_t)Parameters.word[2]; // Yaw weight
+        GovWritePayload[14] = (uint8_t)Parameters.word[3]; // Cyclic weight
+        GovWritePayload[15] = (uint8_t)Parameters.word[4]; // Collective weight
+        GovWritePayload[16] = (uint8_t)Parameters.word[5]; // Flags lo
+        GovWritePayload[17] = (uint8_t)Parameters.word[6]; // Flags hi
+        // Profile complete — unpack and write to FC
+        UnpackGovernorFromTxPayload(GovWritePayload);
+        WriteGovernorProfileToNexusAndSave();
+        break;
+
+    case SEND_GOV_WRITE_CONFIG1: // 31 — config bytes 18-28
+        if (!Rotorflight_Version)
+            break;
+        GovWritePayload[18] = (uint8_t)Parameters.word[1];  // Gov mode
+        GovWritePayload[19] = (uint8_t)Parameters.word[2];  // Handover throttle
+        GovWritePayload[20] = (uint8_t)Parameters.word[3];  // Startup lo
+        GovWritePayload[21] = (uint8_t)Parameters.word[4];  // Startup hi
+        GovWritePayload[22] = (uint8_t)Parameters.word[5];  // Spoolup lo
+        GovWritePayload[23] = (uint8_t)Parameters.word[6];  // Spoolup hi
+        GovWritePayload[24] = (uint8_t)Parameters.word[7];  // Spooldown lo
+        GovWritePayload[25] = (uint8_t)Parameters.word[8];  // Spooldown hi
+        GovWritePayload[26] = (uint8_t)Parameters.word[9];  // Tracking lo
+        GovWritePayload[27] = (uint8_t)Parameters.word[10]; // Tracking hi
+        GovWritePayload[28] = (uint8_t)Parameters.word[11]; // Recovery lo
+        break;
+
+    case SEND_GOV_WRITE_CONFIG2: // 32 — config bytes 29-39
+        if (!Rotorflight_Version)
+            break;
+        GovWritePayload[29] = (uint8_t)Parameters.word[1];  // Recovery hi
+        GovWritePayload[30] = (uint8_t)Parameters.word[2];  // Hold timeout lo
+        GovWritePayload[31] = (uint8_t)Parameters.word[3];  // Hold timeout hi
+        GovWritePayload[32] = (uint8_t)Parameters.word[4];  // Autorot timeout lo
+        GovWritePayload[33] = (uint8_t)Parameters.word[5];  // Autorot timeout hi
+        GovWritePayload[34] = (uint8_t)Parameters.word[6];  // RPM filter
+        GovWritePayload[35] = (uint8_t)Parameters.word[7];  // Pwr filter
+        GovWritePayload[36] = (uint8_t)Parameters.word[8];  // D filter
+        GovWritePayload[37] = (uint8_t)Parameters.word[9];  // FF filter
+        GovWritePayload[38] = (uint8_t)Parameters.word[10]; // TTA filter
+        GovWritePayload[39] = (uint8_t)Parameters.word[11]; // Throttle type
+        break;
+
+    case SEND_GOV_WRITE_CONFIG3: // 33 — config bytes 40-45
+        if (!Rotorflight_Version)
+            break;
+        GovWritePayload[40] = (uint8_t)Parameters.word[1]; // Idle throttle
+        GovWritePayload[41] = (uint8_t)Parameters.word[2]; // Auto throttle
+        GovWritePayload[42] = (uint8_t)Parameters.word[3]; // Volt comp flag
+        GovWritePayload[43] = (uint8_t)Parameters.word[4]; // PID spoolup flag
+        GovWritePayload[44] = (uint8_t)Parameters.word[5]; // Fallback precomp flag
+        GovWritePayload[45] = (uint8_t)Parameters.word[6]; // Dyn min thr flag
+        // Config complete — unpack and write to FC
+        UnpackGovernorFromTxPayload(GovWritePayload);
+        WriteGovernorConfigToNexusAndSave();
+        break;
+
     default:
         break;
     }
+
 }
 
 #endif
