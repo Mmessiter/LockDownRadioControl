@@ -892,6 +892,7 @@ void DisplayGovValues(uint8_t n, uint8_t m);
 void HideGOVMsg();
 void ShowGOVMsg(const char *msg, uint16_t Colour);
 void ShowGOVBank();
+
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************
@@ -1492,6 +1493,9 @@ char SearchFile[80]; // used for searching files on SD card after adding path to
 
 char RatesWindows[MAX_RATES_BYTES][5] = {"t10", "tn0", "tn1", "tn2", "tn3", "tn4", "tn5", "tn6", "tn7", "tn8", "tn9", "tn10", "tn11"};
 bool LinkRatesToBanks = false;
+
+bool NeedGlobalsToo = false; // This is set to true when we need to read the global settings as well as the profile settings, 
+//because these are on different MSP pages and we want to read them both in one go if possible. It is cleared after use.
 
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************

@@ -8,9 +8,7 @@
 #include "1Definitions.h"
 
 uint8_t GOV_Items_Received[GOVERNOR_LABELS_COUNT] = {0};
-
 uint16_t Total_Received_GOV_Values = 0;
-
 char GOV_Labels[GOVERNOR_LABELS_COUNT][4] = {
     "n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9",
     "n10", "n11", "n12", "n13", "n14", "n15", "n16", "n17", "n18", "n19",
@@ -105,12 +103,7 @@ void LoadGovWritePayload()
     GovWritePayload[45] = (flags & GOV_FLAG_DYN_MIN_THROTTLE) ? 1 : 0;
 }
 
-// ====================================================
-// DisplayGovValues()
-// Sends governor values to Nextion numeric fields
-// Called with byte range [n, m) from GovAckPayload[]
-// ====================================================
-// **
+// ************************************************************************************************/
 
 int GetTotalSoFar()
 {
@@ -123,10 +116,20 @@ int GetTotalSoFar()
 //** ****************************************************************************************************
 void Show_Progress()
 {
-    SendValue((char *)"Progress", GetTotalSoFar() * 100 / 35); // progress value for progress bar
+    if (NeedGlobalsToo)
+    {
+        SendValue((char *)"Progress", GetTotalSoFar() * 100 / 35); // progress value for progress bar
+    }
 }
 
 // ************************************************************************************************************/
+
+// ====================================================
+// DisplayGovValues()
+// Sends governor values to Nextion numeric fields
+// Called with byte range [n, m) from GovAckPayload[]
+// ====================================================
+
 void DisplayGovValues(uint8_t n, uint8_t m)
 {
     if (CurrentView != RFGOVERNORVIEW)
@@ -319,7 +322,12 @@ void DisplayGovValues(uint8_t n, uint8_t m)
 // ====================================================
 void ForegroundColourGOVLabels(uint16_t Colour)
 {
-    for (int i = 0; i < GOVERNOR_LABELS_COUNT; ++i)
+    uint16_t n = GOVERNOR_LABELS_COUNT;
+    // if we're only reading profile values, only colour the first 18 labels,
+    // to avoid colouring the config labels which aren't being updated
+    if (!NeedGlobalsToo)
+        n = 18;
+    for (int i = 0; i < n; ++i)
         SendForegroundColour(GOV_Labels[i], Colour);
 }
 
@@ -332,19 +340,24 @@ void HideGOVMsg()
         SendCommand((char *)"vis b2,1");
         ForegroundColourGOVLabels(Black);
         BlockBankChanges = false;
-        Total_Received_GOV_Values = GetTotalSoFar();
-        if (Total_Received_GOV_Values > 20)
+
+        if (NeedGlobalsToo)
         {
-            if (Total_Received_GOV_Values < GOVERNOR_LABELS_COUNT)
+            Total_Received_GOV_Values = GetTotalSoFar();
+            if (Total_Received_GOV_Values > 18) // if over 18 values received, assume phase 2
             {
-                MsgBox((char *)"page RFGovView", (char *)" Error - try again! ");
+                if (Total_Received_GOV_Values < GOVERNOR_LABELS_COUNT) // if not all values were received, show error message
+                {
+                    MsgBox((char *)"page RFGovView", (char *)" Error - try again! ");
+                    NeedGlobalsToo = false;
+                }
+                else // if all values were received, show success message
+                {
+                    SendCommand((char *)"vis Progress,0");
+                    MsgBox((char *)"page RFGovView", (char *)"All 35 governor values loaded successfully.");
+                    NeedGlobalsToo = false;
+                }
             }
-            else
-            {
-                SendCommand((char *)"vis Progress,0");
-                MsgBox((char *)"page RFGovView", (char *)"All 35 governor values loaded successfully.");
-            }
-          
         }
     }
 }
@@ -359,22 +372,27 @@ void ShowGOVMsg(const char *msg, uint16_t Colour)
         SendCommand((char *)"vis busy,1");
         SendCommand((char *)"vis b2,0");
         BlockBankChanges = true;
-        SendCommand((char *)"vis Progress,1");
+        if (NeedGlobalsToo)
+            SendCommand((char *)"vis Progress,1");
     }
 }
 
+// ******************************************************************************************************
 // ====================================================
 void ShowGOVBank()
 {
     if (CurrentView == RFGOVERNORVIEW)
     {
         char buf[40];
-        for (int i = 0; i < GOVERNOR_LABELS_COUNT; ++i)
+
+        if (NeedGlobalsToo)
         {
-            GOV_Items_Received[i] = 0;
-            SendValue(GOV_Labels[i], 0); // clear all numeric fields to 0
+            for (int i = 0; i < GOVERNOR_LABELS_COUNT; ++i)
+            {
+                GOV_Items_Received[i] = 0;
+                SendValue(GOV_Labels[i], 0); // clear all numeric fields to 0
+            }
         }
-        Total_Received_GOV_Values = 0;
 
         strcpy(buf, "Loading governor values ...");
         SendText((char *)"t26", BankNames[BanksInUse[Bank - 1]]);
@@ -395,6 +413,7 @@ void Start_RF_Governor()
     SendCommand((char *)"page RFGovView");
     CurrentView = RFGOVERNORVIEW;
     SendText((char *)"t27", ModelName);
+    NeedGlobalsToo = true;
     ShowGOVBank();
 }
 
