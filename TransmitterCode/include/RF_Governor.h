@@ -9,6 +9,8 @@
 
 uint8_t GOV_Items_Received[GOVERNOR_LABELS_COUNT] = {0};
 
+uint16_t Total_Received_GOV_Values = 0;
+
 char GOV_Labels[GOVERNOR_LABELS_COUNT][4] = {
     "n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9",
     "n10", "n11", "n12", "n13", "n14", "n15", "n16", "n17", "n18", "n19",
@@ -108,6 +110,23 @@ void LoadGovWritePayload()
 // Sends governor values to Nextion numeric fields
 // Called with byte range [n, m) from GovAckPayload[]
 // ====================================================
+// **
+
+int GetTotalSoFar()
+{
+    int total = 0;
+    for (int i = 0; i < GOVERNOR_LABELS_COUNT; ++i)
+        total += GOV_Items_Received[i];
+    return total;
+}
+
+//** ****************************************************************************************************
+void Show_Progress()
+{
+    SendValue((char *)"Progress", GetTotalSoFar() * 100 / 35); // progress value for progress bar
+}
+
+// ************************************************************************************************************/
 void DisplayGovValues(uint8_t n, uint8_t m)
 {
     if (CurrentView != RFGOVERNORVIEW)
@@ -119,6 +138,7 @@ void DisplayGovValues(uint8_t n, uint8_t m)
             break;
 
         GOV_Items_Received[i] = 1;
+        Show_Progress();
 
         switch (i)
         {
@@ -296,8 +316,6 @@ void DisplayGovValues(uint8_t n, uint8_t m)
     }
 }
 
-uint16_t Total_Received_GOV_Values = 0;
-
 // ====================================================
 void ForegroundColourGOVLabels(uint16_t Colour)
 {
@@ -314,15 +332,20 @@ void HideGOVMsg()
         SendCommand((char *)"vis b2,1");
         ForegroundColourGOVLabels(Black);
         BlockBankChanges = false;
-        Total_Received_GOV_Values = 0;
-        for (int i = 0; i < GOVERNOR_LABELS_COUNT; ++i)
-            Total_Received_GOV_Values += GOV_Items_Received[i];
-
-        if (Total_Received_GOV_Values < 20) 
-        Look1("Phase 1: ");
-        else
-            Look1("Phase 1 + Phase 2: ");
-        Look(Total_Received_GOV_Values);
+        Total_Received_GOV_Values = GetTotalSoFar();
+        if (Total_Received_GOV_Values > 20)
+        {
+            if (Total_Received_GOV_Values < GOVERNOR_LABELS_COUNT)
+            {
+                MsgBox((char *)"page RFGovView", (char *)" Error - try again! ");
+            }
+            else
+            {
+                SendCommand((char *)"vis Progress,0");
+                MsgBox((char *)"page RFGovView", (char *)"All 35 governor values loaded successfully.");
+            }
+          
+        }
     }
 }
 
@@ -336,6 +359,7 @@ void ShowGOVMsg(const char *msg, uint16_t Colour)
         SendCommand((char *)"vis busy,1");
         SendCommand((char *)"vis b2,0");
         BlockBankChanges = true;
+        SendCommand((char *)"vis Progress,1");
     }
 }
 
@@ -351,6 +375,7 @@ void ShowGOVBank()
             SendValue(GOV_Labels[i], 0); // clear all numeric fields to 0
         }
         Total_Received_GOV_Values = 0;
+
         strcpy(buf, "Loading governor values ...");
         SendText((char *)"t26", BankNames[BanksInUse[Bank - 1]]);
         BlockBankChanges = true;

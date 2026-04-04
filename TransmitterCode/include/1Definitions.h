@@ -96,8 +96,8 @@
 #define POWERONOFFDELAY2 4000                 // Delay after power ON before Off is possible....
 #define MSP_WAIT_TIME 1000                    // Time to allow for reading MSP data from RX and FC
 #define GOV_1_WAIT_TIME 1000                  // first phase of GOV value reading 
-#define GOV_2_WAIT_TIME 3000                  // second phase of GOV value reading
-#define GOV_MSP_PAUSE_TIME 1000               // pause between phase 1 and phase 2 of GOV value reading - to give RX a chance to 
+#define GOV_2_WAIT_TIME 3500                  // second phase of GOV value reading
+#define GOV_MSP_PAUSE_TIME 1500               // pause between phase 1 and phase 2 of GOV value reading - to give RX a chance to 
 
 // **************************************************************************
 //                            FHSS BITS                                     *
