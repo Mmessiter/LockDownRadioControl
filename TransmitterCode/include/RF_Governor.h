@@ -110,6 +110,8 @@ int GetTotalSoFar()
     int total = 0;
     for (int i = 0; i < GOVERNOR_LABELS_COUNT; ++i)
         total += GOV_Items_Received[i];
+    if (total == GOVERNOR_LABELS_COUNT)
+        GOV_Config_Send_Duration = 0; // stop timeout once all items received
     return total;
 }
 
@@ -351,10 +353,9 @@ void HideGOVMsg()
                     MsgBox((char *)"page RFGovView", (char *)" Error - try again! ");
                     NeedGlobalsToo = false;
                 }
-                else // if all values were received, show success message
+                else
                 {
                     SendCommand((char *)"vis Progress,0");
-                   // MsgBox((char *)"page RFGovView", (char *)"All 35 governor values loaded successfully.");
                     NeedGlobalsToo = false;
                 }
             }
