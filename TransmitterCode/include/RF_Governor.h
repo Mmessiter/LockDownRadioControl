@@ -354,7 +354,7 @@ void HideGOVMsg()
                 else // if all values were received, show success message
                 {
                     SendCommand((char *)"vis Progress,0");
-                    MsgBox((char *)"page RFGovView", (char *)"All 35 governor values loaded successfully.");
+                   // MsgBox((char *)"page RFGovView", (char *)"All 35 governor values loaded successfully.");
                     NeedGlobalsToo = false;
                 }
             }
