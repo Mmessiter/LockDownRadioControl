@@ -95,17 +95,15 @@
 #define POWERONOFFDELAY 1000                  // Delay after power OFF before transmit stops.
 #define POWERONOFFDELAY2 4000                 // Delay after power ON before Off is possible....
 #define MSP_WAIT_TIME 1000                    // Time to allow for reading MSP data from RX and FC
-#define GOV_1_WAIT_TIME 1000                  // first phase of GOV value reading - wait for ACK payload to arrive with GOV values in it
-#define GOV_2_WAIT_TIME 1000                  // second phase of GOV value reading - wait for ACK payload to arrive with GOV CONFIG values in it
-#define GOV_MSP_PAUSE_TIME 1000               // pause between phase 1 and phase 2 of GOV value reading - to give RX a chance to breathe before we ask for the config values
+#define GOV_1_WAIT_TIME 1000                  // first phase of GOV value reading 
+#define GOV_2_WAIT_TIME 3000                  // second phase of GOV value reading
+#define GOV_MSP_PAUSE_TIME 1000               // pause between phase 1 and phase 2 of GOV value reading - to give RX a chance to 
 
 // **************************************************************************
 //                            FHSS BITS                                     *
 //***************************************************************************
 #define DATARATE RF24_250KBPS   // RF24_250KBPS or RF24_1MBPS or RF24_2MBPS
 #define FASTDATARATE RF24_2MBPS // (WAS RF24_1MBPS) 2 MBPS = RF24_2MBPS; 1 MBPS = RF24_1MBPS >> THIS IS FOR BUDDY ONLY <<
-#define RETRYCOUNT 2            // was 2. Auto retries inside nRF24L01. MAX is 15. Fails below 2.
-#define RETRYWAIT 1             // was 1. 250us = Wait between retries (RetryWait+1 * 250us))
 #define QUIETCHANNEL 5          // This was found to be the least busy channel in the 2.4GHz band in my house
 #define STOPLISTENINGDELAY 100  // seems close to ideal <<<<< *********
 #define SELECTTARGETDELAY 100
@@ -1512,8 +1510,7 @@ namespace FHSS_data
     uint8_t *FHSSChPointer = FHSS_Channels; // pointer for channels array
     uint8_t NextChannelNumber = 0;
     uint8_t PaceMaker = PACEMAKER;   // now signed variables are used
-    uint8_t RetryCount = RETRYCOUNT; // now variables are used
-    uint8_t RetryWait = RETRYWAIT;   // now variables are used
+   
 
 } // namespace FHSS_data
 

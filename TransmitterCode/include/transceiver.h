@@ -6,15 +6,18 @@
 #ifndef TRANSCEIVER_H
 #define TRANSCEIVER_H
 
+uint8_t RetryCount = 2; //  was 2 (0 - 15)
+uint8_t RetryWait = 1;  //  was 1 (0 - 15)
 /************************************************************************************************************/
 
 FLASHMEM void ConfigureRadio()
 {
+
     Radio1.setPALevel(RF24_PA_MAX, true);
     Radio1.setDataRate(DATARATE);
     Radio1.enableAckPayload();
     Radio1.openWritingPipe(DefaultPipe);
-    Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait);
+    Radio1.setRetries(RetryCount, RetryWait);
     Radio1.stopListening();
     delayMicroseconds(STOPLISTENINGDELAY);
     Radio1.enableDynamicPayloads();
@@ -738,7 +741,7 @@ void NormaliseTheRadio()
 {
     SetThePipe(DefaultPipe);
     Radio1.setCRCLength(RF24_CRC_16);
-    Radio1.setRetries(FHSS_data::RetryCount, FHSS_data::RetryWait);
+    Radio1.setRetries(RetryCount, RetryWait);
 }
 /************************************************************************************************************/
 
@@ -1483,6 +1486,7 @@ FASTRUN void ParseAckPayload()
         }
         break;
     case 35:
+
         if (AgeGapChecked)
             break;                           // only do this once per power up
         RXBuildAge = GetIntFromAckPayload(); // RX Build Age
