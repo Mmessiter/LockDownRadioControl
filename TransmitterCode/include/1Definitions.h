@@ -96,7 +96,7 @@
 #define POWERONOFFDELAY2 4000                 // Delay after power ON before Off is possible....
 #define MSP_WAIT_TIME 1000                    // Time to allow for reading MSP data from RX and FC
 #define GOV_1_WAIT_TIME 1000                  // first phase of GOV value reading 
-#define GOV_2_WAIT_TIME 3500                  // second phase of GOV value reading
+#define GOV_2_WAIT_TIME 4000                  // second phase of GOV value reading
 #define GOV_MSP_PAUSE_TIME 1500               // pause between phase 1 and phase 2 of GOV value reading - to give RX a chance to 
 
 // **************************************************************************
@@ -184,7 +184,7 @@
 // Parameter transmission timing and redundancy
 
 #define PAUSE_BEFORE_PARAMETER_SEND 3000 // ms pause before sending parameters (to allow RX to prepare)
-#define PARAMETER_SEND_REPEATS 3         // Each parameter is repeated this many times (in case of packet loss)
+#define PARAMETER_SEND_REPEATS 3         // was 3 Each parameter is repeated this many times (in case of packet loss)
 #define PARAMETER_SEND_FREQUENCY 100     // ms between parameter send slots (was 100)
 #define PARAMETER_SEND_DURATION 5        // ms duration for parameter sending (remainder used for control)
 #define PARAMETER_QUEUE_MAXIMUM 250      // Maximum queued parameters allowed at once

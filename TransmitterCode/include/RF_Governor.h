@@ -21,9 +21,8 @@ char GOV_Labels[GOVERNOR_LABELS_COUNT][4] = {
 // ====================================================
 void LoadGovWritePayload()
 {
-    // ── Profile fields (bytes 0-17) ──────────────────────────────────
+        // ── Profile fields (bytes 0-17) ──────────────────────────────────
     GovWritePayload[0] = 0; // RF23 flag — not written back
-
     uint16_t hs = (uint16_t)GetValue((char *)"n0");
     GovWritePayload[1] = (uint8_t)(hs & 0xFF);
     GovWritePayload[2] = (uint8_t)(hs >> 8);
@@ -103,8 +102,7 @@ void LoadGovWritePayload()
     GovWritePayload[45] = (flags & GOV_FLAG_DYN_MIN_THROTTLE) ? 1 : 0;
 }
 
-// ************************************************************************************************/
-
+// ====================================================
 int GetTotalSoFar()
 {
     int total = 0;
@@ -115,23 +113,18 @@ int GetTotalSoFar()
     return total;
 }
 
-//** ****************************************************************************************************
+// ====================================================
 void Show_Progress()
 {
     if (NeedGlobalsToo)
-    {
-        SendValue((char *)"Progress", GetTotalSoFar() * 100 / 35); // progress value for progress bar
-    }
+        SendValue((char *)"Progress", GetTotalSoFar() * 100 / 35);
 }
-
-// ************************************************************************************************************/
 
 // ====================================================
 // DisplayGovValues()
 // Sends governor values to Nextion numeric fields
 // Called with byte range [n, m) from GovAckPayload[]
 // ====================================================
-
 void DisplayGovValues(uint8_t n, uint8_t m)
 {
     if (CurrentView != RFGOVERNORVIEW)
@@ -147,7 +140,6 @@ void DisplayGovValues(uint8_t n, uint8_t m)
 
         switch (i)
         {
-        // Profile — U16 Headspeed
         case 1:
         {
             uint16_t v = (uint16_t)GovAckPayload[1] | ((uint16_t)GovAckPayload[2] << 8);
@@ -155,9 +147,7 @@ void DisplayGovValues(uint8_t n, uint8_t m)
             break;
         }
         case 2:
-            break; // high byte handled above
-
-        // Profile — single byte fields
+            break; // high byte of Headspeed — handled above
         case 3:
             SendValue((char *)"n1", GovAckPayload[i]);
             break; // Gain
@@ -197,21 +187,16 @@ void DisplayGovValues(uint8_t n, uint8_t m)
         case 15:
             SendValue((char *)"n13", GovAckPayload[i]);
             break; // Collective weight
-
         case 16:
             break; // Flags lo — not displayed directly
         case 17:
             break; // Flags hi — not displayed directly
-
-        // Config — single byte fields
         case 18:
             SendValue((char *)"n14", GovAckPayload[i]);
             break; // Gov mode
         case 19:
             SendValue((char *)"n15", GovAckPayload[i]);
             break; // Handover throttle
-
-        // Config — U16 timing fields (stored as raw integer, label shows ×.1s)
         case 20:
         {
             uint16_t v = (uint16_t)GovAckPayload[20] | ((uint16_t)GovAckPayload[21] << 8);
@@ -220,7 +205,6 @@ void DisplayGovValues(uint8_t n, uint8_t m)
         }
         case 21:
             break;
-
         case 22:
         {
             uint16_t v = (uint16_t)GovAckPayload[22] | ((uint16_t)GovAckPayload[23] << 8);
@@ -229,7 +213,6 @@ void DisplayGovValues(uint8_t n, uint8_t m)
         }
         case 23:
             break;
-
         case 24:
         {
             uint16_t v = (uint16_t)GovAckPayload[24] | ((uint16_t)GovAckPayload[25] << 8);
@@ -238,7 +221,6 @@ void DisplayGovValues(uint8_t n, uint8_t m)
         }
         case 25:
             break;
-
         case 26:
         {
             uint16_t v = (uint16_t)GovAckPayload[26] | ((uint16_t)GovAckPayload[27] << 8);
@@ -247,7 +229,6 @@ void DisplayGovValues(uint8_t n, uint8_t m)
         }
         case 27:
             break;
-
         case 28:
         {
             uint16_t v = (uint16_t)GovAckPayload[28] | ((uint16_t)GovAckPayload[29] << 8);
@@ -256,7 +237,6 @@ void DisplayGovValues(uint8_t n, uint8_t m)
         }
         case 29:
             break;
-
         case 30:
         {
             uint16_t v = (uint16_t)GovAckPayload[30] | ((uint16_t)GovAckPayload[31] << 8);
@@ -265,7 +245,6 @@ void DisplayGovValues(uint8_t n, uint8_t m)
         }
         case 31:
             break;
-
         case 32:
         {
             uint16_t v = (uint16_t)GovAckPayload[32] | ((uint16_t)GovAckPayload[33] << 8);
@@ -274,8 +253,6 @@ void DisplayGovValues(uint8_t n, uint8_t m)
         }
         case 33:
             break;
-
-        // Config — single byte filter/config fields
         case 34:
             SendValue((char *)"n23", GovAckPayload[i]);
             break; // RPM filter
@@ -300,8 +277,6 @@ void DisplayGovValues(uint8_t n, uint8_t m)
         case 41:
             SendValue((char *)"n30", GovAckPayload[i]);
             break; // Auto throttle
-
-        // Flag fields (0 or 1)
         case 42:
             SendValue((char *)"n31", GovAckPayload[i]);
             break; // Volt comp
@@ -314,7 +289,6 @@ void DisplayGovValues(uint8_t n, uint8_t m)
         case 45:
             SendValue((char *)"n34", GovAckPayload[i]);
             break; // Dyn min thr
-
         default:
             break;
         }
@@ -325,8 +299,6 @@ void DisplayGovValues(uint8_t n, uint8_t m)
 void ForegroundColourGOVLabels(uint16_t Colour)
 {
     uint16_t n = GOVERNOR_LABELS_COUNT;
-    // if we're only reading profile values, only colour the first 18 labels,
-    // to avoid colouring the config labels which aren't being updated
     if (!NeedGlobalsToo)
         n = 18;
     for (int i = 0; i < n; ++i)
@@ -346,9 +318,9 @@ void HideGOVMsg()
         if (NeedGlobalsToo)
         {
             Total_Received_GOV_Values = GetTotalSoFar();
-            if (Total_Received_GOV_Values > 18) // if over 18 values received, assume phase 2
+            if (Total_Received_GOV_Values > 18)
             {
-                if (Total_Received_GOV_Values < GOVERNOR_LABELS_COUNT) // if not all values were received, show error message
+                if (Total_Received_GOV_Values < GOVERNOR_LABELS_COUNT)
                 {
                     MsgBox((char *)"page RFGovView", (char *)" Error - try again! ");
                     NeedGlobalsToo = false;
@@ -378,23 +350,20 @@ void ShowGOVMsg(const char *msg, uint16_t Colour)
     }
 }
 
-// ******************************************************************************************************
 // ====================================================
 void ShowGOVBank()
 {
     if (CurrentView == RFGOVERNORVIEW)
     {
         char buf[40];
-
         if (NeedGlobalsToo)
         {
             for (int i = 0; i < GOVERNOR_LABELS_COUNT; ++i)
             {
                 GOV_Items_Received[i] = 0;
-                SendValue(GOV_Labels[i], 0); // clear all numeric fields to 0
+                SendValue(GOV_Labels[i], 0);
             }
         }
-
         strcpy(buf, "Loading governor values ...");
         SendText((char *)"t26", BankNames[BanksInUse[Bank - 1]]);
         BlockBankChanges = true;
@@ -403,6 +372,7 @@ void ShowGOVBank()
         Reading_GOV_Now = true;
         AddParameterstoQueue(SEND_GOV_VALUES);
         GOVS_Were_Edited = false;
+        SendCommand((char *)"vis b3,0"); // hide Save button
         GOV_Start_Time = millis();
     }
 }
@@ -442,15 +412,35 @@ void SendEditedGovValues()
     DelayWithDog(100);
     LoadGovWritePayload(); // read all values from Nextion into GovWritePayload[]
 
+    // *** DEBUG — remove once write-back confirmed correct ***
+    for (uint8_t i = 1; i < 46; i++)
+    {
+        Look1(i);
+        Look1("=");
+        Look(GovWritePayload[i]);
+    }
+    // *** END DEBUG ***
+
     // Queue in reverse order — LIFO executes profile first, then config
     AddParameterstoQueue(SEND_GOV_WRITE_CONFIG3);  // executes 5th
     AddParameterstoQueue(SEND_GOV_WRITE_CONFIG2);  // executes 4th
     AddParameterstoQueue(SEND_GOV_WRITE_CONFIG1);  // executes 3rd
+
+    DelayWithDog(1000);
+
     AddParameterstoQueue(SEND_GOV_WRITE_PROFILE2); // executes 2nd
     AddParameterstoQueue(SEND_GOV_WRITE_PROFILE1); // executes 1st
 
     GOVS_Were_Edited = false;
+    SendCommand((char *)"vis b3,0"); // hide Save button
     PlaySound(BEEPCOMPLETE);
+}
+
+// ====================================================
+void GOVS_Were_edited()
+{
+    SendCommand((char *)"vis b3,1"); // show Save button
+    GOVS_Were_Edited = true;
 }
 
 // ====================================================

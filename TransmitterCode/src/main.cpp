@@ -3231,7 +3231,7 @@ void CheckAllModelIds()
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!  ( Use "NUMBER<<8" )
-#define LASTFUNCTION1 53 // One more than final one
+#define LASTFUNCTION1 54 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])(){
     Blank,                   // 0 Cannot be used
@@ -3286,7 +3286,8 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     End_RF_Backup_Restore,   // 49
     Start_RF_Governor,       // 50
     End_RF_Governor,         // 51
-    Save_RF_Governor         // 52
+    Save_RF_Governor,        // 52
+    GOVS_Were_edited         // 53
 
 };
 
