@@ -1,25 +1,24 @@
-// ******************************************** Rotorflight Governor ******************************************************
-// This module handles the Rotorflight Governor on the Nextion display
+// ******************************************** Rotorflight Governor (Profile) ****************************************
+// This module handles the Rotorflight Governor Profile screen on the Nextion display.
+// Shows 14 profile-specific governor parameters (n0-n13).
+// Global/config parameters are handled separately in GovConfig.h.
 // **********************************************************************************************************
 #ifndef GOVERNOR_H
 #define GOVERNOR_H
-// #define GOVERNOR_LABELS_COUNT 35
-#define GOVERNOR_LABELS_COUNT 18 // Profile fields only, for now
+#define GOVERNOR_LABELS_COUNT 14 // 14 profile fields only (n0-n13)
 #include <Arduino.h>
 #include "1Definitions.h"
 
 uint8_t GOV_Items_Received[GOVERNOR_LABELS_COUNT] = {0};
-uint16_t Total_Received_GOV_Values = 0;
+
 char GOV_Labels[GOVERNOR_LABELS_COUNT][4] = {
-    "n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9",
-    "n10", "n11", "n12", "n13", "n14", "n15", "n16", "n17"};
-//"n18", "n19",
-//   "n20", "n21", "n22", "n23", "n24", "n25", "n26", "n27", "n28", "n29",
-//   "n30", "n31", "n32", "n33", "n34"
+    "n0", "n1", "n2", "n3", "n4", "n5", "n6",
+    "n7", "n8", "n9", "n10", "n11", "n12", "n13"};
 
 // ====================================================
 // LoadGovWritePayload()
-// Reads all governor numeric fields from Nextion into GovWritePayload[]
+// Reads all 14 profile fields from Nextion into GovWritePayload[]
+// Flags (b[16-17]) preserved from last read — not editable on this screen
 // ====================================================
 void LoadGovWritePayload()
 {
@@ -47,27 +46,10 @@ void LoadGovWritePayload()
     GovWritePayload[16] = GovAckPayload[16];
     GovWritePayload[17] = GovAckPayload[17];
 }
-// ====================================================
-// int GetTotalSoFar()
-// {
-//     int total = 0;
-//     for (int i = 0; i < GOVERNOR_LABELS_COUNT; ++i)
-//         total += GOV_Items_Received[i];
-//     if (total == GOVERNOR_LABELS_COUNT)
-//         GOV_Config_Send_Duration = 0; // stop timeout once all items received
-//     return total;
-// }
-
-// ====================================================
-// void Show_Progress()
-// {
-//     if (NeedGlobalsToo)
-//         SendValue((char *)"Progress", GetTotalSoFar() * 100 / 35);
-// }
 
 // ====================================================
 // DisplayGovValues()
-// Sends governor values to Nextion numeric fields
+// Sends profile governor values to Nextion numeric fields n0-n13
 // Called with byte range [n, m) from GovAckPayload[]
 // ====================================================
 void DisplayGovValues(uint8_t n, uint8_t m)
@@ -80,7 +62,7 @@ void DisplayGovValues(uint8_t n, uint8_t m)
         if (i >= GOV_ACK_PAYLOAD_SIZE)
             break;
 
-        GOV_Items_Received[i] = 1;
+        GOV_Items_Received[i < GOVERNOR_LABELS_COUNT ? i : 0] = 1;
 
         switch (i)
         {
@@ -128,111 +110,9 @@ void DisplayGovValues(uint8_t n, uint8_t m)
         case 14:
             SendValue((char *)"n12", GovAckPayload[i]);
             break; // Cyclic weight
-        // case 15:
-        //     SendValue((char *)"n13", GovAckPayload[i]);
-        //     break; // Collective weight
-        // case 16:
-        //     break; // Flags lo — not displayed directly
-        // case 17:
-        //     break; // Flags hi — not displayed directly
-        // case 18:
-        //     SendValue((char *)"n14", GovAckPayload[i]);
-        //     break; // Gov mode
-        // case 19:
-        //     SendValue((char *)"n15", GovAckPayload[i]);
-        //     break; // Handover throttle
-        // case 20:
-        // {
-        //     uint16_t v = (uint16_t)GovAckPayload[20] | ((uint16_t)GovAckPayload[21] << 8);
-        //     SendValue((char *)"n16", v);
-        //     break;
-        // }
-        // case 21:
-        //     break;
-        // case 22:
-        // {
-        //     uint16_t v = (uint16_t)GovAckPayload[22] | ((uint16_t)GovAckPayload[23] << 8);
-        //     SendValue((char *)"n17", v);
-        //     break;
-        // }
-        // case 23:
-        //     break;
-        // case 24:
-        // {
-        //     uint16_t v = (uint16_t)GovAckPayload[24] | ((uint16_t)GovAckPayload[25] << 8);
-        //     SendValue((char *)"n18", v);
-        //     break;
-        // }
-        // case 25:
-        //     break;
-        // case 26:
-        // {
-        //     uint16_t v = (uint16_t)GovAckPayload[26] | ((uint16_t)GovAckPayload[27] << 8);
-        //     SendValue((char *)"n19", v);
-        //     break;
-        // }
-        // case 27:
-        //     break;
-        // case 28:
-        // {
-        //     uint16_t v = (uint16_t)GovAckPayload[28] | ((uint16_t)GovAckPayload[29] << 8);
-        //     SendValue((char *)"n20", v);
-        //     break;
-        // }
-        // case 29:
-        //     break;
-        // case 30:
-        // {
-        //     uint16_t v = (uint16_t)GovAckPayload[30] | ((uint16_t)GovAckPayload[31] << 8);
-        //     SendValue((char *)"n21", v);
-        //     break;
-        // }
-        // case 31:
-        //     break;
-        // case 32:
-        // {
-        //     uint16_t v = (uint16_t)GovAckPayload[32] | ((uint16_t)GovAckPayload[33] << 8);
-        //     SendValue((char *)"n22", v);
-        //     break;
-        // }
-        // case 33:
-        //     break;
-        // case 34:
-        //     SendValue((char *)"n23", GovAckPayload[i]);
-        //     break; // RPM filter
-        // case 35:
-        //     SendValue((char *)"n24", GovAckPayload[i]);
-        //     break; // Pwr filter
-        // case 36:
-        //     SendValue((char *)"n25", GovAckPayload[i]);
-        //     break; // D filter
-        // case 37:
-        //     SendValue((char *)"n26", GovAckPayload[i]);
-        //     break; // FF filter
-        // case 38:
-        //     SendValue((char *)"n27", GovAckPayload[i]);
-        //     break; // TTA filter
-        // case 39:
-        //     SendValue((char *)"n28", GovAckPayload[i]);
-        //     break; // Throttle type
-        // case 40:
-        //     SendValue((char *)"n29", GovAckPayload[i]);
-        //     break; // Idle throttle
-        // case 41:
-        //     SendValue((char *)"n30", GovAckPayload[i]);
-        //     break; // Auto throttle
-        // case 42:
-        //     SendValue((char *)"n31", GovAckPayload[i]);
-        //     break; // Volt comp
-        // case 43:
-        //     SendValue((char *)"n32", GovAckPayload[i]);
-        //     break; // PID spoolup
-        // case 44:
-        //     SendValue((char *)"n33", GovAckPayload[i]);
-        //     break; // Fallback precomp
-        // case 45:
-        //     SendValue((char *)"n34", GovAckPayload[i]);
-        //     break; // Dyn min thr
+        case 15:
+            SendValue((char *)"n13", GovAckPayload[i]);
+            break; // Collective weight
         default:
             break;
         }
@@ -255,24 +135,6 @@ void HideGOVMsg()
         SendCommand((char *)"vis b2,1");
         ForegroundColourGOVLabels(Black);
         BlockBankChanges = false;
-
-        // if (NeedGlobalsToo)
-        // {
-        //     Total_Received_GOV_Values = GetTotalSoFar();
-        //     if (Total_Received_GOV_Values > 18)
-        //     {
-        //         if (Total_Received_GOV_Values < GOVERNOR_LABELS_COUNT)
-        //         {
-        //             MsgBox((char *)"page RFGovView", (char *)" Error - try again! ");
-        //             NeedGlobalsToo = false;
-        //         }
-        //         else
-        //         {
-        //             SendCommand((char *)"vis Progress,0");
-        //             NeedGlobalsToo = false;
-        //         }
-        //     }
-        // }
     }
 }
 
@@ -295,14 +157,25 @@ void ShowGOVBank()
     if (CurrentView == RFGOVERNORVIEW)
     {
         char buf[40];
-        // if (NeedGlobalsToo)
-        //  {
-        //      for (int i = 0; i < GOVERNOR_LABELS_COUNT; ++i)
-        //      {
-        //          GOV_Items_Received[i] = 0;
-        //          SendValue(GOV_Labels[i], 0);
-        //      }
-        //  }
+
+        // Clear all 14 profile fields to 0 before loading fresh values
+        for (int i = 0; i < GOVERNOR_LABELS_COUNT; ++i)
+        {
+            GOV_Items_Received[i] = 0;
+            SendValue(GOV_Labels[i], 0);
+        }
+
+        if (GOVS_PROFILE_Were_Edited)
+        {
+            char NB[10];
+            char Wmsg[120];
+            char w1[] = "Governor values for Bank ";
+            char w2[] = " were edited \r\nbut not saved. (Too late now!)\r\nSo you may want to check them.";
+            strcpy(Wmsg, w1);
+            strcat(Wmsg, Str(NB, PreviousBank, 0));
+            strcat(Wmsg, w2);
+            MsgBox((char *)"page RFGovView", Wmsg); // Warn about unsaved edits
+        }
         strcpy(buf, "Loading governor values ...");
         SendText((char *)"t26", BankNames[BanksInUse[Bank - 1]]);
         BlockBankChanges = true;
@@ -329,8 +202,21 @@ void Start_RF_Governor()
 // ====================================================
 void End_RF_Governor()
 {
-    AddParameterstoQueue(MSP_ENABLE_TELEMETRY);
-    RotorFlightStart();
+    if (GOVS_PROFILE_Were_Edited)
+    {
+        if (GetConfirmation((char *)"page RFGovView", (char *)"Discard edited governor values?"))
+        {
+            GOVS_PROFILE_Were_Edited = false;
+            AddParameterstoQueue(MSP_ENABLE_TELEMETRY);
+            RotorFlightStart();
+        }
+        // if user says No, stay on page
+    }
+    else
+    {
+        AddParameterstoQueue(MSP_ENABLE_TELEMETRY);
+        RotorFlightStart();
+    }
 }
 
 // ====================================================
@@ -348,19 +234,12 @@ void SendEditedGovValues()
 
     PlaySound(BEEPMIDDLE);
     DelayWithDog(100);
-    LoadGovWritePayload(); // read all values from Nextion into GovWritePayload[]
-    
-    // Queue in reverse order — LIFO executes profile first, then config
-    // AddParameterstoQueue(SEND_GOV_WRITE_CONFIG3);  // executes 5th
-    // AddParameterstoQueue(SEND_GOV_WRITE_CONFIG2);  // executes 4th
-    // AddParameterstoQueue(SEND_GOV_WRITE_CONFIG1);  // executes 3rd
-    // DelayWithDog(1000);
+    LoadGovWritePayload(); // read all 14 profile fields from Nextion
 
+    // Queue in reverse order — LIFO executes PROFILE1 first, PROFILE2 second
     AddParameterstoQueue(SEND_GOV_WRITE_PROFILE2); // executes 2nd
     AddParameterstoQueue(SEND_GOV_WRITE_PROFILE1); // executes 1st
 
-
-  
     GOVS_PROFILE_Were_Edited = false;
     SendCommand((char *)"vis b3,0"); // hide Save button
     PlaySound(BEEPCOMPLETE);

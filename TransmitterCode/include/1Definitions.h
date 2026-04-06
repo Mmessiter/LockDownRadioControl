@@ -35,7 +35,7 @@
 //**************************************************************************************
 
 // #define DB_NEXTION        // Debug NEXTION
-// #define DB_SD             // Debug SD card data
+ #define DB_SD             // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
