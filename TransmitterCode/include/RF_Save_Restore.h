@@ -10,7 +10,13 @@
 #define DO_PIDS_ADVANCED 2
 #define DO_RATES 4
 #define DO_RATES_ADVANCED 8
+#define DO_GOV_PROFILES 16
+#define GOV_PROFILE_PAYLOAD_SIZE 17
+
 // ************************************************************************************************************/
+
+
+uint8_t Saved_GOV_Profiles_Values[GOV_PROFILE_PAYLOAD_SIZE][4];
 
 uint16_t Which_Case_Now = 0;   // Which case we are up to in the state machine
 uint16_t ProgressSoFar = 0;    // progress bar value
@@ -30,6 +36,8 @@ uint8_t CountSelectedParams(uint8_t mask)
     if (mask & DO_RATES)
         n++;
     if (mask & DO_RATES_ADVANCED)
+        n++;
+    if (mask & DO_GOV_PROFILES)
         n++;
     return n;
 }
@@ -120,7 +128,7 @@ void Restore_SOME_RF_Parameters()
         SendText(t2, msg);
         for (int i = 0; i < MAX_RATES_BYTES; ++i)
             Rate_Values[i] = Saved_Rate_Values[i][LocalBank - 1];
-        Wait_for_Advanced_Rates_to_Be_Sent_Too = true;         // this flag tells the Ack payload parser to wait until these have been sent before allowing bank changes again because rates changes can cause problems if a bank change happens while they are being sent
+        Wait_for_Advanced_Rates_to_Be_Sent_Too = true;   // this flag tells the Ack payload parser to wait until these have been sent before allowing bank changes again because rates changes can cause problems if a bank change happens while they are being sent
         AddParameterstoQueue(GET_SECOND_6_RATES_VALUES); // SECOND MUST BE QUEUED FIRST!!! Send RATES from TX to RX
         AddParameterstoQueue(GET_FIRST_7_RATES_VALUES);  // SECOND MUST BE QUEUED FIRST!!! Send RATES from TX to RX
         ProgressSoFar += OneProgressItem;                // update progress bar
@@ -155,6 +163,8 @@ void Restore_SOME_RF_Parameters()
         LTimer = millis();
         break;
 
+
+
     case 150:
         if ((millis() - LTimer) >= MSP_WAIT_TIME) // wait to allow RATES ADVANCED to be sent
         {
@@ -173,7 +183,7 @@ void Restore_SOME_RF_Parameters()
         break;
     case 400:
         SendText(t2, (char *)"Success!");
-        CurrentMode = NORMAL;               // no further calls will come here
+        CurrentMode = NORMAL; // no further calls will come here
         PlaySound(BEEPCOMPLETE);
         SendCommand((char *)"vis Progress,0"); // hide progress bar
         SendCommand((char *)"vis t2,0");       // hide please wait text
@@ -327,13 +337,13 @@ void Save_SOME_RF_Parameters()
         break;
     case 200:
         if (!Reading_RATES_Advanced_Now) // wait until Advanced RATES have been read
-            Which_Case_Now = 400;         // move to next stage when Advanced RATES have been read
+            Which_Case_Now = 400;        // move to next stage when Advanced RATES have been read
         break;
 
     case 400:
         SendText(t2, (char *)"Success!");
-        CurrentMode = NORMAL;               // no further calls will come here
-        SaveOneModel(ModelNumber);          // save all to SD card
+        CurrentMode = NORMAL;      // no further calls will come here
+        SaveOneModel(ModelNumber); // save all to SD card
         PlaySound(BEEPCOMPLETE);
         SendCommand((char *)"vis Progress,0"); // hide progress bar
         SendCommand((char *)"vis t2,0");       // hide please wait text
@@ -430,13 +440,13 @@ void Cancel_RESTORE()
     Cancel_SAVE();
 }
 // ************************************************************************************************************/
-void Start_RF_Backup_Restore(){
+void Start_RF_Backup_Restore()
+{
     SendCommand((char *)"page RFBackUpView");
     CurrentView = RFBACKUP_RESTOREVIEW;
     ShowRFBank();
     ShowRFRate();
-    SendText((char *)"t11", ModelName);          // Show model name
-
+    SendText((char *)"t11", ModelName); // Show model name
 }
 // ************************************************************************************************************/
 void End_RF_Backup_Restore()

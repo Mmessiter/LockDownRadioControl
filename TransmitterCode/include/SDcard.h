@@ -184,10 +184,7 @@ bool ReadOneModel(uint32_t Mnum)
         ModelName[j] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
-    // Look1(Counter);
-    // Look1(" ");
-    // Look(ModelName);
-    // ++Counter;
+    
 
     for (i = 0; i < CHANNELSUSED; ++i)
     {

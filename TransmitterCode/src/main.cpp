@@ -4154,6 +4154,8 @@ FASTRUN void ButtonWasPressed()
                 LoadModelSelector();
             }
             ClearText();
+           // Look1("Importing model file: "); //here import.
+           // Look(SingleModelFile);
             return;
         }
 

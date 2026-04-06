@@ -35,7 +35,7 @@
 //**************************************************************************************
 
 // #define DB_NEXTION        // Debug NEXTION
- #define DB_SD             // Debug SD card data
+#define DB_SD // Debug SD card data
 // #define DB_CHECKSUM       // Debug 32BIT file checksum info
 // #define DB_FHSS           // Debug real time FHSS data
 // #define DB_SENSORS        // Debug Sensors
@@ -95,7 +95,7 @@
 #define POWERONOFFDELAY 1000                  // Delay after power OFF before transmit stops.
 #define POWERONOFFDELAY2 4000                 // Delay after power ON before Off is possible....
 #define MSP_WAIT_TIME 1000                    // Time to allow for reading MSP data from RX and FC
-#define GOV_1_WAIT_TIME 1000                  // first phase of GOV value reading
+#define GOV_1_WAIT_TIME 750                  // first phase of GOV value reading
 #define GOV_2_WAIT_TIME 4000                  // second phase of GOV value reading
 #define GOV_MSP_PAUSE_TIME 1500               // pause between phase 1 and phase 2 of GOV value reading - to give RX a chance to
 
@@ -471,7 +471,7 @@
 //***************************************************************************
 
 #define TXSIZE 512            // SD space reserved for transmitter (WAS  250)
-#define MODELSIZE 2048        // SD space reserved for each model (WAS 1600)
+#define MODELSIZE 1024 * 3    // SD space reserved for each model (2k)
 #define MAXFILELEN (1024 * 3) // 3?? MAX SIZE FOR HELP AND LOG FILES
 #define MAXBACKUPFILES 95
 
@@ -1551,6 +1551,7 @@ uint16_t Saved_PID_Values[MAX_PID_WORDS + 5][4];
 uint8_t Saved_Rate_Values[MAX_RATES_BYTES][4];
 uint8_t Saved_Rate_Advanced_Values[MAX_RATES_ADVANCED_BYTES][4];
 uint8_t Saved_PID_Advanced_Values[MAX_PIDS_ADVANCED_BYTES][4];
+
 
 uint16_t PID_Send_Duration = 0;
 uint16_t PID_Advanced_Send_Duration = 0;
