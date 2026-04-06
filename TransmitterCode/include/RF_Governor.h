@@ -16,6 +16,51 @@ char GOV_Labels[GOVERNOR_LABELS_COUNT][4] = {
     "n7", "n8", "n9", "n10", "n11", "n12", "n13"};
 
 // ====================================================
+// ShowLocalGovBank()
+// Shows saved governor profile values from SD card when not connected
+// ====================================================
+void ShowLocalGovBank()
+{
+    for (int i = 0; i < GOVERNOR_LABELS_COUNT; ++i)
+    {
+        uint16_t v;
+        switch (i)
+        {
+        case 0: // Headspeed U16
+            v = (uint16_t)Saved_GOV_Profiles_Values[1][Bank - 1] |
+                ((uint16_t)Saved_GOV_Profiles_Values[2][Bank - 1] << 8);
+            SendValue(GOV_Labels[0], v);
+            break;
+        default: // single byte fields — payload index is i+2 (bytes 3-15 → labels 1-13)
+            SendValue(GOV_Labels[i], Saved_GOV_Profiles_Values[i + 2][Bank - 1]);
+            break;
+        }
+    }
+    HideGOVMsg();
+    BlockBankChanges = false;
+}
+
+// ====================================================
+// SaveToLocalGovBank()
+// Saves edited governor profile values to SD card when not connected
+// ====================================================
+void SaveToLocalGovBank()
+{
+    ShowGOVMsg((char *)"Saving governor values ...", Gray);
+    LoadGovWritePayload(); // read from Nextion into GovWritePayload[]
+
+    // Copy into saved array for current bank
+    for (int i = 0; i < GOV_PROFILE_PAYLOAD_SIZE; ++i)
+        Saved_GOV_Profiles_Values[i][Bank - 1] = GovWritePayload[i];
+
+    SaveOneModel(ModelNumber);       // save to SD card
+    SendCommand((char *)"vis b3,0"); // hide Save button
+    HideGOVMsg();
+    GOVS_PROFILE_Were_Edited = false;
+    PlaySound(BEEPCOMPLETE);
+}
+
+// ====================================================
 // LoadGovWritePayload()
 // Reads all 14 profile fields from Nextion into GovWritePayload[]
 // Flags (b[16-17]) preserved from last read — not editable on this screen
@@ -42,9 +87,9 @@ void LoadGovWritePayload()
     GovWritePayload[14] = (uint8_t)GetValue((char *)"n12"); // Cyclic weight
     GovWritePayload[15] = (uint8_t)GetValue((char *)"n13"); // Collective weight
 
-    // Flags — preserve existing values from last read, not editable on this screen
-    GovWritePayload[16] = GovAckPayload[16];
-    GovWritePayload[17] = GovAckPayload[17];
+    // Flags — preserve existing values. Use saved values if not connected, GovAckPayload if connected
+    GovWritePayload[16] = LedWasGreen ? GovAckPayload[16] : Saved_GOV_Profiles_Values[16][Bank - 1];
+    GovWritePayload[17] = LedWasGreen ? GovAckPayload[17] : Saved_GOV_Profiles_Values[17][Bank - 1];
 }
 
 // ====================================================
@@ -174,10 +219,21 @@ void ShowGOVBank()
             strcpy(Wmsg, w1);
             strcat(Wmsg, Str(NB, PreviousBank, 0));
             strcat(Wmsg, w2);
-            MsgBox((char *)"page RFGovView", Wmsg); // Warn about unsaved edits
+            MsgBox((char *)"page RFGovView", Wmsg);
         }
+
         strcpy(buf, "Loading governor values ...");
         SendText((char *)"t26", BankNames[BanksInUse[Bank - 1]]);
+
+        if (!LedWasGreen)
+        {
+            // Not connected — show locally saved values from SD card
+            ShowGOVMsg(buf, Gray);
+            GOVS_PROFILE_Were_Edited = false; // reset before showing local values
+            ShowLocalGovBank();
+            return;
+        }
+
         BlockBankChanges = true;
         ShowGOVMsg(buf, Gray);
         GOV_Send_Duration = GOV_1_WAIT_TIME;
@@ -223,7 +279,11 @@ void End_RF_Governor()
 void SendEditedGovValues()
 {
     if (!LedWasGreen)
+    {
+        // Not connected — save to local SD card instead
+        SaveToLocalGovBank();
         return;
+    }
 
     if (SendBuffer[ArmingChannel - 1] > 1000)
     {

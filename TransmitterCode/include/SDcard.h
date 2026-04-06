@@ -462,9 +462,19 @@ bool ReadOneModel(uint32_t Mnum)
     }
     LinkRatesToBanks = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
+
     RotorFlight_V = SDRead8BITS(SDCardAddress);
-   // Look(RotorFlight_V);
+    // Look(RotorFlight_V);
     ++SDCardAddress;
+
+    // Governor profile saved values — 17 bytes x 4 banks = 68 bytes
+    for (j = 0; j < 4; ++j)
+        for (i = 0; i < GOV_PROFILE_PAYLOAD_SIZE; ++i)
+        {
+            Saved_GOV_Profiles_Values[i][j] = SDRead8BITS(SDCardAddress);
+            ++SDCardAddress;
+        }
+
     CheckOutPutChannels();
     CheckServoType();
     // **************************************
@@ -1347,7 +1357,17 @@ void SaveOneModel(uint32_t mnum)
     SDUpdate8BITS(SDCardAddress, RotorFlight_V);
     ++SDCardAddress;
 
-    SaveCheckSum32(); // Save the Model parametres checksm
+    // Governor profile saved values — 17 bytes x 4 banks = 68 bytes
+    for (uint32_t jj = 0; jj < 4; ++jj)
+        for (uint32_t ii = 0; ii < GOV_PROFILE_PAYLOAD_SIZE; ++ii)
+        {
+            SDUpdate8BITS(SDCardAddress, Saved_GOV_Profiles_Values[ii][jj]);
+            ++SDCardAddress;
+        }
+
+    SaveCheckSum32(); // Save the Model parametres checksum
+
+        SaveCheckSum32(); // Save the Model parametres checksm
 
     // ********************** Add more
 

@@ -11,12 +11,9 @@
 #define DO_RATES 4
 #define DO_RATES_ADVANCED 8
 #define DO_GOV_PROFILES 16
-#define GOV_PROFILE_PAYLOAD_SIZE 17
+
 
 // ************************************************************************************************************/
-
-
-uint8_t Saved_GOV_Profiles_Values[GOV_PROFILE_PAYLOAD_SIZE][4];
 
 uint16_t Which_Case_Now = 0;   // Which case we are up to in the state machine
 uint16_t ProgressSoFar = 0;    // progress bar value
@@ -143,7 +140,7 @@ void Restore_SOME_RF_Parameters()
     case 6:
         if (!(Which_Params & (DO_RATES || DO_RATES_ADVANCED))) /// RATES ADVANCED. ****************************************************************************************************
         {
-            Which_Case_Now = 150; // skip to next if not doing RATES ADVANCED
+            Which_Case_Now = 7; // skip to next if not doing RATES ADVANCED
             break;
         }
         strcpy(msg, "Restoring Rates Advanced: LocalRates ");
@@ -159,14 +156,37 @@ void Restore_SOME_RF_Parameters()
         AddParameterstoQueue(GET_RATES_ADVANCED_VALUES_FIRST_7);  // Send RATES ADVANCED values from TX to RX ...because this queue is a LIFO stack
         ProgressSoFar += OneProgressItem;                         // update progress bar
         SendValue((char *)"Progress", ProgressSoFar);             // update progress bar
+        Which_Case_Now = 7;
+        LTimer = millis();
+        break;
+
+    case 7:                                      // *** GOV PROFILE RESTORE ***
+        if ((millis() - LTimer) < MSP_WAIT_TIME) // wait for rates advanced to finish
+            break;
+        if (!(Which_Params & DO_GOV_PROFILES))
+        {
+            Which_Case_Now = 150; // skip to next if not doing Gov Profile
+            break;
+        }
+        strcpy(msg, "Restoring Gov Profile: LocalBank ");
+        strcat(msg, NB1);
+        strcat(msg, " to FC Bank ");
+        strcat(msg, NB);
+        SendText(t2, msg);
+        // Copy saved values into GovWritePayload
+        for (int i = 0; i < GOV_PROFILE_PAYLOAD_SIZE; ++i)
+            GovWritePayload[i] = Saved_GOV_Profiles_Values[i][LocalBank - 1];
+        // Send in reverse order — LIFO
+        AddParameterstoQueue(SEND_GOV_WRITE_PROFILE2); // executes 2nd
+        AddParameterstoQueue(SEND_GOV_WRITE_PROFILE1); // executes 1st
+        ProgressSoFar += OneProgressItem;
+        SendValue((char *)"Progress", ProgressSoFar);
         Which_Case_Now = 150;
         LTimer = millis();
         break;
 
-
-
     case 150:
-        if ((millis() - LTimer) >= MSP_WAIT_TIME) // wait to allow RATES ADVANCED to be sent
+        if ((millis() - LTimer) >= MSP_WAIT_TIME) // wait to allow GOV PROFILE to be sent
         {
             LTimer = millis();
             Which_Case_Now = 200;
@@ -247,7 +267,7 @@ void Save_SOME_RF_Parameters()
         ProgressSoFar += OneProgressItem;             // update progress bar
         SendValue((char *)"Progress", ProgressSoFar); // update progress bar
         break;                                        //--
-    case 3:                                           // advced PIDs
+    case 3:                                           // advanced PIDs
         if (!(Which_Params & DO_PIDS_ADVANCED))
         {
             Which_Case_Now = 6; // skip to next if not doing Advanced PIDs
@@ -306,7 +326,7 @@ void Save_SOME_RF_Parameters()
     case 9:                                           // advanced RATES
         if (!(Which_Params & DO_RATES_ADVANCED))
         {
-            Which_Case_Now = 200; // skip to next if not doing Advanced RATES
+            Which_Case_Now = 12; // skip Gov Profile check
             break;
         }
         strcpy(msg, "Saving Advanced Rates: FC Rates ");
@@ -333,11 +353,45 @@ void Save_SOME_RF_Parameters()
         SendValue((char *)"Progress", 100);           // update progress bar
         Reading_RATES_Advanced_Now = true;            // This tells the Ack payload parser to get RATES Advanced values .... extra sec
         RATES_Advanced_Start_Time = millis();         // record start time as it's not long
-        Which_Case_Now = 200;                         // move to next bank
+        Which_Case_Now = 12;                          // move to Gov Profile
         break;
-    case 200:
+
+    case 12:                             // *** GOV PROFILE SAVE — request from FC ***
         if (!Reading_RATES_Advanced_Now) // wait until Advanced RATES have been read
-            Which_Case_Now = 400;        // move to next stage when Advanced RATES have been read
+        {
+            if (!(Which_Params & DO_GOV_PROFILES))
+            {
+                Which_Case_Now = 200; // skip if not doing Gov Profile
+                break;
+            }
+            strcpy(msg, "Saving Gov Profile: FC Bank ");
+            strcat(msg, NB);
+            strcat(msg, " to LocalBank ");
+            strcat(msg, NB1);
+            SendText(t2, msg);
+            // Request governor profile values fresh from FC
+            GOV_Send_Duration = MSP_WAIT_TIME;
+            Reading_GOV_Now = true;
+            AddParameterstoQueue(SEND_GOV_VALUES);
+            GOV_Start_Time = millis();
+            Which_Case_Now = 13;
+        }
+        break;
+
+    case 13:                  // wait until GOV profile has been read from FC
+        if (!Reading_GOV_Now) // cleared when phase 1 completes
+        {
+            // Save received values into local saved array
+            for (int i = 0; i < GOV_PROFILE_PAYLOAD_SIZE; ++i)
+                Saved_GOV_Profiles_Values[i][LocalBank - 1] = GovAckPayload[i];
+            ProgressSoFar += OneProgressItem;
+            SendValue((char *)"Progress", ProgressSoFar);
+            Which_Case_Now = 200;
+        }
+        break;
+
+    case 200:
+        Which_Case_Now = 400; // move to next stage
         break;
 
     case 400:
@@ -367,6 +421,8 @@ void Collect_data_from_dialog() // and close it
         Which_Params |= DO_RATES;
     if (GetValue((char *)"sw3"))
         Which_Params |= DO_RATES_ADVANCED;
+    if (GetValue((char *)"sw4"))
+        Which_Params |= DO_GOV_PROFILES;
     SelectedItemCount = CountSelectedParams(Which_Params);
     if (SelectedItemCount > 0)
         OneProgressItem = 99 / SelectedItemCount;
