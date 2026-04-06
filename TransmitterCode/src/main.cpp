@@ -3287,7 +3287,7 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     Start_RF_Governor,       // 50
     End_RF_Governor,         // 51
     Save_RF_Governor,        // 52
-    GOVS_Were_edited         // 53
+    GOVS_P_Were_Edited       // 53
 
 };
 

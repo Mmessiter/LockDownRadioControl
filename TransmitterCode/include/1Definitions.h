@@ -95,9 +95,9 @@
 #define POWERONOFFDELAY 1000                  // Delay after power OFF before transmit stops.
 #define POWERONOFFDELAY2 4000                 // Delay after power ON before Off is possible....
 #define MSP_WAIT_TIME 1000                    // Time to allow for reading MSP data from RX and FC
-#define GOV_1_WAIT_TIME 1000                  // first phase of GOV value reading 
+#define GOV_1_WAIT_TIME 1000                  // first phase of GOV value reading
 #define GOV_2_WAIT_TIME 4000                  // second phase of GOV value reading
-#define GOV_MSP_PAUSE_TIME 1500               // pause between phase 1 and phase 2 of GOV value reading - to give RX a chance to 
+#define GOV_MSP_PAUSE_TIME 1500               // pause between phase 1 and phase 2 of GOV value reading - to give RX a chance to
 
 // **************************************************************************
 //                            FHSS BITS                                     *
@@ -1471,7 +1471,7 @@ char ESC_Temperature[10];
 char MAX_ESC_Temperature[10];
 char PID_Labels[17][4] = {"n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", "n9", "n10", "n11", "n12", "n13", "n14", "n15", "n16"};
 bool PIDS_Were_Edited = false;
-bool GOVS_Were_Edited = false;
+bool GOVS_PROFILE_Were_Edited = false;
 bool PIDS_Advanced_Were_Edited = false;
 bool Rates_Were_Edited = false;
 bool Rates_Advanced_Were_Edited = false;
@@ -1494,9 +1494,6 @@ char SearchFile[80]; // used for searching files on SD card after adding path to
 char RatesWindows[MAX_RATES_BYTES][5] = {"t10", "tn0", "tn1", "tn2", "tn3", "tn4", "tn5", "tn6", "tn7", "tn8", "tn9", "tn10", "tn11"};
 bool LinkRatesToBanks = false;
 
-bool NeedGlobalsToo = false; // This is set to true when we need to read the global settings as well as the profile settings, 
-//because these are on different MSP pages and we want to read them both in one go if possible. It is cleared after use.
-
 // **********************************************************************************************************************************
 // **********************************  Area & namespace for FHSS data ************************************************************
 // **********************************************************************************************************************************
@@ -1513,8 +1510,7 @@ namespace FHSS_data
     uint8_t *FHSSRecoveryPointer = Used_Recovery_Channels;
     uint8_t *FHSSChPointer = FHSS_Channels; // pointer for channels array
     uint8_t NextChannelNumber = 0;
-    uint8_t PaceMaker = PACEMAKER;   // now signed variables are used
-   
+    uint8_t PaceMaker = PACEMAKER; // now signed variables are used
 
 } // namespace FHSS_data
 
@@ -1567,8 +1563,6 @@ uint32_t GOV_Start_Time = 0;
 uint32_t GOV_Config_Start_Time = 0;
 uint16_t GOV_Send_Duration = 0;
 uint16_t GOV_Config_Send_Duration = 0;
-
-
 
 uint32_t PID_Advanced_Start_Time = 0;
 uint32_t RATES_Advanced_Start_Time = 0;
