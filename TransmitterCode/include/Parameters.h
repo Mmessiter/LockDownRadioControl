@@ -157,15 +157,15 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
     case MSP_BANK_CHANGE: // 22 = I'm sending the current bank number to the RX (TX->RX)
         Parameters.word[1] = 1;
         Parameters.word[2] = Bank; // 0 to 3 new bank number
+      //  Look1("Sent MSP_BANK_CHANGE with value: ");
+      //  Look(Bank);
         break;
     case MSP_RATES_CHANGE: // 23 = I'm sending the current rates number to the RX (TX->RX)
         Parameters.word[1] = 1;
         Parameters.word[2] = DualRateInUse | 0x80; // 0 to 3 new rates number RATES = BANK | 128 for now....
+      //  Look1("Sent MSP_RATES_CHANGE with value: ");
+      //  Look(Parameters.word[2]);  
         break;
-        // case MSP_BANK_CHANGE_CONFIRMATION:      // 24 = I'm confirming that the bank change was successful (TX->RX)
-        //     Parameters.word[1] = DualRateInUse; // might be used later for rates change confirmation
-        //     Parameters.word[2] = Bank;          // 0 to 3 new bank number
-        //     break;
     case MSP_INHIBIT_TELEMETRY:   // 25 = Inhibit telemetry for a short time to allow MSP data to be exchanged without interference from telemetry data (TX->RX)
         Parameters.word[1] = 123; // this is just a flag to say "inhibit telemetry now"
         break;

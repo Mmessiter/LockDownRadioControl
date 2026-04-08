@@ -220,7 +220,7 @@ uint8_t Saved_GOV_Profiles_Values[GOV_PROFILE_PAYLOAD_SIZE][4];
 #define GET_THIRD_8_ADVANCED_PID_VALUES 21    // Command to update third 8 Advanced PID values to RX ... 26 total
 #define MSP_BANK_CHANGE 22                    // Command to send current bank number to RX (for MSP Bank change)
 #define MSP_RATES_CHANGE 23                   // Command to send current rates number to RX (for MSP Rates change)
-#define MSP_BANK_CHANGE_CONFIRMATION 24       // Confirmation from RX that bank change was successful (for MSP Bank change confirmation) NOT YET USED
+//#define MSP_BANK_CHANGE_CONFIRMATION 24       // NOT USED NOW. Confirmation from RX that bank change was successful (for MSP Bank change confirmation) NOT YET USED
 #define MSP_INHIBIT_TELEMETRY 25              // Inhibit telemetry for a short time to allow MSP data to be sent without interference from telemetry data (for MSP data transmission)
 #define MSP_ENABLE_TELEMETRY 26               // ENABLE telemetry after MSP data has been sent (for MSP data transmission)
 #define SEND_GOV_VALUES 27                    // Command to request RFGOVERNOR values from RX

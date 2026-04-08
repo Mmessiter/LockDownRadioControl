@@ -4154,8 +4154,8 @@ FASTRUN void ButtonWasPressed()
                 LoadModelSelector();
             }
             ClearText();
-           // Look1("Importing model file: "); //here import.
-           // Look(SingleModelFile);
+            // Look1("Importing model file: "); //here import.
+            // Look(SingleModelFile);
             return;
         }
 
@@ -4631,7 +4631,10 @@ void GetBank() // ... and the other three switches
     if (SafetyON)
         MotorEnabled = false;
     if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill))
+    {
         MotorEnabledHasChanged();
+        PreviousBank = 254;// Force bank change to make sure it redisplays
+    }
     ReadChannelSwitches9to12();
     if (Bank != PreviousBank) /// BANK HAS CHANGED ******************************************************************
         BankHasChanged();
