@@ -9,8 +9,6 @@
 #include <Arduino.h>
 #include "1Definitions.h"
 
-uint8_t GOV_Items_Received[GOVERNOR_LABELS_COUNT] = {0};
-
 char GOV_Labels[GOVERNOR_LABELS_COUNT][4] = {
     "n0", "n1", "n2", "n3", "n4", "n5", "n6",
     "n7", "n8", "n9", "n10", "n11", "n12", "n13"};
@@ -106,8 +104,6 @@ void DisplayGovValues(uint8_t n, uint8_t m)
     {
         if (i >= GOV_ACK_PAYLOAD_SIZE)
             break;
-
-        GOV_Items_Received[i < GOVERNOR_LABELS_COUNT ? i : 0] = 1;
 
         switch (i)
         {
@@ -205,10 +201,7 @@ void ShowGOVBank()
 
         // Clear all 14 profile fields to 0 before loading fresh values
         for (int i = 0; i < GOVERNOR_LABELS_COUNT; ++i)
-        {
-            GOV_Items_Received[i] = 0;
             SendValue(GOV_Labels[i], 0);
-        }
 
         if (GOVS_PROFILE_Were_Edited)
         {
