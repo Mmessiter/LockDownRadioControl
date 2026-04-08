@@ -300,6 +300,7 @@ inline bool Parse_MSP_Governor_Profile(const uint8_t *data, uint8_t n);
 inline void WriteGovernorConfigToNexusAndSave();
 inline void UnpackGovernorFromTxPayload(const uint8_t *src);
 inline void WriteGovernorProfileToNexusAndSave();
+inline void RestartRotorflight();
 
 /************************************************************************************************************/
 // For numeric types (int, float, double, etc.)

@@ -23,6 +23,7 @@
 #define MSP_SET_GOVERNOR_CONFIG 143  // write global governor settings
 #define MSP_GOVERNOR_PROFILE 148     // read  per-profile governor tuning
 #define MSP_SET_GOVERNOR_PROFILE 149 // write per-profile governor tuning
+#define MSP_REBOOT 68
 
 // Send states
 #define SEND_NO_RF 0
@@ -856,7 +857,7 @@ static uint16_t Gov_Flags = 0;
 inline void PackGovernorForAckPayload()
 {
     uint8_t *b = GovAckPayload;
-  
+
     for (uint8_t i = 46; i < GOV_ACK_PAYLOAD_SIZE; i++)
         b[i] = 0;
 
@@ -906,7 +907,6 @@ inline void PackGovernorForAckPayload()
     b[43] = (Gov_Flags & GOV_FLAG_PID_SPOOLUP) ? 1 : 0;
     b[44] = (Gov_Flags & GOV_FLAG_FALLBACK_PRECOMP) ? 1 : 0;
     b[45] = (Gov_Flags & GOV_FLAG_DYN_MIN_THROTTLE) ? 1 : 0;
- 
 }
 
 // ====================================================
@@ -958,7 +958,6 @@ inline bool Parse_MSP_Governor_Config(const uint8_t *data, uint8_t n)
     Gov_Auto_Throttle = p[o++];
     for (uint8_t i = 0; i < 9; i++)
         Gov_Bypass_Curve[i] = p[o++];
-
     PackGovernorForAckPayload();
     return true;
 }
@@ -1045,18 +1044,39 @@ inline void WriteGovernorConfigToNexusAndSave()
     if (o != GOV_CONFIG_PAYLOAD_SIZE)
         return;
     delay(20);
+    
     This_MSP_Uart->flush();
     SendToMSP(MSP_SET_GOVERNOR_CONFIG, payload, GOV_CONFIG_PAYLOAD_SIZE);
-    This_MSP_Uart->flush();
+   This_MSP_Uart->flush();
     if (!WaitForMspAck(MSP_SET_GOVERNOR_CONFIG, 300))
         return;
     delay(50);
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
-    This_MSP_Uart->flush();
+   This_MSP_Uart->flush();
     if (!WaitForMspAck(MSP_EEPROM_WRITE, 1500))
         return;
+
+    delay(300);
+    RestartRotorflight();
+    Look("Gov Config Written!!");
+
     lastWriteTime = millis();
 }
+// ====================================================
+// RestartRotorflight()
+// Sends MSP reboot command (cmd 68) to the FC.
+// No ACK expected — FC reboots immediately.
+// Allow ~3 seconds for FC to restart before sending MSP again.
+// ====================================================
+inline void RestartRotorflight()
+{
+    if (!Rotorflight_Version)
+        return;
+    delay(100); // let any pending UART data clear
+    SendToMSP(MSP_REBOOT, nullptr, 0);
+    This_MSP_Uart->flush();
+}
+
 
 // ====================================================
 inline void WriteGovernorProfileToNexusAndSave()
@@ -1089,17 +1109,24 @@ inline void WriteGovernorProfileToNexusAndSave()
     if (o != GOV_PROFILE_PAYLOAD_SIZE)
         return;
     delay(20);
-    This_MSP_Uart->flush();
+     This_MSP_Uart->flush();
     SendToMSP(MSP_SET_GOVERNOR_PROFILE, payload, GOV_PROFILE_PAYLOAD_SIZE);
-    This_MSP_Uart->flush();
-    if (!WaitForMspAck(MSP_SET_GOVERNOR_PROFILE, 300))
+       This_MSP_Uart->flush();
+    if (!WaitForMspAck(MSP_SET_GOVERNOR_PROFILE, 500))
+    {
+        Look("Gov Profile Write Failed 1");
         return;
+    }
     delay(50);
     SendToMSP(MSP_EEPROM_WRITE, nullptr, 0);
-    This_MSP_Uart->flush();
-    if (!WaitForMspAck(MSP_EEPROM_WRITE, 1500))
+     This_MSP_Uart->flush();
+    if (!WaitForMspAck(MSP_EEPROM_WRITE, 1000))
+    {
+        Look("Gov Profile Write Failed 2");
         return;
+    }
     lastWriteTime = millis();
+   
 }
 
 // ====================================================
@@ -1120,32 +1147,32 @@ inline void UnpackGovernorFromTxPayload(const uint8_t *src)
     Gov_Cyclic_Weight = src[14];
     Gov_Collective_Weight = src[15];
     Gov_Flags = (uint16_t)src[16] | ((uint16_t)src[17] << 8);
-    Gov_Mode = src[18];
-    Gov_Handover_Throttle = src[19];
-    Gov_Startup_Time = (uint16_t)src[20] | ((uint16_t)src[21] << 8);
-    Gov_Spoolup_Time = (uint16_t)src[22] | ((uint16_t)src[23] << 8);
-    Gov_Spooldown_Time = (uint16_t)src[24] | ((uint16_t)src[25] << 8);
-    Gov_Tracking_Time = (uint16_t)src[26] | ((uint16_t)src[27] << 8);
-    Gov_Recovery_Time = (uint16_t)src[28] | ((uint16_t)src[29] << 8);
-    Gov_Throttle_Hold_Timeout = (uint16_t)src[30] | ((uint16_t)src[31] << 8);
-    Gov_Autorotation_Timeout = (uint16_t)src[32] | ((uint16_t)src[33] << 8);
-    Gov_Rpm_Filter = src[34];
-    Gov_Pwr_Filter = src[35];
-    Gov_D_Filter = src[36];
-    Gov_Ff_Filter = src[37];
-    Gov_Tta_Filter = src[38];
-    Gov_Throttle_Type = src[39];
-    Gov_Idle_Throttle = src[40];
-    Gov_Auto_Throttle = src[41];
-    Gov_Flags &= ~(GOV_FLAG_VOLTAGE_COMP | GOV_FLAG_PID_SPOOLUP | GOV_FLAG_FALLBACK_PRECOMP | GOV_FLAG_DYN_MIN_THROTTLE);
-    if (src[42])
-        Gov_Flags |= GOV_FLAG_VOLTAGE_COMP;
-    if (src[43])
-        Gov_Flags |= GOV_FLAG_PID_SPOOLUP;
-    if (src[44])
-        Gov_Flags |= GOV_FLAG_FALLBACK_PRECOMP;
-    if (src[45])
-        Gov_Flags |= GOV_FLAG_DYN_MIN_THROTTLE;
+    // Gov_Mode = src[18];
+    // Gov_Handover_Throttle = src[19];
+    // Gov_Startup_Time = (uint16_t)src[20] | ((uint16_t)src[21] << 8);
+    // Gov_Spoolup_Time = (uint16_t)src[22] | ((uint16_t)src[23] << 8);
+    // Gov_Spooldown_Time = (uint16_t)src[24] | ((uint16_t)src[25] << 8);
+    // Gov_Tracking_Time = (uint16_t)src[26] | ((uint16_t)src[27] << 8);
+    // Gov_Recovery_Time = (uint16_t)src[28] | ((uint16_t)src[29] << 8);
+    // Gov_Throttle_Hold_Timeout = (uint16_t)src[30] | ((uint16_t)src[31] << 8);
+    // Gov_Autorotation_Timeout = (uint16_t)src[32] | ((uint16_t)src[33] << 8);
+    // Gov_Rpm_Filter = src[34];
+    // Gov_Pwr_Filter = src[35];
+    // Gov_D_Filter = src[36];
+    // Gov_Ff_Filter = src[37];
+    // Gov_Tta_Filter = src[38];
+    // Gov_Throttle_Type = src[39];
+    // Gov_Idle_Throttle = src[40];
+    // Gov_Auto_Throttle = src[41];
+    // Gov_Flags &= ~(GOV_FLAG_VOLTAGE_COMP | GOV_FLAG_PID_SPOOLUP | GOV_FLAG_FALLBACK_PRECOMP | GOV_FLAG_DYN_MIN_THROTTLE);
+    // if (src[42])
+    //     Gov_Flags |= GOV_FLAG_VOLTAGE_COMP;
+    // if (src[43])
+    //     Gov_Flags |= GOV_FLAG_PID_SPOOLUP;
+    // if (src[44])
+    //     Gov_Flags |= GOV_FLAG_FALLBACK_PRECOMP;
+    // if (src[45])
+    //     Gov_Flags |= GOV_FLAG_DYN_MIN_THROTTLE;
 }
 
 // ************************************************************************************************************
