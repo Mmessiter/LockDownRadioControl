@@ -896,6 +896,7 @@ void HideGOVMsg();
 void ShowGOVMsg(const char *msg, uint16_t Colour);
 void ShowGOVBank();
 void LoadGovWritePayload();
+void Start_RF_Backup_Restore();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *

@@ -209,6 +209,7 @@ void Restore_SOME_RF_Parameters()
         SendCommand((char *)"vis t2,0");       // hide please wait text
         SendText(t2, (char *)" ");
         BlockBankChanges = false;
+        RestoreRFParameters();// go back and do another bank if needed or just refresh screen if done
     default:
         break;
     }
@@ -403,6 +404,7 @@ void Save_SOME_RF_Parameters()
         SendCommand((char *)"vis t2,0");       // hide please wait text
         SendText(t2, (char *)" ");
         BlockBankChanges = false;
+        SaveRFParameters(); // go back and do another bank if needed or just refresh screen if done
 
     default:
         break;
@@ -429,7 +431,7 @@ void Collect_data_from_dialog() // and close it
     RotorFlightStart();
 }
 // ************************************************************************************************************/
-void RestoreRFParameters() // show dialog to pick bank and params to save
+void RestoreRFParameters() // show dialog to pick bank and params to save // heer
 {
     if (!(LedWasGreen))
     {
@@ -443,7 +445,7 @@ void RestoreRFParameters() // show dialog to pick bank and params to save
 }
 
 // ************************************************************************************************************/
-void SaveRFParameters() // show dialog to pick bank and params to save
+void SaveRFParameters() // show dialog to pick bank and params to save // heer 
 {
     if (!(LedWasGreen))
     {
@@ -491,6 +493,14 @@ void Start_SAVE()
 }
 
 // ************************************************************************************************************/
+void Cancel_SAVE()
+{
+    Start_RF_Backup_Restore();
+    BlockBankChanges = false;
+}
+// ************************************************************************************************************/
+
+// ************************************************************************************************************/
 void Cancel_RESTORE()
 {
     Cancel_SAVE();
@@ -509,13 +519,5 @@ void End_RF_Backup_Restore()
 {
     RotorFlightStart();
 }
-
-// ************************************************************************************************************/
-void Cancel_SAVE()
-{
-    Start_RF_Backup_Restore();
-    BlockBankChanges = false;
-}
-// ************************************************************************************************************/
 
 #endif // RF_SAVE_RESTORE_H
