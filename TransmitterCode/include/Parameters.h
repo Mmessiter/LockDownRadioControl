@@ -157,14 +157,14 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
     case MSP_BANK_CHANGE: // 22 = I'm sending the current bank number to the RX (TX->RX)
         Parameters.word[1] = 1;
         Parameters.word[2] = Bank; // 0 to 3 new bank number
-      //  Look1("Sent MSP_BANK_CHANGE with value: ");
-      //  Look(Bank);
+                                   //  Look1("Sent MSP_BANK_CHANGE with value: ");
+                                   //  Look(Bank);
         break;
     case MSP_RATES_CHANGE: // 23 = I'm sending the current rates number to the RX (TX->RX)
         Parameters.word[1] = 1;
         Parameters.word[2] = DualRateInUse | 0x80; // 0 to 3 new rates number RATES = BANK | 128 for now....
-      //  Look1("Sent MSP_RATES_CHANGE with value: ");
-      //  Look(Parameters.word[2]);  
+                                                   //  Look1("Sent MSP_RATES_CHANGE with value: ");
+                                                   //  Look(Parameters.word[2]);
         break;
     case MSP_INHIBIT_TELEMETRY:   // 25 = Inhibit telemetry for a short time to allow MSP data to be exchanged without interference from telemetry data (TX->RX)
         Parameters.word[1] = 123; // this is just a flag to say "inhibit telemetry now"
@@ -172,12 +172,12 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
     case MSP_ENABLE_TELEMETRY:    // 26 = ENABLE telemetry after MSP data has been sent (TX->RX)
         Parameters.word[1] = 123; // this is just a flag to say "enable telemetry now"
         break;
-    case SEND_GOV_VALUES: // 27 = Please send Rotorflight Governor values
+    case SEND_GOV_VALUES:                       // 27 = Please send Rotorflight Governor values
         Parameters.word[1] = 321;               // confirms request for RFGOV values
         Parameters.word[2] = GOV_Send_Duration; // 1000 - how many milliseconds to send these
         break;
-    case SEND_GOV_CONFIG_VALUES: // 28 = Please send Rotorflight Governor CONFIG values
-        Parameters.word[1] = 321;                          // confirms request for RFGOV CONFIG values
+    case SEND_GOV_CONFIG_VALUES:                       // 28 = Please send Rotorflight Governor CONFIG values
+        Parameters.word[1] = 321;                      // confirms request for RFGOV CONFIG values
         Parameters.word[2] = GOV_Config_Send_Duration; // 1000 - how many milliseconds to send these
         break;
 
@@ -315,11 +315,11 @@ void ActuallySendParameters(uint32_t RightNow)
         return;
 
     ShowSendingParameters();
-    if ((RightNow - LastParameterSent >= PARAMETER_SEND_FREQUENCY) ) // if it's time to send the next parameter and we're not paused
+    if ((RightNow - LastParameterSent >= PARAMETER_SEND_FREQUENCY)) // if it's time to send the next parameter and we're not paused
     {
         ParamPause = false; // Reset pause flag to allow the parameters to be sent
         LastParameterSent = RightNow;
-       // Look("Sending parameters... ");
+        // Look("Sending parameters... ");
     }
     else if (RightNow - LastParameterSent >= PARAMETER_SEND_DURATION) // it would just keep sending parameters so we must pause it for a while
     {
@@ -327,7 +327,7 @@ void ActuallySendParameters(uint32_t RightNow)
         {
             ParamPause = true; // Pause sending parameters briefly so we can send data to control the model ! :-)
             LastConnectionQuality = 0;
-          // Look("Paused sending parameters: ");
+            // Look("Paused sending parameters: ");
         }
     }
 }

@@ -205,7 +205,8 @@ void ReadDualRateSwitch()
     {
         AddParameterstoQueue(MSP_RATES_CHANGE); //
         PreviousDualRateInUse = DualRateInUse;
-        LogNewRateInUse();
+        if (UseLog)
+            LogNewRateInUse();
         LastShowTime = 0;
         LastTimeRead = 0; // heer
 
