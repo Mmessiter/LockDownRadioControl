@@ -353,7 +353,7 @@ void BankHasChanged()
     {
         ShowPIDBank();
     }
-    if (CurrentView == RFGOVERNORVIEW)
+    if (CurrentView == RFGOVERNORVIEW_PROFILE)
     {
         ShowGOVBank();
     }

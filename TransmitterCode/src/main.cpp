@@ -165,7 +165,8 @@
 #include "SDFiles.h"
 #include "ChooseImage.h"
 #include "Calibrate.h"
-#include "RF_Governor.h"
+#include "RF_Governor_Profile.h"
+#include "RF_Governor_Global.h"
 /*********************************************************************************************************************************/
 
 /*********************************************************************************************************************************/
@@ -3231,7 +3232,7 @@ void CheckAllModelIds()
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!  ( Use "NUMBER<<8" )
-#define LASTFUNCTION1 54 // One more than final one
+#define LASTFUNCTION1 57 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])(){
     Blank,                   // 0 Cannot be used
@@ -3287,8 +3288,10 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     Start_RF_Governor,       // 50
     End_RF_Governor,         // 51
     Save_RF_Governor,        // 52
-    GOVS_P_Were_Edited       // 53
-
+    GOVS_P_Were_Edited,      // 53
+    Start_Gov_Global,        // 54
+    End_Gov_Global,          // 55
+    Save_Gov_Global          // 56  heer
 };
 
 // This list migth become MUCH longer as it limit is 24 bits big
@@ -4633,7 +4636,7 @@ void GetBank() // ... and the other three switches
     if ((MotorEnabled != MotorWasEnabled) && (UseMotorKill))
     {
         MotorEnabledHasChanged();
-        PreviousBank = 254;// Force bank change to make sure it redisplays
+        PreviousBank = 254; // Force bank change to make sure it redisplays
     }
     ReadChannelSwitches9to12();
     if (Bank != PreviousBank) /// BANK HAS CHANGED ******************************************************************
@@ -4974,7 +4977,7 @@ void FASTRUN ManageTransmitter()
         ReadTheSwitchesAndTrims();
         CheckHardwareTrims();
         GetBank(); // Check switch positions 20 times a secon
-        if (CurrentView >= PIDVIEW && CurrentView <= RFGOVERNORVIEW)
+        if (CurrentView >= PIDVIEW && CurrentView <= RFGOVERNORVIEW_PROFILE)
         {
             Hide_msg_if_needed(); // Hide any message in rotoflight config area
         }

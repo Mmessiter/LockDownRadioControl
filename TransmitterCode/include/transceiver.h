@@ -1052,22 +1052,8 @@ void Hide_msg_if_needed()
     {
         if ((millis() - GOV_Start_Time) > GOV_Send_Duration)
         {
-           // char buf[40];
             Reading_GOV_Now = false;
-            // if (NeedGlobalsToo)
-            // {
-            //     strcpy(buf, "LOADING GLOBALS! ...");
-            //     DelayWithDog(GOV_MSP_PAUSE_TIME); // give the RX a chance to breathe before we ask for the config values
-            //     ShowGOVMsg(buf, Gray);            //  Show loading message and hides old PIDs                           // immediately show the message for the config values
-            //     Reading_GOV_Config_Now = true;    // Phase 1 complete — immediately trigger phase 2 (config data)
-            //     GOV_Config_Start_Time = millis();
-            //     GOV_Config_Send_Duration = GOV_2_WAIT_TIME;
-            //     AddParameterstoQueue(SEND_GOV_CONFIG_VALUES); // new parameter ID 28
-            // }
-            // else
-            // {
-                HideGOVMsg();
-            // }
+            HideGOVMsg();
             return;
         }
     }
@@ -1077,7 +1063,7 @@ void Hide_msg_if_needed()
         if ((millis() - GOV_Config_Start_Time) > GOV_Config_Send_Duration)
         {
             Reading_GOV_Config_Now = false;
-           // HideGOVMsg(); // todo fix
+            // HideGOVMsg(); // todo fix
             return;
         }
     }
@@ -1118,11 +1104,6 @@ void ReadGovBytesFromAckPayload(uint8_t n, uint8_t m)
         return;
     uint8_t p = 0;
 
-    // Look1("ReadGovBytes: ");
-    // Look1(n);
-    // Look1("-");
-    // Look(m);
-
     for (uint8_t i = n; i < m; ++i)
     {
         if (i < GOV_ACK_PAYLOAD_SIZE)
@@ -1131,10 +1112,18 @@ void ReadGovBytesFromAckPayload(uint8_t n, uint8_t m)
             ++p;
         }
     }
-    if (CurrentView == RFGOVERNORVIEW)
+    if (CurrentView == RFGOVERNORVIEW_PROFILE)
         DisplayGovValues(n, m);
 }
-
+// ******************************************************************************************
+uint16_t DoLowPassFilter(uint32_t RawRpm)
+{
+    static uint16_t lastRPM = 0;
+    const float alpha = 0.12; // smoothing factor (0 < alpha < 1)
+    uint16_t filteredRPM = (alpha * RawRpm) + ((1 - alpha) * lastRPM);
+    lastRPM = filteredRPM;
+    return filteredRPM;
+}
 /************************************************************************************************************/
 FASTRUN void ParseAckPayload()
 {
@@ -1267,8 +1256,9 @@ FASTRUN void ParseAckPayload()
         if (RateOfClimb > MaxRateOfClimb)
             MaxRateOfClimb = RateOfClimb;
         break;
+
     case 20:
-        RotorRPM = GetIntFromAckPayload(); // Get the current RPM value from the payload
+        RotorRPM = DoLowPassFilter(GetIntFromAckPayload()); // Get the filtered current RPM value from the payload
         if (RotorRPM == 0xffff)
         {
             RotorRPM = 0; // sanity check
