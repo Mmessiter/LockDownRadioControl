@@ -225,7 +225,7 @@ void EnsureMotorIsOff()
         PlaySound(MOTORON);
         DelayWithDog(1200);
         PlaySound(PLSTURNOFF);
-        DelayWithDog(3000);
+        MsgBox(pFrontView, (char *)"Motor switch is still ON!");
         CheckMotorOff();
     }
     SendCommand(WarnOff);
@@ -1135,6 +1135,7 @@ FLASHMEM void setup()
     ConfigureStickMode();
     WarningTimer = millis();
     EnsureMotorIsOff();
+   
     if (!BuddyPupilOnWireless)
     { // when pupil is buddying wirelessly, these potential errors are ignored
 
@@ -1155,9 +1156,12 @@ FLASHMEM void setup()
             }
         }
     }
+    // not ko
+   
     initADC();
     FHSS_data::PaceMaker = PACEMAKER;
     RationaliseBuddy();
+  
     WarnUserIfBuddyBoxIsOn();
     ClearMostParameters();
     DelayWithDog(500);
