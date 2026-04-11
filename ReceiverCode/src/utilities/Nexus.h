@@ -1132,6 +1132,7 @@ inline void WriteGovernorProfileToNexusAndSave()
 // ====================================================
 inline void UnpackGovernorFromTxPayload(const uint8_t *src)
 {
+    // Profile fields — always active
     Gov_Headspeed = (uint16_t)src[1] | ((uint16_t)src[2] << 8);
     Gov_Gain = src[3];
     Gov_P_Gain = src[4];
@@ -1147,33 +1148,24 @@ inline void UnpackGovernorFromTxPayload(const uint8_t *src)
     Gov_Cyclic_Weight = src[14];
     Gov_Collective_Weight = src[15];
     Gov_Flags = (uint16_t)src[16] | ((uint16_t)src[17] << 8);
-    // Gov_Mode = src[18];
-    // Gov_Handover_Throttle = src[19];
-    // Gov_Startup_Time = (uint16_t)src[20] | ((uint16_t)src[21] << 8);
-    // Gov_Spoolup_Time = (uint16_t)src[22] | ((uint16_t)src[23] << 8);
-    // Gov_Spooldown_Time = (uint16_t)src[24] | ((uint16_t)src[25] << 8);
-    // Gov_Tracking_Time = (uint16_t)src[26] | ((uint16_t)src[27] << 8);
-    // Gov_Recovery_Time = (uint16_t)src[28] | ((uint16_t)src[29] << 8);
-    // Gov_Throttle_Hold_Timeout = (uint16_t)src[30] | ((uint16_t)src[31] << 8);
-    // Gov_Autorotation_Timeout = (uint16_t)src[32] | ((uint16_t)src[33] << 8);
-    // Gov_Rpm_Filter = src[34];
-    // Gov_Pwr_Filter = src[35];
-    // Gov_D_Filter = src[36];
-    // Gov_Ff_Filter = src[37];
-    // Gov_Tta_Filter = src[38];
-    // Gov_Throttle_Type = src[39];
-    // Gov_Idle_Throttle = src[40];
-    // Gov_Auto_Throttle = src[41];
-    // Gov_Flags &= ~(GOV_FLAG_VOLTAGE_COMP | GOV_FLAG_PID_SPOOLUP | GOV_FLAG_FALLBACK_PRECOMP | GOV_FLAG_DYN_MIN_THROTTLE);
-    // if (src[42])
-    //     Gov_Flags |= GOV_FLAG_VOLTAGE_COMP;
-    // if (src[43])
-    //     Gov_Flags |= GOV_FLAG_PID_SPOOLUP;
-    // if (src[44])
-    //     Gov_Flags |= GOV_FLAG_FALLBACK_PRECOMP;
-    // if (src[45])
-    //     Gov_Flags |= GOV_FLAG_DYN_MIN_THROTTLE;
-}
 
-// ************************************************************************************************************
+    // Config fields — TX GovWritePayload[] order [18]-[41]
+    Gov_Mode = src[18];
+    Gov_Handover_Throttle = src[19];
+    Gov_Startup_Time = (uint16_t)src[20] | ((uint16_t)src[21] << 8);
+    Gov_Spoolup_Time = (uint16_t)src[22] | ((uint16_t)src[23] << 8);
+    Gov_Spooldown_Time = (uint16_t)src[24] | ((uint16_t)src[25] << 8);
+    Gov_Tracking_Time = (uint16_t)src[26] | ((uint16_t)src[27] << 8);
+    Gov_Recovery_Time = (uint16_t)src[28] | ((uint16_t)src[29] << 8);
+    Gov_Throttle_Hold_Timeout = (uint16_t)src[30] | ((uint16_t)src[31] << 8);
+    Gov_Autorotation_Timeout = (uint16_t)src[32] | ((uint16_t)src[33] << 8);
+    Gov_Rpm_Filter = src[34]; // preserved from last FC read
+    Gov_Pwr_Filter = src[35]; // preserved from last FC read
+    Gov_D_Filter = src[36];   // preserved from last FC read
+    Gov_Ff_Filter = src[37];  // preserved from last FC read
+    Gov_Tta_Filter = src[38]; // preserved from last FC read
+    Gov_Throttle_Type = src[39];
+    Gov_Idle_Throttle = src[40];
+    Gov_Auto_Throttle = src[41];
+}
 #endif // NEXUS_H
