@@ -178,7 +178,7 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
         break;
     case SEND_GOV_CONFIG_VALUES:                       // 28 = Please send Rotorflight Governor CONFIG values
         Parameters.word[1] = 321;                      // confirms request for RFGOV CONFIG values
-        Parameters.word[2] = GOV_Config_Send_Duration; // 1000 - how many milliseconds to send these
+        Parameters.word[2] = GOV_Config_Send_Duration; // how many milliseconds to send these
         break;
 
     case SEND_GOV_WRITE_PROFILE1:                  // 29 — profile bytes 1-11

@@ -239,14 +239,13 @@ void ShowGOVBank()
 
         BlockBankChanges = true;
         ShowGOVMsg(buf, Gray);
-        GOV_Send_Duration = GOV_1_WAIT_TIME;
+        GOV_Send_Duration = GOV_PROFILE_WAIT_TIME;
         Reading_GOV_Now = true;
         AddParameterstoQueue(SEND_GOV_VALUES);
         GOVS_PROFILE_Were_Edited = false;
         SendCommand((char *)"vis b3,0"); // hide Save button
         GOV_Start_Time = millis();
-        
-    }
+        }
 }
 
 // ====================================================

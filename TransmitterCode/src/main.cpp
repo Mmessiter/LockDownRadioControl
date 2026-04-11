@@ -3232,7 +3232,7 @@ void CheckAllModelIds()
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!  ( Use "NUMBER<<8" )
-#define LASTFUNCTION1 57 // One more than final one
+#define LASTFUNCTION1 58 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])(){
     Blank,                   // 0 Cannot be used
@@ -3291,7 +3291,8 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     GOVS_P_Were_Edited,      // 53
     Start_Gov_Global,        // 54
     End_Gov_Global,          // 55
-    Save_Gov_Global          // 56  heer
+    Save_Gov_Global,         // 56
+    Gov_Global_Were_Edited   // 57
 };
 
 // This list migth become MUCH longer as it limit is 24 bits big
@@ -4977,7 +4978,7 @@ void FASTRUN ManageTransmitter()
         ReadTheSwitchesAndTrims();
         CheckHardwareTrims();
         GetBank(); // Check switch positions 20 times a secon
-        if (CurrentView >= PIDVIEW && CurrentView <= RFGOVERNORVIEW_PROFILE)
+        if (CurrentView >= PIDVIEW && CurrentView <= RFGOVERNORVIEW_GLOBAL)
         {
             Hide_msg_if_needed(); // Hide any message in rotoflight config area
         }

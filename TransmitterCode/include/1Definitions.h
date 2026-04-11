@@ -95,9 +95,10 @@
 #define POWERONOFFDELAY 1000                  // Delay after power OFF before transmit stops.
 #define POWERONOFFDELAY2 4000                 // Delay after power ON before Off is possible....
 #define MSP_WAIT_TIME 1000                    // Time to allow for reading MSP data from RX and FC
-#define GOV_1_WAIT_TIME 750                   // first phase of GOV value reading
-#define GOV_2_WAIT_TIME 4000                  // second phase of GOV value reading
-#define GOV_MSP_PAUSE_TIME 1500               // pause between phase 1 and phase 2 of GOV value reading - to give RX a chance to
+
+#define GOV_PROFILE_WAIT_TIME 1000 // Profiles GOV values reading time
+#define GOV_GLOBAL_WAIT_TIME 3500  // Global GOV values reading time
+#define GOV_CONFIG_PAYLOAD_SIZE 42 // bytes [0]-[41]; we use [18]-[41]
 
 // **************************************************************************
 //                            FHSS BITS                                     *
@@ -898,6 +899,9 @@ void ShowGOVMsg(const char *msg, uint16_t Colour);
 void ShowGOVBank();
 void LoadGovWritePayload();
 void Start_RF_Backup_Restore();
+void DisplayGovConfigValues(uint8_t n, uint8_t m);
+void HideGOVConfigMsg();
+void Gov_Global_Were_Edited();
 
 // **************************************************************************
 //                            GLOBAL DATA                                   *
@@ -1479,6 +1483,7 @@ char PID_Labels[17][4] = {"n0", "n1", "n2", "n3", "n4", "n5", "n6", "n7", "n8", 
 bool PIDS_Were_Edited = false;
 bool GOVS_PROFILE_Were_Edited = false;
 bool PIDS_Advanced_Were_Edited = false;
+bool GOVS_GLOBAL_Were_Edited = false;
 bool Rates_Were_Edited = false;
 bool Rates_Advanced_Were_Edited = false;
 float GearRatio = 10.3;
@@ -1566,7 +1571,7 @@ uint16_t Rates_Advanced_Send_Duration = 0;
 uint32_t PID_Start_Time = 0;
 
 uint32_t GOV_Start_Time = 0;
-uint32_t GOV_Config_Start_Time = 0;
+uint32_t GOV_Global_Start_Time = 0;
 uint16_t GOV_Send_Duration = 0;
 uint16_t GOV_Config_Send_Duration = 0;
 
@@ -1582,6 +1587,7 @@ bool Reading_GOV_Config_Now = false;
 
 uint8_t GovWritePayload[GOV_ACK_PAYLOAD_SIZE] = {0};
 uint8_t GovAckPayload[GOV_ACK_PAYLOAD_SIZE] = {0};
+uint8_t Saved_GOV_Config_Values[GOV_CONFIG_PAYLOAD_SIZE] = {0};
 
 char Rate_Types[7][16] = {"None", "Betaflight", "Raceflight", "KISS", "Actual", "QuickRates", "Rotorflight 2.3"};
 

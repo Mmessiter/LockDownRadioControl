@@ -1057,13 +1057,13 @@ void Hide_msg_if_needed()
             return;
         }
     }
-
+    
     if (Reading_GOV_Config_Now) // Global
     {
-        if ((millis() - GOV_Config_Start_Time) > GOV_Config_Send_Duration)
+        if ((millis() - GOV_Global_Start_Time) > GOV_Config_Send_Duration)
         {
             Reading_GOV_Config_Now = false;
-            // HideGOVMsg(); // todo fix
+            HideGOVConfigMsg();
             return;
         }
     }
@@ -1098,6 +1098,7 @@ void CheckAgeGap()
 }
 
 // ******************************************************************************************
+// ******************************************************************************************
 void ReadGovBytesFromAckPayload(uint8_t n, uint8_t m)
 {
     if (CurrentMode == RESTORE_RF_SETTINGS)
@@ -1114,7 +1115,10 @@ void ReadGovBytesFromAckPayload(uint8_t n, uint8_t m)
     }
     if (CurrentView == RFGOVERNORVIEW_PROFILE)
         DisplayGovValues(n, m);
+    else if (CurrentView == RFGOVERNORVIEW_GLOBAL)
+        DisplayGovConfigValues(n, m);
 }
+
 // ******************************************************************************************
 uint16_t DoLowPassFilter(uint32_t RawRpm)
 {
