@@ -310,6 +310,7 @@ uint8_t Saved_GOV_Profiles_Values[GOV_PROFILE_PAYLOAD_SIZE][4];
 #define RFBACKUP_RESTOREVIEW 53
 #define RFGOVERNORVIEW_PROFILE 54
 #define RFGOVERNORVIEW_GLOBAL 55
+#define MODELIDVIEW 56
 
 // **************************************************************************
 //                          Switches' GPIOs                                 *
@@ -1406,6 +1407,7 @@ char pTypeView[] = "page TypeView";
 char pFailSafe[] = "page FailSafeView";
 char pModelsView[] = "page ModelsView";
 char pRXSetupView[] = "page RXSetupView";
+char pModelsIDView[] = "page IDsStartView"; 
 char pCalibrateView[] = "page CalibrateView";
 char pSubTrimView[] = "page SubTrimView";
 char pAudioView[] = "page AudioView";

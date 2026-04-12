@@ -167,6 +167,7 @@
 #include "Calibrate.h"
 #include "RF_Governor_Profile.h"
 #include "RF_Governor_Global.h"
+#include "Model_IDs.h"
 /*********************************************************************************************************************************/
 
 /*********************************************************************************************************************************/
@@ -2174,101 +2175,7 @@ void BindNow()
     Serial.println("(All 6 bytes of Teensy MAC ID used without modification.) ");
 #endif
 }
-/******************************************************************************************************************************/
-void DeleteModelID()
-{
 
-    // This deletes current model ID
-    char prompt[60];
-    char p[] = "Delete ID for ";
-    char p1[] = "?";
-    char Done[] = "Model ID deleted.";
-    char DoneAlready[] = "No model ID not found.";
-    char NotDone[] = "Model ID retained.";
-
-    strcpy(prompt, p);
-    strcat(prompt, ModelName);
-    strcat(prompt, p1);
-
-    if (!ModelsMacUnionSaved.Val64)
-    {
-        MsgBox(pRXSetupView, DoneAlready);
-        return;
-    }
-    if (GetConfirmation(pRXSetupView, prompt))
-    {
-        ModelsMacUnionSaved.Val64 = 0;
-        SaveOneModel(ModelNumber);
-        MsgBox(pRXSetupView, Done);
-    }
-    else
-    {
-        MsgBox(pRXSetupView, NotDone);
-    }
-}
-// *********************************************************************************************************************************/
-// void ClearDuplicateModelIDs(uint64_t ThisModelID)
-// {
-//     // This clears any duplicate model IDs
-//     bool Found = false;
-//     SavedModelNumber = ModelNumber; // save current
-//     for (int i = 0; i < MAXMODELNUMBER; ++i)
-//     {
-//         ReadOneModel(i);
-//         if (ModelsMacUnionSaved.Val64 == ThisModelID)
-//         {
-//             ModelsMacUnionSaved.Val64 = 0;
-//             SaveOneModel(i);
-//             Found = true;
-//         }
-//     }
-//     if (Found)
-//         MsgBox(pRXSetupView, (char *)"Duplicate Model ID(s) cleared!");
-//     ModelNumber = SavedModelNumber; // restore current model number
-//     ReadOneModel(ModelNumber);      // reload current model
-// }
-
-/*********************************************************************************************************************************/
-
-void StoreModelID()
-{ // This stores current model ID
-
-    char prompt[60];
-    char p[] = "Store ID for ";
-    char p1[] = "?";
-    char Done[] = "Model ID stored.";
-    char NotDone[] = "Model ID not stored.";
-    char DoneAlready[] = "ID was already stored.";
-    char NotConnected[] = "No ID to store.";
-
-    strcpy(prompt, p);
-    strcat(prompt, ModelName);
-    strcat(prompt, p1);
-
-    if (ModelsMacUnion.Val64 == ModelsMacUnionSaved.Val64)
-    {
-        MsgBox(pRXSetupView, DoneAlready);
-        return;
-    }
-    if (!ModelsMacUnion.Val64)
-    {
-        MsgBox(pRXSetupView, NotConnected);
-        return;
-    }
-
-    if (GetConfirmation(pRXSetupView, prompt))
-    {
-        // ClearDuplicateModelIDs(ModelsMacUnion.Val64); // ensure no duplicates
-        PlaySound(MMSAVED);
-        ModelsMacUnionSaved.Val64 = ModelsMacUnion.Val64;
-        SaveOneModel(ModelNumber);
-        MsgBox(pRXSetupView, Done);
-    }
-    else
-    {
-        MsgBox(pRXSetupView, NotDone);
-    }
-}
 /*********************************************************************************************************************************/
 int GetDifference(int YtouchPlace, int oldy)
 {
@@ -3151,92 +3058,10 @@ void RestoreCurrentModel()
     SaveAllParameters();
 }
 
-/******************************************************************************************************************************/
-// Function to display all model IDs and check for duplcates
-
-void CheckAllModelIds()
-{
-    unsigned int TempModelId;
-    char Vbuf[15];
-    char MMemsp[] = "MMems.path=\"";
-    char GoIDview[] = "page IDsView";
-    char crlf[] = {13, 10, 0};
-    char lb[] = "(";
-    char rb[] = ")  ";
-    char KO[] = ">Duplicate:";
-    char Okay[] = " (ID OK)";
-    char n0[] = "n0";
-    char nb[4];
-    char buf[MAXBUFFERSIZE];
-    uint64_t ModelIDs[92];
-    uint8_t DuplicatesCount = 0;
-    uint32_t SavedModelNumber = ModelNumber;
-
-    SendCommand(GoIDview);
-    CurrentView = IDCHECKVIEW;
-    for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER - 1; ++ModelNumber)
-    {
-        ReadOneModel(ModelNumber);
-        ModelIDs[ModelNumber] = ModelsMacUnionSaved.Val64;
-    }
-    for (ModelNumber = 1; ModelNumber < MAXMODELNUMBER - 1; ++ModelNumber)
-    {
-        ReadOneModel(ModelNumber);
-        if (ModelNumber == 1)
-        {
-            strcpy(buf, lb);
-        }
-        else
-        {
-            strcat(buf, lb);
-        }
-        Str(nb, ModelNumber, 0);
-        strcat(buf, nb);
-        strcat(buf, rb);
-        strcat(buf, ModelName);
-        TempModelId = ModelsMacUnionSaved.Val32[0];
-        snprintf(Vbuf, 10, "%X", TempModelId);
-        if (TempModelId)
-        {
-            strcat(buf, " ");
-            strcat(buf, Vbuf);
-        }
-        TempModelId = ModelsMacUnionSaved.Val32[1];
-        ModelIDs[ModelNumber] = ModelsMacUnionSaved.Val64;
-        snprintf(Vbuf, 10, "%X", TempModelId);
-        if (TempModelId)
-        {
-            strcat(buf, Vbuf);
-            int p = 0;
-            for (unsigned int i = 1; i < MAXMODELNUMBER - 1; ++i)
-            {
-                if ((ModelIDs[i] == ModelIDs[ModelNumber]) && (i != ModelNumber))
-                    p = i;
-            }
-            if (p > 0)
-            {
-                strcat(buf, KO);
-                strcat(buf, Str(nb, p, 0));
-                strcat(buf, "<");
-                ++DuplicatesCount;
-            }
-            else
-            {
-                strcat(buf, Okay);
-            }
-        }
-        strcat(buf, crlf);
-    }
-    SendOtherText(MMemsp, buf);
-    SendValue(n0, DuplicatesCount);
-    ModelNumber = SavedModelNumber;
-    ReadOneModel(ModelNumber);
-}
-
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!  ( Use "NUMBER<<8" )
-#define LASTFUNCTION1 59 // One more than final one
+#define LASTFUNCTION1 61 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])(){
     Blank,                   // 0 Cannot be used
@@ -3297,7 +3122,9 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     End_Gov_Global,          // 55
     Save_Gov_Global,         // 56
     Gov_Global_Were_Edited,  // 57
-    AddWords                 // 58
+    AddWords,                // 58
+    StartModelIDView,        // 59
+    EndModelIDView           // 60
 };
 
 // This list migth become MUCH longer as it limit is 24 bits big
