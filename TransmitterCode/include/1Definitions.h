@@ -902,7 +902,8 @@ void Start_RF_Backup_Restore();
 void DisplayGovConfigValues(uint8_t n, uint8_t m);
 void HideGOVConfigMsg();
 void Gov_Global_Were_Edited();
-
+bool AllGlobalConfigBytesReceived();
+void AddWords();
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************
@@ -1572,8 +1573,8 @@ uint32_t PID_Start_Time = 0;
 
 uint32_t GOV_Start_Time = 0;
 uint32_t GOV_Global_Start_Time = 0;
-uint16_t GOV_Send_Duration = 0;
-uint16_t GOV_Config_Send_Duration = 0;
+uint32_t GOV_Send_Duration = 0;
+uint32_t GOV_Config_Send_Duration = 0;
 
 uint32_t PID_Advanced_Start_Time = 0;
 uint32_t RATES_Advanced_Start_Time = 0;

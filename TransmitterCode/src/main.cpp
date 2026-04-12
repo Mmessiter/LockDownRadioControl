@@ -1135,7 +1135,7 @@ FLASHMEM void setup()
     ConfigureStickMode();
     WarningTimer = millis();
     EnsureMotorIsOff();
-   
+
     if (!BuddyPupilOnWireless)
     { // when pupil is buddying wirelessly, these potential errors are ignored
 
@@ -1157,11 +1157,11 @@ FLASHMEM void setup()
         }
     }
     // not ko
-   
+
     initADC();
     FHSS_data::PaceMaker = PACEMAKER;
     RationaliseBuddy();
-  
+
     WarnUserIfBuddyBoxIsOn();
     ClearMostParameters();
     DelayWithDog(500);
@@ -3236,7 +3236,7 @@ void CheckAllModelIds()
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!  ( Use "NUMBER<<8" )
-#define LASTFUNCTION1 58 // One more than final one
+#define LASTFUNCTION1 59 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])(){
     Blank,                   // 0 Cannot be used
@@ -3296,7 +3296,8 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     Start_Gov_Global,        // 54
     End_Gov_Global,          // 55
     Save_Gov_Global,         // 56
-    Gov_Global_Were_Edited   // 57
+    Gov_Global_Were_Edited,  // 57
+    AddWords                 // 58
 };
 
 // This list migth become MUCH longer as it limit is 24 bits big

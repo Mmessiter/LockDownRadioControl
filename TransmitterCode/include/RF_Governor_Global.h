@@ -13,10 +13,15 @@
 #include <Arduino.h>
 #include "1Definitions.h"
 
+uint8_t Global_Params_Received_Flags[24] = {0}; // tracks which config bytes [18]-[41] have been received from FC
+
 char GOV_Global_Labels[GOVERNOR_GLOBAL_LABELS_COUNT][4] = {
     "n14", "n15", "n16", "n17", "n18", "n19", "n20",
     "n21", "n22", "n23", "n24", "n25", "n26", "n27",
     "n28", "n29", "n30"};
+
+char Gov_Mode_types[5][14] = {"Off (0)", "Limit (1)", "Direct (2)", "Electic (3)", "Nitro (4)"};
+char Throttle_types[3][14] = {"Normal (0)", "Switch (1)", "Function (2)"};
 
 // ====================================================
 void ForegroundColourGOVConfigLabels(uint16_t Colour)
@@ -35,7 +40,31 @@ void ShowGOVConfigMsg(const char *msg, uint16_t Colour)
         SendCommand((char *)"vis t4,1");
         SendCommand((char *)"vis b1,0");
         BlockBankChanges = true;
-        PlaySound(BEEPMIDDLE);
+        //  PlaySound(BEEPMIDDLE);
+    }
+}
+ // ====================================================
+void AddWords(){
+    uint8_t temp = GetValue((char *)"n14"); // Gov mode
+
+    if (temp < 5)
+    {
+        SendText((char *)"GovMode", Gov_Mode_types[temp]);
+    }
+    else
+    {
+        SendText((char *)"GovMode", (char *)"0 - 4 only!");
+    }
+
+    temp = GetValue((char *)"n28"); // Throttle type
+
+    if (temp < 3)
+    {
+        SendText((char *)"ThrMode", Throttle_types[temp]);
+    }
+    else
+    {
+        SendText((char *)"ThrMode", (char *)"0 - 2 only!");
     }
 }
 
@@ -48,7 +77,11 @@ void HideGOVConfigMsg()
         SendCommand((char *)"vis b1,1");
         ForegroundColourGOVConfigLabels(Black);
         BlockBankChanges = false;
-        PlaySound(BEEPCOMPLETE);
+        if (!AllGlobalConfigBytesReceived())
+        {
+            MsgBox((char *)"page RFGovGlobalView", (char *)"Failed to read all config bytes from FC.\r\nYou might want to check the connection and try again.");
+        }
+        AddWords();
     }
 }
 
@@ -57,6 +90,7 @@ void GOVS_G_Were_Edited()
 {
     SendCommand((char *)"vis b3,1");
     GOVS_GLOBAL_Were_Edited = true;
+    AddWords();
 }
 
 // ====================================================
@@ -75,34 +109,29 @@ void LoadGovConfigWritePayload()
     GovWritePayload[20] = GovAckPayload[20];
     GovWritePayload[21] = GovAckPayload[21];
 
-    // Spoolup ×.1%/s — visible, editable
+    // U16 fields — visible, editable
     uint16_t v;
-    v = (uint16_t)GetValue((char *)"n17");
+    v = (uint16_t)GetValue((char *)"n17"); // Spoolup ×.1%/s
     GovWritePayload[22] = (uint8_t)(v & 0xFF);
     GovWritePayload[23] = (uint8_t)(v >> 8);
 
-    // Spooldown ×.1%/s — visible, editable
-    v = (uint16_t)GetValue((char *)"n18");
+    v = (uint16_t)GetValue((char *)"n18"); // Spooldown ×.1%/s
     GovWritePayload[24] = (uint8_t)(v & 0xFF);
     GovWritePayload[25] = (uint8_t)(v >> 8);
 
-    // Tracking ×.1%/s — visible, editable
-    v = (uint16_t)GetValue((char *)"n19");
+    v = (uint16_t)GetValue((char *)"n19"); // Tracking ×.1%/s
     GovWritePayload[26] = (uint8_t)(v & 0xFF);
     GovWritePayload[27] = (uint8_t)(v >> 8);
 
-    // Recovery ×.1%/s — visible, editable
-    v = (uint16_t)GetValue((char *)"n20");
+    v = (uint16_t)GetValue((char *)"n20"); // Recovery ×.1%/s
     GovWritePayload[28] = (uint8_t)(v & 0xFF);
     GovWritePayload[29] = (uint8_t)(v >> 8);
 
-    // Hold timeout ×.1s — visible, editable
-    v = (uint16_t)GetValue((char *)"n21");
+    v = (uint16_t)GetValue((char *)"n21"); // Hold timeout ×.1s
     GovWritePayload[30] = (uint8_t)(v & 0xFF);
     GovWritePayload[31] = (uint8_t)(v >> 8);
 
-    // Autorot timeout s — visible, editable
-    v = (uint16_t)GetValue((char *)"n22");
+    v = (uint16_t)GetValue((char *)"n22"); // Autorot timeout s
     GovWritePayload[32] = (uint8_t)(v & 0xFF);
     GovWritePayload[33] = (uint8_t)(v >> 8);
 
@@ -117,6 +146,17 @@ void LoadGovConfigWritePayload()
     GovWritePayload[39] = (uint8_t)GetValue((char *)"n28"); // Throttle type
     GovWritePayload[40] = (uint8_t)GetValue((char *)"n29"); // Idle thr ×.1%
     GovWritePayload[41] = (uint8_t)GetValue((char *)"n30"); // Auto thr ×.1%
+}
+
+// ====================================================
+bool AllGlobalConfigBytesReceived()
+{
+    for (int i = 0; i < 24; ++i)
+    {
+        if (Global_Params_Received_Flags[i] == 0)
+            return false;
+    }
+    return true;
 }
 
 // ====================================================
@@ -135,6 +175,13 @@ void DisplayGovConfigValues(uint8_t n, uint8_t m)
     {
         if (i >= GOV_ACK_PAYLOAD_SIZE)
             break;
+
+        Global_Params_Received_Flags[i - 18] = 1; // mark this config byte as received
+
+        if (AllGlobalConfigBytesReceived())
+        {
+            GOV_Global_Start_Time = 0; // instant timeout — all bytes in
+        }
 
         switch (i)
         {
@@ -292,11 +339,9 @@ void SendEditedGovConfigValues()
 
     GOVS_GLOBAL_Were_Edited = false;
     SendCommand((char *)"vis b3,0");
-
-    // Reboot FC so config changes take effect
-    // AddParameterstoQueue(MSP_REBOOT);
-
     PlaySound(BEEPCOMPLETE);
+
+    // Reboot FC is done at receiver.
 }
 
 // ====================================================
@@ -306,6 +351,9 @@ void ShowGOV_Global_Bank()
     {
         for (int i = 0; i < GOVERNOR_GLOBAL_LABELS_COUNT; ++i)
             SendValue(GOV_Global_Labels[i], 0);
+
+        // Reset received flags for fresh read
+        memset(Global_Params_Received_Flags, 0, sizeof(Global_Params_Received_Flags));
 
         if (!LedWasGreen)
         {
@@ -347,6 +395,7 @@ void End_Gov_Global()
             AddParameterstoQueue(MSP_ENABLE_TELEMETRY);
             RotorFlightStart();
         }
+        // if user says No, stay on page
     }
     else
     {
@@ -354,6 +403,7 @@ void End_Gov_Global()
         RotorFlightStart();
     }
 }
+
 // ====================================================
 void Gov_Global_Were_Edited()
 {
@@ -365,6 +415,7 @@ void Gov_Global_Were_Edited()
 void Save_Gov_Global()
 {
     SendEditedGovConfigValues();
+    AddWords();
 }
 
 #endif // RF_GOVERNOR_GLOBAL_H

@@ -1011,9 +1011,12 @@ void ReadPIDs_Advanced_FromAckPayload(uint8_t n, uint8_t m)
 // ******************************************************************************************
 void Hide_msg_if_needed()
 {
+
+    uint32_t now = millis();
+
     if (Reading_PIDS_Now)
     {
-        if ((millis() - PID_Start_Time) > PID_Send_Duration)
+        if ((now - PID_Start_Time) > PID_Send_Duration)
         {
             Reading_PIDS_Now = false;
             HidePIDMsg();
@@ -1022,7 +1025,7 @@ void Hide_msg_if_needed()
     }
     if (Reading_RATES_Now)
     {
-        if ((millis() - RATES_Start_Time) > RATES_Send_Duration)
+        if ((now - RATES_Start_Time) > RATES_Send_Duration)
         {
             Reading_RATES_Now = false;
             HideRATESMsg();
@@ -1031,7 +1034,7 @@ void Hide_msg_if_needed()
     }
     if (Reading_RATES_Advanced_Now)
     {
-        if ((millis() - RATES_Advanced_Start_Time) > Rates_Advanced_Send_Duration)
+        if ((now - RATES_Advanced_Start_Time) > Rates_Advanced_Send_Duration)
         {
             Reading_RATES_Advanced_Now = false;
             Hide_Advanced_Rates_Msg();
@@ -1040,7 +1043,7 @@ void Hide_msg_if_needed()
     }
     if (Reading_PIDS_Advanced_Now)
     {
-        if ((millis() - PID_Advanced_Start_Time) > PID_Advanced_Send_Duration)
+        if ((now - PID_Advanced_Start_Time) > PID_Advanced_Send_Duration)
         {
             Reading_PIDS_Advanced_Now = false;
             HidePID_Advanced_Msg();
@@ -1050,7 +1053,7 @@ void Hide_msg_if_needed()
 
     if (Reading_GOV_Now) // Profile dependent
     {
-        if ((millis() - GOV_Start_Time) > GOV_Send_Duration)
+        if ((now - GOV_Start_Time) > GOV_Send_Duration)
         {
             Reading_GOV_Now = false;
             HideGOVMsg();
@@ -1060,7 +1063,7 @@ void Hide_msg_if_needed()
     
     if (Reading_GOV_Config_Now) // Global
     {
-        if ((millis() - GOV_Global_Start_Time) > GOV_Config_Send_Duration)
+        if ((now - GOV_Global_Start_Time) > GOV_Config_Send_Duration)
         {
             Reading_GOV_Config_Now = false;
             HideGOVConfigMsg();
