@@ -97,7 +97,7 @@
 #define MSP_WAIT_TIME 1000                    // Time to allow for reading MSP data from RX and FC
 
 #define GOV_PROFILE_WAIT_TIME 1000 // Profiles GOV values reading time
-#define GOV_GLOBAL_WAIT_TIME 3500  // Global GOV values reading time
+#define GOV_GLOBAL_WAIT_TIME 4000  // Global GOV values reading time
 #define GOV_CONFIG_PAYLOAD_SIZE 42 // bytes [0]-[41]; we use [18]-[41]
 
 // **************************************************************************

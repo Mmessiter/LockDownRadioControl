@@ -80,7 +80,8 @@ void HideGOVConfigMsg()
         BlockBankChanges = false;
         if (!AllGlobalConfigBytesReceived())
         {
-            MsgBox((char *)"page RFGovGlobalView", (char *)"Failed to read all \r\nconfig bytes!");
+            MsgBox((char *)"page RFGovGlobalView", (char *)"Failed to read global \r\n(config) bytes. Try again.");
+            Start_RF_Governor();
         }
         AddWords();
     }
@@ -366,7 +367,7 @@ void ShowGOV_Global_Bank()
 
         BlockBankChanges = true;
         ShowGOVConfigMsg((char *)"Loading config values ...", Gray);
-        GOV_Config_Send_Duration = GOV_GLOBAL_WAIT_TIME;
+        GOV_Config_Send_Duration = GOV_GLOBAL_WAIT_TIME; // heer
         Reading_GOV_Config_Now = true;
         AddParameterstoQueue(SEND_GOV_CONFIG_VALUES);
         GOVS_GLOBAL_Were_Edited = false;
