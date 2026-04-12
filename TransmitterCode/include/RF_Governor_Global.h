@@ -20,8 +20,8 @@ char GOV_Global_Labels[GOVERNOR_GLOBAL_LABELS_COUNT][4] = {
     "n21", "n22", "n23", "n24", "n25", "n26", "n27",
     "n28", "n29", "n30"};
 
-char Gov_Mode_types[5][14] = {"Off (0)", "Limit (1)", "Direct (2)", "Electic (3)", "Nitro (4)"};
-char Throttle_types[3][14] = {"Normal (0)", "Switch (1)", "Function (2)"};
+char Gov_Mode_types[5][20] = {"(Mode 0 = Off)", "(Mode 1 = Limit)", "(Mode 2 = Direct)", "(Mode 3 = Electric)", "(Mode 4 = Nitro)"};
+char Throttle_types[3][20] = {"(Type 0 = Normal)", "(Type 1 = Switch)", "(Type 2 = Function)"};
 
 // ====================================================
 void ForegroundColourGOVConfigLabels(uint16_t Colour)
@@ -40,31 +40,32 @@ void ShowGOVConfigMsg(const char *msg, uint16_t Colour)
         SendCommand((char *)"vis t4,1");
         SendCommand((char *)"vis b1,0");
         BlockBankChanges = true;
-        //  PlaySound(BEEPMIDDLE);
     }
 }
- // ====================================================
-void AddWords(){
-    uint8_t temp = GetValue((char *)"n14"); // Gov mode
+// ====================================================
+void AddWords() // Add in the text words to describe the meaning of numeric config values, so user doesn't have to keep the manual open
+{
+    uint8_t temp = GetValue((char *)"n14"); // Current governor mode
+    static uint8_t last_temp = -1;
+    static uint8_t last_temp1 = -1;
 
-    if (temp < 5)
+    if (temp != last_temp)
     {
-        SendText((char *)"GovMode", Gov_Mode_types[temp]);
-    }
-    else
-    {
-        SendText((char *)"GovMode", (char *)"0 - 4 only!");
+        if (temp < 5)
+            SendText((char *)"GovMode", Gov_Mode_types[temp]);
+        else
+            SendText((char *)"GovMode", (char *)"0 - 4 only!");
+        last_temp = temp;
     }
 
-    temp = GetValue((char *)"n28"); // Throttle type
-
-    if (temp < 3)
+    uint8_t temp1 = GetValue((char *)"n28"); // Current throttle type
+    if (temp1 != last_temp1)
     {
-        SendText((char *)"ThrMode", Throttle_types[temp]);
-    }
-    else
-    {
-        SendText((char *)"ThrMode", (char *)"0 - 2 only!");
+        if (temp1 < 3)
+            SendText((char *)"ThrMode", Throttle_types[temp1]);
+        else
+            SendText((char *)"ThrMode", (char *)"0 - 2 only!");
+        last_temp1 = temp1;
     }
 }
 
@@ -79,7 +80,7 @@ void HideGOVConfigMsg()
         BlockBankChanges = false;
         if (!AllGlobalConfigBytesReceived())
         {
-            MsgBox((char *)"page RFGovGlobalView", (char *)"Failed to read all config bytes from FC.\r\nYou might want to check the connection and try again.");
+            MsgBox((char *)"page RFGovGlobalView", (char *)"Failed to read all \r\nconfig bytes!");
         }
         AddWords();
     }
