@@ -68,7 +68,6 @@ void AddWords() // Add in the text words to describe the meaning of numeric conf
         last_temp1 = temp1;
     }
 }
-
 // ====================================================
 void HideGOVConfigMsg()
 {
@@ -78,7 +77,7 @@ void HideGOVConfigMsg()
         SendCommand((char *)"vis b1,1");
         ForegroundColourGOVConfigLabels(Black);
         BlockBankChanges = false;
-        if (!AllGlobalConfigBytesReceived())
+        if (LedWasGreen && !AllGlobalConfigBytesReceived())
         {
             MsgBox((char *)"page RFGovGlobalView", (char *)"Failed to read global \r\n(config) bytes. Try again.");
             Start_RF_Governor();
@@ -296,8 +295,12 @@ void ShowLocalGovConfigBank()
 // ====================================================
 // SaveToLocalGovConfigBank()
 // ====================================================
-void SaveToLocalGovConfigBank()
-{
+void SaveToLocalGovGLOBAL() // "Save FC to SD" button
+{ // This function only works when connected. The values are already on screen so it's easy enough.
+    
+    if (!GetConfirmation((char *)"page RFGovViewGlbl", (char *)"Save these config values to SD card?"))
+        return;
+    
     ShowGOVConfigMsg((char *)"Saving config values ...", Gray);
     LoadGovConfigWritePayload();
 
@@ -312,6 +315,49 @@ void SaveToLocalGovConfigBank()
 }
 
 // ====================================================
+// RestoreFromSDGlobalGOV()
+// Reads saved config values from SD card, displays them on screen,
+// and sends them to the FC via MSP. Only works when connected.
+// ====================================================
+void RestoreFromSDGlobalGOV()
+{
+    if (!LedWasGreen)
+    {
+        MsgBox((char *)"page RFGovViewGlbl", (char *)"Not connected!\r\nCannot restore to FC.");
+        return;
+    }
+
+    if (SendBuffer[ArmingChannel - 1] > 1000)
+    {
+        PlaySound(WHAHWHAHMSG);
+        MsgBox((char *)"page RFGovViewGlbl", (char *)"Model is armed!\r\nDisarm before restoring governor config.");
+        return;
+    }
+
+    if (!GetConfirmation((char *)"page RFGovViewGlbl", (char *)"Restore config values from SD card?"))
+        return;
+
+    ShowGOVConfigMsg((char *)"Restoring config values ...", Gray);
+
+    // Copy SD values into GovWritePayload[18..41]
+    for (int i = 18; i < GOV_CONFIG_PAYLOAD_SIZE; ++i)
+        GovWritePayload[i] = Saved_GOV_Config_Values[i];
+
+    // Show restored values on screen
+    ShowLocalGovConfigBank();
+
+    // Send to FC — queue in reverse order (LIFO)
+    AddParameterstoQueue(SEND_GOV_WRITE_CONFIG3); // executes 3rd
+    AddParameterstoQueue(SEND_GOV_WRITE_CONFIG2); // executes 2nd
+    AddParameterstoQueue(SEND_GOV_WRITE_CONFIG1); // executes 1st
+
+    GOVS_GLOBAL_Were_Edited = false;
+    SendCommand((char *)"vis b3,0");
+    HideGOVConfigMsg();
+    PlaySound(BEEPCOMPLETE);
+}
+
+// ====================================================
 // SendEditedGovConfigValues()
 // Writes config values to FC via MSP, then reboots FC
 // ====================================================
@@ -319,7 +365,7 @@ void SendEditedGovConfigValues()
 {
     if (!LedWasGreen)
     {
-        SaveToLocalGovConfigBank();
+        SaveToLocalGovGLOBAL();
         return;
     }
 
@@ -345,7 +391,6 @@ void SendEditedGovConfigValues()
 
     // Reboot FC is done at receiver.
 }
-
 // ====================================================
 void ShowGOV_Global_Bank()
 {
@@ -384,6 +429,7 @@ void Start_Gov_Global()
     CurrentView = RFGOVERNORVIEW_GLOBAL;
     SendText((char *)"t27", ModelName);
     ShowGOV_Global_Bank();
+    SendText((char *)"b3", (char *)"Save");
 }
 
 // ====================================================
@@ -406,6 +452,11 @@ void End_Gov_Global()
     }
 }
 
+// ====================================================
+void Restore_FROM_SD_Global_GOV()
+{
+    // Implementation for restoring from SD card
+}
 // ====================================================
 void Gov_Global_Were_Edited()
 {

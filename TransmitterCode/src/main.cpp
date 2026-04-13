@@ -3061,7 +3061,7 @@ void RestoreCurrentModel()
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!  ( Use "NUMBER<<8" )
-#define LASTFUNCTION1 61 // One more than final one
+#define LASTFUNCTION1 63 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])(){
     Blank,                   // 0 Cannot be used
@@ -3124,7 +3124,9 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     Gov_Global_Were_Edited,  // 57
     AddWords,                // 58
     StartModelIDView,        // 59
-    EndModelIDView           // 60
+    EndModelIDView,          // 60
+    SaveToLocalGovGLOBAL,    // 61
+    RestoreFromSDGlobalGOV   // 62
 };
 
 // This list migth become MUCH longer as it limit is 24 bits big

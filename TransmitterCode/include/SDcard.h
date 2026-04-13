@@ -184,7 +184,6 @@ bool ReadOneModel(uint32_t Mnum)
         ModelName[j] = SDRead8BITS(SDCardAddress);
         ++SDCardAddress;
     }
-    
 
     for (i = 0; i < CHANNELSUSED; ++i)
     {
@@ -474,6 +473,13 @@ bool ReadOneModel(uint32_t Mnum)
             Saved_GOV_Profiles_Values[i][j] = SDRead8BITS(SDCardAddress);
             ++SDCardAddress;
         }
+
+    // Read config values for RF Governor global (no bank dimension)
+    for (i = 0; i < GOV_CONFIG_PAYLOAD_SIZE; ++i)
+    {
+        Saved_GOV_Config_Values[i] = SDRead8BITS(SDCardAddress);
+        ++SDCardAddress;
+    }
 
     CheckOutPutChannels();
     CheckServoType();
@@ -1365,9 +1371,14 @@ void SaveOneModel(uint32_t mnum)
             ++SDCardAddress;
         }
 
-    SaveCheckSum32(); // Save the Model parametres checksum
+    // Governor global config values — 42 bytes, no bank dimension
+    for (uint32_t ii = 0; ii < GOV_CONFIG_PAYLOAD_SIZE; ++ii)
+    {
+        SDUpdate8BITS(SDCardAddress, Saved_GOV_Config_Values[ii]);
+        ++SDCardAddress;
+    }
 
-        SaveCheckSum32(); // Save the Model parametres checksm
+    SaveCheckSum32(); // Save the Model parametres checksm
 
     // ********************** Add more
 
