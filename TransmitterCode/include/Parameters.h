@@ -27,8 +27,8 @@ void AddParameterstoQueue(uint8_t ID) // this queue is essentially a LIFO stack
 void SendInitialSetupParams() // This function sends the initial setup parameters.
 {                             // Failsafe and stabilisation parameters are NOT sent here because they are sent separately
 
-    AddParameterstoQueue(MSP_BANK_CHANGE);    // for Rotorflight MSP Bank change
-    AddParameterstoQueue(MSP_RATES_CHANGE);   // for Rotorflight MSP Bank change
+   // AddParameterstoQueue(MSP_BANK_CHANGE);    // for Rotorflight MSP Bank change
+    // AddParameterstoQueue(MSP_RATES_CHANGE);   // for Rotorflight MSP Bank change
     AddParameterstoQueue(SERVO_PULSE_WIDTHS); // Servo Pulse Widths 7
     AddParameterstoQueue(SERVO_FREQUENCIES);  // Servo Frequencies 6
     AddParameterstoQueue(QNH_SETTING);        // QNH 2
@@ -154,18 +154,18 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
         for (int i = 0; i < 8; ++i)
             Parameters.word[i + 1] = PID_Advanced_Values[i + 18]; // 18 to 25
         break;
-    case MSP_BANK_CHANGE: // 22 = I'm sending the current bank number to the RX (TX->RX)
-        Parameters.word[1] = 1;
-        Parameters.word[2] = Bank; // 0 to 3 new bank number
-                                   //  Look1("Sent MSP_BANK_CHANGE with value: ");
-                                   //  Look(Bank);
-        break;
-    case MSP_RATES_CHANGE: // 23 = I'm sending the current rates number to the RX (TX->RX)
-        Parameters.word[1] = 1;
-        Parameters.word[2] = DualRateInUse | 0x80; // 0 to 3 new rates number RATES = BANK | 128 for now....
-                                                   //  Look1("Sent MSP_RATES_CHANGE with value: ");
-                                                   //  Look(Parameters.word[2]);
-        break;
+    // case MSP_BANK_CHANGE: // 22 = I'm sending the current bank number to the RX (TX->RX)
+    //     Parameters.word[1] = 1;
+    //     Parameters.word[2] = Bank; // 0 to 3 new bank number
+    //                                //  Look1("Sent MSP_BANK_CHANGE with value: ");
+    //                                //  Look(Bank);
+    //     break;
+    // case MSP_RATES_CHANGE: // 23 = I'm sending the current rates number to the RX (TX->RX)
+    //     Parameters.word[1] = 1;
+    //     Parameters.word[2] = DualRateInUse | 0x80; // 0 to 3 new rates number RATES = BANK | 128 for now....
+    //                                                //  Look1("Sent MSP_RATES_CHANGE with value: ");
+    //                                                //  Look(Parameters.word[2]);
+    //     break;
     case MSP_INHIBIT_TELEMETRY:   // 25 = Inhibit telemetry for a short time to allow MSP data to be exchanged without interference from telemetry data (TX->RX)
         Parameters.word[1] = 123; // this is just a flag to say "inhibit telemetry now"
         break;

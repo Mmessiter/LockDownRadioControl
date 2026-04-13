@@ -203,7 +203,7 @@ void ReadDualRateSwitch()
     // Respond to a change
     if (PreviousDualRateInUse != DualRateInUse)
     {
-        AddParameterstoQueue(MSP_RATES_CHANGE); //
+        //AddParameterstoQueue(MSP_RATES_CHANGE); //
         PreviousDualRateInUse = DualRateInUse;
         if (UseLog)
             LogNewRateInUse();
@@ -313,11 +313,11 @@ void BankHasChanged()
 
     if (RotorFlight_V)
     { // msp bank change
-        AddParameterstoQueue(MSP_BANK_CHANGE);
+       // AddParameterstoQueue(MSP_BANK_CHANGE);
         if (LinkRatesToBanks)
         {
             DualRateInUse = Bank;                   // if linked, DualRateInUse is the same as Bank number
-            AddParameterstoQueue(MSP_RATES_CHANGE); // and maybe rates change too if linked
+          //  AddParameterstoQueue(MSP_RATES_CHANGE); // and maybe rates change too if linked
             ShowRatesBank();
         }
         // BankCheckIsNeeded = true; // this tells the Ack payload parser to check that the bank change was successful
