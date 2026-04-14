@@ -923,13 +923,17 @@ void LoadAckPayload()
         break;
     case 20:
         if (!Rotorflight_Version)
-            RotorRPM = 0xffff;         // invalid RPM
+            break; // if no Rotorflight, don't send this
         SendIntToAckPayload(RotorRPM); // RPM from Nexus
         break;
     case 21:
+        if (!Rotorflight_Version)
+            break;                           // if no Rotorflight, don't send this
         SendFloatToAckPayload(Battery_Amps); // Amps from Nexus
         break;
     case 22:
+        if (!Rotorflight_Version)
+            break;                           // if no Rotorflight, don't send this  
         SendFloatToAckPayload(Battery_mAh); // mAh from Nexus
         break;
     case 23:

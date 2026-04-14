@@ -1265,6 +1265,8 @@ FASTRUN void ParseAckPayload()
         break;
 
     case 20:
+        if (!RotorFlight_Version)
+            break; // if we are not talking to a RotorFlight build, don't try to get RPM data
         RotorRPM = DoLowPassFilter(GetIntFromAckPayload()); // Get the filtered current RPM value from the payload
         if (RotorRPM == 0xffff)
         {
@@ -1288,12 +1290,16 @@ FASTRUN void ParseAckPayload()
         }
         break;
     case 21:
+        if (!RotorFlight_Version)
+            break;                               // if we are not talking to a RotorFlight build, don't try to get current data
         Battery_Amps = GetFloatFromAckPayload(); // current ... amps being used :-)
         ShowAmpsBeingUsed(Battery_Amps);
         if (Battery_Amps > Max_Battery_Amps)
             Max_Battery_Amps = Battery_Amps;
         break;
     case 22:
+        if (!RotorFlight_Version)
+            break;                              // if we are not talking to a RotorFlight build, don't try to get mAh data
         Battery_mAh = GetFloatFromAckPayload(); // milliamp hours used so far
         ShowMilliAmpHoursUsed(Battery_mAh);
         break;
