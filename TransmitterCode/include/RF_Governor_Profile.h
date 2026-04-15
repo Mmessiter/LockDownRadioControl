@@ -245,12 +245,25 @@ void ShowGOVBank()
         GOVS_PROFILE_Were_Edited = false;
         SendCommand((char *)"vis b3,0"); // hide Save button
         GOV_Start_Time = millis();
-        }
+    }
 }
 
 // ====================================================
 void Start_RF_Governor()
 {
+    if (RotorFlight_Version < 2.3)
+    {
+        char msg[160];
+        char w1[] = "RotorFlight V2.3 is needed for all\r\ngovernor tuning features.\r\n\r\nYour current version is only V";
+        char w2[] = ".\r\nPlease update your flight controller!";
+        char Vbuf[10];
+        snprintf(Vbuf, 10, "%1.1f", RotorFlight_Version);
+        strcpy(msg, w1);
+        strcat(msg, Vbuf);
+        strcat(msg, w2);
+        MsgBox((char *)"page RFView", msg);
+        return;
+    }
     AddParameterstoQueue(MSP_INHIBIT_TELEMETRY);
     SendCommand((char *)"page RFGovView");
     CurrentView = RFGOVERNORVIEW_PROFILE;

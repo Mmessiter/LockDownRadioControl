@@ -12,7 +12,6 @@
 #define DO_RATES_ADVANCED 8
 #define DO_GOV_PROFILES 16
 
-
 // ************************************************************************************************************/
 
 uint16_t Which_Case_Now = 0;   // Which case we are up to in the state machine
@@ -209,7 +208,7 @@ void Restore_SOME_RF_Parameters()
         SendCommand((char *)"vis t2,0");       // hide please wait text
         SendText(t2, (char *)" ");
         BlockBankChanges = false;
-        RestoreRFParameters();// go back and do another bank if needed or just refresh screen if done
+        RestoreRFParameters(); // go back and do another bank if needed or just refresh screen if done
     default:
         break;
     }
@@ -423,7 +422,7 @@ void Collect_data_from_dialog() // and close it
         Which_Params |= DO_RATES;
     if (GetValue((char *)"sw3"))
         Which_Params |= DO_RATES_ADVANCED;
-    if (GetValue((char *)"sw4"))
+    if (GetValue((char *)"sw4") && (RotorFlight_Version > 2.25)) // floats might not be exactly 2.2 or 2.3
         Which_Params |= DO_GOV_PROFILES;
     SelectedItemCount = CountSelectedParams(Which_Params);
     if (SelectedItemCount > 0)
@@ -442,10 +441,16 @@ void RestoreRFParameters() // show dialog to pick bank and params to save // hee
     CurrentView = PICKBANKVIEW1;
     SendValue((char *)"n0", Bank);
     SendValue((char *)"n1", Bank);
+    if (RotorFlight_Version < 2.25) // floats might not be exactly 2.2 or 2.3
+    {
+        SendValue((char *)"sw4", 0);      // default Gov Profile option to off if not supported
+        SendCommand((char *)"vis sw4,0"); // Hide Gov Profile option if not supported
+        SendCommand((char *)"vis t9,0");
+    } 
 }
 
 // ************************************************************************************************************/
-void SaveRFParameters() // show dialog to pick bank and params to save // heer 
+void SaveRFParameters() // show dialog to pick bank and params to save // heer
 {
     if (!(LedWasGreen))
     {
@@ -456,6 +461,12 @@ void SaveRFParameters() // show dialog to pick bank and params to save // heer
     CurrentView = PICKBANKVIEW2;
     SendValue((char *)"n0", Bank);
     SendValue((char *)"n1", Bank);
+    if ((RotorFlight_Version < 2.25)) // floats might not be exactly 2.2 or 2.3
+    {
+        SendValue((char *)"sw4", 0); // default Gov Profile option to off if not supported
+        SendCommand((char *)"vis sw4,0"); // Hide Gov Profile option if not supported
+        SendCommand((char *)"vis t9,0");
+    }
 }
 
 // ************************************************************************************************************/
