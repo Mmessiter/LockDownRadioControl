@@ -251,7 +251,7 @@ void ShowGOVBank()
 // ====================================================
 void Start_RF_Governor()
 {
-    if (RotorFlight_Version < 2.3)
+    if (RotorFlight_Version < 2.25) // floats might not be exactly 2.2 or 2.3
     {
         char msg[160];
         char w1[] = "RotorFlight V2.3 is needed for all\r\ngovernor tuning features.\r\n\r\nYour current version is only V";
@@ -264,6 +264,7 @@ void Start_RF_Governor()
         MsgBox((char *)"page RFView", msg);
         return;
     }
+
     AddParameterstoQueue(MSP_INHIBIT_TELEMETRY);
     SendCommand((char *)"page RFGovView");
     CurrentView = RFGOVERNORVIEW_PROFILE;
