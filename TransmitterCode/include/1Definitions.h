@@ -28,7 +28,7 @@
 #define TXVERSION_MAJOR 2                  // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 5
 #define TXVERSION_MINIMUS 6
-#define TXVERSION_EXTRA "i 14/04/26"
+#define TXVERSION_EXTRA "j 16/04/26"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
