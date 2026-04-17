@@ -4833,7 +4833,7 @@ void FixArmingChannel()
 {
     uint16_t ArmValue[2] = {667, 2233}; // these are the values at the arming switch would give
     if (RotorFlight_V && !BindingEnabled && !BuddyPupilOnWireless)
-        SendBuffer[ArmingChannel - 1] = ArmValue[(uint8_t)Armed]; // If safety is on, arming is off
+        SendBuffer[ArmingChannel - 1] = ArmValue[(uint8_t)Armed]; // If safety is on, arming is off UNLESS BINDING!!
 }
 /************************************************************************************************************/
 // LOOP

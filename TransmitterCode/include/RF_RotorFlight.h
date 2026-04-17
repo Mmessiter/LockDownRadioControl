@@ -35,9 +35,15 @@ void RotorFlightStart()
     char t7[] = "t7";
     char Vbuf[15];
 
+    if(!RotorFlight_Version)
+    {
+       MsgBox(pRXSetupView, (char *)"RotorFlight FC was not detected!");
+       return;
+    }
+
     if (MotorEnabled || !SafetyON)
     {
-        PlaySound(BEEPMIDDLE); // warn that you can't enter Rotorflight view if the motor is enabled or safety is off
+        MsgBox(pRXSetupView, (char *)"Please disarm and turn on safety.");
         return;
     }
 
