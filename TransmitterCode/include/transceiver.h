@@ -519,35 +519,32 @@ void DrawFhssBox()
 }
 
 /************************************************************************************************************/
-
-// This function scans the waveband and displays result in the box that was drawn by the function above.
-
 void ScanAllChannels(bool cls)
 {
-
     const uint16_t x1 = xx1;
     const uint16_t y1 = yy1;
-    const uint8_t BlobHeight = 4; // Blobs are 4 x 5 pixels
-    const uint8_t BlobWidth = 5;  // Blobs are 4 x 5 pixels
+    const uint8_t BlobHeight = 4;
+    const uint8_t BlobWidth = 5;
+    const uint16_t GraphHeight = 255; // pixel height of the graph area
     uint16_t Sc;
     uint16_t x2, y2;
 
-    char NB[12]; // Number Buffer
+    char NB[12];
     char NB1[12];
     char NB2[12];
     char NB3[12];
     char NB4[12];
-    char CB[100]; // COMMAND BUFFER
+    char CB[100];
     char fyll[] = "fill ";
     char NewYellow[15];
-    char NA[1] = ""; // blank one
-    static uint8_t AllChannels[127];
+    char NA[1] = "";
+
+    static uint8_t AllChannels[127]; // current rendered height (pixels)
     static uint8_t NoCarrier[127];
     static uint32_t TotalHits[127];
     static uint32_t HitCount = 0;
     static uint32_t LocalTimer = millis();
-    static uint32_t Seconds_so_far = 1; // avoid divide by zero in HitCountPerSecond calculation below
-
+    static uint32_t Seconds_so_far = 1;
 
     char Quietest[] = "Quietest";
     char Noisyest[] = "Noisyest";
@@ -557,7 +554,7 @@ void ScanAllChannels(bool cls)
 
     CheckPowerOffButton();
 
-   if (millis() - LocalTimer >= 1000)
+    if (millis() - LocalTimer >= 1000)
     {
         LocalTimer = millis();
         SendValue(Count3, HitCount / Seconds_so_far);
@@ -579,43 +576,107 @@ void ScanAllChannels(bool cls)
     }
 
     Str(NewYellow, HighlightColour, 0);
+
+    // ── PASS 1: scan all channels, accumulate raw hit counts ──────────────────
+    // We use a local raw array this sweep; TotalHits accumulates across sweeps.
+    uint8_t RawHits[126] = {0}; // hits detected THIS sweep, per channel
+
     for (Sc = 0; Sc <= 125; ++Sc)
     {
         if (NEXTION.available())
-            return; // in case someone wants to stop!
+            return;
+
         Radio1.setChannel(Sc);
         Radio1.startListening();
-        x2 = x1 + (Sc * 5);
-        y2 = y1 + 255;
-        y2 = y2 - BlobHeight;
-        y2 = y2 - AllChannels[Sc];
-        delayMicroseconds(120); // Minimum!?
+        delayMicroseconds(120);
         Radio1.stopListening();
+
         if (Radio1.testCarrier())
         {
-            if (AllChannels[Sc] < (250))
+            RawHits[Sc] = 1;
+            ++TotalHits[Sc];
+            ++HitCount;
+        }
+    }
+
+    // ── Find the peak TotalHits across all channels (for scaling) ─────────────
+    uint32_t PeakHits = 1; // avoid divide-by-zero
+    for (Sc = 0; Sc <= 125; ++Sc)
+        if (TotalHits[Sc] > PeakHits)
+            PeakHits = TotalHits[Sc];
+
+    // ── PASS 2: update rendered bar heights with proportional scaling ─────────
+    for (Sc = 0; Sc <= 125; ++Sc)
+    {
+        if (NEXTION.available())
+            return;
+
+        x2 = x1 + (Sc * 5);
+
+        // Target rendered height for this channel, scaled to GraphHeight
+        uint8_t TargetHeight = (uint8_t)(((uint32_t)TotalHits[Sc] * GraphHeight) / PeakHits);
+        // Snap to BlobHeight grid
+        TargetHeight = (TargetHeight / BlobHeight) * BlobHeight;
+
+        uint8_t CurrentHeight = AllChannels[Sc];
+
+        if (TargetHeight > CurrentHeight)
+        {
+            // Grow upward by one blob
+            uint8_t NewHeight = CurrentHeight + BlobHeight;
+            if (NewHeight > TargetHeight)
+                NewHeight = TargetHeight;
+
+            y2 = y1 + GraphHeight - CurrentHeight - BlobHeight; // top of new blob
+            SendCharArray(CB, fyll,
+                          Str(NB, x2, 1),
+                          Str(NB1, y2, 1),
+                          Str(NB2, BlobWidth, 1),
+                          Str(NB3, BlobHeight, 1),
+                          NewYellow, NA, NA, NA, NA, NA, NA);
+
+            AllChannels[Sc] = NewHeight;
+        }
+        else if (TargetHeight < CurrentHeight)
+        {
+            // Shrink: only reduce if NoCarrier threshold met
+            ++NoCarrier[Sc];
+            if (NoCarrier[Sc] >= ScanSensitivity)
             {
-                AllChannels[Sc] += BlobHeight;
-                ++TotalHits[Sc];
-                ++HitCount;
-                SendCharArray(CB, fyll, Str(NB, x2, 1), Str(NB1, (y2), 1), Str(NB2, BlobWidth, 1), Str(NB3, BlobHeight, 1), NewYellow, NA, NA, NA, NA, NA, NA);
+                uint8_t NewHeight = CurrentHeight - BlobHeight;
+                if (NewHeight < TargetHeight)
+                    NewHeight = TargetHeight;
+
+                y2 = y1 + GraphHeight - CurrentHeight; // top of blob to erase
+                SendCharArray(CB, fyll,
+                              Str(NB, x2, 1),
+                              Str(NB1, y2, 1),
+                              Str(NB2, BlobWidth, 1),
+                              Str(NB3, BlobHeight, 1),
+                              Str(NB4, 0, 0), NA, NA, NA, NA, NA, NA);
+
+                AllChannels[Sc] = NewHeight;
+                NoCarrier[Sc] = 0;
             }
         }
         else
         {
-            ++NoCarrier[Sc];
-            if (NoCarrier[Sc] >= ScanSensitivity)
-            { // must see no carrier >= ScanSensitivity times before reducing the trace
-                if (AllChannels[Sc] >= (BlobHeight))
-                {
-                    SendCharArray(CB, fyll, Str(NB, x2, 1), Str(NB1, (y2 + BlobHeight), 1), Str(NB2, BlobWidth, 1), Str(NB3, BlobHeight, 1), Str(NB4, 0, 0), NA, NA, NA, NA, NA, NA);
-                    AllChannels[Sc] -= (BlobHeight);
-                    NoCarrier[Sc] = 0;
-                }
+            // On target — if a hit arrived this sweep, refresh the colour
+            // (handles the case where a rescale left stale black pixels)
+            if (RawHits[Sc] && CurrentHeight > 0)
+            {
+                y2 = y1 + GraphHeight - CurrentHeight;
+                SendCharArray(CB, fyll,
+                              Str(NB, x2, 1),
+                              Str(NB1, y2, 1),
+                              Str(NB2, BlobWidth, 1),
+                              Str(NB3, BlobHeight, 1),
+                              NewYellow, NA, NA, NA, NA, NA, NA);
             }
         }
     }
 
+    // ── Best / worst channel reporting ────────────────────────────────────────
     static uint16_t BestScore = 0;
     static uint16_t WorstScore = 0;
 
