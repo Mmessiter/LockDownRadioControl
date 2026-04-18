@@ -544,11 +544,25 @@ void ScanAllChannels(bool cls)
     static uint8_t AllChannels[127];
     static uint8_t NoCarrier[127];
     static uint32_t TotalHits[127];
+    static uint32_t HitCount = 0;
+    static uint32_t LocalTimer = millis();
+    static uint32_t Seconds_so_far = 1; // avoid divide by zero in HitCountPerSecond calculation below
+
 
     char Quietest[] = "Quietest";
     char Noisyest[] = "Noisyest";
     char Count[] = "Count";
     char Count1[] = "Count1";
+    char Count3[] = "Count3";
+
+    CheckPowerOffButton();
+
+   if (millis() - LocalTimer >= 1000)
+    {
+        LocalTimer = millis();
+        ++Seconds_so_far;
+        SendValue(Count3, HitCount / Seconds_so_far);
+    }
 
     if (cls)
     {
@@ -558,6 +572,8 @@ void ScanAllChannels(bool cls)
             AllChannels[i] = 0;
             TotalHits[i] = 0;
         }
+        HitCount = 0;
+        Seconds_so_far = 1;
         return;
     }
 
@@ -580,6 +596,7 @@ void ScanAllChannels(bool cls)
             {
                 AllChannels[Sc] += BlobHeight;
                 ++TotalHits[Sc];
+                ++HitCount;
                 SendCharArray(CB, fyll, Str(NB, x2, 1), Str(NB1, (y2), 1), Str(NB2, BlobWidth, 1), Str(NB3, BlobHeight, 1), NewYellow, NA, NA, NA, NA, NA, NA);
             }
         }
@@ -609,13 +626,12 @@ void ScanAllChannels(bool cls)
             WorstScore = Sc;
     }
 
-    // uint16_t BestFreq = 2400 + BestScore;
-    // uint16_t WorstFreq = 2400 + WorstScore;
-
-    SendValue(Quietest, BestScore);
-    SendValue(Noisyest, WorstScore);
-    SendValue(Count1, TotalHits[WorstScore]);
-    SendValue(Count, TotalHits[BestScore]);
+    strcpy(NextionCommand, "");
+    BuildValue(Quietest, BestScore);
+    BuildValue(Noisyest, WorstScore);
+    BuildValue(Count1, TotalHits[WorstScore]);
+    BuildValue(Count, TotalHits[BestScore]);
+    SendCommand(NextionCommand);
 }
 
 #ifdef DB_FHSS

@@ -905,6 +905,7 @@ void HideGOVConfigMsg();
 void Gov_Global_Were_Edited();
 bool AllGlobalConfigBytesReceived();
 void AddWords();
+void BuildValue(char *nbox, int value);
 // **************************************************************************
 //                            GLOBAL DATA                                   *
 //***************************************************************************
