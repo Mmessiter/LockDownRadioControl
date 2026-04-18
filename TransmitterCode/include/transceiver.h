@@ -560,8 +560,8 @@ void ScanAllChannels(bool cls)
    if (millis() - LocalTimer >= 1000)
     {
         LocalTimer = millis();
-        ++Seconds_so_far;
         SendValue(Count3, HitCount / Seconds_so_far);
+        ++Seconds_so_far;
     }
 
     if (cls)
