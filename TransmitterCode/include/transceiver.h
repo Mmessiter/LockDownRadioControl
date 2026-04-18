@@ -574,6 +574,7 @@ void ScanAllChannels(bool cls)
         }
         HitCount = 0;
         Seconds_so_far = 1;
+        LocalTimer = millis();
         return;
     }
 
@@ -633,7 +634,7 @@ void ScanAllChannels(bool cls)
     BuildValue(Count, TotalHits[BestScore]);
     SendCommand(NextionCommand);
 }
-
+// ************************************************************************************************************/
 #ifdef DB_FHSS
 float PStartTime = 0;
 float PEndTime = 0;
