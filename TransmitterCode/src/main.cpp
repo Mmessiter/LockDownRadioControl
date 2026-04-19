@@ -4494,33 +4494,28 @@ void GotoFrontView()
     OldRate = 235;             // forced different
     ForceVoltDisplay = true;   // force redisplay of voltage
     LastConnectionQuality = 0; // force redisplay of connection quality
-    if (CurrentView != FRONTVIEW)
-    {
-        if (CurrentView == SCANVIEW)
-            DoScanEnd(); // Put transceiver back to normal mode
-        if (CurrentView == PONGVIEW)
-            ReadOneModel(ModelNumber); // Return to current model
-        if (CurrentMode != LISTENMODE)
-            CurrentMode = NORMAL;     // Return to normal mode unless in BUDDY listen mode
-        SendCommand(pFrontView);      // Set to FrontView
-        CurrentView = FRONTVIEW;      // Set to FrontView
-        UpdateModelsNameEveryWhere(); // Update model name
-        SafetyWasOn ^= 1;             // this forces a re-display of safety state
-        BeQuiet = true;               // this means no announcement of safety this time
-        ShowBank();
-        LastTimeRead = 0;
-        Reconnected = false; // this is to make '** Connected! **' redisplay (in ShowComms())
-        LastSeconds = 0;     // This forces redisplay of timer...
-        Force_ReDisplay();
-        ShowMotorTimer();
-        ClearText();
-        LastShowTime = 0; // this is to make redisplay sooner (in ShowComms())
-        SendText(FrontView_Connected, na);
-    }
-    // for (int i = 0; i < 4; ++i)
-    // {
-    //     SendText(fms[i], BankNames[BanksInUse[i]]);
-    // }
+                               // if (CurrentView != FRONTVIEW)
+                               // {
+    if (CurrentView == SCANVIEW)
+        DoScanEnd(); // Put transceiver back to normal mode
+    if (CurrentView == PONGVIEW)
+        ReadOneModel(ModelNumber); // Return to current model
+    if (CurrentMode != LISTENMODE)
+        CurrentMode = NORMAL;     // Return to normal mode unless in BUDDY listen mode
+    SendCommand(pFrontView);      // Set to FrontView
+    CurrentView = FRONTVIEW;      // Set to FrontView
+    UpdateModelsNameEveryWhere(); // Update model name
+    SafetyWasOn ^= 1;             // this forces a re-display of safety state
+    BeQuiet = true;               // this means no announcement of safety this time
+    ShowBank();
+    LastTimeRead = 0;
+    Reconnected = false; // this is to make '** Connected! **' redisplay (in ShowComms())
+    LastSeconds = 0;     // This forces redisplay of timer...
+    Force_ReDisplay();
+    ShowMotorTimer();
+    ClearText();
+    LastShowTime = 0; // this is to make redisplay sooner (in ShowComms())
+    SendText(FrontView_Connected, na);
     SendText((char *)"t4", BankNames[BanksInUse[Bank - 1]]); // show current bank name on front view
     ForceDataRedisplay();
     ShowAMS();
