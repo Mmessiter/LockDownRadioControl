@@ -227,6 +227,7 @@ void EnsureMotorIsOff()
         DelayWithDog(1200);
         PlaySound(PLSTURNOFF);
         MsgBox(pFrontView, (char *)"Motor switch is still ON!");
+        DelayWithDog(4000); // allow time for sound to play and for pilot to react
         CheckMotorOff();
     }
     SendCommand(WarnOff);
@@ -4411,14 +4412,10 @@ void MotorEnabledHasChanged()
     {
         if (LedWasRed)
         {
-            MotorEnabled = false;
-            SendNoData = false;
-            if ((millis() - WarningTimer) > 4000)
-            {
-                PlaySound(PLSTURNOFF);
-                SendNoData = true; // user turned on motor
-                WarningTimer = millis();
-            }
+            MotorEnabled = false;  // user has not turned on motor, so turn it back off
+            PlaySound(PLSTURNOFF); // Tell the pilot to turn off motor before it will work
+            SendNoData = true;     // send no data until motor is turned on again (so that pilot has to turn it on again before it will work)
+            DelayWithDog(4000);    // allow time for sound to play and for pilot to react
             return;
         }
         ShowMotor(1);
