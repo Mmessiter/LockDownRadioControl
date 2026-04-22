@@ -282,22 +282,6 @@ void CalibrateEdgeSwitches()
     }
 }
 
-//************************************************************************************************************/
-void SafetySwitchChanged()
-{
-    if (SafetyON)
-    {
-        ShowSafetyIsOn();
-        SendNoData = false;
-        Armed = false;
-    }
-    else
-    {
-        ShowSafetyIsOff();
-        Armed = true;
-    }
-    SafetyWasOn = SafetyON;
-}
 
 //************************************************************************************************************/
 // This function is called when the bank has changed

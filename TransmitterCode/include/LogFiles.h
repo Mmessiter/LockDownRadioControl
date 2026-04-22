@@ -558,15 +558,11 @@ FASTRUN void LogMotor(bool On)
 }
 
 // ************************************************************************
-FASTRUN void LogSafety(bool On)
+FASTRUN void LogSafety()
 {
-    char Ltext1[] = "Safety On";
-    char Ltext0[] = "Safety Off";
-    char thetext[20];
-    if (On)
-        strcpy(thetext, Ltext1);
-    else
-        strcpy(thetext, Ltext0);
+char thetext[12] = "Safety Off";
+    if (SafetyON)
+        strcpy(thetext, "Safety On");
     LogText(thetext, 10, true);
 }
 // ************************************************************************

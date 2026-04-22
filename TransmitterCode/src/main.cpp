@@ -168,6 +168,8 @@
 #include "RF_Governor_Profile.h"
 #include "RF_Governor_Global.h"
 #include "Model_IDs.h"
+#include "Motor_sign.h"
+
 /*********************************************************************************************************************************/
 
 /*********************************************************************************************************************************/
@@ -323,83 +325,6 @@ void GreenLedOn()
     {
         if (LedIsBlinking)
             analogWrite(GREENLED, GetLEDBrightness()); // Blink Led!
-    }
-}
-
-/*********************************************************************************************************************************/
-
-FASTRUN void ShowMotorTimer()
-{
-    char FrontView_Hours[] = "Hours";
-    char FrontView_Mins[] = "Mins";
-    char FrontView_Secs[] = "Secs";
-
-    if (TimesUp)
-        return;
-
-    uint8_t Recording[10] = {ONEMINUTE, TWOMINUTES, THREEMINUTES, FOURMINUTES, FIVEMINUTES, SIXMINUTES, SEVENMINUTES, EIGHTMINUTES, NINEMINUTES, TENMINUTES};
-
-    uint8_t Cdown[10] = {TEN, NINE, EIGHT, SEVEN, SIX, FIVE, FOUR, THREE, TWO, ONE};
-
-    if ((MotorEnabled && (!LostContactFlag)))
-    {
-        MotorOnSeconds = ((millis() - MotorStartTime) / 1000) + PausedSecs;
-        Secs = MotorOnSeconds;
-        if (TimerDownwards)
-            Secs = TimerStartTime - MotorOnSeconds;
-        Hours = Secs / 3600;
-        Secs %= 3600;
-        Mins = Secs / 60;
-        Secs %= 60;
-    }
-    if (LastSeconds != Secs)
-    {
-
-        ClockSpoken = false;
-        ClockSpoken1 = false;
-        if (CurrentView == FRONTVIEW)
-        {
-            SendValue(FrontView_Secs, Secs);
-            SendValue(FrontView_Mins, Mins);
-            SendValue(FrontView_Hours, Hours);
-        }
-        LastSeconds = Secs;
-    }
-
-    if (TimerDownwards)
-    {
-        if ((Secs < 11) && !Mins && !ClockSpoken1 && (MotorOnSeconds > 2))
-        {
-            PlaySound(Cdown[CountDownIndex]);
-            ++CountDownIndex;
-            ClockSpoken1 = true;
-        }
-    }
-
-    if (!Secs && SpeakingClock && !ClockSpoken)
-    {
-        ClockSpoken = true;
-        if ((Mins <= 10) && (Mins > 0))
-        {
-            PlaySound(Recording[Mins - 1]);
-        }
-        if (Mins)
-        {
-            if (UseLog)
-            {
-                LogTimer(Mins);
-                LogRPM(RotorRPM);
-            }
-        }
-        if (TimerDownwards)
-        {
-            if ((!Mins) && (!Secs) && (MotorOnSeconds > 2))
-            {
-                PlaySound(STORAGECHARGE); // = Stop Flying!
-                TimesUp = true;
-                CountDownIndex = 0;
-            }
-        }
     }
 }
 
@@ -853,59 +778,6 @@ void Force_ReDisplay()
 }
 
 /*********************************************************************************************************************************/
-void SendColour(char *but, int Colour)
-{
-    char lbut[60];
-    char nb[10] = " ";
-    strcpy(lbut, but);
-    strcat(lbut, Str(nb, Colour, 0));
-    SendCommand(lbut);
-}
-/*********************************************************************************************************************************/
-void ShowSafetyIsOn()
-{
-    if (AnnounceBanks && !BeQuiet && UseMotorKill && millis() > 10000)
-    {
-        PlaySound(SAFEON);
-        if (UseLog)
-            LogSafety(1);
-    }
-    if ((CurrentView == FRONTVIEW) && UseMotorKill)
-    {
-        char bco[] = "bt0.bco=";
-        char bco2[] = "bt0.bco2=";
-        char pco[] = "bt0.pco=";
-        char pco2[] = "bt0.pco2=";
-        SendColour(bco, RED);
-        SendColour(bco2, RED);
-        SendColour(pco, WHITE);
-        SendColour(pco2, WHITE);
-        BeQuiet = false;
-    }
-}
-/*********************************************************************************************************************************/
-void ShowSafetyIsOff()
-{
-    if (AnnounceBanks && !BeQuiet && UseMotorKill)
-    {
-        PlaySound(SAFEOFF);
-        if (UseLog)
-            LogSafety(0);
-    }
-    if ((CurrentView == FRONTVIEW) && UseMotorKill)
-    {
-        char bco[] = "bt0.bco=";
-        char bco2[] = "bt0.bco2=";
-        char pco[] = "bt0.pco=";
-        char pco2[] = "bt0.pco2=";
-        SendColour(bco, GREEN);
-        SendColour(bco2, GREEN);
-        SendColour(pco, BLACK);
-        SendColour(pco2, BLACK);
-        BeQuiet = false;
-    }
-}
-/*********************************************************************************************************************************/
 
 void WatchDogCallBack()
 {
@@ -1142,9 +1014,9 @@ FLASHMEM void setup()
     { // when pupil is buddying wirelessly, these potential errors are ignored
 
         if (!UseMotorKill)
-            ShowMotor(1);
+            ShowMotor();
         if (SafetyON)
-            ShowSafetyIsOn();
+            ShowSafety();
         if (ErrorState)
         {
             SendCommand(WarnNow);
@@ -2370,17 +2242,7 @@ void ShowBank()
     SendCommand(FMPress[Bank - 1]);
     SendText((char *)"t4", BankNames[BanksInUse[Bank - 1]]);
 }
-/*********************************************************************************************************************************/
-void ShowMotor(int on)
-{
-    char bt0[] = "bt0";
-    char OnMsg[] = "Motor is ON";
-    char OffMsg[] = "Motor is OFF";
-    if ((on == 1) || (!UseMotorKill))
-        SendText(bt0, OnMsg);
-    if (on == 0)
-        SendText(bt0, OffMsg);
-}
+
 /*********************************************************************************************************************************/
 
 void DoOneSwitchView(uint8_t n) // n is 1-4  = number for switch to edit
@@ -4403,48 +4265,6 @@ void ResetMotorTimer()
     }
 }
 
-// ************************************************************************************************************/
-void MotorEnabledHasChanged()
-{
-    if (BuddyPupilOnWireless)
-        return;
-    if (MotorEnabled)
-    {
-        if (LedWasRed)
-        {
-            MotorEnabled = false;  // user has not turned on motor, so turn it back off
-            PlaySound(PLSTURNOFF); // Tell the pilot to turn off motor before it will work
-            SendNoData = true;     // send no data until motor is turned on again (so that pilot has to turn it on again before it will work)
-            DelayWithDog(4000);    // allow time for sound to play and for pilot to react
-            return;
-        }
-        ShowMotor(1);
-        if (AnnounceBanks)
-            PlaySound(MOTORON); // Tell the pilot motor is on!
-        if (UseLog)
-            LogMotor(1);
-        MotorStartTime = millis(); // Motor ON timerpause off
-    }
-    else
-    {
-        if (AnnounceBanks)
-            PlaySound(MOTOROFF);
-        SendNoData = false; // can send data!
-        if (UseLog)
-            LogMotor(0);
-        SendCommand(WarnOff);
-        ShowMotor(0); // Tell the pilot motor is off
-        if (SendNoData)
-        {
-            SendCommand(WarnOff);
-            SendNoData = false; // user turned off motor
-        }
-        PausedSecs = MotorOnSeconds; //    Motor OFF timerpause started
-    }
-    LastSeconds = 0;
-    ShowMotorTimer();
-}
-
 /************************************************************************************************************/
 void GetBank() // ... and the other three switches
 {
@@ -4502,8 +4322,6 @@ void GotoFrontView()
     SendCommand(pFrontView);      // Set to FrontView
     CurrentView = FRONTVIEW;      // Set to FrontView
     UpdateModelsNameEveryWhere(); // Update model name
-    SafetyWasOn ^= 1;             // this forces a re-display of safety state
-    BeQuiet = true;               // this means no announcement of safety this time
     ShowBank();
     LastTimeRead = 0;
     Reconnected = false; // this is to make '** Connected! **' redisplay (in ShowComms())

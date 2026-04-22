@@ -664,8 +664,7 @@ void CheckTrimValues();
 void ClearSuccessRate();
 int CheckRange(int v, int min, int max);
 void MoveaTrim(uint8_t i);
-FASTRUN void LogSafety(bool On);
-void ShowMotor(int on);
+FASTRUN void LogSafety();
 void StartModelSetup();
 bool GetConfirmation(char *goback, char *Prompt);
 void GotoModelsView();
@@ -906,11 +905,12 @@ void Gov_Global_Were_Edited();
 bool AllGlobalConfigBytesReceived();
 void AddWords();
 void BuildValue(char *nbox, int value);
-// **************************************************************************
-//                            GLOBAL DATA                                   *
-//***************************************************************************
+void ShowMotor();
+    // **************************************************************************
+    //                            GLOBAL DATA                                   *
+    //***************************************************************************
 
-RF24 Radio1(CE_PIN, CSN_PIN);
+    RF24 Radio1(CE_PIN, CSN_PIN);
 
 /************************************************************************************************************/
 /************************************************************************************************************/
@@ -1343,7 +1343,6 @@ uint8_t PupilIsAlive = 0;
 uint8_t MasterIsAlive = 0;
 bool VersionsCompared = false;
 uint32_t LedGreenMoment = 0;
-bool BeQuiet = false;
 bool ReconnectingNow = true;
 uint32_t LastHopTime = 0; //  Time of last hop
 uint16_t ParametersToBeSent[PARAMETER_QUEUE_MAXIMUM + 1];
