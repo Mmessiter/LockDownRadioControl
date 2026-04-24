@@ -58,11 +58,19 @@ void RotorFlightStart()
 // **********************************************************************************************************/
 void RotorFlightEnd()
 {
-    char temp[10];
+    char temp[15];
+    // Nextion serial can carry stale bytes after heavy MSP traffic, so GetText may fail silently.
+    // Only overwrite the globals if the read-back parses to a plausible value — otherwise keep the current one.
     GetText((char *)"Ratio", temp);
-    GearRatio = atof(temp);
+    float newRatio = atof(temp);
+    if (newRatio > 0.0f)
+        GearRatio = newRatio;
+
     GetText((char *)"Arming", temp);
-    ArmingChannel = atoi(temp);
+    int newArming = atoi(temp);
+    if (newArming > 0 && newArming <= CHANNELSUSED)
+        ArmingChannel = (uint8_t)newArming;
+
     LinkRatesToBanks = GetValue((char *)"sw0");
     SaveOneModel(ModelNumber); // save the model including gear ratio and arming channel
     ZeroDataScreen();        // clear the screen data because editing Rotorflight parameters may have created misleading comms gaps

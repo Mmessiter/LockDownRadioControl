@@ -1537,10 +1537,7 @@ FASTRUN void ParseAckPayload()
         if (BindingEnabled)
             break;
         if (Reading_GOV_Config_Now)
-        {
-            ReadGovBytesFromAckPayload(42, 46);
-            break;
-        }
+            break; // bytes [42..45] were an extraneous read and never used — dropped to stop OOB writes
         RotorFlight_V = GetIntFromAckPayload();
         RotorFlight_Version = RFVersions[RotorFlight_V];
         break;

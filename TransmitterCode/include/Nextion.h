@@ -236,7 +236,7 @@ uint32_t GetValue(char *nbox)
 // It returns the length of array
 uint16_t GetText(char *TextBoxName, char *TheText)
 {
-    
+    TheText[0] = 0; // guarantee a defined result even if the Nextion doesn't answer with 'p'
     char get[] = "get ";
     char _txt[] = ".txt";
     char CB[100];

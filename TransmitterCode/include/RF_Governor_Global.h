@@ -177,7 +177,8 @@ void DisplayGovConfigValues(uint8_t n, uint8_t m)
         if (i >= GOV_ACK_PAYLOAD_SIZE)
             break;
 
-        Global_Params_Received_Flags[i - 18] = 1; // mark this config byte as received
+        if (i >= 18 && (uint8_t)(i - 18) < sizeof(Global_Params_Received_Flags))
+            Global_Params_Received_Flags[i - 18] = 1; // mark this config byte as received
 
         if (AllGlobalConfigBytesReceived())
         {
