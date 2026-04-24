@@ -31,15 +31,7 @@ void ShowRFBank()
 // **********************************************************************************************************/
 void RotorFlightStart()
 {
-    char t12[] = "t12";
-    char t7[] = "t7";
     char Vbuf[15];
-
-    if(!RotorFlight_Version)
-    {
-       MsgBox(pRXSetupView, (char *)"RotorFlight FC was not detected!");
-       return;
-    }
 
     if (MotorEnabled || !SafetyON)
     {
@@ -52,9 +44,9 @@ void RotorFlightStart()
     AddParameterstoQueue(MSP_INHIBIT_TELEMETRY); // Inhibit telemetry for a short time to allow MSP data to be sent without interference from telemetry data (for MSP data transmission)
     SendText((char *)"t11", ModelName);          // Show model name
     snprintf(Vbuf, 5, "%1.2f", GearRatio);       // 10.3 usually
-    SendText(t12, Vbuf);
+    SendText((char *)"Ratio", Vbuf);
     snprintf(Vbuf, 5, "%d", ArmingChannel);
-    SendText(t7, Vbuf);
+    SendText((char *)"Arming", Vbuf);
     SendValue((char *)"sw0", LinkRatesToBanks);
     RotorFlight_Version = RFVersions[RotorFlight_V];
     snprintf(Vbuf, 5, "%1.1f", RotorFlight_Version);
@@ -67,15 +59,14 @@ void RotorFlightStart()
 void RotorFlightEnd()
 {
     char temp[10];
-    GetText((char *)"t12", temp);
+    GetText((char *)"Ratio", temp);
     GearRatio = atof(temp);
-    GetText((char *)"t7", temp);
+    GetText((char *)"Arming", temp);
     ArmingChannel = atoi(temp);
     LinkRatesToBanks = GetValue((char *)"sw0");
     SaveOneModel(ModelNumber); // save the model including gear ratio and arming channel
-                               //  ZeroDataScreen();        // clear the screen data because editing Rotorflight parameters may have created misleading comms gaps
+    ZeroDataScreen();        // clear the screen data because editing Rotorflight parameters may have created misleading comms gaps
     GotoFrontView();
-    // RXOptionsViewStart();      // go back to RX Options view
 }
 // **********************************************************************************************************/
 void LinkRatesToBanksChanged()

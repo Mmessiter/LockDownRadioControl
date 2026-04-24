@@ -1560,7 +1560,7 @@ void SetDefaultValues()
         ServoFrequency[i] = 50;
         ServoCentrePulse[i] = 1500;
     }
-    ArmingChannel = 0; // for Rotorflight arming switch. 0 means no arming switch
+    ArmingChannel = 6; // for Rotorflight 
     GearRatio = 10.3;  // for helicopters with swash plates. This is the ratio between servo movement and blade pitch change. 10.3 is a typical value for a 700 size heli
     for (j = 0; j < 4; ++j)
     {

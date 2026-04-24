@@ -343,7 +343,12 @@ void PopulateDataView()
     BuildText(DataView_txv, TransmitterVersionNumber);
     if (BoundFlag && ModelMatched)
         BuildValue(MeanFrameRate, AverageFrameRate);
-    BuildText(DataView_rxv, ReceiverVersionNumber);
+
+    if (LedWasGreen)
+    {
+        BuildText(DataView_rxv, ReceiverVersionNumber);
+    }
+
     BuildValue(DataView_pps, PacketsPerSecond);
     BuildValue(DataView_lps, TotalLostPackets);
     BuildValue(DataView_Ls, GapLongest);
