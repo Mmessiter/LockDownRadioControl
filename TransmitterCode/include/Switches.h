@@ -142,19 +142,23 @@ void ReadBankSwitch()
 /************************************************************************************************************/
 void ReadAutoAndMotorSwitch()
 {
-    if (BlockBankChanges) // do not change bank if blocked
-        return;
+    // Motor state must always reflect the physical switch — never gate on
+    // BlockBankChanges, or a stale block leaves the motor sign reading "ON"
+    // after the pilot has switched it off. Only the Bank=4 forcing respects
+    // the block, since that is what BlockBankChanges actually exists to gate.
     switch (GetSwitchPosition(Autoswitch))
     {
     case 1:
         MotorEnabled = true;
         break;
     case 2:
-        Bank = 4;
+        if (!BlockBankChanges)
+            Bank = 4;
         MotorEnabled = true;
         break;
     case 3:
-        Bank = 4;
+        if (!BlockBankChanges)
+            Bank = 4;
         MotorEnabled = false;
         break;
     default:
