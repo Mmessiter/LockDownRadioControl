@@ -835,6 +835,22 @@ void LoadAckPayload()
     {
         AckPayload.Ack_Payload_byte[0] = 0; // wrap after max
     }
+    // Items 25..30 and 32..34 are MSP-only slots. Their cases only write bytes
+    // 1..4 when an MSP read is active; otherwise the bytes retain stale data
+    // from a prior item (e.g. case 24's ESC_Temp_C float). The TX reads those
+    // bytes unconditionally whenever Reading_*_Now is true — which it sets the
+    // moment the user clicks Read, before the SEND_*_VALUES parameter has
+    // reached the RX. Skip these slots while idle so the TX cannot latch stale
+    // bytes during the request-propagation window. Item 31 must still fire —
+    // it carries the Rotorflight version, which the TX needs in steady state —
+    // so the cycle becomes 0..24, 31, 35, 0..24, 31, 35 while idle.
+    if (SendRotorFlightParametresNow == SEND_NO_RF)
+    {
+        if (AckPayload.Ack_Payload_byte[0] >= 25 && AckPayload.Ack_Payload_byte[0] <= 30)
+            AckPayload.Ack_Payload_byte[0] = 31;
+        else if (AckPayload.Ack_Payload_byte[0] >= 32 && AckPayload.Ack_Payload_byte[0] <= 34)
+            AckPayload.Ack_Payload_byte[0] = MAX_TELEMETERY_ITEMS;
+    }
 
     switch (AckPayload.Ack_Payload_byte[0])
     {
@@ -1106,10 +1122,13 @@ void LoadAckPayload()
         }
         break;
     case 31:
-        if (SendRotorFlightParametresNow == SEND_GOV_CONFIG_RF)
-            SendGovAckBytes(42, 46); // [42..45] — the four unpacked flag bytes
-        else
-            SendIntToAckPayload(Rotorflight_Version); // preserve existing behaviour
+        // Always send the version. The previous dual-purpose for SEND_GOV_CONFIG_RF
+        // (gov flag bytes [42..45]) was never read by the TX, but corrupted the
+        // displayed version to 0 during the brief window where the TX's
+        // Reading_GOV_Config_Now timer expires before the RX's matching
+        // SendRotorFlightParametresNow timer (RX timer starts ~100-300ms later
+        // because the SEND_GOV_CONFIG_VALUES parameter takes that long to arrive).
+        SendIntToAckPayload(Rotorflight_Version);
         break;
     case 32:
         switch (SendRotorFlightParametresNow)
