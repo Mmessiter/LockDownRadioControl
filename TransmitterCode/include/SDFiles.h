@@ -250,26 +250,15 @@ void OpenModelsFile()
 // *********************************************************************************************************************************/
 void CheckSDCard()
 {
-    char err_404[] = "SD card error!";
-    char err_405[] = "or not found!";
     bool SDCARDOK = TINYCARD.begin(BUILTIN_SDCARD); // MUST return true or SD card is not working
     if (!SDCARDOK)
     {
-        delay(1000); // allow screen to warm up
-        SendCommand(pFrontView);
-        delay(70);
-        RestoreBrightness();
-        delay(70);
-        SendCommand(WarnNow);
-        for (uint8_t i = 0; i < 4; ++i)
-        {
-            SendText(Warning, err_404);
-            delay(1000);
-            SendText(Warning, err_405);
-            delay(1000);
-            PlaySound(WHAHWHAHMSG);
-        }
-        digitalWrite(POWER_OFF_PIN, HIGH); // turn off power now!
+        delay(50); // allow screen to warm up
+        SetBrightness(100);
+        delay(20);
+        MsgBox(pFrontView,(char *)"SD card missing!");
+    } else{
+        SD_Card_Exists = true;
     }
 }
 // *********************************************************************************************************************************/

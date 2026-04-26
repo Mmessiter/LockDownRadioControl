@@ -226,9 +226,11 @@ uint8_t Ascii(char c)
 // ──────────────────────────────────────────────────────────────
 // Play a RAM-resident clip on the Nextion
 // ──────────────────────────────────────────────────────────────
-void PlaySound(uint16_t id) // your original idea,
-{                           // rewritten with snprintf
+void PlaySound(uint16_t id)     
+{                        
     if (CurrentView == MODELSVIEW && id != CLICKONE)
+        return;
+    if (!SD_Card_Exists)
         return;
     char cmd[24];
     snprintf(cmd, sizeof(cmd), "play 0,%u,0", id); // loop = 0 (play once)
@@ -1094,9 +1096,9 @@ void DelayWithDog(uint32_t HowLong)
         CheckPowerOffButton();
         if (ModelMatched && BoundFlag)
         {
-          GetNewChannelValues(); // these might have changed while we were waiting
-          FixMotorChannel();     // ensure motor channel is off if that's needed
-          SendData(); // send new data to RX
+            GetNewChannelValues(); // these might have changed while we were waiting
+            FixMotorChannel();     // ensure motor channel is off if that's needed
+            SendData();            // send new data to RX
         }
     }
     AlreadyKicking = false;
@@ -1260,7 +1262,6 @@ void ShowMismatchMsg()
     strcat(prompt, (char *)"\r\n");
     strcat(prompt, TDetails);
     MsgBox((char *)"page FrontView", prompt);
-
 }
 
 /************************************************************************************************************/
@@ -1270,7 +1271,6 @@ void WarnUserOfVersionsMismatch()
     VersionMismatch = true;
     PlaySound(WHAHWHAHMSG); // Play warning sound
     ShowMismatchMsg();
-  
 }
 
 /************************************************************************************************************/

@@ -942,13 +942,17 @@ FLASHMEM void setup()
     CentreTrims();
     strcpy(TextFileName, "");
     ErrorState = NOERROR;
+
+    CheckSDCard(); // Check if SD card is present and working and initialise it
+
     WatchDogConfig.window = WATCHDOGMAXRATE;  //  = MINIMUM RATE in milli seconds, (32ms to 522.232s) must be MUCH smaller than timeout
     WatchDogConfig.timeout = WATCHDOGTIMEOUT; //  = MAX TIMEOUT in milli seconds, (32ms to 522.232s)
     WatchDogConfig.callback = WatchDogCallBack;
-    CheckSDCard(); // Check if SD card is present and working and initialise it
     TeensyWatchDog.begin(WatchDogConfig);
     delay(300); // <<********************* MUST ALLOW DOG TO INITIALISE
+
     DelayWithDog(WARMUPDELAY);
+
     if (CheckFileExists(ModelsFile))
     {
         if (!LoadAllParameters())
@@ -960,6 +964,7 @@ FLASHMEM void setup()
     {
         ErrorState = MODELSFILENOTFOUND; // if no file ... or no SD
     }
+
     SetBrightness(1);         // Set low brightness for splash screen
     SendCommand(pSplashView); // show splash screen **************************
     CurrentView = SPLASHVIEW; // while loading ...
@@ -1560,7 +1565,7 @@ void SetDefaultValues()
         ServoFrequency[i] = 50;
         ServoCentrePulse[i] = 1500;
     }
-    ArmingChannel = 6; // for Rotorflight 
+    ArmingChannel = 6; // for Rotorflight
     GearRatio = 10.3;  // for helicopters with swash plates. This is the ratio between servo movement and blade pitch change. 10.3 is a typical value for a 700 size heli
     for (j = 0; j < 4; ++j)
     {
@@ -4299,9 +4304,8 @@ void GetBank() // ... and the other three switches
 
 /************************************************************************************************************/
 
-void GotoFrontView()
+void GotoFrontView() // heer
 {
-    // char fms[4][4] = {{"fm1"}, {"fm2"}, {"fm3"}, {"fm4"}};
     char FrontView_Connected[] = "Connected";
     PupilIsAlive = 0;
     MasterIsAlive = 0;
@@ -4360,6 +4364,7 @@ void GotoFrontView()
     }
     DisplayModelImage();
     SendCommand((char *)"vis exp0,1");
+    ShowBindingIsEnabled(); // Show binding enabled if it is...
 }
 
 /************************************************************************************************************/
@@ -4437,16 +4442,24 @@ void Close_TX_Down()
     digitalWrite(POWER_OFF_PIN, HIGH); // Power off the transmitter
     delay(100);                        // Wait for a short time to ensure power off
 }
+/// ************************************************************************************************************/
+void ShowBindingIsEnabled()
+{
+    if (BindingEnabled)
+    {
+        char Mfound[] = "Binding enabled";
+        char wb[] = "wb"; // wb is the name of the label on front view
+        char YesVisible[] = "vis wb,1";
+        SendText(wb, Mfound);     // Show binding enabled
+        SendCommand(YesVisible);  // Show binding enabled
+    }
+}
 
 // ************************************************************************************************************/
 void CheckWhetherToEnableBinding()
 {
     // This function checks whether binding is being enabled for this transmitter.
     // This is done by holding down the power button for two seconds at the start up.
-
-    char Mfound[] = "Binding enabled";
-    char wb[] = "wb"; // wb is the name of the label on front view
-    char YesVisible[] = "vis wb,1";
 
     if (!digitalRead(BUTTON_SENSE_PIN) && ((millis()) < 5000) && (millis() >= 2000)) //  To initiate Binding, hold ON button for 2-5 secs
     {
@@ -4458,9 +4471,8 @@ void CheckWhetherToEnableBinding()
             PlaySound(BEEPCOMPLETE);      // Play sound to indicate binding enabled
             delay(250);                   // Wait for chirp to finish
             PlaySound(BINDINGENABLED);    // Play sound to indicate binding enabled
-            SendText(wb, Mfound);         // Show binding enabled
-            SendCommand(YesVisible);      // Show binding enabled
             BindingEnabled = true;        // Set binding enabled flag
+            ShowBindingIsEnabled();       // Show binding enabled
         }
         return;
     }
@@ -4480,10 +4492,10 @@ void CheckPowerOffButton()
     char ShowStillConnected[] = "vis StillConnected,1";
     char StillConnectedBox[] = "StillConnected";
 
-    if ((digitalRead(BUTTON_SENSE_PIN)) || CheckingPowerButton) // already checking power button or button not even pressed!
+    if (digitalRead(BUTTON_SENSE_PIN) || CheckingPowerButton) // already checking power button or button not even pressed!
         return;
     CheckingPowerButton = true; // set flag to prevent re-entry
-    if (!BuddyMasterOnWireless && !BuddyPupilOnWireless)
+    if (!BuddyMasterOnWireless && !BuddyPupilOnWireless && SD_Card_Exists)
         CheckWhetherToEnableBinding(); // Check if binding is enabled Which is done by holding the start button for more than two seconds
 
     if ((!digitalRead(BUTTON_SENSE_PIN)) && (millis() > POWERONOFFDELAY2)) // no power off for first 10 seconds in case button held down too long
