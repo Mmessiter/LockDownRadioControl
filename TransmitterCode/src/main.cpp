@@ -2929,7 +2929,7 @@ void RestoreCurrentModel()
 // ******************************** Global Array1 of numbered function pointers OK up the **********************************
 
 // This new list can be huge - up to 24 BITS unsigned!  ( Use "NUMBER<<8" )
-#define LASTFUNCTION1 63 // One more than final one
+#define LASTFUNCTION1 64 // One more than final one
 
 void (*NumberedFunctions1[LASTFUNCTION1])(){
     Blank,                   // 0 Cannot be used
@@ -2994,7 +2994,8 @@ void (*NumberedFunctions1[LASTFUNCTION1])(){
     StartModelIDView,        // 59
     EndModelIDView,          // 60
     SaveToLocalGovGLOBAL,    // 61
-    RestoreFromSDGlobalGOV   // 62
+    RestoreFromSDGlobalGOV,  // 62
+    Enable_Binding           // 63
 };
 
 // This list migth become MUCH longer as it limit is 24 bits big
@@ -4304,7 +4305,7 @@ void GetBank() // ... and the other three switches
 
 /************************************************************************************************************/
 
-void GotoFrontView() // heer
+void GotoFrontView()
 {
     char FrontView_Connected[] = "Connected";
     PupilIsAlive = 0;
@@ -4450,8 +4451,8 @@ void ShowBindingIsEnabled()
         char Mfound[] = "Binding enabled";
         char wb[] = "wb"; // wb is the name of the label on front view
         char YesVisible[] = "vis wb,1";
-        SendText(wb, Mfound);     // Show binding enabled
-        SendCommand(YesVisible);  // Show binding enabled
+        SendText(wb, Mfound);    // Show binding enabled
+        SendCommand(YesVisible); // Show binding enabled
     }
 }
 

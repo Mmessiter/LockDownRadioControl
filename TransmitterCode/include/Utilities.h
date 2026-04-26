@@ -1379,4 +1379,10 @@ uint32_t GetBuildDaysSince2020()
     // cur >= base for your builds; clamp just in case.
     return (cur >= base) ? (uint32_t)(cur - base) : 0u;
 }
+// ************************************************************************************************************/
+void Enable_Binding(){
+    BindingEnabled = true;
+    PlaySound(BINDINGENABLED);
+    GotoFrontView();
+}
 #endif
