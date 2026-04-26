@@ -226,8 +226,8 @@ uint8_t Ascii(char c)
 // ──────────────────────────────────────────────────────────────
 // Play a RAM-resident clip on the Nextion
 // ──────────────────────────────────────────────────────────────
-void PlaySound(uint16_t id)     
-{                        
+void PlaySound(uint16_t id)
+{
     if (CurrentView == MODELSVIEW && id != CLICKONE)
         return;
     if (!SD_Card_Exists)
@@ -795,6 +795,7 @@ void StartInactvityTimeout()
 uint8_t GetLEDBrightness()
 {
     static uint8_t BlinkOnPhase = 1;
+    static uint32_t BlinkTimer = 0;
 
     if (LEDBrightness < 15)
     {
@@ -816,8 +817,6 @@ uint8_t GetLEDBrightness()
     }
     if (BlinkOnPhase)
     {
-        if (LedIsBlinking)
-            return 255;
         return LEDBrightness; // 0 - 254 (= brightness)
     }
     else
@@ -1380,9 +1379,27 @@ uint32_t GetBuildDaysSince2020()
     return (cur >= base) ? (uint32_t)(cur - base) : 0u;
 }
 // ************************************************************************************************************/
-void Enable_Binding(){
-    BindingEnabled = true;
-    PlaySound(BINDINGENABLED);
-    GotoFrontView();
+void Enable_Binding()
+{
+    if (!BindingEnabled)
+    {
+        BindingEnabled = true;
+        LedIsBlinking = true;
+        PlaySound(BINDINGENABLED);
+        SendText((char *)"OptionsView.b0", (char *)"Stop Bind");
+    }
+    else
+    {
+        BindingEnabled = false;
+        LedIsBlinking = false;
+        PlaySound(BEEPCOMPLETE);
+        SendText((char *)"OptionsView.b0", (char *)"Bind");
+        if (LedWasRed){
+            RedLedOn();
+        }
+        if (LedWasGreen){
+            GreenLedOn();
+        }
+    }
 }
 #endif

@@ -147,7 +147,6 @@ void CheckBatteryStates()
                 PlaySound(WarningSound); // Issue audible warning
                 LogStopFlyingMsg();      // Log the stop flying message
                 LogRXVoltsPerCell();     // Log the RX volts per cell
-                                         // LedIsBlinking = true; // too annoying
                 if (CurrentView == FRONTVIEW)
                     SendCommand(WarnNow);
             }
@@ -157,7 +156,6 @@ void CheckBatteryStates()
     {
         if (CurrentView == FRONTVIEW)
             SendCommand(WarnOff);
-        LedIsBlinking = false;
         WarnTimer = Now;
     }
     SimplePing();

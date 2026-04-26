@@ -1209,8 +1209,8 @@ uint16_t YtouchPlace = 0; // Clicked Y
 // changing these four valiables controls LED blink and speed
 
 bool LedIsBlinking = false;
-float BlinkHertz = 2;
-uint32_t BlinkTimer = 0;
+float BlinkHertz = 6;
+
 bool LedWasGreen = false;
 bool LedWasRed = false;
 char ThisRadio[6] = "0 ";

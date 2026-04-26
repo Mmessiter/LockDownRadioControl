@@ -237,7 +237,7 @@ void EnsureMotorIsOff()
 }
 /*********************************************************************************************************************************/
 
-void RedLedOn()
+void RedLedOn() // heer
 {
     analogWrite(GREENLED, 0);
     analogWrite(BLUELED, 0);
@@ -291,6 +291,7 @@ void GreenLedOn()
         }
         SendCommand((char *)"vis wb,0"); // Hide the binding button
         BindingEnabled = false;          // Disable new binding after successful bind
+        LedIsBlinking = false;          // Stop blinking if it was blinking for binding
         LedGreenMoment = millis();
         LastShowTime = 0;
         ShowComms();
@@ -4453,6 +4454,8 @@ void ShowBindingIsEnabled()
         char YesVisible[] = "vis wb,1";
         SendText(wb, Mfound);    // Show binding enabled
         SendCommand(YesVisible); // Show binding enabled
+        LedIsBlinking = true;    // Start blinking LED to show binding enabled
+        SendText((char *)"OptionsView.b0", (char *)"Stop Bind");
     }
 }
 
@@ -4599,11 +4602,6 @@ void FASTRUN ManageTransmitter()
     if (RightNow - LastTimeRead >= 1000)
     { // Only once a second for these..
 
-        // if (RotorFlight_V && BankCheckIsNeeded){
-        //     BankCheckIsNeeded = false;
-        //     AddParameterstoQueue(MSP_BANK_CHANGE_CONFIRMATION); // This is to confirm that we are talking to Rotorflight 2.2 which needs this extra step to complete the bank change process.
-        // }
-
         if (VersionMismatch)
         {
             ShowMismatchMsg(); // Show version mismatch message if needed
@@ -4634,7 +4632,10 @@ void FASTRUN ManageTransmitter()
     { // 50 = 20 times a second
         ReadTheSwitchesAndTrims();
         CheckHardwareTrims();
-        GetBank(); // Check switch positions 20 times a secon
+        GetBank(); // Check switch positions 20 times a second
+        if (LedIsBlinking && LedWasRed)
+                RedLedOn();
+       
         if (CurrentView >= PIDVIEW && CurrentView <= RFGOVERNORVIEW_GLOBAL)
         {
             Hide_msg_if_needed(); // Hide any message in rotoflight config area
