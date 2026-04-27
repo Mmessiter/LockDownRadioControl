@@ -238,9 +238,13 @@ void Modify_Labels_For_RATES_View()
 
     if (RotorFlight_V >= 2)
     {
-        SendText((char *)"t4", (char *)"Rates");
+        SendText((char *)"t4", (char *)"Rates"); // in RF v2.2 this is called Axis but in RF v2.3 it's called Rates so change label accordingly
         SendText((char *)"t5", (char *)"Rate");
         SendText((char *)"t6", (char *)"Shape");
+    }else{
+        SendText((char *)"t4", (char *)"Axis"); // in RF v2.2 this is called Axis but in RF v2.3 it's called Rates so change label accordingly
+        SendText((char *)"t5", (char *)"Centre Sens.");
+        SendText((char *)"t6", (char *)"Maximum");
     }
 }
 // ******************************************************************************************************************************/
