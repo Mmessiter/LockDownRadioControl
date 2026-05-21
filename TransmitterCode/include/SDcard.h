@@ -361,8 +361,8 @@ bool ReadOneModel(uint32_t Mnum)
     ++SDCardAddress;
     ++SDCardAddress;
     StopFlyingVoltsPerCell = float(SFV) / 100;
-    if (StopFlyingVoltsPerCell < 3 || StopFlyingVoltsPerCell > 4)
-        StopFlyingVoltsPerCell = 3.50; // a useful default stop time?!
+   // if (StopFlyingVoltsPerCell < 3 || StopFlyingVoltsPerCell > 4)
+   //     StopFlyingVoltsPerCell = 3.50; // a useful default stop time?!
     Drate2 = SDRead8BITS(SDCardAddress);
     if ((Drate2 < 10) || (Drate2 > 200))
         Drate2 = 100;
