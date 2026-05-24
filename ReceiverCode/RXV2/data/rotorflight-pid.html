@@ -84,6 +84,16 @@ table.pids td input{width:100%;padding:.5em;font-size:1em;border:1px solid #b8c7
     <button class="btn btn-fly" id=saveBtn onclick="save()" style="background:#6cab5e"><span class=ico>&#128190;</span>SAVE to FC (writes EEPROM)</button>
     <button class="btn btn-fw" onclick="load()"><span class=ico>&#8635;</span>Reload from FC</button>
 
+    <div class=card>
+        <h2>Copy these settings to&hellip;</h2>
+        <div class=profRow>
+            <button class=profBtn onclick="copyTo(0)" id=cb0>1</button>
+            <button class=profBtn onclick="copyTo(1)" id=cb1>2</button>
+            <button class=profBtn onclick="copyTo(2)" id=cb2>3</button>
+            <button class=profBtn onclick="copyTo(3)" id=cb3>4</button>
+        </div>
+    </div>
+
     <a class="btn btn-back" href="/rotorflight"><span class=ico>&#8617;</span>Back</a>
     <div class=footer></div>
 </div>
@@ -158,9 +168,7 @@ async function load() {
     }
 }
 
-async function save() {
-    if (!confirm('Write these PIDs to the FC EEPROM?')) return;
-    setStatus('info', 'Writing PIDs…');
+function buildPayload() {
     const ids = ['r_P','r_I','r_D','r_F','p_P','p_I','p_D','p_F','y_P','y_I','y_D','y_F',
                  'b_R','b_P','b_Y','h_R','h_P'];
     const words = ids.map(id => parseInt(document.getElementById(id).value || '0'));
@@ -169,6 +177,13 @@ async function save() {
         bytes[i*2]     = words[i] & 0xff;
         bytes[i*2 + 1] = (words[i] >> 8) & 0xff;
     }
+    return bytes;
+}
+
+async function save() {
+    if (!confirm('Write these PIDs to the FC EEPROM?')) return;
+    setStatus('info', 'Writing PIDs…');
+    const bytes = buildPayload();
     try {
         const r1 = await fetch('/api/msp?fn=202&data=' + bytesToHex(bytes), { cache: 'no-store' });
         if (!r1.ok) throw new Error('SET_PID: ' + (await r1.text()));
@@ -178,6 +193,27 @@ async function save() {
     } catch (e) {
         setStatus('bad', 'Save failed: ' + e.message);
     }
+}
+
+async function copyTo(destIdx) {
+    if (destIdx === currentProfile) { setStatus('info', 'Already on profile ' + (destIdx+1)); return; }
+    if (!confirm('Copy current PIDs to profile ' + (destIdx + 1) + ' and switch to it?')) return;
+    setStatus('info', 'Copying to profile ' + (destIdx + 1) + '…');
+    const bytes = buildPayload();
+    try {
+        const enc = destIdx.toString(16).padStart(2,'0');
+        const rS = await fetch('/api/msp?fn=210&data=' + enc);
+        if (!rS.ok) throw new Error('SELECT: ' + (await rS.text()));
+        const r1 = await fetch('/api/msp?fn=202&data=' + bytesToHex(bytes));
+        if (!r1.ok) throw new Error('SET_PID: ' + (await r1.text()));
+        const r2 = await fetch('/api/msp?fn=250');
+        if (!r2.ok) throw new Error('EEPROM_WRITE: ' + (await r2.text()));
+        currentProfile = destIdx;
+        localStorage.setItem('rfPidProfile', String(destIdx));
+        paintProfileButtons();
+        await load();
+        setStatus('good', '✓ Copied to profile ' + (destIdx + 1) + ' (now editing it)');
+    } catch (e) { setStatus('bad', 'Copy failed: ' + e.message); }
 }
 
 document.addEventListener('DOMContentLoaded', () => {

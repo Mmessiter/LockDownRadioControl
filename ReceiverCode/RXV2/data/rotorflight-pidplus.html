@@ -83,6 +83,16 @@
     <button class="btn btn-fly" onclick="save()" style="background:#6cab5e"><span class=ico>&#128190;</span>SAVE to FC (writes EEPROM)</button>
     <button class="btn btn-fw" onclick="load()"><span class=ico>&#8635;</span>Reload from FC</button>
 
+    <div class=card>
+        <h2>Copy these settings to&hellip;</h2>
+        <div class=profRow>
+            <button class=profBtn onclick="copyTo(0)" id=cb0>1</button>
+            <button class=profBtn onclick="copyTo(1)" id=cb1>2</button>
+            <button class=profBtn onclick="copyTo(2)" id=cb2>3</button>
+            <button class=profBtn onclick="copyTo(3)" id=cb3>4</button>
+        </div>
+    </div>
+
     <a class="btn btn-back" href="/rotorflight"><span class=ico>&#8617;</span>Back</a>
     <div class=footer></div>
 </div>
@@ -149,16 +159,21 @@ async function load() {
     } catch (e) { setStatus('bad', 'Read failed: ' + e.message); }
 }
 
-async function save() {
-    if (!cachedRaw) { setStatus('bad', 'Read FC first'); return; }
-    if (!confirm('Write these advanced PIDs to the FC EEPROM?')) return;
-    setStatus('info', 'Writing PID profile…');
-    const bytes = new Uint8Array(cachedRaw);   // start from last-read snapshot
+function buildPayload() {
+    const bytes = new Uint8Array(cachedRaw);
     for (const [id, off, kind] of FIELDS) {
         const el = document.getElementById(id);
         if (kind === 'bool') bytes[off] = el.checked ? 1 : 0;
         else bytes[off] = Math.max(0, Math.min(255, parseInt(el.value || '0')));
     }
+    return bytes;
+}
+
+async function save() {
+    if (!cachedRaw) { setStatus('bad', 'Read FC first'); return; }
+    if (!confirm('Write these advanced PIDs to the FC EEPROM?')) return;
+    setStatus('info', 'Writing PID profile…');
+    const bytes = buildPayload();
     try {
         const r1 = await fetch('/api/msp?fn=95&data=' + bytesToHex(bytes));
         if (!r1.ok) throw new Error('SET_PID_PROFILE: ' + (await r1.text()));
@@ -167,6 +182,28 @@ async function save() {
         setStatus('good', '✓ Saved to FC EEPROM');
         cachedRaw = bytes;
     } catch (e) { setStatus('bad', 'Save failed: ' + e.message); }
+}
+
+async function copyTo(destIdx) {
+    if (!cachedRaw) { setStatus('bad', 'Read FC first'); return; }
+    if (destIdx === currentProfile) { setStatus('info', 'Already on profile ' + (destIdx+1)); return; }
+    if (!confirm('Copy current advanced PIDs to profile ' + (destIdx + 1) + ' and switch to it?')) return;
+    setStatus('info', 'Copying to profile ' + (destIdx + 1) + '…');
+    const bytes = buildPayload();
+    try {
+        const enc = destIdx.toString(16).padStart(2,'0');
+        const rS = await fetch('/api/msp?fn=210&data=' + enc);
+        if (!rS.ok) throw new Error('SELECT: ' + (await rS.text()));
+        const r1 = await fetch('/api/msp?fn=95&data=' + bytesToHex(bytes));
+        if (!r1.ok) throw new Error('SET_PID_PROFILE: ' + (await r1.text()));
+        const r2 = await fetch('/api/msp?fn=250');
+        if (!r2.ok) throw new Error('EEPROM_WRITE: ' + (await r2.text()));
+        currentProfile = destIdx;
+        localStorage.setItem('rfPidProfile', String(destIdx));
+        paintProfileButtons();
+        await load();
+        setStatus('good', '✓ Copied to profile ' + (destIdx + 1) + ' (now editing it)');
+    } catch (e) { setStatus('bad', 'Copy failed: ' + e.message); }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
