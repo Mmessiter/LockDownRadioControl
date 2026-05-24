@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name=theme-color content="#5fa099">
+<meta name=apple-mobile-web-app-capable content=yes>
+<meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
+<meta name=apple-mobile-web-app-title content="LDRC RX V2">
+<title>Fly &middot; LDRC RX V2</title>
+<link rel=stylesheet href="/style.css">
+<script src="/app.js" defer></script>
+</head>
+<body>
+<div class=container>
+    <h1>Fly now</h1>
+
+    <div id=statuscard class="status-card down">
+        <div class=label>RF link</div>
+        <div class=big id=rfstatus>&hellip;</div>
+        <div class=muted id=rfdetail>connecting&hellip;</div>
+    </div>
+
+    <div class=card>
+        <div class=label>Flight pack</div>
+        <div class=big id=vbatt>0.00 V</div>
+        <div class=muted>from flight controller via CRSF telemetry</div>
+    </div>
+
+    <div class=card>
+        <h2>Stick positions</h2>
+        <div class=grid4 id=chgrid></div>
+    </div>
+
+    <form method=POST action="/fly_arm" onsubmit="return confirm('Disable WiFi until next reboot?')">
+        <button class="btn btn-fly" type=submit style="background:#c97464">
+            <span class=ico>&#128737;&#65039;</span>Disable WiFi &amp; fly
+        </button>
+    </form>
+    <p class=muted style="text-align:center">SBUS keeps running with or without WiFi.</p>
+
+    <a class="btn btn-back" href="/"><span class=ico>&#8617;</span>Return to menu</a>
+    <div class=footer></div>
+</div>
+
+<script>
+// Build the 16 channel cells once.
+(function(){
+    const g = document.getElementById('chgrid');
+    for (let i = 0; i < 16; ++i) {
+        const cell = document.createElement('div');
+        cell.className = 'ch';
+        cell.innerHTML = '<div class=n>ch ' + (i+1) + '</div><div class=v id=ch' + i + '>&mdash;</div>';
+        g.appendChild(cell);
+    }
+})();
+
+function paint(s) {
+    if (!s) return;
+    const alive = s.rf.last_pkt_ms >= 0 && s.rf.last_pkt_ms < 500;
+    LDRC.setText('rfstatus', alive ? 'Connected' : (s.bind.bound ? 'Waiting' : 'Unbound'));
+    LDRC.setText('rfdetail',
+        alive ? (s.rf.last_pkt_ms + ' ms ago') :
+        (s.bind.bound ? 'bound, no packets for now' : 'waiting for TX bind'));
+    LDRC.setClass('statuscard', 'up',   alive);
+    LDRC.setClass('statuscard', 'down', !alive);
+
+    LDRC.setText('vbatt', (s.fc && s.fc.valid ? s.fc.v : 0).toFixed(2) + ' V');
+
+    for (let i = 0; i < 16; ++i) {
+        if (s.channels[i] !== undefined) LDRC.setText('ch' + i, s.channels[i]);
+    }
+}
+
+LDRC.startPolling(paint, 250);
+</script>
+</body>
+</html>

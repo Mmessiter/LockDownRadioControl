@@ -1,0 +1,121 @@
+/* LockDownRadioControl — RXV2 web UI stylesheet
+ *
+ * Served from LittleFS at /style.css. Edit this file freely and push it to
+ * the receiver with:
+ *
+ *     pio run -e xiao_ota -t uploadfs
+ *
+ * No firmware rebuild needed.
+ *
+ * Embedded fallback CSS lives in src/WebPages.h and is used only if LittleFS
+ * fails to mount on the chip.
+ *
+ * Palette: warm-flying-field — sky blue, sandstone, meadow green.
+ */
+
+*{box-sizing:border-box;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:linear-gradient(180deg,#b8d8e8 0%,#f4e4c1 55%,#c8d8a8 100%);
+    color:#2c3e50;
+    padding:1.5em 1em 3em
+}
+
+.container{max-width:500px;margin:0 auto}
+
+h1{
+    text-align:center;
+    color:#2c3e50;
+    font-weight:300;
+    letter-spacing:.08em;
+    font-size:1.9em;
+    margin:.3em 0 .15em;
+    text-shadow:0 1px 2px rgba(255,255,255,.5)
+}
+
+.subtitle{text-align:center;color:#5d7a8c;margin:0 0 1.8em;font-size:.9em}
+
+/* Buttons -------------------------------------------------------------- */
+.btn{
+    display:flex;
+    align-items:center;
+    width:100%;
+    padding:1.1em 1.2em;
+    margin:.7em 0;
+    font-size:1.1em;
+    text-decoration:none;
+    color:#fff;
+    border-radius:14px;
+    border:0;
+    box-shadow:0 3px 8px rgba(0,0,0,.12);
+    transition:transform .08s,box-shadow .08s;
+    cursor:pointer;
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent
+}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.btn .ico{font-size:1.55em;margin-right:.65em;line-height:1}
+
+.btn-bind{background:#d4944a}
+.btn-fw  {background:#7d9eb0}
+.btn-diag{background:#5fa099}
+.btn-bb  {background:#9aaf7d}
+.btn-fly {background:#6cab5e;font-weight:600;font-size:1.3em;padding:1.4em 1.2em}
+.btn-back{background:#7d9eb0;margin-top:1.5em}
+.danger  {background:#c97464}
+
+/* Cards ---------------------------------------------------------------- */
+.card{
+    background:rgba(255,255,255,.65);
+    border-radius:14px;
+    padding:1.2em 1.4em;
+    margin:.8em 0;
+    box-shadow:0 2px 6px rgba(0,0,0,.06)
+}
+.card h2{margin-top:0;font-weight:500;color:#3a5165}
+
+/* Definition lists ----------------------------------------------------- */
+dl{margin:0}
+dt{font-weight:600;margin-top:.6em;color:#3a5165}
+dd{margin-left:0;color:#2c3e50}
+
+code{
+    font-family:ui-monospace,SFMono-Regular,monospace;
+    font-size:.92em;
+    color:#5d3a3a
+}
+
+/* Footer --------------------------------------------------------------- */
+.footer{text-align:center;margin-top:2em;color:#5d7a8c;font-size:.85em}
+.footer a{color:#5d7a8c;text-decoration:none;margin:0 .5em}
+
+/* Misc helpers --------------------------------------------------------- */
+.muted{color:#7a8b95;font-size:.88em}
+.big{font-size:2.4em;font-weight:300;line-height:1.1;margin:.15em 0}
+
+/* Status card (Fly page) ---------------------------------------------- */
+.status-card{
+    text-align:center;
+    padding:1.5em;
+    border-radius:18px;
+    margin:1em 0;
+    box-shadow:0 4px 14px rgba(0,0,0,.08);
+    transition:background .3s
+}
+.status-card.up  {background:rgba(168,210,154,.85)}
+.status-card.down{background:rgba(220,160,140,.85)}
+
+/* Channel grid (Diagnostics + Fly) ----------------------------------- */
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.4em;margin:1em 0}
+.ch{
+    background:rgba(255,255,255,.7);
+    border-radius:8px;
+    padding:.45em;
+    text-align:center;
+    font-size:.82em
+}
+.ch .n{color:#7a8b95;font-size:.85em}
+.ch .v{font-weight:600;font-size:1.05em}

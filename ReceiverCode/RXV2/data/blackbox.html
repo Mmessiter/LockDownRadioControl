@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name=theme-color content="#5fa099">
+<meta name=apple-mobile-web-app-capable content=yes>
+<meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
+<meta name=apple-mobile-web-app-title content="LDRC RX V2">
+<title>Black box &middot; LDRC RX V2</title>
+<link rel=stylesheet href="/style.css">
+<script src="/app.js" defer></script>
+</head>
+<body>
+<div class=container>
+    <h1>Black box log</h1>
+
+    <div class=card>
+        <p class=muted id=summary>loading&hellip;</p>
+        <dl id=evlist></dl>
+    </div>
+
+    <a class="btn btn-back" href="/"><span class=ico>&#8617;</span>Return to menu</a>
+    <div class=footer></div>
+</div>
+
+<script>
+function fmt(ms) {
+    const s = Math.floor(ms / 1000);
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const ss = s % 60;
+    return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(ss).padStart(2,'0');
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const ev = await LDRC.fetchEvents();
+    const sum = document.getElementById('summary');
+    const list = document.getElementById('evlist');
+    if (!ev || ev.length === 0) {
+        sum.textContent = 'No events recorded yet.';
+        return;
+    }
+    sum.textContent = 'Most recent first. ' + ev.length + ' event' + (ev.length === 1 ? '' : 's') + '.';
+    // ev is already newest-first from the server.
+    let html = '';
+    for (const e of ev) {
+        html += '<dt>' + fmt(e.t) + '</dt><dd>' + e.msg.replace(/</g, '&lt;') + '</dd>';
+    }
+    list.innerHTML = html;
+});
+</script>
+</body>
+</html>

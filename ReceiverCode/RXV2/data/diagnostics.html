@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name=theme-color content="#5fa099">
+<meta name=apple-mobile-web-app-capable content=yes>
+<meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
+<meta name=apple-mobile-web-app-title content="LDRC RX V2">
+<title>Diagnostics &middot; LDRC RX V2</title>
+<link rel=stylesheet href="/style.css">
+<script src="/app.js" defer></script>
+</head>
+<body>
+<div class=container>
+    <h1>Diagnostics</h1>
+    <p class=subtitle>Full receiver state &mdash; nothing prettified</p>
+
+    <div class=card><h2>Device</h2><dl>
+        <dt>Firmware</dt>   <dd id=fw></dd>
+        <dt>Hostname</dt>   <dd id=hostname></dd>
+        <dt>IP</dt>         <dd id=ip></dd>
+        <dt>MAC</dt>        <dd id=mac></dd>
+        <dt>RSSI</dt>       <dd id=rssi></dd>
+        <dt>Uptime</dt>     <dd id=uptime></dd>
+        <dt>Free heap</dt>  <dd id=heap></dd>
+        <dt>Chip</dt>       <dd id=chip></dd>
+        <dt>LittleFS</dt>   <dd id=fs></dd>
+    </dl></div>
+
+    <div class=card><h2>nRF24 self-test</h2><dl>
+        <dt>Verdict</dt>          <dd><b id=rfVerdict>&hellip;</b></dd>
+        <dt>begin()</dt>          <dd id=rfBegin></dd>
+        <dt>isChipConnected()</dt><dd id=rfChip></dd>
+        <dt>Channel r/w</dt>      <dd id=rfChannel></dd>
+        <dt>Data rate r/w</dt>    <dd id=rfRate></dd>
+    </dl><p><a href="/retest">&#8635; Re-run self-test</a></p></div>
+
+    <div class=card><h2>RF link</h2><dl>
+        <dt>Packets received</dt>     <dd><b id=packets></b></dd>
+        <dt>Ack-payloads written</dt> <dd id=acks></dd>
+        <dt>MAC acks sent</dt>        <dd id=macacks></dd>
+        <dt>Bind state</dt>           <dd id=bindstate></dd>
+        <dt>Radios</dt>               <dd id=radios></dd>
+        <dt>FHSS</dt>                 <dd id=fhss></dd>
+        <dt>Telemetry item</dt>       <dd id=telitem></dd>
+        <dt>SBUS frames out</dt>      <dd id=sbusout></dd>
+        <dt>Last channel data</dt>    <dd id=lastch></dd>
+        <dt>Board MAC</dt>            <dd><code id=boardmac></code></dd>
+        <dt>Last packet</dt>          <dd id=lastpkt></dd>
+        <dt id=lpDt style="display:none">Last payload</dt>      <dd id=lpDd  style="display:none"><code id=lastpayload></code></dd>
+        <dt id=mpDt style="display:none">Largest payload</dt>   <dd id=mpDd  style="display:none"><code id=maxpayload></code></dd>
+    </dl></div>
+
+    <div class=card><h2>Flight controller telemetry (D5 RX)</h2><dl>
+        <dt>Protocol</dt>           <dd id=fcProto></dd>
+        <dt>Raw bytes (total)</dt>  <dd id=fcRawTotal></dd>
+        <dt>Bytes in (parser)</dt>  <dd id=fcBytes></dd>
+        <dt>Frames parsed</dt>      <dd id=fcFrames></dd>
+        <dt>CRC errors</dt>         <dd id=fcCrcErr></dd>
+        <dt>Responses sent</dt>     <dd id=fcResp></dd>
+        <dt>Recent raw</dt>         <dd><code id=fcRaw></code></dd>
+        <dt>Last frame</dt>         <dd id=fcLast></dd>
+        <dt id=fcBattDt  style="display:none">FC battery</dt>   <dd id=fcBatt  style="display:none"></dd>
+        <dt id=fcRssiDt  style="display:none">Uplink RSSI</dt>  <dd id=fcRssi  style="display:none"></dd>
+        <dt id=fcAttDt   style="display:none">Attitude</dt>     <dd id=fcAtt   style="display:none"></dd>
+        <dt id=fcModeDt  style="display:none">Flight mode</dt>  <dd id=fcMode  style="display:none"></dd>
+        <dt id=fcStatusDt style="display:none">Status</dt>      <dd id=fcStatus class=muted style="display:none">No telemetry parsed yet &mdash; ensure D5 is wired to the FC's UART TX (for CRSF). Floating D5 is harmless; you just won't see FC data here.</dd>
+    </dl></div>
+
+    <div class=card><h2>Channels (&micro;s)</h2><div class=grid4 id=chgrid></div></div>
+
+    <a class="btn btn-back" href="/"><span class=ico>&#8617;</span>Return to menu</a>
+    <div class=footer></div>
+</div>
+
+<script>
+// Build the 16 channel cells once.
+(function(){
+    const g = document.getElementById('chgrid');
+    for (let i = 0; i < 16; ++i) {
+        const cell = document.createElement('div');
+        cell.className = 'ch';
+        cell.innerHTML = '<div class=n>' + (i+1) + '</div><div class=v id=ch' + i + '>&mdash;</div>';
+        g.appendChild(cell);
+    }
+})();
+
+function show(id, on) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = on ? '' : 'none';
+}
+
+function paint(s) {
+    if (!s) return;
+    const i = s.info, rf = s.rf, st = rf.self_test, b = s.bind, fc = s.fc;
+
+    // Device card
+    LDRC.setText('fw',       i.fw_version);
+    LDRC.setText('hostname', i.hostname + '.local');
+    LDRC.setText('ip',       i.ip);
+    LDRC.setText('mac',      i.mac);
+    LDRC.setText('rssi',     i.rssi + ' dBm');
+    LDRC.setText('uptime',   i.uptime_str);
+    LDRC.setText('heap',     i.free_heap + ' B');
+    LDRC.setText('chip',     i.chip + ' rev ' + i.chip_rev);
+    LDRC.setText('fs',       i.littlefs ? 'mounted' : 'not mounted');
+
+    // Self-test
+    LDRC.setText('rfVerdict', st.verdict);
+    LDRC.setText('rfBegin',   st.begin_ok      ? 'ok' : 'FAIL');
+    LDRC.setText('rfChip',    st.chip_connected? 'ok' : 'FAIL');
+    LDRC.setText('rfChannel', (st.channel_ok ? 'ok' : 'FAIL') + ' (read back ' + st.channel_read + ', expected 76)');
+    LDRC.setText('rfRate',    (st.data_rate_ok ? 'ok' : 'FAIL') + ' (read back ' + st.data_rate_name + ')');
+
+    // RF link
+    LDRC.setText('packets',  rf.packets);
+    LDRC.setText('acks',     rf.acks_written);
+    LDRC.setText('macacks',  rf.mac_acks_sent + ' / ' + rf.mac_ack_threshold);
+
+    if (b.bound) {
+        LDRC.setHtml('bindstate',
+            '<b>bound</b> &mdash; pipe <code>' + b.pipe + '</code>, ' + b.bound_s_ago + ' s ago');
+    } else {
+        LDRC.setText('bindstate', 'unbound (DefaultPipe), ' + b.attempts + ' attempts seen');
+    }
+
+    LDRC.setHtml('radios',
+        (rf.radios_dual ? 'dual (Radio1 + Radio2)' : 'single (Radio1 only)') +
+        ' &mdash; active: <b>Radio ' + rf.active_radio + '</b>, swaps ' + rf.radio_swaps);
+
+    LDRC.setHtml('fhss',
+        (rf.fhss_enabled ? 'enabled' : 'disabled') +
+        ' &mdash; idx ' + rf.fhss_idx + ' (channel ' + rf.fhss_channel + ')');
+
+    LDRC.setText('telitem',  rf.telemetry_item);
+    LDRC.setText('sbusout',  rf.sbus_frames_out);
+    LDRC.setText('lastch',   rf.last_channel_ms >= 0 ? (rf.last_channel_ms + ' ms ago') : 'never');
+    LDRC.setText('boardmac', rf.board_mac);
+    LDRC.setText('lastpkt',
+        rf.last_pkt_ms >= 0 ? (rf.last_pkt_ms + ' ms ago, ' + rf.last_payload_len + ' bytes') : 'never');
+
+    if (rf.last_payload) { show('lpDt', true); show('lpDd', true); LDRC.setText('lastpayload', rf.last_payload); }
+    if (rf.max_payload)  { show('mpDt', true); show('mpDd', true); LDRC.setText('maxpayload',
+        rf.max_payload + '  (' + rf.max_payload_len + ' bytes)'); }
+
+    // FC telemetry
+    LDRC.setText('fcProto',    s.protocol.current);
+    LDRC.setText('fcRawTotal', fc.raw_total);
+    LDRC.setText('fcBytes',    fc.bytes);
+    LDRC.setText('fcFrames',   fc.frames);
+    LDRC.setText('fcCrcErr',   fc.crc_err);
+    LDRC.setText('fcResp',     fc.responses);
+    LDRC.setText('fcRaw',      fc.raw_dump || '(empty)');
+    LDRC.setText('fcLast',     fc.last_frame_ms >= 0 ? (fc.last_frame_ms + ' ms ago') : 'never');
+
+    if (fc.valid) {
+        show('fcBattDt', true); show('fcBatt', true);
+        LDRC.setText('fcBatt',
+            fc.v.toFixed(2) + ' V / ' + fc.a.toFixed(2) + ' A / ' + fc.mah + ' mAh / ' + fc.pct + '%');
+        show('fcRssiDt', true); show('fcRssi', true);
+        LDRC.setText('fcRssi', fc.rssi + ' dBm, LQ ' + fc.lq + ', SNR ' + fc.snr);
+        show('fcAttDt',  true); show('fcAtt',  true);
+        LDRC.setText('fcAtt', 'pitch ' + fc.pitch + ', roll ' + fc.roll + ', yaw ' + fc.yaw + ' (mrad)');
+        if (fc.flight_mode) {
+            show('fcModeDt', true); show('fcMode', true);
+            LDRC.setText('fcMode', fc.flight_mode);
+        }
+        show('fcStatusDt', false); show('fcStatus', false);
+    } else {
+        show('fcStatusDt', true); show('fcStatus', true);
+    }
+
+    // Channels
+    for (let k = 0; k < 16; ++k) {
+        if (s.channels[k] !== undefined) LDRC.setText('ch' + k, s.channels[k]);
+    }
+}
+
+LDRC.startPolling(paint, 500);
+</script>
+</body>
+</html>

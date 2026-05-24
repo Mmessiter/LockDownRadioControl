@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name=theme-color content="#5fa099">
+<meta name=apple-mobile-web-app-capable content=yes>
+<meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
+<meta name=apple-mobile-web-app-title content="LDRC RX V2">
+<title>Output protocol &middot; LDRC RX V2</title>
+<link rel=stylesheet href="/style.css">
+<script src="/app.js" defer></script>
+</head>
+<body>
+<div class=container>
+    <h1>Output protocol</h1>
+
+    <div class=card>
+        <p>Choose what the receiver puts out on the <b>D6</b> pin. Saved to NVS and applied on reboot.</p>
+        <form method=POST action="/protocol">
+            <div id=protoList>loading&hellip;</div>
+            <p style="margin:1.2em 0 0;padding:.8em 1em;background:rgba(255,255,255,.55);border-radius:8px;font-size:.92em">
+                <label style="display:flex;align-items:center">
+                    <input type=checkbox name=ppm_inv value=1 id=ppmInv style="margin-right:.6em;transform:scale(1.2)">
+                    <span>Invert PPM polarity (idle HIGH, negative-going pulses) &mdash; try this if your simulator/FC doesn't pick up PPM</span>
+                </label>
+            </p>
+            <button class="btn btn-fw" type=submit><span class=ico>&#128190;</span>Save &amp; reboot</button>
+        </form>
+    </div>
+
+    <div class=card>
+        <h2>Notes</h2>
+        <ul>
+            <li><b>SBUS</b>: universal legacy. Inverted 100 kbaud 8E2. 16 ch.</li>
+            <li><b>CRSF</b>: modern standard, ~250 Hz, used by Crossfire/ExpressLRS. 16 ch packed.</li>
+            <li><b>IBUS</b>: FlySky / many budget gear. 115200 8N1. 14 ch.</li>
+            <li><b>PPM</b>: classic single-pin pulse train. Useful for sim adapters (RX2SIM, Phoenix, etc). 8 ch.</li>
+        </ul>
+        <p class=muted>Same pin (D6) for all four &mdash; the chip reconfigures it as either an inverted/non-inverted UART or as an RMT pulse generator at boot, depending on which protocol you select.</p>
+    </div>
+
+    <a class="btn btn-back" href="/"><span class=ico>&#8617;</span>Return to menu</a>
+    <div class=footer></div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    const s = await LDRC.fetchState();
+    if (!s) return;
+    const p = s.protocol;
+
+    const list = document.getElementById('protoList');
+    let html = '';
+    for (const opt of p.available) {
+        const isCurrent = (opt.name === p.current);
+        html += '<p style="margin:.9em 0"><label style="display:flex;align-items:flex-start">';
+        html += '<input type=radio name=proto value=' + opt.id + (isCurrent ? ' checked' : '') +
+                ' style="margin:.3em .7em 0 0;transform:scale(1.2)">';
+        html += '<span><b>' + opt.name + (isCurrent ? ' (current)' : '') +
+                '</b><br><span class=muted style="font-size:.88em">' + opt.desc + '</span></span>';
+        html += '</label></p>';
+    }
+    list.innerHTML = html;
+
+    document.getElementById('ppmInv').checked = !!p.ppm_inverted;
+});
+</script>
+</body>
+</html>

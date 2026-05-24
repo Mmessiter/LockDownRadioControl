@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name=theme-color content="#5fa099">
+<meta name=apple-mobile-web-app-capable content=yes>
+<meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
+<meta name=apple-mobile-web-app-title content="LDRC RX V2">
+<title>Firmware &middot; LDRC RX V2</title>
+<link rel=stylesheet href="/style.css">
+<script src="/app.js" defer></script>
+<style>
+.statusBox{padding:1.5em 1em;border-radius:18px;margin:0 0 1em;text-align:center;
+           font-size:1.4em;font-weight:600;line-height:1.3;box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.statusBox.good{background:rgba(168,210,154,.95);color:#2a4d1f}
+.statusBox.warn{background:rgba(255,210,120,.95);color:#5c3a00}
+.statusBox.bad {background:rgba(220,160,140,.95);color:#5c2a1a}
+.statusBox.gray{background:rgba(200,210,220,.85);color:#3a5165}
+.statusBox .sub{font-size:.65em;font-weight:400;margin-top:.4em;display:block;opacity:.85}
+.bigBtn{display:block;width:100%;padding:1.2em;margin:.7em 0;border:0;border-radius:14px;
+        font-size:1.15em;font-weight:600;color:#fff;cursor:pointer;text-align:center;
+        box-shadow:0 3px 8px rgba(0,0,0,.12)}
+.bigBtn:disabled{opacity:.4;cursor:default}
+.bigBtn.update   {background:#6cab5e}
+.bigBtn.reinstall{background:#7d9eb0}
+.bigBtn.rollback {background:#d4944a}
+</style>
+</head>
+<body>
+<div class=container>
+    <h1>Firmware</h1>
+
+    <div id=statusBox class="statusBox gray">checking&hellip;</div>
+
+    <button class="bigBtn update"    id=btnUpdate    style="display:none"></button>
+    <button class="bigBtn reinstall" id=btnReinstall style="display:none"></button>
+    <div id=rollbackList></div>
+
+    <a class="btn btn-back" href="/" style="margin-top:1.5em"><span class=ico>&#8617;</span>Return to menu</a>
+    <div class=footer></div>
+</div>
+
+<script>
+// Hardcoded dev firmware server. Update IP here when Mac's IP changes.
+const MANIFEST_URL = 'http://192.168.1.171:8000/manifest.json';
+
+let currentFw = '';
+
+function vTuple(name) {
+    const m = name.match(/RXV2-(\d+)\.(\d+)\.(\d+)/);
+    return m ? [+m[1], +m[2], +m[3]] : [0, 0, 0];
+}
+function vCmp(a, b) {  // returns positive if b > a
+    const ta = vTuple(a), tb = vTuple(b);
+    for (let i = 0; i < 3; i++) if (tb[i] !== ta[i]) return tb[i] - ta[i];
+    return 0;
+}
+
+function setStatus(kind, headline, sub) {
+    const b = document.getElementById('statusBox');
+    b.className = 'statusBox ' + kind;
+    b.innerHTML = headline + (sub ? '<span class=sub>' + sub + '</span>' : '');
+}
+
+function showBtn(id, label, urlOrAction) {
+    const b = document.getElementById(id);
+    b.style.display = '';
+    b.textContent = label;
+    b.onclick = urlOrAction;
+}
+
+async function loadAll() {
+    const s = await LDRC.fetchState();
+    if (!s) { setStatus('bad', '❌ Receiver not responding'); return; }
+    currentFw = s.info.fw_version;
+
+    let data;
+    try {
+        const r = await fetch(MANIFEST_URL, { cache: 'no-store' });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        data = await r.json();
+    } catch (e) {
+        setStatus('bad',
+            '❌ Cannot reach dev server',
+            'Is firmware_server.py running on the Mac?');
+        return;
+    }
+
+    const versions = (data.versions || []).slice().sort((a, b) => vCmp(a.name, b.name));
+    if (versions.length === 0) {
+        setStatus('warn', '⚠️ Server reachable, no firmware', 'Drop RXV2-*.bin files in dev/');
+        return;
+    }
+
+    const latest    = versions[0];
+    const newer     = versions.find(v => vCmp(currentFw, v.name) > 0);
+    const current   = versions.find(v => v.name === currentFw);
+    const olders    = versions.filter(v => vCmp(currentFw, v.name) < 0);    // ALL older versions, newest-first
+    const base      = new URL('.', MANIFEST_URL).href.replace(/\/$/, '');
+
+    if (newer) {
+        setStatus('warn', '⬆️ Update available', currentFw + ' → ' + newer.name);
+        showBtn('btnUpdate',  'UPDATE  →  ' + newer.name, () => doInstall(newer.name, base + newer.url, 'btnUpdate'));
+    } else {
+        setStatus('good', '✓ Up to date', 'Running ' + currentFw);
+    }
+    if (current) {
+        showBtn('btnReinstall', 'REINSTALL  ' + current.name, () => doInstall(current.name, base + current.url, 'btnReinstall'));
+    }
+    // Render up to 3 most-recent older versions, each with its own rollback button.
+    const rbList = document.getElementById('rollbackList');
+    rbList.innerHTML = '';
+    olders.slice(0, 3).forEach((v, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'bigBtn rollback';
+        btn.id = 'btnRollback' + i;
+        btn.textContent = 'ROLL BACK  →  ' + v.name;
+        btn.onclick = () => doInstall(v.name, base + v.url, btn.id);
+        rbList.appendChild(btn);
+    });
+}
+
+async function doInstall(name, url, btnId) {
+    if (!confirm('Install ' + name + '?\nReceiver will reboot.')) return;
+    document.querySelectorAll('.bigBtn').forEach(b => b.disabled = true);
+    document.getElementById(btnId).textContent = 'installing ' + name + '…';
+    setStatus('gray', '⌛ Installing ' + name, 'Downloading + applying');
+    try {
+        const r = await fetch('/api/firmware/install?url=' + encodeURIComponent(url), { method: 'POST' });
+        if (r.ok) {
+            setStatus('good', '✓ Done — rebooting', 'Page reloads in ~10 s');
+            setTimeout(() => location.href = '/', 10000);
+        } else {
+            const t = await r.text();
+            setStatus('bad', '❌ Install failed', t);
+            document.querySelectorAll('.bigBtn').forEach(b => b.disabled = false);
+            loadAll();
+        }
+    } catch (e) {
+        setStatus('bad', '❌ Network error', e.message);
+        document.querySelectorAll('.bigBtn').forEach(b => b.disabled = false);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadAll);
+</script>
+</body>
+</html>
