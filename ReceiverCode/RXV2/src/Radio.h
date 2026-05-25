@@ -217,7 +217,13 @@ inline void loadNextAck() {
                 // Battery capacity used (mAh, Rotorflight).
                 if (fcTelem.valid) packF32(ack, (float)fcTelem.fcBattMah);
                 break;
-            case 23:  packU32(ack, RXV2_RECEIVER_TYPE);             break;  // Receiver_Type sentinel
+            case 23:
+                // Receiver type index into the TX's Rx_type[6][30] table:
+                //   0=Unknown, 1=TRX:1 PWM:8, 2=TRX:2 PWM:8, 3=TRX:2 PWM:11,
+                //   4=TRX:1 V2,  5=TRX:2 V2
+                // RXV2 reports 4 for single-transceiver, 5 for dual.
+                ack[1] = useSecondTransceiver ? 5 : 4;
+                break;
             case 24:  packF32(ack, 0.0f);                           break;  // ESC temp
             case 25:
                 // RXV2 firmware version — moved here from slot 0 in v0.7.3 so slot 0

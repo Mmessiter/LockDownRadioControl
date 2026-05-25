@@ -8,8 +8,8 @@
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
 <title>Governor (global) &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css?v=14">
-<script src="/app.js?v=14" defer></script>
+<link rel=stylesheet href="/style.css?v=15">
+<script src="/app.js?v=15" defer></script>
 <style>
 .fldRow{display:flex;justify-content:space-between;align-items:center;
         padding:.45em .7em;background:rgba(255,255,255,.55);border-radius:8px;margin:.25em 0}
@@ -21,12 +21,15 @@
 .banner.good{background:rgba(168,210,154,.85);color:#2a4d1f}
 .banner.bad {background:rgba(220,160,140,.85);color:#5c2a1a}
 .banner.warn{background:rgba(255,200,140,.95);color:#5c3a1a;font-size:1.05em;padding:1em}
-.curveTable{width:100%;border-collapse:separate;border-spacing:.25em}
-.curveTable td{padding:.2em}
+.curveTable{width:100%;border-collapse:separate;border-spacing:.15em;table-layout:fixed}
+.curveTable td{padding:.1em}
 .curveTable td.lab{font-weight:600;color:#3a5165;text-align:center;background:rgba(200,210,220,.6);
-                   border-radius:6px;font-size:.85em}
-.curveTable td input{width:100%;padding:.4em;font-size:.95em;text-align:center;
-                     border:1px solid #b8c7d0;border-radius:6px}
+                   border-radius:6px;font-size:.8em;padding:.3em 0}
+.curveTable td input{width:100%;padding:.35em .1em;font-size:.82em;text-align:center;
+                     border:1px solid #b8c7d0;border-radius:6px;box-sizing:border-box;
+                     -moz-appearance:textfield}
+.curveTable td input::-webkit-outer-spin-button,
+.curveTable td input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 input:disabled,select:disabled{background:#eee;color:#999}
 </style>
 </head>
