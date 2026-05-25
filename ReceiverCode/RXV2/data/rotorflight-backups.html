@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name=theme-color content="#5fa099">
+<meta name=apple-mobile-web-app-capable content=yes>
+<meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
+<meta name=apple-mobile-web-app-title content="LDRC RX V2">
+<title>Backups &middot; LDRC RX V2</title>
+<link rel=stylesheet href="/style.css?v=14">
+<script src="/app.js?v=14" defer></script>
+<style>
+.banner{padding:.7em;border-radius:10px;text-align:center;font-weight:600;margin:0 0 1em}
+.banner.info{background:rgba(200,210,220,.85);color:#3a5165}
+.banner.good{background:rgba(168,210,154,.85);color:#2a4d1f}
+.banner.bad {background:rgba(220,160,140,.85);color:#5c2a1a}
+.banner.warn{background:rgba(255,210,120,.95);color:#5c3a00}
+.fldRow{display:flex;justify-content:space-between;align-items:center;
+        padding:.45em .7em;background:rgba(255,255,255,.55);border-radius:8px;margin:.25em 0}
+.fldRow input[type=text]{flex:1;padding:.5em;font-size:.95em;
+        border:1px solid #b8c7d0;border-radius:6px;margin-right:.5em}
+.bkRow{display:flex;align-items:center;gap:.4em;padding:.5em .7em;
+        background:rgba(255,255,255,.55);border-radius:8px;margin:.25em 0}
+.bkName{flex:1;font-weight:600;color:#3a5165}
+.bkBtn{padding:.5em .8em;border:0;border-radius:7px;font-weight:600;color:#fff;cursor:pointer;font-size:.9em}
+.bkBtn.restore{background:#5fa099}
+.bkBtn.delete {background:#d4944a}
+.bkBtn:disabled{opacity:.4;cursor:default}
+.empty{color:#7a8896;text-align:center;font-style:italic;padding:1em}
+</style>
+</head>
+<body>
+<div class=container>
+    <h1>Backups</h1>
+    <div id=status class="banner info">loading&hellip;</div>
+
+    <div class=card>
+        <h2>Create new backup</h2>
+        <p class=muted style="font-size:.85em">
+            Captures every PID, PID&nbsp;+, Rate and Governor value &mdash; one complete tune.
+            Allowed in the name: letters, numbers, dash, underscore, dot. Max 32 chars.
+        </p>
+        <div class=fldRow>
+            <input type=text id=bkName placeholder="e.g. spring-2026-mikado" maxlength=32>
+            <button class="bkBtn restore" id=btnCreate onclick="createBackup()">Backup</button>
+        </div>
+    </div>
+
+    <div class=card>
+        <h2>Saved backups</h2>
+        <div id=bkList class=empty>(none yet)</div>
+        <p class=muted style="font-size:.8em;margin-top:.5em">
+            Restore overwrites every profile + global governor config on the FC, then reboots it.
+            Save a fresh backup before restoring if you want a way back.
+        </p>
+        <p class=muted style="font-size:.75em">
+            <span id=bkCap></span>
+        </p>
+    </div>
+
+    <a class="btn btn-back" href="/rotorflight"><span class=ico>&#8617;</span>Back</a>
+    <div class=footer></div>
+</div>
+
+<script>
+// Snapshot format v1: every editable Rotorflight parameter, captured as
+// hex strings keyed by what MSP code produced them. Per-profile arrays
+// are indexed 0..3 (Banks 1..4).
+//
+//   pid_basic[i]     ← MSP_PID            (112), 30+ bytes (Roll/Pitch/Yaw P/I/D/FF + Boost + HSI)
+//   pid_advanced[i]  ← MSP_PID_PROFILE    (94),  43 bytes  (filters/limits/yaw stop/etc)
+//   rates[i]         ← MSP_RC_TUNING      (111), 25–36 bytes
+//   governor[i]      ← MSP_GOVERNOR_PROF  (148), 17 bytes
+//   gov_config       ← MSP_GOVERNOR_CONFIG(142), 42 bytes
+//   active_pid       ← byte from snapshot of MSP_STATUS (we just record what
+//                                                       PID profile was active at backup time)
+//
+// Restoring: SELECT profile i, SET each per-profile MSP for i, repeat for
+// all 4. Then SET gov_config. Then EEPROM_WRITE + REBOOT.
+
+const SNAPSHOT_VERSION = 1;
+const PROFILES = 4;
+let editable = false;
+
+function setStatus(kind, msg) {
+    const b = document.getElementById('status');
+    b.className = 'banner ' + kind;
+    b.textContent = msg;
+}
+
+function fmtBytes(n) {
+    if (n > 1024 * 1024) return (n / 1024 / 1024).toFixed(1) + ' MB';
+    if (n > 1024)        return (n / 1024).toFixed(1) + ' KB';
+    return n + ' B';
+}
+
+async function refreshList() {
+    try {
+        const r = await fetch('/api/backup/list', { cache: 'no-store' });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        const j = await r.json();
+        const list = document.getElementById('bkList');
+        document.getElementById('bkCap').textContent =
+            'Backups: ' + (j.names || []).length + ' / ' + j.max +
+            '   ·   ' + fmtBytes(j.free_bytes) + ' free on chip';
+        if (!j.names || j.names.length === 0) {
+            list.className = 'empty';
+            list.innerHTML = '(none yet)';
+            return;
+        }
+        list.className = '';
+        list.innerHTML = '';
+        // Newest first (sort lexically descending — names with dates sort right)
+        j.names.sort().reverse().forEach(name => {
+            const row = document.createElement('div');
+            row.className = 'bkRow';
+            row.innerHTML =
+                '<span class=bkName></span>' +
+                '<button class="bkBtn restore">Restore</button>' +
+                '<button class="bkBtn delete">Delete</button>';
+            row.querySelector('.bkName').textContent = name;
+            row.querySelectorAll('.bkBtn').forEach(b => b.disabled = !editable);
+            row.querySelector('.restore').onclick = () => restoreBackup(name);
+            row.querySelector('.delete' ).onclick = () => deleteBackup(name);
+            list.appendChild(row);
+        });
+    } catch (e) { setStatus('bad', 'List failed: ' + e.message); }
+}
+
+async function createBackup() {
+    if (!editable) { setStatus('bad', 'Disabled on this firmware version'); return; }
+    const name = document.getElementById('bkName').value.trim();
+    if (!name) { setStatus('bad', 'Give it a name first'); return; }
+    if (!/^[a-zA-Z0-9._-]{1,32}$/.test(name)) {
+        setStatus('bad', 'Name must be letters, numbers, dash, underscore, dot — max 32 chars');
+        return;
+    }
+    setStatus('info', 'Reading from flight controller — please wait…');
+    document.getElementById('btnCreate').disabled = true;
+    try {
+        const snap = {
+            v: SNAPSHOT_VERSION,
+            created: new Date().toISOString(),
+            fw: (LDRC.state && LDRC.state.info ? LDRC.state.info.fw_version : ''),
+            rf: (LDRC.state && LDRC.state.fcinfo ? (LDRC.state.fcinfo.rf_major + '.' + LDRC.state.fcinfo.rf_minor) : ''),
+            pid_basic:    [],
+            pid_advanced: [],
+            rates:        [],
+            governor:     [],
+        };
+        // Per-profile reads: switch to each profile, then read all per-profile MSPs.
+        for (let i = 0; i < PROFILES; i++) {
+            setStatus('info', 'Reading profile ' + (i + 1) + ' of ' + PROFILES + '…');
+            await LDRC.msp(210, i.toString(16).padStart(2, '0'));               // SELECT PID profile i
+            snap.pid_basic[i]    = await LDRC.msp(112);                          // MSP_PID
+            snap.pid_advanced[i] = await LDRC.msp(94);                           // MSP_PID_PROFILE
+            snap.governor[i]     = await LDRC.msp(148);                          // MSP_GOVERNOR_PROFILE
+            // Rate profile uses (0x80 | idx)
+            await LDRC.msp(210, (0x80 | i).toString(16).padStart(2, '0'));       // SELECT rate profile i
+            snap.rates[i]        = await LDRC.msp(111);                          // MSP_RC_TUNING
+        }
+        setStatus('info', 'Reading global governor config…');
+        snap.gov_config = await LDRC.msp(142);                                   // MSP_GOVERNOR_CONFIG
+        setStatus('info', 'Saving to chip…');
+        const r = await fetch('/api/backup/save?name=' + encodeURIComponent(name),
+            { method: 'POST', body: JSON.stringify(snap) });
+        if (!r.ok) throw new Error(await r.text());
+        setStatus('good', '✓ Backup "' + name + '" saved');
+        document.getElementById('bkName').value = '';
+        await refreshList();
+    } catch (e) {
+        setStatus('bad', 'Backup failed: ' + e.message);
+    }
+    document.getElementById('btnCreate').disabled = false;
+}
+
+async function restoreBackup(name) {
+    if (!editable) { setStatus('bad', 'Disabled on this firmware version'); return; }
+    if (!(await LDRC.confirm(
+        'Restore "' + name + '" to the flight controller? This overwrites EVERY PID, Rate and Governor profile + the global governor config. The FC will reboot. Motors will stop briefly.',
+        {title:'Restore "' + name + '"?', icon:'♻️', yes:'Restore & reboot', kind:'danger'}))) return;
+    setStatus('info', 'Loading backup file…');
+    try {
+        const r = await fetch('/api/backup/load?name=' + encodeURIComponent(name), { cache: 'no-store' });
+        if (!r.ok) throw new Error('Load: ' + (await r.text()));
+        const snap = await r.json();
+        if (snap.v !== SNAPSHOT_VERSION) throw new Error('Unsupported snapshot version ' + snap.v);
+
+        for (let i = 0; i < PROFILES; i++) {
+            setStatus('info', 'Writing profile ' + (i + 1) + ' of ' + PROFILES + '…');
+            await LDRC.msp(210, i.toString(16).padStart(2, '0'));                       // SELECT PID profile
+            await LDRC.msp(202, snap.pid_basic[i]);                                      // SET_PID
+            await LDRC.msp(95,  snap.pid_advanced[i]);                                   // SET_PID_PROFILE
+            await LDRC.msp(149, snap.governor[i]);                                       // SET_GOVERNOR_PROFILE
+            await LDRC.msp(210, (0x80 | i).toString(16).padStart(2, '0'));               // SELECT rate profile
+            await LDRC.msp(204, snap.rates[i]);                                          // SET_RC_TUNING
+        }
+        setStatus('info', 'Writing global governor config…');
+        await LDRC.msp(143, snap.gov_config);                                            // SET_GOVERNOR_CONFIG
+
+        setStatus('info', 'Saving to EEPROM and rebooting flight controller…');
+        await LDRC.msp(250);                                                              // EEPROM_WRITE
+        try { await LDRC.msp(68, null, 1); } catch (e) {}                                 // REBOOT (no retry)
+        await new Promise(r => setTimeout(r, 7000));
+        setStatus('good', '✓ Restored "' + name + '" — flight controller is back up');
+    } catch (e) {
+        setStatus('bad', 'Restore failed: ' + e.message);
+    }
+}
+
+async function deleteBackup(name) {
+    if (!(await LDRC.confirm('Delete backup "' + name + '"?',
+        {title:'Delete "' + name + '"?', icon:'🗑️', yes:'Delete', kind:'danger'}))) return;
+    try {
+        const r = await fetch('/api/backup/delete?name=' + encodeURIComponent(name), { method: 'POST' });
+        if (!r.ok) throw new Error(await r.text());
+        setStatus('good', '✓ Deleted "' + name + '"');
+        await refreshList();
+    } catch (e) {
+        setStatus('bad', 'Delete failed: ' + e.message);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const s = await LDRC.fetchState();
+    if (s && s.fcinfo) {
+        const api = (s.fcinfo.api_major * 100) + s.fcinfo.api_minor;
+        editable = (api >= 1209);
+    }
+    if (!editable) {
+        setStatus('warn', '⚠ Requires Rotorflight 2.3 — backup/restore disabled on this flight-controller firmware');
+    } else {
+        const newer = LDRC.rfVersionAlert((s.fcinfo.api_major * 100) + s.fcinfo.api_minor);
+        if (newer) {
+            setStatus('warn', '⚠ ' + newer + ' (Backups taken here may not restore correctly to this newer FC.)');
+        } else {
+            setStatus('good', 'Ready');
+        }
+    }
+    document.getElementById('btnCreate').disabled = !editable;
+    refreshList();
+});
+</script>
+</body>
+</html>

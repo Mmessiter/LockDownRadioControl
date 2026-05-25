@@ -30,7 +30,7 @@
 //  Firmware version
 //*********************************************************************
 
-constexpr const char* FW_VERSION = "RXV2-0.9.3-rates";
+constexpr const char* FW_VERSION = "RXV2-0.9.23-rf-newer-warn";
 
 //*********************************************************************
 //  WiFi / network defaults

@@ -75,7 +75,7 @@ inline bool serveLittleFsFile(const char* path, const char* mime) {
 //*********************************************************************
 
 inline void handleStyleCss() {
-    server.sendHeader("Cache-Control", "max-age=3600");
+    server.sendHeader("Cache-Control", "public, max-age=86400");
     if (serveLittleFsFile("/style.css", "text/css")) return;
     server.send_P(200, "text/css", PAGE_CSS_FALLBACK);
 }
@@ -85,7 +85,7 @@ inline void handleStyleCss() {
 //*********************************************************************
 
 inline void handleAppJs() {
-    server.sendHeader("Cache-Control", "max-age=3600");
+    server.sendHeader("Cache-Control", "public, max-age=86400");
     if (serveLittleFsFile("/app.js", "application/javascript")) return;
     server.send(503, "text/plain", "/app.js not in LittleFS — uploadfs the data/ folder");
 }
@@ -154,6 +154,135 @@ inline void handleRotorflightRates() {
     server.send(503, "text/plain", "/rotorflight-rates.html missing — uploadfs the data/ folder");
 }
 
+inline void handleRotorflightGovProfile() {
+    if (serveLittleFsFile("/rotorflight-gov-profile.html", "text/html")) return;
+    server.send(503, "text/plain", "/rotorflight-gov-profile.html missing — uploadfs the data/ folder");
+}
+
+inline void handleRotorflightGovGlobal() {
+    if (serveLittleFsFile("/rotorflight-gov-global.html", "text/html")) return;
+    server.send(503, "text/plain", "/rotorflight-gov-global.html missing — uploadfs the data/ folder");
+}
+
+inline void handleRotorflightBackups() {
+    if (serveLittleFsFile("/rotorflight-backups.html", "text/html")) return;
+    server.send(503, "text/plain", "/rotorflight-backups.html missing — uploadfs the data/ folder");
+}
+
+//*********************************************************************
+//  Backups — JSON snapshots of every editable Rotorflight parameter
+//*********************************************************************
+// Stored at /backups/<name>.json on LittleFS. Each file ~1.5 KB. The JS
+// page owns the snapshot format; the chip is just a key/value store.
+// Backup names: alnum, '-', '_', '.', max 32 chars. Hard cap 20 files.
+
+constexpr const char* BACKUP_DIR = "/backups";
+constexpr uint8_t     BACKUP_MAX = 20;
+
+inline bool backupNameOk(const String& n) {
+    if (n.length() == 0 || n.length() > 32) return false;
+    for (size_t i = 0; i < n.length(); i++) {
+        char c = n[i];
+        bool ok = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
+                  (c >= '0' && c <= '9') || c == '-' || c == '_' || c == '.';
+        if (!ok) return false;
+    }
+    return true;
+}
+
+inline String backupPath(const String& name) {
+    String p = BACKUP_DIR;
+    p += '/'; p += name; p += ".json";
+    return p;
+}
+
+// GET /api/backup/list  → JSON: {"names":[...], "max":20, "free_bytes":N}
+inline void handleBackupList() {
+    if (!littleFsMounted) { server.send(500, "text/plain", "FS not mounted"); return; }
+    if (!LittleFS.exists(BACKUP_DIR)) LittleFS.mkdir(BACKUP_DIR);
+    File dir = LittleFS.open(BACKUP_DIR);
+    String j = "{\"names\":[";
+    bool first = true;
+    if (dir) {
+        File f = dir.openNextFile();
+        while (f) {
+            String n = f.name();
+            // Strip directory path + ".json" suffix
+            int slash = n.lastIndexOf('/');
+            if (slash >= 0) n = n.substring(slash + 1);
+            if (n.endsWith(".json")) n = n.substring(0, n.length() - 5);
+            if (!first) j += ',';
+            j += '"'; j += n; j += "\"";
+            first = false;
+            f.close();
+            f = dir.openNextFile();
+        }
+        dir.close();
+    }
+    j += "],\"max\":"; j += BACKUP_MAX;
+    j += ",\"free_bytes\":"; j += (uint32_t)(LittleFS.totalBytes() - LittleFS.usedBytes());
+    j += "}";
+    server.sendHeader("Cache-Control", "no-store");
+    server.send(200, "application/json", j);
+}
+
+// GET /api/backup/load?name=X  → the JSON file's raw content
+inline void handleBackupLoad() {
+    if (!server.hasArg("name")) { server.send(400, "text/plain", "missing name"); return; }
+    String name = server.arg("name");
+    if (!backupNameOk(name)) { server.send(400, "text/plain", "bad name"); return; }
+    String path = backupPath(name);
+    if (!LittleFS.exists(path)) { server.send(404, "text/plain", "no such backup"); return; }
+    File f = LittleFS.open(path, "r");
+    if (!f) { server.send(500, "text/plain", "open failed"); return; }
+    server.sendHeader("Cache-Control", "no-store");
+    server.streamFile(f, "application/json");
+    f.close();
+}
+
+// POST /api/backup/save?name=X  with JSON body  → 200 ok / 4xx error
+inline void handleBackupSave() {
+    if (!server.hasArg("name"))  { server.send(400, "text/plain", "missing name"); return; }
+    if (!server.hasArg("plain")) { server.send(400, "text/plain", "missing body"); return; }
+    String name = server.arg("name");
+    if (!backupNameOk(name)) { server.send(400, "text/plain", "bad name"); return; }
+    if (!LittleFS.exists(BACKUP_DIR)) LittleFS.mkdir(BACKUP_DIR);
+    // Enforce hard cap. Allow overwrite of an existing name without counting it.
+    String path = backupPath(name);
+    bool replacing = LittleFS.exists(path);
+    if (!replacing) {
+        uint8_t count = 0;
+        File dir = LittleFS.open(BACKUP_DIR);
+        if (dir) {
+            File f = dir.openNextFile();
+            while (f) { count++; f.close(); f = dir.openNextFile(); }
+            dir.close();
+        }
+        if (count >= BACKUP_MAX) {
+            server.send(507, "text/plain", "backup limit reached — delete one first");
+            return;
+        }
+    }
+    File f = LittleFS.open(path, "w");
+    if (!f) { server.send(500, "text/plain", "open for write failed"); return; }
+    String body = server.arg("plain");
+    f.print(body);
+    f.close();
+    server.sendHeader("Cache-Control", "no-store");
+    server.send(200, "text/plain", "saved");
+}
+
+// POST /api/backup/delete?name=X
+inline void handleBackupDelete() {
+    if (!server.hasArg("name")) { server.send(400, "text/plain", "missing name"); return; }
+    String name = server.arg("name");
+    if (!backupNameOk(name)) { server.send(400, "text/plain", "bad name"); return; }
+    String path = backupPath(name);
+    if (!LittleFS.exists(path)) { server.send(404, "text/plain", "no such backup"); return; }
+    if (!LittleFS.remove(path)) { server.send(500, "text/plain", "remove failed"); return; }
+    server.send(200, "text/plain", "deleted");
+}
+
 //*********************************************************************
 //  GET /api/msp?fn=N[&data=HEX]  — synchronous MSP request to the FC
 //*********************************************************************
@@ -187,8 +316,14 @@ inline void handleMspApi() {
 
     uint8_t  respBuf[256];
     uint16_t respLen = 0;
-    bool ok = mspRequestAndWait(fn, reqBuf, reqLen, respBuf, &respLen, 600);
-    if (!ok) { server.send(504, "text/plain", "FC did not respond"); return; }
+    // 400 ms timeout: was 150 ms but read-failed too often. FC normally
+    // responds in <50 ms, but if a periodic mspFcPoll probe queued behind
+    // our request, the FC processes it first and ours can take longer.
+    // (mspFcPoll is now blocked while a sync wait is in flight, but this
+    // also handles the case where the user starts a new wait while a
+    // probe response is mid-flight on the wire.)
+    bool ok = mspRequestAndWait(fn, reqBuf, reqLen, respBuf, &respLen, 400);
+    if (!ok) { server.send(504, "text/plain", "flight controller did not respond within 400 ms"); return; }
 
     String s;
     s.reserve(respLen * 2 + 4);
@@ -689,7 +824,14 @@ inline void registerWebRoutes() {
     server.on("/rotorflight",     handleRotorflight);
     server.on("/rotorflight-pid",     handleRotorflightPid);
     server.on("/rotorflight-pidplus", handleRotorflightPidPlus);
-    server.on("/rotorflight-rates",   handleRotorflightRates);
+    server.on("/rotorflight-rates",        handleRotorflightRates);
+    server.on("/rotorflight-gov-profile",  handleRotorflightGovProfile);
+    server.on("/rotorflight-gov-global",   handleRotorflightGovGlobal);
+    server.on("/rotorflight-backups",      handleRotorflightBackups);
+    server.on("/api/backup/list",          HTTP_GET,  handleBackupList);
+    server.on("/api/backup/load",          HTTP_GET,  handleBackupLoad);
+    server.on("/api/backup/save",          HTTP_POST, handleBackupSave);
+    server.on("/api/backup/delete",        HTTP_POST, handleBackupDelete);
     server.on("/api/msp",         HTTP_GET, handleMspApi);
 
     // Auto-update endpoints.

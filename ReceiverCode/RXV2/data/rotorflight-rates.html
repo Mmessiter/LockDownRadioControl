@@ -8,8 +8,8 @@
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
 <title>Rates &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css">
-<script src="/app.js" defer></script>
+<link rel=stylesheet href="/style.css?v=14">
+<script src="/app.js?v=14" defer></script>
 <style>
 .banner{padding:.7em;border-radius:10px;text-align:center;font-weight:600;margin:0 0 1em}
 .banner.info{background:rgba(200,210,220,.85);color:#3a5165}
@@ -44,7 +44,7 @@ table.dyn-yaw td input{width:6em;padding:.4em;font-size:.95em;text-align:right;
     <div id=status class="banner info">loading&hellip;</div>
 
     <div class=card>
-        <h2>Profile</h2>
+        <h2>Profile (Bank)</h2>
         <div class=profRow>
             <button class=profBtn onclick="selectProfile(0)" id=pb0>1</button>
             <button class=profBtn onclick="selectProfile(1)" id=pb1>2</button>
@@ -96,11 +96,11 @@ table.dyn-yaw td input{width:6em;padding:.4em;font-size:.95em;text-align:right;
         </table>
     </div>
 
-    <button class="btn btn-fly" onclick="save()" style="background:#6cab5e"><span class=ico>&#128190;</span>SAVE to FC (writes EEPROM)</button>
-    <button class="btn btn-fw" onclick="load()"><span class=ico>&#8635;</span>Reload from FC</button>
+    <button class="btn btn-fly" onclick="save()" style="background:#6cab5e"><span class=ico>&#128190;</span>Save to Flight Controller</button>
+    <button class="btn btn-fw" onclick="load()"><span class=ico>&#8635;</span>Reload from flight controller</button>
 
     <div class=card>
-        <h2>Copy these settings to&hellip;</h2>
+        <h2>Copy to Profile (Bank) &hellip;</h2>
         <div class=profRow>
             <button class=profBtn onclick="copyTo(0)" id=cb0>1</button>
             <button class=profBtn onclick="copyTo(1)" id=cb1>2</button>
@@ -128,7 +128,11 @@ let cachedRaw = null;
 let hasAdvanced = false;
 
 function paintProfileButtons() {
-    for (let i = 0; i < 4; i++) document.getElementById('pb' + i).classList.toggle('active', i === currentProfile);
+    for (let i = 0; i < 4; i++) {
+        document.getElementById('pb' + i).classList.toggle('active', i === currentProfile);
+        const cb = document.getElementById('cb' + i);
+        if (cb) cb.disabled = (i === currentProfile);
+    }
 }
 function setStatus(kind, msg) {
     const b = document.getElementById('status');
@@ -284,12 +288,12 @@ function buildBoostUI() {
 }
 
 async function selectProfile(idx) {
+    if (idx === currentProfile) return;
+    if (!(await LDRC.confirmLoseChanges('switching profile'))) return;
     setStatus('info', 'Switching to rate profile ' + (idx + 1) + '…');
     try {
         // Rate profile: idx | 0x80  (high bit distinguishes from PID profile).
-        const enc = (0x80 | idx).toString(16).padStart(2,'0');
-        const r = await fetch('/api/msp?fn=210&data=' + enc);
-        if (!r.ok) throw new Error(await r.text());
+        await LDRC.msp(210, (0x80 | idx).toString(16).padStart(2,'0'));
         currentProfile = idx;
         localStorage.setItem('rfRatesProfile', String(idx));
         paintProfileButtons();
@@ -298,7 +302,7 @@ async function selectProfile(idx) {
 }
 
 async function load() {
-    setStatus('info', 'Reading rates from FC…');
+    setStatus('info', 'Reading rates from flight controller…');
     try {
         const stateR = await fetch('/api/state.json', { cache: 'no-store' });
         const st = await stateR.json();
@@ -308,9 +312,9 @@ async function load() {
         if (hasAdvanced) buildBoostUI();
     } catch (e) {}
     try {
-        const r = await fetch('/api/msp?fn=111', { cache: 'no-store' });
-        if (!r.ok) throw new Error(await r.text());
-        const bytes = hexToBytes((await r.text()).trim());
+        // Force FC to the rate profile our page is showing (0x80 | idx).
+        await LDRC.msp(210, (0x80 | currentProfile).toString(16).padStart(2,'0'));
+        const bytes = hexToBytes(await LDRC.msp(111));
         const minLen = hasAdvanced ? 36 : 25;
         if (bytes.length < minLen) throw new Error('short response: ' + bytes.length);
         cachedRaw = bytes.slice(0, minLen);
@@ -334,8 +338,9 @@ async function load() {
             document.getElementById('a_yddg').value = bytes[34];
             document.getElementById('a_yddf').value = bytes[35];
         }
-        setStatus('good', '✓ Loaded from FC (profile ' + (currentProfile + 1) + ')');
+        setStatus('good', '✓ Loaded from flight controller (profile ' + (currentProfile + 1) + ')');
         drawCurves();
+        LDRC.clearDirty();
     } catch (e) { setStatus('bad', 'Read failed: ' + e.message); }
 }
 
@@ -368,35 +373,31 @@ function buildPayload() {
 }
 
 async function save() {
-    if (!cachedRaw) { setStatus('bad', 'Read FC first'); return; }
-    if (!confirm('Write these rates to the FC EEPROM?')) return;
+    if (!cachedRaw) { setStatus('bad', 'Read flight controller first'); return; }
+    if (!(await LDRC.confirm('Write these rates to the flight controller EEPROM?',
+        {title:'Save Rates', icon:'💾', yes:'Save to flight controller'}))) return;
     setStatus('info', 'Writing rates…');
     const bytes = buildPayload();
     try {
-        const r1 = await fetch('/api/msp?fn=204&data=' + bytesToHex(bytes));
-        if (!r1.ok) throw new Error('SET_RC_TUNING: ' + (await r1.text()));
-        const r2 = await fetch('/api/msp?fn=250');
-        if (!r2.ok) throw new Error('EEPROM_WRITE: ' + (await r2.text()));
-        setStatus('good', '✓ Saved to FC EEPROM');
+        await LDRC.msp(204, bytesToHex(bytes));   // SET_RC_TUNING
+        await LDRC.msp(250);                       // EEPROM_WRITE
+        setStatus('good', '✓ Saved to flight controller EEPROM');
         cachedRaw = bytes;
+        LDRC.clearDirty();
     } catch (e) { setStatus('bad', 'Save failed: ' + e.message); }
 }
 
 async function copyTo(destIdx) {
-    if (!cachedRaw) { setStatus('bad', 'Read FC first'); return; }
+    if (!cachedRaw) { setStatus('bad', 'Read flight controller first'); return; }
     if (destIdx === currentProfile) { setStatus('info', 'Already on profile ' + (destIdx+1)); return; }
-    if (!confirm('Copy current rates to profile ' + (destIdx + 1) + ' and switch to it?')) return;
+    if (!(await LDRC.confirm('Copy current rates to profile ' + (destIdx + 1) + ' and switch to it?',
+        {title:'Copy to profile ' + (destIdx + 1), icon:'📋', yes:'Copy + switch', kind:'warn'}))) return;
     setStatus('info', 'Copying to profile ' + (destIdx + 1) + '…');
     const bytes = buildPayload();
     try {
-        // Rate profile select uses 0x80 | idx
-        const enc = (0x80 | destIdx).toString(16).padStart(2,'0');
-        const rS = await fetch('/api/msp?fn=210&data=' + enc);
-        if (!rS.ok) throw new Error('SELECT: ' + (await rS.text()));
-        const r1 = await fetch('/api/msp?fn=204&data=' + bytesToHex(bytes));
-        if (!r1.ok) throw new Error('SET_RC_TUNING: ' + (await r1.text()));
-        const r2 = await fetch('/api/msp?fn=250');
-        if (!r2.ok) throw new Error('EEPROM_WRITE: ' + (await r2.text()));
+        await LDRC.msp(210, (0x80 | destIdx).toString(16).padStart(2,'0'));   // SELECT (rate)
+        await LDRC.msp(204, bytesToHex(bytes));                                // SET_RC_TUNING
+        await LDRC.msp(250);                                                    // EEPROM_WRITE
         currentProfile = destIdx;
         localStorage.setItem('rfRatesProfile', String(destIdx));
         paintProfileButtons();
@@ -408,6 +409,11 @@ async function copyTo(destIdx) {
 document.addEventListener('DOMContentLoaded', () => {
     buildAxesUI();
     paintProfileButtons();
+    // Any user input in this form marks the page dirty so a profile-switch
+    // can warn before throwing the edits away.
+    document.addEventListener('input', e => {
+        if (e.target.matches('input, select')) LDRC.markDirty();
+    });
     load();
 });
 </script>

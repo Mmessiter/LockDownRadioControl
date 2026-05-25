@@ -8,8 +8,8 @@
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
 <title>PIDs &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css">
-<script src="/app.js" defer></script>
+<link rel=stylesheet href="/style.css?v=14">
+<script src="/app.js?v=14" defer></script>
 <style>
 table.pids{width:100%;border-collapse:separate;border-spacing:.3em}
 table.pids th{text-align:center;color:#3a5165;font-weight:600;padding:.4em 0}
@@ -31,7 +31,7 @@ table.pids td input{width:100%;padding:.5em;font-size:1em;border:1px solid #b8c7
     <div id=status class="banner info">loading&hellip;</div>
 
     <div class=card>
-        <h2>Profile</h2>
+        <h2>Profile (Bank)</h2>
         <div class=profRow>
             <button class=profBtn onclick="selectProfile(0)" id=pb0>1</button>
             <button class=profBtn onclick="selectProfile(1)" id=pb1>2</button>
@@ -81,11 +81,11 @@ table.pids td input{width:100%;padding:.5em;font-size:1em;border:1px solid #b8c7
         </table>
     </div>
 
-    <button class="btn btn-fly" id=saveBtn onclick="save()" style="background:#6cab5e"><span class=ico>&#128190;</span>SAVE to FC (writes EEPROM)</button>
-    <button class="btn btn-fw" onclick="load()"><span class=ico>&#8635;</span>Reload from FC</button>
+    <button class="btn btn-fly" id=saveBtn onclick="save()" style="background:#6cab5e"><span class=ico>&#128190;</span>Save to Flight Controller</button>
+    <button class="btn btn-fw" onclick="load()"><span class=ico>&#8635;</span>Reload from flight controller</button>
 
     <div class=card>
-        <h2>Copy these settings to&hellip;</h2>
+        <h2>Copy to Profile (Bank) &hellip;</h2>
         <div class=profRow>
             <button class=profBtn onclick="copyTo(0)" id=cb0>1</button>
             <button class=profBtn onclick="copyTo(1)" id=cb1>2</button>
@@ -129,15 +129,17 @@ let currentProfile = parseInt(localStorage.getItem('rfPidProfile') || '0');
 function paintProfileButtons() {
     for (let i = 0; i < 4; i++) {
         document.getElementById('pb' + i).classList.toggle('active', i === currentProfile);
+        const cb = document.getElementById('cb' + i);
+        if (cb) cb.disabled = (i === currentProfile);
     }
 }
 
 async function selectProfile(idx) {
+    if (idx === currentProfile) return;
+    if (!(await LDRC.confirmLoseChanges('switching profile'))) return;
     setStatus('info', 'Switching to profile ' + (idx + 1) + '…');
     try {
-        const data = idx.toString(16).padStart(2, '0');
-        const r = await fetch('/api/msp?fn=210&data=' + data, { cache: 'no-store' });
-        if (!r.ok) throw new Error(await r.text());
+        await LDRC.msp(210, idx.toString(16).padStart(2,'0'));
         currentProfile = idx;
         localStorage.setItem('rfPidProfile', String(idx));
         paintProfileButtons();
@@ -148,11 +150,11 @@ async function selectProfile(idx) {
 }
 
 async function load() {
-    setStatus('info', 'Reading PIDs from FC…');
+    setStatus('info', 'Reading PIDs from flight controller…');
     try {
-        const r = await fetch('/api/msp?fn=112', { cache: 'no-store' });
-        if (!r.ok) throw new Error(await r.text());
-        const hex = (await r.text()).trim();
+        // Force FC to the profile our page is showing, so Configurator matches.
+        await LDRC.msp(210, currentProfile.toString(16).padStart(2,'0'));
+        const hex = await LDRC.msp(112);
         const bytes = hexToBytes(hex);
         if (bytes.length < 34) throw new Error('short response: ' + bytes.length + ' bytes');
         // Parse 17 little-endian words
@@ -162,7 +164,8 @@ async function load() {
         const ids = ['r_P','r_I','r_D','r_F','p_P','p_I','p_D','p_F','y_P','y_I','y_D','y_F',
                      'b_R','b_P','b_Y','h_R','h_P'];
         ids.forEach((id, i) => document.getElementById(id).value = words[i]);
-        setStatus('good', '✓ Loaded from FC');
+        setStatus('good', '✓ Loaded from flight controller');
+        LDRC.clearDirty();
     } catch (e) {
         setStatus('bad', 'Read failed: ' + e.message);
     }
@@ -181,15 +184,15 @@ function buildPayload() {
 }
 
 async function save() {
-    if (!confirm('Write these PIDs to the FC EEPROM?')) return;
+    if (!(await LDRC.confirm('Write these PIDs to the flight controller EEPROM?',
+        {title:'Save PIDs', icon:'💾', yes:'Save to flight controller'}))) return;
     setStatus('info', 'Writing PIDs…');
     const bytes = buildPayload();
     try {
-        const r1 = await fetch('/api/msp?fn=202&data=' + bytesToHex(bytes), { cache: 'no-store' });
-        if (!r1.ok) throw new Error('SET_PID: ' + (await r1.text()));
-        const r2 = await fetch('/api/msp?fn=250', { cache: 'no-store' });
-        if (!r2.ok) throw new Error('EEPROM_WRITE: ' + (await r2.text()));
-        setStatus('good', '✓ Saved to FC EEPROM');
+        await LDRC.msp(202, bytesToHex(bytes));   // SET_PID
+        await LDRC.msp(250);                       // EEPROM_WRITE
+        setStatus('good', '✓ Saved to flight controller EEPROM');
+        LDRC.clearDirty();
     } catch (e) {
         setStatus('bad', 'Save failed: ' + e.message);
     }
@@ -197,17 +200,14 @@ async function save() {
 
 async function copyTo(destIdx) {
     if (destIdx === currentProfile) { setStatus('info', 'Already on profile ' + (destIdx+1)); return; }
-    if (!confirm('Copy current PIDs to profile ' + (destIdx + 1) + ' and switch to it?')) return;
+    if (!(await LDRC.confirm('Copy current PIDs to profile ' + (destIdx + 1) + ' and switch to it?',
+        {title:'Copy to profile ' + (destIdx + 1), icon:'📋', yes:'Copy + switch', kind:'warn'}))) return;
     setStatus('info', 'Copying to profile ' + (destIdx + 1) + '…');
     const bytes = buildPayload();
     try {
-        const enc = destIdx.toString(16).padStart(2,'0');
-        const rS = await fetch('/api/msp?fn=210&data=' + enc);
-        if (!rS.ok) throw new Error('SELECT: ' + (await rS.text()));
-        const r1 = await fetch('/api/msp?fn=202&data=' + bytesToHex(bytes));
-        if (!r1.ok) throw new Error('SET_PID: ' + (await r1.text()));
-        const r2 = await fetch('/api/msp?fn=250');
-        if (!r2.ok) throw new Error('EEPROM_WRITE: ' + (await r2.text()));
+        await LDRC.msp(210, destIdx.toString(16).padStart(2,'0'));   // SELECT
+        await LDRC.msp(202, bytesToHex(bytes));                       // SET_PID
+        await LDRC.msp(250);                                           // EEPROM_WRITE
         currentProfile = destIdx;
         localStorage.setItem('rfPidProfile', String(destIdx));
         paintProfileButtons();
@@ -218,6 +218,9 @@ async function copyTo(destIdx) {
 
 document.addEventListener('DOMContentLoaded', () => {
     paintProfileButtons();
+    document.addEventListener('input', e => {
+        if (e.target.matches('input, select')) LDRC.markDirty();
+    });
     load();
 });
 </script>

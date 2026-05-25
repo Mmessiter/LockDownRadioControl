@@ -8,8 +8,8 @@
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
 <title>Home &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css">
-<script src="/app.js" defer></script>
+<link rel=stylesheet href="/style.css?v=14">
+<script src="/app.js?v=14" defer></script>
 </head>
 <body>
 <div class=container>
@@ -18,7 +18,7 @@
 
     <div id=fwBanner style="display:none;text-align:center;padding:.7em;border-radius:10px;margin:0 0 1em;font-weight:600"></div>
 
-    <a class="btn btn-fly"  href="/fly"><span class=ico>&#9992;&#65039;</span>Fly now</a>
+    <a class="btn btn-fly"  href="/fly"><span class=ico>&#128641;&#9992;&#65039;</span>Fly now</a>
     <a class="btn btn-bind" href="/bind"><span class=ico>&#128279;</span>Start Bind mode</a>
     <a class="btn btn-bb"   href="/rotorflight" id=rfbtn style="display:none;background:#8e6cab"><span class=ico>&#129357;</span>Rotorflight config &mdash; <span id=fcver>&hellip;</span></a>
     <a class="btn btn-fw"   href="/firmware"><span class=ico>&#128229;</span>Update or roll back firmware</a>
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const fc = s.fcinfo;
         const label = (fc.rf_major > 0)
             ? ('Rotorflight ' + fc.rf_major + '.' + fc.rf_minor)
-            : 'FC connected';
+            : 'Flight controller connected';
         LDRC.setText('fcver', label);
     }
 

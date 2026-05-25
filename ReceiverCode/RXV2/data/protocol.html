@@ -8,8 +8,8 @@
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
 <title>Output protocol &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css">
-<script src="/app.js" defer></script>
+<link rel=stylesheet href="/style.css?v=14">
+<script src="/app.js?v=14" defer></script>
 </head>
 <body>
 <div class=container>
@@ -22,7 +22,7 @@
             <p style="margin:1.2em 0 0;padding:.8em 1em;background:rgba(255,255,255,.55);border-radius:8px;font-size:.92em">
                 <label style="display:flex;align-items:center">
                     <input type=checkbox name=ppm_inv value=1 id=ppmInv style="margin-right:.6em;transform:scale(1.2)">
-                    <span>Invert PPM polarity (idle HIGH, negative-going pulses) &mdash; try this if your simulator/FC doesn't pick up PPM</span>
+                    <span>Invert PPM polarity (idle HIGH, negative-going pulses) &mdash; try this if your simulator or flight controller doesn't pick up PPM</span>
                 </label>
             </p>
             <button class="btn btn-fw" type=submit><span class=ico>&#128190;</span>Save &amp; reboot</button>

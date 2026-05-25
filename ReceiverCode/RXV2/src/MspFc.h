@@ -199,6 +199,10 @@ inline void mspFcPoll() {
     // Don't fight the bridge — if a Configurator client is talking to the FC
     // we'd just confuse both sides.
     if (mspBridgeActive) return;
+    // Don't fight a synchronous /api/msp request that's mid-wait — sending
+    // a competing probe causes the FC to interleave two responses, often
+    // making the sync request time out and the page see "Read failed".
+    if (mspWaitFunction != 0xFF) return;
     // Don't probe while RC frames are being transmitted to a live TX session,
     // unless dev mode keeps wifi on anyway. Probing during active flight would
     // briefly compete for Serial1 bandwidth.

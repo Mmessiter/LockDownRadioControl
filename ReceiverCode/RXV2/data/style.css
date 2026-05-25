@@ -108,6 +108,69 @@ code{
 .status-card.up  {background:rgba(168,210,154,.85)}
 .status-card.down{background:rgba(220,160,140,.85)}
 
+/* Confirm modal (LDRC.confirm) --------------------------------------- */
+.modalOverlay{
+    position:fixed;inset:0;background:rgba(20,30,45,.65);
+    z-index:1000;display:none;align-items:center;justify-content:center;
+    padding:1em;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)
+}
+.modalOverlay.show{display:flex}
+.modalBox{
+    background:#fff;border-radius:20px;padding:1.8em 1.5em 1.4em;
+    max-width:90vw;width:380px;
+    box-shadow:0 18px 50px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.6) inset;
+    animation:modalPop .25s cubic-bezier(.34,1.56,.64,1);
+    text-align:center
+}
+@keyframes modalPop{
+    0%{transform:scale(.7) translateY(20px);opacity:0}
+    100%{transform:scale(1) translateY(0);opacity:1}
+}
+.modalAccent{
+    margin:-1.8em -1.5em 1em;padding:1.2em;border-radius:20px 20px 0 0;
+    background:linear-gradient(135deg,#6cab5e 0%,#5d9e6e 100%);
+    color:#fff
+}
+.modalAccent.warn{background:linear-gradient(135deg,#e0a040 0%,#d4944a 100%)}
+.modalAccent.danger{background:linear-gradient(135deg,#d4624a 0%,#c97464 100%)}
+.modalIcon{font-size:3em;line-height:1;margin:0 0 .15em;text-shadow:0 2px 4px rgba(0,0,0,.15)}
+.modalTitle{font-weight:700;font-size:1.35em;letter-spacing:.02em;margin:0}
+.modalMsg{color:#3a5165;margin:0 0 1.4em;font-size:1.05em;line-height:1.4;padding:0 .3em}
+.modalBtns{display:flex;gap:.6em}
+.modalBtn{
+    flex:1;padding:.95em;border:0;border-radius:12px;
+    font-size:1.05em;font-weight:700;cursor:pointer;
+    transition:transform .08s;letter-spacing:.02em
+}
+.modalBtn:active{transform:scale(.96)}
+.modalBtn.yes{background:#6cab5e;color:#fff;box-shadow:0 3px 8px rgba(108,171,94,.4)}
+.modalBtn.yes.warn{background:#d4944a;box-shadow:0 3px 8px rgba(212,148,74,.4)}
+.modalBtn.yes.danger{background:#c97464;box-shadow:0 3px 8px rgba(201,116,100,.4)}
+.modalBtn.no{background:#e8edf2;color:#5a6b78}
+button:disabled{opacity:.35;cursor:not-allowed;filter:grayscale(.6)}
+
+/* Page-load wait overlay (LDRC.showLoading) ------------------------ */
+/* Small floating toast at the top — no full-screen overlay. */
+#_ldrcLoad{
+    position:fixed;top:1em;left:50%;transform:translateX(-50%);
+    display:none;z-index:2000;pointer-events:none
+}
+#_ldrcLoad.show{display:block}
+.loadingBox{
+    background:#3a5165;color:#fff;padding:.6em 1.1em;border-radius:24px;
+    font-size:.95em;font-weight:600;text-align:center;white-space:nowrap;
+    box-shadow:0 4px 14px rgba(0,0,0,.25);
+    animation:loadPop .15s ease-out;
+    display:flex;align-items:center;gap:.55em
+}
+.loadingSpin{
+    width:16px;height:16px;border:2.5px solid rgba(255,255,255,.35);
+    border-top-color:#fff;border-radius:50%;
+    animation:loadSpin 1s linear infinite
+}
+@keyframes loadSpin{to{transform:rotate(360deg)}}
+@keyframes loadPop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+
 /* Channel grid (Diagnostics + Fly) ----------------------------------- */
 .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.4em;margin:1em 0}
 .ch{

@@ -8,18 +8,20 @@
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
 <title>Rotorflight &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css">
-<script src="/app.js" defer></script>
+<link rel=stylesheet href="/style.css?v=14">
+<script src="/app.js?v=14" defer></script>
 </head>
 <body>
 <div class=container>
     <h1>Rotorflight</h1>
     <p class=subtitle id=fcInfo>&hellip;</p>
 
-    <a class="btn btn-fw" href="/rotorflight-pid"     style="background:#8e6cab"><span class=ico>&#9881;&#65039;</span>PIDs</a>
-    <a class="btn btn-fw" href="/rotorflight-pidplus" style="background:#8e6cab"><span class=ico>&#9881;&#65039;</span>PID + (advanced)</a>
-    <a class="btn btn-fw" href="/rotorflight-rates"   style="background:#8e6cab"><span class=ico>&#9881;&#65039;</span>Rates &amp; Dynamics</a>
-    <p class=muted style="text-align:center">Governor and Backups coming next.</p>
+    <a class="btn btn-fw" href="/rotorflight-pid"        style="background:#8e6cab"><span class=ico>&#9881;&#65039;</span>PIDs</a>
+    <a class="btn btn-fw" href="/rotorflight-pidplus"    style="background:#8e6cab"><span class=ico>&#9881;&#65039;</span>PID + (advanced)</a>
+    <a class="btn btn-fw" href="/rotorflight-rates"      style="background:#8e6cab"><span class=ico>&#9881;&#65039;</span>Rates &amp; Dynamics</a>
+    <a class="btn btn-fw" href="/rotorflight-gov-profile" style="background:#5fa099"><span class=ico>&#9881;&#65039;</span>Governor (profile)</a>
+    <a class="btn btn-fw" href="/rotorflight-gov-global"  style="background:#5fa099"><span class=ico>&#9881;&#65039;</span>Governor (global)</a>
+    <a class="btn btn-fw" href="/rotorflight-backups"     style="background:#d4944a"><span class=ico>&#128190;</span>Backups &amp; restore</a>
 
     <a class="btn btn-back" href="/"><span class=ico>&#8617;</span>Return to menu</a>
     <div class=footer></div>
@@ -32,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const fc = s.fcinfo || {};
     const label = (fc.rf_major > 0)
         ? ('Rotorflight ' + fc.rf_major + '.' + fc.rf_minor + ' (BetaFlight ' + fc.fw_major + '.' + fc.fw_minor + '.' + fc.fw_patch + ' • API ' + fc.api_major + '.' + fc.api_minor + ')')
-        : (fc.detected ? fc.variant : 'FC connected (version pending)');
+        : (fc.detected ? fc.variant : 'Flight controller connected (version pending)');
     LDRC.setText('fcInfo', label);
 });
 </script>

@@ -8,8 +8,8 @@
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
 <title>Diagnostics &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css">
-<script src="/app.js" defer></script>
+<link rel=stylesheet href="/style.css?v=14">
+<script src="/app.js?v=14" defer></script>
 </head>
 <body>
 <div class=container>
@@ -61,11 +61,11 @@
         <dt>Responses sent</dt>     <dd id=fcResp></dd>
         <dt>Recent raw</dt>         <dd><code id=fcRaw></code></dd>
         <dt>Last frame</dt>         <dd id=fcLast></dd>
-        <dt id=fcBattDt  style="display:none">FC battery</dt>   <dd id=fcBatt  style="display:none"></dd>
+        <dt id=fcBattDt  style="display:none">Flight controller battery</dt>   <dd id=fcBatt  style="display:none"></dd>
         <dt id=fcRssiDt  style="display:none">Uplink RSSI</dt>  <dd id=fcRssi  style="display:none"></dd>
         <dt id=fcAttDt   style="display:none">Attitude</dt>     <dd id=fcAtt   style="display:none"></dd>
         <dt id=fcModeDt  style="display:none">Flight mode</dt>  <dd id=fcMode  style="display:none"></dd>
-        <dt id=fcStatusDt style="display:none">Status</dt>      <dd id=fcStatus class=muted style="display:none">No telemetry parsed yet &mdash; ensure D5 is wired to the FC's UART TX (for CRSF). Floating D5 is harmless; you just won't see FC data here.</dd>
+        <dt id=fcStatusDt style="display:none">Status</dt>      <dd id=fcStatus class=muted style="display:none">No telemetry parsed yet &mdash; ensure D5 is wired to the flight controller's UART TX (for CRSF). Floating D5 is harmless; you just won't see flight controller data here.</dd>
     </dl></div>
 
     <div class=card><h2>Channels (&micro;s)</h2><div class=grid4 id=chgrid></div></div>

@@ -195,6 +195,27 @@ void loop() {
     heartbeat();
     netStep();
 
+    // Periodic free-heap snapshot to the event log so we can spot leaks
+    // (every 60 s; logs only when value drops to track downward trend).
+    {
+        static uint32_t lastHeapLogMs = 0;
+        static uint32_t lastHeap      = 0xFFFFFFFF;
+        if ((uint32_t)(millis() - lastHeapLogMs) >= 60000) {
+            lastHeapLogMs = millis();
+            uint32_t now = ESP.getFreeHeap();
+            // Log on first sample, or if heap has dropped by >2 KB since the last log.
+            if (lastHeap == 0xFFFFFFFF || (lastHeap > now && (lastHeap - now) > 2048)) {
+                char buf[64];
+                snprintf(buf, sizeof(buf), "Free heap: %u B (was %u)",
+                         (unsigned)now, (unsigned)lastHeap);
+                events.add(buf);
+                lastHeap = now;
+            } else if (now > lastHeap) {
+                lastHeap = now;   // recovered (e.g. closed connections freed) — update baseline silently
+            }
+        }
+    }
+
     // After 5 s of stable running, clear the quick-boot counter so an isolated
     // power-cycle doesn't accumulate toward the 3-trip threshold.
     static bool quickBootReset = false;

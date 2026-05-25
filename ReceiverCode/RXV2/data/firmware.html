@@ -8,8 +8,8 @@
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
 <title>Firmware &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css">
-<script src="/app.js" defer></script>
+<link rel=stylesheet href="/style.css?v=14">
+<script src="/app.js?v=14" defer></script>
 <style>
 .statusBox{padding:1.5em 1em;border-radius:18px;margin:0 0 1em;text-align:center;
            font-size:1.4em;font-weight:600;line-height:1.3;box-shadow:0 4px 14px rgba(0,0,0,.08)}
@@ -75,6 +75,21 @@ async function loadAll() {
     if (!s) { setStatus('bad', '❌ Receiver not responding'); return; }
     currentFw = s.info.fw_version;
 
+    // Firmware updates require the receiver to be on the local WiFi so the
+    // browser can reach the manifest server. In AP mode there's no path to it.
+    if (s.net.mode === 'AP mode') {
+        setStatus('warn',
+            '⚠️ Firmware updates not available in AP mode',
+            'Running ' + currentFw + ' — to update, the receiver must first join your local WiFi.');
+        const a = document.createElement('a');
+        a.href = '/wifi';
+        a.className = 'btn btn-fw';
+        a.style.background = '#5fa099';
+        a.innerHTML = '<span class=ico>&#128246;</span>Open WiFi settings';
+        document.getElementById('statusBox').after(a);
+        return;
+    }
+
     let data;
     try {
         const r = await fetch(MANIFEST_URL, { cache: 'no-store' });
@@ -122,7 +137,8 @@ async function loadAll() {
 }
 
 async function doInstall(name, url, btnId) {
-    if (!confirm('Install ' + name + '?\nReceiver will reboot.')) return;
+    if (!(await LDRC.confirm('Install ' + name + '? The receiver will reboot.',
+        {title:'Install firmware', icon:'📥', yes:'Install + reboot', kind:'warn'}))) return;
     document.querySelectorAll('.bigBtn').forEach(b => b.disabled = true);
     document.getElementById(btnId).textContent = 'installing ' + name + '…';
     setStatus('gray', '⌛ Installing ' + name, 'Downloading + applying');
