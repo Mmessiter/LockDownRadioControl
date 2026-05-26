@@ -7,177 +7,452 @@
 <meta name=apple-mobile-web-app-capable content=yes>
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
-<title>Diagnostics &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css?v=18">
-<script src="/app.js?v=18" defer></script>
+<title>View channels &middot; LDRC RX V2</title>
+<link rel=stylesheet href="/style.css?v=19">
+<style>
+.container{max-width:min(96vw,1100px)}
+.chTable{display:grid;grid-template-columns:auto auto 1fr auto;gap:6px 10px;align-items:center;font-variant-numeric:tabular-nums}
+.chIdx{color:#7a8b95;font-size:.9em;text-align:right;min-width:1.2em}
+.chLbl{color:#445;font-size:.95em;min-width:5em;white-space:nowrap}
+.chTrack{position:relative;height:24px;background:#eef0f2;border-radius:4px;overflow:hidden}
+.chFill{position:absolute;left:0;top:0;bottom:0;width:0;transition:width 80ms linear,background 200ms,opacity 200ms;border-radius:4px}
+.chVal{position:absolute;left:6px;top:0;bottom:0;display:flex;align-items:center;font-size:.88em;color:#222;text-shadow:0 0 2px rgba(255,255,255,.85)}
+.chPct{font-size:.88em;color:#445;min-width:3.6em;text-align:right}
+.stale .chFill{opacity:.25}
+.status{margin:0 0 12px 0;font-weight:600}
+.statusOK{color:#3a7}
+.statusBad{color:#b54}
+
+/* Helicopter preview ---------------------------------------------------- */
+.heliCard{margin-top:14px;padding:0;overflow:hidden}
+.heliCard h2{margin:0;padding:8px 14px;background:#3a4248;color:#e8edef;font-size:1em;font-weight:600;letter-spacing:.02em}
+.heliWrap{
+    position:relative;height:min(46vh,420px);
+    background:
+        linear-gradient(#fafbfc,#eef0f2),
+        linear-gradient(90deg,rgba(0,0,0,.05) 1px,transparent 1px) 0 0/22px 22px,
+        linear-gradient(rgba(0,0,0,.05) 1px,transparent 1px) 0 0/22px 22px;
+    background-blend-mode:normal,multiply,multiply;
+}
+#heli3D{position:absolute;inset:0;width:100%;height:100%;display:block}
+.heliMsg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#778;font-size:.9em;pointer-events:none}
+.heliReset{position:absolute;top:8px;right:10px;font-size:.82em;background:#fff;border:1px solid #c2c8cd;border-radius:4px;padding:4px 11px;cursor:pointer;color:#345;z-index:2}
+.heliReset:hover{background:#f4f6f8}
+.heliReadout{position:absolute;bottom:6px;left:10px;font-size:.78em;color:#556;font-variant-numeric:tabular-nums;background:rgba(255,255,255,.65);padding:3px 8px;border-radius:4px;z-index:2}
+.heliStale #heli3D{opacity:.35;filter:grayscale(.4)}
+</style>
+<script src="/app.js?v=19" defer></script>
+<script src="/three.min.js" defer></script>
 </head>
 <body>
 <div class=container>
-    <h1>Diagnostics</h1>
-    <p class=subtitle>Full receiver state &mdash; nothing prettified</p>
+    <h1>View channels</h1>
+    <p class=status id=status>Connecting&hellip;</p>
 
-    <div class=card><h2>Device</h2><dl>
-        <dt>Firmware</dt>   <dd id=fw></dd>
-        <dt>Hostname</dt>   <dd id=hostname></dd>
-        <dt>IP</dt>         <dd id=ip></dd>
-        <dt>MAC</dt>        <dd id=mac></dd>
-        <dt>RSSI</dt>       <dd id=rssi></dd>
-        <dt>Uptime</dt>     <dd id=uptime></dd>
-        <dt>Free heap</dt>  <dd id=heap></dd>
-        <dt>Chip</dt>       <dd id=chip></dd>
-        <dt>LittleFS</dt>   <dd id=fs></dd>
-    </dl></div>
+    <div class=card>
+        <div class=chTable id=chTable></div>
+    </div>
 
-    <div class=card><h2>nRF24 self-test</h2><dl>
-        <dt>Verdict</dt>          <dd><b id=rfVerdict>&hellip;</b></dd>
-        <dt>begin()</dt>          <dd id=rfBegin></dd>
-        <dt>isChipConnected()</dt><dd id=rfChip></dd>
-        <dt>Channel r/w</dt>      <dd id=rfChannel></dd>
-        <dt>Data rate r/w</dt>    <dd id=rfRate></dd>
-    </dl><p><a href="/retest">&#8635; Re-run self-test</a></p></div>
-
-    <div class=card><h2>RF link</h2><dl>
-        <dt>Packets received</dt>     <dd><b id=packets></b></dd>
-        <dt>Ack-payloads written</dt> <dd id=acks></dd>
-        <dt>MAC acks sent</dt>        <dd id=macacks></dd>
-        <dt>Bind state</dt>           <dd id=bindstate></dd>
-        <dt>Radios</dt>               <dd id=radios></dd>
-        <dt>FHSS</dt>                 <dd id=fhss></dd>
-        <dt>Telemetry item</dt>       <dd id=telitem></dd>
-        <dt>SBUS frames out</dt>      <dd id=sbusout></dd>
-        <dt>Last channel data</dt>    <dd id=lastch></dd>
-        <dt>Board MAC</dt>            <dd><code id=boardmac></code></dd>
-        <dt>Last packet</dt>          <dd id=lastpkt></dd>
-        <dt id=lpDt style="display:none">Last payload</dt>      <dd id=lpDd  style="display:none"><code id=lastpayload></code></dd>
-        <dt id=mpDt style="display:none">Largest payload</dt>   <dd id=mpDd  style="display:none"><code id=maxpayload></code></dd>
-    </dl></div>
-
-    <div class=card><h2>Flight controller telemetry (D5 RX)</h2><dl>
-        <dt>Protocol</dt>           <dd id=fcProto></dd>
-        <dt>Raw bytes (total)</dt>  <dd id=fcRawTotal></dd>
-        <dt>Bytes in (parser)</dt>  <dd id=fcBytes></dd>
-        <dt>Frames parsed</dt>      <dd id=fcFrames></dd>
-        <dt>CRC errors</dt>         <dd id=fcCrcErr></dd>
-        <dt>Responses sent</dt>     <dd id=fcResp></dd>
-        <dt>Recent raw</dt>         <dd><code id=fcRaw></code></dd>
-        <dt>Last frame</dt>         <dd id=fcLast></dd>
-        <dt id=fcBattDt  style="display:none">Flight controller battery</dt>   <dd id=fcBatt  style="display:none"></dd>
-        <dt id=fcRssiDt  style="display:none">Uplink RSSI</dt>  <dd id=fcRssi  style="display:none"></dd>
-        <dt id=fcAttDt   style="display:none">Attitude</dt>     <dd id=fcAtt   style="display:none"></dd>
-        <dt id=fcModeDt  style="display:none">Flight mode</dt>  <dd id=fcMode  style="display:none"></dd>
-        <dt id=fcStatusDt style="display:none">Status</dt>      <dd id=fcStatus class=muted style="display:none">No telemetry parsed yet &mdash; ensure D5 is wired to the flight controller's UART TX (for CRSF). Floating D5 is harmless; you just won't see flight controller data here.</dd>
-    </dl></div>
-
-    <div class=card><h2>Channels (&micro;s)</h2><div class=grid4 id=chgrid></div></div>
+    <div class="card heliCard">
+        <h2>Preview</h2>
+        <div class=heliWrap id=heliWrap>
+            <canvas id=heli3D></canvas>
+            <div class=heliMsg id=heliMsg>Loading 3D model&hellip;</div>
+            <button class=heliReset id=heliReset type=button>Reset</button>
+            <div class=heliReadout id=heliReadout>roll 0&deg; &middot; pitch 0&deg; &middot; yaw 0&deg;</div>
+        </div>
+    </div>
 
     <a class="btn btn-back" href="/"><span class=ico>&#8617;</span>Return to menu</a>
     <div class=footer></div>
 </div>
 
 <script>
-// Build the 16 channel cells once.
-(function(){
-    const g = document.getElementById('chgrid');
+// ---------------------------------------------------------------------
+//  Channel bar viewer
+// ---------------------------------------------------------------------
+
+// TX is sending the full 500..2500 us protocol range; centre 1500.
+const CH_LO  = 500;
+const CH_HI  = 2500;
+const CH_MID = 1500;
+// Fill-bar scale is slightly wider than the live range so even at full
+// stick deflection a sliver of colour remains visible (matches Rotorflight).
+const FILL_LO = 400;
+const FILL_HI = 2600;
+const POLL_MS  = 100;
+const STALE_MS = 500;
+
+const CH_NAMES = [
+    'Roll', 'Pitch', 'Throttle', 'Yaw', 'Collective',
+    'AUX 1', 'AUX 2', 'AUX 3', 'AUX 4', 'AUX 5',
+    'AUX 6', 'AUX 7', 'AUX 8', 'AUX 9', 'AUX 10', 'AUX 11'
+];
+const CH_BIPOLAR = [
+    true, true, false, true, false,
+    false, false, false, false, false,
+    false, false, false, false, false, false
+];
+
+(function build() {
+    let html = '';
     for (let i = 0; i < 16; ++i) {
-        const cell = document.createElement('div');
-        cell.className = 'ch';
-        cell.innerHTML = '<div class=n>' + (i+1) + '</div><div class=v id=ch' + i + '>&mdash;</div>';
-        g.appendChild(cell);
+        const hue = (i * 360 / 16) | 0;
+        html += '<div class=chIdx>' + (i + 1) + '</div>'
+              + '<div class=chLbl>' + CH_NAMES[i] + '</div>'
+              + '<div class=chTrack>'
+              +   '<div class=chFill id=f' + i + ' style="background:hsl(' + hue + ',70%,62%)"></div>'
+              +   '<div class=chVal  id=v' + i + '>&mdash;</div>'
+              + '</div>'
+              + '<div class=chPct id=p' + i + '>&mdash;</div>';
     }
+    document.getElementById('chTable').innerHTML = html;
 })();
 
-function show(id, on) {
-    const el = document.getElementById(id);
-    if (el) el.style.display = on ? '' : 'none';
+const table      = document.getElementById('chTable');
+const status     = document.getElementById('status');
+const heliWrap   = document.getElementById('heliWrap');
+const heliReadout= document.getElementById('heliReadout');
+
+// Stick → -1..+1 about 1500 us.
+function stick(us) {
+    const v = (us - CH_MID) / ((CH_HI - CH_LO) / 2);   // ±1 at the protocol extremes
+    return Math.max(-1, Math.min(1, v));
 }
+// us → 0..1 from CH_LO..CH_HI.
+function unit(us) {
+    return Math.max(0, Math.min(1, (us - CH_LO) / (CH_HI - CH_LO)));
+}
+
+// ---------------------------------------------------------------------
+//  3D helicopter (Three.js) — built once Three.js has loaded
+// ---------------------------------------------------------------------
+
+const I_ROLL = 0, I_PITCH = 1, I_THROTTLE = 2, I_YAW = 3, I_COLLECTIVE = 4;
+const ROLL_RATE_DPS  = 220;
+const PITCH_RATE_DPS = 160;
+const YAW_RATE_DPS   = 280;
+const STICK_DEAD     = 0.04;
+
+let attRoll = 0, attPitch = 0, attYaw = 0;    // raw stick-deflection accumulators (readout only)
+let lastTickMs = 0;
+let rotorRateRPS = 1;
+let tailRateRPS  = 4;
+
+let three    = null;
+let heliQuat = null;                          // body orientation; identity until buildHeli3D
+
+document.getElementById('heliReset').addEventListener('click', () => {
+    attRoll = attPitch = attYaw = 0;
+    if (heliQuat) heliQuat.identity();
+});
+
+function buildHeli3D() {
+    if (!window.THREE) {
+        document.getElementById('heliMsg').textContent = '3D library failed to load — bars still work.';
+        return;
+    }
+    const canvas = document.getElementById('heli3D');
+    const wrap   = heliWrap;
+
+    const scene = new THREE.Scene();
+
+    const w = wrap.clientWidth, h = wrap.clientHeight;
+    const camera = new THREE.PerspectiveCamera(28, w / h, 0.1, 50);
+    camera.position.set(2.8, 1.55, 3.4);
+    camera.lookAt(0, 0.15, 0);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(window.devicePixelRatio || 1);
+    renderer.setClearColor(0x000000, 0);
+    renderer.setSize(w, h, false);
+
+    // Lights
+    scene.add(new THREE.HemisphereLight(0xffffff, 0xb0b8c0, 0.65));
+    const sun = new THREE.DirectionalLight(0xffffff, 0.9);
+    sun.position.set(3.5, 5, 2.5);
+    scene.add(sun);
+    const fill = new THREE.DirectionalLight(0xc8d4dc, 0.35);
+    fill.position.set(-3, 2, -2);
+    scene.add(fill);
+
+    // Materials
+    const M = {
+        body:   new THREE.MeshPhongMaterial({ color: 0xe8edef, shininess: 90, specular: 0x404040 }),
+        accent: new THREE.MeshPhongMaterial({ color: 0x5fa099, shininess: 100 }),
+        accent2:new THREE.MeshPhongMaterial({ color: 0x3f7e76, shininess: 80 }),
+        canopy: new THREE.MeshPhongMaterial({ color: 0x152030, shininess: 220, specular: 0xa0b0c0, transparent: true, opacity: .85 }),
+        dark:   new THREE.MeshPhongMaterial({ color: 0x2a3540, shininess: 30 }),
+        blade:  new THREE.MeshPhongMaterial({ color: 0x1a2028 }),
+        metal:  new THREE.MeshPhongMaterial({ color: 0x6a7078, shininess: 100 })
+    };
+
+    const heli = new THREE.Group();
+    heli.rotation.order = 'YZX';            // intrinsic yaw → pitch → roll
+    heli.position.y = 0.1;
+
+    // Main fuselage — stretched ellipsoid
+    const fuseGeo = new THREE.SphereGeometry(0.34, 32, 20);
+    fuseGeo.scale(1.65, 0.85, 0.95);
+    const fuse = new THREE.Mesh(fuseGeo, M.body);
+    fuse.position.x = -0.05;
+    heli.add(fuse);
+
+    // Accent stripe (a thin coloured band around the waist)
+    const stripeGeo = new THREE.TorusGeometry(0.4, 0.025, 10, 32);
+    stripeGeo.scale(1.45, 1.0, 0.92);
+    const stripe = new THREE.Mesh(stripeGeo, M.accent);
+    stripe.rotation.x = Math.PI / 2;
+    stripe.position.set(-0.05, -0.02, 0);
+    heli.add(stripe);
+
+    // Canopy windshield (front upper hemisphere, darker)
+    const canGeo = new THREE.SphereGeometry(0.27, 24, 16, 0, Math.PI * 2, 0, Math.PI * 0.55);
+    canGeo.scale(1.05, 1.0, 0.92);
+    const canopy = new THREE.Mesh(canGeo, M.canopy);
+    canopy.position.set(0.2, 0.06, 0);
+    heli.add(canopy);
+
+    // Engine cowling on top
+    const cowlGeo = new THREE.BoxGeometry(0.32, 0.16, 0.28);
+    const cowl = new THREE.Mesh(cowlGeo, M.dark);
+    cowl.position.set(-0.04, 0.22, 0);
+    heli.add(cowl);
+
+    // Tail boom — long taper to the rear
+    const boomGeo = new THREE.CylinderGeometry(0.04, 0.09, 1.0, 14);
+    const boom = new THREE.Mesh(boomGeo, M.body);
+    boom.rotation.z = Math.PI / 2;
+    boom.position.set(-0.7, 0.06, 0);
+    heli.add(boom);
+
+    // Vertical stabilizer
+    const finGeo = new THREE.BoxGeometry(0.24, 0.22, 0.035);
+    const fin = new THREE.Mesh(finGeo, M.accent2);
+    fin.position.set(-1.18, 0.2, 0);
+    heli.add(fin);
+
+    // Horizontal stabilizer
+    const hstabGeo = new THREE.BoxGeometry(0.16, 0.03, 0.42);
+    const hstab = new THREE.Mesh(hstabGeo, M.accent2);
+    hstab.position.set(-1.08, 0.06, 0);
+    heli.add(hstab);
+
+    // Rotor mast
+    const mastGeo = new THREE.CylinderGeometry(0.04, 0.05, 0.18, 14);
+    const mast = new THREE.Mesh(mastGeo, M.dark);
+    mast.position.set(0, 0.4, 0);
+    heli.add(mast);
+
+    // Rotor hub
+    const hubGeo = new THREE.CylinderGeometry(0.075, 0.075, 0.05, 14);
+    const hub = new THREE.Mesh(hubGeo, M.metal);
+    hub.position.set(0, 0.49, 0);
+    heli.add(hub);
+
+    // Main rotor (spinning)
+    const rotorGrp = new THREE.Group();
+    rotorGrp.position.set(0, 0.52, 0);
+    const bladeGeo = new THREE.BoxGeometry(1.7, 0.018, 0.085);
+    for (let i = 0; i < 2; ++i) {
+        const b = new THREE.Mesh(bladeGeo, M.blade);
+        b.rotation.y = i * Math.PI / 2;
+        rotorGrp.add(b);
+    }
+    heli.add(rotorGrp);
+
+    // Tail rotor — disc plane is vertical and along the body length
+    // (perpendicular to the lateral axis). Mast points sideways out of the
+    // tail boom; blades sweep in the X-Y (forward-vertical) plane, so they
+    // are visible from the side as a disc, not edge-on.
+    const tailRotorGrp = new THREE.Group();
+    tailRotorGrp.position.set(-1.18, 0.2, 0.09);
+    const tBladeGeo = new THREE.BoxGeometry(0.26, 0.018, 0.03);   // long along X
+    for (let i = 0; i < 2; ++i) {
+        const tb = new THREE.Mesh(tBladeGeo, M.blade);
+        tb.rotation.z = i * Math.PI / 2;                          // cross in X-Y plane
+        tailRotorGrp.add(tb);
+    }
+    heli.add(tailRotorGrp);
+
+    // Skids
+    const skidGeo = new THREE.CylinderGeometry(0.024, 0.024, 1.05, 12);
+    const strutGeo = new THREE.CylinderGeometry(0.014, 0.014, 0.36, 8);
+    for (const z of [-0.24, 0.24]) {
+        const skid = new THREE.Mesh(skidGeo, M.dark);
+        skid.rotation.z = Math.PI / 2;
+        skid.position.set(0.04, -0.36, z);
+        heli.add(skid);
+        for (const x of [-0.28, 0.28]) {
+            const strut = new THREE.Mesh(strutGeo, M.dark);
+            strut.position.set(x, -0.2, z);
+            strut.rotation.z = x > 0 ? 0.18 : -0.18;
+            heli.add(strut);
+        }
+    }
+
+    scene.add(heli);
+
+    heliQuat = new THREE.Quaternion();        // starts at identity
+
+    // Resize handling
+    new ResizeObserver(() => {
+        const W = wrap.clientWidth, H = wrap.clientHeight;
+        if (W < 2 || H < 2) return;
+        renderer.setSize(W, H, false);
+        camera.aspect = W / H;
+        camera.updateProjectionMatrix();
+    }).observe(wrap);
+
+    // Animation loop. Pose is set externally in updatePose() by composing
+    // body-frame delta quaternions; we just apply heliQuat each frame and
+    // spin the rotors.
+    let rotorAng = 0, tailAng = 0, lastT = 0;
+    function frame(t) {
+        requestAnimationFrame(frame);
+        const dt = lastT ? Math.min(0.1, (t - lastT) / 1000) : 0;
+        lastT = t;
+        rotorAng += rotorRateRPS * 2 * Math.PI * dt;
+        tailAng  += tailRateRPS  * 2 * Math.PI * dt;
+        rotorGrp.rotation.y     = rotorAng;     // main rotor spins about vertical mast
+        tailRotorGrp.rotation.z = tailAng;      // tail rotor spins in X-Y plane (lateral mast)
+
+        heli.quaternion.copy(heliQuat);
+        renderer.render(scene, camera);
+    }
+    requestAnimationFrame(frame);
+
+    document.getElementById('heliMsg').style.display = 'none';
+    three = { scene, camera, renderer, heli };
+}
+
+window.addEventListener('load', buildHeli3D);
+
+// ---------------------------------------------------------------------
+//  Stale handling + readout
+// ---------------------------------------------------------------------
+
+// Scratch quaternion + axis vectors reused per tick to avoid garbage.
+const _tq        = (typeof THREE !== 'undefined') ? null : null;   // lazy-allocated once Three loads
+const _axisRoll  = { x: 1, y: 0, z: 0 };
+const _axisPitch = { x: 0, y: 0, z: 1 };
+const _axisYaw   = { x: 0, y: 1, z: 0 };
+
+function updatePose(ch, stale) {
+    if (stale) {
+        rotorRateRPS = 0;
+        tailRateRPS  = 0;
+        heliWrap.classList.add('heliStale');
+        lastTickMs = 0;
+        return;
+    }
+    heliWrap.classList.remove('heliStale');
+
+    const now = performance.now();
+    const dt  = lastTickMs ? Math.min(0.25, (now - lastTickMs) / 1000) : 0;
+    lastTickMs = now;
+
+    const roll  = stick(ch[I_ROLL]);
+    const pitch = stick(ch[I_PITCH]);
+    const yaw   = stick(ch[I_YAW]);
+    const thr   = unit(ch[I_THROTTLE]);
+
+    const dRoll  = roll  * ROLL_RATE_DPS  * dt * Math.PI / 180;
+    const dPitch = pitch * PITCH_RATE_DPS * dt * Math.PI / 180;
+    const dYaw   = yaw   * YAW_RATE_DPS   * dt * Math.PI / 180;
+
+    // Compose body-frame delta rotations into heliQuat. After each multiply,
+    // the heli's body axes (including the rotor-mast Y axis) rotate with it,
+    // so the next yaw delta is around the *new* mast position — i.e. yaw is
+    // always around the heli's current vertical axis, regardless of pitch
+    // or roll. Same for pitch/roll about current body axes.
+    //
+    // Signs (after matching Malcolm's TX):
+    //   yaw right  → CW from above   → negative angle about body +Y
+    //   pitch fwd  → nose down       → negative angle about body +Z
+    //   roll right → right side dips → positive angle about body +X
+    if (heliQuat && window.THREE) {
+        const tq = new THREE.Quaternion();
+        const v  = new THREE.Vector3();
+        if (Math.abs(yaw) > STICK_DEAD) {
+            tq.setFromAxisAngle(v.set(0, 1, 0), -dYaw);
+            heliQuat.multiply(tq);
+        }
+        if (Math.abs(pitch) > STICK_DEAD) {
+            tq.setFromAxisAngle(v.set(0, 0, 1), -dPitch);
+            heliQuat.multiply(tq);
+        }
+        if (Math.abs(roll) > STICK_DEAD) {
+            tq.setFromAxisAngle(v.set(1, 0, 0),  dRoll);
+            heliQuat.multiply(tq);
+        }
+    }
+
+    // Stick-deflection accumulators for the on-screen readout — these are
+    // just "how hard have you held the sticks" totals, not real heli angles.
+    if (Math.abs(roll)  > STICK_DEAD) attRoll  += roll  * ROLL_RATE_DPS  * dt;
+    if (Math.abs(pitch) > STICK_DEAD) attPitch += pitch * PITCH_RATE_DPS * dt;
+    if (Math.abs(yaw)   > STICK_DEAD) attYaw   += yaw   * YAW_RATE_DPS   * dt;
+
+    rotorRateRPS = 1 + 17 * thr;
+    tailRateRPS  = 4 + 24 * thr;
+
+    const wrap = a => { let x = ((a + 180) % 360 + 360) % 360 - 180; return x.toFixed(0); };
+    heliReadout.textContent =
+        'roll '  + wrap(attRoll)  + '° · ' +
+        'pitch ' + wrap(attPitch) + '° · ' +
+        'yaw '   + wrap(attYaw)   + '° · ' +
+        'thr '   + Math.round(thr * 100) + '%';
+}
+
+// ---------------------------------------------------------------------
+//  Bar paint + polling
+// ---------------------------------------------------------------------
 
 function paint(s) {
-    if (!s) return;
-    const i = s.info, rf = s.rf, st = rf.self_test, b = s.bind, fc = s.fc;
-
-    // Device card
-    LDRC.setText('fw',       i.fw_version);
-    LDRC.setText('hostname', i.hostname + '.local');
-    LDRC.setText('ip',       i.ip);
-    LDRC.setText('mac',      i.mac);
-    LDRC.setText('rssi',     i.rssi + ' dBm');
-    LDRC.setText('uptime',   i.uptime_str);
-    LDRC.setText('heap',     i.free_heap + ' B');
-    LDRC.setText('chip',     i.chip + ' rev ' + i.chip_rev);
-    LDRC.setText('fs',       i.littlefs ? 'mounted' : 'not mounted');
-
-    // Self-test
-    LDRC.setText('rfVerdict', st.verdict);
-    LDRC.setText('rfBegin',   st.begin_ok      ? 'ok' : 'FAIL');
-    LDRC.setText('rfChip',    st.chip_connected? 'ok' : 'FAIL');
-    LDRC.setText('rfChannel', (st.channel_ok ? 'ok' : 'FAIL') + ' (read back ' + st.channel_read + ', expected 76)');
-    LDRC.setText('rfRate',    (st.data_rate_ok ? 'ok' : 'FAIL') + ' (read back ' + st.data_rate_name + ')');
-
-    // RF link
-    LDRC.setText('packets',  rf.packets);
-    LDRC.setText('acks',     rf.acks_written);
-    LDRC.setText('macacks',  rf.mac_acks_sent + ' / ' + rf.mac_ack_threshold);
-
-    if (b.bound) {
-        LDRC.setHtml('bindstate',
-            '<b>bound</b> &mdash; pipe <code>' + b.pipe + '</code>, ' + b.bound_s_ago + ' s ago');
+    const ch    = s.ch;
+    const age   = s.age_ms;
+    const stale = (age < 0) || (age > STALE_MS);
+    table.classList.toggle('stale', stale);
+    if (stale) {
+        status.innerHTML = '<span class=statusBad>No RC signal'
+            + (age >= 0 ? ' &mdash; last frame ' + age + ' ms ago' : '')
+            + '</span>';
     } else {
-        LDRC.setText('bindstate', 'unbound (DefaultPipe), ' + b.attempts + ' attempts seen');
+        status.innerHTML = '<span class=statusOK>RC signal live</span> &mdash; ' + age + ' ms since last frame';
     }
 
-    LDRC.setHtml('radios',
-        (rf.radios_dual ? 'dual (Radio1 + Radio2)' : 'single (Radio1 only)') +
-        ' &mdash; active: <b>Radio ' + rf.active_radio + '</b>, swaps ' + rf.radio_swaps);
-
-    LDRC.setHtml('fhss',
-        (rf.fhss_enabled ? 'enabled' : 'disabled') +
-        ' &mdash; idx ' + rf.fhss_idx + ' (channel ' + rf.fhss_channel + ')');
-
-    LDRC.setText('telitem',  rf.telemetry_item);
-    LDRC.setText('sbusout',  rf.sbus_frames_out);
-    LDRC.setText('lastch',   rf.last_channel_ms >= 0 ? (rf.last_channel_ms + ' ms ago') : 'never');
-    LDRC.setText('boardmac', rf.board_mac);
-    LDRC.setText('lastpkt',
-        rf.last_pkt_ms >= 0 ? (rf.last_pkt_ms + ' ms ago, ' + rf.last_payload_len + ' bytes') : 'never');
-
-    if (rf.last_payload) { show('lpDt', true); show('lpDd', true); LDRC.setText('lastpayload', rf.last_payload); }
-    if (rf.max_payload)  { show('mpDt', true); show('mpDd', true); LDRC.setText('maxpayload',
-        rf.max_payload + '  (' + rf.max_payload_len + ' bytes)'); }
-
-    // FC telemetry
-    LDRC.setText('fcProto',    s.protocol.current);
-    LDRC.setText('fcRawTotal', fc.raw_total);
-    LDRC.setText('fcBytes',    fc.bytes);
-    LDRC.setText('fcFrames',   fc.frames);
-    LDRC.setText('fcCrcErr',   fc.crc_err);
-    LDRC.setText('fcResp',     fc.responses);
-    LDRC.setText('fcRaw',      fc.raw_dump || '(empty)');
-    LDRC.setText('fcLast',     fc.last_frame_ms >= 0 ? (fc.last_frame_ms + ' ms ago') : 'never');
-
-    if (fc.valid) {
-        show('fcBattDt', true); show('fcBatt', true);
-        LDRC.setText('fcBatt',
-            fc.v.toFixed(2) + ' V / ' + fc.a.toFixed(2) + ' A / ' + fc.mah + ' mAh / ' + fc.pct + '%');
-        show('fcRssiDt', true); show('fcRssi', true);
-        LDRC.setText('fcRssi', fc.rssi + ' dBm, LQ ' + fc.lq + ', SNR ' + fc.snr);
-        show('fcAttDt',  true); show('fcAtt',  true);
-        LDRC.setText('fcAtt', 'pitch ' + fc.pitch + ', roll ' + fc.roll + ', yaw ' + fc.yaw + ' (mrad)');
-        if (fc.flight_mode) {
-            show('fcModeDt', true); show('fcMode', true);
-            LDRC.setText('fcMode', fc.flight_mode);
+    for (let i = 0; i < 16; ++i) {
+        const us = ch[i];
+        // Bar fill: slightly wider than protocol range so extremes stay visible.
+        const fillPct = Math.max(0, Math.min(100, ((us - FILL_LO) / (FILL_HI - FILL_LO)) * 100));
+        let pctTxt;
+        if (CH_BIPOLAR[i]) {
+            const v = ((us - CH_MID) / ((CH_HI - CH_LO) / 2)) * 100;
+            const c = Math.max(-100, Math.min(100, v));
+            pctTxt = (c >= 0 ? '+' : '') + c.toFixed(1) + '%';
+        } else {
+            const u = Math.max(0, Math.min(100, ((us - CH_LO) / (CH_HI - CH_LO)) * 100));
+            pctTxt = u.toFixed(1) + '%';
         }
-        show('fcStatusDt', false); show('fcStatus', false);
-    } else {
-        show('fcStatusDt', true); show('fcStatus', true);
+        document.getElementById('f' + i).style.width = fillPct.toFixed(1) + '%';
+        document.getElementById('v' + i).textContent = us;
+        document.getElementById('p' + i).textContent = pctTxt;
     }
-
-    // Channels
-    for (let k = 0; k < 16; ++k) {
-        if (s.channels[k] !== undefined) LDRC.setText('ch' + k, s.channels[k]);
-    }
+    updatePose(ch, stale);
 }
 
-LDRC.startPolling(paint, 500);
+let _stopping = false;
+async function tick() {
+    if (_stopping) return;
+    try {
+        const r = await fetch('/api/channels.json', { cache: 'no-store' });
+        if (r.ok) paint(await r.json());
+    } catch (e) { /* single misses are fine */ }
+    setTimeout(tick, POLL_MS);
+}
+document.addEventListener('DOMContentLoaded', () => setTimeout(tick, 200));
+document.addEventListener('visibilitychange', () => { _stopping = document.hidden; if (!_stopping) tick(); });
 </script>
 </body>
 </html>

@@ -90,6 +90,14 @@ inline void handleAppJs() {
     server.send(503, "text/plain", "/app.js not in LittleFS — uploadfs the data/ folder");
 }
 
+inline void handleThreeJs() {
+    // Three.js UMD bundle for the /diagnostics channel viewer. ~660 kB —
+    // browsers must cache it aggressively or every page load re-streams it.
+    server.sendHeader("Cache-Control", "public, max-age=604800, immutable");
+    if (serveLittleFsFile("/three.min.js", "application/javascript")) return;
+    server.send(503, "text/plain", "/three.min.js not in LittleFS — uploadfs the data/ folder");
+}
+
 //*********************************************************************
 //  Static-page handlers — each just streams the corresponding HTML file
 //*********************************************************************
@@ -588,6 +596,28 @@ inline void handleApiEvents() {
 }
 
 //*********************************************************************
+//  /api/channels.json — tiny endpoint just for the live channel viewer
+//*********************************************************************
+// Polled at ~10 Hz by data/diagnostics.html. Returns the 16 decoded
+// channel uS values plus the age of the most recent RC frame so the
+// page can grey the bars out when the signal drops.
+
+inline void handleApiChannels() {
+    String j;
+    j.reserve(180);
+    j += "{\"ch\":[";
+    for (int i = 0; i < 16; ++i) {
+        if (i) j += ',';
+        j += channelMicros[i];
+    }
+    j += "],\"age_ms\":";
+    if (lastChannelDataMs) j += (uint32_t)(millis() - lastChannelDataMs);
+    else                   j += "-1";
+    j += "}";
+    server.send(200, "application/json", j);
+}
+
+//*********************************************************************
 //  /api/state.json — comprehensive single endpoint for all pages
 //*********************************************************************
 
@@ -845,12 +875,14 @@ inline void registerWebRoutes() {
     server.on("/api/firmware/install", HTTP_POST, handleFirmwareInstall);
 
     // Shared assets
-    server.on("/style.css",   handleStyleCss);
-    server.on("/app.js",      handleAppJs);
+    server.on("/style.css",    handleStyleCss);
+    server.on("/app.js",       handleAppJs);
+    server.on("/three.min.js", handleThreeJs);
 
     // JSON APIs
-    server.on("/api/state.json",  handleApiState);
-    server.on("/api/events.json", handleApiEvents);
+    server.on("/api/state.json",    handleApiState);
+    server.on("/api/channels.json", handleApiChannels);
+    server.on("/api/events.json",   handleApiEvents);
 
     // POSTs that reboot
     server.on("/bind",        HTTP_POST, handleBindDo);
