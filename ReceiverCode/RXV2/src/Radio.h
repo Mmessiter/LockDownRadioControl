@@ -388,7 +388,11 @@ inline void tryBind(const uint8_t* payload, uint8_t size) {
 // any moment.
 
 inline void radioBeginListenV1() {
-    if (!rfTest.beginOk) return;
+    // Was guarded on rfTest.beginOk (radio1-specific). That gated out the
+    // valid case where slot 1 is empty but slot 2 or 3 has a working chip
+    // — nothing got configured and the TX couldn't connect. Now we only
+    // bail when literally zero radios are present.
+    if (numRadiosPresent == 0) return;
 
     auto configureOne = [](RF24& r, const uint8_t* pipe) {
         r.setPALevel(RF24_PA_MAX);

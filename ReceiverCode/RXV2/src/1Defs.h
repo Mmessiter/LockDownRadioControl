@@ -30,7 +30,7 @@
 //  Firmware version
 //*********************************************************************
 
-constexpr const char* FW_VERSION = "RXV2-0.9.31-revert-slot0";
+constexpr const char* FW_VERSION = "RXV2-0.9.32-slot2-listen";
 
 //*********************************************************************
 //  WiFi / network defaults
