@@ -218,24 +218,17 @@ inline void loadNextAck() {
         bool versionCase = false;
         switch (telemetryItem) {
             case 0:
-                // Slot 0 ALWAYS carries the real chip MAC's first half. The
-                // v1 TX checks these bytes against its stored bound-MAC on
-                // every packet, not just during bind capture — sending
-                // anything else here triggers "wrong MAC" on the TX.
-                // RX firmware version lives in slot 25 (see below); the v1
-                // TX UI must read from slot 25 to display it correctly.
-                ack[1] = boardMac[0];
-                ack[2] = boardMac[1];
-                ack[3] = boardMac[2];
-                ack[4] = boardMac[3];
+                // Mirrors v1's SendVersionNumberToAckPayload. The TX consumes
+                // slot 0 as the firmware version after model-match; real MAC
+                // is delivered in the MAC ack phase (macAcksSent < MAC_ACK_THRESHOLD).
+                ack[1] = activeRadioIdx;
+                ack[2] = RXV2_V_MAJOR;
+                ack[3] = RXV2_V_MINOR;
+                ack[4] = RXV2_V_MINIMUS;
+                ack[5] = (uint8_t)RXV2_V_EXTRA;
+                versionCase = true;
                 break;
-            case 1:
-                // Slot 1 — second half of the real chip MAC, same rationale as slot 0.
-                ack[1] = boardMac[4];
-                ack[2] = boardMac[5];
-                ack[3] = boardMac[6];
-                ack[4] = boardMac[7];
-                break;
+            case 1:   packU32(ack, rx.packets);                     break;  // SuccessfulPackets (v1 parity)
             case 2:   packU32(ack, radioSwaps);                     break;  // RadioSwaps
             case 3:   packU32(ack, radioElapsedSec(0));             break;  // Transceiver 1 active time (sec)
             case 4:   packU32(ack, radioElapsedSec(1));             break;  // Transceiver 2 active time (sec)
@@ -270,19 +263,6 @@ inline void loadNextAck() {
                 ack[1] = (uint8_t)(3 + numRadiosPresent);  // 1→4, 2→5, 3→6
                 break;
             case 24:  packF32(ack, 0.0f);                           break;  // ESC temp
-            case 25:
-                // RXV2 firmware version — moved here from slot 0 in v0.7.3 so slot 0
-                // can be a stable real-MAC carrier for the v1 TX's bind handshake.
-                // (v1 RX puts version in slot 0; with our remap the TX will display
-                // "version 0" in any UI it uses for that, but everything functional
-                // still works. Trade-off accepted to keep Model ID rock solid.)
-                ack[1] = RXV2_THIS_RADIO;
-                ack[2] = RXV2_V_MAJOR;
-                ack[3] = RXV2_V_MINOR;
-                ack[4] = RXV2_V_MINIMUS;
-                ack[5] = (uint8_t)RXV2_V_EXTRA;
-                versionCase = true;
-                break;
             case 31:
                 // Rotorflight version flag. Set when FC telemetry is active so v1 TX
                 // picks up the Rotorflight-specific slots (cases 20-22).

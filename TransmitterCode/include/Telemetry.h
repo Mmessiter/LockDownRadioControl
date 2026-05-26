@@ -323,7 +323,7 @@ void PopulateDataView()
     char DataView_MaxAlt[] = "MaxAlt";
     char DataView_rxv[] = "rxv";
     char DataView_Ls[] = "Ls";
-    char DataView_Ts[] = "Ts";
+    char DataView_Ts[] = "Ts"; // now third transceiver total time
     char DataView_Rx[] = "rx";
     char DataView_Sg[] = "Sg";
     char DataView_Ag[] = "Ag";
@@ -332,8 +332,8 @@ void PopulateDataView()
     char Vbuf[50];
     char DataView_txv[] = "txv";
     char MeanFrameRate[] = "n0";
-    char TimeSinceBoot[] = "n1";
-    uint32_t BootedSeconds = millis() / 1000;
+    char RX3Time[] = "n1";
+  //  uint32_t BootedSeconds = millis() / 1000;
     char tempbuf[25];
     AddParameterstoQueue(MSP_ENABLE_TELEMETRY); // 26 = ENABLE telemetry after MSP data has been sent (for MSP data transmission)
     ClearNextionCommand();
@@ -356,6 +356,8 @@ void PopulateDataView()
     BuildValue(DataView_Ag, GapAverage);
     Hours_Mins_Secs(RX2TotalTime, tempbuf, sizeof(tempbuf));
     BuildText(DataView_Gc, tempbuf);
+    Hours_Mins_Secs(RX3TotalTime, tempbuf, sizeof(tempbuf));
+    BuildText(RX3Time, tempbuf);
     sprintf(Max_Rotor_RPM, "%" PRIu32 " RPM", Max_RotorRPM);
     BuildText(DataView_Alt, Max_Rotor_RPM);
     sprintf(ESC_Temperature, "%.1f C.", ESC_Temp);
@@ -365,8 +367,7 @@ void PopulateDataView()
     snprintf(Vbuf, 7, "%" PRIu32, RXSuccessfulPackets);
     BuildText(DataView_Rx, Vbuf);
     BuildText(Sbs, Rx_type[Receiver_type]);
-    Hours_Mins_Secs(BootedSeconds, tempbuf, sizeof(tempbuf));
-    BuildText(TimeSinceBoot, tempbuf);
+
     SimplePing();
     SendCommand(NextionCommand); // takes about 3 ms to send all at once
     SimplePing();
