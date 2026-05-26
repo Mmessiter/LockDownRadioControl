@@ -216,26 +216,53 @@ inline void loadNextAck() {
         if (++telemetryItem > MAX_TELEMETRY_ITEM) telemetryItem = 0;
         ack[0] = telemetryItem;
         bool versionCase = false;
+
+        // Bind-protect window. The v1 TX's pre-match parser
+        // (ParseAckPayload → GetModelsMacAddress while !ModelMatched &&
+        // !LedWasGreen) reads slot 0 / slot 1 into ModelsMacUnion every
+        // packet — so if we put anything other than the real chip MAC on
+        // those slots while the TX is still pre-match, the saved model ID
+        // gets corrupted. The 20-ack MAC phase isn't enough on its own.
+        // We can't see the TX's match state, so we use a continuous-traffic
+        // timer: once we've had an uninterrupted stream for >5s, the TX
+        // has either matched or has fired its NOTFOUND prompt — safe to
+        // hand slots 0/1 over to firmware version + packet count (mirroring
+        // v1 LoadAckPayload). A gap of >500 ms resets the window so a
+        // disconnect/reconnect re-delivers MAC on the new session.
+        static uint32_t lastAckMs        = 0;
+        static uint32_t connectionFreshMs = 0;
+        uint32_t        nowMs            = millis();
+        if (lastAckMs == 0 || (nowMs - lastAckMs) > 500) connectionFreshMs = nowMs;
+        lastAckMs = nowMs;
+        const bool postBindWindow = (nowMs - connectionFreshMs) >= 5000;
+
         switch (telemetryItem) {
             case 0:
-                // Slot 0 ALWAYS carries the real chip MAC's first half. The
-                // v1 TX's pre-match parser (ParseAckPayload → GetModelsMacAddress
-                // while !ModelMatched && !LedWasGreen) reads slot 0 into
-                // ModelsMacUnion.Val32[0] on every packet — sending anything
-                // else here clobbers the MAC and corrupts the saved model ID.
-                // RX firmware version lives on slot 25; the v1 TX UI shows
-                // garbage there but the bind handshake stays rock solid.
-                ack[1] = boardMac[0];
-                ack[2] = boardMac[1];
-                ack[3] = boardMac[2];
-                ack[4] = boardMac[3];
+                if (!postBindWindow) {
+                    ack[1] = boardMac[0];
+                    ack[2] = boardMac[1];
+                    ack[3] = boardMac[2];
+                    ack[4] = boardMac[3];
+                } else {
+                    // Post-bind: mirror v1's SendVersionNumberToAckPayload so the
+                    // TX's "RX firmware" field shows the real version.
+                    ack[1] = activeRadioIdx;
+                    ack[2] = RXV2_V_MAJOR;
+                    ack[3] = RXV2_V_MINOR;
+                    ack[4] = RXV2_V_MINIMUS;
+                    ack[5] = (uint8_t)RXV2_V_EXTRA;
+                    versionCase = true;
+                }
                 break;
             case 1:
-                // Slot 1 — second half of the real chip MAC, same rationale as slot 0.
-                ack[1] = boardMac[4];
-                ack[2] = boardMac[5];
-                ack[3] = boardMac[6];
-                ack[4] = boardMac[7];
+                if (!postBindWindow) {
+                    ack[1] = boardMac[4];
+                    ack[2] = boardMac[5];
+                    ack[3] = boardMac[6];
+                    ack[4] = boardMac[7];
+                } else {
+                    packU32(ack, rx.packets);  // SuccessfulPackets (v1 parity)
+                }
                 break;
             case 2:   packU32(ack, radioSwaps);                     break;  // RadioSwaps
             case 3:   packU32(ack, radioElapsedSec(0));             break;  // Transceiver 1 active time (sec)
@@ -271,20 +298,6 @@ inline void loadNextAck() {
                 ack[1] = (uint8_t)(3 + numRadiosPresent);  // 1→4, 2→5, 3→6
                 break;
             case 24:  packF32(ack, 0.0f);                           break;  // ESC temp
-            case 25:
-                // RXV2 firmware version. Sent on slot 25 instead of slot 0 so
-                // that slot 0 can stay as a stable real-MAC carrier (the v1 TX
-                // reads slot 0 into ModelsMacUnion every packet during pre-match).
-                // The v1 TX displays "garbage" in its RX firmware field because
-                // it reads version only from slot 0 — accepted trade-off until
-                // the TX has a slot-25 reader or a different version channel.
-                ack[1] = activeRadioIdx;
-                ack[2] = RXV2_V_MAJOR;
-                ack[3] = RXV2_V_MINOR;
-                ack[4] = RXV2_V_MINIMUS;
-                ack[5] = (uint8_t)RXV2_V_EXTRA;
-                versionCase = true;
-                break;
             case 31:
                 // Rotorflight version flag. Set when FC telemetry is active so v1 TX
                 // picks up the Rotorflight-specific slots (cases 20-22).
