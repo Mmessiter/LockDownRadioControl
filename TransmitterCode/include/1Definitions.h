@@ -1253,6 +1253,7 @@ bool RXVoltsDetected = false;
 uint16_t RadioSwaps = 0;
 uint16_t RX1TotalTime = 0;
 uint16_t RX2TotalTime = 0;
+uint16_t RX3TotalTime = 0;
 uint8_t AudioVolume = 50;
 uint32_t WarningTimer = 0;
 uint32_t ScreenTimeTimer = 0;

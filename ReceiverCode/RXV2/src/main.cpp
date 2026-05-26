@@ -137,7 +137,7 @@ void setup() {
     // Radio bring-up
     //*****************************************************************
     runRadioSelfTest();
-    detectRadio2();          // probes the optional Radio2; sets useSecondTransceiver
+    detectAllRadios();       // probes slots 1/2/3 independently; sets radioPresent[]
     radioBeginListenV1();
 
     //*****************************************************************
@@ -186,7 +186,7 @@ void loop() {
     // Dual-radio redundancy: if we've not received a packet on the active
     // radio for a while AND a swap cooldown has elapsed AND we have a second
     // radio populated, try the other radio (v1 TryTheOtherTransceiver).
-    if (useSecondTransceiver && bindState.bound && rx.lastMillis != 0 &&
+    if (numRadiosPresent >= 2 && bindState.bound && rx.lastMillis != 0 &&
         (uint32_t)(millis() - rx.lastMillis)     >= RADIO_SWAP_PACKET_TIMEOUT_MS &&
         (uint32_t)(millis() - lastRadioSwapMs)   >= RADIO_SWAP_COOLDOWN_MS) {
         swapRadios();

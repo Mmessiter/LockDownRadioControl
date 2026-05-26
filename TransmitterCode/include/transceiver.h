@@ -1577,6 +1577,9 @@ FASTRUN void ParseAckPayload()
         AgeGapChecked = true;
         CheckAgeGap();
         break;
+    case 36:
+        RX3TotalTime = GetIntFromAckPayload();
+        break;
     default:
         break;
     }

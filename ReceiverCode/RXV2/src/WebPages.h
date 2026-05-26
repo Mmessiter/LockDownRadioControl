@@ -634,7 +634,13 @@ inline void handleApiState() {
     j += buf;
     j += ",\"last_pkt_ms\":";
     if (rx.lastMillis) j += (uint32_t)(millis() - rx.lastMillis); else j += "-1";
-    j += ",\"radios_dual\":"; j += (useSecondTransceiver ? "true" : "false");
+    j += ",\"radios_count\":"; j += numRadiosPresent;
+    j += ",\"radios_present\":["; j += (radioPresent[0] ? "true" : "false");
+    j += ',';                     j += (radioPresent[1] ? "true" : "false");
+    j += ',';                     j += (radioPresent[2] ? "true" : "false");
+    j += "]";
+    // Legacy field — kept for any older diagnostics page that reads it.
+    j += ",\"radios_dual\":"; j += (numRadiosPresent >= 2 ? "true" : "false");
     j += ",\"active_radio\":"; j += activeRadioIdx;
     j += ",\"radio_swaps\":"; j += radioSwaps;
     j += ",\"fhss_enabled\":"; j += (fhssEnabled ? "true" : "false");

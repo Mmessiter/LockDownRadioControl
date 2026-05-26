@@ -30,7 +30,7 @@
 //  Firmware version
 //*********************************************************************
 
-constexpr const char* FW_VERSION = "RXV2-0.9.25-curve-fit";
+constexpr const char* FW_VERSION = "RXV2-0.9.31-revert-slot0";
 
 //*********************************************************************
 //  WiFi / network defaults
@@ -76,10 +76,15 @@ constexpr bool     DEV_KEEP_WIFI         = true;
 //   D2  (GPIO 4)  -> Radio1 CE        D7  (GPIO 20) -> SPI MISO (shared)
 //   D3  (GPIO 5)  -> Radio1 CSN       D8  (GPIO 8)  -> SPI SCK  (shared)
 //   D0  (GPIO 2)  -> Radio2 CE        D10 (GPIO 10) -> SPI MOSI (shared)
-//   D1  (GPIO 3)  -> Radio2 CSN       D9  (GPIO 9)  -> NC (BOOT strap pin!)
-//   D4  (GPIO 6)  -> Heartbeat LED
+//   D1  (GPIO 3)  -> Radio2 CSN       D4  (GPIO 6)  -> Radio3 CE  (triple-radio PCB only)
+//                                     D9  (GPIO 9)  -> Radio3 CSN (triple-radio PCB only, S3 only)
+//   LED -> LED_BUILTIN  (XIAO onboard, freed D4 from heartbeat duty)
 //   D5  (GPIO 7)  -> UART RX (FC telemetry in — CRSF / FBUS / IBUS2 sensor)
 //   D6  (GPIO 21) -> UART/RMT TX (RC out — SBUS / CRSF / IBUS / PPM)
+//
+// Note: Radio3 uses D9, which on the older ESP32-C3 is the BOOT strap pin (see
+// next note). On the S3 (production target) D9 = GPIO 9 is a plain GPIO with
+// no boot-strap meaning. The triple-radio PCB variant is therefore S3-only.
 //
 // Why MISO is NOT on D9 (GPIO 9):
 //   GPIO 9 on the ESP32-C3 doubles as the BOOT strap pin sampled at every
@@ -101,8 +106,10 @@ constexpr bool     DEV_KEEP_WIFI         = true;
 constexpr uint8_t LED_PIN      = LED_BUILTIN;
 constexpr uint8_t PIN_NRF_CE   = D2;   // Radio1 CE
 constexpr uint8_t PIN_NRF_CSN  = D3;   // Radio1 CSN
-constexpr uint8_t PIN_NRF_CE2  = D0;   // Radio2 CE  (dual-radio PCB only)
-constexpr uint8_t PIN_NRF_CSN2 = D1;   // Radio2 CSN (dual-radio PCB only)
+constexpr uint8_t PIN_NRF_CE2  = D0;   // Radio2 CE   (dual-radio PCB or higher)
+constexpr uint8_t PIN_NRF_CSN2 = D1;   // Radio2 CSN  (dual-radio PCB or higher)
+constexpr uint8_t PIN_NRF_CE3  = D4;   // Radio3 CE   (triple-radio PCB only; S3 only)
+constexpr uint8_t PIN_NRF_CSN3 = D9;   // Radio3 CSN  (triple-radio PCB only; S3 only)
 constexpr int8_t  PIN_SPI_SCK  = D8;   // shared
 constexpr int8_t  PIN_SPI_MISO = D7;   // shared — kept OFF D9 because D9 is the C3 BOOT strap
 constexpr int8_t  PIN_SPI_MOSI = D10;  // shared
@@ -129,7 +136,7 @@ constexpr uint8_t FHSS_CHANNELS[83] = {
 };
 constexpr uint8_t  HOP_TIME_MS         = 8;   // v1 HOPTIME → ~100 Hz FHSS
 constexpr uint8_t  MAC_ACK_THRESHOLD   = 20;  // matches v1: MAC in first 20 acks, then telemetry rotation
-constexpr uint8_t  MAX_TELEMETRY_ITEM  = 35;  // v1 MAX_TELEMETERY_ITEMS
+constexpr uint8_t  MAX_TELEMETRY_ITEM  = 36;  // bumped from 35 to make room for case 36 = RX3 active time
 
 // v1 channel 82 lives at index 14 of FHSS_CHANNELS. We bind there, then increment.
 constexpr uint8_t  CHAN82_INDEX        = 14;
@@ -138,7 +145,7 @@ constexpr uint8_t  CHAN82_INDEX        = 14;
 constexpr uint8_t  RXV2_THIS_RADIO     = 1;
 constexpr uint8_t  RXV2_V_MAJOR        = 2;
 constexpr uint8_t  RXV2_V_MINOR        = 5;
-constexpr uint8_t  RXV2_V_MINIMUS      = 6;       // matches v1 minimum that TX requires
+constexpr uint8_t  RXV2_V_MINIMUS      = 6;       // must match TX's required version exactly — TX rejects any other value
 constexpr char     RXV2_V_EXTRA        = 'R';     // R = RXV2 prototype
 constexpr uint32_t RXV2_RECEIVER_TYPE  = 0x52580200;   // 'RX' 0x02 0x00 — sentinel
 
@@ -244,12 +251,25 @@ inline BindStateT bindState;
 
 inline RF24 radio1(PIN_NRF_CE,  PIN_NRF_CSN,  NRF_SPI_HZ);
 inline RF24 radio2(PIN_NRF_CE2, PIN_NRF_CSN2, NRF_SPI_HZ);
+inline RF24 radio3(PIN_NRF_CE3, PIN_NRF_CSN3, NRF_SPI_HZ);
+inline RF24* radios[3]    = { &radio1, &radio2, &radio3 };
 inline RF24* currentRadio = &radio1;
 
-inline bool     useSecondTransceiver = false;
-inline uint8_t  activeRadioIdx       = 1;       // for UI display: 1 or 2
+// Independent per-slot presence — probed at boot. radioPresent[i] is true
+// iff the chip at slot i+1 responds on SPI. swapRadios() rotates only
+// through present slots, so a missing or failed radio is skipped.
+inline bool     radioPresent[3]      = { false, false, false };
+inline uint8_t  numRadiosPresent     = 0;        // 0..3
+inline uint8_t  activeRadioIdx       = 1;       // for UI display: 1, 2, or 3
 inline uint32_t radioSwaps           = 0;
 inline uint32_t lastRadioSwapMs      = 0;
+
+// Per-radio active-time accumulators. radioActiveMs[i] counts ms that slot
+// i+1 has spent as the currently-listening radio (across all swaps). The
+// time accumulating for the active radio right now is held separately in
+// radioActiveStartMs and is added in by radioElapsedSec() when read.
+inline uint32_t radioActiveMs[3]     = { 0, 0, 0 };
+inline uint32_t radioActiveStartMs   = 0;
 
 constexpr uint32_t RADIO_SWAP_PACKET_TIMEOUT_MS = 200;
 constexpr uint32_t RADIO_SWAP_COOLDOWN_MS       = 200;

@@ -79,46 +79,82 @@ inline void runRadioSelfTest() {
 }
 
 //*********************************************************************
-//  Radio2 detection (dual-radio PCB)
+//  Probe each of the three radio slots (single / dual / triple PCB)
 //*********************************************************************
-// If the chip doesn't respond, we run as a single-radio receiver. Otherwise
-// Radio2 stays in standby ready for swap-on-loss redundancy.
+// Probes slots 2 and 3 (slot 1 already covered by runRadioSelfTest). Each
+// slot's presence is recorded independently — if slot 1 has failed but
+// slot 3 still answers, swap-on-loss can use whichever radios actually
+// respond. Slots that are absent are simply skipped by swapRadios().
 
-inline void detectRadio2() {
-    pinMode(PIN_NRF_CE2,  OUTPUT);
-    pinMode(PIN_NRF_CSN2, OUTPUT);
-    digitalWrite(PIN_NRF_CE2,  LOW);
-    digitalWrite(PIN_NRF_CSN2, HIGH);
+inline bool probeRadioSlot(RF24& r, uint8_t cePin, uint8_t csnPin, uint8_t idxForLog) {
+    pinMode(cePin,  OUTPUT);
+    pinMode(csnPin, OUTPUT);
+    digitalWrite(cePin,  LOW);
+    digitalWrite(csnPin, HIGH);
     delay(5);
-
-    if (radio2.begin() && radio2.isChipConnected()) {
-        useSecondTransceiver = true;
-        radio2.setChannel(76);
-        delayMicroseconds(150);
-        bool channelOk = (radio2.getChannel() == 76);
-        Serial.printf("[rf] radio2 DETECTED on D0/D1, channel r/w %s — dual-radio mode\n",
-                      channelOk ? "ok" : "FAIL");
-        events.add("Dual-radio PCB detected");
-    } else {
-        useSecondTransceiver = false;
-        Serial.println("[rf] radio2 not present — single-radio mode");
+    if (!r.begin() || !r.isChipConnected()) {
+        Serial.printf("[rf] radio%u not present\n", idxForLog);
+        return false;
     }
+    r.setChannel(76);
+    delayMicroseconds(150);
+    bool channelOk = (r.getChannel() == 76);
+    Serial.printf("[rf] radio%u DETECTED, channel r/w %s\n",
+                  idxForLog, channelOk ? "ok" : "FAIL");
+    return channelOk;
+}
+
+inline void detectAllRadios() {
+    // Slot 1 is the SPI-bench from runRadioSelfTest — read its verdict.
+    radioPresent[0] = rfTest.beginOk && rfTest.chipConnected;
+    radioPresent[1] = probeRadioSlot(radio2, PIN_NRF_CE2, PIN_NRF_CSN2, 2);
+    radioPresent[2] = probeRadioSlot(radio3, PIN_NRF_CE3, PIN_NRF_CSN3, 3);
+    numRadiosPresent = (uint8_t)(radioPresent[0] + radioPresent[1] + radioPresent[2]);
+
+    // currentRadio defaults to radio1; if it's missing, pick the first
+    // slot that did respond so the receiver still works.
+    if (!radioPresent[0]) {
+        for (uint8_t i = 1; i < 3; i++) {
+            if (radioPresent[i]) { currentRadio = radios[i]; activeRadioIdx = i + 1; break; }
+        }
+    }
+
+    char buf[64];
+    snprintf(buf, sizeof(buf), "Radios detected: %u (1:%s 2:%s 3:%s)",
+             numRadiosPresent,
+             radioPresent[0] ? "ok" : "-",
+             radioPresent[1] ? "ok" : "-",
+             radioPresent[2] ? "ok" : "-");
+    events.add(buf);
+    Serial.printf("[rf] %s\n", buf);
 }
 
 //*********************************************************************
-//  Swap active radio (CE-line swap)
+//  Swap active radio (CE-line swap) — rotates through present slots only
 //*********************************************************************
-// Currently-active radio drops out of listen (CE low, standby); the other
-// takes over. Both have already been configured with the same channel and
-// pipe at boot / on bind.
+// Skips absent slots so a 3-slot PCB with one dead chip keeps cycling
+// only the working two. With one radio there's nothing to swap to.
 
 inline void swapRadios() {
-    if (!useSecondTransceiver) return;
+    if (numRadiosPresent < 2) return;
+
+    uint8_t startIdx = activeRadioIdx - 1;   // 0-based
+    uint8_t nextIdx  = startIdx;
+    for (uint8_t step = 0; step < 3; step++) {
+        nextIdx = (nextIdx + 1) % 3;
+        if (radioPresent[nextIdx]) break;
+    }
+    if (nextIdx == startIdx) return;         // nothing else present
+
+    // Accrue the time we've spent on the outgoing radio before switching.
+    uint32_t now = millis();
+    radioActiveMs[startIdx] += (now - radioActiveStartMs);
+    radioActiveStartMs       = now;
 
     currentRadio->stopListening();
     delayMicroseconds(150);
-    currentRadio = (currentRadio == &radio1) ? &radio2 : &radio1;
-    activeRadioIdx = (currentRadio == &radio1) ? 1 : 2;
+    currentRadio   = radios[nextIdx];
+    activeRadioIdx = nextIdx + 1;
     currentRadio->startListening();
     delayMicroseconds(150);
     // Re-prime the ack-payload FIFO on the new active radio — the previous
@@ -144,6 +180,14 @@ inline void swapRadios() {
 // cleanly. byte[0] also carries the FHSS HOP flag (high bit) when it's time
 // to switch channel; byte[5] carries the FHSS table index so the TX knows
 // where we're going.
+
+// Active seconds for radio slot idx (0..2). For the currently-active radio
+// this includes the live counter; for others it's the frozen accumulator.
+inline uint32_t radioElapsedSec(uint8_t idx) {
+    uint32_t acc = radioActiveMs[idx];
+    if (idx == (uint8_t)(activeRadioIdx - 1)) acc += (millis() - radioActiveStartMs);
+    return acc / 1000;
+}
 
 inline void loadNextAck() {
     uint8_t ack[ACK_PAYLOAD_BYTES] = {0};
@@ -174,13 +218,12 @@ inline void loadNextAck() {
         bool versionCase = false;
         switch (telemetryItem) {
             case 0:
-                // Slot 0 ALWAYS carries the real chip MAC's first half, mirroring the
-                // MAC broadcast phase. Reason: the v1 TX captures bytes from ack[0]==0
-                // frames into ModelsMacUnion.Val32[0] for as long as it's still trying
-                // to bind. If the user is slow to accept the "Save new ID?" prompt and
-                // telemetry rotation has wrapped back to slot 0 by then, sending
-                // anything other than the real MAC here corrupts the TX's captured ID.
-                // Version info has been relocated to slot 25 — see below.
+                // Slot 0 ALWAYS carries the real chip MAC's first half. The
+                // v1 TX checks these bytes against its stored bound-MAC on
+                // every packet, not just during bind capture — sending
+                // anything else here triggers "wrong MAC" on the TX.
+                // RX firmware version lives in slot 25 (see below); the v1
+                // TX UI must read from slot 25 to display it correctly.
                 ack[1] = boardMac[0];
                 ack[2] = boardMac[1];
                 ack[3] = boardMac[2];
@@ -194,8 +237,9 @@ inline void loadNextAck() {
                 ack[4] = boardMac[7];
                 break;
             case 2:   packU32(ack, radioSwaps);                     break;  // RadioSwaps
-            case 3:   packU32(ack, millis() / 1000);                break;  // RX1 uptime sec
-            case 4:   packU32(ack, 0);                              break;  // RX2 uptime
+            case 3:   packU32(ack, radioElapsedSec(0));             break;  // Transceiver 1 active time (sec)
+            case 4:   packU32(ack, radioElapsedSec(1));             break;  // Transceiver 2 active time (sec)
+            case 36:  packU32(ack, radioElapsedSec(2));             break;  // Transceiver 3 active time (sec) — matches TX's RX3TotalTime handler
             case 5: {
                 // Battery voltage. Prefer FC's reported voltage; fall back to 0 if
                 // no CRSF telemetry. v1 TX has a backward-compat quirk: if it
@@ -218,11 +262,12 @@ inline void loadNextAck() {
                 if (fcTelem.valid) packF32(ack, (float)fcTelem.fcBattMah);
                 break;
             case 23:
-                // Receiver type index into the TX's Rx_type[6][30] table:
+                // Receiver type index into the TX's Rx_type[] table:
                 //   0=Unknown, 1=TRX:1 PWM:8, 2=TRX:2 PWM:8, 3=TRX:2 PWM:11,
-                //   4=TRX:1 V2,  5=TRX:2 V2
-                // RXV2 reports 4 for single-transceiver, 5 for dual.
-                ack[1] = useSecondTransceiver ? 5 : 4;
+                //   4=TRX:1 V2,  5=TRX:2 V2,  6=TRX:3 V2
+                // RXV2 reports 4 / 5 / 6 based on radios actually detected
+                // (e.g. a 3-slot PCB with one dead chip reports as 2-radio).
+                ack[1] = (uint8_t)(3 + numRadiosPresent);  // 1→4, 2→5, 3→6
                 break;
             case 24:  packF32(ack, 0.0f);                           break;  // ESC temp
             case 25:
@@ -305,14 +350,16 @@ inline void tryBind(const uint8_t* payload, uint8_t size) {
     currentRadio->openReadingPipe(V1_PIPE_NUMBER, bindState.pipe);
     currentRadio->startListening();
     delayMicroseconds(150);
-    if (useSecondTransceiver) {
-        RF24* other = (currentRadio == &radio1) ? &radio2 : &radio1;
-        other->stopListening();
+    // Mirror the new pipe to every OTHER present radio so any subsequent
+    // swap lands on a slot already configured for this bind.
+    for (uint8_t i = 0; i < 3; i++) {
+        if (!radioPresent[i] || radios[i] == currentRadio) continue;
+        radios[i]->stopListening();
         delayMicroseconds(150);
-        other->flush_tx();
-        other->flush_rx();
-        other->openReadingPipe(V1_PIPE_NUMBER, bindState.pipe);
-        // other stays in standby (CE low) — only the current radio has CE high.
+        radios[i]->flush_tx();
+        radios[i]->flush_rx();
+        radios[i]->openReadingPipe(V1_PIPE_NUMBER, bindState.pipe);
+        // Other slots stay in standby (CE low) — only currentRadio has CE high.
     }
 
     loadNextAck();
@@ -357,12 +404,22 @@ inline void radioBeginListenV1() {
         r.openReadingPipe(V1_PIPE_NUMBER, pipe);
     };
     const uint8_t* pipe = bindState.bound ? bindState.pipe : V1_DEFAULT_PIPE;
-    configureOne(radio1, pipe);
-    if (useSecondTransceiver) configureOne(radio2, pipe);
-
-    currentRadio = &radio1;
-    activeRadioIdx = 1;
+    for (uint8_t i = 0; i < 3; i++) {
+        if (radioPresent[i]) configureOne(*radios[i], pipe);
+    }
+    // Start listening on the first present slot — usually radio1, but if it
+    // was missing at boot the active pointer was already pointed elsewhere
+    // by detectAllRadios(), so honour that.
+    if (!radioPresent[0]) {
+        for (uint8_t i = 0; i < 3; i++) {
+            if (radioPresent[i]) { currentRadio = radios[i]; activeRadioIdx = i + 1; break; }
+        }
+    } else {
+        currentRadio = &radio1;
+        activeRadioIdx = 1;
+    }
     currentRadio->startListening();
+    radioActiveStartMs = millis();   // start counting time on the initial active radio
     Serial.printf("[rf] %s pipe %02X %02X %02X %02X %02X on channel %u\n",
                   bindState.bound ? "bound" : "default",
                   pipe[0], pipe[1], pipe[2], pipe[3], pipe[4], V1_RECOVERY_CH);
