@@ -15,7 +15,7 @@ We are building **RXV2**, the next-generation receiver.
 
 1. **Don't edit `TransmitterCode/`** to fix an RXV2 problem. The v1 TX is the fixed reference; the RXV2 conforms to it. Treat the TX side as read-only unless Malcolm explicitly says otherwise.
 2. **Ack-payload layout** must mirror v1 (`ReceiverCode/src/utilities/radio.h::LoadAckPayload`). Slot 0 = version, slot 1 = packet count, etc. New telemetry items go into unused slots, not by remapping existing ones.
-3. **MAC delivery** uses the dedicated MAC-ack phase (first 20 acks via `macAcksSent < MAC_ACK_THRESHOLD`), exactly as v1 does. The telemetry rotation does **not** carry MAC bytes.
+3. **MAC delivery on slot 0/1 is non-negotiable.** The v1 TX's `ParseAckPayload` runs `GetModelsMacAddress` on **every** packet while `!ModelMatched && !LedWasGreen` (transceiver.h:1224), reading slot 0 → `ModelsMacUnion.Val32[0]` and slot 1 → `Val32[1]`. The MAC-ack phase (first 20 acks via `macAcksSent < MAC_ACK_THRESHOLD`) is **not** sufficient on its own — the telemetry rotation that follows MUST also carry the real chip MAC on slots 0 and 1, otherwise `ModelsMacUnion` gets clobbered with whatever else you put there and the saved model ID becomes corrupt. RX firmware version goes on slot 25 (TX displays garbage there, accepted trade-off). **Do not "fix" the version display by moving it to slot 0** — this has been tried twice and broken bind both times.
 4. Builds must succeed under PlatformIO; OTA artifacts are auto-archived by `dev/archive_firmware.py`.
 
 ## Next, once RXV2 is settled: **Transmitter V2 (TXV2)**
