@@ -22,6 +22,10 @@ The firmware is settled (2026-05-26). The next milestone is real-hardware testin
 
 Not started. Target MCU: a **slightly bigger ESP32-S3** module than the XIAO (more pins / RAM / flash than the XIAO-S3 used on RXV2, but same family — chosen so the RXV2 firmware patterns and toolchain carry across). The Teensy 4.1 + Nextion combo of the v1 TX will be dropped. Trigger to start: Malcolm shouts "hooray" (annoyingly loudly) after the three RXV2 PCB variants test green.
 
+## Public releases
+
+End users of LDRC receivers won't be on Malcolm's home network, so OTA via `LDRC_RX.local` won't reach them — public firmware updates need to live on **messiter.com**. When Malcolm decides to publish a release, future Claude sessions may be launched from the parent directory so both this repo and the `messiter.com` site source are visible at the same time. The CI helper `ReceiverCode/RXV2/dev/archive_firmware.py` writes versioned `.bin` files that are the natural artifacts to publish.
+
 ## Where the detail lives
 
 - `~/.claude/projects/-Users-malcolmmessiter-Documents-GitHub-LockDownRadioControl/memory/` — auto-loaded notes (RXV2 design, chip plan, bind handshake, MSP bridge plan, RF version pinning, etc.).
