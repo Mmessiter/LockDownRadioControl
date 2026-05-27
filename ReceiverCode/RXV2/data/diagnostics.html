@@ -15,7 +15,7 @@
 .chIdx{color:#7a8b95;font-size:.9em;text-align:right;min-width:1.2em}
 .chLbl{color:#445;font-size:.95em;min-width:5em;white-space:nowrap}
 .chTrack{position:relative;height:24px;background:#eef0f2;border-radius:4px;overflow:hidden}
-.chFill{position:absolute;left:0;top:0;bottom:0;width:0;transition:width 80ms linear,background 200ms,opacity 200ms;border-radius:4px}
+.chFill{position:absolute;left:0;top:0;bottom:0;width:0;transition:width 50ms linear,background 200ms,opacity 200ms;border-radius:4px}
 .chVal{position:absolute;left:6px;top:0;bottom:0;display:flex;align-items:center;font-size:.88em;color:#222;text-shadow:0 0 2px rgba(255,255,255,.85)}
 .chPct{font-size:.88em;color:#445;min-width:3.6em;text-align:right}
 .stale .chFill{opacity:.25}
@@ -80,7 +80,7 @@ const CH_MID = 1500;
 // stick deflection a sliver of colour remains visible (matches Rotorflight).
 const FILL_LO = 400;
 const FILL_HI = 2600;
-const POLL_MS  = 100;
+const POLL_MS  = 33;       // ~30 Hz — smooth-looking bars without hammering the chip
 const STALE_MS = 500;
 
 const CH_NAMES = [
@@ -414,13 +414,9 @@ function paint(s) {
     const age   = s.age_ms;
     const stale = (age < 0) || (age > STALE_MS);
     table.classList.toggle('stale', stale);
-    if (stale) {
-        status.innerHTML = '<span class=statusBad>No RC signal'
-            + (age >= 0 ? ' &mdash; last frame ' + age + ' ms ago' : '')
-            + '</span>';
-    } else {
-        status.innerHTML = '<span class=statusOK>RC signal live</span> &mdash; ' + age + ' ms since last frame';
-    }
+    status.innerHTML = stale
+        ? '<span class=statusBad>No RC signal</span>'
+        : '<span class=statusOK>RC signal live</span>';
 
     for (let i = 0; i < 16; ++i) {
         const us = ch[i];
