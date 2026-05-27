@@ -1,0 +1,89 @@
+{
+  "versions": [
+    {
+      "name": "RXV2-0.9.50-sta-forever",
+      "url": "https://messiter.com/rxv2/release/v0.9.50/firmware.bin",
+      "notes": "WiFi behaviour rewritten so the chip stops surrendering to AP mode on transient stalls. NVS credentials are never being touched (the boot log confirms this on every reboot) — what was happening is the home router occasionally took longer than the chip's STA-join budget to recognise the freshly-rebooted chip, and the chip then auto-fell to AP. New policy: on a timeout the chip resets the radio (mode OFF, settle, mode STA) and tries again FOREVER. AP fallback only fires on a genuine `WL_CONNECT_FAILED` (wrong password) or persistent `WL_NO_SSID_AVAIL` after three tries (network truly missing). Also turns off WiFi.persistent (no cached BSSID across reboots) and sets max TX power for better association on weak corners of the house. Quick-boot recovery (three power cycles in a row) is still the escape hatch if the chip ever needs to be forced into AP for reconfiguration."
+    },
+    {
+      "name": "RXV2-0.9.49-heli-curves",
+      "url": "https://messiter.com/rxv2/release/v0.9.49/firmware.bin",
+      "notes": "Heli preview tightened up per feedback. Skids now follow a curved path (TubeGeometry along a Catmull-Rom curve) so the front sweeps up off the ground like real model landing gear. The side stripe is a swept chevron — bulges through the middle and tapers to a sharp point at the nose — rendered with ShapeGeometry rather than the flat rectangle. The rectangular black chassis block between the skids and the diagonal boom support strut have both been removed; the latter was reading as a stray aerial poking out the back of the body."
+    },
+    {
+      "name": "RXV2-0.9.48-heli-cleaner",
+      "url": "https://messiter.com/rxv2/release/v0.9.48/firmware.bin",
+      "notes": "Helicopter preview cleaned up per feedback: the bright red battery block under the chassis is gone, the yellow band around the body is now a painted side-decal (flat PlaneGeometry on each flank) rather than a 3D torus ring sticking out, the horizontal stabiliser is removed entirely, and the vertical fin now hangs down beneath the tail boom instead of up above it. JS syntax checked with `node --check` before flashing."
+    },
+    {
+      "name": "RXV2-0.9.47-heli-fix",
+      "url": "https://messiter.com/rxv2/release/v0.9.47/firmware.bin",
+      "notes": "Fixes the 'Loading 3D model…' hang on the diagnostics page caused by a name collision in the v0.9.46 helicopter redesign — the new tail-boom support strut shared a variable name (`strutGeo`) with the existing skid struts, so the script threw `SyntaxError: Identifier already declared` and the heli never rendered. Renamed to `boomStrutGeo` and added a node --check pass to the workflow so this kind of regression is caught before flashing."
+    },
+    {
+      "name": "RXV2-0.9.46-sab-style",
+      "url": "https://messiter.com/rxv2/release/v0.9.46/firmware.bin",
+      "notes": "Heli preview redesigned to read as a real RC model rather than a generic streamlined pod. New: visible carbon chassis between body and skids with a bright red LiPo battery slung underneath, a sharp pointed nose cone projecting forward of the canopy, a tail-boom support strut running diagonally back to the chassis, a chunky tail gearbox housing at the boom tip, a swashplate disc under a beefier rotor head with two cylindrical blade grips at right angles. Colour scheme switched to SAB Heli Division-style: glossy black body, vivid lime-yellow stripe and tail surfaces, glossy black canopy. Battery is bright red for contrast against the chassis."
+    },
+    {
+      "name": "RXV2-0.9.45-fresh-pages",
+      "url": "https://messiter.com/rxv2/release/v0.9.45/firmware.bin",
+      "notes": "HTML pages now ship with Cache-Control: no-cache so a stale page from the previous firmware can't keep showing after an update. Phones still send a normal request each visit; the chip re-streams the (tiny) HTML and you always see what's actually on disk. Static assets (style.css, app.js, three.min.js, the backdrop jpg / svg) keep their aggressive immutable caching — they're versioned via ?v= cache busters anyway."
+    },
+    {
+      "name": "RXV2-0.9.44-sta-patient",
+      "url": "https://messiter.com/rxv2/release/v0.9.44/firmware.bin",
+      "notes": "Stops the chip from falling to AP mode on a transient WiFi hiccup. STA join now retries 5 times at 25 seconds per attempt — ~2 minutes total before AP fallback — which is plenty to outlast any router-side stall (stale DHCP lease, channel congestion, etc.). The attempt counter is reset on every successful join so a mid-session disconnect later doesn't inherit the boot-time count. Boot now logs the actual NVS state (SSID name, password presence, bind state) to the in-RAM event log too, so you can verify on the Black-box page whether credentials really are saved without needing a USB serial cable."
+    },
+    {
+      "name": "RXV2-0.9.43-heli-slim",
+      "url": "https://messiter.com/rxv2/release/v0.9.43/firmware.bin",
+      "notes": "Tail-rotor disc now sits in the same plane as the blades it replaces (the v0.9.42 disc was accidentally tipped 90° out and read edge-on). Fuselage cross-section more than halved in width (0.95 → 0.48 Z-scale) and lengthened so the body reads as a sleek model pod rather than a fat torpedo. Slimmer accent stripe, narrower canopy with a longer pointed nose, lower-profile cowling, and a slender push-rod running along the boom to the tail-rotor pitch slider."
+    },
+    {
+      "name": "RXV2-0.9.42-heli-real",
+      "url": "https://messiter.com/rxv2/release/v0.9.42/firmware.bin",
+      "notes": "Helicopter 3-D preview on the diagnostics page made to look like a real model. Fuselage slimmed and lengthened, canopy pushed forward and narrowed, engine cowling rounded, tail boom slimmed and stretched so the tail rotor sits well aft. Main and tail rotor blades remain solid bars only at spool-up speeds — once they cross the persistence-of-vision threshold (~3 RPS) the animation hides the discrete blades and renders a translucent disc with a slightly darker tip ring, matching how the eye actually perceives a spinning rotor. Default RPM scaled to realistic flight values."
+    },
+    {
+      "name": "RXV2-0.9.41-reboot-redirect",
+      "url": "https://messiter.com/rxv2/release/v0.9.41/firmware.bin",
+      "notes": "Post-reboot pages no longer leave you staring at a dead 'Rebooting…' screen. Save-and-reboot handlers (WiFi credentials, output protocol, bind clear, OTA rollback, manual reboot) now render a live status line that polls /api/state.json once a second after a 4-second grace period; the moment the chip answers, the page redirects to /. If the chip never returns within 60 s — typically meaning a wrong WiFi password sent it to AP mode — a clear recovery message appears with the AP SSID and IP. Fly-mode opts out of the auto-reload since it deliberately cuts WiFi."
+    },
+    {
+      "name": "RXV2-0.9.40-wifi-safer",
+      "url": "https://messiter.com/rxv2/release/v0.9.40/firmware.bin",
+      "notes": "WiFi robustness + safety tweaks. The dangerous 'Forget & reboot' button is gone — the same outcome (back to AP) is reachable by entering a different SSID/password through the normal save form, so the explicit wipe button was needless rope. STA join attempts now retry once before falling back to AP and the per-attempt timeout is bumped from 12 s to 18 s, which kills the 'WiFi password lost' false alarms where the credentials in NVS were intact but a slow router-side reconnect tripped the AP fallback. Boot now also logs what is actually in NVS (SSID, password presence, bind pipe, proto), so the next time something does look wiped we'll know within one reboot whether NVS really was disturbed or just the join timed out."
+    },
+    {
+      "name": "RXV2-0.9.39-mown-turf",
+      "url": "https://messiter.com/rxv2/release/v0.9.39/firmware.bin",
+      "notes": "New backdrop photo — Scott Webb, “Landscape of grass field under blue sky” (White Oaks Park, London, Canada; Unsplash License). Short manicured turf reads as a flying field rather than the wild meadow of the previous backdrop. Resized 6000×4000 → 1800×1200, JPEG 70% (~470 KB)."
+    },
+    {
+      "name": "RXV2-0.9.38-real-photo",
+      "url": "https://messiter.com/rxv2/release/v0.9.38/firmware.bin",
+      "notes": "Real photograph for the page backdrop — a free-licence Unsplash image (Wolfgang Hasselmann, “Blue sky with white clouds over a green field”), resized to 1800×1200 and re-encoded at JPEG 78% (~340 KB). The hand-drawn SVG is kept on the chip as a fallback. Ships with dev/uploadfs_safe.sh and dev/preserve_backups.py so future filesystem updates don’t wipe the receiver’s saved Rotorflight backups."
+    },
+    {
+      "name": "RXV2-0.9.37-flying-field",
+      "url": "https://messiter.com/rxv2/release/v0.9.37/firmware.bin",
+      "notes": "Photo-realistic flying-field backdrop rolled out across every receiver page. Sky uses a seven-stop gradient with a warm haze band; cumulus clouds carved by Perlin-noise filters with diffuse-lit highlights and shadowed undersides; the meadow has a noise-textured base, a tileable blade pattern, and ~70 hand-drawn foreground blades."
+    },
+    {
+      "name": "RXV2-0.9.35-page-cards",
+      "url": "https://messiter.com/rxv2/release/v0.9.35/firmware.bin",
+      "notes": "Update page redesigned in the ReedsV2 style. Currently-installed card with status pill; per-version cards showing the clean version number, release codename pill, and Newer/Older/Current tag; install/reinstall/roll-back button on each card. The local dev server is auto-discovered at m4macmini.local:8000."
+    },
+    {
+      "name": "RXV2-0.9.34-fw-tidy",
+      "url": "https://messiter.com/rxv2/release/v0.9.34/firmware.bin",
+      "notes": "Slimmer /firmware page: just the version numbers as buttons (green = update, amber = rollback). Local-server section hidden unless reachable."
+    },
+    {
+      "name": "RXV2-0.9.33-ota-public",
+      "url": "https://messiter.com/rxv2/release/v0.9.33/firmware.bin",
+      "notes": "First release reachable from messiter.com — adds an over-the-air update path that no longer requires the dev Mac to be on the LAN."
+    }
+  ]
+}

@@ -125,6 +125,16 @@ inline void startWifiStation() {
     }
     Serial.printf("[wifi] STA connecting to '%s'\n", ssid.c_str());
     WiFi.mode(WIFI_STA);
+    // Don't write WiFi state to flash on every Begin — without this
+    // the ESP32 caches the previous AP's BSSID + channel and tries to
+    // reuse them on next boot. When the router has roamed channels or
+    // expired the lease, that cached state causes the slow re-joins
+    // the user has been seeing.
+    WiFi.persistent(false);
+    // Push the radio to maximum TX power — costs ~20 mA but materially
+    // improves association reliability on a weak signal corner of the
+    // house, which is the most common cause of timeout-style joins.
+    WiFi.setTxPower(WIFI_POWER_19_5dBm);
     WiFi.setHostname(OTA_HOSTNAME);
     WiFi.begin(ssid.c_str(), getEffectivePass().c_str());
     netMode       = NET_WIFI_CONNECTING;
@@ -150,6 +160,10 @@ inline void onWifiConnected() {
     char buf[80];
     snprintf(buf, sizeof(buf), "WiFi up: %s", WiFi.localIP().toString().c_str());
     events.add(buf);
+    // Reset the STA-attempt counter on success so a future mid-session
+    // disconnect gets the full WIFI_STA_RETRY_MAX budget again rather
+    // than inheriting the stale boot-time count.
+    staAttempts = 0;
     startMdnsAndOta();
     startHttpServerIfNeeded();
     mspBridgeStart();           // tcp/5760 — Configurator wireless MSP (CRSF mode only)
@@ -221,12 +235,57 @@ inline void netStep() {
             break;
 
         case NET_WIFI_CONNECTING:
-            if (WiFi.status() == WL_CONNECTED) {
+        {
+            wl_status_t s = WiFi.status();
+            if (s == WL_CONNECTED) {
                 onWifiConnected();
-            } else if ((uint32_t)(millis() - netStateStart) >= WIFI_CONNECT_MS) {
-                Serial.println("[net] STA timed out, falling back to AP mode");
-                events.add("STA failed — falling back to AP");
+                break;
+            }
+            // Auth failure: the router actively rejected the password.
+            // No amount of retrying fixes this — the user needs to
+            // re-enter creds, so go to AP straight away. This is one
+            // of the only branches that should ever fall to AP.
+            if (s == WL_CONNECT_FAILED) {
+                Serial.println("[net] STA WL_CONNECT_FAILED — AP fallback (bad password?)");
+                events.add("STA: wrong password — AP fallback");
+                staAttempts = 0;
                 startApMode();
+                break;
+            }
+            if ((uint32_t)(millis() - netStateStart) >= WIFI_CONNECT_MS) {
+                staAttempts++;
+                // SSID truly invisible after several attempts: probably
+                // a typo'd SSID or the home router is off entirely.
+                // Go to AP so the user can fix it.
+                if (s == WL_NO_SSID_AVAIL && staAttempts >= 3) {
+                    Serial.println("[net] SSID not seen after 3 tries — AP fallback");
+                    events.add("STA: SSID not visible — AP fallback");
+                    staAttempts = 0;
+                    startApMode();
+                    break;
+                }
+                // Anything else — generic timeout, WL_DISCONNECTED,
+                // WL_IDLE_STATUS — is a transient hiccup (router slow
+                // to recognise the chip, stale DHCP lease, channel
+                // congestion). Keep retrying FOREVER. The chip never
+                // surrenders to AP from a transient stall any more.
+                // Quick-boot recovery (3 power cycles) is the escape
+                // hatch if the user genuinely wants to force AP.
+                Serial.printf("[net] STA attempt %u timed out (status=%d), retrying\n",
+                              (unsigned)staAttempts, (int)s);
+                char buf[64];
+                snprintf(buf, sizeof(buf),
+                         "STA retry %u (status=%d)",
+                         (unsigned)staAttempts, (int)s);
+                events.add(buf);
+                // Hard WiFi reset — power the radio off, settle, back
+                // on. Recovers from internal-state corruption that a
+                // plain disconnect() leaves behind.
+                WiFi.disconnect(true);
+                WiFi.mode(WIFI_OFF);
+                delay(500);
+                startWifiStation();   // resets netStateStart
+                break;
             } else {
                 // Blink fast while STA connecting
                 static uint32_t lastBlink = 0;
@@ -236,6 +295,7 @@ inline void netStep() {
                 }
             }
             break;
+        }
 
         case NET_WIFI_UP:
             // If WiFi drops, try to reconnect quietly (don't restart the chip).

@@ -59,6 +59,40 @@ void setup() {
     prefs.begin(NVS_NAMESPACE, false);
 
     //*****************************************************************
+    // NVS state report — surfaces silent data loss the moment it
+    // happens. WiFi creds, bind state and proto should all survive
+    // OTA/uploadfs; if any of them show "(none)" right after an
+    // update, the OTA disturbed NVS rather than just the firmware/FS
+    // partitions and the user shouldn't have to guess why the chip
+    // is in AP mode.
+    //*****************************************************************
+    {
+        String ssid     = prefs.isKey(NVS_KEY_SSID) ? prefs.getString(NVS_KEY_SSID, "") : "";
+        bool   haveSsid = ssid.length() > 0;
+        bool   havePass = prefs.isKey(NVS_KEY_PASS) && prefs.getString(NVS_KEY_PASS, "").length() > 0;
+        size_t pipeLen  = prefs.isKey(NVS_KEY_PIPE) ? prefs.getBytesLength(NVS_KEY_PIPE) : 0;
+        bool   haveProto = prefs.isKey(NVS_KEY_PROTO);
+        Serial.printf("[nvs] ssid=%s pass=%s bind_pipe=%s proto=%s\n",
+                      haveSsid   ? ssid.c_str() : "(none)",
+                      havePass   ? "set" : "(none)",
+                      pipeLen == 5 ? "stored" : "(none)",
+                      haveProto  ? "set" : "(default)");
+        // Also push the same summary to the in-RAM event log so it shows
+        // up on /blackbox without needing a USB serial cable. Users can
+        // confirm at a glance whether WiFi creds and bind state survived
+        // a reboot instead of guessing from the chip's mode.
+        char buf[80];
+        snprintf(buf, sizeof(buf), "NVS: ssid=%s pass=%s bind=%s",
+                 haveSsid  ? ssid.c_str() : "NONE",
+                 havePass  ? "yes" : "NO",
+                 pipeLen == 5 ? "yes" : "NO");
+        events.add(buf);
+        if (!haveSsid) {
+            events.add("Boot: no WiFi SSID in NVS — AP mode");
+        }
+    }
+
+    //*****************************************************************
     // Mount LittleFS so web pages can serve assets from /data
     //*****************************************************************
     if (LittleFS.begin(true)) {     // formatOnFail=true — wipes & formats if corrupt

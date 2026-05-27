@@ -19,12 +19,38 @@ body{
     margin:0;
     min-height:100vh;
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    /* Fallback gradient — used only if /flying-field.svg fails to load.
+     * The .bg-photo overlay (below) normally covers this entirely. */
     background:linear-gradient(180deg,#b8d8e8 0%,#f4e4c1 55%,#c8d8a8 100%);
     color:#2c3e50;
     padding:1.5em 1em 3em
 }
 
-.container{max-width:500px;margin:0 auto}
+/* Flying-field backdrop — applied to every page via two divs the
+ * page templates drop in immediately after <body>:
+ *   <div class=bg-photo aria-hidden=true></div>
+ *   <div class=bg-wash  aria-hidden=true></div>
+ * Bump ?v= when /flying-field.svg changes; the asset is cached as
+ * `immutable` so the query string is the only knob that busts it. */
+.bg-photo{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    /* Photograph backdrop (Unsplash, free-license). Bump ?v= when the
+     * file changes — it's served with `immutable` so this is the only
+     * knob that busts the browser cache. The hand-drawn SVG at
+     * /flying-field.svg is still on the chip as a fallback. */
+    background:center / cover no-repeat url("/flying-field.jpg?v=2");
+    opacity:.92;filter:saturate(1.02);
+}
+.bg-wash{
+    position:fixed;inset:0;z-index:0;pointer-events:none;
+    /* Top-bright + bottom-darker vignette: keeps headings legible
+     * against the sky and cards legible against the meadow. */
+    background:
+      radial-gradient(900px 600px at 50% 8%, rgba(255,255,255,.20), transparent 70%),
+      radial-gradient(900px 700px at 50% 100%, rgba(46,68,90,.18), transparent 60%);
+}
+
+.container{max-width:500px;margin:0 auto;position:relative;z-index:1}
 
 h1{
     text-align:center;

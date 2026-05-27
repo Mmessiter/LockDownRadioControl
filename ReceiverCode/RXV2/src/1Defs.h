@@ -25,12 +25,30 @@
 #include <esp32-hal-rmt.h>
 #include <Update.h>
 #include <HTTPClient.h>
+#include <WiFiClientSecure.h>
 
 //*********************************************************************
 //  Firmware version
 //*********************************************************************
 
-constexpr const char* FW_VERSION = "RXV2-0.9.32-slot2-listen";
+constexpr const char* FW_VERSION = "RXV2-0.9.50-sta-forever";
+
+//*********************************************************************
+//  Auto-update manifest URLs
+//*********************************************************************
+// Two sources are consulted by /api/firmware/check:
+//   - "local"  : a user-configurable URL stored in NVS (NVS_KEY_FW_MANIFEST,
+//                see below). Typically the dev Mac's firmware_server.py on
+//                the LAN. Falls back to FW_DEFAULT_LOCAL_MANIFEST_URL when
+//                NVS holds no override, so a dev machine running the
+//                server is auto-discovered without per-chip configuration.
+//   - "public" : the hardcoded messiter.com mirror. Always HTTPS. Available
+//                wherever the receiver has internet access, so a chip that
+//                never sees the dev Mac can still pull official releases.
+constexpr const char* FW_DEFAULT_LOCAL_MANIFEST_URL =
+    "http://m4macmini.local:8000/manifest.json";
+constexpr const char* FW_PUBLIC_MANIFEST_URL =
+    "https://messiter.com/rxv2/release/manifest.json";
 
 //*********************************************************************
 //  WiFi / network defaults
@@ -57,8 +75,24 @@ inline NetMode  netMode       = NET_INIT;
 inline uint32_t netStateStart = 0;
 inline bool     otaStarted    = false;
 
+// STA attempt counter. Lives outside netStep() so onWifiConnected() can
+// zero it on success — otherwise a flaky mid-session reconnect would
+// inherit a stale count from a much earlier boot-time retry and trip
+// the AP fallback after one extra failure.
+inline uint8_t  staAttempts   = 0;
+
 constexpr uint32_t RF_WINDOW_MS         = 10000;   // boot window before falling through to WiFi
-constexpr uint32_t WIFI_CONNECT_MS      = 12000;   // STA timeout before giving up and going to AP
+// STA-join timeout per attempt. Stepped up from 12 s → 18 s → 25 s
+// because users kept seeing "WiFi password lost" symptoms that were
+// really slow router-side associations (stale DHCP leases, channel
+// congestion at boot) tripping AP fallback while the credentials in
+// NVS were still intact. With WIFI_STA_RETRY_MAX = 5, the chip now
+// patiently retries STA for ~125 s before giving up — long enough to
+// outlast any sane router hiccup. A real wifi-creds-gone case still
+// surfaces immediately because we go straight to AP when NVS is empty
+// (startWifiStation short-circuits when ssid is blank).
+constexpr uint32_t WIFI_CONNECT_MS      = 25000;
+constexpr uint8_t  WIFI_STA_RETRY_MAX   = 5;
 
 // *** DEV FLAG — set to false before shipping ***
 // When true: skip the RF-discovery boot window and go straight to WiFi STA,

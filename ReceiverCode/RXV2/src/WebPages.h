@@ -65,6 +65,15 @@ inline bool serveLittleFsFile(const char* path, const char* mime) {
     if (!LittleFS.exists(path)) return false;
     File f = LittleFS.open(path, "r");
     if (!f) return false;
+    // HTML pages are small and change every firmware release — ask
+    // the browser to revalidate each time so a stale cached page
+    // doesn't keep showing across an `uploadfs`. The dedicated
+    // handlers for css/js/jpg/svg set their own aggressive cache
+    // headers (versioned via ?v= cache busters), so this only
+    // affects text/html responses.
+    if (mime && strncmp(mime, "text/html", 9) == 0) {
+        server.sendHeader("Cache-Control", "no-cache");
+    }
     server.streamFile(f, mime);
     f.close();
     return true;
@@ -96,6 +105,25 @@ inline void handleThreeJs() {
     server.sendHeader("Cache-Control", "public, max-age=604800, immutable");
     if (serveLittleFsFile("/three.min.js", "application/javascript")) return;
     server.send(503, "text/plain", "/three.min.js not in LittleFS — uploadfs the data/ folder");
+}
+
+inline void handleFlyingFieldSvg() {
+    // Legacy hand-drawn backdrop, kept as a fallback. Live pages now
+    // reference the .jpg below instead — switch CSS back here if the
+    // photograph ever feels wrong.
+    server.sendHeader("Cache-Control", "public, max-age=604800, immutable");
+    if (serveLittleFsFile("/flying-field.svg", "image/svg+xml")) return;
+    server.send(503, "text/plain", "/flying-field.svg not in LittleFS — uploadfs the data/ folder");
+}
+
+inline void handleFlyingFieldJpg() {
+    // Photograph backdrop sourced from Unsplash (Wolfgang Hasselmann,
+    // Unsplash License — free use, no attribution required). Cached
+    // hard via `immutable` — the asset is content-addressed by ?v=
+    // query string in style.css, which is the only knob that busts it.
+    server.sendHeader("Cache-Control", "public, max-age=604800, immutable");
+    if (serveLittleFsFile("/flying-field.jpg", "image/jpeg")) return;
+    server.send(503, "text/plain", "/flying-field.jpg not in LittleFS — uploadfs the data/ folder");
 }
 
 //*********************************************************************
@@ -361,10 +389,124 @@ inline void handleFirmwareSetUrl() {
 }
 
 //*********************************************************************
+//  Helpers shared by the auto-update endpoints
+//*********************************************************************
+
+inline bool isHttpsUrl(const String& u) {
+    return u.startsWith("https://") || u.startsWith("HTTPS://");
+}
+
+// Pick the right WiFiClient implementation for `url`'s scheme so the
+// same call works for both http:// (local dev server) and https://
+// (messiter.com). setInsecure() skips CA verification — the .bin itself
+// isn't signed today, so we wouldn't be earning end-to-end trust by
+// pinning a CA bundle.
+inline bool httpBeginAny(HTTPClient& http,
+                         WiFiClient& plain,
+                         WiFiClientSecure& secure,
+                         const String& url) {
+    if (isHttpsUrl(url)) {
+        secure.setInsecure();
+        return http.begin(secure, url);
+    }
+    return http.begin(plain, url);
+}
+
+// Fetch a manifest URL and append a `{"manifest_url":..., ...}` chunk
+// to `out` describing the result. On success the manifest body is
+// embedded verbatim under "manifest"; on failure an "error" string is
+// included instead. Caller composes the surrounding JSON.
+inline void fetchManifestInto(String& out, const String& url, uint32_t timeoutMs) {
+    out += "{\"manifest_url\":\"";
+    out += url;
+    out += "\"";
+    if (url.isEmpty()) {
+        out += ",\"ok\":false,\"error\":\"no manifest URL configured\"}";
+        return;
+    }
+    HTTPClient       http;
+    WiFiClient       plain;
+    WiFiClientSecure secure;
+    http.setConnectTimeout(timeoutMs);
+    http.setTimeout(timeoutMs);
+    if (!httpBeginAny(http, plain, secure, url)) {
+        out += ",\"ok\":false,\"error\":\"http.begin failed\"}";
+        return;
+    }
+    int code = http.GET();
+    if (code != HTTP_CODE_OK) {
+        out += ",\"ok\":false,\"http_status\":";
+        out += code;
+        out += ",\"error\":\"manifest fetch failed\"}";
+        http.end();
+        return;
+    }
+    String body = http.getString();
+    http.end();
+    out += ",\"ok\":true,\"manifest\":";
+    out += body;
+    out += "}";
+}
+
+//*********************************************************************
+//  GET /api/firmware/check — fetch both local + public manifests
+//*********************************************************************
+// Single endpoint the page calls. Saves the page from having to know
+// the messiter.com URL or from needing CORS access to either server —
+// the chip is on the same origin as the page, so the page can always
+// reach this. Returns:
+//   {
+//     "current": "RXV2-x.y.z-…",
+//     "local":  { manifest_url, ok, manifest? | error },
+//     "public": { manifest_url, ok, manifest? | error }
+//   }
+
+inline void handleFirmwareCheck() {
+    if (netMode != NET_WIFI_UP) {
+        // AP mode (or no-WiFi flight mode) can't reach either server.
+        // Reply quickly with a clear "offline" payload so the UI can
+        // explain instead of timing out.
+        String j = "{\"current\":\"";
+        j += FW_VERSION;
+        j += "\",\"offline\":true,\"net_mode\":\"";
+        j += netModeName();
+        j += "\"}";
+        server.sendHeader("Cache-Control", "no-store");
+        server.send(200, "application/json", j);
+        return;
+    }
+    String localUrl = prefs.isKey(NVS_KEY_FW_MANIFEST)
+                          ? prefs.getString(NVS_KEY_FW_MANIFEST, "")
+                          : String("");
+    localUrl.trim();
+    // Fall back to the compiled-in default when no override is in NVS, so
+    // the dev Mac's firmware_server.py is auto-discovered without anyone
+    // having to POST /api/firmware/seturl first. The page then renders
+    // the "local" section iff the fetch succeeds — production users who
+    // aren't running the dev server simply see no local card.
+    if (localUrl.length() == 0) {
+        localUrl = FW_DEFAULT_LOCAL_MANIFEST_URL;
+    }
+
+    String out;
+    out.reserve(2048);
+    out  = "{\"current\":\"";
+    out += FW_VERSION;
+    out += "\",\"local\":";
+    fetchManifestInto(out, localUrl, 4000);
+    out += ",\"public\":";
+    fetchManifestInto(out, String(FW_PUBLIC_MANIFEST_URL), 10000);
+    out += "}";
+    server.sendHeader("Cache-Control", "no-store");
+    server.send(200, "application/json", out);
+}
+
+//*********************************************************************
 //  POST /api/firmware/install?url=... — chip downloads .bin and applies
 //*********************************************************************
 // Synchronous — the HTTP response is returned only after the download
-// completes (or fails), then the chip reboots.
+// completes (or fails), then the chip reboots. Accepts both http:// and
+// https:// URLs (https:// is required for the messiter.com mirror).
 
 inline void handleFirmwareInstall() {
     if (!server.hasArg("url")) {
@@ -372,8 +514,19 @@ inline void handleFirmwareInstall() {
         return;
     }
     String url = server.arg("url");
-    HTTPClient http;
-    if (!http.begin(url)) {
+    url.trim();
+    if (!(url.startsWith("http://") || isHttpsUrl(url))) {
+        server.send(400, "text/plain", "url must start with http:// or https://");
+        return;
+    }
+    HTTPClient       http;
+    WiFiClient       plain;
+    WiFiClientSecure secure;
+    // Generous timeouts — a slow messiter.com TLS handshake on a weak
+    // WiFi link can take a few seconds before the first bytes flow.
+    http.setConnectTimeout(8000);
+    http.setTimeout(15000);
+    if (!httpBeginAny(http, plain, secure, url)) {
         server.send(500, "text/plain", "http.begin failed");
         return;
     }
@@ -425,15 +578,41 @@ inline void handleFirmwareInstall() {
 // the chip resets. A tiny inline page is faster and survives even if
 // LittleFS is broken.
 
-inline String confirmPage(const char* title, const char* body) {
+inline String confirmPage(const char* title, const char* body, bool autoReload = true) {
     String s;
-    s.reserve(400);
+    s.reserve(autoReload ? 1400 : 480);
     s += F("<!doctype html><html><head><meta charset=utf-8>");
     s += F("<meta name=viewport content='width=device-width,initial-scale=1'>");
     s += F("<title>"); s += title; s += F(" &middot; LDRC RX V2</title>");
     s += F("<link rel=stylesheet href='/style.css'>");
-    s += F("</head><body><div class=container><h1>"); s += title; s += F("</h1>");
-    s += F("<div class=card>"); s += body; s += F("</div>");
+    s += F("</head><body>");
+    s += F("<div class=bg-photo aria-hidden=true></div>");
+    s += F("<div class=bg-wash aria-hidden=true></div>");
+    s += F("<div class=container><h1>"); s += title; s += F("</h1>");
+    s += F("<div class=card>"); s += body;
+    if (autoReload) {
+        // Auto-recovery script. The chip is about to reboot — the page
+        // polls /api/state.json until the chip answers (or 60 s elapses)
+        // and then redirects to /. If the chip never comes back the user
+        // sees a clear message pointing at AP-mode recovery, instead of
+        // a frozen "Rebooting…" page that requires manual reload.
+        s += F("<p id=__waitline class=muted style='margin-top:1em'>"
+               "Waiting for receiver to come back (<span id=__secs>0</span>&thinsp;s)&hellip;"
+               "</p>"
+               "<script>(()=>{"
+               "const $=i=>document.getElementById(i);let n=0;"
+               "const tick=async()=>{$('__secs').textContent=n;"
+               "if(n>=4){try{const r=await fetch('/api/state.json',"
+               "{cache:'no-store',signal:AbortSignal.timeout(2000)});"
+               "if(r.ok){location.href='/';return;}}catch(e){}}"
+               "if(n>=60){$('__waitline').innerHTML="
+               "\"Receiver didn't come back. If you entered a wrong "
+               "password it may have fallen back to AP mode &mdash; "
+               "join the <b>LDRC_RX</b> WiFi and open "
+               "<code>http://192.168.4.1</code>.\";return;}"
+               "n++;setTimeout(tick,1000);};tick();})();</script>");
+    }
+    s += F("</div>");
     s += F("<div class=footer>"); s += FW_VERSION; s += F("</div></div></body></html>");
     return s;
 }
@@ -500,17 +679,18 @@ inline void handleWifiSet() {
 }
 
 //*********************************************************************
-//  POST /wifi_reset — wipe stored credentials and reboot
+//  POST /wifi_reset — DELIBERATELY removed (2026-05-27)
 //*********************************************************************
+// The "Forget & reboot" button was easy to tap accidentally and the same
+// outcome (chip back in AP mode) is reachable by entering a wrong SSID/
+// password through the normal /wifi form. The route is still registered
+// below as a no-op so any cached bookmark or open tab that POSTs here
+// just gets a 410 instead of silently wiping credentials.
 
-inline void handleWifiReset() {
-    prefs.remove(NVS_KEY_SSID);
-    prefs.remove(NVS_KEY_PASS);
-    events.add("WiFi NVS credentials wiped");
-    server.send(200, "text/html", confirmPage("Reset",
-        "<p>NVS wiped. Receiver is rebooting and will use the compiled-in defaults.</p>"));
-    delay(500);
-    ESP.restart();
+inline void handleWifiResetGone() {
+    server.send(410, "text/plain",
+        "The 'forget WiFi' endpoint has been removed. Submit a different "
+        "SSID/password via /wifi if you want to change the saved network.");
 }
 
 //*********************************************************************
@@ -539,9 +719,13 @@ inline void handleProtocolSet() {
 //*********************************************************************
 
 inline void handleFlyArm() {
+    // Opt out of confirmPage's auto-reload — WiFi is about to be cut on
+    // purpose, polling /api/state.json forever would just confuse the
+    // user. They explicitly armed Fly mode; the static page is correct.
     server.send(200, "text/html", confirmPage("Flying",
         "<p>The receiver is now in <b>RF-only</b> mode. WiFi will return on the next power-cycle.</p>"
-        "<p class=muted>SBUS keeps streaming. This page will stop responding the moment WiFi shuts down (any second now).</p>"));
+        "<p class=muted>SBUS keeps streaming. This page will stop responding the moment WiFi shuts down (any second now).</p>",
+        /*autoReload=*/false));
     flyArmRequested = true;       // disableWifi() runs from loop() after this response flushes
 }
 
@@ -872,12 +1056,15 @@ inline void registerWebRoutes() {
 
     // Auto-update endpoints.
     server.on("/api/firmware/seturl",  HTTP_POST, handleFirmwareSetUrl);
+    server.on("/api/firmware/check",   HTTP_GET,  handleFirmwareCheck);
     server.on("/api/firmware/install", HTTP_POST, handleFirmwareInstall);
 
     // Shared assets
-    server.on("/style.css",    handleStyleCss);
-    server.on("/app.js",       handleAppJs);
-    server.on("/three.min.js", handleThreeJs);
+    server.on("/style.css",         handleStyleCss);
+    server.on("/app.js",            handleAppJs);
+    server.on("/three.min.js",      handleThreeJs);
+    server.on("/flying-field.svg",  handleFlyingFieldSvg);
+    server.on("/flying-field.jpg",  handleFlyingFieldJpg);
 
     // JSON APIs
     server.on("/api/state.json",    handleApiState);
@@ -888,7 +1075,10 @@ inline void registerWebRoutes() {
     server.on("/bind",        HTTP_POST, handleBindDo);
     server.on("/rollback",    HTTP_POST, handleRollback);
     server.on("/wifi",        HTTP_POST, handleWifiSet);
-    server.on("/wifi_reset",  HTTP_POST, handleWifiReset);
+    // /wifi_reset was the "Forget & reboot" button — removed 2026-05-27
+    // because an accidental tap silently wiped saved credentials. Left
+    // here as a 410 so stale bookmarks fail loudly instead of silently.
+    server.on("/wifi_reset",  HTTP_POST, handleWifiResetGone);
     server.on("/protocol",    HTTP_POST, handleProtocolSet);
     server.on("/fly_arm",     HTTP_POST, handleFlyArm);
 
