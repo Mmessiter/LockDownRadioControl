@@ -106,21 +106,33 @@ function paintRadioBanner(s) {
     rb.style.display     = '';
 }
 
-const MANIFEST_URL = 'http://m4macmini.local:8000/manifest.json';
-
 function vTuple(n){ const m=n.match(/RXV2-(\d+)\.(\d+)\.(\d+)/); return m?[+m[1],+m[2],+m[3]]:[0,0,0]; }
+// vCmp returns positive when `b` is newer than `a`, negative when `a`
+// is newer. Used both to sort and to test "is there a newer version".
 function vCmp(a,b){ const ta=vTuple(a),tb=vTuple(b); for(let i=0;i<3;i++) if(tb[i]!==ta[i]) return tb[i]-ta[i]; return 0; }
 
+// Banner uses the chip's /api/firmware/check (same data source as the
+// /firmware page) so both screens always agree. Earlier this function
+// hit the dev server directly with an inverted sort, which would tell
+// the user a v0.9.51 was newer than the v0.9.52 they were running.
 async function checkFirmware(current) {
     const b = document.getElementById('fwBanner');
     try {
-        const r = await fetch(MANIFEST_URL, { cache: 'no-store' });
-        if (!r.ok) throw 0;
-        const data = await r.json();
-        const versions = (data.versions || []).slice().sort((x,y) => vCmp(x.name,y.name));
-        if (versions.length === 0) return;
-        const latest = versions[0].name;
-        if (vCmp(latest, current) < 0) {
+        const r = await fetch('/api/firmware/check', { cache: 'no-store' });
+        if (!r.ok) return;
+        const j = await r.json();
+        if (j.offline) return;            // chip in AP mode — nothing to compare
+        const names = [];
+        for (const k of ['local', 'public']) {
+            if (j[k] && j[k].ok && j[k].manifest && j[k].manifest.versions) {
+                for (const v of j[k].manifest.versions) names.push(v.name);
+            }
+        }
+        if (names.length === 0) return;
+        // Largest by vTuple = latest. vCmp(a,c)>0 means c is newer than a.
+        let latest = names[0];
+        for (const n of names) if (vCmp(latest, n) > 0) latest = n;
+        if (vCmp(latest, current) > 0) {
             b.textContent = '⬆️  Update available: ' + latest;
             b.style.background = 'rgba(255,210,120,.95)';
             b.style.color = '#5c3a00';
@@ -133,7 +145,7 @@ async function checkFirmware(current) {
         }
         b.style.display = '';
     } catch (e) {
-        // silent — server might just be off
+        // silent — banner just doesn't appear
     }
 }
 </script>

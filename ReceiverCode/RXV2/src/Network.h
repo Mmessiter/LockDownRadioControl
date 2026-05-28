@@ -115,33 +115,48 @@ inline void startHttpServerIfNeeded() {
 //*********************************************************************
 
 inline void startWifiStation() {
+    // From v0.9.51 the chip runs AP+STA simultaneously. The soft-AP
+    // `LDRC_RX` is always live at 192.168.4.1 regardless of home WiFi
+    // state, so the user can ALWAYS reach the chip — overnight router
+    // hiccups, channel storms, ISP outages, none of it strands them in
+    // a no-WiFi state any more. The web server, mDNS and MSP bridge
+    // all come up immediately on the AP side; STA tries the home
+    // network in the background and joins when it can.
+    WiFi.persistent(false);
+    WiFi.mode(WIFI_AP_STA);
+    WiFi.softAP(AP_SSID);
+    WiFi.setSleep(false);
+    WiFi.setTxPower(WIFI_POWER_19_5dBm);
+    Serial.printf("[wifi] soft-AP '%s' up at %s\n",
+                  AP_SSID, WiFi.softAPIP().toString().c_str());
+
+    // Bring the web server / mDNS up NOW on the AP side. Once STA
+    // connects, the same handlers serve traffic at the LAN IP too —
+    // startHttpServerIfNeeded() is idempotent.
+    if (MDNS.begin(OTA_HOSTNAME)) {
+        MDNS.addService("http", "tcp", 80);
+    }
+    setupOTA();
+    startHttpServerIfNeeded();
+    mspBridgeStart();
+
     String ssid = getEffectiveSsid();
     if (ssid.length() == 0) {
-        // No SSID saved → go straight to AP so the user can enter credentials.
-        Serial.println("[wifi] no NVS SSID — going straight to AP mode");
-        events.add("No SSID configured — AP mode");
-        startApMode();
+        // No NVS creds — stay AP-only. User can reach 192.168.4.1 to
+        // set them up.
+        Serial.println("[wifi] no NVS SSID — AP-only");
+        events.add("No SSID — AP-only");
+        netMode = NET_AP;
         return;
     }
-    Serial.printf("[wifi] STA connecting to '%s'\n", ssid.c_str());
-    WiFi.mode(WIFI_STA);
-    // Don't write WiFi state to flash on every Begin — without this
-    // the ESP32 caches the previous AP's BSSID + channel and tries to
-    // reuse them on next boot. When the router has roamed channels or
-    // expired the lease, that cached state causes the slow re-joins
-    // the user has been seeing.
-    WiFi.persistent(false);
-    // Push the radio to maximum TX power — costs ~20 mA but materially
-    // improves association reliability on a weak signal corner of the
-    // house, which is the most common cause of timeout-style joins.
-    WiFi.setTxPower(WIFI_POWER_19_5dBm);
+    Serial.printf("[wifi] STA connecting to '%s' (AP stays up)\n", ssid.c_str());
     WiFi.setHostname(OTA_HOSTNAME);
     WiFi.begin(ssid.c_str(), getEffectivePass().c_str());
     netMode       = NET_WIFI_CONNECTING;
     netStateStart = millis();
 
     char buf[80];
-    snprintf(buf, sizeof(buf), "Trying STA WiFi '%s'", ssid.c_str());
+    snprintf(buf, sizeof(buf), "Trying STA WiFi '%s' (AP also up)", ssid.c_str());
     events.add(buf);
 }
 
@@ -153,20 +168,15 @@ inline void startWifiStation() {
 // ~20 mA cost is irrelevant when we're powered by USB or BEC.
 
 inline void onWifiConnected() {
-    WiFi.setSleep(false);
-
-    Serial.printf("[wifi] %s  RSSI %d dBm\n",
+    // STA joined home WiFi. AP + web server are already up from
+    // startWifiStation() so there's nothing to bring up here — we just
+    // log, reset counters, and transition state.
+    Serial.printf("[wifi] STA %s  RSSI %d dBm\n",
                   WiFi.localIP().toString().c_str(), WiFi.RSSI());
     char buf[80];
     snprintf(buf, sizeof(buf), "WiFi up: %s", WiFi.localIP().toString().c_str());
     events.add(buf);
-    // Reset the STA-attempt counter on success so a future mid-session
-    // disconnect gets the full WIFI_STA_RETRY_MAX budget again rather
-    // than inheriting the stale boot-time count.
     staAttempts = 0;
-    startMdnsAndOta();
-    startHttpServerIfNeeded();
-    mspBridgeStart();           // tcp/5760 — Configurator wireless MSP (CRSF mode only)
     netMode = NET_WIFI_UP;
     ledOff();
 }
@@ -175,17 +185,19 @@ inline void onWifiConnected() {
 //  AP fallback
 //*********************************************************************
 
+// Kept for the quick-boot escape hatch / "no SSID" boot path. Tears
+// STA down and stays in AP-only mode. In normal operation we run
+// AP+STA via startWifiStation() so this is rarely called.
 inline void startApMode() {
-    Serial.printf("[wifi] STA failed, starting AP '%s'\n", AP_SSID);
+    Serial.printf("[wifi] AP-only mode, '%s'\n", AP_SSID);
     WiFi.disconnect(true);
     delay(50);
     WiFi.mode(WIFI_AP);
     WiFi.softAP(AP_SSID);
     WiFi.setSleep(false);
     delay(150);
-    Serial.printf("[wifi] AP IP %s\n", WiFi.softAPIP().toString().c_str());
     char buf[80];
-    snprintf(buf, sizeof(buf), "AP mode: %s at %s",
+    snprintf(buf, sizeof(buf), "AP-only mode: %s at %s",
              AP_SSID, WiFi.softAPIP().toString().c_str());
     events.add(buf);
     if (MDNS.begin(OTA_HOSTNAME)) {
@@ -236,75 +248,71 @@ inline void netStep() {
 
         case NET_WIFI_CONNECTING:
         {
+            // AP is already up from startWifiStation(), so we NEVER
+            // fall back to AP-only from this state any more. Just
+            // retry STA forever — the user can always reach the chip
+            // via the AP side regardless of how STA is faring.
             wl_status_t s = WiFi.status();
             if (s == WL_CONNECTED) {
                 onWifiConnected();
                 break;
             }
-            // Auth failure: the router actively rejected the password.
-            // No amount of retrying fixes this — the user needs to
-            // re-enter creds, so go to AP straight away. This is one
-            // of the only branches that should ever fall to AP.
-            if (s == WL_CONNECT_FAILED) {
-                Serial.println("[net] STA WL_CONNECT_FAILED — AP fallback (bad password?)");
-                events.add("STA: wrong password — AP fallback");
-                staAttempts = 0;
-                startApMode();
-                break;
-            }
             if ((uint32_t)(millis() - netStateStart) >= WIFI_CONNECT_MS) {
                 staAttempts++;
-                // SSID truly invisible after several attempts: probably
-                // a typo'd SSID or the home router is off entirely.
-                // Go to AP so the user can fix it.
-                if (s == WL_NO_SSID_AVAIL && staAttempts >= 3) {
-                    Serial.println("[net] SSID not seen after 3 tries — AP fallback");
-                    events.add("STA: SSID not visible — AP fallback");
-                    staAttempts = 0;
-                    startApMode();
-                    break;
-                }
-                // Anything else — generic timeout, WL_DISCONNECTED,
-                // WL_IDLE_STATUS — is a transient hiccup (router slow
-                // to recognise the chip, stale DHCP lease, channel
-                // congestion). Keep retrying FOREVER. The chip never
-                // surrenders to AP from a transient stall any more.
-                // Quick-boot recovery (3 power cycles) is the escape
-                // hatch if the user genuinely wants to force AP.
-                Serial.printf("[net] STA attempt %u timed out (status=%d), retrying\n",
+                Serial.printf("[net] STA attempt %u timed out (status=%d), retrying — AP still up\n",
                               (unsigned)staAttempts, (int)s);
                 char buf[64];
                 snprintf(buf, sizeof(buf),
                          "STA retry %u (status=%d)",
                          (unsigned)staAttempts, (int)s);
                 events.add(buf);
-                // Hard WiFi reset — power the radio off, settle, back
-                // on. Recovers from internal-state corruption that a
-                // plain disconnect() leaves behind.
-                WiFi.disconnect(true);
-                WiFi.mode(WIFI_OFF);
-                delay(500);
-                startWifiStation();   // resets netStateStart
+                // Restart the STA side only. AP stays up because we
+                // pass `false` to WiFi.disconnect (don't turn WiFi off).
+                WiFi.disconnect(false, true);   // disconnect STA, erase saved AP
+                delay(200);
+                WiFi.begin(getEffectiveSsid().c_str(),
+                           getEffectivePass().c_str());
+                netStateStart = millis();
                 break;
-            } else {
-                // Blink fast while STA connecting
-                static uint32_t lastBlink = 0;
-                if (millis() - lastBlink > 150) {
-                    lastBlink = millis();
-                    digitalWrite(LED_PIN, !digitalRead(LED_PIN));
-                }
+            }
+            // Still connecting — blink LED.
+            static uint32_t lastBlink = 0;
+            if (millis() - lastBlink > 150) {
+                lastBlink = millis();
+                digitalWrite(LED_PIN, !digitalRead(LED_PIN));
             }
             break;
         }
 
         case NET_WIFI_UP:
-            // If WiFi drops, try to reconnect quietly (don't restart the chip).
-            if (WiFi.status() != WL_CONNECTED) {
-                Serial.println("[wifi] dropped, retrying STA");
-                events.add("WiFi dropped, retrying");
-                startWifiStation();
+        {
+            // 3-second debounce. ESP32's WiFi.status() can transiently
+            // report not-connected during background scans even when
+            // the link is fine, so we only treat a drop as real after
+            // the radio has been disconnected for several seconds.
+            static uint32_t disconnectedSinceMs = 0;
+            if (WiFi.status() == WL_CONNECTED) {
+                disconnectedSinceMs = 0;
+                break;
             }
+            if (disconnectedSinceMs == 0) {
+                disconnectedSinceMs = millis();
+                break;
+            }
+            if (millis() - disconnectedSinceMs < 3000) break;
+            // Genuinely dropped — go back to NET_WIFI_CONNECTING and
+            // re-try STA. AP stays up throughout.
+            Serial.println("[wifi] STA dropped, retrying (AP still up)");
+            events.add("WiFi dropped, retrying");
+            disconnectedSinceMs = 0;
+            WiFi.disconnect(false, true);
+            delay(200);
+            WiFi.begin(getEffectiveSsid().c_str(),
+                       getEffectivePass().c_str());
+            netMode       = NET_WIFI_CONNECTING;
+            netStateStart = millis();
             break;
+        }
 
         case NET_NO_WIFI:
         case NET_AP:

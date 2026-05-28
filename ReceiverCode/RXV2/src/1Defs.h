@@ -31,7 +31,7 @@
 //  Firmware version
 //*********************************************************************
 
-constexpr const char* FW_VERSION = "RXV2-0.9.50-sta-forever";
+constexpr const char* FW_VERSION = "RXV2-0.9.53-banner-fix";
 
 //*********************************************************************
 //  Auto-update manifest URLs

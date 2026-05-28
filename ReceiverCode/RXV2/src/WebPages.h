@@ -679,6 +679,28 @@ inline void handleWifiSet() {
 }
 
 //*********************************************************************
+//  POST /api/wifi/rejoin — retry home WiFi without re-entering creds
+//*********************************************************************
+// When the chip is in AP mode (or has STA stuck retrying) but the
+// SSID + password are still in NVS, a single tap should be enough to
+// trigger another STA attempt. Saves the user from re-typing a long
+// password they might not even remember.
+
+inline void handleWifiRejoin() {
+    if (!wifiCredsAreCustom()) {
+        server.send(409, "text/plain",
+            "No SSID saved — use /wifi to enter one first.");
+        return;
+    }
+    events.add("Manual WiFi rejoin requested");
+    String body = "<p>Retrying home WiFi with the saved password. "
+                  "Receiver is rebooting.</p>";
+    server.send(200, "text/html", confirmPage("Rejoining WiFi", body.c_str()));
+    delay(500);
+    ESP.restart();
+}
+
+//*********************************************************************
 //  POST /wifi_reset — DELIBERATELY removed (2026-05-27)
 //*********************************************************************
 // The "Forget & reboot" button was easy to tap accidentally and the same
@@ -825,7 +847,14 @@ inline void handleApiState() {
     j += ",\"chip_rev\":"; j += ESP.getChipRevision();
     j += ",\"littlefs\":"; j += (littleFsMounted ? "true" : "false");
     j += ",\"ap_ssid\":\""; j += AP_SSID; j += "\"";
-    j += ",\"ap_ip\":\""; j += (netMode == NET_AP ? WiFi.softAPIP().toString() : String("")); j += "\"";
+    // ap_ip reports the soft-AP address whenever the AP interface is
+    // up — in v0.9.51 that's "always" because the chip runs AP+STA in
+    // parallel. The wifi UI uses this to tell the user they can reach
+    // the chip via 192.168.4.1 even when STA is connected.
+    j += ",\"ap_ip\":\""; {
+        IPAddress apIp = WiFi.softAPIP();
+        if (apIp[0] || apIp[1] || apIp[2] || apIp[3]) j += apIp.toString();
+    } j += "\"";
 
     const esp_partition_t* running = esp_ota_get_running_partition();
     const esp_partition_t* other   = esp_ota_get_next_update_partition(NULL);
@@ -1078,7 +1107,8 @@ inline void registerWebRoutes() {
     // /wifi_reset was the "Forget & reboot" button — removed 2026-05-27
     // because an accidental tap silently wiped saved credentials. Left
     // here as a 410 so stale bookmarks fail loudly instead of silently.
-    server.on("/wifi_reset",  HTTP_POST, handleWifiResetGone);
+    server.on("/wifi_reset",      HTTP_POST, handleWifiResetGone);
+    server.on("/api/wifi/rejoin", HTTP_POST, handleWifiRejoin);
     server.on("/protocol",    HTTP_POST, handleProtocolSet);
     server.on("/fly_arm",     HTTP_POST, handleFlyArm);
 

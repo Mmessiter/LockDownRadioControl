@@ -28,6 +28,16 @@
         <dd id=noteDd class=muted style="display:none">WiFi updates only work in STA mode &mdash; save credentials below so the next boot can join your network.</dd>
     </dl></div>
 
+    <div class=card id=rejoinCard style="display:none">
+        <h2>Rejoin home WiFi</h2>
+        <p class=muted>Saved SSID: <code id=savedSsid></code>. Tap to retry
+            the home network &mdash; the saved password is used, you don't
+            need to re-enter it.</p>
+        <form method=POST action="/api/wifi/rejoin">
+            <button class="btn btn-fw" type=submit><span class=ico>&#128279;</span>Rejoin WiFi</button>
+        </form>
+    </div>
+
     <div class=card>
         <h2>Set credentials</h2>
         <p>Saved to NVS and used on next boot. Edit either field and tap save; the current values are pre-filled.</p>
@@ -82,6 +92,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Pre-fill form
     document.getElementById('ssidField').value = n.ssid || '';
+
+    // Show "Rejoin WiFi" any time the chip has saved credentials in
+    // NVS. Tapping it re-tries the home network with the stored
+    // password — no need to type it in again.
+    if (n.ssid_custom) {
+        show('rejoinCard', true);
+        LDRC.setText('savedSsid', n.ssid);
+    }
 });
 </script>
 </body>

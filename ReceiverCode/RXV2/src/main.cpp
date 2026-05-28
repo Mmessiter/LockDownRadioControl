@@ -208,7 +208,11 @@ void setup() {
 
 void loop() {
     if (otaStarted) ArduinoOTA.handle();
-    if (netMode == NET_WIFI_UP || netMode == NET_AP) {
+    // Server runs whenever the HTTP listener is bound, regardless of
+    // STA state. From v0.9.51 the chip runs AP+STA in parallel, so
+    // the web UI is reachable via the soft-AP even while STA is still
+    // (re)connecting to home WiFi.
+    if (httpServerStarted) {
         server.handleClient();
     }
 

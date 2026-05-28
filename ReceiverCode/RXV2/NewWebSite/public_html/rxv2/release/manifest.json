@@ -1,6 +1,16 @@
 {
   "versions": [
     {
+      "name": "RXV2-0.9.53-banner-fix",
+      "url": "https://messiter.com/rxv2/release/v0.9.53/firmware.bin",
+      "notes": "Home-page firmware banner now uses the chip's /api/firmware/check (same data source as /firmware) so the two screens always agree. The old banner code only looked at the local dev server and could disagree with /firmware when only the public mirror had something new — confusing 'update available' messages that vanished on click. Removes the hardcoded m4macmini.local manifest URL too, so end users without a dev server get clean behaviour instead of a silent fetch failure."
+    },
+    {
+      "name": "RXV2-0.9.52-ap-always-rejoin",
+      "url": "https://messiter.com/rxv2/release/v0.9.52/firmware.bin",
+      "notes": "AP and STA now run simultaneously from boot. The soft-AP `LDRC_RX` is always live at 192.168.4.1, web server + mDNS + MSP bridge come up immediately, and STA tries the home network in the background — when STA succeeds the chip is reachable at both 192.168.4.1 and 192.168.1.231. Overnight router hiccups can no longer strand the chip in AP-only mode because there's no auto-fallback path any more: timeouts just trigger another STA attempt. Also: new 'Rejoin WiFi' button on the /wifi page that retries the home network using the saved password — no need to re-type credentials when the chip is in AP after a long drop. The 3-second STA-drop debounce filters out the spurious WL_DISCONNECTED reports that the ESP32 throws during background scans."
+    },
+    {
       "name": "RXV2-0.9.50-sta-forever",
       "url": "https://messiter.com/rxv2/release/v0.9.50/firmware.bin",
       "notes": "WiFi behaviour rewritten so the chip stops surrendering to AP mode on transient stalls. NVS credentials are never being touched (the boot log confirms this on every reboot) — what was happening is the home router occasionally took longer than the chip's STA-join budget to recognise the freshly-rebooted chip, and the chip then auto-fell to AP. New policy: on a timeout the chip resets the radio (mode OFF, settle, mode STA) and tries again FOREVER. AP fallback only fires on a genuine `WL_CONNECT_FAILED` (wrong password) or persistent `WL_NO_SSID_AVAIL` after three tries (network truly missing). Also turns off WiFi.persistent (no cached BSSID across reboots) and sets max TX power for better association on weak corners of the house. Quick-boot recovery (three power cycles in a row) is still the escape hatch if the chip ever needs to be forced into AP for reconfiguration."
