@@ -428,16 +428,30 @@ function buildHeli3D() {
         new THREE.Vector3( 0.62, -0.26, 0)
     ]);
     const skidGeo  = new THREE.TubeGeometry(skidPath, 24, 0.024, 10, false);
-    const strutGeo = new THREE.CylinderGeometry(0.014, 0.014, 0.36, 8);
     for (const z of [-0.24, 0.24]) {
         const skid = new THREE.Mesh(skidGeo, M.dark);
         skid.position.set(0, 0, z);
         heli.add(skid);
-        for (const x of [-0.28, 0.28]) {
-            const strut = new THREE.Mesh(strutGeo, M.dark);
-            strut.position.set(x, -0.2, z);
-            strut.rotation.z = x > 0 ? 0.18 : -0.18;
-            heli.add(strut);
+    }
+    // Skid struts — each one rises vertically from the skid then bends
+    // inward at the top to meet the body, the way real model heli
+    // landing-gear struts do. A straight cylinder leaves the strut
+    // tops floating beside the body rather than touching it. The path
+    // has four control points: foot at the skid, a short vertical run,
+    // a bend, and the top landing on (or just inside) the body's
+    // lower-side surface.
+    for (const zs of [-0.24, 0.24]) {
+        for (const xs of [-0.28, 0.28]) {
+            const xt = xs * (0.24 / 0.28);
+            const zt = zs * (0.10 / 0.24);
+            const strutPath = new THREE.CatmullRomCurve3([
+                new THREE.Vector3(xs, -0.36, zs),
+                new THREE.Vector3(xs, -0.28, zs),
+                new THREE.Vector3(xs, -0.22, zs * 0.85),
+                new THREE.Vector3(xt, -0.12, zt)
+            ]);
+            const strutGeo = new THREE.TubeGeometry(strutPath, 16, 0.014, 8, false);
+            heli.add(new THREE.Mesh(strutGeo, M.dark));
         }
     }
 

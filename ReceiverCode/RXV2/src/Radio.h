@@ -35,10 +35,22 @@ inline const char* dataRateName(rf24_datarate_e d) {
 inline void runRadioSelfTest() {
     rfTest.ran = true;
 
-    pinMode(PIN_NRF_CSN, OUTPUT);
-    digitalWrite(PIN_NRF_CSN, HIGH);
-    pinMode(PIN_NRF_CE,  OUTPUT);
-    digitalWrite(PIN_NRF_CE,  LOW);
+    // Park ALL THREE radio slots' CSN HIGH and CE LOW before we touch
+    // the SPI bus. Without this, slots 2 and 3 leave their CSN pins in
+    // INPUT mode (default) — and nRF24L01+ has no internal pull-up on
+    // CSN, so a floating CSN can drift LOW through PCB leakage. That
+    // would select slots 2 and/or 3 *simultaneously* with slot 1 the
+    // first time we drive SPI, multiple chips drive MISO at once, and
+    // slot 1's self-test reads garbage → "radio 1 not present" even
+    // though slot 1's hardware is perfectly fine. The symptom: one
+    // radio installed = bind works; add a second physical radio = the
+    // CSN floating wrecks slot 1's detection.
+    pinMode(PIN_NRF_CSN,  OUTPUT); digitalWrite(PIN_NRF_CSN,  HIGH);
+    pinMode(PIN_NRF_CSN2, OUTPUT); digitalWrite(PIN_NRF_CSN2, HIGH);
+    pinMode(PIN_NRF_CSN3, OUTPUT); digitalWrite(PIN_NRF_CSN3, HIGH);
+    pinMode(PIN_NRF_CE,   OUTPUT); digitalWrite(PIN_NRF_CE,   LOW);
+    pinMode(PIN_NRF_CE2,  OUTPUT); digitalWrite(PIN_NRF_CE2,  LOW);
+    pinMode(PIN_NRF_CE3,  OUTPUT); digitalWrite(PIN_NRF_CE3,  LOW);
 
     // Override variant defaults — route MISO off the BOOT-strap pin.
     SPI.begin(PIN_SPI_SCK, PIN_SPI_MISO, PIN_SPI_MOSI, -1);

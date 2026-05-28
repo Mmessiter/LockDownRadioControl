@@ -1,6 +1,21 @@
 {
   "versions": [
     {
+      "name": "RXV2-0.9.56-csn-park",
+      "url": "https://messiter.com/rxv2/release/v0.9.56/firmware.bin",
+      "notes": "Fixes triple-transceiver detection on the new prototype board. runRadioSelfTest() only parked slot 1's CSN HIGH at boot — slots 2 and 3's CSN pins were left in INPUT mode (default), and the nRF24L01+ has no internal CSN pull-up, so their pins could drift LOW through PCB leakage. The result: when slot 1 first drove SPI, multiple chips were selected at once, MISO got clobbered, slot 1's self-test failed, and the chip declared radio 1 missing even though its hardware was perfectly fine. Symptom on the prototype: one radio installed = bind worked; two or three installed = slot 1 'not present'. Now all six radio control pins (three CSN + three CE) are explicitly OUTPUT-deselected before any SPI traffic begins."
+    },
+    {
+      "name": "RXV2-0.9.55-strut-bend",
+      "url": "https://messiter.com/rxv2/release/v0.9.55/firmware.bin",
+      "notes": "Helicopter skid struts now bend inward at the top so they actually touch the body, the way real model heli landing gear does. Built with TubeGeometry along a Catmull-Rom curve — foot at the skid, short vertical run, then a smooth inward bend that lands the strut top on the body's lower side. The straight cylinders left the struts floating beside the cabin."
+    },
+    {
+      "name": "RXV2-0.9.54-no-rejoin",
+      "url": "https://messiter.com/rxv2/release/v0.9.54/firmware.bin",
+      "notes": "Removes the 'Rejoin WiFi' button added yesterday — with AP+STA running in parallel and STA retrying forever in the background it was a placebo button. The chip already does what the button asked for, automatically and continuously."
+    },
+    {
       "name": "RXV2-0.9.53-banner-fix",
       "url": "https://messiter.com/rxv2/release/v0.9.53/firmware.bin",
       "notes": "Home-page firmware banner now uses the chip's /api/firmware/check (same data source as /firmware) so the two screens always agree. The old banner code only looked at the local dev server and could disagree with /firmware when only the public mirror had something new — confusing 'update available' messages that vanished on click. Removes the hardcoded m4macmini.local manifest URL too, so end users without a dev server get clean behaviour instead of a silent fetch failure."

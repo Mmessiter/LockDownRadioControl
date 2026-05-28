@@ -31,7 +31,7 @@
 //  Firmware version
 //*********************************************************************
 
-constexpr const char* FW_VERSION = "RXV2-0.9.53-banner-fix";
+constexpr const char* FW_VERSION = "RXV2-0.9.56-csn-park";
 
 //*********************************************************************
 //  Auto-update manifest URLs
