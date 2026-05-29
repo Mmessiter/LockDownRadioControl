@@ -8,26 +8,76 @@
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
 <title>Home &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css?v=25">
-<script src="/app.js?v=25" defer></script>
+<link rel=stylesheet href="/style.css?v=28">
+<script src="/app.js?v=28" defer></script>
 </head>
 <body>
+<button class=helpBtn aria-label=Help title=Help onclick="LDRC.showHelp()">?</button>
 <div class=bg-photo aria-hidden=true></div>
 <div class=bg-wash  aria-hidden=true></div>
 <div class=container>
-    <h1>LDRC RX V2</h1>
+    <h1 id=modelName style="cursor:pointer" title="Tap to rename this receiver">loading&hellip;</h1>
     <p class=subtitle id=subtitle>loading&hellip;</p>
 
-    <div id=radioBanner style="display:none;text-align:center;padding:.7em;border-radius:10px;margin:0 0 1em;font-weight:600"></div>
+    <!-- First-run gate: when the model name is still the "RXV2"
+         default, the entire menu is hidden and a big card insists the
+         user pick a name first. Predictable RXV2.local default for
+         discoverability + forced unique naming on first connection so
+         multi-receiver setups stop colliding on mDNS. -->
+    <div id=nameGate class=card style="display:none;background:rgba(255,247,217,.96);border:2px solid rgba(212,148,74,.6)">
+        <h2 style="margin-top:.2em;color:#5c3a00;text-align:center">Welcome — let's set this receiver up</h2>
+        <p style="color:#5c3a00;margin:.4em 0 1em;text-align:center">Give the receiver a unique name and (optionally) your home WiFi details. Filling both in here saves an extra reboot.</p>
 
-    <a class="btn btn-fly"  href="/fly"><span class=ico>&#128641;&#9992;&#65039;</span>Fly now</a>
-    <a class="btn btn-bind" href="/bind"><span class=ico>&#128279;</span>Start Bind mode</a>
-    <a class="btn btn-bb"   href="/rotorflight" id=rfbtn style="display:none;background:#8e6cab"><span class=ico>&#129357;</span>Rotorflight config &mdash; <span id=fcver>&hellip;</span></a>
-    <a class="btn btn-fw"   href="/firmware"><span class=ico>&#128229;</span>Update or roll back firmware</a>
-    <a class="btn btn-diag" href="/diagnostics"><span class=ico>&#127916;</span>View channels</a>
-    <a class="btn btn-bb"   href="/blackbox"><span class=ico>&#128209;</span>Black box log</a>
-    <a class="btn btn-fw"   href="/wifi" id=wifibtn style="display:none"><span class=ico>&#128246;</span>WiFi settings</a>
-    <a class="btn btn-diag" href="/protocol"><span class=ico>&#128225;</span>Output protocol &mdash; <span id=protoname>&hellip;</span></a>
+        <form id=nameGateForm>
+            <p style="margin:.2em 0 .25em;font-weight:600;color:#5c3a00">Receiver name <span style="font-weight:400">(required)</span></p>
+            <input id=nameGateInput type=text required maxlength=30
+                   pattern="[A-Za-z0-9][A-Za-z0-9\-]{0,29}"
+                   placeholder="e.g. Goblin700"
+                   title="Letters, digits and hyphens only — no spaces"
+                   style="width:100%;padding:.7em;font-size:1.05em;border-radius:8px;border:1.5px solid #d4944a">
+            <p style="color:#5c3a00;margin:.3em 0 .9em;font-size:.88em">Letters, digits and hyphens only. No spaces. Up to 30 characters.</p>
+
+            <p style="margin:.2em 0 .25em;font-weight:600;color:#5c3a00">Home WiFi <span style="font-weight:400">(optional — leave blank to set later)</span></p>
+            <input id=gateSsid type=text maxlength=32 placeholder="Home WiFi network name (SSID)"
+                   autocomplete=username inputmode=text
+                   style="width:100%;padding:.7em;font-size:1em;border-radius:8px;border:1.5px solid #d4944a;margin-bottom:.5em">
+            <input id=gatePass type=password maxlength=63 placeholder="Home WiFi password"
+                   autocomplete=current-password
+                   style="width:100%;padding:.7em;font-size:1em;border-radius:8px;border:1.5px solid #d4944a">
+            <p style="margin:.35em 0 0;font-size:.9em;color:#5c3a00">
+                <label style="cursor:pointer">
+                    <input type=checkbox onchange="document.getElementById('gatePass').type=this.checked?'text':'password'" style="margin-right:.4em">
+                    Show password
+                </label>
+            </p>
+
+            <p id=nameGateErr style="display:none;color:#a4242a;margin:.6em 0 0;font-size:.9em"></p>
+
+            <button type=submit class="btn btn-fly" style="margin-top:1em">
+                <span class=ico>&#9989;</span>Save and continue
+            </button>
+
+            <p id=gateNextSteps style="color:#5c3a00;font-size:.85em;margin:.9em 0 0;line-height:1.45">
+                <b>What happens next:</b> the receiver reboots and reappears as <code id=gateNameEcho>&lt;name&gt;</code>.
+                If you provided WiFi details, it also joins your home network at
+                <code><span id=gateHostEcho>&lt;name&gt;</span>.local</code> — switch your phone back to home WiFi and visit that address.
+                If you didn't, reconnect to the <code id=gateApEcho>&lt;name&gt;</code> WiFi network and come back here to add them.
+            </p>
+        </form>
+    </div>
+
+    <div id=mainMenu>
+        <div id=radioBanner style="display:none;text-align:center;padding:.7em;border-radius:10px;margin:0 0 1em;font-weight:600"></div>
+
+        <a class="btn btn-fly"  href="/fly"><span class=ico>&#128641;&#9992;&#65039;</span>Fly now</a>
+        <a class="btn btn-bind" href="/bind"><span class=ico>&#128279;</span>Start Bind mode</a>
+        <a class="btn btn-bb"   href="/rotorflight" id=rfbtn style="display:none;background:#8e6cab"><span class=ico>&#129357;</span>Rotorflight config &mdash; <span id=fcver>&hellip;</span></a>
+        <a class="btn btn-fw"   href="/firmware"><span class=ico>&#128229;</span>Update or roll back firmware</a>
+        <a class="btn btn-diag" href="/diagnostics"><span class=ico>&#127916;</span>View channels</a>
+        <a class="btn btn-bb"   href="/blackbox"><span class=ico>&#128209;</span>Black box log</a>
+        <a class="btn btn-fw"   href="/wifi" id=wifibtn style="display:none"><span class=ico>&#128246;</span>WiFi settings</a>
+        <a class="btn btn-diag" href="/protocol"><span class=ico>&#128225;</span>Output protocol &mdash; <span id=protoname>&hellip;</span></a>
+    </div>
 
     <div id=fwBanner style="display:none;text-align:center;padding:.7em;border-radius:10px;margin:1em 0 0;font-weight:600"></div>
 
@@ -38,6 +88,9 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const s = await LDRC.fetchState();
     if (!s) { LDRC.setText('subtitle', 'connection lost — try refresh'); return; }
+
+    // Model name — show as the h1, prompt with warning + edit-on-tap.
+    paintModelName(s);
 
     LDRC.setText('protoname', s.protocol.current);
 
@@ -79,6 +132,91 @@ document.addEventListener('DOMContentLoaded', async () => {
     // own the prime real-estate at the top).
     checkFirmware(s.info.fw_version);
 });
+
+// Renders the model name in the h1 and either shows the normal menu
+// (if a custom name is set) or the first-run gate (if it isn't).
+// Tapping the h1 also opens a rename prompt so the name can be
+// changed later from the home page.
+function paintModelName(s) {
+    const name   = (s.info && s.info.name) || 'RXV2';
+    const custom = !!(s.info && s.info.name_custom);
+    LDRC.setText('modelName', name);
+    document.title = name + ' — LDRC RX V2';
+    const gate = document.getElementById('nameGate');
+    const menu = document.getElementById('mainMenu');
+    if (!custom) {
+        // First-run: hide the menu, show the naming card, focus the input.
+        if (gate) gate.style.display = '';
+        if (menu) menu.style.display = 'none';
+        const form = document.getElementById('nameGateForm');
+        const inp  = document.getElementById('nameGateInput');
+        const err  = document.getElementById('nameGateErr');
+        const ssid = document.getElementById('gateSsid');
+        const pass = document.getElementById('gatePass');
+        const VALID = /^[A-Za-z0-9][A-Za-z0-9-]{0,29}$/;
+        if (form && inp) {
+            setTimeout(() => inp.focus(), 200);
+            // Live preview of what the WiFi network + mDNS address will
+            // become so the user can see why the chars matter.
+            const echoName = () => {
+                const v = inp.value.trim();
+                const out = v || '<name>';
+                document.getElementById('gateNameEcho').textContent = out;
+                document.getElementById('gateHostEcho').textContent = out;
+                document.getElementById('gateApEcho').textContent   = out;
+            };
+            inp.addEventListener('input', echoName);
+            echoName();
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const v = inp.value.trim();
+                if (!VALID.test(v)) {
+                    if (err) {
+                        err.textContent = 'Name: letters, digits and hyphens only — no spaces.';
+                        err.style.display = '';
+                    }
+                    inp.focus();
+                    return;
+                }
+                const fd = new URLSearchParams();
+                fd.set('name', v);
+                const s = ssid ? ssid.value.trim() : '';
+                if (s) {
+                    fd.set('ssid', s);
+                    fd.set('pass', pass ? pass.value : '');
+                }
+                if (err) err.style.display = 'none';
+                fetch('/api/firstrun', { method: 'POST', body: fd })
+                  .then(r => r.text()).then(html => {
+                      document.open(); document.write(html); document.close();
+                  })
+                  .catch(() => alert('Could not save — try again.'));
+            });
+        }
+    } else {
+        if (gate) gate.style.display = 'none';
+        if (menu) menu.style.display = '';
+    }
+    // Tapping the h1 always opens the rename prompt.
+    const h = document.getElementById('modelName');
+    if (h) h.addEventListener('click', () => {
+        const v = prompt('Rename this receiver (blank = revert to "RXV2"):', custom ? name : '');
+        if (v === null) return;
+        postName(v.trim());
+    });
+}
+
+function postName(v) {
+    const fd = new URLSearchParams();
+    fd.set('name', v);
+    fetch('/api/name', { method: 'POST', body: fd })
+      .then(r => r.text()).then(html => {
+          document.open();
+          document.write(html);
+          document.close();
+      })
+      .catch(() => alert('Could not save — try again.'));
+}
 
 function paintRadioBanner(s) {
     const rb = document.getElementById('radioBanner');
@@ -149,5 +287,13 @@ async function checkFirmware(current) {
     }
 }
 </script>
+<template id=helpContent><h2>About this page</h2>
+<p>This is the receiver's home screen. It tells you whether the receiver is bound to a transmitter, which transceivers are alive at boot, and links to every other page.</p>
+<h3>How to use it</h3>
+<p>Tap any coloured button to go to that section. Each page has its own help button — tap <code>?</code> there for details.</p>
+<h3>Tips</h3>
+<p>The green/amber banner at the top tells you which transceiver slots (1, 2, 3) were detected at boot. The banner at the bottom warns you when newer firmware is available; tap it to jump to the Firmware page.</p>
+<p><b>Fly</b> is the only button to press immediately before flying — it shuts WiFi down so the radio link is uninterrupted.</p>
+</template>
 </body>
 </html>

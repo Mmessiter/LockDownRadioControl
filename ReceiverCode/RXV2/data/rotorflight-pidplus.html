@@ -8,8 +8,8 @@
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
 <title>PID+ &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css?v=25">
-<script src="/app.js?v=25" defer></script>
+<link rel=stylesheet href="/style.css?v=28">
+<script src="/app.js?v=28" defer></script>
 <style>
 .fldRow{display:flex;justify-content:space-between;align-items:center;
         padding:.45em .7em;background:rgba(255,255,255,.55);border-radius:8px;margin:.25em 0}
@@ -28,6 +28,7 @@
 </style>
 </head>
 <body>
+<button class=helpBtn aria-label=Help title=Help onclick="LDRC.showHelp()">?</button>
 <div class=bg-photo aria-hidden=true></div>
 <div class=bg-wash  aria-hidden=true></div>
 <div class=container>
@@ -219,5 +220,12 @@ document.addEventListener('DOMContentLoaded', () => {
     load();
 });
 </script>
+<template id=helpContent><h2>Rotorflight PID+</h2>
+<p>Rotorflight's extended PID controller — Yaw Stop Gain, Yaw CW/CCW Gain, I-Term decay rates, and other refinement terms beyond the core PID.</p>
+<h3>How to use it</h3>
+<p>Same workflow as the PID page: edit, save, test. Most pilots leave PID+ at sensible defaults unless they're chasing a very specific feel.</p>
+<h3>Tip</h3>
+<p>Snapshot first via the <b>Backups</b> page. PID+ effects can be subtle but cumulative — being able to revert is essential.</p>
+</template>
 </body>
 </html>

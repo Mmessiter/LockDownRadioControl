@@ -8,8 +8,8 @@
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
 <title>Check for Update &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css?v=25">
-<script src="/app.js?v=25" defer></script>
+<link rel=stylesheet href="/style.css?v=28">
+<script src="/app.js?v=28" defer></script>
 <style>
 /* --- Currently-installed card -------------------------------------- */
 .installed-card .row{
@@ -107,6 +107,7 @@
 </style>
 </head>
 <body>
+<button class=helpBtn aria-label=Help title=Help onclick="LDRC.showHelp()">?</button>
 <div class=bg-photo aria-hidden=true></div>
 <div class=bg-wash  aria-hidden=true></div>
 <div class=container>
@@ -392,5 +393,18 @@ async function doInstall(v, sourceKey, url, btnEl) {
 $('check').addEventListener('click', check);
 document.addEventListener('DOMContentLoaded', () => { loadCurrent().then(check); });
 </script>
+<template id=helpContent><h2>Firmware update</h2>
+<p>Updates the receiver's firmware over the air, either from a local dev server on your home network (if one is running) or from the public messiter.com mirror.</p>
+<h3>How to use it</h3>
+<p>Tap <b>Check now</b> to refresh the version lists. Each version card shows:</p>
+<ul>
+<li>A green <b>Install</b> button — newer than what's running.</li>
+<li>A blue <b>Reinstall</b> button — the current version.</li>
+<li>An amber <b>Roll back</b> button — an older version (use to undo a bad update).</li>
+</ul>
+<p>Tap a button, confirm the dialog, and the receiver downloads, flashes, and reboots itself — about 20 seconds. The page polls until the receiver returns, then takes you back to the menu.</p>
+<h3>If it doesn't come back</h3>
+<p>It usually does. If after a minute it hasn't, you probably entered a wrong WiFi password earlier and the chip is in <code>LDRC_RX</code> AP mode at <code>http://192.168.4.1</code> — head there to fix.</p>
+</template>
 </body>
 </html>

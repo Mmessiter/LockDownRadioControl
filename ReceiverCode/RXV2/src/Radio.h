@@ -369,22 +369,28 @@ inline void tryBind(const uint8_t* payload, uint8_t size) {
         bindState.pipe[4 - i] = (uint8_t)(channel[i + 1] & 0xff);
     }
 
-    // Switch the radio's reading pipe to the new address. Stay on channel 82.
+    // Switch the radio's reading pipe to the new address, and flip from
+    // silent (autoACK off, no ack-payload FIFO) back to noisy now that
+    // we know who we're talking to. Stay on channel 82.
     currentRadio->stopListening();
     delayMicroseconds(150);
     currentRadio->flush_tx();
     currentRadio->flush_rx();
+    currentRadio->enableAckPayload();
+    currentRadio->setAutoAck(true);
     currentRadio->openReadingPipe(V1_PIPE_NUMBER, bindState.pipe);
     currentRadio->startListening();
     delayMicroseconds(150);
-    // Mirror the new pipe to every OTHER present radio so any subsequent
-    // swap lands on a slot already configured for this bind.
+    // Mirror the new pipe + noisy config to every OTHER present radio so
+    // any subsequent swap lands on a slot already configured for the bind.
     for (uint8_t i = 0; i < 3; i++) {
         if (!radioPresent[i] || radios[i] == currentRadio) continue;
         radios[i]->stopListening();
         delayMicroseconds(150);
         radios[i]->flush_tx();
         radios[i]->flush_rx();
+        radios[i]->enableAckPayload();
+        radios[i]->setAutoAck(true);
         radios[i]->openReadingPipe(V1_PIPE_NUMBER, bindState.pipe);
         // Other slots stay in standby (CE low) — only currentRadio has CE high.
     }
@@ -421,15 +427,26 @@ inline void radioBeginListenV1() {
     // bail when literally zero radios are present.
     if (numRadiosPresent == 0) return;
 
-    auto configureOne = [](RF24& r, const uint8_t* pipe) {
+    // Stay silent on the air while unbound — no auto-ack, no ack-payload
+    // FIFO. The chip is then indistinguishable from "no receiver present"
+    // to a TX that's scanning. Required because the V1 TX firmware has a
+    // latent bug: when it receives autoACK replies on the default pipe
+    // carrying our board-MAC payload (dynamic length, V2-specific), its
+    // parser locks up and the TX becomes unresponsive until the battery
+    // is disconnected. V1 receivers don't trigger this because they don't
+    // send the same first-N-acks-carry-MAC payload format. tryBind() flips
+    // both flags back on for every present radio the moment a real bind
+    // packet arrives, so the normal bind handshake still works.
+    const bool isBound = bindState.bound;
+    auto configureOne = [isBound](RF24& r, const uint8_t* pipe) {
         r.setPALevel(RF24_PA_MAX);
         r.setDataRate(RF24_250KBPS);
-        r.enableAckPayload();
+        if (isBound) r.enableAckPayload();
         r.setRetries(2, 2);
         r.enableDynamicPayloads();
         r.setAddressWidth(5);
         r.setCRCLength(RF24_CRC_16);
-        r.setAutoAck(true);
+        r.setAutoAck(isBound);
         r.maskIRQ(1, 1, 1);
         r.setChannel(V1_RECOVERY_CH);
         r.openReadingPipe(V1_PIPE_NUMBER, pipe);
@@ -451,16 +468,20 @@ inline void radioBeginListenV1() {
     }
     currentRadio->startListening();
     radioActiveStartMs = millis();   // start counting time on the initial active radio
-    Serial.printf("[rf] %s pipe %02X %02X %02X %02X %02X on channel %u\n",
+    Serial.printf("[rf] %s pipe %02X %02X %02X %02X %02X on channel %u %s\n",
                   bindState.bound ? "bound" : "default",
-                  pipe[0], pipe[1], pipe[2], pipe[3], pipe[4], V1_RECOVERY_CH);
+                  pipe[0], pipe[1], pipe[2], pipe[3], pipe[4], V1_RECOVERY_CH,
+                  isBound ? "(noisy)" : "(silent — autoACK off)");
     (void)V1_DEFAULT_PIPE;
 
-    // Pre-load ack-payload FIFO so the very first incoming packet's ACK
-    // already carries telemetry bytes.
-    loadNextAck();
-    loadNextAck();
-    loadNextAck();
+    if (isBound) {
+        // Pre-load ack-payload FIFO so the very first incoming packet's ACK
+        // already carries telemetry bytes. Skipped while unbound — see the
+        // 0.9.66 debug comment above configureOne.
+        loadNextAck();
+        loadNextAck();
+        loadNextAck();
+    }
 
     lastHopMs = millis();
 }

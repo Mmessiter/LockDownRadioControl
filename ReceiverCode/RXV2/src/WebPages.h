@@ -658,6 +658,172 @@ inline void handleRollback() {
 }
 
 //*********************************************************************
+//  POST /api/factory-reset — wipe NVS + Rotorflight backups, reboot
+//*********************************************************************
+// For passing the receiver to a new owner. Clears every NVS key in our
+// namespace (WiFi credentials, model name, bind pipe, saved protocol,
+// boot counter, dev manifest URL, board MAC) so on next boot the chip
+// behaves exactly like a fresh unit straight from the factory. Also
+// removes /backups/*.json so the new owner doesn't inherit the
+// previous owner's Rotorflight tuning history. LittleFS *page assets*
+// (HTML/CSS/JS) are untouched so the UI still works on next boot.
+
+inline void handleFactoryReset() {
+    events.add("Factory reset requested via web UI");
+
+    // 1. Wipe every NVS key in our namespace.
+    prefs.clear();
+
+    // 2. Remove the Rotorflight backups so the new owner starts clean.
+    //    We delete the files but leave the directory itself in place
+    //    so the existing /api/backup/* handlers still work afterwards.
+    if (littleFsMounted && LittleFS.exists(BACKUP_DIR)) {
+        File dir = LittleFS.open(BACKUP_DIR);
+        if (dir) {
+            File f = dir.openNextFile();
+            while (f) {
+                String path = f.path();
+                f.close();
+                LittleFS.remove(path);
+                f = dir.openNextFile();
+            }
+            dir.close();
+        }
+    }
+
+    String body = "<p>All saved settings have been cleared. The "
+                  "receiver is rebooting and will come up as a "
+                  "fresh unit at <code>RXV2.local</code>.</p>"
+                  "<p>The new owner can set things up from scratch "
+                  "on the welcome screen.</p>";
+    server.send(200, "text/html",
+                confirmPage("Factory reset", body.c_str(),
+                            /*autoReload=*/false));
+    delay(500);
+    ESP.restart();
+}
+
+//*********************************************************************
+//  POST /api/firstrun — combined name + WiFi save for first connection
+//*********************************************************************
+// Saves model name (required) plus optional home-WiFi credentials in a
+// single round-trip, then reboots once. Streamlines the first-time UX:
+// instead of "set name → reboot → reconnect to new AP → set WiFi →
+// reboot → join home WiFi" the user gets "set both → reboot → join
+// home WiFi → done". The chip lands on the home network on the new
+// hostname in one cycle.
+
+inline void handleFirstRun() {
+    String name = server.hasArg("name") ? server.arg("name") : String();
+    name.trim();
+    if (name.length() == 0 || name.length() > 30) {
+        server.send(400, "text/plain", "name required (1-30 chars)");
+        return;
+    }
+    // Same validation as /api/name: letters, digits, hyphens only.
+    bool valid = true;
+    for (size_t i = 0; i < name.length(); i++) {
+        char c = name[i];
+        bool ok = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
+                  (c >= '0' && c <= '9') || (i > 0 && c == '-');
+        if (!ok) { valid = false; break; }
+    }
+    if (!valid) {
+        server.send(400, "text/plain",
+            "Invalid name. Letters, digits and hyphens only, "
+            "must start with a letter or digit, no spaces.");
+        return;
+    }
+    prefs.putString(NVS_KEY_MODEL_NAME, name);
+    char ev[80];
+    snprintf(ev, sizeof(ev), "First-run: name set to '%s'", name.c_str());
+    events.add(ev);
+
+    bool wifiSaved = false;
+    if (server.hasArg("ssid") && server.arg("ssid").length() > 0) {
+        String ssid = server.arg("ssid");
+        ssid.trim();
+        prefs.putString(NVS_KEY_SSID, ssid);
+        if (server.hasArg("pass")) {
+            prefs.putString(NVS_KEY_PASS, server.arg("pass"));
+        }
+        wifiSaved = true;
+        snprintf(ev, sizeof(ev), "First-run: WiFi creds saved for '%s'", ssid.c_str());
+        events.add(ev);
+    }
+
+    String body = "<p><b>Saved.</b> Receiver is rebooting as <code>";
+    body += name;
+    body += "</code>.</p>";
+    if (wifiSaved) {
+        body += "<p>It will join your home WiFi and become reachable at "
+                "<code>";
+        body += name;
+        body += ".local</code>. Switch your phone back to your normal "
+                "WiFi network and visit that address.</p>";
+    } else {
+        body += "<p>Reconnect to the <code>";
+        body += name;
+        body += "</code> WiFi network and reload this page to enter "
+                "your home WiFi details next.</p>";
+    }
+    server.send(200, "text/html", confirmPage("Saved", body.c_str()));
+    delay(500);
+    ESP.restart();
+}
+
+//*********************************************************************
+//  POST /api/name — set the model name (e.g. "Goblin 700") and reboot
+//*********************************************************************
+// Empty name = clear the override and revert to the "RXV2-XXXX"
+// default (last-4-hex of MAC). Limited to 30 characters so it fits in
+// AP SSID + hostname budgets and stays readable in page titles.
+
+inline void handleNameSet() {
+    String name = server.hasArg("name") ? server.arg("name") : server.arg("plain");
+    name.trim();
+    if (name.length() > 30) {
+        server.send(400, "text/plain", "name too long (max 30)");
+        return;
+    }
+    // Server-side validation. Only letters, digits, hyphens; must start
+    // with alphanumeric. Empty name = revert to default. Anything else
+    // would round-trip badly through mDNS / SSID, so reject rather than
+    // silently sanitise — the form told the user the rules already.
+    bool valid = name.length() == 0;
+    if (!valid) {
+        valid = true;
+        for (size_t i = 0; i < name.length(); i++) {
+            char c = name[i];
+            bool ok = (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') ||
+                      (c >= '0' && c <= '9') || (i > 0 && c == '-');
+            if (!ok) { valid = false; break; }
+        }
+    }
+    if (!valid) {
+        server.send(400, "text/plain",
+            "Invalid name. Letters, digits and hyphens only, "
+            "must start with a letter or digit, no spaces.");
+        return;
+    }
+    if (name.length() == 0) {
+        prefs.remove(NVS_KEY_MODEL_NAME);
+        events.add("Model name cleared — reverting to default");
+    } else {
+        prefs.putString(NVS_KEY_MODEL_NAME, name);
+        char buf[64];
+        snprintf(buf, sizeof(buf), "Model name set to '%s'", name.c_str());
+        events.add(buf);
+    }
+    String body = "<p>Model name updated. Receiver is rebooting so the "
+                  "new name takes effect across the WiFi AP, mDNS, and "
+                  "page titles.</p>";
+    server.send(200, "text/html", confirmPage("Name saved", body.c_str()));
+    delay(500);
+    ESP.restart();
+}
+
+//*********************************************************************
 //  POST /wifi — save WiFi credentials and reboot
 //*********************************************************************
 
@@ -814,7 +980,16 @@ inline void handleApiState() {
     j += "{\"info\":{";
     j += "\"fw_version\":\""; j += FW_VERSION; j += "\"";
     j += ",\"build_date\":\""; j += __DATE__; j += ' '; j += __TIME__; j += "\"";
-    j += ",\"hostname\":\""; j += OTA_HOSTNAME; j += "\"";
+    j += ",\"name\":\""; {
+        String n = g_effectiveName;
+        for (size_t i = 0; i < n.length(); i++) {
+            char c = n[i];
+            if (c == '"' || c == '\\') j += '\\';
+            j += c;
+        }
+    } j += "\"";
+    j += ",\"name_custom\":"; j += (nameIsCustom() ? "true" : "false");
+    j += ",\"hostname\":\""; j += g_hostname; j += "\"";
     j += ",\"ip\":\""; j += WiFi.localIP().toString(); j += "\"";
     j += ",\"mac\":\""; j += WiFi.macAddress(); j += "\"";
     j += ",\"rssi\":"; j += (netMode == NET_WIFI_UP ? (int)WiFi.RSSI() : 0);
@@ -1086,6 +1261,9 @@ inline void registerWebRoutes() {
     // because an accidental tap silently wiped saved credentials. Left
     // here as a 410 so stale bookmarks fail loudly instead of silently.
     server.on("/wifi_reset",      HTTP_POST, handleWifiResetGone);
+    server.on("/api/name",        HTTP_POST, handleNameSet);
+    server.on("/api/firstrun",      HTTP_POST, handleFirstRun);
+    server.on("/api/factory-reset", HTTP_POST, handleFactoryReset);
     server.on("/protocol",    HTTP_POST, handleProtocolSet);
     server.on("/fly_arm",     HTTP_POST, handleFlyArm);
 

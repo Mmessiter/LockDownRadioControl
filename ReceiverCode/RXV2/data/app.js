@@ -113,6 +113,30 @@
             });
         },
 
+        // Help modal. Each page provides its own help text in a hidden
+        // `<template id=helpContent>` element near the bottom of the
+        // body, and a floating `?` button anywhere with onclick
+        // "LDRC.showHelp()". The function builds an overlay with the
+        // template's content and a "Got it" button. Tap outside the
+        // panel or the close button to dismiss.
+        showHelp() {
+            const tpl = document.getElementById('helpContent');
+            const html = tpl ? tpl.innerHTML
+                             : '<p>No help text on this page yet.</p>';
+            const overlay = document.createElement('div');
+            overlay.className = 'helpModal';
+            overlay.innerHTML =
+                '<div class=helpPanel>' + html +
+                '<button class=helpClose type=button>Got it</button>' +
+                '</div>';
+            const close = () => overlay.remove();
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) close();
+            });
+            overlay.querySelector('.helpClose').addEventListener('click', close);
+            document.body.appendChild(overlay);
+        },
+
         // Retry-on-fail wrapper for the /api/msp endpoint. MSP responses
         // occasionally drop on the CRSF wire — pause 200 ms and try again,
         // up to `retries` total attempts. Returns response text or throws.

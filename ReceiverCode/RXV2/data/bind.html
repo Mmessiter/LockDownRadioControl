@@ -8,10 +8,11 @@
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
 <title>Bind &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css?v=25">
-<script src="/app.js?v=25" defer></script>
+<link rel=stylesheet href="/style.css?v=28">
+<script src="/app.js?v=28" defer></script>
 </head>
 <body>
+<button class=helpBtn aria-label=Help title=Help onclick="LDRC.showHelp()">?</button>
 <div class=bg-photo aria-hidden=true></div>
 <div class=bg-wash  aria-hidden=true></div>
 <div class=container>
@@ -21,7 +22,7 @@
         <p>This clears the saved pipe and reboots the receiver so it listens on the v1 <code>DefaultPipe</code> again.</p>
         <p>Then put your transmitter into bind mode and wait a few seconds &mdash; the receiver will pick up the new pipe address and save it automatically.</p>
         <p class=muted id=currbind>&hellip;</p>
-        <form method=POST action="/bind">
+        <form id=bindForm method=POST action="/bind">
             <button class="btn danger" type=submit><span class=ico>&#9888;&#65039;</span>Clear bind &amp; restart</button>
         </form>
     </div>
@@ -33,13 +34,61 @@
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
     const s = await LDRC.fetchState();
-    if (!s) return;
-    if (s.bind.bound) {
-        LDRC.setHtml('currbind', 'Current saved pipe: <code>' + s.bind.pipe + '</code>');
-    } else {
-        LDRC.setText('currbind', 'Currently unbound — just power-cycle the TX in bind mode.');
+    if (s) {
+        if (s.bind.bound) {
+            LDRC.setHtml('currbind', 'Current saved pipe: <code>' + s.bind.pipe + '</code>');
+        } else {
+            LDRC.setText('currbind', 'Currently unbound — just power-cycle the TX in bind mode.');
+        }
     }
+    // Intercept submit and drive the reboot/wait flow client-side so we
+    // don't depend on the chip's confirmPage response surviving the
+    // 400 ms gap between server.send() and ESP.restart(). On a slow
+    // phone connection that response often gets cut, leaving the user
+    // stuck on a blank form-submitting state.
+    const f = document.getElementById('bindForm');
+    if (f) f.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        // Swap the page to a "Rebooting…" panel + local poll loop.
+        document.querySelector('.container').innerHTML =
+            '<h1>Rebooting</h1><div class=card>' +
+            '<p>Bind cleared. The receiver is rebooting and will listen on DefaultPipe within ~5 seconds.</p>' +
+            '<p>Put your transmitter into bind mode now &mdash; the new pipe will be saved automatically.</p>' +
+            '<p id=__waitline class=muted style="margin-top:1em">Waiting for receiver to come back (<span id=__secs>0</span>&thinsp;s)&hellip;</p>' +
+            '</div>';
+        // Fire-and-forget POST. We don\'t await the response because the
+        // chip will restart mid-reply; just kick the request off.
+        fetch('/bind', { method: 'POST' }).catch(() => {});
+        let n = 0;
+        const tick = async () => {
+            const el = document.getElementById('__secs');
+            if (el) el.textContent = n;
+            if (n >= 4) {
+                try {
+                    const r = await fetch('/api/state.json',
+                        { cache: 'no-store', signal: AbortSignal.timeout(2000) });
+                    if (r.ok) { location.href = '/'; return; }
+                } catch (err) { /* chip still down */ }
+            }
+            if (n >= 60) {
+                const w = document.getElementById('__waitline');
+                if (w) w.innerHTML = "Receiver didn't come back. Try power-cycling it, "
+                    + "or join the <b>LDRC_RX</b> WiFi and open <code>http://192.168.4.1</code>.";
+                return;
+            }
+            n++;
+            setTimeout(tick, 1000);
+        };
+        tick();
+    });
 });
 </script>
+<template id=helpContent><h2>Bind</h2>
+<p>Clears the receiver's saved binding to a transmitter. On the next power-up with a transmitter in bind mode, the receiver will pair with it as if it were a fresh chip.</p>
+<h3>How to use it</h3>
+<p>Tap <b>Clear bind</b>. The receiver confirms, then reboots. Put your transmitter into bind mode, power the receiver on, and the new pairing happens automatically within a few seconds.</p>
+<h3>When you need this</h3>
+<p>Only when you want to pair with a <em>different</em> transmitter. The existing binding survives reboots and firmware updates — you almost never need to clear it.</p>
+</template>
 </body>
 </html>

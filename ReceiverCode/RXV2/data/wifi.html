@@ -8,10 +8,11 @@
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
 <title>WiFi &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css?v=25">
-<script src="/app.js?v=25" defer></script>
+<link rel=stylesheet href="/style.css?v=28">
+<script src="/app.js?v=28" defer></script>
 </head>
 <body>
+<button class=helpBtn aria-label=Help title=Help onclick="LDRC.showHelp()">?</button>
 <div class=bg-photo aria-hidden=true></div>
 <div class=bg-wash  aria-hidden=true></div>
 <div class=container>
@@ -34,10 +35,14 @@
         <form method=POST action="/wifi">
             <p><label>SSID<br>
                 <input name=ssid type=text required id=ssidField value=""
+                       autocomplete=username inputmode=text
+                       placeholder="Home WiFi network name"
                        style="width:100%;padding:.6em;font-size:1em;border-radius:8px;border:1px solid #b8c7d0">
             </label></p>
             <p><label>Password<br>
                 <input name=pass type=password id=pwfield value=""
+                       autocomplete=current-password
+                       placeholder="Home WiFi password"
                        style="width:100%;padding:.6em;font-size:1em;border-radius:8px;border:1px solid #b8c7d0">
             </label></p>
             <p style="margin-top:-.3em"><label style="font-size:.92em;color:#3a5165">
@@ -46,6 +51,12 @@
             </label></p>
             <button class="btn btn-fw" type=submit><span class=ico>&#128190;</span>Save &amp; reboot</button>
         </form>
+    </div>
+
+    <div class=card style="background:rgba(220,160,140,.16);border:1.5px solid rgba(201,116,100,.45)">
+        <h2 style="color:#8a2e1a">Factory defaults</h2>
+        <p class=muted>Use this <b>before passing the receiver to someone else</b>. Wipes the saved WiFi password, model name, bind state, output protocol and any Rotorflight backups. The receiver reboots and comes up as a fresh unit at <code>RXV2.local</code>.</p>
+        <button class="btn danger" id=factoryBtn type=button><span class=ico>&#9888;&#65039;</span>Erase all saved settings</button>
     </div>
 
     <a class="btn btn-back" href="/"><span class=ico>&#8617;</span>Return to menu</a>
@@ -82,7 +93,34 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Pre-fill form
     document.getElementById('ssidField').value = n.ssid || '';
+
+    // Factory-defaults handler. Two-step confirmation: an LDRC.confirm
+    // dialog, then we POST /api/factory-reset. Chip wipes NVS +
+    // backups and reboots fresh.
+    const fb = document.getElementById('factoryBtn');
+    if (fb) fb.addEventListener('click', async () => {
+        const ok = await LDRC.confirm(
+            'This will erase the saved WiFi password, model name, bind, output protocol and any Rotorflight backups. The receiver will reboot as a fresh unit. Continue?',
+            { title: 'Erase all settings?', icon: '⚠️',
+              yes: 'Yes, erase everything', kind: 'danger' });
+        if (!ok) return;
+        try {
+            const r = await fetch('/api/factory-reset', { method: 'POST' });
+            const html = await r.text();
+            document.open(); document.write(html); document.close();
+        } catch (e) {
+            alert('Could not contact the receiver — try again.');
+        }
+    });
 });
 </script>
+<template id=helpContent><h2>WiFi settings</h2>
+<p>Shows the receiver's current WiFi state and lets you set the home network SSID + password. Credentials are saved to NVS and persist across reboots and firmware updates.</p>
+<h3>How to use it</h3>
+<p>Type your home WiFi SSID and password in the form, then tap <b>Save & reboot</b>. The receiver reboots and joins the new network. The page polls until the receiver returns.</p>
+<h3>Tips</h3>
+<p>Leave the password field blank to keep the existing saved one (handy when you want to change just the SSID).</p>
+<p>The receiver runs AP + STA at the same time — even when home WiFi is unavailable, the receiver is still reachable on its own <b>LDRC_RX</b> network at <code>http://192.168.4.1</code>. You're never locked out.</p>
+</template>
 </body>
 </html>

@@ -31,7 +31,7 @@
 //  Firmware version
 //*********************************************************************
 
-constexpr const char* FW_VERSION = "RXV2-0.9.56-csn-park";
+constexpr const char* FW_VERSION = "RXV2-0.9.66-silent-unbound";
 
 //*********************************************************************
 //  Auto-update manifest URLs
@@ -217,12 +217,19 @@ constexpr const char* NVS_KEY_BOOT_COUNT = "qbc";        // quick-boot counter f
 constexpr const char* NVS_KEY_PROTO      = "proto";
 constexpr const char* NVS_KEY_PPM_INV    = "ppm_inv";
 constexpr const char* NVS_KEY_FW_MANIFEST = "fwurl";   // URL of dev firmware server's manifest.json
+constexpr const char* NVS_KEY_MODEL_NAME  = "nm";      // user-set model name (e.g. "Goblin 700"); empty = use default
 
 constexpr uint8_t     QUICK_BOOT_THRESHOLD = 3;
 constexpr uint32_t    QUICK_BOOT_RESET_MS  = 5000;
 
 inline Preferences prefs;
 inline bool forceWifiMode = false;
+
+// Cached effective name + DNS-safe hostname, computed once in setup()
+// after the board MAC is loaded so the hostname suffix is stable. Used
+// by Network.h for AP SSID, mDNS hostname, and Arduino-OTA hostname.
+inline String g_effectiveName;
+inline String g_hostname;
 
 //*********************************************************************
 //  Channel-data periods + frame buffers
@@ -305,8 +312,15 @@ inline uint32_t lastRadioSwapMs      = 0;
 inline uint32_t radioActiveMs[3]     = { 0, 0, 0 };
 inline uint32_t radioActiveStartMs   = 0;
 
-constexpr uint32_t RADIO_SWAP_PACKET_TIMEOUT_MS = 200;
-constexpr uint32_t RADIO_SWAP_COOLDOWN_MS       = 200;
+// Stepped down from 200 ms → 50 ms each after the prototype test
+// showed swaps were sluggish during real fades. At the V1 protocol's
+// ~125 Hz packet rate, 50 ms = about 6 missed packets — quick enough
+// to find a working slot during real antenna shadowing without
+// thrashing on the routine 1–2-packet gaps. The 50 ms cooldown is
+// enough for the incoming radio to wake out of standby and start
+// receiving before we'd consider swapping again.
+constexpr uint32_t RADIO_SWAP_PACKET_TIMEOUT_MS = 50;
+constexpr uint32_t RADIO_SWAP_COOLDOWN_MS       = 50;
 
 //*********************************************************************
 //  Ack-payload rotation state

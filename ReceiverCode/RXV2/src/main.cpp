@@ -168,6 +168,19 @@ void setup() {
                   boardMac[3], boardMac[4], boardMac[5]);
 
     //*****************************************************************
+    // Model name → AP SSID, mDNS hostname, page titles
+    //*****************************************************************
+    // Defaults to "RXV2-XXXX" using last-4-hex of the board MAC so
+    // every receiver out of the box has a unique, non-colliding name.
+    // The user can override via the front page; their friendly name
+    // then drives both the WiFi visibility (AP SSID + hostname) and
+    // the page titles right across the web UI.
+    g_effectiveName = effectiveName();
+    g_hostname      = hostnameFromName(g_effectiveName);
+    Serial.printf("[id] model name = '%s'  hostname = '%s.local'\n",
+                  g_effectiveName.c_str(), g_hostname.c_str());
+
+    //*****************************************************************
     // Radio bring-up
     //*****************************************************************
     runRadioSelfTest();

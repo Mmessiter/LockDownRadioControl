@@ -8,10 +8,11 @@
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
 <title>Black box &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css?v=25">
-<script src="/app.js?v=25" defer></script>
+<link rel=stylesheet href="/style.css?v=28">
+<script src="/app.js?v=28" defer></script>
 </head>
 <body>
+<button class=helpBtn aria-label=Help title=Help onclick="LDRC.showHelp()">?</button>
 <div class=bg-photo aria-hidden=true></div>
 <div class=bg-wash  aria-hidden=true></div>
 <div class=container>
@@ -52,5 +53,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     list.innerHTML = html;
 });
 </script>
+<template id=helpContent><h2>Black box</h2>
+<p>The in-RAM event log. The receiver writes a one-line entry for every interesting moment — boot, WiFi up/down, bind, radio swap, etc. — newest first.</p>
+<h3>How to use it</h3>
+<p>Scroll to read recent history. Use this when something unexpected has happened: a WiFi drop, a failed bind, a sudden mode change.</p>
+<h3>Tips</h3>
+<p>The log clears on every reboot — there's nothing to delete or rotate.</p>
+<p>The <code>NVS: ssid=… pass=… bind=…</code> line near the top tells you at a glance whether your saved credentials really survived the last reboot. If <code>pass=NO</code> after an update, that's worth knowing.</p>
+</template>
 </body>
 </html>

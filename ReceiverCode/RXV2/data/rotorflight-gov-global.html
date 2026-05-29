@@ -8,8 +8,8 @@
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
 <title>Governor (global) &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css?v=25">
-<script src="/app.js?v=25" defer></script>
+<link rel=stylesheet href="/style.css?v=28">
+<script src="/app.js?v=28" defer></script>
 <style>
 .fldRow{display:flex;justify-content:space-between;align-items:center;
         padding:.45em .7em;background:rgba(255,255,255,.55);border-radius:8px;margin:.25em 0}
@@ -34,6 +34,7 @@ input:disabled,select:disabled{background:#eee;color:#999}
 </style>
 </head>
 <body>
+<button class=helpBtn aria-label=Help title=Help onclick="LDRC.showHelp()">?</button>
 <div class=bg-photo aria-hidden=true></div>
 <div class=bg-wash  aria-hidden=true></div>
 <div class=container>
@@ -499,5 +500,12 @@ document.addEventListener('DOMContentLoaded', () => {
     load();
 });
 </script>
+<template id=helpContent><h2>Governor — global</h2>
+<p>Rotorflight's global governor settings: mode (electric / nitro / off), spool-up time, full headspeed RPM, and other settings that apply to <em>every</em> profile.</p>
+<h3>How to use it</h3>
+<p>Choose a governor mode, set spool-up curve and full-headspeed RPM, tap <b>Save</b>.</p>
+<h3>Tips</h3>
+<p><b>Spool-up</b> is how slowly the FC ramps the rotor to full speed at start-up. Too fast can be hard on the model (stresses the drivetrain); too slow wastes time. 6–10 seconds is typical for an electric heli.</p>
+</template>
 </body>
 </html>

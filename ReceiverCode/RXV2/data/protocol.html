@@ -8,10 +8,11 @@
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
 <title>Output protocol &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css?v=25">
-<script src="/app.js?v=25" defer></script>
+<link rel=stylesheet href="/style.css?v=28">
+<script src="/app.js?v=28" defer></script>
 </head>
 <body>
+<button class=helpBtn aria-label=Help title=Help onclick="LDRC.showHelp()">?</button>
 <div class=bg-photo aria-hidden=true></div>
 <div class=bg-wash  aria-hidden=true></div>
 <div class=container>
@@ -68,5 +69,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('ppmInv').checked = !!p.ppm_inverted;
 });
 </script>
+<template id=helpContent><h2>Output protocol</h2>
+<p>Chooses how the receiver pipes its 16 channels out to your flight controller (or servo train).</p>
+<h3>Choices</h3>
+<ul>
+<li><b>SBUS</b> — the FrSky standard; supported by almost every FC and servo bus.</li>
+<li><b>CRSF</b> — required for live Rotorflight configurator support (the Rotorflight pages on this device need CRSF).</li>
+<li><b>IBUS</b> — FlySky-compatible serial bus.</li>
+<li><b>PPM</b> — old-school 8-channel pulse train, for legacy servo setups.</li>
+</ul>
+<h3>How to use it</h3>
+<p>Pick a protocol, tap <b>Save & reboot</b>. The receiver applies the change on the next boot.</p>
+<h3>Tips</h3>
+<p>If you're flying a Rotorflight helicopter, pick CRSF — it unlocks the FC telemetry + Rotorflight tuning pages on this device. PPM uses a different output mode; check your servo wiring if you switch.</p>
+</template>
 </body>
 </html>

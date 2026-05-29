@@ -23,7 +23,14 @@ body{
      * The .bg-photo overlay (below) normally covers this entirely. */
     background:linear-gradient(180deg,#b8d8e8 0%,#f4e4c1 55%,#c8d8a8 100%);
     color:#2c3e50;
-    padding:1.5em 1em 3em
+    /* viewport-fit=cover lets the page run edge-to-edge under the
+     * iPhone's Dynamic Island / notch when added to the Home Screen as
+     * a PWA. Use env(safe-area-inset-*) to push the content far enough
+     * away that the h1 model name isn't hidden behind the island. */
+    padding-top:    max(1.5em, env(safe-area-inset-top, 1.5em));
+    padding-right:  max(1em,   env(safe-area-inset-right, 1em));
+    padding-bottom: max(3em,   env(safe-area-inset-bottom, 3em));
+    padding-left:   max(1em,   env(safe-area-inset-left, 1em));
 }
 
 /* Flying-field backdrop — applied to every page via two divs the
@@ -92,6 +99,47 @@ h1{
 .btn-fly {background:#6cab5e;font-weight:600;font-size:1.3em;padding:1.4em 1.2em}
 .btn-back{background:#7d9eb0;margin-top:1.5em}
 .danger  {background:#c97464}
+
+/* Help button + modal --------------------------------------------------- */
+/* Each page drops a small floating `?` button (top-right corner) and a
+ * <template id=helpContent> near the bottom of <body>; LDRC.showHelp()
+ * (in app.js) reads the template and shows it as a modal overlay. */
+.helpBtn{
+    position:fixed;
+    top:max(0.7em, env(safe-area-inset-top, 0.7em));
+    right:max(0.7em, env(safe-area-inset-right, 0.7em));
+    width:2.4em;height:2.4em;border-radius:50%;
+    background:rgba(255,255,255,.85);color:#3a5165;
+    font:700 1.15em/1 -apple-system,BlinkMacSystemFont,sans-serif;
+    border:1.5px solid rgba(125,158,176,.5);cursor:pointer;
+    z-index:50;box-shadow:0 2px 6px rgba(0,0,0,.15);padding:0;
+}
+.helpBtn:active{transform:scale(.95)}
+.helpModal{
+    position:fixed;inset:0;z-index:100;
+    background:rgba(46,68,90,.55);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+    display:flex;align-items:center;justify-content:center;padding:1em;
+}
+.helpPanel{
+    background:rgba(255,255,255,.96);
+    border-radius:14px;padding:1.3em 1.5em;
+    max-width:500px;max-height:85vh;overflow-y:auto;
+    box-shadow:0 8px 32px rgba(0,0,0,.25);
+    color:#2c3e50;line-height:1.5;
+}
+.helpPanel h2{margin:0 0 .35em;font-weight:500;color:#2c3e50;font-size:1.35em}
+.helpPanel h3{margin:1.1em 0 .3em;font-weight:600;color:#3a5165;font-size:1.0em}
+.helpPanel p{margin:.35em 0;color:#2c3e50}
+.helpPanel ul{margin:.3em 0 .3em 1.2em;padding:0;color:#2c3e50}
+.helpPanel li{margin:.25em 0}
+.helpPanel code{font-family:ui-monospace,SFMono-Regular,monospace;font-size:.92em;color:#5d3a3a}
+.helpClose{
+    margin-top:1.2em;width:100%;padding:.75em;
+    background:#5fa099;color:#fff;border:0;border-radius:10px;
+    font-weight:600;font-size:1em;cursor:pointer;
+}
+.helpClose:active{transform:translateY(1px)}
 
 /* Cards ---------------------------------------------------------------- */
 .card{

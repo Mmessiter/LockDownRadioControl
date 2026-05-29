@@ -8,7 +8,7 @@
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
 <title>View channels &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css?v=25">
+<link rel=stylesheet href="/style.css?v=28">
 <style>
 .container{max-width:min(96vw,1100px)}
 .chTable{display:grid;grid-template-columns:auto auto 1fr auto;gap:6px 10px;align-items:center;font-variant-numeric:tabular-nums}
@@ -41,10 +41,11 @@
 .heliReadout{position:absolute;bottom:6px;left:10px;font-size:.78em;color:#556;font-variant-numeric:tabular-nums;background:rgba(255,255,255,.65);padding:3px 8px;border-radius:4px;z-index:2}
 .heliStale #heli3D{opacity:.35;filter:grayscale(.4)}
 </style>
-<script src="/app.js?v=25" defer></script>
+<script src="/app.js?v=28" defer></script>
 <script src="/three.min.js" defer></script>
 </head>
 <body>
+<button class=helpBtn aria-label=Help title=Help onclick="LDRC.showHelp()">?</button>
 <div class=bg-photo aria-hidden=true></div>
 <div class=bg-wash  aria-hidden=true></div>
 <div class=container>
@@ -632,5 +633,17 @@ async function tick() {
 document.addEventListener('DOMContentLoaded', () => setTimeout(tick, 200));
 document.addEventListener('visibilitychange', () => { _stopping = document.hidden; if (!_stopping) tick(); });
 </script>
+<template id=helpContent><h2>View Channels</h2>
+<p>Shows the 16 RC channels arriving from the transmitter in real time, plus a 3-D model helicopter that mirrors your stick movements (roll, pitch, yaw, throttle, collective).</p>
+<h3>How to use it</h3>
+<p>Move the sticks on your transmitter — the bars should respond instantly and the helicopter should bank, pitch and yaw accordingly. Throttle changes the rotor speed.</p>
+<h3>What to look for</h3>
+<ul>
+<li>Each of channels 1–16 should respond cleanly to its assigned stick or switch.</li>
+<li>If a channel is dead while others move, the TX hasn't mapped it.</li>
+<li>If <em>all</em> channels freeze, the link has dropped — wait for a swap or check the TX.</li>
+</ul>
+<p>The <b>Reset</b> button straightens the helicopter back to neutral attitude if it looks tilted from accumulated stick deflections.</p>
+</template>
 </body>
 </html>

@@ -59,7 +59,7 @@ inline String uptimeString() {
 
 inline void setupOTA() {
     if (otaStarted) return;
-    ArduinoOTA.setHostname(OTA_HOSTNAME);
+    ArduinoOTA.setHostname(g_hostname.c_str());
     if (OTA_PASSWORD) ArduinoOTA.setPassword(OTA_PASSWORD);
 
     ArduinoOTA
@@ -124,16 +124,19 @@ inline void startWifiStation() {
     // network in the background and joins when it can.
     WiFi.persistent(false);
     WiFi.mode(WIFI_AP_STA);
-    WiFi.softAP(AP_SSID);
+    // AP SSID is the user-friendly model name (or "RXV2-XXXX" default).
+    // Phones in the area see "Goblin 700" instead of a generic
+    // "LDRC_RX" and can tell receivers apart at a glance.
+    WiFi.softAP(g_effectiveName.c_str());
     WiFi.setSleep(false);
     WiFi.setTxPower(WIFI_POWER_19_5dBm);
     Serial.printf("[wifi] soft-AP '%s' up at %s\n",
-                  AP_SSID, WiFi.softAPIP().toString().c_str());
+                  g_effectiveName.c_str(), WiFi.softAPIP().toString().c_str());
 
     // Bring the web server / mDNS up NOW on the AP side. Once STA
     // connects, the same handlers serve traffic at the LAN IP too —
     // startHttpServerIfNeeded() is idempotent.
-    if (MDNS.begin(OTA_HOSTNAME)) {
+    if (MDNS.begin(g_hostname.c_str())) {
         MDNS.addService("http", "tcp", 80);
     }
     setupOTA();
@@ -150,7 +153,7 @@ inline void startWifiStation() {
         return;
     }
     Serial.printf("[wifi] STA connecting to '%s' (AP stays up)\n", ssid.c_str());
-    WiFi.setHostname(OTA_HOSTNAME);
+    WiFi.setHostname(g_hostname.c_str());
     WiFi.begin(ssid.c_str(), getEffectivePass().c_str());
     netMode       = NET_WIFI_CONNECTING;
     netStateStart = millis();
@@ -189,18 +192,18 @@ inline void onWifiConnected() {
 // STA down and stays in AP-only mode. In normal operation we run
 // AP+STA via startWifiStation() so this is rarely called.
 inline void startApMode() {
-    Serial.printf("[wifi] AP-only mode, '%s'\n", AP_SSID);
+    Serial.printf("[wifi] AP-only mode, '%s'\n", g_effectiveName.c_str());
     WiFi.disconnect(true);
     delay(50);
     WiFi.mode(WIFI_AP);
-    WiFi.softAP(AP_SSID);
+    WiFi.softAP(g_effectiveName.c_str());
     WiFi.setSleep(false);
     delay(150);
     char buf[80];
     snprintf(buf, sizeof(buf), "AP-only mode: %s at %s",
-             AP_SSID, WiFi.softAPIP().toString().c_str());
+             g_effectiveName.c_str(), WiFi.softAPIP().toString().c_str());
     events.add(buf);
-    if (MDNS.begin(OTA_HOSTNAME)) {
+    if (MDNS.begin(g_hostname.c_str())) {
         MDNS.addService("http", "tcp", 80);
     }
     startHttpServerIfNeeded();

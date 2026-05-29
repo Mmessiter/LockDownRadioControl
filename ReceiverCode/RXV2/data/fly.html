@@ -8,10 +8,11 @@
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
 <title>Fly &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css?v=25">
-<script src="/app.js?v=25" defer></script>
+<link rel=stylesheet href="/style.css?v=28">
+<script src="/app.js?v=28" defer></script>
 </head>
 <body>
+<button class=helpBtn aria-label=Help title=Help onclick="LDRC.showHelp()">?</button>
 <div class=bg-photo aria-hidden=true></div>
 <div class=bg-wash  aria-hidden=true></div>
 <div class=container>
@@ -76,5 +77,12 @@ function paint(s) {
 
 LDRC.startPolling(paint, 250);
 </script>
+<template id=helpContent><h2>Fly mode</h2>
+<p>"Fly" shuts down the receiver's WiFi until the next power-cycle. Mixed WiFi + radio operation is reliable, but a clean radio-only link is the strongest possible link, and a broadcasting AP at a flying field is wasted power.</p>
+<h3>How to use it</h3>
+<p>Tap the big green <b>Fly</b> button before you launch. The receiver acknowledges, then disconnects WiFi within a second.</p>
+<h3>After flying</h3>
+<p>To bring WiFi back, power-cycle the receiver. WiFi state isn't saved across the Fly toggle — it's intentionally one-shot so a runaway tap doesn't leave you without remote access at the field.</p>
+</template>
 </body>
 </html>

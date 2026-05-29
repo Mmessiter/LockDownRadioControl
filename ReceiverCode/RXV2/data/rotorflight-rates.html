@@ -8,8 +8,8 @@
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
 <title>Rates &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css?v=25">
-<script src="/app.js?v=25" defer></script>
+<link rel=stylesheet href="/style.css?v=28">
+<script src="/app.js?v=28" defer></script>
 <style>
 .banner{padding:.7em;border-radius:10px;text-align:center;font-weight:600;margin:0 0 1em}
 .banner.info{background:rgba(200,210,220,.85);color:#3a5165}
@@ -39,6 +39,7 @@ table.dyn-yaw td input{width:6em;padding:.4em;font-size:.95em;text-align:right;
 </style>
 </head>
 <body>
+<button class=helpBtn aria-label=Help title=Help onclick="LDRC.showHelp()">?</button>
 <div class=bg-photo aria-hidden=true></div>
 <div class=bg-wash  aria-hidden=true></div>
 <div class=container>
@@ -419,5 +420,15 @@ document.addEventListener('DOMContentLoaded', () => {
     load();
 });
 </script>
+<template id=helpContent><h2>Rotorflight rates</h2>
+<p>Reshapes the curve that maps your stick deflection to a commanded angular rate. Independent curves for Roll, Pitch, Yaw.</p>
+<h3>How to use it</h3>
+<p>Pick a curve type (Betaflight / Actual / Quick / etc.) and adjust the parameters until the helicopter flies the way you want — gentle around centre stick for hover, sharper at the extremes for aerobatics.</p>
+<h3>Tips</h3>
+<ul>
+<li>Gentle curves are calmer in hover; aggressive curves give a more responsive feel at full deflection.</li>
+<li>Test in a safe area — a rate change at high speed is more dramatic than it sounds on paper.</li>
+</ul>
+</template>
 </body>
 </html>

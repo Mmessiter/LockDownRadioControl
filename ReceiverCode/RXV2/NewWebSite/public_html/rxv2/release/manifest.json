@@ -1,6 +1,56 @@
 {
   "versions": [
     {
+      "name": "RXV2-0.9.66-silent-unbound",
+      "url": "https://messiter.com/rxv2/release/v0.9.66/firmware.bin",
+      "notes": "Fixes a hard TX lockup with V1 transmitters when a V2 receiver is unbound and present. Diagnosed as a latent V1 TX firmware bug: when the TX scans the default pipe and receives V2's first few autoACKs (which carry our 8-byte board MAC, dynamic length) its parser locks up and the transmitter becomes unresponsive until the battery is disconnected — even when the operator isn't trying to bind. V1 receivers don't trigger this because their first acks aren't in the same format. The fix is structural: while unbound the V2 keeps autoACK off and the ack-payload FIFO empty, so it looks exactly like 'no receiver present' to a scanning TX. The instant a real bind packet arrives, tryBind() flips both flags back on and the standard bind handshake completes — confirmed working in the field."
+    },
+    {
+      "name": "RXV2-0.9.65-bind-wait",
+      "url": "https://messiter.com/rxv2/release/v0.9.65/firmware.bin",
+      "notes": "Fix for the bind page hanging after 'Clear bind & restart'. The form used a native HTML POST and relied on the chip's reply landing before reboot — on a slow phone link the reply was cut off and the page sat there forever. Submit is now driven from JavaScript: the page swaps to a local 'Rebooting…' panel with its own poll loop, fires the POST as fire-and-forget, then polls /api/state.json until the receiver answers and redirects home. No more stuck spinner; transmitter binding itself was always working."
+    },
+    {
+      "name": "RXV2-0.9.64-safe-area",
+      "url": "https://messiter.com/rxv2/release/v0.9.64/firmware.bin",
+      "notes": "iPhone PWA fix — the model name at the top of every page now sits clear of the Dynamic Island / notch when the chip's web UI is added to the Home Screen and opened fullscreen. body padding switches to max(1.5em, env(safe-area-inset-top)) so regular browsers and desktops keep their existing spacing while notched iPhones get whatever inset iOS asks for."
+    },
+    {
+      "name": "RXV2-0.9.63-show-password",
+      "url": "https://messiter.com/rxv2/release/v0.9.63/firmware.bin",
+      "notes": "Show-password checkbox on the first-run gate, and autocomplete hints (username for SSID, current-password for password) on both forms so iOS Safari is more likely to offer its Wi-Fi-password autofill flow."
+    },
+    {
+      "name": "RXV2-0.9.62-factory-reset",
+      "url": "https://messiter.com/rxv2/release/v0.9.62/firmware.bin",
+      "notes": "New 'Factory defaults' card on /wifi. Clears every NVS key (WiFi credentials, model name, bind state, output protocol, board MAC, dev manifest URL) plus the Rotorflight backup files, then reboots. Use before passing the receiver to a new owner."
+    },
+    {
+      "name": "RXV2-0.9.61-firstrun-combo",
+      "url": "https://messiter.com/rxv2/release/v0.9.61/firmware.bin",
+      "notes": "Streamlined first-time setup. The welcome card now accepts model name and (optional) home-WiFi credentials in a single form — one POST, one reboot, and the chip comes up on the home network under the new name straight away. Saves a reboot and saves the phone from having to rejoin a renamed AP."
+    },
+    {
+      "name": "RXV2-0.9.60-name-rules",
+      "url": "https://messiter.com/rxv2/release/v0.9.60/firmware.bin",
+      "notes": "Tightens model-name validation after a user got stranded by a name with a space. Form now uses an HTML5 pattern + live JS check + chip-side rejection — letters, digits and hyphens only, starts with alphanumeric, no spaces. The welcome card spells the rules out, and a live preview shows exactly what hostname / AP SSID the chosen name will become."
+    },
+    {
+      "name": "RXV2-0.9.59-model-name",
+      "url": "https://messiter.com/rxv2/release/v0.9.59/firmware.bin",
+      "notes": "Each receiver can now carry its own model name (e.g. 'Goblin 700'). On fresh boot the chip auto-names itself 'RXV2-XXXX' using the last 4 hex of its board MAC, so multiple receivers no longer collide on the same SSID/hostname. Tap the title on the home page (or the amber warning banner when the default name is in use) to set a friendly name. Saving reboots and re-derives the soft-AP SSID, mDNS hostname, and page titles from the new name. Phones in the area see 'Goblin 700' and 'T-Rex 500' in their WiFi list instead of two 'LDRC_RX's, and mDNS now resolves 'goblin-700.local' independently per board."
+    },
+    {
+      "name": "RXV2-0.9.58-swap-50ms",
+      "url": "https://messiter.com/rxv2/release/v0.9.58/firmware.bin",
+      "notes": "Radio-swap trigger and cooldown shortened from 200 ms to 50 ms each, matching V1's more responsive behaviour. At the V1 protocol's ~125 Hz packet rate that's about 6 missed packets before the chip tries the next transceiver — quick enough to catch a real fade or antenna shadow without thrashing on routine 1–2-packet gaps. Reported by user: V1 sometimes saw several swaps while the longest gap stayed below 100 ms; the new threshold restores that responsiveness."
+    },
+    {
+      "name": "RXV2-0.9.57-help-text",
+      "url": "https://messiter.com/rxv2/release/v0.9.57/firmware.bin",
+      "notes": "Every page now has a small floating ? help button in the top-right corner. Tap it to read a short, friendly explanation of what the page does, how to use it, and any tips. Covers all 15 pages — Home, Fly, View channels, Black box, Bind, Firmware, WiFi, Output protocol, Rotorflight, and the five Rotorflight sub-pages (PID, PID+, Rates, Governor profile, Governor global, Backups). Tap outside the panel or the 'Got it' button to dismiss. New users no longer need to guess what a page does."
+    },
+    {
       "name": "RXV2-0.9.56-csn-park",
       "url": "https://messiter.com/rxv2/release/v0.9.56/firmware.bin",
       "notes": "Fixes triple-transceiver detection on the new prototype board. runRadioSelfTest() only parked slot 1's CSN HIGH at boot — slots 2 and 3's CSN pins were left in INPUT mode (default), and the nRF24L01+ has no internal CSN pull-up, so their pins could drift LOW through PCB leakage. The result: when slot 1 first drove SPI, multiple chips were selected at once, MISO got clobbered, slot 1's self-test failed, and the chip declared radio 1 missing even though its hardware was perfectly fine. Symptom on the prototype: one radio installed = bind worked; two or three installed = slot 1 'not present'. Now all six radio control pins (three CSN + three CE) are explicitly OUTPUT-deselected before any SPI traffic begins."

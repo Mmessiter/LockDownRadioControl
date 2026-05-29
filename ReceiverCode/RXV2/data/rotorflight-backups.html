@@ -8,8 +8,8 @@
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
 <title>Backups &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css?v=25">
-<script src="/app.js?v=25" defer></script>
+<link rel=stylesheet href="/style.css?v=28">
+<script src="/app.js?v=28" defer></script>
 <style>
 .banner{padding:.7em;border-radius:10px;text-align:center;font-weight:600;margin:0 0 1em}
 .banner.info{background:rgba(200,210,220,.85);color:#3a5165}
@@ -31,6 +31,7 @@
 </style>
 </head>
 <body>
+<button class=helpBtn aria-label=Help title=Help onclick="LDRC.showHelp()">?</button>
 <div class=bg-photo aria-hidden=true></div>
 <div class=bg-wash  aria-hidden=true></div>
 <div class=container>
@@ -244,5 +245,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     refreshList();
 });
 </script>
+<template id=helpContent><h2>Backups</h2>
+<p>Save named snapshots of every editable Rotorflight parameter, then restore them later. Snapshots live on the receiver's filesystem, up to 20 of them.</p>
+<h3>How to use it</h3>
+<p>Tap <b>Save backup</b>, name it (e.g. "T-Rex 500 stock", "Aggressive 3D", "Calm sport"), and the current FC state is captured. Tap any name in the list to load that snapshot back to the FC.</p>
+<h3>Tips</h3>
+<ul>
+<li>Snapshot any working config before experimenting on the PID / PID+ / rates / governor pages.</li>
+<li>This page is your safety net — get into the habit of saving before every tuning session.</li>
+</ul>
+<h3>Caveat</h3>
+<p>A receiver-side filesystem update (re-flashing all the web pages from the dev tools) clears the backups folder. The dev workflow uses a preserve-and-restore script to keep them safe, but if you ever do a full factory-erase you'll need to restart your snapshot library.</p>
+</template>
 </body>
 </html>
