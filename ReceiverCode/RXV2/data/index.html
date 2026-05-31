@@ -8,8 +8,8 @@
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
 <title>Home &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css?v=28">
-<script src="/app.js?v=28" defer></script>
+<link rel=stylesheet href="/style.css?v=30">
+<script src="/app.js?v=30" defer></script>
 </head>
 <body>
 <button class=helpBtn aria-label=Help title=Help onclick="LDRC.showHelp()">?</button>
@@ -69,6 +69,18 @@
     <div id=mainMenu>
         <div id=radioBanner style="display:none;text-align:center;padding:.7em;border-radius:10px;margin:0 0 1em;font-weight:600"></div>
 
+        <!-- Bind-mode banner. Shown only when the receiver is unbound,
+             so the user always knows at a glance why the LED is blinking
+             and what the chip is waiting for. -->
+        <div id=bindBanner style="display:none;text-align:center;padding:1em 1em;border-radius:12px;margin:0 0 1em;
+             background:rgba(212,148,74,.95);color:#3a1f00;font-weight:700;font-size:1.05em;
+             box-shadow:0 3px 10px rgba(212,148,74,.35);animation:bindPulse 1s ease-in-out infinite alternate">
+            <div style="font-size:1.15em;letter-spacing:.04em;margin-bottom:.25em">🔗  BIND MODE</div>
+            <div style="font-weight:500;font-size:.92em;line-height:1.4">
+                Receiver is listening on the default pipe. Power up your transmitter in bind mode and the new pipe will be saved automatically within a few seconds. The on-board LED is blinking at 2 Hz.
+            </div>
+        </div>
+
         <a class="btn btn-fly"  href="/fly"><span class=ico>&#128641;&#9992;&#65039;</span>Fly now</a>
         <a class="btn btn-bind" href="/bind"><span class=ico>&#128279;</span>Start Bind mode</a>
         <a class="btn btn-bb"   href="/rotorflight" id=rfbtn style="display:none;background:#8e6cab"><span class=ico>&#129357;</span>Rotorflight config &mdash; <span id=fcver>&hellip;</span></a>
@@ -118,9 +130,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         const alive = s.rf.last_pkt_ms >= 0 && s.rf.last_pkt_ms < 500;
         subtitle = alive ? 'Bound &amp; receiving — ready to fly' : 'Bound, waiting for transmitter';
     } else {
-        subtitle = 'Unbound — tap <b>Start Bind</b> below';
+        subtitle = 'Bind mode — listening for transmitter';
     }
     LDRC.setHtml('subtitle', subtitle);
+
+    // Big amber bind-mode banner at the top of the menu — only visible
+    // while unbound. Pairs with the 2 Hz LED blink so the user has an
+    // unmissable cue both on-screen and on the hardware itself.
+    const bb = document.getElementById('bindBanner');
+    if (bb) bb.style.display = s.bind.bound ? 'none' : '';
 
     // Transceiver-presence banner at the top — shows which radio slots
     // came up at boot. A 3-slot PCB with one dead chip is immediately
@@ -270,7 +288,8 @@ async function checkFirmware(current) {
         // Largest by vTuple = latest. vCmp(a,c)>0 means c is newer than a.
         let latest = names[0];
         for (const n of names) if (vCmp(latest, n) > 0) latest = n;
-        if (vCmp(latest, current) > 0) {
+        // vCmp(current, latest) > 0  ⇒  latest is newer than what's installed.
+        if (vCmp(current, latest) > 0) {
             b.textContent = '⬆️  Update available: ' + latest;
             b.style.background = 'rgba(255,210,120,.95)';
             b.style.color = '#5c3a00';

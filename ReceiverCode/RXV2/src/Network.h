@@ -182,6 +182,20 @@ inline void onWifiConnected() {
     staAttempts = 0;
     netMode = NET_WIFI_UP;
     ledOff();
+
+    // Re-announce mDNS on the STA interface. mDNS was first started in
+    // startWifiStation() before STA had an IP, so it bound to the AP side and
+    // <hostname>.local often won't resolve on the home network until we
+    // re-register now that we have a real STA address. Without this the chip is
+    // reachable by IP but not by name after every (re)connect — which looks
+    // exactly like "it dropped to AP / lost WiFi" even though it didn't.
+    MDNS.end();
+    if (MDNS.begin(g_hostname.c_str())) {
+        MDNS.addService("http", "tcp", 80);
+        Serial.printf("[mdns] re-announced http://%s.local/ on STA\n", g_hostname.c_str());
+    } else {
+        Serial.println("[mdns] re-announce failed");
+    }
 }
 
 //*********************************************************************
@@ -325,18 +339,50 @@ inline void netStep() {
 }
 
 //*********************************************************************
-//  Heartbeat LED — 50 ms blip every 2 s
+//  Status LED — encodes link state on the XIAO on-board LED
 //*********************************************************************
+// The on-board LED shares GPIO 21 with the protocol output pin, so the
+// LED behaviour depends on which protocol is running and whether the
+// peripheral is currently driving the pin:
+//
+//   UNBOUND           → 2 Hz blink (peripheral not running yet)
+//   BOUND, idle-LOW   → LED solid on (SBUS/FBUS UART idle drives pin LOW)
+//   BOUND, idle-HIGH  → LED dark while link is up (CRSF/IBUS idle HIGH),
+//                       solid on when link is lost (Output.h has released
+//                       the UART so heartbeat() can drive the pin LOW).
+//
+// In other words: across protocols, BLINKING always means "bind mode",
+// LIT means "something needs attention" (either bind it or restore the
+// link), DARK means "link is fine, carry on". Inverted from the literal
+// "ON = connected" only on idle-HIGH protocols, which is the best the
+// shared-pin physics allows.
+
+constexpr uint32_t LED_BIND_HALF_PERIOD_MS = 250;   // 2 Hz square wave
 
 inline void heartbeat() {
-    static uint32_t next = 0;
-    static bool     on   = false;
-    uint32_t now = millis();
-    if (now >= next) {
-        on = !on;
-        if (on) { ledOn();  next = now + 50;   }
-        else    { ledOff(); next = now + 1950; }
+    static uint32_t nextEdge = 0;
+    static bool     blinkOn  = false;
+    const uint32_t now = millis();
+
+    if (!bindState.bound) {
+        // Unbound — 2 Hz square wave. No protocol output is running yet
+        // (we don't have channel data to send), so digitalWrite has full
+        // control of the pin.
+        if (now >= nextEdge) {
+            blinkOn = !blinkOn;
+            if (blinkOn) ledOn(); else ledOff();
+            nextEdge = now + LED_BIND_HALF_PERIOD_MS;
+        }
+        return;
     }
+    nextEdge = 0; blinkOn = false;   // reset phase for next unbind
+
+    // Bound. On idle-HIGH protocols Output.h drops the UART during
+    // failsafe and parks the pin HIGH; we drive it LOW now so the LED
+    // lights as a "no link" warning. On idle-LOW protocols (and any
+    // bound+link-live state) we let the peripheral run the pin — our
+    // writes are no-ops while the GPIO matrix is bound.
+    if (outputDetachedForFailsafe) ledOn();
 }
 
 //*********************************************************************

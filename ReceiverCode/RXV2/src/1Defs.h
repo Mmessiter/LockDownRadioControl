@@ -31,7 +31,7 @@
 //  Firmware version
 //*********************************************************************
 
-constexpr const char* FW_VERSION = "RXV2-0.9.66-silent-unbound";
+constexpr const char* FW_VERSION = "RXV2-0.9.77-mdns-reannounce";
 
 //*********************************************************************
 //  Auto-update manifest URLs
@@ -170,6 +170,8 @@ constexpr uint8_t FHSS_CHANNELS[83] = {
 };
 constexpr uint8_t  HOP_TIME_MS         = 8;   // v1 HOPTIME → ~100 Hz FHSS
 constexpr uint8_t  MAC_ACK_THRESHOLD   = 20;  // matches v1: MAC in first 20 acks, then telemetry rotation
+constexpr uint16_t MAC_STICK_DEADBAND  = 200;
+constexpr uint8_t  MAC_MOVE_CONFIRM    = 3;    // a channel must exceed the deadband on this many packets before "being flown" latches (rejects single-packet glitches)  // 12-bit counts a channel must move from its settled baseline to count as "being flown" → end ID broadcast (well above gimbal jitter, well below a real stick move)
 constexpr uint8_t  MAX_TELEMETRY_ITEM  = 36;  // bumped from 35 to make room for case 36 = RX3 active time
 
 // v1 channel 82 lives at index 14 of FHSS_CHANNELS. We bind there, then increment.
@@ -335,6 +337,8 @@ inline uint8_t  ackByteZero    = 1;
 // (The earlier "skip MAC phase" workaround was for an old Model-ID stability
 // issue that's since been fixed by NVS-caching the board MAC.)
 inline uint32_t macAcksSent    = 0;
+inline bool     idBroadcasting = false;      // true while we're putting the board ID on ack slots 0/1 (diagnostic, surfaced in state.json)
+inline bool     beingFlown     = false;      // latched once a control channel moves past MAC_STICK_DEADBAND on the current connection
 inline uint8_t  telemetryItem  = 0;
 inline uint8_t  nextChannelIdx = CHAN82_INDEX;
 inline uint32_t lastHopMs      = 0;

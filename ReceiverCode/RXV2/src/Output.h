@@ -283,12 +283,31 @@ inline uint32_t protocolPeriodMs(Protocol p) {
 // Name is "sbusTick" for historical reasons; it actually dispatches to the
 // selected protocol's frame builder + write.
 
+// Idle-HIGH protocols: when running, the UART peripheral holds GPIO 21
+// HIGH between frames, which keeps the on-board LED (active-low, shared
+// pin) dark. To let heartbeat() drive the LED on these protocols when
+// the link is lost we suspend the UART entirely during failsafe — which
+// matches the CRSF convention anyway (the FC infers loss from absence
+// of frames). When packets resume we re-attach the UART. SBUS/FBUS/PPM
+// idle the pin LOW which already lights the LED, so they're untouched.
+inline bool isIdleHighProto(Protocol p) {
+    return (p == PROTO_CRSF) || (p == PROTO_IBUS) || (p == PROTO_IBUS2);
+}
+
+inline bool outputDetachedForFailsafe = false;
+
 inline void sbusTick() {
     // Suspend RC frame transmission while the MSP bridge has a client connected.
     // The user is configuring (TX is off, we're not flying); the FC's CRSF UART
     // is being driven by Configurator over the bridge instead. Sending RC frames
     // here would interleave with MSP traffic and corrupt both directions.
-    if (mspBridgeActive) return;
+    if (mspBridgeActive) {
+        if (outputDetachedForFailsafe) {
+            configureOutputDriver(currentProtocol);
+            outputDetachedForFailsafe = false;
+        }
+        return;
+    }
 
     if ((uint32_t)(millis() - lastSbusMs) < protocolPeriodMs(currentProtocol)) return;
     lastSbusMs = millis();
@@ -296,6 +315,37 @@ inline void sbusTick() {
     uint32_t age      = millis() - lastChannelDataMs;
     bool     frameLost = age > 100;
     bool     failsafe  = age > 500;
+
+    // Idle-HIGH protocol failsafe handling — detach the UART so the LED
+    // pin can be driven by heartbeat() in Network.h. Only flips on the
+    // edge so we don't thrash Serial1 every tick.
+    //
+    // Critical: only detach AFTER the link has genuinely been live at
+    // least once. On a cold boot lastChannelDataMs is still zero and
+    // "failsafe" trips immediately — tearing Serial1 down before the FC
+    // has had a chance to send its first telemetry frame killed the D5
+    // RX line on CRSF and hid the Rotorflight config button until the
+    // user power-cycled while the TX was already on. The everConnected
+    // guard makes "no link" a state we only enter after having had a
+    // link, which is what the user actually wants the LED to warn about.
+    if (isIdleHighProto(currentProtocol)) {
+        bool everConnected = (lastChannelDataMs != 0);
+        bool wantDetach    = everConnected && failsafe;
+        if (wantDetach && !outputDetachedForFailsafe) {
+            Serial1.end();
+            pinMode(PIN_SBUS_TX, OUTPUT);
+            digitalWrite(PIN_SBUS_TX, HIGH);   // park HIGH so LED starts off
+            outputDetachedForFailsafe = true;
+            Serial.println("[out] failsafe: UART released, LED owns the pin");
+            return;                            // no frame this tick
+        }
+        if (!wantDetach && outputDetachedForFailsafe) {
+            configureOutputDriver(currentProtocol);
+            outputDetachedForFailsafe = false;
+            Serial.println("[out] link restored: UART re-attached");
+        }
+        if (outputDetachedForFailsafe) return; // skip TX while detached
+    }
 
     switch (currentProtocol) {
         case PROTO_SBUS:

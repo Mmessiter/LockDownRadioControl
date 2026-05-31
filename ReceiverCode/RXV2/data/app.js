@@ -280,4 +280,13 @@
         const ov = document.getElementById('_ldrcLoad');
         if (ov) ov.classList.remove('show');
     };
+
+    // Stale-values overlay — used by Rotorflight value-display pages
+    // while a fresh fetch is in flight. Toggles a <body> class that
+    // CSS (style.css) turns into "fade values to grey". Call markStale
+    // at the start of a load, clearStale after the last .value = ...
+    // assignment. Failed loads should leave the page stale (values
+    // remain suspect until something actually arrives).
+    LDRC.markStale  = function() { document.body.classList.add('stale-values'); };
+    LDRC.clearStale = function() { document.body.classList.remove('stale-values'); };
 })();

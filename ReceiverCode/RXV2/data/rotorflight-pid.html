@@ -8,8 +8,8 @@
 <meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
 <meta name=apple-mobile-web-app-title content="LDRC RX V2">
 <title>PIDs &middot; LDRC RX V2</title>
-<link rel=stylesheet href="/style.css?v=28">
-<script src="/app.js?v=28" defer></script>
+<link rel=stylesheet href="/style.css?v=29">
+<script src="/app.js?v=29" defer></script>
 <style>
 table.pids{width:100%;border-collapse:separate;border-spacing:.3em}
 table.pids th{text-align:center;color:#3a5165;font-weight:600;padding:.4em 0}
@@ -154,6 +154,7 @@ async function selectProfile(idx) {
 
 async function load() {
     setStatus('info', 'Reading PIDs from flight controller…');
+    LDRC.markStale();
     try {
         // Force FC to the profile our page is showing, so Configurator matches.
         await LDRC.msp(210, currentProfile.toString(16).padStart(2,'0'));
@@ -167,6 +168,7 @@ async function load() {
         const ids = ['r_P','r_I','r_D','r_F','p_P','p_I','p_D','p_F','y_P','y_I','y_D','y_F',
                      'b_R','b_P','b_Y','h_R','h_P'];
         ids.forEach((id, i) => document.getElementById(id).value = words[i]);
+        LDRC.clearStale();
         setStatus('good', '✓ Loaded from flight controller');
         LDRC.clearDirty();
     } catch (e) {

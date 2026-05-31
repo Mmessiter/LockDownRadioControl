@@ -25,7 +25,10 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-CHIP_HOST   = "LDRC_RX.local"
+import os
+# Target host: CHIP_HOST env var (set by uploadfs_safe.sh from PLATFORMIO_UPLOAD_PORT)
+# falls back to the legacy default. Stops backups being pulled from the wrong chip.
+CHIP_HOST   = os.environ.get("CHIP_HOST", "LDRC_RX.local")
 CHIP_BASE   = f"http://{CHIP_HOST}"
 CACHE_ROOT  = Path(__file__).resolve().parent / ".backup-cache" / CHIP_HOST
 REQ_TIMEOUT = 8.0

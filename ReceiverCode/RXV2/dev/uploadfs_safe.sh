@@ -17,6 +17,12 @@ PROJECT_DIR="$(cd "$HERE/.." && pwd)"
 
 ENV="${PIO_ENV:-xiao_s3_ota}"
 
+# Pull/push backups from the SAME chip we're flashing. preserve_backups.py reads
+# CHIP_HOST; derive it from PLATFORMIO_UPLOAD_PORT so we never pull from the wrong
+# board (the .pio OTA port and the backup host must agree).
+export CHIP_HOST="${CHIP_HOST:-${PLATFORMIO_UPLOAD_PORT:-LDRC_RX.local}}"
+echo "==> Target chip: $CHIP_HOST"
+
 echo "==> Preserving backups from the chip"
 python3 "$HERE/preserve_backups.py" pull || \
     echo "==> WARNING: backup pull had errors — continuing anyway"

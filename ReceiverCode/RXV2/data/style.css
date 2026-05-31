@@ -256,3 +256,26 @@ button:disabled{opacity:.35;cursor:not-allowed;filter:grayscale(.6)}
 }
 .ch .n{color:#7a8b95;font-size:.85em}
 .ch .v{font-weight:600;font-size:1.05em}
+
+/* Stale-values overlay (LDRC.markStale / LDRC.clearStale) ------------
+ * Pages that refetch a screenful of values from the flight controller
+ * add `stale-values` to <body> while the request is in flight, then
+ * remove it once every field has been repainted. The old numbers
+ * fade to light grey so the user can see at a glance that what's on
+ * screen is no longer trustworthy until the new ones arrive. */
+body.stale-values input,
+body.stale-values select,
+body.stale-values dd,
+body.stale-values .big,
+body.stale-values .v,
+body.stale-values td input{
+    color:#b8c2cc;
+    transition:color .25s
+}
+
+/* Bind-mode banner pulse (index.html #bindBanner). Used to give the
+ * unbound state an unmissable on-screen cue that pairs with the LED. */
+@keyframes bindPulse {
+    from { box-shadow: 0 3px 10px rgba(212,148,74,.35); transform: scale(1); }
+    to   { box-shadow: 0 3px 18px rgba(212,148,74,.70); transform: scale(1.015); }
+}

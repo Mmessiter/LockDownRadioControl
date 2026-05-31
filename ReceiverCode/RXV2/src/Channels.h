@@ -62,13 +62,45 @@ inline void decodeChannelData(const uint8_t* payload, uint8_t size) {
     uint16_t raw[24] = {0};
     decompress(raw, compressed, decompressedSize(size));
 
+    // "Being flown" detection (drives the model-ID broadcast in loadNextAck).
+    // Each channel's baseline is the FIRST value seen for it on this connection;
+    // a later move past the deadband is a genuine stick input → the model is
+    // being flown. First-sighting baselines are key: the TX only sends *changed*
+    // channels and resends low-priority ones every few seconds, so a channel can
+    // first appear well into the connection — that initial value must set the
+    // baseline, not look like a movement (which is what broke the fixed-snapshot
+    // approach). A >500 ms gap marks a fresh connection and re-arms everything.
+    static bool     chSeen[16];
+    static uint16_t chBase[16];
+    static uint8_t  chMoveCount[16];
+    const uint32_t  nowc = millis();
+    if (lastChannelDataMs == 0 || (uint32_t)(nowc - lastChannelDataMs) > 500) {
+        for (uint8_t i = 0; i < 16; ++i) { chSeen[i] = false; chMoveCount[i] = 0; }
+        beingFlown = false;
+    }
+
     uint8_t p = 0;
     for (uint8_t i = 0; i < 16; ++i) {
         if (mask & (1u << i)) {
-            channelMicros[i] = raw[p++];
+            uint16_t v      = raw[p++];
+            channelMicros[i] = v;
+            if (!chSeen[i]) { chBase[i] = v; chSeen[i] = true; }   // first sighting → baseline
+            else if (!beingFlown) {
+                int d = (int)v - (int)chBase[i];
+                if (d < 0) d = -d;
+                if (d > MAC_STICK_DEADBAND) {
+                    // Require the SAME channel out of band on several packets so a
+                    // single corrupted packet on a marginal link can't trip it.
+                    if (++chMoveCount[i] >= MAC_MOVE_CONFIRM) {
+                        beingFlown = true;   // sustained real stick move
+                    }
+                } else {
+                    chMoveCount[i] = 0;       // back in band → not a real move
+                }
+            }
         }
     }
-    lastChannelDataMs = millis();
+    lastChannelDataMs = nowc;
 }
 
 #endif // _SRC_CHANNELS_H

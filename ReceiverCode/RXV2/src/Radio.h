@@ -204,77 +204,90 @@ inline uint32_t radioElapsedSec(uint8_t idx) {
 inline void loadNextAck() {
     uint8_t ack[ACK_PAYLOAD_BYTES] = {0};
 
-    // FHSS hop decision — gated on fhssEnabled while we're still proving the
-    // link on a fixed channel.
+    // MAC-delivery window. The v1 TX's pre-match parser (ParseAckPayload →
+    // GetModelsMacAddress while !ModelMatched && !LedWasGreen) latches ack[0]
+    // slot 0 into the low half and slot 1 into the high half of the model ID on
+    // *every* packet, until it has assembled a full 8-byte value and matched.
+    // So until the TX matches, anything other than our real MAC on slots 0/1
+    // becomes the (wrong) model ID — and the "Model IDs" identify screen keeps
+    // the TX permanently unmatched, reading slots 0/1 as the ID indefinitely.
+    //
+    // We can't see the TX's match state, so we broadcast the MAC densely (a half
+    // on *every* ack, alternating) until we have positive evidence the model is
+    // being *flown* — i.e. a stick has moved past a deadband from its value when
+    // the connection came up. On the identify screen the sticks sit still so the
+    // ID stays correct; on take-off the throttle/cyclic moves and we switch to
+    // telemetry within ~1 ack, exactly like v1 (which delivered the MAC only for
+    // the first 20 acks of each connection, then telemetry). A 60 s cap is a
+    // backstop. Notes:
+    //   • Dense (every-ack) alternation, not v1's count: swapRadios() fires
+    //     loadNextAck() three extra times per swap, so the old 20-ack count was
+    //     exhausted almost instantly on a three-transceiver board and the sparse
+    //     post-burst MAC (2 frames per ~37-item cycle) often failed to land both
+    //     halves on the radio the TX was hearing — it never assembled a full ID,
+    //     never matched, then misread the cycling telemetry as an ever-changing
+    //     MAC. Dense delivery lands both halves in milliseconds regardless of swaps.
+    //   • Re-armed on every fresh connection: a >500 ms ack gap (the same
+    //     threshold the output stage treats as failsafe) restarts the window,
+    //     matching v1's reset-on-link-loss so each reconnection re-delivers the MAC.
+    // beingFlown is owned by decodeChannelData() (per-channel first-sighting
+    // baseline + deadband). Broadcast the ID whenever the model isn't being
+    // flown — NO time cap: the Model IDs screen holds a connection up
+    // indefinitely while you read it, so any finite window can be outwaited
+    // (that was the 0.9.74 failure). beingFlown is what ends the broadcast, and
+    // it proved reliable in testing (no false trips). FHSS stays on the fixed
+    // channel while broadcasting — fine, because that only happens when NOT
+    // flying; the first stick move at take-off trips beingFlown and hands over
+    // to telemetry + FHSS within ~1 ack.
+    static uint32_t lastAckEntryMs = 0;
+    const uint32_t  now            = millis();
+    if (lastAckEntryMs == 0 || (uint32_t)(now - lastAckEntryMs) > 500) {
+        macAcksSent = 0;          // fresh connection → reset diagnostic counter
+    }
+    lastAckEntryMs = now;
+    const bool inMacWindow = !beingFlown;
+    idBroadcasting = inMacWindow;
+
+    // FHSS hop decision — suppressed during the MAC window so we never advance
+    // the channel index without telling the TX (the window keeps ack[5] = 0).
     bool hopThisAck = false;
-    if (fhssEnabled && macAcksSent >= MAC_ACK_THRESHOLD &&
+    if (fhssEnabled && !inMacWindow &&
         (uint32_t)(millis() - lastHopMs) >= HOP_TIME_MS) {
         nextChannelIdx = (nextChannelIdx + 1) % 83;
         hopThisAck = true;
     }
 
-    if (macAcksSent < MAC_ACK_THRESHOLD) {
-        // MAC ack format (v1 SendMacAddress)
+    if (inMacWindow) {
+        // MAC ack format (v1 SendMacAddress) — alternate the two 4-byte halves.
         ackByteZero = ackByteZero ? 0 : 1;        // toggles 0,1,0,1 → which MAC half
-        ack[0] = ackByteZero;                     // HOP bit stays clear during MAC phase
+        ack[0] = ackByteZero;                     // HOP bit stays clear during MAC window
         uint8_t base = ackByteZero ? 4 : 0;
         ack[1] = boardMac[base + 0];
         ack[2] = boardMac[base + 1];
         ack[3] = boardMac[base + 2];
         ack[4] = boardMac[base + 3];
-        macAcksSent++;
+        if (macAcksSent < 0xFFFFFFFFu) macAcksSent++;  // kept for state.json / diagnostics
     } else {
-        // Telemetry rotation (v1 LoadAckPayload switch, simplified)
+        // Telemetry rotation (v1 LoadAckPayload switch, simplified). Reached
+        // only after the MAC window, by which point a TX that has our model
+        // saved has matched and stopped reading slots 0/1 as the MAC.
         if (++telemetryItem > MAX_TELEMETRY_ITEM) telemetryItem = 0;
         ack[0] = telemetryItem;
         bool versionCase = false;
 
-        // Bind-protect window. The v1 TX's pre-match parser
-        // (ParseAckPayload → GetModelsMacAddress while !ModelMatched &&
-        // !LedWasGreen) reads slot 0 / slot 1 into ModelsMacUnion every
-        // packet — so if we put anything other than the real chip MAC on
-        // those slots while the TX is still pre-match, the saved model ID
-        // gets corrupted. The 20-ack MAC phase isn't enough on its own.
-        // We can't see the TX's match state, so we use a continuous-traffic
-        // timer: once we've had an uninterrupted stream for >5s, the TX
-        // has either matched or has fired its NOTFOUND prompt — safe to
-        // hand slots 0/1 over to firmware version + packet count (mirroring
-        // v1 LoadAckPayload). A gap of >500 ms resets the window so a
-        // disconnect/reconnect re-delivers MAC on the new session.
-        static uint32_t lastAckMs        = 0;
-        static uint32_t connectionFreshMs = 0;
-        uint32_t        nowMs            = millis();
-        if (lastAckMs == 0 || (nowMs - lastAckMs) > 500) connectionFreshMs = nowMs;
-        lastAckMs = nowMs;
-        const bool postBindWindow = (nowMs - connectionFreshMs) >= 5000;
-
         switch (telemetryItem) {
             case 0:
-                if (!postBindWindow) {
-                    ack[1] = boardMac[0];
-                    ack[2] = boardMac[1];
-                    ack[3] = boardMac[2];
-                    ack[4] = boardMac[3];
-                } else {
-                    // Post-bind: mirror v1's SendVersionNumberToAckPayload so the
-                    // TX's "RX firmware" field shows the real version.
-                    ack[1] = activeRadioIdx;
-                    ack[2] = RXV2_V_MAJOR;
-                    ack[3] = RXV2_V_MINOR;
-                    ack[4] = RXV2_V_MINIMUS;
-                    ack[5] = (uint8_t)RXV2_V_EXTRA;
-                    versionCase = true;
-                }
+                // Mirror v1's SendVersionNumberToAckPayload: byte 1 = active
+                // transceiver, then the firmware version, so the TX shows both.
+                ack[1] = activeRadioIdx;
+                ack[2] = RXV2_V_MAJOR;
+                ack[3] = RXV2_V_MINOR;
+                ack[4] = RXV2_V_MINIMUS;
+                ack[5] = (uint8_t)RXV2_V_EXTRA;
+                versionCase = true;
                 break;
             case 1:
-                if (!postBindWindow) {
-                    ack[1] = boardMac[4];
-                    ack[2] = boardMac[5];
-                    ack[3] = boardMac[6];
-                    ack[4] = boardMac[7];
-                } else {
-                    packU32(ack, rx.packets);  // SuccessfulPackets (v1 parity)
-                }
+                packU32(ack, rx.packets);  // SuccessfulPackets (v1 parity)
                 break;
             case 2:   packU32(ack, radioSwaps);                     break;  // RadioSwaps
             case 3:   packU32(ack, radioElapsedSec(0));             break;  // Transceiver 1 active time (sec)

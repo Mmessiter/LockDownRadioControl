@@ -1043,6 +1043,8 @@ inline void handleApiState() {
     j += ",\"fhss_idx\":"; j += nextChannelIdx;
     j += ",\"fhss_channel\":"; j += FHSS_CHANNELS[nextChannelIdx];
     j += ",\"telemetry_item\":"; j += telemetryItem;
+    j += ",\"id_broadcasting\":"; j += (idBroadcasting ? "true" : "false");
+    j += ",\"being_flown\":"; j += (beingFlown ? "true" : "false");
     j += ",\"sbus_frames_out\":"; j += sbusFramesOut;
     j += ",\"last_channel_ms\":";
     if (lastChannelDataMs) j += (uint32_t)(millis() - lastChannelDataMs); else j += "-1";

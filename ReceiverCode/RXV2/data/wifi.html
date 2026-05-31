@@ -53,6 +53,21 @@
         </form>
     </div>
 
+    <div class=card>
+        <h2>Model name</h2>
+        <p>Used as this receiver's WiFi AP SSID and its <code>.local</code> hostname. Letters, digits and hyphens only; must start with a letter or digit; no spaces; up to 30 characters.</p>
+        <form id=nameForm>
+            <p><label>New name<br>
+                <input id=nameField name=name type=text required maxlength=30
+                       pattern="[A-Za-z0-9][A-Za-z0-9\-]{0,29}"
+                       autocomplete=off autocapitalize=off autocorrect=off spellcheck=false
+                       style="width:100%;padding:.6em;font-size:1em;border-radius:8px;border:1px solid #b8c7d0">
+            </label></p>
+            <p class=muted id=namePreview style="margin-top:-.3em"></p>
+            <button class="btn btn-fw" type=submit><span class=ico>&#9999;&#65039;</span>Rename &amp; reboot</button>
+        </form>
+    </div>
+
     <div class=card style="background:rgba(220,160,140,.16);border:1.5px solid rgba(201,116,100,.45)">
         <h2 style="color:#8a2e1a">Factory defaults</h2>
         <p class=muted>Use this <b>before passing the receiver to someone else</b>. Wipes the saved WiFi password, model name, bind state, output protocol and any Rotorflight backups. The receiver reboots and comes up as a fresh unit at <code>RXV2.local</code>.</p>
@@ -94,6 +109,73 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Pre-fill form
     document.getElementById('ssidField').value = n.ssid || '';
 
+    // Rename card — pre-fill current name and wire live preview.
+    const nf = document.getElementById('nameField');
+    if (nf) {
+        const current = (info.name_custom && info.name) ? info.name : '';
+        nf.value = current;
+        const np = document.getElementById('namePreview');
+        const refreshPreview = () => {
+            const raw = nf.value.trim();
+            if (!raw) {
+                np.innerHTML = 'Leave blank to revert to the default <code>RXV2</code>.';
+                return;
+            }
+            // Mirror hostnameFromName(): keep alphanumerics + hyphen, max 30.
+            const clean = raw.replace(/[^A-Za-z0-9-]/g, '').slice(0, 30);
+            np.innerHTML = 'Will become <code>' + clean + '.local</code> on the home network, AP SSID <code>' + clean + '</code>.';
+        };
+        nf.addEventListener('input', refreshPreview);
+        refreshPreview();
+    }
+
+    // Rename submit. AJAX so the chip's confirmPage reply can be cut by
+    // the reboot without leaving the page stuck — we drive the wait UI
+    // and redirect from the browser. After reboot the chip is at a NEW
+    // mDNS hostname, so we poll that hostname (not this page's host).
+    const form = document.getElementById('nameForm');
+    if (form) form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const raw = nf.value.trim();
+        const clean = raw.replace(/[^A-Za-z0-9-]/g, '').slice(0, 30);
+        if (raw && !/^[A-Za-z0-9][A-Za-z0-9-]{0,29}$/.test(raw)) {
+            alert('Invalid name. Letters, digits and hyphens only; must start with a letter or digit; no spaces.');
+            return;
+        }
+        const newHost = clean || 'RXV2';
+        const newURL  = 'http://' + newHost + '.local/';
+        document.querySelector('.container').innerHTML =
+            '<h1>Renaming</h1><div class=card>' +
+            '<p>Renaming to <b>' + newHost + '</b>. The receiver is rebooting; its WiFi AP and <code>.local</code> hostname will both change.</p>' +
+            '<p>Once it is back, this page will jump to <code>' + newURL + '</code> automatically.</p>' +
+            '<p id=__waitline class=muted style="margin-top:1em">Waiting for receiver to come back at the new name (<span id=__secs>0</span>&thinsp;s)&hellip;</p>' +
+            '</div>';
+        const body = new URLSearchParams(); body.append('name', raw);
+        fetch('/api/name', { method: 'POST', body }).catch(() => {});
+        let n = 0;
+        const tick = async () => {
+            const el = document.getElementById('__secs');
+            if (el) el.textContent = n;
+            if (n >= 6) {
+                try {
+                    const r = await fetch(newURL + 'api/state.json',
+                        { cache: 'no-store', signal: AbortSignal.timeout(2000) });
+                    if (r.ok) { location.href = newURL; return; }
+                } catch (err) { /* not yet */ }
+            }
+            if (n >= 90) {
+                const w = document.getElementById('__waitline');
+                if (w) w.innerHTML = "Receiver didn't answer at <code>" + newURL + "</code> in 90&thinsp;s. "
+                    + "Your phone's mDNS cache may still be holding the old name &mdash; open the link above manually, "
+                    + "or join the new <b>" + newHost + "</b> AP and visit <code>http://192.168.4.1</code>.";
+                return;
+            }
+            n++;
+            setTimeout(tick, 1000);
+        };
+        tick();
+    });
+
     // Factory-defaults handler. Two-step confirmation: an LDRC.confirm
     // dialog, then we POST /api/factory-reset. Chip wipes NVS +
     // backups and reboots fresh.
@@ -114,7 +196,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 });
 </script>
-<template id=helpContent><h2>WiFi settings</h2>
+<template id=helpContent><h2>WiFi &amp; identity</h2>
+<p><b>Model name</b> sets the receiver's <code>.local</code> hostname and its AP SSID at the same time &mdash; rename here if you mis-typed the name on first run (for example, calling a three-transceiver board <code>PT2</code> when it should be <code>PT3</code>). After the rename, this page jumps to the new URL automatically.</p>
+<h2>WiFi settings</h2>
 <p>Shows the receiver's current WiFi state and lets you set the home network SSID + password. Credentials are saved to NVS and persist across reboots and firmware updates.</p>
 <h3>How to use it</h3>
 <p>Type your home WiFi SSID and password in the form, then tap <b>Save & reboot</b>. The receiver reboots and joins the new network. The page polls until the receiver returns.</p>
