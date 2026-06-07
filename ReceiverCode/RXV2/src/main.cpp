@@ -29,6 +29,7 @@
 #include "Network.h"
 #include "MspBridge.h"
 #include "MspFc.h"
+#include "SimUsb.h"         // before WebPages.h — the firmware web pages call SimUSB::getMap/setMap
 #include "WebPages.h"
 
 //*********************************************************************
@@ -43,7 +44,12 @@ void setup() {
     // Make USB-CDC writes non-blocking when no host is attached — otherwise
     // every printf can stall up to 20 s waiting for a reader, which delays
     // the entire boot sequence (radio self-test, WiFi, AP fallback all push back).
+    // Only the USB-CDC `Serial` has setTxTimeoutMs(); under TinyUSB builds
+    // (ARDUINO_USB_CDC_ON_BOOT=0, the S3 sim-capable envs) `Serial` is UART0,
+    // which has no such method — and a hardware UART never blocks on a reader.
+#if ARDUINO_USB_CDC_ON_BOOT
     Serial.setTxTimeoutMs(0);
+#endif
     delay(200);
     Serial.printf("\n\n=== %s ===\n", FW_VERSION);
     bootMillis = millis();
@@ -137,7 +143,17 @@ void setup() {
                       protocolName(currentProtocol), protocolDesc(currentProtocol),
                       ppmInverted ? "negative (idle HIGH)" : "positive (idle LOW)");
     }
-    configureOutputDriver(currentProtocol);
+    // Sim mode (driving a PC simulator over USB) must NOT also drive a real
+    // flight controller — so when it's on we skip output-driver setup entirely:
+    // nothing is ever configured or sent on the D6 output pin. Read the flag
+    // here, before any output init, so the decision is made once.
+    simEnabled = prefs.isKey(NVS_KEY_SIM) ? (prefs.getUChar(NVS_KEY_SIM, 0) != 0) : false;
+    if (simEnabled) {
+        Serial.println("[sim] simulator mode — flight-controller output DISABLED (D6 stays silent)");
+        events.add("Sim mode: FC output disabled");
+    } else {
+        configureOutputDriver(currentProtocol);
+    }
 
     //*****************************************************************
     // Bind state — restore from NVS if previously bound
@@ -179,6 +195,28 @@ void setup() {
     g_hostname      = hostnameFromName(g_effectiveName);
     Serial.printf("[id] model name = '%s'  hostname = '%s.local'\n",
                   g_effectiveName.c_str(), g_hostname.c_str());
+
+    //*****************************************************************
+    // "Drive simulator over USB" — bring up the USB HID joystick fed from the
+    // channels we receive (S3/TinyUSB builds only; a no-op on the C3). simEnabled
+    // was read above (where it also gated the FC output). Sim mode PERSISTS across
+    // reboots — it's a deliberate choice toggled from the home page, not reset by
+    // a power-cycle. Uses the per-unit model name as the USB serial so the sim
+    // keeps its calibration.
+    //*****************************************************************
+    if (simEnabled) {
+        SimUSB::begin(g_effectiveName.c_str());
+        // Apply any saved channel remap (from the /map page); the default stands otherwise.
+        uint8_t sm[8]; bool sr[8] = { false };
+        if (prefs.isKey(NVS_KEY_SIM_MAP) && prefs.getBytes(NVS_KEY_SIM_MAP, sm, 8) == 8) {
+            uint8_t rb[8] = { 0 };
+            bool haveR = prefs.isKey(NVS_KEY_SIM_REV) && prefs.getBytes(NVS_KEY_SIM_REV, rb, 8) == 8;
+            for (uint8_t i = 0; i < 8; i++) sr[i] = haveR ? (rb[i] != 0) : false;
+            SimUSB::setMap(sm, sr);
+        }
+        Serial.println("[sim] USB joystick ON — driving the simulator from received channels");
+        events.add("Sim-over-USB: joystick active");
+    }
 
     //*****************************************************************
     // Radio bring-up
@@ -230,9 +268,16 @@ void loop() {
     }
 
     radioPoll();
-    protocolRx();          // pull any telemetry/MSP bytes the FC has sent back on D5
-    mspBridgePoll();       // TCP/5760 ↔ FC for wireless Rotorflight config
-    mspFcPoll();           // periodic FC-variant / FC-version discovery
+    if (simEnabled) {
+        // Sim mode: the ONLY output is the USB joystick. Skip ALL flight-controller
+        // work — no RC output frames, no telemetry, no MSP — so a real model can't
+        // be flown from sim mode, and the loop has just one job (lower latency).
+        SimUSB::sendChannels(channelMicros);
+    } else {
+        protocolRx();          // pull any telemetry/MSP bytes the FC has sent back on D5
+        mspBridgePoll();       // TCP/5760 ↔ FC for wireless Rotorflight config
+        mspFcPoll();           // periodic FC-variant / FC-version discovery
+    }
 
     // Dual-radio redundancy: if we've not received a packet on the active
     // radio for a while AND a swap cooldown has elapsed AND we have a second
@@ -242,7 +287,7 @@ void loop() {
         (uint32_t)(millis() - lastRadioSwapMs)   >= RADIO_SWAP_COOLDOWN_MS) {
         swapRadios();
     }
-    sbusTick();
+    if (!simEnabled) sbusTick();   // no RC output frames at all while in sim mode
     heartbeat();
     netStep();
 

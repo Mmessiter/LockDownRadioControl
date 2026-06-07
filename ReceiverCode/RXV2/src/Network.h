@@ -331,8 +331,26 @@ inline void netStep() {
             break;
         }
 
-        case NET_NO_WIFI:
         case NET_AP:
+            // AP-only is correct ONLY when there are no saved STA creds (first-
+            // time setup). If creds DO exist we belong on the home network — so
+            // periodically retry STA. This self-heals a receiver that fell to
+            // AP-only from a transient failed connect, a router hiccup, or an NVS
+            // read race during rapid reboots (e.g. toggling sim mode), instead of
+            // stranding it off the home network until a manual power-cycle.
+            {
+                static uint32_t lastApRetry = 0;
+                if (getEffectiveSsid().length() > 0 &&
+                    (uint32_t)(millis() - lastApRetry) >= AP_STA_RETRY_MS) {
+                    lastApRetry = millis();
+                    Serial.println("[net] AP-only but creds exist — retrying home WiFi");
+                    events.add("AP-only: retrying home WiFi");
+                    startWifiStation();   // AP+STA; → NET_WIFI_CONNECTING, which then retries forever
+                }
+            }
+            break;
+
+        case NET_NO_WIFI:   // Fly mode — WiFi deliberately off until reboot; don't retry
         case NET_INIT:
             break;
     }

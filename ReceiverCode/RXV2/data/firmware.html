@@ -307,6 +307,14 @@ async function check() {
         return;
     }
 
+    if (j.link_active) {
+        setStatePill('Transmitter connected', 'offline');
+        showMessage('The transmitter is connected, so the update check is paused to keep the radio ' +
+            'link rock-solid. Turn the transmitter off (or exit Simulator mode), then tap ' +
+            '<b>Check again</b>.');
+        return;
+    }
+
     const localNewer  = renderSource('local',  j.local);
     const publicNewer = renderSource('public', j.public);
 

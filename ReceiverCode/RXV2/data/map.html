@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name=theme-color content="#5fa099">
+<meta name=apple-mobile-web-app-capable content=yes>
+<meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
+<meta name=apple-mobile-web-app-title content="LDRC RX V2">
+<title>Remap channels &middot; LDRC RX V2</title>
+<link rel=stylesheet href="/style.css?v=30">
+<script src="/app.js?v=30" defer></script>
+<style>
+.mapRow{display:grid;grid-template-columns:auto 1fr auto;gap:8px 10px;align-items:center;
+ padding:.6em 0;border-bottom:1px solid rgba(125,158,176,.18)}
+.mapRow:last-child{border-bottom:0}
+.mapRow .out{font-weight:600;color:#3a5165;white-space:nowrap}
+.mapRow select{padding:.5em;font-size:1em;width:100%}
+.mapRow .rv{display:flex;align-items:center;gap:.3em;font-size:.85em;color:#5d7a8c;font-weight:600;white-space:nowrap}
+.mapRow .rv input{width:auto;margin:0;transform:scale(1.1)}
+.chTable{display:grid;grid-template-columns:auto 1fr auto;gap:6px 10px;align-items:center;font-variant-numeric:tabular-nums}
+.chN{color:#5d7a8c;font-weight:600;font-size:.9em;white-space:nowrap}
+.track{position:relative;height:24px;background:rgba(255,255,255,.5);border-radius:6px;overflow:hidden;
+ box-shadow:inset 0 1px 2px rgba(0,0,0,.08)}
+.track:before{content:"";position:absolute;left:50%;top:0;bottom:0;width:1px;background:rgba(46,68,90,.18)}
+/* Smoothness comes from the 60fps requestAnimationFrame loop below (an
+   exponential low-pass), so the fill has NO width transition of its own — a CSS
+   transition fighting the rAF updates is exactly what made it look jerky. */
+.fill{position:absolute;top:0;bottom:0;left:0;width:0;border-radius:6px;transition:opacity .2s,background .2s}
+.us{color:#3a5165;font-weight:600;min-width:3.4em;text-align:right}
+</style>
+</head>
+<body>
+<button class=helpBtn aria-label=Help title=Help onclick="LDRC.showHelp()">?</button>
+<div class=bg-photo aria-hidden=true></div>
+<div class=bg-wash  aria-hidden=true></div>
+<div class=container>
+    <h1>Remap channels</h1>
+    <p class=subtitle>Receiver channels &rarr; USB simulator outputs</p>
+
+    <div class=card>
+        <h2>Simulator outputs</h2>
+        <div id=rows>loading&hellip;</div>
+    </div>
+
+    <div class=card>
+        <h2>Channels in use (live)</h2>
+        <div class=chTable id=bars></div>
+    </div>
+
+    <div id=msg class=muted style="text-align:center;min-height:1.2em;margin:.4em 0"></div>
+    <button class="btn btn-fly" type=button id=saveBtn><span class=ico>&#9989;</span>Save mapping</button>
+    <button class="btn btn-bb"  type=button id=resetBtn><span class=ico>&#8634;</span>Reset to default</button>
+    <a class="btn btn-back" href="/"><span class=ico>&#8617;</span>Return to menu</a>
+    <div class=footer></div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+// Default = tidy 1:1, nothing reversed. The throttle/rudder swap + rudder
+// reverse that neXt needs are applied invisibly in firmware (BASE below).
+const DEF_M = [0, 1, 2, 3, 4, 5, 6, 7];
+const DEF_R = [0, 0, 0, 0, 0, 0, 0, 0];
+// Mirror of the firmware's hidden baseline so the live bar tracks the right
+// stick: the channel the user picks (logical L) rides physical slot phys(L).
+const BASE = [0, 1, 3, 2, 4, 5, 6, 7];
+const phys = L => (L < 8 ? BASE[L] : L);
+const LO = 900, HI = 2100;       // µs -> %
+const EASE = 0.4;                // 60fps low-pass: smooth but only ~2-frame lag
+let tgt = Array(8).fill(50), cur = Array(8).fill(50), live = false;
+const selVal = o => +$('m' + o).value;
+
+function buildRows(map, rev) {
+    let h = '';
+    for (let o = 0; o < 8; o++) {
+        h += '<div class=mapRow><span class=out>Output ' + (o + 1) + '</span><select id=m' + o + '>';
+        for (let c = 0; c < 16; c++) h += '<option value=' + c + (map[o] === c ? ' selected' : '') + '>Ch ' + (c + 1) + '</option>';
+        h += '</select><label class=rv><input type=checkbox id=r' + o + (rev[o] ? ' checked' : '') + '>Rev</label></div>';
+    }
+    $('rows').innerHTML = h;
+    $('rows').querySelectorAll('select').forEach(s => s.addEventListener('change', relabel));
+}
+
+// One bar per OUTPUT, in output order — i.e. only the 8 channels actually in
+// use, shown in the order the user has defined them.
+function buildBars() {
+    let h = '';
+    for (let o = 0; o < 8; o++) {
+        h += '<div class=chN id=bl' + o + '>Out ' + (o + 1) + '</div>'
+           + '<div class=track><div class=fill id=if' + o + '></div></div>'
+           + '<div class=us id=iv' + o + '>&middot;</div>';
+    }
+    $('bars').innerHTML = h;
+}
+
+// Re-label + re-colour each bar from the current selections (cheap; called on
+// load and whenever a select changes — NOT every animation frame).
+function relabel() {
+    for (let o = 0; o < 8; o++) {
+        const c = selVal(o);
+        $('bl' + o).textContent = 'Out ' + (o + 1) + ' · Ch ' + (c + 1);
+        $('if' + o).style.background = 'hsl(' + ((c * 22.5) | 0) + ',65%,58%)';
+    }
+}
+
+function paint(ch) {             // values + targets only (labels handled by relabel)
+    for (let o = 0; o < 8; o++) {
+        const v = ch[phys(selVal(o))];
+        tgt[o] = Math.max(0, Math.min(100, (v - LO) / (HI - LO) * 100));
+        $('iv' + o).textContent = v;
+    }
+}
+
+function anim() {                // 60fps smoothing
+    for (let o = 0; o < 8; o++) {
+        cur[o] += (tgt[o] - cur[o]) * EASE;
+        const f = $('if' + o);
+        f.style.width = cur[o].toFixed(1) + '%';
+        f.style.opacity = live ? 1 : 0.35;
+    }
+    requestAnimationFrame(anim);
+}
+
+async function poll() {
+    if (window.LDRC && LDRC.navigating) return;
+    try {
+        const d = await (await fetch('/api/channels.json', { cache: 'no-store' })).json();
+        live = (d.age_ms >= 0 && d.age_ms < 500);
+        paint(d.ch);
+    } catch (e) { /* transient */ }
+    setTimeout(poll, 33);        // ~30 Hz; the rAF loop interpolates to 60fps between polls
+}
+
+function save() {
+    const m = [], r = [];
+    for (let o = 0; o < 8; o++) { m.push(selVal(o)); r.push($('r' + o).checked ? 1 : 0); }
+    $('msg').textContent = 'Saving…';
+    fetch('/api/map', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'map=' + m.join(',') + '&rev=' + r.join(',') })
+        .then(r => r.ok ? r.text() : Promise.reject())
+        .then(() => { $('msg').textContent = '✓ Saved — mapping is live.'; })
+        .catch(() => { $('msg').textContent = 'Save failed — try again.'; });
+}
+
+function reset() {
+    for (let o = 0; o < 8; o++) { $('m' + o).value = DEF_M[o]; $('r' + o).checked = !!DEF_R[o]; }
+    relabel();
+    $('msg').textContent = 'Defaults restored — tap Save to apply.';
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    buildBars();
+    let map = DEF_M.slice(), rev = DEF_R.map(x => !!x);
+    try {
+        const d = await (await fetch('/api/simmap.json', { cache: 'no-store' })).json();
+        if (Array.isArray(d.map) && d.map.length === 8) map = d.map;
+        if (Array.isArray(d.rev) && d.rev.length === 8) rev = d.rev.map(x => !!x);
+    } catch (e) { /* defaults */ }
+    buildRows(map, rev);
+    relabel();
+    $('saveBtn').addEventListener('click', save);
+    $('resetBtn').addEventListener('click', reset);
+    requestAnimationFrame(anim);
+    setTimeout(poll, 100);
+});
+</script>
+<template id=helpContent><h2>Remap channels</h2>
+<p>Sets which of your received channels feeds each of the <b>8 outputs</b> the flight simulator
+sees over USB &mdash; only used in <b>Drive simulator over USB</b> mode.</p>
+<h3>How to use it</h3>
+<p>For each <b>Output</b>, pick the channel that should drive it, and tick <b>Rev</b> to reverse
+it. The bars below show those 8 channels live, in output order &mdash; work the sticks to confirm
+each one. Tap <b>Save mapping</b>: it applies immediately (no reboot) and survives power-cycles.</p>
+<h3>Default</h3>
+<p><b>Reset to default</b> restores the tidy 1&rarr;1 mapping (Output&nbsp;N = Channel&nbsp;N). The
+small tweaks that make neXt / RX2SIM fly correctly are handled automatically &mdash; you don't set
+them. Tap Save to apply.</p>
+</template>
+</body>
+</html>

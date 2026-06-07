@@ -475,6 +475,19 @@ inline void handleFirmwareCheck() {
         server.send(200, "application/json", j);
         return;
     }
+    // If the transmitter link is LIVE, skip the blocking manifest fetches — they
+    // stall the single-threaded loop for seconds, starving radioPoll() so the
+    // nRF24 RX FIFO fills and the TX misses acks (it can even disconnect). An
+    // update check only matters when idle, so defer it while flying / driving the
+    // sim and tell the UI why. (Keeps the transmitter happy.)
+    if (lastChannelDataMs && (uint32_t)(millis() - lastChannelDataMs) < LINK_LIVE_MS) {
+        String j = "{\"current\":\"";
+        j += FW_VERSION;
+        j += "\",\"link_active\":true}";
+        server.sendHeader("Cache-Control", "no-store");
+        server.send(200, "application/json", j);
+        return;
+    }
     String localUrl = prefs.isKey(NVS_KEY_FW_MANIFEST)
                           ? prefs.getString(NVS_KEY_FW_MANIFEST, "")
                           : String("");
@@ -493,9 +506,9 @@ inline void handleFirmwareCheck() {
     out  = "{\"current\":\"";
     out += FW_VERSION;
     out += "\",\"local\":";
-    fetchManifestInto(out, localUrl, 4000);
+    fetchManifestInto(out, localUrl, 2500);
     out += ",\"public\":";
-    fetchManifestInto(out, String(FW_PUBLIC_MANIFEST_URL), 10000);
+    fetchManifestInto(out, String(FW_PUBLIC_MANIFEST_URL), 5000);
     out += "}";
     server.sendHeader("Cache-Control", "no-store");
     server.send(200, "application/json", out);
@@ -881,6 +894,76 @@ inline void handleProtocolSet() {
 }
 
 //*********************************************************************
+//  POST /api/sim — toggle "drive simulator over USB" and reboot
+//*********************************************************************
+// Persists the flag; it takes effect at boot in setup(). USB mode is fixed at
+// compile time, so the HID joystick can only be brought up on a fresh boot —
+// the same reboot-to-apply model the output-protocol setting uses.
+inline void handleSimSet() {
+    bool on = server.hasArg("on") ? (server.arg("on").toInt() != 0) : false;
+    prefs.putUChar(NVS_KEY_SIM, on ? 1 : 0);
+    events.add(on ? "Sim-over-USB enabled" : "Sim-over-USB disabled");
+    server.send(200, "text/html", confirmPage("Saved & rebooting", on
+        ? "<p>Simulator-over-USB <b>enabled</b>. The receiver is rebooting; plug it into your "
+          "computer and it appears as a USB joystick driven by your sticks.</p>"
+        : "<p>Simulator-over-USB <b>disabled</b>. The receiver is rebooting back to normal.</p>"));
+    delay(500);
+    ESP.restart();
+}
+
+//*********************************************************************
+//  Simulator channel remap — GET /map page, GET current map, POST new map
+//*********************************************************************
+// The map decides which received channel (0..15) feeds each of the 8 USB sim
+// outputs, plus a per-output reverse. Applies LIVE (no reboot) and persists to
+// NVS, re-read at the next sim boot. Mirrors the LDRC2SIM "Map channels" page;
+// the live bars reuse /api/channels.json.
+inline void handleMap() {
+    if (serveLittleFsFile("/map.html", "text/html")) return;
+    server.send(503, "text/plain", "/map.html missing — uploadfs the data/ folder");
+}
+
+inline void handleApiSimMap() {
+    uint8_t m[8]; bool r[8];
+    SimUSB::getMap(m, r);
+    String j; j.reserve(96);
+    j = "{\"map\":[";
+    for (int i = 0; i < 8; i++) { if (i) j += ','; j += m[i]; }
+    j += "],\"rev\":[";
+    for (int i = 0; i < 8; i++) { if (i) j += ','; j += (r[i] ? 1 : 0); }
+    j += "]}";
+    server.sendHeader("Cache-Control", "no-store");
+    server.send(200, "application/json", j);
+}
+
+inline void handleMapSave() {
+    String m = server.arg("map"), r = server.arg("rev");
+    uint8_t nm[8], nr[8], cm = 0, cr = 0;
+    int start = 0;
+    for (uint8_t i = 0; i < 8 && start <= (int)m.length(); i++) {
+        int comma = m.indexOf(',', start);
+        String tok = (comma < 0) ? m.substring(start) : m.substring(start, comma); tok.trim();
+        if (tok.length()) { int v = tok.toInt(); if (v < 0) v = 0; if (v > 15) v = 15; nm[cm++] = (uint8_t)v; }
+        if (comma < 0) break; start = comma + 1;
+    }
+    start = 0;
+    for (uint8_t i = 0; i < 8 && start <= (int)r.length(); i++) {
+        int comma = r.indexOf(',', start);
+        String tok = (comma < 0) ? r.substring(start) : r.substring(start, comma); tok.trim();
+        if (tok.length()) { nr[cr++] = (uint8_t)(tok.toInt() != 0); }
+        if (comma < 0) break; start = comma + 1;
+    }
+    if (cm != 8 || cr != 8) { server.send(400, "text/plain", "expected 8 values"); return; }
+    bool rb[8]; for (int i = 0; i < 8; i++) rb[i] = nr[i] != 0;
+    SimUSB::setMap(nm, rb);
+    prefs.putBytes(NVS_KEY_SIM_MAP, nm, 8);
+    prefs.putBytes(NVS_KEY_SIM_REV, nr, 8);
+    events.add("Sim channel map updated");
+    server.sendHeader("Cache-Control", "no-store");
+    server.send(200, "text/plain", "ok");
+}
+
+//*********************************************************************
 //  POST /fly_arm — disable WiFi until next reboot
 //*********************************************************************
 
@@ -1109,6 +1192,9 @@ inline void handleApiState() {
     }
     j += "]}";
 
+    // --- sim (drive simulator over USB) ------------------------------
+    j += ",\"sim\":"; j += (simEnabled ? "true" : "false");
+
     // --- fc telemetry ------------------------------------------------
     j += ",\"fc\":{";
     j += "\"valid\":"; j += (fcTelem.valid ? "true" : "false");
@@ -1254,6 +1340,8 @@ inline void registerWebRoutes() {
     server.on("/api/state.json",    handleApiState);
     server.on("/api/channels.json", handleApiChannels);
     server.on("/api/events.json",   handleApiEvents);
+    server.on("/map",               handleMap);          // sim channel-remap page
+    server.on("/api/simmap.json",   handleApiSimMap);    // current sim channel map
 
     // POSTs that reboot
     server.on("/bind",        HTTP_POST, handleBindDo);
@@ -1267,6 +1355,8 @@ inline void registerWebRoutes() {
     server.on("/api/firstrun",      HTTP_POST, handleFirstRun);
     server.on("/api/factory-reset", HTTP_POST, handleFactoryReset);
     server.on("/protocol",    HTTP_POST, handleProtocolSet);
+    server.on("/api/sim",     HTTP_POST, handleSimSet);
+    server.on("/api/map",     HTTP_POST, handleMapSave);   // save sim channel map (applies live, no reboot)
     server.on("/fly_arm",     HTTP_POST, handleFlyArm);
 
     // Misc

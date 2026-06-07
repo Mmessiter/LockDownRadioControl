@@ -67,6 +67,12 @@
     </div>
 
     <div id=mainMenu>
+        <!-- Big "simulator mode" sign — shown only while sim mode is on. -->
+        <div id=simBanner style="display:none;text-align:center;padding:1em;border-radius:12px;margin:0 0 1em;
+             background:rgba(108,171,94,.95);color:#0e2e08;font-weight:700;box-shadow:0 3px 12px rgba(108,171,94,.45)">
+            <div style="font-size:1.3em;letter-spacing:.05em">🎮 SIMULATOR MODE ON</div>
+            <div style="font-weight:500;font-size:.9em;line-height:1.4;margin-top:.3em">Driving the PC simulator over USB &mdash; flight-controller output is OFF.</div>
+        </div>
         <div id=radioBanner style="display:none;text-align:center;padding:.7em;border-radius:10px;margin:0 0 1em;font-weight:600"></div>
 
         <!-- Bind-mode banner. Shown only when the receiver is unbound,
@@ -81,14 +87,16 @@
             </div>
         </div>
 
-        <a class="btn btn-fly"  href="/fly"><span class=ico>&#128641;&#9992;&#65039;</span>Fly now</a>
-        <a class="btn btn-bind" href="/bind"><span class=ico>&#128279;</span>Start Bind mode</a>
+        <a class="btn btn-fly"  href="/fly" id=flybtn><span class=ico>&#128641;&#9992;&#65039;</span>Fly now</a>
+        <a class="btn btn-bind" href="/bind" id=bindbtn><span class=ico>&#128279;</span>Start Bind mode</a>
         <a class="btn btn-bb"   href="/rotorflight" id=rfbtn style="display:none;background:#8e6cab"><span class=ico>&#129357;</span>Rotorflight config &mdash; <span id=fcver>&hellip;</span></a>
         <a class="btn btn-fw"   href="/firmware"><span class=ico>&#128229;</span>Update or roll back firmware</a>
-        <a class="btn btn-diag" href="/diagnostics"><span class=ico>&#127916;</span>View channels</a>
+        <a class="btn btn-diag" href="/diagnostics" id=diagbtn><span class=ico>&#127916;</span>View channels</a>
         <a class="btn btn-bb"   href="/blackbox"><span class=ico>&#128209;</span>Black box log</a>
         <a class="btn btn-fw"   href="/wifi" id=wifibtn style="display:none"><span class=ico>&#128246;</span>WiFi settings</a>
-        <a class="btn btn-diag" href="/protocol"><span class=ico>&#128225;</span>Output protocol &mdash; <span id=protoname>&hellip;</span></a>
+        <a class="btn btn-diag" href="/protocol" id=protobtn><span class=ico>&#128225;</span>Output protocol &mdash; <span id=protoname>&hellip;</span></a>
+        <button class="btn" type=button id=simbtn style="display:none;background:#8e6cab"><span class=ico>&#127918;</span><span id=simlbl>Drive simulator over USB</span></button>
+        <a class="btn" href="/map" id=mapbtn style="display:none;background:#c98a4a"><span class=ico>&#128256;</span>Remap channels</a>
     </div>
 
     <div id=fwBanner style="display:none;text-align:center;padding:.7em;border-radius:10px;margin:1em 0 0;font-weight:600"></div>
@@ -104,16 +112,58 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Model name — show as the h1, prompt with warning + edit-on-tap.
     paintModelName(s);
 
-    LDRC.setText('protoname', s.protocol.current);
+    // In sim mode the D6 output is disabled and the USB joystick is the output,
+    // so show "USB → SIM" instead of the (now-inactive) wire protocol.
+    LDRC.setText('protoname', s.sim ? 'USB → SIM' : s.protocol.current);
+
+    // "Drive simulator over USB" toggle — present the receiver to a PC as a
+    // USB joystick driven by the channels it receives. Toggling reboots (USB
+    // mode is set at boot), mirroring the output-protocol flow.
+    const simOn = !!s.sim;
+    const sb = document.getElementById('simbtn');
+    if (sb) {
+        sb.style.display = '';
+        sb.style.background = simOn ? '#6cab5e' : '#8e6cab';
+        LDRC.setText('simlbl', simOn ? 'Turn simulator mode OFF' : 'Drive simulator over USB');
+        const simB = document.getElementById('simBanner');   // big "SIMULATOR MODE ON" sign
+        if (simB) simB.style.display = simOn ? '' : 'none';
+        const mb = document.getElementById('mapbtn');   // Remap channels — only shown in sim mode
+        if (mb) mb.style.display = simOn ? '' : 'none';
+        sb.onclick = () => {
+            const turnOn = !simOn;
+            const msg = turnOn
+                ? 'Turn ON “Drive simulator over USB”?\n\nFOR SIMULATOR USE ONLY. The receiver reboots as a USB joystick, and its flight-controller output (D6) is DISABLED — it cannot fly a real model until you turn this off. Continue?'
+                : 'Turn OFF “Drive simulator over USB”?\n\nThe receiver reboots back to a normal receiver (flight-controller output restored).';
+            if (confirm(msg)) postSim(turnOn);
+        };
+    }
+
+    // In sim mode the receiver is just a USB joystick — hide everything that
+    // doesn't apply (not flying, FC output off). Kept: firmware, WiFi, the sim
+    // toggle, Remap channels, Black box, Help. Also swap the Help text to match.
+    if (simOn) {
+        ['flybtn', 'bindbtn', 'diagbtn', 'protobtn'].forEach(id => {
+            const e = document.getElementById(id); if (e) e.style.display = 'none';
+        });
+        const hc = document.getElementById('helpContent');
+        if (hc) hc.innerHTML =
+            '<h2>Simulator mode</h2>'
+          + '<p>The receiver is a <b>USB joystick</b> for a PC flight simulator, driven by your transmitter sticks. Its flight-controller output is OFF, so it cannot fly a real model.</p>'
+          + '<h3>Buttons</h3><ul>'
+          + '<li><b>Remap channels</b> &mdash; choose which channel drives each simulator axis, with live bars.</li>'
+          + '<li><b>Drive simulator over USB</b> &mdash; tap to turn simulator mode OFF and return to a normal receiver.</li>'
+          + '<li><b>Update firmware / WiFi settings / Black box log</b> &mdash; as usual.</li>'
+          + '</ul><h3>Tip</h3><p>If the simulator doesn’t see the receiver, re-plug the USB cable. Turn simulator mode off to fly a real model again.</p>';
+    }
 
     // Show WiFi-settings button only when WiFi is up or in AP mode.
     const wifiVisible = (s.net.mode === 'WiFi up' || s.net.mode === 'AP mode');
     const wb = document.getElementById('wifibtn');
     if (wb) wb.style.display = wifiVisible ? '' : 'none';
 
-    // Show Rotorflight config button when FC is reachable on CRSF.
+    // Show Rotorflight config button when FC is reachable on CRSF (never in sim mode).
     const rfb = document.getElementById('rfbtn');
-    if (rfb && s.fcinfo && s.fcinfo.rotorflight_capable) {
+    if (rfb && !simOn && s.fcinfo && s.fcinfo.rotorflight_capable) {
         rfb.style.display = '';
         const fc = s.fcinfo;
         const label = (fc.rf_major > 0)
@@ -236,6 +286,18 @@ function postName(v) {
       .catch(() => alert('Could not save — try again.'));
 }
 
+function postSim(on) {
+    const fd = new URLSearchParams();
+    fd.set('on', on ? '1' : '0');
+    fetch('/api/sim', { method: 'POST', body: fd })
+      .then(r => r.text()).then(html => {
+          document.open();
+          document.write(html);
+          document.close();
+      })
+      .catch(() => alert('Could not save — try again.'));
+}
+
 function paintRadioBanner(s) {
     const rb = document.getElementById('radioBanner');
     if (!rb) return;
@@ -278,6 +340,7 @@ async function checkFirmware(current) {
         if (!r.ok) return;
         const j = await r.json();
         if (j.offline) return;            // chip in AP mode — nothing to compare
+        if (j.link_active) return;        // TX connected — check deferred to keep the radio link stable
         const names = [];
         for (const k of ['local', 'public']) {
             if (j[k] && j[k].ok && j[k].manifest && j[k].manifest.versions) {

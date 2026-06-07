@@ -31,7 +31,7 @@
 //  Firmware version
 //*********************************************************************
 
-constexpr const char* FW_VERSION = "RXV2-0.9.77-mdns-reannounce";
+constexpr const char* FW_VERSION = "RXV2-0.9.82-tx-happy";
 
 //*********************************************************************
 //  Auto-update manifest URLs
@@ -92,6 +92,8 @@ constexpr uint32_t RF_WINDOW_MS         = 10000;   // boot window before falling
 // surfaces immediately because we go straight to AP when NVS is empty
 // (startWifiStation short-circuits when ssid is blank).
 constexpr uint32_t WIFI_CONNECT_MS      = 25000;
+constexpr uint32_t AP_STA_RETRY_MS      = 20000;   // in AP-only WITH saved creds, retry home WiFi this often (self-heal)
+constexpr uint32_t LINK_LIVE_MS         = 2000;    // a TX packet within this window = link live (defer blocking web work)
 constexpr uint8_t  WIFI_STA_RETRY_MAX   = 5;
 
 // *** DEV FLAG — set to false before shipping ***
@@ -205,6 +207,7 @@ constexpr uint8_t PROTO_DEFAULT = PROTO_SBUS;
 
 inline Protocol  currentProtocol = (Protocol)PROTO_DEFAULT;
 inline bool      ppmInverted     = false;
+inline bool      simEnabled      = false;    // "Drive simulator over USB" — present as a USB HID joystick (S3/TinyUSB only)
 
 //*********************************************************************
 //  NVS keys (Preferences namespace = "rxv2")
@@ -220,6 +223,9 @@ constexpr const char* NVS_KEY_PROTO      = "proto";
 constexpr const char* NVS_KEY_PPM_INV    = "ppm_inv";
 constexpr const char* NVS_KEY_FW_MANIFEST = "fwurl";   // URL of dev firmware server's manifest.json
 constexpr const char* NVS_KEY_MODEL_NAME  = "nm";      // user-set model name (e.g. "Goblin 700"); empty = use default
+constexpr const char* NVS_KEY_SIM         = "sim";     // 1 = drive flight simulator over USB (HID joystick)
+constexpr const char* NVS_KEY_SIM_MAP     = "simmap";  // 8-byte map: which RX channel (0..15) feeds each sim output
+constexpr const char* NVS_KEY_SIM_REV     = "simrev";  // 8-byte per-output reverse flags (0/1)
 
 constexpr uint8_t     QUICK_BOOT_THRESHOLD = 3;
 constexpr uint32_t    QUICK_BOOT_RESET_MS  = 5000;
