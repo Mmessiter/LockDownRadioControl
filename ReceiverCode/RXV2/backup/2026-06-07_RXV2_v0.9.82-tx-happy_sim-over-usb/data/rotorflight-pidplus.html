@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name=theme-color content="#5fa099">
+<meta name=apple-mobile-web-app-capable content=yes>
+<meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
+<meta name=apple-mobile-web-app-title content="LDRC RX V2">
+<title>PID+ &middot; LDRC RX V2</title>
+<link rel=stylesheet href="/style.css?v=29">
+<script src="/app.js?v=29" defer></script>
+<style>
+.fldRow{display:flex;justify-content:space-between;align-items:center;
+        padding:.45em .7em;background:rgba(255,255,255,.55);border-radius:8px;margin:.25em 0}
+.fldRow label{flex:1;color:#3a5165;font-size:.95em}
+.fldRow input[type=number]{width:6em;padding:.4em;font-size:.95em;text-align:right;
+        border:1px solid #b8c7d0;border-radius:6px}
+.fldRow input[type=checkbox]{transform:scale(1.4)}
+.banner{padding:.7em;border-radius:10px;text-align:center;font-weight:600;margin:0 0 1em}
+.banner.info{background:rgba(200,210,220,.85);color:#3a5165}
+.banner.good{background:rgba(168,210,154,.85);color:#2a4d1f}
+.banner.bad {background:rgba(220,160,140,.85);color:#5c2a1a}
+.profRow{display:flex;gap:.5em;margin:.3em 0}
+.profBtn{flex:1;padding:.7em;border:0;border-radius:10px;font-size:1.1em;font-weight:600;
+         background:#cdd6df;color:#3a5165;cursor:pointer}
+.profBtn.active{background:#6cab5e;color:#fff}
+</style>
+</head>
+<body>
+<button class=helpBtn aria-label=Help title=Help onclick="LDRC.showHelp()">?</button>
+<div class=bg-photo aria-hidden=true></div>
+<div class=bg-wash  aria-hidden=true></div>
+<div class=container>
+    <h1>PID + (advanced)</h1>
+    <div id=status class="banner info">loading&hellip;</div>
+
+    <div class=card>
+        <h2>Profile (Bank)</h2>
+        <div class=profRow>
+            <button class=profBtn onclick="selectProfile(0)" id=pb0>1</button>
+            <button class=profBtn onclick="selectProfile(1)" id=pb1>2</button>
+            <button class=profBtn onclick="selectProfile(2)" id=pb2>3</button>
+            <button class=profBtn onclick="selectProfile(3)" id=pb3>4</button>
+        </div>
+    </div>
+
+    <div class=card>
+        <h2>Filters &amp; limits</h2>
+        <div class=fldRow><label>Piro compensation</label><input type=checkbox id=f_piro></div>
+        <div class=fldRow><label>Ground error decay</label><input type=number id=f_ged></div>
+        <div class=fldRow><label>Cutoff Roll</label><input type=number id=f_cR></div>
+        <div class=fldRow><label>Cutoff Pitch</label><input type=number id=f_cP></div>
+        <div class=fldRow><label>Cutoff Yaw</label><input type=number id=f_cY></div>
+        <div class=fldRow><label>Error limit Roll</label><input type=number id=f_eR></div>
+        <div class=fldRow><label>Error limit Pitch</label><input type=number id=f_eP></div>
+        <div class=fldRow><label>Error limit Yaw</label><input type=number id=f_eY></div>
+        <div class=fldRow><label>HSI offset limit Roll</label><input type=number id=f_hoR></div>
+        <div class=fldRow><label>HSI offset limit Pitch</label><input type=number id=f_hoP></div>
+        <div class=fldRow><label>Roll bandwidth</label><input type=number id=f_bwR></div>
+        <div class=fldRow><label>Pitch bandwidth</label><input type=number id=f_bwP></div>
+        <div class=fldRow><label>Yaw bandwidth</label><input type=number id=f_bwY></div>
+    </div>
+
+    <div class=card>
+        <h2>D / B term cutoffs</h2>
+        <div class=fldRow><label>Roll D-Term cutoff</label><input type=number id=f_dR></div>
+        <div class=fldRow><label>Pitch D-Term cutoff</label><input type=number id=f_dP></div>
+        <div class=fldRow><label>Yaw D-Term cutoff</label><input type=number id=f_dY></div>
+        <div class=fldRow><label>Roll B-Term cutoff</label><input type=number id=f_bR></div>
+        <div class=fldRow><label>Pitch B-Term cutoff</label><input type=number id=f_bP></div>
+        <div class=fldRow><label>Yaw B-Term cutoff</label><input type=number id=f_bY></div>
+    </div>
+
+    <div class=card>
+        <h2>Yaw &amp; feed-forward</h2>
+        <div class=fldRow><label>CW Yaw stop gain</label><input type=number id=f_cwS></div>
+        <div class=fldRow><label>CCW Yaw stop gain</label><input type=number id=f_ccwS></div>
+        <div class=fldRow><label>Yaw Precomp cutoff</label><input type=number id=f_yPC></div>
+        <div class=fldRow><label>Cyclic FF gain</label><input type=number id=f_cFF></div>
+        <div class=fldRow><label>Collective FF gain</label><input type=number id=f_coFF></div>
+        <div class=fldRow><label>Inertia precomp gain</label><input type=number id=f_iPG></div>
+        <div class=fldRow><label>Inertia precomp cutoff</label><input type=number id=f_iPC></div>
+    </div>
+
+    <button class="btn btn-fly" onclick="save()" style="background:#6cab5e"><span class=ico>&#128190;</span>Save to Flight Controller</button>
+    <button class="btn btn-fw" onclick="load()"><span class=ico>&#8635;</span>Reload from flight controller</button>
+
+    <div class=card>
+        <h2>Copy to Profile (Bank) &hellip;</h2>
+        <div class=profRow>
+            <button class=profBtn onclick="copyTo(0)" id=cb0>1</button>
+            <button class=profBtn onclick="copyTo(1)" id=cb1>2</button>
+            <button class=profBtn onclick="copyTo(2)" id=cb2>3</button>
+            <button class=profBtn onclick="copyTo(3)" id=cb3>4</button>
+        </div>
+    </div>
+
+    <a class="btn btn-back" href="/rotorflight"><span class=ico>&#8617;</span>Back</a>
+    <div class=footer></div>
+</div>
+
+<script>
+// Mapping: fieldId → byte offset in the MSP_PID_PROFILE payload (43 bytes total).
+// Lifted from v1's Nexus.h Parse_MSP_PID_PROFILE / WritePIDAdvancedToNexusAndSave.
+const FIELDS = [
+    ['f_piro',  6, 'bool'],
+    ['f_ged',   1],
+    ['f_cR',   17], ['f_cP',   18], ['f_cY',   19],
+    ['f_eR',    7], ['f_eP',    8], ['f_eY',    9],
+    ['f_hoR',  36], ['f_hoP',  37],
+    ['f_bwR',  10], ['f_bwP',  11], ['f_bwY',  12],
+    ['f_dR',   13], ['f_dP',   14], ['f_dY',   15],
+    ['f_bR',   38], ['f_bP',   39], ['f_bY',   40],
+    ['f_cwS',  20], ['f_ccwS', 21],
+    ['f_yPC',  22],
+    ['f_cFF',  23], ['f_coFF', 24],
+    ['f_iPG',  41], ['f_iPC',  42],
+];
+const PROFILE_BYTES = 43;
+
+let currentProfile = parseInt(localStorage.getItem('rfPidProfile') || '0');
+let cachedRaw = null;   // last full 43-byte read from FC (for read-modify-write)
+
+function paintProfileButtons() {
+    for (let i = 0; i < 4; i++) {
+        document.getElementById('pb' + i).classList.toggle('active', i === currentProfile);
+        const cb = document.getElementById('cb' + i);
+        if (cb) cb.disabled = (i === currentProfile);
+    }
+}
+function setStatus(kind, msg) {
+    const b = document.getElementById('status');
+    b.className = 'banner ' + kind;
+    b.textContent = msg;
+}
+function hexToBytes(h) { const o = new Uint8Array(h.length/2); for (let i=0;i<o.length;i++) o[i]=parseInt(h.substr(i*2,2),16); return o; }
+function bytesToHex(b) { let s=''; for (let i=0;i<b.length;i++) s += b[i].toString(16).padStart(2,'0').toUpperCase(); return s; }
+
+async function selectProfile(idx) {
+    if (idx === currentProfile) return;
+    if (!(await LDRC.confirmLoseChanges('switching profile'))) return;
+    setStatus('info', 'Switching to profile ' + (idx + 1) + '…');
+    try {
+        await LDRC.msp(210, idx.toString(16).padStart(2,'0'));
+        currentProfile = idx;
+        localStorage.setItem('rfPidProfile', String(idx));
+        paintProfileButtons();
+        await load();
+    } catch (e) { setStatus('bad', 'Profile switch failed: ' + e.message); }
+}
+
+async function load() {
+    setStatus('info', 'Reading PID profile from flight controller…');
+    LDRC.markStale();
+    try {
+        // Force FC to the profile our page is showing, so Configurator matches.
+        await LDRC.msp(210, currentProfile.toString(16).padStart(2,'0'));
+        const bytes = hexToBytes(await LDRC.msp(94));
+        if (bytes.length < PROFILE_BYTES) throw new Error('short response: ' + bytes.length);
+        cachedRaw = bytes.slice(0, PROFILE_BYTES);
+        for (const [id, off, kind] of FIELDS) {
+            const el = document.getElementById(id);
+            if (kind === 'bool') el.checked = !!bytes[off];
+            else el.value = bytes[off];
+        }
+        LDRC.clearStale();
+        setStatus('good', '✓ Loaded from flight controller (profile ' + (currentProfile + 1) + ')');
+        LDRC.clearDirty();
+    } catch (e) { setStatus('bad', 'Read failed: ' + e.message); }
+}
+
+function buildPayload() {
+    const bytes = new Uint8Array(cachedRaw);
+    for (const [id, off, kind] of FIELDS) {
+        const el = document.getElementById(id);
+        if (kind === 'bool') bytes[off] = el.checked ? 1 : 0;
+        else bytes[off] = Math.max(0, Math.min(255, parseInt(el.value || '0')));
+    }
+    return bytes;
+}
+
+async function save() {
+    if (!cachedRaw) { setStatus('bad', 'Read flight controller first'); return; }
+    if (!(await LDRC.confirm('Write these advanced PIDs to the flight controller EEPROM?',
+        {title:'Save PID +', icon:'💾', yes:'Save to flight controller'}))) return;
+    setStatus('info', 'Writing PID profile…');
+    const bytes = buildPayload();
+    try {
+        await LDRC.msp(95, bytesToHex(bytes));   // SET_PID_PROFILE
+        await LDRC.msp(250);                      // EEPROM_WRITE
+        setStatus('good', '✓ Saved to flight controller EEPROM');
+        cachedRaw = bytes;
+        LDRC.clearDirty();
+    } catch (e) { setStatus('bad', 'Save failed: ' + e.message); }
+}
+
+async function copyTo(destIdx) {
+    if (!cachedRaw) { setStatus('bad', 'Read flight controller first'); return; }
+    if (destIdx === currentProfile) { setStatus('info', 'Already on profile ' + (destIdx+1)); return; }
+    if (!(await LDRC.confirm('Copy current advanced PIDs to profile ' + (destIdx + 1) + ' and switch to it?',
+        {title:'Copy to profile ' + (destIdx + 1), icon:'📋', yes:'Copy + switch', kind:'warn'}))) return;
+    setStatus('info', 'Copying to profile ' + (destIdx + 1) + '…');
+    const bytes = buildPayload();
+    try {
+        await LDRC.msp(210, destIdx.toString(16).padStart(2,'0'));   // SELECT
+        await LDRC.msp(95, bytesToHex(bytes));                        // SET_PID_PROFILE
+        await LDRC.msp(250);                                           // EEPROM_WRITE
+        currentProfile = destIdx;
+        localStorage.setItem('rfPidProfile', String(destIdx));
+        paintProfileButtons();
+        await load();
+        setStatus('good', '✓ Copied to profile ' + (destIdx + 1) + ' (now editing it)');
+    } catch (e) { setStatus('bad', 'Copy failed: ' + e.message); }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    paintProfileButtons();
+    document.addEventListener('input', e => {
+        if (e.target.matches('input, select')) LDRC.markDirty();
+    });
+    load();
+});
+</script>
+<template id=helpContent><h2>Rotorflight PID+</h2>
+<p>Rotorflight's extended PID controller — Yaw Stop Gain, Yaw CW/CCW Gain, I-Term decay rates, and other refinement terms beyond the core PID.</p>
+<h3>How to use it</h3>
+<p>Same workflow as the PID page: edit, save, test. Most pilots leave PID+ at sensible defaults unless they're chasing a very specific feel.</p>
+<h3>Tip</h3>
+<p>Snapshot first via the <b>Backups</b> page. PID+ effects can be subtle but cumulative — being able to revert is essential.</p>
+</template>
+</body>
+</html>

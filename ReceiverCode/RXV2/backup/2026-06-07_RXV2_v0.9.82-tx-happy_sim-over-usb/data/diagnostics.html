@@ -1,0 +1,649 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name=theme-color content="#5fa099">
+<meta name=apple-mobile-web-app-capable content=yes>
+<meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
+<meta name=apple-mobile-web-app-title content="LDRC RX V2">
+<title>View channels &middot; LDRC RX V2</title>
+<link rel=stylesheet href="/style.css?v=28">
+<style>
+.container{max-width:min(96vw,1100px)}
+.chTable{display:grid;grid-template-columns:auto auto 1fr auto;gap:6px 10px;align-items:center;font-variant-numeric:tabular-nums}
+.chIdx{color:#7a8b95;font-size:.9em;text-align:right;min-width:1.2em}
+.chLbl{color:#445;font-size:.95em;min-width:5em;white-space:nowrap}
+.chTrack{position:relative;height:24px;background:#eef0f2;border-radius:4px;overflow:hidden}
+.chFill{position:absolute;left:0;top:0;bottom:0;width:0;transition:width 50ms linear,background 200ms,opacity 200ms;border-radius:4px}
+.chVal{position:absolute;left:6px;top:0;bottom:0;display:flex;align-items:center;font-size:.88em;color:#222;text-shadow:0 0 2px rgba(255,255,255,.85)}
+.chPct{font-size:.88em;color:#445;min-width:3.6em;text-align:right}
+.stale .chFill{opacity:.25}
+.status{margin:0 0 12px 0;font-weight:600}
+.statusOK{color:#3a7}
+.statusBad{color:#b54}
+
+/* Helicopter preview ---------------------------------------------------- */
+.heliCard{margin-top:14px;padding:0;overflow:hidden}
+.heliCard h2{margin:0;padding:8px 14px;background:#3a4248;color:#e8edef;font-size:1em;font-weight:600;letter-spacing:.02em}
+.heliWrap{
+    position:relative;height:min(46vh,420px);
+    background:
+        linear-gradient(#fafbfc,#eef0f2),
+        linear-gradient(90deg,rgba(0,0,0,.05) 1px,transparent 1px) 0 0/22px 22px,
+        linear-gradient(rgba(0,0,0,.05) 1px,transparent 1px) 0 0/22px 22px;
+    background-blend-mode:normal,multiply,multiply;
+}
+#heli3D{position:absolute;inset:0;width:100%;height:100%;display:block}
+.heliMsg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#778;font-size:.9em;pointer-events:none}
+.heliReset{position:absolute;top:8px;right:10px;font-size:.82em;background:#fff;border:1px solid #c2c8cd;border-radius:4px;padding:4px 11px;cursor:pointer;color:#345;z-index:2}
+.heliReset:hover{background:#f4f6f8}
+.heliReadout{position:absolute;bottom:6px;left:10px;font-size:.78em;color:#556;font-variant-numeric:tabular-nums;background:rgba(255,255,255,.65);padding:3px 8px;border-radius:4px;z-index:2}
+.heliStale #heli3D{opacity:.35;filter:grayscale(.4)}
+</style>
+<script src="/app.js?v=28" defer></script>
+<script src="/three.min.js" defer></script>
+</head>
+<body>
+<button class=helpBtn aria-label=Help title=Help onclick="LDRC.showHelp()">?</button>
+<div class=bg-photo aria-hidden=true></div>
+<div class=bg-wash  aria-hidden=true></div>
+<div class=container>
+    <h1>View channels</h1>
+    <p class=status id=status>Connecting&hellip;</p>
+
+    <div class=card>
+        <div class=chTable id=chTable></div>
+    </div>
+
+    <div class="card heliCard">
+        <h2>Preview</h2>
+        <div class=heliWrap id=heliWrap>
+            <canvas id=heli3D></canvas>
+            <div class=heliMsg id=heliMsg>Loading 3D model&hellip;</div>
+            <button class=heliReset id=heliReset type=button>Reset</button>
+            <div class=heliReadout id=heliReadout>roll 0&deg; &middot; pitch 0&deg; &middot; yaw 0&deg;</div>
+        </div>
+    </div>
+
+    <a class="btn btn-back" href="/"><span class=ico>&#8617;</span>Return to menu</a>
+    <div class=footer></div>
+</div>
+
+<script>
+// ---------------------------------------------------------------------
+//  Channel bar viewer
+// ---------------------------------------------------------------------
+
+// TX is sending the full 500..2500 us protocol range; centre 1500.
+const CH_LO  = 500;
+const CH_HI  = 2500;
+const CH_MID = 1500;
+// Fill-bar scale is slightly wider than the live range so even at full
+// stick deflection a sliver of colour remains visible (matches Rotorflight).
+const FILL_LO = 400;
+const FILL_HI = 2600;
+const POLL_MS  = 33;       // ~30 Hz — smooth-looking bars without hammering the chip
+const STALE_MS = 500;
+
+const CH_NAMES = [
+    'Roll', 'Pitch', 'Throttle', 'Yaw', 'Collective',
+    'AUX 1', 'AUX 2', 'AUX 3', 'AUX 4', 'AUX 5',
+    'AUX 6', 'AUX 7', 'AUX 8', 'AUX 9', 'AUX 10', 'AUX 11'
+];
+const CH_BIPOLAR = [
+    true, true, false, true, false,
+    false, false, false, false, false,
+    false, false, false, false, false, false
+];
+
+(function build() {
+    let html = '';
+    for (let i = 0; i < 16; ++i) {
+        const hue = (i * 360 / 16) | 0;
+        html += '<div class=chIdx>' + (i + 1) + '</div>'
+              + '<div class=chLbl>' + CH_NAMES[i] + '</div>'
+              + '<div class=chTrack>'
+              +   '<div class=chFill id=f' + i + ' style="background:hsl(' + hue + ',70%,62%)"></div>'
+              +   '<div class=chVal  id=v' + i + '>&mdash;</div>'
+              + '</div>'
+              + '<div class=chPct id=p' + i + '>&mdash;</div>';
+    }
+    document.getElementById('chTable').innerHTML = html;
+})();
+
+const table      = document.getElementById('chTable');
+const status     = document.getElementById('status');
+const heliWrap   = document.getElementById('heliWrap');
+const heliReadout= document.getElementById('heliReadout');
+
+// Stick → -1..+1 about 1500 us.
+function stick(us) {
+    const v = (us - CH_MID) / ((CH_HI - CH_LO) / 2);   // ±1 at the protocol extremes
+    return Math.max(-1, Math.min(1, v));
+}
+// us → 0..1 from CH_LO..CH_HI.
+function unit(us) {
+    return Math.max(0, Math.min(1, (us - CH_LO) / (CH_HI - CH_LO)));
+}
+
+// ---------------------------------------------------------------------
+//  3D helicopter (Three.js) — built once Three.js has loaded
+// ---------------------------------------------------------------------
+
+const I_ROLL = 0, I_PITCH = 1, I_THROTTLE = 2, I_YAW = 3, I_COLLECTIVE = 4;
+const ROLL_RATE_DPS  = 220;
+const PITCH_RATE_DPS = 160;
+const YAW_RATE_DPS   = 280;
+const STICK_DEAD     = 0.04;
+
+let attRoll = 0, attPitch = 0, attYaw = 0;    // raw stick-deflection accumulators (readout only)
+let lastTickMs = 0;
+// In-flight default RPM. The disc/blades crossover (in the animation
+// loop, below) shows the discrete blades up to ~3 RPS and a translucent
+// blur disc above that — matches what a viewer actually sees. Resting
+// values are high so the preview opens looking like a flying model.
+let rotorRateRPS = 25;
+let tailRateRPS  = 90;
+
+let three    = null;
+let heliQuat = null;                          // body orientation; identity until buildHeli3D
+
+document.getElementById('heliReset').addEventListener('click', () => {
+    attRoll = attPitch = attYaw = 0;
+    if (heliQuat) heliQuat.identity();
+});
+
+function buildHeli3D() {
+    if (!window.THREE) {
+        document.getElementById('heliMsg').textContent = '3D library failed to load — bars still work.';
+        return;
+    }
+    const canvas = document.getElementById('heli3D');
+    const wrap   = heliWrap;
+
+    const scene = new THREE.Scene();
+
+    const w = wrap.clientWidth, h = wrap.clientHeight;
+    const camera = new THREE.PerspectiveCamera(28, w / h, 0.1, 50);
+    camera.position.set(2.8, 1.55, 3.4);
+    camera.lookAt(0, 0.15, 0);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(window.devicePixelRatio || 1);
+    renderer.setClearColor(0x000000, 0);
+    renderer.setSize(w, h, false);
+
+    // Lights
+    scene.add(new THREE.HemisphereLight(0xffffff, 0xb0b8c0, 0.65));
+    const sun = new THREE.DirectionalLight(0xffffff, 0.9);
+    sun.position.set(3.5, 5, 2.5);
+    scene.add(sun);
+    const fill = new THREE.DirectionalLight(0xc8d4dc, 0.35);
+    fill.position.set(-3, 2, -2);
+    scene.add(fill);
+
+    // Materials — SAB Heli Division-ish: glossy black body with bright
+    // lime-yellow accents. Real RC helis are usually painted in strong
+    // primary or fluorescent colours so they can be seen against sky
+    // and field; muted tones make a stylised model look generic.
+    const M = {
+        body:    new THREE.MeshPhongMaterial({ color: 0x1a1a1a, shininess: 140, specular: 0x606060 }),
+        accent:  new THREE.MeshPhongMaterial({ color: 0xd6f04a, shininess: 130, specular: 0x808080 }),
+        accent2: new THREE.MeshPhongMaterial({ color: 0xb8d63a, shininess: 110, specular: 0x707070 }),
+        // Canopy: very glossy black with strong specular so it picks up
+        // a highlight from the sun light and reads as moulded plexiglass
+        // rather than flat paint.
+        canopy:  new THREE.MeshPhongMaterial({ color: 0x0c0c0c, shininess: 280, specular: 0xc8d4e0, transparent: true, opacity: .92 }),
+        dark:    new THREE.MeshPhongMaterial({ color: 0x1f1f22, shininess: 60 }),
+        blade:   new THREE.MeshPhongMaterial({ color: 0x101014, shininess: 90 }),
+        metal:   new THREE.MeshPhongMaterial({ color: 0xa8aeb6, shininess: 200, specular: 0xd0d4d8 }),
+        // Battery pack — bright red so it pops against the matte black
+        // chassis it's slung under, the way a LiPo flight pack does.
+        battery: new THREE.MeshPhongMaterial({ color: 0xd9342a, shininess: 80 }),
+        // Translucent disc that stands in for spinning rotor blades.
+        // depthWrite is off so the disc doesn't z-clip with the hub/blades
+        // underneath and produce visible seams.
+        disc:    new THREE.MeshBasicMaterial({
+            color: 0x141a20, transparent: true, opacity: .22,
+            side: THREE.DoubleSide, depthWrite: false
+        }),
+        // Rim ring: blade tips travel furthest and read slightly darker
+        // in a motion-blurred photo. Two layered translucent discs give
+        // the spinning rotor its convincing "thickness" without any
+        // animation cost.
+        discRim: new THREE.MeshBasicMaterial({
+            color: 0x141a20, transparent: true, opacity: .36,
+            side: THREE.DoubleSide, depthWrite: false
+        })
+    };
+
+    const heli = new THREE.Group();
+    heli.rotation.order = 'YZX';            // intrinsic yaw → pitch → roll
+    heli.position.y = 0.1;
+
+    // ============================================================
+     // Lower chassis + battery — the single biggest "this is a model"
+     // tell. Full-scale helis have a sealed fuselage; model helis are
+     // a thin shell sitting on a visible carbon-plate chassis with
+     // the battery slung beneath it between the skid struts. Showing
+     // that open frame underneath is what turns the silhouette from
+     // "torpedo" into "scratch-built RC model".
+     // ============================================================
+    // (Chassis box removed — the user found it sat awkwardly between
+    //  the skids and read as a separate floating piece.)
+
+    // Main fuselage
+    const fuseGeo = new THREE.SphereGeometry(0.34, 32, 20);
+    fuseGeo.scale(2.2, 0.68, 0.45);
+    const fuse = new THREE.Mesh(fuseGeo, M.body);
+    fuse.position.set(-0.05, 0.03, 0);
+    heli.add(fuse);
+
+    // Painted side stripe — a swept chevron that swells through the
+    // middle of the body and tapers to a sharp point at the nose, the
+    // shape of a real model-heli racing decal. Flat ShapeGeometry on
+    // each flank rather than a 3D torus ring or a flat rectangle.
+    const stripeMat = new THREE.MeshPhongMaterial({
+        color: 0xd6f04a, shininess: 130, specular: 0x808080,
+        side: THREE.DoubleSide
+    });
+    const stripeShape = new THREE.Shape();
+    stripeShape.moveTo(-0.50,  0.035);
+    stripeShape.lineTo(-0.10,  0.052);
+    stripeShape.lineTo( 0.55,  0.000);
+    stripeShape.lineTo(-0.10, -0.052);
+    stripeShape.lineTo(-0.50, -0.035);
+    stripeShape.closePath();
+    const stripeGeo = new THREE.ShapeGeometry(stripeShape);
+    const stripeR = new THREE.Mesh(stripeGeo, stripeMat);
+    stripeR.position.set(-0.05, 0.02, 0.156);
+    heli.add(stripeR);
+    const stripeL = new THREE.Mesh(stripeGeo, stripeMat);
+    stripeL.position.set(-0.05, 0.02, -0.156);
+    heli.add(stripeL);
+
+    // Sharp nose cone — a proper pointed tip projecting forward of the
+    // body. A stretched half-sphere always rounds off at the front;
+    // a cone gives the sharply aerodynamic nose typical of fast model
+    // helis (Goblin, T-Rex, etc.).
+    const noseGeo = new THREE.ConeGeometry(0.12, 0.32, 20);
+    const nose = new THREE.Mesh(noseGeo, M.body);
+    nose.rotation.z = -Math.PI / 2;
+    nose.position.set(0.74, 0.03, 0);
+    heli.add(nose);
+
+    // Canopy — pulled forward over the nose / front of the cabin.
+    const canGeo = new THREE.SphereGeometry(0.27, 24, 16, 0, Math.PI * 2, 0, Math.PI * 0.55);
+    canGeo.scale(1.65, 0.90, 0.55);
+    const canopy = new THREE.Mesh(canGeo, M.canopy);
+    canopy.position.set(0.22, 0.06, 0);
+    heli.add(canopy);
+
+    // Engine cowling — narrow dome over the motor mount, behind the canopy.
+    const cowlGeo = new THREE.SphereGeometry(0.18, 18, 12);
+    cowlGeo.scale(1.05, 0.55, 0.62);
+    const cowl = new THREE.Mesh(cowlGeo, M.dark);
+    cowl.position.set(-0.08, 0.26, 0);
+    heli.add(cowl);
+
+    // Tail boom + control rod
+    const boomGeo = new THREE.CylinderGeometry(0.022, 0.07, 1.3, 14);
+    const boom = new THREE.Mesh(boomGeo, M.body);
+    boom.rotation.z = Math.PI / 2;
+    boom.position.set(-0.86, 0.08, 0);
+    heli.add(boom);
+
+    const rodGeo = new THREE.CylinderGeometry(0.008, 0.008, 1.18, 8);
+    const rod = new THREE.Mesh(rodGeo, M.metal);
+    rod.rotation.z = Math.PI / 2;
+    rod.position.set(-0.82, 0.015, 0);
+    heli.add(rod);
+
+    // (Boom support strut removed — at the camera angle it stuck out
+    //  diagonally and read as an aerial poking down out the back.)
+
+    // Tail gearbox housing — chunky block at the end of the boom where
+    // the bevel drive turns torque from the boom onto the tail-rotor
+    // shaft. Without this the tail rotor looks like it floats.
+    const tailBoxGeo = new THREE.BoxGeometry(0.11, 0.16, 0.08);
+    const tailBox = new THREE.Mesh(tailBoxGeo, M.dark);
+    tailBox.position.set(-1.42, 0.14, 0);
+    heli.add(tailBox);
+
+    // Vertical stabiliser — hangs DOWN from the boom (some model
+    // helis carry the fin under the tail boom rather than over it,
+    // a deliberate styling choice). No horizontal stab any more —
+    // they were visually busy without adding to the silhouette.
+    const finGeo = new THREE.BoxGeometry(0.26, 0.30, 0.025);
+    const fin = new THREE.Mesh(finGeo, M.accent2);
+    fin.position.set(-1.4, -0.08, 0);
+    heli.add(fin);
+
+    // Rotor mast — taller and clearly visible above the body.
+    const mastGeo = new THREE.CylinderGeometry(0.035, 0.045, 0.22, 14);
+    const mast = new THREE.Mesh(mastGeo, M.dark);
+    mast.position.set(0, 0.44, 0);
+    heli.add(mast);
+
+    // Rotor head — model-heli style. A wide flat hub disc, plus two
+    // cylindrical "blade grips" perpendicular to each other where the
+    // blades hinge. The grips are short, blunt cylinders pointing out
+    // sideways; on a real heli they are the most visually distinctive
+    // part of the rotor system. Without them the hub reads as a coin
+    // glued to the top of the mast.
+    const hubGeo = new THREE.CylinderGeometry(0.10, 0.10, 0.035, 18);
+    const hub = new THREE.Mesh(hubGeo, M.metal);
+    hub.position.set(0, 0.55, 0);
+    heli.add(hub);
+
+    // Two grip stubs, 90° to each other. Blades attach to these.
+    const gripGeo = new THREE.CylinderGeometry(0.038, 0.038, 0.20, 12);
+    for (let i = 0; i < 2; ++i) {
+        const grip = new THREE.Mesh(gripGeo, M.metal);
+        grip.rotation.z = Math.PI / 2;
+        grip.rotation.y = i * Math.PI / 2;
+        grip.position.set(0, 0.55, 0);
+        heli.add(grip);
+    }
+
+    // Swashplate suggestion — a thin disc just below the head where
+    // the pitch link arms meet the rotating bits. Adds a clear band
+    // of contrast under the hub.
+    const swashGeo = new THREE.CylinderGeometry(0.085, 0.085, 0.018, 18);
+    const swash = new THREE.Mesh(swashGeo, M.accent);
+    swash.position.set(0, 0.50, 0);
+    heli.add(swash);
+
+    // Main rotor — keep two discrete blades for static / spool-up RPM,
+    // but layer a translucent disc above them. The animation loop hides
+    // the discrete blades and shows the disc once rotorRateRPS clears
+    // the persistence-of-vision threshold (~3 RPS), so a viewer always
+    // sees what their eye would actually see at that speed.
+    const rotorGrp = new THREE.Group();
+    rotorGrp.position.set(0, 0.58, 0);
+    const bladeGeo = new THREE.BoxGeometry(1.75, 0.012, 0.06);
+    const mainBlades = [];
+    for (let i = 0; i < 2; ++i) {
+        const b = new THREE.Mesh(bladeGeo, M.blade);
+        b.rotation.y = i * Math.PI / 2;
+        rotorGrp.add(b);
+        mainBlades.push(b);
+    }
+    heli.add(rotorGrp);
+
+    const mainDiscGeo = new THREE.CircleGeometry(0.88, 64);
+    const mainDisc    = new THREE.Mesh(mainDiscGeo, M.disc);
+    mainDisc.rotation.x = -Math.PI / 2;
+    mainDisc.position.set(0, 0.585, 0);
+    mainDisc.visible = false;
+    heli.add(mainDisc);
+
+    const mainRimGeo = new THREE.RingGeometry(0.83, 0.88, 64);
+    const mainRim    = new THREE.Mesh(mainRimGeo, M.discRim);
+    mainRim.rotation.x = -Math.PI / 2;
+    mainRim.position.set(0, 0.586, 0);
+    mainRim.visible = false;
+    heli.add(mainRim);
+
+    // Tail rotor — same disc-or-blades treatment, in the X-Y plane.
+    const tailRotorGrp = new THREE.Group();
+    tailRotorGrp.position.set(-1.42, 0.22, 0.09);
+    const tBladeGeo = new THREE.BoxGeometry(0.27, 0.012, 0.022);
+    const tailBlades = [];
+    for (let i = 0; i < 2; ++i) {
+        const tb = new THREE.Mesh(tBladeGeo, M.blade);
+        tb.rotation.z = i * Math.PI / 2;
+        tailRotorGrp.add(tb);
+        tailBlades.push(tb);
+    }
+    heli.add(tailRotorGrp);
+
+    // CircleGeometry defaults to the X-Y plane (normal along +Z), which
+    // is exactly the plane the tail blades sweep in (group rotates about
+    // its own Z axis). No extra rotation needed — the earlier
+    // `rotation.y = π/2` accidentally tipped the disc into the Y-Z plane,
+    // 90° out from the blades and the rim it's meant to replace.
+    const tailDiscGeo = new THREE.CircleGeometry(0.145, 32);
+    const tailDisc    = new THREE.Mesh(tailDiscGeo, M.disc);
+    tailDisc.position.set(-1.42, 0.22, 0.095);
+    tailDisc.visible = false;
+    heli.add(tailDisc);
+
+    const tailRimGeo = new THREE.RingGeometry(0.12, 0.145, 32);
+    const tailRim    = new THREE.Mesh(tailRimGeo, M.discRim);
+    tailRim.position.set(-1.42, 0.22, 0.096);
+    tailRim.visible = false;
+    heli.add(tailRim);
+
+    // Skids — landing-gear tubes that follow a curve so the front
+    // sweeps up off the ground, the way a real model heli's skid does
+    // (a straight cylinder always looks like an unfinished broom
+    // handle). The curve is defined in 2D (z=0) and the two skid
+    // meshes are then translated out to the left and right.
+    const skidPath = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(-0.50, -0.36, 0),
+        new THREE.Vector3(-0.20, -0.36, 0),
+        new THREE.Vector3( 0.30, -0.36, 0),
+        new THREE.Vector3( 0.52, -0.33, 0),
+        new THREE.Vector3( 0.62, -0.26, 0)
+    ]);
+    const skidGeo  = new THREE.TubeGeometry(skidPath, 24, 0.024, 10, false);
+    for (const z of [-0.24, 0.24]) {
+        const skid = new THREE.Mesh(skidGeo, M.dark);
+        skid.position.set(0, 0, z);
+        heli.add(skid);
+    }
+    // Skid struts — each one rises vertically from the skid then bends
+    // inward at the top to meet the body, the way real model heli
+    // landing-gear struts do. A straight cylinder leaves the strut
+    // tops floating beside the body rather than touching it. The path
+    // has four control points: foot at the skid, a short vertical run,
+    // a bend, and the top landing on (or just inside) the body's
+    // lower-side surface.
+    for (const zs of [-0.24, 0.24]) {
+        for (const xs of [-0.28, 0.28]) {
+            const xt = xs * (0.24 / 0.28);
+            const zt = zs * (0.10 / 0.24);
+            const strutPath = new THREE.CatmullRomCurve3([
+                new THREE.Vector3(xs, -0.36, zs),
+                new THREE.Vector3(xs, -0.28, zs),
+                new THREE.Vector3(xs, -0.22, zs * 0.85),
+                new THREE.Vector3(xt, -0.12, zt)
+            ]);
+            const strutGeo = new THREE.TubeGeometry(strutPath, 16, 0.014, 8, false);
+            heli.add(new THREE.Mesh(strutGeo, M.dark));
+        }
+    }
+
+    scene.add(heli);
+
+    heliQuat = new THREE.Quaternion();        // starts at identity
+
+    // Resize handling
+    new ResizeObserver(() => {
+        const W = wrap.clientWidth, H = wrap.clientHeight;
+        if (W < 2 || H < 2) return;
+        renderer.setSize(W, H, false);
+        camera.aspect = W / H;
+        camera.updateProjectionMatrix();
+    }).observe(wrap);
+
+    // Animation loop. Pose is set externally in updatePose() by composing
+    // body-frame delta quaternions; we just apply heliQuat each frame,
+    // spin the rotors, and swap discrete blades for a translucent disc
+    // once the spin rate exceeds what the eye can resolve.
+    let rotorAng = 0, tailAng = 0, lastT = 0;
+    function frame(t) {
+        requestAnimationFrame(frame);
+        const dt = lastT ? Math.min(0.1, (t - lastT) / 1000) : 0;
+        lastT = t;
+        rotorAng += rotorRateRPS * 2 * Math.PI * dt;
+        tailAng  += tailRateRPS  * 2 * Math.PI * dt;
+        rotorGrp.rotation.y     = rotorAng;     // main rotor about vertical mast
+        tailRotorGrp.rotation.z = tailAng;      // tail rotor in X-Y plane
+
+        // Persistence-of-vision threshold: above ~3 revolutions per
+        // second the eye merges the blades into a translucent disc.
+        // Show the disc + tip ring instead of the discrete blades
+        // (which would otherwise read as solid bars at every frame).
+        const POV_RPS = 3;
+        const mainBlur = rotorRateRPS > POV_RPS;
+        mainBlades.forEach(b => b.visible = !mainBlur);
+        mainDisc.visible = mainBlur;
+        mainRim.visible  = mainBlur;
+        const tailBlur = tailRateRPS > POV_RPS;
+        tailBlades.forEach(b => b.visible = !tailBlur);
+        tailDisc.visible = tailBlur;
+        tailRim.visible  = tailBlur;
+
+        heli.quaternion.copy(heliQuat);
+        renderer.render(scene, camera);
+    }
+    requestAnimationFrame(frame);
+
+    document.getElementById('heliMsg').style.display = 'none';
+    three = { scene, camera, renderer, heli };
+}
+
+window.addEventListener('load', buildHeli3D);
+
+// ---------------------------------------------------------------------
+//  Stale handling + readout
+// ---------------------------------------------------------------------
+
+// Scratch quaternion + axis vectors reused per tick to avoid garbage.
+const _tq        = (typeof THREE !== 'undefined') ? null : null;   // lazy-allocated once Three loads
+const _axisRoll  = { x: 1, y: 0, z: 0 };
+const _axisPitch = { x: 0, y: 0, z: 1 };
+const _axisYaw   = { x: 0, y: 1, z: 0 };
+
+function updatePose(ch, stale) {
+    if (stale) {
+        rotorRateRPS = 0;
+        tailRateRPS  = 0;
+        heliWrap.classList.add('heliStale');
+        lastTickMs = 0;
+        return;
+    }
+    heliWrap.classList.remove('heliStale');
+
+    const now = performance.now();
+    const dt  = lastTickMs ? Math.min(0.25, (now - lastTickMs) / 1000) : 0;
+    lastTickMs = now;
+
+    const roll  = stick(ch[I_ROLL]);
+    const pitch = stick(ch[I_PITCH]);
+    const yaw   = stick(ch[I_YAW]);
+    const thr   = unit(ch[I_THROTTLE]);
+
+    const dRoll  = roll  * ROLL_RATE_DPS  * dt * Math.PI / 180;
+    const dPitch = pitch * PITCH_RATE_DPS * dt * Math.PI / 180;
+    const dYaw   = yaw   * YAW_RATE_DPS   * dt * Math.PI / 180;
+
+    // Compose body-frame delta rotations into heliQuat. After each multiply,
+    // the heli's body axes (including the rotor-mast Y axis) rotate with it,
+    // so the next yaw delta is around the *new* mast position — i.e. yaw is
+    // always around the heli's current vertical axis, regardless of pitch
+    // or roll. Same for pitch/roll about current body axes.
+    //
+    // Signs (after matching Malcolm's TX):
+    //   yaw right  → CW from above   → negative angle about body +Y
+    //   pitch fwd  → nose down       → negative angle about body +Z
+    //   roll right → right side dips → positive angle about body +X
+    if (heliQuat && window.THREE) {
+        const tq = new THREE.Quaternion();
+        const v  = new THREE.Vector3();
+        if (Math.abs(yaw) > STICK_DEAD) {
+            tq.setFromAxisAngle(v.set(0, 1, 0), -dYaw);
+            heliQuat.multiply(tq);
+        }
+        if (Math.abs(pitch) > STICK_DEAD) {
+            tq.setFromAxisAngle(v.set(0, 0, 1), -dPitch);
+            heliQuat.multiply(tq);
+        }
+        if (Math.abs(roll) > STICK_DEAD) {
+            tq.setFromAxisAngle(v.set(1, 0, 0),  dRoll);
+            heliQuat.multiply(tq);
+        }
+    }
+
+    // Stick-deflection accumulators for the on-screen readout — these are
+    // just "how hard have you held the sticks" totals, not real heli angles.
+    if (Math.abs(roll)  > STICK_DEAD) attRoll  += roll  * ROLL_RATE_DPS  * dt;
+    if (Math.abs(pitch) > STICK_DEAD) attPitch += pitch * PITCH_RATE_DPS * dt;
+    if (Math.abs(yaw)   > STICK_DEAD) attYaw   += yaw   * YAW_RATE_DPS   * dt;
+
+    // Realistic-ish flight RPM scaling. Below the POV threshold (3 RPS)
+    // the discrete blades are visible during spool-up; from ~idle on
+    // up the disc takes over. Tail rotor is geared ~4.7:1 off the main.
+    rotorRateRPS = 8  + 28  * thr;     // idle 8 RPS, full ~36 RPS (~2160 RPM)
+    tailRateRPS  = 30 + 110 * thr;     // idle 30 RPS, full ~140 RPS
+
+    const wrap = a => { let x = ((a + 180) % 360 + 360) % 360 - 180; return x.toFixed(0); };
+    heliReadout.textContent =
+        'roll '  + wrap(attRoll)  + '° · ' +
+        'pitch ' + wrap(attPitch) + '° · ' +
+        'yaw '   + wrap(attYaw)   + '° · ' +
+        'thr '   + Math.round(thr * 100) + '%';
+}
+
+// ---------------------------------------------------------------------
+//  Bar paint + polling
+// ---------------------------------------------------------------------
+
+function paint(s) {
+    const ch    = s.ch;
+    const age   = s.age_ms;
+    const stale = (age < 0) || (age > STALE_MS);
+    table.classList.toggle('stale', stale);
+    status.innerHTML = stale
+        ? '<span class=statusBad>No RC signal</span>'
+        : '<span class=statusOK>RC signal live</span>';
+
+    for (let i = 0; i < 16; ++i) {
+        const us = ch[i];
+        // Bar fill: slightly wider than protocol range so extremes stay visible.
+        const fillPct = Math.max(0, Math.min(100, ((us - FILL_LO) / (FILL_HI - FILL_LO)) * 100));
+        let pctTxt;
+        if (CH_BIPOLAR[i]) {
+            const v = ((us - CH_MID) / ((CH_HI - CH_LO) / 2)) * 100;
+            const c = Math.max(-100, Math.min(100, v));
+            pctTxt = (c >= 0 ? '+' : '') + c.toFixed(1) + '%';
+        } else {
+            const u = Math.max(0, Math.min(100, ((us - CH_LO) / (CH_HI - CH_LO)) * 100));
+            pctTxt = u.toFixed(1) + '%';
+        }
+        document.getElementById('f' + i).style.width = fillPct.toFixed(1) + '%';
+        document.getElementById('v' + i).textContent = us;
+        document.getElementById('p' + i).textContent = pctTxt;
+    }
+    updatePose(ch, stale);
+}
+
+let _stopping = false;
+async function tick() {
+    if (_stopping) return;
+    try {
+        const r = await fetch('/api/channels.json', { cache: 'no-store' });
+        if (r.ok) paint(await r.json());
+    } catch (e) { /* single misses are fine */ }
+    setTimeout(tick, POLL_MS);
+}
+document.addEventListener('DOMContentLoaded', () => setTimeout(tick, 200));
+document.addEventListener('visibilitychange', () => { _stopping = document.hidden; if (!_stopping) tick(); });
+</script>
+<template id=helpContent><h2>View Channels</h2>
+<p>Shows the 16 RC channels arriving from the transmitter in real time, plus a 3-D model helicopter that mirrors your stick movements (roll, pitch, yaw, throttle, collective).</p>
+<h3>How to use it</h3>
+<p>Move the sticks on your transmitter — the bars should respond instantly and the helicopter should bank, pitch and yaw accordingly. Throttle changes the rotor speed.</p>
+<h3>What to look for</h3>
+<ul>
+<li>Each of channels 1–16 should respond cleanly to its assigned stick or switch.</li>
+<li>If a channel is dead while others move, the TX hasn't mapped it.</li>
+<li>If <em>all</em> channels freeze, the link has dropped — wait for a swap or check the TX.</li>
+</ul>
+<p>The <b>Reset</b> button straightens the helicopter back to neutral attitude if it looks tilted from accumulated stick deflections.</p>
+</template>
+</body>
+</html>

@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name=theme-color content="#5fa099">
+<meta name=apple-mobile-web-app-capable content=yes>
+<meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
+<meta name=apple-mobile-web-app-title content="LDRC RX V2">
+<title>Governor (global) &middot; LDRC RX V2</title>
+<link rel=stylesheet href="/style.css?v=29">
+<script src="/app.js?v=29" defer></script>
+<style>
+.fldRow{display:flex;justify-content:space-between;align-items:center;
+        padding:.45em .7em;background:rgba(255,255,255,.55);border-radius:8px;margin:.25em 0}
+.fldRow label{flex:1;color:#3a5165;font-size:.95em}
+.fldRow input[type=number],.fldRow select{width:7em;padding:.4em;font-size:.95em;text-align:right;
+        border:1px solid #b8c7d0;border-radius:6px;background:#fff}
+.banner{padding:.7em;border-radius:10px;text-align:center;font-weight:600;margin:0 0 1em}
+.banner.info{background:rgba(200,210,220,.85);color:#3a5165}
+.banner.good{background:rgba(168,210,154,.85);color:#2a4d1f}
+.banner.bad {background:rgba(220,160,140,.85);color:#5c2a1a}
+.banner.warn{background:rgba(255,200,140,.95);color:#5c3a1a;font-size:1.05em;padding:1em}
+.curveTable{width:100%;border-collapse:separate;border-spacing:.15em;table-layout:fixed}
+.curveTable td{padding:.1em}
+.curveTable td.lab{font-weight:600;color:#3a5165;text-align:center;background:rgba(200,210,220,.6);
+                   border-radius:6px;font-size:.8em;padding:.3em 0}
+.curveTable td input{width:100%;padding:.35em .1em;font-size:.82em;text-align:center;
+                     border:1px solid #b8c7d0;border-radius:6px;box-sizing:border-box;
+                     -moz-appearance:textfield}
+.curveTable td input::-webkit-outer-spin-button,
+.curveTable td input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+input:disabled,select:disabled{background:#eee;color:#999}
+</style>
+</head>
+<body>
+<button class=helpBtn aria-label=Help title=Help onclick="LDRC.showHelp()">?</button>
+<div class=bg-photo aria-hidden=true></div>
+<div class=bg-wash  aria-hidden=true></div>
+<div class=container>
+    <h1>Governor (global)</h1>
+    <div id=verBanner class="banner warn" style="display:none">
+        <strong>Requires Rotorflight 2.3</strong><br>
+        <span id=verBannerMsg>You are running an older firmware. Editing the governor is disabled. Please upgrade your flight controller to Rotorflight 2.3 to use this page.</span>
+    </div>
+    <div id=status class="banner info">loading&hellip;</div>
+
+    <div class=card>
+        <h2>Mode &amp; throttle</h2>
+        <div class=fldRow><label>Governor mode</label>
+            <select id=g_mode>
+                <option value=0>0 — OFF</option>
+                <option value=1>1 — LIMIT</option>
+                <option value=2>2 — DIRECT</option>
+                <option value=3>3 — ELECTRIC</option>
+                <option value=4>4 — NITRO</option>
+            </select></div>
+        <div class=fldRow><label>Handover throttle (%)</label>    <input type=number id=g_hand></div>
+        <div class=fldRow><label>Throttle type</label>            <input type=number id=g_ttype></div>
+        <div class=fldRow><label>Idle throttle (%)</label>        <input type=number id=g_idle></div>
+        <div class=fldRow><label>Auto throttle (%)</label>        <input type=number id=g_auto></div>
+    </div>
+
+    <div class=card>
+        <h2>Timings (tenths of a second)</h2>
+        <div class=fldRow><label>Startup time</label>             <input type=number id=g_start></div>
+        <div class=fldRow><label>Spool-up time</label>            <input type=number id=g_spool></div>
+        <div class=fldRow><label>Spool-down time</label>          <input type=number id=g_spdwn></div>
+        <div class=fldRow><label>Tracking time</label>            <input type=number id=g_track></div>
+        <div class=fldRow><label>Recovery time</label>            <input type=number id=g_recov></div>
+        <div class=fldRow><label>Throttle-hold timeout</label>    <input type=number id=g_hold></div>
+        <div class=fldRow><label>Autorotation timeout</label>     <input type=number id=g_auto_to></div>
+    </div>
+
+    <div class=card>
+        <h2>Filter cutoffs (Hz)</h2>
+        <div class=fldRow><label>Power filter</label>             <input type=number id=g_fpwr></div>
+        <div class=fldRow><label>RPM filter</label>               <input type=number id=g_frpm></div>
+        <div class=fldRow><label>TTA filter</label>               <input type=number id=g_ftta></div>
+        <div class=fldRow><label>FF filter</label>                <input type=number id=g_fff></div>
+        <div class=fldRow><label>D filter</label>                 <input type=number id=g_fd></div>
+    </div>
+
+    <div class=card>
+        <h2>Bypass throttle curve (%)</h2>
+        <div class=fldRow><label>Points</label>
+            <select id=g_bypPoints>
+                <option value=5>5</option>
+                <option value=9>9</option>
+            </select></div>
+        <canvas id=bypCanvas width=600 height=320
+                style="width:100%;height:auto;background:#f4f5f7;border-radius:8px;
+                       display:block;margin:.4em 0;touch-action:none;cursor:ns-resize"></canvas>
+        <table class=curveTable>
+            <tr id=bypHead></tr>
+            <tr id=bypRow></tr>
+        </table>
+        <p class=muted style="margin-top:.4em;font-size:.8em;text-align:center">
+            Drag points up/down on the chart, or type values below. In 5-point mode the in-between values are auto-interpolated as midpoints, matching Configurator.
+        </p>
+    </div>
+
+    <button class="btn btn-fly" id=saveBtn onclick="save()" style="background:#5fa099"><span class=ico>&#128190;</span>Save to Flight Controller</button>
+    <button class="btn btn-fw" onclick="load()"><span class=ico>&#8635;</span>Reload from flight controller</button>
+
+    <a class="btn btn-back" href="/rotorflight"><span class=ico>&#8617;</span>Back</a>
+    <div class=footer></div>
+</div>
+
+<script>
+// MSP_GOVERNOR_CONFIG (142) / MSP_SET_GOVERNOR_CONFIG (143)
+// Payload layout for Rotorflight 2.3 (firmware RF-4.6.x) — 42 bytes:
+//   [0]      u8   gov_mode (0=OFF,1=PASS,2=STD,3=MODE1,4=MODE2)
+//   [1..2]   u16  gov_startup_time (0.1 s)
+//   [3..4]   u16  gov_spoolup_time (0.1 s)
+//   [5..6]   u16  gov_tracking_time (0.1 s)
+//   [7..8]   u16  gov_recovery_time (0.1 s)
+//   [9..10]  u16  gov_throttle_hold_timeout (0.1 s)
+//   [11..12] u16  reserved (was lost_headspeed_timeout — write 0, ignore)
+//   [13..14] u16  gov_autorotation_timeout (0.1 s)
+//   [15..16] u16  reserved (was autorotation_bailout_time — write 0)
+//   [17..18] u16  reserved (was autorotation_min_entry_time — write 0)
+//   [19]     u8   gov_handover_throttle (%)
+//   [20]     u8   gov_pwr_filter (Hz)
+//   [21]     u8   gov_rpm_filter (Hz)
+//   [22]     u8   gov_tta_filter (Hz)
+//   [23]     u8   gov_ff_filter (Hz)
+//   [24]     u8   reserved (was spoolup_min_throttle — write 0)
+//   [25]     u8   gov_d_filter (Hz) — new in 4.6
+//   [26..27] u16  gov_spooldown_time (0.1 s) — new in 4.6
+//   [28]     u8   gov_throttle_type — new in 4.6
+//   [29]     i8   reserved (write 0)
+//   [30]     i8   reserved (write 0)
+//   [31]     u8   gov_idle_throttle (%) — new in 4.6
+//   [32]     u8   gov_auto_throttle (%) — new in 4.6
+//   [33..41] 9×u8 gov_bypass_throttle[0..8] (%) — throttle curve
+const CONFIG_BYTES = 42;
+
+let cachedRaw = null;
+let editable = false;
+
+function setStatus(kind, msg) {
+    const b = document.getElementById('status');
+    b.className = 'banner ' + kind;
+    b.textContent = msg;
+}
+function hexToBytes(h) { const o = new Uint8Array(h.length/2); for (let i=0;i<o.length;i++) o[i]=parseInt(h.substr(i*2,2),16); return o; }
+function bytesToHex(b) { let s=''; for (let i=0;i<b.length;i++) s += b[i].toString(16).padStart(2,'0').toUpperCase(); return s; }
+
+function buildBypassUI() {
+    let head = '', row = '';
+    for (let i = 0; i < 9; i++) {
+        // Label as "1..5" in 5-point mode, "1..9" in 9-point mode (set later)
+        head += '<td class=lab id=bypHead' + i + '>' + (i + 1) + '</td>';
+        row  += '<td id=bypCell' + i + '><input type=number id=g_byp' + i + ' min=0 max=100></td>';
+    }
+    document.getElementById('bypHead').innerHTML = head;
+    document.getElementById('bypRow').innerHTML  = row;
+}
+
+// Matches Configurator: in 5-point mode the user sees indices 0,2,4,6,8 as
+// "1..5"; the other 4 are hidden and become the midpoint of their neighbours.
+const FIVE_POINT_VISIBLE = [0, 2, 4, 6, 8];
+function applyBypassPointsMode() {
+    const five = (document.getElementById('g_bypPoints').value === '5');
+    for (let i = 0; i < 9; i++) {
+        const cell  = document.getElementById('bypCell' + i);
+        const head  = document.getElementById('bypHead' + i);
+        const showI = FIVE_POINT_VISIBLE.indexOf(i);
+        if (five) {
+            const visible = (showI >= 0);
+            cell.style.display = head.style.display = visible ? '' : 'none';
+            if (visible) head.textContent = String(showI + 1);
+        } else {
+            cell.style.display = head.style.display = '';
+            head.textContent = String(i + 1);
+        }
+    }
+    if (five) recomputeMidpoints();
+    drawBypassCurve();
+}
+function recomputeMidpoints() {
+    // For each hidden index j, set value = round((v[j-1] + v[j+1]) / 2)
+    const v = idx => parseInt(document.getElementById('g_byp' + idx).value || '0');
+    [1, 3, 5, 7].forEach(j => {
+        document.getElementById('g_byp' + j).value = Math.round((v(j - 1) + v(j + 1)) / 2);
+    });
+}
+// True iff the 9 bytes look like a 5-point curve already (midpoints match).
+function curveIsFivePointable(bytes) {
+    for (let i = 0; i < 8; i += 2) {
+        if (Math.round((bytes[i] + bytes[i + 2]) / 2) !== bytes[i + 1]) return false;
+    }
+    return true;
+}
+
+//*********************************************************************
+//  Draggable bypass-curve canvas (matches Configurator's look + feel)
+//*********************************************************************
+const CHART = { W: 600, H: 320, padL: 30, padR: 30, padT: 18, padB: 22 };
+let _hoverIdx = -1;            // currently dragged / hovered point
+function visibleIndices() {
+    return (document.getElementById('g_bypPoints').value === '5') ? FIVE_POINT_VISIBLE : [0,1,2,3,4,5,6,7,8];
+}
+function pointXY(visIdx, visN) {
+    const innerW = CHART.W - CHART.padL - CHART.padR;
+    const innerH = CHART.H - CHART.padT - CHART.padB;
+    const x = CHART.padL + (visN === 1 ? innerW / 2 : visIdx * innerW / (visN - 1));
+    const v = parseInt(document.getElementById('g_byp' + visibleIndices()[visIdx]).value || '0');
+    const y = CHART.padT + (1 - Math.max(0, Math.min(100, v)) / 100) * innerH;
+    return { x, y, v };
+}
+function drawBypassCurve() {
+    const c = document.getElementById('bypCanvas');
+    if (!c) return;
+    const ctx = c.getContext('2d');
+    const W = CHART.W, H = CHART.H;
+    const innerW = W - CHART.padL - CHART.padR;
+    const innerH = H - CHART.padT - CHART.padB;
+    ctx.clearRect(0, 0, W, H);
+
+    const vis = visibleIndices();
+    const n   = vis.length;
+
+    // Highlight band on the active point (Configurator-style translucent green)
+    if (_hoverIdx >= 0 && _hoverIdx < n) {
+        const { x } = pointXY(_hoverIdx, n);
+        const bandW = innerW / n;
+        ctx.fillStyle = 'rgba(108, 171, 94, 0.18)';
+        ctx.fillRect(x - bandW / 2, CHART.padT, bandW, innerH);
+    }
+
+    // Chart border + dashed cross at centre + dashed 50% line
+    ctx.strokeStyle = '#b8c0c8';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(CHART.padL, CHART.padT, innerW, innerH);
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(CHART.padL + innerW / 2, CHART.padT);
+    ctx.lineTo(CHART.padL + innerW / 2, CHART.padT + innerH);
+    ctx.moveTo(CHART.padL,              CHART.padT + innerH / 2);
+    ctx.lineTo(CHART.padL + innerW,     CHART.padT + innerH / 2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Curve polyline
+    ctx.strokeStyle = '#e23a2e';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let i = 0; i < n; i++) {
+        const { x, y } = pointXY(i, n);
+        if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    // Filled red dots
+    for (let i = 0; i < n; i++) {
+        const { x, y } = pointXY(i, n);
+        ctx.fillStyle = (i === _hoverIdx) ? '#a52319' : '#e23a2e';
+        ctx.beginPath();
+        ctx.arc(x, y, (i === _hoverIdx) ? 8 : 6, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    // Y-axis labels (0, 50, 100 %)
+    ctx.fillStyle = '#3a5165';
+    ctx.font = '11px sans-serif';
+    ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+    ctx.fillText('100',  CHART.padL - 4, CHART.padT);
+    ctx.fillText('50',   CHART.padL - 4, CHART.padT + innerH / 2);
+    ctx.fillText('0',    CHART.padL - 4, CHART.padT + innerH);
+}
+
+function canvasToChart(c, evt) {
+    const r = c.getBoundingClientRect();
+    return {
+        x: (evt.clientX - r.left) * (CHART.W / r.width),
+        y: (evt.clientY - r.top)  * (CHART.H / r.height),
+    };
+}
+function nearestPointIdxByX(chartX, n) {
+    const innerW = CHART.W - CHART.padL - CHART.padR;
+    if (n === 1) return 0;
+    const frac = (chartX - CHART.padL) / innerW;
+    let i = Math.round(frac * (n - 1));
+    if (i < 0) i = 0; if (i > n - 1) i = n - 1;
+    return i;
+}
+function chartYToValue(chartY) {
+    const innerH = CHART.H - CHART.padT - CHART.padB;
+    let v = (1 - (chartY - CHART.padT) / innerH) * 100;
+    if (v < 0) v = 0; if (v > 100) v = 100;
+    return Math.round(v);
+}
+function attachCanvasHandlers() {
+    const c = document.getElementById('bypCanvas');
+    let dragging = false;
+    function down(evt) {
+        if (!editable) return;
+        evt.preventDefault();
+        const n = visibleIndices().length;
+        const p = canvasToChart(c, evt);
+        _hoverIdx = nearestPointIdxByX(p.x, n);
+        dragging = true;
+        c.setPointerCapture(evt.pointerId);
+        move(evt);
+    }
+    function move(evt) {
+        if (!dragging || !editable) return;
+        evt.preventDefault();
+        const n = visibleIndices().length;
+        const p = canvasToChart(c, evt);
+        const v = chartYToValue(p.y);
+        const dataIdx = visibleIndices()[_hoverIdx];
+        const inp = document.getElementById('g_byp' + dataIdx);
+        inp.value = String(v);
+        // Manually fire so the global "mark dirty" listener triggers.
+        inp.dispatchEvent(new Event('input', { bubbles: true }));
+        // In 5-point mode keep hidden midpoints in sync immediately so the
+        // 9-byte payload would be coherent if the user saves right now.
+        if (document.getElementById('g_bypPoints').value === '5') recomputeMidpoints();
+        drawBypassCurve();
+    }
+    function up(evt) {
+        if (!dragging) return;
+        dragging = false;
+        try { c.releasePointerCapture(evt.pointerId); } catch {}
+        _hoverIdx = -1;
+        drawBypassCurve();
+    }
+    c.addEventListener('pointerdown', down);
+    c.addEventListener('pointermove', move);
+    c.addEventListener('pointerup',   up);
+    c.addEventListener('pointercancel', up);
+    c.addEventListener('pointerleave', up);
+}
+
+function paintEditable() {
+    document.getElementById('saveBtn').disabled = !editable;
+    document.querySelectorAll('.fldRow input, .fldRow select, .curveTable input')
+            .forEach(el => el.disabled = !editable);
+}
+
+async function load() {
+    try {
+        const stateR = await fetch('/api/state.json', { cache: 'no-store' });
+        const st = await stateR.json();
+        const api = (st.fcinfo.api_major * 100) + st.fcinfo.api_minor;
+        editable = (api >= 1209);
+        const newer = LDRC.rfVersionAlert(api);
+        const banner = document.getElementById('verBanner');
+        const msg    = document.getElementById('verBannerMsg');
+        if (!editable && st.fcinfo.rf_major > 0) {
+            banner.className = 'banner warn';
+            banner.style.display = '';
+            msg.textContent = 'You are running Rotorflight ' + st.fcinfo.rf_major + '.' +
+                st.fcinfo.rf_minor + '. Editing the governor is disabled — please upgrade to Rotorflight 2.3.';
+        } else if (newer) {
+            banner.className = 'banner warn';
+            banner.style.display = '';
+            msg.textContent = newer;
+        } else {
+            banner.style.display = 'none';
+        }
+    } catch (e) {}
+
+    setStatus('info', 'Reading governor config from flight controller…');
+    LDRC.markStale();
+    try {
+        const bytes = hexToBytes(await LDRC.msp(142));
+        if (bytes.length < CONFIG_BYTES) throw new Error('short response: ' + bytes.length + ' (need ' + CONFIG_BYTES + ', is flight controller on Rotorflight 2.3?)');
+        cachedRaw = bytes.slice(0, CONFIG_BYTES);
+        const u16 = (o) => bytes[o] | (bytes[o+1] << 8);
+        document.getElementById('g_mode').value   = bytes[0];
+        document.getElementById('g_start').value  = u16(1);
+        document.getElementById('g_spool').value  = u16(3);
+        document.getElementById('g_track').value  = u16(5);
+        document.getElementById('g_recov').value  = u16(7);
+        document.getElementById('g_hold').value   = u16(9);
+        document.getElementById('g_auto_to').value= u16(13);
+        document.getElementById('g_hand').value   = bytes[19];
+        document.getElementById('g_fpwr').value   = bytes[20];
+        document.getElementById('g_frpm').value   = bytes[21];
+        document.getElementById('g_ftta').value   = bytes[22];
+        document.getElementById('g_fff').value    = bytes[23];
+        document.getElementById('g_fd').value     = bytes[25];
+        document.getElementById('g_spdwn').value  = u16(26);
+        document.getElementById('g_ttype').value  = bytes[28];
+        document.getElementById('g_idle').value   = bytes[31];
+        document.getElementById('g_auto').value   = bytes[32];
+        for (let i = 0; i < 9; i++) {
+            document.getElementById('g_byp' + i).value = bytes[33 + i];
+        }
+        // Auto-pick 5-point view if the loaded data is already 5-point shaped
+        // (and the user hasn't manually overridden); otherwise leave as-is.
+        const stored = localStorage.getItem('rfBypPoints');
+        if (!stored) {
+            document.getElementById('g_bypPoints').value =
+                curveIsFivePointable(bytes.slice(33, 42)) ? '5' : '9';
+        } else {
+            document.getElementById('g_bypPoints').value = stored;
+        }
+        applyBypassPointsMode();
+        LDRC.clearStale();
+        setStatus('good', '✓ Loaded from flight controller');
+        paintEditable();
+        LDRC.clearDirty();
+    } catch (e) { setStatus('bad', 'Read failed: ' + e.message); }
+}
+
+function buildPayload() {
+    const bytes = new Uint8Array(cachedRaw);   // preserves reserved bytes verbatim
+    const u8  = (id) => Math.max(0, Math.min(255, parseInt(document.getElementById(id).value || '0')));
+    const u16 = (id) => Math.max(0, Math.min(65535, parseInt(document.getElementById(id).value || '0')));
+    const putU16 = (o, v) => { bytes[o] = v & 0xff; bytes[o+1] = (v >> 8) & 0xff; };
+    bytes[0]  = u8('g_mode');
+    putU16(1,  u16('g_start'));
+    putU16(3,  u16('g_spool'));
+    putU16(5,  u16('g_track'));
+    putU16(7,  u16('g_recov'));
+    putU16(9,  u16('g_hold'));
+    // bytes 11-12 (reserved) preserved
+    putU16(13, u16('g_auto_to'));
+    // bytes 15-18 (reserved) preserved
+    bytes[19] = u8('g_hand');
+    bytes[20] = u8('g_fpwr');
+    bytes[21] = u8('g_frpm');
+    bytes[22] = u8('g_ftta');
+    bytes[23] = u8('g_fff');
+    // byte 24 (reserved) preserved
+    bytes[25] = u8('g_fd');
+    putU16(26, u16('g_spdwn'));
+    bytes[28] = u8('g_ttype');
+    // bytes 29-30 (i8 reserved) preserved
+    bytes[31] = u8('g_idle');
+    bytes[32] = u8('g_auto');
+    // In 5-point mode the hidden midpoints must be recomputed from the
+    // visible 5 before we serialise — otherwise stale values from a
+    // previous load would be saved.
+    if (document.getElementById('g_bypPoints').value === '5') recomputeMidpoints();
+    for (let i = 0; i < 9; i++) {
+        bytes[33 + i] = u8('g_byp' + i);
+    }
+    return bytes;
+}
+
+async function save() {
+    if (!editable) { setStatus('bad', 'Disabled on this firmware version'); return; }
+    if (!cachedRaw) { setStatus('bad', 'Read flight controller first'); return; }
+    if (!(await LDRC.confirm(
+        'Global governor settings are only applied at flight-controller startup, so the flight controller must reboot after saving. Motors will stop briefly. Save and reboot now?',
+        {title:'Save & reboot flight controller', icon:'🔄', yes:'Save & reboot', kind:'warn'}))) return;
+    setStatus('info', 'Writing governor config…');
+    const bytes = buildPayload();
+    try {
+        await LDRC.msp(143, bytesToHex(bytes));   // SET_GOVERNOR_CONFIG
+        await LDRC.msp(250);                       // EEPROM_WRITE
+        // MSP_REBOOT (68) — needed because gov config is a Parameter Group;
+        // EEPROM_WRITE persists to flash but the running governor still
+        // uses the values it loaded at boot. Reboot makes the FC re-read.
+        // CRITICAL: pass retries=1. The FC reboots before sending its
+        // MSP response, so LDRC.msp sees a "failure" and would normally
+        // retry — which lands a SECOND reboot once the FC comes back up.
+        setStatus('info', 'Rebooting flight controller… (please wait ~7 s)');
+        try { await LDRC.msp(68, null, 1); } catch (e) {}
+        // Wait for FC firmware to come back up, then re-verify by reload.
+        await new Promise(r => setTimeout(r, 7000));
+        setStatus('info', 'Re-reading from flight controller after reboot…');
+        const check = hexToBytes(await LDRC.msp(142));
+        const diffs = [];
+        for (let i = 0; i < bytes.length && i < check.length; i++) {
+            if (bytes[i] !== check[i]) diffs.push('byte ' + i + ': sent ' + bytes[i] + ' got ' + check[i]);
+        }
+        if (diffs.length === 0) {
+            setStatus('good', '✓ Saved, rebooted & verified by flight controller read-back');
+            cachedRaw = bytes;
+            LDRC.clearDirty();
+            await load();
+        } else {
+            setStatus('bad', '⚠ ' + diffs.length + ' bytes differ on read-back: ' + diffs.slice(0,3).join('; '));
+            cachedRaw = check;
+            await load();
+        }
+    } catch (e) { setStatus('bad', 'Save failed: ' + e.message); }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    buildBypassUI();
+    attachCanvasHandlers();
+    document.addEventListener('input', e => {
+        if (e.target.matches('input, select')) LDRC.markDirty();
+        // Live-redraw the chart when any bypass number input is edited by hand.
+        if (e.target.id && e.target.id.startsWith('g_byp') && e.target.id !== 'g_bypPoints') {
+            if (document.getElementById('g_bypPoints').value === '5') recomputeMidpoints();
+            drawBypassCurve();
+        }
+    });
+    document.getElementById('g_bypPoints').addEventListener('change', () => {
+        localStorage.setItem('rfBypPoints', document.getElementById('g_bypPoints').value);
+        applyBypassPointsMode();
+    });
+    load();
+});
+</script>
+<template id=helpContent><h2>Governor — global</h2>
+<p>Rotorflight's global governor settings: mode (electric / nitro / off), spool-up time, full headspeed RPM, and other settings that apply to <em>every</em> profile.</p>
+<h3>How to use it</h3>
+<p>Choose a governor mode, set spool-up curve and full-headspeed RPM, tap <b>Save</b>.</p>
+<h3>Tips</h3>
+<p><b>Spool-up</b> is how slowly the FC ramps the rotor to full speed at start-up. Too fast can be hard on the model (stresses the drivetrain); too slow wastes time. 6–10 seconds is typical for an electric heli.</p>
+</template>
+</body>
+</html>

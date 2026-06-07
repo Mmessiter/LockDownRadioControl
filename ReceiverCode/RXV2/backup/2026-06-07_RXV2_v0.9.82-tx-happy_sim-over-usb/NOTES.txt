@@ -1,0 +1,30 @@
+RXV2 backup — 2026-06-07 (evening)
+Version: RXV2-0.9.82-tx-happy
+Git:     LockDownRadioControl @ main, commit da340b9
+
+WHAT THIS DAY ADDED: "Drive simulator over USB"
+The receiver can now drive a PC flight sim (neXt / RX2SIM) as a USB HID joystick,
+fed straight from the channels it receives over RF — no separate LDRC2SIM dongle
+(it's the same XIAO ESP32-S3 chip).
+
+Highlights:
+- TinyUSB on the S3 builds (ARDUINO_USB_MODE=0, platform pinned espressif32@6.6.0);
+  a no-op on the C3 prototype. New src/SimUsb.h holds the HID joystick + mapping.
+- Home-page "Drive simulator over USB" toggle (reboots to apply). In sim mode:
+  a big "SIMULATOR MODE ON" banner, only the relevant buttons shown, and the
+  flight-controller output (D6) DISABLED so a real model can't be flown.
+- /map "Remap channels" page: 8 outputs <- any received channel + reverse,
+  NVS-persisted; 8 live 60fps-smoothed bars of the channels in use. The RX2SIM
+  baseline (throttle/rudder swap + rudder reverse) is hidden, so the default
+  map reads as a tidy 1:1.
+- WiFi self-heal: NET_AP was a terminal dead-end; now retries home WiFi every
+  20 s when AP-only with saved creds, so it rejoins on its own.
+- Keep-the-TX-happy: the home page's firmware-update check did a BLOCKING
+  manifest fetch in the single-threaded loop, starving radioPoll() and dropping
+  the transmitter; it's now skipped while the TX link is live (LINK_LIVE_MS).
+
+Live on the receiver PT1.local (192.168.1.231). Deploy:
+  PLATFORMIO_UPLOAD_PORT=PT1.local pio run -e xiao_s3_ota -t upload          (firmware)
+  PLATFORMIO_UPLOAD_PORT=PT1.local CHIP_HOST=PT1.local dev/uploadfs_safe.sh  (web assets)
+
+This snapshot = src/ + data/ + platformio.ini + the built RXV2_firmware.bin.

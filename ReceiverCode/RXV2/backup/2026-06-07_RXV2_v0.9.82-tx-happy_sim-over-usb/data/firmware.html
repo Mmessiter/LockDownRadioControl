@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang=en>
+<head>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name=theme-color content="#5fa099">
+<meta name=apple-mobile-web-app-capable content=yes>
+<meta name=apple-mobile-web-app-status-bar-style content=black-translucent>
+<meta name=apple-mobile-web-app-title content="LDRC RX V2">
+<title>Check for Update &middot; LDRC RX V2</title>
+<link rel=stylesheet href="/style.css?v=28">
+<script src="/app.js?v=28" defer></script>
+<style>
+/* --- Currently-installed card -------------------------------------- */
+.installed-card .row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:.55em 0;
+}
+.installed-card .row + .row{border-top:1px solid rgba(125,158,176,.18)}
+.installed-card .label{
+    font-size:.74em;letter-spacing:.18em;text-transform:uppercase;
+    color:#5d7a8c;font-weight:600;
+}
+.installed-card .value{
+    font-family:ui-monospace,SFMono-Regular,monospace;
+    font-size:1.05em;color:#2c3e50;
+}
+
+/* --- Generic status pill ------------------------------------------- */
+.pill{
+    display:inline-block;padding:.25em .8em;border-radius:999px;
+    font-size:.78em;font-weight:600;letter-spacing:.04em;color:#fff;
+    background:#7d9eb0;white-space:nowrap;
+}
+.pill.good   {background:#6cab5e}
+.pill.amber  {background:#d4944a}
+.pill.bad    {background:#c97464}
+.pill.offline{background:#7a8b95}
+
+/* --- "what the page is telling you" line --------------------------- */
+.note{
+    background:rgba(255,255,255,.55);border-radius:12px;
+    padding:.75em 1em;margin:.6em 0 1.2em;font-size:.94em;color:#3a5165;
+    line-height:1.45;box-shadow:0 1px 3px rgba(0,0,0,.05);
+}
+.note code{font-family:ui-monospace,SFMono-Regular,monospace;color:#5d3a3a}
+
+/* --- One source (Local server / Public release) -------------------- */
+.source-section{margin:1.4em 0 .6em}
+.source-section h2{
+    font-family:inherit;font-size:1.1em;font-weight:500;color:#3a5165;
+    margin:0 0 .35em;letter-spacing:.01em;
+}
+.source-section .source-state{margin:0 0 .7em}
+
+/* --- One version card --------------------------------------------- */
+.versions{display:flex;flex-direction:column;gap:.7em;margin:0 0 1em}
+.ver{
+    display:grid;
+    grid-template-columns:1fr auto;
+    column-gap:.9em;row-gap:.45em;align-items:center;
+    background:rgba(255,255,255,.65);
+    border:1px solid rgba(125,158,176,.22);border-radius:14px;
+    padding:.9em 1.05em;
+    box-shadow:0 2px 6px rgba(0,0,0,.06);
+}
+.ver.current{outline:1.5px solid #6cab5e;outline-offset:-1px}
+.ver-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:.55em}
+.ver-num{
+    font-family:ui-monospace,SFMono-Regular,monospace;
+    font-size:1.25em;color:#2c3e50;letter-spacing:-.005em;
+}
+.ver-label{
+    display:inline-block;font-size:.7em;letter-spacing:.16em;
+    text-transform:uppercase;color:#3a5165;
+    background:rgba(125,158,176,.18);border-radius:999px;
+    padding:.2em .65em;
+}
+.ver-tag{
+    font-size:.68em;letter-spacing:.16em;text-transform:uppercase;
+    padding:.2em .65em;border-radius:999px;color:#fff;
+}
+.ver-tag.newer  {background:#d4944a}
+.ver-tag.older  {background:#7a8b95}
+.ver-tag.same   {background:#6cab5e}
+.ver-notes{
+    grid-column:1 / -1;font-size:.88em;color:#5d7a8c;line-height:1.45;
+    margin:.15em 0 0;
+}
+.ver .ver-btn{
+    border:0;border-radius:999px;padding:.55em 1em;
+    background:#fbf4e1;color:#3a5165;font-weight:600;font-size:.92em;
+    cursor:pointer;white-space:nowrap;
+    box-shadow:0 1px 3px rgba(0,0,0,.08);
+}
+.ver .ver-btn:active{transform:translateY(1px)}
+.ver .ver-btn:disabled{opacity:.45;cursor:default}
+
+/* --- Bottom action row -------------------------------------------- */
+.actions{
+    display:flex;flex-wrap:wrap;gap:.6em;justify-content:flex-start;
+    margin:1.6em 0 0;
+}
+.actions .btn{width:auto;flex:0 0 auto;padding:.85em 1.4em;font-size:1em}
+.actions .btn-check{background:#d4944a}
+.actions .btn-ghost{background:#fbf4e1;color:#3a5165}
+</style>
+</head>
+<body>
+<button class=helpBtn aria-label=Help title=Help onclick="LDRC.showHelp()">?</button>
+<div class=bg-photo aria-hidden=true></div>
+<div class=bg-wash  aria-hidden=true></div>
+<div class=container>
+    <h1>Check for Update</h1>
+
+    <div class="card installed-card">
+        <div class=row><span class=label>Currently installed</span><span class=value id=current>&hellip;</span></div>
+        <div class=row><span class=label>Status</span><span class=value><span class="pill" id=state>Idle</span></span></div>
+    </div>
+
+    <p id=message class=note hidden></p>
+
+    <section id=local-section class=source-section hidden>
+        <h2>Local server</h2>
+        <p class=source-state><span class=pill id=local-state>&hellip;</span></p>
+        <div id=versions-local class=versions></div>
+    </section>
+
+    <section id=public-section class=source-section hidden>
+        <h2>Public release</h2>
+        <p class=source-state><span class=pill id=public-state>&hellip;</span></p>
+        <div id=versions-public class=versions></div>
+    </section>
+
+    <div class=actions>
+        <button type=button id=check class="btn btn-check"><span class=ico>&#8635;</span>Check now</button>
+        <a class="btn btn-ghost" href="/"><span class=ico>&#8617;</span>Menu</a>
+    </div>
+
+    <div class=footer></div>
+</div>
+
+<script>
+// The chip's /api/firmware/check fetches both manifests (local dev +
+// messiter.com) and returns a single JSON payload. We render from that —
+// the page never reaches either server directly.
+
+const $ = id => document.getElementById(id);
+let currentFw = '';
+let currentVer = '';
+let installing = false;
+
+// "RXV2-0.9.35-page-cards"  →  { ver: "0.9.35", label: "page-cards" }
+// Lets the page show a clean version number (the user asked for the
+// -tag suffix to be stripped) while still surfacing the release
+// codename as a pill, ReedsV2-style.
+function splitName(name) {
+    const m = String(name || '').match(/RXV2-(\d+\.\d+\.\d+)(?:-(.+))?/);
+    return m ? { ver: m[1], label: m[2] || '' } : { ver: name || '', label: '' };
+}
+function vTuple(name) {
+    const m = String(name || '').match(/RXV2-(\d+)\.(\d+)\.(\d+)/);
+    return m ? [+m[1], +m[2], +m[3]] : [0, 0, 0];
+}
+function vCmp(a, b) {
+    const ta = vTuple(a), tb = vTuple(b);
+    for (let i = 0; i < 3; i++) if (ta[i] !== tb[i]) return ta[i] - tb[i];
+    return 0;
+}
+function resolveUrl(url, manifestUrl) {
+    if (!url) return '';
+    if (/^https?:\/\//i.test(url)) return url;
+    try { return new URL(url, manifestUrl).href; }
+    catch (e) { return url; }
+}
+
+function setStatePill(text, kind) { setPill('state', text, kind); }
+function setPill(id, text, kind) {
+    const el = $(id); if (!el) return;
+    el.textContent = text;
+    el.className = 'pill' + (kind ? ' ' + kind : '');
+}
+function showMessage(html) {
+    const m = $('message'); m.innerHTML = html; m.hidden = !html;
+}
+
+// One version card, ReedsV2-style: version number + label pill +
+// Newer/Older/Current tag, install button on the right, notes below.
+const SOURCE_LABEL = {
+    local:  { short: 'local', long: 'the local server' },
+    public: { short: 'web',   long: 'messiter.com'     },
+};
+function makeVersionRow(v, sourceKey, srcManifestUrl) {
+    const cmp = vCmp(v.name, currentFw);
+    const tagClass = cmp > 0 ? 'newer' : cmp < 0 ? 'older' : 'same';
+    const tagText  = cmp > 0 ? 'Newer' : cmp < 0 ? 'Older' : 'Current';
+
+    const wrap = document.createElement('div');
+    wrap.className = 'ver' + (cmp === 0 ? ' current' : '');
+
+    const { ver, label } = splitName(v.name);
+    const head = document.createElement('div');
+    head.className = 'ver-head';
+    head.innerHTML =
+        '<span class=ver-num>' + ver + '</span>' +
+        (label ? '<span class=ver-label>' + label + '</span>' : '') +
+        '<span class="ver-tag ' + tagClass + '">' + tagText + '</span>';
+    wrap.appendChild(head);
+
+    const verb = cmp > 0 ? 'Install' : cmp < 0 ? 'Roll back' : 'Reinstall';
+    const src  = SOURCE_LABEL[sourceKey];
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'ver-btn';
+    btn.textContent = verb + (src ? ' · ' + src.short : '');
+    const url = resolveUrl(v.url, srcManifestUrl);
+    btn.addEventListener('click', () => doInstall(v, sourceKey, url, btn));
+    wrap.appendChild(btn);
+
+    if (v.notes) {
+        const n = document.createElement('p');
+        n.className = 'ver-notes';
+        n.textContent = v.notes;
+        wrap.appendChild(n);
+    }
+    return wrap;
+}
+
+// Render one source's manifest into its section. We trim to the
+// newest "newer" + the "current" (if listed) + up to 2 "older" entries
+// — matches the explicit "update + two previous" ask from earlier
+// without flooding the page when the local dev server is offering 40
+// historical builds. Returns count of newer entries displayed.
+function renderSource(key, src) {
+    const section = $(key + '-section');
+    const host    = $('versions-' + key);
+    host.innerHTML = '';
+    if (!src || !src.ok) {
+        section.hidden = true;
+        return 0;
+    }
+    const versions = (src.manifest && src.manifest.versions) || [];
+    if (versions.length === 0) {
+        section.hidden = false;
+        setPill(key + '-state', 'Empty manifest', 'amber');
+        return 0;
+    }
+    section.hidden = false;
+
+    const sorted = versions.slice().sort((a, b) => -vCmp(a.name, b.name));
+    const newer   = sorted.filter(v => vCmp(v.name, currentFw) > 0);
+    const current = sorted.find(v => v.name === currentFw);
+    const older   = sorted.filter(v => vCmp(v.name, currentFw) < 0).slice(0, 2);
+
+    setPill(key + '-state',
+            newer.length
+                ? newer.length + ' newer version' + (newer.length === 1 ? '' : 's')
+                : 'Up to date',
+            newer.length ? 'amber' : 'good');
+
+    const show = [];
+    if (newer.length) show.push(newer[0]);
+    if (current)      show.push(current);
+    older.forEach(v => show.push(v));
+
+    show.forEach(v => host.appendChild(makeVersionRow(v, key, src.manifest_url)));
+    return newer.length;
+}
+
+async function loadCurrent() {
+    try {
+        const s = await LDRC.fetchState();
+        if (!s) throw new Error('no state');
+        currentFw = s.info.fw_version;
+        const { ver, label } = splitName(currentFw);
+        currentVer = ver;
+        $('current').textContent = ver + (label ? ' · ' + label : '');
+        return s;
+    } catch (e) {
+        $('current').textContent = '(offline)';
+        return null;
+    }
+}
+
+async function check() {
+    setStatePill('Checking…', 'amber');
+    showMessage('Asking the local and public manifest servers…');
+    $('local-section').hidden = true;
+    $('public-section').hidden = true;
+
+    let j;
+    try {
+        const r = await fetch('/api/firmware/check', { cache: 'no-store' });
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        j = await r.json();
+    } catch (e) {
+        setStatePill('Error', 'offline');
+        showMessage('Network error talking to the receiver.');
+        return;
+    }
+
+    if (j.offline) {
+        setStatePill(j.net_mode || 'offline', 'offline');
+        showMessage('The receiver is in <b>' + (j.net_mode || 'AP') + '</b> mode, ' +
+            'so it cannot reach the manifest servers. ' +
+            '<a href="/wifi">Join your home WiFi</a> and come back.');
+        return;
+    }
+
+    if (j.link_active) {
+        setStatePill('Transmitter connected', 'offline');
+        showMessage('The transmitter is connected, so the update check is paused to keep the radio ' +
+            'link rock-solid. Turn the transmitter off (or exit Simulator mode), then tap ' +
+            '<b>Check again</b>.');
+        return;
+    }
+
+    const localNewer  = renderSource('local',  j.local);
+    const publicNewer = renderSource('public', j.public);
+
+    const localShown  = j.local  && j.local.ok;
+    const publicShown = j.public && j.public.ok;
+    const totalNewer  = localNewer + publicNewer;
+
+    if (!localShown && !publicShown) {
+        setStatePill('Both unreachable', 'offline');
+        showMessage("Couldn't reach either update source. Check the receiver's WiFi.");
+        return;
+    }
+    if (totalNewer) {
+        setStatePill('Updates available', 'amber');
+        const where = localShown && publicShown ? 'either source below'
+                    : localShown ? 'the local server below'
+                                 : 'the public release below';
+        showMessage('You are running <code>' + currentVer + '</code>. ' +
+            totalNewer + ' newer version' + (totalNewer === 1 ? '' : 's') +
+            ' available — install from ' + where + '.');
+    } else {
+        setStatePill('Up to date', 'good');
+        showMessage('You are running the latest version offered by ' +
+            (localShown && publicShown ? 'both sources.' :
+             localShown ? 'the local server.' : 'the public release.'));
+    }
+
+    // Flag when local is ahead of public — typically means a release that
+    // hasn't been FTP-pushed to messiter.com yet.
+    if (localShown && publicShown) {
+        const maxOf = vs => vs.slice().sort((a, b) => vCmp(a.name, b.name)).pop();
+        const lmax = maxOf(j.local.manifest.versions  || []);
+        const pmax = maxOf(j.public.manifest.versions || []);
+        if (lmax && pmax && vCmp(lmax.name, pmax.name) > 0) {
+            const m = $('message');
+            const lv = splitName(lmax.name).ver;
+            const pv = splitName(pmax.name).ver;
+            m.innerHTML += '<br><br><b>Local server is ahead of Public release.</b> ' +
+                'Local offers <code>' + lv + '</code>; the latest on the public ' +
+                'release is <code>' + pv + '</code>.';
+        }
+    }
+}
+
+async function doInstall(v, sourceKey, url, btnEl) {
+    if (installing) return;
+    const { ver } = splitName(v.name);
+    if (!(await LDRC.confirm(
+            'Install ' + ver + ' from ' + (SOURCE_LABEL[sourceKey]?.long || 'this source') +
+            '? The receiver will reboot.',
+            { title: 'Install firmware', icon: '📥', yes: 'Install + reboot', kind: 'warn' }))) return;
+
+    installing = true;
+    document.querySelectorAll('.ver-btn').forEach(b => b.disabled = true);
+    $('check').disabled = true;
+    setStatePill('Installing ' + ver + '…', 'amber');
+    showMessage('<b>Installing</b> <code>' + ver + '</code> from <b>' +
+        (SOURCE_LABEL[sourceKey]?.long || 'this source') + '</b>. The receiver will reboot when done.');
+    try {
+        const r = await fetch('/api/firmware/install?url=' + encodeURIComponent(url),
+                              { method: 'POST' });
+        if (r.ok) {
+            setStatePill('Installed', 'good');
+            showMessage('<b>✓ Installed.</b> Now running <code>' + ver +
+                '</code>. Page reloads in 10 s.');
+            setTimeout(() => location.href = '/', 10000);
+        } else {
+            const t = await r.text();
+            setStatePill('Failed', 'bad');
+            showMessage('Install failed: ' + t);
+            installing = false;
+            $('check').disabled = false;
+            document.querySelectorAll('.ver-btn').forEach(b => b.disabled = false);
+        }
+    } catch (e) {
+        setStatePill('Network error', 'bad');
+        showMessage('Network error during install: ' + (e.message || e));
+        installing = false;
+        $('check').disabled = false;
+        document.querySelectorAll('.ver-btn').forEach(b => b.disabled = false);
+    }
+}
+
+$('check').addEventListener('click', check);
+document.addEventListener('DOMContentLoaded', () => { loadCurrent().then(check); });
+</script>
+<template id=helpContent><h2>Firmware update</h2>
+<p>Updates the receiver's firmware over the air, either from a local dev server on your home network (if one is running) or from the public messiter.com mirror.</p>
+<h3>How to use it</h3>
+<p>Tap <b>Check now</b> to refresh the version lists. Each version card shows:</p>
+<ul>
+<li>A green <b>Install</b> button — newer than what's running.</li>
+<li>A blue <b>Reinstall</b> button — the current version.</li>
+<li>An amber <b>Roll back</b> button — an older version (use to undo a bad update).</li>
+</ul>
+<p>Tap a button, confirm the dialog, and the receiver downloads, flashes, and reboots itself — about 20 seconds. The page polls until the receiver returns, then takes you back to the menu.</p>
+<h3>If it doesn't come back</h3>
+<p>It usually does. If after a minute it hasn't, you probably entered a wrong WiFi password earlier and the chip is in <code>LDRC_RX</code> AP mode at <code>http://192.168.4.1</code> — head there to fix.</p>
+</template>
+</body>
+</html>
