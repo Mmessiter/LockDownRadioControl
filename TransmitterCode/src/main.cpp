@@ -229,7 +229,7 @@ void EnsureMotorIsOff()
         DelayWithDog(1200);
         PlaySound(PLSTURNOFF);
         MsgBox(pFrontView, (char *)"Motor switch is still ON!");
-        DelayWithDog(4000); // allow time for sound to play and for pilot to react
+        DelayWithDog(500); // allow time for sound to play and for pilot to react
         CheckMotorOff();
     }
     SendCommand(WarnOff);
