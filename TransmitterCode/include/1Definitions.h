@@ -985,9 +985,41 @@ uint8_t SubTrims[CHANNELSUSED + 1];                   //    Subtrims
 uint8_t SubTrimToEdit = 1;
 uint32_t LastPacketSentTime = 0;
 uint8_t Bank = 1;
+void SendOtherValue(char *nbox, int value);
 // User defined bank names zone
 // ************************************** 0                  1                 2                  3                4          5           6           7          8                9        10          11       12        13             14            15          16          17      18        19           20         21     22           23         24         25          26           27        ***
-char BankNames[32][14] = {{"Flight mode 1"}, {"Flight mode 2"}, {"Flight mode 3"}, {"Flight mode 4"}, {"Bank 1"}, {"Bank 2"}, {"Bank 3"}, {"Bank 4"}, {"Aerobatics"}, {"Auto"}, {"Cruise"}, {"Flaps"}, {"Hover"}, {"Idle up 1"}, {"Idle up 2"}, {"Landing"}, {"Launch"}, {"Normal"}, {"Speed"}, {"Takeoff"}, {"Thermal"}, {"Hold"}, {"3D"}, {"Brakes"}, {"Stunt 1"}, {"Stunt 2"}, {"Gear up"}, {"Gear down"}, {"Profile 1"}, {"Profile 2"}, {"Profile 3"}, {"Profile 4"}};
+char BankNames[32][14] = {{"Flight mode 1"},
+                          {"Flight mode 2"},
+                          {"Flight mode 3"},
+                          {"Flight mode 4"},
+                          {"Bank 1"},
+                          {"Bank 2"},
+                          {"Bank 3"},
+                          {"Bank 4"},
+                          {"Aerobatics"},
+                          {"Auto"},
+                          {"Cruise"},
+                          {"Flaps"},
+                          {"Hover"},
+                          {"Idle up 1"},
+                          {"Idle up 2"},
+                          {"Landing"},
+                          {"Launch"},
+                          {"Normal"},
+                          {"Speed"},
+                          {"Takeoff"},
+                          {"Thermal"},
+                          {"Hold"},
+                          {"3D"},
+                          {"Brakes"},
+                          {"Stunt 1"},
+                          {"Stunt 2"},
+                          {"Gear up"},
+                          {"Gear down"},
+                          {"Profile 1"},
+                          {"Profile 2"},
+                          {"Profile 3"},
+                          {"Profile 4"}};
 uint8_t BankSounds[32] = {
     BFM1,       // "Flight mode 1"
     BFM2,       // "Flight mode 2"

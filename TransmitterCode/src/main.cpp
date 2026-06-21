@@ -1705,8 +1705,6 @@ FASTRUN void DisplayCurve()
 
     // Clear the box
    
-    //sprintf(tempCmd, "fill %d,%d,%d,%d,%d", 25, 25, 378, 370, 0);
-
     sprintf(tempCmd, "fill %d,%d,%d,%d,%d", 36, 36, 360, 360, 0);
 
     strcat(cmdBuffer, tempCmd);

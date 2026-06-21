@@ -1009,13 +1009,11 @@ int DegsToPercent(int degs)
 
 void ClearBox()
 {
-    char nb[10];
     char cmd[80];
-    char fillcmd[] = "fill 36, 36, 360, 360,";
-    
+    SendOtherValue((char *)"GraphView.pic", BackGroundSelection);
+    delay(50);
+    char fillcmd[] = "fill 36, 36, 360, 360,0";
     strcpy(cmd, fillcmd);
-    Str(nb, 0, 0);
-    strcat(cmd, nb);
     SendCommand(cmd);
 }
 // *********************************************************************************************************************************/
