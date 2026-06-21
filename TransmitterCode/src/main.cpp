@@ -1704,8 +1704,11 @@ FASTRUN void DisplayCurve()
     // 1. First batch: Clear box and send top row values
 
     // Clear the box
-    // sprintf(tempCmd, "fill %d,%d,%d,%d,%d", 20, 20, 388, 375, BackGroundColour);
-    sprintf(tempCmd, "fill %d,%d,%d,%d,%d", 25, 25, 378, 370, 0);
+   
+    //sprintf(tempCmd, "fill %d,%d,%d,%d,%d", 25, 25, 378, 370, 0);
+
+    sprintf(tempCmd, "fill %d,%d,%d,%d,%d", 36, 36, 360, 360, 0);
+
     strcat(cmdBuffer, tempCmd);
     strcat(cmdBuffer, endMarker);
 
