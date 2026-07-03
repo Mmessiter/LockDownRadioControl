@@ -291,7 +291,7 @@ void GreenLedOn()
         }
         SendCommand((char *)"vis wb,0"); // Hide the binding button
         BindingEnabled = false;          // Disable new binding after successful bind
-        LedIsBlinking = false;          // Stop blinking if it was blinking for binding
+        LedIsBlinking = false;           // Stop blinking if it was blinking for binding
         LedGreenMoment = millis();
         LastShowTime = 0;
         ShowComms();
@@ -389,7 +389,7 @@ FASTRUN void ShowServoPos()
         else
             InputAmount = ReadThreePositionSwitch(InputDevice);                                                   // not analogue
         InputAmount = map(InputAmount, ChannelCentre[InputDevice], ChannelMax[InputDevice], 0, 100);              // input stick position
-        OutputAmount = map(SendBuffer[ChanneltoSet - 1], MINMICROS, MAXMICROS, -100, 100);                         // output servo position (was SendBuffer[InputDevice] -- ClaudeFix-2-7-2026 wrong channel whenever input is remapped)
+        OutputAmount = map(SendBuffer[ChanneltoSet - 1], MINMICROS, MAXMICROS, -100, 100);                        // output servo position (was SendBuffer[InputDevice] -- ClaudeFix-2-7-2026 wrong channel whenever input is remapped)
         SendValue(ChannelInput, InputAmount);                                                                     // input stick position
         SendValue(ChannelOutput, OutputAmount);                                                                   // output servo position
         StickPosition = map(constrain((InputAmount + 100) / 2, 0, 100), 0, 100, BOXLEFT + 2, BOXRIGHT - BOXLEFT); // map to box size
@@ -526,15 +526,15 @@ void DoTrimsAndSubtrims()
 
     for (uint16_t OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel)
     {
-        uint16_t InputChannel = InPutStick[OutputChannel];                                      // Input sticks knobs & switches are mapped by user
+        uint16_t InputChannel = InPutStick[OutputChannel]; // Input sticks knobs & switches are mapped by user
         // ClaudeFix-2-7-2026 Signed maths! SendBuffer is uint16_t: a low curve value plus a negative
         // subtrim/trim used to wrap below zero to ~65000, and constrain then
         // clamped it to MAXMICROS -- FULL deflection in the WRONG direction.
         int TrimmedValue = (int)SendBuffer[OutputChannel];
-        TrimmedValue += (SubTrims[OutputChannel] - 127) * 5;                                    // ADD SUBTRIM to output channel, (Range 0 - 127 - 254) multiplier is always 5 otherwise subtrim might keep changing
-        TrimmedValue += GetTrimAmount(InputChannel);                                            // ADD TRIM to output channel
-        SendBuffer[OutputChannel] = constrain(TrimmedValue, MINMICROS, MAXMICROS);              // Keep within limits
-        PreMixBuffer[OutputChannel] = SendBuffer[OutputChannel];                                // premixbuffer will be needed again...
+        TrimmedValue += (SubTrims[OutputChannel] - 127) * 5;                       // ADD SUBTRIM to output channel, (Range 0 - 127 - 254) multiplier is always 5 otherwise subtrim might keep changing
+        TrimmedValue += GetTrimAmount(InputChannel);                               // ADD TRIM to output channel
+        SendBuffer[OutputChannel] = constrain(TrimmedValue, MINMICROS, MAXMICROS); // Keep within limits
+        PreMixBuffer[OutputChannel] = SendBuffer[OutputChannel];                   // premixbuffer will be needed again...
     }
 }
 //**************************************************************************************************************************************************************
@@ -1346,7 +1346,7 @@ void DoNewChannelName(int ch, int k)
     if (ch < 1 || ch > 16)
         return; // ChannelNames is [16][11]
     ChannelNames[ch - 1][0] = 32;
-    ChannelNames[ch - 1][1] = 0; // remove old name
+    ChannelNames[ch - 1][1] = 0;             // remove old name
     while (uint8_t(TextIn[k]) > 0 && j < 10) // ClaudeFix-2-7-2026 names are 10 chars max -- longer input overflowed into the next name (channel 16: past the array)
     {
         ChannelNames[ch - 1][j] = TextIn[k];
@@ -1712,7 +1712,7 @@ FASTRUN void DisplayCurve()
     // 1. First batch: Clear box and send top row values
 
     // Clear the box
-   
+
     sprintf(tempCmd, "fill %d,%d,%d,%d,%d", 36, 36, 360, 360, 0);
 
     strcat(cmdBuffer, tempCmd);
@@ -2914,7 +2914,7 @@ void WriteBackup()
 void EndRenameModel()
 {
     char NewName[31] = "NewName";
-    GetText(NewName, ModelName, sizeof(ModelName));  // ClaudeFix-2-7-2026
+    GetText(NewName, ModelName, sizeof(ModelName)); // ClaudeFix-2-7-2026
     SaveOneModel(ModelNumber);
     GotoModelsView();
 }
@@ -4590,6 +4590,26 @@ void CheckModelsScreen(uint32_t RightNow)
     if (CheckModelName())
         LastModelScreenCheck = RightNow;
 }
+//************************************************************************************************************/
+void CheckMaxCurrent() // heer
+{
+    static bool warned = false;
+    if (!LedWasGreen)
+    {
+        warned = false;
+        return;
+    }
+    if (Battery_Amps && Max_Safe_Amps && !warned) // is the current current currently excessive?
+    {
+        if (Battery_Amps > Max_Safe_Amps)
+        {
+            PlaySound(WHAHWHAHMSG); // Play sound to indicate there is a Problem.
+            MsgBox(pFrontView, (char *)"Max current exceeded!");
+            warned = true;
+        }
+    }
+}
+
 /************************************************************************************************************/
 void FASTRUN ManageTransmitter()
 {
@@ -4642,13 +4662,14 @@ void FASTRUN ManageTransmitter()
         CheckModelsScreen(RightNow);
 
     if (RightNow - TransmitterLastManaged >= 50)
-    { // 50 = 20 times a second
+    {                      // 50 = 20 times a second
+        CheckMaxCurrent(); // Check if max current has been exceeded
         ReadTheSwitchesAndTrims();
         CheckHardwareTrims();
         GetBank(); // Check switch positions 20 times a second
         if (LedIsBlinking && LedWasRed)
-                RedLedOn();
-       
+            RedLedOn();
+
         if (CurrentView >= PIDVIEW && CurrentView <= RFGOVERNORVIEW_GLOBAL)
         {
             Hide_msg_if_needed(); // Hide any message in rotoflight config area
