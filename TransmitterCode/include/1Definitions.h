@@ -1640,7 +1640,7 @@ float RFVersions[3] = {0, 2.2, 2.3}; // for display only
 char ModelImageFileName[9];
 bool Armed = false;
 bool Wait_for_Advanced_Rates_to_Be_Sent_Too = false;
-uint16_t Max_Safe_Amps = 42;
+uint16_t Max_Safe_Amps = 0;
 
 // *********************************************** END OF GLOBAL DATA ***************************************************************
 
