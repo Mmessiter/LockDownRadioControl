@@ -375,8 +375,8 @@ bool ReadOneModel(uint32_t Mnum)
     ++SDCardAddress;
     ++SDCardAddress;
     StopFlyingVoltsPerCell = float(SFV) / 100;
-   // if (StopFlyingVoltsPerCell < 3 || StopFlyingVoltsPerCell > 4)
-   //     StopFlyingVoltsPerCell = 3.50; // a useful default stop time?!
+    // if (StopFlyingVoltsPerCell < 3 || StopFlyingVoltsPerCell > 4)
+    //     StopFlyingVoltsPerCell = 3.50; // a useful default stop time?!
     Drate2 = SDRead8BITS(SDCardAddress);
     if ((Drate2 < 10) || (Drate2 > 200))
         Drate2 = 100;
@@ -396,8 +396,9 @@ bool ReadOneModel(uint32_t Mnum)
     }
     CheckDualRatesValues();
 
-    ++SDCardAddress; // Spare byte
-    ++SDCardAddress; // Spare byte
+    Max_Safe_Amps = SDRead16BITS(SDCardAddress);
+    ++SDCardAddress;
+    ++SDCardAddress;
 
     for (i = 0; i < 4; ++i)
     {
@@ -1306,8 +1307,10 @@ void SaveOneModel(uint32_t mnum)
         SDUpdate8BITS(SDCardAddress, DualRateChannels[i]);
         ++SDCardAddress;
     }
-    ++SDCardAddress; // Spare byte
-    ++SDCardAddress; // Spare byte
+
+    SDUpdate16BITS(SDCardAddress, Max_Safe_Amps);
+    ++SDCardAddress;
+    ++SDCardAddress;
 
     for (i = 0; i < 4; ++i)
     {

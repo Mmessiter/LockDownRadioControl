@@ -12,8 +12,8 @@ FASTRUN bool CheckTXVolts()
     char FrontView_TXBV[] = "TXBV"; // Labels on Nextion
     bool TXWarningFlag = false;
     float TransmitterBatteryPercentLeft, TXVoltsRaw;
-    char TXBattInfo[80];
-    char pc[] = "%";
+   // char TXBattInfo[80];
+   // char pc[] = "%";
     char nbuf[60]; //  buffer for numbers
     char NB[10];
     char PerCell[] = "V per cell)";

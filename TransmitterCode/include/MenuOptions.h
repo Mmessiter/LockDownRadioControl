@@ -1036,6 +1036,7 @@ void RXOptionsViewStart() // model Options screen
     char RxVCorrextion[] = "n2";
     char c1[] = "c1";
     char n3[] = "n3";
+    char Max_Amps[] = "t12";
     char n4[] = "n4"; // TimerDownwards timer minutes
     char c2[] = "c2"; // TimerDownwards timer on off
 
@@ -1045,6 +1046,7 @@ void RXOptionsViewStart() // model Options screen
     SendValue(n3, TrimMultiplier);
     snprintf(Vbuf, 5, "%1.2f", StopFlyingVoltsPerCell);
     SendText(t10, Vbuf);
+    
     SendValue(Mvalue, map(MotorChannelZero, 0, 180, -100, 100)); // map to -100 to 100
     SendValue(Mchannel, MotorChannel + 1);
     SendValue(UseKill, UseMotorKill);
@@ -1052,6 +1054,8 @@ void RXOptionsViewStart() // model Options screen
     SendValue(c2, TimerDownwards);
     SendValue(n4, TimerStartTime / 60);
     SendValue((char *)"sw0", 1); // redundant
+    snprintf(Vbuf, 15, "%3.0d", Max_Safe_Amps);
+    SendText(Max_Amps, Vbuf);
     DisplayModelImage();
     UpdateModelsNameEveryWhere();
 }
@@ -1082,6 +1086,11 @@ void RXOptionsViewEnd()
     TrimMultiplier = GetValue(n3);
     GetText(t10, fbuf, sizeof(fbuf));  // ClaudeFix-2-7-2026
     StopFlyingVoltsPerCell = atof(fbuf);
+    
+    GetText((char *)"t12", fbuf, sizeof(fbuf)); // MCMFix-2-7-2026
+    Max_Safe_Amps = atoi(fbuf);
+    
+    
     SFV = StopFlyingVoltsPerCell * 100; // this makes it a 16 bit value I can save easily
     SendValue(Progress, 15);
     MotorChannelZero = map(GetValue(Mvalue), -100, 100, 0, 180); // map to 0 to 180
