@@ -169,7 +169,7 @@ void ReadRatesAdvanced()
         if (i == 14) // last one is divided by 10 and therefore must be text
         {
             char temp[10];
-            GetText(RatesAWindows[i], temp);
+            GetText(RatesAWindows[i], temp, sizeof(temp));  // ClaudeFix-2-7-2026
             float q = atof(temp) * 10.0;
             Rate_Advanced_Values[i] = (uint8_t)q;
             continue;

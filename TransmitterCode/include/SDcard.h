@@ -153,6 +153,8 @@ bool ReadOneModel(uint32_t Mnum)
 
     FileCheckSum = 0;
     MixNumber = 0;
+    if ((Mnum > 90) || (Mnum <= 0))
+        Mnum = 1; // ClaudeFix-2-7-2026 clamp the SLOT too: the old code clamped only the global, then read the out-of-range slot anyway -- and the next save wrote that slot's data over model 1
     if ((ModelNumber > 90) || (ModelNumber <= 0))
         ModelNumber = 1;
 
@@ -208,6 +210,10 @@ bool ReadOneModel(uint32_t Mnum)
             Mixes[j][i] = SDRead8BITS(SDCardAddress); // Read mixes
             ++SDCardAddress;
         }
+        // ClaudeFix-2-7-2026 A mix is only usable when BOTH channels are 1..16 -- a corrupt slave
+        // wrote SendBuffer[-1] (or far beyond) every loop. Disable junk mixes.
+        if (Mixes[j][M_MasterChannel] > 16 || Mixes[j][M_SlaveChannel] > 16 || Mixes[j][M_SlaveChannel] == 0)
+            Mixes[j][M_MasterChannel] = 0;
     }
 
     for (j = 0; j < BANKS_USED + 1; ++j)
@@ -228,6 +234,8 @@ bool ReadOneModel(uint32_t Mnum)
     }
     CheckServoSpeeds();
     RXCellCount = SDRead8BITS(SDCardAddress);
+    if (RXCellCount < 1 || RXCellCount > 12)
+        RXCellCount = 2; // ClaudeFix-2-7-2026 divisor -- 0 made volts-per-cell infinite
     ++SDCardAddress;
     TrimMultiplier = SDRead16BITS(SDCardAddress);
     TrimMultiplier = CheckRange(TrimMultiplier, 0, 25);
@@ -292,6 +300,10 @@ bool ReadOneModel(uint32_t Mnum)
     ++SDCardAddress;
     ++SDCardAddress;
     ArmingChannel = SDRead8BITS(SDCardAddress);
+    if (ArmingChannel < 1 || ArmingChannel > CHANNELSUSED)
+        ArmingChannel = 6; // ClaudeFix-2-7-2026 self-heal: old model files (or ones saved while the
+                           // GetText desync bug was corrupting this) can hold 0 or
+                           // nonsense -- restore the Rotorflight default instead
     ++SDCardAddress;
 
     for (i = 0; i < CHANNELSUSED; ++i)
@@ -352,6 +364,8 @@ bool ReadOneModel(uint32_t Mnum)
     MotorChannelZero = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     MotorChannel = SDRead8BITS(SDCardAddress);
+    if (MotorChannel > 15)
+        MotorChannel = 2; // ClaudeFix-2-7-2026 self-heal like ArmingChannel: a corrupt byte made FixMotorChannel write OOB every loop pass
     ++SDCardAddress;
 
     // TREX
@@ -388,6 +402,8 @@ bool ReadOneModel(uint32_t Mnum)
     for (i = 0; i < 4; ++i)
     {
         BanksInUse[i] = SDRead8BITS(SDCardAddress);
+        if (BanksInUse[i] > 31)
+            BanksInUse[i] = i + 4; // ClaudeFix-2-7-2026 BankNames is [32]; corrupt index strcpy'd garbage into a stack buffer on bank change
         ++SDCardAddress;
     }
 
@@ -816,12 +832,20 @@ bool LoadAllParameters()
     Autoswitch = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     TopChannelSwitch[Ch9_SW] = SDRead8BITS(SDCardAddress);
+    if (TopChannelSwitch[Ch9_SW] > 4)
+        TopChannelSwitch[Ch9_SW] = 0; // ClaudeFix-2-7-2026 switches are 1..4; 0 = unused
     ++SDCardAddress;
     TopChannelSwitch[Ch10_SW] = SDRead8BITS(SDCardAddress);
+    if (TopChannelSwitch[Ch10_SW] > 4)
+        TopChannelSwitch[Ch10_SW] = 0; // ClaudeFix-2-7-2026 switches are 1..4; 0 = unused
     ++SDCardAddress;
     TopChannelSwitch[Ch11_SW] = SDRead8BITS(SDCardAddress);
+    if (TopChannelSwitch[Ch11_SW] > 4)
+        TopChannelSwitch[Ch11_SW] = 0; // ClaudeFix-2-7-2026 switches are 1..4; 0 = unused
     ++SDCardAddress;
     TopChannelSwitch[Ch12_SW] = SDRead8BITS(SDCardAddress);
+    if (TopChannelSwitch[Ch12_SW] > 4)
+        TopChannelSwitch[Ch12_SW] = 0; // ClaudeFix-2-7-2026 switches are 1..4; 0 = unused
     ++SDCardAddress;
     SwitchReversed[0] = bool(SDRead8BITS(SDCardAddress));
     ++SDCardAddress;
@@ -858,8 +882,8 @@ bool LoadAllParameters()
     ReadCheckSum32();
     CheckTrimValues();
     MemoryForTransmtter = SDCardAddress;
-    if ((ModelNumber < 1) || (ModelNumber > 99))
-        ModelNumber = 1;
+    if ((ModelNumber < 1) || (ModelNumber > 90))
+        ModelNumber = 1; // ClaudeFix-2-7-2026 was 99: slots 91-99 do not exist; loading one clobbered model 1 on the next save
     ReadOneModel(ModelNumber);
     return true;
 }
@@ -973,7 +997,7 @@ void SaveTransmitterParameters()
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, PowerOffWarningSeconds);
     ++SDCardAddress;
-    SDUpdate16BITS(SDCardAddress, LEDBrightness);
+    SDUpdate8BITS(SDCardAddress, LEDBrightness); // ClaudeFix-2-7-2026 was SDUpdate16BITS with a 1-step advance: the stray high byte only worked because the next field immediately overwrote it
     ++SDCardAddress;
     SDUpdate8BITS(SDCardAddress, WirelessBuddy);
     ++SDCardAddress;

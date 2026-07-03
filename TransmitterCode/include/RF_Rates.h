@@ -26,7 +26,7 @@ void ReadEditedRateValues()
     for (int i = 1; i < MAX_RATES_BYTES; ++i) // start at 1 because 0 is Rates Type and not yet edited here
     {
         char temp[10];
-        GetText(RatesWindows[i], temp);
+        GetText(RatesWindows[i], temp, sizeof(temp));  // ClaudeFix-2-7-2026
 
         if (RotorFlight_V >= 2) // 2
         {

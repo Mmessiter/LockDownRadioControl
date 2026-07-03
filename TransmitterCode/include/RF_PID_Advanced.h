@@ -43,7 +43,7 @@ void ReadEditedPIDAdvancedValues()
             continue;
         }
         char temp[10];
-        GetText(PID_Advanced_Labels[i], temp);
+        GetText(PID_Advanced_Labels[i], temp, sizeof(temp));  // ClaudeFix-2-7-2026
         if ((i == 1) || (i == 25)) // these two are floats multiplied by 10
             PID_Advanced_Values[i] = (uint8_t)(atof(temp) * 10.0f);
         else

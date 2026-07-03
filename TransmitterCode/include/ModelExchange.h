@@ -326,6 +326,16 @@ void ReceiveModelFile()
     Fsize += Fbuffer[BUFFERSIZE + 2] << 16;
     Fsize += Fbuffer[BUFFERSIZE + 3] << 24; //  Get file size
 
+    if (Fsize == 0 || Fsize > MAXFILELEN)
+    {   // ClaudeFix-2-7-2026 a bogus size off the air used to trap the receive loop forever and
+        // over-read the RAM buffer -- reject it cleanly
+        SendText(ModelsView_filename, (char *)"Transfer error");
+        NormaliseTheRadio();
+        RedLedOn();
+        GotoModelsView();
+        return;
+    }
+
     for (int q = 0; q < 5; ++q)
     {
         BuddyMacAddress[q] = Fbuffer[q + 16]; // sender's macaddress is in buffer at offset 16 - get it 
@@ -389,7 +399,18 @@ void ReceiveModelFile()
 
     SingleModelFlag = true;
  ;
-    ReadOneModel(1);
+    if (!ReadOneModel(1))
+    {   // ClaudeFix-2-7-2026 the imported file failed its checksum -- do NOT persist it over the
+        // current model (the old code ignored this and SaveAllParameters'd it)
+        SingleModelFlag = false;
+        CloseModelsFile();
+        SendText(ModelsView_filename, (char *)"Bad model - not saved");
+        NormaliseTheRadio();
+        SendCommand(ProgressEnd);
+        RedLedOn();
+        GotoModelsView();
+        return;
+    }
 
     
     if (SavedSticksMode != SticksMode)

@@ -112,7 +112,7 @@ void Restore_SOME_RF_Parameters()
             Which_Case_Now = 4;
         break;
     case 4:
-        if (!(Which_Params & (DO_RATES || DO_RATES_ADVANCED))) /// RATES ****************************************************************************************************
+        if (!(Which_Params & (DO_RATES | DO_RATES_ADVANCED))) // ClaudeFix-2-7-2026 was ||, which evaluates to 1 == DO_PIDS: ticking Rates restored nothing, ticking PIDs pushed stale rates /// RATES ****************************************************************************************************
         {
             Which_Case_Now = 6; // skip to next if not doing RATES
             break;
@@ -137,7 +137,7 @@ void Restore_SOME_RF_Parameters()
             Which_Case_Now = 6;
         break;
     case 6:
-        if (!(Which_Params & (DO_RATES || DO_RATES_ADVANCED))) /// RATES ADVANCED. ****************************************************************************************************
+        if (!(Which_Params & (DO_RATES | DO_RATES_ADVANCED))) // ClaudeFix-2-7-2026 was ||, which evaluates to 1 == DO_PIDS: ticking Rates restored nothing, ticking PIDs pushed stale rates /// RATES ADVANCED. ****************************************************************************************************
         {
             Which_Case_Now = 7; // skip to next if not doing RATES ADVANCED
             break;
@@ -413,6 +413,8 @@ void Save_SOME_RF_Parameters()
 void Collect_data_from_dialog() // and close it
 {
     LocalBank = GetValue((char *)"n0");
+    if (LocalBank < 1 || LocalBank > 4)
+        LocalBank = 1; // ClaudeFix-2-7-2026 Saved_* arrays are [4]; a comms error returns 65535
     Which_Params = 0;
     if (GetValue((char *)"sw0"))
         Which_Params |= DO_PIDS;

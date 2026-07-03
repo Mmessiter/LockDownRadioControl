@@ -44,20 +44,39 @@ void BuildValue(char *nbox, int value)
     BuildNextionCommand(CB);
 }
 /*********************************************************************************************************************************/
+// ClaudeFix-2-7-2026 Bounded, sanitising copy for anything sent inside a Nextion txt="..."
+// assignment. Two characters are LETHAL in there: an embedded double quote
+// terminates the string so the display SILENTLY REJECTS the whole command
+// (the frozen-help-screen bug), and a 0xFF byte ends the command early,
+// letting the remaining bytes execute as a NEW command (injection from
+// garbage telemetry). maxroom includes the terminating NUL. CR/LF pass
+// through (the log viewer needs them).
+void CopyTextForNextion(char *dst, const char *src, uint16_t maxroom)
+{
+    uint16_t i = 0;
+    while (src[i] && (i + 1) < maxroom)
+    {
+        char c = src[i];
+        if (c == '"')
+            c = '\'';
+        if ((uint8_t)c >= 0xFE)
+            c = ' ';
+        dst[i] = c;
+        ++i;
+    }
+    dst[i] = 0;
+}
+/*********************************************************************************************************************************/
 void BuildText(char *tbox, char *NewWord) // same as sendtext only delayed send
 {
-    char txt[] = ".txt=\"";
-    char quote[] = "\"";
     char CB[120];
-    char TooLong[] = "Too long!";
-    if (strlen(NewWord) > 110)
-    {
-        strcpy(NewWord, TooLong); //
-    }
+    // ClaudeFix-2-7-2026 The old cap forgot the name + ".txt=\"" + quote overhead (and replaced
+    // the CALLER's buffer with "Too long!") -- truncate safely instead.
     strcpy(CB, tbox);
-    strcat(CB, txt);
-    strcat(CB, NewWord);
-    strcat(CB, quote);
+    strcat(CB, ".txt=\"");
+    uint16_t used = strlen(CB);
+    CopyTextForNextion(CB + used, NewWord, (uint16_t)(sizeof(CB) - used - 2));
+    strcat(CB, "\"");
     BuildNextionCommand(CB);
 }
 
@@ -65,18 +84,12 @@ void BuildText(char *tbox, char *NewWord) // same as sendtext only delayed send
 /*********************************************************************************************************************************/
 void SendText1(char *tbox, char *NewWord)
 {
-    char txt[] = ".txt=\"";
-    char quote[] = "\"";
     char CB[2048];
-    char TooLong[] = "Too long!";
-    if (strlen(NewWord) > 2048-5)
-    {
-        strcpy(NewWord, TooLong); //
-    }
     strcpy(CB, tbox);
-    strcat(CB, txt);
-    strcat(CB, NewWord);
-    strcat(CB, quote);
+    strcat(CB, ".txt=\"");
+    uint16_t used = strlen(CB);
+    CopyTextForNextion(CB + used, NewWord, (uint16_t)(sizeof(CB) - used - 2));
+    strcat(CB, "\"");
     SendCommand(CB);
     GetReturnCode(tbox);
 }
@@ -89,17 +102,11 @@ void SendText(char *tbox, char *NewWord)
 /*********************************************************************************************************************************/
 void SendOtherText(char *tbox, char *NewWord)
 {
-    char quote[] = "\"";
     char CB[MAXBUFFERSIZE];
-    char TooLong[] = "Too long!";
-
-    if (strlen(NewWord) > MAXBUFFERSIZE - 2)
-    {
-        strcpy(NewWord, TooLong);
-    }
-    strcpy(CB, tbox);
-    strcat(CB, NewWord);
-    strcat(CB, quote);
+    strcpy(CB, tbox); // ClaudeFix-2-7-2026 tbox carries its own prefix incl. the opening quote
+    uint16_t used = strlen(CB);
+    CopyTextForNextion(CB + used, NewWord, (uint16_t)(sizeof(CB) - used - 2));
+    strcat(CB, "\"");
     SendCommand(CB);
     // Look(CB);
     GetReturnCode(tbox);
@@ -197,9 +204,41 @@ uint32_t getvalue(char *nbox)
     strcpy(CB, GET);
     strcat(CB, nbox);
     strcat(CB, VAL);
+    // ClaudeFix-2-7-2026 Same discipline as the fixed GetText: FLUSH stale bytes first (a
+    // leftover reply used to be parsed as THIS one -- the ArmingChannel bug
+    // family, which also fed shifted-by-one PIDs/rates to the FC), then WAIT
+    // for the framed 'q' reply instead of hoping it already arrived.
+    while (NEXTION.available())
+        NEXTION.read();
+    TextIn[0] = 0;
     NEXTION.print(CB);
     EndSend();
-    GetTextIn();
+    {
+        uint32_t begun = millis();
+        uint16_t k = 0;
+        uint8_t ffs = 0;
+        bool done = false;
+        while (!done && (millis() - begun) < 100)
+        {
+            while (NEXTION.available())
+            {
+                uint8_t b = NEXTION.read();
+                if (k < MAXTEXTIN)
+                    TextIn[k++] = b;
+                if (b == 0xFF)
+                {
+                    if (++ffs >= 3)
+                    {
+                        done = true;
+                        break;
+                    }
+                }
+                else
+                    ffs = 0;
+            }
+            KickTheDog();
+        }
+    }
     if (TextIn[0] == 'q')
     {
         ValueIn = TextIn[1]; // Collect and build 32 bit value from 4 bytes
@@ -234,23 +273,69 @@ uint32_t GetValue(char *nbox)
 // ***************************************************************************************************************
 // This function gets Nextion textbox Text into a char array pointed to by * TheText. There better be room!
 // It returns the length of array
-uint16_t GetText(char *TextBoxName, char *TheText)
+uint16_t GetText(char *TextBoxName, char *TheText, uint16_t maxlen)
 {
     TheText[0] = 0; // guarantee a defined result even if the Nextion doesn't answer with 'p'
+    if (maxlen < 2)
+        return 0;
     char get[] = "get ";
     char _txt[] = ".txt";
     char CB[100];
-    uint8_t j = 0;
+    uint16_t j = 0;
     strcpy(CB, get);
     strcat(CB, TextBoxName);
     strcat(CB, _txt);
+
+    // ClaudeFix-2-7-2026 Discard any STALE bytes before asking. Leftovers from earlier traffic
+    // (especially after heavy MSP work on the Rotorflight screens) used to be
+    // parsed as THIS field's reply — so field N's answer became field N+1's
+    // value. That is exactly how ArmingChannel "mysteriously" changed: the
+    // Ratio box's "10.30" was read back as Arming and atoi'd to a perfectly
+    // plausible channel 10, which then sailed past the range check.
+    while (NEXTION.available())
+        NEXTION.read();
+    TextIn[0] = 0; // if no reply arrives, stale TextIn content must not be re-parsed
+
     NEXTION.print(CB);
     EndSend();
-    GetTextIn();
+
+    // WAIT for the actual reply. The old code waited 20 MICROseconds — the
+    // Nextion cannot even begin answering that fast, so what got read was
+    // whatever the buffer already held (usually the PREVIOUS get's answer).
+    // A reply is 'p' + text + FF FF FF: collect until that terminator, with
+    // a timeout so a dead display can't hang us (normal replies take ~2 ms).
+    {
+        uint32_t begun = millis();
+        uint16_t k = 0;
+        uint8_t ffs = 0;
+        bool done = false;
+        while (!done && (millis() - begun) < 100)
+        {
+            while (NEXTION.available())
+            {
+                uint8_t b = NEXTION.read();
+                if (k < MAXTEXTIN)
+                    TextIn[k++] = b;
+                if (b == 0xFF)
+                {
+                    if (++ffs >= 3)
+                    {
+                        done = true;
+                        break;
+                    }
+                }
+                else
+                    ffs = 0;
+            }
+            KickTheDog();
+        }
+    }
+
     if (TextIn[0] == 'p')
     {
-        while (TextIn[j + 1] < 0xFF)
-        {
+        while (TextIn[j + 1] < 0xFF && j < MAXTEXTIN - 2 && j < maxlen - 1)
+        {   // ClaudeFix-2-7-2026 maxlen: the reply lands in CALLER buffers as small as 10 bytes
+            // ("There better be room!" -- now there is)
             TheText[j] = TextIn[j + 1];
             ++j;
             KickTheDog(); // ??
@@ -268,9 +353,37 @@ int GetOtherValue(char *nbox)
     char CB[100];
     strcpy(CB, GET);
     strcat(CB, nbox);
+    while (NEXTION.available()) // ClaudeFix-2-7-2026 flush stale replies (same fix as getvalue/GetText)
+        NEXTION.read();
+    TextIn[0] = 0;
     NEXTION.print(CB);
     EndSend();
-    GetTextIn();
+    {
+        uint32_t begun = millis();
+        uint16_t k = 0;
+        uint8_t ffs = 0;
+        bool done = false;
+        while (!done && (millis() - begun) < 100)
+        {
+            while (NEXTION.available())
+            {
+                uint8_t b = NEXTION.read();
+                if (k < MAXTEXTIN)
+                    TextIn[k++] = b;
+                if (b == 0xFF)
+                {
+                    if (++ffs >= 3)
+                    {
+                        done = true;
+                        break;
+                    }
+                }
+                else
+                    ffs = 0;
+            }
+            KickTheDog();
+        }
+    }
     if (TextIn[0] == 'q')
     {
         ValueIn = TextIn[1]; // Collect and build 32 bit value from 4 bytes
@@ -357,7 +470,7 @@ int GetIntFromTextBox(char *tbox)
     GetTextIn();
     if (TextIn[0] == 'p')
     {
-        while (TextIn[j + 1] < 0xFF)
+        while (TextIn[j + 1] < 0xFF && j < sizeof(Text) - 1) // ClaudeFix-2-7-2026 bounded: a fragment reply used to copy forever (uint8_t j wraps, smashing the stack past Text[50])
         {
             Text[j] = TextIn[j + 1];
             ++j;
@@ -385,7 +498,7 @@ float GetFloatFromTextBox(char *tbox)
     GetTextIn();
     if (TextIn[0] == 'p')
     {
-        while (TextIn[j + 1] < 0xFF)
+        while (TextIn[j + 1] < 0xFF && j < sizeof(Text) - 1) // ClaudeFix-2-7-2026 bounded: a fragment reply used to copy forever (uint8_t j wraps, smashing the stack past Text[50])
         {
             Text[j] = TextIn[j + 1];
             ++j;

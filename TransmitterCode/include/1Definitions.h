@@ -760,7 +760,7 @@ void FixFileName();
 void WriteBackup();
 void RestoreCurrentModel();
 void GetYesOrNo();
-uint16_t GetText(char *TextBoxName, char *TheText);
+uint16_t GetText(char *TextBoxName, char *TheText, uint16_t maxlen);  // ClaudeFix-2-7-2026
 void StoreModelID();
 void ResetMotorTimer();
 void SpeedTest();

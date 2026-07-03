@@ -40,7 +40,7 @@ FASTRUN bool CheckTXVolts()
             WarningSound = BATTERYISLOW;
         }
         TransmitterBatteryPercentLeft = constrain(TransmitterBatteryPercentLeft, 0, 100);
-        strcat(TXBattInfo, pc);
+// strcat(TXBattInfo, pc); // ClaudeFix-2-7-2026 removed: TXBattInfo is never initialised and never sent -- strcat scanned/overran stack garbage
         if (CurrentView == FRONTVIEW)
         {
             SendValue(JTX, TransmitterBatteryPercentLeft);
@@ -610,12 +610,12 @@ void DoTheVariometer()
     //------------------------------------------------------------------
     // 2.1  Early exits (rate‑limit and pilot conditions)
     //------------------------------------------------------------------
-    static uint32_t nextCheckMs = 0; // 20 Hz cadence (50 ms)
+    static uint32_t lastCheckMs = 0; // 20 Hz cadence (50 ms)
     uint32_t now = millis();
 
-    if (now < nextCheckMs)
+    if (now - lastCheckMs < 50) // ClaudeFix-2-7-2026 subtraction form: wrap-safe (old (now < nextCheckMs) muted the variometer for a long stretch after the 49.7-day millis() wrap)
         return;
-    nextCheckMs = now + 50;
+    lastCheckMs = now;
     if (!UseVariometer || !(BoundFlag && ModelMatched) ||
         (now - LedGreenMoment < 10000) ||
         ((Bank != VariometerBank) && (VariometerBank != 0)))

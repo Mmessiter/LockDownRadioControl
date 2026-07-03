@@ -467,16 +467,27 @@ void GetSpecialPacket()
 
     CheckPowerOffButton(); // Check if the power off button is pressed. If so, power off immediately without trying to receive the packet, which would cause a delay and a possible crash if the buddy is not present.
 
+    static uint8_t BadBuddyPacketCount = 0; // consecutive wrong-size buddy packets
     if (Radio1.available())
     {                                                                   // if a packet has arrived
         if (Radio1.getDynamicPayloadSize() != sizeof SpecialPacketData) // MUST be sizeof SpecialPacketData (= 24!)
         {
-            SendText(wb, ExsBd); // If not, declare an error: excess buddies !
-            SendCommand(YesVisible);
-            PlaySound(EXTRABUDDIES);
-            DelayWithDog(10000);
+            // ClaudeFix-2-7-2026 Require SEVERAL consecutive wrong-size packets before crying
+            // "excess buddies" -- one corrupt packet is a normal radio event,
+            // and the old 10 s freeze on a single blip was a harsh mid-flight
+            // failure. ~3 in a row = a real second buddy; penalty now ~2 s.
+            if (++BadBuddyPacketCount >= 3)
+            {
+                BadBuddyPacketCount = 0;
+                SendText(wb, ExsBd); // If not, declare an error: excess buddies !
+                SendCommand(YesVisible);
+                PlaySound(EXTRABUDDIES);
+                DelayWithDog(2000);
+            }
+            Radio1.flush_rx();
             return;
         }
+        BadBuddyPacketCount = 0; // a good (correct-size) packet -> the bad run was not consecutive
         SendTheSpecialAckPayload();
         ParseSpecialPacket(); // Parse the packet
         MasterDetected(true); // Master is alive

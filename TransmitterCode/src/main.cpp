@@ -380,6 +380,8 @@ FASTRUN void ShowServoPos()
     }
     if ((CurrentView == GRAPHVIEW))
     {
+        if (ChanneltoSet < 1 || ChanneltoSet > 16)
+            return; // ClaudeFix-2-7-2026 ChanneltoSet can still be 0 when the graph page appears by an unusual route -- InPutStick[-1] was read
         MinimumDistance = 4;
         InputDevice = (InPutStick[ChanneltoSet - 1]);
         if (InputDevice < 8)
@@ -387,7 +389,7 @@ FASTRUN void ShowServoPos()
         else
             InputAmount = ReadThreePositionSwitch(InputDevice);                                                   // not analogue
         InputAmount = map(InputAmount, ChannelCentre[InputDevice], ChannelMax[InputDevice], 0, 100);              // input stick position
-        OutputAmount = map(SendBuffer[InputDevice], MINMICROS, MAXMICROS, -100, 100);                             // output servo position
+        OutputAmount = map(SendBuffer[ChanneltoSet - 1], MINMICROS, MAXMICROS, -100, 100);                         // output servo position (was SendBuffer[InputDevice] -- ClaudeFix-2-7-2026 wrong channel whenever input is remapped)
         SendValue(ChannelInput, InputAmount);                                                                     // input stick position
         SendValue(ChannelOutput, OutputAmount);                                                                   // output servo position
         StickPosition = map(constrain((InputAmount + 100) / 2, 0, 100), 0, 100, BOXLEFT + 2, BOXRIGHT - BOXLEFT); // map to box size
@@ -525,9 +527,13 @@ void DoTrimsAndSubtrims()
     for (uint16_t OutputChannel = 0; OutputChannel < CHANNELSUSED; ++OutputChannel)
     {
         uint16_t InputChannel = InPutStick[OutputChannel];                                      // Input sticks knobs & switches are mapped by user
-        SendBuffer[OutputChannel] += (SubTrims[OutputChannel] - 127) * 5;                       // ADD SUBTRIM to output channel, (Range 0 - 127 - 254) multiplier is always 5 otherwise subtrim might keep changing
-        SendBuffer[OutputChannel] += GetTrimAmount(InputChannel);                               // ADD TRIM to output channel
-        SendBuffer[OutputChannel] = constrain(SendBuffer[OutputChannel], MINMICROS, MAXMICROS); // Keep within limits
+        // ClaudeFix-2-7-2026 Signed maths! SendBuffer is uint16_t: a low curve value plus a negative
+        // subtrim/trim used to wrap below zero to ~65000, and constrain then
+        // clamped it to MAXMICROS -- FULL deflection in the WRONG direction.
+        int TrimmedValue = (int)SendBuffer[OutputChannel];
+        TrimmedValue += (SubTrims[OutputChannel] - 127) * 5;                                    // ADD SUBTRIM to output channel, (Range 0 - 127 - 254) multiplier is always 5 otherwise subtrim might keep changing
+        TrimmedValue += GetTrimAmount(InputChannel);                                            // ADD TRIM to output channel
+        SendBuffer[OutputChannel] = constrain(TrimmedValue, MINMICROS, MAXMICROS);              // Keep within limits
         PreMixBuffer[OutputChannel] = SendBuffer[OutputChannel];                                // premixbuffer will be needed again...
     }
 }
@@ -552,7 +558,7 @@ void GetAllInputs()
         }
         else
         {
-            InputsBuffer[OutputChannel] = ReadThreePositionSwitch(OutputChannel); // Get values from switches
+            InputsBuffer[OutputChannel] = ReadThreePositionSwitch(InPutStick[OutputChannel]); // Get values from switches (ClaudeFix-2-7-2026 via the user's input mapping, like the analogue branch above -- passing OutputChannel only worked when input == output)
         }
     }
 }
@@ -1337,9 +1343,11 @@ int CheckRange(int v, int min, int max)
 void DoNewChannelName(int ch, int k)
 {
     int j = 0;
+    if (ch < 1 || ch > 16)
+        return; // ChannelNames is [16][11]
     ChannelNames[ch - 1][0] = 32;
     ChannelNames[ch - 1][1] = 0; // remove old name
-    while (uint8_t(TextIn[k]) > 0)
+    while (uint8_t(TextIn[k]) > 0 && j < 10) // ClaudeFix-2-7-2026 names are 10 chars max -- longer input overflowed into the next name (channel 16: past the array)
     {
         ChannelNames[ch - 1][j] = TextIn[k];
         ++j;
@@ -1493,7 +1501,7 @@ void SetDefaultValues()
             Exponential[j][i] = DEFAULT_EXPO; // 0% (50) expo = default
         }
     }
-    for (j = 0; j < BANKS_USED; ++j)
+    for (j = 1; j <= BANKS_USED; ++j) // ClaudeFix-2-7-2026 banks are 1-based at runtime (matches the Exponential loop above); 0..3 left bank 4 inheriting the previous model's curve types
     {
         for (i = 0; i < CHANNELSUSED; ++i)
         {
@@ -2752,6 +2760,8 @@ void StartSlowView()
 /******************************************************************************************************************************/
 void ReadSpeedsScreen(uint8_t bk)
 {
+    if (bk > 3)
+        return; // ClaudeFix-2-7-2026 ServoSpeed is [5][17]; the motor-switch "force bank change" sentinel (254) used to arrive here and write 4 KB past it
 
     char ns[16][4] = {{"n0"}, {"n1"}, {"n2"}, {"n3"}, {"n4"}, {"n5"}, {"n6"}, {"n7"}, {"n8"}, {"n9"}, {"n10"}, {"n11"}, {"n12"}, {"n13"}, {"n14"}, {"n15"}};
     char Progress[] = "Progress";
@@ -2904,7 +2914,7 @@ void WriteBackup()
 void EndRenameModel()
 {
     char NewName[31] = "NewName";
-    GetText(NewName, ModelName);
+    GetText(NewName, ModelName, sizeof(ModelName));  // ClaudeFix-2-7-2026
     SaveOneModel(ModelNumber);
     GotoModelsView();
 }
@@ -3276,6 +3286,8 @@ FASTRUN void ButtonWasPressed()
         if (InStrng(StCH, TextIn))
         { // select sub trim channel
             SubTrimToEdit = GetValue(s0) - 1;
+            if (SubTrimToEdit > 15)
+                SubTrimToEdit = 0; // ClaudeFix-2-7-2026 0 or comms-error 65535 indexed SubTrims[254]
             SendValue(n0, SubTrims[SubTrimToEdit] - 127);
             SendValue(h0, SubTrims[SubTrimToEdit]);
             ClearText();
@@ -3951,7 +3963,7 @@ FASTRUN void ButtonWasPressed()
 
         if (InStrng(TRIMS50, TextIn) > 0)
         {
-            for (i = 0; i < 15; ++i)
+            for (i = 0; i < 16; ++i) // ClaudeFix-2-7-2026 was < 15: channel 16's trim never reset
             {
                 Trims[Bank][i] = 80; // Mid value is 80
             }
@@ -4648,6 +4660,8 @@ void FASTRUN ManageTransmitter()
 /************************************************************************************************************/
 void FixMotorChannel()
 {
+    if (MotorChannel > 15)
+        return; // ClaudeFix-2-7-2026 never index SendBuffer OOB, whatever state the config is in
     if (!MotorEnabled && !BuddyState && !BindingEnabled && !BuddyPupilOnWireless)
     {
         SendBuffer[MotorChannel] = IntoHigherRes(MotorChannelZero); // If safety is on, throttle will be zero whatever was shown.
@@ -4657,7 +4671,12 @@ void FixMotorChannel()
 void FixArmingChannel()
 {
     uint16_t ArmValue[2] = {667, 2233}; // these are the values at the arming switch would give
-    if (RotorFlight_V && !BindingEnabled && !BuddyPupilOnWireless)
+    // ArmingChannel is range-checked here: it starts life as 0 (and an old or
+    // garbled model file can hand back anything), and SendBuffer[0 - 1] wrote
+    // 667/2233 into whatever global the linker happened to place just before
+    // SendBuffer — EVERY loop pass. Out-of-range now means "do nothing".
+    if (RotorFlight_V && !BindingEnabled && !BuddyPupilOnWireless &&
+        ArmingChannel >= 1 && ArmingChannel <= CHANNELSUSED)
         SendBuffer[ArmingChannel - 1] = ArmValue[(uint8_t)Armed]; // If safety is on, arming is off UNLESS BINDING!!
 }
 /************************************************************************************************************/

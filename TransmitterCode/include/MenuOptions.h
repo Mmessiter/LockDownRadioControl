@@ -50,7 +50,7 @@ void SystemPage1End()
     SendCommand(ProgressStart);
     SticksMode = CheckRange(GetValue(n0), 1, 2);
     SendValue(Progress, 20);
-    GetText(TxNme, TxName);
+    GetText(TxNme, TxName, sizeof(TxName));  // ClaudeFix-2-7-2026
     SendValue(Progress, 40);
     AutoModelSelect = GetValue(lpm);
     SendValue(Progress, 50);
@@ -107,7 +107,10 @@ void EndReverseView()
         if (InStrng(fs[i], chgs))
         {
             Altered = true;
-            if (GetValue(fs[i]))
+            uint32_t RevVal = GetValue(fs[i]);
+            if (RevVal == 65535)
+                continue; // comms error -- ClaudeFix-2-7-2026 do NOT flip a channel's direction on garbage
+            if (RevVal)
                 ReversedChannelBITS |= 1 << i; // set a BIT
             else
                 ReversedChannelBITS &= ~(1 << i); // clear a BIT
@@ -252,6 +255,8 @@ void ShowChannelName()
     uint8_t ch = GetValue(MoveToChannel);
     if (ch > 0)
         --ch; // no zero
+    if (ch > 15)
+        ch = 0; // ClaudeFix-2-7-2026 ChannelNames is [16][11]; a comms error gave 254
     SendText(MacrosView_chM, ChannelNames[ch]);
 }
 /*********************************************************************************************************************************/
@@ -265,6 +270,8 @@ void ExitMacrosView()
     char Delay[] = "Del";
     char Duration[] = "Dur";
     uint8_t n = GetValue(MacroNumber) - 1;
+    if (n >= MAXMACROS)
+        return; // 0 or a comms-error 65535 ClaudeFix-2-7-2026 would write ~1.5 KB past MacrosBuffer[8][6]
     MacrosBuffer[n][MACROTRIGGERCHANNEL] = GetValue(TriggerChannel);
     MacrosBuffer[n][MACROMOVECHANNEL] = GetValue(MoveToChannel);
     MacrosBuffer[n][MACROMOVETOPOSITION] = GetValue(MoveToPosition);
@@ -328,6 +335,8 @@ void PopulateMacrosView()
         MacrosBuffer[n][MACRODURATION] = GetValue(Duration);
     }
     n = GetValue(MacroNumber) - 1;
+    if (n >= MAXMACROS)
+        return; // ClaudeFix-2-7-2026 same clamp as ExitMacrosView -- comms error must not index OOB
     SendValue(TriggerChannel, MacrosBuffer[n][MACROTRIGGERCHANNEL]);
     SendValue(MoveToChannel, MacrosBuffer[n][MACROMOVECHANNEL]);
     SendValue(MoveToPosition, MacrosBuffer[n][MACROMOVETOPOSITION]);
@@ -569,6 +578,8 @@ void DeleteModel()
     if (GetConfirmation(pModelsView, Prompt))
     {
         ModelNumber = GetValue(MMems) + 1;
+        if (ModelNumber < 1 || ModelNumber > 90)
+            ModelNumber = 1; // ClaudeFix-2-7-2026 comms error 65535 must not become a file slot
         SetDefaultValues();
         SaveOneModel(ModelNumber);
         LoadModelSelector();
@@ -1069,7 +1080,7 @@ void RXOptionsViewEnd()
     CopyTrimsToAll = GetValue(c1);
     SendValue(Progress, 5);
     TrimMultiplier = GetValue(n3);
-    GetText(t10, fbuf);
+    GetText(t10, fbuf, sizeof(fbuf));  // ClaudeFix-2-7-2026
     StopFlyingVoltsPerCell = atof(fbuf);
     SFV = StopFlyingVoltsPerCell * 100; // this makes it a 16 bit value I can save easily
     SendValue(Progress, 15);
@@ -1080,6 +1091,8 @@ void RXOptionsViewEnd()
     UseMotorKill = GetValue(UseKill);
     SendValue(Progress, 50);
     MotorChannel = GetValue(Mchannel) - 1;
+    if (MotorChannel > 15)
+        MotorChannel = 2; // ClaudeFix-2-7-2026 comms error returns 65535 -> 254 -> OOB writes every loop pass
     SendValue(Progress, 60);
     TimerDownwards = GetValue(c2);
     SendValue(Progress, 70);

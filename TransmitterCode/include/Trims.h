@@ -506,11 +506,8 @@ void TrimsToSubtrim()
         {
             int temp = (int)(Trims[Bank][InputTrim[i]] - 80) * (int)TrimMultiplier; // 'int temp' is needed to avoid overflow
             temp /= 5;                                                              // Subtrims' multiplier is 5 always
-            if (temp + SubTrims[InputTrim[i]] > 255)
-                temp = 255 - SubTrims[InputTrim[i]]; // Avoid overflow
-            SubTrims[InputTrim[i]] += temp;          // Trims *affected* channels are in the InputTrim[] array
-            if (SubTrims[i] > 255)
-                SubTrims[i] = 255; // Avoid overflow
+            int NewSubTrim = (int)SubTrims[InputTrim[i]] + temp;                    // ClaudeFix-2-7-2026 signed: a low trim + low subtrim used to wrap the uint8_t to ~230 (a JUMP to near max)
+            SubTrims[InputTrim[i]] = constrain(NewSubTrim, 0, 255);                 // Trims *affected* channels are in the InputTrim[] array
             for (int j = 1; j < 5; ++j)
                 Trims[j][InputTrim[i]] = 80; // Reset all four normal trims to centre
         }

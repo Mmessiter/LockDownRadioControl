@@ -55,8 +55,12 @@ void ReadChannelSwitches9to12()
     uint8_t Values[3] = {0, 90, 180};
     for (uint8_t ChSwith = Ch9_SW; ChSwith <= Ch12_SW; ChSwith++)
     {
-        if (TopChannelSwitch[ChSwith])                                                                   // if this switch is defined.... 1 2 3 or 4 ...
-            TopChannelSwitchValue[ChSwith] = Values[(GetSwitchPosition(TopChannelSwitch[ChSwith])) - 1]; // get its position
+        if (TopChannelSwitch[ChSwith] >= 1 && TopChannelSwitch[ChSwith] <= 4)                            // if this switch is defined.... 1 2 3 or 4 ... (ClaudeFix-2-7-2026 a corrupt config byte >4 made GetSwitchPosition return 0 and Values[-1] was read)
+        {
+            uint8_t SwPos = GetSwitchPosition(TopChannelSwitch[ChSwith]);
+            if (SwPos >= 1 && SwPos <= 3)
+                TopChannelSwitchValue[ChSwith] = Values[SwPos - 1]; // get its position
+        }
     }
 }
 

@@ -317,7 +317,18 @@ void SuccessfulPacket()
     if (Radio1.available())
     {
         uint8_t PayloadSize = Radio1.getDynamicPayloadSize();
-        Radio1.read(&AckPayload, PayloadSize);
+        if (PayloadSize > sizeof(AckPayload))
+        {   // ClaudeFix-2-7-2026 AckPayload is 6 bytes but the radio can report up to 32 (a buddy
+            // pupil's 16-byte ack left in the FIFO, or a corrupt length that
+            // passed CRC) -- reading it here overwrote neighbouring globals.
+            uint8_t Oversize[32];
+            Radio1.read(Oversize, PayloadSize);
+            memcpy(&AckPayload, Oversize, sizeof(AckPayload));
+        }
+        else
+        {
+            Radio1.read(&AckPayload, PayloadSize);
+        }
         ParseAckPayload();
         // using a short payload added complexity without driving an advantage! So it is dropped.
     }
@@ -360,7 +371,7 @@ FASTRUN uint8_t EncodeTheChangedChannels()
     DataTosend.ChannelBitMask ^= DataTosend.ChannelBitMask; // Clear the ChannelBitMask 16 BIT WORD (1 bit per channel)
     for (uint8_t i = 0; i < CHANNELSUSED; ++i)              // Check for changed channels and load them into the rawdatabuffer
     {
-        if ((abs(SendBuffer[i] - PreviousBuffer[i]) >= Smallest_Change) || (LastSendTime[i] + Channel_Priority[i] < RightNow)) // Check if the channel has changed significantly
+        if ((abs(SendBuffer[i] - PreviousBuffer[i]) >= Smallest_Change) || (RightNow - LastSendTime[i] >= Channel_Priority[i])) // Check if the channel has changed significantly (ClaudeFix-2-7-2026 subtraction form: wrap-safe at the 49.7-day millis() rollover)
         {
             RawDataBuffer[NumberOfChangedChannels] = SendBuffer[i];  // Load a changed channel into the rawdatabuffer.
             PreviousBuffer[i] = SendBuffer[i];                       // Save the current value as the previous value so that we can detect changes.
@@ -873,7 +884,7 @@ void GetAltitude()
     feet = (int)RXMAXModelAltitude;
     inches = (int)((RXMAXModelAltitude - feet) * 12.0f + 0.5f); // round to nearest inch
     FixInches(&inches, &feet);
-    snprintf(Maxaltitude, sizeof(ModelAltitude), "%d' %d''", feet, inches);
+    snprintf(Maxaltitude, sizeof(Maxaltitude), "%d' %d''", feet, inches);  // ClaudeFix-2-7-2026
 }
 /************************************************************************************************************/
 void GetTemperature()
@@ -1214,8 +1225,8 @@ FASTRUN void ParseAckPayload()
 {
     FHSS_data::NextChannelNumber = AckPayload.Ack_Payload_byte[5]; // every packet tells of next hop destination
 
-    if (AckPayload.Ack_Payload_byte[0] & 0x80)
-    {                                                                             // Hi bit is now the **HOP NOW!!** flag
+    if ((AckPayload.Ack_Payload_byte[0] & 0x80) && FHSS_data::NextChannelNumber <= 82)
+    {                                                                             // Hi bit is now the **HOP NOW!!** flag (ClaudeFix-2-7-2026 index clamped: table has 83 entries; a corrupt byte hopped to a garbage channel)
         NextChannel = *(FHSS_data::FHSSChPointer + FHSS_data::NextChannelNumber); // The actual channel number pointed to.
         HopToNextChannel();
         AckPayload.Ack_Payload_byte[0] &= 0x7f; // Clear the high BIT, use the remainder ...
@@ -1254,7 +1265,7 @@ FASTRUN void ParseAckPayload()
             {
                 RXModelVolts *= 2; // voltage divider was used so double it!
             }
-            snprintf(ModelVolts, 5, "%1.2f", RXModelVolts);
+            snprintf(ModelVolts, sizeof(ModelVolts), "%1.2f", RXModelVolts); // ClaudeFix-2-7-2026 5 truncated any pack >= 10 V to "12.3"
         }
         break;
     case 6:
@@ -1345,11 +1356,11 @@ FASTRUN void ParseAckPayload()
     case 20:
         if (!RotorFlight_Version)
             break; // if we are not talking to a RotorFlight build, don't try to get RPM data
-        RotorRPM = DoLowPassFilter(GetIntFromAckPayload()); // Get the filtered current RPM value from the payload
-        if (RotorRPM == 0xffff)
         {
-            RotorRPM = 0; // sanity check
-            break;
+            uint32_t RawRPM = GetIntFromAckPayload();
+            if (RawRPM >= 0xffff)
+                break; // ClaudeFix-2-7-2026 sanity check BEFORE the filter -- an invalid reading used to be smoothed into ~7864 RPM and poison the filter state
+            RotorRPM = DoLowPassFilter(RawRPM); // Get the filtered current RPM value from the payload
         }
         if (RotorRPM > Max_RotorRPM)
             Max_RotorRPM = RotorRPM;
@@ -1383,15 +1394,19 @@ FASTRUN void ParseAckPayload()
         break;
     case 23:
         Receiver_type = (uint8_t)GetIntFromAckPayload();
+        if (Receiver_type > 6)
+            Receiver_type = 0; // ClaudeFix-2-7-2026 Rx_type table has 7 entries; a corrupt byte read far past it
         break;
     case 24:
         ESC_Temp = GetFloatFromAckPayload(); // ESC Temperature
+        if (!(ESC_Temp > -100.0f && ESC_Temp < 300.0f))
+            break; // ClaudeFix-2-7-2026 a garbage float (e.g. 3.4e38) sprintf'd ~44 bytes over the neighbours -- and the MAX latched it, repeating every second
         if (ESC_Temp > Max_ESC_Temp)
         {
             Max_ESC_Temp = ESC_Temp;
         }
-        sprintf(ESC_Temperature, "%.1f C.", ESC_Temp);
-        sprintf(MAX_ESC_Temperature, "%.1f C.", Max_ESC_Temp);
+        snprintf(ESC_Temperature, sizeof(ESC_Temperature), "%.1f C.", ESC_Temp);
+        snprintf(MAX_ESC_Temperature, sizeof(MAX_ESC_Temperature), "%.1f C.", Max_ESC_Temp);
         break;
     case 25: // ROTORFLIGHT config PIDs and Rates **********************
         if (Reading_PIDS_Now)
@@ -1539,6 +1554,8 @@ FASTRUN void ParseAckPayload()
         if (Reading_GOV_Config_Now)
             break; // bytes [42..45] were an extraneous read and never used — dropped to stop OOB writes
         RotorFlight_V = GetIntFromAckPayload();
+        if (RotorFlight_V > 2)
+            RotorFlight_V = 0; // ClaudeFix-2-7-2026 RFVersions is float[3]; a corrupt byte read past it and enabled RotorFlight behaviours on a non-RF model
         RotorFlight_Version = RFVersions[RotorFlight_V];
         break;
 

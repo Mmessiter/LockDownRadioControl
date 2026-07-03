@@ -170,7 +170,7 @@ void RenameFile()
     char Deleteable[42];
 
     SaveCurrentModel();
-    GetText(ModelsView_filename, SingleModelFile);
+    GetText(ModelsView_filename, SingleModelFile, 40);  // ClaudeFix-2-7-2026
     strcpy(Deleteable, SingleModelFile);
     LoadModelForRenaming();
     if (GetBackupFilename(pModelsView, SingleModelFile, model, Head, prompt))
@@ -187,13 +187,15 @@ void RenameFile()
             if (GetConfirmation(pModelsView, Prompt))
             {
                 WriteBackup();
-                TINYCARD.remove(Deleteable);
+                AddPath(Deleteable);
+                TINYCARD.remove(SearchFile); // ClaudeFix-2-7-2026 backups live in /mod/ -- a bare name removed nothing, leaving both files
             }
         }
         else
         {
             WriteBackup();
-            TINYCARD.remove(Deleteable);
+            AddPath(Deleteable);
+            TINYCARD.remove(SearchFile);
         }
     }
     strcpy(MOD, ".MOD");
@@ -299,7 +301,7 @@ void BuildDirectory()
     char Entry1[30];
     char fn[20];
     int i = 0;
-    File dir;
+    File dir; // note: ClaudeFix-2-7-2026 left default if MOD matches nothing -- the openNextFile loop below just yields nothing then
 
     if ((strcmp(MOD, ".LOG") == 0))
         dir = TINYCARD.open("/log/");
@@ -317,10 +319,12 @@ void BuildDirectory()
         File entry = dir.openNextFile();
         if (!entry || ExportedFileCounter > MAXBACKUPFILES)
             break;
-        strcpy(Entry1, entry.name());
+        strncpy(Entry1, entry.name(), sizeof(Entry1) - 1); // ClaudeFix-2-7-2026 SD long filenames can be 255 chars -- strcpy smashed the 30-byte stack buffer
+        Entry1[sizeof(Entry1) - 1] = 0;
         if ((InStrng(MOD, Entry1) > 0) && (!InStrng((char *)"._", Entry1)))
         {
-            strcpy(fn, entry.name());
+            strncpy(fn, entry.name(), sizeof(fn) - 1);
+            fn[sizeof(fn) - 1] = 0;
             for (i = 0; i < 12; ++i)
             {
                 TheFilesList[ExportedFileCounter][i] = fn[i];   

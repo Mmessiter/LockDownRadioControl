@@ -720,18 +720,19 @@ void ReadTime()
             strcat(TimeString, Space);
             strcat(TimeString, (Str(NB, tmYearToCalendar(tm.Year), 0)));
             strcat(TimeString, Space);
-            DisplayedHour = tm.Hour + DeltaGMT;
+            int LocalHour = (int)tm.Hour + DeltaGMT; // ClaudeFix-2-7-2026 signed: DisplayedHour is uint8_t, so a negative GMT wrapped it to ~251 and the <0 fix never ran
             DateFix = 0;
-            if (DisplayedHour > 24)
+            if (LocalHour >= 24)
             {
-                DisplayedHour -= 24;
+                LocalHour -= 24;
                 DateFix = 1;
             }
-            if (DisplayedHour < 0)
+            if (LocalHour < 0)
             {
-                DisplayedHour += 24;
+                LocalHour += 24;
                 DateFix = -1;
             }
+            DisplayedHour = (uint8_t)LocalHour;
             if (MayBeAddZero(DisplayedHour))
                 strcat(TimeString, zero);
             strcat(TimeString, Str(NB, DisplayedHour, 0));
@@ -1214,7 +1215,7 @@ bool GetBackupFilename(char *goback, char *tt1, char *MMname, char *heading, cha
     SendText(Mname, MMname); // Model name
     SendText(t3, heading);   // heading
     GetYesOrNo();
-    GetText(t1, SingleModelFile);
+    GetText(t1, SingleModelFile, 40);  // ClaudeFix-2-7-2026
     SendCommand(goback);
     if (Confirmed[0] == 'Y')
         return true;
