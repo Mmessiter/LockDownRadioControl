@@ -4390,6 +4390,9 @@ bool CheckModelName()
     char Mfiles[] = "Mfiles";
     char mn[] = "modelname";
 
+    if (NEXTION.available())
+        return false; // ClaudeFix-14-7-2026 a button press is waiting -- let it be handled before polling
+
     ModelNumber = GetValue(MMems) + 1;
     FileNumberInView = GetValue(Mfiles);
     if (FileNumberInView != LastFileInView)

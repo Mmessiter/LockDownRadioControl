@@ -180,7 +180,14 @@ bool ReadOneModel(uint32_t Mnum)
     ModelDefined = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
     if (ModelDefined != 42)
+    {
+        // ClaudeFix-14-7-2026 slot never written (reads past EOF as 255): present it as free.
+        // Without this the PREVIOUS model's name stayed in ModelName, so the
+        // models list repeated the last real model all the way down.
+        strcpy(ModelName, "Not in use");
+        ModelsMacUnionSaved.Val64 = 0;
         return false;
+    }
     for (j = 0; j < 30; ++j)
     {
         ModelName[j] = SDRead8BITS(SDCardAddress);

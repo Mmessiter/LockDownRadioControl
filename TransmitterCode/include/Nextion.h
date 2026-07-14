@@ -127,6 +127,38 @@ void SendOtherValue(char *nbox, int value)
 }
 
 /*********************************************************************************************************************************/
+// ClaudeFix-14-7-2026 The Nextion sends UNSOLICITED touch-event strings ("Import x.MOD",
+// "Yes", ...) into the same serial buffer as get-replies. The 2-7 fix flushed
+// that buffer before every get -- which DESTROYED any button press that was
+// waiting there (the restore button needed 2-3 presses). Instead of discarding,
+// printable bytes are rescued here and served to GetButtonPress afterwards.
+// (Return-code debris -- 0x01/0x1A + FF FF FF -- is non-printable and still dropped.)
+char PendingEvent[128];
+uint16_t PendingEventLen = 0;
+
+void StashPrintableBytes(const char *src, uint16_t len)
+{
+    for (uint16_t i = 0; i < len; ++i)
+    {
+        uint8_t b = (uint8_t)src[i];
+        if (b >= 32 && b < 0x7F && PendingEventLen < sizeof(PendingEvent) - 1)
+            PendingEvent[PendingEventLen++] = b;
+    }
+    PendingEvent[PendingEventLen] = 0;
+}
+
+void StashPendingEventBytes() // replaces the blind pre-get flush
+{
+    while (NEXTION.available())
+    {
+        uint8_t b = NEXTION.read();
+        if (b >= 32 && b < 0x7F && PendingEventLen < sizeof(PendingEvent) - 1)
+            PendingEvent[PendingEventLen++] = b;
+        delayMicroseconds(20); // one byte at 921600 baud takes ~11 us
+    }
+    PendingEvent[PendingEventLen] = 0;
+}
+
 void GetTextIn() 
 {
     delayMicroseconds(20);
@@ -147,6 +179,13 @@ void GetTextIn()
 /*********************************************************************************************************************************/
 bool GetButtonPress() 
 {
+    if (PendingEventLen)
+    {   // a touch event rescued from a get-reply window -- deliver it now
+        memcpy(TextIn, PendingEvent, PendingEventLen);
+        TextIn[PendingEventLen] = 0;
+        PendingEventLen = 0;
+        return true;
+    }
     if (NEXTION.available())
     {
         GetTextIn();
@@ -208,8 +247,7 @@ uint32_t getvalue(char *nbox)
     // leftover reply used to be parsed as THIS one -- the ArmingChannel bug
     // family, which also fed shifted-by-one PIDs/rates to the FC), then WAIT
     // for the framed 'q' reply instead of hoping it already arrived.
-    while (NEXTION.available())
-        NEXTION.read();
+    StashPendingEventBytes(); // ClaudeFix-14-7-2026 rescue any waiting button press, don't flush it
     TextIn[0] = 0;
     NEXTION.print(CB);
     EndSend();
@@ -237,6 +275,14 @@ uint32_t getvalue(char *nbox)
                     ffs = 0;
             }
             KickTheDog();
+        }
+        // ClaudeFix-14-7-2026 A touch event that arrived just before the reply sits IN FRONT
+        // of the 8-byte 'q' frame. Rescue it and realign -- otherwise the read
+        // "fails" (65535), GetValue retries 25x with flushes, and the press dies.
+        if (done && k > 8)
+        {
+            StashPrintableBytes((char *)TextIn, k - 8);
+            memmove(TextIn, TextIn + (k - 8), 8);
         }
     }
     if (TextIn[0] == 'q')
@@ -292,8 +338,7 @@ uint16_t GetText(char *TextBoxName, char *TheText, uint16_t maxlen)
     // value. That is exactly how ArmingChannel "mysteriously" changed: the
     // Ratio box's "10.30" was read back as Arming and atoi'd to a perfectly
     // plausible channel 10, which then sailed past the range check.
-    while (NEXTION.available())
-        NEXTION.read();
+    StashPendingEventBytes(); // ClaudeFix-14-7-2026 rescue any waiting button press, don't flush it
     TextIn[0] = 0; // if no reply arrives, stale TextIn content must not be re-parsed
 
     NEXTION.print(CB);
@@ -353,8 +398,7 @@ int GetOtherValue(char *nbox)
     char CB[100];
     strcpy(CB, GET);
     strcat(CB, nbox);
-    while (NEXTION.available()) // ClaudeFix-2-7-2026 flush stale replies (same fix as getvalue/GetText)
-        NEXTION.read();
+    StashPendingEventBytes(); // ClaudeFix-14-7-2026 rescue any waiting button press, don't flush it
     TextIn[0] = 0;
     NEXTION.print(CB);
     EndSend();
@@ -382,6 +426,14 @@ int GetOtherValue(char *nbox)
                     ffs = 0;
             }
             KickTheDog();
+        }
+        // ClaudeFix-14-7-2026 A touch event that arrived just before the reply sits IN FRONT
+        // of the 8-byte 'q' frame. Rescue it and realign -- otherwise the read
+        // "fails" (65535), GetValue retries 25x with flushes, and the press dies.
+        if (done && k > 8)
+        {
+            StashPrintableBytes((char *)TextIn, k - 8);
+            memmove(TextIn, TextIn + (k - 8), 8);
         }
     }
     if (TextIn[0] == 'q')
