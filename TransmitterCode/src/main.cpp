@@ -3872,6 +3872,7 @@ FASTRUN void ButtonWasPressed()
                 DisplayModelImage();
                 if (FileError)
                     ShowFileErrorMsg();
+                DelayWithDog(150); // ClaudeFix-14-7-2026 let the display finish the image redraw before the big list command
                 LoadModelSelector();
             }
             ClearText();

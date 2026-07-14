@@ -240,8 +240,9 @@ void DualRatesStart()
 
     if (RotorFlight_V)
     {
-        MsgBox(pRXSetupView, (char *)"Please use the RotorFlight rates option.");
-        return;
+      //  MsgBox(pRXSetupView, (char *)"Please use the RotorFlight rates option.");
+       // return;
+       Look(RotorFlight_V);
     }
 
     char GotoDualRates[] = "page DualRatesView";

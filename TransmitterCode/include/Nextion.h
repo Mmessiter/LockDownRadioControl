@@ -107,8 +107,23 @@ void SendOtherText(char *tbox, char *NewWord)
     uint16_t used = strlen(CB);
     CopyTextForNextion(CB + used, NewWord, (uint16_t)(sizeof(CB) - used - 2));
     strcat(CB, "\"");
-    SendCommand(CB);
-    // Look(CB);
+    // ClaudeFix-14-7-2026 Send BIG commands in paced chunks. The models list is ~1.6 KB in
+    // ONE command; blasted at 921600 while the display is still redrawing
+    // (e.g. rendering the model image) it overruns the display's RX buffer
+    // and is silently dropped -- the freshly imported model then never
+    // appeared in the list until a second attempt.
+    uint16_t len = strlen(CB);
+    for (uint16_t i = 0; i < len; i += 64)
+    {
+        uint16_t n = (uint16_t)(len - i);
+        if (n > 64)
+            n = 64;
+        NEXTION.write((uint8_t *)CB + i, n);
+        NEXTION.flush();
+        delayMicroseconds(800); // let the display's parser drain the chunk
+        KickTheDog();
+    }
+    EndSend();
     GetReturnCode(tbox);
 }
 
