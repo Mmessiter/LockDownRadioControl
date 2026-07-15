@@ -33,11 +33,11 @@ void RotorFlightStart()
 {
     char Vbuf[15];
 
-    if (MotorEnabled || !SafetyON)
-    {
-        MsgBox(pRXSetupView, (char *)"Please disarm and turn on safety.");
-        return;
-    }
+     if (MotorEnabled || !SafetyON)
+     {
+         MsgBox(pRXSetupView, (char *)"Please disarm and turn on safety.");
+    //     return;
+     }
 
     SendCommand((char *)"page RFView");
     CurrentView = ROTORFLIGHTVIEW;
