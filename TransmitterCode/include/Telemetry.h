@@ -137,12 +137,15 @@ void CheckBatteryStates()
     char WarnOff[] = "vis Warning,0";
     uint32_t Now = millis();
 
+    static bool WasLow = false;
     bool txLow = CheckTXVolts();
     bool rxLow = (!txLow && ModelMatched && Connected) ? CheckRXVolts() : false;
     if (txLow || rxLow)
     {
-        if (Now - WarnTimer > 10000)
-        { // issue warning every 10 seconds
+        if (!WasLow || Now - WarnTimer > 5000)
+        { // ClaudeFix-16-7-2026 FIRST warning at once (was a 10 s wait after
+          // switch-on with a flat pack), then every 5 s (was 10).
+            WasLow = true;
             WarnTimer = Now;
             // ClaudeFix-16-7-2026 the TX's OWN battery warning was gated on
             // ModelMatched && Connected — a low transmitter on the bench (or
@@ -160,6 +163,7 @@ void CheckBatteryStates()
     }
     else
     {
+        WasLow = false;
         if (CurrentView == FRONTVIEW)
             SendCommand(WarnOff);
         WarnTimer = Now;
