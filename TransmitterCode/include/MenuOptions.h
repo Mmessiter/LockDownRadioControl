@@ -541,17 +541,22 @@ void EndAudioVisualView()
     char c5[] = "c5";
     char Ex1[] = "Ex1"; // slider
     char h0[] = "h0";
-    AudioVolume = GetValue(Ex1);
-    Brightness = GetValue(h0);
-    VariometerBank = CheckRange(GetValue(n2), 0, 3);
-    VariometerThreshold = CheckRange(GetValue(n0), 0, 1000);
-    VariometerSpacing = CheckRange(GetValue(n3), 50, 1000);
-    PlayFanfare = GetValue(c0);
-    TrimClicks = GetValue(c1);
-    UseVariometer = GetValue(c2);
-    SpeakingClock = GetValue(c3);
-    AnnounceBanks = GetValue(c4);
-    AnnounceConnected = GetValue(c5);
+    // ClaudeFix-16-7-2026 A comms error (65535) was being STORED: checkboxes flipped
+    // themselves on and sliders jumped ("settings spontaneously change").
+    // Before the 2-July read-back fix a bad read returned a stale-but-sane
+    // value, which hid this; now an error keeps the previous setting.
+    uint32_t gv;
+    gv = GetValue(Ex1); if (gv != 65535) AudioVolume = gv;
+    gv = GetValue(h0);  if (gv != 65535) Brightness = gv;
+    gv = GetValue(n2);  if (gv != 65535) VariometerBank = CheckRange(gv, 0, 3);
+    gv = GetValue(n0);  if (gv != 65535) VariometerThreshold = CheckRange(gv, 0, 1000);
+    gv = GetValue(n3);  if (gv != 65535) VariometerSpacing = CheckRange(gv, 50, 1000);
+    gv = GetValue(c0);  if (gv != 65535) PlayFanfare = gv;
+    gv = GetValue(c1);  if (gv != 65535) TrimClicks = gv;
+    gv = GetValue(c2);  if (gv != 65535) UseVariometer = gv;
+    gv = GetValue(c3);  if (gv != 65535) SpeakingClock = gv;
+    gv = GetValue(c4);  if (gv != 65535) AnnounceBanks = gv;
+    gv = GetValue(c5);  if (gv != 65535) AnnounceConnected = gv;
     SetAudioVolume(AudioVolume);
     CurrentView = TXSETUPVIEW;
     SendCommand(pTXSetupView);

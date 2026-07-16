@@ -2496,8 +2496,9 @@ FASTRUN void DisplayCurveAndServoPos()
 void UpdateLED()
 { // LED Brightness has changed so this ensures it is redisplayed
     char n1[] = "n1";
-    LEDBrightness = GetValue(n1);
-    LEDBrightness = CheckRange(LEDBrightness, 1, 254);
+    uint32_t gv = GetValue(n1);
+    if (gv != 65535) // ClaudeFix-16-7-2026 comms error must not become a brightness
+        LEDBrightness = CheckRange(gv, 1, 254);
     LedWasGreen = false; // Forces a redisplay if brightness has changed
 }
 
@@ -3106,8 +3107,35 @@ void (*NumberedFunctions[LASTFUNCTION])(){
 /*********************************************************************************************************************************
  *                          BUTTON WAS PRESSED (DEAL WITH INPUT FROM NEXTION DISPLAY)                                            *
  *********************************************************************************************************************************/
+// ClaudeFix-16-7-2026 A channel-name event ("CH3NAME=Gear") can share one serial read
+// with another touch event (e.g. leaving the Inputs screen). The dispatcher
+// matched the OTHER event first and its ClearText() discarded the freshly
+// typed name — "sometimes the new name disappears". Handle every name event
+// up front, then blank it from TextIn so normal dispatch continues with
+// whatever else arrived in the same read.
+void HandleChannelNameEvents()
+{
+    char pat[12];
+    for (int ch = 1; ch <= 16; ++ch)
+    {
+        snprintf(pat, sizeof(pat), "CH%dNAME=", ch);
+        int p = InStrng(pat, TextIn);
+        if (p <= 0)
+            continue;
+        int start = p - 1;                    // InStrng positions are 1-based
+        int k = start + (int)strlen(pat);     // the typed name begins here
+        DoNewChannelName(ch, k);
+        int j = k, cnt = 0;                   // blank exactly what was consumed
+        while (uint8_t(TextIn[j]) > 0 && cnt < 10) { ++j; ++cnt; }
+        for (int b = start; b < j; ++b)
+            TextIn[b] = ' ';
+    }
+}
+
 FASTRUN void ButtonWasPressed()
 {
+    HandleChannelNameEvents(); // ClaudeFix-16-7-2026 names first — see comment above
+
     int Command_number = GetIntFromTextIn(0);
     if (Command_number)
     { // is there anything ?
