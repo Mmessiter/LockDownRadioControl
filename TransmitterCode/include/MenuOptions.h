@@ -70,6 +70,7 @@ void SystemPage1End()
     SendValue(Progress, 90);
     FixDeltaGMTSign();
     SaveTransmitterParameters();
+    SaveOneModel(ModelNumber); // ClaudeFix-16-7-2026 LowBattery is stored per-model — persist the new threshold NOW, not just at power-off
     SendText(change, cleared);
     SendValue(Progress, 100);
     CurrentView = TXSETUPVIEW;

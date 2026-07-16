@@ -248,11 +248,20 @@ bool ReadOneModel(uint32_t Mnum)
     TrimMultiplier = CheckRange(TrimMultiplier, 0, 25);
     ++SDCardAddress;
     ++SDCardAddress;
-    LowBattery = SDRead8BITS(SDCardAddress);
-    if (LowBattery > 100)
-        LowBattery = LOWBATTERY;
-    if (LowBattery < 10)
-        LowBattery = LOWBATTERY;
+    // ClaudeFix-16-7-2026 LowBattery byte lives in every model file, but the user sets it
+    // ONCE on the transmitter-settings screen and expects it to be global —
+    // every model load was silently reverting it to that model's old value
+    // (the "low-battery warning mysteriously stopped" bug). Load it from the
+    // BOOT model only; after that the in-RAM value rules, and every model
+    // save stamps it back, so the files converge to the latest setting.
+    {
+        static bool LowBatteryLoaded = false;
+        uint8_t lb = SDRead8BITS(SDCardAddress);
+        if (!LowBatteryLoaded) {
+            LowBatteryLoaded = true;
+            LowBattery = (lb > 100 || lb < 10) ? LOWBATTERY : lb;
+        }
+    }
     ++SDCardAddress;
     CopyTrimsToAll = SDRead8BITS(SDCardAddress);
     ++SDCardAddress;
