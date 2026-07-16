@@ -228,7 +228,7 @@ uint8_t Ascii(char c)
 // ──────────────────────────────────────────────────────────────
 void PlaySound(uint16_t id)
 {
-    if (millis() < 6000 && id!=WINDOWS1)
+    if (millis() < 5000 && id!=WINDOWS1)
     return; // don't play any sounds for the first 5 seconds of power up, except the windows sound
     if (CurrentView == MODELSVIEW && id != CLICKONE)
         return;

@@ -882,12 +882,14 @@ void WarnUserIfBuddyBoxIsOn() // This function warns the user if the buddy box i
 {
     if (BuddyPupilOnWireless)
     {
+        DelayWithDog(4000);
         PlaySound(BUDDYPUPILON);
         DelayWithDog(1500);                     // allow sound to finish
         FHSS_data::PaceMaker = PACEMAKER_BUDDY; // only 200Hz
     }
     if (BuddyMasterOnWireless)
     {
+        DelayWithDog(4000);
         PlaySound(BUDDYMASTERON);
         DelayWithDog(1500);                     // allow sound to finish
         FHSS_data::PaceMaker = PACEMAKER_BUDDY; // only 200Hz
