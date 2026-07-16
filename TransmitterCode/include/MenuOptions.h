@@ -48,15 +48,19 @@ void SystemPage1End()
     char cleared[] = "XX:";
 
     SendCommand(ProgressStart);
-    SticksMode = CheckRange(GetValue(n0), 1, 2);
+    // ClaudeFix-16-7-2026 same guard as EndAudioVisualView: a comms error (65535)
+    // must keep the previous setting, not become one (the low-battery
+    // threshold could silently revert, among others).
+    uint32_t gv;
+    gv = GetValue(n0);  if (gv != 65535) SticksMode = CheckRange(gv, 1, 2);
     SendValue(Progress, 20);
     GetText(TxNme, TxName, sizeof(TxName));  // ClaudeFix-2-7-2026
     SendValue(Progress, 40);
-    AutoModelSelect = GetValue(lpm);
+    gv = GetValue(lpm); if (gv != 65535) AutoModelSelect = gv;
     SendValue(Progress, 50);
-    LowBattery = GetValue(Bwn);
+    gv = GetValue(Bwn); if (gv != 65535) LowBattery = CheckRange(gv, 10, 100);
     SendValue(Progress, 60);
-    ScreenTimeout = GetValue(ScreenViewTimeout);
+    gv = GetValue(ScreenViewTimeout); if (gv != 65535) ScreenTimeout = gv;
     SendValue(Progress, 80);
     Inactivity_Timeout = GetValue(Pto) * TICKSPERMINUTE;
     if (Inactivity_Timeout < INACTIVITYMINIMUM)
