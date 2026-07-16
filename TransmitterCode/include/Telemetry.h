@@ -34,12 +34,16 @@ FASTRUN bool CheckTXVolts()
         {                                                                                                  // No, it's a LiFePo4
             TransmitterBatteryPercentLeft = map(TXVoltsTotalPerCell * 100, 3.2 * 100, 3.33 * 100, 0, 100); // LiFePo4 Battery 3.1 -> 3.35  volts per cell
         }
-        if (TransmitterBatteryPercentLeft < LowBattery)
+        // ClaudeFix-16-7-2026 clamp BEFORE comparing: map() returns >100 on a freshly
+        // charged pack, so a full battery sailed over even a 100% threshold
+        // (test threshold heard nothing tonight). <= so threshold 100 always
+        // warns — the honest behaviour for a test setting.
+        TransmitterBatteryPercentLeft = constrain(TransmitterBatteryPercentLeft, 0, 100);
+        if (TransmitterBatteryPercentLeft <= LowBattery)
         {
             TXWarningFlag = true;
             WarningSound = BATTERYISLOW;
         }
-        TransmitterBatteryPercentLeft = constrain(TransmitterBatteryPercentLeft, 0, 100);
 // strcat(TXBattInfo, pc); // ClaudeFix-2-7-2026 removed: TXBattInfo is never initialised and never sent -- strcat scanned/overran stack garbage
         if (CurrentView == FRONTVIEW)
         {
