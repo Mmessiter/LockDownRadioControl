@@ -14,45 +14,28 @@ void ReadDualRatesFromScreen()
 {
     char Rt[3][6] = {"rate1", "rate2", "rate3"};
     char CHn[8][3] = {"n2", "n0", "n1", "n3", "n6", "n4", "n5", "n7"};
-    bool Altered = false;
-    char chgs[512];
     char change[] = "change";
     char cleared[] = "XX:";
+    uint32_t gv;
 
-    for (uint16_t i = 0; i < 500; ++i)
-    { // get copy of any changes
-        chgs[i] = TextIn[i + 4];
-        chgs[i + 1] = 0;
-    }
-
-    if (InStrng(Rt[0], chgs)) // if any of the rates have changed
-    {
-        Drate1 = GetValue(Rt[0]);
-        Altered = true;
-    }
-    if (InStrng(Rt[1], chgs)) // if any of the rates have changed
-    {
-        Drate2 = GetValue(Rt[1]);
-        Altered = true;
-    }
-    if (InStrng(Rt[2], chgs)) // if any of the rates have changed
-    {
-        Drate3 = GetValue(Rt[2]);
-        Altered = true;
-    }
+    // ClaudeFix-17-7-2026 The old code read ONLY the fields listed in the screen's
+    // "change" label, delivered inside the button's event text — a truncated
+    // or garbled event meant NOTHING was read: Refresh showed stale channel
+    // names and OK silently saved nothing (the club-plane setup bug). All
+    // eleven fields are now read directly (~50 ms, cannot miss a change),
+    // and a comms error (65535) keeps the previous value instead of storing
+    // nonsense. Values are clamped to the validator's own limits.
+    gv = GetValue(Rt[0]); if (gv != 65535) Drate1 = CheckRange(gv, 0, MAXDUALRATE);
+    gv = GetValue(Rt[1]); if (gv != 65535) Drate2 = CheckRange(gv, 0, MAXDUALRATE);
+    gv = GetValue(Rt[2]); if (gv != 65535) Drate3 = CheckRange(gv, 0, MAXDUALRATE);
     for (uint8_t i = 0; i < 8; i++)
     {
-        if (InStrng(CHn[i], chgs)) // if any of the channels have changed
-        {
-            DualRateChannels[i] = GetValue(CHn[i]);
-            Altered = true;
-        }
+        gv = GetValue(CHn[i]);
+        if (gv != 65535)
+            DualRateChannels[i] = CheckRange(gv, 0, 16);   // 0 = not used
     }
-    if (Altered) // if any of the rates or channels have changed
-    {
-        SaveOneModel(ModelNumber);
-        SendText(change, cleared);
-    }
+    SaveOneModel(ModelNumber);
+    SendText(change, cleared);
 }
 /************************************************************************************************************/
 
