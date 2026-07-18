@@ -217,6 +217,37 @@ void DualRatesRefresh()
 }
 
 /******************************************************************************************************************************/
+// ClaudeFix-18-7-2026 Live channel names: while the Rates screen is up, quietly watch
+// the eight channel-number boxes (~every 600 ms, same pattern as the
+// Models screen) and swap the name the moment a number changes — no
+// Refresh press needed (the button remains, and still saves).
+
+void CheckDualRatesScreen(uint32_t RightNow)
+{
+    static uint32_t LastRatesPoll = 0;
+    static char CHn[8][3] = {"n2", "n0", "n1", "n3", "n6", "n4", "n5", "n7"};
+    static char ChNames[8][4] = {"t12", "t8", "t11", "t13", "t16", "t14", "t15", "t17"};
+
+    if (RightNow - LastRatesPoll < 600)
+        return;
+    LastRatesPoll = RightNow;
+    if (NEXTION.available())
+        return;   // a button press is waiting — never poll over it
+    for (uint8_t i = 0; i < 8; ++i)
+    {
+        uint32_t gv = GetValue(CHn[i]);
+        if (gv == 65535)
+            continue;                          // comms hiccup — keep the previous value
+        uint8_t v = CheckRange(gv, 0, 16);
+        if (v != DualRateChannels[i])
+        {
+            DualRateChannels[i] = v;
+            ShowDualRateChannelsName(ChNames[i], v);
+        }
+    }
+}
+
+/******************************************************************************************************************************/
 
 void DualRatesStart()
 {

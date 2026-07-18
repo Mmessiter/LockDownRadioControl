@@ -786,6 +786,7 @@ void LogTimeSinceBoot();
 void LogConnectedDuration();
 void LogTouched();
 void RefreshDualRatesNew();
+void CheckDualRatesScreen(uint32_t RightNow);
 int GetIntFromTextIn(uint8_t offset);
 void ShowLogFileNew(uint16_t LinesCounter);
 uint16_t ReadAFewLines();

@@ -4694,6 +4694,8 @@ void FASTRUN ManageTransmitter()
         ActuallySendParameters(RightNow); // yes, send them
     if (CurrentView == MODELSVIEW)
         CheckModelsScreen(RightNow);
+    if (CurrentView == DUALRATESVIEW)
+        CheckDualRatesScreen(RightNow);   // live channel names — no Refresh needed
 
     if (RightNow - TransmitterLastManaged >= 50)
     {                      // 50 = 20 times a second
