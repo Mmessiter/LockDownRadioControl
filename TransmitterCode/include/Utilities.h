@@ -434,6 +434,66 @@ FLASHMEM void SetTheRTC()
     Wire.endTransmission();
 }
 /*********************************************************************************************************************************/
+// Epoch <-> calendar (Howard Hinnant's civil-days algorithms).
+int64_t DaysFromCivil(int y, unsigned m, unsigned d)
+{
+    y -= m <= 2;
+    const int era = (y >= 0 ? y : y - 399) / 400;
+    const unsigned yoe = (unsigned)(y - era * 400);
+    const unsigned doy = (153 * (m + (m > 2 ? -3 : 9)) + 2) / 5 + d - 1;
+    const unsigned doe = yoe * 365 + yoe / 4 - yoe / 100 + doy;
+    return (int64_t)era * 146097 + (int64_t)doe - 719468;
+}
+void CivilFromDays(int64_t z, int &y, unsigned &m, unsigned &d)
+{
+    z += 719468;
+    const int64_t era = (z >= 0 ? z : z - 146096) / 146097;
+    const unsigned doe = (unsigned)(z - era * 146097);
+    const unsigned yoe = (doe - doe / 1460 + doe / 36524 - doe / 146096) / 365;
+    y = (int)(yoe) + (int)(era * 400);
+    const unsigned doy = doe - (365 * yoe + yoe / 4 - yoe / 100);
+    const unsigned mp = (5 * doy + 2) / 153;
+    d = doy - (153 * mp + 2) / 5 + 1;
+    m = mp + (mp < 10 ? 3 : -9);
+    y += m <= 2;
+}
+
+/*********************************************************************************************************************************/
+// Correct our drifty DS1307 from the phone-true LOCAL time RXV2 streams in
+// ack item 37 (only when the receiver's clock came from a phone). Captured in
+// the radio path, applied HERE — I2C writes must never run there. Corrections
+// only when >= 10 s adrift, so the bus stays quiet in normal operation.
+void CorrectRtcFromPhoneTime()
+{
+    if (!PhoneEpochLocal)
+        return;
+    const uint32_t nowEpoch = PhoneEpochLocal + (millis() - PhoneEpochAtMs) / 1000;
+    PhoneEpochLocal = 0; // consumed — the next ack cycle refreshes it
+    if (nowEpoch < 1700000000u)
+        return; // insane value — ignore
+    if (!RTC.read(tm))
+        return;
+    ReadTheRTC();
+    const int64_t face = DaysFromCivil(2000 + Gyear, Gmonth, GmonthDay) * 86400LL + (int64_t)Ghour * 3600 + (int64_t)Gminute * 60 + Gsecond;
+    const int32_t diff = (int32_t)((int64_t)nowEpoch - face);
+    if (abs(diff) < 10)
+        return; // close enough — leave the RTC alone
+    int y;
+    unsigned mo, da;
+    const int64_t days = (int64_t)(nowEpoch / 86400u);
+    CivilFromDays(days, y, mo, da);
+    Gyear = (uint8_t)(y - 2000);
+    Gmonth = (uint8_t)mo;
+    GmonthDay = (uint8_t)da;
+    GweekDay = (uint8_t)(((days + 4) % 7) + 1); // 1970-01-01 was a Thursday; 1 = Sunday
+    Ghour = (uint8_t)((nowEpoch / 3600u) % 24);
+    Gminute = (uint8_t)((nowEpoch / 60u) % 60);
+    Gsecond = (uint8_t)(nowEpoch % 60);
+    SetTheRTC();
+    GPSTimeSynched = true; // phone truth is at least as good — don't let GPS fight it this session
+}
+
+/*********************************************************************************************************************************/
 void SynchRTCwithGPSTime()
 { // This function corrects the time and the date.
     if (!GPSTimeSynched)

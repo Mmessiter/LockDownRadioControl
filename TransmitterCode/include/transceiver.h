@@ -1548,6 +1548,11 @@ FASTRUN void ParseAckPayload()
         }
 
         break;
+    case 37: // RXV2: phone-true LOCAL time — stash it; the slow loop corrects our RTC
+        PhoneEpochLocal = GetIntFromAckPayload();
+        PhoneEpochAtMs = millis();
+        break;
+
     case 31:
         if (BindingEnabled)
             break;

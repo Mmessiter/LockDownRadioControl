@@ -4686,8 +4686,9 @@ void FASTRUN ManageTransmitter()
             UpdateTrimView();
             ShowComms();
         } // Show time and trim positions
-        ShowMotorTimer();        // Show motor timer and send any queued parameters
-        LastTimeRead = millis(); // Reset this timer
+        CorrectRtcFromPhoneTime(); // apply any phone-true time from ack item 37 (RXV2)
+        ShowMotorTimer();          // Show motor timer and send any queued parameters
+        LastTimeRead = millis();   // Reset this timer
         return;                  // That's enough housekeeping for this time around
     }
     if (ParametersToBeSentPointer)        // Any parameters to be sent?

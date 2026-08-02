@@ -233,6 +233,11 @@ uint8_t Saved_GOV_Profiles_Values[GOV_PROFILE_PAYLOAD_SIZE][4];
 #define SEND_GOV_WRITE_CONFIG2 32
 #define SEND_GOV_WRITE_CONFIG3 33
 #define RTC_TIME_SETTING 34 // TX's battery-backed RTC -> RX, so flights get dated with no phone (RXV2; V1 RXs ignore it)
+// Ack item 37 from RXV2: phone-true LOCAL time, so we can correct our own
+// drifty DS1307 whenever any model has met a phone. Captured in the radio
+// path, APPLIED in the slow loop (I2C writes must never run there).
+uint32_t PhoneEpochLocal = 0;   // 0 = nothing pending
+uint32_t PhoneEpochAtMs = 0;    // millis() at capture, for staleness correction
 
 #define PARAMETERS_MAX_ID 34 // Max types of parameters packet to send  ... might increase.
 
