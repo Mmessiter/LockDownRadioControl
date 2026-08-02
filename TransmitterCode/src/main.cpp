@@ -4476,17 +4476,24 @@ void Close_TX_Down()
         SaveAllParameters();     // Save the model if it's not 'Not in use'
         DelayWithDog(500);       // Wait for 0.5 seconds to allow the message to be displayed
     }
+    if (UseLog && LedWasGreen)
+    { // Powering off with the receiver STILL CONNECTED (the warning countdown
+      // path): the log's end-of-session summary would otherwise never be
+      // written — and that's the interesting bit (Malcolm, 2026-08-02).
+      // Written BEFORE the screen fade so the SD writes happen while
+      // everything is still healthy.
+        char PoweredOffMsg[] = "Transmitter powered off while still connected";
+        LogText(PoweredOffMsg, strlen(PoweredOffMsg), true);
+        LogDisConnection();       // the end-of-session summary + LogEndLine
+        CloseLogFile();
+        strcpy(TextFileName, ""); // no further logging to this file
+    }
     SendText(t0, ClosingDown);    // Show 'Closing down ...' on screen
     for (int i = 0; i < 100; ++i) // fade in screen brightness
     {
         SetBrightness(100 - i);
         DelayWithDog(25);
     }
-    // if (UseLog)
-    //  {
-    //      strcpy(TextFileName, ""); // avoid logging to the wrong file
-    //      LogPowerOff();
-    //  } // log the event
     DelayWithDog(POWERONOFFDELAY);     // 2 seconds delay in case button held down too long
     digitalWrite(POWER_OFF_PIN, HIGH); // Power off the transmitter
     delay(100);                        // Wait for a short time to ensure power off
