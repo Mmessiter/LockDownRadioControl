@@ -243,7 +243,8 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
         break;
 
     case RTC_TIME_SETTING:            // 34 — our RTC, so the RX can date its flight logs
-        ReadTheRTC();                 // freshen G* from the DS1307
+        if (RTC.read(tm))             // FRESH I2C read — ReadTheRTC only decodes the last-read tm,
+            ReadTheRTC();             // which could be minutes stale (or zeros before any read)
         Parameters.word[1] = Gyear;   // 2-digit (26 = 2026); RX adds 2000
         Parameters.word[2] = Gmonth;
         Parameters.word[3] = GmonthDay;
