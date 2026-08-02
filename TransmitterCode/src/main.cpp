@@ -4686,19 +4686,6 @@ void FASTRUN ManageTransmitter()
             UpdateTrimView();
             ShowComms();
         } // Show time and trim positions
-        // Re-send the RTC time every 60 s while connected. The connect-moment
-        // queue (SendInitialSetupParams) can fire before the model match
-        // completes — AddParameterstoQueue silently refuses until matched —
-        // and the RX may reboot mid-session (model battery swap). Gated on the
-        // exact conditions the queue checks, so this add always succeeds.
-        // RXV2 dates its flight logs with it; V1 receivers ignore ID 34.
-        static uint32_t LastRtcTimeSent = 0;
-        if (LedWasGreen && ModelMatched && BoundFlag &&
-            (LastRtcTimeSent == 0 || (millis() - LastRtcTimeSent) >= 60000))
-        {
-            AddParameterstoQueue(RTC_TIME_SETTING);
-            LastRtcTimeSent = millis();
-        }
         ShowMotorTimer();        // Show motor timer and send any queued parameters
         LastTimeRead = millis(); // Reset this timer
         return;                  // That's enough housekeeping for this time around
