@@ -232,6 +232,7 @@ uint8_t Saved_GOV_Profiles_Values[GOV_PROFILE_PAYLOAD_SIZE][4];
 #define SEND_GOV_WRITE_CONFIG1 31
 #define SEND_GOV_WRITE_CONFIG2 32
 #define SEND_GOV_WRITE_CONFIG3 33
+#define RTC_TIME_SETTING 34 // TX's battery-backed RTC -> RX, so flights get dated with no phone (RXV2; V1 RXs ignore it)
 
 #define PARAMETERS_MAX_ID 34 // Max types of parameters packet to send  ... might increase.
 

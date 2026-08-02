@@ -33,6 +33,7 @@ void SendInitialSetupParams() // This function sends the initial setup parameter
     AddParameterstoQueue(SERVO_FREQUENCIES);  // Servo Frequencies 6
     AddParameterstoQueue(QNH_SETTING);        // QNH 2
     AddParameterstoQueue(GEAR_RATIO);         // Gear Ratio 8
+    AddParameterstoQueue(RTC_TIME_SETTING);   // Time of day 34 — dates the RX's flight logs (RXV2)
 }
 // ****************************************************************************
 void EncodeAFloat(float value)
@@ -239,6 +240,17 @@ void LoadOneParameter() // todo: return length of this parameter (avoid using MA
         Parameters.word[4] = GovWritePayload[43]; // PID spoolup flag
         Parameters.word[5] = GovWritePayload[44]; // Fallback precomp flag
         Parameters.word[6] = GovWritePayload[45]; // Dyn min thr flag
+        break;
+
+    case RTC_TIME_SETTING:            // 34 — our RTC, so the RX can date its flight logs
+        ReadTheRTC();                 // freshen G* from the DS1307
+        Parameters.word[1] = Gyear;   // 2-digit (26 = 2026); RX adds 2000
+        Parameters.word[2] = Gmonth;
+        Parameters.word[3] = GmonthDay;
+        Parameters.word[4] = Ghour;   // LOCAL wall time — RX applies its phone-taught TZ offset
+        Parameters.word[5] = Gminute;
+        Parameters.word[6] = Gsecond;
+        Parameters.word[7] = 321;     // sanity magic (matches the read-request convention)
         break;
 
     default:
