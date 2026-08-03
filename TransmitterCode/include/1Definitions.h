@@ -238,6 +238,11 @@ uint8_t Saved_GOV_Profiles_Values[GOV_PROFILE_PAYLOAD_SIZE][4];
 // path, APPLIED in the slow loop (I2C writes must never run there).
 uint32_t PhoneEpochLocal = 0;   // 0 = nothing pending
 uint32_t PhoneEpochAtMs = 0;    // millis() at capture, for staleness correction
+// Ack item 38 from RXV2: "pardon the next N ms" — the receiver is about to
+// write a finished flight to flash (an erase stalls it ~100 ms, always on the
+// ground). Gaps inside the window are excluded from ALL statistics and logged
+// as excused, so the averages describe the LINK, not the housekeeping.
+uint32_t GapPardonUntilMs = 0;
 
 #define PARAMETERS_MAX_ID 34 // Max types of parameters packet to send  ... might increase.
 

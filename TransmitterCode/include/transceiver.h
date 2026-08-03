@@ -132,6 +132,18 @@ FASTRUN void ProcessRecentCommsGap() // When we know there is time, process a re
         ThisGap = 0; // ignore any gaps when in PID view
         return;
     }
+    if (GapPardonUntilMs && (millis() < GapPardonUntilMs))
+    { // RXV2 announced a flight-save flash write (ack item 38): the gap is
+      // expected ground housekeeping — excluded from all statistics, but
+      // honestly noted in the log.
+        if (ThisGap >= MinimumGap && UseLog)
+        {
+            char Excused[] = "Gap excused (RX saving flight)";
+            LogText(Excused, strlen(Excused), true);
+        }
+        ThisGap = 0;
+        return;
+    }
     ++GapCount;
     int i = 0;
     for (i = 0; i < 10; ++i)
@@ -1552,6 +1564,14 @@ FASTRUN void ParseAckPayload()
         PhoneEpochLocal = GetIntFromAckPayload();
         PhoneEpochAtMs = millis();
         break;
+
+    case 38: // RXV2: flight-save imminent — pardon gaps for the announced window
+    {
+        uint32_t PardonMs = GetIntFromAckPayload();
+        if (PardonMs <= 10000)
+            GapPardonUntilMs = millis() + PardonMs;
+        break;
+    }
 
     case 31:
         if (BindingEnabled)
