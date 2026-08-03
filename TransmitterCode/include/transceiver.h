@@ -138,7 +138,8 @@ FASTRUN void ProcessRecentCommsGap() // When we know there is time, process a re
       // honestly noted in the log.
         if (ThisGap >= MinimumGap && UseLog)
         {
-            char Excused[] = "Gap excused (RX saving flight)";
+            char Excused[48];
+            snprintf(Excused, sizeof(Excused), "%lu ms gap excused (RX saving flight)", (unsigned long)ThisGap);
             LogText(Excused, strlen(Excused), true);
         }
         ThisGap = 0;
