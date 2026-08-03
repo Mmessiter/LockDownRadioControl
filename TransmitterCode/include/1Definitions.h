@@ -24,11 +24,11 @@
 //                   TX VERSION NUMBER   (2020 - 2026 Malcolm Messiter)                *
 //**************************************************************************************
 
-#define BUILD_ID_STR __DATE__ " " __TIME__ // EG "Feb 14 2026 13:31:06"
+#define BUILD_ID_STR __DATE__ " " __TIME__ // EG "Aug 03 2026 13:31:06"
 #define TXVERSION_MAJOR 2                  // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 5
 #define TXVERSION_MINIMUS 6
-#define TXVERSION_EXTRA "L 26/04/26"
+#define TXVERSION_EXTRA "M 03/08/26"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
