@@ -226,7 +226,9 @@ void EnsureMotorIsOff()
         SendText(Warning, err_MotorOn);
         SendNoData = true;
         PlaySound(MOTORON);
+        Force_Early_Sound = true; // Force sound to play
         DelayWithDog(1200);
+        Force_Early_Sound = true; // Force sound to play
         PlaySound(PLSTURNOFF);
         MsgBox(pFrontView, (char *)"Motor switch is still ON!");
         DelayWithDog(500); // allow time for sound to play and for pilot to react
@@ -297,10 +299,12 @@ void GreenLedOn()
         ShowComms();
         if (AnnounceConnected)
         {
+            Force_Early_Sound = true; // Force sound to play
             PlaySound(CONNECTEDMSG);
             if (Connect_MMmsg) // this is set when Modelmatch is executed during binding.
             {
                 DelaySimple(1000);        // wait a second before playing the message
+                Force_Early_Sound = true; // Force sound to play
                 PlaySound(Connect_MMmsg); // play the message that was set during ModelMatch  ("Model Found!" or "Model matched!" or "Model not found!")
                 Connect_MMmsg = 0;        // reset the message to be played later
             }
@@ -883,6 +887,7 @@ void WarnUserIfBuddyBoxIsOn() // This function warns the user if the buddy box i
     if (BuddyPupilOnWireless)
     {
         DelayWithDog(4000);
+        Force_Early_Sound = true; // Force sound to play
         PlaySound(BUDDYPUPILON);
         DelayWithDog(1500);                     // allow sound to finish
         FHSS_data::PaceMaker = PACEMAKER_BUDDY; // only 200Hz
@@ -890,6 +895,7 @@ void WarnUserIfBuddyBoxIsOn() // This function warns the user if the buddy box i
     if (BuddyMasterOnWireless)
     {
         DelayWithDog(4000);
+        Force_Early_Sound = true; // Force sound to play
         PlaySound(BUDDYMASTERON);
         DelayWithDog(1500);                     // allow sound to finish
         FHSS_data::PaceMaker = PACEMAKER_BUDDY; // only 200Hz
@@ -999,7 +1005,10 @@ FLASHMEM void setup()
     SendOtherValue((char *)"Screen_Background", BackGroundSelection); // also set screen background
     SendOtherValue((char *)"FrontView.pic", BackGroundSelection);
     if (PlayFanfare)
+    {
+        Force_Early_Sound = true; // Force sound to play
         PlaySound(WINDOWS1);
+    }
     for (int i = 1; i < 100; ++i) // fade in screen brightness
     {
         SetBrightness(i);
@@ -3124,11 +3133,15 @@ void HandleChannelNameEvents()
         int p = InStrng(pat, TextIn);
         if (p <= 0)
             continue;
-        int start = p - 1;                    // InStrng positions are 1-based
-        int k = start + (int)strlen(pat);     // the typed name begins here
+        int start = p - 1;                // InStrng positions are 1-based
+        int k = start + (int)strlen(pat); // the typed name begins here
         DoNewChannelName(ch, k);
-        int j = k, cnt = 0;                   // blank exactly what was consumed
-        while (uint8_t(TextIn[j]) > 0 && cnt < 10) { ++j; ++cnt; }
+        int j = k, cnt = 0; // blank exactly what was consumed
+        while (uint8_t(TextIn[j]) > 0 && cnt < 10)
+        {
+            ++j;
+            ++cnt;
+        }
         for (int b = start; b < j; ++b)
             TextIn[b] = ' ';
     }
@@ -4484,7 +4497,7 @@ void Close_TX_Down()
       // everything is still healthy.
         char PoweredOffMsg[] = "Transmitter powered off while still connected";
         LogText(PoweredOffMsg, strlen(PoweredOffMsg), true);
-        LogDisConnection();       // the end-of-session summary + LogEndLine
+        LogDisConnection(); // the end-of-session summary + LogEndLine
         CloseLogFile();
         strcpy(TextFileName, ""); // no further logging to this file
     }
@@ -4496,7 +4509,7 @@ void Close_TX_Down()
     }
     DelayWithDog(POWERONOFFDELAY);     // 2 seconds delay in case button held down too long
     digitalWrite(POWER_OFF_PIN, HIGH); // Power off the transmitter
-    delay(100);                        // Wait for a short time to ensure power off
+    delay(100);                 // Wait for a short time to ensure power off
 }
 /// ************************************************************************************************************/
 void ShowBindingIsEnabled()
@@ -4526,8 +4539,10 @@ void CheckWhetherToEnableBinding()
             SendCommand(pFrontView);      // Go to front view
             CurrentView = FRONTVIEW;      // Set to FrontView
             UpdateModelsNameEveryWhere(); // Update model name
+            Force_Early_Sound = true;     // Force sound to play
             PlaySound(BEEPCOMPLETE);      // Play sound to indicate binding enabled
-            delay(250);                   // Wait for chirp to finish
+            delay(500);                   // Wait for chirp to finish
+            Force_Early_Sound = true;     // Force sound to play
             PlaySound(BINDINGENABLED);    // Play sound to indicate binding enabled
             BindingEnabled = true;        // Set binding enabled flag
             ShowBindingIsEnabled();       // Show binding enabled
@@ -4696,14 +4711,14 @@ void FASTRUN ManageTransmitter()
         CorrectRtcFromPhoneTime(); // apply any phone-true time from ack item 37 (RXV2)
         ShowMotorTimer();          // Show motor timer and send any queued parameters
         LastTimeRead = millis();   // Reset this timer
-        return;                  // That's enough housekeeping for this time around
+        return;                    // That's enough housekeeping for this time around
     }
     if (ParametersToBeSentPointer)        // Any parameters to be sent?
         ActuallySendParameters(RightNow); // yes, send them
     if (CurrentView == MODELSVIEW)
         CheckModelsScreen(RightNow);
     if (CurrentView == DUALRATESVIEW)
-        CheckDualRatesScreen(RightNow);   // live channel names — no Refresh needed
+        CheckDualRatesScreen(RightNow); // live channel names — no Refresh needed
 
     if (RightNow - TransmitterLastManaged >= 50)
     {                      // 50 = 20 times a second

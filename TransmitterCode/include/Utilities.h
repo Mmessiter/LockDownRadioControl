@@ -228,8 +228,9 @@ uint8_t Ascii(char c)
 // ──────────────────────────────────────────────────────────────
 void PlaySound(uint16_t id)
 {
-    if (millis() < 5000 && id!=WINDOWS1)
-    return; // don't play any sounds for the first 5 seconds of power up, except the windows sound
+    if (millis() < 5000 && !Force_Early_Sound)
+        return;                // don't play any sounds for the first 5 seconds of power up, except the forced early sound (e.g. for binding enabled)
+    Force_Early_Sound = false; // reset this flag so that we don't play any more sounds for the first 5 seconds of power up
     if (CurrentView == MODELSVIEW && id != CLICKONE)
         return;
     if (!SD_Card_Exists)
@@ -1277,7 +1278,7 @@ bool GetBackupFilename(char *goback, char *tt1, char *MMname, char *heading, cha
     SendText(Mname, MMname); // Model name
     SendText(t3, heading);   // heading
     GetYesOrNo();
-    GetText(t1, SingleModelFile, 40);  // ClaudeFix-2-7-2026
+    GetText(t1, SingleModelFile, 40); // ClaudeFix-2-7-2026
     SendCommand(goback);
     if (Confirmed[0] == 'Y')
         return true;
@@ -1453,10 +1454,12 @@ void Enable_Binding()
         LedIsBlinking = false;
         PlaySound(BEEPCOMPLETE);
         SendText((char *)"OptionsView.b0", (char *)"Bind");
-        if (LedWasRed){
+        if (LedWasRed)
+        {
             RedLedOn();
         }
-        if (LedWasGreen){
+        if (LedWasGreen)
+        {
             GreenLedOn();
         }
     }
