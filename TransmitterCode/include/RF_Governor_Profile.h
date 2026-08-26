@@ -176,8 +176,9 @@ void HideGOVMsg()
         SendCommand((char *)"vis busy,0");
         SendCommand((char *)"vis b2,1");
         ForegroundColourGOVLabels(Black);
-        BlockBankChanges = false;
     }
+    BlockBankChanges = false; // ALWAYS clear — a view change before this call
+                              // must never leave the bank switch dead (ClaudeFix 25-8-2026)
 }
 
 // ====================================================

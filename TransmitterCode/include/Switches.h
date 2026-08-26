@@ -136,6 +136,27 @@ void ReadBuddySwitch()
 /************************************************************************************************************/
 void ReadBankSwitch()
 {
+    // Safety net (ClaudeFix 25-8-2026, Malcolm's field report: banks 2/3
+    // unselectable in flight): if the block is set but NO parameter transfer
+    // is running and we are in NORMAL mode, it is a stale latch (a screen was
+    // left before its clear ran) — release it after 5 s rather than leaving
+    // the bank switch dead until reboot. Genuine transfers (params queued, or
+    // a save/restore sweep) keep the block as long as they need it.
+    static uint32_t blockedQuietSince = 0;
+    if (BlockBankChanges)
+    {
+        if (ParametersToBeSentPointer || CurrentMode != NORMAL)
+            blockedQuietSince = 0;                    // real transfer — block is doing its job
+        else if (!blockedQuietSince)
+            blockedQuietSince = millis();
+        else if (millis() - blockedQuietSince > 5000)
+        {
+            BlockBankChanges = false;                 // stale — self-heal
+            blockedQuietSince = 0;
+        }
+    }
+    else
+        blockedQuietSince = 0;
     if (BlockBankChanges) // do not change bank if blocked
         return;
     Bank = GetSwitchPosition(BankSwitch);

@@ -106,8 +106,9 @@ void HidePIDMsg()
         SendCommand((char *)"vis busy,0"); // Hide  message
         SendCommand((char *)"vis b2,1");   // Make Advanced visible
         ForegroundColourPIDLabels(Black);  // make text black so it is visible again
-        BlockBankChanges = false;
     }
+    BlockBankChanges = false; // ALWAYS clear — a view change before this call
+                              // must never leave the bank switch dead (ClaudeFix 25-8-2026)
 }
 //***********************************************************************************************************/
 void ShowLocalBank()

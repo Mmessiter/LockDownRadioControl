@@ -71,12 +71,13 @@ void AddWords() // Add in the text words to describe the meaning of numeric conf
 // ====================================================
 void HideGOVConfigMsg()
 {
+    BlockBankChanges = false; // ALWAYS clear — a view change before this call
+                              // must never leave the bank switch dead (ClaudeFix 25-8-2026)
     if (CurrentView == RFGOVERNORVIEW_GLOBAL)
     {
         SendCommand((char *)"vis t4,0");
         SendCommand((char *)"vis b1,1");
         ForegroundColourGOVConfigLabels(Black);
-        BlockBankChanges = false;
         if (LedWasGreen && !AllGlobalConfigBytesReceived())
         {
             MsgBox((char *)"page RFGovGlobalView", (char *)"Failed to read global \r\n(config) bytes. Try again.");
