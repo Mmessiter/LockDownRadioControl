@@ -1227,11 +1227,16 @@ void ReadGovBytesFromAckPayload(uint8_t n, uint8_t m)
 // ******************************************************************************************
 uint16_t DoLowPassFilter(uint32_t RawRpm)
 {
-    static uint16_t lastRPM = 0;
-    const float alpha = 0.12; // smoothing factor (0 < alpha < 1)
-    uint16_t filteredRPM = (alpha * RawRpm) + ((1 - alpha) * lastRPM);
-    lastRPM = filteredRPM;
-    return filteredRPM;
+    // ClaudeFix-3-9-2026: keep the filter state as a float and ROUND the result.
+    // The old integer state truncated every step, so on the way UP the filter
+    // stalled as soon as its step fell below 1 rpm — up to 8 rpm short of the
+    // true value (alpha 0.12 → 1/0.12). The Goblin showed 1345 for a governor
+    // holding exactly 1350; a wrong gear ratio was suspected, but the number the
+    // FC sends IS its governed head speed, so only the display could be low.
+    static float lastRPM = 0.0f;
+    const float alpha = 0.12f; // smoothing factor (0 < alpha < 1)
+    lastRPM = (alpha * (float)RawRpm) + ((1.0f - alpha) * lastRPM);
+    return (uint16_t)(lastRPM + 0.5f);
 }
 /************************************************************************************************************/
 FASTRUN void ParseAckPayload()
