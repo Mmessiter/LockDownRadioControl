@@ -4,7 +4,7 @@ Everything in this repository — the V1 transmitter and receiver firmware, the
 circuits, the STL files, the Nextion screens, the documentation — is free
 software: **GPL-2.0-or-later** (see [LICENSE](LICENSE)).
 
-Copyright (C) 2024–2026 Malcolm Messiter.
+Copyright (C) 2020–2026 Malcolm Messiter.
 
 Use it, copy it, change it, share it. If you share a changed version, you must
 share its source under the same licence. Derivatives stay free — that is the
