@@ -291,3 +291,9 @@ The protocol supports a wireless trainer (Buddy Box) system using Time Division 
 | Connectors         | DuPont connectors             | 3- and 4-pin female                   | Several |
 | Controls           | RC switches                   | Three-position                        | 8       |
 | Controls           | Rheostat knobs                | Optional (can replace 4 RC switches)  | Up to 4 |
+
+## Licence
+
+Free software under **GPL-2.0-or-later** — see [LICENSE](LICENSE) and
+[LICENSING.md](LICENSING.md). Use it, change it, share it; changed versions
+must be shared under the same terms.
