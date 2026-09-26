@@ -28,7 +28,7 @@
 #define TXVERSION_MAJOR 2                  // first three *must* match RX but _EXTRA can be different
 #define TXVERSION_MINOR 5
 #define TXVERSION_MINIMUS 6
-#define TXVERSION_EXTRA "O 03/09/26"
+#define TXVERSION_EXTRA "P 26/09/26"
 
 // *************************************************************************************
 //          DEBUG OPTIONS (Uncomment any of these for that bit of debug info)          *
@@ -243,6 +243,7 @@ uint32_t PhoneEpochAtMs = 0;    // millis() at capture, for staleness correction
 // ground). Gaps inside the window are excluded from ALL statistics and logged
 // as excused, so the averages describe the LINK, not the housekeeping.
 uint32_t GapPardonUntilMs = 0;
+bool GapStartedDisarmed = false; // Rotorflight arming in use and DISARMED when the current gap began = a ground gap
 
 #define PARAMETERS_MAX_ID 34 // Max types of parameters packet to send  ... might increase.
 

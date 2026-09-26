@@ -145,6 +145,20 @@ FASTRUN void ProcessRecentCommsGap() // When we know there is time, process a re
         ThisGap = 0;
         return;
     }
+    if (GapStartedDisarmed)
+    { // Malcolm 2026-09-26: "ANY gap when arming is off (but available) is
+      // excluded as it didn't happen in flight" - excluded from all
+      // statistics, honestly noted in the log.
+        if (ThisGap >= MinimumGap && UseLog)
+        {
+            char Excused[48];
+            snprintf(Excused, sizeof(Excused), "(%lu ms gap excluded - model disarmed)", (unsigned long)ThisGap);
+            LogText(Excused, strlen(Excused), true);
+        }
+        GapStartedDisarmed = false;
+        ThisGap = 0;
+        return;
+    }
     ++GapCount;
     int i = 0;
     for (i = 0; i < 10; ++i)
@@ -187,6 +201,9 @@ void CheckGap()
     if (!GapStart)
     {
         GapStart = millis(); // To keep track of this gap's length
+        // Armed state as the gap BEGINS (a real in-flight loss followed by a
+        // quick disarm must still count).
+        GapStartedDisarmed = RotorFlight_V && ArmingChannel >= 1 && ArmingChannel <= 16 && !Armed;
     }
     else
     {
