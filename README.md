@@ -1,5 +1,13 @@
 # Lockdown Radio Control
 
+> **Version 2 is here (October 2026).** The same transmitter with a 5-inch WiFi
+> touchscreen that updates the whole radio from the internet, and a new receiver
+> that sets up Rotorflight from your phone. Model memories pass between the two
+> versions over the air, and the new receiver binds to this Version 1 transmitter
+> too. Everything is in the
+> [LDRC_V2 repository](https://github.com/Mmessiter/LDRC_V2). This repository is
+> Version 1, which keeps flying; new work happens in Version 2.
+
 ![Image](./Images/IMG_RAW420.JPG "The radio!")
 
 ## Why would anyone choose to use LockDownRadioControl (LDRC) instead of EdgeTX or a commercial system? Here are a few reasons:
