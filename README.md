@@ -104,7 +104,7 @@ Along the way:
 ---
 
 > [!WARNING]
-> **Check your local rules.** A home-built transmitter has no CE, UKCA or FCC marking. In the UK and the EU, 2.4 GHz radios are expected to meet ETSI EN 300 328; LDRC has no listen-before-talk mode. The transmitter's and the receiver's radio modules always run at full power, about 100 mW (20 dBm); with a normal aerial's gain the total is probably over the UK and EU limit of 100 mW. You fly at your own risk.
+> **Radio rules.** The radio modules that transmit and receive, Ebyte's E01-ML01DP5 (transmitter) and E01-ML01SP4 (receiver), carry the CE mark and FCC ID 2ALPH-E01. They run at about 100 mW (20 dBm), the UK and EU limit for 2.4 GHz; an aerial cannot add power, it only shapes where the signal goes. As with any model you build yourself, check the radio rules where you live before you fly.
 >
 > LDRC is yours to change: its author often adds a feature within a day of a pilot asking, and everything is open, so you can change it yourself. Commercial systems are almost always take it or leave it. See [how LDRC compares](https://messiter.com/ldrc/transmitter.html#compare).
 
